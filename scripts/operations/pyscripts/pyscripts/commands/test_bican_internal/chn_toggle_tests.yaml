@@ -1,0 +1,781 @@
+tests:
+  ncn_master:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+  ncn_worker:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+  ncn_storage:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+  spine_switch:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+  leaf_switch:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+  leaf_BMC:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+  CDU:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmn:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: true
+      leaf_switch: true
+      leaf_BMC: true
+      CDU: true
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: true
+      ncn_worker: true
+      ncn_storage: true
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+  uan:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: true
+    hmn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+  uai:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: true
+    hmn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+  cn:
+    can:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    cmn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    chn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: true
+      uai: true
+      cn: true
+    nmn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmn:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    nmnlb:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
+    hmnlb:
+      ncn_master: false
+      ncn_worker: false
+      ncn_storage: false
+      spine_switch: false
+      leaf_switch: false
+      leaf_BMC: false
+      CDU: false
+      uan: false
+      uai: false
+      cn: false
