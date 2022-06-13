@@ -450,20 +450,20 @@ BMC can be safely ignored or needs to be addressed before proceeding.
 
    ```bash
   ncn-m001# PDU=x3000m0
-  ncn-m001# c curl -k -s --compressed  https://$PDU -i | grep Server:
+  ncn-m001# curl -k -s --compressed  https://$PDU -i | grep Server:
   ```
 
   - Example ServerTech output:
 
-  ```bash
-  Server: ServerTech-AWS/v8.0v
-  ```
+    ```bash
+    Server: ServerTech-AWS/v8.0v
+    ```
 
   - Example HPE output
 
-  ```bash
-  Server: HPE/1.4.0
-  ```
+    ```bash
+    Server: HPE/1.4.0
+    ```
 
   - ServerTech PDUs may need password changed from their defaults to become functional. Perform the steps in [Change Credentials on ServerTech PDUs](./security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
 

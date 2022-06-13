@@ -18,22 +18,22 @@ If the PDU is accessible over the network, the following can be used to determin
 
 ```bash
 ncn-m001# PDU=x3000m0
-ncn-m001# c curl -k -s --compressed  https://$PDU -i | grep Server:
+ncn-m001# curl -k -s --compressed  https://$PDU -i | grep Server:
 ```
 
 - Example ServerTech output:
 
-```bash
-Server: ServerTech-AWS/v8.0v
-```
+  ```bash
+  Server: ServerTech-AWS/v8.0v
+  ```
 
 - Example HPE output
 
-```bash
-Server: HPE/1.4.0
-```
+  ```bash
+  Server: HPE/1.4.0
+  ```
 
-This document covers HPE PDU procedures
+This document covers HPE PDU procedures.
 
 ## Connect to HPE PDU Web Interface
 
@@ -130,24 +130,6 @@ Change the password of any existing user account using the HPE PDU web interface
 1. Use the **"admin"** menu (top right corner) to navigate to **"User Accounts"**.
 1. Click on the **"Edit"** icon (pencil) next to the user.
 1. Enter new password and make any other changes for that user account and click the **"Save"** button.
-1. If the `admin` password was changed, update Vault with the new credentials following procduere [Update Vault Credentials](#update-vault-credentials)
-
-### Update Vault Credentials
-
-1. Set up aliases:
-
-    ```bash
-    ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-    ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
-    ```
-
-1. Update the PDU credentials stored in Vault:
-
-    ```bash
-    ncn-m001# vault kv get secret/pdu-creds/$PDU |
-    jq --arg PASSWORD "$NEW_PDU_PASSWORD" '.data | .Password=$PASSWORD' |
-    vault kv put secret/pdu-creds/$PDU -
-    ```
 
 ## Discover HPE PDU after Upgrading CSM
 

@@ -5,13 +5,13 @@ This procedure changes password used by the `admn` user on ServerTech PDUs. Eith
 **NOTE:** This procedure does not update the default credentials that RTS uses for new ServerTech PDUs added to a system.
 To change the default credentials, follow the [Update default ServerTech PDU Credentials used by the Redfish Translation Service](Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md) procedure.
 
-**NOTE:** ServerTech PDUs running firmware version `8.0q` or greater must have the password of the `admn` changed before the JAWS rest API functions as expected
+**NOTE:** ServerTech PDUs running firmware version `8.0q` or greater must have the password of the `admn` changed before the JAWS rest API functions as expected.
 
 ## Prerequisites
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-- The PDU is accessible over the network. A PDU can be reachable by its hostname, but not discovered by HSM.
-- PDUs are Made by ServerTech  
+- The PDU is accessible over the network. A PDU can be reachable by its xname hostname, but may not yet be discovered by HSM.
+- PDUs are made by ServerTech.
 
     ```bash
     ncn-m001# PDU=x3000m0
@@ -83,6 +83,8 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
     ```
 
 1. Change and update the password for a ServerTech PDU(s). Either change the credentials on a single PDU or change all ServerTech PDUs to the same global default value:
+
+**NOTE**: To change the 
 
      1. To update the password on a single ServerTech PDU in the system:
 
