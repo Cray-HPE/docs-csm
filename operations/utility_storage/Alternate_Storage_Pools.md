@@ -28,6 +28,7 @@ This example shows the creation and mounting of an `rbd` device on `ncn-m001`.
 ### Create storage pool
 
 The below example will create a storage pool name `csm-release`. The pool name can be changed to better reflect any use cases outside of support for upgrades.
+The `3 3` arguments can be left unchanged. For more information on their meaning and possible alternative values, see the Ceph product documentation.
 
 ```bash
 ceph osd pool create csm-release 3 3
@@ -133,9 +134,9 @@ ncn-m001:~ # mountpoint /etc/cray/csm/csm-release/
 /etc/cray/csm/csm-release/ is a mountpoint
 ```
 
-### Move the rbd device to another node
+### Move the `rbd` device to another node
 
-On node where the rbd device is mapped:
+On node where the `rbd` device is mapped:
 
 ```bash
 umount /etc/cray/csm/csm-release
@@ -143,9 +144,9 @@ rbd unmap  -p csm-release release_version
 rbd showmapped
 ```
 
-**NOTE:** There should be no output from the above unless you have other mapped rbd devices on the node.  In this case it is a master node which typically should have no mapped rbd devices.
+**NOTE:** There should be no output from the above unless other `rbd` devices are mapped on the node. In this case, it is a master node, which typically will not have mapped `rbd` devices.
 
-On the node you want to remap the rbd device to:
+Then run the following commands on the destination node (that is, the node where the `rbd` device is being remapped to).
 
 ```bash
 rbd map -p csm-release release_version
@@ -159,8 +160,11 @@ Output:
 ```text
 ncn-m002:~ # rbd map -p csm-release release_version
 /dev/rbd0
+```
 
-## The below output will vary based on the existence of the directories.
+The following output will vary based on the existence of the directories.
+
+```text
 ncn-m002:~ # mkdir -pv /etc/cray/csm/csm-release
 mkdir: created directory '/etc/cray'
 mkdir: created directory '/etc/cray/csm'
@@ -173,7 +177,7 @@ id  pool         namespace  image            snap  device
 ncn-m002:~ # mount /dev/rbd0 /etc/cray/csm/csm-release/
 ```
 
-### Unmount, unmap, and delete an rbd device
+### Unmount, unmap, and delete an `rbd` device
 
 ```bash
 umount /etc/cray/csm/csm-release
