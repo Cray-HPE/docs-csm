@@ -85,7 +85,11 @@ id  pool         namespace  image            snap  device
 0   csm-release             release_version  -     /dev/rbd0
 ```
 
-**IMPORTANT NOTE:** Master nodes normally do not have rbd devices mapped via ceph provisioner.  If mapping to a worker node where there are mapped PVCs then you will need to ensure you are capturing the proper rbd device for the following steps.  Not doing so can and most likely will result in data corrpution or loss.
+**IMPORTANT NOTE:**
+
+* Master nodes normally do not have rbd devices mapped via ceph provisioner.  
+  * If mapping to a worker node where there are mapped PVCs then you will need to ensure you are capturing the proper rbd device for the following steps.  
+  * Not doing so can and most likely will result in data corruption or loss.
 
 ### Mounting an rbd device
 
@@ -105,8 +109,8 @@ Discarding device blocks: done
 Creating filesystem with 26214400 4k blocks and 6553600 inodes
 Filesystem UUID: d5fe6df4-a0ab-49bc-8d49-9cc62700915d
 Superblock backups stored on blocks:
-	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
-	4096000, 7962624, 11239424, 20480000, 23887872
+ 32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+ 4096000, 7962624, 11239424, 20480000, 23887872
 
 Allocating group tables: done
 Writing inode tables: done
