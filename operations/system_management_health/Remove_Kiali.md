@@ -1,6 +1,6 @@
 # Remove Kiali
 
-If you do not plan to use Kiali, you can remove Kiali from your environment for CVE (Common Vulnerabilities and Exposures) remediation. 
+If you do not plan to use Kiali, you can remove Kiali from your environment for CVE (Common Vulnerabilities and Exposures) remediation.
 
 ## Procedure
 
