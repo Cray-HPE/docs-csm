@@ -31,10 +31,11 @@ backup of Workload Manager configuration data and files is created. Once complet
     See [Create a storage pool](../../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
     and [Create and map an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
 
-    This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
-
-    **Note:** The `prepare-assets.sh` script will delete the CSM tarball. Copy it to a different location before running that script.
-    Otherwise it will need to be downloaded again later in the upgrade procedure.
+    **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
+    However, by default the `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
+    If using an `rbd` device, this is not necessary or desirable, as it will require the CSM tarball to be downloaded again later in the
+    procedure. Therefore, **if using an `rbd` device to store the CSM tarball, then run the `prepare-assets.sh` script with the
+    `--no-delete-tarball-file` argument.**
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
@@ -57,7 +58,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 
    In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
 
-  > **`NOTE`** This step is optional for Cray/HPE internal installs, if `ncn-m001` can reach the internet.
+   > **`NOTE`** This step is optional for Cray/HPE internal installs, if `ncn-m001` can reach the internet.
 
    ```bash
    ENDPOINT=https://put.the/url/here/
@@ -65,7 +66,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 1. (`ncn-m001#`) Run the script.
 
-  > **`NOTE`** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
+   > **`NOTE`** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
 
    ```bash
    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --endpoint "${ENDPOINT}"
@@ -88,7 +89,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 
    ```bash
    cp PATH_TO_DOCS_RPM /root/docs-csm-latest.noarch.rpm &&
-             rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
    ```
 
 1. (`ncn-m001#`) Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m001`.
@@ -98,6 +99,9 @@ backup of Workload Manager configuration data and files is created. Once complet
    ```
 
 1. (`ncn-m001#`) Run the script.
+
+   > If using an `rbd` device to store the CSM tarball (or if not wanting the tarball file deleted for other reasons), then append the
+   `--no-delete-tarball-file` argument when running the script.
 
    ```bash
    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
