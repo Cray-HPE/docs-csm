@@ -25,7 +25,7 @@ This example shows the creation and mounting of an `rbd` device on `ncn-m001`.
 
 **NOTE:** The commands to create and delete pools or `rbd` devices must be run from a master node or one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
-### Create storage pool
+### Create a storage pool
 
 The below example will create a storage pool name `csm-release`. The pool name can be changed to better reflect any use cases outside of support for upgrades.
 The `3 3` arguments can be left unchanged. For more information on their meaning and possible alternative values, see the Ceph product documentation.
