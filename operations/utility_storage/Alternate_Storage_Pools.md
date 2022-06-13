@@ -12,20 +12,20 @@ Creating, maintaining, and removing Ceph storage pools.
 ## Best Practices
 
 * Apply a proper quota to any pools created.
-  * This will use storage from the default crush rule which is utilizing every OSD.
+  * This will use storage from the default CRUSH rule which is utilizing every OSD.
   * Improper use and policing of space usage can have a negative impact on the cluster and space available to running services that have determined the space provided by the design and sizing exercises.
 * Cleanup after the criteria for the pool creation has been met.
   * This can be as simple as removing volumes but leaving the pool for future use.
 
 ## Procedures
 
-This example shows the creating and mounting of an rbd device on `ncn-m001`.
+This example shows the creation and mounting of an `rbd` device on `ncn-m001`.
 
-**NOTE:** The commands to create and delete pools or rbd devices must be run from `ncn-m001/2/3` or `ncn-s001/2/3`.
+**NOTE:** The commands to create and delete pools or `rbd` devices must be run from `ncn-m001/2/3` or `ncn-s001/2/3`.
 
 ### Create storage pool
 
-The below example will create a storage pool name `csm-release`.  The pool name can  be changed to better reflect any use cases outside of support for upgrades.
+The below example will create a storage pool name `csm-release`.  The pool name can be changed to better reflect any use cases outside of support for upgrades.
 
 ```bash
 ceph osd pool create csm-release 3 3
@@ -56,14 +56,14 @@ quotas for pool 'csm-release':
 
 * The above example sets the quota to 500 GiB.  
   * If this pool is fully utilized it will be using 1.5 TiB of raw space.
-  * This space counts against the total space provided by the cluster.  Use cautiously
-  * If this pool or any pool reaches 95-100% utilization then all volumes for the fully utilized pool will go into read-only mode.
+  * This space counts against the total space provided by the cluster; Use cautiously.
+  * If this pool or any pool reaches 95-100% utilization, then all volumes for the fully utilized pool will go into read-only mode.
 
-### Create and map an rbd device
+### Create and map an `rbd` device
 
 **IMPORTANT:**
 
-* Creating and rbd device requires proper access and must be run from `ncn-m001/2/3` or `ncn-s001/2/3`.
+* Creating an `rbd` device requires proper access and must be run from `ncn-m001/2/3` or `ncn-s001/2/3`.
 * Mounting a device will occur on the node where the storage needs to be present.
 
 ```bash
@@ -87,11 +87,11 @@ id  pool         namespace  image            snap  device
 
 **IMPORTANT NOTE:**
 
-* Master nodes normally do not have rbd devices mapped via ceph provisioner.  
-  * If mapping to a worker node where there are mapped PVCs then you will need to ensure you are capturing the proper rbd device for the following steps.  
-  * Not doing so can and most likely will result in data corruption or loss.
+* Master nodes normally do not have `rbd` devices mapped via Ceph provisioner.
+  * If mapping to a worker node where there are mapped PVCs, then ensure the proper `rbd` device is being captured for the following steps.
+  * Failure to do this most likely will result in data corruption or loss.
 
-### Mounting an rbd device
+### Mounting an `rbd` device
 
 ```bash
 mkfs.ext4 /dev/rbd0
@@ -120,16 +120,18 @@ Writing superblocks and filesystem accounting information: mkdir done
 ncn-m001:~ # mkdir -pv /etc/cray/csm/csm-release
 mkdir: created directory '/etc/cray/csm'
 mkdir: created directory '/etc/cray/csm/csm-release'
+```
 
-## Note the below command doesn't return output on success
+Note that the below command does not return output on success:
 
+```text
 ncn-m001:~ # mount /dev/rbd0 /etc/cray/csm/csm-release/
 
 ncn-m001:~ # mountpoint /etc/cray/csm/csm-release/
 /etc/cray/csm/csm-release/ is a mountpoint
 ```
 
-### Unmount, unmap, and delete an rbd device
+### Unmount, unmap, and delete an `rbd` device
 
 ```bash
 umount /etc/cray/csm/csm-release
@@ -165,7 +167,7 @@ Removing image: 100% complete...done.
    true
    ```
 
-   If the above returns false then enable it using the following command.
+   If the above command shows `false`, then enable it using the following command:
 
    ```bash
    ceph config set mon mon_allow_pool_delete true
