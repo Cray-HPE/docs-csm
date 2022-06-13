@@ -82,7 +82,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
     read -s SW_ADMIN_PASSWORD
     ```
 
-    ```bash    
+    ```bash
     export SW_ADMIN_PASSWORD
     ```
 
@@ -252,7 +252,7 @@ prerequisites have been met to allow access to the system management health tool
 
 Information to assist with troubleshooting some of the components mentioned in the prerequisites can be accessed here:
 
-- [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
+- [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 - [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
 - [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
@@ -484,7 +484,7 @@ Follow these instructions for executing the gateway tests from an NCN and from o
 
 - [Running Gateway Tests on an NCN Management Node](./network/Gateway_Testing.md#running-gateway-tests-on-an-ncn-management-node)
   - The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
-- [Running Gateway Tests on a Device Outside the System](network/Gateway_testing#running-gateway-tests-on-a-device-outside-the-system)
+- [Running Gateway Tests on a Device Outside the System](network/Gateway_Testing.md#running-gateway-tests-on-a-device-outside-the-system)
 
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
