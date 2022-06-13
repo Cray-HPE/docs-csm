@@ -1,261 +1,368 @@
-# Set NCN Image Root Password and SSH Keys and optional modify the timezone
+# Set NCN Image Root Password, SSH Keys, and Timezone
 
-Customize the NCN images by setting the root password and adding SSH keys for the root account. Optionally,
-change the the timezone (UTC is the default).
+Modify the NCN images by setting the `root` user password and adding SSH keys for the `root` user account.
+If desired, also change the timezone for the NCNs.
 
 This procedure shows this process being done any time after the first time installation of the CSM
-software has been completed and the PIT node is booted as a regular master node. To change the NCN image
-during an installation while the PIT node is booted as the PIT node,
-see [Change_NCN_Image_Root_Password_and_SSH_Keys_PIT](../security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
+software has been completed and the PIT node is booted as a regular master node. To change the NCN images
+from the PIT node during CSM installation, see
+[Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
 
-There is some common preparation before making the Kubernetes image for master nodes and worker nodes, making the Ceph image for utility storage nodes, and then some common cleanup afterwards.
+All of the commands in this procedure are intended to be run on a single master or worker node.
 
-***`NOTE`*** This procedure can only be done after the PIT node is rebuilt to become a normal master node.
+## Prerequisites
 
-## Common Preparation
+- This procedure can only be done after the PIT node is rebuilt to become a normal master node.
+- The Cray CLI must be configured on the node where the procedure is being done. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
+- The CSM documentation RPM must be installed on the node where the procedure is being run. See [Check for Latest Documentation](../../update_product_stream/README.md#documentation).
+- The `ncn-image-modification.sh` script must be extracted from the top level of the CSM release tarball.
 
-1. Prepare new SSH keys for the root account in advance. The same key information will be added to both `k8s-image` and `ceph-image`.
+## Procedure
 
-   Either replace the root public and private SSH keys with your own previously generated keys or generate a new pair using the `ncn-image-modification.sh` script described below.
+1. [Preparation](#1-preparation)
+2. [Get NCN artifacts](#2-get-ncn-artifacts)
+3. [Customize the images](#3-customize-the-images)
 
-1. Change to a working directory with enough space to hold the images once they have been expanded.
+    - [SSH keys](#ssh-keys)
+      - [Script-generated keys](#script-generated-keys)
+      - [Administrator-provided keys](#administrator-provided-keys)
+    - [Password](#password)
+      - [Use node password](#use-node-password)
+      - [Enter password and generate hash](#enter-password-and-generate-hash)
+    - [Timezone](#timezone)
+    - [Examples](#examples)
+      - [Example 1: New keys, copy password, keep UTC](#example-1-new-keys-copy-password-keep-utc)
+      - [Example 2: Provide keys, prompt for password, change timezone](#example-2-provide-keys-prompt-for-password-change-timezone)
+      - [Example 3: New keys, no password change, keep UTC, no prompting](#example-3-new-keys-no-password-change-keep-utc-no-prompting)
 
-   ```bash
-   cd /run/initramfs/overlayfs
-   mkdir workingarea
-   cd workingarea
-   ```
+4. [Upload artifacts into S3](#4-upload-artifacts-into-s3)
+5. [Update BSS](#update-bss)
+6. [Cleanup](#6-cleanup)
+7. [Rebuild NCNs](#7-rebuild-ncns)
 
-The Kubernetes image `k8s-image` is used by the master and worker nodes.
+### 1. Preparation
 
-1. Decide which `k8s-image` is to be modified
+Change to a working directory with enough space to hold the images once they have been expanded.
 
-   ```bash
-   cray artifacts list ncn-images --format json | jq '.artifacts[] .Key' | grep k8s | grep squashfs
-   "k8s-filesystem.squashfs"
-   "k8s/0.1.107/filesystem.squashfs"
-   "k8s/0.1.109/filesystem.squashfs"
-   "k8s/0.1.48/filesystem.squashfs"
-   ```
+```bash
+mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/workingarea
+```
 
-   This example uses k8s/0.1.109 for the current version and adds a suffix for the new version.
-   ```bash
-   export K8SVERSION=0.1.109
-   export K8SNEW=0.1.109-2
-   ```
+### 2. Get NCN artifacts
 
-1. Make a temporary directory for the k8s-image using the current version string.
+1. List available Kubernetes NCN images.
 
-   ```bash
-   mkdir -p k8s/${K8SVERSION}
-   ```
+    The Kubernetes image is used by the master and worker nodes.
 
-1. Get the image.
+    ```bash
+    cray artifacts list ncn-images --format json | jq '.artifacts[] .Key' | grep k8s | grep squashfs
+    ```
 
-   ```bash
-   cray artifacts get ncn-images k8s/${K8SVERSION}/filesystem.squashfs k8s/${K8SVERSION}/filesystem.squashfs
-   ```
+    Example output:
 
-The Ceph image `ceph-image` is used by the utility storage nodes.
+    ```text
+    "k8s-filesystem.squashfs"
+    "k8s/0.1.107/filesystem.squashfs"
+    "k8s/0.1.109/filesystem.squashfs"
+    "k8s/0.1.48/filesystem.squashfs"
+    ```
 
-1. Decide which ceph-image is to be modified
+1. Set Kubernetes image version variables.
 
-   ```bash
-   cray artifacts list ncn-images --format json | jq '.artifacts[] .Key' | grep ceph | grep squashfs
-   "ceph-filesystem.squashfs"
-   "ceph/0.1.107/filesystem.squashfs"
-   "ceph/0.1.113/filesystem.squashfs"
-   "ceph/0.1.48/filesystem.squashfs"
-   ```
+    - Set `K8SVERSION` to the version of the image to be modified.
+    - Set `K8SNEW` to the version label to use for the modified image.
 
-   This example uses ceph/0.1.113 for the current version and adds a suffix for the new version.
+    This example uses `k8s/0.1.109` for the current version and adds a suffix for the new version.
 
-   ```bash
-   export CEPHVERSION=0.1.113
-   export CEPHNEW=0.1.113-2
-   ```
+    ```bash
+    K8SVERSION=0.1.109
+    K8SNEW=${K8SVERSION}-2
+    ```
 
-1. Make a temporary directory for the ceph-image using the current version string.
+1. Make a temporary directory for the Kubernetes artifacts using the current version string.
 
-   ```bash
-   mkdir -p ceph/${CEPHVERSION}
-   ```
+    ```bash
+    mkdir -pv k8s/${K8SVERSION}
+    ```
 
-1. Get the image.
+1. Download the Kubernetes NCN artifacts.
 
-   ```bash
-   cray artifacts get ncn-images ceph/${CEPHVERSION}/filesystem.squashfs ceph/${CEPHVERSION}/filesystem.squashfs
-   ```
+    ```bash
+    for art in filesystem.squashfs initrd kernel ; do
+        cray artifacts get ncn-images k8s/${K8SVERSION}/${art} k8s/${K8SVERSION}/${art}
+    done
+    ```
 
-1. Execute the `ncn-image-modification.sh` script.
+1. List available Ceph images.
 
-   The `ncn-image-modification.sh` script is included at the top-level of the unpacked CSM release tarball.
+    The Ceph image is used by the utility storage nodes.
 
-   See the `-h` output for usage information:
+    ```bash
+    cray artifacts list ncn-images --format json | jq '.artifacts[] .Key' | grep ceph | grep squashfs
+    ```
 
-   ```bash
-   ncn-image-modification.sh -h
-   Usage: ncn-image-modification.sh [-p] [-d dir] [ -z timezone] [-k kubernetes-squashfs-file] [-s storage-squashfs-file] [ssh-keygen arguments]
+    Example output:
 
-          This script semi-automates the process of changing the timezone, root
-          password, and adding new SSH keys for the root user to the NCN squashfs
-          image(s).
+    ```text
+    "ceph-filesystem.squashfs"
+    "ceph/0.1.107/filesystem.squashfs"
+    "ceph/0.1.113/filesystem.squashfs"
+    "ceph/0.1.48/filesystem.squashfs"
+    ```
 
-          The script will immediately prompt for a new passphrase for ssh-keygen.
-          The script will then proceed to unsquash the supplied squash files and
-          then prompt for a password. Once the password of the last squash has been
-          provided, the script will continue to completion without interruption.
+1. Set Ceph image version variables.
 
-          The process can be fully automated by using the SQUASHFS_ROOT_PW_HASH
-          environment variable (see below) along with either -d or -N
+    - Set `CEPHVERSION` to the version of the image to be modified.
+    - Set `CEPHNEW` to the version label to use for the modified image.
 
-          -a             Do *not* modify the authorized_keys file in the squashfs.
-                         If modifying a previously modified image, or an
-                         authorized_keys file that contains the public key is already
-                         included in the directory used with the -d option, you may
-                         want to use this option.
+    This example uses `ceph/0.1.113` for the current version and adds a suffix for the new version.
 
-          -d dir         If provided, the contents will be copied into /root/.ssh/
-                         in the squashfs image. Do not supply ssh-keygen arguments
-                         when using -d. Assumes public keys have a .pub extension.
+    ```bash
+    CEPHVERSION=0.1.113
+    CEPHNEW=${CEPHVERSION}-2
+    ```
 
-          -p             Change or set the password in the squashfs. By default, the
-                         user prompted to enter the password after each squashfs file
-                         is unsquashed. Use the SQUASHFS_ROOT_PW_HASH environment
-                         variable (see below) to change or set the password without
-                         being prompted.
+1. Make a temporary directory for the Ceph artifacts using the current version string.
 
-          -z timezone    By default the timezone on NCNs is UTC. Use this option to
-                         override.
+    ```bash
+    mkdir -pv ceph/${CEPHVERSION}
+    ```
 
-   SUPPORTED SSH-KEYGEN ARGUMENTS
+1. Download the storage NCN artifacts.
 
-          The following ssh-keygen(1) arguments are supported by this script:
-          [-b bits] [-t dsa | ecdsa | ecdsa-sk | ed25519 | ed25519-sk | rsa]
-          [-N new_passphrase] [-C comment]
+    ```bash
+    for art in filesystem.squashfs initrd kernel ; do
+        cray artifacts get ncn-images ceph/${CEPHVERSION}/${art} ceph/${CEPHVERSION}/${art}
+    done
+    ```
 
-   ENVIRONMENT VARIABLES
+### 3. Customize the images
 
-          SQUASHFS_ROOT_PW_HASH    If set to the encrypted hash for a root password,
-                                   this hash will be injected into /etc/shadow in the
-                                   squashfs image and there will be no interactive prompt
-                                   to set it. When setting this variable, be sure to use
-                                   single quotes (') to ensure any '$' characters are not
-                                   interpreted.
+Add SSH keys and the `root` password to the NCN SquashFS images. Optionally set their timezone, if a timezone other than UTC
+(the default) is desired. This is all done by running the `ncn-image-modification.sh` script, which is located at the top
+level of the CSM release tarball.
 
-          DEBUG                    If set, the script will be run with 'set -x'
-   ```
+This document provides common ways of using the script to accomplish this. However, specific environments may require
+deviations from these examples. In those cases, it may be helpful to view the complete script usage statement by running
+it with only the `-h` argument.
 
-   Example:
-   ```bash
-   ncn-image-modification.sh -z Americas/Chicago \
-                                    -k k8s/${K8SVERSION}/filesystem.squashfs \
-                                    -s ceph/${CEPHVERSION}/filesystem.squashfs \
-                                    -d ~/.ssh/
-   ```
+The Kubernetes NCN image location is specified with the `-k` argument to the script, and the storage NCN image location is
+specified with the `-s` argument to the script. Both images should be customized with a single call to the script to ensure that
+they receive matching customizations, unless specifically desiring otherwise.
 
-   In the above example, the timezone in the squashfs is being changed to `Americas/Chicago`.
-   The root password will **not** be changed because `-p` was not provided on the command line.
-   It will copy the existing keys in `~/.ssh/` into the image.
+The new customized images are created in their original image's directory. They have the same name as the original image, except
+with the `secure-` prefix added. The original image is moved into a subdirectory named `old`, for backup purposes.
 
-   Example:
-   ```bash
-   export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
-   ncn-image-modification.sh -p -t rsa \
-                                    -N "" \
-                                    -k k8s/${K8SVERSION}/filesystem.squashfs \
-                                    -s ceph/${CEPHVERSION}/filesystem.squashfs
-   ```
+There are several choices to be made during this process:
 
-   In this example the root password hash in `/etc/shadow` in the NCN image will be replaced with the contents
-   of the `$SQUASHFS_ROOT_PW_HASH` variable. Ensure single quotes are used when setting the environment variable
-   so that any `$` characters are not interpreted by Bash. In the example above, `SQUASHFS_ROOT_PW_HASH` is being
-   set to match the root password hash that exists on the current node. This invocation also creates new SSH keys.
+- SSH key files can be provided to the script, or the script can generate them itself.
+- The hashed `root` password can be provided to the script, or the script can prompt for password entry when it is running.
+- To use a non-default timezone, that must be passed into the script.
 
-   The newly created images will have a `secure-` prefix. The original images are retained in an `./old` directory
-   at the same level in the filesystem as the squashfs files.
+#### SSH keys
 
-1. Put the new squashfs, kernel, and initrd into S3
+##### Script-generated keys
 
-   ***`NOTE`*** The version string for the kernel file may be different.
+To have the script generate the SSH keys automatically, it must be provided with the `ssh-keygen` options to use.
 
-   ```bash
-   cd k8s/${K8SNEW}
-   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/filesystem.squashfs' --file-name filesystem.squashfs
-   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/initrd' --file-name initrd.img.xz
-   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
-   ```
+- To view the complete list of supported `ssh-keygen` options, view the script usage statement by running it with the `-h` argument.
+- If the `-N` option is not used to specify the passphrase, then the script will prompt for the passphrase when it generates the keys.
+  - Even specifying an empty passphrase will prevent being prompted to enter the passphrase during script execution.
+    See [Example 3](#example-3-new-keys-copy-password-keep-utc-no-prompting).
 
-   ```bash
-   cd ceph/${CEPHNEW}
-   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name filesystem.squashfs
-   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
-   /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
-   cd ../..
-   ```
+##### Administrator-provided keys
 
-1. The Kubernetes and Storage images now have the image changes.
+To provide SSH keys to the script, specify the directory containing them with the `-d` argument.
 
-1. Update BSS with the new image for the master nodes and worker nodes.
+- The script assumes that public keys in that directory have the `.pub` file extension.
+- The entire contents of this directory will be copied into the `/root/.ssh` directory in the images.
+- After copying the directory contents, the script updates the `/root/.ssh/authorized_keys` file in the images
+  with the new public keys.
+  - This is usually the desired behavior, but it can be overridden by specifying the `-a` argument. In that
+    case, the script will **not** update the `authorized_keys` file after copying the directory contents.
 
-   **WARNING:** If doing a CSM software upgrade, skip this section to continue with Ceph Image.
+#### Password
 
-   > If not doing a CSM software upgrade, this process will update the entries in BSS for the master nodes and worker nodes to use the new `k8s-image`.
-   >
-   > 1. Set all master nodes and worker nodes to use newly created k8s-image.
-   >
-   >     This will use the K8SVERSION and K8SNEW variables defined earlier.
-   >
-   >     ```bash
-   >     for node in $(grep -oP "(ncn-[mw]\w+)" /etc/hosts | sort -u)
-   >     do
-   >       echo $node
-   >       xname=$(ssh $node cat /etc/cray/xname)
-   >       echo $xname
-   >       cray bss bootparameters list --name $xname --format json > bss_$xname.json
-   >       sed -i.old "s@k8s/${K8SVERSION}@k8s/${K8SNEW}@g" bss_$xname.json
-   >       kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
-   >       initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
-   >       params=$(cat bss_$xname.json | jq '.[]  .params')
-   >       cray bss bootparameters update --initrd $initrd --kernel $kernel --params $params --name $xname --format json
-   >     done
-   >     ```
+In order for the script to set `root` passwords in the images, the `-p` argument must be included when calling it.
 
-1. Update BSS with the new image for utility storage nodes.
+If the `SQUASHFS_ROOT_PW_HASH` environment variable is exported, the script will use that as the new `root` password hash for the images.
+Otherwise, the script will prompt for the password to be entered during its execution.
 
-   **WARNING:** If doing a CSM software upgrade, skip this section to continue with Cleanup.
+##### Use node password
 
-   > If not doing a CSM software upgrade, this process will update the entries in BSS for the utility storage nodes to use the new `ceph-image`.
-   >
-   > 1. Set all utility storage nodes to use newly created ceph-image.
-   >
-   >     This will use the CEPHVERSION and CEPHNEW variables defined earlier.
-   >
-   >     ```bash
-   >     for node in $(grep -oP "(ncn-s\w+)" /etc/hosts | sort -u)
-   >     do
-   >       echo $node
-   >       xname=$(ssh $node cat /etc/cray/xname)
-   >       echo $xname
-   >       cray bss bootparameters list --name $xname --format json > bss_$xname.json
-   >       sed -i.old "s@ceph/${CEPHVERSION}@ceph/${CEPHNEW}@g" bss_$xname.json
-   >       kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
-   >       initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
-   >       params=$(cat bss_$xname.json | jq '.[]  .params')
-   >       cray bss bootparameters update --initrd $initrd --kernel $kernel --params $params --name $xname --format json
-   >     done
-   >     ```
+If wanting to use the same `root` user password that is being used on the node where this procedure is being run, then
+the following command can be used to set the `SQUASHFS_ROOT_PW_HASH` variable.
 
-## Cleanup
+```bash
+export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
+```
 
-1. Remove the workarea so the space can be reused.
+##### Enter password and generate hash
 
-   ```bash
-   rm -rf /run/initramfs/overlayfs/workingarea
-   ```
+The following script can be used to manually enter a new password, and then generate its hash.
 
-1. Rebuild nodes.
+> The script uses `read -s` to prevent the password from being echoed to the screen or saved
+> in the shell history. It unsets the plaintext password variables at the end, so that only
+> the hash is preserved.
 
-   **WARNING:** If doing a CSM software upgrade, skip this step since the upgrade process does a rolling rebuild with some additional steps.
+```bash
+echo -n "Enter root password for NCN images: " ; read -s PW1 ; echo ; if [[ -z $PW1 ]]; then
+    echo "ERROR: Password cannot be blank"
+else
+    echo -n "Enter again: "
+    read -s PW2
+    echo
+    if [[ $PW1 != $PW2 ]]; then
+        echo "ERROR: Passwords do not match"
+    else
+        export SQUASHFS_ROOT_PW_HASH=$(echo "$PW1" | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin)
+        [[ -n $SQUASHFS_ROOT_PW_HASH ]] && echo "Password hash set and exported" || echo "ERROR: Problem generating hash"
+    fi
+fi ; unset PW1 PW2
+```
 
-   > If not doing a CSM software upgrade, follow the procedure to do a [Rolling Rebuild](../node_management/Rebuild_NCNs/Rebuild_NCNs.md) of all management nodes.
+#### Timezone
+
+The default timezone in the NCN images is UTC. This can optionally be changed by passing the `-z` argument to the
+script. Valid timezone options can be listed by running `timedatectl list-timezones`.
+
+#### Examples
+
+##### Example 1: New keys, copy password, keep UTC
+
+This example has the script generate new SSH keys (prompting the administrator for the SSH key passphrase) and
+copies the `root` user password from the current node. It does not change the timezone from the UTC default.
+
+```bash
+export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
+ncn-image-modification.sh -p \
+                          -t rsa \
+                          -k k8s/${K8SVERSION}/filesystem.squashfs \
+                          -s ceph/${CEPHVERSION}/filesystem.squashfs
+```
+
+##### Example 2: Provide keys, prompt for password, change timezone
+
+This example uses existing SSH keys located in the `/my/pre-existing/keys` directory. The script prompts the
+administrator for the `root` user password during execution. It changes the timezone to `America/Chicago`.
+
+```bash
+ncn-image-modification.sh -p \
+                          -d /my/pre-existing/keys \
+                          -z America/Chicago \
+                          -k k8s/${K8SVERSION}/filesystem.squashfs \
+                          -s ceph/${CEPHVERSION}/filesystem.squashfs
+```
+
+##### Example 3: New keys, no password change, keep UTC, no prompting
+
+This example has the script generate new SSH keys. It does not change the `root` password, nor does it
+change the timezone from the UTC default. A blank passphrase is provided, so that the script requires
+no input from the administrator while it is running.
+
+```bash
+ncn-image-modification.sh -t rsa \
+                          -N "" \
+                          -k k8s/${K8SVERSION}/filesystem.squashfs \
+                          -s ceph/${CEPHVERSION}/filesystem.squashfs
+```
+
+### 4. Upload artifacts into S3
+
+1. Upload the new Kubernetes image into S3.
+
+    ```bash
+    /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
+        --bucket-name ncn-images \
+        --key-name "k8s/${K8SNEW}/filesystem.squashfs" \
+        --file-name k8s/${K8SVERSION}/secure-filesystem.squashfs
+    ```
+
+1. Upload the Kubernetes kernel and `initrd` into S3 under the new version string.
+
+    ```bash
+    for art in initrd kernel ; do
+        /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
+            --bucket-name ncn-images \
+            --key-name "k8s/${K8SNEW}/${art}" \
+            --file-name k8s/${K8SVERSION}/${art}
+    done
+    ```
+
+1. Upload the new Ceph image into S3.
+
+    ```bash
+    /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
+        --bucket-name ncn-images \
+        --key-name "ceph/${CEPHNEW}/filesystem.squashfs" \
+        --file-name ceph/${CEPHVERSION}/secure-filesystem.squashfs
+    ```
+
+1. Upload the Ceph kernel and `initrd` into S3 under the new version string.
+
+    ```bash
+    for art in initrd kernel ; do
+        /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
+            --bucket-name ncn-images \
+            --key-name "ceph/${CEPHNEW}/${art}" \
+            --file-name ceph/${CEPHVERSION}/${art}
+    done
+    ```
+
+The Kubernetes and storage images now have the image changes.
+
+### 5. Update BSS
+
+**WARNING:** If doing a CSM software upgrade, skip this section and proceed to [Cleanup](#6-cleanup).
+
+This step updates the entries in BSS for the NCNs to use the new images.
+
+1. Update BSS for master and worker nodes.
+
+    > This uses the `K8SVERSION` and `K8SNEW` variables defined earlier.
+
+    ```bash
+    for node in $(grep -oP "(ncn-[mw]\w+)" /etc/hosts | sort -u); do
+        echo $node
+        xname=$(ssh $node cat /etc/cray/xname)
+        echo $xname
+        cray bss bootparameters list --name $xname --format json > bss_$xname.json
+        sed -i.old "s@k8s/${K8SVERSION}@k8s/${K8SNEW}@g" bss_$xname.json
+        kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
+        initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
+        params=$(cat bss_$xname.json | jq '.[]  .params')
+        cray bss bootparameters update --initrd $initrd --kernel $kernel --params $params --name $xname --format json
+    done
+    ```
+
+1. Update BSS for utility storage nodes.
+
+    > This uses the `CEPHVERSION` and `CEPHNEW` variables defined earlier.
+
+    ```bash
+    for node in $(grep -oP "(ncn-s\w+)" /etc/hosts | sort -u); do
+        echo $node
+        xname=$(ssh $node cat /etc/cray/xname)
+        echo $xname
+        cray bss bootparameters list --name $xname --format json > bss_$xname.json
+        sed -i.old "s@ceph/${CEPHVERSION}@ceph/${CEPHNEW}@g" bss_$xname.json
+        kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
+        initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
+        params=$(cat bss_$xname.json | jq '.[]  .params')
+        cray bss bootparameters update --initrd $initrd --kernel $kernel --params $params --name $xname --format json
+    done
+    ```
+
+### 6. Cleanup
+
+Remove the temporary working area in order to reclaim the space.
+
+```bash
+rm -rvf /run/initramfs/overlayfs/workingarea
+```
+
+### 7. Rebuild NCNs
+
+**WARNING:** If doing a CSM software upgrade, skip this step since the upgrade process does a rolling rebuild with some additional steps.
+
+Do a rolling rebuild of all NCNs. See [Rebuild NCNs](../node_management/Rebuild_NCNs/Rebuild_NCNs.md).
