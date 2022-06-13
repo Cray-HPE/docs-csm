@@ -1,14 +1,14 @@
 # Alternate Storage Pools
 
-- [Description](#description)
-- [Use cases](#use-cases)
-- [Best practices](#best-practices)
-- [Procedures](#procedures)
-  - [Create a storage pool](#create-a-storage-pool)
-  - [Create and map an `rbd` device](#create-and-map-an-rbd-device)
-  - [Move an `rbd` device to another node](#move-an-rbd-device-to-another-node)
-  - [Unmount, unmap, and delete an `rbd` device](#unmount-unmap-and-delete-an-rbd-device)
-  - [Remove a storage pool](#remove-a-storage-pool)
+* [Description](#description)
+* [Use cases](#use-cases)
+* [Best practices](#best-practices)
+* [Procedures](#procedures)
+  * [Create a storage pool](#create-a-storage-pool)
+  * [Create and map an `rbd` device](#create-and-map-an-rbd-device)
+  * [Move an `rbd` device to another node](#move-an-rbd-device-to-another-node)
+  * [Unmount, unmap, and delete an `rbd` device](#unmount-unmap-and-delete-an-rbd-device)
+  * [Remove a storage pool](#remove-a-storage-pool)
 
 ## Description
 
