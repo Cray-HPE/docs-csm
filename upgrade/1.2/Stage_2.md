@@ -39,6 +39,9 @@ By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrad
 has been the "stable node" -- that is, the node from which the other nodes were upgraded. At this point, the
 upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to allow the upgrade of `ncn-m001`.
 
+1. If you are using and rbd device for the CSM tarball, then please see the procedure to move the device from `ncn-m001` to `ncn-m002` in the "Move the rbd device to another node" section [here](../../operations/utility_storage/alernate_storage_pools.md).
+
+
 1. Log in to `ncn-m002` from outside the cluster.
 
     > **`NOTE`** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
@@ -54,13 +57,13 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
    See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
 
-1. (`ncn-m002#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
+4. (`ncn-m002#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
    CSM_RELEASE=1.2.0
    ```
 
-1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
+5. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
 
    A later stage of the upgrade expects the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm` on `ncn-m002`; that is why this command copies it there.
 
@@ -75,7 +78,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
              rpm -Uvh --force /tmp/cray-site-init.rpm /root/docs-csm-latest.noarch.rpm
    ```
 
-1. Upgrade `ncn-m001`.
+6. Upgrade `ncn-m001`.
 
    ```bash
    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
