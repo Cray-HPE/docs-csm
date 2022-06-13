@@ -43,7 +43,6 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
     See [Move the `rbd` device to another node](../../operations/utility_storage/Alernate_Storage_Pools.md#move-the-rbd-device-to-another-node).
 
-
 1. Log in to `ncn-m002` from outside the cluster.
 
     > **`NOTE`** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
