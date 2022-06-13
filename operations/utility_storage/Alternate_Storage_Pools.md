@@ -144,7 +144,7 @@ rbd unmap  -p csm-release release_version
 rbd showmapped
 ```
 
-**NOTE:** There should be no output from the above unless other `rbd` devices are mapped on the node.  In this case, it is a master node which typically will have no mapped `rbd` devices.
+**NOTE:** There should be no output from the above unless other `rbd` devices are mapped on the node. In this case, it is a master node, which typically will not have mapped `rbd` devices.
 
 Then run the following commands on the destination node (that is, the node where the `rbd` device is being remapped to).
 
