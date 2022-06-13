@@ -33,7 +33,8 @@ backup of Workload Manager configuration data and files is created. Once complet
     **Note:** The `prepare-assets.sh` script will delete the CSM tarball. Copy it to a different location before running that script.
     Otherwise it will need to be downloaded again later in the upgrade procedure.
 
-    See [Alternate Storage Pools](../../operations/utility_storage/Alternate_Storage_Pools.md).
+    See [Create a storage pool](../../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
+    and [Create and map an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
