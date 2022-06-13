@@ -519,6 +519,8 @@ unixODBC
 unmap
 unregister
 unregisters
+unset
+unsets
 unsquashed
 Unsuspend
 untainting
