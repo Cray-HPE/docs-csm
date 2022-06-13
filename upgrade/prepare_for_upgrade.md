@@ -161,6 +161,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```
 
 1. Optional - Create `rbd` device to provide space for the CSM release tarball.
-   1. See [Alternate Storage Pools](../operations/utility_storage/Alternate_Storage_Pools.md).
+
+    See [Alternate Storage Pools](../operations/utility_storage/Alternate_Storage_Pools.md).
 
 After completing the above steps, proceed to [Upgrade Management Nodes and CSM Services](README.md#upgrade_management_nodes_csm_services).
