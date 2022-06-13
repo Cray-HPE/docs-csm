@@ -41,7 +41,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 1. If the CSM tarball is located on an `rbd` device, then remap that device to `ncn-m002`.
 
-    See [Move the `rbd` device to another node](../../operations/utility_storage/Alernate_Storage_Pools.md#move-the-rbd-device-to-another-node).
+    See [Move the `rbd` device to another node](../../operations/utility_storage/Alternate_Storage_Pools.md#move-the-rbd-device-to-another-node).
 
 1. Log in to `ncn-m002` from outside the cluster.
 
