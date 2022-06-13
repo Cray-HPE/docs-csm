@@ -430,6 +430,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md)
 - [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
+- [Remove Kiali](system_management_health/Remove_Kiali.md)
 
 <a name="system-layout-service-sls"></a>
 
