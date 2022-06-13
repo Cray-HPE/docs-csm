@@ -57,13 +57,13 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
    See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
 
-4. (`ncn-m002#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
+1. (`ncn-m002#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
    CSM_RELEASE=1.2.0
    ```
 
-5. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
+1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
 
    A later stage of the upgrade expects the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm` on `ncn-m002`; that is why this command copies it there.
 
@@ -78,7 +78,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
              rpm -Uvh --force /tmp/cray-site-init.rpm /root/docs-csm-latest.noarch.rpm
    ```
 
-6. Upgrade `ncn-m001`.
+1. Upgrade `ncn-m001`.
 
    ```bash
    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
