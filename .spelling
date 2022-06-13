@@ -222,7 +222,7 @@ highspeed
 HM
 HMN
 HMNLB
-HMN_MTN 
+HMN_MTN
 HMN_RVR
 honored
 hostname
@@ -519,6 +519,8 @@ unixODBC
 unmap
 unregister
 unregisters
+unset
+unsets
 unsquashed
 Unsuspend
 untainting

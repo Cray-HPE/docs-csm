@@ -308,8 +308,9 @@ Mechanisms used by the system to ensure the security and authentication of inter
 - [Manage System Passwords](security_and_authentication/Manage_System_Passwords.md)
   - [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
   - [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
-  - [Change NCN Image Root Password and SSH Keys on Pit Node](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
-  - [Change NCN Image Root Password and SSH Keys](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+  - Set NCN Image Root Password, SSH Keys, and Timezone
+    - [Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
+    - [Set NCN Image Root Password, SSH Keys, and Timezone](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
   - [Change EX Liquid-Cooled Cabinet Global Default Password](security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
   - [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
   - [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
@@ -430,6 +431,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md)
 - [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
+- [Remove Kiali](system_management_health/Remove_Kiali.md)
 
 <a name="system-layout-service-sls"></a>
 
