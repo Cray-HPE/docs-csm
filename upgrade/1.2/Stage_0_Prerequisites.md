@@ -30,6 +30,9 @@ backup of Workload Manager configuration data and files is created. Once complet
 
     This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
 
+    **Note:** The `prepare-assets.sh` script will delete the CSM tarball. Copy it to a different location before running that script.
+    Otherwise it will need to be downloaded again later in the upgrade procedure.
+
     See [Alternate Storage Pools](../../operations/utility_storage/Alternate_Storage_Pools.md).
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
