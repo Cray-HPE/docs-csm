@@ -21,6 +21,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         ncn-m001# sdu --scenario triage --start_time '-4 hours' \
         --reason "saving state before powerdown/up"
         ```
+
         Refer to the HPE Cray EX System Diagnostic Utility (SDU) Administration Guide for more information and troubleshooting steps.
 
     1. Check Ceph status.
@@ -84,10 +85,10 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
    If a Lustre file system is being used, see the ClusterStor documentation for details on how to check
    for Lustre health. Here are a few commands which could be used to validate Lustre health. This example
-   is for a ClusterStor providing the cls01234 filesystem.
+   is for a ClusterStor providing the `cls01234` filesystem.
 
    1. SSH to the primary management node.
-      For example, on system cls01234.
+      For example, on system `cls01234`.
 
       ```bash
       remote$ ssh -l admin cls01234n000.systemname.com
@@ -156,5 +157,10 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       [n000]# cscli show_nodes
       [n000]# cscli fs_info
       ```
+
+1. Optional - Create `rbd` device to provide space for the CSM release tarball.
+
+    See [Create a storage pool](../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
+    and [Create and map an `rbd` device](../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
 
 After completing the above steps, proceed to [Upgrade Management Nodes and CSM Services](index.md#upgrade_management_nodes_csm_services).

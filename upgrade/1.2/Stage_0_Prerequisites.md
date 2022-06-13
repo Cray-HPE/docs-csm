@@ -25,8 +25,19 @@ backup of Workload Manager configuration data and files is created. Once complet
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-    ncn-m001# CSM_RELEASE=csm-1.2.0
+   ncn-m001# CSM_RELEASE=csm-1.2.0
    ```
+
+1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
+
+    See [Create a storage pool](../../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
+    and [Create and map an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
+
+    **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
+    However, the `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
+    If using an `rbd` device, this is not necessary or desirable, as it will require the CSM tarball to be downloaded again later in the
+    procedure. Therefore, **if using an `rbd` device to store the CSM tarball, then copy the tarball to a different location and point to that location
+    when running the `prepare-assets.sh` script.
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
@@ -44,7 +55,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    ```bash
    ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm \
                 -O /root/docs-csm-latest.noarch.rpm &&
-             rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
    ```
 
 1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
@@ -65,7 +76,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
-1. Skip the `Manual copy` subsection.
+1. Skip the `Manual copy` subsection and proceed to [Stage 0.2 - Update SLS](#stage-0.2-update-sls).
 
 <a name="manual-copy">
 
@@ -88,6 +99,10 @@ backup of Workload Manager configuration data and files is created. Once complet
    ```
 
 1. Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m001`.
+
+   > The `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
+   > If using an `rbd` device to store the CSM tarball (or if not wanting the tarball file deleted for other reasons), then be sure to
+   > copy the tarball file to a different location, and set the `CSM_TAR_PATH` to point to this new location.
 
    ```bash
    ncn-m001# CSM_TAR_PATH=/path/to/${CSM_RELEASE}.tar.gz
@@ -208,7 +223,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
 
    Set it to the password for `admin` user on the switches. This is needed for preflight tests within the check script.
 
-   > `read -s` is used to prevent the password from being written to the screen or the shell history.
+   > **NOTE:** `read -s` is used to prevent the password from being written to the screen or the shell history.
 
    ```bash
    ncn-m001# read -s SW_ADMIN_PASSWORD
