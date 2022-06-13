@@ -13,7 +13,9 @@ Creating, maintaining, and removing Ceph storage pools.
 
 * Apply a proper quota to any pools created.
   * This will use storage from the default crush rule which is utilizing every OSD.
-  * Improper use and policing of space usage can have a negative impact on the cluster and space available to running services that have determined the space provided by the design and sizing exercises.
+  * Improper use of this procedure can have a negative impact on the cluster and space available to running services.
+    * Failure to set a quota and not policing space usage can result in the Ceph cluster going into read-only mode.
+      * This will cause running services to crash if the space issue is not resolved quickly.
 * Cleanup after the criteria for the pool creation has been met.
   * This can be as simple as removing volumes but leaving the pool for future use.
 
@@ -127,6 +129,46 @@ ncn-m001:~ # mount /dev/rbd0 /etc/cray/csm/csm-release/
 
 ncn-m001:~ # mountpoint /etc/cray/csm/csm-release/
 /etc/cray/csm/csm-release/ is a mountpoint
+```
+
+### Move the rbd device to another node
+
+On node where the rbd device is mapped:
+
+```bash
+umount /etc/cray/csm/csm-release
+rbd unmap  -p csm-release release_version
+rbd showmapped
+```
+
+**NOTE:** There should be no output from the above unless you have other mapped rbd devices on the node.  In this case it is a master node which typically should have no mapped rbd devices.
+
+On the node you want to remap the rbd device to:
+
+```bash
+rbd map -p csm-release release_version
+rbd showmapped
+mkdir -pv /etc/cray/csm/csm-release 
+mount /dev/rbd0 /etc/cray/csm/csm-release
+```
+
+Output:
+
+```text
+ncn-m002:~ # rbd map -p csm-release release_version
+/dev/rbd0
+
+## The below output will vary based on the existence of the directories.
+ncn-m002:~ # mkdir -pv /etc/cray/csm/csm-release
+mkdir: created directory '/etc/cray'
+mkdir: created directory '/etc/cray/csm'
+mkdir: created directory '/etc/cray/csm/csm-release'
+
+ncn-m002:~ # rbd showmapped
+id  pool         namespace  image            snap  device
+0   csm-release             release_version  -     /dev/rbd0
+
+ncn-m002:~ # mount /dev/rbd0 /etc/cray/csm/csm-release/
 ```
 
 ### Unmount, unmap, and delete an rbd device
