@@ -55,7 +55,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    ```bash
    ncn-m001# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm \
                 -O /root/docs-csm-latest.noarch.rpm &&
-   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+             rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
    ```
 
 1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
