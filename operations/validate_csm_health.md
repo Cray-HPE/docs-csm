@@ -489,7 +489,7 @@ Follow these instructions for executing the gateway tests from an NCN and from o
 
 - [Running Gateway Tests on an NCN Management Node](./network/Gateway_Testing.md#running-gateway-tests-on-an-ncn-management-node)
   - The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
-- [Running Gateway Tests on a Device Outside the System](network/Gateway_testing#running-gateway-tests-on-a-device-outside-the-system)
+- [Running Gateway Tests on a Device Outside the System](./network/Gateway_testing#running-gateway-tests-on-a-device-outside-the-system)
 
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
@@ -536,7 +536,7 @@ The external SSH access tests may be run on any system external to the cluster.
 
     - Install the `docs-csm` RPM.
 
-      See [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+      See [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
     - Copy over the following folder from a system where the `docs-csm` RPM is installed:
 
