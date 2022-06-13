@@ -507,7 +507,7 @@ see [Check for Latest Documentation](../update_product_stream/README.md#check-fo
 Execute the tests by running the following command:
 
 ```bash
-ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
+/usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
 ```
 
 By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
@@ -515,7 +515,7 @@ It is possible to customize which nodes and networks will be tested. See the tes
 The script usage statement is displayed by calling the test with the `--help` argument:
 
 ```bash
-ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal --help
+/usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal --help
 ```
 
 The test will complete with an overall pass/failure status such as the following:
@@ -547,7 +547,7 @@ The external SSH access tests may be run on any system external to the cluster.
    Run the following command from the `pyscripts` directory in order to install the required Python dependencies:
 
     ```bash
-    external:/usr/share/doc/csm/scripts/operations/pyscripts# pip install .
+    cd /usr/share/doc/csm/scripts/operations/pyscripts && pip install .
     ```
 
 1. Obtain the `admin` client secret.
@@ -556,7 +556,7 @@ The external SSH access tests may be run on any system external to the cluster.
    following command on an NCN.
 
     ```bash
-    ncn# kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
+    kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
     ```
 
     Example output:
@@ -568,7 +568,7 @@ The external SSH access tests may be run on any system external to the cluster.
 1. On the external system, execute the tests.
 
     ```bash
-    external:/usr/share/doc/csm/scripts/operations/pyscripts# ./start.py test_bican_external
+    cd /usr/share/doc/csm/scripts/operations/pyscripts && ./start.py test_bican_external
     ```
 
    By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
@@ -576,7 +576,7 @@ The external SSH access tests may be run on any system external to the cluster.
    The script usage statement is displayed by calling the test with the `--help` argument:
 
     ```bash
-    external:/usr/share/doc/csm/scripts/operations/pyscripts# ./start.py test_bican_external --help
+    cd /usr/share/doc/csm/scripts/operations/pyscripts && ./start.py test_bican_external --help
     ```
 
 1. When prompted by the test, enter the system domain and the `admin` client secret.
