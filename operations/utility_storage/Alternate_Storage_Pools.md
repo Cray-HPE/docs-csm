@@ -4,12 +4,12 @@
 
 Creating, maintaining, and removing Ceph storage pools.
 
-## Known use cases
+## Use cases
 
 * A landing space for the CSM tarball used for upgrades.
 * Temporary space needed for maintenance or pre/post upgrade activities.
 
-## Best Practices
+## Best practices
 
 * Apply a proper quota to any pools created.
   * This will use storage from the default CRUSH rule which is utilizing every OSD.
@@ -21,7 +21,7 @@ Creating, maintaining, and removing Ceph storage pools.
 
 This example shows the creation and mounting of an `rbd` device on `ncn-m001`.
 
-**NOTE:** The commands to create and delete pools or `rbd` devices must be run from `ncn-m001/2/3` or `ncn-s001/2/3`.
+**NOTE:** The commands to create and delete pools or `rbd` devices must be run from a master node or one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
 ### Create storage pool
 
@@ -54,7 +54,7 @@ quotas for pool 'csm-release':
 
 **NOTES:**
 
-* The above example sets the quota to 500 GiB.  
+* The above example sets the quota to 500 GiB.
   * If this pool is fully utilized it will be using 1.5 TiB of raw space.
   * This space counts against the total space provided by the cluster; Use cautiously.
   * If this pool or any pool reaches 95-100% utilization, then all volumes for the fully utilized pool will go into read-only mode.
@@ -63,7 +63,7 @@ quotas for pool 'csm-release':
 
 **IMPORTANT:**
 
-* Creating an `rbd` device requires proper access and must be run from `ncn-m001/2/3` or `ncn-s001/2/3`.
+* Creating an `rbd` device requires proper access and must be run from a master node or one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 * Mounting a device will occur on the node where the storage needs to be present.
 
 ```bash
