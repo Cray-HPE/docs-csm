@@ -1,19 +1,19 @@
-# Change Air-Cooled Node BMC Credentials
+# Change Air-Cooled Node BMC Credentials Using SAT
 
 This procedure describes how to use the System Admin Toolkit's (SAT) `sat bmccreds`
 command to set a global credential for all BMCs on air-cooled nodes.
 
-### Limitations
+## Limitations
 
 All air-cooled and liquid-cooled BMCs share the same global credentials. The air-cooled Slingshot switch controllers (Router BMCs) must have the same credentials as the liquid-cooled Slingshot switch controllers.
 
 The `sat bmccreds` command is not able to target air-cooled nodes directly. It can, however, target nodes by their component name (xname). The following procedure uses xnames to target nodes.
 
-### Prerequisites
+## Prerequisites
 
 SAT is installed and configured.
 
-### Procedure
+## Procedure
 
 1. Get the xnames for all air-cooled nodes.
 
