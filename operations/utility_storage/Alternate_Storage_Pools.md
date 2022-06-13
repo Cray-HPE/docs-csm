@@ -6,8 +6,8 @@ Creating, maintaining, and removing Ceph storage pools.
 
 ## Known use cases
 
-* A landing space for the csm tarball used for upgrades.
-* Temporary space needed for maintainance or pre/post upgrade activities.
+* A landing space for the CSM tarball used for upgrades.
+* Temporary space needed for maintenance or pre/post upgrade activities.
 
 ## Best Practices
 
