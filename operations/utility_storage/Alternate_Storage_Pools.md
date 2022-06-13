@@ -30,30 +30,55 @@ This example shows the creation and mounting of an `rbd` device on `ncn-m001`.
 The below example will create a storage pool name `csm-release`. The pool name can be changed to better reflect any use cases outside of support for upgrades.
 The `3 3` arguments can be left unchanged. For more information on their meaning and possible alternative values, see the Ceph product documentation.
 
-```bash
-ceph osd pool create csm-release 3 3
-ceph osd pool application enable csm-release rbd
-ceph osd pool set-quota csm-release max_bytes 500G
-ceph osd pool get-quota csm-release
-```
+1. Create a pool.
 
-Output:
+    ```bash
+    ceph osd pool create csm-release 3 3
+    ```
 
-```text
-ncn-s001:~ # ceph osd pool create csm-release 3 3
-pool 'csm-release' created
+    Example output:
 
-ncn-s001:~ # ceph osd pool application enable csm-release rbd
-enabled application 'rbd' on pool 'csm-release'
+    ```text
+    pool 'csm-release' created
+    ```
 
-ncn-s001:~ # ceph osd pool set-quota csm-release max_bytes 500G
-set-quota max_bytes = 536870912000 for pool csm-release
+1. Enable `rbd` devices in the pool.
 
-ncn-s001:~ # ceph osd pool get-quota csm-release
-quotas for pool 'csm-release':
-  max objects: N/A
-  max bytes  : 500 GiB  (current num bytes: 0 bytes)
-```
+    ```bash
+    ceph osd pool application enable csm-release rbd
+    ```
+
+    Example output:
+
+    ```text
+    enabled application 'rbd' on pool 'csm-release'
+    ```
+
+1. Set the quota.
+
+    ```bash
+    ceph osd pool set-quota csm-release max_bytes 500G
+    ```
+
+    Example output:
+
+    ```text
+    set-quota max_bytes = 536870912000 for pool csm-release
+    ```
+
+1. View the quota.
+
+    ```bash
+    ceph osd pool get-quota csm-release
+    ```
+
+    Example output:
+
+    ```text
+    quotas for pool 'csm-release':
+      max objects: N/A
+      max bytes  : 500 GiB  (current num bytes: 0 bytes)
+    ```
 
 **NOTES:**
 
