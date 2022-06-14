@@ -106,12 +106,12 @@ Verify that the firmware version for the HPE PDU is **2.0.0.L**. If it is not, a
 1. Download version **2.0.0.L** firmware from: `support.hpe.com` website
 This will download an `.exe` file, which is a self extracting zip file.
 1. If using a Windows system, run the `.exe` file to extract the files, or use an unzip program on the file.
-One of the files extracted will be named **`HPE.FW`**, that is the firmware file needed for uploading.
+One of the files extracted will be named `HPE.FW`, that is the firmware file needed for uploading.
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
-1. Use the **`Settings"** icon (gear in computer monitor in top right corner) to navigate to **`System Management`**.
-1. Click the **`Update Firmware`** button.
-1. Click **`Choose File`** and select the **'HPE.FW'** file downloaded.
-1. Click **`Upload`** button.
+1. Use the `Settings` icon (gear in computer monitor in top right corner) to navigate to `System Management`.
+1. Click the `Update Firmware` button.
+1. Click `Choose File` and select the `HPE.FW` file downloaded.
+1. Click `Upload` button.
 
 The firmware will be updated and the PDU management processor will restart.
 
