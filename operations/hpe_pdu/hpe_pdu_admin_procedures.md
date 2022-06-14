@@ -63,8 +63,6 @@ The following is needed before running this procedure:
 
 1. Log in with the `admin` username. Enter the admin password. If the admin password has not been changed, there will be a prompt to change the password.
 
-1. If the `admin` password was changed, update Vault with the new credentials following procedure [Update Vault Credentials](#update-vault-credentials)
-
 ## HPE PDU Initial Set-up
 
 Set up an HPE PDU for administrative use by completing the following tasks:

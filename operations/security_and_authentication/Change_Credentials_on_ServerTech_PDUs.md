@@ -51,14 +51,14 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
     To extract the global credentials from vault for the PDUs:
 
     ```bash
-    vault kv get secret/pdu-creds/global/pdu
+    ncn-m001# vault kv get secret/pdu-creds/global/pdu
     ```
 
     To extract the credentials from vault for a single PDU:
 
     ```bash
-    PDU=x3000m0
-    vault kv get secret/pdu-creds/$PDU
+    ncn-m001# PDU=x3000m0
+    ncn-m001# vault kv get secret/pdu-creds/$PDU
     ```
 
     Store the current password:
