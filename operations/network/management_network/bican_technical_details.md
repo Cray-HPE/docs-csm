@@ -1,11 +1,11 @@
 # Bifurcating the CAN - CSM 1.2 Feature Details
 
 - [1 CAN New Features Overview](#1-can-new-features-overview)
-- [2 High Speed CAN (CHN)](#2-high-speed-can-(chn))
-  - [2.1 CHN system ingress endpoints accessible in CSM 1.2](#21-chn-system-ingress-endpoints-accessible-in-CSM 1.2)
-  - [2.2 CHN system egress endpoints accessible in CSM 1.2](#22-chn-system-egress-endpoints-accessible-in-CSM 1.2)
+- [2 High Speed CAN (CHN)](#2-high-speed-can-chn)
+  - [2.1 CHN system ingress endpoints accessible in CSM 1.2](#21-chn-system-ingress-endpoints-accessible-in-CSM-1.2)
+  - [2.2 CHN system egress endpoints accessible in CSM 1.2](#22-chn-system-egress-endpoints-accessible-in-CSM-1.2)
   - [2.3 Endpoint Naming](#23-endpoint-naming)
-    - [2.3.1 Touchpoints: effects and changes](#231-touchpoints:-effects-and-changes)
+    - [2.3.1 Touchpoints: effects and changes](#231-touchpoints-effects-and-changes)
     - [2.3.2 When naming occurs](#232-when-naming-occurs)
     - [2.3.3 Ability to change post-install](#233-ability-to-change-post-install)
   - [2.4 Endpoint Addressing](#24-endpoint-addressing)
@@ -13,7 +13,7 @@
     - [2.4.2 When addressing occurs](#242-when-addressing-occurs)
     - [2.4.3 Ability to change post-install](#243-ability-to-change-post-install)
   - [2.5 Traffic Separation and Routing](#25-traffic-separation-and-routing)
-    - [2.5.1 Touchpoints: effects and changes](#251-touchpoints:-effects-and-changes)
+    - [2.5.1 Touchpoints: effects and changes](#251-touchpoints-effects-and-changes)
     - [2.5.2 When configuration occurs](#252-when-configuration-occurs)
     - [2.5.3 Ability to change post install](#253-ability-to-change-post-install)
 - [3 Management CAN(CMN)](#3-management-can(cmn))
@@ -21,13 +21,13 @@
   - [3.2 Endpoint Naming](#32-endpoint-naming)
   - [3.3 Endpoint Addressing](#33-endpoint-addressing)
   - [3.4 Changes](#34-changes)
-    - [3.4.1 Touchpoints: effects and changes](#341-touchpoints:-effects-and-changes)
+    - [3.4.1 Touchpoints: effects and changes](#341-touchpoints-effects-and-changes)
     - [3.4.2 When configuration occurs](#342-when-configuration-occurs)
     - [3.4.3 Ability to change post install](#343-ability-to-change-post-install)
 - [4 CAN External/Site Access (site DNS, LDAP, etc...)](#4-can-external/site-access)
   - [4.1 Traffic Separation and Routing](#41-traffic-separation-and-routing)
   - [4.2 Changes](#42-changes)
-    - [4.2.1 Touchpoints: effects and changes](#421-touchpoints:-effects-and-changes)
+    - [4.2.1 Touchpoints: effects and changes](#421-touchpoints-effects-and-changes)
     - [4.2.2 When configuration occurs](#422-when-configuration-occurs)
     - [4.2.3 Ability to change post install](#423-ability-to-change-post-install)
 
@@ -48,11 +48,12 @@ Enabling BICAN will remove the original CAN.
 
 **During installation the opportunity to enable the new features will be presented.**
 
-At this time, the customers must:
+At this time, the customers must accept:
 
-- **Add** High Speed CAN (CHN) access and remove CAN.
-- **Move** system access to site external resources (LDAP, DNS, etc...) from the CAN to either the CMN or CHN.
-- **Add** migrate administrative traffic from CAN to the new Management CAN (CMN).
+- External management to admin endpoints moves to the Customer Management Network (CMN).
+- External user access to user endpoints moves to the Customer High-speed Network (CHN).
+- The CHN is now the default ingress network.
+- Customer access over the legacy CAN is disabled by default.
 
 **Reverting or changing any decisions will be manual**
 
@@ -61,7 +62,7 @@ Details of the High Speed CAN (CHN) and the Management CAN (CMN) are described b
 
 ![Customer Access Overview](img/customer_access_overview.png)
 
-<a name="2-high-speed-can-(chn)"></a>
+<a name="2-high-speed-can-chn"></a>
 
 ## 2 High Speed CAN (CHN)
 
@@ -72,7 +73,7 @@ As can be seen in the diagram above, traffic ingress from the site for the CHN i
 NOTE:  Arista routing configurations as a virtual routing instance are in-scope for CSM 1.2 CHN work.
 Other Edge Routers, including Juniper are out of scope.
 
-<a name="21-chn-system-ingress-endpoints-accessible-in-CSM 1.2"></a>
+<a name="21-chn-system-ingress-endpoints-accessible-in-CSM-1.2"></a>
 
 ### 2.1 CHN system ingress endpoints accessible in CSM 1.2
 
@@ -80,7 +81,7 @@ Other Edge Routers, including Juniper are out of scope.
 - Designated **Compute Nodes (CN)**, including those used for Compute as UAN, **over SSH**.
 - Kubernetes **API endpoints over https**.
 
-<a name="22-chn-system-egress-endpoints-accessible-in-CSM 1.2"></a>
+<a name="22-chn-system-egress-endpoints-accessible-in-CSM-1.2"></a>
 
 ### 2.2 CHN system egress endpoints accessible in CSM 1.2
 
@@ -106,7 +107,7 @@ Exchange of system DNS with the site may be via delegation (preferred) or zone t
 
 Once added to CSI, names and IP's will use the standard CSM data flow and end up in SLS and be available for use via both DNS and DHCP services.
 
-<a name="231-touchpoints:-effects-and-changes"></a>
+<a name="231-touchpoints-effects-and-changes"></a>
 
 #### 2.3.1 Touchpoints: effects and changes
 
@@ -174,7 +175,7 @@ This is intended to be changed during installation to a **customer-supplied IPv4
 In CSM 1.2, there will be Layer 3 separation internal to the system but co-mingled Layer 2 between the CHN IPv4 addressing and the internal HSN private IPv4 addresses.
 Isolation will be within the Slingshot network as well as separated at the Edge Router.
 
-<a name="251-touchpoings:-effects-and-changes"></a>
+<a name="251-touchpoings-effects-and-changes"></a>
 
 #### 2.5.1 Touchpoints: effects and changes
 
@@ -242,7 +243,7 @@ For the CSM 1.2 release the CMN will only be available via customer-supplied IPv
 
 ### 3.4 Changes
 
-<a name="341-touchpoints:-effects-and-changes"></a>
+<a name="341-touchpoints-effects-and-changes"></a>
 
 #### 3.4.1 Touchpoints: effects and changes
 
@@ -290,7 +291,7 @@ At installation time one of the following egress routes from the system to the s
 
 ### 4.2 Changes
 
-<a name="421-touchpoints:-effects-and-changes"></a>
+<a name="421-touchpoints-effects-and-changes"></a>
 
 #### 4.2.1 Touchpoints: effects and changes
 
