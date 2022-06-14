@@ -11,7 +11,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 - The PDU is accessible over the network. A PDU can be reachable by its xname hostname, but may not yet be discovered by HSM.
-- PDUs are made by ServerTech.
+- PDUs are manufactured by ServerTech.
 
     ```bash
     ncn-m001# PDU=x3000m0
@@ -84,7 +84,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
 1. Change and update the password for a ServerTech PDU(s). Either change the credentials on a single PDU or change all ServerTech PDUs to the same global default value:
 
-**NOTE**: To change the 
+**NOTE**: To change the password on a single PDU, the PDUs must be successfully discovered by HSM.
 
      1. To update the password on a single ServerTech PDU in the system:
 
