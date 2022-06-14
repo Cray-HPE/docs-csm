@@ -2,13 +2,13 @@
 
 The following procedures are used to manage the HPE Power Distribution Unit (PDU):
 
- * [Verify PDU Vendor](#verify-pdu-vendor)
- * [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)
- * [HPE PDU Initial Set-up](#hpe-pdu-initial-set-up)
- * [Update HPE PDU Firmware](#update-hpe-pdu-firmware)
- * [Change HPE PDU User Passwords](#change-hpe-pdu-user-passwords)
- * [Update Vault Credentials](#update-vault-credentials)
- * [Discover HPE PDU after Upgrading CSM](#discover-hpe-pdu-after-upgrading-csm)
+* [Verify PDU Vendor](#verify-pdu-vendor)
+* [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)
+* [HPE PDU Initial Set-up](#hpe-pdu-initial-set-up)
+* [Update HPE PDU Firmware](#update-hpe-pdu-firmware)
+* [Change HPE PDU User Passwords](#change-hpe-pdu-user-passwords)
+* [Update Vault Credentials](#update-vault-credentials)
+* [Discover HPE PDU after Upgrading CSM](#discover-hpe-pdu-after-upgrading-csm)
 
 > **IMPORTANT:** Because of the polling method used to process sensor data from the HPE PDU, telemetry data may take up to six minutes to refresh; this includes the outlet status reported by the Hardware State Manager (HSM).
 
@@ -21,13 +21,13 @@ ncn-m001# PDU=x3000m0
 ncn-m001# curl -k -s --compressed  https://$PDU -i | grep Server:
 ```
 
-- Example ServerTech output:
+* Example ServerTech output:
 
   ```bash
   Server: ServerTech-AWS/v8.0v
   ```
 
-- Example HPE output
+* Example HPE output
 
   ```bash
   Server: HPE/1.4.0
@@ -49,8 +49,6 @@ The following is needed before running this procedure:
 * Root password for `ncn-m001`
 * Admin password for HPE PDU _(default: 12345678)_
 
-### Procedure
-
 1. Use the `ssh` command from a local PC/MAC/Linux machine:
 
    ```bash
@@ -65,7 +63,7 @@ The following is needed before running this procedure:
 
 1. Log in with the `admin` username. Enter the admin password. If the admin password has not been changed, there will be a prompt to change the password.
 
-1. If the `admin` password was changed, update Vault with the new credentials following procduere [Update Vault Credentials](#update-vault-credentials)
+1. If the `admin` password was changed, update Vault with the new credentials following procedure [Update Vault Credentials](#update-vault-credentials)
 
 ## HPE PDU Initial Set-up
 
@@ -75,14 +73,12 @@ Set up an HPE PDU for administrative use by completing the following tasks:
 * Add the default user
 * Enable Outlet Control
 
-### Procedure
-
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 
 #### Ensure Redfish is Enabled
 
 1. Use the **"Settings"** icon (gear in computer monitor in top right corner) to navigate to **"Network Settings"**.
-1. Verify there is a check next to "RESTapi Access", if not, click the **"Edit"** icon (pencil) and enable.
+1. Verify there is a check next to `RESTapi Access`, if not, click the **"Edit"** icon (pencil) and enable.
 
 #### Add Default User
 
@@ -99,8 +95,6 @@ Set up an HPE PDU for administrative use by completing the following tasks:
 
 Verify that the firmware version for the HPE PDU is **2.0.0.L**. If it is not, a firmware update is required.
 
-### Procedure
-
 #### Check Firmware Version
 
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
@@ -109,22 +103,21 @@ Verify that the firmware version for the HPE PDU is **2.0.0.L**. If it is not, a
 
 #### Update Firmware
 
-1. Download version **2.0.0.L** firmware from: [https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software]](https://support.hpe.com/connect/s/search?language=en_US#q=P9S23A&t=All&sort=%40hpescuniversaldate%20descending&numberOfResults=25&f:@contenttype=[Drivers%20and%20Software])
-This will download an .exe file, which is a self extracting zip file.
-1. If using a Windows system, run the .exe file to extract the files, or use an unzip program on the file. One of the files extracted will be named **"HPE.FW"**, that is the firmware file needed for uploading.
+1. Download version **2.0.0.L** firmware from: `support.hpe.com` website
+This will download an `.exe` file, which is a self extracting zip file.
+1. If using a Windows system, run the `.exe` file to extract the files, or use an unzip program on the file.
+One of the files extracted will be named **`HPE.FW`**, that is the firmware file needed for uploading.
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
-1. Use the **"Settings"** icon (gear in computer monitor in top right corner) to navigate to **"System Management"**.
-1. Click the **"Update Firmware"** button.
-1. Click **"Choose File"** and select the **"HPE.FW"** file downloaded.
-1. Click **"Upload"** button.
+1. Use the **`Settings"** icon (gear in computer monitor in top right corner) to navigate to **`System Management`**.
+1. Click the **`Update Firmware`** button.
+1. Click **`Choose File`** and select the **'HPE.FW'** file downloaded.
+1. Click **`Upload`** button.
 
 The firmware will be updated and the PDU management processor will restart.
 
 ## Change HPE PDU User Passwords
 
 Change the password of any existing user account using the HPE PDU web interface.
-
-### Procedure
 
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 1. Use the **"admin"** menu (top right corner) to navigate to **"User Accounts"**.
@@ -137,9 +130,9 @@ Use the following procedure to ensure the `hms-discovery` job and Redfish Transl
 
 > **IMPORTANT:** This procedure is only needed when upgrading CSM, not performing a fresh install. This procedure should be run after CSM has been fully upgraded including the discovery job.
 
-### Procedure
-
-1.  In CSM 1.0 and earlier releases, the `hms-discovery` job and RTS treated all PDUs as if were made by ServerTech. After the upgrade to CSM 1.2, RTS will still think the HPE PDUs in the system are ServerTech PDUs. Remove these erroneous HPE PDU entries for RTS from Vault.
+1.  In CSM 1.0 and earlier releases, the `hms-discovery` job and RTS treated all PDUs as if were made by ServerTech.
+After the upgrade to CSM 1.2, RTS will still think the HPE PDUs in the system are ServerTech PDUs.
+Remove these erroneous HPE PDU entries for RTS from Vault.
 
     1. Get Vault password and create Vault alias.
 
