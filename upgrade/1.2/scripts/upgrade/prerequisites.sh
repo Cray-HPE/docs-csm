@@ -496,29 +496,6 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
 
-    kubectl patch deployment -n spire spire-jwks -p '{
-        "spec": {
-        "strategy": {"rollingUpdate": {"maxSurge": 0}},
-        "template": {
-            "spec": {
-                "affinity": {
-                    "podAntiAffinity": {
-                        "requiredDuringSchedulingIgnoredDuringExecution": [
-                            {
-                            "labelSelector": {
-                                "matchLabels": {
-                                    "app.kubernetes.io/name":"spire-jwks"
-                                }
-                            },
-                            "topologyKey": "kubernetes.io/hostname"
-                            }
-                        ]
-                    }
-                }
-            }
-        }
-    }}'
-
     if kubectl get deployment -n istio-system istio-ingressgateway >/dev/null 2>&1; then
         kubectl patch deployment -n istio-system istio-ingressgateway -p '{
             "spec": {
@@ -622,6 +599,64 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
             }
         }}'
     fi
+
+    for deploy in cray-opa cray-opa-ingressgateway cray-opa-ingressgateway-customer-admin cray-opa-ingressgateway-user; do
+        namespace="opa"
+        if kubectl get deployment -n "${namespace}" "${deploy}" >/dev/null 2>&1; then
+            kubectl patch deployment -n "${namespace}" "${deploy}" -p '{
+                "spec": {
+                "strategy": {"rollingUpdate": {"maxSurge": 0, "maxUnavailable": 1 }},
+                "template": {
+                    "spec": {
+                        "affinity": {
+                            "podAntiAffinity": {
+                                "preferredDuringSchedulingIgnoredDuringExecution": null,
+                                "requiredDuringSchedulingIgnoredDuringExecution": [
+                                    {
+                                    "labelSelector": {
+                                        "matchLabels": {
+                                            "app":"'"${deploy}"'"
+                                        }
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }}'
+        fi
+    done
+
+    for deploy in spire-jwks spire-postgres-pooler; do
+        namespace="spire"
+        if kubectl get deployment -n "${namespace}" "${deploy}" >/dev/null 2>&1; then
+            kubectl patch deployment -n "${namespace}" "${deploy}" -p '{
+                "spec": {
+                "strategy": {"rollingUpdate": {"maxSurge": 0, "maxUnavailable": 1 }},
+                "template": {
+                    "spec": {
+                        "affinity": {
+                            "podAntiAffinity": {
+                                "preferredDuringSchedulingIgnoredDuringExecution": null,
+                                "requiredDuringSchedulingIgnoredDuringExecution": [
+                                    {
+                                    "labelSelector": {
+                                        "matchLabels": {
+                                            "app":"'"${deploy}"'"
+                                        }
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }}'
+        fi
+    done
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} "$(hostname)"
