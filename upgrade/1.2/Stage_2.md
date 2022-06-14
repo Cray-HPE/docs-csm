@@ -18,10 +18,10 @@
 
 1. Make sure that not all pods of `ingressgateway-hmn` or `spire-server` are running on the same worker node.
 
-    1. See where the pods are running.
+    1. (`ncn-m001#`) See where the pods are running.
 
         ```bash
-        ncn-m001# kubectl get pods -A -o wide | grep -E 'ingressgateway-hmn|spire-server|^NAMESPACE'
+        kubectl get pods -A -o wide | grep -E 'ingressgateway-hmn|spire-server|^NAMESPACE'
         ```
 
         Example output:
@@ -40,10 +40,10 @@
 
     1. For either of those two deployments, if all pods are running on a single worker node, then move at least one pod to a different worker node.
 
-        Use the `/opt/cray/platform-utils/move_pod.sh` script to do this.
+        (`ncn-m001#`) Use the `/opt/cray/platform-utils/move_pod.sh` script to do this.
 
         ```bash
-        ncn-m001# /opt/cray/platform-utils/move_pod.sh <pod_name> <target_node>
+        /opt/cray/platform-utils/move_pod.sh <pod_name> <target_node>
         ```
 
 1. (`ncn-m001#`) Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`.
