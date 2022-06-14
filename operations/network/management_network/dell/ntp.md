@@ -1,15 +1,11 @@
 # Network Time Protocol (NTP) Client
 
-<<<<<<< HEAD
 Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
 
 > NTP is used to synchronize timekeeping among a set of distributed time servers and clients
 > ...
 > It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date
 > well into the next century.
-=======
-"NTP is used to synchronize timekeeping among a set of distributed time servers and clients [...] It provides the protocol mechanisms to synchronize time in principle to precisions in the order of nanoseconds while preserving a non-ambiguous date well into the next century." –rfc1305
->>>>>>> MTL-1695
 
 The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system.
 This document shows how to view NTP status and configure NTP on a Dell switch.

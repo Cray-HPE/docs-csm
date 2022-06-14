@@ -1,29 +1,30 @@
 # Troubleshoot BGP not Accepting Routes from MetalLB
 
-Check the number of routes that the Border Gateway Protocol \(BGP\) Router is accepting in the peering session. This procedure is useful if Kubernetes LoadBalancer services in the NMN, HMN, or CAN address pools are not accessible from outside the cluster.
+Check the number of routes that the Border Gateway Protocol \(BGP\) Router is accepting in the peering session. This procedure is useful if Kubernetes `LoadBalancer` services in the NMNLB, HMNLB, CMN, CHN or
+CAN address pools are not accessible from outside the cluster.
 
-Regain access to Kubernetes LoadBalancer services from outside the cluster.
+Regain access to Kubernetes `LoadBalancer` services from outside the cluster.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires administrative privileges.
 
-### Procedure
+## Procedure
 
-1.  Log into the spine or aggregate switch.
+1. Log into the spine or aggregate switch.
 
-    In this example, the Aruba or Mellanox spine or aggregate switch is accessed from `ncn-m001`. In this case, sw-spine-001.hmn is being accessed:
+    In this example, the Aruba or Mellanox spine or aggregate switch is accessed from `ncn-m001`. In this case, `sw-spine-001.hmn` is being accessed:
     You should check BOTH spine switches during this process.
 
     ```bash
     ssh admin@sw-spine-001.hmn
     ```
 
-2.  Check the number of routes that the BGP Router is accepting in the peering session.
+2. Check the number of routes that the BGP Router is accepting in the peering session.
 
-    -   **Mellanox:**
+    - **Mellanox:**
 
-        Look at the number under the State/Pfx column in the output. There should be a number that matches the number of unique LoadBalancer IP addresses configured in the cluster.
+        Look at the number under the `State/Pfx` column in the output. There should be a number that matches the number of unique `LoadBalancer` IP addresses configured in the cluster.
 
         ```bash
         sw-spine-001 [standalone: master] # show ip bgp vrf all summary
@@ -31,9 +32,9 @@ This procedure requires administrative privileges.
 
         Example output:
 
-        ```
-        VRF name                  : CAN
-        BGP router identifier     : 10.101.8.2
+        ```console
+        VRF name                  : Customer
+        BGP router identifier     : 10.2.0.2
         local AS number           : 65533
         BGP table version         : 1634
         Main routing table version: 1634
@@ -49,7 +50,7 @@ This procedure requires administrative privileges.
         10.101.8.10       4    65536        1267478   1278327   1634      0      0      13:20:12:15   ESTABLISHED/14
 
         VRF name                  : default
-        BGP router identifier     : 10.252.0.2
+        BGP router identifier     : 10.2.0.2
         local AS number           : 65533
         BGP table version         : 40
         Main routing table version: 40
@@ -73,7 +74,7 @@ This procedure requires administrative privileges.
 
         Example output:
 
-        ```
+        ```console
         Flags:
           F: Failed to install in H/W
           B: BFD protected (static route)
@@ -115,7 +116,7 @@ This procedure requires administrative privileges.
                                               c        10.254.1.12       vlan4            bgp        200/0
                                               c        10.254.1.14       vlan4            bgp        200/0
 
-        VRF Name CAN:
+        VRF Name Customer:
           ------------------------------------------------------------------------------------------------------
           Destination       Mask              Flag     Gateway           Interface        Source     AD/M
           ------------------------------------------------------------------------------------------------------
@@ -169,7 +170,7 @@ This procedure requires administrative privileges.
 
         If the expected routes are not present, check the route-map or prefix-list configuration on the spine switch.
 
-    -   **Aruba:**
+    - **Aruba:**
 
         To check the status for Aruba:
 
@@ -179,7 +180,7 @@ This procedure requires administrative privileges.
 
         Example output:
 
-        ```
+        ```console
         VRF : default
         BGP Summary
         -----------
@@ -230,7 +231,7 @@ This procedure requires administrative privileges.
 
         Example output:
 
-        ```
+        ```console
         Displaying ipv4 routes selected for forwarding
 
         Origin Codes: C - connected, S - static, L - local
@@ -328,5 +329,4 @@ This procedure requires administrative privileges.
         Total Route Count : 29
         ```
 
-        There should be a route for each unique LoadBalancer IP addresses configured in the cluster.
-
+        There should be a route for each unique `LoadBalancer` IP addresses configured in the cluster.

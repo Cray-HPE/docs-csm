@@ -39,6 +39,10 @@ By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrad
 has been the "stable node" -- that is, the node from which the other nodes were upgraded. At this point, the
 upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to allow the upgrade of `ncn-m001`.
 
+1. If the CSM tarball is located on an `rbd` device, then remap that device to `ncn-m002`.
+
+    See [Move an `rbd` device to another node](../../operations/utility_storage/Alternate_Storage_Pools.md#move-an-rbd-device-to-another-node).
+
 1. Log in to `ncn-m002` from outside the cluster.
 
     > **`NOTE`** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
