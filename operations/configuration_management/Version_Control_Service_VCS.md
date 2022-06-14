@@ -127,7 +127,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
     ./utils/secrets-seed-customizations.sh customizations.yaml
     ```
 
-   If the above command complains that it cannot find `certs/sealed_secrets.crt`, then you can run the following commands to create it:
+   If the above command complains that it cannot find `certs/sealed_secrets.crt`, then run the following commands to create it:
 
     ```bash
     mkdir -p ./certs &&
