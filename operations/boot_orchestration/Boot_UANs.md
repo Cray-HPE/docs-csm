@@ -11,8 +11,8 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 1. Create a BOS session to boot the UAN nodes.
 
     ```bash
-    ncn# cray bos session create --template-uuid uan-sessiontemplate-PRODUCT_VERSION \
-            --operation reboot --format json | tee session.json
+    ncn-mw# cray bos session create --template-uuid uan-sessiontemplate-PRODUCT_VERSION \
+               --operation reboot --format json | tee session.json
     ```
 
     Example output:
@@ -63,7 +63,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 1. Retrieve the BOS session ID from the output of the `cray bos session create` command in the previous step.
 
     ```bash
-    ncn# BOS_SESSION=$(jq -r '.links[] | select(.rel=="session") | .href' session.json | cut -d '/' -f4) ; echo $BOS_SESSION
+    ncn-mw# BOS_SESSION=$(jq -r '.links[] | select(.rel=="session") | .href' session.json | cut -d '/' -f4) ; echo $BOS_SESSION
     ```
 
     Example output:
@@ -75,19 +75,19 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 1. Retrieve the Boot Orchestration Agent \(BOA\) Kubernetes job name for the BOS session.
 
     ```bash
-    ncn# BOA_JOB_NAME=$(cray bos session describe $BOS_SESSION --format json | jq -r .boa_job_name)
+    ncn-mw# BOA_JOB_NAME=$(cray bos session describe $BOS_SESSION --format json | jq -r .boa_job_name)
     ```
 
 1. Retrieve the Kubernetes pod name for the BOA assigned to run this session.
 
     ```bash
-    ncn# BOA_POD=$(kubectl get pods -n services -l job-name=$BOA_JOB_NAME --no-headers -o custom-columns=":metadata.name")
+    ncn-mw# BOA_POD=$(kubectl get pods -n services -l job-name=$BOA_JOB_NAME --no-headers -o custom-columns=":metadata.name")
     ```
 
 1. View the logs for the BOA to track session progress.
 
     ```bash
-    ncn# kubectl logs -f -n services $BOA_POD -c boa
+    ncn-mw# kubectl logs -f -n services $BOA_POD -c boa
     ```
 
 1. List the CFS sessions started by the BOA.
@@ -99,7 +99,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
     In the following command, `pending` and `complete` are also valid statuses to filter on.
 
     ```bash
-    ncn# cray cfs sessions list --tags bos_session=$BOS_SESSION --status running --format json
+    ncn-mw# cray cfs sessions list --tags bos_session=$BOS_SESSION --status running --format json
     ```
 
 1. Verify that the Day Zero patch was applied correctly during [Create UAN Boot Images](../image_management/Create_UAN_Boot_Images.md).
@@ -109,7 +109,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
     1. SSH into a newly booted UAN.
 
         ```bash
-        ncn# ssh uan01-nmn
+        ncn-mw# ssh uan01-nmn
         ```
 
     1. Verify that the DVS RPM versions match what exists in the `1.4.0-p2/rpms` directory.
