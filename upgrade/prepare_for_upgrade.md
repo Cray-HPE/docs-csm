@@ -160,7 +160,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       [n000]# cscli fs_info
       ```
 
-1. Optional - Create `rbd` device to provide space for the CSM release tarball.
+1. (Optional) Create `rbd` device to provide space for the CSM release tarball.
 
     See [Create a storage pool](../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
     and [Create and map an `rbd` device](../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
