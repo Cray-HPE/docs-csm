@@ -21,7 +21,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
         Label names are defined by the user. The names used in this procedure are only examples. The label name used in this example is `slurm-nodes`.
 
         ```bash
-        ncn# cray hsm groups create --label slurm-nodes --description 'Starting Node Group for my Compute Node upgrade'
+        ncn-mw# cray hsm groups create --label slurm-nodes --description 'Starting Node Group for my Compute Node upgrade'
         ```
 
     1. Add members to the group.
@@ -29,7 +29,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
         Add compute nodes to the group by using the component name (xname) for each node being added.
 
         ```bash
-        ncn# cray hsm groups members create slurm-nodes --id XNAME
+        ncn-mw# cray hsm groups members create slurm-nodes --id XNAME --format toml
         ```
 
         Example output:
@@ -44,7 +44,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
     The label name used in this example is `upgrading-nodes`.
 
     ```bash
-    ncn# cray hsm groups create --label upgrading-nodes --description 'Upgrading Node Group for my Compute Node upgrade'
+    ncn-mw# cray hsm groups create --label upgrading-nodes --description 'Upgrading Node Group for my Compute Node upgrade'
     ```
 
     Do not add members to this group; it should be empty when the compute rolling upgrade process begins.
@@ -54,7 +54,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
     The label name used in this example is `failed-nodes`.
 
     ```bash
-    ncn# cray hsm groups create --label failed-nodes --description 'Failed Node Group for my Compute Node upgrade'
+    ncn-mw# cray hsm groups create --label failed-nodes --description 'Failed Node Group for my Compute Node upgrade'
     ```
 
     Do not add members to this group; it should be empty when the compute rolling upgrade process begins.
@@ -65,13 +65,14 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
     being used to reboot the nodes.
 
     ```bash
-    ncn# cray crus session create \
-            --starting-label slurm-nodes \
-            --upgrading-label upgrading-nodes \
-            --failed-label failed-nodes \
-            --upgrade-step-size 50 \
-            --workload-manager-type slurm \
-            --upgrade-template-id=BOS_SESSION_TEMPLATE_NAME
+    ncn-mw# cray crus session create \
+               --starting-label slurm-nodes \
+               --upgrading-label upgrading-nodes \
+               --failed-label failed-nodes \
+               --upgrade-step-size 50 \
+               --workload-manager-type slurm \
+               --upgrade-template-id=BOS_SESSION_TEMPLATE_NAME \
+               --format toml
     ```
 
     Example output:
@@ -94,7 +95,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
 1. Note the `upgrade_id` in the returned data of the previous command.
 
     ```bash
-    ncn# UPGRADE_ID=e0131663-dbee-47c2-aa5c-13fe9b110242
+    ncn-mw# UPGRADE_ID=e0131663-dbee-47c2-aa5c-13fe9b110242
     ```
 
 1. Monitor the status of the upgrade session.
@@ -103,7 +104,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
     information about stage transitions, step transitions, and other conditions of interest encountered by the session as it progresses. It is cleared once the session completes.
 
     ```bash
-    ncn# cray crus session describe $UPGRADE_ID
+    ncn-mw# cray crus session describe $UPGRADE_ID --format toml
     ```
 
     Example output:
@@ -142,7 +143,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
     Once a CRUS upgrade session has completed, it can no longer be used. It can be kept for historical purposes if desired, or it can be deleted.
 
     ```bash
-    ncn# cray crus session delete $UPGRADE_ID
+    ncn-mw# cray crus session delete $UPGRADE_ID --format toml
     ```
 
     Example output:
