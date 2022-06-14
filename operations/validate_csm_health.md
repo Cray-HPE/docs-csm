@@ -459,7 +459,7 @@ BMC can be safely ignored or needs to be addressed before proceeding.
     Server: ServerTech-AWS/v8.0v
     ```
 
-  - Example HPE output
+  - Example HPE output:
 
     ```bash
     Server: HPE/1.4.0
