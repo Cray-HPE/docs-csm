@@ -510,7 +510,7 @@ Execute the tests by running the following command:
 /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
 ```
 
-By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
+By default, SSH access will be tested between master nodes, compute nodes, UANs, and spine switches on all relevant networks.
 It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
 The script usage statement is displayed by calling the test with the `--help` argument:
 
@@ -542,7 +542,7 @@ The external SSH access tests may be run on any system external to the cluster.
 
         - `/usr/share/doc/csm/scripts/operations/pyscripts`
 
-1. Install the Python dependencies
+1. Install the Python dependencies.
 
    Run the following command from the `pyscripts` directory in order to install the required Python dependencies:
 
@@ -571,7 +571,7 @@ The external SSH access tests may be run on any system external to the cluster.
     cd /usr/share/doc/csm/scripts/operations/pyscripts && ./start.py test_bican_external
     ```
 
-   By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
+   By default, SSH access will be tested between master nodes, compute nodes, UANs, and spine switches on all relevant networks.
    It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
    The script usage statement is displayed by calling the test with the `--help` argument:
 
