@@ -8,9 +8,10 @@
     ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-ceph-nodes.sh ncn-s001
     ```
 
-    > **NOTE:** The root password for the node may need to be reset after it is rebooted.
+    > **NOTE:** The `root` password for the node may need to be reset after it is rebooted.
 
     **Known Issues:**
+
     * If the below error is observed, then re-run the same command for the node upgrade. It will pick up at that point and continue.
 
         ```text
@@ -63,11 +64,17 @@
         Expected output on a system with three Ceph nodes should look similar to the following:
 
         ```text
-        NAME                    HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE ID           CONTAINER ID
-        node-exporter.ncn-s001  ncn-s001  running (57m)  3m ago     67m  0.18.1   docker.io/prom/node-exporter:v0.18.1             e5a616e4b9cf       3465eade21da
-        node-exporter.ncn-s002  ncn-s002  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       7ed9b6cc9991
-        node-exporter.ncn-s003  ncn-s003  running (57m)  3m ago     67m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1  e5a616e4b9cf       1078d9e555e4
+        NAME                    HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                              IMAGE ID      CONTAINER ID
+        node-exporter.ncn-s001  ncn-s001  running (57m)  3m ago     67m  0.18.1   registry.local/quay.io/prometheus/node-exporter:v1.2.2  53b6486665ad  8455ee5bfcd2
+        node-exporter.ncn-s002  ncn-s002  running (57m)  3m ago     67m  0.18.1   registry.local/quay.io/prometheus/node-exporter:v1.2.2  53b6486665ad  d37aece375e1
+        node-exporter.ncn-s003  ncn-s003  running (57m)  3m ago     67m  0.18.1   registry.local/quay.io/prometheus/node-exporter:v1.2.2  53b6486665ad  cb3ce40c10c0
         ```
+
+        The `VERSION` may be reported as `<unknown>`. This is not an error. The three things to verify in the output are:
+
+        * The number of `node-exporter` pods matches the number of Ceph nodes.
+        * The `STATUS` for each pod is `running`.
+        * The `REFRESHED` time for each pod is low enough that it indicates the refresh did not happen **before** the `ceph orch apply` commands issued earlier in this procedure.
 
     1. Verify that `alertmanager` is running.
 
@@ -80,9 +87,15 @@
         Expected output looks similar to the following:
 
         ```text
-        NAME                   HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                      IMAGE ID           CONTAINER ID
-        alertmanager.ncn-s001  ncn-s001  running (66m)  3m ago     68m  0.20.0   registry.local/prometheus/alertmanager:v0.20.0  0881eb8f169f       775aa53f938f
+        NAME                   HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                              IMAGE ID      CONTAINER ID
+        alertmanager.ncn-s001  ncn-s001  running (66m)  3m ago     68m  0.21.0   registry.local/quay.io/prometheus/alertmanager:v0.21.0  926ce25ce099  58bceaf8577b
         ```
+
+        The `VERSION` may be reported as `<unknown>`. This is not an error. The three things to verify in the output are:
+
+        * There is exactly one `alertmanager` pod.
+        * The `STATUS` for each pod is `running`.
+        * The `REFRESHED` time for each pod is low enough that it indicates the refresh did not happen **before** the `ceph orch apply` commands issued earlier in this procedure.
 
 1. Update BSS to ensure that the Ceph images are loaded if a node is rebuilt.
 
