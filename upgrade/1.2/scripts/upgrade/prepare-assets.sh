@@ -32,6 +32,7 @@ trap 'err_report' ERR
 # array for paths to unmount after chrooting images
 #shellcheck disable=SC2034
 declare -a UNMOUNTS=()
+DELETE_TARBALL_FILE=Y
 
 while [[ $# -gt 0 ]]
 do
@@ -47,6 +48,10 @@ do
         ENDPOINT="$2"
         shift # past argument
         shift # past value
+        ;;
+        --no-delete-tarball-file)
+        DELETE_TARBALL_FILE=N
+        shift # past argument
         ;;
         --tarball-file)
         TARBALL_FILE="$2"
@@ -131,7 +136,9 @@ if [[ $state_recorded == "0" ]]; then
     mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
     tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
     CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}
-    rm -rf ${TARBALL_FILE}
+    if [[ "${DELETE_TARBALL_FILE}" != N ]]; then
+        rm -rf "${TARBALL_FILE}"
+    fi
 
     # if we have to untar a file, we assume this is a new upgrade
     # remove existing myenv file just in case
