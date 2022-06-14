@@ -75,18 +75,18 @@ Set up an HPE PDU for administrative use by completing the following tasks:
 
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 
-#### Ensure Redfish is Enabled
+### Ensure Redfish is Enabled
 
 1. Use the **"Settings"** icon (gear in computer monitor in top right corner) to navigate to **"Network Settings"**.
 1. Verify there is a check next to `RESTapi Access`, if not, click the **"Edit"** icon (pencil) and enable.
 
-#### Add Default User
+### Add Default User
 
 1. Use the **"admin"** menu (top right corner) to navigate to **"User Accounts"**.
 1. Click on the **"Add User"** button.
 1. Use the form to add the _username_ and _password_ for the default River user. Assign the role _"Administrator"_ to that user.
 
-#### Enable Outlet Control
+### Enable Outlet Control
 
 1. Using the **"Home"** icon (House in top right corner) navigate to **"Control & Manage"**.
 1. Verify **"Outlet Control Enable"** switch on the top of the page is selected (green).
@@ -95,13 +95,13 @@ Set up an HPE PDU for administrative use by completing the following tasks:
 
 Verify that the firmware version for the HPE PDU is **2.0.0.L**. If it is not, a firmware update is required.
 
-#### Check Firmware Version
+### Check Firmware Version
 
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 1. Check which version of firmware is installed by selecting the **"Home"** icon (House in the top right corner) and navigating to **"Identification"**.
 1. The _"Version"_ will be displayed. If the version is not the _"2.0.0.L"_, update firmware.
 
-#### Update Firmware
+### Update Firmware
 
 1. Download version **2.0.0.L** firmware from: `support.hpe.com` website
 This will download an `.exe` file, which is a self extracting zip file.
@@ -130,7 +130,7 @@ Use the following procedure to ensure the `hms-discovery` job and Redfish Transl
 
 > **IMPORTANT:** This procedure is only needed when upgrading CSM, not performing a fresh install. This procedure should be run after CSM has been fully upgraded including the discovery job.
 
-1.  In CSM 1.0 and earlier releases, the `hms-discovery` job and RTS treated all PDUs as if were made by ServerTech.
+1. In CSM 1.0 and earlier releases, the `hms-discovery` job and RTS treated all PDUs as if were made by ServerTech.
 After the upgrade to CSM 1.2, RTS will still think the HPE PDUs in the system are ServerTech PDUs.
 Remove these erroneous HPE PDU entries for RTS from Vault.
 
@@ -141,7 +141,7 @@ Remove these erroneous HPE PDU entries for RTS from Vault.
         ncn# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
         ```
 
-    1.  Identify HPE PDUs known by RTS:
+    1. Identify HPE PDUs known by RTS:
 
         ```bash
         ncn# vault kv list secret/pdu-creds
@@ -157,14 +157,14 @@ Remove these erroneous HPE PDU entries for RTS from Vault.
         ]
         ```
 
-    1.  Remove each HPE PDU identified in the previous sub-step from Vault:
+    1. Remove each HPE PDU identified in the previous sub-step from Vault:
 
         ```bash
         ncn# PDU=x3000m0
         ncn# vault kv delete secret/pdu-creds/$PDU
         ```
 
-    1.  Restart the Redfish Translation Service (RTS):
+    1. Restart the Redfish Translation Service (RTS):
 
         ```bash
         ncn# kubectl -n services rollout restart deployment cray-hms-rts

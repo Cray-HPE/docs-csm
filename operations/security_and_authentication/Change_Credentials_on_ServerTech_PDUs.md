@@ -93,9 +93,8 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
 1. Change and update the password for a ServerTech PDU(s). Either change the credentials on a single PDU or change all ServerTech PDUs to the same global default value:
 
-**NOTE**: To change the password on a single PDU, the PDUs must be successfully discovered by HSM.
-
      1. To update the password on a single ServerTech PDU in the system:
+     **NOTE**: To change the password on a single PDU, the PDUs must be successfully discovered by HSM.
 
         1. Set the PDU hostname to change the `admn` credentials:
 
