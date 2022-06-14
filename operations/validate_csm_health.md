@@ -12,8 +12,8 @@ The following are examples of when to run health checks:
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
-**NOTE:** It can take up to 15 minutes, and sometimes longer, for NCN clocks to sync after an upgrade or when a system is brought back up. If a clock sync test
-fails, wait 15 minutes and try again.
+**NOTE:** It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
+fails, then wait 15 minutes and try again.
 
 ## Topics
 
