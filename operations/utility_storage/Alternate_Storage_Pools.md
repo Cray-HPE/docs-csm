@@ -69,7 +69,7 @@ quotas for pool 'csm-release':
 
 * The above example sets the quota to 500 GiB.
   * If this pool is fully utilized it will be using 1.5 TiB of raw space.
-  * This space counts against the total space provided by the cluster; Use cautiously.
+  * This space counts against the total space provided by the cluster; use cautiously.
   * If this pool or any pool reaches 95-100% utilization, then all volumes for the fully utilized pool will go into read-only mode.
 
 ### Create and map an `rbd` device
