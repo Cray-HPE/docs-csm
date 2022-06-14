@@ -135,7 +135,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
                     vault kv put secret/pdu-creds/$PDU -
             ```
 
-     1. To update all ServerTech PDUs in the system to the same password:
+     1. Update all ServerTech PDUs in the system to the same password:
 
         1. Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
 
