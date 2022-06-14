@@ -121,25 +121,25 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
              value: crayvcs
    ```
 
+1. Encrypt the values after changing the `customizations.yaml` file.
+
+    ```bash
+    ./utils/secrets-seed-customizations.sh customizations.yaml
+    ```
+
+   If the above command complains that it cannot find `certs/sealed_secrets.crt`, then run the following commands to create it:
+
+    ```bash
+    mkdir -p ./certs &&
+         ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > ./certs/sealed_secrets.crt
+    ```
+
 1. Upload the modified `customizations.yaml` file to Kubernetes.
 
    ```bash
    kubectl delete secret -n loftsman site-init
    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
-
-1. Encrypt the values after changing the `customizations.yaml` file.
-
-    ```bash
-    ./secrets-seed-customizations.sh customizations.yaml
-    ```
-
-   If the above command complains that it cannot find `certs/sealed_secrets.crt`, then you can run the following commands to create it:
-
-    ```bash
-    mkdir -p ../certs &&
-         ./bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > ../certs/sealed_secrets.crt
-    ```
 
 1. Get the current cached `sysmgmt` manifest and save it into a `gitea.yaml` file.
 
