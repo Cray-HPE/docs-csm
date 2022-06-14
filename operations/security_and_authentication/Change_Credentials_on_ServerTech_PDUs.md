@@ -10,7 +10,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 ## Prerequisites
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-- The PDU is accessible over the network. A PDU can be reachable by its xname hostname, but may not yet be discovered by HSM.
+- The PDU is accessible over the network. A PDU can be reachable by its component name (xname) hostname, but may not yet be discovered by HSM.
 - PDUs are manufactured by ServerTech.
 
     ```bash
