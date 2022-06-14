@@ -3,8 +3,8 @@
 Resynchronize system clocks after Ceph reports a clock skew.
 
 Systems use `chronyd` to synchronize their system clocks. If systems are not able to communicate, then the clocks can drift,
-causing clock skew. Another reason for this issue would be an individual manually changing the clocks or a task that may change
-the clocks and require a series of steps \(time adjustments\) to resynchronize.
+causing clock skew. Clock skew can also be caused by an individual or an automated task manually changing the clocks.
+In this case, `chronyd` may require a series of steps \(time adjustments\) to resynchronize the clocks.
 
 Major time jumps where the clock is set back in time will require a full restart of all Ceph services.
 
