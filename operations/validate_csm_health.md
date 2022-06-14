@@ -13,7 +13,33 @@ The following are examples of when to run health checks:
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
 **NOTE:** It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
-fails, then wait 15 minutes and try again.
+fails, wait 15 minutes and try again. To check status, run the following command, preferably on `ncn-m001`:
+
+```console
+ncn-m001:~ # chronyc sources -v
+210 Number of sources = 9
+
+  .-- Source mode  '^' = server, '=' = peer, '#' = local clock.
+ / .- Source state '*' = current synced, '+' = combined , '-' = not combined,
+| /   '?' = unreachable, 'x' = time may be in error, '~' = time too variable.
+||                                                 .- xxxx [ yyyy ] +/- zzzz
+||      Reachability register (octal) -.           |  xxxx = adjusted offset,
+||      Log2(Polling interval) --.      |          |  yyyy = measured offset,
+||                                \     |          |  zzzz = estimated error.
+||                                 |    |           \
+MS Name/IP address         Stratum Poll Reach LastRx Last sample
+===============================================================================
+^* ntp.hpecorp.net               2  10   377   650   -421us[ -571us] +/-   30ms
+=? ncn-m002.nmn                 10   4   377   213    +82us[  +82us] +/-  367us
+=- ncn-m003.nmn                  3   1   377     1  -2033us[-2033us] +/-   28ms
+=- ncn-s001.nmn                  6   5   377    20    +53us[  +53us] +/-  193us
+=- ncn-s002.nmn                  5   5   377    25    +29us[  +29us] +/-  275us
+=- ncn-s003.nmn                  6   6   377    27    +47us[  +47us] +/-  237us
+=- ncn-w001.nmn                  5   9   377  234m  +8305us[  +10ms] +/-   38ms
+=- ncn-w002.nmn                  3   5   377     8  -1910us[-1910us] +/-   27ms
+=- ncn-w003.nmn                  3   8   377   74m  -1122us[-1002us] +/-   31ms
+ncn-m001:~ #
+```
 
 ## Topics
 
