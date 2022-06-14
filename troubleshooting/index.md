@@ -2,15 +2,15 @@
 
 This document provides links to troubleshooting information for services and functionality provided by CSM.
 
-## Known Issues
+## Known issues
 
-* [Known Issues](#known-issues)
-  * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
-  * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
-    * [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
-  * [Platform CA Issues](known_issues/platform_ca_issues.md)
+* [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+* [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
+  * [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
+* [Platform CA Issues](known_issues/platform_ca_issues.md)
+* [Kafka Failure after CSM 1.2 Upgrade](known_issues/kafka_upgrade_failure.md)
 
-## Troubleshooting Topics
+## Troubleshooting topics
 
 * Kubernetes
   * [General Kubernetes Commands for Troubleshooting](kubernetes/Kubernetes_Troubleshooting_Information.md)
@@ -41,6 +41,9 @@ This document provides links to troubleshooting information for services and fun
     * [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
     * [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
 * Compute Rolling Upgrades
+  * CRUS is deprecated in CSM 1.2.0.
+    * It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+    * See [Deprecated features](../introduction/differences.md#deprecated_features).
   * [Nodes Failing to Upgrade in a CRUS Session](../operations/compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
   * [Failed CRUS Session Because of Unmet Conditions](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
   * [Failed CRUS Session Because of Bad Parameters](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
@@ -49,6 +52,7 @@ This document provides links to troubleshooting information for services and fun
   * [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
 * Security and Authentication
   * [Common Vault Cluster Issues](../operations/security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
+  * [Keycloak User Localization](../operations/security_and_authentication/Keycloak_User_Localization.md)
 * ConMan
   * [ConMan Blocking Access to a Node BMC](../operations/conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
   * [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
@@ -66,12 +70,12 @@ This document provides links to troubleshooting information for services and fun
   * [Issues with Redfish Endpoint `DiscoveryCheck` for Redfish Events from Nodes](../operations/node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
   * [Interfaces with IP Address Issues](../operations/node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
   * [Loss of Console Connections and Logs on Gigabyte Nodes](../operations/node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
-* Customer Access Network (CAN)
-  * [CAN Issues](../operations/network/customer_access_network/Troubleshoot_CAN_Issues.md)
+* Customer Management Network (CMN)
+  * [CMN Issues](../operations/network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 * Domain Name Service (DNS)
   * [Connectivity to Services with External IP addresses](../operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
   * [DNS Configuration Issues](../operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
-* MetalLB in BGP-Mode
+* MetalLB
   * [Services Without an Allocated IP Address](../operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
   * [BGP not Accepting Routes from MetalLB](../operations/network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 * Spire

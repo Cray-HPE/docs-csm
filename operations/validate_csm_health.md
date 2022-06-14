@@ -30,8 +30,10 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [3.1 SMS test execution](#31-sms-test-execution)
   - [3.2 Interpreting `cmsdev` results](#32-interpreting-cmsdev-results)
   - [3.3 Known issues with SMS tests](#33-known-issues-with-sms-tests)
-- [4. NCN gateway health checks](#4-ncn-gateway-health-checks)
-  - [4.1 Gateway test execution](#41-gateway-test-execution)
+- [4. Gateway health and SSH access checks](#4-gateway-health-and-ssh-access-checks)
+  - [4.1 Gateway health tests](#41-gateway-health-tests)
+  - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
+  - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
   - [5.1 Run the test script](#51-run-the-test-script)
 - [6. UAS / UAI tests](#6-uas--uai-tests)
@@ -176,7 +178,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, then delete
     `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
-    `request-ncn-join-token` daemonset pod.
+    `request-ncn-join-token` daemon set pod.
 - `cfs-state-reporter service ran successfully`
   - If this test is failing, it could be due to SSL certificate issues on that NCN.
      1. Run the following command on the node where the test is failing.
@@ -254,7 +256,7 @@ prerequisites have been met to allow access to the system management health tool
 
 Information to assist with troubleshooting some of the components mentioned in the prerequisites can be accessed here:
 
-- [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
+- [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 - [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
 - [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
@@ -490,23 +492,23 @@ ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" n
 In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
 (as long as the other two Etcd pods are healthy).
 
-## 4. NCN gateway health checks
+## 4. Gateway health and SSH access checks
 
-The gateway tests check the health of the API Gateway on all of the relevant networks. On NCNs, the API gateway is accessible
-on the NMNLB network, the CMN network, and either the CAN or CHN user network depending on the configuration of the system.
-The gateway tests will check that the gateway is accessible on all networks where it should be accessible, and NOT accessible on all
-networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
+### 4.1 Gateway health tests
+
+The gateway tests check the health of the API Gateway on all of the relevant networks.  The gateway tests will check that the gateway is accessible on all networks where it should be accessible,
+and NOT accessible on all networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
 on each accessible network.
 
-### 4.1 Gateway test execution
+The gateway tests can be run from various locations.   For this part of the CSM validation, we will check gateway access from the NCNs and from outside the system.
+Externally, the API gateway is accessible on the CMN network and either the CAN or CHN user network depending on the configuration of the system.
+On NCNs, the API gateway is accessible on the same networks (CMN and CAN/CHN) and it is also accessible on the NMNLB network.
 
-The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+Follow these instructions for executing the gateway tests from an NCN and from outside the system.
 
-Execute the tests by by running the following command.
-
-```bash
-ncn# /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
-```
+- [Running Gateway Tests on an NCN Management Node](network/gateway_testing.md#running-gateway-tests-on-an-ncn-management-node)
+  - The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+- [Running Gateway Tests on a Device Outside the System](network/gateway_testing.md#running-gateway-tests-on-a-device-outside-the-system)
 
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
@@ -517,6 +519,94 @@ Overall Gateway Test Status:  PASS
 For more detailed information on the tests results and examples, see [Gateway Testing](network/gateway_testing.md).
 
 <a name="booting-csm-barebones-image"></a>
+
+### 4.2 Internal SSH access test execution
+
+The internal SSH access tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM,
+see [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+
+Execute the tests by running the following command:
+
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
+```
+
+By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
+It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
+The script usage statement is displayed by calling the test with the `--help` argument:
+
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal --help
+```
+
+The test will complete with an overall pass/failure status such as the following:
+
+```text
+Overall status: PASSED (Passed: 40, Failed: 0)
+```
+
+### 4.3 External SSH access test execution
+
+The external SSH access tests may be run on any system external to the cluster.
+
+1. `python3` must be installed (if it is not already).
+
+1. Obtain the test code.
+
+   There are two options for doing this:
+
+    - Install the `docs-csm` RPM.
+
+      See [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+
+    - Copy over the following folder from a system where the `docs-csm` RPM is installed:
+
+        - `/usr/share/doc/csm/scripts/operations/pyscripts`
+
+1. Install the Python dependencies
+
+   Run the following command from the `pyscripts` directory in order to install the required Python dependencies:
+
+    ```bash
+    external:/usr/share/doc/csm/scripts/operations/pyscripts# pip install .
+    ```
+
+1. Obtain the `admin` client secret.
+
+   Because `kubectl` will not work outside of the cluster, obtain the `admin` client secret by running the
+   following command on an NCN.
+
+    ```bash
+    ncn# kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
+    ```
+
+    Example output:
+
+    ```text
+    26947343-d4ab-403b-14e937dbd700
+    ```
+
+1. On the external system, execute the tests.
+
+    ```bash
+    external:/usr/share/doc/csm/scripts/operations/pyscripts# ./start.py test_bican_external
+    ```
+
+   By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
+   It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
+   The script usage statement is displayed by calling the test with the `--help` argument:
+
+    ```bash
+    external:/usr/share/doc/csm/scripts/operations/pyscripts# ./start.py test_bican_external --help
+    ```
+
+1. When prompted by the test, enter the system domain and the `admin` client secret.
+
+   The test will complete with an overall pass/failure status such as the following:
+
+    ```text
+    Overall status: PASSED (Passed: 20, Failed: 0)
+    ```
 
 ## 5. Booting CSM `barebones` image
 

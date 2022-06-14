@@ -59,7 +59,7 @@
 
 ## Perform upgrade
 
-During this stage there will be a brief (approximately 5 minutes) window where pods with Persistent Volumes (`PV`s) will not be able to migrate between nodes.
+During this stage there will be a brief (approximately five minutes) window where pods with Persistent Volumes (`PV`s) will not be able to migrate between nodes.
 This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in order to accommodate the newer charts and a better upgrade strategy.
 
 1. Set the `SW_ADMIN_PASSWORD` environment variable.
@@ -80,6 +80,36 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    ```bash
    ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
    ```
+
+## Validate `cray-shared-kafka` was updated properly
+
+Occasionally the `cray-shared-kafka-kafka` pods will be restarted before the
+`cray-shared-kafka-zookeeper` pods are ready. Check to make sure that all
+`cray-shared-kafka-kafka` and `cray-shared-kafka-zookeeper` pods have a Ready status
+of 1/1. If any of them have a 2/2 then rerun the `kafka-restart.sh` script.
+
+```bash
+ncn# kubectl get pods -n services -l app.kubernetes.io/instance=cray-shared-kafka
+NAME                                                 READY   STATUS    RESTARTS   AGE
+cray-shared-kafka-entity-operator-7f9895897d-zjgkm   3/3     Running   0          12m
+cray-shared-kafka-kafka-0                            2/2     Running   0          10m
+cray-shared-kafka-kafka-1                            2/2     Running   0          10m
+cray-shared-kafka-kafka-2                            2/2     Running   0          10m
+cray-shared-kafka-zookeeper-0                        1/1     Running   0          8m
+cray-shared-kafka-zookeeper-1                        1/1     Running   0          8m
+cray-shared-kafka-zookeeper-2                        1/1     Running   0          8m
+
+ncn# /usr/share/doc/csm/upgrade/1.2/scripts/strimzi/kafka-restart.sh
+```
+
+## Verify Keycloak users
+
+Verify that the Keycloak users localize job has completed as expected.
+
+> This section can be skipped if user localization is not required.
+
+After an upgrade, it is possible that all expected Keycloak users were not localized.
+See [Verification procedure](../../operations/security_and_authentication/Keycloak_User_Localization.md#Verification-procedure) to confirm that Keycloak localization has completed as expected.
 
 ## Stage completed
 

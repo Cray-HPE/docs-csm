@@ -1,13 +1,23 @@
 # Queuing and Scheduling
 
-When defining end-to-end behavior via CoS or DSCP, different priorities of traffic must be placed in different queues so the network device can service them appropriately. Separate queues allow delay- or jitter-sensitive traffic to be serviced before bulk or less time-critical traffic.
+When defining end-to-end behavior via CoS or DSCP, different priorities of traffic must be placed in different
+queues so the network device can service them appropriately.
+Separate queues allow delay- or jitter-sensitive traffic to be serviced before bulk or less time-critical traffic.
 
-Queue policies configure which queues the different priorities of traffic will use. Queues are numbered in priority order, with zero being the lowest priority. The larger the queue number, the higher the priority of that queue.
+Queue policies configure which queues the different priorities of traffic will use.
+Queues are numbered in priority order, with zero being the lowest priority. The larger the queue number, the higher the priority of that queue.
 
-Schedule policies configure the order of the queues from which packets are removed (de-queued) for transmitting. The schedule discipline is the algorithm the scheduler employs each round it must select the next packet for transmission. The supported scheduling disciplines are:
+Schedule policies configure the order of the queues from which packets are removed (de-queued) for transmitting.
+The schedule discipline is the algorithm the scheduler employs each round it must select the next packet for transmission.
+The supported scheduling disciplines are:
 
-* **Strict priority (SP):** This is the simplest of scheduling disciplines. For each round, the scheduler will choose the highest-priority queue when removing packets for transmission. While this does provide prioritization of traffic, when spikes of high-priority traffic occur, it will prevent lower-priority traffic from being transmitted (queue starvation).
-* **Weighted fair queuing (WFQ):** Weighted fair queuing can limit queue starvation by providing a fairer distribution of available bandwidth across the priorities. Lower-priority queues will have some service even when packets are present in higher-priority queues, depending on the weights assigned to each queue; the larger the weight, the greater the potential amount of service. WFQ accommodates variable traffic and services each packet as fairly as possible.
+* **Strict priority (SP):** This is the simplest of scheduling disciplines.
+  For each round, the scheduler will choose the highest-priority queue when removing packets for transmission.
+  While this does provide prioritization of traffic, when spikes of high-priority traffic occur, it will prevent lower-priority traffic from being transmitted (queue starvation).
+* **Weighted fair queuing (WFQ):** Weighted fair queuing can limit queue starvation by providing a fairer distribution of available bandwidth across the priorities.
+  Lower-priority queues will have some service even when packets are present in higher-priority queues,
+  depending on the weights assigned to each queue; the larger the weight, the greater the potential amount of service.
+  WFQ accommodates variable traffic and services each packet as fairly as possible.
 
 ## Configuration Commands
 

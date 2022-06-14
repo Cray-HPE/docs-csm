@@ -67,7 +67,7 @@ def main():
     non_std_bucket_map = {'ssm': 'ssm-swm-s3-credentials',
                           'boot-images': 'ims-s3-credentials',
                           'install-artifacts': 'artifacts-s3-credentials',
-                          'ncn-images': 'sds-s3-credentials'}
+                          'ncn-images': 'sts-s3-credentials'}
     if args.bucket_name in non_std_bucket_map:
         secret_name = non_std_bucket_map[args.bucket_name]
     else:

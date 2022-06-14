@@ -13,23 +13,23 @@ the [Configuration Framework Service (CFS)](../configuration_management/Configur
 During a fresh install, carry out these procedures in order. Later, individual
 procedures may be re-run as needed.
 
-1. [Set Up Passwordless SSH](#set_up_passwordless_ssh)
-   - [Option 1: Use the CSM-provided SSH Keys](#set_up_passwordless_ssh_option_1)
-   - [Option 2: Option 2: Provide Custom SSH Keys](#set_up_passwordless_ssh_option_2)
-   - [Option 3: Disable CSM-provided Passwordless SSH](#set_up_passwordless_ssh_option_3)
-   - [Restore CSM-provided SSH Keys](#set_up_passwordless_ssh_restore)
-2. [Configure the Root Password and Root SSH Keys in Vault](#set_root_password)
-   - [Option 1: Automated Default](#set_root_password_option_1)
+1. [Set up passwordless SSH](#set_up_passwordless_ssh)
+   - [Option 1: Use the CSM-provided SSH keys](#set_up_passwordless_ssh_option_1)
+   - [Option 2: Provide custom SSH keys](#set_up_passwordless_ssh_option_2)
+   - [Option 3: Disable CSM-provided passwordless SSH](#set_up_passwordless_ssh_option_3)
+   - [Restore CSM-provided SSH keys](#set_up_passwordless_ssh_restore)
+2. [Configure the `root` password and SSH keys in Vault](#set_root_password)
+   - [Option 1: Automated default](#set_root_password_option_1)
    - [Option 2: Manual](#set_root_password_option_2)
-3. [Perform NCN Personalization](#perform_ncn_personalization)
-   - [Option 1: Automatically Apply CSM Configuration](#auto_apply_csm_config)
-     - [Automatic CSM Configuration Steps](#auto_apply_csm_config_steps)
-     - [Automatic CSM Configuration Overrides](#auto_apply_csm_config_overrides)
-   - [Option 2: Manually Apply CSM Configuration](#manual_apply_csm_config)
+3. [Perform NCN personalization](#perform_ncn_personalization)
+   - [Option 1: Automatically apply CSM configuration](#auto_apply_csm_config)
+     - [Automatic CSM configuration steps](#auto_apply_csm_config_steps)
+     - [Automatic CSM Configuration overrides](#auto_apply_csm_config_overrides)
+   - [Option 2: Manually apply CSM configuration](#manual_apply_csm_config)
 
 <a name="set_up_passwordless_ssh"></a>
 
-## 1. Set Up Passwordless SSH
+## 1. Set up passwordless SSH
 
 This procedure should be run during CSM installation and any later time when
 the SSH keys need to be changed per site requirements.
@@ -54,15 +54,15 @@ The SSH keypair is applied to management nodes using NCN personalization.
 
 <a name="set_up_passwordless_ssh_option_1"></a>
 
-### Option 1: Use the CSM-provided SSH Keys
+### Option 1: Use the CSM-provided SSH keys
 
 The default CSM Ansible plays are already configured to enable Passwordless SSH
-by default. No further action is necessary before running NCN personalization
-with CFS.
+by default. No further action is necessary before proceeding to
+[Configure the `root` password and SSH keys in Vault](#set_root_password).
 
 <a name="set_up_passwordless_ssh_option_2"></a>
 
-### Option 2: Provide Custom SSH Keys
+### Option 2: Provide custom SSH keys
 
 Administrators may elect to replace the CSM-provided keys with their own custom
 keys.
@@ -73,8 +73,8 @@ keys.
     > key files on the system.
 
     ```bash
-    ncn# PUBLIC_KEY_FILE=/root/.ssh/id_rsa-csm.pub
-    ncn# PRIVATE_KEY_FILE=/root/.ssh/id_rsa-csm
+    ncn# PUBLIC_KEY_FILE=/path/to/id_rsa-csm.pub
+    ncn# PRIVATE_KEY_FILE=/path/to/id_rsa-csm
     ```
 
 1. Provide the custom keys by script or manually.
@@ -118,13 +118,14 @@ keys.
 Passwordless SSH with the provided keys will be set up once NCN personalization
 runs on the NCNs.
 
-**NOTE**: This keypair may or may not be the same keypair used for the NCN
-`root` user. See the [Configure the Root Password and Root SSH Keys in Vault](#set_root_password)
-procedure below for setting the root user SSH keys on NCNs.
+**NOTE**: This keypair may be the same keypair used for the NCN `root` user, but it
+is not required to be the same. Either option is valid.
+
+Proceed [Configure the `root` password and SSH keys in Vault](#set_root_password).
 
 <a name="set_up_passwordless_ssh_option_3"></a>
 
-### Option 3: Disable CSM-provided Passwordless SSH
+### Option 3: Disable CSM-provided passwordless SSH
 
 Local site security requirements may preclude use of passwordless SSH access between
 management nodes. A variable has been added to the associated Ansible roles that
@@ -165,12 +166,14 @@ associated with the product.
 > to make connections between nodes. CFS will continue to function if
 > passwordless SSH is disabled between CSM and other product environments.
 
+Proceed [Configure the `root` password and SSH keys in Vault](#set_root_password).
+
 <a name="set_up_passwordless_ssh_restore"></a>
 
-### Restore CSM-provided SSH Keys
+### Restore CSM-provided SSH keys
 
 > Use this procedure if switching from custom keys to the default CSM SSH keys
-> only; otherwise it can be skipped.
+> only; otherwise it should be skipped.
 
 In order to restore the default CSM keys, there are two options:
 
@@ -205,26 +208,27 @@ In order to restore the default CSM keys, there are two options:
 
 <a name="set_root_password"></a>
 
-## 2. Configure the Root Password and Root SSH Keys in Vault
+## 2. Configure the `root` password and SSH keys in Vault
 
-The root user password and SSH keys are managed on NCNs by using the
+The `root` user password and SSH keys are managed on NCNs by using the
 `csm.password` and `csm.ssh_keys` Ansible roles, respectively, located in the
-CSM configuration management repository. Root user passwords and SSH keys are
+CSM configuration management repository. `root` user passwords and SSH keys are
 set and managed in Vault.
 
-There are two options for setting the root password and SSH keys in Vault: automated default or manual.
+There are two options for setting the `root` password and SSH keys in Vault:
+[automated default](#set_root_password_option_1) or [manual](#set_root_password_option_2).
 
 After these have been set in Vault, they will automatically be applied to NCNs during NCN personalization.
 For more information on how to configure and run NCN personalization, see the
-[Perform NCN Personalization](#perform_ncn_personalization) procedure later in this page.
+[Perform NCN personalization](#perform_ncn_personalization) procedure later in this page.
 
 <a name="set_root_password_option_1"></a>
 
-### Option 1: Automated Default
+### Option 1: Automated default
 
 The automated default method uses the `write_root_secrets_to_vault.py` script to read in the current
-root password and SSH keys from the NCN where it is run, and write those to Vault. All of the NCNs are
-booted from images which already had their root passwords and SSH keys customized during the
+`root` user password and SSH keys from the NCN where it is run, and write those to Vault. All of the NCNs are
+booted from images which already had their `root` passwords and SSH keys customized during the
 [Deploy Management Nodes](../../install/deploy_management_nodes.md#deploy)
 procedure of the CSM install. In most cases, these are the same password and keys that should be
 written to Vault, and this script provides an easy way to do that.
@@ -274,6 +278,8 @@ All secrets successfully written to Vault
 SUCCESS
 ```
 
+Proceed to [Perform NCN personalization](#perform_ncn_personalization).
+
 <a name="set_root_password_option_2"></a>
 
 ### Option 2: Manual
@@ -290,9 +296,11 @@ Set the `root` user password and SSH keys in Vault by combining the following tw
 - The `Configure Root Password in Vault` procedure in [Update NCN User Passwords](../security_and_authentication/Update_NCN_Passwords.md#configure_root_password_in_vault).
 - The `Configure Root SSH Keys in Vault` procedure in [Update NCN User SSH Keys](../security_and_authentication/SSH_Keys.md#configure_root_keys_in_vault).
 
+Proceed to [Perform NCN personalization](#perform_ncn_personalization).
+
 <a name="perform_ncn_personalization"></a>
 
-## 3. Perform NCN Personalization
+## 3. Perform NCN personalization
 
 After completing the previous procedures, apply the configuration to the NCNs
 by running NCN personalization with [CFS](../configuration_management/Configuration_Management.md).
@@ -301,7 +309,7 @@ running the steps manually.
 
 <a name="auto_apply_csm_config"></a>
 
-### Option 1: Automatically Apply CSM Configuration
+### Option 1: Automatically apply CSM configuration
 
 > The `docs-csm` RPM must be installed in order to use this script. See
 > [Check for Latest Documentation](../../update_product_stream/index.md#documentation)
@@ -315,7 +323,7 @@ ncn# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration
 
 <a name="auto_apply_csm_config_steps"></a>
 
-#### Automatic CSM Configuration Steps
+#### Automatic CSM configuration steps
 
 By default, the script will perform the following steps:
 
@@ -331,7 +339,7 @@ By default, the script will perform the following steps:
 
 <a name="auto_apply_csm_config_overrides"></a>
 
-#### Automatic CSM Configuration Overrides
+#### Automatic CSM configuration overrides
 
 The script also supports several flags to override these behaviors:
 
@@ -359,7 +367,7 @@ The script also supports several flags to override these behaviors:
 
 <a name="manual_apply_csm_config"></a>
 
-### Option 2: Manually Apply CSM Configuration
+### Option 2: Manually apply CSM configuration
 
 In order to manually run NCN personalization, first gather the following information:
 

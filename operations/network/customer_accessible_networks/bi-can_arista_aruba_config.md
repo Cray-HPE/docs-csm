@@ -1,22 +1,25 @@
-# BI-CAN Aruba/Arista Config
+# BI-CAN Aruba/Arista Configuration
 
 This is an example configuration of how to connect two Aruba spine switches to two Arista switches. This example is from a running system utilizing the bifurcated CAN feature offered in CSM 1.2.
 
 Summary:
-- Two Aruba 8325s running in a VSX cluster.
-- Two Arista 7060CX2-32S running MLAG.
-- The Aristas are connected to the Slingshot/HSN network via static MLAG.
-- The Aruba Spine switches are connected to the Aristas with point-to-point OSPF links.
-- The Arista Edge switches are redistributing the default route to the Arubas via OSPF.  This allows the Shasta cluster to have external access.
-- The Aristas are utilizing a static default route.
 
-#### Topology
-![](../management_network/img/aruba_arista.png)
+- Two Aruba 8325 switches running in a VSX cluster.
+- Two Arista 7060CX2-32S switches running MLAG.
+- The Arista switches are connected to the Slingshot/HSN network via static MLAG.
+- The Aruba Spine switches are connected to the Arista switches with point-to-point OSPF links.
+- The Arista Edge switches are redistributing the default route to the Aruba switches via OSPF.  This allows the Shasta cluster to have external access.
+- The Arista switches are utilizing a static default route.
 
-#### Configs
+## Topology
 
-##### sw-edge-001
-```
+![Topology](../management_network/img/aruba_arista.png)
+
+## Configurations
+
+### `sw-edge-001`
+
+```text
 ! device: sw-edge-001 (DCS-7060CX2-32S, EOS-4.23.0F)
 !
 ! boot system flash:EOS-4.23.0F.swi
@@ -146,8 +149,9 @@ router ospf 1
 end
 ```
 
-##### sw-edge-002
-```
+## `sw-edge-002`
+
+```text
 ! device: sw-edge-002 (DCS-7060CX2-32S, EOS-4.23.0F)
 !
 ! boot system flash:EOS-4.23.0F.swi
@@ -278,8 +282,9 @@ router ospf 1
 end
 ```
 
-##### sw-spine-001
-```
+### `sw-spine-001`
+
+```text
 Current configuration:
 !
 !Version ArubaOS-CX GL.10.09.0010
@@ -667,9 +672,10 @@ https-server vrf Customer
 https-server vrf default
 https-server vrf mgmt
 ```
-##### sw-spine-002
 
-```
+### `sw-spine-002`
+
+```text
 Current configuration:
 !
 !Version ArubaOS-CX GL.10.09.0010
@@ -1058,12 +1064,12 @@ https-server vrf default
 https-server vrf mgmt
 ```
 
+### Below is the desired state of a system running this configuration
 
-##### Below is the desired state of a system running this configuration.
-- two ospf neighbors on the Customer vrf.
+- two OSPF neighbors on the Customer VRF.
 - two default routes.
 
-```
+```text
 sw-spine-001# show ip ospf neighbors vrf Customer
 VRF : Customer                         Process : 2
 ===================================================
@@ -1076,7 +1082,8 @@ Neighbor ID      Priority  State             Nbr Address       Interface
 
 10.103.15.234    n/a       FULL              192.168.80.0       1/1/29
 ```
-```
+
+```text
 sw-spine-001# show ip route vrf Customer
 
 Displaying ipv4 routes selected for forwarding
@@ -1095,7 +1102,8 @@ Prefix              Nexthop          Interface     VRF(egress)       Origin/   D
 0.0.0.0/0           192.168.80.0     1/1/29        -                 O/E2      [110/1]      00m:01w:01d
                     192.168.80.4     1/1/28        -                           [110/1]      00m:01w:01d
 ```
-```
+
+```text
 sw-spine-002# show ip ospf neighbors vrf Customer
 VRF : Customer                         Process : 2
 ===================================================
@@ -1108,7 +1116,8 @@ Neighbor ID      Priority  State             Nbr Address       Interface
 
 10.103.15.234    n/a       FULL              192.168.80.2       1/1/29
 ```
-```
+
+```text
 sw-spine-002# show ip route vrf Customer
 
 Displaying ipv4 routes selected for forwarding
