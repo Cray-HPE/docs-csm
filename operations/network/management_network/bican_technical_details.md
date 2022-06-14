@@ -9,7 +9,7 @@
     - [2.3.2 When naming occurs](#232-when-naming-occurs)
     - [2.3.3 Ability to change post-install](#233-ability-to-change-post-install)
   - [2.4 Endpoint Addressing](#24-endpoint-addressing)
-    - [2.4.1 Touchpoints: effects and changes](#241-touchpoints:-effects-and-changes)
+    - [2.4.1 Touchpoints: effects and changes](#241-touchpoints-effects-and-changes)
     - [2.4.2 When addressing occurs](#242-when-addressing-occurs)
     - [2.4.3 Ability to change post-install](#243-ability-to-change-post-install)
   - [2.5 Traffic Separation and Routing](#25-traffic-separation-and-routing)
@@ -143,7 +143,7 @@ and testing required to certify IPv6 system-wide.
 The CHN will, by default, have a private IPv4 address block.
 This is intended to be changed during installation to a **customer-supplied IPv4 address block**.
 
-<a name="241-touchpoints:-effects-and-changes"></a>
+<a name="241-touchpoints-effects-and-changes"></a>
 
 #### 2.4.1 Touchpoints: effects and changes
 
