@@ -2,7 +2,9 @@
 
 Resynchronize system clocks after Ceph reports a clock skew.
 
-Systems use `chronyd` to synchronize their system clocks. If systems are not able to communicate, then the clocks can drift, causing clock skew. Another reason for this issue would be an individual manually changing the clocks or a task that may change the clocks and require a series of steps \(time adjustments\) to resynchronize.
+Systems use `chronyd` to synchronize their system clocks. If systems are not able to communicate, then the clocks can drift,
+causing clock skew. Another reason for this issue would be an individual manually changing the clocks or a task that may change
+the clocks and require a series of steps \(time adjustments\) to resynchronize.
 
 Major time jumps where the clock is set back in time will require a full restart of all Ceph services.
 
@@ -14,7 +16,7 @@ This procedure requires admin privileges.
 
 ## Procedure
 
-1. Verify that the system is impact by clock skew.
+1. Verify that the system is impacted by clock skew.
 
     Ceph provides block storage and requires a clock skew of less than 0.05 seconds to report back healthy.
 
@@ -53,7 +55,9 @@ This procedure requires admin privileges.
 
     1. View the Ceph logs.
 
-        If looking back to earlier logs, use the `xzgrep` command for the `ceph.log` or the `ceph-mon*.log`. There are cases where the MGR and OSD logs are not in the `ceph-mon` logs. This indicates that the skew was very drastic and sudden, causing the `ceph-mon` process to panic and not log the issue.
+        If looking back to earlier logs, use the `xzgrep` command for the `ceph.log` or the `ceph-mon*.log`. There are cases where
+        the MGR and OSD logs are not in the `ceph-mon` logs. This indicates that the skew was very drastic and sudden, causing the
+        `ceph-mon` process to panic and not log the issue.
 
         ```bash
         grep skew /var/log/ceph/*.log
@@ -83,7 +87,7 @@ This procedure requires admin privileges.
 
     Example output:
 
-    ```
+    ```console
     cluster:
       id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
       health: HEALTH_OK

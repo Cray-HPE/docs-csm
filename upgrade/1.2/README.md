@@ -29,7 +29,7 @@ For more information about modifying `customizations.yaml` and tuning for specif
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
 - [Stage 4 - Ceph Upgrade](Stage_4.md)
 - [Stage 5 - Perform NCN Personalization](Stage_5.md)
-- [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
+- [Return to Main Page and Proceed to *Validate CSM Health*](../README.md#6-validate-csm-health)
 
 **`Important:`** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 
@@ -51,8 +51,8 @@ For more information about modifying `customizations.yaml` and tuning for specif
 - Troubleshooting NTP
 
    During upgrades, clock skew may occur when rebooting nodes. If one node is rebooted and its clock differs significantly from those that have **not** been rebooted, it can
-   cause contention among the other nodes. Waiting for Chrony to slowly adjust the clocks can resolve intermittent clock skew issues. If it does not resolve on its own, follow the
-   [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure to troubleshoot it further.
+   cause contention among the other nodes. Waiting for `Chrony` to slowly adjust the clocks can resolve intermittent clock skew issues. This can take up to 15 minutes or
+   longer. If it does not resolve on its own, follow the [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure to troubleshoot it further.
 
 - Bare-metal Etcd recovery
 
