@@ -465,7 +465,7 @@ BMC can be safely ignored or needs to be addressed before proceeding.
     Server: HPE/1.4.0
     ```
 
-  - ServerTech PDUs may need password changed from their defaults to become functional. Perform the steps in [Change Credentials on ServerTech PDUs](./security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
+  - ServerTech PDUs may need password changed from their defaults to become functional. Perform the steps in [Change Credentials on ServerTech PDUs](./security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
 
   - HPE PDUs are supported and should show up as being found in HSM.
   If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered.
