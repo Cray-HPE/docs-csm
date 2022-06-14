@@ -30,7 +30,10 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [3.1 SMS test execution](#31-sms-test-execution)
   - [3.2 Interpreting `cmsdev` results](#32-interpreting-cmsdev-results)
   - [3.3 Known issues with SMS tests](#33-known-issues-with-sms-tests)
-- [4. Gateway health checks](#4-gateway-health-checks)
+- [4. Gateway health and SSH access checks](#4-gateway-health-and-ssh-access-checks)
+  - [4.1 Gateway health tests](#41-gateway-health-tests)
+  - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
+  - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
   - [5.1 Run the test script](#51-run-the-test-script)
 - [6. UAS / UAI tests](#6-uas--uai-tests)
@@ -470,7 +473,9 @@ ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" n
 In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
 (as long as the other two Etcd pods are healthy).
 
-## 4. Gateway health checks
+## 4. Gateway health and SSH access checks
+
+### 4.1 Gateway health tests
 
 The gateway tests check the health of the API Gateway on all of the relevant networks.  The gateway tests will check that the gateway is accessible on all networks where it should be accessible,
 and NOT accessible on all networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
@@ -493,6 +498,94 @@ Overall Gateway Test Status:  PASS
 ```
 
 For more detailed information on the tests results and examples, see [Gateway Testing](network/Gateway_Testing.md).
+
+### 4.2 Internal SSH access test execution
+
+The internal SSH access tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM,
+see [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
+
+Execute the tests by running the following command:
+
+```bash
+/usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
+```
+
+By default, SSH access will be tested between master nodes, compute nodes, UANs, and spine switches on all relevant networks.
+It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
+The script usage statement is displayed by calling the test with the `--help` argument:
+
+```bash
+/usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal --help
+```
+
+The test will complete with an overall pass/failure status such as the following:
+
+```text
+Overall status: PASSED (Passed: 40, Failed: 0)
+```
+
+### 4.3 External SSH access test execution
+
+The external SSH access tests may be run on any system external to the cluster.
+
+1. `python3` must be installed (if it is not already).
+
+1. Obtain the test code.
+
+   There are two options for doing this:
+
+    - Install the `docs-csm` RPM.
+
+      See [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
+
+    - Copy over the following folder from a system where the `docs-csm` RPM is installed:
+
+        - `/usr/share/doc/csm/scripts/operations/pyscripts`
+
+1. Install the Python dependencies.
+
+   Run the following command from the `pyscripts` directory in order to install the required Python dependencies:
+
+    ```bash
+    cd /usr/share/doc/csm/scripts/operations/pyscripts && pip install .
+    ```
+
+1. Obtain the `admin` client secret.
+
+   Because `kubectl` will not work outside of the cluster, obtain the `admin` client secret by running the
+   following command on an NCN.
+
+    ```bash
+    kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
+    ```
+
+    Example output:
+
+    ```text
+    26947343-d4ab-403b-14e937dbd700
+    ```
+
+1. On the external system, execute the tests.
+
+    ```bash
+    cd /usr/share/doc/csm/scripts/operations/pyscripts && ./start.py test_bican_external
+    ```
+
+   By default, SSH access will be tested between master nodes, compute nodes, UANs, and spine switches on all relevant networks.
+   It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
+   The script usage statement is displayed by calling the test with the `--help` argument:
+
+    ```bash
+    cd /usr/share/doc/csm/scripts/operations/pyscripts && ./start.py test_bican_external --help
+    ```
+
+1. When prompted by the test, enter the system domain and the `admin` client secret.
+
+   The test will complete with an overall pass/failure status such as the following:
+
+    ```text
+    Overall status: PASSED (Passed: 20, Failed: 0)
+    ```
 
 ## 5. Booting CSM `barebones` image
 
