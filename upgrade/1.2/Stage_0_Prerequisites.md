@@ -18,7 +18,6 @@ backup of Workload Manager configuration data and files is created. Once complet
 - [Stage 0.5 - Backup Workload Manager Data](#backup_workload_manager)
 - [Stage completed](#stage_completed)
 
-<a name="prepare-assets"></a>
 
 ## Stage 0.1 - Prepare assets
 
@@ -33,7 +32,6 @@ backup of Workload Manager configuration data and files is created. Once complet
    - If there is a URL for the CSM `tar` file that is accessible from `ncn-m001`, then the [Direct download](#direct-download) procedure may be used.
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m001`.
 
-<a name="direct-download">
 
 ### Direct download
 
@@ -67,7 +65,6 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 1. Skip the `Manual copy` subsection.
 
-<a name="manual-copy">
 
 ### Manual copy
 
@@ -99,7 +96,6 @@ backup of Workload Manager configuration data and files is created. Once complet
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
-<a name="update-sls"></a>
 
 ## Stage 0.2 - Update SLS
 
@@ -172,7 +168,6 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
    ```
 
-<a name="update-management-network"></a>
 
 ## Stage 0.3 - Upgrade management network
 
@@ -200,7 +195,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
    - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
    - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
 
-<a name="prerequisites-check"></a>
+
 
 ## Stage 0.4 - Prerequisites check
 
@@ -271,7 +266,7 @@ To prevent any possibility of losing workload manager configuration data or file
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
 
-<a name="stage_completed"></a>
+
 
 ## Stage completed
 
