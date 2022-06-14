@@ -8,6 +8,8 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 
 ## Procedure
 
+The commands in this procedure are to be run on a master or worker NCN, except where noted otherwise.
+
 1. Create a BOS session to boot the UAN nodes.
 
     ```bash
@@ -112,7 +114,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
         ssh uan01-nmn
         ```
 
-    1. Verify that the DVS RPM versions match what exists in the `1.4.0-p2/rpms` directory.
+    1. (`uan01#`) Verify that the DVS RPM versions match what exists in the `1.4.0-p2/rpms` directory.
 
         ```bash
         rpm -qa | grep 'cray-dvs.*2.12' | sort
@@ -126,7 +128,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
         cray-dvs-kmp-cray_shasta_c-2.12_4.0.102_k4.12.14_197.78_9.1.58-7.0.1.0_8.1__g30d29e7a.x86_64
         ```
 
-    1. Log out of the UAN.
+    1. (`uan01#`) Log out of the UAN.
 
         ```bash
         exit
