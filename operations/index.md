@@ -180,6 +180,8 @@ Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifact
 Upgrade sets of compute nodes with the Compute Rolling Upgrade Service \(CRUS\) without requiring an entire set of nodes to be out of service at once. CRUS enables
 administrators to limit the impact on production caused from upgrading compute nodes by working through one step of the upgrade process at a time.
 
+**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+
 - [Compute Rolling Upgrade Service (CRUS)](compute_rolling_upgrades/Compute_Rolling_Upgrades.md)
 - [CRUS Workflow](compute_rolling_upgrades/CRUS_Workflow.md)
 - [Upgrade Compute Nodes with CRUS](compute_rolling_upgrades/Upgrade_Compute_Nodes_with_CRUS.md)
@@ -327,14 +329,6 @@ Mechanisms used by the system to ensure the security and authentication of inter
   - [Change the LDAP Server IP Address for New LDAP Server Content](security_and_authentication/Change_the_LDAP_Server_IP_Address_for_New_LDAP_Server_Content.md)
   - [Remove the LDAP User Federation from Keycloak](security_and_authentication/Remove_the_LDAP_User_Federation_from_Keycloak.md)
   - [Add LDAP User Federation](security_and_authentication/Add_LDAP_User_Federation.md)
-- [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
-  - [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
-  - [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
-  - [Transport Layer Security \(TLS\) for Ingress Services](security_and_authentication/Transport_Layer_Security_for_Ingress_Services.md)
-  - [PKI Services](security_and_authentication/PKI_Services.md)
-  - [HashiCorp Vault](security_and_authentication/HashiCorp_Vault.md)
-  - [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
-  - [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
 - [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
   - [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
   - [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)

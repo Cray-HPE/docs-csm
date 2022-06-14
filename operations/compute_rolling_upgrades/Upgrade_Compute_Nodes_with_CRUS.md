@@ -1,71 +1,82 @@
 # Upgrade Compute Nodes with CRUS
 
-Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\). Manage the workload management status of nodes and quiesce each node before taking the node out of service and upgrading it. Then reboot it into the upgraded state and return it to service within the workload manager \(WLM\).
+**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
 
-### Prerequisites
+Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\). Manage the workload management status of nodes and quiesce each node before taking the node
+out of service and upgrading it. Then reboot it into the upgraded state and return it to service within the workload manager \(WLM\).
 
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
--   A Boot Orchestration Service \(BOS\) session template describing the desired states of the nodes being upgraded must exist.
+## Prerequisites
 
-### Procedure
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
+- A Boot Orchestration Service \(BOS\) session template describing the desired states of the nodes being upgraded must exist.
 
-1.  Create and populate the starting node group.
+## Procedure
 
-    This will be the group of nodes that will be upgraded.
+1. Create and populate the starting node group.
 
-    1.  Create a starting node group \(starting label\).
+    This is the group of nodes that will be upgraded.
 
-        Label names are defined by the user and the names used in this procedure are only examples. The label name used in this example is slurm-nodes.
+    1. Create a starting node group \(starting label\).
+
+        Label names are defined by the user. The names used in this procedure are only examples. The label name used in this example is `slurm-nodes`.
 
         ```bash
-        ncn# cray hsm groups create --label slurm-nodes \
-        --description 'Starting Node Group for my Compute Node upgrade'
+        ncn# cray hsm groups create --label slurm-nodes --description 'Starting Node Group for my Compute Node upgrade'
         ```
 
-    2.  Add members to the group.
+    1. Add members to the group.
 
         Add compute nodes to the group by using the component name (xname) for each node being added.
 
         ```bash
         ncn# cray hsm groups members create slurm-nodes --id XNAME
+        ```
+
+        Example output:
+
+        ```toml
         [[results]]
         URI = "/hsm/v2/groups/slurm-nodes/members/x0c0s28b0n0"
         ```
 
-2.  Create a group for upgrading nodes \(upgrading label\).
+1. Create a group for upgrading nodes \(upgrading label\).
 
-    The label name used in this example is upgrading-nodes.
-
-    ```bash
-    ncn-w001# cray hsm groups create --label upgrading-nodes \
-    --description 'Upgrading Node Group for my Compute Node upgrade'
-    ```
-
-    There is no need to add members to this group because it should be empty when the compute rolling upgrade process begins.
-
-3.  Create a group for failed nodes \(failed label\).
-
-    The label name used in this example is failed-nodes.
+    The label name used in this example is `upgrading-nodes`.
 
     ```bash
-    ncn# cray hsm groups create --label failed-nodes \
-    --description 'Failed Node Group for my Compute Node upgrade'
+    ncn# cray hsm groups create --label upgrading-nodes --description 'Upgrading Node Group for my Compute Node upgrade'
     ```
 
-    There is no need to add members to this group because it should be empty when the compute rolling upgrade process begins.
+    Do not add members to this group; it should be empty when the compute rolling upgrade process begins.
 
-4.  Create an upgrade session with CRUS.
+1. Create a group for failed nodes \(failed label\).
 
-    The following example is upgrading 50 nodes at a step. The --upgrade-template-id value should be the name of the Boot Orchestration Service \(BOS\) session template being used.
+    The label name used in this example is `failed-nodes`.
+
+    ```bash
+    ncn# cray hsm groups create --label failed-nodes --description 'Failed Node Group for my Compute Node upgrade'
+    ```
+
+    Do not add members to this group; it should be empty when the compute rolling upgrade process begins.
+
+1. Create an upgrade session with CRUS.
+
+    The following example is upgrading 50 nodes per step. The `--upgrade-template-id` value should be the name of the Boot Orchestration Service \(BOS\) session template
+    being used to reboot the nodes.
 
     ```bash
     ncn# cray crus session create \
-    --starting-label slurm-nodes \
-    --upgrading-label upgrading-nodes \
-    --failed-label failed-nodes \
-    --upgrade-step-size 50 \
-    --workload-manager-type slurm \
-    --upgrade-template-id=BOS_SESSION_TEMPLATE_NAME
+            --starting-label slurm-nodes \
+            --upgrading-label upgrading-nodes \
+            --failed-label failed-nodes \
+            --upgrade-step-size 50 \
+            --workload-manager-type slurm \
+            --upgrade-template-id=BOS_SESSION_TEMPLATE_NAME
+    ```
+
+    Example output:
+
+    ```toml
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-nodes"
@@ -80,18 +91,24 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
     workload_manager_type = "slurm"
     ```
 
-    If successful, note the upgrade\_id in the returned data.
+1. Note the `upgrade_id` in the returned data of the previous command.
 
     ```bash
-    ncn-w001# export UPGRADE_ID=e0131663-dbee-47c2-aa5c-13fe9b110242
+    ncn# UPGRADE_ID=e0131663-dbee-47c2-aa5c-13fe9b110242
     ```
 
-5.  Monitor the status of the upgrade session.
+1. Monitor the status of the upgrade session.
 
-    The progress of the session through the upgrade process is described in the messages field of the session. This is a list of messages, in chronological order, containing information about stage transitions, step transitions, and other conditions of interest encountered by the session as it progresses. It is cleared once the session completes.
+    The progress of the session through the upgrade process is described in the `messages` field of the session. This is a list of messages, in chronological order, containing
+    information about stage transitions, step transitions, and other conditions of interest encountered by the session as it progresses. It is cleared once the session completes.
 
     ```bash
-    ncn-w001# cray crus session describe $UPGRADE_ID
+    ncn# cray crus session describe $UPGRADE_ID
+    ```
+
+    Example output:
+
+    ```toml
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-nodes"
@@ -106,23 +123,31 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
     workload_manager_type = "slurm"
     ```
 
-    A CRUS session goes through a number of steps \(approximately the number of nodes to be upgraded divided by the requested step size\) to complete an upgrade. Each step moves through the following stages, unless the boot session is interrupted by being deleted.
+    A CRUS session goes through a number of steps \(approximately the number of nodes to be upgraded divided by the requested step size\) to complete an upgrade. Each step
+    moves through the following stages, unless the boot session is interrupted by being deleted.
 
-    1.  Starting - Preparation for the step and CRUS initiates WLM quiescing of nodes.
-    2.  Quiescing - Waits for all WLM nodes in the step to reach a quiesced \(not busy\) state.
-    3.  Quiesced - The nodes in the step are all quiesced and CRUS initiates booting the nodes into the upgraded environment.
-    4.  Booting - Waits for the boot session to complete.
-    5.  Booted - The boot session has completed. Check the success or failure of the boot session. Mark all nodes in the step as failed if the boot session failed.
-    6.  WLM Waiting - The boot session succeeded. Wait for nodes to reach a ready state in the WLM. All nodes in the step that fail to reach a ready state within 10 minutes of entering this stage are marked as failed.
-    7.  Cleanup - The upgrade step has finished. Clean up resources to prepare for the next step.
-    When a step moves from one stage to the next, CRUS adds a message to the messages field of the upgrade session to mark the progress.
+    1. `Starting` - Preparation for the step; CRUS initiates WLM quiescing of nodes.
+    1. `Quiescing` - Waits for all WLM nodes in the step to reach a quiesced \(not busy\) state.
+    1. `Quiesced` - The nodes in the step are all quiesced and CRUS initiates booting the nodes into the upgraded environment.
+    1. `Booting` - Waits for the boot session to complete.
+    1. `Booted` - The boot session has completed. Check the success or failure of the boot session. Mark all nodes in the step as failed if the boot session failed.
+    1. `WLM Waiting` - The boot session succeeded. Wait for nodes to reach a ready state in the WLM. All nodes in the step that fail to reach a ready state within 10 minutes of
+       entering this stage are marked as failed.
+    1. `Cleanup` - The upgrade step has finished. Clean up resources to prepare for the next step.
 
-6.  Optional: Delete the CRUS upgrade session.
+    When a step moves from one stage to the next, CRUS adds a message to the `messages` field of the upgrade session to mark the progress.
 
-    Once a CRUS upgrade session it is complete, it can no longer be used. It can be kept for historical purposes if desired, or it can be deleted.
+1. Delete the CRUS upgrade session. (Optional)
+
+    Once a CRUS upgrade session has completed, it can no longer be used. It can be kept for historical purposes if desired, or it can be deleted.
 
     ```bash
-    ncn-w001# cray crus session delete $UPGRADE_ID
+    ncn# cray crus session delete $UPGRADE_ID
+    ```
+
+    Example output:
+
+    ```toml
     api_version = "1.0.0"
     completed = true
     failed_label = "failed-nodes"
@@ -138,4 +163,3 @@ Upgrade a set of compute nodes with the Compute Rolling Upgrade Service \(CRUS\)
     ```
 
     The session may be visible briefly after it is deleted. This allows for orderly cleanup of the session.
-
