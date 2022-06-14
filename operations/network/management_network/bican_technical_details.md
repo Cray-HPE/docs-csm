@@ -215,7 +215,6 @@ Examples:
 
 - SSH `ncn-w001.cmn.tld`
 
-<a name="3-3-endpoint-addressing"></a>
 
 ### 3.3 Endpoint Addressing
 
@@ -247,7 +246,6 @@ For the CSM 1.2 release the CMN will only be available via customer-supplied IPv
 - During installation as part of Management Network configuration.
 - During installation as part of NCN deployment.
 
-<a name="343-ability-to-change-post-install"></a>
 
 #### 3.4.3 Ability to change post install
 

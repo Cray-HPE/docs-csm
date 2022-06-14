@@ -258,7 +258,6 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# git push
    ```
 
-<a name="backup_workload_manager"></a>
 
 ## Stage 0.5 - Backup workload manager data
 
