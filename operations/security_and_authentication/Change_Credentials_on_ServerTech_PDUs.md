@@ -181,7 +181,7 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
             done
             ```
 
-    **NOTE**: After 5 minutes, the previous credential should stop working as the existing session timed out.
+    **NOTE**: After five minutes, the previous credential should stop working as the existing session timed out.
 
 1. Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials:
 
