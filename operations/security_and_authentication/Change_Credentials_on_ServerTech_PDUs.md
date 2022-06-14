@@ -39,13 +39,29 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
     x3000m0
     ```
 
+1. Set up aliases:
+
+    ```bash
+    ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    ```
+
 1. Specify the existing password for the `admn` user:
 
-    > **TODO** If the PDUs have already been discovered this should match what is on the PDU currently. Need to pull the password from vault
-    >
-    > **TODO rephrase/context** If the PDU has not been discovered, then needs to match the current credentials of the `admn` user.
-    This would most likely match the default `admn` password.
-    Otherwise this would apply if the PDU was either factory reset, or has a different known credential set on the PDU that does not match the sealed secret containing default PDU credentials (this is set in [Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)](Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md))
+    To extract the global credentials from vault for the PDUs:
+
+    ```bash
+    vault kv get secret/pdu-creds/global/pdu
+    ```
+
+    To extract the credentials from vault for a single PDU:
+
+    ```bash
+    PDU=x3000m0
+    vault kv get secret/pdu-creds/$PDU
+    ```
+
+    Store the current password:
 
     ```bash
     ncn-m001# read -s OLD_PDU_PASSWORD
@@ -73,13 +89,6 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
     ```text
     Super5ecret
-    ```
-
-1. Set up aliases:
-
-    ```bash
-    ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-    ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
 
 1. Change and update the password for a ServerTech PDU(s). Either change the credentials on a single PDU or change all ServerTech PDUs to the same global default value:
