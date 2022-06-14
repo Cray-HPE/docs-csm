@@ -19,8 +19,8 @@ This assumes that the HMN is not setup on the PIT node, and these steps cater to
 
 1. (`pit#`) Confirm that the `ncn_metadata.csv` file in this directory has the new information.
 
-   > **NOTE:** If the file is missing, please generate the file by following 
-   > [Generate Topology Files](./pre-installation.md#generate-topology-files) after the 
+   > **NOTE:** If the file is missing, please generate the file by following
+   > [Generate Topology Files](./pre-installation.md#generate-topology-files) after the
    > other steps in [create system configuration](./pre-installation.md#3-create-system-configuration).
 
    ```bash
