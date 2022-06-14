@@ -31,7 +31,7 @@
     - [4.2.2 When configuration occurs](#422-when-configuration-occurs)
     - [4.2.3 Ability to change post install](#423-ability-to-change-post-install)
 
-<a name="1-can-new-features-overview"></a>
+
 
 ## 1 CAN New Features Overview
 
@@ -62,7 +62,6 @@ Details of the High Speed CAN (CHN) and the Management CAN (CMN) are described b
 
 ![Customer Access Overview](img/customer_access_overview.png)
 
-<a name="2-high-speed-can-chn"></a>
 
 ## 2 High Speed CAN (CHN)
 
