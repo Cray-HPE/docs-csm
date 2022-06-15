@@ -629,34 +629,61 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         fi
     done
 
-    for deploy in spire-jwks spire-postgres-pooler; do
-        namespace="spire"
-        if kubectl get deployment -n "${namespace}" "${deploy}" >/dev/null 2>&1; then
-            kubectl patch deployment -n "${namespace}" "${deploy}" -p '{
+    namespace="spire"
+
+    deploy=spire-jwks
+    if kubectl get deployment -n "${namespace}" "${deploy}" >/dev/null 2>&1; then
+        kubectl patch deployment -n "${namespace}" "${deploy}" -p '{
+            "spec": {
+            "strategy": {"rollingUpdate": {"maxSurge": 0, "maxUnavailable": 1 }},
+            "template": {
                 "spec": {
-                "strategy": {"rollingUpdate": {"maxSurge": 0, "maxUnavailable": 1 }},
-                "template": {
-                    "spec": {
-                        "affinity": {
-                            "podAntiAffinity": {
-                                "preferredDuringSchedulingIgnoredDuringExecution": null,
-                                "requiredDuringSchedulingIgnoredDuringExecution": [
-                                    {
-                                    "labelSelector": {
-                                        "matchLabels": {
-                                            "app":"'"${deploy}"'"
-                                        }
-                                    },
-                                    "topologyKey": "kubernetes.io/hostname"
+                    "affinity": {
+                        "podAntiAffinity": {
+                            "preferredDuringSchedulingIgnoredDuringExecution": null,
+                            "requiredDuringSchedulingIgnoredDuringExecution": [
+                                {
+                                "labelSelector": {
+                                    "matchLabels": {
+                                        "app":"'"${deploy}"'"
                                     }
-                                ]
-                            }
+                                },
+                                "topologyKey": "kubernetes.io/hostname"
+                                }
+                            ]
                         }
                     }
                 }
-            }}'
-        fi
-    done
+            }
+        }}'
+    fi
+
+    deploy=spire-server
+    if kubectl get statefulset -n "${namespace}" "${deploy}" >/dev/null 2>&1; then
+        kubectl patch statefulset -n "${namespace}" "${deploy}" -p '{
+            "spec": {
+            "strategy": {"rollingUpdate": {"maxSurge": 0, "maxUnavailable": 1 }},
+            "template": {
+                "spec": {
+                    "affinity": {
+                        "podAntiAffinity": {
+                            "preferredDuringSchedulingIgnoredDuringExecution": null,
+                            "requiredDuringSchedulingIgnoredDuringExecution": [
+                                {
+                                "labelSelector": {
+                                    "matchLabels": {
+                                        "app":"'"${deploy}"'"
+                                    }
+                                },
+                                "topologyKey": "kubernetes.io/hostname"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }}'
+    fi
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} "$(hostname)"

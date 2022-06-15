@@ -46,6 +46,29 @@ function remove_spire_req_affinity() {
     fi
 }
 
-for deploy in spire-jwks spire-postgres-pooler; do
-  remove_spire_req_affinity "${deploy}"
-done
+remove_spire_req_affinity spire-wjks
+
+function remove_spireserver_req_affinity() {
+    deployment=$1
+    shift
+    namespace="${1:-spire}"
+
+    if kubectl get statefulset -n "${namespace}" "${deployment}" >/dev/null 2>&1; then
+       kubectl patch statefulset -n "${namespace}" "${deployment}" -p '{
+           "spec": {
+           "template": {
+               "spec": {
+                   "affinity": {
+                       "podAntiAffinity": {
+                           "requiredDuringSchedulingIgnoredDuringExecution": null
+                       }
+                   }
+               }
+           }
+       }}'
+
+       kubectl rollout status statefulset -n "${namespace}" "${deployment}"
+    fi
+}
+
+remove_spireserver_req_affinity spire-server
