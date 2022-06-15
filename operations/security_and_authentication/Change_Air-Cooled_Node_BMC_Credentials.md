@@ -7,7 +7,7 @@ command to set a global credential for all BMCs on air-cooled nodes.
 
 All air-cooled and liquid-cooled BMCs share the same global credentials. The air-cooled Slingshot switch controllers (Router BMCs) must have the same credentials as the liquid-cooled Slingshot switch controllers.
 
-The `sat bmccreds` command is not able to target air-cooled nodes directly. It can, however, target nodes by their component name (xname). The following procedure uses xnames to target nodes.
+The `sat bmccreds` command is only able to target specific Node BMCs by their component name (xname). To target just the air-cooled node BMCs, a list of their xnames must be passed into the command.
 
 ## Prerequisites
 
@@ -27,5 +27,5 @@ SAT is installed and configured.
 1. Set the same random password for every BMC on an air-cooled node.
 
     ```bash
-    sat bmccreds --xnames $RIVER_NODEBMC_XNAMES --random-password --pw-domain bmc
+    sat bmccreds --xnames $RIVER_NODEBMC_XNAMES --random-password --pw-domain system
     ```

@@ -46,6 +46,9 @@ sat bmccreds --random-password --pw-domain system
 
 ### Provide a user-defined password for all BMCs in the system
 
+In this case, `sat bmccreds` will prompt the user for a custom password, which
+it will then set for every BMC.
+
 ```bash
-sat bmccreds USER-DEFINED_PASSWORD
+sat bmccreds
 ```
