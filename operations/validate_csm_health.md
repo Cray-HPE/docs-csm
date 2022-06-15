@@ -12,6 +12,35 @@ The following are examples of when to run health checks:
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
+**NOTE:** It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
+fails, wait 15 minutes and try again. To check status, run the following command, preferably on `ncn-m001`:
+
+```console
+ncn-m001:~ # chronyc sources -v
+210 Number of sources = 9
+
+  .-- Source mode  '^' = server, '=' = peer, '#' = local clock.
+ / .- Source state '*' = current synced, '+' = combined , '-' = not combined,
+| /   '?' = unreachable, 'x' = time may be in error, '~' = time too variable.
+||                                                 .- xxxx [ yyyy ] +/- zzzz
+||      Reachability register (octal) -.           |  xxxx = adjusted offset,
+||      Log2(Polling interval) --.      |          |  yyyy = measured offset,
+||                                \     |          |  zzzz = estimated error.
+||                                 |    |           \
+MS Name/IP address         Stratum Poll Reach LastRx Last sample
+===============================================================================
+^* ntp.hpecorp.net               2  10   377   650   -421us[ -571us] +/-   30ms
+=? ncn-m002.nmn                 10   4   377   213    +82us[  +82us] +/-  367us
+=- ncn-m003.nmn                  3   1   377     1  -2033us[-2033us] +/-   28ms
+=- ncn-s001.nmn                  6   5   377    20    +53us[  +53us] +/-  193us
+=- ncn-s002.nmn                  5   5   377    25    +29us[  +29us] +/-  275us
+=- ncn-s003.nmn                  6   6   377    27    +47us[  +47us] +/-  237us
+=- ncn-w001.nmn                  5   9   377  234m  +8305us[  +10ms] +/-   38ms
+=- ncn-w002.nmn                  3   5   377     8  -1910us[-1910us] +/-   27ms
+=- ncn-w003.nmn                  3   8   377   74m  -1122us[-1002us] +/-   31ms
+ncn-m001:~ #
+```
+
 ## Topics
 
 - [0. Cray command line interface](#0-cray-command-line-interface)
@@ -30,7 +59,10 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [3.1 SMS test execution](#31-sms-test-execution)
   - [3.2 Interpreting `cmsdev` results](#32-interpreting-cmsdev-results)
   - [3.3 Known issues with SMS tests](#33-known-issues-with-sms-tests)
-- [4. Gateway health checks](#4-gateway-health-checks)
+- [4. Gateway health and SSH access checks](#4-gateway-health-and-ssh-access-checks)
+  - [4.1 Gateway health tests](#41-gateway-health-tests)
+  - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
+  - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
   - [5.1 Run the test script](#51-run-the-test-script)
 - [6. UAS / UAI tests](#6-uas--uai-tests)
@@ -82,7 +114,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
     read -s SW_ADMIN_PASSWORD
     ```
 
-    ```bash    
+    ```bash
     export SW_ADMIN_PASSWORD
     ```
 
@@ -252,7 +284,7 @@ prerequisites have been met to allow access to the system management health tool
 
 Information to assist with troubleshooting some of the components mentioned in the prerequisites can be accessed here:
 
-- [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
+- [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 - [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
 - [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
@@ -470,7 +502,9 @@ ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" n
 In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
 (as long as the other two Etcd pods are healthy).
 
-## 4. Gateway health checks
+## 4. Gateway health and SSH access checks
+
+### 4.1 Gateway health tests
 
 The gateway tests check the health of the API Gateway on all of the relevant networks.  The gateway tests will check that the gateway is accessible on all networks where it should be accessible,
 and NOT accessible on all networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
@@ -484,7 +518,7 @@ Follow these instructions for executing the gateway tests from an NCN and from o
 
 - [Running Gateway Tests on an NCN Management Node](./network/Gateway_Testing.md#running-gateway-tests-on-an-ncn-management-node)
   - The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
-- [Running Gateway Tests on a Device Outside the System](network/Gateway_testing#running-gateway-tests-on-a-device-outside-the-system)
+- [Running Gateway Tests on a Device Outside the System](network/Gateway_Testing.md#running-gateway-tests-on-a-device-outside-the-system)
 
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
@@ -493,6 +527,94 @@ Overall Gateway Test Status:  PASS
 ```
 
 For more detailed information on the tests results and examples, see [Gateway Testing](network/Gateway_Testing.md).
+
+### 4.2 Internal SSH access test execution
+
+The internal SSH access tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM,
+see [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
+
+Execute the tests by running the following command:
+
+```bash
+/usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
+```
+
+By default, SSH access will be tested between master nodes, compute nodes, UANs, and spine switches on all relevant networks.
+It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
+The script usage statement is displayed by calling the test with the `--help` argument:
+
+```bash
+/usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal --help
+```
+
+The test will complete with an overall pass/failure status such as the following:
+
+```text
+Overall status: PASSED (Passed: 40, Failed: 0)
+```
+
+### 4.3 External SSH access test execution
+
+The external SSH access tests may be run on any system external to the cluster.
+
+1. `python3` must be installed (if it is not already).
+
+1. Obtain the test code.
+
+   There are two options for doing this:
+
+    - Install the `docs-csm` RPM.
+
+      See [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
+
+    - Copy over the following folder from a system where the `docs-csm` RPM is installed:
+
+        - `/usr/share/doc/csm/scripts/operations/pyscripts`
+
+1. Install the Python dependencies.
+
+   Run the following command from the `pyscripts` directory in order to install the required Python dependencies:
+
+    ```bash
+    cd /usr/share/doc/csm/scripts/operations/pyscripts && pip install .
+    ```
+
+1. Obtain the `admin` client secret.
+
+   Because `kubectl` will not work outside of the cluster, obtain the `admin` client secret by running the
+   following command on an NCN.
+
+    ```bash
+    kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
+    ```
+
+    Example output:
+
+    ```text
+    26947343-d4ab-403b-14e937dbd700
+    ```
+
+1. On the external system, execute the tests.
+
+    ```bash
+    cd /usr/share/doc/csm/scripts/operations/pyscripts && ./start.py test_bican_external
+    ```
+
+   By default, SSH access will be tested between master nodes, compute nodes, UANs, and spine switches on all relevant networks.
+   It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
+   The script usage statement is displayed by calling the test with the `--help` argument:
+
+    ```bash
+    cd /usr/share/doc/csm/scripts/operations/pyscripts && ./start.py test_bican_external --help
+    ```
+
+1. When prompted by the test, enter the system domain and the `admin` client secret.
+
+   The test will complete with an overall pass/failure status such as the following:
+
+    ```text
+    Overall status: PASSED (Passed: 20, Failed: 0)
+    ```
 
 ## 5. Booting CSM `barebones` image
 

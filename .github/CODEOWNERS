@@ -1,7 +1,42 @@
+# Default group
+*                                                       @Cray-HPE/docs-csm-reviewers
 
-*                       @Cray-HPE/docs-csm-reviewers
+# Metal team items.
+/background/ncn_*                                        @Cray-HPE/metal
+/install/*                                               @Cray-HPE/metal
+/install/livecd                                          @Cray-HPE/metal
+/operations/bare_metal                                   @Cray-HPE/metal
 
-background/ncn_*        @Cray-HPE/metal
-install/*               @Cray-HPE/metal
-install/livecd          @Cray-HPE/metal
-operations/network      @Cray-HPE/management-network
+# Continuous Integration Items
+Jenkinsfile.github                                       @Cray-HPE/ci
+
+# CMS Items
+/operations/boot_orchestration                           @Cray-HPE/cms-core-bos
+/operations/CSM_product_management                       @Cray-HPE/cms-core-cfs @Cray-HPE/cms-core-csm-product
+/operations/conman                                       @Cray-HPE/cms-core-console-logging
+/operations/compute_rolling_upgrades                     @Cray-HPE/cms-core-crus
+/operations/configuration_management                     @Cray-HPE/cms-core-cfs @Cray-HPE/cms-core-vcs
+/operations/image_management                             @Cray-HPE/cms-core-ims @Cray-HPE/cms-core-images                             
+
+# User Access items
+/operations/UAS_user_and_admin_topics                    @Cray-HPE/user-access
+
+# PET Items
+/operations/artifact_management                          @Cray-HPE/platform-engineering
+/operations/kubernetes                                   @Cray-HPE/platform-engineering
+/operations/package_repository_management                @Cray-HPE/platform-engineering
+/operations/spire                                        @Cray-HPE/platform-engineering
+/operations/system_management_health                     @Cray-HPE/platform-engineering
+/operations/utility_storage                              @Cray-HPE/platform-engineering
+troubleshooting/kubernetes                               @Cray-HPE/platform-engineering
+
+# HMS Items
+/operations/firmware                                     @Cray-HPE/hardware-management
+/operations/hardware_state_manager                       @Cray-HPE/hardware-management
+/operations/hmcollector                                  @Cray-HPE/hardware-management
+/operations/hpe_pdu                                      @Cray-HPE/hardware-management
+/operations/power_management                             @Cray-HPE/hardware-management
+/operations/system_layout_service                        @Cray-HPE/hardware-management
+
+# Network Items
+/operations/network                                      @Cray-HPE/management-network

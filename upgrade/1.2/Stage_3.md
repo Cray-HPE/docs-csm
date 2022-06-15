@@ -13,15 +13,13 @@
    - If there is a URL for the CSM `tar` file that is accessible from `ncn-m002`, then the [Direct download](#direct-download) procedure may be used.
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m002`.
 
-
-
 ### Direct download
 
 1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
 
    In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
 
-  > **`NOTE`** This step is optional for Cray/HPE internal installs, if `ncn-m002` can reach the internet.
+   > **`NOTE`** This step is optional for Cray/HPE internal installs, if `ncn-m002` can reach the internet.
 
    ```bash
    ENDPOINT=https://put.the/url/here/
@@ -29,15 +27,13 @@
 
 1. Run the script.
 
-  > **`NOTE`** For Cray/HPE internal installs, if `ncn-m002` can reach the internet, then the `--endpoint` argument may be omitted.
+   > **`NOTE`** For Cray/HPE internal installs, if `ncn-m002` can reach the internet, then the `--endpoint` argument may be omitted.
 
    ```bash
    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
-1. Skip the `Manual copy` subsection.
-
-
+1. Skip the `Manual copy` subsection and proceed to [Perform upgrade](#perform-upgrade).
 
 ### Manual copy
 
@@ -52,6 +48,9 @@
    ```
 
 1. Run the script.
+
+   > By default, the script will delete the CSM tarball file. If not wanting the tarball file to be deleted, then
+   > append the `--no-delete-tarball-file` argument when running the script.
 
    ```bash
    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
