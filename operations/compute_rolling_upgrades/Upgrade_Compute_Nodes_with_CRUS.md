@@ -13,6 +13,8 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
 
 ## Procedure
 
+This procedure can be run on any master or worker NCN.
+
 1. Create and populate the starting node group.
 
     This is the group of nodes that will be upgraded.
@@ -30,7 +32,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
         Add compute nodes to the group by using the component name (xname) for each node being added.
 
         ```bash
-        cray hsm groups members create slurm-nodes --id XNAME
+        cray hsm groups members create slurm-nodes --id XNAME --format toml
         ```
 
         Example output:
@@ -72,7 +74,8 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
         --failed-label failed-nodes \
         --upgrade-step-size 50 \
         --workload-manager-type slurm \
-        --upgrade-template-id=BOS_SESSION_TEMPLATE_NAME
+        --upgrade-template-id=BOS_SESSION_TEMPLATE_NAME \
+        --format toml
     ```
 
     Example output:
@@ -104,7 +107,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
     information about stage transitions, step transitions, and other conditions of interest encountered by the session as it progresses. It is cleared once the session completes.
 
     ```bash
-    cray crus session describe $UPGRADE_ID
+    cray crus session describe $UPGRADE_ID --format toml
     ```
 
     Example output:
@@ -143,7 +146,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
     Once a CRUS upgrade session has completed, it can no longer be used. It can be kept for historical purposes if desired, or it can be deleted.
 
     ```bash
-    cray crus session delete $UPGRADE_ID
+    cray crus session delete $UPGRADE_ID --format toml
     ```
 
     Example output:
