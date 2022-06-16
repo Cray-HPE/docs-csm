@@ -16,7 +16,7 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
 ### Initiate upgrade
 
-1. Check to ensure the upgrade is possible.
+1. Check to ensure that the upgrade is possible.
 
    ```bash
    ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
