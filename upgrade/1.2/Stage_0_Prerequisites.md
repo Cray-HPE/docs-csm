@@ -163,16 +163,16 @@ the correct options for the specific environment are used. Two examples are give
    ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
    ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CHN \
-                         --customer-highspeed-network 5 10.103.11.192/26
+                         --customer-highspeed-network REPLACE_CHN_VLAN REPLACE_CHN_IPV4_SUBNET
    ```
 
-- Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
+- Example 2: The CAN as the system default route and preserve the existing `external-dns` entry.
 
    ```bash
    ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
    ncn-m001# ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
                          --bican-user-network-name CAN \
-                         --customer-access-network 6 10.103.15.192/26 \
+                         --customer-access-network REPLACE_CAN_VLAN REPLACE_CAN_IPV4_SUBNET \
                          --preserve-existing-subnet-for-cmn external-dns
    ```
 
