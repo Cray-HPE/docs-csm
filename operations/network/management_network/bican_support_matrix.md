@@ -4,8 +4,8 @@
 
 ### Overview
 
-Customer Access Networks provide the interface between Shasta system networking and the customer site network.  Customer Access Networks (CANs) are routed networks with broadcast domain separation. Customer Access
-Networks provide higher availability and more flexibility in accessing cloud services compared to traditional "bastion hosts", and are more in line with cloud-native architecture of Shasta as whole.
+Customer Access Networks provide the interface between Shasta system networking and the customer site network. Customer Access Networks (CANs) are routed networks with broadcast domain separation. Customer Access
+Networks provide higher availability and more flexibility in accessing cloud services compared to traditional "bastion hosts", and are more in line with the cloud-native architecture of Shasta as whole.
 
 Customer Access Networks (CANs) provide flexible networking at the edge between the site and Shasta system to do the following:
 
@@ -40,11 +40,11 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
 ### External and edge networks
 
 * Customer Management Network (CMN) \- Provides customer access from the site to the system for administrators.
-  * Customer Access Network (CAN) or Customer High Speed Network (CHN) provide:
-  * Customer access from the site to the System for job control and jobs data movement.
-* Access from the System to the Site for network services like DNS, LDAP, etc...
+* Customer Access Network (CAN) or Customer High Speed Network (CHN) provide:
+  * Customer access from the site to the system for job control and jobs data movement.
+  * Access from the system to the site for network services like DNS, LDAP, etc.
 
-## Supported Configurations
+## Supported configurations
 
 ### Option A: CMN + CAN (Management Network only - Layer 2 separation)
 
@@ -54,11 +54,11 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
 
 ![cmn plus chn](img/cmn_plus_chn.png)
 
-Note: During installation the High Speed Network is not configured until relatively late in the install process.
-Installation generally requires site access for deployment artifacts, site DNS, etc...
-To achieve this the Management Network CAN is used during the installation process for system traffic egress until the High Speed Network is available.
+Note: During installation, the High Speed Network is not configured until relatively late in the process.
+Installation generally requires site access for deployment artifacts, site DNS, etc.
+In order to achieve this, the Management Network CAN is used during the installation process for system traffic egress until the High Speed Network is available.
 
-## Network Capabilities
+## Network capabilities
 
 ### Layer 2
 
@@ -70,10 +70,10 @@ To achieve this the Management Network CAN is used during the installation proce
   * IPv4 supported (default)
   * IPv6 roadmap
 * Routing
-  * Static routes (default) exist on the edge router/switches at the edge.
+  * Static routes (default) exist on the edge router/switches.
   * Dynamic routing (OSPF or BGP) is possible at the edge.
 
-## Network Sizing and Requirements
+## Network sizing and requirements
 
 CMN
 
