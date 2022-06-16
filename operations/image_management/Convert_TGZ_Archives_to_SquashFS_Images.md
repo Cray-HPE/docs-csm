@@ -10,6 +10,8 @@ There is a pre-built image that is not currently in SquashFS format.
 
 ## Procedure
 
+This procedure can be run on any master or worker NCN.
+
 1. Locate the image root to be converted to SquashFS.
 
     Images and recipes are uploaded to IMS and S3 via containers.
@@ -27,6 +29,5 @@ There is a pre-built image that is not currently in SquashFS format.
 1. Recompress the image root with SquashFS.
 
     ```bash
-    IMS_ROOTFS_FILENAME=IMAGE_NAME.squashfs
-    mksquashfs image-root $IMS_ROOTFS_FILENAME
+    mksquashfs image-root IMAGE_NAME.squashfs
     ```
