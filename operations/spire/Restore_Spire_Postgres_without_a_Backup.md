@@ -11,14 +11,14 @@ event that `spire-postgres` databases cannot be restored from a backup.
    ncn# helm uninstall -n spire spire
    ```
 
-1. Wait for the pods in the Spire namespace to terminate. Once that is done, remove
+2. Wait for the pods in the Spire namespace to terminate. Once that is done, remove
    the spire-data-server `PVCs`.
 
    ```bash
    ncn# kubectl get pvc -n spire | grep spire-data-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
    ```
 
-1. Disable `spire-agent` on all of the Kubernetes NCNs (all worker nodes and
+3. Disable `spire-agent` on all of the Kubernetes NCNs (all worker nodes and
    master nodes) and delete the join data.
 
    ```bash
