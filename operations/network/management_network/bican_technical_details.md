@@ -83,7 +83,7 @@ Other edge routers, including Juniper, are out of scope.
 
 A `.chn` DNS suffix will be used for all endpoints accessed over the High Speed CAN.
 Endpoints naming will be resolved and maintained in the system authoritative DNS (another CSM 1.2 feature).
-As part of the introduction of authoritative DNS endpoints, endpoints will also have a top-level-domain appended, creating a fully-qualified domain system.
+As part of the introduction of authoritative DNS endpoints, endpoints will also have a top-level-domain appended, creating a fully qualified domain system.
 
 Examples:
 
