@@ -248,6 +248,6 @@ At installation time one of the following egress routes from the system to the s
 
 - During installation as part of site configuration.
 
-#### 4.2.3 Ability to change post install
+#### 4.2.3 Ability to change post-install
 
 - No
