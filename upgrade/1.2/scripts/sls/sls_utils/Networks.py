@@ -250,7 +250,7 @@ class BicanNetwork(Network):
         self.__system_default_route = default_route_network_name
         self.mtu(network_mtu=9000)
 
-    def system_default_route(self, default_route_network_name):
+    def system_default_route(self, default_route_network_name=None):
         """Retrieve or set the default route network name.
 
         Args:

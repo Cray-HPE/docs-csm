@@ -12,25 +12,57 @@ The following are examples of when to run health checks:
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
+**NOTE:** It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
+fails, wait 15 minutes and try again. To check status, run the following command, preferably on `ncn-m001`:
+
+```console
+ncn-m001:~ # chronyc sources -v
+210 Number of sources = 9
+
+  .-- Source mode  '^' = server, '=' = peer, '#' = local clock.
+ / .- Source state '*' = current synced, '+' = combined , '-' = not combined,
+| /   '?' = unreachable, 'x' = time may be in error, '~' = time too variable.
+||                                                 .- xxxx [ yyyy ] +/- zzzz
+||      Reachability register (octal) -.           |  xxxx = adjusted offset,
+||      Log2(Polling interval) --.      |          |  yyyy = measured offset,
+||                                \     |          |  zzzz = estimated error.
+||                                 |    |           \
+MS Name/IP address         Stratum Poll Reach LastRx Last sample
+===============================================================================
+^* ntp.hpecorp.net               2  10   377   650   -421us[ -571us] +/-   30ms
+=? ncn-m002.nmn                 10   4   377   213    +82us[  +82us] +/-  367us
+=- ncn-m003.nmn                  3   1   377     1  -2033us[-2033us] +/-   28ms
+=- ncn-s001.nmn                  6   5   377    20    +53us[  +53us] +/-  193us
+=- ncn-s002.nmn                  5   5   377    25    +29us[  +29us] +/-  275us
+=- ncn-s003.nmn                  6   6   377    27    +47us[  +47us] +/-  237us
+=- ncn-w001.nmn                  5   9   377  234m  +8305us[  +10ms] +/-   38ms
+=- ncn-w002.nmn                  3   5   377     8  -1910us[-1910us] +/-   27ms
+=- ncn-w003.nmn                  3   8   377   74m  -1122us[-1002us] +/-   31ms
+ncn-m001:~ #
+```
+
 ## Topics
 
 - [0. Cray command line interface](#0-cray-command-line-interface)
 - [1. Platform health checks](#1-platform-health-checks)
   - [1.1 NCN health checks](#11-ncn-health-checks)
-    - [1.1.1 known test issues](#111-known-test-issues)
+    - [1.1.1 Known issues with NCN health checks](#111-known-issues-with-ncn-health-checks)
   - [1.2 NCN resource checks (optional)](#12-ncn-resource-checks-optional)
-    - [1.2.1 Known issues](#121-known-issues)
+    - [1.2.1 Known issues with NCN resource checks](#121-known-issues-with-ncn-resource-checks)
   - [1.3 Check of system management monitoring tools](#13-check-of-system-management-monitoring-tools)
 - [2. Hardware Management Services health checks](#2-hardware-management-services-health-checks)
   - [2.1 HMS CT test execution](#21-hms-ct-test-execution)
   - [2.2 Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
-    - [2.2.1 Interpreting results](#221-interpreting-results)
-    - [2.2.2 Known issues](#222-known-issues)
+    - [2.2.1 Interpreting HSM discovery results](#221-interpreting-hsm-discovery-results)
+    - [2.2.2 Known issues with HSM discovery validation](#222-known-issues-with-hsm-discovery)
 - [3. Software Management Services health checks](#3-software-management-services-health-checks)
   - [3.1 SMS test execution](#31-sms-test-execution)
   - [3.2 Interpreting `cmsdev` results](#32-interpreting-cmsdev-results)
-- [4. NCN gateway health checks](#4-ncn-gateway-health-checks)
-  - [4.1 Gateway test execution](#41-gateway-test-execution)
+  - [3.3 Known issues with SMS tests](#33-known-issues-with-sms-tests)
+- [4. Gateway health and SSH access checks](#4-gateway-health-and-ssh-access-checks)
+  - [4.1 Gateway health tests](#41-gateway-health-tests)
+  - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
+  - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
   - [5.1 Run the test script](#51-run-the-test-script)
 - [6. UAS / UAI tests](#6-uas--uai-tests)
@@ -60,13 +92,15 @@ The Cray CLI must be configured on all NCNs and the PIT node. The following proc
 
 ## 1. Platform health checks
 
-All platform health checks are expected to pass. Each check has been implemented as a [Goss](https://github.com/aelsabbahy/goss) test which reports a PASS or FAIL.
+All platform health checks are expected to pass. Each check has been implemented as a [Goss](https://github.com/aelsabbahy/goss) test which reports a `PASS` or `FAIL`.
 
-Available Platform Health Checks:
+Available platform health checks:
 
-1. [`ncnHealthChecks`](#pet-ncnhealthchecks)
-1. [OPTIONAL Check of `ncnHealthChecks` Resources](#pet-optional-ncnhealthchecks-resources)
-1. [Check of System Management Monitoring Tools](#check-of-system-management-monitoring-tools)
+1. [NCN health checks](#pet-ncnhealthchecks)
+    1. [Known issues with NCN health checks](#autogoss-issues)
+1. [OPTIONAL Check of `ncnHealthChecks` resources](#pet-optional-ncnhealthchecks-resources)
+    1. [Known issues with NCN resource checks](#pet-resource-checks-known-issues)
+1. [Check of system management monitoring tools](#check-of-system-management-monitoring-tools)
 
 <a name="pet-ncnhealthchecks"></a>
 
@@ -74,31 +108,41 @@ Available Platform Health Checks:
 
 These checks require that the [Cray CLI is configured](#cray-command-line-interface) on all worker NCNs.
 
-If `ncn-m001` is the PIT node, run these checks on `ncn-m001`, otherwise run them from any NCN.
-
-There are multiple Goss test suites available that cover a variety of subsystems. The platform health checks are defined in the test suites `ncn-healthcheck` and `ncn-kubernetes-checks`.
+If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise run them from any NCN.
 
 1. Specify the `admin` user password for the management switches in the system.
 
-    This is required for the `ncn-healthcheck` test.
+    This is required for the `ncn-healthcheck` tests.
 
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
-    linux# read -s SW_ADMIN_PASSWORD
-    linux# export SW_ADMIN_PASSWORD
+    ncn/pit# read -s SW_ADMIN_PASSWORD
+    ncn/pit# export SW_ADMIN_PASSWORD
     ```
 
 1. Run the NCN health checks.
 
     ```bash
-    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck
+    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck | tee ncn-healthcheck.log
+    ```
+
+    The following command will extract the test totals for the various nodes:
+
+    ```bash
+    ncn/pit# grep "Total Test" ncn-healthcheck.log
     ```
 
 1. Run the Kubernetes checks.
 
     ```bash
-    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
+    ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks | tee ncn-kubernetes-checks.log
+    ```
+
+    The following command will extract the test totals for the various nodes:
+
+    ```bash
+    ncn/pit# grep "Total Test" ncn-kubernetes-checks.log
     ```
 
 1. Review results.
@@ -107,35 +151,39 @@ There are multiple Goss test suites available that cover a variety of subsystems
 
 <a name="autogoss-issues"></a>
 
-#### 1.1.1 Known test issues
+#### 1.1.1 Known issues with NCN health checks
 
 - It is possible that the first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes.
   In this case, please wait five minutes and re-run the tests.
 - For any failures related to SSL certificates, see the [Platform CA Issues](../troubleshooting/known_issues/platform_ca_issues.md) troubleshooting guide.
 - `Kubernetes Query BSS Cloud-init for ca-certs`
-  - This test may fail immediately after platform install. It should pass after the TrustedCerts Operator has updated BSS
+  - This test may fail immediately after platform install. It should pass after the TrustedCerts operator has updated BSS
     (Global `cloud-init` meta) with CA certificates.
 - `Kubernetes Velero No Failed Backups`
-  - Because of a [known issue](https://github.com/vmware-tanzu/velero/issues/1980) with Velero, a backup may be attempted immediately
-    upon the deployment of a backup schedule (for example, vault). It may be necessary to delete backups from a Kubernetes node to
+  - Because of a [known issue  with Velero](https://github.com/vmware-tanzu/velero/issues/1980), a backup may be attempted immediately
+    upon the deployment of a backup schedule (for example, Vault). It may be necessary to delete backups from a Kubernetes node to
     clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known
     interruption. For example:
-     1. Run the following to find the failed backup.
+     1. Find the failed backup.
 
         ```bash
         ncn/pit# kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
 
-     1. Delete the backup, where `<backup>` is replaced with a backup returned in the previous step.
+     1. Delete the backup.
+
+        > In the following command, replace `<backup>` with a backup returned in the previous step.
+        >
+        > This command will not work on the PIT node.
 
         ```bash
         ncn# velero backup delete <backup> --confirm
         ```
 
 - `Verify spire-agent is enabled and running`
-  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker and master nodes), logging errors
-    (via `journalctl`) similar to `join token does not exist or has already been used`, or the last log entries containing multiple lines
-    of `systemd[1]: spire-agent.service: Start request repeated too quickly.`. Deleting the `request-ncn-join-token` daemonset pod
+  - The `spire-agent` service may fail to start on Kubernetes NCNs (all worker and master nodes). In this case, it may log errors
+    (using `journalctl`) similar to `join token does not exist or has already been used`, or the last log entries may contain multiple
+    instances of `systemd[1]: spire-agent.service: Start request repeated too quickly.`. Deleting the `request-ncn-join-token` `daemonset` pod
     running on the node may clear the issue. Even though the `spire-agent` `systemctl` service on the Kubernetes node should eventually
     restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can
     be run from any Kubernetes node in the cluster.
@@ -159,7 +207,7 @@ There are multiple Goss test suites available that cover a variety of subsystems
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, then delete
     `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
-    `request-ncn-join-token` daemonset pod.
+    `request-ncn-join-token` daemon set pod.
 - `cfs-state-reporter service ran successfully`
   - If this test is failing, it could be due to SSL certificate issues on that NCN.
      1. Run the following command on the node where the test is failing.
@@ -193,9 +241,9 @@ ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s node_resource_consumptio
 ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 ```
 
-<a name="known-issues"></a>
+<a name="pet-resource-checks-known-issues"></a>
 
-#### 1.2.1 Known issues
+#### 1.2.1 Known issues with NCN resource checks
 
 - `pods_not_running`
   - If the output of `pods_not_running` indicates that there are pods in the `Evicted` state, it may be due to the root file system
@@ -237,7 +285,7 @@ prerequisites have been met to allow access to the system management health tool
 
 Information to assist with troubleshooting some of the components mentioned in the prerequisites can be accessed here:
 
-- [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
+- [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 - [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
 - [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
@@ -253,6 +301,11 @@ The checks in this section require that the [Cray CLI is configured](#cray-comma
 Execute the HMS tests to confirm that the Hardware Management Services are running and operational.
 
 Note: Do not run HMS tests concurrently on multiple nodes. They may interfere with one another and cause false failures.
+
+1. [HMS CT test execution](#hms-test-execution)
+1. [Hardware State Manager discovery validation](#hms-smd-discovery-validation)
+    1. [Interpreting HSM discovery results](#hms-smd-discovery-validation-interpreting-results)
+    1. [Known issues with HSM discovery validation](#hms-smd-discovery-validation-known-issues)
 
 <a name="hms-test-execution"></a>
 
@@ -330,7 +383,7 @@ code. Failure information interpretation is described in the next section.
 
 <a name="hms-smd-discovery-validation-interpreting-results"></a>
 
-#### 2.2.1 Interpreting results
+#### 2.2.1 Interpreting HSM discovery results
 
 The Cabinet Checks output is divided into three sections:
 
@@ -404,7 +457,7 @@ If it was determined that the mismatch can not be ignored, then proceed onto the
 
 <a name="hms-smd-discovery-validation-known-issues"></a>
 
-#### 2.2.2 Known issues
+#### 2.2.2 Known issues with HSM discovery validation
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
 
@@ -414,14 +467,9 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 
 ## 3 Software Management Services health checks
 
-The Software Management Services health checks are run using `/usr/local/bin/cmsdev`.
-
-- The tool logs to `/opt/cray/tests/cmsdev.log`
-- The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
-  - The same amount of data is written to the log file in either case.
-
-1. [SMS Test Execution](#sms-checks)
+1. [SMS test execution](#sms-checks)
 1. [Interpreting `cmsdev` Results](#cmsdev-results)
+1. [Known issues with SMS tests](#cmsdev-known-issues)
 
 <a name="sms-checks"></a>
 
@@ -435,6 +483,10 @@ The following test can be run on any Kubernetes node (any master or worker node,
 ncn# /usr/local/bin/cmsdev test -q all
 ```
 
+- The `cmsdev` tool logs to `/opt/cray/tests/cmsdev.log`
+- The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
+  - The same amount of data is written to the log file in either case.
+
 <a name="cmsdev-results"></a>
 
 ### 3.2 Interpreting `cmsdev` results
@@ -447,39 +499,45 @@ ncn# /usr/local/bin/cmsdev test -q all
   - The return code will be non-zero.
   - The final line of output will begin with `FAILURE` and will list which checks failed.
     - For example: `FAILURE: 2 service tests FAILED (conman, ims), 5 passed (bos, cfs, crus, tftp, vcs)`
+  - After remediating a test failure for a particular service, just that single service test can be re-run by replacing
+    `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
 
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
-### 3.3 Known issues
+<a name="cmsdev-known-issues"></a>
 
-If an Etcd restore has been performed on one of the `SMS` services (such as `BOS` or `CRUS`), the first Etcd pod that
-comes up after the restore will not have a `PVC` (Persistent Volume Claim) attached to it (until the pod is restarted).
-The Etcd cluster is in a healthy state at this point but the SMS Health Checks will detect this, and you may see errors similar to:
+### 3.3 Known issues with SMS tests
+
+If an Etcd restore has been performed on one of the SMS services (such as BOS or CRUS), then the first Etcd pod that
+comes up after the restore will not have a PVC (Persistent Volume Claim) attached to it (until the pod is restarted).
+The Etcd cluster is in a healthy state at this point, but the SMS health checks will detect the above condition and
+may report test failures similar to the following:
 
 ```text
 ERROR (run tag 1khv7-bos): persistentvolumeclaims "cray-bos-etcd-ncchqgnczg" not found
 ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" not found
 ```
 
-In this case, these errors can be ignored, or the pod with the same name as the `PVC` mentioned in the output can be restarted (as long as the other two Etcd pods are healthy).
+In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
+(as long as the other two Etcd pods are healthy).
 
-## 4. NCN gateway health checks
+## 4. Gateway health and SSH access checks
 
-The gateway tests check the health of the API Gateway on all of the relevant networks. On NCNs, the API gateway is accessible
-on the NMNLB network, the CMN network, and either the CAN or CHN user network depending on the configuration of the system.
-The gateway tests will check that the gateway is accessible on all networks where it should be accessible, and NOT accessible on all
-networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
+### 4.1 Gateway health tests
+
+The gateway tests check the health of the API Gateway on all of the relevant networks.  The gateway tests will check that the gateway is accessible on all networks where it should be accessible,
+and NOT accessible on all networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
 on each accessible network.
 
-### 4.1 Gateway test execution
+The gateway tests can be run from various locations.   For this part of the CSM validation, we will check gateway access from the NCNs and from outside the system.
+Externally, the API gateway is accessible on the CMN network and either the CAN or CHN user network depending on the configuration of the system.
+On NCNs, the API gateway is accessible on the same networks (CMN and CAN/CHN) and it is also accessible on the NMNLB network.
 
-The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+Follow these instructions for executing the gateway tests from an NCN and from outside the system.
 
-Execute the tests by by running the following command.
-
-```bash
-ncn# /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
-```
+- [Running Gateway Tests on an NCN Management Node](network/gateway_testing.md#running-gateway-tests-on-an-ncn-management-node)
+  - The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+- [Running Gateway Tests on a Device Outside the System](network/gateway_testing.md#running-gateway-tests-on-a-device-outside-the-system)
 
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
@@ -490,6 +548,94 @@ Overall Gateway Test Status:  PASS
 For more detailed information on the tests results and examples, see [Gateway Testing](network/gateway_testing.md).
 
 <a name="booting-csm-barebones-image"></a>
+
+### 4.2 Internal SSH access test execution
+
+The internal SSH access tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM,
+see [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+
+Execute the tests by running the following command:
+
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
+```
+
+By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
+It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
+The script usage statement is displayed by calling the test with the `--help` argument:
+
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal --help
+```
+
+The test will complete with an overall pass/failure status such as the following:
+
+```text
+Overall status: PASSED (Passed: 40, Failed: 0)
+```
+
+### 4.3 External SSH access test execution
+
+The external SSH access tests may be run on any system external to the cluster.
+
+1. `python3` must be installed (if it is not already).
+
+1. Obtain the test code.
+
+   There are two options for doing this:
+
+    - Install the `docs-csm` RPM.
+
+      See [Check for Latest Documentation](../update_product_stream/index.md#documentation).
+
+    - Copy over the following folder from a system where the `docs-csm` RPM is installed:
+
+        - `/usr/share/doc/csm/scripts/operations/pyscripts`
+
+1. Install the Python dependencies
+
+   Run the following command from the `pyscripts` directory in order to install the required Python dependencies:
+
+    ```bash
+    external:/usr/share/doc/csm/scripts/operations/pyscripts# pip install .
+    ```
+
+1. Obtain the `admin` client secret.
+
+   Because `kubectl` will not work outside of the cluster, obtain the `admin` client secret by running the
+   following command on an NCN.
+
+    ```bash
+    ncn# kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
+    ```
+
+    Example output:
+
+    ```text
+    26947343-d4ab-403b-14e937dbd700
+    ```
+
+1. On the external system, execute the tests.
+
+    ```bash
+    external:/usr/share/doc/csm/scripts/operations/pyscripts# ./start.py test_bican_external
+    ```
+
+   By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
+   It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
+   The script usage statement is displayed by calling the test with the `--help` argument:
+
+    ```bash
+    external:/usr/share/doc/csm/scripts/operations/pyscripts# ./start.py test_bican_external --help
+    ```
+
+1. When prompted by the test, enter the system domain and the `admin` client secret.
+
+   The test will complete with an overall pass/failure status such as the following:
+
+    ```text
+    Overall status: PASSED (Passed: 20, Failed: 0)
+    ```
 
 ## 5. Booting CSM `barebones` image
 
@@ -512,7 +658,7 @@ can be used to build the CSM Barebones image. However, the CSM Barebones recipe 
 RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
 Cray OS (COS) product stream is also installed on to the system.
   - In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
-- This procedure can be followed on any NCN or the PIT node.
+- This test can be run on any NCN, but not the PIT node.
 - This script uses the Kubernetes API Gateway to access CSM services. This gateway must be properly
 configured to allow an access token to be generated by the script.
 - This script is installed as part of the `cray-cmstools-crayctldeploy` RPM.
@@ -542,7 +688,7 @@ cray.barebones-boot-test: INFO     Successfully completed barebones image boot t
 ```
 
 The script will choose an enabled compute node that is listed in the Hardware State Manager (HSM) for
-the test unless the user passes in a specific node using the `--xname` argument. If a compute node is
+the test, unless the user passes in a specific node using the `--xname` argument. If a compute node is
 specified but unavailable, an available node will be used instead and a warning will be logged.
 
 ```bash

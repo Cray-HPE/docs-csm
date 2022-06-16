@@ -6,13 +6,13 @@ The switch supports SNMPv2c community-based security for read-only access.
 
 Configure an SNMPv2c community name:
 
-```
+```text
 switch(config)# snmp-server community community-name
 ```
 
 Show commands to validate functionality:
 
-```
+```text
 switch# show snmp community
 ```
 

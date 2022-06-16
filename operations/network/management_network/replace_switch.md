@@ -6,7 +6,7 @@
 
 - Out-of-band access to the switches (console).
 - GA generated switch configuration or backed-up switch configuration exists.
-  - [Generate Switch Config](generate_switch_configs.md)
+  - [Generate Switch Configurations](generate_switch_configs.md)
   - [Configuration Management](config_management.md)
 
 ### Procedure
@@ -19,7 +19,7 @@ The following steps are required to replace a switch.
 
 1. Apply the configuration.
 
-   See [Apply Switch Configs](apply_switch_configs.md).
+   See [Apply Switch Configurations](apply_switch_configurations.md).
 
 1. Unplug all the network and power cables and remove the failed switch.
 

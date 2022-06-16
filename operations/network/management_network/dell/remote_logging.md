@@ -6,7 +6,7 @@ Configure remote logging to view log files from the switch on a remote server. T
 
 Configure logging:
 
-```
+```text
 switch(config)# logging server dell.com severity log-info
 ```
 
@@ -16,4 +16,3 @@ switch(config)# logging server dell.com severity log-info
 2. Administrators can see the log files from the switch on the remote server
 
 [Back to Index](index.md)
-

@@ -192,7 +192,8 @@ Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifact
 Upgrade sets of compute nodes with the Compute Rolling Upgrade Service \(CRUS\) without requiring an entire set of nodes to be out of service at once. CRUS enables
 administrators to limit the impact on production caused from upgrading compute nodes by working through one step of the upgrade process at a time.
 
-**Note:** CRUS will be deprecated in an upcoming release.
+**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+See [Deprecated features](../introduction/differences.md#deprecated_features).
 
 - [Compute Rolling Upgrade Service (CRUS)](compute_rolling_upgrades/Compute_Rolling_Upgrades.md)
 - [CRUS Workflow](compute_rolling_upgrades/CRUS_Workflow.md)
@@ -307,8 +308,9 @@ Mechanisms used by the system to ensure the security and authentication of inter
 - [Manage System Passwords](security_and_authentication/Manage_System_Passwords.md)
   - [Update NCN Passwords](security_and_authentication/Update_NCN_Passwords.md)
   - [Change Root Passwords for Compute Nodes](security_and_authentication/Change_Root_Passwords_for_Compute_Nodes.md)
-  - [Change NCN Image Root Password and SSH Keys on Pit Node](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
-  - [Change NCN Image Root Password and SSH Keys](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+  - Set NCN Image Root Password, SSH Keys, and Timezone
+    - [Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
+    - [Set NCN Image Root Password, SSH Keys, and Timezone](security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
   - [Change EX Liquid-Cooled Cabinet Global Default Password](security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
   - [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](security_and_authentication/Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md)
   - [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
@@ -318,6 +320,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
   - [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
   - [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
   - [Add Root Service Account for Gigabyte Controllers](security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md)
+  - [Recovering from Mismatched BMC Credentials](security_and_authentication/Recovering_from_Mismatched_BMC_Credentials.md)
 - [SSH Keys](security_and_authentication/SSH_Keys.md)
 - [Authenticate an Account with the Command Line](security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md)
 - [Default Keycloak Realms, Accounts, and Clients](security_and_authentication/Default_Keycloak_Realms_Accounts_and_Clients.md)
@@ -343,14 +346,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
   - [Remove the LDAP User Federation from Keycloak](security_and_authentication/Remove_the_LDAP_User_Federation_from_Keycloak.md)
   - [Add LDAP User Federation](security_and_authentication/Add_LDAP_User_Federation.md)
   - [Keycloak User Management with `kcadm.sh`](security_and_authentication/Keycloak_User_Management_with_Kcadm.md)
-- [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
-  - [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
-  - [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
-  - [Transport Layer Security \(TLS\) for Ingress Services](security_and_authentication/Transport_Layer_Security_for_Ingress_Services.md)
-  - [PKI Services](security_and_authentication/PKI_Services.md)
-  - [HashiCorp Vault](security_and_authentication/HashiCorp_Vault.md)
-  - [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
-  - [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
+  - [Keycloak User Localization](security_and_authentication/Keycloak_User_Localization.md)
 - [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
   - [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
   - [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
@@ -435,6 +431,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md)
 - [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
+- [Remove Kiali](system_management_health/Remove_Kiali.md)
 
 <a name="system-layout-service-sls"></a>
 
@@ -592,16 +589,15 @@ while older systems have Dell and Mellanox switches. Switch IP addresses are gen
 
 <a name="customer-access-network-can"></a>
 
-### Customer Access Network (CAN)
+### Customer Accessible Networks (CMN/CAN/CHN)
 
-The Customer Access Network \(CAN\) provides access from outside the customer network to services, NCNs, and User Access Nodes \(UANs\) in the system.
+The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the customer network to services, NCNs, and User Access Nodes \(UANs\) in the system.
 
-- [Customer Access Network (CAN)](network/customer_access_network/Customer_Access_Network_CAN.md)
-- [Required Labels if CAN is Not Configured](network/customer_access_network/Required_Labels_if_CAN_is_Not_Configured.md)
-- [Externally Exposed Services](network/customer_access_network/Externally_Exposed_Services.md)
-- [Connect to the CAN](network/customer_access_network/Connect_to_the_CAN.md)
-- [CAN with Dual-Spine Configuration](network/customer_access_network/Dual_Spine_Configuration.md)
-- [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
+- [Customer Accessible Networks](network/customer_accessible_networks/Customer_Accessible_Networks.md)
+- [Externally Exposed Services](network/customer_accessible_networks/Externally_Exposed_Services.md)
+- [Connect to the CMN and CAN](network/customer_accessible_networks/Connect_to_the_CMN_CAN.md)
+- [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)
+- [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 
 <a name="dynamic-host-configuration-protocol-dhcp"></a>
 
@@ -628,14 +624,13 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 
 ### External DNS
 
-External DNS, along with the Customer Access Network \(CAN\), Border Gateway Protocol \(BGP\), and MetalLB, makes it simpler to access the HPE Cray EX API and system
+External DNS, along with the Customer Management Network \(CMN\), Border Gateway Protocol \(BGP\), and MetalLB, makes it simpler to access the HPE Cray EX API and system
 management services. Services are accessible directly from a laptop without needing to tunnel into a non-compute node \(NCN\) or override /etc/hosts settings.
 
 - [External DNS](network/external_dns/External_DNS.md)
 - [External DNS `csi config init` Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
 - [Update the `cmn-external-dns` Value Post-Installation](network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
 - [Ingress Routing](network/external_dns/Ingress_Routing.md)
-- [Add NCNs and UANs to External DNS](network/external_dns/Add_NCNs_and_UANs_to_External_DNS.md)
 - [External DNS Failing to Discover Services Workaround](network/external_dns/External_DNS_Failing_to_Discover_Services_Workaround.md)
 - [Troubleshoot Connectivity to Services with External IP addresses](network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
 - [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
@@ -651,7 +646,7 @@ MetalLB can run in either `Layer2-mode` or `BGP-mode` for each address pool it m
 \(`Layer2-mode` does failover, not load balancing\) and allows for a more robust layer 3 configuration for these networks.
 
 - [MetalLB in BGP-Mode](network/metallb_bgp/MetalLB_in_BGP-Mode.md)
-- [MetalLB in BGP-Mode Configuration](network/metallb_bgp/MetalLB_in_BGP-Mode_Configuration.md)
+- [MetalLB Configuration](network/metallb_bgp/MetalLB_Configuration.md)
 - [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 - [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)

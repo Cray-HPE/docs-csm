@@ -89,7 +89,7 @@ See [CSM Automatic Network Utility (CANU)](canu/index.md)
   * Shows how the HMN tab on the SHCD should be formatted.
 * [SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)
   * Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
-* [Backup Custom Configuration](backup_custom_config.md)
+* [Backup Custom Configuration](backup_custom_configurations.md)
   * Shows users how to backup configuration that is custom to their system; this includes site connections and credentials.
 * [Configuration Management](config_management.md)
   * Shows users how to save a running configuration to the switch for backup purposes or to switch between different switch configurations.

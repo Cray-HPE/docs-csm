@@ -1,4 +1,4 @@
-# Wipe Management Switch Config
+# Wipe Management Switch Configuration
 
 This procedure describes how to wipe Aruba, Dell, and Mellanox switch configurations.
 
@@ -12,33 +12,33 @@ Out-of-band access to the switches (console)
 
    More information related to backing up configuration can be found on the [Configuration Management](config_management.md) procedure.
 
-   ```
+   ```console
    sw-spine-001# copy running-config checkpoint CSM1_0
    ```
 
 1. Verify the checkpoint was created.
 
-   ```
+   ```console
    sw-spine-001# show checkpoint
    ```
 
    Example output:
 
-   ```
+   ```console
    NAME                         TYPE        WRITER  DATE(YYYY/MM/DD)      IMAGE VERSION
    CSM1_0                       latest      User    2022-01-27T18:52:31Z  GL.10.08.1021
    ```
 
 1. Erase the startup configuration.
 
-   ```
+   ```console
    sw-spine-002# erase startup-config
    Erase checkpoint startup-config ? (y/n): y
    ```
 
 1. Reboot after erasing the startup configuration.
 
-   ```
+   ```console
    sw-spine-001# boot system
    Checking if the configuration needs to be saved...
 
@@ -49,26 +49,26 @@ Out-of-band access to the switches (console)
 
    The default user is `admin` without any password.
 
-1. Follow the [Apply Switch Configs](apply_switch_configs.md) procedure.
+1. Follow the [Apply Switch Configurations](apply_switch_configurations.md) procedure.
 
 ## Dell
 
 1. Save startup configuration to a new XML configuration file.
 
-   ```
+   ```console
    sw-leaf-bmc-001# copy config://startup.xml config://csm1.2.xml
    ```
 
 1. Erase the startup configuration.
 
-   ```
+   ```console
    sw-leaf-bmc-001# delete startup-configuration
    Proceed to delete startup-configuration [confirm yes/no(default)]:yes
    ```
 
 1. Reboot after erasing the startup configuration.
 
-   ```
+   ```console
    sw-leaf-bmc-001# reload
    System configuration has been modified. Save? [yes/no]:no
    Continuing without saving system configuration
@@ -78,7 +78,7 @@ Out-of-band access to the switches (console)
    The default username and password are `admin`.
    This will boot the switch to factory defaults.
 
-1. Follow the [Apply Switch Configs](apply_switch_configs.md) procedure.
+1. Follow the [Apply Switch Configurations](apply_switch_configurations.md) procedure.
 
 ## Mellanox
 
@@ -86,7 +86,7 @@ Out-of-band access to the switches (console)
 
    When a new configuration file is created, no data is written to it. We will boot to this new, blank configuration file.
 
-   ```
+   ```console
    (config) # configuration new csm1.2
    ```
 
@@ -94,13 +94,13 @@ Out-of-band access to the switches (console)
 
 1. Check that the configuration files contain the new `csm1.2` blank configuration that was just created.
 
-   ```
+   ```console
    (config) # show configuration files
    ```
 
    Example output:
 
-   ```
+   ```console
    files
    csm1.0 (active)
    csm1.2
@@ -112,7 +112,7 @@ Out-of-band access to the switches (console)
 
 1. Switch to the new configuration, which requires a reboot.
 
-   ```
+   ```console
    (config) # configuration switch-to csm1.2
    This requires a reboot.
    Type 'yes' to confirm: yes
@@ -122,7 +122,7 @@ Out-of-band access to the switches (console)
 
 1. Follow the prompts as shown below.
 
-   ```
+   ```console
    NVIDIA Switch
 
 
