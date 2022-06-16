@@ -11,11 +11,12 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 ### Stages
 
-- [Stage 0.1 - Prepare assets](#prepare-assets)
-- [Stage 0.2 - Update SLS](#update-sls)
-- [Stage 0.3 - Upgrade Management Network](#update-management-network)
-- [Stage 0.4 - Prerequisites Check](#prerequisites-check)
-- [Stage 0.5 - Backup Workload Manager Data](#backup-workload-manager)
+- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+- [Stage 0.2 - Plan and coordinate network upgrade](#stage-02---plan-and-coordinate-network-upgrade)
+- [Stage 0.3 - Update SLS](#stage-03---update-sls)
+- [Stage 0.4 - Upgrade Management Network](#stage-04---upgrade-management-network)
+- [Stage 0.5 - Prerequisites Check](#stage-05---prerequisites-check)
+- [Stage 0.6 - Backup Workload Manager Data](#stage-06---backup-workload-manager-data)
 - [Stage completed](#stage-completed)
 
 ## Stage 0.1 - Prepare assets
@@ -107,19 +108,127 @@ backup of Workload Manager configuration data and files is created. Once complet
    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
-## Stage 0.2 - Update SLS
+## Stage 0.2 - Plan and coordinate network upgrade
 
 ### Abstract (Stage 0.2)
 
-CSM 1.2 introduces the bifurcated CAN (BICAN) as well as network configuration controlled by data in SLS. An offline upgrade of SLS data is performed. For more details on the
+Prior to CSM 1.2, the single Customer Access Network (CAN) carried both the admin network traffic and the user network
+traffic. CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate admin network traffic and user network traffic.
+With BICAN, the pre-1.2 CAN network is split into two separate networks:
+
+1. Customer Management Network (CMN)
+
+   This network allows only system administrative access from the customer site. The pre-1.2 CAN is renamed to CMN. By
+   the end of the CSM 1.2 upgrade, all non-administrative access, such as from UANs, will be removed from CMN.
+
+   During the CSM 1.2 upgrade, UANs will retain their pre-1.2 CAN IPs in order to minimize disruption to UANs. However,
+   toward the end of the CSM 1.2 upgrade, UANs will stop registering themselves on CMN and will receive new IPs on the
+   CAN/CHN network below. This process is described in more detail in [UAN Migration](#uan-migration).
+
+1. Customer Access Network (CAN) / Customer High-speed Network (CHN)
+
+   For user traffic only (e.g. users running and monitoring jobs), CSM 1.2 allows you to pick one of two networks:
+
+      - Customer Access Network (CAN): this is a new network (VLAN6 in switches) that runs over the management network. This
+         network must not be confused with pre-1.2 CAN, which was a monolithic network that allowed both user and administrative
+         traffic, was configured as VLAN7 in switches, and is now renamed to CMN. The new CAN allows only user traffic.
+
+      - Customer High-speed Network (CHN): this is a new network (VLAN5 in switches) that runs over the high-speed fabric.
+
+   You must only pick either the new CAN or CHN, but not both. The rest of the installation guide will provide you with
+   options for configuring either the new CAN or CHN.
+
+Pivoting the pre-1.2 CAN to the new CMN allows administrative traffic (already on the pre-1.2 CAN) to remain as-is while
+moving standard user traffic to a new site-routable network.
+
+### UAN migration
+
+Certain steps are taken in order to minimize disruption to UANs during the CSM 1.2 upgrade process:
+
+1. During the upgrade, the switch `1.2 Preconfig` will not remove UAN ports from the CMN VLAN (the pre-1.2 CAN), allowing UANs
+   to retain their existing IPs during the CSM 1.2 upgrade process. Traffic to and from UANs will still flow through CMN, but
+   may also flow through CAN/CHN networks if desired.
+
+1. CFS will be temporarily disabled for UANs, so that running CFS plays does not remove CMN interfaces from UANs. As mentioned
+   in [Abstract (Stage 0.3)](#abstract-stage-03), network configuration is controlled by data in SLS, but CFS plays also pick up
+   the same SLS data, which can lead to UANs being prematurely removed from CMN and causing UAN outage. As such, CFS plays
+   need to be disabled for UANs.
+
+   To disable CFS plays for UANs, you must remove CFS assignment for UANs by running the following command:
+
+   ```bash
+   what-is-the-command-to-disable-CFS-for-UANs.sh
+   ```
+
+1. UAN reboots must be avoided. Rebooting a UAN can re-enable CFS and can ultimately lead to removing CMN interfaces from UANs.
+   As a system administrator, you must inform your users to avoid UAN reboots during the CSM 1.2 upgrade process. If, however,
+   a UAN is rebooted, you can run the following set of commands to add the CMN interface back on the UAN:
+
+   ```bash
+   what-is-the-command-to-readd-CMN-to-UANs-after-accidental-reboot.sh
+   ```
+
+1. Once the CSM 1.2 upgrade is complete, you may reboot the UANs for the new network configuration changes to take effect.
+   UANs will not receive an IP on the CMN network and instead will default their traffic through the new CAN/CHN.
+
+1. `{TODO: keepme?}` Note that in CSM 1.2, UAN ports will not be removed from the CMN VLAN7 in switches. In the next CSM release, switch
+   configuration will be updated to remove UAN ports from the CMN VLAN7. This enables non-rebooted UANs to continue to work
+   and allows for better easing into BICAN in CSM 1.2.
+
+### UAI migration
+
+Access to UAIs will be disrupted until CSM 1.2 upgrade completes. After the upgrade is completed, UAIs need to be restarted.
+
+### Decide on subnet ranges for new CAN/CHN
+
+Once you have decided whether to use the new CAN or to use CHN for user access, you must decide on the subnet range. Refer
+to [Customer Accessible Networks](../../operations/network/customer_accessible_networks/Customer_Accessible_Networks.md)
+for subnet ranges and defaults for CAN/CHN.
+
+### Preserving CMN subnet range
+
+It is vital that you preserve the subnet range for the pre-1.2 CAN that is now being renamed to CMN. Changing the subnet
+size during the CSM 1.2 upgrade process can have unintended consequences.
+
+### Changes to service endpoints
+
+With the introduction of BICAN, URLs for certain services are now different, as it is now necessary to include the network path in the
+fully qualified domain name. Furthermore, certain services are only available on CMN:
+
+- Access to administrative services is now restricted to the CMN.
+- API access is available via the CMN, new CAN, and CHN.
+
+The following table are a set of examples of how domain names of existing services are impacted. It assumes the system was
+configured with a `system-name` of `shasta` and a `site-domain` of `dev.cray.com`.
+
+| Old Name                           | New Name                                  |
+|------------------------------------|-------------------------------------------|
+| `auth.shasta.dev.cray.com`         | `auth.cmn.shasta.dev.cray.com`            |
+| `nexus.shasta.dev.cray.com`        | `nexus.cmn.shasta.dev.cray.com`           |
+| `grafana.shasta.dev.cray.com`      | `grafana.cmn.shasta.dev.cray.com`         |
+| `prometheus.shasta.dev.cray.com`   | `prometheus.cmn.shasta.dev.cray.com`      |
+| `alertmanager.shasta.dev.cray.com` | `alertmanager.cmn.shasta.dev.cray.com`    |
+| `vcs.shasta.dev.cray.com`          | `vcs.cmn.shasta.dev.cray.com`             |
+| `kiali-istio.shasta.dev.cray.com`  | `kiali-istio.cmn.shasta.dev.cray.com`     |
+| `s3.shasta.dev.cray.com`           | `s3.cmn.shasta.dev.cray.com`              |
+| `sma-grafana.shasta.dev.cray.com`  | `sma-grafana.cmn.shasta.dev.cray.com`     |
+| `sma-kibana.shasta.dev.cray.com`   | `sma-kibana.cmn.shasta.dev.cray.com`      |
+| `api.shasta.dev.cray.com`          | `api.cmn.shasta.dev.cray.com`, `api.chn.shasta.dev.cray.com`, `api.can.shasta.dev.cray.com` |
+
+You must inform your users of the change to the `api.*` endpoint to avoid any unexpected disruptions.
+
+Note that the `*.cmn.<system-domain>`, `*.can.<system-domain>`, `*.chn.<system-domain>` suffixes are not configurable. That is, you
+**cannot** configure, for example, `*.cmn.<system-domain>` to instead be `*.my-mgmt-network.<system-domain>`.
+
+## Stage 0.3 - Update SLS
+
+### Abstract (Stage 0.3)
+
+CSM 1.2 introduces network configuration controlled by data in SLS. An offline upgrade of SLS data is performed. For more details on the
 upgrade and its sequence of events, see the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md).
 
 The SLS data upgrade is a critical step in moving to CSM 1.2. Upgraded SLS data is used in DNS and management network configuration. For details to aid in understanding and
 decision making, see the [Management Network User Guide](../../operations/network/management_network/README.md).
-
-One detail which must not be overlooked is that the existing Customer Access Network (CAN) will be migrated or retrofitted into the new Customer Management Network (CMN) while
-minimizing changes. A new CAN (or CHN) network is then created. Pivoting the existing CAN to the new CMN allows administrative traffic (already on the CAN) to remain as-is while
-moving standard user traffic to a new site-routable network.
 
 > **Important:** If this is the first time performing the SLS update to CSM 1.2, review the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md) in order to ensure
 the correct options for the specific environment are used. Two examples are given below. To see all options from the update script, run `./sls_updater_csm_1.2.py --help`.
@@ -147,6 +256,9 @@ the correct options for the specific environment are used. Two examples are give
    ```
 
 ### Migrate SLS data JSON to CSM 1.2
+
+You can now migrate SLS data to CSM 1.2, using the `sls_input_file.json` obtained above, as well as using the desired
+network (new CAN or CHN) and its chosen subnet as per [Decide on subnet ranges for new CAN/CHN](#decide-on-subnet-ranges-for-new-canchn).
 
 - (`ncn-m001#`) Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
@@ -178,7 +290,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
 curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
 ```
 
-## Stage 0.3 - Upgrade management network
+## Stage 0.4 - Upgrade management network
 
 ### Verify that switches have 1.2 configuration in place
 
@@ -204,7 +316,7 @@ curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-se
    - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
    - See the [Management Network User Guide](../../operations/network/management_network/README.md) for more information on the management network.
 
-## Stage 0.4 - Prerequisites check
+## Stage 0.5 - Prerequisites check
 
 1. (`ncn-m001#`) Set the `SW_ADMIN_PASSWORD` environment variable.
 
@@ -271,7 +383,7 @@ curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-se
    git push
    ```
 
-## Stage 0.5 - Backup workload manager data
+## Stage 0.6 - Backup workload manager data
 
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the

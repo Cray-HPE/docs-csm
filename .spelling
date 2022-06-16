@@ -222,7 +222,7 @@ highspeed
 HM
 HMN
 HMNLB
-HMN_MTN 
+HMN_MTN
 HMN_RVR
 honored
 hostname
@@ -619,4 +619,8 @@ Admin
 - operations/network/management_network/upgrade.md
 Preconfig
 preconfig
+
+- upgrade/1.2/Stage_0_Prerequisites.md
+# To differentiate between old CAN and new CAN
+pre-1
 
