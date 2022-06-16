@@ -1,10 +1,13 @@
 # Post-Install Customizations
 
-Post-install customizations may be needed as systems scale. These customizations also need to persist across future installs or upgrades. Not all resources can be customized post-install; common scenarios are documented in the following sections.
+Post-install customizations may be needed as systems scale.
+These customizations also need to persist across future installs or upgrades.
+Not all resources can be customized post-install; common scenarios are documented in the following sections.
 
-The following is a guide for determining where issues may exist, how to adjust the resources, and how to ensure the changes will persist. Different values may be be needed for systems as they scale.
+The following is a guide for determining where issues may exist, how to adjust the resources, and how to ensure the changes will persist.
+Different values may be be needed for systems as they scale.
 
-### Kubectl Events `OOMKilled`
+## `kubectl` events `OOMKilled`
 
 Check to see if there are any recent out of memory events.
 
@@ -14,58 +17,105 @@ Check to see if there are any recent out of memory events.
     ncn# kubectl get event -A | grep OOM
     ```
 
-1. Use the Grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the memory utilization graphs over time for any pod that has been `OOMKilled`.
+1. Log in to Grafana.
 
-### Prometheus `CPUThrottlingHigh` Alerts
+   ```text
+   https://grafana.cmn.SYSTEM_DOMAIN_NAME/
+   ```
 
-Check Prometheus for recent `CPUThrottlingHigh` Alerts.
+1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the memory utilization graphs over time for any pod that has been `OOMKilled`.
 
-1. From Prometheus (https://prometheus.SYSTEM-NAME_DOMAIN-NAME/), select the **Alert** tab and scroll down to the alert for `CPUThrottlingHigh`.
+## Prometheus `CPUThrottlingHigh` alerts
 
-1. Use the Grafana "Kubernetes/Compute Resources/Pod" Dashboard to view the throttling graphs over time for any pod that is alerting.
+Check Prometheus for recent `CPUThrottlingHigh` alerts.
 
-### Grafana Kubernetes/Compute Resources/Pod Dashboard
+1. Log in to Prometheus.
 
-Use Grafana to investigate and analyze CPU Throttling and/or Memory Usage.
+   ```text
+   https://prometheus.cmn.SYSTEM_DOMAIN_NAME/
+   ```
 
-1. From Grafana (https://grafana.SYSTEM-NAME_DOMAIN-NAME/) and the Home Dashboard, select the "Kubernetes/Compute Resources/Pod" Dashboard.
+   1. Select the **Alert** tab.
 
-1. Select the datasource, namespace, and pod based on the pod being examined. For example:
+   1. Scroll down to the alert for `CPUThrottlingHigh`.
 
-    ```
-    datasource: default
-    namespace: sysmgmt-health
-    pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
-    ```
+1. Log in to Grafana.
 
-#### For CPU Throttling
+   ```text
+   https://grafana.cmn.SYSTEM_DOMAIN_NAME/
+   ```
 
-1. Select the **CPU Throttling** drop-down to see the CPU Throttling graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
+1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the throttling graphs over time for any pod that is alerting.
 
-1. The presence of CPU throttling does not always indicate a problem, but if a service is being slow or experiencing latency issues, reviewing the graph and adjusting the `resources.limits.cpu` can be beneficial. If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed. If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.
+## Grafana "Kubernetes / Compute Resources / Pod" dashboard
 
-1. The `resources.requests.cpu` are used by the Kubernetes scheduler to decide which node to place the pod on and do not impact CPU Throttling. The `resources.limits.cpu` can never be lower than the `resources.requests.cpu`.
+Use Grafana to investigate and analyze CPU throttling and memory usage.
 
-#### For Memory Usage
+1. Log in to Grafana.
 
-1. Select the **Memory Usage** drop-down to see the Memory Usage graph for the pod during the selected time (from the top right), and select the container (from the legends under the x axis).
+   ```text
+   https://grafana.cmn.SYSTEM_DOMAIN_NAME/
+   ```
 
-1. From the Memory Usage graph for the container, determine the steady state memory usage. This is where the `resources.requests.memory` should be minimally set. But more importantly, determine the spike usage for the container and set the `resources.limits.memory` based on the spike values with some additional headroom.
+1. Search for the "Kubernetes / Compute Resources / Pod" dashboard.
 
-### Common Customization Scenarios
+1. Select the `datasource`, `namespace`, and `pod` based on the pod being examined.
 
-- [Prerequisite](#prerequisite)
-- [Prometheus Pod is `OOMKilled` or CPU Throttled](#prometheus_resources)
-- [Postgres Pods are `OOMKilled` or CPU Throttled](#postgres_resources)
-- [Scale `cray-bss` Service](#bss_scale)
-- [Postgres PVC Resize](#postgres_pvc_resize)
+   For example:
 
-<a name="prerequisite"></a>
-### Prerequisite
+   ```yaml
+   datasource: default
+   namespace: sysmgmt-health
+   pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
+   ```
+
+### CPU throttling
+
+1. Select the **CPU Throttling** drop-down to see the CPU Throttling graph for the pod during the selected time (from the top right).
+
+1. Select the container (from the legends under the x axis).
+
+1. Review the graph and adjust the `resources.limits.cpu` value as needed.
+
+   The presence of CPU throttling does not always indicate a problem, but if a service is being slow or experiencing latency
+   issues, adjusting `resources.limits.cpu` may be beneficial.
+
+   For example:
+
+   * If the pod is being throttled at or near 100% for any period of time, then adjustments are likely needed.
+   * If the service's response time is critical, then adjusting the pod's resources to greatly reduce or eliminate any CPU throttling may be required.
+
+   > **NOTE:** The `resources.requests.cpu` values are used by the Kubernetes scheduler to decide which node to place the pod on and do not impact CPU
+   > throttling. The value of `resources.limits.cpu` can never be lower than the value of `resources.requests.cpu`.
+
+### Memory usage
+
+1. Select the **Memory Usage** drop-down to see the memory usage graph for the pod during the selected time (from the top right).
+
+1. Select the container (from the legends under the x axis).
+
+1. Determine the steady state memory usage by looking at the memory usage graph for the container.
+
+   This is where the `resources.requests.memory` value should be minimally set.
+   But more importantly, determine the spike usage for the container and set the `resources.limits.memory` value based on the spike values with some additional headroom.
+
+## Common customization scenarios
+
+* [Prerequisites](#prerequisites)
+* [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus_resources)
+* [Postgres pods are `OOMKilled` or CPU throttled](#postgres_resources)
+* [Scale `cray-bss` service](#bss_scale)
+* [Postgres PVC resize](#postgres_pvc_resize)
+
+<a name="prerequisites"></a>
+
+### Prerequisites
 
 In order to apply post-install customizations to a system, the affected Helm chart must exist on the system so that the same chart version can be redeployed with the desired customizations.
 
-This example unpacks the the csm-1.0.0 tarball under /root and lists the Helm charts that are now on your system. Set `PATH_TO_RELEASE` to the release directory where the Helm directory exists. `PATH_TO_RELEASE` will be used below when deploying a customization.
+This example unpacks the the `csm-1.0.0` tarball under `/root` and lists the Helm charts that are now on the system.
+Set `PATH_TO_RELEASE` to the release directory where the `helm` directory exists.
+`PATH_TO_RELEASE` will be used below when deploying a customization.
 
 These unpacked files can be safely removed after the customizations are deployed through `loftsman ship` in the examples below.
 
@@ -79,9 +129,12 @@ ncn# ls $PATH_TO_RELEASE/helm
 ```
 
 <a name="prometheus_resources"></a>
-### Prometheus Pod is `OOMKilled` or CPU Throttled
-Update resources associated with Prometheus in the `sysmgmt-health` namespace. This example is based on what was needed for a system with 4000 compute nodes. Trial and error may be needed to determine what is best for a given system at scale.
 
+### Prometheus pod is `OOMKilled` or CPU throttled
+
+Update resources associated with Prometheus in the `sysmgmt-health` namespace.
+This example is based on what was needed for a system with 4000 compute nodes.
+Trial and error may be needed to determine what is best for a given system at scale.
 
 1. Get the current cached customizations.
 
@@ -112,7 +165,7 @@ Update resources associated with Prometheus in the `sysmgmt-health` namespace. T
 
    Example output:
 
-   ```
+   ```yaml
    requests:
      cpu: "3"
      memory: 15Gi
@@ -121,9 +174,11 @@ Update resources associated with Prometheus in the `sysmgmt-health` namespace. T
      memory: 30Gi
    ```
 
-1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data. (The resources specified above will be updated in the next step and the version may differ, because this is an example).
+1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data.
 
-   ```
+   The resources specified above will be updated in the next step. The version may differ, because this is an example.
+
+   ```yaml
    apiVersion: manifests/v1beta1
    metadata:
      name: platform
@@ -152,7 +207,7 @@ Update resources associated with Prometheus in the `sysmgmt-health` namespace. T
 
    Example output:
 
-   ```
+   ```yaml
    requests:
      cpu: "3"
      memory: 15Gi
@@ -167,15 +222,16 @@ Update resources associated with Prometheus in the `sysmgmt-health` namespace. T
    ncn# loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
-1. Verify the pod restarts and that the desired resources have been applied.
+1. Verify that the pod restarts and that the desired resources have been applied.
 
-   1. Watch the pod prometheus-cray-sysmgmt-health-promet-prometheus-0 restart.
+   1. Watch the `prometheus-cray-sysmgmt-health-promet-prometheus-0` pod restart.
 
       ```bash
       ncn# watch "kubectl get pods -n sysmgmt-health -l prometheus=cray-sysmgmt-health-promet-prometheus"
       ```
-      It may take about ten minutes for the prometheus-cray-sysmgmt-health-promet-prometheus-0 pod to Terminate.
-      It can be forced deleted if it remains in Terminating state:
+
+      It may take about 10 minutes for the `prometheus-cray-sysmgmt-health-promet-prometheus-0` pod to terminate.
+      It can be forced deleted if it remains in the terminating state:
 
       ```bash
       ncn# kubectl delete pod prometheus-cray-sysmgmt-health-promet-prometheus-0 --force --grace-period=0 -n sysmgmt-health
@@ -187,7 +243,9 @@ Update resources associated with Prometheus in the `sysmgmt-health` namespace. T
       ncn#  kubectl get pod prometheus-cray-sysmgmt-health-promet-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
       ```
 
-2. **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+1. **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
@@ -195,11 +253,15 @@ Update resources associated with Prometheus in the `sysmgmt-health` namespace. T
    ```
 
 <a name="postgres_resources"></a>
-### Postgres Pods are `OOMKilled` or CPU Throttled
 
-Update resources associated with spire-postgres in the `spire` namespace. This example is based on what was needed for a system with 4000 compute nodes. Trial and error may be needed to determine what is best for a given system at scale.
+### Postgres pods are `OOMKilled` or CPU throttled
 
-A similar flow can be used to update the resources for `cray-sls-postgres`, `cray-smd-postgres`, or `gitea-vcs-postgres`. Refer to the note at the end of this section for more details.
+Update resources associated with `spire-postgres` in the `spire` namespace.
+This example is based on what was needed for a system with 4000 compute nodes.
+Trial and error may be needed to determine what is best for a given system at scale.
+
+A similar flow can be used to update the resources for `cray-sls-postgres`, `cray-smd-postgres`, or `gitea-vcs-postgres`.
+Refer to the note at the end of this section for more details.
 
 1. Get the current cached customizations.
 
@@ -207,7 +269,7 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
    ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
-1. Get the current cached sysmgmt manifest.
+1. Get the current cached `sysmgmt` manifest.
 
    ```bash
    ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
@@ -230,7 +292,7 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
 
    Example output:
 
-   ```
+   ```yaml
    requests:
      cpu: "4"
      memory: 4Gi
@@ -239,9 +301,11 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
      memory: 8Gi
    ```
 
-1. Edit the `sysmgmt.yaml` to only include the `spire` chart and all its current data. (The resources specified above will be updated in the next step and the version may differ, because this is an example).
+1. Edit the `sysmgmt.yaml` to only include the `spire` chart and all its current data.
 
-   ```
+   The resources specified above will be updated in the next step. The version may differ, because this is an example.
+
+   ```yaml
    apiVersion: manifests/v1beta1
    metadata:
      name: platform
@@ -270,7 +334,7 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
 
    Example output:
 
-   ```
+   ```yaml
    requests:
      cpu: "4"
      memory: 4Gi
@@ -293,7 +357,7 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
       ncn# watch "kubectl get pods -n spire -l application=spilo,cluster-name=spire-postgres"
       ```
 
-   1. Verify the desired resources have been applied.
+   1. Verify that the desired resources have been applied.
 
       ```bash
       ncn# kubectl get pod spire-postgres-0 -n spire -o json | jq -r '.spec.containers[] | select(.name == "postgres").resources'
@@ -301,7 +365,7 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
 
       Example output:
 
-      ```
+      ```json
       {
       "limits": {
          "cpu": "8",
@@ -314,34 +378,40 @@ A similar flow can be used to update the resources for `cray-sls-postgres`, `cra
       }
       ```
 
-1. **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+1. **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
    ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-**IMPORTANT:** If `cray-sls-postgres`, `cray-smd-postgres`, or `gitea-vcs-postgres` resources need to be adjusted, the same procedure as above can be used with the following changes:
+**IMPORTANT:** If `cray-sls-postgres`, `cray-smd-postgres`, or `gitea-vcs-postgres` resources need to be adjusted,
+the same procedure as above can be used with the following changes:
 
-  * `cray-sls-postgres`
+* `cray-sls-postgres`
 
-    Get the current cached manifest configmap from: `loftsman-core-services`
-    Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.resources`
+  * Get the current cached manifest ConfigMap from: `loftsman-core-services`
+  * Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.resources`
 
-  * `cray-smd-postgres`
+* `cray-smd-postgres`
 
-    Get the current cached manifest configmap from: `loftsman-core-services`
-    Resource path: `spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.resources`
+  * Get the current cached manifest ConfigMap from: `loftsman-core-services`
+  * Resource path: `spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.resources`
 
-  * `gitea-vcs-postgres`
+* `gitea-vcs-postgres`
 
-    Get the current cached manifest configmap from: `loftsman-sysmgmt`
-    Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.resources`
-
+  * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
+  * Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.resources`
 
 <a name="bss_scale"></a>
-### Scale `cray-bss` Service
-Scale the replica count associated with the `cray-bss` service in the `services` namespace. This example is based on what was needed for a system with 4000 compute nodes. Trial and error may be needed to determine what is best for a given system at scale.
+
+### Scale `cray-bss` service
+
+Scale the replica count associated with the `cray-bss` service in the `services` namespace.
+This example is based on what was needed for a system with 4000 compute nodes.
+Trial and error may be needed to determine what is best for a given system at scale.
 
 1. Get the current cached customizations.
 
@@ -368,9 +438,11 @@ Scale the replica count associated with the `cray-bss` service in the `services`
    5
    ```
 
-1. Edit the `sysmgmt.yaml` to only include the `cray-hms-bss` chart and all its current data. (The replicaCount specified above will be updated in the next step and the version may differ, because this is an example).
+1. Edit the `sysmgmt.yaml` to only include the `cray-hms-bss` chart and all its current data.
 
-   ```
+   The `replicaCount` specified above will be updated in the next step. The version may differ, because this is an example.
+
+   ```yaml
    apiVersion: manifests/v1beta1
    metadata:
      name: sysmgmt
@@ -406,7 +478,7 @@ Scale the replica count associated with the `cray-bss` service in the `services`
 
 1. Verify the `cray-bss` pods scale.
 
-   1. Watch the `cray-bss` pods scale to 5 and each reach a 2/2 ready state.
+   1. Watch the `cray-bss` pods scale to 5, with each pod reaching a `2/2` ready state.
 
       ```bash
       ncn# watch "kubectl get pods -l app.kubernetes.io/instance=cray-hms-bss -n services"
@@ -414,7 +486,7 @@ Scale the replica count associated with the `cray-bss` service in the `services`
 
       Example output:
 
-      ```
+      ```text
       NAME                       READY   STATUS    RESTARTS   AGE
       cray-bss-fccbc9f7d-7jw2q   2/2     Running   0          82m
       cray-bss-fccbc9f7d-l524g   2/2     Running   0          93s
@@ -431,7 +503,9 @@ Scale the replica count associated with the `cray-bss` service in the `services`
 
       In this example, `5` will be the returned value.
 
-1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
@@ -439,11 +513,15 @@ Scale the replica count associated with the `cray-bss` service in the `services`
    ```
 
 <a name="postgres_pvc_resize"></a>
-### Postgres PVC Resize
 
-Increase the PVC volume size associated with `cray-smd-postgres` cluster in the `services` namespace. This example is based on what was needed for a system with 4000 compute nodes. Trial and error may be needed to determine what is best for a given system at scale. The PVC size can only ever be increased.
+### Postgres PVC resize
 
-A similar flow can be used to update the volume size for `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres`. Refer to the note at the end of this section for more details.
+Increase the PVC volume size associated with `cray-smd-postgres` cluster in the `services` namespace.
+This example is based on what was needed for a system with 4000 compute nodes.
+Trial and error may be needed to determine what is best for a given system at scale. The PVC size can only ever be increased.
+
+A similar flow can be used to update the volume size for `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres`.
+Refer to the note at the end of this section for more details.
 
 1. Get the current cached customizations.
 
@@ -471,9 +549,11 @@ A similar flow can be used to update the volume size for `cray-sls-postgres`, `g
    100Gi
    ```
 
-1. Edit the `core-services.yaml` to only include the `cray-hms-smd` chart and all its current data. (The `volumeSize` specified above will be updated in the next step and the version may differ, because this is an example).
+1. Edit the `core-services.yaml` to only include the `cray-hms-smd` chart and all its current data.
 
-   ```
+   The `volumeSize` specified above will be updated in the next step. The version may differ, because this is an example.
+
+   ```yaml
    apiVersion: manifests/v1beta1
    metadata:
      name: core-services
@@ -516,41 +596,47 @@ A similar flow can be used to update the volume size for `cray-sls-postgres`, `g
 
    Example output:
 
-   ```
+   ```text
    NAME                TEAM       VERSION   PODS   VOLUME   CPU-REQUEST   MEMORY-REQUEST   AGE   STATUS
    cray-smd-postgres   cray-smd   11        3      100Gi     500m          8Gi              45m  Running
    ```
 
-1. If the status on the above command is `SyncFailed` instead of `Running`, refer to *Case 1* in the *SyncFailed* section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed). At this point the Postgres cluster is healthy, but additional steps are required to complete the resize of the Postgres PVCs.
+1. If the status on the above command is `SyncFailed` instead of `Running`, refer to *Case 1* in the
+   `SyncFailed` section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed).
 
-1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location. If not done, these changes will not persist in future installs or upgrades.
+   At this point the Postgres cluster is healthy, but additional steps are required to complete the resize of the Postgres PVCs.
+
+1. **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
    ncn# kubectl delete secret -n loftsman site-init
    ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-**IMPORTANT:** If `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` `volumeSize` need to be adjusted, the same procedure as above can be used with the following changes:
+**IMPORTANT:** If the volume sizes of `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` need to be adjusted, the same procedure as above can be used with the following changes:
 
-  * `cray-sls-postgres`
+* `cray-sls-postgres`
 
-    Get the current cached manifest configmap from: `loftsman-core-services`
-    Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.volumeSize`
+  * Get the current cached manifest ConfigMap from: `loftsman-core-services`
+  * Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.volumeSize`
 
-  * `gitea-vcs-postgres`
+* `gitea-vcs-postgres`
 
-    Get the current cached manifest configmap from: `loftsman-sysmgmt`
-    Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.volumeSize`
+  * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
+  * Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.volumeSize`
 
-  * `spire-postgres`
+* `spire-postgres`
 
-    Get the current cached manifest configmap from: `loftsman-sysmgmt`
-    Resource path: `spec.kubernetes.services.spire.cray-service.sqlCluster.volumeSize`
+  * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
+  * Resource path: `spec.kubernetes.services.spire.cray-service.sqlCluster.volumeSize`
 
-### References
+## References
 
-To make changes that will not persist across installs or upgrades, see the following references. These procedures will also help to verify and eliminate any issues in the short term. As other resource customizations are needed, contact support to request the feature.
+To make changes that will not persist across installs or upgrades, see the following references.
+These procedures will also help to verify and eliminate any issues in the short term.
+As other resource customizations are needed, contact support to request the feature.
 
-* Reference [Determine if Pods are Hitting Resource Limits](../kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
-* Reference [Increase Pod Resource Limits](../kubernetes/Increase_Pod_Resource_Limits.md)
-
+* [Determine if Pods are Hitting Resource Limits](../kubernetes/Determine_if_Pods_are_Hitting_Resource_Limits.md)
+* [Increase Pod Resource Limits](../kubernetes/Increase_Pod_Resource_Limits.md)

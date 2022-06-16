@@ -34,13 +34,13 @@ the following procedure can be used to add this external image to IMS and upload
     Set the `IMS_ROOTFS_FILENAME` variable to the chosen name.
 
     ```bash
-    ncn# IMS_ROOTFS_FILENAME=sles_15_image.squashfs
+    ncn-mw# IMS_ROOTFS_FILENAME=sles_15_image.squashfs
     ```
 
 1. Create a new IMS image record for the image.
 
     ```bash
-    ncn# cray ims images create --name $IMS_ROOTFS_FILENAME
+    ncn-mw# cray ims images create --name $IMS_ROOTFS_FILENAME --format toml
     ```
 
     Example output:
@@ -56,7 +56,7 @@ the following procedure can be used to add this external image to IMS and upload
     Set the `IMS_IMAGE_ID` variable, using the `id` field value from the returned data in the previous step.
 
     ```bash
-    ncn# IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
+    ncn-mw# IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
 1. <a name="upload_to_s3"></a>Upload the image root to S3.
@@ -66,19 +66,19 @@ the following procedure can be used to add this external image to IMS and upload
         > This may be the same name as `IMS_ROOTFS_FILENAME`, but it is not required to be.
 
         ```bash
-        ncn# ROOTFS_FILENAME=/home/rootfs.squashfs
+        ncn-mw# ROOTFS_FILENAME=/home/rootfs.squashfs
         ```
 
     1. Record the `md5sum` of the image root to be uploaded.
 
         ```bash
-        ncn# IMS_ROOTFS_MD5SUM=$(md5sum $ROOTFS_FILENAME | awk '{ print $1 }')
+        ncn-mw# IMS_ROOTFS_MD5SUM=$(md5sum $ROOTFS_FILENAME | awk '{ print $1 }')
         ```
 
     1. Upload the image root to S3.
 
         ```bash
-        ncn# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_ROOTFS_FILENAME $ROOTFS_FILENAME
+        ncn-mw# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_ROOTFS_FILENAME $ROOTFS_FILENAME
         ```
 
 1. Optionally, upload the kernel for the image to S3.
@@ -87,9 +87,9 @@ the following procedure can be used to add this external image to IMS and upload
     > `image-root/boot/vmlinuz`.
 
     ```bash
-    ncn# IMS_KERNEL_FILENAME=vmlinuz
-    ncn# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_KERNEL_FILENAME image-root/boot/$IMS_KERNEL_FILENAME
-    ncn# IMS_KERNEL_MD5SUM=`md5sum image-root/boot/$IMS_KERNEL_FILENAME | awk '{ print $1 }'`
+    ncn-mw# IMS_KERNEL_FILENAME=vmlinuz
+    ncn-mw# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_KERNEL_FILENAME image-root/boot/$IMS_KERNEL_FILENAME
+    ncn-mw# IMS_KERNEL_MD5SUM=`md5sum image-root/boot/$IMS_KERNEL_FILENAME | awk '{ print $1 }'`
     ```
 
 1. Optionally, upload the `initrd` for the image to S3.
@@ -98,9 +98,9 @@ the following procedure can be used to add this external image to IMS and upload
     > `image-root/boot/initrd`.
 
     ```bash
-    ncn# IMS_INITRD_FILENAME=initrd
-    ncn# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_INITRD_FILENAME image-root/boot/$IMS_INITRD_FILENAME
-    ncn# IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
+    ncn-mw# IMS_INITRD_FILENAME=initrd
+    ncn-mw# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_INITRD_FILENAME image-root/boot/$IMS_INITRD_FILENAME
+    ncn-mw# IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
     ```
 
 1. <a name="image_manifest"></a>Create an image manifest and upload it to S3.
@@ -117,7 +117,7 @@ the following procedure can be used to add this external image to IMS and upload
     1. Generate an image manifest file.
 
         ```console
-        ncn# cat <<EOF> manifest.json
+        ncn-mw# cat <<EOF> manifest.json
         {
           "created": "`date '+%Y-%m-%d %H:%M:%S'`",
           "version": "1.0",
@@ -154,7 +154,7 @@ the following procedure can be used to add this external image to IMS and upload
     1. Upload the manifest to S3.
 
         ```bash
-        ncn# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
+        ncn-mw# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
         ```
 
 1. <a name="register"></a>Register the image manifest with the IMS service.
@@ -162,9 +162,10 @@ the following procedure can be used to add this external image to IMS and upload
     Update the IMS image record.
 
     ```bash
-    ncn# cray ims images update $IMS_IMAGE_ID \
-            --link-type s3 \
-            --link-path s3://boot-images/$IMS_IMAGE_ID/manifest.json
+    ncn-mw# cray ims images update $IMS_IMAGE_ID \
+                --link-type s3 \
+                --link-path s3://boot-images/$IMS_IMAGE_ID/manifest.json \
+                --format toml
     ```
 
     Example output:
