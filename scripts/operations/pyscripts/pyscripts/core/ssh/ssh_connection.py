@@ -44,7 +44,7 @@ except NameError:
 
 PASSWORD_PROMPT = r"((.|\n)*)password\:"
 COMMAND_PROMPT_ONE_LINE = r"((.|\n)*)\:\~ \#"
-SSH_NEWKEY = r"(?i)are you sure you want to continue connecting"
+SSH_NEWKEY = r"((.|\n)*)Are you sure you want to continue connecting((.|\n)*)"
 UNRESOLVED_HOSTNAME = r"((.|\n)*)Could not resolve hostname((.|\n)*)"
 
 DEFAULT_TIMEOUT = 5
@@ -88,8 +88,7 @@ class SshConnection:
             return # return silently because we are already connected
 
         if not self.ssh_conn:
-            self.child_process = pexpect.spawn("ssh -o LogLevel=error -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %s@%s" %
-                (self.ssh_host.username, self.ssh_host.get_full_domain_name()), encoding="utf-8")
+            self.child_process = pexpect.spawn(self.ssh_host.get_ssh_command_to_connect_to_self(), encoding="utf-8")
 
             if get_logging_level() == logging.INFO:
                 self.child_process.logfile = sys.stdout
@@ -99,23 +98,7 @@ class SshConnection:
                 self.ssh_conn.connect()
                 self.child_process = self.ssh_conn.child_process
 
-            vrf = ""
-            extra_params = "  -o LogLevel=error -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-            hostname = self.ssh_host.get_full_domain_name()
-
-            if self.ssh_conn.ssh_host.vrf:
-                # add " vrf Customer" at the end of the SSH connection if the underlying connection requires it.
-                vrf = " vrf {}".format(self.ssh_conn.ssh_host.vrf)
-
-            if not self.ssh_conn.ssh_host.use_extra_params:
-                # Enable extra parameters if we are allowed to
-                extra_params = ""
-
-            # normalize the hostname if necessary
-            hostname = self.ssh_conn.ssh_host.get_target_hostname(self.ssh_host)
-
-            self.child_process.sendline("ssh%s %s@%s%s" %
-                (extra_params, self.ssh_host.username, hostname, vrf))
+            self.child_process.sendline(self.ssh_conn.ssh_host.get_ssh_command_to_connect_to_target(self.ssh_host))
 
         self.__open_connection_dance()
 
@@ -135,18 +118,18 @@ class SshConnection:
         i = self.__expect([r"{}((.|\n)*){}{}".format(re.escape(command_to_run), re.escape(expected), self.command_prompt_host_pattern), pexpect.TIMEOUT], timeout=DEFAULT_TIMEOUT)
 
         if i != 0:
-            logging.error("Unexpected run_test_command output. See above for actual and expected outputs.")
+            logging.info("Unexpected run_test_command output. See above for actual and expected outputs.")
             raise UnexpectedRunCommandOutput
 
     def __check_child_process(self):
         if not self.child_process:
-            logging.error("No SSH child process has been spawned off yet.")
+            logging.info("No SSH child process has been spawned off yet.")
             raise SshConnectionException
 
     def __check_connected(self):
         self.__check_child_process()
         if not self.connected:
-            logging.error("Not connected yet.")
+            logging.info("Not connected yet.")
             raise SshConnectionException
 
     def __expect(self, regex_list, timeout=DEFAULT_TIMEOUT):
@@ -216,7 +199,7 @@ class SshConnection:
                 self.connected = True
                 return
 
-        logging.error("Could not login to {}.".format(self.ssh_host.get_full_domain_name()))
+        logging.info("Could not login to {}.".format(self.ssh_host.get_full_domain_name()))
         raise CannotLoginException
 
     def __close_connection_dance(self):
