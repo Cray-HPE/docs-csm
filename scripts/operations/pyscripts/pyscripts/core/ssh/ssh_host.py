@@ -151,7 +151,7 @@ class SshHost:
 
         2. If using nmnlb or hmnlb, then always goes to api.nmnlb.<system-domain> and api.hmnlb.<system-domain> respectively.
         """
-        if self.is_switch() and "cmn." in target_ssh_host.domain_suffix and target_ssh_host.is_switch():
+        if self.is_aruba_switch() and "cmn." in target_ssh_host.domain_suffix:
             return socket.gethostbyname(target_ssh_host.get_full_domain_name())
         elif target_ssh_host.domain_suffix and "hmnlb." in target_ssh_host.domain_suffix and target_ssh_host.is_management_node():
             return "hmcollector.{}".format(target_ssh_host.domain_suffix)
@@ -188,3 +188,9 @@ class SshHost:
         Whether this is a Mellnox brand switch
         """
         return self.is_switch() and self.rawdata and "ExtraProperties" in self.rawdata and "Brand" in self.rawdata["ExtraProperties"] and self.rawdata["ExtraProperties"]["Brand"] == "Mellanox"
+
+    def is_aruba_switch(self):
+        """
+        Whether this is a Aruba brand switch
+        """
+        return self.is_switch() and self.rawdata and "ExtraProperties" in self.rawdata and "Brand" in self.rawdata["ExtraProperties"] and self.rawdata["ExtraProperties"]["Brand"] == "Aruba"
