@@ -146,7 +146,7 @@ The High Speed Network (HSN) in an HPE Cray EX system is based on the Slingshot 
 ### Kubernetes NCNs
 
 The Kubernetes NCNs are the management nodes which are known as Kubernetes master nodes
-(ncn-mXXX) or Kubernetes worker nodes (ncn-wXXX). The only type of management node which is
+(`ncn-mXXX`) or Kubernetes worker nodes (`ncn-wXXX`). The only type of management node which is
 excluded from this is the utility storage node (ncn-sXXX).
 
 ### LiveCD
