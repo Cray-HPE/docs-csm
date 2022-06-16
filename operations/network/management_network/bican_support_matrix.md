@@ -62,15 +62,13 @@ To achieve this the Management Network CAN is used during the installation proce
 
 ### Layer 2
 
-* CMN, CAN and CHN have broadcast boundaries at the System:Site edge.
+* CMN, CAN, and CHN have broadcast boundaries at the edge between the system and the site.
 
 ### Layer 3
 
 * Addressing
-
-* IPv4 supported (default)
-* IPv6 roadmap
-
+  * IPv4 supported (default)
+  * IPv6 roadmap
 * Routing
   * Static routes (default) exist on the edge router/switches at the edge.
   * Dynamic routing (OSPF or BGP) is possible at the edge.
