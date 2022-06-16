@@ -18,7 +18,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 
 ### Networking
 
-* Release Cray Automated Network Utility - CANU V1.0.0
+* Release Cray Automated Network Utility (CANU) V1.0.0
 * Performance improvements to Unbound and DHCP Helper
 * Initial Release of Bifurcated CAN
   * [BICAN summary page](operations/network/management_network/bican_technical_summary.md)

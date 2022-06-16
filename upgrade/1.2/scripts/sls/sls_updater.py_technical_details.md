@@ -1,8 +1,8 @@
 # `sls_updater.py` Technical Details
 
-**No Action needed.  Informational Purposes only.**
+**No action needed. Informational purposes only.**
 
-## Actions and Order
+## Actions and order
 
 This migration is performed offline for data security. The running SLS file is first dumped, then the
 migration script is run and a new, migrated output file is created.
@@ -18,7 +18,7 @@ migration script is run and a new, migrated output file is created.
 1. Update `uai_macvlan` in NMN DHCP ranges and `uai_macvlan` VLAN.
 1. Remove unused user networks (CAN or CHN) if requested (`--retain-unused-user-network` to keep).
 
-## Migrate Switch Names
+## Migrate switch names
 
 Switch names change in CSM 1.2 and must be applied in the following order:
 
@@ -27,37 +27,37 @@ Switch names change in CSM 1.2 and must be applied in the following order:
 
 This needs to be done in the order listed above.
 
-## Remove `api-gateway` / `istio-ingress-gateway` Reservations from HMNLB Subnets
+## Remove `api-gateway` / `istio-ingress-gateway` reservations from HMNLB subnets
 
-For CSM 1.2, the API gateway will no longer listen on the HMNLB MetalLB address pool.
-These aliases provided DNS records and are being removed.
+For CSM 1.2, the API gateway no longer listens on the HMNLB MetalLB address pool.
+These aliases provided DNS records and have been removed in CSM 1.2.
 
-## Create the BICAN Network "Toggle"
+## Create the BICAN network "toggle"
 
-New for CSM 1.2, the BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
+New for CSM 1.2: The BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
 to point to the CAN, CHN, or CMN, and is used by utilities to systematically toggle routes.
 
-## Migrate (existing) CAN to (new) CMN
+## Migrate existing CAN to new CMN
 
-Using the existing CAN as a template, create the CMN.  The same IP addresses will be preserved for
-NCNs (`bootstrap_dhcp`).  A new `network_hardware` subnet will be created where the end of the previous
+Using the existing CAN as a template, create the CMN. The same IP addresses will be preserved for
+NCNs (`bootstrap_dhcp`). A new `network_hardware` subnet will be created where the end of the previous
 `bootstrap_dhcp` subnet existed to contain switching hardware. MetalLB pools in the `bootstrap_dhcp`
 subnet will be shifted around to remain at the end of the new bootstrap subnet.
 
-## Create the CHN Network
+## Create the CHN
 
-With the original CAN as a template, the new CHN network will be created. IP addresses will come from the
+With the original CAN as a template, the new CHN will be created. IP addresses will come from the
 `--customer-highspeed-network <vlan> <ipaddress>` (or its defaults). This is be created by default, but
 can be removed (if not needed or desired) by using the `--retain-unused-user-network` flag.
 
-## Convert the IP Addresses of the CAN Network
+## Convert the IP addresses of the CAN
 
 Since the original/existing CAN has been converted to the new CMN, the CAN must have new IP addresses.
 These are provided using the `--customer-access-network <vlan> <ipaddress>` (or its defaults). This CAN
 conversion will happen by default, but the new CAN may be removed (if not needed or desired) by using the
 `--retain-unused-user-network` flag.
 
-## Add BGP Peering Information to CMN and NMN
+## Add BGP peering information to CMN and NMN
 
 MetalLB and switches now obtain BGP peers using SLS data.
 
@@ -82,7 +82,7 @@ In CMN and NMN:
     "Subnets": 
 ```
 
-## Remove `kubeapi-vip` Reservations For All Networks Except NMN
+## Remove `kubeapi-vip` reservations for all networks except NMN
 
 Self explanatory. This endpoint now exists only on the NMN.
 
@@ -90,10 +90,10 @@ Self explanatory. This endpoint now exists only on the NMN.
 
 Self explanatory. Ranges are used for the addresses of UAIs.
 
-## Remove Unused User Networks (Either CAN or CHN) if Desired
+## Remove unused user networks (either CAN or CHN) if desired
 
-By default the CAN will be removed if `--bican-user-network-name CHN` or the CHN will be removed if
-`--bican-user-network-name CAN`. In order to keep this network, use the `--retain-unused-user-network` flag.
+By default, the CAN will be removed if `--bican-user-network-name CHN` is specified, or the CHN will be removed if
+`--bican-user-network-name CAN` is specified. In order to keep a network from being removed, use the `--retain-unused-user-network` flag.
 Retention of the unused network is not normal behavior.
 
 * Generally production systems will NOT want to use this flag unless active toggling between CAN and CHN is required. This is not usual behavior.

@@ -7,11 +7,11 @@ file should be followed top to bottom, and the content on this top level page is
 [`resource_material` directory](resource_material/README.md)
 for additional reference material in support of the processes and scripts mentioned explicitly on this page.
 
-A major feature of CSM 1.2 is the bifurcated CAN (BICAN). The BICAN is designed to separate admin network traffic from user network traffic.
-More information can be found on the [BICAN summary page](../../operations/network/management_network/bican_technical_summary.md).
-Review the BICAN summary before continuing with the CSM 1.2 upgrade.
+A major feature of CSM 1.2 is the Bifurcated CAN (BICAN). The BICAN is designed to separate administrative network traffic from user network traffic.
+For more information, see the [BICAN Summary](../../operations/network/management_network/bican_technical_summary.md).
+Review the BICAN Summary before continuing with the CSM 1.2 upgrade.
 
-Detailed BICAN documentation can be found on the [BICAN technical details](../../operations/network/management_network/bican_technical_details.md) page.
+For detailed BICAN documentation, see the [BICAN Technical Details](../../operations/network/management_network/bican_technical_details.md) page.
 
 ## Notes
 
@@ -37,9 +37,7 @@ For more information about modifying `customizations.yaml` and tuning for specif
 - [Stage 5 - Perform NCN Personalization](Stage_5.md)
 - [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
 
-**`Important:`** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
-
-<a name="relevant-troubleshooting-links-for-upgrade-related-issues"></a>
+**Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 
 ## Relevant Troubleshooting Links for Upgrade-Related Issues
 
