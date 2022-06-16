@@ -1,4 +1,4 @@
-## Configure the BOS Timeout When Booting Compute Nodes
+# Configure the BOS Timeout When Booting Compute Nodes
 
 Manually update the boa-job-template ConfigMap to tune the timeout and sleep intervals for the Boot Orchestration Agent \(BOA\). Correcting the timeout value is a good troubleshooting option for when BOS sessions hang waiting for nodes to be in a Ready state.
 
@@ -94,5 +94,4 @@ A Boot Orchestration Service \(BOS\) session was run and compute nodes are faili
     ncn-m001# kubectl scale deployment -n services cray-bos --replicas=0
     ncn-m001# kubectl scale deployment -n services cray-bos --replicas=1
     ```
-
 

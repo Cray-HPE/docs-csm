@@ -1,4 +1,4 @@
-## Enable ncsd on UANs
+# Enable ncsd on UANs
 
 Configure User Access Nodes (UANs) to start the `ncsd` service at boot time.
 
@@ -58,7 +58,4 @@ The `nscd` service is not currently enabled by default and `systemd` does not st
     4.  Update the UAN BOS session template with the new image ID. Refer to [Create UAN Boot Images](../../image_management/Create_UAN_Boot_Images.md) for instructions on updating the BOS session template.
 
     5.  Perform [Boot UANs](../../boot_orchestration/Boot_UANs.md) to reboot the UANs with the updated session template.
-
-
-
 

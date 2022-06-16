@@ -2,7 +2,9 @@
 
 Resynchronize system clocks after Ceph reports a clock skew.
 
-Systems use `chronyd` to synchronize their system clocks. If systems are not able to communicate, then the clocks can drift, causing clock skew. Another reason for this issue would be an individual manually changing the clocks or a task that may change the clocks and require a series of steps \(time adjustments\) to resynchronize.
+Systems use `chronyd` to synchronize their system clocks. If systems are not able to communicate, then the clocks can drift,
+causing clock skew. Clock skew can also be caused by an individual or an automated task manually changing the clocks.
+In this case, `chronyd` may require a series of steps \(time adjustments\) to resynchronize the clocks.
 
 Major time jumps where the clock is set back in time will require a full restart of all Ceph services.
 
@@ -14,12 +16,17 @@ This procedure requires admin privileges.
 
 ## Procedure
 
-1. Verify that the system is impact by clock skew.
+1. Verify that the system is impacted by clock skew.
 
     Ceph provides block storage and requires a clock skew of less than 0.05 seconds to report back healthy.
 
     ```bash
-    ncn-m001# ceph -s
+    ncn# ceph -s
+    ```
+
+    Example output:
+
+    ```text
     cluster:
        id:     b6d509e6-772e-4785-a421-e4a138b1780c
        health: HEALTH_WARN
@@ -42,39 +49,45 @@ This procedure requires admin privileges.
        client:   919 KiB/s wr, 0 op/s rd, 16 op/s wr
     ```
 
-    **`IMPORTANT:`** If you see this message in the ceph logs `unable to obtain rotating service keys; retrying` it will also indicate clock skew. You may have to utilize `xzgrep skew *.xz  to see the skew` if you logs have rolled over.
+    **`IMPORTANT:`** If you see this message in the Ceph logs `unable to obtain rotating service keys; retrying`, it also indicates clock skew. You may have to run `xzgrep skew *.xz` to see the skew if your logs have rolled over.
 
-
-2. View the Ceph health details.
+1. View the Ceph health details.
 
     1. View the Ceph logs.
 
-        If looking back to earlier logs, use the `xzgrep` command for the ceph.log or the ceph-mon\*.log. There are cases where the MGR and OSD logs are not in the ceph-mon logs. This indicates that the skew was very drastic and sudden, thus causing the ceph-mon process to panic and not log the issue.
+        If looking back to earlier logs, use the `xzgrep` command for the `ceph.log` or the `ceph-mon*.log`. There are cases where
+        the MGR and OSD logs are not in the `ceph-mon` logs. This indicates that the skew was very drastic and sudden, causing the
+        `ceph-mon` process to panic and not log the issue.
 
         ```bash
-        ncn-m001# grep skew /var/log/ceph/*.log
+        ncn-s# grep skew /var/log/ceph/*.log
         ```
 
-    2. View the system time.
+    1. View the system time.
 
         ```bash
-        ncn-w001# ansible ceph_all -m shell -a date
+        ncn-s# ansible ceph_all -m shell -a date
         ```
 
-3. Sync the clocks to fix the issue.
+1. Sync the clocks to fix the issue.
 
     ```bash
-    ncn-w001# systemctl restart chronyd.service
+    ncn-s# systemctl restart chronyd.service
     ```
 
     Wait a bit after running the command and the Ceph alert will clear. Restart the Ceph mon service on that node if the alert does not clear.
 
-4. Check Ceph health to verify the clock skew issue is resolved.
+1. Check Ceph health to verify the clock skew issue is resolved.
 
     It may take up to 15 minutes for this warning to resolve.
 
     ```bash
-    ncn-m001# ceph -s
+    ncn# ceph -s
+    ```
+
+    Example output:
+
+    ```console
     cluster:
       id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
       health: HEALTH_OK

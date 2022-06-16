@@ -1,6 +1,6 @@
 # Accessing LiveCD USB Device After Reboot
 
-This is an procedure that only applies to the LiveCD USB device after the PIT node has been rebooted.
+This is a procedure that only applies to the LiveCD USB device after the PIT node has been rebooted.
 
 > **`USB ONLY`** If the installation above was done from a [Remote ISO](../install/bootstrap_livecd_remote_iso.md).
 

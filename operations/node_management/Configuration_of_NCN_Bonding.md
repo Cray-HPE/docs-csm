@@ -1,4 +1,4 @@
-## Configuration of NCN Bonding
+# Configuration of NCN Bonding
 
 Non-compute nodes \(NCNs\) have network interface controllers \(NICs\) connected to the management network that are configured in a redundant manner via Link Aggregation Control Protocol \(LACP\) link aggregation. The link aggregation configuration can be modified by editing and applying various configuration files either through Ansible or the interfaces directly.
 
@@ -21,6 +21,11 @@ The following is an example of `ifcfg-bond0`:
 
 ```bash
 ncn-w001# cat /etc/sysconfig/network/ifcfg-bond0
+```
+
+Example output:
+
+```
 BONDING_MASTER='yes'
 BONDING_MODULE_OPTS='mode=802.3ad miimon=100 lacp_rate=fast xmit_hash_policy=layer2+3'
 BONDING_SLAVE0='p1p1'
@@ -49,20 +54,25 @@ To view a system wide interface network configuration:
 ncn-w001# wicked ifstatus all
 ```
 
-Use the following command to view information about a specific interface. In this example, vlan007 is used.
+Use the following command to view information about a specific interface. In this example, bond0.cmn0 is used.
 
 ```bash
-ncn-w001# wicked ifstatus --verbose vlan007
-vlan007         up
+ncn-w001# wicked ifstatus --verbose bond0.cmn0
+```
+
+Example output:
+
+```
+bond0.cmn0         up
       link:     #4603, state up, mtu 1500
       type:     vlan bond0[7], hwaddr b8:59:9f:c7:11:12
       control:  none
-      config:   compat:suse:/etc/sysconfig/network/ifcfg-vlan007,
+      config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0.cmn0,
                 uuid: 5cce4d33-8d99-50a2-b6c0-b4b3d101c557
       leases:   ipv4 static granted
       addr:     ipv6 fe80::ba59:9fff:fec7:1112/64 scope link
-      addr:     ipv4 10.102.3.4/24 brd 10.102.3.4 scope universe label vlan007 [static]
-      route:    ipv4 0.0.0.0/0 via 10.102.3.20 dev vlan007 type unicast table 3 scope universe protocol boot
+      addr:     ipv4 10.102.3.4/24 brd 10.102.3.4 scope universe label bond0.cmn0 [static]
+      route:    ipv4 0.0.0.0/0 via 10.102.3.20 dev bond0.cmn0 type unicast table 3 scope universe protocol boot
       route:    ipv4 10.102.3.0/24 type unicast table main scope link protocol kernel pref-src 10.102.3.4
       route:    ipv6 fe80::/64 type unicast table main scope universe protocol kernel priority 256
 ```
@@ -71,12 +81,15 @@ To view information about the bond:
 
 ```bash
 ncn-w001# wicked ifstatus bond0
+```
+
+Example output:
+
+```
 bond0           device-not-running
       link:     #9, state up, mtu 9238
       type:     bond, mode ieee802-3ad, hwaddr b8:59:9f:4a:f6:30
       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0
       leases:   ipv4 static failed
 ```
-
-
 

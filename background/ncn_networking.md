@@ -42,7 +42,7 @@ These interfaces can be observed on a live NCN with the following command.
 <a name="device-naming"></a>
 #### Device Naming
 
-The underlying naming relies on [BIOSDEVNAME][1], this helps conform device naming into a smaller
+The underlying naming relies on [BIOSDEVNAME](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname), this helps conform device naming into a smaller
 set of possible names. It also helps show us when driver issues occur, if a non-BIOSDEVNAME interface appears
  then METAL can/should receive a triage report/bug.
 
@@ -57,6 +57,7 @@ the PCI busses and sort network interfaces into 3 buckets:
 The source code for the rule generation is in [metal-ipxe][1], but for technical information on the PCI configuration/reading please read on.
 
 <a name="vendor-and-bus-id-identification"></a>
+
 ### Vendor and Bus ID Identification
 
 The initial boot of an NCN sets interface `udev` rules because it has no discovery method yet.

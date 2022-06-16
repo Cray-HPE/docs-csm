@@ -1,4 +1,4 @@
-## API Authorization
+# API Authorization
 
 Authorization for REST API calls is only done at the API gateway. This is facilitated through policy checks to the Open Policy Agent \(OPA\). Every REST API call into the system is sent to the OPA to make an authorization decision. The decision is based on the Authenticated JSON Web Token \(JWT\) passed into the request.
 
@@ -122,6 +122,4 @@ The following is a list of available personas and the supported REST API endpoin
     {"method": "PUT", "path": `^/apis/fc/.*$`},
     {"method": "DELETE", "path": `^/apis/fc/.*$`},
     ```
-
-
 

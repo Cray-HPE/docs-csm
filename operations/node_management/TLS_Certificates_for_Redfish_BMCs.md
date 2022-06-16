@@ -1,15 +1,15 @@
-## TLS Certificates for Redfish BMCs
+# TLS Certificates for Redfish BMCs
 
 Redfish HTTP communications are capable of using TLS certificates and Certificate Authority \(CA\) trust bundles to improve security. Several Hardware Management Services \(HMS\) have been modified to enable the HTTP transports used for Redfish communications to use a CA trust bundle.
 
 The following services communicate with Redfish BMCs:
 
--   State Manager Daemon \(SMD\)
--   Cray Advanced Platform Monitoring and Control \(CAPMC\)
--   Firmware Action Service \(FAS\)
--   HMS Collector
--   River Endpoint Discovery Service \(REDS\)
--   Mountain Endpoint Discovery Service \(MEDS\)
+- State Manager Daemon \(SMD\)
+- Cray Advanced Platform Monitoring and Control \(CAPMC\)
+- Firmware Action Service \(FAS\)
+- HMS Collector
+- River Endpoint Discovery Service \(REDS\)
+- Mountain Endpoint Discovery Service \(MEDS\)
 
 Each Redfish BMC must have a TLS certificate in order to be useful. The certificates will come from the same PKI that issues the CA trust bundle. The Vault PKI is used to create the TLS certs. Services will get the CA trust bundle either directly from the Vault PKI, or it can be read in via a Kubernetes ConfigMap.
 

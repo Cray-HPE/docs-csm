@@ -1,4 +1,4 @@
-## Manage HMS Locks
+# Manage HMS Locks
 
 This section describes how to check the status of a lock, disable reservations, and repair reservations. The disable and repair operations only affect the ability to make reservations on hardware devices.
 
@@ -6,16 +6,21 @@ Some of the common scenarios an admin might encounter when working with the Hard
 
 ### Check Lock Status
 
-Use the following command to verify if an xname is locked or not. The command will show if its locked (admin), reserved (service command), or reservation disabled (either an EPO or an admin command).
+Use the following command to verify if a component name (xname) is locked or not. The command will show if it is locked (admin), reserved (service command), or reservation disabled (either an EPO or an admin command).
 
 The following shows how to interpret the output:
 
-* Locked: Shows if the xname has been locked with the `cray hsm locks lock create` command.
-* Reserved: Shows if the xname has been locked for a time-boxed event. Only service can reserve xnames; administrators are not able to reserve xnames.
-* ReservationDisable: Shows if the ability to reserved an xname has been changed by an EPO or admin command.
+* Locked: Shows if the component name (xname) has been locked with the `cray hsm locks lock create` command.
+* Reserved: Shows if the component name (xname) has been locked for a time-boxed event. Only service can reserve component names (xnames); administrators are not able to reserve component names (xnames).
+* ReservationDisable: Shows if the ability to reserve a component name (xname) has been changed by an EPO or admin command.
 
 ```bash
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -34,6 +39,11 @@ This is a way to stop new operations from happening, not a way to prevent curren
 
 ```bash
 ncn-m001# cray hsm locks disable create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Failure = []
 
 [Counts]
@@ -49,6 +59,11 @@ The following is an example of a when a lock is disabled:
 
 ```bash
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -63,6 +78,11 @@ Locks must be manually repaired after disabling a component or performing a manu
 
 ```bash
 ncn-m001# cray hsm locks repair create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Failure = []
 
 [Counts]
@@ -78,6 +98,11 @@ To verify if the lock was successfully repaired:
 
 ```bash
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -92,6 +117,11 @@ Before issuing a `disable` command, verify that a lock is already in effect:
 
 ```bash
 ncn-m001# cray hsm locks lock create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Failure = []
 
 [Counts]
@@ -101,8 +131,15 @@ Failure = 0
 
 [Success]
 ComponentIDs = [ "x1003c5s2b1n1",]
+```
 
+```
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -115,6 +152,11 @@ When attempting to disable, the lock will stay in effect, but the reservation ab
 
 ```bash
 ncn-m001# cray hsm locks disable create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Failure = []
 
 [Counts]
@@ -124,8 +166,15 @@ Failure = 0
 
 [Success]
 ComponentIDs = [ "x1003c5s2b1n1",]
+```
 
+```
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
@@ -140,15 +189,26 @@ A lock cannot be issued to a component that is already locked. The following exa
 
 ```bash
 ncn-m001# cray hsm locks status create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 NotFound = []
 [[Components]]
 ID = "x1003c5s2b1n1"
-Locked = true  <<-- xname is locked
+Locked = true  <<-- component name (xname) is locked
 Reserved = false
 ReservationDisabled = true
+```
 
-
+```
 ncn-m001# cray hsm locks lock create --component-ids x1003c5s2b1n1
+```
+
+Example output:
+
+```
 Usage: cray hsm locks lock create [OPTIONS]
 Try 'cray hsm locks lock create --help' for help.
 

@@ -8,12 +8,17 @@ Troubleshoot the Ceph health detail reporting down OSDs. Ensuring that OSDs are 
 
 This procedure requires admin privileges.
 
-### Procedure
+## Procedure
 
 1. Identify the down OSDs.
 
     ```bash
     ncn-m/s(001/2/3)# ceph osd tree down
+    ```
+
+    Example output:
+
+    ```
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         62.87558  root default
     -7         20.95853      host ncn-s002
@@ -25,38 +30,45 @@ This procedure requires admin privileges.
     16    ssd   3.49309          osd.16       down   1.00000  1.00000
     ```
 
-   Option 1
+1. Restart the down OSDs.
 
-   1. Restart the OSD utilizing `ceph orch`
+   * **Option 1:**
 
-    ```bash
-    ncn-m/s00(1/2/3)# ceph orch daemon restart osd.<number>
-    ```
+     1. Restart the OSD utilizing `ceph orch`
 
-   Option 2
+        ```bash
+        ncn-m/s00(1/2/3)# ceph orch daemon restart osd.<number>
+        ```
 
-   1. Check the logs for the OSD that is down.
+   * **Option 2:**
 
-      Use the OSD number for the down OSD returned in the command above.
+     1. Check the logs for the OSD that is down.
 
-      ```bash
-      ncn-m/s(001/2/3)# ceph osd find OSD_ID
-      ```
+        Use the OSD number for the down OSD returned in the command above.
 
-   1. Manually restart the OSD.
+        ```bash
+        ncn-m/s(001/2/3)# ceph osd find OSD_ID
+        ```
 
-      This step `must be done on the node with the reported down OSD.`
+     2. Manually restart the OSD.
 
-       ```bash
-       ncn-s# ceph orch daemon restart osd.<number>
-       ```
+        This step **must be done on the node with the reported down OSD.**
 
-    **Troubleshooting:** If the service is not restarted with `ceph orch`, restart it using [Manage Ceph Services](Manage_Ceph_Services.md)
+         ```bash
+         ncn-s# ceph orch daemon restart osd.<number>
+         ```
 
-1. Verify the OSDs are running again.
+    **Troubleshooting:** If the service is not restarted with `ceph orch`, restart it using [Manage Ceph Services](Manage_Ceph_Services.md).
+
+2. Verify the OSDs are running again.
 
     ```bash
     # ceph osd tree down
+    ```
+
+    Example output:
+
+    ```
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         62.87558  root default
     -7         20.95853      host ncn-s002
@@ -69,3 +81,4 @@ This procedure requires admin privileges.
     ```
 
 If the OSD dies again, check dmesg for drive failures.
+

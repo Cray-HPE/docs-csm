@@ -1,4 +1,4 @@
-## Component Names \(xnames\)
+# Component Names \(xnames\)
 
 Component names \(xnames\) identify the geolocation for hardware components in the HPE Cray EX system. Every component is uniquely identified by these component names. Some, like the system cabinet number or the CDU number, can be changed by site needs. There is no geolocation encoded within the cabinet number, such as an X-Y coordinate system to relate to the floor layout of the cabinets. Other component names refer to the location within a cabinet and go down to the port on a card or switch or the socket holding a processor or a memory DIMM location.
 
@@ -12,7 +12,7 @@ Component names \(xnames\) identify the geolocation for hardware components in t
 |pH.S|H: 0-n S: 0-n|Partition: A hardware or software partition \(hard or soft partition\). H specifies a hardware partition; HSN cabling, switches, and so on. The S specifies a software partition. A hard partition can have more than 1 soft partition. A soft partition cannot have more than 1 hard partition. Example: p1.2 is soft partition 2 of hard partition 1.|
 |dD|D: 0-999|Coolant Distribution Unit \(CDU\): 1 CDU for up to 6 cabinets. Example: d3 \(CDU 3\).|
 |dDwW|W: 0-31|Management Switch in a CDU: Example: d3w1 is switch 1 in CDU 3.|
-|xX|X: 0-9999|Liquid-cooled Cabinet or Standard Rack: Liquid-cooled cabinets include 8 chassis and do not have a cabinet-level controller; only chassis-level controllers. An standard rack is always considered chassis 0. Examples: x3000 is rack number 3000.|
+|xX|X: 0-9999|Liquid-cooled Cabinet or Standard Rack: Liquid-cooled cabinets include 8 chassis and do not have a cabinet-level controller; only chassis-level controllers. A standard rack is always considered chassis 0. Examples: x3000 is rack number 3000.|
 |xXdD|D: 0-1|Rack-mounted CDU: Example: x1000d0 is CDU 0 for cabinet 1000.|
 |xXmM|M: 0-3|Rack PDU Controller \(BMC\): Controller or BMC for one or more rack PDUs. A primary PDU controller many manage other PDUs. Example: x3000m0 is PDU controller 0, cabinet 3000.|
 |xXmMpP|P: 0-7|Rack PDU: managed by a controller. Example: x3000m0p0 is PDU 0, PDU controller 0, cabinet 3000.|
@@ -54,5 +54,4 @@ Component names \(xnames\) identify the geolocation for hardware components in t
 |xXcCsSbBnNaA|A: 0-7|GPU: Accelerator \(GPU\) associated with a node. Example: x16c3s0b1n0a1 is accelerator 1, node 0, of node card 1, compute blade 0, of chassis 3, of cabinet 1016.|
 |xXcCsSbBnNgG|G: 0-63|Storage Group or Group of Disk Drives for a Node: Example: x1016c3s0b0n1g3 is storage group 3 of node 1, node card 0, compute blade in slot 0, chassis 3, cabinet 1016.|
 |xXcCsSbBnNgGkK|K: 0-63|Storage Group Disk: Example: x1016c3s0b0n1g3k1 is disk 1 of storage group 3, node 1, node card 0, of compute blade in slot 0, chassis 3, cabinet 1016.|
-
 

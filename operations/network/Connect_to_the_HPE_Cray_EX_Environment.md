@@ -1,10 +1,10 @@
-## Connect to the HPE Cray EX Environment
+# Connect to the HPE Cray EX Environment
 
 The HPE Cray EX Management Network \(SMNet\) has multiple separate physical and logical links that are used to segregate traffic.
 
 The diagram below shows the available connections from within the SMNet, as well as the connections to the customer network:
 
-![Management NCN Interfaces and VLANs](../../img/operations/Management_NCN_Interfaces_and_VLANs.PNG "Management NCN Interfaces and VLANs")
+![Management NCN Interfaces and VLANs](../../img/operations/Management_NCN_Interfaces_and_VLANs.png "Management NCN Interfaces and VLANs")
 
 There are multiple ways to connect to the HPE Cray EX environment. The various methods are described in the following table:
 
@@ -21,6 +21,4 @@ There are also several ways to physically connect to the nodes on the system. Th
 |Administrative node|1GB copper connection made from the customer network that provides administrative access and hardware management|
 |Application node|Different interconnect types are available from the customer network based on customer requirements|
 
-For more information on connecting to the CAN, see [Connect to the CAN](customer_access_network/Connect_to_the_CAN.md).
-
-
+For more information on connecting to the CAN, see [Connect to the CMN and CAN](customer_accessible_networks/Connect_to_the_CMN_CAN.md).

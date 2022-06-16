@@ -1,4 +1,4 @@
-## Hardware State Manager \(HSM\) State and Flag Fields
+# Hardware State Manager \(HSM\) State and Flag Fields
 
 HSM manages important information for hardware components in the system. Administrators can use the data returned by HSM to learn about the state of the system. To do so, it is critical that the State and Flag fields are understood, and the next steps to take are known when viewing output returned by HSM commands. It is also beneficial to understand what services can cause State or Flag changes in HSM.
 
@@ -77,5 +77,4 @@ The following table describes how to interpret when the state of hardware change
 | Any State   | Empty         | Redfish Endpoint is disabled meaning component removal       |
 
 Generally, nodes transition from `Off` to `On` to `Ready` when going from `Off` to booted, and from `Ready` to `Ready/Warning` to `Standby` to `Off` when shut down.
-
 

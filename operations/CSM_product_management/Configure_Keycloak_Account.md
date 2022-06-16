@@ -9,11 +9,11 @@ of external accounts in keycloak.
 However, if the external accounts are not available, then an "internal user account" could be
 created in keycloak. Having a usable account in keycloak with administrative authorization
 enables the use of the `cray` CLI for many administrative commands, such as those used to
-[Validate CSM Health](../../validate_csm_health.md) and general operation of the management services
+[Validate CSM Health](../validate_csm_health.md) and general operation of the management services
 via the API gateway.
 
-See [System Security and Authentication](../security_and_authentication/System_Security_and_Authentication.md)
-in the "Default Keycloak Realms, Accounts, and Clients" section for more information about these topics.
+In [Security and Authentication](../index.md#security-and-authentication)
+see the "Default Keycloak Realms, Accounts, and Clients" section for more information about these topics:
 
    * Certificate Types
    * Change the Keycloak Admin Password

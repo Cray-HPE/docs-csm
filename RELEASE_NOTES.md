@@ -1,0 +1,147 @@
+# Cray System Management (CSM) - Release Notes
+
+## CSM 1.2.0
+
+CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
+
+## New
+
+### Monitoring
+
+* New network traffic dashboard
+* New Kubernetes and microservice health dashboard
+* New boot dashboard
+* New command line dashboard for critical services like `smd`, `smd-postgres`, `capmc`, and `hbtd`
+* New Grafana dashboard for critical services like `smd`, `capmc`, `smd-postgres`, and `hbtd`
+* Management nodes sample SMART data and publish it to SMA/SMF
+* Support for HPE PDU telemetry
+
+### Networking
+
+* Release Cray Automated Network Utility (CANU) V1.0.0
+* Performance improvements to Unbound and DHCP helper
+* Initial release of Bifurcated CAN
+
+  The user and administrative traffic segregation introduced by Bifurcated CAN has changed the URLs for certain services as it is now necessary to include the network path in the
+  fully qualified domain name. Access to administrative services is now restricted to the Customer Management Network (CMN). API access is available via the Customer Management
+  Network (CMN), Customer Access Network (CAN), and Customer Highspeed Network (CHN).
+
+  The following table assumes the system was configured with a `system-name` of `shasta` and a `site-domain` of `dev.cray.com`.
+
+  | Old Name                           | New Name                                  |
+  |------------------------------------|-------------------------------------------|
+  | `auth.shasta.dev.cray.com`         | `auth.cmn.shasta.dev.cray.com`            |
+  | `nexus.shasta.dev.cray.com`        | `nexus.cmn.shasta.dev.cray.com`           |
+  | `grafana.shasta.dev.cray.com`      | `grafana.cmn.shasta.dev.cray.com`         |
+  | `prometheus.shasta.dev.cray.com`   | `prometheus.cmn.shasta.dev.cray.com`      |
+  | `alertmanager.shasta.dev.cray.com` | `alertmanager.cmn.shasta.dev.cray.com`    |
+  | `vcs.shasta.dev.cray.com`          | `vcs.cmn.shasta.dev.cray.com`             |
+  | `kiali-istio.shasta.dev.cray.com`  | `kiali-istio.cmn.shasta.dev.cray.com`     |
+  | `s3.shasta.dev.cray.com`           | `s3.cmn.shasta.dev.cray.com`              |
+  | `sma-grafana.shasta.dev.cray.com`  | `sma-grafana.cmn.shasta.dev.cray.com`     |
+  | `sma-kibana.shasta.dev.cray.com`   | `sma-kibana.cmn.shasta.dev.cray.com`      |
+  | `api.shasta.dev.cray.com`          | `api.cmn.shasta.dev.cray.com`, `api.chn.shasta.dev.cray.com`, `api.can.shasta.dev.cray.com` |
+
+* PowerDNS authoritative DNS server
+  * Supports zone transfer to external DNS servers via AXFR query and DNSSEC
+  * Refer to the [PowerDNS Migration Guide](operations/network/dns/PowerDNS_migration.md) and
+    [PowerDNS Configuration Guide](operations/network/dns/PowerDNS_Configuration.md) for further information.
+* Management network switch hostname changes
+
+  The management network switch hostnames have changed in CSM 1.2 to more accurately reflect the usage of each switch type.
+
+  | Old Name   | New Name      | Usage                                                     |
+  |------------|---------------|-----------------------------------------------------------|
+  | `sw-spine` | Unchanged     | Network spine that links to other switches.               |
+  | `sw-agg`   | `sw-leaf`     | NMN connections for NCNs and application nodes.           |
+  | `sw-leaf`  | `sw-leaf-bmc` | BMC connections, PDUs, Slingshot switches, cooling doors  |
+
+### Miscellaneous functionality
+
+* SLES15 SP3 support for NCNs, UANs, Compute Nodes, and barebones validation image
+* S3FS added to master and worker nodes for storing SDU dumps and CPS content
+* Improved FAS (Firmware Action Service) error reporting
+* CFS State Reporter added to storage nodes
+* Numerous new tests added along with improved error logging
+* CAPMC support for HPE Apollo 6500 power capping
+* CAPMC support for new power schema for BardPeak power capping
+* CAPMC support for HPE `G2 Metered 3Ph 39.9kVA 60A 480/277V FIO` PDU
+* Improved CAPMC error handling in BOA
+* `root` user password and SSH keys now handled by NCN personalization after initial install; locations of data changed in HashiCorp Vault from previous releases
+* Generic Ansible passthrough parameter added to CFS session API
+* Improved CFS session resiliency after power outages
+* Pod priority class additions to improve upgrades and fail-over
+
+### New hardware support
+
+* Olympus Bard Peak Blade (AMD Trento with AMD MI200) with Slingshot 11 - Compute Node
+* Olympus Grizzly Peak NVidia A100 80GB GPU - Compute Node
+* Milan-Based DL385 Gen10+ with AMD Mi100 GPU - UAN and Application Node
+* Milan-Based Apollo 6500/XL675d Gen10+ with NVIDIA A100 40GB - Compute Node
+* Milan-Based Apollo 6500/XL645d Gen10+ with NVIDIA A100 80GB - Compute Node
+* HPE `G2 Metered 3Ph 39.9kVA 60A 480/277V FIO` PDU
+
+### Automation improvements
+
+* Automated validation of CSM health in several areas
+* Automated administrative access configuration
+* Automated installation of CFS set-up of passwordless SSH
+* Automated validation of Management Network cabling
+* Automated firmware check on PIT node
+* `keycloak-installer` is released
+* CSM install and upgrade automation improvements
+
+### Base platform component upgrades
+
+* `istio` V1.8 from V1.7
+* Loftsman V1.2.0-1
+* Kubernetes V1.20.13 from V1.19.9
+* Ceph V15.2.15 from V15.2.8
+
+### Security improvements
+
+* Switch to non-root containers - A significant number of `root` user container images have been removed. The remainder have been identified for removal in a future release
+* Verification of signed RPMs
+* CVE remediation - A significant number of CVEs have been addressed, including a majority of the critical and high CVEs, like `polkit` and `log4j`
+* Updates to Nexus require authentication
+* Removal of code injection vulnerability in `commit` and `cloneURL` fields of CFS configuration API
+* Further restrictions on allowed HTTP verbs in API requests coming from Compute Nodes
+* Option to restrict Compute Nodes to only call URIs by machine identity
+
+### Customer-requested enhancements
+
+* Ability to turn off slots without `hms-discovery` powering them on
+* Resilient way to reboot a Compute Node into its current configuration with a single API call
+
+## Bug fixes
+
+* Documented optimized BIOS boot order for NCNs
+* Fixed: Slingshot switches attempting DHCP renewal to unreachable address
+* Fixed: Node will not reboot following upgrade of BMC and BIOS
+* Fixed: Worker node container `/var/lib/containerd` is full and pods stuck in `ContainerCreating` state
+* Fixed: Incorrect data or bad monitor filters in `sysmgmt-health` namespace
+* Fixed: Hardware State Manager showing compute nodes in standby after cabinet-level power down procedure
+* Fixed: Cray HSM inventory reports incorrect DIMM `Id` and `Name`
+* Fixed: Image customization CFS jobs do not set an Ansible limit when customizing
+* Fixed: No `/proc` available in CFS image container
+* Fixed: ConMan reconnects to nodes every hour, reissuing old messages with updated time stamps
+* Fixed: CFS can leave sessions `pending` after a power outage
+* Fixed: `sonar-jobs-watcher` not stopping orphaned CFS pods
+* Fixed: PXE boot failures during installs, upgrades, and NCN rebuilds
+
+## Deprecations
+
+* CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+* PowerDNS will replace Unbound as the authoritative DNS source in a future CSM release.
+  * The `cray-dns-unbound-manager` CronJob will be deprecated in a future release once all DNS records are migrated to PowerDNS.
+  * The introduction of PowerDNS and Bifurcated CAN will introduce some node and service naming changes.
+  * See the [PowerDNS Migration Guide](operations/network/dns/PowerDNS_migration.md) for more information.
+
+See [Deprecated features](introduction/differences.md#deprecated_features).
+
+## Removals
+
+* The V1 version of the CFS API has been removed
+* The `cray-externaldns-coredns`, `cray-externaldns-etcd`, and `cray-externaldns-wait-for-etcd` pods have been removed. PowerDNS is now the provider of the external DNS service.
+
+## Known issues

@@ -4,30 +4,40 @@ As a reference, the following `ceph` and `rbd` commands are run from a master no
 
 ## Ceph Block \(rbd\)
 
-List block devices in a specific pool:
+**List block devices in a specific pool:**
 
 ```bash
 ncn-m001# rbd -p POOL_NAME ls -l
+```
+
+Example output:
+
+```
 NAME     SIZE  PARENT FMT PROT LOCK
 kube_vol 4 GiB          2
 ```
 
-Create a block device:
+**Create a block device:**
 
 ```bash
 ncn-m001# rbd create -p POOL_NAME VOLUME_NAME -size SIZE
 ```
 
-Remove a block device:
+**Remove a block device:**
 
 ```bash
 ncn-m001# rbd -p POOL_NAME remove VOLUME_NAME
 ```
 
-Show mapped devices:
+**Show mapped devices:**
 
 ```bash
 ncn-m001# rbd showmapped
+```
+
+Example output:
+
+```
 id pool namespace image    snap device
 0  test           test_vol -    /dev/rbd0
 1  kube           kube_vol -    /dev/rbd1
@@ -36,17 +46,27 @@ id pool namespace image    snap device
 
 ## Ceph MDS \(File\)
 
-Display CephFS shares with their pool information:
+**Display CephFS shares with their pool information:**
 
 ```bash
 ncn-m001# ceph fs ls
+```
+
+Example output:
+
+```
 name: cephfs, metadata pool: cephfs_metadata, data pools: [cephfs_data ]
 ```
 
-Show the status of all CephFS components:
+**Show the status of all CephFS components:**
 
 ```bash
 ncn-m001# ceph fs status
+```
+
+Example output:
+
+```
 cephfs - 0 clients <<-- Containers or hosts attached to cephfs are represented here
 ======
 +------+--------+-----------+---------------+-------+-------+
@@ -72,10 +92,17 @@ MDS version: ceph version 14.2.0-300-gacd2f2b9e1 (acd2f2b9e196222b0350b3b59af998
 
 ## Ceph RadosGW \(object/s3\)
 
-List the services to learn more about the radosgw service. The following command lists more than just the radosgw service, so ensure the correct sections are used.
+**List the services to learn more about the radosgw service:**
+
+The following command lists more than just the radosgw service, so ensure the correct sections are used.
 
 ```bash
 ncn-m001# ceph service dump
+```
+
+Example output:
+
+```
 {
     "epoch": 2,
     "modified": "2019-08-11 04:37:31.464120",
@@ -115,10 +142,17 @@ ncn-m001# ceph service dump
                 },
 ```
 
-The radosgw-admin user command is be used to edit and view user information. The following command is an example of how to get information about a specific user.
+**Edit and view user information:**
+
+The following command is an example of how to get information about a specific user.
 
 ```bash
 ncn-m001# radosgw-admin user info --uid TEST_USER
+```
+
+Example output:
+
+```
 {
     "user_id": "test_user",
     "display_name": "test_user",
@@ -161,13 +195,13 @@ ncn-m001# radosgw-admin user info --uid TEST_USER
 
 The `radosgw-admin bucket` command is used to remove or view buckets.
 
-To list the buckets:
+**To list the buckets:**
 
 ```bash
 ncn-m001# radosgw-admin bucket list
 ```
 
-To remove a specific bucket:
+**To remove a specific bucket:**
 
 ```bash
 ncn-m001# radosgw-admin bucket rm --bucket-name BUCKET_NAME

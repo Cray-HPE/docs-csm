@@ -1,6 +1,6 @@
-## Target Ansible Tasks for Image Customization
+# Target Ansible Tasks for Image Customization
 
-The Configuration Framework Service \(CFS\) enables Ansible playbooks to run against both running nodes and images. See the "Use Cases" header in the [Configuration Management](Configuration_Management.md) section for more information about image customization and when it should be used.
+The Configuration Framework Service \(CFS\) enables Ansible playbooks to run against both running nodes and images. See the "Use Cases" header in the [Configuration Management](Configuration_Management.md#use-cases) section for more information about image customization and when it should be used.
 
 CFS uses the `cray_cfs_image` variable to distinguish between node personalization \(running on live nodes\) and image customization \(configuring an image prior to boot\). When this variable is set to true, it indicates that the CFS session is an image customization type and the playbook is targeting an image.
 
@@ -19,6 +19,4 @@ when: "{{ cray_cfs_image | default(false) }}"
 If a default is not provided, any playbooks or roles will not be runnable outside of the CFS Ansible Execution Environment \(AEE\) without the user specifying `cray_cfs_image` in the vars files or with the Ansible extra-vars options.
 
 When running Ansible against an IMS-hosted image root during an image customization CFS session, there are no special requirements for the paths when copying or syncing files. The image root directories will appears as if Ansible is connecting to a regular, live node. However, the image is not a running node, so actions that require a running system, such as starting/reloading a service, will not work properly and will cause the Ansible play to fail. Actions like these should be done only during live-node configuration modes such as node personalization.
-
-
 

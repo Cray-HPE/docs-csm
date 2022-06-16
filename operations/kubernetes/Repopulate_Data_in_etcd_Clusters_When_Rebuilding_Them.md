@@ -1,50 +1,58 @@
-## Repopulate Data in etcd Clusters When Rebuilding Them
+# Repopulate Data in etcd Clusters When Rebuilding Them
 
-When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data. That data needs to be repopulated in order for the cluster to go back to a healthy state.
+When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data.
+That data needs to be repopulated in order for the cluster to go back to a healthy state.
 
 The following services need their data repopulated in the etcd cluster:
 
--   Boot Orchestration Service \(BOS\)
--   Boot Script Service \(BSS\)
--   Content Projection Service \(CPS\)
--   Compute Rolling Upgrade Service \(CRUS\)
--   External DNS
--   Firmware Action Service \(FAS\)
--   HMS Notification Fanout Daemon \(HMNFD\)
--   Mountain Endpoint Discovery Service \(MEDS\)
--   River Endpoint Discovery Service \(REDS\)
+- Boot Orchestration Service \(BOS\)
+- Boot Script Service \(BSS\)
+- Content Projection Service \(CPS\)
+- Compute Rolling Upgrade Service \(CRUS\)
+- External DNS
+- Firmware Action Service \(FAS\)
+- HMS Notification Fanout Daemon \(HMNFD\)
+- Mountain Endpoint Discovery Service \(MEDS\)
+- River Endpoint Discovery Service \(REDS\)
 
-### Prerequisites
+## Prerequisites
 
-A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
+An etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
 
+## BOS
 
-### BOS
-
-1.  Reconstruct boot session templates for impacted product streams to repopulate data.
+1. Reconstruct boot session templates for impacted product streams to repopulate data.
 
     Boot preparation information for other product streams can be found in the following locations:
 
-    -   UANs: refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
-    -   Cray Operating System \(COS\): refer to the COS product stream repository and search for the "Create a Boot Session Template" header in the "Install or Upgrade COS" procedure.
+    - UANs: Refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
+    - Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
 
+## CPS
 
-### CPS
+Repopulate clusters for CPS.
 
-1.  Repopulate clusters for CPS.
+- If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running.
+  See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
+- If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt.
+  Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
 
-    -   If there are no clients using CPS when the etcd cluster is rebuilt, then nothing needs to be done other than to rebuild the cluster and make sure all of the components are up and running. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md) for more information.
-    -   If any clients have already mounted content provided by CPS, that content should be unmounted before rebuilding the etcd cluster, and then re-mounted after the etcd cluster is rebuilt. Compute nodes that use CPS to access their root file system must be shut down to unmount, and then booted to perform the re-mount.
+## CRUS
 
+**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+[Deprecated features](../../introduction/differences.md#deprecated_features).
 
-### CRUS
+1. View the progress of existing CRUS sessions.
 
-1.  View the progress of existing CRUS sessions.
-
-    1.  List the existing CRUS sessions to find the upgrade\_id for the desired session.
+    1. List the existing CRUS sessions to find the `upgrade_id` for the desired session.
 
         ```bash
-        ncn-w001# cray crus session list
+        ncn# cray crus session list
+        ```
+
+        Example output:
+
+        ```toml
         [[results]]
         api_version = "1.0.0"
         completed = false
@@ -60,18 +68,22 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
         workload_manager_type = "slurm"
         ```
 
-    2.  Describe the CRUS session to see if the session failed or is stuck.
+    1. Describe the CRUS session to see if the session failed or is stuck.
 
         If the session continued and appears to be in a healthy state, proceed to the [BSS](#bss) section.
 
         ```bash
-        ncn-w001# cray crus session describe CRUS_UPGRADE_ID
+        ncn# cray crus session describe CRUS_UPGRADE_ID
+        ```
+
+        Example output:
+
+        ```toml
         api_version = "1.0.0"
         completed = false
         failed_label = "failed-nodes"
         kind = "ComputeUpgradeSession"
-        messages = [ "Quiesce requested in step 0: moving to QUIESCING", "All nodes quiesced in step 0:
-        moving to QUIESCED", "Began the boot session for step 0: moving to BOOTING",]
+        messages = [ "Quiesce requested in step 0: moving to QUIESCING", "All nodes quiesced in step 0: moving to QUIESCED", "Began the boot session for step 0: moving to BOOTING",]
         starting_label = "slurm-nodes"
         state = "UPDATING"
         upgrade_id = "e0131663-dbee-47c2-aa5c-13fe9b110242"
@@ -81,141 +93,94 @@ A etcd cluster was rebuilt. See [Rebuild Unhealthy etcd Clusters](Rebuild_Unheal
         workload_manager_type = "slurm"
         ```
 
-2.  Find the name of the running CRUS pod.
+1. Find the name of the running CRUS pod.
 
     ```bash
-    ncn-w001# kubectl get pods -n services | grep cray-crus
+    ncn# kubectl get pods -n services | grep cray-crus
+    ```
+
+    Example output:
+
+    ```text
     cray-crus-549cb9cb5d-jtpqg                                   3/4     Running   528        25h
     ```
 
-3.  Restart the CRUS pod.
+1. Restart the CRUS pod.
 
     Deleting the pod will restart CRUS and start the discovery process for any data recovered in etcd.
 
     ```bash
-    ncn-w001# kubectl delete pods -n services POD_NAME
+    ncn# kubectl delete pods -n services POD_NAME
     ```
 
+## BSS
 
-### External DNS
+Data is repopulated in BSS when the REDS `init` job is run.
 
-The etcd cluster for external DNS maintains an ephemeral cache for CoreDNS. There is no reason to back it up. If it is having any issues, delete it and recreate it.
-
-1.  Save the external DNS configuration.
-
-2.  Edit the end of each .yaml file to remove the .status, .metadata.uid, .metadata.selfLink, .metadata.resourceVersion, .metadata.generation, and .metadata.creationTimestamp.
-
-    For example:
+1. Get the current REDS job.
 
     ```bash
-    apiVersion: etcd.database.coreos.com/v1beta2
-    kind: EtcdCluster
-    metadata:
-      annotations:
-        etcd.database.coreos.com/scope: clusterwide
-      labels:
-        app.kubernetes.io/name: cray-externaldns-etcd
-      name: cray-externaldns-etcd
-      namespace: services
-    spec:
-      pod:
-        ClusterDomain: ""
-        annotations:
-          sidecar.istio.io/inject: "false"
-        busyboxImage: registry.local/library/busybox:1.28.0-glibc
-        persistentVolumeClaimSpec:
-          accessModes:
-          - ReadWriteOnce
-          dataSource: null
-          resources:
-            requests:
-              storage: 1Gi
-        resources: {}
-      repository: registry.local/coreos/etcd
-      size: 3
-      version: 3.3.8
+    ncn# kubectl get -o json -n services job/cray-reds-init |
+            jq 'del(.spec.template.metadata.labels["controller-uid"], .spec.selector)' > cray-reds-init.json
     ```
 
-3.  Delete the current cluster.
+1. Delete the `reds-client-init` job.
 
     ```bash
-    ncn-w001# kubectl -n services delete etcd cray-externaldns-etcd
+    ncn# kubectl delete -n services -f cray-reds-init.json
     ```
 
-4.  Recreate the cluster.
+1. Restart the `reds-client-init` job.
 
     ```bash
-    ncn-w001# kubectl apply -f cray-externaldns-etcd.yaml
+    ncn# kubectl apply -n services -f cray-reds-init.json
     ```
 
+## REDS
 
-<a name="bss"></a>
-
-### BSS
-
-Data is repopulated in BSS when the REDS init job is run.
-
-1.  Get the current REDS job.
+1. Restart REDS.
 
     ```bash
-    ncn-w001# kubectl get -o json -n services job/cray-reds-init | \
-    jq 'del(.spec.template.metadata.labels["controller-uid"], .spec.selector)' > cray-reds-init.json
+    ncn# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-reds'
     ```
 
-2. Delete the reds-client-init job.
+## MEDS
+
+1. Restart MEDS.
 
     ```bash
-    ncn-w001# kubectl delete -n services -f cray-reds-init.json
+    ncn# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
     ```
 
-3.  Restart the reds-client-init job.
+## FAS
 
-    ```bash
-    ncn-w001# kubectl apply -n services -f cray-reds-init.json
-    ```
+1. Reload the firmware images from Nexus.
 
-### REDS
+  Refer to the `Load Firmware from Nexus` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md#load-firmware-from-nexus) for more information.
 
-1.  Restart REDS.
+  When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost.
+  Image data will be reloaded from Nexus.
+  Any images that were loaded into FAS outside of Nexus will need to be reloaded using the `Load Firmware from RPM or ZIP file` section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md#load-firmware-from-rpm-or-zip-file).
+  After images are reloaded, any running actions at time of failure will need to be recreated.
 
-    ```bash
-    ncn-w001# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-reds'
-    ```
+## HMNFD
 
+1. Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their State Change Notifications \(SCN\).
 
-### MEDS
+    1. Resubscribe all compute nodes.
 
-1.  Restart MEDS.
+      ```bash
+      ncn-m001# TMPFILE=$(mktemp)
+      ncn-m001# sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$3);}' > $TMPFILE
+      ncn-m001# pdsh -w ^${TMPFILE} "systemctl restart cray-dvs-orca"
+      ncn-m001# rm -rf $TMPFILE
+      ```
 
-    ```bash
-    ncn-w001# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
-    ```
+    1. Resubscribe the NCNs.
 
-### FAS
-
-1.  Run the `cray-fas-loader` Kubernetes job.
-
-    Refer to the "Use the `cray-fas-loader` Kubernetes Job" section in [FAS Admin Procedures](../firmware/FAS_Admin_Procedures.md) for more information.
-
-    When the etcd cluster is rebuilt, all historic data for firmware actions and all recorded snapshots will be lost. Image data will need to be reloaded by following the `cray-fas-loader` Kubernetes job procedure. After images are reloaded any running actions at time of failure will need to be recreated.
-
-
-### HMNFD
-
-1.  Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their State Change Notifications \(SCN\).
-
-    1.  Resubscribe all compute nodes.
+        **NOTE:** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
 
         ```bash
-        ncn-w001# pdsh -w nid00[0-9][0-9][0-9]-nmn "systemctl restart cray-dvs-orca"
+        ncn-m001# pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-dvs-orca"
+        ncn-m001# pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-dvs-orca"
         ```
-
-    2.  Resubscribe the NCNs.
-
-        ```bash
-        ncn-w001# pdsh -w ncn[ws]00[0-4]-can.local "systemctl restart cray-dvs-orca"
-        ```
-
-
-
-

@@ -1,4 +1,4 @@
-## Add a Switch to the HSM Database
+# Add a Switch to the HSM Database
 
 Manually add a switch to the Hardware State Manager \(HSM\) database. Switches need to be in the HSM database in order to update their firmware with the Firmware Action Service \(FAS\).
 
@@ -32,6 +32,11 @@ Manually add a switch to the Hardware State Manager \(HSM\) database. Switches n
 
     ```bash
     ncn-m001# cray hsm inventory redfishEndpoints list --id XNAME
+    ```
+
+    Example output:
+
+    ```
     [[RedfishEndpoints]]
     Domain = ""
     RediscoverOnUpdate = true
@@ -49,8 +54,5 @@ Manually add a switch to the Hardware State Manager \(HSM\) database. Switches n
     LastDiscoveryStatus = "DiscoverOK"
     ```
 
-
 The switch is now discovered by the HSM.
-
-
 

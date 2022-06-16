@@ -7,21 +7,22 @@ Any process covered on this page will be covered by the installer.
 
 The use cases for resetting services:
 
-   * Interfaces not showing up
-   * IP Addresses not applying
-   * Member/children interfaces not being included
+* Interfaces not showing up
+* IP Addresses not applying
+* Member/children interfaces not being included
 
-### Topics:
+## Topics
 
-   * [Restart Network Services and Interfaces](#restart_network_services_and_interfaces))))
-   * [Command Reference](#command_reference)
-      * Check interface status (up/down/broken)
-      * Show routing and status for all devices
-      * Print real devices ( ignore no-device )
-      * Show the currently enabled network service (Wicked or Network Manager)
+* [Restart Network Services and Interfaces](#restart_network_services_and_interfaces))))
+* [Command Reference](#command_reference)
+  * Check interface status (up/down/broken)
+  * Show routing and status for all devices
+  * Print real devices ( ignore no-device )
+  * Show the currently enabled network service (Wicked or Network Manager)
 
 <a name="restart_network_services_and_interfaces"></a>
-### Restart Network Services
+
+## Restart Network Services
 
 There are a few daemons that make up the SUSE network stack. The following are
 sorted by safest to touch relative to keeping an SSH connection up.
@@ -44,7 +45,7 @@ sorted by safest to touch relative to keeping an SSH connection up.
 3. `network.service`: Responsible for network configuration per interface; This does not reload `wicked`.
     This command restarts the network interface configuration, but leaves wicked daemons alone.
 
-    > NOTE: Commonly the problem exists within `wicked`. This is a last resort in the event the
+    > **NOTE:** Commonly the problem exists within `wicked`. This is a last resort in the event the
     configuration is so bad `wicked` cannot handle it.
 
     ```bash
@@ -53,15 +54,16 @@ sorted by safest to touch relative to keeping an SSH connection up.
     ```
 
 <a name="command_reference"></a>
-### Command Reference
 
-* Check interface status (up/down/broken)
+## Command Reference
+
+* Check interface status (up/down/broken):
 
    ```bash
    ncn# wicked ifstatus
    ```
 
-* Show routing and status for all devices
+* Show routing and status for all devices:
 
    ```bash
    ncn# wicked ifstatus --verbose all
@@ -135,15 +137,15 @@ sorted by safest to touch relative to keeping an SSH connection up.
          route:    ipv6 fe80::/64 type unicast table main scope universe protocol kernel priority 256
 
    eth0            no-device
+   ```
 
-
-* Print real devices ( ignore no-device )
+* Print real devices (ignore no-device):
 
    ```bash
    ncn# wicked show --verbose all
    ```
 
-* Show the currently enabled network service (Wicked or Network Manager)
+* Show the currently enabled network service (Wicked or Network Manager):
 
    ```bash
    ncn# systemctl show -p Id network.service

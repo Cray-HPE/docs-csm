@@ -1,6 +1,6 @@
 # Cray System Management Documentation
 
-### Scope and Audience
+## Scope and Audience
 
 The documentation included here describes the Cray System Management (CSM) software, how to install
 or upgrade CSM software, and related supporting operational procedures to manage an HPE Cray EX system.
@@ -20,10 +20,6 @@ This information is intended for system installers, system administrators, and n
 of the system. It assumes some familiarity with standard Linux and open source tools, such as shell
 scripts, revision control with git, configuration management with Ansible, YAML, JSON, and TOML file formats, etc.
 
-### Trademarks
-
-© Copyright 2021 Hewlett Packard Enterprise Development LP. All trademarks used in this document are the property of their respective owners.
-
 ## Table of Contents
 
 1. [Introduction to CSM Installation](introduction/index.md)
@@ -34,11 +30,17 @@ scripts, revision control with git, configuration management with Ansible, YAML,
    of the HPE Cray EX system, differences between previous release and this release, and conventions
    used in this documentation.
 
+1. [Pre-Install Steps](operations/preinstall/Preinstall.md)
+
+   This chapter outlines how to set up default credentials for River BMCs and
+   ServerTech PDUs, which must be done before the initial installation of
+   CSM, in order to enable HSM software to interact with River Redfish BMCs
+   and PDUs.
+
 1. [Update CSM Product Stream](update_product_stream/index.md)
 
-   This chapter explains how to get the CSM product release, any patches, update to the latest set of
-   documenation and any installation workarounds, and check for any Field Notices or Hotfixes.
-
+   This chapter explains how to get the CSM product release, get any patches, update to the latest
+   documentation, and check for any Field Notices or Hotfixes.
 
 1. [Install CSM](install/index.md)
 
@@ -101,4 +103,28 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 
 1. [Glossary](glossary.md)
 
-   This chapter provides a explanations of terms and acronyms used throughout the rest of this documentation.
+   This chapter provides explanations of terms and acronyms used throughout the rest of this documentation.
+
+## Copyright and License
+
+MIT License
+
+(C) Copyright [2020-2022] Hewlett Packard Enterprise Development LP
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.

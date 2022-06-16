@@ -1,15 +1,16 @@
+# Troubleshoot Stale Brokered UAIs
 
-## Troubleshoot Stale Brokered UAIs
+When a Broker UAI terminates and restarts, the SSH key used to forward SSH sessions to End-User UAIs changes (this is a known problem) and subsequent Broker UAIs are unable to forward sessions to End-User UAIs.
+The symptom of this is that a user logging into a Broker UAI will receive a password prompt from the End-User UAI and be unable to log in even if providing the correct password.
+To fix this, remove the stale End-User UAIs and allow the Broker UAI to recreate them. The easy way to do this is to use the command specifying the `uai-creation-class` identifier from the Broker's UAI class.
 
-When a broker UAI terminates and restarts, the SSH key used to forward SSH sessions to end-user UAIs changes (this is a known problem) and subsequent broker UAIs are unable to forward sessions to end-user UAIs. The symptom of this is that a user logging into a broker UAI will receive a password prompt from the end-user UAI and be unable to log in even if providing the correct password. To fix this, remove the stale end-user UAIs and allow the broker UAI to recreate them. The easy way to do this is to use the command specifying the uai-creation-class identifier from the broker's UAI class.
-
-```
+```bash
 cray uas admin uais delete --class-id <creation-class-id>
 ```
 
 For example:
 
-```
+```bash
 ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
 class_id = "74970cdc-9f94-4d51-8f20-96326212b468"
 comment = "UAI broker class"
@@ -25,6 +26,8 @@ ncn-m001-pit# cray uas admin uais delete --class-id a623a04a-8ff0-425e-94cc-4409
 results = [ "Successfully deleted uai-vers-6da50e7a",]
 ```
 
-After that, users should be able to log into the broker UAI and be directed to an end-user UAI as before.
+After that, users should be able to log into the Broker UAI and be directed to an End-User UAI as before.
 
+[Top: User Access Service (UAS)](index.md)
 
+[Next Topic: Troubleshoot UAI Stuck in `ContainerCreating`](Troubleshoot_UAI_Stuck_in_ContainerCreating.md)

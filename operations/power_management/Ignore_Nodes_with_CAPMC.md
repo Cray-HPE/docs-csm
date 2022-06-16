@@ -1,6 +1,4 @@
-
-
-## Ignore Nodes with CAPMC
+# Ignore Nodes with CAPMC
 
 Update the Cray Advanced Platform Monitoring and Control \(CAPMC\) configmap to ignore non-compute nodes \(NCNs\) and ensure they cannot be powered off or reset.
 

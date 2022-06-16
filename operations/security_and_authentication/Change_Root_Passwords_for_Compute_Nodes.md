@@ -1,4 +1,4 @@
-## Change Root Passwords for Compute Nodes
+# Change Root Passwords for Compute Nodes
 
 Update the root password on the system for compute nodes.
 
@@ -27,6 +27,4 @@ The initial root password for compute nodes are not set. Use this procedure to s
 2.  Use the encrypted value returned in the previous step to override the default passwords for compute nodes.
 
     Refer to [Customize Configuration Values](../configuration_management/Customize_Configuration_Values.md) for more information.
-
-
 

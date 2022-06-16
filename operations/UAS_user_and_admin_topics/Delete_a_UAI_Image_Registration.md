@@ -1,28 +1,33 @@
-
-## Delete a UAI Image Registration
+# Delete a UAI Image Registration
 
 Unregister a UAI image from UAS.
 
-### Prerequisites
+## Prerequisites
 
-Verify that the UAI image to be deleted is registered with UAS. See [Retrieve UAI Image Registration Information](Retrieve_UAI_Image_Registration_Information.md) for instructions.
+* The administrator must be logged into an NCN or a host that has administrative access to the HPE Cray EX System API Gateway
+* The administrator must have the HPE Cray EX System CLI (`cray` command) installed on the above host
+* The HPE Cray EX System CLI must be configured (initialized - `cray init` command) to reach the HPE Cray EX System API Gateway
+* The administrator must be logged in as an administrator to the HPE Cray EX System CLI (`cray auth login` command)
+* The administrator must know the name of the UAI Image Registration to be deleted: [List Registered UAI Images](List_Registered_UAI_Images.md)
 
-### Procedure
+## Procedure
 
-Deleting a UAI image from UAS effectively unregisters the UAI image from UAS. This procedure does delete the actual UAI image artifact.
+Deleting a UAI image from UAS removes the UAI image registration from UAS. This procedure does not delete the actual UAI image artifact, nor does it affect UAIs currently created using the UAI Image.
 
-1.  Delete a UAS image registration by using a command of the following form:
+Delete a UAS image registration by using a command of the following form:
 
-    ```bash
-    ncn-m001-pit# cray uas admin config images delete IMAGE_ID
-    ```
+```bash
+ncn-m001-pit# cray uas admin config images delete IMAGE_ID
+```
 
-    Replace IMAGE\_ID with image ID of the UAI image to unregister from UAS.
+`IMAGE_ID` is the image ID of the UAI image registration being removed from UAS.
 
-    For example:
+For example:
 
-    ```
-    ncn-m001-pit# cray uas admin config images delete 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
-    ```
+```bash
+ncn-m001-pit# cray uas admin config images delete 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
+```
 
+[Top: User Access Service (UAS)](index.md)
 
+[Next Topic: Volumes](Volumes.md)

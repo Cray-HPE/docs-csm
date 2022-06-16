@@ -1,33 +1,45 @@
 # Ceph Daemon Memory Profiling
 
-`Use Case:` This page is meant as an instructional guide to provide information back to HPECray to assist in tuning and troubleshooting exercises.
+This procedure is meant as an instructional guide to provide information back to HPE Cray to assist in tuning and troubleshooting exercises.
 
-Procedure:
+## Procedure
 
-**`NOTE:`** For this example we are going to use a ceph-mon process on ncn-s001
+> **NOTE:** For this example, a ceph-mon process on ncn-s001 is used.
 
 1. Identify the process and location of the daemon to profile.
 
    ```bash
-   ncn-s00(1/2/3)#  ceph orch ps --daemon_type mon
+   ncn-s00(1/2/3)# ceph orch ps --daemon_type mon
+   ```
+
+   Example output:
+
+   ```
    NAME          HOST      STATUS        REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
    mon.ncn-s001  ncn-s001  running (1h)  60s ago    1h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  bcca26f69191
    mon.ncn-s002  ncn-s002  running (1h)  61s ago    1h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  43c8472465b2
    mon.ncn-s003  ncn-s003  running (1h)  61s ago    1h   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  7aa1b1f19a00
    ```
 
-2. ssh to the node where you process is running if it is different from your current node.
+2. SSH to the node where the process is running if it is different from the current node.
+
 3. Start the profiler.
 
    ```bash
-   ncn-s001:~ # ceph tell mon.ncn-s001 heap start_profiler
-   mon.ncn-s001 started profiler
+   ncn-s001# ceph tell mon.ncn-s001 heap start_profiler
    ```
+
+   A message stating "mon.ncn-s001 started profiler" will be returned.
 
 4. Dump stats. This `does NOT require` the profiler to be running.
 
    ```bash
-   ncn-s001:~ # ceph tell mon.ncn-s001 heap stats
+   ncn-s001# ceph tell mon.ncn-s001 heap stats
+   ```
+
+   Example output:
+
+   ```
    mon.ncn-s001 tcmalloc heap stats:------------------------------------------------
    MALLOC:      972461744 (  927.4 MiB) Bytes in use by application
    MALLOC: +            0 (    0.0 MiB) Bytes in page heap freelist
@@ -49,10 +61,15 @@ Procedure:
    Bytes released to the OS take up virtual address space but no physical memory.
    ```
 
-5. Dump heap.  This `requires` the profiler to be running.
+5. Dump heap. This `requires` the profiler to be running.
 
    ```bash
    # ceph tell mon.ncn-s001 heap dump
+   ```
+
+   Example output:
+
+   ```
    mon.ncn-s001 dumping heap profile now.
    ------------------------------------------------
    MALLOC:      976849264 (  931.6 MiB) Bytes in use by application
@@ -78,13 +95,16 @@ Procedure:
 6. Release memory.
 
    ```bash
-   ncn-s001:~ # ceph tell mon.ncn-s001 heap release
-   mon.ncn-s001 releasing free RAM back to system.
+   ncn-s001# ceph tell mon.ncn-s001 heap release
    ```
 
-7. Stop the profiler
+   A message stating "mon.ncn-s001 releasing free RAM back to system" will be returned.
+
+7. Stop the profiler.
 
    ```bash
-   ncn-s001:~ # ceph tell mon.ncn-s001 heap stop_profiler
-   mon.ncn-s001 stopped profiler
+   ncn-s001# ceph tell mon.ncn-s001 heap stop_profiler
    ```
+
+   A message stating " mon.ncn-s001 stopped profiler" will be returned.
+

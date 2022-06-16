@@ -1,4 +1,4 @@
-## Manage Component Partitions
+# Manage Component Partitions
 
 The creation, deletion, and modification of partitions is enabled by the Hardware State Manager \(HSM\) APIs.
 
@@ -80,6 +80,4 @@ Delete a partition so all members are no longer in it:
 ```screen
 ncn-m# cray hsm partitions delete PARTITION_NAME
 ```
-
-
 

@@ -1,4 +1,4 @@
-## Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster
+# Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster
 
 Clients lying outside the system's management cluster need to trust the Certificate Authority \(CA\) certificate or host certificate in order to make requests to a non-compute node \(NCN\). Getting the client system to trust the CA certificate depends on the operating system.
 
@@ -47,7 +47,7 @@ This procedure assumes that it is being carried out on a Mac OS X system.
 
     ```bash
     $ curl -H "Authorization: Bearer $TOKEN" \
-    https://api.SYSTEM-NAME_DOMAIN-NAME/apis/capmc/capmc/get_node_rules
+    https://api.cmn.SYSTEM-NAME_DOMAIN-NAME/apis/capmc/capmc/get_node_rules
     {
     "e":0,
     "err_msg":"",
@@ -61,6 +61,4 @@ This procedure assumes that it is being carried out on a Mac OS X system.
     "min_off_time":-1
     }
     ```
-
-
 

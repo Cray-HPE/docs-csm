@@ -4,6 +4,8 @@ Because of a bug in the Gigabyte firmware, the Shasta 1.5 install may negatively
 
 A patched firmware release (newer than C20 BIOS) is expected to be available for a future release of Shasta. It is recommended that Gigabyte users wait for this new firmware before attempting an installation of Shasta 1.5. The procedure to recover the boards is included below.
 
+> All firmware can be found with HFP package provided with the Shasta release.
+
 ## Clear BIOS settings by jumper
 
 1. Pull the power cables or blade server from the chassis, and open the system top cover.

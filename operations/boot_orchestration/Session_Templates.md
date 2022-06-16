@@ -1,4 +1,4 @@
-## BOS Session Templates
+# BOS Session Templates
 
 Describes the contents of a BOS session template.
 
@@ -8,9 +8,9 @@ Session templates can be used to boot images that are customized with the Image 
 
 The Simple Storage Service \(S3\) is used to store the manifest.json file that is created by IMS. This file contains links to all of the boot artifacts. The following S3 parameters are used in a BOS session template:
 
--   type: This is the type of storage used. Currently, the only allowable value is `s3`.
--   path: This is the path to the manifest.json file in S3. The path will follow the s3://<BUCKET\_NAME\>/<KEY\_NAME\> format.
--   etag: This entity tag helps identify the version of the manifest.json file. Currently not used but cannot be left blank.
+- type: This is the type of storage used. Currently, the only allowable value is `s3`.
+- path: This is the path to the manifest.json file in S3. The path will follow the s3://<BUCKET\_NAME\>/<KEY\_NAME\> format.
+- etag: This entity tag helps identify the version of the manifest.json file. Currently not used but cannot be left blank.
 
 The following is an example BOS session template:
 
@@ -32,6 +32,9 @@ The following is an example BOS session template:
      "path": "s3://boot-images/e06530f1-fde2-4ca5-9148-7e84f4857d17/manifest_sans_boot_parameters.json", <<-- The path to the manifest.json file in S3
      "rootfs_provider_passthrough": "66666666:dvs:api-gw-service-nmn.local:300:eth0",
      "type": "s3" <<-- Type of storage
+   },
+   "boot_set2": {
+     ...
    }
  },
 ```
@@ -42,11 +45,11 @@ Each boot set needs its own set of S3 parameters \(path, type, and optionally et
 
 ### Specify Nodes in a BOS Session Template
 
-There are three different ways to specify the nodes inside a boot set in a BOS session template. The node list, node groups, or node role groups values can be used. Each can be specified as a comma separated list.
+There are three different ways to specify the nodes inside a boot set in a BOS session template. The node list, node groups, or node role groups values can be used. Each can be specified as a comma-separated list.
 
 -   **Node list**
 
-    The `"node_list"` value is a list of nodes identified by xnames.
+    The `"node_list"` value is a list of nodes identified by component names (xnames).
 
     For example:
 
@@ -83,5 +86,4 @@ There are three different ways to specify the nodes inside a boot set in a BOS s
     -   Application
     -   Storage
     -   Management
-
 

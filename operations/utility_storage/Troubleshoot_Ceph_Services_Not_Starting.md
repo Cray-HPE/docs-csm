@@ -1,9 +1,10 @@
-# Troubleshoot Ceph services not starting after a server crash
+# Troubleshoot Ceph Services Not Starting After a Server Crash
 
 ## Issue
+
 There is a known issue where the Ceph container images will not start after a power failure or server component failure that causes the server to crash and not boot back up
 
-There will be a message like this in the journalctl logs for the ceph services on the machine that crashed
+There will be a message similar to the following in the journalctl logs for the Ceph services on the machine that crashed:
 
 `ceph daemons will not start due to: Error: readlink /var/lib/containers/storage/overlay/l/CXMD7IEI4LUKBJKX5BPVGZLY3Y: no such file or directory`
 
@@ -11,23 +12,27 @@ When the issue materializes, then it is highly likely the Ceph container images 
 
 ## Fix
 
-1. Remove the corrupted images
+1. Remove the corrupted images.
 
    ```bash
    for i in $(podman images|grep -v REPO|awk {'print $1":"$2'}); do podman image rm $i; done
    ```
 
-1. Reload the images
+1. Reload the images.
 
    ```bash
    /srv/cray/scripts/common/pre-load-images.sh
    ```
 
-1. Validate services are starting
+1. Validate that the services are starting.
 
    ```bash
    ncn-s00(1/2/3)# ceph orch ps
-   # ceph orch ps
+   ```
+
+   Example output:
+
+   ```
    NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE    ID      CONTAINER ID
    alertmanager.ncn-s001            ncn-s001  running (95m)  2m ago     97m  0.20.0   registry.local/prometheus/alertmanager:v0.20.0      0881eb8f169f  a3fbad5afe50
    crash.ncn-s001                   ncn-s001  running (97m)  2m ago     97m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  ddc724e9a18e
@@ -48,32 +53,15 @@ When the issue materializes, then it is highly likely the Ceph container images 
    node-exporter.ncn-s003           ncn-s003  running (96m)  2m ago     96m  0.18.1   registry.local/prometheus/node-exporter:v0.18.1     e5a616e4b9cf  8ba07c965a83
    osd.0                            ncn-s003  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  9dd55acc0475
    osd.1                            ncn-s001  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  08548417e7ea
-   osd.10                           ncn-s001  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  5d3f372c2164
-   osd.11                           ncn-s002  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  c3697f42ee78
-   osd.12                           ncn-s003  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  3671a6897993
-   osd.13                           ncn-s001  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  35bc02ccd8a6
-   osd.14                           ncn-s002  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  a777b16e6e8b
-   osd.15                           ncn-s003  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  b725bd38b753
-   osd.16                           ncn-s001  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  fa4e211a6632
-   osd.17                           ncn-s002  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  ae5cd8b169cc
-   osd.2                            ncn-s002  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  abbf4563210b
-   osd.3                            ncn-s003  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  765115ca70e8
-   osd.4                            ncn-s001  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  ef4186a535df
-   osd.5                            ncn-s002  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  d4c96c856f2a
-   osd.6                            ncn-s003  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  ff7c0c2a8b66
-   osd.7                            ncn-s001  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  c18c09dd115f
-   osd.8                            ncn-s002  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  5ea54dfa7cbe
-   osd.9                            ncn-s003  running (96m)  2m ago     96m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  0bd8f2e7cbe6
-   prometheus.ncn-s001              ncn-s001  running (95m)  2m ago     97m  2.18.1   docker.io/prom/prometheus:v2.18.1                   de242295e225  43c3411ae2cb
-   rgw.site1.zone1.ncn-s001.hjmgem  ncn-s001  running (94m)  2m ago     94m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  0f23173da9b0
-   rgw.site1.zone1.ncn-s002.eccwzc  ncn-s002  running (94m)  2m ago     94m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  a71878b4847b
-   rgw.site1.zone1.ncn-s003.lsmzng  ncn-s003  running (94m)  2m ago     94m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  0a5f56e8fc98
+
+   [...]
    ```
 
-   At this point the processes starting/running on the node that crashed, this may take a few minutes
+   At this point, the processes are starting/running on the node that crashed; this may take a few minutes.
 
-   If after 5 mins the service are still reporting down then fail-over the ceph mgr daemon and recheck the daemons
+   If after five mins the services are still reporting down, then fail-over the ceph mgr daemon and re-check the daemons:
 
    ```bash
    ceph mgr fail $(ceph mgr dump | jq -r .active_name)
    ```
+
