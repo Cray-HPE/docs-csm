@@ -243,8 +243,15 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
    ```
 
-   **IMPORTANT:** If any errors are encountered, then potential fixes should be displayed where the error occurred. **If** the upgrade `prerequisites.sh` script fails and does
-   not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
+   If the script ran correctly, it should end with the following output:
+
+   ```text
+   [OK] - Successfully completed
+   ```
+
+   If the script does not end with this output, then try rerunning it. If it still fails, see
+   [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+   If the failure persists, then open a support ticket for guidance before proceeding.
 
 1. Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
 
@@ -276,14 +283,5 @@ the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Wor
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
 
 ## Stage completed
-
-To confirm `prerequisites.sh` has run successfully.  You should see:
-
-   ```bash
-   [OK] - Successfully completed
-   ```
-
-If you do not see the message above.  Try rerunning `prerequisites.sh`
-Please see troubleshooting section  [Upgrade Troubleshooting](https://github.com/Cray-HPE/docs-csm/blob/release/1.2/upgrade/1.2/README.md#relevant-troubleshooting-links-for-upgrade-related-issues)
 
 This stage is completed. Continue to [Stage 1 - Ceph image upgrade](Stage_1.md).
