@@ -1,11 +1,8 @@
-
-## Manage System Passwords
+# Manage System Passwords
 
 Many system services require login credentials to gain access to them. The information below is a comprehensive list of system passwords and how to change them.
 
 Contact HPE Cray service in order to obtain the default usernames and passwords for any of these components or services.
-
-
 
 ### Keycloak
 
@@ -13,9 +10,9 @@ Default Keycloak admin user login credentials:
 
 - Username: admin
 - The password can be obtained with the following command:
-  
+
   ```bash
-  ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
+  kubectl get secret -n services keycloak-master-admin-auth \
   --template={{.data.password}} | base64 --decode
   ```
 
@@ -23,54 +20,33 @@ To update the default password for the admin account, refer to [Change the Keycl
 
 To create new accounts, refer to [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md).
 
-
-
 ### Gitea
 
-The initial Gitea login credentials for the `crayvcs` username are stored in three places:
+The default Gitea user credentials is `crayvcs`. The password is randomly generated at install time
+and can be found in the vcs-user-credentials secret.
 
-- vcs-user-credentials Kubernetes secret - This is used to initialize the other two locations, as well as providing a place where users can query for the password.
-  
-  The password can be obtained using this command:
+```bash
+kubectl get secret -n services vcs-user-credentials \
+--template={{.data.vcs_password}} | base64 --decode
+```
 
-  ```bash
-  ncn-w001# kubectl get secret -n services vcs-user-credentials \
-  --template={{.data.vcs_password}} | base64 --decode
-  ```
-
-  The password can be changed using this command:
-
-  ```bash
-  ncn-w001# kubectl create secret generic vcs-user-credentials \
-  --save-config --from-literal=vcs_username="crayvcs" --from-literal=vcs_password="NEW_PASSWORD" \
-  --dry-run -o yaml | kubectl apply -f -
-  ```
-
-- Gitea - These credentials are used when pushing to Git using the default username and password. The password should be changed through the Gitea UI.
-
-- Keycloak - These credentials are used to allow access to the Gitea UI. They must be changed through Keycloak.
-
-> **IMPORTANT:** These three sources of credentials are not currently synced by any mechanism, and so changing the default password requires that it be changed in all three places. Changing only one many result in difficulty determining the password at a later date, or may result in lost access to Gitea.
-
-
+For more information on Gitea, including how to change the password, see [Version Control Service VCS](../configuration_management/Version_Control_Service_VCS.md).
 
 ### System Management Health Service
 
 The default username is admin.
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default password for Grafana and Kiali.
-
-
+> **`NOTE`** Contact HPE Cray service in order to obtain the default password for Grafana and Kiali.
 
 ### Management Network Switches
 
-Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change. 
+Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change.
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default passwords.
+> **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
 
 The tables below include the default login credentials for each rack type. These passwords can be changed by going into the console on a given switch and changing it. However, if the user gets locked out attempting to change the password or the configuration gets corrupted for an individual switch, it can wipe out the entire network configuration for the system.
 
-> **NOTE:** IP addresses can be found from the generated SLS file.
+> **`NOTE`** IP addresses can be found from the generated SLS file.
 
 **Liquid-Cooled Cabinet:**
 
@@ -96,7 +72,6 @@ The tables below include the default login credentials for each rack type. These
 | sw-cdu | CDU/Leaf | Dell S4048T-ON |  admin |
 | sw-cdu | CDU/Leaf | Aruba 8360 |  admin |
 
-
 **ClusterStor:**
 
 | Name     | Role                  | Switch         | IP Address    | Login |
@@ -104,8 +79,6 @@ The tables below include the default login credentials for each rack type. These
 | Arista   |                       | DCS-7060CX-32S | 172.16.249.10 | admin |
 | Sonexion | Entry point to Arista | CS-L300        | 172.30.49.178 | admin |
 | E1000    |                       | CS-E1000       |               | admin |
-
-
 
 ### Redfish Credentials
 
@@ -122,15 +95,15 @@ Three accounts are created by default:
 - ReadOnly - Log in, configure self, and read values
     - Username: guest
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default passwords.
+> **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
 
 The System Configuration Service (SCSD) is used to set the credentials for Redfish BMCs.
 Refer to [Set BMC Credentials](../system_configuration_service/Set_BMC_Credentials.md) for more information.
 
 The account database is automatically saved to the non-volatile settings partition
-\(/nvram/redfish/redfish-accounts\) any time an account or account policy is modified. 
+\(/nvram/redfish/redfish-accounts\) any time an account or account policy is modified.
 The file is stored as a redis command dump and is replayed \(if it exists\) anytime the core Redfish
-schema is loaded via the init script. If default accounts must be restored, 
+schema is loaded via the init script. If default accounts must be restored,
 delete the redis command dump and reboot the controller.
 
 **List accounts:**
@@ -188,7 +161,7 @@ GET /redfish/v1/AccountService/Accounts/1
 **Add accounts:**
 
 If an account is successfully created, then the account information data structure will be returned.
-The most important bit returned is the Id because it is part of the URL used for any further manipulation of the account. 
+The most important bit returned is the Id because it is part of the URL used for any further manipulation of the account.
 
 Use the following API path to add accounts:
 
@@ -251,8 +224,6 @@ Update the password for an account with the `curl` command:
 https://x0c0s0b0/redfish/v1/AccountService/Accounts/ACCOUNT_ID
 ```
 
-
-
 ### System Controllers
 
 For SSH access, the system controllers have the following default credentials:
@@ -269,16 +240,16 @@ For SSH access, the system controllers have the following default credentials:
 - sC minimal recovery firmware image \(rec\)
     - Username: root
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default passwords.
+> **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
 
 Passwords for nC, cC, and sC controllers are all managed with the following process. The cfgsh tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as root via `ssh`:
 
 ```bash
-x0c1# config
+config
 x0c1(conf)# CURRENT_PASSWORD root NEW_PASSWORD
 x0c1(conf)# exit
-x0c1# copy running-config startup-config
-x0c1# exit
+copy running-config startup-config
+exit
 ```
 
 It may be used non-interactively as well. This is useful for separating out several of the commands used for the initial setup. The shell utility returns non-zero on error.
@@ -290,27 +261,23 @@ It may be used non-interactively as well. This is useful for separating out seve
 
 In both cases, a `running-config` must be saved out to non-volatile storage in a startup configuration file. If it is not, the password will revert to default on the next boot. This is the exact same behavior as standard managed Ethernet switches.
 
-
-
 ### SNMP Credentials
 
 To adjust the SNMP credentials, perform the following tasks:
 
 1. Update the default credentials specified in the customizations.yaml file.
-   
-   * See [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md)
+
+   * See [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
 
 2. Update the credentials actively being used for existing leaf switches.
-   
-   * See [Change SNMP Credentials on Leaf Switches](Change_SMNP_Credentials_on_Leaf_Switches.md)
 
-
+   * See [Change SNMP Credentials on Leaf BMC Switches](Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
 
 ### HPE Cray EX Liquid-Cooled Cabinet Hardware
 
 Change the global default credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs). The chassis management module (CMM) controller (cC), node controller (nC), and Slingshot switch controller (sC) are generically referred to as "BMCs" in these procedures.
 
-* See [Change EX Liquid-Cooled Cabinet Global Defualt Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
+* See [Change EX Liquid-Cooled Cabinet Global Default Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
 
 Provision a Glibc compatible SHA-512 administrative password hash to a cabinet environmental controller (CEC). This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).
 
@@ -320,19 +287,17 @@ Change the credential for HPE Cray EX liquid-cooled cabinet chassis controllers 
 
 * See [Updating the Liquid-Cooled EX Cabinet CEC with Default Credentials after a CEC Password Change](Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
 
-
 ### Gigabyte
 
 The default username is admin.
 
-> **NOTE:** Contact HPE Cray service in order to obtain the default password for Gigabyte.
-
+> **`NOTE`** Contact HPE Cray service in order to obtain the default password for Gigabyte.
 
 ### Passwords Managed in Other Product Streams
 
 Refer to the following product stream documentation for detailed procedures about updating passwords for compute nodes and User Access Nodes (UANs).
 
-**Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information. 
+**Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information.
 
 **User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs. The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.
 

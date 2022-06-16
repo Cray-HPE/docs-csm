@@ -1,4 +1,4 @@
-## PKI Certificate Authority \(CA\)
+# PKI Certificate Authority \(CA\)
 
 An instance of HashiCorp Vault, deployed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a Public Key Infrastructure \(PKI\) engine instance.
 
@@ -18,5 +18,4 @@ On NCNs, trusted certificates are installed by Cloud-init in the /etc/pki/trust/
 On compute nodes \(CNs\), trusted certificates are installed at image build time by the Image Management Service \(IMS\), and are located in the /etc/cray/ca/certificate\_authority.crt file.
 
 For NCNs and CNs, the trusted certificates are added to the base OS trust store. The TrustedCerts Kubernetes Operator manages updates to trusted CA material across the noted channels.
-
 

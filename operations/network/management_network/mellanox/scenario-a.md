@@ -1,7 +1,7 @@
 # Scenario A: network connection via management network
 
-Description 
-The example here covers outside connections achieved via management network. 
+Description
+The example here covers outside connections achieved via management network.
 
 ### Summary
 * Create a new VRF
@@ -17,4 +17,4 @@ The example here covers outside connections achieved via management network.
 
 ![](../../../../img/network/management_network/scenario-a-topology.png)
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

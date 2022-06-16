@@ -1,6 +1,6 @@
 # Key features used in the management network configuration
 
-This section is to list and define the key features used in the management network configuration. 
+This section is to list and define the key features used in the management network configuration.
 
 Feature list:
 
@@ -21,5 +21,4 @@ Feature list:
 |SNMP	| | Allows for device polling from the NCNs to map out interfaces |
 |VRF	| | Virtual routing and forwarding, used to segregate traffic between networks |
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

@@ -1,14 +1,11 @@
-# Network types – naming and segment Function
+# Network Types – Naming and Segment Function
 
-In below you can find the overview of the different networks services defined inside of our spine and leaf architecture.
-
+The following table provides an overview of the different network services defined inside of the spine and leaf architectures.
 
 | *********** | Administration: Hardware | Administration: Cloud/Job     | Customer: Jobs | Customer: Administration | Storage |
 | :---        |    :----:   |    :----:   |    :----:   |     :----:   |          ---: |
 | Full name      | Hardware Management Network       | Node Management Network   | Customer Access Network | Customer Management Network | Storage User Network |
 | Short name / acronym   | HMN        | NMN      | CAN | CMN | SUN
 
-
-[Back to Index](../index.md)
-
+[Back to Index](../README.md)
 

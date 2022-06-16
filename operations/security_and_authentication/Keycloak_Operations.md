@@ -1,4 +1,4 @@
-## Keycloak Operations
+# Keycloak Operations
 
 A service may need to access Keycloak to perform various tasks. These typical uses for a service to access Keycloak include creating a new service account, creating a new user, etc. These operations require Keycloak administrative access. As part of the System Management Services \(SMS\) installation process, Keycloak is initialized with a Master realm. An administrative client and user are created within this realm. The system installation process adds the information needed for the Keycloak administrator's authentication into a Kubernetes secret that can be accessed by any pod. Using this information and the Keycloak REST API, a service can create an account in the `Shasta` realm. The Keycloak master administrative authentication information is located in the `keycloak-master-admin-auth` secret, which includes the following fields:
 
@@ -10,7 +10,7 @@ A service may need to access Keycloak to perform various tasks. These typical us
     The pod in the following example gets a Keycloak Master admin token and makes a request to create a client with a user ID attribute mapper.
 
     ```bash
-    ncn# kubectl apply -f - <<EOF
+    kubectl apply -f - <<EOF
     apiVersion: v1
     kind: Pod
     metadata:
@@ -69,7 +69,7 @@ A service may need to access Keycloak to perform various tasks. These typical us
     ```
 
     ```bash
-    ncn# kubectl logs -n services kc-admin-example
+    kubectl logs -n services kc-admin-example
     ```
 
     Example output:
@@ -107,7 +107,4 @@ A service may need to access Keycloak to perform various tasks. These typical us
     ```
 
   The new example client is now visible in the Keycloak administrative web application.
-
-
-
 

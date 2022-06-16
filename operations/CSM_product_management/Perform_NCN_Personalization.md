@@ -1,7 +1,7 @@
 # Perform NCN Personalization
 
 NCN personalization is the process of applying product-specific configuration
-to NCNs post-boot. 
+to NCNs post-boot.
 
 ## Prerequisites
 
@@ -20,7 +20,6 @@ S-8000](https://www.hpe.com/support/ex-gsg) on the HPE Customer Support Center.
 
 ## Procedure: Perform NCN Personalization
 
-<a name="ncn_personalization_determine_existence"></a>
 ### Determine if NCN Personalization CFS Configuration Exists
 
 If upgrading a product to a new version, an NCN personalization configuration in
@@ -29,9 +28,9 @@ CFS should already exist. By default, the configuration is named
 the steps below.
 
 1. Determine if a configuration already exists.
-   
+
    ```bash
-   ncn# cray cfs configurations describe ncn-personalization --format json > ncn-personalization.json
+   cray cfs configurations describe ncn-personalization --format json > ncn-personalization.json
    ```
 
 If the configuration exists, the `ncn-personalization.json` file will be
@@ -39,7 +38,6 @@ created and populated with previously defined configuration layers. If it does
 not exist, the file will be created empty and the command will respond with an
 error. This error can be ignored.
 
-<a name="ncn_personalization_add_layer"></a>
 ### Add Layer(s) to the CFS Configuration
 
 CFS executes configuration layers in order. Refer to the _1.5 HPE Cray EX
@@ -47,21 +45,21 @@ System Software Getting Started Guide S-8000_ on the HPE Customer Support
 Center at https://www.hpe.com/support/ex-gsg to determine if the
 configuration layer requires special placement in the layer list.
 
-> **NOTE:** The CSM configuration layer _MUST_ be the first layer in the
+> **`NOTE`** The CSM configuration layer _MUST_ be the first layer in the
 > NCN personalization CFS configuration.
 
 1. Add a configuration layer to the `ncn-personalization.json` file. Follow the
    appropriate step based on if an NCN personalization CFS configuration exists:
    * If the `ncn-personalization.json` file is empty, overwrite the file with
      the configuration layer(s) information gathered from the product that is
-     configuring the NCNs. Use the [sample file with a single layer](../configuration_management/Configuration_Layers.md#configuration_layer_example_configuration_single)
+     configuring the NCNs. Use the [sample file with a single layer](../configuration_management/Configuration_Layers.md#example-configuration-single-layer)
      as a template.
    * If a CFS configuration exists with one or more layers, add (or replace)
      the corresponding layer entry(ies) with the configuration layer
      information gathered for this specific product. For example:
-        
+
         ```bash
-        ncn# cat ncn-personalization.json
+        cat ncn-personalization.json
         ```
 
         Example configuration:
@@ -76,19 +74,18 @@ configuration layer requires special placement in the layer list.
               "playbook": "site.yml",
               "commit": "<git commit>"
             },
-            # ... 
+            # ...
           ]
         }
         ```
 
-<a name="ncn_personalization_update_cfs_configuration"></a>
 ### Create/Update the NCN Personalization CFS Configuration Layer
 
 1. Upload the configuration file to CFS to update or create the
    `ncn-personalization` CFS configuration.
-   
+
    ```bash
-   ncn# cray cfs configurations update ncn-personalization --file ncn-personalization.json --format json
+   cray cfs configurations update ncn-personalization --file ncn-personalization.json --format json
    ```
 
    Example output:
@@ -103,13 +100,12 @@ configuration layer requires special placement in the layer list.
    }
    ```
 
-<a name="ncn_personalization_set_component_config"></a>
 ### Set the Desired Configuration on NCNs
 
 1. Update the desired configuration for all NCNs.
 
    ```bash
-   ncn# for xname in $(cray hsm state components list --role Management --type node --format json | jq -r .Components[].ID)
+   for xname in $(cray hsm state components list --role Management --type node --format json | jq -r .Components[].ID)
    do
        cray cfs components update --desired-config ncn-personalization --enabled true --format json $xname
    done
@@ -123,10 +119,13 @@ configuration layer requires special placement in the layer list.
    `configured` when the configuration has completed.
 
    ```bash
-   ncn# export CRAY_FORMAT=json
-   ncn# for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
+   for xname in $(cray hsm state components list \
+                               --role Management --type node \
+                               --format json |
+                           jq -r .Components[].ID)
    do
-       cray cfs components describe $xname | jq -r ' .id+" status="+.configurationStatus'
+       cray cfs components describe --format json $xname |
+           jq -r ' .id+" status="+.configurationStatus'
    done
    ```
 
@@ -136,7 +135,7 @@ configuration layer requires special placement in the layer list.
    x3000c0s17b0n0 status=configured
    x3000c0s19b0n0 status=pending
    x3000c0s21b0n0 status=configured
-   
+
    [...]
    ```
 
@@ -148,7 +147,6 @@ configuration layer requires special placement in the layer list.
    for more information on setting desired configuration on specific nodes using
    CFS.
 
-<a name="rerun_ncn_personalization"></a>
 ## Procedure: Re-Run NCN Personalization
 
 If no changes have been made to the configuration layers (such as a new layer,
@@ -157,34 +155,26 @@ run again, CFS can re-run NCN personalization on specific nodes.
 
 Re-run the configuration for an NCN by clearing the state of the node. Clearing
 the node state will cause CFS to reconfigure the node, so long as the desired
-configuration was [set previously](#ncn_personalization_set_component_config).
+configuration was [set previously](#set-the-desired-configuration-on-ncns).
 
-1. Clear the state of the node using CFS.
+1. Clear the state and error count of the node using CFS.
 
-   Replace the XNAME value in the following command with the xname of the node
+   Replace the `<XNAME>` string in the following command with the xname of the node
    being reconfigured.
 
    ```bash
-   ncn# cray cfs components update --state '[]' <XNAME>
-   ```
-
-1. Clear the error count for the node in CFS.
-
-   Replace the XNAME value in the following command with the xname of the node
-   being reconfigured.
-   
-   ```bash
-   ncn# cray cfs components update --error-count 0 <XNAME>
+   cray cfs components update --error-count 0 --state '[]' --format json <XNAME>
    ```
 
 1. (Optional) To re-run NCN personalization on all NCNs at once, use the
    following loop:
-   
+
    ```bash
-   ncn# export CRAY_FORMAT=json
-   ncn# for xname in $(cray hsm state components list --role Management --type node | jq -r .Components[].ID)
+   for xname in $(cray hsm state components list \
+                               --role Management --type node \
+                               --format json |
+                           jq -r .Components[].ID)
    do
-       cray cfs components update --error-count 0 $xname
-       cray cfs components update --state '[]' $xname
+       cray cfs components update --error-count 0 --state '[]' --format json $xname
    done
    ```

@@ -12,19 +12,20 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
 ## Procedure
 
-**Note:** this procedure has changed since the CSM 0.9 release.
+> **`NOTE`** this procedure has changed since the CSM 0.9 release.
 
 1. Log on to a Kubernetes master or worker node.
 
 1. Find the `cray-console-operator` pod.
-    
+
     ```bash
-    ncn# OP_POD=$(kubectl get pods -n services \
+    OP_POD=$(kubectl get pods -n services \
             -o wide|grep cray-console-operator|awk '{print $1}')
-    ncn# echo $OP_POD
+    echo $OP_POD
     ```
 
     Example output:
+
     ```text
     cray-console-operator-6cf89ff566-kfnjr
     ```
@@ -32,7 +33,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 1. Log on to the pod.
 
     ```bash
-    ncn# kubectl exec -it -n services $OP_POD -- sh
+    kubectl exec -it -n services $OP_POD -- sh
     ```
 
 1. The console log file for each node is labeled with the component name (xname) of that node.
@@ -45,18 +46,17 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     -rw------- 1 root root 1415 Nov 30 20:00 console.XNAME
     ...
     ```
-    
+
     > The log directory is also accessible from the `cray-console-node` pods.
 
 1. The log files are plain text files which can be viewed with commands like `cat` or `tail`.
 
     ```bash
-    # tail /var/log/conman/console.XNAME
+    tail /var/log/conman/console.XNAME
     ```
 
 1. Exit out of the pod.
 
     ```bash
-    # exit
-    ncn#
+    exit
     ```

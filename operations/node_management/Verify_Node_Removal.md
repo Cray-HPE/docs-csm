@@ -1,4 +1,4 @@
-## Verify Node Removal
+# Verify Node Removal
 
 Use this procedure to verify that a node has been successfully removed from the system.
 
@@ -12,7 +12,7 @@ Use this procedure to verify that a node has been successfully removed from the 
 1.  Ensure that the Redfish endpoint of the removed node's BMC has been disabled.
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints describe x3000c0s19b4
+    cray hsm inventory redfishEndpoints describe x3000c0s19b4
     ```
 
     Example output:
@@ -40,7 +40,7 @@ Use this procedure to verify that a node has been successfully removed from the 
 2.  Ensure that the nodes have been disabled.
 
     ```bash
-    ncn-m001# cray hsm state components describe x3000c0s19b4n0
+    cray hsm state components describe x3000c0s19b4n0
     ```
 
     Example output:
@@ -59,6 +59,4 @@ Use this procedure to verify that a node has been successfully removed from the 
     ```
 
 3.  If a River node will not be replaced, update SLS to omit it.
-
-
 

@@ -1,4 +1,4 @@
-## Image Management Workflows
+# Image Management Workflows
 
 Overview of how to create an image and how to customize and image.
 
@@ -9,8 +9,6 @@ The workflows in this section include:
   * [Create a New Image](#create-image)
   * [Customize an Image](#customize-image)
 
-<a name="create-image"></a>
-
 ### Create a New Image
 
 **Use Case:** The system administrator creates an image root from a customized recipe. The new image can be used to boot compute nodes.
@@ -19,9 +17,9 @@ The workflows in this section include:
 
 Mentioned in this workflow:
 
--   Image Management Service \(IMS\) allows administrators and users to build or customize \(pre-boot\) images from kiwi-ng recipes. This service is responsible for enabling the creation of bootable and non-bootable images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts \(kernel, rootfs, initrd, etc\) with a new IMS image record.
--   Nexus is needed for image creation and image customization. Nexus provides local RPM repositories for use when building or customizing an image. You can define zypper or Yum package repositories and provide the RPM content for installing and updating software for every compute and non-compute node in the system.
--   The Simple Storage Service \(Ceph S3\) is an artifact repository that stores boot artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
+* Image Management Service \(IMS\) allows administrators and users to build or customize \(pre-boot\) images from kiwi-ng recipes. This service is responsible for enabling the creation of bootable and non-bootable images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts \(kernel, rootfs, initrd, etc\) with a new IMS image record.
+* Nexus is needed for image creation and image customization. Nexus provides local RPM repositories for use when building or customizing an image. You can define zypper or Yum package repositories and provide the RPM content for installing and updating software for every compute and non-compute node in the system.
+* The Simple Storage Service \(Ceph S3\) is an artifact repository that stores boot artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
 
 ![image-create](../../img/operations/image-create.gif)
 
@@ -40,7 +38,7 @@ Mentioned in this workflow:
     Registering the recipe creates a recipe record for your custom recipe in IMS.
 
     ```bash
-    ncn# cray ims recipes list
+    cray ims recipes list
     ```
 
 4.  **Administrator uploads public key**
@@ -48,7 +46,7 @@ Mentioned in this workflow:
     A public key is uploaded to allow them to access SSH shells that IMS provides.
 
     ```bash
-    ncn# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
+    cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
     ```
 
 5.  **Administrator starts the creation job**
@@ -56,7 +54,7 @@ Mentioned in this workflow:
     Create a new IMS image by providing request body parameter, job\_type="create". The following steps 6-10 happen automatically as a part of the image creation process.
 
     ```bash
-    ncn# cray ims jobs create \
+    cray ims jobs create \
     --job-type create \
     --image-root-archive-name cray-sles15-barebones \
     --artifact-id $IMS_RECIPE_ID \
@@ -90,9 +88,6 @@ Mentioned in this workflow:
 
     The new image artifacts are uploaded to Ceph S3.
 
-
-<a name="customize-image"></a>
-
 ### Customize an Image
 
 **Use Case:** The system administrator customizes an existing image and makes desired changes.
@@ -101,63 +96,63 @@ Mentioned in this workflow:
 
 Mentioned in this workflow:
 
--   Image Management Service \(IMS\) allows administrators and users to build or customize \(pre-boot\) images from kiwi-ng recipes. This service is responsible for enabling the creation of bootable and non-bootable images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts \(kernel, rootfs, initrd, etc\) with a new IMS image record.
--   The Simple Storage Service \(Ceph S3\) is an artifact repository that stores artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
+* Image Management Service \(IMS\) allows administrators and users to build or customize \(pre-boot\) images from kiwi-ng recipes. This service is responsible for enabling the creation of bootable and non-bootable images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts \(kernel, rootfs, initrd, etc\) with a new IMS image record.
+* The Simple Storage Service \(Ceph S3\) is an artifact repository that stores artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
 
 ![image-customize](../../img/operations/image-customize.gif)
 
 **Workflow Overview:** The following sequence of steps occurs during this workflow.
 
-1.  **Administrator identifies an existing image to be customized**
+1.  The administrator identifies an existing image to be customized.
 
     Retrieve a list of ImageRecords indicating images that have been registered with IMS. IMS uses the ImageRecord to read the image's manifest.yaml to find the image's root file system \(rootfs\) artifact. Note the id of the image that you want to customize.
 
     ```bash
-    ncn# cray ims images list
+    cray ims images list
     ```
 
-2.  **Administrator uploads public key**
+1.  The administrator uploads a public key.
 
     A public key is uploaded to allow them to access SSH shells that IMS provides.
 
     ```bash
-    ncn# cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
+    cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
     ```
 
-3.  **Administrator starts the image customization job**
+1.  The administrator starts the image customization job.
 
-    Create a new IMS image by providing request body parameter,job\_type="customize". The following steps \(4-8\) happen automatically as a part of the image customization process.
+    Create a new IMS image by providing the `--job-type customize` argument to the `cray ims jobs create` command. The following steps \(4-8\) happen automatically as a part of the image customization process.
 
     ```bash
-    ncn# cray ims jobs create \
-    --job-type customize \
-    --image-root-archive-name my_customized_image \
-    --kernel-file-name vmlinuz \
-    --initrd-file-name initrd \
-    --artifact-id $IMS_IMAGE_ID \
-    --public-key-id $IMS_PUBLIC_KEY_ID \
-    --enable-debug False
+    cray ims jobs create \
+        --job-type customize \
+        --image-root-archive-name my_customized_image \
+        --kernel-file-name vmlinuz \
+        --initrd-file-name initrd \
+        --artifact-id $IMS_IMAGE_ID \
+        --public-key-id $IMS_PUBLIC_KEY_ID \
+        --enable-debug False
     ```
 
-4.  **IMS to Ceph S3**
+1.  IMS to Ceph S3.
 
     IMS downloads the image root \(rootfs\) from Ceph S3 and decompresses the image root to a temporary directory.
 
-5.  **IMS creates an SSH environment for image customization**
+1.  IMS creates an SSH environment for image customization.
 
-    IMS spins up an sshd container so that the administrator can modify the image. Administrator accesses the sshd container and makes changes to the image. For example, it may be necessary to modify the timezone, or modify the programming environment, etc. Use touch /mnt/image/complete in a non-jailed environment or touch /tmp/complete in a jailed \(chroot\) environment to exit. The shell can be run in either a jailed or non-jailed mode.
+    IMS spins up an `sshd` container so that the administrator can modify the image. The administrator accesses the `sshd` container and makes changes to the image. For example, it may be necessary to modify the timezone, or modify the programming environment, etc. Use `touch /mnt/image/complete` in a non-jailed environment or `touch /tmp/complete` in a jailed \(`chroot`\) environment to exit. The shell can be run in either a jailed or non-jailed mode.
 
     The output is a new image. Note that the original image also exists. IMS customizes a copy of the original image.
 
-6.  **Buildenv-sidecar container packages new image artifacts**
+1.  `buildenv-sidecar` container packages new image artifacts.
 
-    The buildenv-sidecar container waits for the admin to exit the SSH and upon completion new records are created for each image artifact. It also adds the root CA certificate to the image and packages the new image artifacts \(kernel, initrd, rootfs\).
+    The `buildenv-sidecar` container waits for the administrator to exit the SSH session. Upon completion, new records are created for each image artifact. It also adds the root CA certificate to the image and packages the new image artifacts \(kernel, initrd, rootfs\).
 
-7.  **Save the new image record in IMS**
+1.  Save the new image record in IMS.
 
     The metadata for the new image artifacts is stored in IMS.
 
-8.  **Upload the new image artifacts to Ceph S3**
+1.  Upload the new image artifacts to Ceph S3.
 
     The new image artifacts are uploaded to Ceph S3.
 

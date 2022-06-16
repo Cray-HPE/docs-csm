@@ -1,4 +1,4 @@
-## Network
+# Network
 
 There are several different networks supported by the HPE Cray EX system. The following are the available internal and external networks, as well as the devices that connect to each network:
 
@@ -26,7 +26,7 @@ There are several different networks supported by the HPE Cray EX system. The fo
         -   Kubernetes worker nodes
         -   UANs
         -   ClusterStor controller data interfaces of all ClusterStor components \(SMU, MMU, and SSU\)
-        -   There must be at least two NCN's whose BMCs are on the HMN. If these are not present, there cannot be multiple DVS servers that function correctly, which will have an effect on compute node root file system and PE scaling/performance/reliability.
+        -   There must be at least two NCNs whose BMCs are on the HMN. If these are not present, there cannot be multiple DVS servers that function correctly, which will have an effect on compute node root file system and PE scaling/performance/reliability.
 
 During initial installation, several of those networks are created with default IP address ranges. See [Default IP Address Ranges](Default_IP_Address_Ranges.md).
 
@@ -37,6 +37,4 @@ The network management system \(NMS\) data model and REST API enable customer si
 The low-level network management components \(switch, DHCP service, ARP service\) of the NCNs and ClusterStor interfaces are configured to serve one particular network \(the "supported network"\) on the high-speed fabric. The supported network includes all of the compute nodes, thereby enabling those compute nodes to access the gateway, user access services, and ClusterStor devices. A site may create other networks as well, but it is only the supported network that is served by those devices.
 
 ![Management Network Connections - Liquid Cooled](../../img/Management_Network_Connections_Liquid_Cooled.png "Management Network Connections - Liquid Cooled")
-
-
 

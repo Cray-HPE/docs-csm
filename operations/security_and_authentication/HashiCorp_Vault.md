@@ -1,11 +1,11 @@
-## HashiCorp Vault
+# HashiCorp Vault
 
 A deployment of HashiCorp Vault, managed via the Bitnami Bank-vaults operator, stores private and public Certificate Authority \(CA\) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.
 
 Kubernetes service account authorization is utilized to authenticate access to Vault. The configuration of Vault, as deployed on the system, can be viewed with the following command:
 
 ```bash
-ncn# kubectl get vault -n vault cray-vault -o yaml
+kubectl get vault -n vault cray-vault -o yaml
 ```
 
 A Kubernetes operator manages the deployment of Vault, based on this definition. The operator is deployed to the `vault` namespace. The resulting instance will also be deployed to the `vault` namespace.
@@ -32,10 +32,10 @@ Administrative access to Vault can be accomplished through the use of the unseal
 To obtain and use the `root` token:
 
 ```bash
-ncn# export VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys \
+export VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys \
 -n vault -o jsonpath={.data.vault-root} | base64 -d)
 
-ncn# kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c \
+kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c \
 "export VAULT_ADDR=http://localhost:8200; export \
 VAULT_TOKEN=$VAULT_TOKEN; vault secrets list"
 ```
@@ -47,18 +47,18 @@ Vault is configured to allow service account access from the `services` namespac
 To obtain and use the service account token:
 
 ```bash
-ncn# SA_SECRET=$(kubectl -n services get serviceaccounts \
+SA_SECRET=$(kubectl -n services get serviceaccounts \
 default -o jsonpath='{.secrets[0].name}')
 
-ncn# SA_JWT=$(kubectl -n services get secret $SA_SECRET \
+SA_JWT=$(kubectl -n services get secret $SA_SECRET \
 -o jsonpath='{.data.token}' | base64 --decode)
 
-ncn# VAULT_TOKEN=$(kubectl exec -it -n vault -c vault cray-vault-0 \
+VAULT_TOKEN=$(kubectl exec -it -n vault -c vault cray-vault-0 \
 -- sh -c "export VAULT_ADDR=http://localhost:8200; vault write \
 auth/kubernetes/login role=services jwt=$SA_JWT -format=json" \
 | jq ".auth.client_token" | sed -e 's/"//g')
 
-ncn# kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c \
+kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c \
 "export VAULT_ADDR=http://localhost:8200; export \
 VAULT_TOKEN=$VAULT_TOKEN; vault kv list secret/"
 ```
@@ -70,7 +70,7 @@ Service account tokens will eventually expire.
 Check the status of Vault clusters with the following command:
 
 ```bash
-ncn# for n in $(seq 0 2); do echo "======= Vault status from cray-vault-${n} ======"; \
+for n in $(seq 0 2); do echo "======= Vault status from cray-vault-${n} ======"; \
 kubectl exec -it -n vault -c vault cray-vault-${n} -- sh \
 -c "export VAULT_ADDR=http://localhost:8200; vault status"; done
 ```
@@ -131,6 +131,4 @@ Raft Applied Index      521
 ```
 
 Healthy clusters will have one Vault pod in active HA mode, and two Vault pods in standby HA Mode. All instances should also be unsealed and initialized.
-
-
 

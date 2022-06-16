@@ -1,53 +1,54 @@
-# Locator LED 
+# Locator LED
 
-The Locator LED is an LED in the front of the chassis that you can turn on or make flash. This is a handy feature when guiding someone to your switch during a "remote hands" situation, such as asking data center engineer to run a cable to your switch. 
+The Locator LED is an LED in the front of the chassis that you can turn on or make flash.
+This is a handy feature when guiding someone to the switch during a "remote hands" situation, such as asking an engineer to run a cable to the switch.
 
-Relevant Configuration 
+## Configuration Commands
 
-Enable led
+Enable LED:
 
-```
-switch# led locator <flashing|off|on>
-```
-
-Show Commands to Validate Functionality 
-
-```
-switch# show environment led
+```text
+led locator <flashing|off|on>
 ```
 
-Example Output 
+Show commands to validate functionality:
 
+```text
+show environment led
 ```
-switch# show environment led
+
+## Example Output
+
+```text
+show environment led
 Name           State     Status
 -----------------------------------
 locator        off           ok
-switch# led locator flashing
-switch# show system led
+led locator flashing
+show system led
 Name           State     Status
 -----------------------------------
 locator        flashing      ok
-switch# led locator on
-switch# show system led
+led locator on
+show system led
 Name           State     Status
 -----------------------------------
 locator        on            ok
-switch# led locator off
-switch# show system led
+led locator off
+show system led
 Name           State     Status
 -----------------------------------
 locator        off           ok
 ```
 
-Expected Results
+## Expected Results
 
-* Step 1: The Locator LED should be in the off state
-* Step 2: The Locator LED is now flashing
-* Step 3: The show command shows the LED is in the flashing state 
-* Step 4: The Locator LED is lit a solid color and it does not flash
-* Step 5: The show command shows the LED is in the on state
-* Step 6: The LED is no longer lit
-* Step 7: The show command shows the LED is in the off state
+1. The Locator LED should be in the off state
+2. The Locator LED is now flashing
+3. The `show` command shows the LED is in the flashing state
+4. The Locator LED is lit a solid color and it does not flash
+5. The `show` command shows the LED is in the on state
+6. The LED is no longer lit
+7. The `show` command shows the LED is in the off state
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

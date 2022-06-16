@@ -1,4 +1,4 @@
-## BOS Workflows
+# BOS Workflows
 
 The following workflows present a high-level overview of common Boot Orchestration Service \(BOS\) operations. These workflows depict how services interact with each other when booting, configuring, or shutting down nodes. They also help provide a quicker and deeper understanding of how the system functions.
 
@@ -7,8 +7,6 @@ The following workflows are included in this section:
   - [Boot and Configure Nodes](#boot-and-configure)
   - [Reconfigure Nodes](#reconfigure)
   - [Power Off Nodes](#power-off)
-
-<a name="boot-and-configure"></a>
 
 ### Boot and Configure Nodes
 
@@ -37,23 +35,23 @@ Mentioned in this workflow:
     Add a configuration to CFS.
 
     ```bash
-    # cray cfs configurations update sample-config --file configuration.json
+    cray cfs configurations update sample-config --file configuration.json
     ```
 
     Example output:
-    
-    ```
+
+    ```json
     {
-    "lastUpdated": "2020-09-22T19:56:32Z",
-    "layers": [
-    {
-    "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/configmanagement.
-    git",
-    "commit": "01b8083dd89c394675f3a6955914f344b90581e2",
-    "playbook": "site.yaml"
-    }
-    ],
-    "name": "sample-config"
+        "lastUpdated": "2020-09-22T19:56:32Z",
+        "layers": [
+            {
+                "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/configmanagement.
+                git",
+                "commit": "01b8083dd89c394675f3a6955914f344b90581e2",
+                "playbook": "site.yaml"
+            }
+        ],
+        "name": "sample-config"
     }
     ```
 
@@ -122,8 +120,6 @@ Mentioned in this workflow:
 
     CFS runs Ansible on the nodes and applies post-boot configuration \(also called node personalization\). CFS then communicates the results back to BOA.
 
-<a name="reconfigure"></a>
-
 ### Reconfigure Nodes
 
 **Use Case:** Administrator reconfigures compute nodes that are already booted and configured.
@@ -159,9 +155,9 @@ Mentioned in this workflow:
     -   Shutdown – Gracefully power down nodes that are on
 
     ```bash
-    # cray bos session create \
-    --template-uuid SESSIONTEMPLATE_NAME \
-    --operation Configure
+    cray bos session create \
+        --template-uuid SESSIONTEMPLATE_NAME \
+        --operation Configure
     ```
 
 3.  **Launch BOA**
@@ -183,8 +179,6 @@ Mentioned in this workflow:
 7.  **CFS to BOA**
 
     CFS then communicates the results back to BOA.
-
-<a name="power-off"></a>
 
 ### Power Off Nodes
 
@@ -221,9 +215,9 @@ Mentioned in this workflow:
     -   Shutdown – Gracefully power down nodes that are on
 
     ```bash
-    # cray bos session create \
-    --template-uuid SESSIONTEMPLATE_NAME \
-    --operation Shutdown
+    cray bos session create \
+        --template-uuid SESSIONTEMPLATE_NAME \
+        --operation Shutdown
     ```
 
 3.  **Launch BOA**

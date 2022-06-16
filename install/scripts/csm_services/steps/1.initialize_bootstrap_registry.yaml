@@ -64,7 +64,7 @@ spec:
               quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
               /images localhost:5000
 
-          # XXX For backwards compatibilty with CSM 1.0, container images under
+          # XXX For backwards compatibility with CSM 1.0, container images under
           # XXX dtr.dev.cray.com and quay.io are also uploaded to the root of
           # XXX registry.local. This is only necessary while charts and procedures still
           # XXX reference dtr.dev.cray.com or quay.io/skopeo/stable:latest.

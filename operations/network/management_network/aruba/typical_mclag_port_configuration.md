@@ -1,7 +1,8 @@
+# Typical Configuration of MCLAG Link
 
-# Typical configuration of MCLAG link connecting to NCN
+The following is a very basic MCLAG link configuration connecting to NCNs. An administrators configuration may differ.
 
-The intent here is to showcase a very basic MCLAG link configuration -- your configuration may differ. Note the `multi-chassis` definition after the `interface lag xx` command. This is what defines the LAG to be able to peer both to `Spine-01` and `Spine-02`.
+> **`NOTE`** The `multi-chassis` definition after the `interface lag xx` command. This is what defines the LAG to be able to peer both to Spine-01 and Spine-02.
 
 Spine-01
 ```
@@ -37,4 +38,4 @@ interface 1/1/1
     lag 1
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

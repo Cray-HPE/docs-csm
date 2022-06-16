@@ -1,4 +1,4 @@
-## Node Management Workflows
+# Node Management Workflows
 
 The following workflows are intended to be high-level overviews of node management tasks. These workflows depict how services interact with each other during node management and help to provide a quicker and deeper understanding of how the system functions.
 
@@ -8,8 +8,6 @@ The workflows and procedures in this section include:
   - [Remove Nodes](#remove-nodes)
   - [Replace Nodes](#replace-nodes)
   - [Move Nodes](#move-nodes)
-
-<a name="add-nodes"></a>
 
 ### Add Nodes
 
@@ -85,8 +83,6 @@ Mentioned in this workflow:
 
     HSM sends the new compute node state information with State as ON to HMNFD. HMNFD fans out these notifications to the subscribing compute nodes.
 
-<a name="remove-nodes"></a>
-
 ### Remove Nodes
 
 **Use Cases:** Administrator permanently removes select compute nodes to contract the system.
@@ -147,15 +143,10 @@ Mentioned in this workflow:
 
     HSM sends the compute node state information with State as `empty` to HMNFD. HMNFD fans out this notification to the subscribing compute nodes.
 
-<a name="replace-nodes"></a>
-
 ### Replace Nodes
 
 - [Replace a Compute Blade](Replace_a_Compute_Blade.md)
 - [Swap a Compute Blade with a Different System](Swap_a_Compute_Blade_with_a_Different_System.md)
-
-
-<a name="move-nodes"></a>
 
 ### Move Nodes
 

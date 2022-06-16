@@ -22,6 +22,7 @@
 """Functions used to update SLS from CSM 1.0.x to CSM 1.2."""
 from collections import defaultdict
 import ipaddress
+import sys
 
 import click
 from sls_utils.ipam import (
@@ -97,6 +98,7 @@ def sls_and_input_data_checks(
                 "Using [default: 5, 10.104.7.0/24]",
                 fg="bright_yellow",
             )
+
     nmn = networks.get("NMN")
     if nmn is not None:
         if None not in nmn.bgp():
@@ -118,6 +120,32 @@ def sls_and_input_data_checks(
             "         This is EXPERT mode requiring manual subnetting of the CMN and bypasses sanity checks.",
             fg="bright_yellow",
         )
+
+    # Old CAN migrates to CMN.  New CAN must not have overlaps.
+    if cmn is None:
+        old_can_vlan = can.subnets().get("bootstrap_dhcp").vlan()
+        old_can_net = can.subnets().get("bootstrap_dhcp").ipv4_network()
+        new_can_vlan = can_data[0]
+        new_can_net = can_data[1]
+        overlap_errors = False
+        if old_can_vlan == new_can_vlan:
+            click.secho(
+                f"    ERROR: New CMN VLAN {old_can_vlan} overlaps with New CAN VLAN {new_can_vlan}.\n"
+                "         Please correct the --customer-access-network input values on the command line.",
+                fg="red",
+            )
+            overlap_errors = True
+
+        if old_can_net.overlaps(new_can_net):
+            click.secho(
+                f"    ERROR: New CMN Network {old_can_net} overlaps with New CAN Network {new_can_net}.\n"
+                "         Please correct the --customer-access-network input values on the command line.",
+                fg="red",
+            )
+            overlap_errors = True
+
+        if overlap_errors:
+            sys.exit(1)
 
 
 def migrate_switch_names(networks, hardware):
@@ -151,7 +179,7 @@ def migrate_switch_names(networks, hardware):
             f"for subnet {subnet} in network {network.name()}.",
         )
         for reservation in reservations.values():
-            if not reservation.name().find("leaf"):
+            if reservation.name().find("leaf") < 0:
                 continue
             reservation.name(reservation.name().replace("leaf", "leaf-bmc"))
 
@@ -160,7 +188,7 @@ def migrate_switch_names(networks, hardware):
             f"for subnet {subnet} in network {network.name()}.",
         )
         for reservation in reservations.values():
-            if not reservation.name().find("agg"):
+            if reservation.name().find("agg") < 0:
                 continue
             reservation.name(reservation.name().replace("agg", "leaf"))
 
@@ -199,15 +227,47 @@ def remove_api_gw_from_hmnlb_reservations(networks):
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
     """
+    click.secho(
+        f"Removing any api-gw aliases from HMNLB.",
+        fg="bright_white",
+    )
     network = "HMNLB"
     subnet = "hmn_metallb_address_pool"
     reservations = networks.get(network).subnets().get(subnet).reservations()
     for delete_reservation in ["istio-ingressgateway", "istio-ingressgateway-local"]:
         if reservations.pop(delete_reservation, None) is not None:
             click.secho(
-                f"Removing api-gw aliases {delete_reservation} from {network} {subnet}",
-                fg="bright_white",
+                f"    Removing api-gw aliases {delete_reservation} from {network} {subnet}",
+                fg="white",
             )
+
+
+def rename_uai_bridge_reservation(networks):
+    """Rename the uai_macvlan_bridge reservation to uai_nmn_blackhole
+
+    Args:
+        networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
+    """
+    click.secho(
+        "Renaming uai_macvlan_bridge reservation to uai_nmn_blackhole",
+        fg="bright_white"
+    )
+    network = "NMN"
+    subnet = "uai_macvlan"
+    reservations = networks.get(network).subnets().get(subnet).reservations()
+    for reservation in reservations.values():
+        if reservation.name().find("macvlan_bridge") < 0:
+            continue
+        reservation.name(reservation.name().replace("macvlan_bridge", "nmn_blackhole"))
+        reservation.comment(reservation.comment().replace("macvlan-bridge", "nmn-blackhole"))
+
+        for i, alias in enumerate(reservation.aliases()):
+            if alias.find("macvlan-bridge") >= 0:
+                click.echo(f"    Found macvlan-bridge in alias {alias}")
+                reservation.aliases()[i] = alias.replace("-macvlan-bridge", "-nmn-blackhole")
+            elif alias.find("macvlan_bridge") >= 0:
+                click.echo(f"    Found macvlan_bridge in alias {alias}")
+                reservation.aliases()[i] = alias.replace("_macvlan_bridge", "_nmn_blackhole")
 
 
 def remove_kube_api_reservations(networks):
@@ -243,6 +303,7 @@ def create_bican_network(networks, default_route_network_name):
         bican = BicanNetwork(default_route_network_name=default_route_network_name)
         networks.update({bican.name(): bican})
 
+
 def remove_can_static_pool(networks):
     """Remove MetalLB Static pool in CAN (and CHN).
 
@@ -253,6 +314,9 @@ def remove_can_static_pool(networks):
     if can is None:
         return
 
+    if can.subnets().get("can_metallb_static_pool") is None:
+        return
+
     click.secho(
         "Removing CAN MetalLB static pool",
         fg="bright_white",
@@ -260,12 +324,13 @@ def remove_can_static_pool(networks):
     can.subnets().pop("can_metallb_static_pool")
 
 
-def create_chn_network(networks, chn_data):
+def create_chn_network(networks, chn_data, number_of_chn_edge_switches):
     """Create a new SLS CHN data structure.
 
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         chn_data (int, ipaddress.IPv4Network): VLAN and IPv4 CIDR for the CHN
+        number_of_chn_edge_switches (int): Number of switches to uplink for CHN
     """
     if networks.get("CHN") is not None:
         return
@@ -347,6 +412,20 @@ def create_chn_network(networks, chn_data):
         for reservation in subnet.reservations().values():
             reservation.ipv4_address(next_free_ipv4_address(subnet))
 
+    if number_of_chn_edge_switches != 2:
+        # Note that reservation keys above are still "can" so this is a hack
+        # This will leave a hole in the reservation IPs, but can be re-used.
+        click.echo(
+            f"    Adjusting the number of edge switches from 2 to {number_of_chn_edge_switches}",
+        )
+        del_switches = [
+            f"can-switch-{s}" for s in list(range(2, number_of_chn_edge_switches, -1))
+        ]
+        for switch in del_switches:
+            if switch not in bootstrap.reservations().keys():
+                continue
+            del bootstrap.reservations()[switch]
+
     networks.update({"CHN": chn})
 
 
@@ -360,17 +439,9 @@ def migrate_can_to_cmn(networks, preserve=None, overrides=None):
     """
     can_network = networks.get("CAN")
     if can_network is None:
-        click.secho(
-            "ERROR: No CAN network found, not creating CMN.",
-            fg="red",
-        )
         return
 
     if networks.get("CMN") is not None:
-        click.secho(
-            "ERROR: Existing CMN network found.  This will be replaced.",
-            fg="red",
-        )
         return
 
     click.secho("Converting existing CAN network to CMN.", fg="bright_white")
@@ -378,10 +449,10 @@ def migrate_can_to_cmn(networks, preserve=None, overrides=None):
     destination_network_name = "CMN"
     destination_network_full_name = "Customer Management Network"
     subnet_names = [
-        "network_hardware",
         "bootstrap_dhcp",
         "metallb_address_pool",
         "metallb_static_pool",
+        "network_hardware",
     ]
     clone_subnet_and_pivot(
         networks,
@@ -392,6 +463,16 @@ def migrate_can_to_cmn(networks, preserve=None, overrides=None):
         preserve,
         overrides,
     )
+
+    click.echo("    Cleaning up remnant CAN switch reservations in boostrap_dhcp")
+    network = networks.get(destination_network_name)
+    if network is None:
+        return
+    bootstrap_subnet = network.subnets().get("bootstrap_dhcp")
+    switches = ["cmn-switch-1", "cmn-switch-2"]
+    for switch in switches:
+        if bootstrap_subnet.reservations().get(switch) is not None:
+            del bootstrap_subnet.reservations()[switch]
 
 
 def convert_can_ips(networks, can_data, preserve=None, overrides=None):
@@ -405,16 +486,16 @@ def convert_can_ips(networks, can_data, preserve=None, overrides=None):
     """
     can_network = networks.get("CAN")
     if can_network is None:
-        click.secho(
-            "WARNING: CAN network not found.  Cannot re-IP.",
-            fg="red",
-        )
+        return
+
+    if networks.get("BICAN"):
         return
 
     click.secho(
         "Converting existing CAN network and IPv4 addresses.",
         fg="bright_white",
     )
+
     source_network_name = "CAN"
     destination_network_name = "CAN"
     destination_network_full_name = "Customer Access Network"
@@ -472,10 +553,10 @@ def clone_subnet_and_pivot(
     #
     if subnet_names is None:
         subnet_names = [
-            "network_hardware",
             "bootstrap_dhcp",
             "metallb_address_pool",
             "metallb_static_pool",
+            "network_hardware",
         ]
     preserve_subnet = None
     if preserve == "external-dns":
@@ -539,6 +620,17 @@ def clone_subnet_and_pivot(
         # Clone the old subnet and change naming
         #
         new_subnet = Subnet.subnet_from_sls_data(old_subnet.to_sls())
+        if old_subnet.full_name().find("HMN") != -1:
+            new_subnet.full_name(
+                old_subnet.full_name().replace("HMN", f"{destination_network_name}"),
+            )
+        else:
+            new_subnet.full_name(
+                old_subnet.full_name().replace(
+                    f"{source_network_name}",
+                    f"{destination_network_name}",
+                ),
+            )
         new_subnet.name(new_subnet_name)
         for reservation in new_subnet.reservations().values():
             reservation.name(
@@ -571,7 +663,7 @@ def clone_subnet_and_pivot(
             # Cheap trick to seed when subnetting when info is unknown
             #
             remaining_ipv4_addresses = free_ipv4_subnets(new_network)
-            remaining_subnets_to_proccess = len(subnet_names) - len(
+            remaining_subnets_to_process = len(subnet_names) - len(
                 new_network.subnets(),
             )
 
@@ -580,7 +672,7 @@ def clone_subnet_and_pivot(
                 key=prefixlength,
                 reverse=False,
             )[0]
-            if len(remaining_ipv4_addresses) < remaining_subnets_to_proccess:
+            if len(remaining_ipv4_addresses) < remaining_subnets_to_process:
                 click.echo(
                     "    Calculating seed/start prefix based on devices in case no further guidance is given\n"
                     "        INFO:  Overrides may be provided on the command line with --<can|cmn>-subnet-override.",
@@ -639,7 +731,9 @@ def clone_subnet_and_pivot(
             new_subnet.ipv4_address(seed_subnet)
             click.echo("        Adding gateway IP address")
             new_subnet.ipv4_gateway(next_free_ipv4_address(new_subnet))
-            click.echo(f"        Adding IPs for {len(old_reservations.values())} Reservations")
+            click.echo(
+                f"        Adding IPs for {len(old_reservations.values())} Reservations",
+            )
             for old in old_reservations.values():
                 try:
                     new_subnet.reservations().update(
@@ -676,15 +770,6 @@ def clone_subnet_and_pivot(
                     fg="bright_yellow",
                 )
 
-            # Grugingly apply the supernet hack with a bit of trickery
-            if "metallb" not in new_subnet.name():
-                click.echo("        Applying supernet hack")
-                new_subnet.ipv4_gateway(
-                    next_free_ipv4_address(
-                        Subnet("temp", new_network.ipv4_network(), "0.0.0.0", 1),
-                    ),
-                )
-
         #
         # Add the new subnet to the network
         #
@@ -694,6 +779,20 @@ def clone_subnet_and_pivot(
             str(i) for i in sorted(free_ipv4_subnets(new_network), key=prefixlength)
         ]
         click.echo(f"    Remaining subnets: {remaining_subnets}")
+
+    #
+    # Grudgingly apply the supernet hack
+    #
+    for subnet in new_network.subnets().values():
+        if subnet.name().find("metallb") != -1:
+            continue
+        click.echo(f"    Applying supernet hack to {subnet.name()}")
+        subnet.ipv4_address(new_network.ipv4_address())
+        subnet.ipv4_gateway(
+            next_free_ipv4_address(
+                Subnet("temp", new_network.ipv4_network(), "0.0.0.0", 1),
+            ),
+        )
 
     #
     # Add the new (cloned) network to the list
@@ -732,7 +831,13 @@ def update_nmn_uai_macvlan_dhcp_ranges(networks):
     uai_macvlan_subnet.vlan(nmn_vlan)
 
 
-def create_metallb_pools_and_asns(networks, bgp_asn, bgp_chn_asn, bgp_cmn_asn, bgp_nmn_asn):
+def create_metallb_pools_and_asns(
+    networks,
+    bgp_asn,
+    bgp_chn_asn,
+    bgp_cmn_asn,
+    bgp_nmn_asn,
+):
     """Update the NMN and CMN by creating the BGP peering.
 
     Args:
@@ -768,6 +873,7 @@ def create_metallb_pools_and_asns(networks, bgp_asn, bgp_chn_asn, bgp_cmn_asn, b
             f"    Updating the NMN network with BGP peering info MyASN: {bgp_nmn_asn} and PeerASN: {bgp_asn}",
         )
         nmn.bgp(bgp_nmn_asn, bgp_asn)  # bgp(my_asn, peer_asn)
+
     metallb_subnet_name_map = {
         "can_metallb_address_pool": "customer-access",
         "chn_metallb_address_pool": "customer-high-speed",

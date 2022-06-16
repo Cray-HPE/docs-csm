@@ -1,33 +1,42 @@
-# Collect Data 
+# Collect Data
 
-## Prerequisites 
+Collect the input data needed to generate switch configurations.
 
-- SSH access to the switches.
-- SLS API access.
+## Prerequisites
+
+- SSH access to the switches
+- System Layout Service (SLS) API access
+
+## Procedure
 
 1. Retrieve the most up-to-date SHCD spreadsheet. Accuracy in this spreadsheet is critical.
 
     For example:
     - Internal repository
-    - Customer reposotiry
+    - Customer repository
 
-1. Retrieve SLS file from a Shasta system (log in to ncn-m001) on a NCN, this will output the sls file to a file called sls_file.json in your current working directory.
+1. Get an SLS file from a Shasta system.
 
-    **IMPORTANT:** If this is an upgrade SLS needs to be updated to the correct CSM version first
+    Log into any NCN where the Cray CLI is configured. Then run this command to create an SLS file named `sls_file.json` in the current directory.
 
-    Run the command  
-
-    ```text
-    cray sls dumpstate list  --format json >> sls_file.json   
-    ```
-
-1. Retrieve switch running configs.
-
-    CANU can backup all the management network switches using either the SLS input file or the SLS api.
-    This can also be done from outside the cluster using the CMN switch IPs.  
+    **IMPORTANT:** If this is an upgrade SLS needs to be updated to the correct CSM version first.
 
     ```bash
-    ncn-w001# canu backup network --folder switch_backups/ --sls-file ./sls_input_file_1_2.json
+    cray sls dumpstate list  --format json >> sls_file.json
+    ```
+
+1. Retrieve switch running configurations.
+
+    CANU can backup all the management network switches using either the SLS input file or the SLS API.
+    This can also be done from outside the cluster using the CMN switch IP addresses.
+
+    ```bash
+    canu backup network --folder switch_backups/ --sls-file ./sls_input_file_1_2.json
+    ```
+
+    Example output:
+
+    ```
     Enter the switch password:
     -
     Running Configs Saved
@@ -44,14 +53,14 @@
     sw-cdu-002.cfg
     ```
 
-    If the SLS API is up, you do not need to provide an SLS file.
+    If the SLS API is up, an SLS file does not need to be provided.
 
-1. Retrieve customizations file. (log in from ncn-m001)
+1. Retrieve the customizations file.
 
-    Run the command  
+    Log into `ncn-m001` and run the following command:
 
     ```bash
-    kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml 
+    kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
     ```
 
-    This will output the customizations file to a file called ***customizations.yaml*** in your current working directory.
+    This will output the customizations file to a file called `customizations.yaml` in the current working directory.

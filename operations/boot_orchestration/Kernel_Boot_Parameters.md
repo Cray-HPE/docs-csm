@@ -1,5 +1,4 @@
-
-## Kernel Boot Parameters
+# Kernel Boot Parameters
 
 The Image Management Service (IMS) extracts kernel boot parameters from the /boot/kernel-parameters file in the image, if that file exists, and stores them in S3. IMS already stores the other boot artifacts (kernel, initrd, and rootfs) in S3. When told to boot an image, the Boot Orchestration Service (BOS) will extract these parameters and deliver them to the Boot Script Service (BSS) so they can be used during the next boot of a node.
 
@@ -9,7 +8,7 @@ The kernel boot parameters obtained from the image can be overridden by specifyi
 
 The following is a simplified kernel boot parameter ordering:
 
-```
+```text
 <Image parameters> <Session template parameters>
 ```
 
@@ -17,6 +16,6 @@ If there are competing values, the ones earlier in the boot string are supersede
 
 The actual contents of the boot parameters are not as simple as previously described. For completeness, the following is the entire kernel boot parameter ordering:
 
-```
+```text
 <Image parameters> <Session template parameters> <rootfs parameters> <rootfs passthrough parameters> <BOS session id>
 ```

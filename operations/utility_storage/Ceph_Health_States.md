@@ -5,12 +5,12 @@ Ceph reports several different health states depending on the condition of a clu
 The health of a Ceph cluster can be viewed with the following command:
 
 ```bash
-ncn-m001# ceph -s
+ceph -s
 ```
 
 Example output:
 
-```
+```text
 cluster:
   id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
   health: HEALTH_OK  <<-- Health state

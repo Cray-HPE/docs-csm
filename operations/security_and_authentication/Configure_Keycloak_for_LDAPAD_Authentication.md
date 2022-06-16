@@ -1,4 +1,4 @@
-## Configure Keycloak for LDAP/AD authentication
+# Configure Keycloak for LDAP/AD authentication
 
 Keycloak enables users to be in an LDAP or Active Directory \(AD\) server. This allows users to get their tokens using their regular username and password, and use those tokens to perform operations on the system's REST API.
 
@@ -16,6 +16,4 @@ Users are expected to have the following attributes:
 These attributes are added to the users by adding a "User Attribute Mapper" to the LDAP User Federation object. For each of these, there should be a User Attribute Mapper that maps the "LDAP Attribute" in the LDAP Directory to the "User Model Attribute," which will be uidNumber, gidNumber, and more.
 
 The `shasta` client that is created during the install maps these specific user model attributes into the JWT token so that it is available to the REST APIs.
-
-
 

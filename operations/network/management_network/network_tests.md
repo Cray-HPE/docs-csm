@@ -1,34 +1,49 @@
-# Network tests
+# Network Tests
 
-#### Prerequisites 
-- SSH access to the switches.
-- SLS file or SLS API access.
- 
+The CSM Automatic Network Utility (CANU) has the ability to run tests against the management network.
 
-Canu has the ability to run tests against the management network.
+If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, refer to the
+[Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md) procedure.
 
-Canu has to be on version `1.1.4` or later. run `canu --version` to verify.
+The switch inventory is dynamically created from either a System Layout Service (SLS) file `--sls-file`, or it will
+automatically query the SLS API if an SLS file is not specified.
 
-The switch inventory is dynamically created from either an sls file `--sls-file` or it will automatically query the sls API if an sls file is not specified.
+See also:
 
-Tests are found here https://github.com/Cray-HPE/canu/blob/main/canu/test/aruba/test_suite.yaml and more documentation can be found at https://github.com/Cray-HPE/canu/tree/main#test-the-network
+* [CANU Aruba test suite](https://github.com/Cray-HPE/canu/blob/main/canu/test/aruba/test_suite.yaml)
+* [Test The Network with CANU](https://github.com/Cray-HPE/canu/tree/main#test-the-network)
 
+## Prerequisites
 
-##### Examples
-- Pulling switch inventory from SLS and logging to screen, this requires the API gateway to be up.
-    - `ncn-w001:~ # canu test --log`
+* SSH access to the switches
+* SLS file or SLS API access
+* CANU has to be on version `1.1.4` or later; run `canu --version` to verify
 
-- Pulling switch inventory from sls file and connecting to the switches via their CMN IPs, this can be done outside the shasta cluster.
-    - `ncn-w001:~ # canu test --sls-file ../Hela/sls_input_file.json --network CMN`
+## Examples
 
-- Pulling switch inventory from SLS and having the output be in json format.
-    - `ncn-w001:~ # canu test --json`
+* (`ncn#`) Pulling switch inventory from SLS and logging to screen, this requires the API gateway to be up.
+
+    ```bash
+    canu test --log
+    ```
+
+* (`ncn#`) Pulling switch inventory from SLS file and connecting to the switches via their CMN IP addresses, this can be done outside the Shasta cluster.
+
+    ```bash
+    canu test --sls-file ../Hela/sls_input_file.json --network CMN
+    ```
+
+* (`ncn#`) Pulling switch inventory from SLS and having the output be in JSON format.
+
+    ```bash
+    canu test --json
+    ```
 
 Running the tests can take some time if there are a lot of management switches.
 
-Here's a snippet of what the output will look like.
+The output will look similar to the following:
 
-```
+```text
 +----+-----------------+----------------------------------------------+----------+----------------------+
 | 46 | sw-spine-002    | Software version test                        | PASS     |                      |
 +----+-----------------+----------------------------------------------+----------+----------------------+

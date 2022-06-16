@@ -1,4 +1,4 @@
-## PKI Services
+# PKI Services
 
 The services in this section are integral parts of the Public Key Infrastructure \(PKI\) implementation.
 
@@ -73,6 +73,4 @@ To see the deployed `TrustedCertificates` resources:
 ```
 
 These resources can be used to further examine the ConfigMap and Boot Script Service \(BSS\) destination references. The TrustedCerts workload is deployed to the `pki-operator` namespace.
-
-
 

@@ -44,7 +44,7 @@ rgw.site1.zone1.ncn-s003.spojqa  ncn-s003  running (3d)  7m ago     3d   15.2.8 
 
 Start the ceph-mon service:
 
-> **NOTE:** The mon process can have a container ID appended to the end of the host name. Please use the output from above to ensure the correct name is used.
+> **`NOTE`** The mon process can have a container ID appended to the end of the host name. Please use the output from above to ensure the correct name is used.
 
 ```bash
 ncn-s00(1/2/3)# ceph orch daemon start mon.<hostname>
@@ -149,7 +149,7 @@ ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.zone1.<container id from ceph
 - Get the service system_unit:
 
    ```bash
-   ncn-s# cephadm ls
+   cephadm ls
    ```
 
    Example output:
@@ -176,7 +176,7 @@ ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.zone1.<container id from ceph
 - Restart the service:
 
    ```bash
-   ncn-s# systemctl restart ceph-01a0d9d2-ea7f-43dc-af25-acdfa5242a48@mgr.ncn-s001
+   systemctl restart ceph-01a0d9d2-ea7f-43dc-af25-acdfa5242a48@mgr.ncn-s001
    ```
 
 ## Ceph Manager Modules
@@ -186,13 +186,13 @@ ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.zone1.<container id from ceph
 Enable Ceph manager modules:
 
 ```bash
-ncn-m001# ceph mgr MODULE_NAME enable MODULE
+ceph mgr MODULE_NAME enable MODULE
 ```
 
 Disable Ceph manager modules:
 
 ```bash
-ncn-m001# ceph mgr MODULE_NAME disable MODULE
+ceph mgr MODULE_NAME disable MODULE
 ```
 
 ## Scale Ceph Services
@@ -207,7 +207,7 @@ Ceph has the ability to deploy/scale/reconfigure/redeploy Ceph processes down an
 
 The following example shows scaling the mgr service down and back up.
 
-### Prerequisites 
+### Prerequisites
 
 Two SSH sessions are required. One to do the work from and another that is running `watch ceph -s` to monitor the progress.
 
@@ -216,7 +216,7 @@ Two SSH sessions are required. One to do the work from and another that is runni
   1. List the services.
 
      ```bash
-     ncn-s001# ceph orch ls
+     ceph orch ls
      ```
 
      Example output:
@@ -233,11 +233,11 @@ Two SSH sessions are required. One to do the work from and another that is runni
      ```
 
      (Optional) Limit the results.
-       
+
       Syntax: `ceph orch [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]`
 
       ```bash
-      ncn-s001# ceph orch ls mgr
+      ceph orch ls mgr
       ```
 
       Example output:
@@ -250,19 +250,19 @@ Two SSH sessions are required. One to do the work from and another that is runni
       The placement of the services is retrieved with this command.
 
   2. Choose the service to scale. ***(reminder the example will use the MGR service)***
-     
+
      1. If scaling mds or mgr daemons, make sure to fail over the active mgr/mds daemon so there is always one running.
 
          ```bash
          # To get the active MDS
 
-         ncn-s# ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name'
+         ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name'
 
          cephfs.ncn-s001.juehkw <-- current active MDS. note this will change when you fail it over so keep this command handy
 
          # To get the active MGR
 
-         ncn-s# ceph mgr dump | jq -r .active_name
+         ceph mgr dump | jq -r .active_name
 
          ncn-s002.fumzfm  <-- current active MGR. note this will change when you fail it over so keep this command handy
          ```
@@ -278,14 +278,14 @@ Two SSH sessions are required. One to do the work from and another that is runni
      For example:
 
      ```
-     ncn-s001# ceph orch apply mgr --placement="1 ncn-s002"
+     ceph orch apply mgr --placement="1 ncn-s002"
      Scheduled mgr update...
      ```
 
   4. Watch the SSH session that is showing the Ceph status (`ceph -s`).
 
      ```bash
-     ncn-s001# ceph -s
+     ceph -s
      ```
 
      Example output:
@@ -320,17 +320,17 @@ Two SSH sessions are required. One to do the work from and another that is runni
   5. Scale the service back up to 3 mgrs.
 
      ```bash
-     ncn-s001# ceph orch apply mgr --placement="3 ncn-s001 ncn-s002 ncn-s003"
+     ceph orch apply mgr --placement="3 ncn-s001 ncn-s002 ncn-s003"
      ```
 
      The returned output will be "Scheduled mgr update...".
 
   6. When the Ceph status output shows there are 3 running mgr daemons, scale the last daemon back down and up.
-      
+
      **If it is the MDS or MGR daemons, then REMEMBER we have to fail over the active daemon.**
 
       ```bash
-      ncn-s001# ceph mgr fail ncn-s002.fumzfm   # This was our active MGR.
+      ceph mgr fail ncn-s002.fumzfm   # This was our active MGR.
       ```
 
      In the Ceph status output, the will be an ACTIVE ceph mgr process change.
@@ -340,9 +340,9 @@ Two SSH sessions are required. One to do the work from and another that is runni
      ```
 
   7. Scale the service back to its original deployment size.
-     
+
      ```bash
-     ncn-s001# ceph orch apply mgr  --placement="3 ncn-s001 ncn-s002 ncn-s003"
+     ceph orch apply mgr  --placement="3 ncn-s001 ncn-s002 ncn-s003"
      ```
 
      The returned output will be "Scheduled mgr update...".

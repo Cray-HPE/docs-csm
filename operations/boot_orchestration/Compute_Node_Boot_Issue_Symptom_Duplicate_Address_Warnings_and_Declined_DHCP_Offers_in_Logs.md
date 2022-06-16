@@ -1,5 +1,4 @@
-
-## Compute Node Boot Issue Symptom: Duplicate Address Warnings and Declined DHCP Offers in Logs
+# Compute Node Boot Issue Symptom: Duplicate Address Warnings and Declined DHCP Offers in Logs
 
 If the DHCP and node logs show duplicate address warnings and indicate declined DHCP offers, it may be because another component owns the IP address that DHCP is trying to assign to a node. If this happens, the node will not accept the IP address and will repeatedly submit a DHCP discover request. As a result, the node and DHCP become entangled in a loop of requesting and rejecting. This often happens when DHCP is statically assigning IP addresses to nodes, but the assigned IP address for a node has already been assigned to another component.
 
@@ -45,12 +44,12 @@ There are multiple ways to check if this problem exists:
 -   Check the Address Resolution Protocol \(ARP\) cache using the `arp` command. Because it is a cache, it is possible that IP addresses can age out of the cache, so the IP address may not be present. If the address that is failing to be assigned is in the ARP cache, and it is assigned to a node with a different MAC address, then that is confirmation that this problem has occurred.
 
     ```bash
-    ncn-m001# arp
+    arp
     ```
 
     Example output:
 
-    ```
+    ```text
     Address                  HWtype  HWaddress           Flags Mask            Iface
     ncn-w002.local           ether   98:03:9b:b4:f1:fe   C                     bond0.nmn0
     10.46.11.201             ether   ca:d3:dc:33:29:e7   C                     weave
@@ -63,10 +62,9 @@ There are multiple ways to check if this problem exists:
     10.46.11.187             ether   e6:2e:8c:ed:f8:78   C                     weave
     10.46.11.250             ether   c6:73:6d:c4:b9:77   C                     weave
     10.48.15.0               ether   da:c2:40:ed:f4:ec   CM                    flannel.2
-    
+
     [...]
     ```
-
 
 ### Resolution
 

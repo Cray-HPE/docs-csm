@@ -1,4 +1,4 @@
-## Nexus Configuration
+# Nexus Configuration
 
 Expect each product to create and use its own `File` type blob store. For example, the Cray System Management \(CSM\) product uses `csm`.
 
@@ -20,6 +20,4 @@ RPM repositories should be named in the `<product>[-<product-version>]-<os-dist>
 - `-<os-version>` indicates the OS version, such as `-15sp1` or `-15sp2`.
 - `-compute` must be specified if the repository contains RPMs specific to compute nodes and omitted otherwise. There is no suffix for repositories containing NCN RPMs.
 - `-<arch>` must be specified if the repository contains RPMs specific to a system architecture other than `x86_64`, such as `-aarch64`.
-
-
 

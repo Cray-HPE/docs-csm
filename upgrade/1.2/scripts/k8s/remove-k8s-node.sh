@@ -46,6 +46,7 @@ if [[ "$rebuild_node" =~ ^ncn-w ]]; then
     for pdr in $(kubectl get poddisruptionbudgets -n $ns 2>/dev/null | grep -v NAME | awk '{print $1}')
     do
       match_labels=$(kubectl get poddisruptionbudgets -n $ns $pdr -o json | jq -r '.spec.selector.matchLabels' | sed 's/[{}]//g')
+      #shellcheck disable=SC2066
       for match_label in "$match_labels"
       do
         label=$(echo $match_label | sed 's/ //g' | sed 's/"//g' | sed 's/:/=/g')

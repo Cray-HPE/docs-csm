@@ -1,4 +1,4 @@
-## System Management Health
+# System Management Health
 
 The primary goal of the System Management Health service is to enable system administrators to assess the health of their system. Operators need to quickly and efficiently troubleshoot system issues as they occur and be confident that a lack of issues indicates the system is operating normally. This service currently runs as a Helm chart on the system's management Kubernetes cluster and monitors the health status of core system components, triggering alerts as potential issues are observed. It uses Prometheus to aggregate metrics from etcd, Kubernetes, Istio, and Ceph, all of which include support for the Prometheus API. The System Management Health service relies on the following tools:
 
@@ -16,6 +16,4 @@ The System Management Health service is intended to complement the System Monito
     -   Grafana dashboards for Kubernetes
     -   Grafana dashboards, Kiali, and Jaeger for Istio
     -   Grafana dashboards for Ceph
-
-
 

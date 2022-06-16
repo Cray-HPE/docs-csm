@@ -1,6 +1,5 @@
 # PowerDNS Configuration
 
-<a name="external-dns"></a>
 ## External DNS
 
 PowerDNS replaces the CoreDNS server that earlier versions of CSM used to provide External DNS services.
@@ -14,7 +13,7 @@ The CSI `--system-name` and `--site-domain` command line arguments are combined 
 In the following example, the IP address `10.101.8.113` is used for External DNS and the system has the subdomain `system.dev.cray.com`
 
 ```
-ncn-m001# kubectl -n services get service -l app.kubernetes.io/name=cray-dns-powerdns
+kubectl -n services get service -l app.kubernetes.io/name=cray-dns-powerdns
 ```
 
 Example output:
@@ -36,7 +35,6 @@ The administrator would then delegate queries to `system.dev.cray.com` to `ins1.
 
 The specifics of how to configure to configuring DNS forwarding is dependent on the DNS server in use, please consult the documentation provided by the DNS server vendor for more information.
 
-<a name="zone-transfer"></a>
 ## Authoritative Zone Transfer
 
 In addition to responding to external DNS queries, PowerDNS can support replication of domain information to secondary servers via AXFR (Authoritative Zone Transfer) queries.
@@ -45,10 +43,10 @@ In addition to responding to external DNS queries, PowerDNS can support replicat
 
 Zone transfer is configured via `customizations.yaml` parameters and can also be configured at install time via CSI command line arguments.
 
-**Parameter:** `spec.network.dns.primary_server_name`  
-**CSI command line argument:** `--primary-server-name`  
-**Default value:** `primary`  
-**Description:**  
+**Parameter:** `spec.network.dns.primary_server_name`
+**CSI command line argument:** `--primary-server-name`
+**Default value:** `primary`
+**Description:**
 The name of the PowerDNS server, this is combined with the system domain information to create the NS record for zones, for example.
 
 ```
@@ -62,11 +60,11 @@ $ dig +short primary.system.dev.cray.com
 10.101.8.113
 ```
 
-**Parameter:** `spec.network.dns.secondary_servers`   
-**CSI command line argument:** `--secondary-servers`  
-**Default value:** `""`  
-**Description:**  
-A comma separated list of DNS servers to notify in the format `server name/ip address`. 
+**Parameter:** `spec.network.dns.secondary_servers`
+**CSI command line argument:** `--secondary-servers`
+**Default value:** `""`
+**Description:**
+A comma-separated list of DNS servers to notify in the format `server name/ip address`.
 
 ```
 externaldns1.my.domain/1.1.1.1,externaldns2.my.domain/2.2.2.2
@@ -74,11 +72,11 @@ externaldns1.my.domain/1.1.1.1,externaldns2.my.domain/2.2.2.2
 
 If the default value is used no servers to notify on zone update will be configured.
 
-**Parameter:** `spec.network.dns.notify_zones`  
-**CSI command line argument:** `--notify-zones`  
-**Default value:** `""`  
-**Description:**  
-A comma separated list of zones to transfer.
+**Parameter:** `spec.network.dns.notify_zones`
+**CSI command line argument:** `--notify-zones`
+**Default value:** `""`
+**Description:**
+A comma-separated list of zones to transfer.
 
 ```
 system.dev.cray.com,8.101.10.in-addr.arpa
@@ -91,7 +89,7 @@ An example configuration demonstrating how to configure BIND as a secondary serv
 
 For other DNS servers please consult the documentation provided by the DNS server vendor.
 
-```
+```text
 // This is the primary configuration file for the BIND DNS server named.
 //
 // Please read /usr/share/doc/bind9/README.Debian.gz for information on the
@@ -130,7 +128,6 @@ zone "8.101.10.in-addr.arpa" {
 
 `allow-notify` should contain the CAN IP addresses of all Kubernetes worker nodes.
 
-<a name="dnssec"></a>
 ## DNS Security Extensions and zone transfer
 
 ### Zone signing
@@ -142,7 +139,7 @@ If DNSSEC is to be used for zone transfer then the `dnssec` SealedSecret in `cus
 Here is an example of a zone signing key.
 
 ```
-ncn-m001# cat Ksystem.dev.cray.com.+013+63812.private
+cat Ksystem.dev.cray.com.+013+63812.private
 ```
 
 Example output:
@@ -159,7 +156,7 @@ Activate: 20210817081902
 Encode the key using the `base64` utility.
 
 ```
-ncn-m001# base64 Ksystem.dev.cray.com.+013+63812.private
+base64 Ksystem.dev.cray.com.+013+63812.private
 ```
 
 Example output:

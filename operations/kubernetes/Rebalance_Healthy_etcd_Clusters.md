@@ -1,4 +1,4 @@
-## Rebalance Healthy etcd Clusters
+# Rebalance Healthy etcd Clusters
 
 Rebalance the etcd clusters. The clusters need to be in a healthy state, and there needs to be the same number of pods running on each worker node for the etcd clusters to be balanced.
 
@@ -16,7 +16,7 @@ Restoring the balance of etcd clusters will help with the storage of Kubernetes 
     The following is an example of an unhealthy cluster. Two of the pods are on `ncn-w001`, and only one pod is on `ncn-w003`.
 
     ```bash
-    ncn-w001# kubectl get pods -o wide -A -l app=etcd
+    kubectl get pods -o wide -A -l app=etcd
     ```
 
     Example output:
@@ -35,12 +35,10 @@ Restoring the balance of etcd clusters will help with the storage of Kubernetes 
 3.  Delete one of the pods that is on the same node as another in the cluster.
 
     ```bash
-    ncn-w001# kubectl -A delete pod POD_NAME
+    kubectl -A delete pod POD_NAME
     ```
 
 4.  Check the health of the pods.
 
     Refer to [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md).
-
-
 

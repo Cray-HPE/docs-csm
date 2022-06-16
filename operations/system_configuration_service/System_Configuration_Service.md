@@ -1,4 +1,4 @@
-## System Configuration Service
+# System Configuration Service
 
 The System Configuration Service \(SCSD\) allows administrators to set various BMC and controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the `scsd` command.
 
@@ -20,9 +20,7 @@ The specified targets can be BMCs, controller component names (xnames), or HSM g
 
 To view the current build version of the scsd service:
 
+```bash
+cray scsd version list
 ```
-ncn-m001# cray scsd version list
-```
-
-
 

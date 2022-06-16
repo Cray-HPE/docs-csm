@@ -33,6 +33,7 @@ from csm_1_2_upgrade.sls_updates import create_metallb_pools_and_asns
 from csm_1_2_upgrade.sls_updates import migrate_can_to_cmn
 from csm_1_2_upgrade.sls_updates import migrate_switch_names
 from csm_1_2_upgrade.sls_updates import remove_api_gw_from_hmnlb_reservations
+from csm_1_2_upgrade.sls_updates import rename_uai_bridge_reservation
 from csm_1_2_upgrade.sls_updates import remove_can_static_pool
 from csm_1_2_upgrade.sls_updates import remove_kube_api_reservations
 from csm_1_2_upgrade.sls_updates import sls_and_input_data_checks
@@ -51,7 +52,8 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     7. Convert IPs of the CAN network.\n
     8. Create MetalLB Pools and ASN entries on CMN and NMN networks.\n
     9. Update uai_macvlan in NMN dhcp ranges and uai_macvlan VLAN.\n
-   10. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network to keep].\n
+   10. Rename uai_macvlan_bridge reservation to uai_nmn_blackhole
+   11. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network to keep].\n
 """
 
 
@@ -117,9 +119,9 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
 @click.option(
     "--bgp-nmn-asn",
     required=False,
-    help="The autonomous system number for NMN BGP clients",
+    help="The autonomous system number for NMN BGP clients (preserve <= CSM 1.0 defaults)",
     type=click.IntRange(64512, 65534),
-    default=65531,
+    default=65533,
     show_default=True,
 )
 @click.option(
@@ -176,6 +178,13 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     default=True,
     show_default=True,
 )
+@click.option(
+    "--number-of-chn-edge-switches",
+    help="Allow specification of the number of edge switches.  Typically a dev-only option.",
+    default=2,
+    type=click.IntRange(0, 2),
+    show_default=True,
+)
 @click.pass_context
 def main(
     ctx,
@@ -191,6 +200,7 @@ def main(
     preserve_existing_subnet_for_cmn,
     can_subnet_override,
     cmn_subnet_override,
+    number_of_chn_edge_switches,
     retain_unused_user_network,
 ):
     """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
@@ -209,6 +219,7 @@ def main(
         preserve_existing_subnet_for_cmn (str|None): Whether to preserve static pool or bootstrap_dhcp (or neither)
         can_subnet_override (str, ipaddress.IPv4Network): Manually override CAN subnetting
         cmn_subnet_override (str, ipaddress.IPv4Network): Manually override CMN subnetting
+        number_of_chn_edge_switches (str): Flat to override default edge switch (Arista usually) qty of 2
         retain_unused_user_network (flag): Flag to remove unused user network (e.g. remove CAN if CHN)
 
     """
@@ -252,10 +263,6 @@ def main(
     remove_api_gw_from_hmnlb_reservations(networks)
 
     #
-    # Remove kube-api reservations from all networks except NMN.
-    remove_kube_api_reservations(networks)
-
-    #
     # Create BICAN network
     #   (not order dependent)
     create_bican_network(networks, default_route_network_name=bican_user_network_name)
@@ -278,9 +285,17 @@ def main(
     remove_can_static_pool(networks)
 
     #
+    # Remove kube-api reservations from all networks except NMN.
+    remove_kube_api_reservations(networks)
+
+    #
     # Create (new) CHN network
     #   (not order dependent)
-    create_chn_network(networks, customer_highspeed_network)
+    create_chn_network(
+        networks,
+        customer_highspeed_network,
+        number_of_chn_edge_switches,
+    )
 
     #
     # Re-IP the (existing) CAN network
@@ -290,12 +305,23 @@ def main(
     #
     # Add BGP peering data to CMN and NMN
     #   (ORDER DEPENDENT!!! - Must be run after CMN creation)
-    create_metallb_pools_and_asns(networks, bgp_asn, bgp_chn_asn, bgp_cmn_asn, bgp_nmn_asn)
+    create_metallb_pools_and_asns(
+        networks,
+        bgp_asn,
+        bgp_chn_asn,
+        bgp_cmn_asn,
+        bgp_nmn_asn,
+    )
 
     #
     # Update uai_macvlan dhcp ranges in the NMN network.
     #   (not order dependent)
     update_nmn_uai_macvlan_dhcp_ranges(networks)
+
+    #
+    # Rename uai_macvlan_bridge reservation to uai_nmn_blackhole
+    #   (not order dependent)
+    rename_uai_bridge_reservation(networks)
 
     #
     # Remove superfluous user network if requested

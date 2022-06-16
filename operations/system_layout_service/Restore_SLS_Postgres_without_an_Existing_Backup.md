@@ -5,11 +5,11 @@ This procedure is intended to repopulate SLS in the event when no Postgres backu
 ## Prerequisite
 
 - Healthy SLS Service.
-    
+
     Verify all 3 SLS replicas are up and running:
-    
+
     ```
-    ncn# kubectl -n services get pods -l cluster-name=cray-sls-postgres
+    kubectl -n services get pods -l cluster-name=cray-sls-postgres
     ```
 
     Expected output should look similar to the following:
@@ -21,27 +21,29 @@ This procedure is intended to repopulate SLS in the event when no Postgres backu
     cray-sls-postgres-2   3/3     Running   0          18d
     ```
 
-
 ## Procedure
 
 1. Retrieve the initial `sls_input_file.json` that was used to initially install the system with from `sls` S3 bucket.
+
     ```bash
-    ncn# cray artifacts get sls sls_input_file.json sls_input_file.json
+    cray artifacts get sls sls_input_file.json sls_input_file.json
     ```
 
-2. Perform a SLS load state operation to replace the contents of SLS with the data from the `sls_input_file.json` file.
+2. Perform an SLS load state operation to replace the contents of SLS with the data from the `sls_input_file.json` file.
 
     Get an API Token:
+
     ```bash
-    ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                           -d client_id=admin-client \
                           -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
     Perform the load state operation:
+
     ```bash
-    ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -F sls_dump=@sls_input_file.json \
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -F sls_dump=@sls_input_file.json \
         https://api-gw-service-nmn.local/apis/sls/v1/loadstate
     ```
 

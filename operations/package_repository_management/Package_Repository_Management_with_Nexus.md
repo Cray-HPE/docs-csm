@@ -1,4 +1,4 @@
-## Package Repository Management with Nexus
+# Package Repository Management with Nexus
 
 Overview of RPM repositories and container registry in Nexus.
 
@@ -7,7 +7,7 @@ Overview of RPM repositories and container registry in Nexus.
 Repositories are available at https://packages.local/repository/REPO\_NAME. For example, to configure the `csm-sle-15sp2` repository on a non-compute node \(NCN\):
 
 ```bash
-ncn# zypper addrepo -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
+zypper addrepo -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
 ```
 
 Example output:
@@ -24,7 +24,7 @@ Autorefresh : Yes
 Priority    : 99 (default priority)
 
 Repository priorities are without effect. All enabled repositories share the same priority.
-ncn# zypper ref csm-sle-15sp2
+zypper ref csm-sle-15sp2
 Retrieving repository 'csm-sle-15sp2' metadata ....................................................................................[done]
 Building repository 'csm-sle-15sp2' cache .........................................................................................[done]
 Specified repositories have been refreshed.
@@ -39,7 +39,7 @@ Container registry is available at https://registry.local on the NCNs or compute
 **WARNING:** If access to the container registry in Nexus is exposed over CAN, it is strongly recommended to setup and configure fine-grained access control. However, as mentioned above, the default setup assumes the OPA policy only permits admin users access.
 
 ```bash
-ncn# kubectl -n nexus get vs nexus
+kubectl -n nexus get vs nexus
 ```
 
 Example output:
@@ -54,7 +54,7 @@ The only way to add images to the container registry is with the Docker API. Use
 The Cray System Management \(CSM\) product adds a recent version of quay.io/skopeo/stable to the container registry, and it may be used to copy images into `registry.local`. For example, to update the version of quay.io/skopeo/stable:
 
 ```bash
-ncn# podman run --rm registry.local/skopeo/stable copy \
+podman run --rm registry.local/skopeo/stable copy \
 --dest-tls-verify=false docker://quay.io/skopeo/stable docker://registry.local/skopeo/stable
 ```
 
@@ -86,7 +86,7 @@ Kubernetes Pods are expected to rely on the registry mirror configuration in */e
 The following is an example of pulling dtr.dev.cray.com/baseos/alpine:3.12.0 using CRI:
 
 ```bash
-ncn# crictl pull dtr.dev.cray.com/baseos/alpine:3.12.0
+crictl pull dtr.dev.cray.com/baseos/alpine:3.12.0
 Image is up to date for sha256:5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c
 ```
 
@@ -95,7 +95,7 @@ Using containerd or Podman tooling requires changing `dtr.dev.cray.com` to `regi
 The following is an example for containerd:
 
 ```bash
-ncn# ctr image pull registry.local/baseos/alpine:3.12.0
+ctr image pull registry.local/baseos/alpine:3.12.0
 ```
 
 Example output:
@@ -115,7 +115,7 @@ done
 The following is an example for Podman:
 
 ```bash
-ncn# podman pull registry.local/baseos/alpine:3.12.0
+podman pull registry.local/baseos/alpine:3.12.0
 ```
 
 Example output:
@@ -131,6 +131,4 @@ Writing manifest to image destination
 Storing signatures
 5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c
 ```
-
-
 

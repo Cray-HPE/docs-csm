@@ -9,7 +9,7 @@ kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhc
 Example:
 
 ```
-ncn-w001:~ # kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea
+kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea
 
 2020-08-03 21:47:50.580 INFO  [kea-dhcp4.dhcpsrv/10] DHCPSRV_MEMFILE_LEASE_FILE_LOAD loading leases from file /cray-dhcp-kea-socket/dhcp4.leases
 2020-08-03 21:47:50.580 INFO  [kea-dhcp4.dhcpsrv/10] DHCPSRV_MEMFILE_LFC_SETUP setting up the Lease File Cleanup interval to 3600 sec
@@ -37,4 +37,4 @@ Shell into a Kea Pod
 kubectl exec -n services -it pod/$(kubectl get -n services pods | grep kea | head -n 1) -c cray-dhcp-kea -- /bin/bash
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

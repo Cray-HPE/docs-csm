@@ -1,31 +1,36 @@
-## Troubleshoot a Failed CRUS Session Because of Bad Parameters
+# Troubleshoot a Failed CRUS Session Because of Bad Parameters
+
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+[Deprecated features](../../introduction/differences.md#deprecated-features).
 
 A CRUS session must be deleted and recreated if it does not start or complete because of parameters having incorrect values.
 
 The following are examples of incorrect parameters:
 
--   Choosing the wrong Boot Orchestration Service \(BOS\) session template.
--   Choosing the wrong group labels.
--   Improperly defined BOS session template. For example, specifying nodes in the template instead of using the label of the upgrading group.
+- Choosing the wrong Boot Orchestration Service \(BOS\) session template.
+- Choosing the wrong group labels.
+- Improperly defined BOS session template. For example, specifying nodes in the template instead of using the label of the upgrading group.
 
-### Prerequisites
+## Prerequisites
 
--   A Compute Rolling Upgrade Service \(CRUS\) session was run and failed to complete.
--   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- A Compute Rolling Upgrade Service \(CRUS\) session was run and failed to complete.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 
-### Procedure
+## Procedure
 
-1.  Delete the failed session.
+1. Delete the failed session.
 
-    Deleting a CRUS session that is in progress will terminate the session and move all of the unfinished nodes into the group said up for failed nodes. The time frame for recognizing a delete request, cleaning up, and deleting the session is roughly a minute. A session being deleted will move to a DELETING status immediately upon receiving a delete request, which will prevent further processing of the upgrade in that session.
+    Deleting a CRUS session that is in progress will terminate the session and move all of the unfinished nodes into the group said up for failed nodes. The time frame for
+    recognizing a delete request, cleaning up, and deleting the session is roughly a minute. A session being deleted will move to a `DELETING` status immediately upon receiving
+    a delete request, which will prevent further processing of the upgrade in that session.
 
     ```bash
-    ncn# cray crus session delete CRUS_UPGRADE_ID
+    cray crus session delete CRUS_UPGRADE_ID
     ```
 
     Example output:
 
-    ```
+    ```toml
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"
@@ -40,23 +45,23 @@ The following are examples of incorrect parameters:
     workload_manager_type = "slurm"
     ```
 
-2.  Recreate the session that failed.
+1. Recreate the session that failed.
 
-    Ensure the correct parameters are used when restarting the session.
+    Ensure that the correct parameters are used when restarting the session.
 
     ```bash
-    ncn# cray crus session create \
-    --starting-label slurm-nodes \
-    --upgrading-label node-group \
-    --failed-label failed-node-group \
-    --upgrade-step-size 50 \
-    --workload-manager-type slurm \
-    --upgrade-template-id boot-template
+    cray crus session create \
+        --starting-label slurm-nodes \
+        --upgrading-label node-group \
+        --failed-label failed-node-group \
+        --upgrade-step-size 50 \
+        --workload-manager-type slurm \
+        --upgrade-template-id boot-template
     ```
 
     Example output:
 
-    ```
+    ```toml
     api_version = "1.0.0"
     completed = false
     failed_label = "failed-node-group"
@@ -70,6 +75,3 @@ The following are examples of incorrect parameters:
     upgrading_label = "node-group"
     workload_manager_type = "slurm"
     ```
-
-
-

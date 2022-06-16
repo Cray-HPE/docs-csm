@@ -1,4 +1,4 @@
-## Troubleshoot Common DNS Issues
+# Troubleshoot Common DNS Issues
 
 The Domain Name Service \(DNS\) is part of an integrated infrastructure set designed to provide dynamic host discovery, addressing, and naming. There are several different place to look for troubleshooting as DNS interacts with Dynamic Host Configuration Protocol \(DHCP\), the Hardware Management Service \(HMS\), the System Layout Service \(SLS\), and the State Manager Daemon \(SMD\).
 
@@ -34,7 +34,7 @@ Use the `dig` or `nslookup` commands directly against the Unbound resolver. A ho
 - A `QUERY` value exists that has the `status: NOERROR` message
 
 ```bash
-ncn# dig HOSTNAME @10.92.100.225
+dig HOSTNAME @10.92.100.225
 ```
 
 Example output:
@@ -65,7 +65,7 @@ If either of the commands fail to meet the two conditions mentioned above, colle
 If there no record in the Unbound pod, that is also an indication that the host is not in DNS.
 
 ```bash
-ncn# kubectl describe -n services configmaps cray-dns-unbound | grep XNAME
+kubectl describe -n services configmaps cray-dns-unbound | grep XNAME
 ```
 
 Example output:
@@ -83,7 +83,7 @@ Example output:
 Use the following command to check the logs. Any logs with a message saying `ERROR` or `Exception` are an indication that the Unbound service is not healthy.
 
 ```bash
-ncn# kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c cray-dns-unbound
+kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c cray-dns-unbound
 ```
 
 Example output:
@@ -114,7 +114,7 @@ Example output:
 To view the DNS Helper logs:
 
 ```bash
-ncn# kubectl logs -n services pod/$(kubectl get -n services pods | \
+kubectl logs -n services pod/$(kubectl get -n services pods | \
 grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
 ```
 
@@ -192,7 +192,7 @@ VRF Name default:
 Verify if the NCN is receiving DNS queries. On an NCN worker or manager with `kubectl` installed, run the following command:
 
 ```bash
-ncn-mw# tcpdump -envli bond0.nmn0 port 53
+tcpdump -envli bond0.nmn0 port 53
 ```
 
 ### The ping and SSH Commands Fail for Hosts in DNS
@@ -200,7 +200,7 @@ ncn-mw# tcpdump -envli bond0.nmn0 port 53
 If the IP address returned by the `ping` command is different than the IP address returned by the `dig` command, restart `nscd` on the impacted node. This is done with the following command:
 
 ```bash
-ncn# systemctl restart nscd.service
+systemctl restart nscd.service
 ```
 
 Attempt to `ping` or `ssh` to the IP address that was experiencing issues after restarting `nscd`.
@@ -210,7 +210,7 @@ Attempt to `ping` or `ssh` to the IP address that was experiencing issues after 
 Search for a DHCP lease by checking active leases for the service:
 
 ```bash
-ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
+curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
 "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
 [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea |jq
 ```
@@ -218,7 +218,7 @@ ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
 For example:
 
 ```bash
-ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X \
+curl -s -k -H "Authorization: Bearer ${TOKEN}" -X \
 POST -H "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
 [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea \
 |jq|grep x3000c0s19b4  -A 6 -B 4
@@ -239,6 +239,4 @@ If there is not a DHCP lease found, then:
 
 - Ensure the system is running and that its DHCP client is still sending requests. Reboot the system via Redfish/IPMI if required.
 - See [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md) for more information.
-
-
 

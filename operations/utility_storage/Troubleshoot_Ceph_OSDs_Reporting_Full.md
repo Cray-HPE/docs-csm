@@ -15,7 +15,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 1. View the status of the Ceph cluster.
 
     ```bash
-    ncn-m001# ceph -s
+    ceph -s
     ```
 
     Example output:
@@ -49,7 +49,7 @@ The commands in this procedure need to be run on a ceph-mon node.
     The OSD\_NEARFULL list can have multiple results. Take a note of the returned results to compare with the output of the `ceph osd df` output.
 
     ```bash
-    ncn-m001# ceph health detail
+    ceph health detail
     ```
 
     Example output:
@@ -63,7 +63,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 1. View the storage utilization of the cluster and pools.
 
     ```bash
-    ncn-m001# ceph df
+    ceph df
     ```
 
     Example output:
@@ -96,7 +96,7 @@ The commands in this procedure need to be run on a ceph-mon node.
     In the example below, the OSD.9 value is showing that it is 95.17 percent full.
 
     ```bash
-    ncn-m001# ceph osd df
+    ceph osd df
     ```
 
     Example output:
@@ -123,10 +123,10 @@ The commands in this procedure need to be run on a ceph-mon node.
 
 1. Use the `ceph osd reweight` command on the OSD to move data from the drive and get it back under the warning threshold of 85 percent.
 
-    This command tells Ceph that the drive can now only hold 80 percent of the usable space \(crush weight\).
+    This command tells Ceph that the drive can now only hold 80 percent of the usable space \(CRUSH weight\).
 
     ```bash
-    ncn-m001# ceph osd reweight osd.9 0.80
+    ceph osd reweight osd.9 0.80
     ```
 
 1. Confirm the reweight command made the change.
@@ -134,7 +134,7 @@ The commands in this procedure need to be run on a ceph-mon node.
     In this example, the new reweight is .79999 and the use is now at 80 percent.
 
     ```bash
-    ncn-m001# ceph osd df
+    ceph osd df
     ```
 
     Example output:
@@ -164,5 +164,5 @@ The commands in this procedure need to be run on a ceph-mon node.
 1. Monitor the Ceph cluster during recovery.
 
     ```bash
-    ncn-m001# ceph -s
+    ceph -s
     ```

@@ -235,7 +235,7 @@ def is_supernet_hacked(network_address, subnet):
     The most important heuristic indicator of the supernet hack is if a subnet has the same netmask
     as its containing network then the supernet.
 
-    With all this information applied it's still hard to reverse the hack - particularly selecting
+    With all this information applied it is still hard to reverse the hack - particularly selecting
     the original network prefix (CIDR mask).  NOTE: This function may pick a subnet that is too small.
     """
     # A clear clue as to the application of the supernet hack is where the subnet
@@ -267,7 +267,7 @@ def is_supernet_hacked(network_address, subnet):
     dynamic_pool_subnets = ["can_metallb_address_pool"]
     supernet_hacked_pools = core_subnets + static_pool_subnets + dynamic_pool_subnets
 
-    # Do not apply the reverse hackology for subnets in CSI it's not applied
+    # Do not apply the reverse hackology for subnets in CSI it is not applied
     if subnet.name() not in supernet_hacked_pools:
         return None
 

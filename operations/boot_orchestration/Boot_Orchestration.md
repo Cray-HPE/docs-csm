@@ -1,4 +1,4 @@
-## Boot Orchestration
+# Boot Orchestration
 
 The Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes. This is accomplished using BOS components, such as boot orchestration session templates and sessions, as well as launching a Boot Orchestration Agent \(BOA\) that fulfills boot requests.
 
@@ -12,13 +12,12 @@ BOS depends on each of the following services to complete its tasks:
 -   Cray Advanced Platform Monitoring and Control \(CAPMC\) - Used to power on and off the nodes.
 -   Hardware State Manager \(HSM\) - Tracks the state of each node and what groups and roles nodes are included in.
 
-
 ### Use the BOS Cray CLI Commands
 
 BOS utilizes the Cray CLI commands. The latest API information can be found with the following command:
 
 ```bash
-ncn-m001# cray bos list
+cray bos list
 ```
 
 Example output:
@@ -39,6 +38,4 @@ This is a forewarning of changes that will be made to the BOS API in the upcomin
 
 * The `--template-body` option for the Cray CLI `bos` command will be deprecated.
 * Performing a GET on the session status for a boot set (i.e. /v1/session/{session_id}/status/{boot_set_name}) currently returns a status code of 201, but instead it should return a status code of 200. This will be corrected to return 200.
-
-
 

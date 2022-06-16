@@ -5,7 +5,7 @@ The following section includes various issues causing an unresponsive radosgw S3
 ## Issue 1: Rados-Gateway/s3 endpoint is Not Accessible
 
 ```bash
-ncn# response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip)|echo "Curl Response Code: $response"
+response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip)|echo "Curl Response Code: $response"
 Curl Response Code: 200
 ```
 
@@ -16,31 +16,31 @@ Expected Responses: 2xx, 3xx
 1. Check the individual endpoints.
 
    ```bash
-   ncn# num_storage_nodes=$(craysys metadata get num_storage_nodes);for node_num in $(seq 1 "$num_storage_nodes"); do nodename=$(printf "ncn-s%03d" "$node_num");  response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://$nodename:8080); echo "Curl Response Code for ncn-s00$endpoint: $response"; done
+   num_storage_nodes=$(craysys metadata get num_storage_nodes);for node_num in $(seq 1 "$num_storage_nodes"); do nodename=$(printf "ncn-s%03d" "$node_num");  response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://$nodename:8080); echo "Curl Response Code for ncn-s00$endpoint: $response"; done
 
    Curl Response Code for ncn-s003: 200
    Curl Response Code for ncn-s003: 200
    Curl Response Code for ncn-s003: 200
    ```
 
-   **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`. If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the cloud-init cache. Alternatively, manually set that number if the number of Utility Storage nodes is known.
+   **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`. If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the `cloud-init` cache. Alternatively, manually set that number if the number of Utility Storage nodes is known.
 
-2. Check the HAProxy endpoint.
+1. Check the `HAProxy` endpoint.
 
    ```bash
-   ncn# response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip)|echo "Curl Response Code: $response"
+   response=$(curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip)|echo "Curl Response Code: $response"
 
    Curl Response Code: 200
    ```
 
-3. Verify HAProxy and KeepAlived status.
+1. Verify `HAProxy` and `KeepAlived` status.
 
    `KeepAlived:`
 
    1. Check KeepAlived on each node running ceph-radosgw. By default, this will be all Utility Storage nodes, but may differ based on your configuration.
 
    ```bash
-   ncn-s# systemctl is-active keepalived.service
+   systemctl is-active keepalived.service
    ```
 
    `active` should be returned in the output.
@@ -48,7 +48,7 @@ Expected Responses: 2xx, 3xx
    1. Check for the KeepAlived instance hosting the VIP (Virtual IP). This command will have to be run on each node until you find the expected output.
 
     ```bash
-    ncn-s# journalctl -u keepalived.service --no-pager |grep -i gratuitous
+    journalctl -u keepalived.service --no-pager |grep -i gratuitous
     ```
 
     Example output:
@@ -62,16 +62,16 @@ Expected Responses: 2xx, 3xx
    `HAProxy:`
 
    ```bash
-   ncn-s# systemctl is-active haproxy.service
+   systemctl is-active haproxy.service
    ```
 
    `active` should be returned in the output.
 
-## Issue 2: Ceph Reports HEALTH_OK but S3 Operations Not Functioning
+## Issue 2: Ceph Reports `HEALTH_OK` but S3 Operations Not Functioning
 
-Restart Ceph OSDs to help make the rgw.local:8080 endpoint responsive.
+Restart Ceph OSDs to help make the `rgw.local:8080` endpoint responsive.
 
-**Ceph has an issue where it appears healthy but the rgw.local:8080 endpoint is unresponsive.**
+**Ceph has an issue where it appears healthy but the `rgw.local:8080` endpoint is unresponsive.**
 
 This issue occurs when `ceph -s` is run and produces a very high reads per second output:
 
@@ -80,7 +80,7 @@ io:
     client:   103 TiB/s rd, 725 KiB/s wr, 2 op/s rd, 44 op/s wr
 ```
 
-The rgw.local endpoint needs to be responsive in order to interact directly with the Simple Storage Service \(S3\) RESTful API.
+The `rgw.local` endpoint needs to be responsive in order to interact directly with the Simple Storage Service \(S3\) RESTful API.
 
 ### Prerequisites
 
@@ -91,7 +91,7 @@ This procedure requires admin privileges.
 1. View the OSD status.
 
     ```bash
-    ncn-m001# ceph osd tree
+    ceph osd tree
     ```
 
     Example output:
@@ -116,9 +116,8 @@ This procedure requires admin privileges.
     The OSD number in the example below should be replaced with the number of the OSD being restarted.
 
     ```bash
-    ncn-m001# ceph orch restart osd.3
+    ceph orch restart osd.3
     ```
 
     Wait for Ceph health to return to OK before moving between nodes.
 
-    

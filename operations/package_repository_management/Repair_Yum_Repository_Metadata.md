@@ -1,4 +1,4 @@
-## Repair Yum Repository Metadata
+# Repair Yum Repository Metadata
 
 Nexus may have trouble \(re\)generating repository metadata \(for example, repodata/repomd.xml\), especially for larger repositories. Configure the `Repair - Rebuild Yum repository metadata (repodata)` task in Nexus to create the metadata if the standard generation fails. This is not typically needed, which makes it a repair task.
 
@@ -6,11 +6,9 @@ The example in this procedure is for creating a repair task to rebuild Yum metad
 
 See the Nexus documentation on Tasks for more details: [https://help.sonatype.com/repomanager3/system-configuration/tasks](https://help.sonatype.com/repomanager3/system-configuration/tasks)
 
-
 ### Prerequisites
 
 The system is fully installed.
-
 
 ### Procedure
 
@@ -22,7 +20,9 @@ The system is fully installed.
     https://nexus.{{network.dns.external}}/
     ```
 
-    Users will be redirected to Keycloak to log in, and based on the default OPA policy, only admin users will be authorized. Scripts may connect by first obtaining a JWT token from Keycloak and passing it in the HTTP Authorization header.
+    Users will need to login through Nexus UI. The account is configured through Keycloak with a role mapping for Nexus authentication. The role needed for admin permissions is nx-admin in the system-nexus-client role. Scripts may connect by using a username and password in the request.
+
+    ![Keycloak Adding Permissions](../../img/operations/Keycloak_add_nexus_permission.png "Keycloak Adding Permissions")
 
     ![Nexus Web UI](../../img/operations/Nexus_Web_UI.png "Nexus Web UI")
 
@@ -89,7 +89,7 @@ The system is fully installed.
     1.  Retrieve the Nexus pod name.
 
         ```bash
-        ncn# kubectl -n nexus get pods | grep nexus
+        kubectl -n nexus get pods | grep nexus
         ```
 
         Example output:
@@ -101,7 +101,7 @@ The system is fully installed.
     2.  Use `kubectl exec` to access the running `nexus` pod.
 
         ```bash
-        ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
+        kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
         -c nexus -- ls -ltr /nexus-data/log/tasks
         ```
 
@@ -116,7 +116,7 @@ The system is fully installed.
         If multiple repositories are being rebuilt, search the logs for the specific repository to find the latest corresponding log file. The example below is for `mirror-1.3.0-opensuse-leap-15`:
 
         ```bash
-        ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
+        kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
         -c nexus -- grep -R 'Rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15' \
         /nexus-data/log/tasks
         ```
@@ -132,7 +132,7 @@ The system is fully installed.
         The log file for a successful rebuild will look similar to the following:
 
         ```bash
-        ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
+        kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
         -c nexus -- cat /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822235306934.log
         ```
 
@@ -160,11 +160,10 @@ The system is fully installed.
 
     ![Repodata Attributes](../../img/operations/Nexus_Repodata_Attributes_After.png "Repodata Attributes")
 
-
 **Troubleshooting:** When a rebuild fails, expect to see `ERROR` and `WARN` messages around the same time as the `Finished rebuilding yum metadata for repository` message. For example, consider the log from a failed rebuild of `mirror-1.3.0-opensuse-leap-15`:
 
 ```bash
-ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q -c nexus -- \
+kubectl -n nexus exec -ti nexus-55d8c77547-65k6q -c nexus -- \
 cat /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822231259523.log
 ```
 
@@ -314,6 +313,4 @@ Caused by: java.net.SocketTimeoutException: Read timed out
     at org.sonatype.nexus.repository.yum.internal.rpm.YumRpmParser.parse(YumRpmParser.java:97)
     ... 26 common frames omitted
 ```
-
-
 

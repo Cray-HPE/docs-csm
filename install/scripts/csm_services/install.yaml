@@ -32,4 +32,4 @@ spec:
     - ./steps/3.deploy_sealed_secret_decryption_key.yaml
     - ./steps/4.deploy_csm_application_and_services.yaml
     - ./steps/5.setup_nexus.yaml
-    - ./steps/6.set_management_NCN_to_use_unbount.yaml
+    - ./steps/6.set_management_NCN_to_use_unbound.yaml

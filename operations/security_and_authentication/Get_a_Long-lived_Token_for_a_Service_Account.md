@@ -1,4 +1,4 @@
-## Get a Long-Lived Token for a Service Account
+# Get a Long-Lived Token for a Service Account
 
 et up a long-lived offline token for a service account using the Keycloak REST API. Keycloak implements the OpenID Connect protocol, so this is a standard procedure for any OpenID Connect server.
 
@@ -20,7 +20,7 @@ Refer to [https://www.keycloak.org/docs/latest/server\_admin/index.html\#\_offli
     - The $CLIENT\_SECRET variable is set
 
     ```bash
-    ncn-w001# curl -s -d grant_type=client_credentials -d client_id=my-test-client \
+    curl -s -d grant_type=client_credentials -d client_id=my-test-client \
     -d client_secret=$CLIENT_SECRET -d scope=offline_access \
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq
     ```
@@ -53,11 +53,11 @@ Refer to [https://www.keycloak.org/docs/latest/server\_admin/index.html\#\_offli
     - Replace the REFRESH\_TOKEN value with the string returned in the previous step
     - The grant\_type option is set to refresh\_token
     - The $CLIENT\_SECRET variable is set
-    
+
     To refresh the access token, use a grant\_type of refresh\_token and provide the client ID, client secret, and refresh token.
 
     ```bash
-    ncn-w001# curl -s -d grant_type=refresh_token -d client_id=my-test-client \
+    curl -s -d grant_type=refresh_token -d client_id=my-test-client \
     -d client_secret=$CLIENT_SECRET -d refresh_token=REFRESH_TOKEN \
     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq
     ```
@@ -76,5 +76,4 @@ Refer to [https://www.keycloak.org/docs/latest/server\_admin/index.html\#\_offli
       "scope": "profile offline_access email"
     }
     ```
-
 

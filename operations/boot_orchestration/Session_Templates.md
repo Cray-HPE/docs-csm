@@ -1,4 +1,4 @@
-## BOS Session Templates
+# BOS Session Templates
 
 Describes the contents of a BOS session template.
 
@@ -14,7 +14,7 @@ The Simple Storage Service \(S3\) is used to store the manifest.json file that i
 
 The following is an example BOS session template:
 
-```bash
+```json
 {
  "cfs_url": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git", <<-- Configuration manifest API endpoint
  "enable_cfs": true, <<-- Invokes CFS
@@ -34,7 +34,7 @@ The following is an example BOS session template:
      "type": "s3" <<-- Type of storage
    },
    "boot_set2": {
-     ...
+     // ...
    }
  },
 ```
@@ -45,7 +45,7 @@ Each boot set needs its own set of S3 parameters \(path, type, and optionally et
 
 ### Specify Nodes in a BOS Session Template
 
-There are three different ways to specify the nodes inside a boot set in a BOS session template. The node list, node groups, or node role groups values can be used. Each can be specified as a comma separated list.
+There are three different ways to specify the nodes inside a boot set in a BOS session template. The node list, node groups, or node role groups values can be used. Each can be specified as a comma-separated list.
 
 -   **Node list**
 
@@ -56,7 +56,6 @@ There are three different ways to specify the nodes inside a boot set in a BOS s
     ```bash
     "node_list": ["x3000c0s19b1n0", "x3000c0s19b1n1", "x3000c0s19b2n0"]
     ```
-
 
 -   **Node groups**
 
@@ -86,5 +85,4 @@ There are three different ways to specify the nodes inside a boot set in a BOS s
     -   Application
     -   Storage
     -   Management
-
 

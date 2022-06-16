@@ -22,4 +22,3 @@ This procedure requires admin privileges.
 
     Verify the issue is resolved by rerunning the Ceph command that failed.
 
-    

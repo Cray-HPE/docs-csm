@@ -1,4 +1,4 @@
-## Configuration of NCN Bonding
+# Configuration of NCN Bonding
 
 Non-compute nodes \(NCNs\) have network interface controllers \(NICs\) connected to the management network that are configured in a redundant manner via Link Aggregation Control Protocol \(LACP\) link aggregation. The link aggregation configuration can be modified by editing and applying various configuration files either through Ansible or the interfaces directly.
 
@@ -16,11 +16,10 @@ The bond configuration exists across three files on an NCN. These files may vary
 
     Routing table selecting, which is critical for NCN PXE to work.
 
-
 The following is an example of `ifcfg-bond0`:
 
 ```bash
-ncn-w001# cat /etc/sysconfig/network/ifcfg-bond0
+cat /etc/sysconfig/network/ifcfg-bond0
 ```
 
 Example output:
@@ -51,13 +50,13 @@ For administrators familiar with the more common Linux distribution, Ubuntu, it 
 To view a system wide interface network configuration:
 
 ```bash
-ncn-w001# wicked ifstatus all
+wicked ifstatus all
 ```
 
 Use the following command to view information about a specific interface. In this example, bond0.cmn0 is used.
 
 ```bash
-ncn-w001# wicked ifstatus --verbose bond0.cmn0
+wicked ifstatus --verbose bond0.cmn0
 ```
 
 Example output:
@@ -80,7 +79,7 @@ bond0.cmn0         up
 To view information about the bond:
 
 ```bash
-ncn-w001# wicked ifstatus bond0
+wicked ifstatus bond0
 ```
 
 Example output:
@@ -92,6 +91,4 @@ bond0           device-not-running
       config:   compat:suse:/etc/sysconfig/network/ifcfg-bond0
       leases:   ipv4 static failed
 ```
-
-
 

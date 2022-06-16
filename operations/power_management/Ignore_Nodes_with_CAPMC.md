@@ -1,6 +1,4 @@
-
-
-## Ignore Nodes with CAPMC
+# Ignore Nodes with CAPMC
 
 Update the Cray Advanced Platform Monitoring and Control \(CAPMC\) configmap to ignore non-compute nodes \(NCNs\) and ensure they cannot be powered off or reset.
 
@@ -17,7 +15,7 @@ This procedure requires administrative privileges.
 1.  Edit the CAPMC configmap.
 
     ```bash
-    ncn-m001# kubectl -n services edit configmaps cray-capmc-configuration
+    kubectl -n services edit configmaps cray-capmc-configuration
     ```
 
 2.  Uncomment the \# BlockRole = \["Management"\] value in the \[PowerControls.Off\], \[PowerControls.On\], and \[PowerControls.ForceRestart\] sections.

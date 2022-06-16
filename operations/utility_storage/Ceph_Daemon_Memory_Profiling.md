@@ -1,12 +1,10 @@
-
-
 # Ceph Daemon Memory Profiling
 
 This procedure is meant as an instructional guide to provide information back to HPE Cray to assist in tuning and troubleshooting exercises.
 
 ## Procedure
 
-> **NOTE:** For this example, a ceph-mon process on ncn-s001 is used.
+> **`NOTE`** For this example, a ceph-mon process on ncn-s001 is used.
 
 1. Identify the process and location of the daemon to profile.
 
@@ -28,7 +26,7 @@ This procedure is meant as an instructional guide to provide information back to
 3. Start the profiler.
 
    ```bash
-   ncn-s001# ceph tell mon.ncn-s001 heap start_profiler
+   ceph tell mon.ncn-s001 heap start_profiler
    ```
 
    A message stating "mon.ncn-s001 started profiler" will be returned.
@@ -36,7 +34,7 @@ This procedure is meant as an instructional guide to provide information back to
 4. Dump stats. This `does NOT require` the profiler to be running.
 
    ```bash
-   ncn-s001# ceph tell mon.ncn-s001 heap stats
+   ceph tell mon.ncn-s001 heap stats
    ```
 
    Example output:
@@ -97,7 +95,7 @@ This procedure is meant as an instructional guide to provide information back to
 6. Release memory.
 
    ```bash
-   ncn-s001# ceph tell mon.ncn-s001 heap release
+   ceph tell mon.ncn-s001 heap release
    ```
 
    A message stating "mon.ncn-s001 releasing free RAM back to system" will be returned.
@@ -105,7 +103,7 @@ This procedure is meant as an instructional guide to provide information back to
 7. Stop the profiler.
 
    ```bash
-   ncn-s001# ceph tell mon.ncn-s001 heap stop_profiler
+   ceph tell mon.ncn-s001 heap stop_profiler
    ```
 
    A message stating " mon.ncn-s001 stopped profiler" will be returned.

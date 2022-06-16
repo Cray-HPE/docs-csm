@@ -1,4 +1,4 @@
-## Troubleshoot Interfaces with IP Address Issues
+# Troubleshoot Interfaces with IP Address Issues
 
 Correct NCNs that are failing to assigning a static IP address or detect a duplicate IP address.
 
@@ -15,11 +15,11 @@ An NCN has an interface that is failing to assign a static IP address or that ha
     -   Check the logs in /var/log/\* to see what MAC address is being used for the IP address.
 
         ```bash
-        ncn-w001# grep duplicate /var/log/*
+        grep duplicate /var/log/*
         ```
 
         Example output:
-        
+
         ```
         warn:2020-08-04T19:22:02.434775+00:00 ncn-w001 wickedd[2188]: bond0: IPv4 duplicate address 10.1.1.1 detected (in use by 00:30:48:bb:e8:d2)!
         ```
@@ -28,7 +28,7 @@ An NCN has an interface that is failing to assign a static IP address or that ha
         1.  Edit the /etc/sysconfig/network/ifcfg-FILENAME file.
 
             ```bash
-            ncn-w001# vi /etc/sysconfig/network/ifcfg-FILENAME
+            vi /etc/sysconfig/network/ifcfg-FILENAME
             ```
 
         2.  Reload the interface.
@@ -36,13 +36,13 @@ An NCN has an interface that is failing to assign a static IP address or that ha
             Use the following command to safely reload the interface:
 
             ```bash
-            ncn-w001# wicked ifreload INTERFACE_NAME
+            wicked ifreload INTERFACE_NAME
             ```
 
             If that does not work, attempt to forcefully add it:
 
             ```bash
-            ncn-w001# systemctl restart wickedd-nanny
+            systemctl restart wickedd-nanny
             ```
 
     -   Add the duplicate IP address with the ip command.
@@ -51,19 +51,19 @@ An NCN has an interface that is failing to assign a static IP address or that ha
             The command below will bypass Wicked and will not honor the system preference:
 
             ```bash
-            ncn-w001# ip a a IP_ADDRESS/MASK dev INTERFACE_NAME
+            ip a a IP_ADDRESS/MASK dev INTERFACE_NAME
             ```
 
             For example:
 
             ```bash
-            ncn-w001# ip a a 10.1.1.1/16 dev bond0
+            ip a a 10.1.1.1/16 dev bond0
             ```
 
         2.  View the bond.
 
             ```bash
-            ncn-w001# ip a s bond0
+            ip a s bond0
             ```
 
             Example output:
@@ -80,13 +80,13 @@ An NCN has an interface that is failing to assign a static IP address or that ha
         3.  Delete the IP address after the duplicate IP address is removed.
 
             ```bash
-            ncn-w001# ip a d IP_ADDRESS/MASK dev bond0
+            ip a d IP_ADDRESS/MASK dev bond0
             ```
 
             For example:
 
             ```bash
-            ncn-w001# ip a d 10.1.1.1/16 dev bond0
+            ip a d 10.1.1.1/16 dev bond0
             ```
 
     -   \(Not Recommended\) Allow the duplicate IP address to exist.
@@ -94,9 +94,9 @@ An NCN has an interface that is failing to assign a static IP address or that ha
         This is not recommended because it is unstable and can make the work harder to correct down the line. The easiest way to deal with the duplicate is by adding another IP address, and then logging into the duplicate and nullifying it. This block will disable the safeguard for duplicate IP addresses.
 
         ```bash
-        ncn-w001# sed -i '^CHECK_DUPLICATE_IP=.*/CHECK_DUPLICATE_IP="no"/' \
+        sed -i '^CHECK_DUPLICATE_IP=.*/CHECK_DUPLICATE_IP="no"/' \
         /etc/sysconfig/network/config
-        ncn-w001# wicked ifup INTERFACE_NAME
+        wicked ifup INTERFACE_NAME
         ```
 
 ### Notes
@@ -104,5 +104,5 @@ An NCN has an interface that is failing to assign a static IP address or that ha
 * Running `wicked ifreload` on a worker node can have the side-effect of causing Slurm and UAI pods to lose their macvlan attachments. In this case, restarts of those services (in the Kubernetes `user` namespace) can be performed by executing the following command:
 
   ```bash
-  ncn-w# kubectl delete po -n user $(kubectl get po -n user | grep -v NAME | awk '\{ print $1 }')
+  kubectl delete po -n user $(kubectl get po -n user | grep -v NAME | awk '\{ print $1 }')
   ```

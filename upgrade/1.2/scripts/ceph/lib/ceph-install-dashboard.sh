@@ -38,6 +38,8 @@ function install_dashboard () {
     fi
     read -s -p "Enter a password for the initial deployment" passwd
     read -s -p "Confirm passwd" passwd2
+    #shellcheck disable=SC2053
+    #shellcheck disable=SC1010
     if [[ $passwd == $passwd2 ]] then
       echo "Creating cray_cephadm dashboard user"
       ceph dashboard ac-user-create cray_cephadm $passwd administrator

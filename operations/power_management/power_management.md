@@ -1,6 +1,4 @@
-
-
-## Power Management
+# Power Management
 
 HPE Cray System Management \(CSM\) software manages and controls power out-of-band through Redfish APIs. Note that power management features are "asynchronous," in that the client must determine whether the component status has changed after a power management API call returns.
 

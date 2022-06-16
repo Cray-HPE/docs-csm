@@ -1,4 +1,4 @@
-## Troubleshoot Booting Nodes with Hardware Issues
+# Troubleshoot Booting Nodes with Hardware Issues
 
 How to identify a node with hardware issues and how to disable is via the HSM.
 
@@ -7,7 +7,7 @@ If a node included in a Boot Orchestration Service \(BOS\) session template is h
 The following is example log output from a node with hardware issues, resulting in a failed BOS session:
 
 ```bash
-ncn-m001# kubectl logs BOS_POD_ID
+kubectl logs BOS_POD_ID
 ```
 
 Example output:
@@ -22,6 +22,4 @@ x1001c0s2b1n1
 ```
 
 Disabling nodes that have underlying hardware issues preventing them from booting will help resolve this issue. This can be done via the Hardware State Manager \(HSM\). This method does not return the node with hardware issues to a healthy state, but it does enable a BOS session that was encountering issues to complete successfully.
-
-
 

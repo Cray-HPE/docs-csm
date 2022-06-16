@@ -1,4 +1,4 @@
-## Backups for etcd-operator Clusters
+# Backups for etcd-operator Clusters
 
 Backups are periodically created for etcd clusters. These backups are stored in the Ceph Rados Gateway \(S3\). Not all services are backed up automatically. Services that are not backed up automatically will need to be manually rediscovered if the cluster is unhealthy.
 
@@ -11,11 +11,12 @@ The following services are backed up \(daily, one week's worth of backups retain
 - Compute Rolling Upgrade Service \(CRUS\)
 - External DNS
 - Firmware Action Service \(FAS\)
+- User Access Service \(UAS\)
 
 Run the following command on any master node \(`ncn-mXXX`\) or the first worker node \(`ncn-w001`\) to list the backups for a specific project. In the example below, the backups for BSS are listed.
 
 ```bash
-ncn-w001# kubectl exec -it -n operators $(kubectl get pod -n operators \
+kubectl exec -it -n operators $(kubectl get pod -n operators \
 | grep etcd-backup-restore | head -1 | awk '{print $1}') \
 -c boto3 -- list_backups cray-bss
 ```
@@ -32,7 +33,7 @@ cray-bss/etcd.backup_v7210_2020-02-03-20:45:48
 To view all available backups across all projects:
 
 ```bash
-ncn-w001# kubectl exec -it -n operators $(kubectl get pod -n operators \
+kubectl exec -it -n operators $(kubectl get pod -n operators \
 | grep etcd-backup-restore | head -1 | awk '{print $1}') -c boto3 -- list_backups ""
 ```
 
@@ -66,9 +67,7 @@ The following projects are not backed up as part of the automated solution:
 - Heartbeat Tracking Daemon \(HBTD\)
 - HMS Notification Fanout Daemon \(HMNFD\)
 - River Endpoint Discovery Service \(REDS\)
-- User Access Service \(UAS\) Manager
 - Content Projection Service \(CPS\)
 
 If these clusters become unhealthy, the process for rediscovering their data should be followed. See [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md).
-
 

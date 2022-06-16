@@ -1,4 +1,4 @@
-## Update Compute Node Mellanox HSN NIC Firmware
+# Update Compute Node Mellanox HSN NIC Firmware
 
 This procedure updates liquid-cooled or standard rack compute node NIC mezzanine cards \(NMC\) firmware for Slingshot 10 Mellanox ConnectX-5 NICs. The deployed RPM on compute nodes contains the scripts and firmware images required to perform the firmware and configuration updates.
 
@@ -85,19 +85,19 @@ See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md) for info
 7.  Log in to ncn-m001 and use `pdsh` to update the firmware.
 
     ```bash
-    ncn-m001# pdsh -w NODE_LIST /opt/cray/cray-shasta-mlnx-firmware/1.0.5/sbin/update_mlnx_firmware
+    pdsh -w NODE_LIST /opt/cray/cray-shasta-mlnx-firmware/1.0.5/sbin/update_mlnx_firmware
     ```
 
 8.  Apply the configuration settings.
 
     ```bash
-    ncn-m001# pdsh -w NODE_LIST /opt/cray/cray-shasta-mlnx-firmware/1.0.5/sbin/apply_mlnx_configs
+    pdsh -w NODE_LIST /opt/cray/cray-shasta-mlnx-firmware/1.0.5/sbin/apply_mlnx_configs
     ```
 
 9.  Use the Boot Orchestration Service \(BOS\) to reboot all the affected nodes.
 
     ```bash
-    ncn-m001# cray bos session create --template-uuid SESSION_TEMPLATE \
+    cray bos session create --template-uuid SESSION_TEMPLATE \
     --operation reboot
     ```
 

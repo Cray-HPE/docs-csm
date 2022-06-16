@@ -2,9 +2,9 @@
 
 Use this procedure to diagnose and fix clients not logging into Ceph FS.
 
-**NOTE:** This section does not diagnose nor fix network issues.  Please ensure that all networking is functional before proceeding.
+**`NOTE`** This section does not diagnose nor fix network issues. Please ensure that all networking is functional before proceeding.
 
-***IMPORTANT:*** The following commands can be run from ncn-m001/2/3 or ncn-s001/2/3. 
+***IMPORTANT:*** The following commands can be run from ncn-m001/2/3 or ncn-s001/2/3.
 
 ## Procedure
 
@@ -35,7 +35,7 @@ Use this procedure to diagnose and fix clients not logging into Ceph FS.
    ceph mds fail 0
    ```
 
-   **NOTE:** "0" refers to the active rank in our above output.
+   **`NOTE`** "0" refers to the active rank in our above output.
 
 1. Verify clients have reconnected.
 

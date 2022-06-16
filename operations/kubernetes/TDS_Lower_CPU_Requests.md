@@ -1,10 +1,10 @@
-## TDS Lower CPU Requests
+# TDS Lower CPU Requests
 
-TDS systems with three worker nodes will encounter pod scheduling issues when worker nodes are taken out of the Kubernetes cluster and being upgraded.  _*For systems with only three worker nodes*_, the following script should be executed to reduce the CPU request for some services with high CPU requests in order to allow critical upgrade related services to be successfully scheduled on two worker nodes:
+TDS systems with three worker nodes will encounter pod scheduling issues when worker nodes are taken out of the Kubernetes cluster and being upgraded.  _*For systems with only three worker nodes*_, the following script should be executed to reduce the CPU request for some services with high CPU requests in order to allow critical upgrade-related services to be successfully scheduled on two worker nodes:
 
 >
 >```bash
-> ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/tds_lower_cpu_requests.sh
+> /usr/share/doc/csm/upgrade/1.2/scripts/k8s/tds_lower_cpu_requests.sh
 >```
 >
 

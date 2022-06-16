@@ -1,6 +1,4 @@
-
-
-## Power Off the External Lustre File System
+# Power Off the External Lustre File System
 
 General procedure for powering off an external ClusterStor system.
 
@@ -12,7 +10,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 |ClusterStor Administration Guide 3.4 - S-2756|ClusterStor L300/L300N|
 |ClusterStor Administration Guide - S-2755|Legacy ClusterStor|
 
-### Procedure
+## Procedure
 
 1.  SSH to the primary MGMT node as `admin`.
 
@@ -20,40 +18,40 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     remote$ ssh -l admin cls01234n00.us.cray.com
     ```
 
-2.  Change to root user.
+1.  Change to root user.
 
     ```bash
     admin@n000$ sudo su –
     ```
 
-3.  Collect status information for the system before shutdown.
+1.  Collect status information for the system before shutdown.
 
     ```bash
-    n000# cscli csinfo
-    n000# cscli show_nodes
-    n000# cscli fs_info
-    n000# crm_mon -1r
+    cscli csinfo
+    cscli show_nodes
+    cscli fs_info
+    crm_mon -1r
     ```
 
-4.  Check resources before unmounting the file system.
+1.  Check resources before unmounting the file system.
 
     ```bash
-    n000# ssh cls01234n002 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n004 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n006 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n008 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n010 crm_mon -r1 | grep fsys
-    n000# ssh cls01234n012 crm_mon -r1 | grep fsys
+    ssh cls01234n002 crm_mon -r1 | grep fsys
+    ssh cls01234n004 crm_mon -r1 | grep fsys
+    ssh cls01234n006 crm_mon -r1 | grep fsys
+    ssh cls01234n008 crm_mon -r1 | grep fsys
+    ssh cls01234n010 crm_mon -r1 | grep fsys
+    ssh cls01234n012 crm_mon -r1 | grep fsys
     . . .
     ```
 
-5.  Stop the Lustre file system.
+1.  Stop the Lustre file system.
 
     ```bash
     [n000]# cscli unmount -f FILESYSTEM_NAME
     ```
 
-6.  Verify that resources have been stopped by running the following on all even-numbered nodes:
+1.  Verify that resources have been stopped by running the following on all even-numbered nodes:
 
     ```bash
     [n000]# ssh NODENAME crm_mon -r1 | grep fsys
@@ -72,14 +70,14 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     cls01234n006_md7-fsys (ocf::heartbeat:XYMNTR): Stopped
     ```
 
-7.  SSH to the MGS node.
+1.  SSH to the MGS node.
 
     ```bash
-    MGS# ssh MGS_NODE
+    ssh MGS_NODE
 
     ```
 
-8.  To determine if Resource Group md65-group is stopped, use the `crm_mon` utility to monitor the status of the MGS and MDS nodes.
+1.  To determine if Resource Group md65-group is stopped, use the `crm_mon` utility to monitor the status of the MGS and MDS nodes.
 
     Shows MGS and MDS nodes in a partial stopped state.
 
@@ -94,7 +92,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     cls01234n003_md65-fsys (ocf::heartbeat:XYMNTR): Started
     ```
 
-9.  If the node is not stopped, issue the `stop_xyraid` command and verify that the node is stopped:
+1.  If the node is not stopped, issue the `stop_xyraid` command and verify that the node is stopped:
 
     ```bash
     [MGS]# stop_xyraid nodename_md65-group
@@ -104,23 +102,23 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     cls01234n003_md65-fsys (ocf::heartbeat:XYMNTR): Stopped
     ```
 
-10. Exit the MGS node.
+1. Exit the MGS node.
 
     ```bash
-    MGS# exit
+    exit
     ```
 
-11. Power off the non-MGMT diskless nodes.
+1. Power off the non-MGMT diskless nodes.
 
     ```bash
-    n000# cscli power_manage -n DISKLESS_NODES[XX-YY --power-off
+    cscli power_manage -n DISKLESS_NODES[XX-YY --power-off
     ```
 
-12. Check power state of all non-MGMT nodes and list the node hostnames \(in this example `cls01234n[02-15]`\) before power off.
+1. Check power state of all non-MGMT nodes and list the node hostnames \(in this example `cls01234n[02-15]`\) before power off.
 
     ```bash
-    n000# pm –q
-    ``` 
+    pm –q
+    ```
 
     Example output:
 
@@ -130,17 +128,17 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     unknown:
     ```
 
-13. Power off all non-MGMT nodes.
+1. Power off all non-MGMT nodes.
 
     ```bash
     [n00]$ cscli power_manage -n cls01234n[02-15] --power-off
     ```
 
-14. Check the power status of the nodes.
+1. Check the power status of the nodes.
 
     ```bash
-    n000# pm –q
-    ``` 
+    pm –q
+    ```
 
     Example output:
 
@@ -150,21 +148,20 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     unknown:
     ```
 
-15. Repeat step 14 until all non-MGMT nodes are powered off.
+1. Repeat step 14 until all non-MGMT nodes are powered off.
 
-16. From the primary MGMT node, power off the MGMT nodes:
-
-    ```bash
-    n000# cscli power_manage -n cls01234n[000-001] --power-off
-    ```
-
-17. Shut down the primary management node.
+1. From the primary MGMT node, power off the MGMT nodes:
 
     ```bash
-    n000# shutdown -h now
+    cscli power_manage -n cls01234n[000-001] --power-off
     ```
 
+1. Shut down the primary management node.
 
+    ```bash
+    shutdown -h now
+    ```
 
+## Next Step
 
-
+Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.

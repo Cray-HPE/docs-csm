@@ -1,4 +1,4 @@
-## Enable Nodes
+# Enable Nodes
 
 Use the Hardware State Manager \(HSM\) Cray CLI commands to enable nodes on the system.
 
@@ -13,13 +13,13 @@ Enabling nodes that are available provides an accurate system configuration and 
 1.  Enable one or more nodes with HSM.
 
     ```bash
-    ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids XNAME_LIST
+    cray hsm state components bulkEnabled update --enabled true --component-ids XNAME_LIST
     ```
 
 2.  Verify the desired nodes are enabled.
 
     ```bash
-    ncn-m001# cray hsm state components query create --component-ids XNAME_LIST
+    cray hsm state components query create --component-ids XNAME_LIST
     ```
 
     Example output:
@@ -47,5 +47,4 @@ Enabling nodes that are available provides an accurate system configuration and 
     Arch = "X86"
     ID = "x5000c1s0b1n2"
     ```
-
 

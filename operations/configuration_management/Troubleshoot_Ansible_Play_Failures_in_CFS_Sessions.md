@@ -1,26 +1,26 @@
-## Troubleshoot Ansible Play Failures in CFS Sessions
+# Troubleshoot Ansible Play Failures in CFS Sessions
 
 View the Kubernetes logs for a Configuration Framework Service \(CFS\) pod in an error state to determine whether the error resulted from the CFS infrastructure or from an Ansible play that was run by a specific configuration layer in a CFS session.
 
 Use this procedure to obtain important triage information for Ansible plays being called by CFS.
 
-### Prerequisites
+## Prerequisites
 
-A configuration session exists for CFS.
+* A configuration session exists for CFS.
 
-### Procedure
+## Procedure
 
 1.  Find the CFS pod that is in an error state.
 
     In the example below, the $CFS\_POD\_NAME is cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn.
 
     ```bash
-    ncn# kubectl get pods -n services $CFS_POD_NAME
+    kubectl get pods -n services $CFS_POD_NAME
     ```
 
     Example output:
 
-    ```
+    ```text
     NAME                                             READY   STATUS   RESTARTS   AGE
     cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn   0/3     Error    0          25h
     ```
@@ -28,12 +28,12 @@ A configuration session exists for CFS.
 2.  Check to see what containers are in the pod.
 
     ```bash
-    ncn# kubectl logs -n services $CFS_POD_NAME
+    kubectl logs -n services $CFS_POD_NAME
     ```
 
     Example output:
 
-    ```
+    ```text
     Error from server (BadRequest): a container name must be specified for pod cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn, choose one of: [inventory ansible-0 istio-proxy] or one of the init containers: [git-clone-0 istio-init]
     ```
 
@@ -44,7 +44,7 @@ A configuration session exists for CFS.
     1.  Check the git-clone-0 container.
 
         ```bash
-        ncn# kubectl logs -n services CFS_POD_NAME git-clone-0
+        kubectl logs -n services CFS_POD_NAME git-clone-0
         ```
 
     2.  Check the inventory container.
@@ -55,7 +55,7 @@ A configuration session exists for CFS.
 
         Example output:
 
-        ```
+        ```text
           % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                          Dload  Upload   Total   Spent    Left  Speed
           0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0curl: (7) Failed to connect to localhost port 15000: Connection refused
@@ -83,12 +83,12 @@ A configuration session exists for CFS.
         Look towards the end of the Ansible log in the PLAY RECAP section to see if any have failed. If it failed, look above at the immediately preceding play. In the example below, the ncmp\_hsn\_cns role has an issue when being run against the compute nodes.
 
         ```bash
-        ncn# kubectl logs -n services CFS_POD_NAME ansible-0
+        kubectl logs -n services CFS_POD_NAME ansible-0
         ```
 
         Example output:
 
-        ```
+        ```text
         Waiting for Inventory
         Waiting for Inventory
         Inventory available
@@ -113,8 +113,5 @@ A configuration session exists for CFS.
         x3000c0s19b4n0             : ok=27   changed=19   unreachable=0    failed=1    skipped=63   rescued=0    ignored=1
         ```
 
-
 Run the Ansible play again once the underlying issue has been resolved.
-
-
 

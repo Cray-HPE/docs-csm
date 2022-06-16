@@ -1,14 +1,12 @@
-## Check the Health and Balance of etcd Clusters
+# Check the Health and Balance of etcd Clusters
 
 Check to see if all of the etcd clusters have healthy pods, are balanced, and have a healthy cluster database. There needs to be the same number of pods running on each worker node for the etcd clusters to be balanced. If the number of pods is not the same for each worker node, the cluster is not balanced.
 
 Any clusters that do not have healthy pods will need to be rebuilt. Kubernetes cluster data will not be stored as efficiently when etcd clusters are not balanced.
 
-
 ### Prerequisites
 
 This procedure requires root privileges.
-
 
 ### Procedure
 
@@ -17,7 +15,7 @@ This procedure requires root privileges.
     To check the health of the etcd clusters in the services namespace without TLS authentication:
 
     ```bash
-    ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services \
+    for pod in $(kubectl get pods -l app=etcd -n services \
     -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} ###"; \
     kubectl -n services exec ${pod} -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint health"; done
     ```
@@ -50,7 +48,7 @@ This procedure requires root privileges.
     Each cluster should contain at least three pods, but may contain more. Ensure that no two pods in a given cluster exist on the same worker node.
 
     ```bash
-    ncn-w001# kubectl get pod -n services -o wide | head -n 1; for cluster in \
+    kubectl get pod -n services -o wide | head -n 1; for cluster in \
     $(kubectl get etcdclusters.etcd.database.coreos.com -n services | grep -v NAME | \
     awk '{print $1}'); do kubectl get pod -n services -o wide | grep $cluster; echo ""; done
     ```
@@ -128,7 +126,7 @@ This procedure requires root privileges.
         Example of command being entered:
 
         ```bash
-        ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services -o \
+        for pod in $(kubectl get pods -l app=etcd -n services -o \
         jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} \
         Etcd Database Check: ###"; dbc=$(kubectl -n services exec ${pod} \
         -- /bin/sh -c "ETCDCTL_API=3 etcdctl put foo fooCheck && ETCDCTL_API=3 \
@@ -196,7 +194,7 @@ This procedure requires root privileges.
         Example of command being entered:
 
         ```bash
-        ncn-w001# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
+        for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
         -n services -o jsonpath='{.items[*].metadata.name}'); do echo \
         "### ${pod} Etcd Database Check: ###";  dbc=$(kubectl -n \
         services exec ${pod} -- /bin/sh -c "ETCDCTL_API=3 etcdctl \
@@ -223,6 +221,4 @@ This procedure requires root privileges.
 
     - Refer to [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
     - Refer to [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
-
-
 

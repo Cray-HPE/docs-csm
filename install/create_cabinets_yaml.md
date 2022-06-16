@@ -2,7 +2,7 @@
 
 This page provides directions on constructing the optional `cabinets.yaml` file. This file lists cabinet IDs for any systems with non-contiguous cabinet ID numbers and controls how the `csi config init` command treats cabinet IDs.
 
-The following example file is manually created and follows this format. Eeach "type" of cabinet can have several fields: `total_number` of cabinets of this type, `starting_id` for this cabinet type, and a list of the IDs.
+The following example file is manually created and follows this format. Each "type" of cabinet can have several fields: `total_number` of cabinets of this type, `starting_id` for this cabinet type, and a list of the IDs.
 
 ```yaml
 ---

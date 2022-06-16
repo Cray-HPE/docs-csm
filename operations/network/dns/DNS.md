@@ -60,4 +60,4 @@ The PowerDNS Manager also configures the PowerDNS server for zone transfer and D
 
 ### Site DNS
 
-This term is used to refer the external DNS server specified the CSI `--site-dns` option. 
+This term is used to refer the external DNS server specified the CSI `--site-dns` option.

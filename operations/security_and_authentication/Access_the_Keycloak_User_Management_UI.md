@@ -1,4 +1,4 @@
-## Access the Keycloak User Management UI
+# Access the Keycloak User Management UI
 
 This procedure can be used to access the interface to manage Keycloak users. Users can be added with this interface \(see [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md)\).
 
@@ -8,7 +8,7 @@ This procedure can be used to access the interface to manage Keycloak users. Use
 -   This procedure assumes that the password for the Keycloak `admin` account is known. The Keycloak password is set during the software installation process. The password can be obtained with the following command:
 
     ```bash
-    ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
+    kubectl get secret -n services keycloak-master-admin-auth \
     --template={{.data.password}} | base64 --decode
     ```
 
@@ -41,7 +41,5 @@ This procedure can be used to access the interface to manage Keycloak users. Use
 
 5.  Click the **Users** link under the **Manage** menu on the left side of the screen.
 
-
 New users can be added with this interface \(see [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal_User_Accounts_in_the_Keycloak_Shasta_Realm.md)\).
-
 

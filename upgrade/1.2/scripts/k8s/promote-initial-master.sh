@@ -32,11 +32,17 @@ if [[ "$rc" -ne 0 ]]; then
 fi
 
 source /srv/cray/scripts/metal/lib.sh
+#shellcheck disable=SC2155
 export KUBERNETES_VERSION="v$(cat /etc/cray/kubernetes/version)"
+#shellcheck disable=SC2046
 echo $(kubeadm init phase upload-certs --upload-certs 2>&1 | tail -1) > /etc/cray/kubernetes/certificate-key
+#shellcheck disable=SC2155
 export CERTIFICATE_KEY=$(cat /etc/cray/kubernetes/certificate-key)
+#shellcheck disable=SC2155
 export MAX_PODS_PER_NODE=$(craysys metadata get kubernetes-max-pods-per-node)
+#shellcheck disable=SC2155
 export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
+#shellcheck disable=SC2155
 export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
 envsubst < /srv/cray/resources/common/kubeadm.yaml > /etc/cray/kubernetes/kubeadm.yaml
 
@@ -46,6 +52,8 @@ echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key
 mkdir -p /srv/cray/scripts/kubernetes
 cat > /srv/cray/scripts/kubernetes/token-certs-refresh.sh <<'EOF'
 #!/bin/bash
+
+export KUBECONFIG=/etc/kubernetes/admin.conf
 
 if [[ "$1" != "skip-upload-certs" ]]; then
   kubeadm init phase upload-certs --upload-certs --config /etc/cray/kubernetes/kubeadm.yaml
@@ -58,3 +66,7 @@ EOF
 chmod +x /srv/cray/scripts/kubernetes/token-certs-refresh.sh
 /srv/cray/scripts/kubernetes/token-certs-refresh.sh
 echo "0 */1 * * * root /srv/cray/scripts/kubernetes/token-certs-refresh.sh >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-token-certs-refresh
+
+cp /srv/cray/resources/common/cronjob_kicker.py /usr/bin/cronjob_kicker.py
+chmod +x /usr/bin/cronjob_kicker.py
+echo "0 */2 * * * root KUBECONFIG=/etc/kubernetes/admin.conf /usr/bin/cronjob_kicker.py >> /var/log/cray/cron.log 2>&1" > /etc/cron.d/cray-k8s-cronjob-kicker

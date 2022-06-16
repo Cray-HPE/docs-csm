@@ -1,16 +1,18 @@
-# NCNs on install
+# NCNs on Install
 
-Verify the DNSMASQ config file matches what is configured on the switches.
+Verify the DNSMASQ configuration file matches what is configured on the switches.
 
-Here's a DNSMASQ config file for the Metal network (VLAN1). As you can see the router is 10.1.0.1, this has to match what the IP address is on the switches doing the routing for the MTL network.  
+## Example DNSMASQ Configuration File
 
-This is most commonly on the spines.  
+Here is a DNSMASQ configuration file for the Metal network (VLAN1). As you can see the router is `10.1.0.1`, this has to match what the IP address is on the switches doing the routing for the MTL network.
+
+This is most commonly on the spines.
 
 This configuration is commonly missed on the CSI input file.
 
-MTL dnsmasq file
+MTL DNSMASQ file:
 
-```
+```text
 # MTL:
 server=/mtl/
 address=/mtl/
@@ -20,26 +22,26 @@ interface=bond0
 interface-name=pit.mtl,bond0
 ```
 
-### This needs to point to the liveCD IP address for provisioning in bare-metal environments.
+This needs to point to the LiveCD IP address for provisioning in bare-metal environments:
 
-```
+```text
 dhcp-option=interface:bond0,option:dns-server,10.1.1.2
 dhcp-option=interface:bond0,option:ntp-server,10.1.1.2
 ```
 
-### This must point at the router for the network; the L3/IP for the VLAN.
+It must also point at the router for the network; the L3/IP for the VLAN:
 
-```
+```text
 dhcp-option=interface:bond0,option:router,10.1.0.1
 dhcp-range=interface:bond0,10.1.1.33,10.1.1.233,10m
 ```
 
-Here's an example of what the Spine config should be.
+The following is an example of what the Spine configuration should be.
 
-Aruba configuration: 
+Aruba configuration:
 
-````
-sw-spine-001# show run int vlan 1
+```text
+show run int vlan 1
 interface vlan1
     vsx-sync active-gateways
     ip address 10.1.0.2/16
@@ -49,8 +51,8 @@ interface vlan1
     ip bootp-gateway 10.1.0.2
     ip helper-address 10.92.100.222
     exit
- 
-sw-spine-002# show run int vlan 1
+
+show run int vlan 1
 interface vlan1
     vsx-sync active-gateways
     ip address 10.1.0.3/16
@@ -61,4 +63,4 @@ interface vlan1
     exit
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

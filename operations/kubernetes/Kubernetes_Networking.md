@@ -1,4 +1,4 @@
-## Kubernetes Networking
+# Kubernetes Networking
 
 Every Kubernetes pod has an IP address in the pod network that is reachable within the cluster. The system uses the `weave-net` plugin for inter-node communication.
 

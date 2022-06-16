@@ -17,30 +17,32 @@ See [ConMan](ConMan.md) for other procedures related to remote consoles and node
 This procedure can be run from any member of the Kubernetes cluster to verify node consoles are being managed
 by ConMan and to connect to a console.
 
-**NOTE:** this procedure has changed since the CSM 0.9 release.
+**`NOTE`** this procedure has changed since the CSM 0.9 release.
 
 1. Find the `cray-console-operator` pod.
-    
+
     ```bash
-    ncn# OP_POD=$(kubectl get pods -n services \
+    OP_POD=$(kubectl get pods -n services \
             -o wide|grep cray-console-operator|awk '{print $1}')
-    ncn# echo $OP_POD
+    echo $OP_POD
     ```
 
     Example output:
+
     ```text
     cray-console-operator-6cf89ff566-kfnjr
     ```
 
 1. Find the cray-console-node pod that is connected to the node. Be sure to substitute the actual component name (xname) of the node in the command below.
-    
+
     ```bash
-    ncn# XNAME=<xname>
-    ncn# NODEPOD=$(kubectl -n services exec $OP_POD -c cray-console-operator -- sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
-    ncn# echo $NODEPOD
+    XNAME=<xname>
+    NODEPOD=$(kubectl -n services exec $OP_POD -c cray-console-operator -- sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g')
+    echo $NODEPOD
     ```
 
     Example output:
+
     ```text
     cray-console-node-2
     ```
@@ -48,10 +50,11 @@ by ConMan and to connect to a console.
 1. Log into the `cray-console-node` container in this pod:
 
     ```bash
-    ncn# kubectl exec -n services -it $NODEPOD -c cray-console-node -- bash
+    kubectl exec -n services -it $NODEPOD -c cray-console-node -- bash
     ```
 
     Example output:
+
     ```text
     cray-console-node#
     ```
@@ -59,7 +62,7 @@ by ConMan and to connect to a console.
 1. Check the list of nodes being monitored.
 
     ```bash
-    cray-console-node# conman -q
+    conman -q
     ```
 
     Output looks similar to the following:
@@ -77,12 +80,12 @@ by ConMan and to connect to a console.
 1. Compute nodes or UANs are automatically added to this list a short time after they are discovered.
 
 1. To access the node's console, run the following command from within the pod. Again, remember to substitute the actual component name (xname) of the node.
-    
+
     ```bash
-    cray-console-node# conman -j <xname>
+    conman -j <xname>
     ```
 
-    > The console session can be exited by entering `&.`
+    > **`NOTE`** The console session can be exited by entering `&.`
 
 1. Repeat the previous steps to verify that cray-console is now managing all nodes that are included in HSM.
 

@@ -1,4 +1,4 @@
-## Component Memberships
+# Component Memberships
 
 Memberships are a read-only resource that is generated automatically by changes to groups and partitions. Each component in `/hsm/v2/State/Components` is represented. Filter options are available to prune the list, or a specific component name (xname) can be given. All groups and the partition \(if any\) of each component are listed.
 
@@ -6,7 +6,7 @@ At this point in time, only information about node components is needed. The `--
 
 The following is an example membership:
 
-```bash
+```json
 {
     "id" : "x2c3s0b0n0",
     "groupLabels" : [
@@ -27,13 +27,13 @@ By default, the memberships collection contains all components, regardless of if
 Retrieve all node memberships:
 
 ```bash
-ncn-m# cray hsm memberships list --type node
+cray hsm memberships list --type node
 ```
 
 Retrieve only nodes not in a partition:
 
 ```bash
-ncn-m# cray hsm memberships list --type node --partition NULL
+cray hsm memberships list --type node --partition NULL
 ```
 
 ### Retrieve Membership Data for a Given Component
@@ -41,8 +41,6 @@ ncn-m# cray hsm memberships list --type node --partition NULL
 Any components in `/hsm/v2/State/Components` can have its group and memberships looked up with its individual component component name (xname).
 
 ```bash
-ncn-m# cray hsm memberships describe MEMBER_ID
+cray hsm memberships describe MEMBER_ID
 ```
-
-
 

@@ -1,4 +1,4 @@
-## System Security and Authentication
+# System Security and Authentication
 
 The system uses a number of mechanisms to ensure the security and authentication of internal and external requests.
 

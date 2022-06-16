@@ -28,7 +28,7 @@ function on_error() {
     exit 1
 }
 
-[[ -n ${TOKEN} ]] || on_error "Enviroment varaible TOKEN is not set"
+[[ -n ${TOKEN} ]] || on_error "Environment varaible TOKEN is not set"
 
 # Collect network information from SLS
 echo "Collecting networking information from SLS"
@@ -100,7 +100,7 @@ echo -n "${nmn_routes_string}" > $local_nmn_route_file
 echo "Writing $local_hmn_route_file"
 echo -n "${hmn_routes_string}" > $local_hmn_route_file
 
-echo "Querying SLS for Managment NCNs"
+echo "Querying SLS for Management NCNs"
 ncns=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | jq -r '.[] | ."ExtraProperties" | ."Aliases" | .[]' | sort)
 
 for ncn in $ncns; do

@@ -28,7 +28,7 @@ spec:
       JSONPath: .spec.authentication.type
       type: string
     - name: Authorization
-      description: How the user is authorised
+      description: How the user is authorized
       JSONPath: .spec.authorization.type
       type: string
     - name: Ready

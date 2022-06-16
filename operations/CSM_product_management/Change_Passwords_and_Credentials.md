@@ -1,4 +1,4 @@
-## Change Passwords and Credentials
+# Change Passwords and Credentials
 
 This is an overarching procedure to change all credentials managed by Cray System Management (CSM) in HPE Cray EX system to new values.
 
@@ -14,11 +14,11 @@ There are many passwords and credentials used in different contexts to manage th
 
 1.  Perform procedures in [Change Cray EX Liquid-Cooled Cabinet Global Default Password](../security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md).
 
-2.  Perform procedures in [Update Default Air-Cooled BMC and Leaf Switch SNMP Credentials](../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_Switch_SNMP_Credentials.md).
+2.  Perform procedures in [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md).
 
 3.  Perform procedures in [Change Air-Cooled Node BMC Credentials](../security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md).
 
-4.  Perform procedures in [Change SMNP Credentials on Leaf Switches](../security_and_authentication/Change_SMNP_Credentials_on_Leaf_Switches.md).
+4.  Perform procedures in [Change SNMP Credentials on Leaf BMC Switches](../security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md).
 
 5.  Perform procedures in [Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)](../security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md).
 

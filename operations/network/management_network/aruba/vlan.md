@@ -1,57 +1,56 @@
-# Virtual local access networks (VLANs) 
+# Virtual Local Access Networks (VLANs)
 
-VLANs allow for the logical grouping of switch interfaces, enabling communication as if all connected devices were on the same isolated network. 
+VLANs allow for the logical grouping of switch interfaces, enabling communication as if all connected devices were on the same isolated network.
 
+## Configuration Commands
 
-Relevant Configuration 
+Create VLAN:
 
-Create VLAN 
-
-```
-switch(config)# vlan <VLAN> 
-```
-
-Configure an interface to associate it with a VLAN 
-
-```
-switch(config)# interface <IFACE> 
-switch(config-if)# no shutdown 
-switch(config-if)# no routing
-
-```
-Configure an interface as an access port
-
-```
-switch(config-if)# vlan access VLAN 
+```text
+vlan <VLAN>
 ```
 
-Configure an interface as a trunk port 
+Configure an interface to associate it with a VLAN:
 
-```
-switch(config-if)# vlan trunk native <VLAN> 
-switch(config-if)# vlan trunk allowed <VLAN> 
-```
-
-Configure VLAN as Voice: 
-
-NOTE:
-To give a specific VLAN a voice designation and adding the proper hooks, you need to add voice command in the vlan context. This configuration is the same for all CX-series switches.
-
-```
-switch(config)# vlan <VLAN> 
-switch(config-vlan-100)# voice 
+```text
+interface <IFACE>
+no shutdown
+no routing
 ```
 
-Show Commands to Validate Functionality 
+Configure an interface as an access port:
 
-```
-switch# show vlan [VLAN]
+```text
+vlan access VLAN
 ```
 
-Example Output 
+Configure an interface as a trunk port:
 
+```text
+vlan trunk native <VLAN>
+vlan trunk allowed <VLAN>
 ```
-switch# show vlan
+
+Configure VLAN as Voice:
+
+> **`NOTE`** To give a specific VLAN a voice designation and adding the proper hooks, you need to add the `voice` command in the VLAN context.
+> This configuration is the same for all CX-series switches.
+
+```text
+vlan <VLAN>
+voice
+```
+
+Show commands to validate functionality:
+
+```text
+show vlan [VLAN]
+```
+
+## Example Output
+
+```text
+show vlan
 --------------------------------------------------------------------------------------
 VLAN  Name                              Status  Reason          Type      Interfaces
 --------------------------------------------------------------------------------------
@@ -59,10 +58,9 @@ VLAN  Name                              Status  Reason          Type      Interf
 10    VLAN10                            up      ok              static    1/1/1-1/1/2
 ```
 
-Expected Results 
+## Expected Results
 
-* Step 1: You can create a VLAN
-* Step 2: You can assign a VLAN to the physical interface 
+1. Administrators can create a VLAN
+1. Administrators can assign a VLAN to the physical interface
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

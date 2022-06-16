@@ -40,7 +40,7 @@ Setting the SSH keys for mountain controllers is done by running the `/opt/cray/
 Usage: set_ssh_keys.py [options]
 
    --debug=level    Set debug level
-   --dryrun         Gather all info but don't set anything in HW.
+   --dryrun         Gather all info but do not set anything in HW.
    --exclude=list   Comma-separated list of target patterns to exclude.
                     Each item in the list is matched on the front
                     of each target component name (xname) and excluded if there is a match.
@@ -59,7 +59,7 @@ Usage: set_ssh_keys.py [options]
 If no command line arguments are needed, SSH keys are set on all discovered mountain controllers using the root account's public RSA key. Using an alternate key requires the `--sshkey=key` argument:
 
 ```bash
-  # /opt/cray/csm/scripts/admin_access/set_ssh_keys.py --sshkey="AAAbbCcDddd...."
+/opt/cray/csm/scripts/admin_access/set_ssh_keys.py --sshkey="AAAbbCcDddd...."
 ```
 
 After the script runs, verify that it worked:
@@ -72,7 +72,7 @@ After the script runs, verify that it worked:
    If the node controller is not powered up, this SSH attempt will fail.
 
    ```bash
-   ncn-w001# ssh x1000c1s0b0
+   ssh x1000c1s0b0
    ```
 
    Notice that the command prompt (`x1000c1s0b0:>`) includes the hostname for this node controller.

@@ -90,6 +90,7 @@ function update_bss_storage() {
     curl_out=$(update_bss_storage_run_cmd_verify_nonblank curl -s -k -S -d grant_type=client_credentials \
                        -d client_id=admin-client -d client_secret="$secret" \
                        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token) || return 1
+    #shellcheck disable=SC2155
     export TOKEN=$(echo "$curl_out" | jq -r '.access_token')
     if [ $? -ne 0 ]; then
         update_bss_storage_cmd_failed echo "$curl_out" \| jq -r '.access_token'

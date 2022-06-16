@@ -1,4 +1,4 @@
-## Configure kubectl Credentials to Access the Kubernetes APIs
+# Configure kubectl Credentials to Access the Kubernetes APIs
 
 The credentials for kubectl are located in the admin configuration file on all non-compute node \(NCN\) master and worker nodes. They can be found at /etc/kubernetes/admin.conf for the root user. Use `kubectl` to access the Kubernetes cluster from a device outside the cluster.
 
@@ -11,7 +11,6 @@ This procedure requires administrative privileges and assumes that the device be
 - `kubectl` is installed
 - Access to the site admin network
 
-
 ### Procedure
 
 1.  Access the credentials file used by kubectl at /etc/kubernetes/admin.conf on any one of the master or worker NCNs.
@@ -21,7 +20,7 @@ This procedure requires administrative privileges and assumes that the device be
 2.  Verify access by executing the following command:
 
     ```bash
-    ncn# kubectl get nodes
+    kubectl get nodes
     ```
 
     If the command was successful, the system will return output similar to the following:
@@ -37,7 +36,4 @@ This procedure requires administrative privileges and assumes that the device be
     ```
 
     The information above is only an example and may appear differently than it is shown above.
-
-
-
 

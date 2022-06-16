@@ -1,4 +1,4 @@
-## Troubleshoot Spire Failing to Start on NCNs
+# Troubleshoot Spire Failing to Start on NCNs
 
 The spire-agent service may fail to start on Kubernetes non-compute nodes \(NCNs\). A key indication of this failure is when logging errors occur with the journalctl command. The following are logging errors that will indicate if the spire-agent is failing to start:
 
@@ -26,15 +26,14 @@ function renewncnjoin() {
 Run the renewncnjoin function on the NCN where `kubectl` is running:
 
 ```bash
-# renewncnjoin NODE_XNAME
+renewncnjoin NODE_XNAME
 ```
 
 The spire-agent service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, delete /root/spire/agent\_svid.der, /root/spire/bundle.der, and /root/spire/data/svid.key off the NCN before deleting the request-ncn-join-token daemonset pod.
 
 ```bash
-# rm /root/spire/agent_svid.der
-# rm /root/spire/bundle.der
-# rm /root/spire/data/svid.key
+rm /root/spire/agent_svid.der
+rm /root/spire/bundle.der
+rm /root/spire/data/svid.key
 ```
-
 

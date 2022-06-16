@@ -1,7 +1,7 @@
 # Scenario B: network connection via high speed network
 
-Description 
-The example here covers outside connections achieved via highspeed network. 
+Description
+The example here covers outside connections achieved via highspeed network.
 
 ### Summary
 * Create a new VRF
@@ -17,4 +17,4 @@ The example here covers outside connections achieved via highspeed network.
 
 ![](../../../../img/network/management_network/scenario-b-topology.png)
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

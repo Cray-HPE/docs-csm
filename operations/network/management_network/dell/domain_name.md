@@ -1,26 +1,25 @@
+# Configure Domain Name
 
-# Domain name
+A domain name is a name to identify the person, group, or organization that controls the devices within an area.
+An example of a domain name could be `us.cray.com`.
 
-A domain name is a name to identify the person, group, or organization that controls the devices within an area. An example of a domain name could be us.cray.com
+## Configuration Commands
 
-Relevant Configuration
+Create a domain name:
 
-Creating a domain name
-
-```
-switch(config)# domain-name NAME
-```
-
-Show Commands to Validate Functionality
-
-```
-switch# show domain-name
+```text
+domain-name NAME
 ```
 
+Show commands to validate functionality:
 
-Expected Results
+```text
+show domain-name
+```
 
-* Step 1: You can configure the domain name
-* Step 2: The output of all show commands is correct
+## Expected Results
 
-[Back to Index](../index.md)
+1. Administrators can configure the domain name
+2. The output of all `show` commands is correct
+
+[Back to Index](../README.md)

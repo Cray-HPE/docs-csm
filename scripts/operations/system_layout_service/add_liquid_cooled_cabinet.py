@@ -143,7 +143,7 @@ cabinet = {
     "Type": "comptype_cabinet",
     "TypeString": "Cabinet",
     "ExtraProperties": {
-        "Networks": { # This networks block is only presnet for MEDS compatability
+        "Networks": { # This networks block is only present for MEDS compatibility
             "cn": {
                 "HMN": {},
                 "NMN": {},

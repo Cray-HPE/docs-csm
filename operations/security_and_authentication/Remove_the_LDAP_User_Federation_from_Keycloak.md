@@ -1,4 +1,4 @@
-## Remove the LDAP User Federation from Keycloak
+# Remove the LDAP User Federation from Keycloak
 
 Use the Keycloak UI or Keycloak REST API to remove the LDAP user federation from Keycloak.
 
@@ -12,7 +12,6 @@ LDAP user federation is currently configured in Keycloak.
 
 Follow the steps in only one of the sections below depending on if it is preferred to use the Keycloak REST API or Keycloak administration console UI.
 
-
 #### Use the Keycloak Administration Console UI
 
 1.  Log in to the administration console.
@@ -22,7 +21,6 @@ Follow the steps in only one of the sections below depending on if it is preferr
 2.  Click on **User Federation** under the Configure header of the navigation panel on the left side of the page.
 
 3.  Click on the **Delete** button on the line for the LDAP provider in the User Federation table.
-
 
 #### Use the Keycloak REST API
 
@@ -40,11 +38,11 @@ Follow the steps in only one of the sections below depending on if it is preferr
 2. Get the component ID for the LDAP user federation.
 
     ```bash
-    ncn-w001# COMPONENT_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
+    COMPONENT_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components \
     | jq -r '.[] | select(.providerId=="ldap").id')
 
-    ncn-w001# echo $COMPONENT_ID
+    echo $COMPONENT_ID
     57817383-e4a0-4717-905a-ea343c2b5722
     ```
 
@@ -53,11 +51,9 @@ Follow the steps in only one of the sections below depending on if it is preferr
     The HTTP status code should be 204.
 
     ```bash
-    ncn-w001# curl -i -XDELETE -H "Authorization: Bearer $(get_master_token)" \
+    curl -i -XDELETE -H "Authorization: Bearer $(get_master_token)" \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components/$COMPONENT_ID
     HTTP/2 204
     ...
     ```
-
-
 
