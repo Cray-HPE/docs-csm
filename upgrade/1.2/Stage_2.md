@@ -18,8 +18,33 @@
 
 1. Make sure that not all pods of `ingressgateway-hmn` or `spire-server` are running on the same worker node.
 
-   For either of those two deployments, if all pods are running on a single worker node, then use the
-   `/opt/cray/platform-utils/move_pod.sh` script to move at least one pod to a different worker node.
+    1. (`ncn-m001#`) See where the pods are running.
+
+        ```bash
+        kubectl get pods -A -o wide | grep -E 'ingressgateway-hmn|spire-server|^NAMESPACE'
+        ```
+
+        Example output:
+
+        ```text
+        NAMESPACE           NAME                                                              READY   STATUS              RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+        istio-system        istio-ingressgateway-hmn-555dbc8c6b-2b6rv                         1/1     Running             0          5h2m    10.42.1.41    ncn-w001   <none>           <none>
+        istio-system        istio-ingressgateway-hmn-555dbc8c6b-ks75r                         1/1     Running             0          5h3m    10.44.1.16    ncn-w003   <none>           <none>
+        istio-system        istio-ingressgateway-hmn-555dbc8c6b-npmhz                         1/1     Running             0          5h2m    10.47.0.185   ncn-w002   <none>           <none>
+        spire               spire-server-0                                                    2/2     Running             0          22d     10.47.0.190   ncn-w002   <none>           <none>
+        spire               spire-server-1                                                    2/2     Running             0          22d     10.42.1.133   ncn-w001   <none>           <none>
+        spire               spire-server-2                                                    2/2     Running             0          22d     10.44.0.184   ncn-w003   <none>           <none>
+        ```
+
+        In the example output, for each deployment, the pods are spread out across different worker nodes, so no action would be required.
+
+    1. For either of those two deployments, if all pods are running on a single worker node, then move at least one pod to a different worker node.
+
+        (`ncn-m001#`) Use the `/opt/cray/platform-utils/move_pod.sh` script to do this.
+
+        ```bash
+        /opt/cray/platform-utils/move_pod.sh <pod_name> <target_node>
+        ```
 
 1. (`ncn-m001#`) Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`.
 
