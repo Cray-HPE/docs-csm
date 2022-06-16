@@ -16,7 +16,7 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
 ### Initiate upgrade
 
-1. Check to ensure the upgrade is possible.
+1. Check to ensure that the upgrade is possible.
 
    ```bash
    ncn-ms# ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
@@ -24,7 +24,7 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
    Example output:
 
-   ```text
+   ```json
    {
        "needs_update": {
            "alertmanager.ncn-s001": {
@@ -62,8 +62,8 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
    * The monitoring services may be listed but those are patched internally and will not be upgraded with this upgrade.
      * This includes `alertmanager`, `prometheus`, `node-exporter`, and `grafana`.
    * The main goals of this check are to see the listed `15.2.8` services and to see the output at the bottom that confirms the presence of the `15.2.15` target image.
-   * If the output above doesn't contain the correct output, that can indicate a previous step has failed,
-     review output from [Stage 1](Stage_1.md) for errors -- or contact support for in-depth troubleshooting.
+   * If the output does not match what is expected, then this can indicate that a previous step has failed.
+     Review output from [Stage 1](Stage_1.md) for errors or contact support.
 
 1. Set the container image.
 
