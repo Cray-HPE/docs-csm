@@ -39,7 +39,7 @@ For more information about modifying `customizations.yaml` and tuning for specif
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 
-## Relevant Troubleshooting Links for Upgrade-Related Issues
+## Relevant troubleshooting links for upgrade-related issues
 
 - General upgrade troubleshooting
 
