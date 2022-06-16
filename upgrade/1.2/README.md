@@ -38,6 +38,7 @@ For more information about modifying `customizations.yaml` and tuning for specif
 - [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
+
 ## Relevant Troubleshooting Links for Upgrade-Related Issues
 
 - General upgrade troubleshooting
