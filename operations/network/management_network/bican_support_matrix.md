@@ -75,30 +75,30 @@ In order to achieve this, the Management Network CAN is used during the installa
 
 ## Network sizing and requirements
 
-CMN
+### CMN sizing and requirements
 
-* IPv4:
+#### CMN IPv4 sizing and requirements
 
 * Site routable
 * Contiguous (CIDR block)
 * Non-overlapping with internal networks (configurable during installation)
 * Size estimate is the sum of:
-  * Number of Non-Compute Nodes (NCNs) of type master, worker or storage used by the Kubernetes cluster
+  * Number of Non-Compute Nodes (NCNs) of type master, worker, or storage used by the Kubernetes cluster
   * Number of switches on the Management Network
   * Number of administrative API endpoints
   * Several administrative addresses for switch interfaces and routing.
-  * SWAG:  A /26 block is typically sufficient for systems less than approximately 4000 nodes.
+  * A `/26` block is typically sufficient for systems less than approximately 4000 nodes.
 
-CAN or CHN
+### CAN or CHN sizing and requirements
 
-* IPv4:
+#### CAN or CHN IPv4 sizing and requirements
 
 * Site routable
 * Contiguous (CIDR block)
 * Non-overlapping with internal networks (configurable during installation)
 * Size estimate is the sum of:
-  * Number of Application Nodes requiring access from the Site:  User Access Node (UAN), Login, etc...
+  * Number of application nodes requiring access from the site (User Access Node (UAN), login nodes, etc.)
   * Number of User Access Instances (UAI) in Kubernetes (if used).
   * Number of API endpoints
   * Several administrative addresses for switch interfaces and routing
-  * NOTE:  CAN or CHN sizing is largely dependent on customer-specific use cases and Application Node hardware.
+  * NOTE: CAN or CHN sizing is largely dependent on customer-specific use cases and application node hardware.
