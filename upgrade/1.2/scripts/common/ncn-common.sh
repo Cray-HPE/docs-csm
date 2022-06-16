@@ -87,6 +87,23 @@ export TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https
 #shellcheck disable=SC2155
 export TARGET_IP_NMN=$(dig +short $TARGET_NCN.nmn)
 
+# Just do basic API calls to SLS to make sure that it is responding
+function check_sls_health() {
+    echo "Checking SLS health..."
+    # The liveness endpoint should return 204 on success
+    if [[ $(curl -iskH "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/sls/v1/liveness | head -1 | awk '{ print $2 }') != 204 ]]; then
+        echo "ERROR: SLS liveness check failed. Investigate cray-sls service health" 1>&2
+        return 1
+    fi
+    # The health endpoint should return 200 on success
+    if [[ $(curl -iskH "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/sls/v1/health | head -1 | awk '{ print $2 }') != 200 ]]; then
+        echo "ERROR: SLS liveness check failed. Investigate cray-sls service health" 1>&2
+        return 1
+    fi
+    echo "SLS appears healthy"
+    return 0
+}
+
 function drain_node() {
    target_ncn=$1
    state_name="DRAIN_NODE"

@@ -37,6 +37,8 @@ target_ncn=$1
 # kind of thing which may need to be re-done in case of problems.
 ssh_keys_done=0
 
+check_sls_health >> "${LOG_FILE}" 2>&1
+
 state_name="CEPH_NODES_SET_NO_WIPE"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then

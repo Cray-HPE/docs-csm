@@ -147,7 +147,11 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+check_sls_health >> "${LOG_FILE}" 2>&1
+
 drain_node $target_ncn
+
+check_sls_health >> "${LOG_FILE}" 2>&1
 
 {
 set +e
