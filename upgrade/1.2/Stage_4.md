@@ -19,12 +19,12 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 1. Check to ensure the upgrade is possible.
 
    ```bash
-   ncn-ms# ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
    Example output:
 
-   ```text
+   ```json
    {
        "needs_update": {
            "alertmanager.ncn-s001": {
@@ -42,7 +42,9 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
                "current_name": "registry.local/ceph/ceph:v15.2.8",
                "current_version": "15.2.8"
            },
+
            "[ ... lines omitted for readability ... ]",
+
            "rgw.site1.zone1.ncn-s003.adrubu": {
                "current_id": "6a777b4f888c24feec6e12eeeff4ab485f2c043b415bc2213815d5fb791f2597",
                "current_name": "registry.local/ceph/ceph:v15.2.8",
@@ -62,19 +64,19 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
    * The monitoring services may be listed but those are patched internally and will not be upgraded with this upgrade.
      * This includes `alertmanager`, `prometheus`, `node-exporter`, and `grafana`.
    * The main goals of this check are to see the listed `15.2.8` services and to see the output at the bottom that confirms the presence of the `15.2.15` target image.
-   * If the output above doesn't contain the correct output, that can indicate a previous step has failed,
-     review output from [Stage 1](Stage_1.md) for errors -- or contact support for in-depth troubleshooting.
+   * If the output does not match what is expected, then this can indicate that a previous step has failed.
+     Review output from [Stage 1](Stage_1.md) for errors or contact support.
 
 1. Set the container image.
 
    ```bash
-   ncn-ms# ceph config set global container_image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   ceph config set global container_image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
 1. Verify that the change has occurred.
 
    ```bash
-   ncn-ms# ceph config dump -f json-pretty|jq '.[]|select(.name=="container_image")|.value'
+   ceph config dump -f json-pretty|jq '.[]|select(.name=="container_image")|.value'
    ```
 
    Expected result:
@@ -86,7 +88,7 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 1. Start the upgrade.
 
    ```bash
-   ncn-ms# ceph orch upgrade start --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   ceph orch upgrade start --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
 
 1. Monitor the upgrade.
@@ -94,7 +96,7 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
    > If upgrading a larger cluster, consider splitting this into two different `watch` commands in separate windows.
 
    ```bash
-   ncn-ms# watch "ceph -s; ceph orch ps"
+   watch "ceph -s; ceph orch ps"
    ```
 
 ### Monitor upgrade
@@ -112,7 +114,7 @@ on any of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 1. Check the upgrade status.
 
     ```bash
-    ncn-s# ceph orch upgrade status
+    ceph orch upgrade status
     ```
 
     Example output:
@@ -129,8 +131,8 @@ on any of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 1. Pause and resume the upgrade.
 
     ```bash
-    ncn-s# ceph orch upgrade pause
-    ncn-s# ceph orch upgrade resume
+    ceph orch upgrade pause
+    ceph orch upgrade resume
     ```
 
 1. Watch `cephadm`.
@@ -138,13 +140,13 @@ on any of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
     This command watches the `cephadm` logs. If the issue occurs again, it will give more details about which node may be having an issue.
 
     ```bash
-    ncn-s# ceph -W cephadm
+    ceph -W cephadm
     ```
 
 1. If the issue occurs again, then log into each of the storage nodes and perform a `podman` pull of the image.
 
     ```bash
-    ncn-s# podman pull registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+    podman pull registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
     ```
 
 If these steps do not resolve the issue, then contact support for further assistance.
@@ -196,7 +198,7 @@ Verify that the upgrade has completed using the following procedure.
 1. Verify that the upgrade is no longer in progress.
 
    ```bash
-   ncn-ms# ceph orch upgrade status
+   ceph orch upgrade status
    ```
 
    In the output of this command, validate that the `in_progress` field is `false`. If it is `true`, then
@@ -238,7 +240,7 @@ Verify that the upgrade has completed using the following procedure.
    The following command will count the number of `crash`, `mds`, `mgr`, `mon`, `osd`, and `rgw` processes which are not running version `15.2.15`.
 
    ```bash
-   ncn-ms# ceph orch ps -f json-pretty|jq -r '[.[]|select(.version!="15.2.15")|select(.daemon_type as $d | [ "crash", "mds", "mgr", "mon", "osd", "rgw" ] | index($d))] | length'
+   ceph orch ps -f json-pretty|jq -r '[.[]|select(.version!="15.2.15")|select(.daemon_type as $d | [ "crash", "mds", "mgr", "mon", "osd", "rgw" ] | index($d))] | length'
    ```
 
    If the command outputs any number other than zero, then this means that not all expected processes are running `15.2.15`. In that case, do the following:
@@ -246,13 +248,13 @@ Verify that the upgrade has completed using the following procedure.
    1. List the processes which are not at the expected version.
 
       ```bash
-      ncn-ms# ceph orch ps -f json-pretty|jq -r '[.[]|select(.version!="15.2.15")|select(.daemon_type as $d | [ "crash", "mds", "mgr", "mon", "osd", "rgw" ] | index($d))]'
+      ceph orch ps -f json-pretty|jq -r '[.[]|select(.version!="15.2.15")|select(.daemon_type as $d | [ "crash", "mds", "mgr", "mon", "osd", "rgw" ] | index($d))]'
       ```
 
    1. Make sure the upgrade has stopped.
 
       ```bash
-      ncn-ms# ceph orch upgrade stop
+      ceph orch upgrade stop
       ```
 
    1. Troubleshoot the failed upgrade.
@@ -265,7 +267,7 @@ Verify that the upgrade has completed using the following procedure.
    The following command will count the number of processes which are running version `15.2.8`.
 
    ```bash
-   ncn-ms# ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.8")] | length'
+   ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.8")] | length'
    ```
 
    If the command outputs any number other than zero, then this means there are processes still running `15.2.8`. In that case, do the following:
@@ -273,13 +275,13 @@ Verify that the upgrade has completed using the following procedure.
    1. List the processes which are not at the expected version.
 
       ```bash
-      ncn-ms# ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.8")]'
+      ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.8")]'
       ```
 
    1. Make sure the upgrade has stopped.
 
       ```bash
-      ncn-ms# ceph orch upgrade stop
+      ceph orch upgrade stop
       ```
 
    1. Troubleshoot the failed upgrade.
@@ -294,7 +296,7 @@ Verify that the upgrade has completed using the following procedure.
 1. Disable `auth_allow_insecure_global_id_reclaim`:
 
    ```bash
-   ncn-ms# ceph config set mon auth_allow_insecure_global_id_reclaim false
+   ceph config set mon auth_allow_insecure_global_id_reclaim false
    ```
 
 1. Wait until the Ceph cluster health is `HEALTH_OK`.
@@ -302,7 +304,7 @@ Verify that the upgrade has completed using the following procedure.
     It may take up to 30 seconds for the health to return to `HEALTH_OK`.
 
     ```bash
-    ncn-ms# ceph health detail
+    ceph health detail
     ```
 
     Successful output is:
