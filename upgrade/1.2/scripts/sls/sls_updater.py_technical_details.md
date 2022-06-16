@@ -86,7 +86,7 @@ In CMN and NMN:
 
 Self explanatory. This endpoint now exists only on the NMN.
 
-## Update `uai_macvlan` in NMN Ranges and `uai_macvlan` VLAN
+## Update `uai_macvlan` in NMN ranges and `uai_macvlan` VLAN
 
 Self explanatory. Ranges are used for the addresses of UAIs.
 
