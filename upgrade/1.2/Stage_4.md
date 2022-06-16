@@ -313,8 +313,6 @@ Verify that the upgrade has completed using the following procedure.
     HEALTH_OK
     ```
 
-<a name="stage_completed"></a>
-
 ## Stage completed
 
 This stage is completed. Continue to [Stage 5](Stage_5.md).
