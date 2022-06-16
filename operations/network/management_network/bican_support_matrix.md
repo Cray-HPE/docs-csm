@@ -14,9 +14,8 @@ Customer Access Networks (CANs) provide flexible networking at the edge between 
 * Access site resources like DNS and LDAP from the system.
 
 ## Feature access matrix
+
 For CSM 1.2, the notion of the CAN has been expanded to meet customer requests for increased flexibility and policy control.
-
-
 
 | System Resource | Traffic to and from System | Management Network or CAN | High Speed Network CHN | Management Network CMN       |
 | --------------- | :------------------------: | :-----------------------: | :--------------------: |:-----------------------: |

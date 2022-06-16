@@ -31,8 +31,6 @@
     - [4.2.2 When configuration occurs](#422-when-configuration-occurs)
     - [4.2.3 Ability to change post install](#423-ability-to-change-post-install)
 
-
-
 ## 1 CAN New Features Overview
 
 Bifurcation or splitting of the Customer Access Network (CAN) enables customization of customer traffic to and from the system.
@@ -44,7 +42,7 @@ and Kubernetes API endpoints from the customer site via the High Speed Network (
 2. **Management CAN - CMN** :  Using a new VLAN on the Management Network, this feature allows system administrative access from the customer site.
 Administrative access was previously available on the original CAN and this feature provides a traffic path and access split.
 
-Enabling BICAN will remove the original CAN. 
+Enabling BICAN will remove the original CAN.
 
 **During installation the opportunity to enable the new features will be presented.**
 
@@ -55,13 +53,12 @@ At this time, the customers must accept:
 - The CHN is now the default ingress network.
 - Customer access over the legacy CAN is disabled by default.
 
-**Reverting or changing any decisions will be manual**
+### Reverting or changing any decisions will be manual
 
 The feature matrix of the CAN is described [here](bican_support_matrix.md).
 Details of the High Speed CAN (CHN) and the Management CAN (CMN) are described below.
 
 ![Customer Access Overview](img/customer_access_overview.png)
-
 
 ## 2 High Speed CAN (CHN)
 
@@ -72,18 +69,15 @@ As can be seen in the diagram above, traffic ingress from the site for the CHN i
 NOTE:  Arista routing configurations as a virtual routing instance are in-scope for CSM 1.2 CHN work.
 Other Edge Routers, including Juniper are out of scope.
 
-
 ### 2.1 CHN system ingress endpoints accessible in CSM 1.2
 
 - Designated Application Nodes, particularly **UAN, over SSH**.
 - Designated **Compute Nodes (CN)**, including those used for Compute as UAN, **over SSH**.
 - Kubernetes **API endpoints over https**.
 
-
 ### 2.2 CHN system egress endpoints accessible in CSM 1.2
 
 - System access to **site external resources** , including LDAP(s) and DNS.
-
 
 ### 2.3 Endpoint Naming
 
@@ -103,7 +97,6 @@ Exchange of system DNS with the site may be via delegation (preferred) or zone t
 
 Once added to CSI, names and IP's will use the standard CSM data flow and end up in SLS and be available for use via both DNS and DHCP services.
 
-
 #### 2.3.1 Touchpoints: effects and changes
 
 - Will require installation and administration document changes.
@@ -112,19 +105,16 @@ Once added to CSI, names and IP's will use the standard CSM data flow and end up
 - Name aliases can be added/changed/removed via the API to SLS and become available in DNS automatically.
 DNS tooling for this was released in Shasta v1.4 with [SLS](../../index.md#system-layout-service-sls)
 
-
 #### 2.3.2 When naming occurs
 
 - Installation as part of Cray Site Initialization (CSI) data.
 - During site customizations.
-
 
 #### 2.3.3 Ability to change post-install
 
 - YES - Add/Remove/Change Aliases
 - NO - Changing FQDN and domain suffixes because of the number of touchpoints.
 Chiefly Kubernetes limitations introduced at install time and sheer number of touchpoints.
-
 
 ### 2.4 Endpoint Addressing
 
@@ -134,7 +124,6 @@ and testing required to certify IPv6 system-wide.
 
 The CHN will, by default, have a private IPv4 address block.
 This is intended to be changed during installation to a **customer-supplied IPv4 address block**.
-
 
 #### 2.4.1 Touchpoints: effects and changes
 
@@ -147,22 +136,18 @@ This is intended to be changed during installation to a **customer-supplied IPv4
 - Arista switch pair to create new or add to existing virtual routing instance for path and access control.
 - HSN required for transport of application traffic so new procedures need to be developed for troubleshooting and support.
 
-
 #### 2.4.2 When addressing occurs
 
 - Installation as part of CSI data.
-
 
 #### 2.4.3 Ability to change post-install
 
 - NO - There are dozens of touchpoints throughout the system.
 
-
 ### 2.5 Traffic Separation and Routing
 
 In CSM 1.2, there will be Layer 3 separation internal to the system but co-mingled Layer 2 between the CHN IPv4 addressing and the internal HSN private IPv4 addresses.
 Isolation will be within the Slingshot network as well as separated at the Edge Router.
-
 
 #### 2.5.1 Touchpoints: effects and changes
 
@@ -175,17 +160,14 @@ As noted above, non-Arista router configurations are out of scope for CSM 1.2 wo
 - API endpoints in MetalLB for the CHN will be accessible over NCN worker HSN interfaces (via ECMP Layer 3 routing).
   - MetalLB will peer with the Edge Routers to supply load balanced API access.
 
-
 #### 2.5.2 When configuration occurs
 
 - Installation as part of a virtual routing instance on the Edge Routers.
-
 
 #### 2.5.3 Ability to change post install
 
 - NOT RECOMMENDED - Edge Router controls external access so change scope is limited.
 - NO - Node images could be changed but routing and IP changes to CFS images would need extensive testing to certify.
-
 
 ## 3 Management CAN(CMN)
 
@@ -196,7 +178,6 @@ The new Customer Management Network (CMN) will be created as **a separate-and-di
 This new CMN network will allow SSH into the NCNs and CAN access will be disallowed.
 NOTE this is generally for ingress access for administrative purposes.
 
-
 ### 3.1 Traffic Separation and Routing
 
 Enabling the CMN at installation time will have the following effects:
@@ -204,7 +185,6 @@ Enabling the CMN at installation time will have the following effects:
 - Adding uplinks to the Customer Site similar to the original CAN.
 - Creating of a new VLAN on the Management Network.
 - Adding a new subnet and routing to the Management Network and NCNs.
-
 
 ### 3.2 Endpoint Naming
 
@@ -215,14 +195,11 @@ Examples:
 
 - SSH `ncn-w001.cmn.tld`
 
-
 ### 3.3 Endpoint Addressing
 
 For the CSM 1.2 release the CMN will only be available via customer-supplied IPv4 addressing.
 
-
 ### 3.4 Changes
-
 
 #### 3.4.1 Touchpoints: effects and changes
 
@@ -239,32 +216,26 @@ For the CSM 1.2 release the CMN will only be available via customer-supplied IPv
   - Image support for CMN VLAN, addressing and routing.
 - CSI changes to support the new network and naming.
 
-
 #### 3.4.2 When configuration occurs
 
 - During installation as part of CSI data generation.
 - During installation as part of Management Network configuration.
 - During installation as part of NCN deployment.
 
-
 #### 3.4.3 Ability to change post install
 
 - NOT RECOMMENDED and would be manual.
-
 
 ## 4 CAN External/Site Access (site DNS, LDAP, etc...)
 
 System access to site or external resources, like the Internet, site DNS and site LDAP were previously provided over the CAN.
 By default this CAN access path will remain, but for the CSM 1.2 release it will be possible during installation to select system-to-site access over the CHN or CMN.
 
-
 ### 4.1 Traffic Separation and Routing
 
 At installation time one of the following egress routes from the system to the site may be selected: CAN (default), CHN, CMN.
 
-
 ### 4.2 Changes
-
 
 #### 4.2.1 Touchpoints: effects and changes
 
@@ -273,11 +244,9 @@ At installation time one of the following egress routes from the system to the s
   - NCNs will require specific site routes to prioritize selected path over the system default (CAN).
 - Dependent on CHN and CMN work.
 
-
 #### 4.2.2 When configuration occurs
 
 - During installation as part of site configuration.
-
 
 #### 4.2.3 Ability to change post install
 
