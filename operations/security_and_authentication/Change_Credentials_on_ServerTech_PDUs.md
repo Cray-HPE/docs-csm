@@ -11,11 +11,11 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 - The PDU is accessible over the network. A PDU can be reachable by its component name (xname) hostname, but may not yet be discovered by HSM.
-- PDUs are manufactured by ServerTech.
+- (`ncn#`) PDUs are manufactured by ServerTech.
 
     ```bash
-    ncn-m001# PDU=x3000m0
-    ncn-m001# curl -k https://$PDU -i | grep Server
+    PDU=x3000m0
+    curl -k https://$PDU -i | grep Server
     ```
 
     Expected output:
@@ -26,10 +26,10 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
 ## Procedure
 
-1. List the ServerTech PDUs currently discovered in the system:
+1. (`ncn#`) List the ServerTech PDUs currently discovered in the system:
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
+    cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
         jq -r '.RedfishEndpoints[] | select(.FQDN | contains("rts")).ID'
     ```
 
@@ -39,33 +39,33 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
     x3000m0
     ```
 
-1. Set up aliases:
+1. (`ncn#`) Set up aliases:
 
     ```bash
-    ncn-m001# VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-    ncn-m001# alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
 
-1. Specify the existing password for the `admn` user:
+1. (`ncn#`) Specify the existing password for the `admn` user:
 
     To extract the global credentials from vault for the PDUs:
 
     ```bash
-    ncn-m001# vault kv get secret/pdu-creds/global/pdu
+    vault kv get secret/pdu-creds/global/pdu
     ```
 
     To extract the credentials from vault for a single PDU:
 
     ```bash
-    ncn-m001# PDU=x3000m0
-    ncn-m001# vault kv get secret/pdu-creds/$PDU
+    PDU=x3000m0
+    vault kv get secret/pdu-creds/$PDU
     ```
 
     Store the current password:
 
     ```bash
-    ncn-m001# read -s OLD_PDU_PASSWORD
-    ncn-m001# echo $OLD_PDU_PASSWORD
+    read -s OLD_PDU_PASSWORD
+    echo $OLD_PDU_PASSWORD
     ```
 
     Expected output:
@@ -81,8 +81,8 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
     - At least 1 number character
 
     ```bash
-    ncn-m001# read -s NEW_PDU_PASSWORD
-    ncn-m001# echo $NEW_PDU_PASSWORD
+    read -s NEW_PDU_PASSWORD
+    echo $NEW_PDU_PASSWORD
     ```
 
     Expected output:
@@ -96,22 +96,22 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
      1. To update the password on a single ServerTech PDU in the system:
          **NOTE**: To change the password on a single PDU, the PDUs must be successfully discovered by HSM.
 
-        1. Set the PDU hostname to change the `admn` credentials:
+        1. (`ncn#`) Set the PDU hostname to change the `admn` credentials:
 
             ```bash
-            ncn-m001# PDU=x3000m0
+            PDU=x3000m0
             ```
 
-        1. Verify the PDU is reachable:
+        1. (`ncn#`) Verify the PDU is reachable:
 
             ```bash
-            ncn-m001# ping $PDU
+            ping $PDU
             ```
 
-        1. Change password for the `admn` user on the ServerTech PDU.
+        1. (`ncn#`) Change password for the `admn` user on the ServerTech PDU.
 
             ```bash
-            ncn-m001# curl -i -k -u "admn:$OLD_PDU_PASSWORD" -X PATCH https://$PDU/jaws/config/users/local/admn \
+            curl -i -k -u "admn:$OLD_PDU_PASSWORD" -X PATCH https://$PDU/jaws/config/users/local/admn \
                 -d $(jq --arg PASSWORD "$NEW_PDU_PASSWORD" -nc '{password: $PASSWORD}')
             ```
 
@@ -127,20 +127,20 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
             Pragma: JAWS v1.01
             ```
 
-        1. Update the PDU credentials stored in Vault:
+        1. (`ncn#`) Update the PDU credentials stored in Vault:
 
             ```bash
-            ncn-m001# vault kv get secret/pdu-creds/$PDU |
+            vault kv get secret/pdu-creds/$PDU |
                     jq --arg PASSWORD "$NEW_PDU_PASSWORD" '.data | .Password=$PASSWORD' |
                     vault kv put secret/pdu-creds/$PDU -
             ```
 
      1. Update all ServerTech PDUs in the system to the same password:
 
-        1. Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
+        1. (`ncn#`) Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
 
             ```bash
-            ncn-m001# for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
+            for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
             jq -r '.RedfishEndpoints[] | select(.FQDN | contains("rts")).ID'); do
                 echo "Updating password on $PDU"
                 curl -i -k -u "admn:$OLD_PDU_PASSWORD" -X PATCH https://$PDU/jaws/config/users/local/admn \
@@ -169,10 +169,10 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
             Pragma: JAWS v1.01
             ```
 
-        1. Update Vault for all ServerTech PDUs in the system to the same password:
+        1. (`ncn#`) Update Vault for all ServerTech PDUs in the system to the same password:
 
             ```bash
-            ncn-m001# for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
+            for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
               jq -r '.RedfishEndpoints[] | select(.FQDN | contains("rts")).ID'); do
                 echo "Updating password on $PDU"
                 vault kv get secret/pdu-creds/$PDU |
@@ -183,23 +183,23 @@ To change the default credentials, follow the [Update default ServerTech PDU Cre
 
     **NOTE**: After five minutes, the previous credential should stop working as the existing session timed out.
 
-1. Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials:
+1. (`ncn#`) Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials:
 
     ```bash
-    ncn-m001# kubectl -n services rollout restart deployment cray-hms-rts
-    ncn-m001# kubectl -n services rollout status deployment cray-hms-rts
+    kubectl -n services rollout restart deployment cray-hms-rts
+    kubectl -n services rollout status deployment cray-hms-rts
     ```
 
-1. Wait for RTS to initialize itself:
+1. (`ncn#`) Wait for RTS to initialize itself:
 
     ```bash
-    ncn-m001# sleep 3m
+    sleep 3m
     ```
 
-1. Verify RTS was able to communicate with the PDUs with the updated credentials:
+1. (`ncn#`) Verify RTS was able to communicate with the PDUs with the updated credentials:
 
     ```bash
-    ncn-m001# kubectl -n services exec -it deployment/cray-hms-rts -c cray-hms-rts-redis -- redis-cli keys '*/redfish/v1/Managers'
+    kubectl -n services exec -it deployment/cray-hms-rts -c cray-hms-rts-redis -- redis-cli keys '*/redfish/v1/Managers'
     ```
 
     Expected output for a system with 2 PDUs.

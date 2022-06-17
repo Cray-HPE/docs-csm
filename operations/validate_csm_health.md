@@ -437,11 +437,11 @@ BMC can be safely ignored or needs to be addressed before proceeding.
        - x3000m0 - Not found in HSM Components ; Not found in HSM Redfish Endpoints
    ```
 
-   If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
+   (`ncn#`) If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
 
     ```bash
-   ncn-m001# PDU=x3000m0
-   ncn-m001# curl -k -s --compressed  https://$PDU -i | grep Server:
+   PDU=x3000m0
+   curl -k -s --compressed  https://$PDU -i | grep Server:
    ```
 
   - Example ServerTech output:
