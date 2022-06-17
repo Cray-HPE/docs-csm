@@ -1,59 +1,61 @@
 # Pre-Installation
 
-The page will walk a user through setting up the Cray LiveCD with the intention of installing Cray System Management (CSM).
+The page walks a user through setting up the Cray LiveCD with the intention of installing Cray System Management (CSM).
 
-## Topics
+1. [Boot installation environment](#1-boot-installation-environment)
+    1. [Prepare installation environment server](#1-1-prepare-installation-environment-server)
+    2. [Boot the LiveCD](#1-2-boot-the-livecd)
+    3. [First login](#1-3-first-login)
+    4. [Prepare the data partition](#1-4-prepare-the-data-partition)
+    5. [Set reusable environment variables](#1-5-set-reusable-environment-variables)
+    6. [Exit the console and login with SSH](#1-6-exit-the-console-and-login-with-ssh)
+2. [Import CSM tarball](#2-import-csm-tarball)
+    1. [Download CSM tarball](#2-1-download-csm-tarball)
+    2. [Import tarball assets](#2-2-import-tarball-assets)
+3. [Create system configuration](#3-create-system-configuration)
+    1. [Validate SHCD](#3-1-validate-shcd)
+    2. [Generate topology files](#3-2-generate-topology-files)
+    3. [Customize `system_config.yaml`](#3-3-customize-system_configyaml)
+    4. [Run CSI](#3-4-run-csi)
+    5. [Prepare Site Init](#3-5-prepare-site-init)
+    6. [Initialize the LiveCD](#3-6-initialize-the-livecd)
+4. [Next topic](#next-topic)
 
-1. [Boot Installation Environment](#1-boot-installation-environment)
-   * [Prepare Installation Environment Server](#prepare-installation-environment-server)
-   * [Boot the LiveCD](#boot-the-livecd)
-   * [First Login](#first-login)
-   * [Prepare the Data Partition](#prepare-the-data-partition)
-   * [Set Reusable Environment Variables](#set-reusable-environment-variables)
-   * [Exit the Console and Login with SSH](#exit-the-console-and-login-with-ssh)
-1. [Import CSM Tarball](#2-import-csm-tarball)
-   * [Download CSM Tarball](#download-csm-tarball)
-   * [Import Tarball Assets](#import-tarball-assets)
-1. [Create System Configuration](#3-create-system-configuration)
-   * [Validate SHCD](#validate-shcd)
-   * [Generate Topology Files](#generate-topology-files)
-   * [Customize `system_config.yaml`](#customize-system_configyaml)
-   * [Run CSI](#run-csi)
-   * [Shasta CFG](#shasta-cfg)
-   * [Initialize the LiveCD](#initialize-the-livecd)
-1. [Next Topic](#next-topic)
+## 1. Boot installation environment
 
-# 1. Boot Installation Environment
+This section walks the user through booting and connecting to the LiveCD.
 
-This section will walk the user through booting and connecting to the LiveCD.
+Before proceeding, the user must obtain the CSM tarball containing the LiveCD.
 
-Before proceeding the user must obtain the CSM tarball containing the LiveCD.
+> **NOTE:** Each step denotes where its commands must run; `external#` refers to a server that is **not** the CRAY, whereas `pit#` refers to the LiveCD itself.
 
-> **`NOTE`** Each step denotes where its command(s) must run; `external#` refers to a server that is _not_ the CRAY, whereas `pit#` refers to the LiveCD itself. 
-
-Any steps that require the use of an `external` server require that server to have the following tools:
+Any steps run on an `external` server require that server to have the following tools:
 
 - `ipmitool`
 - `ssh`
 - `tar`
 
-> **`NOTE`** The CSM tarball will be fetched from the external server in the [import tarball assets](#import-tarball-assets) step using `curl` or `scp`. If a web server is not installed then `scp` is the backup option.
+> **NOTE:** The CSM tarball will be fetched from the external server in the [Import tarball assets](#2-2-import-tarball-assets) step using `curl` or `scp`. If a web server is not installed, then `scp` is the backup option.
 
-## Prepare Installation Environment Server
+### 1.1 Prepare installation environment server
 
 **`TODO: Manually validate the m001 firmware, UEFI settings, and cabling`**
 
-1. (`external#`) Download the CSM software release from the public artifactory instance.
+1. (`external#`) Download the CSM software release from the public Artifactory instance.
+
+   > **NOTES:**
+   >
+   > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
+   > - **If air-gapped or behind a strict firewall**, then the tarball must be obtained from the medium delivered by Cray-HPE. For these cases, copy or download the tarball to the working
+   >   directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [Download CSM tarball](#2-1-download-csm-tarball) step.
 
    ```bash
    # e.g. an alpha : CSM_RELEASE=1.3.0-alpha.99
    # e.g. an RC    : CSM_RELEASE=1.3.0-rc.1
    # e.g. a stable : CSM_RELEASE=1.3.0  
-   CSM_RELEASE=1.3.0-alpha.4
-   curl -C - -O "https://artifactory.algol60.net/artifactory/releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
+   CSM_RELEASE=1.3.0-alpha.9
+   curl -C - -O "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
    ```
-
-   > **`NOTE`** For users that are in an **air gap or behind a strict firewall**, the tarball will have to be obtained from the medium delivered by Cray-HPE. For these cases, please copy/download the tarball to the working directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [download CSM tarball](#download-csm-tarball) step.
 
 1. (`external#`) Extract the LiveCD from the tarball.
 
@@ -61,29 +63,29 @@ Any steps that require the use of an `external` server require that server to ha
    tar --wildcards --no-anchored -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-pre-install-toolkit-*.iso'
    ```
 
-1. The LiveCD is now extracted and the user may proceed to [boot the LiveCD](#boot-the-livecd).
+### 1.2 Boot the LiveCD
 
-### Boot the LiveCD
+1. (`external#`) Start a typescript and set the `PS1` variable to record timestamps.
 
-1. (`external#`) Start a typescript and set the PS1 to record timestamps.
-
-   > **`NOTE`** Typescripts help triage if/when a user becomes stuck and requires assistance.
+   > **NOTE:** Typescripts help triage if problems are encountered.
 
    ```bash
    script -a "boot.livecd.$(date +%Y-%m-%d).txt"
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-1. (`external#`) Follow one of the respective procedures below based on the vendor for the ncn-m001 node:
+1. (`external#`) Follow one of the procedures below based on the vendor for the `ncn-m001` node:
 
    - **HPE iLO BMCs**
 
-      Prepare a server on the network to host the `cray-pre-install-toolkit` ISO file if the current server is insufficient.
+      Prepare a server on the network to host the `cray-pre-install-toolkit` ISO file, if the current server is insufficient.
       Then follow the [HPE iLO BMCs](livecd/Boot_LiveCD_RemoteISO.md#hpe-ilo-bmcs) to boot the RemoteISO before returning here.
 
-   - **Gigabyte BMCs** and **Intel BMCs** must create a USB stick
+   - **Gigabyte BMCs** and **Intel BMCs**
 
-      1. (`external#`) Get Cray-Site-Init from the Tarball and install it:
+      Create a USB stick using the following procedure.
+
+      1. (`external#`) Get `cray-site-init` from the tarball.
 
          ```bash
          tar --wildcards --no-anchored -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-site-init-*.rpm'
@@ -91,62 +93,56 @@ Any steps that require the use of an `external` server require that server to ha
 
       1. (`external#`) Install the `write-livecd.sh` script:
 
-         - RPM Based Distros:
+         - RPM-based systems:
 
             ```bash
-            rpm -Uvh cray-site-init*.rpm
+            rpm -Uvh --force cray-site-init*.rpm
             ```
 
-         - Non-RPM Based Distros (requires `bsdtar`):         
+         - Non-RPM-based systems (requires `bsdtar`):
 
-            ```bash                                                                    
-            bsdtar xvf cray-site-init-*.rpm --include *write-livecd.sh -C ./           
-            mv ./usr/local/bin/write-livecd.sh ./                                      
-            rmdir -p ./usr/local/bin/                                                  
-            ```      
+            ```bash
+            bsdtar xvf cray-site-init-*.rpm --include *write-livecd.sh -C ./
+            mv -v ./usr/local/bin/write-livecd.sh ./
+            rmdir -pv ./usr/local/bin/
+            ```
 
          - Non-RPM Based Distros (requires `rpm2cpio`):
 
             ```bash
             rpm2cpio cray-site-init-*.rpm | cpio -idmv
-            mv ./usr/local/bin/write-livecd.sh ./                                      
-            rm -rf ./usr
+            mv -v ./usr/local/bin/write-livecd.sh ./
+            rm -vrf ./usr
             ```
 
       1. Follow [Bootstrap a LiveCD USB](livecd/Boot_LiveCD_USB.md) and then return here.
 
-1. The user may proceed to [first login](#first-login).
+### 1.3 First login
 
-## First Login
+On first login, the LiveCD will prompt the administrator to change the password.
 
-On first login the LiveCD will prompt the administrator to change the password.
+1. (`pit#`) Log in.
 
-1. (`pit#`) At the login prompt type in `root` as the username and press return twice. The LiveCD will force the user to set a new password. 
+   > **NOTE:** The initial password is empty.
 
-   > **`NOTE`** **The initial password is empty**, pressing return the second time inputs an empty password.
+   At the login prompt, enter `root` as the username. Because the initial password is blank,
+   press return twice at the first two password prompts. The LiveCD will force a new password to be set.
 
    ```text
-   pit login: root
-   Password:
+   Password:           <-------just press Enter here for a blank password
+   You are required to change your password immediately (administrator enforced)
+   Changing password for root.
+   Current password:   <------- press Enter here, again, for a blank password
+   New password:       <------- type new password
+   Retype new password:<------- retype new password
+   Welcome to the CRAY Pre-Install Toolkit (LiveOS)
    ```
 
-   > Expected output looks similar to the following:
-   > 
-   > ```text
-   > Password:           <-------just press Enter here for a blank password
-   > You are required to change your password immediately (administrator enforced)
-   > Changing password for root.
-   > Current password:   <------- press Enter here, again, for a blank password
-   > New password:       <------- type new password
-   > Retype new password:<------- retype new password
-   > Welcome to the CRAY Pre-Install Toolkit (LiveOS)
-   > ```
+1. (`pit#`) Configure the site-link (`lan0`), DNS, and gateway IP addresses.
 
-1. (`pit#`) Configure the site-link (`lan0`) static IP, DNS, and gateway.
+   1. Set `site_ip`, `site_gw`, and `site_dns` variables.
 
-   1. Set `site_ip`, `site_gw`, and `site_dns`:
-
-      > **`NOTE`** The `site_ip`, `site_gw`, and `site_dns` values must come from the local network administration or authority.
+      > **NOTE:** The `site_ip`, `site_gw`, and `site_dns` values must come from the local network administration or authority.
 
       ```bash
       # CIDR Format: A.B.C.D/N
@@ -163,9 +159,9 @@ On first login the LiveCD will prompt the administrator to change the password.
       site_dns=
       ```
 
-   1. Set `site_nics`
+   1. Set `site_nics` variable.
 
-      > **`NOTE`** The `site_nics` value(s) are found while the user is in the LiveCD (for example, `site_nics='p2p1 p2p2 p2p3'` or `site_nics=em1`).
+      > **NOTE:** The `site_nics` value or values are found while the user is in the LiveCD (for example, `site_nics='p2p1 p2p2 p2p3'` or `site_nics=em1`).
 
       ```bash
       # Device Name: pXpY or emX (e.g. common values are p2p1, p801p1, or em1)
@@ -174,35 +170,40 @@ On first login the LiveCD will prompt the administrator to change the password.
 
    1. (`pit#`) Run the `csi-setup-lan0.sh` script to set up the site link and set the hostname.
 
-      > **`NOTE`** All of the `/root/bin/csi-*` scripts are harmless to run without parameters; doing so will print usage statements.
-      > **`NOTE`** The hostname is auto-resolved based on reverse DNS, if it is unresolvable then the user can set the hostname with:
-      > ```bash
-      > hostname=eniac-ncn-m001
-      > hostamectl set-hostname "${hostname}-pit" 
-      > ```
+      > **NOTES:**
+      >
+      > - All of the `/root/bin/csi-*` scripts can be run without parameters to display usage statements.
+      > - The hostname is auto-resolved based on reverse DNS, if it is unresolvable then the user can set the hostname with:
+      >
+      >    ```bash
+      >    hostname=eniac-ncn-m001
+      >    hostamectl set-hostname "${hostname}-pit" 
+      >    ```
 
       ```bash
       /root/bin/csi-setup-lan0.sh "$site_ip" "$site_gw" "$site_dns" "$site_nics"
       ```
 
-1. (`pit#`) Verify that the assigned IP successfully applied on `lan0` 
+1. (`pit#`) Verify that the assigned IP address was successfully applied to `lan0` .
 
    ```bash
    wicked ifstatus --verbose lan0
    ```
 
-   > **`NOTE`** The output from the above command must say "`leases:   ipv4 static granted`", 
-   > if the IPv4 address was not granted then go back and recheck the variable values. The 
-   > output will indicate the IP failed to assign, which can happen if the given IP is already 
-   > taken on the connected network.
+   > **NOTE:** The output from the above command must say `leases:   ipv4 static granted`.
+   > If the IPv4 address was not granted, then go back and recheck the variable values. The
+   > output will indicate the IP address failed to assign, which can happen if the given IP address
+   > is already taken on the connected network.
 
-1. Proceed to [prepare the data partition](#prepare-the-data-partition).
+### 1.4 Prepare the data partition
 
-## Prepare the Data Partition
+1. (`pit#`) Mount the `PITDATA` partition.
 
-1. (`pit#`) Mount the `PITDATA` partition using the **RemoteISO** directions or the **USB** option below depending how the LiveCD was connected in the [boot the LiveCD](#boot-the-livecd) section.
+   Use either the **RemoteISO** or the **USB** option below, depending how the LiveCD was connected in the [Boot the LiveCD](#1-2-boot-the-livecd) step.
 
-   - **RemoteISO** directions for using a local disk for PITDATA:
+   - **RemoteISO**
+
+      Use a local disk for `PITDATA`:
 
       ```bash
       disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
@@ -212,28 +213,31 @@ On first login the LiveCD will prompt the administrator to change the password.
       mount -vL PITDATA
       ```
 
-   - **USB** directions for mounting the USB data partition:
+   - **USB**
+
+      Mount the USB data partition:
 
       ```bash
       mount -vL PITDATA
       ```
 
-## Set Reusable Environment Variables
+### 1.5 Set reusable environment variables
 
-These variables will need to be set for various pages used within docs-csm installation.
+These variables will need to be set for many procedures within the CSM installation process.
 
-> **`NOTE`** This portion sets some variables that were already set, these should be set again anyway
-> to ensure that they're set properly when a user resumes or picks up a pre-installation.
+> **NOTE:** This sets some variables that were already set. These should be set again anyway.
 
-1. (`pit#`) Set the variables in the following order
+1. (`pit#`) Set the variables.
 
-   1. `PITDATA`
+   1. Set the `PITDATA` variable.
 
       ```bash
       export PITDATA="$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)"
       ```
 
-   1. `CSM_RELEASE`
+   1. Set the `CSM_RELEASE` variable.
+
+      The value is based on the version of the CSM release being installed.
 
       ```bash
       # e.g. an alpha : CSM_RELEASE=1.3.0-alpha.99
@@ -242,20 +246,25 @@ These variables will need to be set for various pages used within docs-csm insta
       export CSM_RELEASE=<value>
       ```
 
-   1. `CSM_PATH`
+   1. Set the `CSM_PATH` variable.
+
+      After the CSM release tarball has been expanded, this will be the path to its base directory.
 
       ```bash
       export CSM_PATH="${PITDATA}/csm-${CSM_RELEASE}"
       ```
 
-   1. `SYSTEM_NAME`
+   1. Set the `SYSTEM_NAME` variable.
+
+      This is the user friendly name for the system. For example, for `eniac-ncn-m001`, `SYSTEM_NAME` should be set to `eniac`.
 
       ```bash
-      # SYSTEM_NAME is equal to the user friendly name for the system, e.g. the system name for "eniac-ncn-m001" is "eniac"
       export SYSTEM_NAME=<eniac>
       ```
 
-1. (`pit#`) Set `/etc/environment` (preserve `GOSS_SERVERS` and clear out all other variables):
+1. (`pit#`) Set `/etc/environment`.
+
+   This ensures that these variables will be set in all future shells on the PIT node.
 
    ```bash
    cat << EOF >/etc/environment
@@ -267,9 +276,9 @@ These variables will need to be set for various pages used within docs-csm insta
    EOF
    ```
 
-## Exit the Console and Login with SSH
+### 1.6 Exit the console and login with SSH
 
-1. (`pit#`) Create the admin directory and logout.
+1. (`pit#`) Create the `admin` directory and logout.
 
    ```bash
    mkdir -pv "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
@@ -282,9 +291,12 @@ These variables will need to be set for various pages used within docs-csm insta
    exit
    ```
 
-1. (`pit#`) Exit the console by typing the key-sequence: tilde, period (e.g. "`~.`").
+1. (`pit#`) Exit the console.
 
-   > **`NOTE`** If the console is running via a jump-box (e.g. the user used SSH to log into another server, and then used `ipmitool` from that server to connect to ncn-m001), then press tilde _twice_ followed by a period to prevent from exiting the parent SSH session (e.g. "`~~.`")
+   This is done by typing the key-sequence: tilde, period. That is, `~.`
+
+   If the console was accessed over an SSH session (that is, the user used SSH to log into another server, and from there used `ipmitool` to access the console),
+   then press tilde **twice** followed by a period, in order to prevent exiting the parent SSH session. That is, `~~.`
 
 1. (`external#`) Copy the typescript to the running LiveCD.
 
@@ -292,14 +304,14 @@ These variables will need to be set for various pages used within docs-csm insta
    scp boot.livecd.*.txt root@eniac-ncn-m001:/tmp/
    ```
 
-1. (`pit#`) SSH into the LiveCD. 
+1. (`pit#`) SSH into the LiveCD.
 
-   ```bash  
+   ```bash
    livecd=eniac-ncn-m001.example.company.com
    ssh root@$livecd
    ```
 
-1. (`pit#`) Change to the `admin` directory, copy any typescripts from `/tmp`, and start a new typescript with a timestamped PS1.
+1. (`pit#`) Copy the previous typescript and start a new one.
 
    ```bash
    cd "${PITDATA}/admin"
@@ -310,94 +322,13 @@ These variables will need to be set for various pages used within docs-csm insta
 
 1. (`pit#`) Print information about the booted PIT image for logging purposes.
 
-   ```bash
-   /root/bin/metalid.sh
-   ```
-
-   > Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors. This output facilitates requests for triage if/when they are issued.
-   > 
-   > ```text
-   > = PIT Identification = COPY/CUT START =======================================
-   > VERSION=1.6.0
-   > TIMESTAMP=20220504161044
-   > HASH=g10e2532
-   > 2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
-   > CRAY-Site-Init build signature...
-   > Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   > Build Time     : 2022-05-02T20:21:46Z
-   > Go Version     : go1.16.10
-   > Git Version    : v1.9.13-29-g0915d59f
-   > Platform       : linux/amd64
-   > App. Version   : 1.17.1
-   > metal-ipxe-2.2.6-1.noarch
-   > metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   > metal-basecamp-1.1.12-1.x86_64
-   > pit-init-1.2.20-1.noarch
-   > pit-nexus-1.1.4-1.x86_64
-   > = PIT Identification = COPY/CUT END =========================================
-   > ```
-
-## 2. Import CSM Tarball
-
-### Download CSM Tarball
-
-1. (`pit#`) Download the CSM Tarball
-
-   - From Cray using `curl`:
-
-      ```bash
-      # Use -C to handle partial downloads; if the download is interrupted then re-running this command will resume.
-      curl -C - -o /var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz "https://artifactory.algol60.net/artifactory/releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
-      ``` 
-
-   - From the `external` server used in [prepare the installation environment server](#prepare-installation-environment-server):
-
-      ```bash
-      scp "<external-server>:/<path>/csm-${CSM_RELEASE}.tar.gz" /var/www/ephemeral/
-      ```
-
-### Import Tarball Assets
-
-If the user is resuming at this stage, the `CSM_RELEASE` and `PITDATA` variables are already set
-via `/etc/environment` from the [download CSM tarball](#download-csm-tarball) step.
-
-1. (`pit#`) Extract the tarball.
-
-   ```text
-   tar -C "${PITDATA}" -zxvf "csm-${CSM_RELEASE}.tar.gz"
-   ```
-
-1. (`pit#`) Copy the NCN images into the web server.
-
-   ```bash
-   rsync -a -P --delete "${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/"
-   rsync -a -P --delete "${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/"
-   ```
-
-1. (`pit#`) Install/update cray-site-init, csm-testing, and goss-servers.
-
-   > **`NOTE`** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
-
-   ```bash
-   zypper \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
-      --no-gpg-checks \
-      update -y cray-site-init
-   zypper \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
-      --no-gpg-checks \
-      update -y csm-testing goss-servers
-   ```
-
-1. (`pit#`) Log the currently installed PIT packages
+   Having this information in the typescript can be helpful if problems are encountered during the install.
 
    ```bash
    /root/bin/metalid.sh
    ```
 
-   > Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors. This output facilitates requests for triage if/when they are issued.
+   > Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
    >
    > ```text
    > = PIT Identification = COPY/CUT START =======================================
@@ -420,31 +351,122 @@ via `/etc/environment` from the [download CSM tarball](#download-csm-tarball) st
    > = PIT Identification = COPY/CUT END =========================================
    > ```
 
-## 3. Create System Configuration
+## 2. Import CSM tarball
 
-This stage will walk the user through creating the configuration payload for the system.
+### 2.1 Download CSM tarball
+
+1. (`pit#`) Download the CSM tarball
+
+   - From Cray using `curl`:
+
+      > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
+
+      ```bash
+      curl -C - -o /var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
+      ```
+
+   - `scp` from the external server used in [Prepare installation environment server](#1-1-prepare-installation-environment-server):
+
+      ```bash
+      scp "<external-server>:/<path>/csm-${CSM_RELEASE}.tar.gz" /var/www/ephemeral/
+      ```
+
+### 2.2 Import tarball assets
+
+If resuming at this stage, the `CSM_RELEASE` and `PITDATA` variables are already set
+in `/etc/environment` from the [Download CSM tarball](#2-1-download-csm-tarball) step.
+
+1. (`pit#`) Extract the tarball.
+
+   ```text
+   tar -C "${PITDATA}" -zxvf "csm-${CSM_RELEASE}.tar.gz"
+   ```
+
+1. (`pit#`) Copy the NCN images from the expanded tarball.
+
+   ```bash
+   rsync -a -P --delete "${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/"
+   rsync -a -P --delete "${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/"
+   ```
+
+1. (`pit#`) Install or update `cray-site-init`, `csm-testing`, and `goss-servers` RPMs.
+
+   > **NOTE:** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
+
+   ```bash
+   zypper \
+      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
+      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+      --no-gpg-checks \
+      update -y cray-site-init
+   zypper \
+      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
+      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+      --no-gpg-checks \
+      update -y csm-testing goss-servers
+   ```
+
+1. (`pit#`) Log the currently installed PIT packages.
+
+   Having this information in the typescript can be helpful if problems are encountered during the install.
+   This command was run once in a previous step -- running it again now is intentional.
+
+   ```bash
+   /root/bin/metalid.sh
+   ```
+
+   > Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
+   >
+   > ```text
+   > = PIT Identification = COPY/CUT START =======================================
+   > VERSION=1.6.0
+   > TIMESTAMP=20220504161044
+   > HASH=g10e2532
+   > 2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
+   > CRAY-Site-Init build signature...
+   > Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
+   > Build Time     : 2022-05-02T20:21:46Z
+   > Go Version     : go1.16.10
+   > Git Version    : v1.9.13-29-g0915d59f
+   > Platform       : linux/amd64
+   > App. Version   : 1.17.1
+   > metal-ipxe-2.2.6-1.noarch
+   > metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
+   > metal-basecamp-1.1.12-1.x86_64
+   > pit-init-1.2.20-1.noarch
+   > pit-nexus-1.1.4-1.x86_64
+   > = PIT Identification = COPY/CUT END =========================================
+   > ```
+
+## 3. Create system configuration
+
+This stage walks the user through creating the configuration payload for the system.
 
 Run the following steps before starting any of the system configuration procedures.
 
-1. (`pit#`) Make the prep directory
+1. (`pit#`) Make the `prep` directory.
 
    ```bash
    mkdir -pv "${PITDATA}/prep"
    ```
 
-1. (`pit#`) Change into the prep directory.
+1. (`pit#`) Change into the `prep` directory.
 
    ```bash
    cd "${PITDATA}/prep"
    ```
 
-### Validate SHCD
+### 3.1 Validate SHCD
 
-1. (`pit#`) Download the SHCD to the `prep/` directory. This will need to be retrieved from the administrators CRAY deliverable.
+1. (`pit#`) Download the SHCD to the `prep` directory.
 
-1. See [validate SHCD](../operations/network/management_network/validate_shcd.md) and then return to this page.
+   This will need to be retrieved from the administrators Cray deliverable.
 
-### Generate Topology Files
+1. Validate the SHCD.
+
+   See [Validate SHCD](../operations/network/management_network/validate_shcd.md) and then return to this page.
+
+### 3.2 Generate topology files
 
 1. (`pit#`) Generate `hmn_connections.json`.
 
@@ -458,57 +480,64 @@ Run the following steps before starting any of the system configuration procedur
     csi config shcd "${SYSTEM_NAME}-full-paddle.json" -ANS
     ```
 
-1. Create the `cabinents.yaml` file, see [Create `cabinets.yaml`](./create_cabinets_yaml.md).
+1. Create the `cabinents.yaml` file.
 
-   > **`NOTE`** This file will be automated through `csi`, at this time it is manually created.
-   > If the system requires this file, update `system_config.yaml#cabinets-yaml` with 
-   > `'cabinets.yaml'` as its value in 
-   > [Customize `system_config.yaml`](#customize-system_configyaml).
+   > If using this file, then do not forget to set the `cabinets-yaml` field in the
+   > [Customize `system_config.yaml`](#3-3-customize-system_configyaml) step.
+
+   See [Create `cabinets.yaml`](./create_cabinets_yaml.md).
 
 1. Fill in the `ncn_metadata.csv` placeholder values with the actual values.
 
-   > **`NOTE`** If a previous `ncn_metadata.csv` file is available, simply copy it into place by overriding the generated one.
+   > **NOTE:** If a previous `ncn_metadata.csv` file is available, simply copy it into place by overriding the generated one.
 
    See [Collect MAC Addresses for NCNs](./collect_mac_addresses_for_ncns.md).
 
-### Customize `system_config.yaml`
+### 3.3 Customize `system_config.yaml`
 
-1. (`pit#`) Create an empty `system_config.yaml`, or if a `system_config.yaml` exists from a prior installation then copy it into the working directory and move onto [run CSI](#run-csi).
+1. (`pit#`) Create or copy `system_config.yaml`.
 
-   ```bash
-   csi config init empty
-   ```
+   - If one does not exist from a prior installation, then create an empty one:
+
+      ```bash
+      csi config init empty
+      ```
+
+   - Otherwise, copy the existing `system_config.yaml` file into the working directory and proceed to the [Run CSI](#3-4-run-csi) step.
 
 1. (`pit#`) Edit the `system_config.yaml` file with the appropriate values.
 
-   > **`NOTE`**
+   > **NOTES:**
+   >
    > - For a short description of each key in the file, run `csi config init --help`.
-   > - For more description of these settings and the default values, see 
-   > [Default IP Address Ranges](../introduction/csm_overview.md#2-default-ip-address-ranges) and the other topics in
-   > [CSM Overview](../introduction/csm_overview.md).
+   > - For more description of these settings and the default values, see
+   >   [Default IP Address Ranges](../introduction/csm_overview.md#2-default-ip-address-ranges) and the other topics in
+   >   [CSM Overview](../introduction/csm_overview.md).
+   > - If the system is using a `cabinets.yaml` file, be sure to update the `cabinets-yaml` field with `'cabinets.yaml'` as its value.
 
    ```bash
    vim system_config.yaml
    ```
 
-### Run CSI
+### 3.4 Run CSI
 
-1. (`pit#`) Generate the initial configuration for CSI, this will validate whether the inputs for CSI are correct.
+1. (`pit#`) Generate the initial configuration for CSI.
+
+   This will validate whether the inputs for CSI are correct.
 
    ```bash
    csi config init
    ```
 
-### Shasta CFG
+### 3.5 Prepare Site Init
 
-See [prepare site init](prepare_site_init.md) for creating a `site-init` directory, 
-once `site-init` is created the user can resume at [initialize the LiveCD](#initialize-the-livecd).
+Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
-### Initialize the LiveCD
+### 3.6 Initialize the LiveCD
 
-> **`NOTE`** If the user is starting an installation at this point, the user must sync their old `prep` directory back onto the system.
+> **NOTE:** If starting an installation at this point, then be sure to copy the previous `prep` directory back onto the system.
 
-1. (`pit#`) Initialize the PIT:
+1. (`pit#`) Initialize the PIT.
 
    The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
 
@@ -516,13 +545,13 @@ once `site-init` is created the user can resume at [initialize the LiveCD](#init
    /root/bin/pit-init.sh
    ```
 
-1. (`pit#`) Set `IPMI_PASSWORD`:
+1. (`pit#`) Set the `IPMI_PASSWORD` variable.
 
    ```bash
    read -s IPMI_PASSWORD
    ```
 
-1. (`pit#`) Export `IPMI_PASSWORD` and run the validation:
+1. (`pit#`) Export the `IPMI_PASSWORD` variable.
 
    ```bash
    export IPMI_PASSWORD
@@ -530,27 +559,29 @@ once `site-init` is created the user can resume at [initialize the LiveCD](#init
 
 1. (`pit#`) Setup boot links to the artifacts extracted from the CSM tarball.
 
-   > **`NOTE`**
+   > **NOTES:**
+   >
    > - This will also set all the BMCs to DHCP.
-   > - Change into the `$HOME` directory to ensure `set-sqfs-links.sh` doesn't affect any `ncn` prefixed directories.
+   > - Changing into the `$HOME` directory ensures the proper operation of the script.
 
    ```bash
-   cd $HOME
-   /root/bin/set-sqfs-links.sh
+   cd $HOME && /root/bin/set-sqfs-links.sh
    ```
 
-1. (`pit#`) Verify the LiveCD is ready by running the preflight tests. If any tests fail they need
-   to be investigated. After actions have been taken to rectify the tests
-   (e.g. editing configuration or CSI inputs) restart
-   [initialize the LiveCD](#initialize-the-livecd) at step 1.
+1. (`pit#`) Verify that the LiveCD is ready by running the preflight tests.
 
    ```bash
    csi pit validate --livecd-preflight
    ```
 
-1. Save the `prep` directory for re-use. This needs to be copied off the system and either stored in 
-   a secure location or in a secured git repository. There are secrets in this directory that
-   shouldn't be accidentally exposed.
+   If any tests fail, they need to be investigated. After actions have been taken to rectify the tests
+   (for example, editing configuration or CSI inputs), then restart from the beginning of the
+   [Initialize the LiveCD](#3-6-initialize-the-livecd) procedure.
+
+1. Save the `prep` directory for re-use.
+
+   This needs to be copied off the system and either stored in a secure location or in a secured Git repository.
+   There are secrets in this directory that should not be accidentally exposed.
 
 1. (`pit#`) Exit the typescript.
 
@@ -558,7 +589,7 @@ once `site-init` is created the user can resume at [initialize the LiveCD](#init
    exit
    ```
 
-## Next Topic
+## Next topic
 
 After completing this procedure, proceed to configure the management network switches.
 

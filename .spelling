@@ -62,6 +62,7 @@ Arista
 artifact
 artifact's
 artifacts
+Artifactory
 ArubaOS-CX
 ASes
 ASICs
@@ -596,7 +597,7 @@ Init
 # To allow Site Init
 Init
 
-- install/prepare_configuration_payload.md
+- install/pre-installation.md
 # To allow Site Init
 Init
 
