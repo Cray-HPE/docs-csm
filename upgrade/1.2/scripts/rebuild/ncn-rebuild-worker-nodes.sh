@@ -93,6 +93,10 @@ fi
 
 drain_node $target_ncn
 
+# Validate SLS health before calling csi handoff bss-update-*, since
+# it relies on SLS
+check_sls_health
+
 set +e
 while true ; do    
     csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME

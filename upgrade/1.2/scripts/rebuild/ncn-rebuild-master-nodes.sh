@@ -106,6 +106,10 @@ if [[ ${first_master_hostname} == ${target_ncn} ]]; then
         exit 1
       fi
 
+      # Validate SLS health before calling csi handoff bss-update-*, since
+      # it relies on SLS
+      check_sls_health
+
       scp /root/docs-csm-latest.noarch.rpm $promotingMaster:/root/docs-csm-latest.noarch.rpm
       ssh $promotingMaster "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
       ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.2/scripts/k8s/promote-initial-master.sh"
@@ -142,6 +146,10 @@ else
 fi
 
 drain_node $target_ncn
+
+# Validate SLS health before calling csi handoff bss-update-*, since
+# it relies on SLS
+check_sls_health
 
 set +e
 while true ; do    
