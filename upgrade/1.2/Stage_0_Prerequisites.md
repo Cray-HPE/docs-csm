@@ -138,25 +138,28 @@ With BICAN, the pre-1.2 CAN network is split into two separate networks:
    toward the end of the CSM 1.2 upgrade, UANs will stop registering themselves on CMN and will receive new IPs on the
    CAN/CHN network below. This process is described in more detail in [UAN Migration](#uan-migration).
 
+   Pivoting the pre-1.2 CAN to the new CMN allows administrative traffic (already on the pre-1.2 CAN) to remain as-is while
+   moving standard user traffic to a new site-routable network (CAN / CHN).
+
 1. Customer Access Network (CAN) / Customer High-speed Network (CHN)
 
    For user traffic only (e.g. users running and monitoring jobs), CSM 1.2 allows you to pick one of two networks:
 
-      - Customer Access Network (CAN): this is a new network (VLAN6 in switches) that runs over the management network. This
+      - Customer Access Network (CAN) \[Recommended\]: this is a new network (VLAN6 in switches) that runs over the management network. This
          network must not be confused with pre-1.2 CAN, which was a monolithic network that allowed both user and administrative
          traffic, was configured as VLAN7 in switches, and is now renamed to CMN. The new CAN allows only user traffic.
 
-      - Customer High-speed Network (CHN): this is a new network (VLAN5 in switches) that runs over the high-speed fabric.
+      - Customer High-speed Network (CHN) \[CSM 1.2 Tech Preview\]: this is a new network (VLAN5 in switches) that runs over the high-speed fabric.
 
-   You must only pick either the new CAN or CHN, but not both. The rest of the installation guide will provide you with
-   options for configuring either the new CAN or CHN.
-
-Pivoting the pre-1.2 CAN to the new CMN allows administrative traffic (already on the pre-1.2 CAN) to remain as-is while
-moving standard user traffic to a new site-routable network.
+   You must only pick either the new CAN or CHN, but not both. Please note that CHN is a tech preview in CSM 1.2, and the new CAN is
+   the recommended upgrade. The rest of the installation guide will provide you with options for configuring either the new CAN or CHN.
 
 ### UAN migration
 
-Certain steps are taken in order to minimize disruption to UANs during the CSM 1.2 upgrade process:
+Certain steps are taken in order to minimize disruption to UANs during the CSM 1.2 upgrade process. Please read these steps
+carefully and follow any recommendations and warnings to minimize disruptions to user activity.  Note that these steps apply
+to all types of application nodes and not just UANs -- the term "UAN" just happens to be more commonly used and understood when
+referring to user activity.
 
 1. During the upgrade, the switch `1.2 Preconfig` will not remove UAN ports from the CMN VLAN (the pre-1.2 CAN), allowing UANs
    to retain their existing IPs during the CSM 1.2 upgrade process. Traffic to and from UANs will still flow through CMN, but
@@ -167,26 +170,69 @@ Certain steps are taken in order to minimize disruption to UANs during the CSM 1
    the same SLS data, which can lead to UANs being prematurely removed from CMN and causing UAN outage. As such, CFS plays
    need to be disabled for UANs.
 
-   To disable CFS plays for UANs, you must remove CFS assignment for UANs by running the following command:
+   (`ncn-m001#`) To disable CFS plays for UANs, you must remove CFS assignment for UANs by running the following command:
 
    ```bash
-   what-is-the-command-to-disable-CFS-for-UANs.sh
+   export CRAY_FORMAT=json
+   for xname in $(cray hsm state components list --role Application --subrole UAN --type node | jq -r .Components[].ID)
+   do
+      cray cfs components update --enabled false --desired-config "" $xname
+   done
    ```
 
-1. UAN reboots must be avoided. Rebooting a UAN can re-enable CFS and can ultimately lead to removing CMN interfaces from UANs.
-   As a system administrator, you must inform your users to avoid UAN reboots during the CSM 1.2 upgrade process. If, however,
-   a UAN is rebooted, you can run the following set of commands to add the CMN interface back on the UAN:
+   > Note that the above command will disable CFS plays for UANs only. If you wish to disable CFS plays for all types of
+   > application nodes (recommended), then remove the `--subrole UAN` portion in the snippet above.
 
-   ```bash
-   what-is-the-command-to-readd-CMN-to-UANs-after-accidental-reboot.sh
+1. UAN reboots must be avoided and is not a supported operation during CSM 1.2 upgrade. Rebooting a UAN during a CSM 1.2
+   upgrade can re-enable CFS and ultimately lead to removing the CMN interface from UANs, disrupting UAN access for your users.
+   As a system administrator, you must inform your users to avoid UAN reboots during the CSM 1.2 upgrade process.
+
+   If, however, a UAN is rebooted, then you need to patch the file `roles/uan_interfaces/tasks/can-v2.yml` for your current
+   CSM release in the `vcs/cray/uan-config-management.git` repository and re-run the CFS Ansible play to bring back the
+   CMN (pre-1.2 CAN) interface back in UAN. Use the following patch file and follow the instructions in
+   [Configuration Management](../../operations/README.md#configuration-management) to restore CMN access in your UAN:
+
+   ```text
+   --- a/roles/uan_interfaces/tasks/can-v2.yml
+   +++ b/roles/uan_interfaces/tasks/can-v2.yml
+   @@ -33,21 +33,16 @@
+   - name: Get Customer Access Network info from SLS
+     local_action:
+     module: uri
+   -    url: "http://cray-sls/v1/search/networks?name={{ sls_can_name }}"
+   +    url: "http://cray-sls/v1/search/networks?name=CMN"
+        method: GET
+        register: sls_can
+   
+   -- name: Get Customer Access Network CIDR from SLS, if network exists.
+   -  # This assumes that the CAN network is _always_ the third item in the array. This makes the
+   -  # implementation fragile. See CASMCMS-6714.
+   -  set_fact:
+   -    customer_access_network: "{{ sls_can.json[0].ExtraProperties.Subnets[2].CIDR }}"
+   -  when: sls_can.status == 200
+   -
+   -- name: Get Customer Access Network Gateway from SLS, if network exists
+   -  set_fact:
+   -    customer_access_gateway: "{{ sls_can.json[0].ExtraProperties.Subnets[2].Gateway }}"
+   -  when: sls_can.status == 200
+   
+   +- name: "Get {{ uan_user_access_cfg | upper }} CIDR from SLS, if network exists."
+   +  set_fact:
+   +    customer_access_network: "{{ item.CIDR }}"
+   +    customer_access_gateway: "{{ item.Gateway }}"
+   +  loop: "{{ sls_can.json[0].ExtraProperties.Subnets }}"
+   +  when: item.FullName == "CMN Bootstrap DHCP Subnet"
    ```
 
 1. Once the CSM 1.2 upgrade is complete, you may reboot the UANs for the new network configuration changes to take effect.
-   UANs will not receive an IP on the CMN network and instead will default their traffic through the new CAN/CHN.
+   UANs will not receive an IP on the CMN network and instead will default their traffic through the new CAN/CHN. For concrete
+   details on UAN transition plan for your users, please refer to
+   [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime)
 
-1. `{TODO: keepme?}` Note that in CSM 1.2, UAN ports will not be removed from the CMN VLAN7 in switches. In the next CSM release, switch
+1. Note that in CSM 1.2, UAN ports will not be removed from the CMN VLAN7 in switches. In the next CSM release, switch
    configuration will be updated to remove UAN ports from the CMN VLAN7. This enables non-rebooted UANs to continue to work
-   and allows for better easing into BICAN in CSM 1.2.
+   and allows for better easing into BICAN in CSM 1.2. More details about this transition plan are outlined in
+   [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime)
 
 ### UAI migration
 
@@ -201,7 +247,7 @@ for subnet ranges and defaults for CAN/CHN.
 ### Preserving CMN subnet range
 
 It is vital that you preserve the subnet range for the pre-1.2 CAN that is now being renamed to CMN. Changing the subnet
-size during the CSM 1.2 upgrade process can have unintended consequences.
+size during the CSM 1.2 upgrade process is unsupported and will break the upgrade.
 
 ### Changes to service endpoints
 
