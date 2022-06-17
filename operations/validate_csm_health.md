@@ -15,8 +15,11 @@ The areas should be tested in the order they are listed on this page. Errors in 
 **NOTE:** It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
 fails, wait 15 minutes and try again. To check status, run the following command, preferably on `ncn-m001`:
 
-```console
-ncn-m001:~ # chronyc sources -v
+```bash
+ncn-m001# chronyc sources -v
+```
+
+```text
 210 Number of sources = 9
 
   .-- Source mode  '^' = server, '=' = peer, '#' = local clock.
@@ -38,7 +41,6 @@ MS Name/IP address         Stratum Poll Reach LastRx Last sample
 =- ncn-w001.nmn                  5   9   377  234m  +8305us[  +10ms] +/-   38ms
 =- ncn-w002.nmn                  3   5   377     8  -1910us[-1910us] +/-   27ms
 =- ncn-w003.nmn                  3   8   377   74m  -1122us[-1002us] +/-   31ms
-ncn-m001:~ #
 ```
 
 ## Topics
@@ -455,17 +457,17 @@ BMC can be safely ignored or needs to be addressed before proceeding.
 
   - Example ServerTech output:
 
-    ```bash
-    Server: ServerTech-AWS/v8.0v
-    ```
+     ```text
+     Server: ServerTech-AWS/v8.0v
+     ```
 
   - Example HPE output:
 
-    ```bash
-    Server: HPE/1.4.0
-    ```
+     ```text
+     Server: HPE/1.4.0
+     ```
 
-  - ServerTech PDUs may need password changed from their defaults to become functional. Perform the steps in [Change Credentials on ServerTech PDUs](./security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
+  - ServerTech PDUs may need passwords changed from their defaults to become functional. See [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
 
   - HPE PDUs are supported and should show up as being found in HSM.
   If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered.
