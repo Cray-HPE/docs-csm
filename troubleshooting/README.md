@@ -8,6 +8,7 @@ This document provides links to troubleshooting information for services and fun
 * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
   * [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
   * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
+* [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 
 ## Troubleshooting topics
 

@@ -74,6 +74,10 @@ For more information about modifying `customizations.yaml` and tuning for specif
 
    See [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
 
+- Troubleshoot SLS not working
+
+    See [SLS Not Working During Node Rebuild](../../troubleshooting/known_issues/SLS_Not_Working_During_Node_Rebuild.md).
+
 - Rerun a step
 
    When running upgrade scripts, each script records what has been done successfully on a node. This is recorded in the
