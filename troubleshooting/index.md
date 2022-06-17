@@ -9,6 +9,7 @@ This document provides links to troubleshooting information for services and fun
 * [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
 * [Console logs filling up available storage](known_issues/console_log_storage_filling.md)
 * [Common Platform CA Issues](known_issues/platform_ca_issues.md)
+* [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 
 ## Troubleshooting topics
 
