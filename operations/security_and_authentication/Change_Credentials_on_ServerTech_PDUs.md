@@ -190,7 +190,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     sleep 3m
     ```
 
-1. (`ncn-mw#`) Verify RTS was able to communicate with the PDUs with the updated credentials.
+1. (`ncn-mw#`) Verify that RTS was able to communicate with the PDUs with the updated credentials.
 
     ```bash
     kubectl -n services exec -it deployment/cray-hms-rts -c cray-hms-rts-redis -- redis-cli keys '*/redfish/v1/Managers'
