@@ -79,4 +79,3 @@
 ## Stage completed
 
 This stage is completed. See to [*Validate CSM Health*](../README.md#6-validate-csm-health) on the main upgrade page.
-
