@@ -14,7 +14,7 @@ The following procedures are used to manage the HPE Power Distribution Unit (PDU
 
 ## Verify PDU vendor
 
-(`ncn#`) If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
+(`ncn-mw#`) If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
 
 ```bash
 PDU=x3000m0
@@ -167,14 +167,14 @@ Use the following procedure to ensure that the `hms-discovery` job and Redfish T
    After the upgrade to CSM 1.2, RTS will still think that the HPE PDUs in the system are ServerTech PDUs.
    Remove these erroneous HPE PDU entries for RTS from Vault.
 
-   1. (`ncn#`) Get Vault password and create Vault alias.
+   1. (`ncn-mw#`) Get Vault password and create Vault alias.
 
       ```bash
       VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
       alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
       ```
 
-   1. (`ncn#`) Identify HPE PDUs known by RTS.
+   1. (`ncn-mw#`) Identify HPE PDUs known by RTS.
 
       ```bash
       vault kv list secret/pdu-creds
@@ -190,7 +190,7 @@ Use the following procedure to ensure that the `hms-discovery` job and Redfish T
       ]
       ```
 
-   1. (`ncn#`) Remove each identified HPE PDU from Vault.
+   1. (`ncn-mw#`) Remove each identified HPE PDU from Vault.
 
       Repeat the following command for each HPE PDU identified in the output of the previous sub-step.
 
@@ -199,14 +199,14 @@ Use the following procedure to ensure that the `hms-discovery` job and Redfish T
       vault kv delete secret/pdu-creds/$PDU
       ```
 
-   1. (`ncn#`) Restart the Redfish Translation Service (RTS).
+   1. (`ncn-mw#`) Restart the Redfish Translation Service (RTS).
 
       ```bash
       kubectl -n services rollout restart deployment cray-hms-rts
       kubectl -n services rollout status deployment cray-hms-rts
       ```
 
-1. (`ncn#`) Find the list of PDU MAC addresses.
+1. (`ncn-mw#`) Find the list of PDU MAC addresses.
 
    The `ID` field in each element is the normalized MAC address of each PDU:
 
@@ -214,7 +214,7 @@ Use the following procedure to ensure that the `hms-discovery` job and Redfish T
    cray hsm inventory ethernetInterfaces list --type CabinetPDUController
    ```
 
-1. (`ncn#`) Use the returned `ID` from the previous step to delete each HPE PDU MAC address from HSM.
+1. (`ncn-mw#`) Use the returned `ID` from the previous step to delete each HPE PDU MAC address from HSM.
 
    ```bash
    cray hsm inventory ethernetInterfaces delete {ID}
@@ -222,14 +222,14 @@ Use the following procedure to ensure that the `hms-discovery` job and Redfish T
 
    On the next `hms-discovery` job run, it should relocate the deleted PDUs and discover them correctly as HPE PDUs.
 
-1. (`ncn#`) After waiting five minutes, verify that the Ethernet interfaces that were previously deleted are now present:
+1. (`ncn-mw#`) After waiting five minutes, verify that the Ethernet interfaces that were previously deleted are now present:
 
    ```bash
    sleep 300
    cray hsm inventory ethernetInterfaces list --type CabinetPDUController
    ```
 
-1. (`ncn#`) Verify that the Redfish endpoints for the PDUs exist and are `DiscoverOK`.
+1. (`ncn-mw#`) Verify that the Redfish endpoints for the PDUs exist and are `DiscoverOK`.
 
    ```bash
    cray hsm inventory redfishEndpoints list --type CabinetPDUController

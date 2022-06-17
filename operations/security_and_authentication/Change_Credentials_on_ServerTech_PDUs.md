@@ -15,7 +15,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 - The PDU is accessible over the network. A PDU can be reachable by its component name (xname) hostname, but may not yet be discovered by HSM.
 - PDUs are manufactured by ServerTech.
 
-    (`ncn#`) This can be verified by the following command
+    (`ncn-mw#`) This can be verified by the following command
 
     ```bash
     PDU=x3000m0
@@ -30,7 +30,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
 ## Procedure
 
-1. (`ncn#`) List the ServerTech PDUs currently discovered in the system.
+1. (`ncn-mw#`) List the ServerTech PDUs currently discovered in the system.
 
     ```bash
     cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
@@ -43,14 +43,14 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     x3000m0
     ```
 
-1. (`ncn#`) Set up Vault password variable and command alias.
+1. (`ncn-mw#`) Set up Vault password variable and command alias.
 
     ```bash
     VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
     alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
     ```
 
-1. (`ncn#`) Look up the existing password for the `admn` user.
+1. (`ncn-mw#`) Look up the existing password for the `admn` user.
 
     - To extract the global credentials from Vault for the PDUs:
 
@@ -65,7 +65,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
         vault kv get secret/pdu-creds/$PDU
         ```
 
-1. (`ncn#`) Store the existing password for the `admn` user.
+1. (`ncn-mw#`) Store the existing password for the `admn` user.
 
     ```bash
     read -s OLD_PDU_PASSWORD
@@ -90,19 +90,19 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
         **NOTE**: To change the password on a single PDU, that PDU must be successfully discovered by HSM.
 
-        1. (`ncn#`) Set the PDU hostname to change the `admn` credentials:
+        1. (`ncn-mw#`) Set the PDU hostname to change the `admn` credentials:
 
             ```bash
             PDU=x3000m0
             ```
 
-        1. (`ncn#`) Verify that the PDU is reachable:
+        1. (`ncn-mw#`) Verify that the PDU is reachable:
 
             ```bash
             ping $PDU
             ```
 
-        1. (`ncn#`) Change password for the `admn` user on the ServerTech PDU.
+        1. (`ncn-mw#`) Change password for the `admn` user on the ServerTech PDU.
 
             ```bash
             curl -i -k -u "admn:$OLD_PDU_PASSWORD" -X PATCH https://$PDU/jaws/config/users/local/admn \
@@ -121,7 +121,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
             Pragma: JAWS v1.01
             ```
 
-        1. (`ncn#`) Update the PDU credentials stored in Vault.
+        1. (`ncn-mw#`) Update the PDU credentials stored in Vault.
 
             ```bash
             vault kv get secret/pdu-creds/$PDU |
@@ -131,7 +131,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
     - Update all ServerTech PDUs in the system to the same password.
 
-        1. (`ncn#`) Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
+        1. (`ncn-mw#`) Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
 
             ```bash
             for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
@@ -163,7 +163,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
             Pragma: JAWS v1.01
             ```
 
-        1. (`ncn#`) Update Vault for all ServerTech PDUs in the system to the same password:
+        1. (`ncn-mw#`) Update Vault for all ServerTech PDUs in the system to the same password:
 
             ```bash
             for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
@@ -177,20 +177,20 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
     **NOTE**: After five minutes, the previous credential should stop working as the existing sessions time out.
 
-1. (`ncn#`) Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials.
+1. (`ncn-mw#`) Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials.
 
     ```bash
     kubectl -n services rollout restart deployment cray-hms-rts
     kubectl -n services rollout status deployment cray-hms-rts
     ```
 
-1. (`ncn#`) Wait for RTS to initialize itself.
+1. (`ncn-mw#`) Wait for RTS to initialize itself.
 
     ```bash
     sleep 3m
     ```
 
-1. (`ncn#`) Verify RTS was able to communicate with the PDUs with the updated credentials.
+1. (`ncn-mw#`) Verify RTS was able to communicate with the PDUs with the updated credentials.
 
     ```bash
     kubectl -n services exec -it deployment/cray-hms-rts -c cray-hms-rts-redis -- redis-cli keys '*/redfish/v1/Managers'
