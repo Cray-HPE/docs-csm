@@ -49,34 +49,24 @@ else
 fi
 
 state_name="ELIMINATE_NTP_CLOCK_SKEW"
-state_recorded=$(is_state_recorded "${state_name}" "${target_ncn}")
-if [[ $state_recorded == "0" && $2 != "--rebuild" ]]; then
-    echo "====> ${state_name} ..."
+state_recorded=$(is_state_recorded "${state_name}" "$target_ncn")
+in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+if [[ "$in_sync" == "no" ]]; then
     {
-    if [[ "${target_ncn}" != "ncn-m001" ]]; then
-      # ensure the directory exists
-      ssh "${target_ncn}" 'mkdir -p /srv/cray/scripts/common/'
-      # copy the NTP script and template to the node
-      scp -pr "${CSM_ARTI_DIR}"/chrony/ "${target_ncn}":/srv/cray/scripts/common/
-      # run the script
-      #shellcheck disable=SC2029
-      if ! ssh "${target_ncn}" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; then
-          echo "${target_ncn} csm_ntp failed"
-          exit 1
-      fi
-
-      # if the node is not in sync after two minutes, fail
-      if ! ssh "${target_ncn}" 'chronyc waitsync 6 0.5 0.5 20'; then
-          echo "${target_ncn} the clock is not in sync.  Wait a bit more or try again."
-          exit 1
-      else
-          record_state "${state_name}" "${target_ncn}"
-      fi
+    ssh "$target_ncn" chronyc makestep
+    sleep 5
+    in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+    if [[ "$in_sync" == "no" ]]; then
+        echo "The clock on ${target_ncn} is not in sync.  Wait a bit more or try again."
+        exit 1
+    else
+        record_state "${state_name}" "${target_ncn}"
     fi
     } >> ${LOG_FILE} 2>&1
 else
     echo "====> ${state_name} has been completed"
 fi
+
 
 state_name="WIPE_NODE_DISK"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
@@ -308,6 +298,24 @@ if [[ $target_ncn != ncn-s* ]]; then
     } >> ${LOG_FILE} 2>&1
 fi 
 
+state_name="FORCE_TIME_SYNC"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+{
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    # force time to sync immediately
+      ssh "${target_ncn}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null chronyc makestep
+      sleep 5
+      in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+      if [[ "$in_sync" == "no" ]]; then
+          echo "The clock for ${target_ncn} is not in sync."
+      fi
+      record_state "${state_name}" "${target_ncn}"
+else
+    echo "====> ${state_name} has been completed"
+fi
+} >> ${LOG_FILE} 2>&1
+
 {
     # Validate SLS health before calling csi handoff bss-update-*, since
     # it relies on SLS
@@ -360,4 +368,10 @@ if [[ ${target_ncn} != ncn-s* ]]; then
     else
         echo "====> ${state_name} has been completed"
     fi
+fi
+
+if [[ "$in_sync" == "no" ]]; then
+    echo "The clock for ${target_ncn} is not in sync. Please verify $target_ncn:/etc/chrony.d/cray.conf"
+    echo "contains a server that is reachable. See also: chronyc sources -v"
+    exit 1
 fi
