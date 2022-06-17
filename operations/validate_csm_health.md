@@ -444,21 +444,21 @@ BMC can be safely ignored or needs to be addressed before proceeding.
    ncn-m001# curl -k -s --compressed  https://$PDU -i | grep Server:
    ```
 
-   - Example ServerTech output:
+  - Example ServerTech output:
 
      ```bash
      Server: ServerTech-AWS/v8.0v
      ```
 
-   - Example HPE output:
+  - Example HPE output:
 
      ```bash
      Server: HPE/1.4.0
      ```
 
-   - ServerTech PDUs may need password changed from their defaults to become functional. Perform the steps in [Change Credentials on ServerTech PDUs](./security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
+  - ServerTech PDUs may need password changed from their defaults to become functional. Perform the steps in [Change Credentials on ServerTech PDUs](./security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
 
-   - HPE PDUs are supported and should show up as being found in HSM.
+  - HPE PDUs are supported and should show up as being found in HSM.
    If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered.
    Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU.
    The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
