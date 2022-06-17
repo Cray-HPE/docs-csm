@@ -3,6 +3,8 @@
 Logs for the individual steps of a session are available via the `kubectl log` command for each container of a Configuration Framework Service \(CFS\) session. Refer to
 [Configuration Sessions](Configuration_Sessions.md) for more info about these containers.
 
+These can be run on any master or worker NCN.
+
 To find the name of the Kubernetes pod that is running the CFS session:
 
 ```bash

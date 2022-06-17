@@ -21,7 +21,9 @@ the following procedure can be used to add this external image to IMS and upload
 
 ## Procedure
 
-#### Ensure Supported Format
+This procedure may be run on any master or worker NCN.
+
+### Ensure supported format
 
 1. Ensure that the image root is in a supported format.
 
@@ -31,7 +33,7 @@ the following procedure can be used to add this external image to IMS and upload
     * If the image being added meets the above requirements, proceed to [Create an IMS image record](#create-image-record).
     * If the image root is in a format other than `tgz` or SquashFS, convert the image root to `tgz`/SquashFS before continuing.
 
-#### Create Image Record
+### Create image record
 
 1. Choose a descriptive name for the new IMS image record.
 
@@ -44,7 +46,7 @@ the following procedure can be used to add this external image to IMS and upload
 1. Create a new IMS image record for the image.
 
     ```bash
-    cray ims images create --name $IMS_ROOTFS_FILENAME
+    cray ims images create --name $IMS_ROOTFS_FILENAME --format toml
     ```
 
     Example output:
@@ -63,7 +65,7 @@ the following procedure can be used to add this external image to IMS and upload
     IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
-#### Upload to S3
+### Upload to S3
 
 1. Upload the image root to S3.
 
@@ -109,7 +111,7 @@ the following procedure can be used to add this external image to IMS and upload
     IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
     ```
 
-#### Image Manifest
+### Image manifest
 
 1. Create an image manifest and upload it to S3.
 
@@ -174,7 +176,8 @@ the following procedure can be used to add this external image to IMS and upload
     ```bash
     cray ims images update $IMS_IMAGE_ID \
             --link-type s3 \
-            --link-path s3://boot-images/$IMS_IMAGE_ID/manifest.json
+            --link-path s3://boot-images/$IMS_IMAGE_ID/manifest.json \
+            --format toml
     ```
 
     Example output:

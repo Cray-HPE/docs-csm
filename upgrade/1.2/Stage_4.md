@@ -1,5 +1,8 @@
 # Stage 4 - Ceph Upgrade
 
+**Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
+[Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+
 ## Addresses CVEs
 
 * `CVE-2021-3531`: Swift API denial of service.
@@ -16,11 +19,56 @@ of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
 ### Initiate upgrade
 
-1. Check to ensure the upgrade is possible.
+1. Check to ensure that the upgrade is possible.
 
    ```bash
    ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
    ```
+
+   Example output:
+
+   ```json
+   {
+       "needs_update": {
+           "alertmanager.ncn-s001": {
+               "current_id": "6ec9fa439af31102c9e6581cbb3d12ee2ab258dada41d40d0f8ad987e8ff266f",
+               "current_name": "registry.local/quay.io/prometheus/alertmanager:v0.21.0",
+               "current_version": "0.21.0"
+           },
+           "crash.ncn-s001": {
+               "current_id": "6a777b4f888c24feec6e12eeeff4ab485f2c043b415bc2213815d5fb791f2597",
+               "current_name": "registry.local/ceph/ceph:v15.2.8",
+               "current_version": "15.2.8"
+           },
+           "crash.ncn-s002": {
+               "current_id": "6a777b4f888c24feec6e12eeeff4ab485f2c043b415bc2213815d5fb791f2597",
+               "current_name": "registry.local/ceph/ceph:v15.2.8",
+               "current_version": "15.2.8"
+           },
+
+           "[ ... lines omitted for readability ... ]",
+
+           "rgw.site1.zone1.ncn-s003.adrubu": {
+               "current_id": "6a777b4f888c24feec6e12eeeff4ab485f2c043b415bc2213815d5fb791f2597",
+               "current_name": "registry.local/ceph/ceph:v15.2.8",
+               "current_version": "15.2.8"
+           }
+       },
+       "target_id": "cba763a65a95e8849d578e05b111123f55a78ab096e67e8ecf7fdc98e67aea71",
+       "target_name": "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15",
+       "target_version": "ceph version 15.2.15 (2dfb18841cfecc2f7eb7eb2afd65986ca4d95985) octopus (stable)",
+       "up_to_date": []
+   }
+   ```
+
+   **Notes:**
+
+   * This upgrade is targeting the Ceph processes running `15.2.8` only.
+   * The monitoring services may be listed but those are patched internally and will not be upgraded with this upgrade.
+     * This includes `alertmanager`, `prometheus`, `node-exporter`, and `grafana`.
+   * The main goals of this check are to see the listed `15.2.8` services and to see the output at the bottom that confirms the presence of the `15.2.15` target image.
+   * If the output does not match what is expected, then this can indicate that a previous step has failed.
+     Review output from [Stage 1](Stage_1.md) for errors or contact support.
 
 1. Set the container image.
 
