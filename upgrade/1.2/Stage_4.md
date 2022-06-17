@@ -1,5 +1,8 @@
 # Stage 4 - Ceph Upgrade
 
+**Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
+[Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+
 ## Addresses CVEs
 
 * `CVE-2021-3531`: Swift API denial of service.
