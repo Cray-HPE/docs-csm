@@ -2,17 +2,17 @@
 
 The following procedures are used to manage the HPE Power Distribution Unit (PDU):
 
-* [Verify PDU Vendor](#verify-pdu-vendor)
-* [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)
-* [HPE PDU Initial Set-up](#hpe-pdu-initial-set-up)
-* [Update HPE PDU Firmware](#update-hpe-pdu-firmware)
-* [Change HPE PDU User Passwords](#change-hpe-pdu-user-passwords)
-* [Update Vault Credentials](#update-vault-credentials)
-* [Discover HPE PDU after Upgrading CSM](#discover-hpe-pdu-after-upgrading-csm)
+* [Verify PDU vendor](#verify-pdu-vendor)
+* [Connect to HPE PDU web interface](#connect-to-hpe-pdu-web-interface)
+* [HPE PDU initial set-up](#hpe-pdu-initial-set-up)
+* [Update HPE PDU firmware](#update-hpe-pdu-firmware)
+* [Change HPE PDU user passwords](#change-hpe-pdu-user-passwords)
+* [Update Vault credentials](#update-vault-credentials)
+* [Discover HPE PDU after upgrading CSM](#discover-hpe-pdu-after-upgrading-csm)
 
 > **IMPORTANT:** Because of the polling method used to process sensor data from the HPE PDU, telemetry data may take up to six minutes to refresh; this includes the outlet status reported by the Hardware State Manager (HSM).
 
-## Verify PDU Vendor
+## Verify PDU vendor
 
 If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
 
@@ -27,7 +27,7 @@ ncn-m001# curl -k -s --compressed  https://$PDU -i | grep Server:
   Server: ServerTech-AWS/v8.0v
   ```
 
-* Example HPE output
+* Example HPE output:
 
   ```bash
   Server: HPE/1.4.0
@@ -35,7 +35,7 @@ ncn-m001# curl -k -s --compressed  https://$PDU -i | grep Server:
 
 This document covers HPE PDU procedures.
 
-## Connect to HPE PDU Web Interface
+## Connect to HPE PDU web interface
 
 Connect and log in to the HPE PDU web interface.
 Access to the HPE PDU web interface is required for the other administrative procedures in this section.
@@ -63,7 +63,7 @@ The following is needed before running this procedure:
 
 1. Log in with the `admin` username. Enter the admin password. If the admin password has not been changed, there will be a prompt to change the password.
 
-## HPE PDU Initial Set-up
+## HPE PDU initial set-up
 
 Set up an HPE PDU for administrative use by completing the following tasks:
 
@@ -73,18 +73,18 @@ Set up an HPE PDU for administrative use by completing the following tasks:
 
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 
-### Ensure Redfish is Enabled
+### Ensure Redfish is enabled
 
 1. Use the **"Settings"** icon (gear in computer monitor in top right corner) to navigate to **"Network Settings"**.
 1. Verify there is a check next to `RESTapi Access`, if not, click the **"Edit"** icon (pencil) and enable.
 
-### Add Default User
+### Add default user
 
 1. Use the **"admin"** menu (top right corner) to navigate to **"User Accounts"**.
 1. Click on the **"Add User"** button.
 1. Use the form to add the _username_ and _password_ for the default River user. Assign the role _"Administrator"_ to that user.
 
-### Enable Outlet Control
+### Enable outlet control
 
 1. Using the **"Home"** icon (House in top right corner) navigate to **"Control & Manage"**.
 1. Verify **"Outlet Control Enable"** switch on the top of the page is selected (green).
@@ -93,13 +93,13 @@ Set up an HPE PDU for administrative use by completing the following tasks:
 
 Verify that the firmware version for the HPE PDU is **2.0.0.L**. If it is not, a firmware update is required.
 
-### Check Firmware Version
+### Check firmware version
 
 1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
 1. Check which version of firmware is installed by selecting the **"Home"** icon (House in the top right corner) and navigating to **"Identification"**.
 1. The _"Version"_ will be displayed. If the version is not the _"2.0.0.L"_, update firmware.
 
-### Update Firmware
+### Update firmware
 
 1. Download version **2.0.0.L** firmware from: `support.hpe.com` website
 This will download an `.exe` file, which is a self extracting zip file.
@@ -113,7 +113,7 @@ One of the files extracted will be named `HPE.FW`, that is the firmware file nee
 
 The firmware will be updated and the PDU management processor will restart.
 
-## Change HPE PDU User Passwords
+## Change HPE PDU user passwords
 
 Change the password of any existing user account using the HPE PDU web interface.
 
