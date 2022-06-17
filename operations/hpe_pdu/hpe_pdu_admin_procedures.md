@@ -23,13 +23,13 @@ curl -k -s --compressed  https://$PDU -i | grep Server:
 
 * Example ServerTech output:
 
-  ```bash
+  ```text
   Server: ServerTech-AWS/v8.0v
   ```
 
 * Example HPE output:
 
-  ```bash
+  ```text
   Server: HPE/1.4.0
   ```
 
@@ -44,152 +44,192 @@ Access to the HPE PDU web interface is required for the other administrative pro
 
 The following is needed before running this procedure:
 
-* IP address or Domain Name of `ncn-m001`
+* IP address or domain name of `ncn-m001`
 * Component name (xname) of the HPE PDU
-* Root password for `ncn-m001`
-* Admin password for HPE PDU _(default: 12345678)_
+* `root` password for `ncn-m001`
+* `admin` password for HPE PDU (default: `12345678`)
 
-1. Use the `ssh` command from a local PC/MAC/Linux machine:
+1. Create an SSH tunnel from a local PC/MAC/Linux machine:
 
    ```bash
-   > ssh -L 8443:{PDU_xname}:443 -N root@{ncn-m001_ip}
+   ssh -L 8443:{PDU_xname}:443 -N root@{ncn-m001_ip}
    ```
 
    In this example, `{PDU_xname}` is the component name (xname) of the PDU and `{ncn-m001_ip}` is the IP address of `ncn-m001`.
 
-   Enter the root password for `ncn-m001` when prompted.
+   Enter the `root` password for `ncn-m001` when prompted.
 
-1. Connect to [`https://localhost:8443`](https://localhost:8443) using a web browser.
+   This command will not complete. It should be left running until the SSH tunnel is no longer needed. At that point, it can be
+   exited with control-C.
 
-1. Log in with the `admin` username. Enter the admin password. If the admin password has not been changed, there will be a prompt to change the password.
+1. Connect to `https://localhost:8443` using a web browser.
+
+   This must be done on the system where the SSH tunnel was created in the previous step.
+
+1. Log in with the `admin` username.
+
+   Enter the `admin` password. If the `admin` password has never been changed, then there will be a prompt to change it.
 
 ## HPE PDU initial set-up
 
 Set up an HPE PDU for administrative use by completing the following tasks:
 
-* Ensure Redfish is enabled
-* Add the default user
-* Enable Outlet Control
+* [Ensure that Redfish is enabled](#ensure-that-redfish-is-enabled)
+* [Add the default user](#add-the-default-user)
+* [Enable outlet control](#enable-outlet-control)
 
-1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
+1. Connect to the HPE PDU Web Interface and log in as `admin`.
 
-### Ensure Redfish is enabled
+   See [Connect to HPE PDU web interface](#connect-to-hpe-pdu-web-interface).
 
-1. Use the **"Settings"** icon (gear in computer monitor in top right corner) to navigate to **"Network Settings"**.
-1. Verify there is a check next to `RESTapi Access`, if not, click the **"Edit"** icon (pencil) and enable.
+### Ensure that Redfish is enabled
 
-### Add default user
+1. Use the `Settings` icon (gear in computer monitor in top right corner) to navigate to `Network Settings`.
+1. Verify that there is a check next to `RESTapi Access`.
 
-1. Use the **"admin"** menu (top right corner) to navigate to **"User Accounts"**.
-1. Click on the **"Add User"** button.
-1. Use the form to add the _username_ and _password_ for the default River user. Assign the role _"Administrator"_ to that user.
+   If there is not, then click the **Edit** icon (pencil) and enable.
+
+### Add the default user
+
+1. Use the `admin` menu (top right corner) to navigate to `User Accounts`.
+1. Click on the `Add User` button.
+1. Use the form to add the username and password for the default River user. Assign the role `Administrator` to that user.
 
 ### Enable outlet control
 
-1. Using the **"Home"** icon (House in top right corner) navigate to **"Control & Manage"**.
-1. Verify **"Outlet Control Enable"** switch on the top of the page is selected (green).
+1. Using the `Home` icon (house in top right corner) navigate to `Control & Manage`.
+1. Verify that the `Outlet Control Enable` switch on the top of the page is selected (green).
 
-## Update HPE PDU Firmware
+## Update HPE PDU firmware
 
-Verify that the firmware version for the HPE PDU is **2.0.0.L**. If it is not, a firmware update is required.
+Verify that the firmware version for the HPE PDU is `2.0.0.L`. If it is not, then a firmware update is required.
 
 ### Check firmware version
 
-1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
-1. Check which version of firmware is installed by selecting the **"Home"** icon (House in the top right corner) and navigating to **"Identification"**.
-1. The _"Version"_ will be displayed. If the version is not the _"2.0.0.L"_, update firmware.
+1. Connect to the HPE PDU Web Interface and log in as `admin`.
+
+   See [Connect to HPE PDU web interface](#connect-to-hpe-pdu-web-interface).
+
+1. Select the `Home` icon (house in the top right corner) and navigate to `Identification`.
+
+   The version will be displayed. If the version is not `2.0.0.L`, then [Update firmware](#update-firmware).
 
 ### Update firmware
 
-1. Download version **2.0.0.L** firmware from: `support.hpe.com` website
-This will download an `.exe` file, which is a self extracting zip file.
-1. If using a Windows system, run the `.exe` file to extract the files, or use an unzip program on the file.
-One of the files extracted will be named `HPE.FW`, that is the firmware file needed for uploading.
-1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
+1. Download version `2.0.0.L` firmware from [HPE Support](https://support.hpe.com).
+
+   This will download an `.exe` file, which is a self-extracting zip archive.
+
+1. Extract the firmware files.
+
+   If using a Windows system, run the `.exe` file to extract the files. Otherwise use an unzip program on the file.
+
+   One of the files extracted will be named `HPE.FW`. That is the firmware file needed for uploading.
+
+1. Connect to the HPE PDU Web Interface and log in as `admin`.
+
+   See [Connect to HPE PDU web interface](#connect-to-hpe-pdu-web-interface).
+
 1. Use the `Settings` icon (gear in computer monitor in top right corner) to navigate to `System Management`.
+
 1. Click the `Update Firmware` button.
-1. Click `Choose File` and select the `HPE.FW` file downloaded.
+
+1. Click `Choose File` and select the `HPE.FW` file that was downloaded.
+
 1. Click `Upload` button.
 
-The firmware will be updated and the PDU management processor will restart.
+   The firmware will be updated and the PDU management processor will restart.
 
 ## Change HPE PDU user passwords
 
 Change the password of any existing user account using the HPE PDU web interface.
 
-1. Connect to the HPE PDU Web Interface (See [Connect to HPE PDU Web Interface](#connect-to-hpe-pdu-web-interface)) and log in as `admin`.
-1. Use the **"admin"** menu (top right corner) to navigate to **"User Accounts"**.
-1. Click on the **"Edit"** icon (pencil) next to the user.
-1. Enter new password and make any other changes for that user account and click the **"Save"** button.
+1. Connect to the HPE PDU Web Interface and log in as `admin`.
 
-## Discover HPE PDU after Upgrading CSM
+   See [Connect to HPE PDU web interface](#connect-to-hpe-pdu-web-interface).
 
-Use the following procedure to ensure the `hms-discovery` job and Redfish Translation Service (RTS) correctly discover HPE PDUs when upgrading from CSM 1.0 or earlier releases to CSM 1.2.
+1. Use the `admin` menu (top right corner) to navigate to `User Accounts`.
 
-> **IMPORTANT:** This procedure is only needed when upgrading CSM, not performing a fresh install. This procedure should be run after CSM has been fully upgraded including the discovery job.
+1. Click on the `Edit` icon (pencil) next to the user.
+
+1. Enter the new password and make any other desired changes for that user account.
+
+1. Click the `Save` button.
+
+## Discover HPE PDU after upgrading CSM
+
+Use the following procedure to ensure that the `hms-discovery` job and Redfish Translation Service (RTS) correctly discover HPE PDUs when upgrading to CSM 1.2 from an earlier release.
+
+> **IMPORTANT:** This procedure is only needed when **upgrading** CSM, not performing a fresh install. Run this procedure after CSM has been fully upgraded, including the discovery job.
 
 1. In CSM 1.0 and earlier releases, the `hms-discovery` job and RTS treated all PDUs as if were made by ServerTech.
-After the upgrade to CSM 1.2, RTS will still think the HPE PDUs in the system are ServerTech PDUs.
-Remove these erroneous HPE PDU entries for RTS from Vault.
 
-    1. (`ncn#`) Get Vault password and create Vault alias.
+   After the upgrade to CSM 1.2, RTS will still think that the HPE PDUs in the system are ServerTech PDUs.
+   Remove these erroneous HPE PDU entries for RTS from Vault.
 
-        ```bash
-        VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-        alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
-        ```
+   1. (`ncn#`) Get Vault password and create Vault alias.
 
-    1. (`ncn#`) Identify HPE PDUs known by RTS:
+      ```bash
+      VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+      alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+      ```
 
-        ```bash
-        vault kv list secret/pdu-creds
-        ```
+   1. (`ncn#`) Identify HPE PDUs known by RTS.
 
-        Example output:
+      ```bash
+      vault kv list secret/pdu-creds
+      ```
 
-        ```json
-        [
-          "global/",
-          "x3000m0",
-          "x3000m1"
-        ]
-        ```
+      Example output:
 
-    1. (`ncn#`) Remove each HPE PDU identified in the previous sub-step from Vault:
+      ```json
+      [
+        "global/",
+        "x3000m0",
+        "x3000m1"
+      ]
+      ```
 
-        ```bash
-        PDU=x3000m0
-        vault kv delete secret/pdu-creds/$PDU
-        ```
+   1. (`ncn#`) Remove each identified HPE PDU from Vault.
 
-    1. (`ncn#`) Restart the Redfish Translation Service (RTS):
+      Repeat the following command for each HPE PDU identified in the output of the previous sub-step.
 
-        ```bash
-        kubectl -n services rollout restart deployment cray-hms-rts
-        kubectl -n services rollout status deployment cray-hms-rts
-        ```
+      ```bash
+      PDU=x3000m0
+      vault kv delete secret/pdu-creds/$PDU
+      ```
 
-1. (`ncn#`) Find the list of PDU MAC address. The `ID` field in each element is the normalized MAC address of each PDU:
+   1. (`ncn#`) Restart the Redfish Translation Service (RTS).
+
+      ```bash
+      kubectl -n services rollout restart deployment cray-hms-rts
+      kubectl -n services rollout status deployment cray-hms-rts
+      ```
+
+1. (`ncn#`) Find the list of PDU MAC addresses.
+
+   The `ID` field in each element is the normalized MAC address of each PDU:
 
    ```bash
    cray hsm inventory ethernetInterfaces list --type CabinetPDUController
    ```
 
-1. (`ncn#`) Use the returned `ID` from the previous step to delete each HPE PDU MAC address from HSM:
+1. (`ncn#`) Use the returned `ID` from the previous step to delete each HPE PDU MAC address from HSM.
 
    ```bash
    cray hsm inventory ethernetInterfaces delete {ID}
    ```
 
-   On the next `hms-discovery` job run, it should relocate the deleted PDUs and discover it correctly as an HPE PDU.
+   On the next `hms-discovery` job run, it should relocate the deleted PDUs and discover them correctly as HPE PDUs.
 
-1. (`ncn#`) After waiting five minutes, verify the Ethernet interfaces that were previously deleted are now present:
+1. (`ncn#`) After waiting five minutes, verify that the Ethernet interfaces that were previously deleted are now present:
 
    ```bash
+   sleep 300
    cray hsm inventory ethernetInterfaces list --type CabinetPDUController
    ```
 
-1. (`ncn#`) Verify the Redfish endpoints for the PDUs exist and are `DiscoverOK`:
+1. (`ncn#`) Verify that the Redfish endpoints for the PDUs exist and are `DiscoverOK`.
 
    ```bash
    cray hsm inventory redfishEndpoints list --type CabinetPDUController

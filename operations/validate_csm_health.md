@@ -446,13 +446,13 @@ BMC can be safely ignored or needs to be addressed before proceeding.
 
   - Example ServerTech output:
 
-     ```bash
+     ```text
      Server: ServerTech-AWS/v8.0v
      ```
 
   - Example HPE output:
 
-     ```bash
+     ```text
      Server: HPE/1.4.0
      ```
 
