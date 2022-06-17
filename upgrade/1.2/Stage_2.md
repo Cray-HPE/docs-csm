@@ -1,5 +1,8 @@
 # Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.20.13
 
+**Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
+[Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+
 ## Stage 2.1
 
 1. Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`.
