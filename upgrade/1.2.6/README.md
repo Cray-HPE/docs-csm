@@ -1,4 +1,4 @@
-# CSM 1.0.10 Patch Installation Instructions
+# CSM 1.2.6 Patch Installation Instructions
 
 ## Introduction
 
