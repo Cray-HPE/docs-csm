@@ -482,6 +482,8 @@ SSHing
 SSHKey
 standalone
 startup
+stderr
+stdout
 Submodule
 subnetting
 subrole
