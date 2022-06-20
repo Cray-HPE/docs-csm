@@ -85,6 +85,7 @@ Run `upgrade.sh` to deploy upgraded CSM applications and services:
 ```bash
 ncn-m001# cd "$CSM_DISTDIR"
 ncn-m001# ./upgrade.sh
+ncn-m001# /usr/share/doc/csm/upgrade/1.2.6/scripts/post-csm-services-upgrade
 ```
 
 <a name="verification"></a>
