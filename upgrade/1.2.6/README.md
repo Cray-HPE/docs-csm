@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document is intended to guide an administrator through the process going to Cray Systems Management v1.2.6 from v1.2.0. If you are at an earlier version, you must first upgrade to at least v1.2.0. For information on how to do that, see [Upgrade CSM](../index.md).
+This document is intended to guide an administrator through the process going to Cray Systems Management `v1.2.6` from `v1.2.0`. If you are at an earlier version, you must first upgrade to at least `v1.2.0`. For information on how to do that, see [Upgrade CSM](../index.md).
 
 ## Steps
 
@@ -71,7 +71,7 @@ ncn-m001# echo $?
 
 In the event of an error, consult [Troubleshoot Nexus](../../operations/package_repository_management/Troubleshoot_Nexus.md)
 to resolve potential problems and then try running `setup-nexus.sh` again. Note that subsequent runs of `setup-nexus.sh` may
-report `FAIL` when uploading duplicate assets. This is ok as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits
+report `FAIL` when uploading duplicate assets. This is okay as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits
 with status code `0`.
 
 <a name="upgrade-services"></a>
@@ -122,7 +122,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.2.6/scripts/post-csm-services-upgrade.sh
 
 ## Run NCN Personalization
 
-1. Run NCN Personalization to update the NCNs to the latest configruation.
+1. Run NCN Personalization to update the NCNs to the latest configuration.
    Complete the [Run NCN Personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#run-ncn-personalization)
    procedure.
 
