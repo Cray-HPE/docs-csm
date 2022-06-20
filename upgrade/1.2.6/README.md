@@ -2,7 +2,8 @@
 
 ## Introduction
 
-This document is intended to guide an administrator through the process going to Cray Systems Management `v1.2.6` from `v1.2.0`. If you are at an earlier version, you must first upgrade to at least `v1.2.0`. For information on how to do that, see [Upgrade CSM](../index.md).
+This document is intended to guide an administrator through the process going to Cray Systems Management `v1.2.6` from `v1.2.0`. If you are at an
+earlier version, you must first upgrade to at least `v1.2.0`. For information on how to do that, see [Upgrade CSM](../index.md).
 
 ## Steps
 
