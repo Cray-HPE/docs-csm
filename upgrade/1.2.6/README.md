@@ -60,7 +60,7 @@ ncn-m001# cd "$CSM_DISTDIR"
 ncn-m001# ./lib/setup-nexus.sh
 ```
 
-On success, `setup-nexus.sh` will output `OK` on stderr and exit with status
+On success, `setup-nexus.sh` will output `OK` on `stderr` and exit with status
 code `0`, e.g.:
 
 ```bash
