@@ -7,7 +7,7 @@ file should be followed top to bottom, and the content on this top level page is
 [`resource_material` directory](resource_material/README.md)
 for additional reference material in support of the processes and scripts mentioned explicitly on this page.
 
-## Notes for three worker systems
+## Notes
 
 For systems with only three worker nodes (typically Testing and  Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be lowered on several
 services in order for this upgrade to succeed. This step is
