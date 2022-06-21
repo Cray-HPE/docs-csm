@@ -134,7 +134,7 @@ With BICAN, the pre-1.2 CAN network is split into two separate networks:
 
 1. Customer Access Network (CAN) / Customer High-speed Network (CHN)
 
-   For user traffic only (e.g. users running and monitoring jobs), CSM 1.2 allows you to pick one of two networks:
+   For user traffic only (e.g. users running and monitoring jobs), CSM 1.2 allows a choice of one of two networks:
 
       - Customer Access Network (CAN) \[Recommended\]: this is a new network (VLAN6 in switches) that runs over the management network. This
          network must not be confused with pre-1.2 CAN, which was a monolithic network that allowed both user and administrative
