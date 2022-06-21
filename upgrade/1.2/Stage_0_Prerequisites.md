@@ -153,7 +153,7 @@ to all types of application nodes and not just UANs -- the term "UAN" just happe
 referring to user activity.
 
 1. During the upgrade, the switch `1.2 Preconfig` will not remove UAN ports from the CMN VLAN (the pre-1.2 CAN), allowing UANs
-   to retain their existing IPs during the CSM 1.2 upgrade process. Traffic to and from UANs will still flow through CMN, but
+   to retain their existing IP addresses during the CSM 1.2 upgrade process. Traffic to and from UANs will still flow through CMN, but
    may also flow through CAN/CHN networks if desired.
 
 1. CFS will be temporarily disabled for UANs, so that running CFS plays does not remove CMN interfaces from UANs. As mentioned
