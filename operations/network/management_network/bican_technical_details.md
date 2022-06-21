@@ -153,7 +153,7 @@ Isolation will be within the Slingshot network as well as separated at the edge 
 As noted earlier, non-Arista router configurations are out of scope for CSM 1.2.
 - Internal to the system, CHN traffic will exist in the same Layer 2 domain with internal HSN traffic until the Slingshot network supports VLAN separation.
 - Compute Node (CN) and Application Node (UAN, in this case) configuration or IPv4 addressing and routing is via CFS.
-  - When multiple HSN interfaces exist, the CHN can be configured to load balance TCP/UDP traffic flows across interfaces via ECMP Layer 3 routing in Linux.
+  - When multiple HSN interfaces exist, the CHN will be configured on the HSN0 NIC.
 - UAI addressing and routing over the HSN interfaces for the worker NCNs is required.
 - API endpoints in MetalLB for the CHN will be accessible over worker NCN HSN interfaces (via ECMP Layer 3 routing).
   - MetalLB will peer with the edge routers to supply load balanced API access.
