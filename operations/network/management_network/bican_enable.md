@@ -62,7 +62,8 @@ Please refer to the "HPE Cray User Access Node (UAN) Software Administration Gui
 
 ### Minimize UAN Downtime
 
-UAN running before and during an upgrade to CSM 1.2 will continue running with no connectivity or local data impacts until an administrator-scheduled transition takes place. While access to currently running UANs continues during the upgrade, UAN rebuilds and reboots not supported.
+UAN running before and during an upgrade to CSM 1.2 will continue running with no connectivity or local data impacts until an administrator-scheduled transition takes place.
+While access to currently running UANs continues during the upgrade, UAN rebuilds and reboots not supported.
 
 The time frame over which the transition can be scheduled is quite large and the transition requires only that UAN users to log out of the UAN (over the old IPv4 address) and log back in (over a new IPv4 address).
 The following diagram illustrates the UAN timeline before, during and after the CSM 1.2 upgrade.
