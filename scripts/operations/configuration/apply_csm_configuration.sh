@@ -54,36 +54,58 @@ usage()
    echo
 }
 
+usage_err_exit()
+{
+    usage
+    err_exit "usage: $*"
+}
+
 while [[ $# -gt 0 ]]; do
   key="$1"
 
   case $key in
     --csm-release)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       RELEASE="$2"
       shift # past argument
       shift # past value
       ;;
     --csm-config-version)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       VERSION="$2"
       shift # past argument
       shift # past value
       ;;
     --git-commit)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       COMMIT="$2"
       shift # past argument
       shift # past value
       ;;
     --git-clone-url)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       CLONE_URL="$2"
       shift # past argument
       shift # past value
       ;;
     --ncn-config-file)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
+      # Make sure the file exists
+      [[ -e "$2" ]] || usage_err_exit "NCN config file ($2) does not exist"
+      [[ -f "$2" ]] || usage_err_exit "NCN config file ($2) exists but is not a regular file"
+      [[ -s "$2" ]] || usage_err_exit "NCN config file ($2) has zero size"
       OLD_NCN_CONFIG_FILE="$2"
       shift # past argument
       shift # past value
       ;;
     --xnames)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       XNAMES="$2"
       shift # past argument
       shift # past value
@@ -97,7 +119,7 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     *) # unknown option
-      usage
+      usage_err_exit "Unknown argument: '$key'"
       exit 1
       ;;
   esac
