@@ -190,7 +190,7 @@ referring to user activity.
    If, however, a UAN is rebooted, then you need to patch the file `roles/uan_interfaces/tasks/can-v2.yml` for your current
    CSM release in the `vcs/cray/uan-config-management.git` repository and reboot again to bring back the
    CMN (pre-1.2 CAN) interface back in the UAN. Use the following patch file and follow the instructions in
-   [Configuration Management](../../operations/README.md#configuration-management) to restore CMN access in your UAN:
+   [Configuration Management](../../operations/index.md#configuration-management) to restore CMN access in your UAN:
 
    ```text
    --- a/roles/uan_interfaces/tasks/can-v2.yml
