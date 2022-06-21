@@ -143,7 +143,7 @@ With BICAN, the pre-1.2 CAN network is split into two separate networks:
       - Customer High-speed Network (CHN) \[CSM 1.2 Tech Preview\]: this is a new network (VLAN5 in switches) that runs over the high-speed fabric.
 
    Either the new CAN or CHN must be chosen, but not both. Note that the CHN is a technical preview in CSM 1.2, and the new CAN is
-   the recommended upgrade. The rest of the installation guide provides options for configuring either the new CAN or CHN.
+   the recommended upgrade. The rest of the upgrade guide provides options for configuring either the new CAN or CHN.
 
 ### UAN migration
 
