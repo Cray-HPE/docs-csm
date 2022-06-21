@@ -81,6 +81,43 @@ export TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https
 
 export TARGET_IP_NMN=$(dig +short $TARGET_NCN.nmn)
 
+# Just do basic API calls to SLS to make sure that it is responding.
+function check_sls_health() {
+    local timeout first
+
+    echo "Checking SLS health..."
+
+    # To make sure that this is not a case where it will get better by itself,
+    # we will retry for up to 5 minutes before quitting.
+    let timeout=SECONDS+300
+    first=Y
+    while [[ $SECONDS -le $timeout ]]; do
+        if [[ $first == Y ]]; then
+            first=N
+        else
+            echo "Sleeping 5 seconds and retrying"
+            sleep 5
+        fi
+    
+        # The liveness endpoint should return 204 on success
+        if [[ $(curl -iskH "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/sls/v1/liveness | head -1 | awk '{ print $2 }') != 204 ]]; then
+            echo "WARNING: SLS liveness check failed." 1>&2
+            continue
+        fi
+
+        # The health endpoint should return 200 on success
+        if [[ $(curl -iskH "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/sls/v1/health | head -1 | awk '{ print $2 }') != 200 ]]; then
+            echo "WARNING: SLS health check failed." 1>&2
+            continue
+        fi
+
+        echo "SLS appears healthy"
+        return 0
+    done
+    echo "ERROR: SLS failed checks. Investigate cray-sls service status."
+    return 1
+}
+
 function drain_node() {
    target_ncn=$1
    state_name="DRAIN_NODE"
@@ -88,6 +125,9 @@ function drain_node() {
    if [[ $state_recorded == "0" ]]; then
       echo "====> ${state_name} ..."
       {
+      # Check SLS health before draining
+      check_sls_health
+
       csi automate ncn kubernetes --action delete-ncn --ncn ${target_ncn} --kubeconfig /etc/kubernetes/admin.conf
       } >> ${LOG_FILE} 2>&1
 
