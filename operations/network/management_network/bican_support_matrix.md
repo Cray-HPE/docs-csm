@@ -56,7 +56,7 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
 
 Note: During installation, the High Speed Network is not configured until relatively late in the process.
 Installation generally requires site access for deployment artifacts, site DNS, etc.
-In order to achieve this, the Management Network CAN is used during the installation process for system traffic egress until the High Speed Network is available.
+In order to achieve this, the CMN is used during the installation process for system traffic egress until the High Speed Network is available.
 
 ## Network capabilities
 
