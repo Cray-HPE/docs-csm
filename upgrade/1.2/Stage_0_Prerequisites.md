@@ -136,7 +136,7 @@ With BICAN, the pre-1.2 CAN network is split into two separate networks:
 
    During the CSM 1.2 upgrade, UANs will retain their pre-1.2 CAN IP addresses in order to minimize disruption to UANs. However,
    toward the end of the CSM 1.2 upgrade, UANs will stop registering themselves on CMN and will receive new IP addresses on the
-   CAN/CHN network below. This process is described in more detail in [UAN Migration](#uan-migration).
+   CAN/CHN network. This process is described in more detail in [UAN Migration](#uan-migration).
 
    Pivoting the pre-1.2 CAN to the new CMN allows administrative traffic (already on the pre-1.2 CAN) to remain as-is while
    moving standard user traffic to a new site-routable network (CAN / CHN).
