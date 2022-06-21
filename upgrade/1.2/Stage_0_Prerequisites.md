@@ -18,7 +18,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 - [Stage 0.1 - Prepare assets](#prepare-assets)
 - [Stage 0.2 - Plan and coordinate network upgrade](#plan-and-coordinate-network-upgrade)
 - [Stage 0.3 - Update SLS](#update-sls)
-- [Stage 0.4 - Upgrade Management Network](#update-management-network)
+- [Stage 0.4 - Upgrade management network](#update-management-network)
 - [Stage 0.5 - Prerequisites check](#prerequisites-check)
 - [Stage 0.6 - Backup workload manager data](#backup_workload_manager)
 - [Stage completed](#stage_completed)
