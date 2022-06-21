@@ -117,7 +117,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 ### Abstract (Stage 0.2)
 
 Prior to CSM 1.2, the single Customer Access Network (CAN) carried both the administrative network traffic and the user network
-traffic. CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate admin network traffic and user network traffic.
+traffic. CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate administrative network traffic and user network traffic.
 With BICAN, the pre-1.2 CAN network is split into two separate networks:
 
 1. Customer Management Network (CMN)
