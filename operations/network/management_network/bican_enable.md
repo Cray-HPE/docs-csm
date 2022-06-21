@@ -4,6 +4,7 @@
   - [Configuration Tasks](#configuration-tasks)
     - [Configure SLS](#configure-sls)
     - [Configure UAN](#configure-uan)
+    - [Minimize UAN Downtime](#minimize-uan-downtime)
     - [Configure UAI](#configure-uai)
     - [Configure Compute Nodes](#configure-compute-nodes)
       - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
@@ -20,32 +21,68 @@
     - [Validate NCNs](#validate-ncns)
     - [Validate the API gateways](#validate-the-api-gateways)
 
+<a name="configuration-tasks"></a>
+
 ## Configuration Tasks
+
+<a name="configure-sls"></a>
 
 ### Configure SLS
 
-To enable the Customer High Speed Network (CHN) the `SystemDefaultRoute` attribute in the System Layout Service (SLS) `BICAN` network needs to be set to the desired network.
+Configuration for the default route of a `BICAN` enabled system is contained in the System Layout Service (SLS) `BICAN` data structure in the `SystemDefaultRoute` attribute value.
+This structure was created and it's value set during] [Prerequisites Stage 0.2](../../upgrade/1.2/../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-02---update-sls) and can be either `CAN` or `CHN`.
 
-Run the following command to update SLS with `CHN` as the `SystemDefaultRoute`
+For CSM 1.2 the recommended value for the `BICAN` `SystemDefaultRoute` is `CAN`.
+This allows continued use of UAN, UAI and API resources over the `CAN` and allows a fully supported transition to `CHN` in a later CSM release.
+To update SLS with `CAN` as the `SystemDefaultRoute`:
 
 ```bash
-/usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CHN
+/usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CAN
+Setting SystemDefaultRoute to CAN
+```
+
+**Preview:** High Speed Network access by users to UAN, UAI and API resources is the `CHN` option.
+This is available during the CSM 1.2 release for those who wish to forge ahead of release-supported features.
+To set and use the `CHN` in SLS update the `SystemDefaultRoute` with:
+
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CHN
 Setting SystemDefaultRoute to CHN
 ```
 
+<a name="configure-uan"></a>
+
 ### Configure UAN
 
-The CHN will automatically be configure on a UAN if the SLS `BICAN` network `SystemDefaultRoute` attribute is set to `CHN` and the following Ansible variable is set.
+UAN will be configured during the next CFS run to the network set in the SLS `BICAN` `SystemDefaultRoute` attribute if the following Ansible variable is set.
 
 `uan_can_setup: yes`
 
 Please refer to the "HPE Cray User Access Node (UAN) Software Administration Guide (`S-8033`)" document on the [HPE Support Center](https://support.hpe.com) website for more information.
+
+### Minimize UAN Downtime
+
+UAN running before and during an upgrade to CSM 1.2 will continue running with no connectivity or local data impacts until an administrator-scheduled transition takes place. While access to currently running UANs continues during the upgrade, UAN rebuilds and reboots not supported.
+
+The time frame over which the transition can be scheduled is quite large and the transition requires only that UAN users to log out of the UAN (over the old IPv4 address) and log back in (over a new IPv4 address).
+The following diagram illustrates the UAN timeline before, during and after the CSM 1.2 upgrade.
+
+![UAN Upgrade Transitions](../../../img/UAN_transition_CSM_1.2.png)
+
+Concretely, users on running UAN may transitioned from the CMN to the new CAN between the two following upgrade points:
+
+1. After [SLS Upgrade](../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-03---upgrade-management-network) has been completed, but
+2. Before [UANs are booted with new images](../../boot_orchestration/Boot_UANs.md).
+
+<a name="configure-uai"></a>
 
 ### Configure UAI
 
 Newly created User Access Instances (UAI) will use the network configured as the `SystemDefaultRoute` in the SLS `BICAN` network.
 
 Existing UAIs will continue to use the network that was set when it was created.
+
+<a name="configure-compute"></a>
 
 ### Configure Compute Nodes
 
@@ -61,7 +98,7 @@ Prerequisites for this task:
 1. Obtain a token.
 
    ```bash
-   export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
+   ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
                                 -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                                 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
    ```
@@ -69,13 +106,13 @@ Prerequisites for this task:
 1. Create a working directory.
 
    ```bash
-   mkdir /root/sls_chn_ips && cd /root/sls_chn_ips
+   ncn-m001# mkdir /root/sls_chn_ips && cd /root/sls_chn_ips
    ```
 
 1. Extract SLS data to a file.
 
    ```bash
-   curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
+   ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
    ```
 
 #### Add Compute IPs to CHN SLS data
@@ -83,8 +120,8 @@ Prerequisites for this task:
 Process the SLS file:
 
    ```bash
-   export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
-   ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
+   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   ncn-m001# ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
    ```
 
 The default output file name will be `chn_with_computes_added_sls_file.json`, but can  be changed by using the flag `--sls-output-file` with the script.
@@ -94,7 +131,7 @@ The default output file name will be `chn_with_computes_added_sls_file.json`, bu
 If the following command does not complete successfully, check if the `TOKEN` environment variable is set correctly.
 
    ```bash
-   curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@chn_with_computes_added_sls_file.json'
+   ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@chn_with_computes_added_sls_file.json'
    ```
 
 #### Enable CFS layer
@@ -106,7 +143,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    1. Identify the compute nodes.
 
       ```bash
-      cray hsm state components list --role Compute --format json | jq -r '.Components[] | .ID'
+      ncn# cray hsm state components list --role Compute --format json | jq -r '.Components[] | .ID'
       x1000c5s1b0n1
       x1000c5s1b0n0
       x1000c5s0b0n0
@@ -116,7 +153,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    1. Identify CFS configuration in use on the compute nodes.
 
       ```bash
-      cray cfs components describe x1000c5s1b0n1
+      ncn# cray cfs components describe x1000c5s1b0n1
       configurationStatus = "configured"
       desiredConfig = "cos-config-full-2.3-integration"
       enabled = true
@@ -127,7 +164,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    1. Extract the CFS configuration.
 
       ```bash
-      cray cfs configurations describe cos-config-full-2.3-integration --format json | jq 'del(.lastUpdated) | del(.name)' > cos-config-full-2.3-integration.json
+      ncn# cray cfs configurations describe cos-config-full-2.3-integration --format json | jq 'del(.lastUpdated) | del(.name)' > cos-config-full-2.3-integration.json
       ```
 
 1. Identify the UAN CFS configuration.
@@ -135,7 +172,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    1. Identify the UAN nodes.
 
       ```bash
-      cray hsm state components list --role Application --subrole UAN --format    json | jq -r '.Components[] | .ID'
+      ncn# cray hsm state components list --role Application --subrole UAN --format    json | jq -r '.Components[] | .ID'
       x3000c0s25b0n0
       x3000c0s16b0n0
       x3000c0s15b0n0
@@ -144,7 +181,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    1. Identify the UAN CFS configuration in use.
 
       ```bash
-      cray cfs components describe x3000c0s25b0n0
+      ncn# cray cfs components describe x3000c0s25b0n0
       configurationStatus = "configured"
       desiredConfig = "chn-uan-cn"
       enabled = true
@@ -157,7 +194,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
       The resulting output should look similar to this. Installed products, versions, and commit hashes will vary.
 
       ```json
-      cray cfs configurations describe chn-uan-cn --format json
+      ncn# cray cfs configurations describe chn-uan-cn --format json
       {
         "lastUpdated": "2022-05-27T20:15:10Z",
         "layers": [
@@ -177,7 +214,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 1. Update the compute node CFS configuration.
 
    ```bash
-   cray cfs configurations update cos-config-full-2.3-integration --file cos-config-full-2.3-integration.json
+   ncn# cray cfs configurations update cos-config-full-2.3-integration --file cos-config-full-2.3-integration.json
    lastUpdated = "2022-05-27T20:47:18Z"
    name = "cos-config-full-2.3-integration"
    [[layers]]
@@ -246,7 +283,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command to verify this has occurred.
 
    ```bash
-   cray cfs components describe x1000c5s1b0n1
+   ncn# cray cfs components describe x1000c5s1b0n1
    configurationStatus = "pending"
    desiredConfig = "cos-config-full-2.3-integration"
    enabled = true
@@ -261,6 +298,8 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
 For more information on managing node with CFS please refer to the [Configuration Management](../../../operations/index.md#configuration-management) documentation.
 
+<a name="configure-ncn"></a>
+
 ### Configure NCNs
 
 Prerequisites for this task:
@@ -273,7 +312,7 @@ Prerequisites for this task:
    1. Identify the worker nodes.
 
       ```bash
-      cray hsm state components list --role Management --subrole Worker --format json | jq -r '.Components[] | .ID'
+      ncn# cray hsm state components list --role Management --subrole Worker --format json | jq -r '.Components[] | .ID'
       x3000c0s4b0n0
       x3000c0s6b0n0
       x3000c0s5b0n0
@@ -283,7 +322,7 @@ Prerequisites for this task:
    1. Identify CFS configuration in use on the worker nodes.
 
       ```bash
-      cray cfs components describe x3000c0s4b0n0
+      ncn# cray cfs components describe x3000c0s4b0n0
       configurationStatus = "configured"
       desiredConfig = "ncn-personalization"
       enabled = true
@@ -294,7 +333,7 @@ Prerequisites for this task:
 1. Extract the CFS configuration
 
    ```bash
-   cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
+   ncn# cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
    ```
 
    The resulting output file should look similar to this. Installed products, versions, and commit hashes will vary.
@@ -352,7 +391,7 @@ Prerequisites for this task:
 1. Update the NCN personalization configuration.
 
    ```bash
-   cray cfs configurations update ncn-personalization --file ncn-personalization.json
+   ncn# cray cfs configurations update ncn-personalization --file ncn-personalization.json
    lastUpdated = "2022-05-25T09:22:44Z"
    name = "ncn-personalization"
    [[layers]]
@@ -397,7 +436,7 @@ Prerequisites for this task:
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command to verify this has occurred.
 
    ```bash
-   cray cfs components describe x3000c0s4b0n0
+   ncn# cray cfs components describe x3000c0s4b0n0
    configurationStatus = "pending"
    desiredConfig = "ncn-personalization"
    enabled = true
@@ -412,22 +451,30 @@ Prerequisites for this task:
 
 For more information on managing NCN personalization please refer to [Perform NCN Personalization](../../../operations/CSM_product_management/Perform_NCN_Personalization.md)
 
+<a name="configure-api-gw"></a>
+
 ### Configure the API gateways
 
 No additional steps are required to configure the API gateways for CHN.
 
 If CHN is selected during CSM installation or upgrade the `customer-high-speed` MetalLB pool is defined and the load balancers configured with IP addresses from this pool.
 
+<a name="validation-tasks"></a>
+
 ## Validation Tasks
+
+<a name="validate-sls"></a>
 
 ### Validating SLS
 
 To display current setting of the `SystemDefaultRoute` SLS `BICAN` network, run the following command.
 
 ```bash
-/usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --check
+ncn-m001# /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --check
 Configured SystemDefaultRoute: CHN
 ```
+
+<a name="validate-uan"></a>
 
 ### Validating UAN
 
@@ -458,12 +505,14 @@ Configured SystemDefaultRoute: CHN
    10.253.0.0/16 dev hsn0 proto kernel scope link src 10.253.0.25
    ```
 
+<a name="validate-uai"></a>
+
 ### Validating UAI
 
 1. Retrieve the configured CHN subnet from SLS
 
    ```bash
-   cray sls search networks list --name CHN --format json | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="chn_metallb_address_pool")'
+   ncn-m001# cray sls search networks list --name CHN --format json | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="chn_metallb_address_pool")'
    {
      "CIDR": "10.103.9.64/27",
      "FullName": "CHN Dynamic MetalLB",
@@ -477,7 +526,7 @@ Configured SystemDefaultRoute: CHN
 1. Verify that UAIs are being created with IP addresses in the correct range.
 
    ```bash
-   cray uas admin uais list --format json | jq -c '.[] | {uai_name, uai_ip}'
+   ncn-m001# cray uas admin uais list --format json | jq -c '.[] | {uai_name, uai_ip}'
    {"uai_name":"uai-vers-93f0289d","uai_ip":"10.103.9.69"}
    {"uai_name":"uai-vers-9f67ac89","uai_ip":"10.103.9.70"}
    {"uai_name":"uai-vers-b773a5d9","uai_ip":"10.103.9.71"}
@@ -486,7 +535,7 @@ Configured SystemDefaultRoute: CHN
 1. Run the UAI gateway tests
 
    ```bash
-   /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
+   ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
    ```
 
    The test will launch a UAI with the gateway-test image, execute the gateway tests, and then delete the UAI that was launched. The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
@@ -496,6 +545,8 @@ Configured SystemDefaultRoute: CHN
    ```
 
 Please refer to the [gateway testing documentation](../gateway_testing.md) for more information.
+
+<a name="validate-compute"></a>
 
 ### Validate Compute Nodes
 
@@ -545,6 +596,8 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
    10.253.0.0/16 dev hsn0 proto kernel scope link src 10.253.0.54
    ```
 
+<a name="validate-ncn"></a>
+
 ### Validate NCNs
 
 1. Retrieve the `CHN` network information from SLS.
@@ -587,6 +640,8 @@ Please refer to the [gateway testing documentation](../gateway_testing.md) for m
        inet 10.253.0.1/16 brd 10.253.255.255 scope global hsn0
        inet 10.103.9.7/25 scope global hsn0
    ```
+
+<a name="validate-api-gw"></a>
 
 ### Validate the API gateways
 
