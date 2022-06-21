@@ -154,32 +154,30 @@ referring to user activity.
 
 1. During the upgrade, the switch `1.2 Preconfig` will not remove UAN ports from the CMN VLAN (the pre-1.2 CAN), allowing UANs
    to retain their existing IP addresses during the CSM 1.2 upgrade process. Traffic to and from UANs will still flow through CMN, but
-   may also flow through CAN/CHN networks if desired.
+   may also flow through CAN/CHN networks, if desired.
 
-1. CFS will be temporarily disabled for UANs, so that running CFS plays does not remove CMN interfaces from UANs. As mentioned
-   in [Abstract (Stage 0.3)](#abstract-stage-03), network configuration is controlled by data in SLS, but CFS plays also pick up
-   the same SLS data, which can lead to UANs being prematurely removed from CMN and causing UAN outage. As such, CFS plays
+1. CFS will be temporarily disabled for UANs, in order to prevent CFS plays from removing CMN interfaces from UANs. As mentioned
+   in [Abstract (Stage 0.3)](#abstract-stage-03), network configuration is controlled by data in SLS. However, CFS plays also pick up
+   the same SLS data, which can lead to UANs being prematurely removed from the CMN and causing UAN outages. As such, CFS plays
    need to be disabled for UANs.
 
-   (`ncn-m001#`) To disable CFS plays for UANs, you must remove CFS assignment for UANs by running the following command:
+   To disable CFS plays for UANs, remove CFS assignment for UANs by running the following command:
 
    ```bash
-   export CRAY_FORMAT=json
-   for xname in $(cray hsm state components list --role Application --subrole UAN --type node | jq -r .Components[].ID)
-   do
-      cray cfs components update --enabled false --desired-config "" $xname
-   done
+   ncn-m001# for xname in $(cray hsm state components list --role Application --subrole UAN --type node --format json | jq -r .Components[].ID) ; do
+                 cray cfs components update --enabled false --desired-config "" --format json $xname
+             done
    ```
 
-   > Note that the above command will disable CFS plays for UANs only. If you wish to disable CFS plays for all types of
+   > Note that the above command will disable CFS plays for UANs only. If wishing to disable CFS plays for all types of
    > application nodes (recommended), then remove the `--subrole UAN` portion in the snippet above.
 
-1. UAN reboots must be avoided and is not a supported operation during CSM 1.2 upgrade. Rebooting a UAN during a CSM 1.2
-   upgrade can re-enable CFS and ultimately lead to removing the CMN interface from UANs, disrupting UAN access for your users.
-   As a system administrator, you must inform your users to avoid UAN reboots during the CSM 1.2 upgrade process.
+1. UAN reboots must be avoided and are not a supported operation during the CSM 1.2 upgrade. Rebooting a UAN during a CSM 1.2
+   upgrade can re-enable CFS and ultimately lead to removing the CMN interface from UANs, disrupting UAN access for users.
+   System administrators must inform users to avoid UAN reboots during the CSM 1.2 upgrade process.
 
-   If, however, a UAN is rebooted, then you need to patch the file `roles/uan_interfaces/tasks/can-v2.yml` for your current
-   CSM release in the `vcs/cray/uan-config-management.git` repository and reboot again to bring back the
+   However, if a UAN is rebooted, then the `roles/uan_interfaces/tasks/can-v2.yml` file in the `vcs/cray/uan-config-management.git` repository
+   must be patched for the current CSM release. After that, the UAN must be rebooted again to bring the
    CMN (pre-1.2 CAN) interface back in the UAN. Use the following patch file and follow the instructions in
    [Configuration Management](../../operations/README.md#configuration-management) to restore CMN access in your UAN:
 
@@ -215,15 +213,15 @@ referring to user activity.
    +  when: item.FullName == "CMN Bootstrap DHCP Subnet"
    ```
 
-1. Once UAN has been upgraded to 2.4, you may reboot the UANs for the new network configuration changes to take effect.
-   UANs will not receive an IP on the CMN network and instead will default their traffic through the new CAN/CHN. For concrete
-   details on UAN transition plan for your users, please refer to
-   [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime)
+1. Once UAN has been upgraded to 2.4, the UANs may be rebooted for the new network configuration changes to take effect.
+   UANs will not receive an IP address on the CMN network and instead will default their traffic through the new CAN/CHN. For concrete
+   details on UAN transition plan for users, see
+   [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime).
 
 1. Note that in CSM 1.2, UAN ports will not be removed from the CMN VLAN7 in switches. In the next CSM release, switch
    configuration will be updated to remove UAN ports from the CMN VLAN7. This enables non-rebooted UANs to continue to work
-   and allows for better easing into BICAN in CSM 1.2. More details about this transition plan are outlined in
-   [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime)
+   and allows for better easing into BICAN in CSM 1.2. For more details about this transition plan, see
+   [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime).
 
 ### UAI migration
 
@@ -231,13 +229,13 @@ Access to UAIs will be disrupted until CSM 1.2 upgrade completes. After the upgr
 
 ### Decide on subnet ranges for new CAN/CHN
 
-Once you have decided whether to use the new CAN or to use CHN for user access, you must decide on the subnet range. Refer
+After deciding whether to use the new CAN or to use CHN for user access, the subnet range must be decided. Refer
 to [Customer Accessible Networks](../../operations/network/customer_accessible_networks/Customer_Accessible_Networks.md)
 for subnet ranges and defaults for CAN/CHN.
 
 ### Preserving CMN subnet range
 
-It is vital that you preserve the subnet range for the pre-1.2 CAN that is now being renamed to CMN. Changing the subnet
+**It is vital** that the subnet range is preserved for the pre-1.2 CAN that is now being renamed to CMN. Changing the subnet
 size during the CSM 1.2 upgrade process is unsupported and will break the upgrade.
 
 ### Changes to service endpoints
@@ -248,7 +246,7 @@ fully qualified domain name. Furthermore, certain services are only available on
 - Access to administrative services is now restricted to the CMN.
 - API access is available via the CMN, new CAN, and CHN.
 
-The following table are a set of examples of how domain names of existing services are impacted. It assumes the system was
+The following table is a set of examples of how domain names of existing services are impacted. It assumes the system was
 configured with a `system-name` of `shasta` and a `site-domain` of `dev.cray.com`.
 
 | Old Name                           | New Name                                  |
@@ -265,10 +263,10 @@ configured with a `system-name` of `shasta` and a `site-domain` of `dev.cray.com
 | `sma-kibana.shasta.dev.cray.com`   | `sma-kibana.cmn.shasta.dev.cray.com`      |
 | `api.shasta.dev.cray.com`          | `api.cmn.shasta.dev.cray.com`, `api.chn.shasta.dev.cray.com`, `api.can.shasta.dev.cray.com` |
 
-You must inform your users of the change to the `api.*` endpoint to avoid any unexpected disruptions.
+Users must be informed of the change to the `api.*` endpoint to avoid any unexpected disruptions.
 
-Note that the `*.cmn.<system-domain>`, `*.can.<system-domain>`, `*.chn.<system-domain>` suffixes are not configurable. That is, you
-**cannot** configure, for example, `*.cmn.<system-domain>` to instead be `*.my-mgmt-network.<system-domain>`.
+Note that the `*.cmn.<system-domain>`, `*.can.<system-domain>`, and `*.chn.<system-domain>` suffixes are not configurable. That is,
+`*.cmn.<system-domain>` **cannot** be configured to instead be `*.my-mgmt-network.<system-domain>`, for example.
 
 ## Stage 0.3 - Update SLS
 
