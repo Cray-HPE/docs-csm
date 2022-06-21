@@ -148,7 +148,7 @@ With BICAN, the pre-1.2 CAN network is split into two separate networks:
 ### UAN migration
 
 Steps are taken in order to minimize disruption to UANs during the CSM 1.2 upgrade process. Read these steps
-carefully and follow any recommendations and warnings to minimize disruptions to user activity.  Note that these steps apply
+carefully and follow any recommendations and warnings to minimize disruptions to user activity. Note that these steps apply
 to all types of application nodes and not just UANs -- the term "UAN" just happens to be more commonly used and understood when
 referring to user activity.
 
