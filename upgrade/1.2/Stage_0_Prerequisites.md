@@ -125,7 +125,7 @@ With BICAN, the pre-1.2 CAN network is split into two separate networks:
    This network allows only system administrative access from the customer site. The pre-1.2 CAN is renamed to CMN. By
    the end of the CSM 1.2 upgrade, all non-administrative access, such as from UANs, will be removed from CMN.
 
-   During the CSM 1.2 upgrade, UANs will retain their pre-1.2 CAN IPs in order to minimize disruption to UANs. However,
+   During the CSM 1.2 upgrade, UANs will retain their pre-1.2 CAN IP addresses in order to minimize disruption to UANs. However,
    toward the end of the CSM 1.2 upgrade, UANs will stop registering themselves on CMN and will receive new IPs on the
    CAN/CHN network below. This process is described in more detail in [UAN Migration](#uan-migration).
 
