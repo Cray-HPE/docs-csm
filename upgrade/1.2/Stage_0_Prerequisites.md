@@ -179,8 +179,8 @@ referring to user activity.
    As a system administrator, you must inform your users to avoid UAN reboots during the CSM 1.2 upgrade process.
 
    If, however, a UAN is rebooted, then you need to patch the file `roles/uan_interfaces/tasks/can-v2.yml` for your current
-   CSM release in the `vcs/cray/uan-config-management.git` repository and re-run the CFS Ansible play to bring back the
-   CMN (pre-1.2 CAN) interface back in UAN. Use the following patch file and follow the instructions in
+   CSM release in the `vcs/cray/uan-config-management.git` repository and reboot again to bring back the
+   CMN (pre-1.2 CAN) interface back in the UAN. Use the following patch file and follow the instructions in
    [Configuration Management](../../operations/README.md#configuration-management) to restore CMN access in your UAN:
 
    ```text
@@ -215,7 +215,7 @@ referring to user activity.
    +  when: item.FullName == "CMN Bootstrap DHCP Subnet"
    ```
 
-1. Once the CSM 1.2 upgrade is complete, you may reboot the UANs for the new network configuration changes to take effect.
+1. Once UAN has been upgraded to 2.4, you may reboot the UANs for the new network configuration changes to take effect.
    UANs will not receive an IP on the CMN network and instead will default their traffic through the new CAN/CHN. For concrete
    details on UAN transition plan for your users, please refer to
    [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime)
