@@ -614,6 +614,6 @@ Init
 Preconfig
 preconfig
 
-- upgrade/1.2/Stage_0_Prerequisites.md
+- upgrade/1.2/plan_and_coordinate_network_upgrade.md
 # To differentiate between old CAN and new CAN
 pre-1
