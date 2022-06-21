@@ -66,7 +66,7 @@ As can be seen in the diagram above, traffic ingress from the site for the CHN i
 Typically these are a pair of Arista switches which provide other HSN access -- for ClusterStor, for example.
 
 NOTE: Arista routing configurations as a virtual routing instance are in scope for CSM 1.2 CHN work.
-Other edge routers, including Juniper, are out of scope.
+Other edge routers, including Cisco and Juniper are out of scope.
 
 ### 2.1 CHN system ingress endpoints accessible in CSM 1.2
 
@@ -131,7 +131,7 @@ This is intended to be changed during installation to a **customer-supplied IPv4
 - CFS configurations for CN and UAN **addressing and routing.**
 - UAI to support changes to **addressing and routing.**
 - MetalLB to create new API endpoints and peer with edge router.
-- Arista switch pair to create new or add to existing virtual routing instance for path and access control.
+- Arista switch pair to create a new BGP routing instance, and add or modify existing virtual routing instance for path and access control.
 - HSN required for transport of application traffic, so new procedures need to be developed for troubleshooting and support.
 
 #### 2.4.2 When addressing occurs
