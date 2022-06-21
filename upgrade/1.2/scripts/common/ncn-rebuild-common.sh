@@ -317,8 +317,12 @@ fi
 } >> ${LOG_FILE} 2>&1
 
 {
+    # Validate SLS health before calling csi handoff bss-update-*, since
+    # it relies on SLS
+    check_sls_health
+
     set +e
-    while true ; do    
+    while true ; do
         csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
         if [[ $? -eq 0 ]]; then
             break
