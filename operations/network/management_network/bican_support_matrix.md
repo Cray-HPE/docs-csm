@@ -71,7 +71,7 @@ In order to achieve this, the Management Network CAN is used during the installa
   * IPv6 roadmap
 * Routing
   * Static routes (default) exist on the edge router/switches.
-  * Dynamic routing (OSPF or BGP) is possible at the edge.
+  * Dynamic routing (OSPF) is possible at the edge.
 
 ## Network sizing and requirements
 
