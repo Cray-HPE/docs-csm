@@ -163,8 +163,7 @@ ncn-m001# /usr/share/doc/csm/upgrade/1.2.6/scripts/post-csm-services-upgrade.sh
 
 1. Remember to exit the typescript that was started at the beginning of the upgrade.
 
-```bash
-ncn-m001# exit
-```
+   ```bash
+   ncn-m001# exit
 
 It is recommended to save the typescript file for later reference.
