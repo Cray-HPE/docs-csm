@@ -7,7 +7,6 @@ the NCNs have been deployed (e.g. there is no more PIT node).
 
 1. [Quiesce Compute and Application Nodes](#quiesce-application-and-compute-nodes)
 1. [Disable DHCP Service](#disable-dhcp-service)
-1. [Wipe Disks on Booted Nodes](#wipe-disks-on-booted-nodes)
 1. [Set IPMI Credentials](#set-ipmi-credentials)
 1. [Power Off Booted Nodes](#power-off-booted-nodes)
 1. [Set Node BMCs to DHCP](#set-node-bmcs-to-dhcp)
@@ -33,16 +32,6 @@ The DHCP service running in kubernetes needs to be disabled or it will conflict 
    ```bash
    kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
    ```
-
-## Wipe Disks on Booted Nodes
-
-> **`NOTE`** Skip this section if none of the management nodes are booted.
-
-There is a bug in the automatic wiping of NCNs that entails a manual wipe prior to a re-installation or upgrade.
-
-For each management node (**excluding** `ncn-m001`), log in and do a "full wipe" of the node's disks.
-
-See [full wipe in Wipe NCN Disks](../operations/node_management/Wipe_NCN_Disks.md#full-wipe).
 
 ## Set IPMI credentials
 

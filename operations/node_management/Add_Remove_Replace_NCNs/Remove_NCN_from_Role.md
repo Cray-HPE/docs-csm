@@ -12,10 +12,6 @@ Remove a master, worker, or storage NCN from current roles. Select the procedure
     - [Master node](#master-node-remove-roles)
     - [Worker node](#worker-node-remove-roles)
     - [Storage node](#storage-node-remove-roles)
-1. [Wipe the drives](#wipe-the-drives)
-    - [Master node](#wipe-disks-master-node)
-    - [Worker node](#wipe-disks-worker-node)
-    - [Storage node](#wipe-disks-utility-storage-node)
 1. [Power off the node](#power-off-the-node)
 1. [Next step](#next-step)
 
@@ -323,91 +319,6 @@ The worker node role removal is complete; proceed to [wipe the drives](#wipe-dis
 Open a new tab and follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
 
 Once the storage node role removal is complete, then proceed to [wipe the drives](#wipe-disks-utility-storage-node).
-
-## Wipe the Drives
-
-### Wipe Disks: Master Node
-
-**`NOTE`** etcd should already be stopped as part of the "Remove NCN from Role" steps.
-
-All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
-
-1. Unmount etcd and `SDU`, and remove the volume group.
-
-   ```bash
-   umount -v /run/lib-etcd /var/lib/etcd /var/lib/s3fs_cache /var/lib/admin-tools
-   vgremove -f -v --select 'vg_name=~metal*'
-   ```
-
-1. Wipe the drives.
-
-   ```bash
-   mdisks=$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '   {print "/dev/" $2}') ; echo $mdisks
-   wipefs --all --force $mdisks
-   ```
-
-Once the wipe of the drives is complete, proceed to [power off the node](#power-off-the-node).
-
-### Wipe Disks: Worker Node
-
-All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
-
-1. Stop `containerd`.
-
-    ```bash
-    systemctl stop containerd.service
-    ```
-
-1. Unmount partitions and remove the volume group.
-
-    ```bash
-    umount -v /var/lib/kubelet /run/lib-containerd /run/containerd /var/lib/s3fs_cache
-    vgremove -f -v --select 'vg_name=~metal*'
-    ```
-
-1. Wipe drives the drives.
-
-    ```bash
-    wipefs --all --force /dev/disk/by-label/*
-    wipefs --all --force /dev/sd*
-    ```
-
-Once the wipe of the drives is complete, proceed to [power off the node](#power-off-the-node).
-
-### Wipe Disks: Utility Storage Node
-
-All commands in this section must be run **on the node being removed** \(unless otherwise indicated\). These commands can be done from the ConMan console window.
-
-1. Make sure the OSDs (if any) are not running.
-
-    ```bash
-    podman ps
-    ```
-
-    Examine the output. There should be no running Ceph processes or containers.
-
-1. Remove the Ceph volume groups.
-
-    ```bash
-    ls -1 /dev/sd* /dev/disk/by-label/*
-    vgremove -f --select 'vg_name=~ceph*'
-    ```
-
-1. Unmount and remove the `metalvg0` volume group.
-
-   ```bash
-   umount -v /etc/ceph /var/lib/ceph /var/lib/containers
-   vgremove -f metalvg0
-   ```
-
-1. Wipe the disks and RAIDs.
-
-    ```bash
-    wipefs --all --force /dev/disk/by-label/*
-    wipefs --all --force /dev/sd*
-    ```
-
-Once the wipe of the drives is complete, proceed to [power off the node](#power-off-the-node).
 
 ## Power Off the Node
 

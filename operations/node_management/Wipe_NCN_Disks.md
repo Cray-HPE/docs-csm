@@ -6,13 +6,15 @@ This page details how to wipe NCN disks.
 
 After following these procedures, an NCN can be rebooted and redeployed.
 
-All types of disk wipe can be run from Linux or from an initramFS/initrd emergency shell.
+> **`NOTE`** All types of disk wipe can be run from Linux or from an initramFS/initrd emergency shell.
 
 The following are potential use cases for wiping disks:
 
-* Adding a node that is not bare.
+* Adding a node that is not bare-metal, that came from somewhere else and might have a running OS already
 * Adopting new disks that are not bare.
-* Doing a fresh install.
+
+By default the NCN is wiped by its own deployment code (when `metal.no-wipe=0` is set), this 
+procedure in this page is offered as an alternative, manual method. This page is not required.
 
 ## Topics
 

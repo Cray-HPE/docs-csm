@@ -472,7 +472,6 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 - [Rebuild NCNs](node_management/Rebuild_NCNs/Rebuild_NCNs.md)
   - [Identify Nodes and Update Metadata](node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md)
   - [Prepare Storage Nodes](node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md)
-  - [Wipe Drives](node_management/Rebuild_NCNs/Wipe_Drives.md)
   - [Power Cycle and Rebuild Nodes](node_management/Rebuild_NCNs/Power_Cycle_and_Rebuild_Nodes.md)
   - [Adding a Ceph Node to the Ceph Cluster](node_management/Rebuild_NCNs/Re-add_Storage_Node_to_Ceph.md)
   - [Customize PCIe Hardware](node_management/Customize_PCIe_Hardware.md)

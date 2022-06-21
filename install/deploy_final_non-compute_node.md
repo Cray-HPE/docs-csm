@@ -241,52 +241,6 @@ The steps in this section load hand-off data before a later procedure reboots th
         > RemoteISOs are at risk here; even though a backup has been performed of the PIT node, it is not possible to
         > boot back to the same state. This is the last step before rebooting the node.
 
-1. (`pit#`) Wipe the disks on the PIT node.
-
-    > **WARNING:** Risk of **USER ERROR**! Do not assume to wipe the first three disks (for example, `sda`, `sdb`, and `sdc`);
-    > they are not pinned to any physical disk layout. **Choosing the wrong ones may result in wiping the USB device**. USB devices can
-    > only be wiped by operators at this point in the install. USB devices are never wiped by the CSM installer.
-
-    1. Select disks to wipe (SATA/NVME/SAS).
-
-        ```bash
-        . /usr/lib/dracut/modules.d/90metalmdsquash/metal-lib.sh
-        md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E $metal_transports | sort -h | awk '{print "/dev/" $2}')"
-        ```
-
-    1. Run a sanity check by printing disks into typescript or console.
-
-        ```bash
-        echo $md_disks
-        ```
-
-        Expected output looks similar to the following:
-
-        ```text
-        /dev/sda /dev/sdb /dev/sdc
-        ```
-
-    1. Wipe. **This is irreversible.**
-
-        ```bash
-        wipefs --all --force $md_disks
-        ```
-
-        If any disks had labels present, output looks similar to the following:
-
-        ```text
-        /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
-        /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
-        /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
-        /dev/sdb: 6 bytes were erased at offset 0x00000000 (crypto_LUKS): 4c 55 4b 53 ba be
-        /dev/sdb: 6 bytes were erased at offset 0x00004000 (crypto_LUKS): 53 4b 55 4c ba be
-        /dev/sdc: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
-        /dev/sdc: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
-        /dev/sdc: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
-        ```
-
-        If there was any wiping done, output should appear similar to the output above. If this is re-run, there may be no output or an ignorable error.
-
 1. (`pit#`) Quit the typescript session and copy the typescript file off of `ncn-m001`.
 
     1. Stop the typescript session:

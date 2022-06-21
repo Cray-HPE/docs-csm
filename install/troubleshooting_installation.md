@@ -29,14 +29,6 @@ the LiveCD USB can be rebuilt.
 
 See [PXE Boot Troubleshooting](troubleshooting_pxe_boot.md)
 
-## Wipe NCN Disks for Reinstallation
-
-If it has been determined an NCN did not properly configure its storage while trying to
-[Deploy Management Nodes](deploy_non-compute_nodes.md) during the install, then the
-storage should be wiped so the node can be redeployed.
-
-See [Wipe NCN Disks for Reinstallation](../operations/node_management/Wipe_NCN_Disks.md)
-
 ## Restart Network Services and Interfaces on NCNs
 
 If an NCN shows any of these problems, the network services and interfaces on that node might need to be restarted.
