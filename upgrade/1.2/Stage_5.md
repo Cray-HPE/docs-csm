@@ -1,5 +1,8 @@
 # Stage 5 - Perform NCN Personalization
 
+**Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
+[Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+
 ## Procedure
 
 1. Set the `root` user password and SSH keys before running NCN personalization.
