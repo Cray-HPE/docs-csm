@@ -162,7 +162,14 @@ the correct options for the specific environment are used. Two examples are give
 
 ### Migrate SLS data JSON to CSM 1.2
 
+<<<<<<< HEAD
 - Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
+=======
+You can now migrate SLS data to CSM 1.2, using the `sls_input_file.json` obtained above, as well as using the desired
+network (new CAN or CHN) and its chosen subnet as per [Decide on subnet ranges for new CAN/CHN](#decide-on-subnet-ranges-for-new-canchn).
+
+- (`ncn-m001#`) Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
+>>>>>>> origin/CASMUSER-3024-main-Update_Raspberry_upgrade_docs_to_warn_admins_about_UAN_CAN_network_outage
 
    ```bash
    ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
