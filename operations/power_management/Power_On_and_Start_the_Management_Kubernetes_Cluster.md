@@ -365,7 +365,7 @@ Verify that the Lustre file system is available from the management cluster.
 1. Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
     ```bash
-    ncn# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+    ncn# for node in $(grep -oP "(ncn-[mw]\w+)" /etc/hosts | sort -u); do echo -n "$node: "; ssh $node systemctl status cfs-state-reporter; done
     ```
 
     Example output:
@@ -389,7 +389,7 @@ Verify that the Lustre file system is available from the management cluster.
     ncn-w001: Mar 19 19:34:50 ncn-w001 python3[5192]: Attempt 2484 of contacting CFS...
     ncn-w001: Mar 19 19:34:50 ncn-w001 python3[5192]: Unable to contact CFS to report component status: CFS returned a non-json response: Unauthorized Request
     ncn-w001: Mar 19 19:34:50 ncn-w001 python3[5192]: Expecting value: line 1 column 1 (char 0)
-    pdsh@ncn-m001: ncn-w001: ssh exited with exit code 3
+    ssh@ncn-m001: ncn-w001: ssh exited with exit code 3
     ```
 
     1. On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service. For example:
@@ -401,7 +401,8 @@ Verify that the Lustre file system is available from the management cluster.
     1. Check the status again.
 
         ```bash
-        ncn# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+
+        ncn# for node in $(grep -oP "(ncn-[mw]\w+)" /etc/hosts | sort -u); do echo -n "$node: "; ssh $node systemctl status cfs-state-reporter; done
         ```
 
 ### Verify BGP peering sessions
@@ -559,7 +560,15 @@ Verify that the Lustre file system is available from the management cluster.
     +----------------+------+--------+-------+------+---------+------+-------+------------+----------+
     ```
 
-1. To check the health and status of the management cluster after a power cycle, refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
+1. Check the health and status of the management cluster after a power cycle.
+
+    1. Enable the `goss-servers` on all the NCNs. For example:
+
+        ```bash
+        ncn# for node in $(grep -oP "(ncn-[mws]\w+)" /etc/hosts | sort -u); do echo -n "$node: "; ssh $node systemctl enable --now goss-servers.service; done
+        ```
+
+    1. Follow the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
 1. If NCNs must have access to Lustre, start the Lustre file system. See [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
 
