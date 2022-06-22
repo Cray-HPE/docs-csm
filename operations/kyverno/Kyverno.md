@@ -165,7 +165,7 @@ Events:
 
 Step 6: Incase of a failure(step 5), delete the policy and restart the workload
 ```bash
-bash# kubectl delete pol -n default add-default-securitycontext
+kubectl delete pol -n default add-default-securitycontext
 ```
 
 Step 7: Check the pod status after deleting the policy
