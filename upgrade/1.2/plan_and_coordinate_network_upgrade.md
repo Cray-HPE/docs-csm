@@ -40,16 +40,16 @@ referring to user activity.
    to retain their existing IP addresses during the CSM 1.2 upgrade process. Traffic to and from UANs will still flow through CMN, but
    may also flow through CAN/CHN networks, if desired.
 
-1. CFS will be temporarily disabled for UANs, in order to prevent CFS plays from removing CMN interfaces from UANs. Note that network
+1. (`ncn-m001#`) CFS will be temporarily disabled for UANs, in order to prevent CFS plays from removing CMN interfaces from UANs. Note that network
    configuration is controlled by data in SLS but CFS plays also pick up the same SLS data, which can lead to UANs being prematurely
    removed from the CMN and causing UAN outages. As such, CFS plays need to be disabled for UANs.
 
    To disable CFS plays for UANs, remove CFS assignment for UANs by running the following command:
 
    ```bash
-   ncn-m001# for xname in $(cray hsm state components list --role Application --subrole UAN --type node --format json | jq -r .Components[].ID) ; do
-                 cray cfs components update --enabled false --desired-config "" --format json $xname
-             done
+   for xname in $(cray hsm state components list --role Application --subrole UAN --type node --format json | jq -r .Components[].ID) ; do
+      cray cfs components update --enabled false --desired-config "" --format json $xname
+   done
    ```
 
    > Note that the above command will disable CFS plays for UANs only. If wishing to disable CFS plays for all types of
