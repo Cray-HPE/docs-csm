@@ -90,6 +90,56 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="REPAIR_AND_VERIFY_CHRONY_CONFIG"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                   -d client_id=admin-client \
+                   -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
+                   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+export TOKEN
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    if [[ "$(hostname)" == "ncn-m002" ]]; then
+        # we already did this from ncn-m001
+        echo "====> ${state_name} has been completed"
+    else
+      # shellcheck disable=SC2013
+      for target_ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
+
+        # ensure host is accessible, skip it if not
+        if ! ssh "$target_ncn" hostname > /dev/null; then
+            continue
+        fi
+
+        # ensure the directory exists
+        ssh "$target_ncn" mkdir -p /srv/cray/scripts/common/
+
+        # copy the NTP script and template to the target ncn
+        rsync -aq "${CSM_ARTI_DIR}"/chrony/ "$target_ncn":/srv/cray/scripts/common/
+
+        # shellcheck disable=SC2029 # it's ok that $TOKEN expands on the client side
+        # run the script
+        if ! ssh "$target_ncn" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; then
+            echo "${target_ncn} csm_ntp failed"
+            exit 1
+        fi
+
+        ssh "$target_ncn" chronyc makestep
+        sleep 5
+        in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+        if [[ "$in_sync" == "no" ]]; then
+            echo "The clock for ${target_ncn} is not in sync.  Wait a bit more or try again."
+            exit 1
+        fi
+      done
+      record_state "${state_name}" "$(hostanme)"
+    fi
+    } >> ${LOG_FILE} 2>&1
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="CHECK_CLOUD_INIT_PREREQ"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
