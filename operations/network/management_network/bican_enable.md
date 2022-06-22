@@ -1,5 +1,6 @@
 # Enabling Customer High Speed Network Routing
 
+- [Prerequisites](#prerequisites)
 - [Configuration tasks](#configuration-tasks)
   - [Configure SLS](#configure-sls)
   - [Configure UAN](#configure-uan)
@@ -20,12 +21,24 @@
   - [Validate NCNs](#validate-ncns)
   - [Validate the API gateways](#validate-the-api-gateways)
 
+## Prerequisites
+
+- Many of the procedures use the Cray Command Line Interface. These can be identified by their use of the `cray` command. For these procedures, the
+  Cray CLI must be configured on the node where the procedure is being followed. See
+  [Configure the Cray CLI](../../configure_cray_cli.md).
+- Some of the procedures require the CSM documentation RPM to be installed on the node where the procedure is being done.
+  This is called out in the procedures where it is a requirement. For information on installing the RPM, see
+  [Check for Latest Documentation](../../../update_product_stream/index.md#check-for-latest-documentation).
+
 ## Configuration tasks
 
 ### Configure SLS
 
 Configuration for the default route of a BICAN enabled system is contained in the System Layout Service (SLS) BICAN data structure in the `SystemDefaultRoute` attribute value.
 This structure was created and its value set during [Prerequisites Stage 0.2](../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-02---update-sls), and can be either `CAN` or `CHN`.
+
+> The commands in this section can be run on any master or worker NCN with the CSM documentation RPM installed. See
+> [Check for Latest Documentation](../../../update_product_stream/index.md#check-for-latest-documentation).
 
 For CSM 1.2, the recommended value for the BICAN `SystemDefaultRoute` is `CAN`.
 This allows continued use of UAN, UAI, and API resources over the `CAN` and allows a fully supported transition to `CHN` in a later CSM release.
@@ -118,6 +131,9 @@ Prerequisites for this task:
    ```
 
 #### Add compute IP addresses to CHN SLS data
+
+> The CSM documentation RPM must be installed on the node where this command is run. See
+> [Check for Latest Documentation](../../../update_product_stream/index.md#check-for-latest-documentation).
 
 (`ncn-mw#`) Process the SLS file:
 
@@ -516,6 +532,9 @@ If CHN is selected during CSM installation or upgrade, then the `customer-high-s
 
 (`ncn-mw#`) To display current setting of the `SystemDefaultRoute` SLS BICAN network, run the following command.
 
+> The CSM documentation RPM must be installed on the node where this command is run. See
+> [Check for Latest Documentation](../../../update_product_stream/index.md#check-for-latest-documentation).
+
 ```bash
 /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --check
 ```
@@ -601,6 +620,9 @@ Configured SystemDefaultRoute: CHN
    ```
 
 1. (`ncn-mw#`) Run the UAI gateway tests.
+
+   > The CSM documentation RPM must be installed on the node where this command is run. See
+   > [Check for Latest Documentation](../../../update_product_stream/index.md#check-for-latest-documentation).
 
    ```bash
    /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
@@ -749,6 +771,9 @@ See [Gateway Testing](../gateway_testing.md) for more information.
    ```
 
 1. (`ncn-mw#`) Run the NCN gateway health checks.
+
+   > The CSM documentation RPM must be installed on the node where this command is run. See
+   > [Check for Latest Documentation](../../../update_product_stream/index.md#check-for-latest-documentation).
 
    ```bash
    /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
