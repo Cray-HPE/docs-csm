@@ -213,7 +213,7 @@ spec:
               allowPrivilegeEscalation: false
               privileged: false
 ```
-The policy report status can be fetched using the following command –
+View the policy report status with the following command:
 
 ```bash
 kubectl get polr -A
