@@ -269,7 +269,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# unset NEXUS_PASSWORD
    ```
 
-1. Commit changes to `customizations.yaml` (optional).
+1. (Optional) Commit changes to `customizations.yaml`.
 
    `customizations.yaml` has been updated in this procedure. If
    [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
