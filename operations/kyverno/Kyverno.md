@@ -282,6 +282,7 @@ This shows that the mutation policy for the workload was enforced properly.
 If there are any discrepancies, we can look at the detailed policy report to triage the issue.
 
 ## Known issues
+
 1. [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 2. [No event is generated incase of mutation policy being apppled to a resource](https://github.com/kyverno/kyverno/issues/2160)
 2. [Inaccurate annnotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
