@@ -254,7 +254,7 @@ summary:
 ```
 
 Step 2: Apply mutation policy and restart the following workload
-```
+```text
 apiVersion: v1
 kind: Pod
 metadata:
