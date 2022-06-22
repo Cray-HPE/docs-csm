@@ -30,10 +30,10 @@
 ### Configure SLS
 
 Configuration for the default route of a `BICAN` enabled system is contained in the System Layout Service (SLS) `BICAN` data structure in the `SystemDefaultRoute` attribute value.
-This structure was created and it's value set during] [Prerequisites Stage 0.2](../../upgrade/1.2/../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-02---update-sls) and can be either `CAN` or `CHN`.
+This structure was created and its value set during [Prerequisites Stage 0.2](../../upgrade/1.2/../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-02---update-sls) and can be either `CAN` or `CHN`.
 
-For CSM 1.2 the recommended value for the `BICAN` `SystemDefaultRoute` is `CAN`.
-This allows continued use of UAN, UAI and API resources over the `CAN` and allows a fully supported transition to `CHN` in a later CSM release.
+For CSM 1.2, the recommended value for the `BICAN` `SystemDefaultRoute` is `CAN`.
+This allows continued use of UAN, UAI, and API resources over the `CAN` and allows a fully supported transition to `CHN` in a later CSM release.
 To update SLS with `CAN` as the `SystemDefaultRoute`:
 
 ```bash
@@ -41,7 +41,7 @@ To update SLS with `CAN` as the `SystemDefaultRoute`:
 Setting SystemDefaultRoute to CAN
 ```
 
-**Preview:** High Speed Network access by users to UAN, UAI and API resources is the `CHN` option.
+**Preview:** High Speed Network access by users to UAN, UAI, and API resources is the `CHN` option.
 This is available during the CSM 1.2 release for those who wish to forge ahead of release-supported features.
 To set and use the `CHN` in SLS update the `SystemDefaultRoute` with:
 
@@ -65,14 +65,14 @@ Please refer to the "HPE Cray User Access Node (UAN) Software Administration Gui
 UAN running before and during an upgrade to CSM 1.2 will continue running with no connectivity or local data impacts until an administrator-scheduled transition takes place.
 While access to currently running UANs continues during the upgrade, UAN rebuilds and reboots not supported.
 
-The time frame over which the transition can be scheduled is quite large and the transition requires only that UAN users to log out of the UAN (over the old IPv4 address) and log back in (over a new IPv4 address).
-The following diagram illustrates the UAN timeline before, during and after the CSM 1.2 upgrade.
+The time frame over which the transition can be scheduled is quite large and the transition requires only that UAN users log out of the UAN (over the old IPv4 address) and log back in (over a new IPv4 address).
+The following diagram illustrates the UAN timeline before, during, and after the CSM 1.2 upgrade.
 
 ![UAN Upgrade Transitions](../../../img/UAN_transition_CSM_1.2.png)
 
-Concretely, users on running UAN may transitioned from the CMN to the new CAN between the two following upgrade points:
+Concretely, users on a running UAN may be transitioned from the CMN to the new CAN between the two following upgrade points:
 
-1. After [SLS Upgrade](../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-03---upgrade-management-network) has been completed, but
+1. After [SLS Upgrade](../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-03---upgrade-management-network) has been completed.
 2. Before [UANs are booted with new images](../../boot_orchestration/Boot_UANs.md).
 
 <a name="configure-uai"></a>
