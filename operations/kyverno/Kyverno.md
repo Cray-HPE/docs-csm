@@ -39,44 +39,44 @@ It mutates the manifest of respective workloads before creating it so that when 
 
 1. Create a sample policy.
 	```text
-	apiVersion: kyverno.io/v1
-	kind: Policy
-	metadata:
-  	name: add-default-securitycontext
-	spec:
-  	rules:
-  	- name: set-container-security-context
-    	match:
-      	resources:
-	        kinds:
-    	    - Pod
-        	selector:
-          	matchLabels:
-            	app: nginx
-    	mutate:
-      	patchStrategicMerge:
-        	spec:
-          	containers:
-          	- (name): "*"
-            	securityContext:
-              	+(allowPrivilegeEscalation): false
-              	+(privileged): false
+    apiVersion: kyverno.io/v1
+    kind: Policy
+    metadata:
+      name: add-default-securitycontext
+    spec:
+    rules:
+      - name: set-container-security-context
+        match:
+          resources:
+            kinds:
+            - Pod
+            selector:
+              matchLabels:
+                app: nginx
+        mutate:
+          patchStrategicMerge:
+            spec:
+              containers:
+              - (name): "*"
+                securityContext:
+                  +(allowPrivilegeEscalation): false
+                  +(privileged): false
 	```
 
 2. Create a simple pod.
 	```text
-	apiVersion: v1
-	kind: Pod
-	metadata:
-  	name: nginx
-  	labels:
-    	app: nginx
-	spec:
-  	containers:
-  	- name: nginx
-    	image: nginx:1.14.2
-    	ports:
-    	- containerPort: 80
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+    containers:
+    - name: nginx
+      image: nginx:1.14.2
+      ports:
+      - containerPort: 80
 	```
 
 	List all of the policies with the following command:
@@ -92,56 +92,56 @@ It mutates the manifest of respective workloads before creating it so that when 
 3. Check the manifest after applying the policy.
 
 	```text
-	  ...
-  	spec:
-    	containers:
-    	- image: nginx:1.14.2
-      	imagePullPolicy: IfNotPresent
-      	name: nginx
-      	ports:
-      	- containerPort: 80
-        	protocol: TCP
-      	resources:
-	        requests:
-    	      cpu: 10m
-        	  memory: 64Mi
-      	securityContext:
-        	allowPrivilegeEscalation: false
-        	privileged: false
-      	terminationMessagePath: /dev/termination-log
-      	terminationMessagePolicy: File
-      	volumeMounts:
-      	- mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-        	name: default-token-vgggw
-        	readOnly: true
+    ...
+    spec:
+      containers:
+      - image: nginx:1.14.2
+        imagePullPolicy: IfNotPresent
+        name: nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+          name: default-token-vgggw
+          readOnly: true
 	  ...
 	```
 
 4. Edit the policy to add one more field and apply the policy again.
 	```text
-	apiVersion: kyverno.io/v1
-	kind: Policy
-	metadata:
-  	name: add-default-securitycontext
-	spec:
-  	rules:
-  	- name: set-container-security-context
-    	match:
-      	resources:
-        	kinds:
-        	- Pod
-        	selector:
-          	matchLabels:
-	            app: nginx
-    	mutate:
-      	patchStrategicMerge:
-        	spec:
-          	containers:
-          	- (name): "*"
-	            securityContext:
-    	          +(allowPrivilegeEscalation): false
-        	      +(privileged): false
-            	  +(runAsNonRoot): true
+    apiVersion: kyverno.io/v1
+    kind: Policy
+    metadata:
+      name: add-default-securitycontext
+    spec:
+    rules:
+      - name: set-container-security-context
+        match:
+          resources:
+            kinds:
+            - Pod
+            selector:
+              matchLabels:
+                app: nginx
+        mutate:
+          patchStrategicMerge:
+            spec:
+              containers:
+              - (name): "*"
+                securityContext:
+                  +(allowPrivilegeEscalation): false
+                  +(privileged): false
+                  +(runAsNonRoot): true
 	```
 
 	If any of the workloads fail to come up after enforcing the policy, then delete the individual policies and restart the workload.
@@ -195,32 +195,32 @@ Also, it generates the report of policy violation in respective workloads. The f
 
 1. Add the following policy before applying the [mutation](#mutation) to the workload.
 	```text
-	apiVersion: kyverno.io/v1
-	kind: Policy
-	metadata:
-  	name: validate-securitycontext
-	spec:
-  	background: true
-  	validationFailureAction: audit
-  	rules:
-  	- name: container-security-context
-	    match:
-    	  resources:
-        	kinds:
-        	- Pod
-        	selector:
-          	matchLabels:
-            	app: nginx
-    	validate:
-      	message: "Non root security context is not set."
-      	pattern:
-	        spec:
-    	      containers:
-        	  - (name): "*"
-            	securityContext:
-              	allowPrivilegeEscalation: false
-              	privileged: false
-	```
+    apiVersion: kyverno.io/v1
+    kind: Policy
+    metadata:
+      name: validate-securitycontext
+    spec:
+      background: true
+      validationFailureAction: audit
+      rules:
+      - name: container-security-context
+        match:
+          resources:
+            kinds:
+            - Pod
+            selector:
+              matchLabels:
+                app: nginx
+        validate:
+          message: "Non root security context is not set."
+          pattern:
+            spec:
+              containers:
+              - (name): "*"
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  privileged: false
+    ```
 
 	View the policy report status with the following command:
 
@@ -238,45 +238,44 @@ Also, it generates the report of policy violation in respective workloads. The f
 	kubectl get polr -n default polr-ns-default -o yaml
 
 	…
-	results:
-	- message: 'validation error: Non root security context is not set. Rule container-security-context
-    	failed at path /spec/containers/0/securityContext/'
-  	policy: validate-securitycontext
-  	resources:
-  	- apiVersion: v1
-    	kind: Pod
-    	name: nginx
-    	namespace: default
-    	uid: 319e5b09-6027-4d90-b3da-6aa1f14573ff
-  	result: fail
-  	rule: container-security-context
-  	scored: true
-  	source: Kyverno
-  	timestamp:
-	    nanos: 0
-    	seconds: 1654594319
-	summary:
-  	error: 0
-  	fail: 1
-  	pass: 0
-  	skip: 0
-  	warn: 0
+    results:
+    - message: 'validation error: Non root security context is not set. Rule container-security-context failed at path /spec/containers/0/securityContext/'
+      policy: validate-securitycontext
+      resources:
+      - apiVersion: v1
+        kind: Pod
+        name: nginx
+        namespace: default
+        uid: 319e5b09-6027-4d90-b3da-6aa1f14573ff
+      result: fail
+      rule: container-security-context
+      scored: true
+      source: Kyverno
+      timestamp:
+        nanos: 0
+        seconds: 1654594319
+      summary:
+        error: 0
+        fail: 1
+        pass: 0
+        skip: 0
+        warn: 0
 	```
 
 2. Apply the mutation policy and restart the following workload.
 	```text
-	apiVersion: v1
-	kind: Pod
-	metadata:
-  	name: nginx
-  	labels:
-    	app: nginx
-	spec:
-  	containers:
-  	- name: nginx
-    	image: nginx:1.14.2
-    	ports:
-    	- containerPort: 80
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: nginx
+      labels:
+        app: nginx
+    spec:
+    containers:
+    - name: nginx
+      image: nginx:1.14.2
+      ports:
+      - containerPort: 80
 	```
 
 3. Check the policy report status.
