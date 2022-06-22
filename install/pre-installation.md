@@ -3,22 +3,22 @@
 The page walks a user through setting up the Cray LiveCD with the intention of installing Cray System Management (CSM).
 
 1. [Boot installation environment](#1-boot-installation-environment)
-    1. [Prepare installation environment server](#1-1-prepare-installation-environment-server)
-    2. [Boot the LiveCD](#1-2-boot-the-livecd)
-    3. [First login](#1-3-first-login)
-    4. [Prepare the data partition](#1-4-prepare-the-data-partition)
-    5. [Set reusable environment variables](#1-5-set-reusable-environment-variables)
-    6. [Exit the console and login with SSH](#1-6-exit-the-console-and-login-with-ssh)
+    1. [Prepare installation environment server](#11-prepare-installation-environment-server)
+    2. [Boot the LiveCD](#12-boot-the-livecd)
+    3. [First login](#13-first-login)
+    4. [Prepare the data partition](#14-prepare-the-data-partition)
+    5. [Set reusable environment variables](#15-set-reusable-environment-variables)
+    6. [Exit the console and login with SSH](#16-exit-the-console-and-login-with-ssh)
 2. [Import CSM tarball](#2-import-csm-tarball)
-    1. [Download CSM tarball](#2-1-download-csm-tarball)
-    2. [Import tarball assets](#2-2-import-tarball-assets)
+    1. [Download CSM tarball](#21-download-csm-tarball)
+    2. [Import tarball assets](#22-import-tarball-assets)
 3. [Create system configuration](#3-create-system-configuration)
-    1. [Validate SHCD](#3-1-validate-shcd)
-    2. [Generate topology files](#3-2-generate-topology-files)
-    3. [Customize `system_config.yaml`](#3-3-customize-system_configyaml)
-    4. [Run CSI](#3-4-run-csi)
-    5. [Prepare Site Init](#3-5-prepare-site-init)
-    6. [Initialize the LiveCD](#3-6-initialize-the-livecd)
+    1. [Validate SHCD](#31-validate-shcd)
+    2. [Generate topology files](#32-generate-topology-files)
+    3. [Customize `system_config.yaml`](#33-customize-system_configyaml)
+    4. [Run CSI](#34-run-csi)
+    5. [Prepare Site Init](#35-prepare-site-init)
+    6. [Initialize the LiveCD](#36-initialize-the-livecd)
 4. [Next topic](#next-topic)
 
 ## 1. Boot installation environment
@@ -35,7 +35,7 @@ Any steps run on an `external` server require that server to have the following 
 - `ssh`
 - `tar`
 
-> **NOTE:** The CSM tarball will be fetched from the external server in the [Import tarball assets](#2-2-import-tarball-assets) step using `curl` or `scp`. If a web server is not installed, then `scp` is the backup option.
+> **NOTE:** The CSM tarball will be fetched from the external server in the [Import tarball assets](#22-import-tarball-assets) step using `curl` or `scp`. If a web server is not installed, then `scp` is the backup option.
 
 ### 1.1 Prepare installation environment server
 
@@ -199,7 +199,7 @@ On first login, the LiveCD will prompt the administrator to change the password.
 
 1. (`pit#`) Mount the `PITDATA` partition.
 
-   Use either the **RemoteISO** or the **USB** option below, depending how the LiveCD was connected in the [Boot the LiveCD](#1-2-boot-the-livecd) step.
+   Use either the **RemoteISO** or the **USB** option below, depending how the LiveCD was connected in the [Boot the LiveCD](#12-boot-the-livecd) step.
 
    - **RemoteISO**
 
@@ -365,7 +365,7 @@ These variables will need to be set for many procedures within the CSM installat
       curl -C - -o /var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
       ```
 
-   - `scp` from the external server used in [Prepare installation environment server](#1-1-prepare-installation-environment-server):
+   - `scp` from the external server used in [Prepare installation environment server](#11-prepare-installation-environment-server):
 
       ```bash
       scp "<external-server>:/<path>/csm-${CSM_RELEASE}.tar.gz" /var/www/ephemeral/
@@ -374,7 +374,7 @@ These variables will need to be set for many procedures within the CSM installat
 ### 2.2 Import tarball assets
 
 If resuming at this stage, the `CSM_RELEASE` and `PITDATA` variables are already set
-in `/etc/environment` from the [Download CSM tarball](#2-1-download-csm-tarball) step.
+in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) step.
 
 1. (`pit#`) Extract the tarball.
 
@@ -483,7 +483,7 @@ Run the following steps before starting any of the system configuration procedur
 1. Create the `cabinents.yaml` file.
 
    > If using this file, then do not forget to set the `cabinets-yaml` field in the
-   > [Customize `system_config.yaml`](#3-3-customize-system_configyaml) step.
+   > [Customize `system_config.yaml`](#33-customize-system_configyaml) step.
 
    See [Create `cabinets.yaml`](./create_cabinets_yaml.md).
 
@@ -503,7 +503,7 @@ Run the following steps before starting any of the system configuration procedur
       csi config init empty
       ```
 
-   - Otherwise, copy the existing `system_config.yaml` file into the working directory and proceed to the [Run CSI](#3-4-run-csi) step.
+   - Otherwise, copy the existing `system_config.yaml` file into the working directory and proceed to the [Run CSI](#34-run-csi) step.
 
 1. (`pit#`) Edit the `system_config.yaml` file with the appropriate values.
 
@@ -576,7 +576,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
    If any tests fail, they need to be investigated. After actions have been taken to rectify the tests
    (for example, editing configuration or CSI inputs), then restart from the beginning of the
-   [Initialize the LiveCD](#3-6-initialize-the-livecd) procedure.
+   [Initialize the LiveCD](#36-initialize-the-livecd) procedure.
 
 1. Save the `prep` directory for re-use.
 
