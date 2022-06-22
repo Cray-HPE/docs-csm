@@ -253,7 +253,7 @@ summary:
   warn: 0
 ```
 
-Step 2: Apply mutation policy and restart the following workload
+2. Apply the mutation policy and restart the following workload.
 ```text
 apiVersion: v1
 kind: Pod
