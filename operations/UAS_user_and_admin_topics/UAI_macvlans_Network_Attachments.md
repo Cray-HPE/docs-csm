@@ -9,10 +9,11 @@ This network attachment integrates the UAI into the HPE Cray EX internal network
 The network attachment also installs a set of routes in the UAI used to reach the compute nodes in the HPE Cray EX platform.
 
 **WARNING**
-This release sets a route over the nmn by default. In CPE release 22.04, instructions for Workload Managers specify that macvlan be changed to use the high speed network. This was found to have a negative impact on the slingshot fabric, as unknown MAC addresses would result in broadcast traffic.
-If macvlan is being changed to use the hsn, make sure the CPE instructions specify how to use iplvan instead of macvlan. In a future CSM release, the network attachment definition will be using ipvlan instead of macvlan to avoid this issue.
+This release sets a route over the NMN by default. In CPE release 22.04, instructions for Workload Managers specify that macvlan be changed to use the high speed network. This was found to have a negative impact on the slingshot fabric, as unknown MAC addresses would result in broadcast traffic.
+If macvlan is being changed to use the HSN, make sure the CPE instructions specify how to use iplvan instead of macvlan. In a future CSM release, the network attachment definition will be using ipvlan instead of macvlan to avoid this issue.
 
-Check how the network attachment is configured with
+Check how the network attachment is configured with:
+
 ```bash
 kubectl describe net-attach-def -n user macvlan-uas-nmn-conf
 ```
