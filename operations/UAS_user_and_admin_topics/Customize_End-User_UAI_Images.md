@@ -65,7 +65,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 1. (`ncn-mw#`) Record the `sessiontemplate` name.
 
     ```bash
-    SESSION_NAME=wlm-sessiontemplate-0.1.0
+    ST_NAME=wlm-sessiontemplate-0.1.0
     ```
 
 1. (`ncn-mw#`) Download a compute node SquashFS.
@@ -73,9 +73,9 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     Use the `sessiontemplate` name to download a compute node SquashFS from a BOS `sessiontemplate` name:
 
     ```bash
-    SESSION_ID=$(cray bos sessiontemplate describe $SESSION_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
+    ST_ID=$(cray bos sessiontemplate describe $ST_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
 
-    cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
+    cray artifacts get boot-images $ST_ID/rootfs rootfs.squashfs
     ```
 
 1. Mount the SquashFS and create a tarball.
@@ -92,7 +92,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
         **IMPORTANT:** `99-slingshot-network.conf` is omitted from the tarball, because that prevents the UAI from running `sshd` as the UAI user with the `su` command.
 
         ```bash
-        (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) 2> /dev/null
+        (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$ST_ID.tar" .) 2> /dev/null
         ```
 
         This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made.
@@ -101,7 +101,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     1. (`ncn-mw#`) Check that the tarball contains `./usr/bin/uai-ssh.sh`.
 
         ```bash
-        tar tf $SESSION_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
+        tar tf $ST_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
         ```
 
         Example output:
@@ -182,7 +182,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     ```bash
     UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
 
-    podman import --change "ENTRYPOINT /usr/bin/uai-ssh.sh" $SESSION_ID.tar $UAI_IMAGE_NAME
+    podman import --change "ENTRYPOINT /usr/bin/uai-ssh.sh" $ST_ID.tar $UAI_IMAGE_NAME
 
     PODMAN_USER=$(kubectl get secret -n nexus nexus-admin-credential -o json | jq -r '.data.username' | base64 -d)
 
@@ -202,7 +202,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     ```bash
     umount -v mount; rmdir -v mount
 
-    rm $SESSION_ID.tar rootfs.squashfs
+    rm $ST_ID.tar rootfs.squashfs
 
     # NOTE: The next step could be done as an `rm -rf` but, because the user
     #       is `root` and the path is very similar to an important system
