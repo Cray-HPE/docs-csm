@@ -701,11 +701,9 @@ x3000c0s1b0  # No mgmt port association
    x3000c0s10b999  # No mgmt port association
    ```
 
-- HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
+- Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
-   > Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
-
-   Example mismatch for HPE PDU:
+   Example mismatch for a PDU:
 
    ```text
    =============== BMCs in SLS not in HSM components ===============
@@ -714,6 +712,28 @@ x3000c0s1b0  # No mgmt port association
    =============== BMCs in SLS not in HSM Redfish Endpoints ===============
    x3000m0
    ```
+
+   If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
+
+   ```bash
+   ncn-m001# PDU=x3000m0
+   ncn-m001# curl -k -s --compressed  https://$PDU -i | grep Server:
+   ```
+
+  - Example ServerTech PDU output:
+
+     ```text
+     Server: ServerTech-AWS/v8.0v
+     ```
+  
+  - Example HPE PDU output:
+
+     ```text
+     Server: HPE/1.4.0
+     ```
+
+  - ServerTech PDUs may need passwords changed from their defaults to become functional. See [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
+  - HPE PDUs are not supported at this time and will likely show up as not being found in HSM. They can be ignored.
 
 - BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where
   Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
