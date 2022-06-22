@@ -3,8 +3,8 @@ Name: docs-csm
 License: MIT License
 Summary: Documentation for CRAY-HPE HPCaaS Installation and Upgrades
 BuildArchitectures: noarch
-Version: %(cat .version)
-Release: %(echo ${BUILD_METADATA})
+Version: %(echo $VERSION)
+Release: 1
 Source: %{name}-%{version}.tar.bz2
 Vendor: Cray Inc.
 

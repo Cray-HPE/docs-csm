@@ -1,7 +1,7 @@
 NAME ?= ${GIT_REPO_NAME}
-VERSION ?= $(shell cat .version)
-# FIXME: When does this switch to release or when it is omitted?
-BUILD_METADATA ?= 1~development~$(shell git rev-parse --short HEAD)
+ifeq ($(VERSION),)
+VERSION := $(shell git describe --tags | tr -s '-' '~' | tr -d '^v')
+endif
 
 SPEC_FILE ?= ${NAME}.spec
 SOURCE_NAME ?= ${NAME}
@@ -21,7 +21,7 @@ rpm_package_source:
 	tar --transform 'flags=r;s,^,/${NAME}-${VERSION}/,' --exclude .git --exclude dist -cvjf $(SOURCE_PATH) .
 
 rpm_build_source:
-	BUILD_METADATA=$(BUILD_METADATA) rpmbuild -ts $(SOURCE_PATH) --define "_topdir $(BUILD_DIR)"
+	rpmbuild -ts $(SOURCE_PATH) --define "_topdir $(BUILD_DIR)"
 
 rpm_build:
-	BUILD_METADATA=$(BUILD_METADATA) rpmbuild -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
+	rpmbuild -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
