@@ -144,7 +144,7 @@ If any of the workloads fails to come up after enforcing the policy, we can dele
 
 Step 5: Check the pod description when the pod fails to come up
 ```
-bash# kubectl get pods
+kubectl get pods
 NAME    READY   STATUS                       RESTARTS   AGE
 nginx   0/1     CreateContainerConfigError   0          5s
 
