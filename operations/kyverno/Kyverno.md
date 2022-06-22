@@ -31,7 +31,7 @@ Currently, [mutation](#mutation) and [validation](#validation) policies are enfo
 
 Mutation policies are applied in admission controller while creating pods. It mutates the manifest of respective workloads before creating it so that when resource comes up, it will abide by the policy constraints.
 
-######Example:
+### Example
 
 1. Create a sample policy.
 ```text
