@@ -278,7 +278,8 @@ default    polr-ns-default        1      0      0      0       0      25d
 …
 ```
 
-This shows that the mutation policy for the workload was enforced properly. If there’s any discrepancy, we can look at the detailed policy report to triage the issue.
+This shows that the mutation policy for the workload was enforced properly.
+If there are any discrepancies, we can look at the detailed policy report to triage the issue.
 
 ## Known issues
 1. [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
