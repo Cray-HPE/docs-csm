@@ -142,7 +142,7 @@ spec:
 
 If any of the workloads fails to come up after enforcing the policy, we can delete individual policies and restart the workload.
 
-Step 5: Check the pod description when the pod fails to come up
+5. Check the pod description when the pod fails to come up.
 ```bash
 kubectl get pods
 NAME    READY   STATUS                       RESTARTS   AGE
