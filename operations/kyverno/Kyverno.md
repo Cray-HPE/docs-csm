@@ -168,7 +168,7 @@ Step 6: Incase of a failure(step 5), delete the policy and restart the workload
 kubectl delete pol -n default add-default-securitycontext
 ```
 
-Step 7: Check the pod status after deleting the policy
+7. Check the pod status after deleting the policy.
 
 ```bash
 bash# kubectl get pods
