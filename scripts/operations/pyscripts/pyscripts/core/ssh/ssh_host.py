@@ -79,6 +79,8 @@ class SshHost:
     def with_domain_suffix(self, domain_suffix):
         """
         Returns another SSH host object with domain suffix as specified.
+
+        Note that the domain_suffix MUST start with the network as the first part. E.g. cmn.hello.world.com
         """
         newHost = SshHost(self.hostname, self.username, self.rawdata, domain_suffix)
         newHost.original_host = self if not self.original_host else self.original_host
@@ -118,6 +120,15 @@ class SshHost:
         else:
             return self.hostname
 
+    def get_network_type(self):
+        """
+        Gets the network type of this host. Extracted from domain_suffix. See with_domain_suffix(..)
+        """
+        if self.domain_suffix:
+            return self.domain_suffix.split(".")[0].lower().strip()
+        else:
+            return ""
+
     def get_ssh_command_to_connect_to_self(self):
         """
         Gets the SSH command to connect to this host. This assumes no underlying SSH connection.
@@ -151,11 +162,17 @@ class SshHost:
 
         2. If using nmnlb or hmnlb, then always goes to api.nmnlb.<system-domain> and api.hmnlb.<system-domain> respectively.
         """
-        if self.is_aruba_switch() and "cmn." in target_ssh_host.domain_suffix:
+
+        target_host_network = target_ssh_host.get_network_type()
+
+        if "cmn" == target_host_network and self.is_aruba_switch():
+            # Condition 1 from above docs
             return socket.gethostbyname(target_ssh_host.get_full_domain_name())
-        elif target_ssh_host.domain_suffix and "hmnlb." in target_ssh_host.domain_suffix and target_ssh_host.is_management_node():
+        elif "hmnlb" == target_host_network and target_ssh_host.is_management_node():
+            # Condition 2a from above docs
             return "hmcollector.{}".format(target_ssh_host.domain_suffix)
-        elif target_ssh_host.domain_suffix and "nmnlb." in target_ssh_host.domain_suffix and target_ssh_host.is_management_node():
+        elif "nmnlb" == target_host_network and target_ssh_host.is_management_node():
+            # Condition 2b from above docs
             return "api.{}".format(target_ssh_host.domain_suffix)
         else:
             return target_ssh_host.get_full_domain_name()
