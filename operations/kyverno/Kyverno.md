@@ -78,7 +78,7 @@ spec:
 We can list all the policies using following command
 
 ```bash
-bash# kubectl get pol -A
+kubectl get pol -A
 
 NAMESPACE            NAME                        BACKGROUND   ACTION   READY
 default              add-default-securitycontext true         audit    true
