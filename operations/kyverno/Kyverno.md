@@ -26,7 +26,6 @@ securityContext:
 
 Currently, [mutation](#mutation) and [validation](#validation) policies are enforced for the network services such as load balancer and virtualservice.
 
-<a name="mutation"></a>
 ## Mutation
 
 Mutation policies are applied in the admission controller while creating pods.
@@ -74,21 +73,21 @@ spec:
     image: nginx:1.14.2
     ports:
     - containerPort: 80
-```
+	```
 
-List all of the policies with the following command:
+	List all of the policies with the following command:
 
-```bash
-kubectl get pol -A
+	```bash
+	kubectl get pol -A
 
-NAMESPACE            NAME                        BACKGROUND   ACTION   READY
-default              add-default-securitycontext true         audit    true
-…
+	NAMESPACE            NAME                        BACKGROUND   ACTION   READY
+	default              add-default-securitycontext true         audit    true
+	…
 ```
 
 3. Check the manifest after applying the policy.
 
-```text
+	```text
 ...
   spec:
     containers:
@@ -112,7 +111,7 @@ default              add-default-securitycontext true         audit    true
         name: default-token-vgggw
         readOnly: true
 ...
-```
+	```
 
 4. Edit the policy to add one more field and apply the policy again.
 ```text
@@ -141,43 +140,45 @@ spec:
               +(runAsNonRoot): true
 ```
 
-If any of the workloads fail to come up after enforcing the policy, then delete the individual policies and restart the workload.
+	If any of the workloads fail to come up after enforcing the policy, then delete the individual policies and restart the workload.
 
 5. Check the pod description when the pod fails to come up.
-```bash
-kubectl get pods
-NAME    READY   STATUS                       RESTARTS   AGE
-nginx   0/1     CreateContainerConfigError   0          5s
+	```bash
+	kubectl get pods
 
-bash# kubectl describe pods
-Name:         nginx
-Namespace:    default
-.
-.
-.
-Events:
-  Type     Reason            Age                            From               Message
-  ----     ------            ----                           ----               -------
-  Normal   Scheduled         <invalid>                      default-scheduler  Successfully assigned default/nginx to ncn-w003-b7534262
-  Warning  DNSConfigForming  <invalid> (x9 over <invalid>)  kubelet            Search Line limits were exceeded, some search paths have been omitted, the applied search line is: default.svc.cluster.local svc.cluster.local cluster.local vshasta.io us-central1-b.c.vsha-sri-ram-35682334251634485.internal c.vsha-sri-ram-35682334251634485.internal
-  Normal   Pulled            <invalid> (x8 over <invalid>)  kubelet            Container image "nginx:1.14.2" already present on machine
-  Warning  Failed            <invalid> (x8 over <invalid>)  kubelet            Error: container has runAsNonRoot and image will run as root (pod: "nginx_default(0ea1d573-219a-4927-b3c3-c76150d35a7a)", container: nginx)
-```
+	NAME    READY   STATUS                       RESTARTS   AGE
+	nginx   0/1     CreateContainerConfigError   0          5s
+	```
+	```bash
+    kubectl describe pods
+
+	Name:         nginx
+	Namespace:    default
+	.
+	.
+	.
+	Events:
+  	Type     Reason            Age                            From               Message
+  	----     ------            ----                           ----               -------
+  	Normal   Scheduled         <invalid>                      default-scheduler  Successfully assigned default/nginx to ncn-w003-b7534262
+  	Warning  DNSConfigForming  <invalid> (x9 over <invalid>)  kubelet            Search Line limits were exceeded, some search paths have been omitted, the applied search line is: default.svc.cluster.local svc.cluster.local cluster.local vshasta.io us-central1-b.c.vsha-sri-ram-35682334251634485.internal c.vsha-sri-ram-35682334251634485.internal
+  	Normal   Pulled            <invalid> (x8 over <invalid>)  kubelet            Container image "nginx:1.14.2" already present on machine
+  	Warning  Failed            <invalid> (x8 over <invalid>)  kubelet            Error: container has runAsNonRoot and image will run as root (pod: "nginx_default(0ea1d573-219a-4927-b3c3-c76150d35a7a)", container: nginx)
+	```
 
 6. If the previous step failed, delete the policy and restart the workload.
-```bash
-kubectl delete pol -n default add-default-securitycontext
-```
+	```bash
+	kubectl delete pol -n default add-default-securitycontext
+	```
 
 7. Check the pod status after deleting the policy.
+	```bash
+	kubectl get pods
 
-```bash
-kubectl get pods
-NAME    READY   STATUS    RESTARTS   AGE
-nginx   1/1     Running   0          6s
-```
+	NAME    READY   STATUS    RESTARTS   AGE
+	nginx   1/1     Running   0          6s
+	```
 
-<a name="validation"></a>
 ## Validation
 
 Validation policies can be applied any time in `audit` and `enforce` modes.
@@ -214,45 +215,46 @@ spec:
               allowPrivilegeEscalation: false
               privileged: false
 ```
-View the policy report status with the following command:
+	View the policy report status with the following command:
 
-```bash
-kubectl get polr -A
+	```bash
+	kubectl get polr -A
 
-NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
-default    polr-ns-default        0      1      0      0       0      25d
-…
-```
+	NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
+	default    polr-ns-default        0      1      0      0       0      25d
+	…
+	```
 
-View a detailed policy report with the following command:
+	View a detailed policy report with the following command:
 
-```bash
-kubectl get polr -n default polr-ns-default -o yaml
-…
-results:
-- message: 'validation error: Non root security context is not set. Rule container-security-context
-    failed at path /spec/containers/0/securityContext/'
-  policy: validate-securitycontext
-  resources:
-  - apiVersion: v1
-    kind: Pod
-    name: nginx
-    namespace: default
-    uid: 319e5b09-6027-4d90-b3da-6aa1f14573ff
-  result: fail
-  rule: container-security-context
-  scored: true
-  source: Kyverno
-  timestamp:
-    nanos: 0
-    seconds: 1654594319
-summary:
-  error: 0
-  fail: 1
-  pass: 0
-  skip: 0
-  warn: 0
-```
+	```bash
+	kubectl get polr -n default polr-ns-default -o yaml
+
+	…
+	results:
+	- message: 'validation error: Non root security context is not set. Rule container-security-context
+    	failed at path /spec/containers/0/securityContext/'
+  	policy: validate-securitycontext
+  	resources:
+  	- apiVersion: v1
+    	kind: Pod
+    	name: nginx
+    	namespace: default
+    	uid: 319e5b09-6027-4d90-b3da-6aa1f14573ff
+  	result: fail
+  	rule: container-security-context
+  	scored: true
+  	source: Kyverno
+  	timestamp:
+	    nanos: 0
+    	seconds: 1654594319
+	summary:
+  	error: 0
+  	fail: 1
+  	pass: 0
+  	skip: 0
+  	warn: 0
+	```
 
 2. Apply the mutation policy and restart the following workload.
 ```text
@@ -271,16 +273,16 @@ spec:
 ```
 
 3. Check the policy report status.
-```bash
-kubectl get polr -A
+	```bash
+	kubectl get polr -A
 
-NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
-default    polr-ns-default        1      0      0      0       0      25d
-…
-```
+	NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
+	default    polr-ns-default        1      0      0      0       0      25d
+	…
+	```
 
-This shows that the mutation policy for the workload was enforced properly.
-If there are any discrepancies, we can look at the detailed policy report to triage the issue.
+	This shows that the mutation policy for the workload was enforced properly.
+	If there are any discrepancies, we can look at the detailed policy report to triage the issue.
 
 ## Known issues
 
