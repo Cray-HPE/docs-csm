@@ -24,7 +24,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 
 1. Choose a name for the custom image.
 
-     This example names the custom End-User UAI image called `registry.local/cray/cray-uai-compute:latest`, and places that name in an environment variable for convenience. Alter the name as appropriate for the image to be created:
+     This example names the custom end-user UAI image called `registry.local/cray/cray-uai-compute:latest`, and places that name in an environment variable for convenience. Alter the name as appropriate for the image to be created:
 
     ```bash
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
