@@ -29,7 +29,8 @@ Currently, [mutation](#mutation) and [validation](#validation) policies are enfo
 <a name="mutation"></a>
 ## Mutation
 
-Mutation policies are applied in admission controller while creating pods. It mutates the manifest of respective workloads before creating it so that when resource comes up, it will abide by the policy constraints.
+Mutation policies are applied in the admission controller while creating pods.
+It mutates the manifest of respective workloads before creating it so that when resource comes up, it will abide by the policy constraints.
 
 ### Example
 
