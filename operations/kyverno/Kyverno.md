@@ -171,7 +171,7 @@ kubectl delete pol -n default add-default-securitycontext
 7. Check the pod status after deleting the policy.
 
 ```bash
-bash# kubectl get pods
+kubectl get pods
 NAME    READY   STATUS    RESTARTS   AGE
 nginx   1/1     Running   0          6s
 ```
