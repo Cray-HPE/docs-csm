@@ -32,7 +32,7 @@ This allows continued use of UAN, UAI, and API resources over the `CAN` and allo
 To update SLS with `CAN` as the `SystemDefaultRoute`:
 
 ```bash
-/usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CAN
+ncn-mw# /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CAN
 ```
 
 Example output:
@@ -46,7 +46,7 @@ This is available during the CSM 1.2 release for those who wish to forge ahead o
 To set and use the `CHN` in SLS, update the `SystemDefaultRoute` with:
 
 ```bash
-ncn# /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CHN
+ncn-mw# /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CHN
 ```
 
 Example output:
@@ -98,7 +98,7 @@ Prerequisites for this task:
 1. Obtain a token.
 
    ```bash
-   ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
+   ncn-mw# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
                                 -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                                 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
    ```
@@ -106,13 +106,13 @@ Prerequisites for this task:
 1. Create a working directory.
 
    ```bash
-   ncn-m001# mkdir /root/sls_chn_ips && cd /root/sls_chn_ips
+   ncn-mw# mkdir /root/sls_chn_ips && cd /root/sls_chn_ips
    ```
 
 1. Extract SLS data to a file.
 
    ```bash
-   ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
+   ncn-mw# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
    ```
 
 #### Add compute IP addresses to CHN SLS data
@@ -120,8 +120,8 @@ Prerequisites for this task:
 Process the SLS file:
 
    ```bash
-   ncn-m001# DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
-   ncn-m001# ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
+   ncn-mw# DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   ncn-mw# ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
    ```
 
 The default output file name will be `chn_with_computes_added_sls_file.json`, but can be changed by using the flag `--sls-output-file` with the script.
@@ -131,7 +131,7 @@ The default output file name will be `chn_with_computes_added_sls_file.json`, bu
 If the following command does not complete successfully, check if the `TOKEN` environment variable is set correctly.
 
    ```bash
-   ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@chn_with_computes_added_sls_file.json'
+   ncn-mw# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@chn_with_computes_added_sls_file.json'
    ```
 
 #### Enable CFS layer
@@ -515,7 +515,7 @@ If CHN is selected during CSM installation or upgrade, then the `customer-high-s
 To display current setting of the `SystemDefaultRoute` SLS BICAN network, run the following command.
 
 ```bash
-ncn-m001# /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --check
+ncn-mw# /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --check
 ```
 
 Example output:
@@ -529,7 +529,7 @@ Configured SystemDefaultRoute: CHN
 1. Retrieve the `CHN` network information from SLS.
 
    ```bash
-   ncn-m001:~ # cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
+   ncn# cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
    ```
 
    Example output:
@@ -549,7 +549,7 @@ Configured SystemDefaultRoute: CHN
 1. Verify that the default route is set correctly on the UAN.
 
    ```bash
-   uan02:~ # ip r
+   uan# ip r
    ```
 
    Example output:
@@ -568,7 +568,7 @@ Configured SystemDefaultRoute: CHN
 1. Retrieve the configured CHN subnet from SLS.
 
    ```bash
-   ncn-m001# cray sls search networks list --name CHN --format json | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="chn_metallb_address_pool")'
+   ncn# cray sls search networks list --name CHN --format json | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="chn_metallb_address_pool")'
    ```
 
    Example output:
@@ -587,7 +587,7 @@ Configured SystemDefaultRoute: CHN
 1. Verify that UAIs are being created with IP addresses in the correct range.
 
    ```bash
-   ncn-m001# cray uas admin uais list --format json | jq -c '.[] | {uai_name, uai_ip}'
+   ncn# cray uas admin uais list --format json | jq -c '.[] | {uai_name, uai_ip}'
    ```
 
    Example output:
@@ -601,7 +601,7 @@ Configured SystemDefaultRoute: CHN
 1. Run the UAI gateway tests.
 
    ```bash
-   ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
+   ncn-mw# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
    ```
 
    The test will launch a UAI with the `gateway-test` image, execute the gateway tests, and then delete the UAI that was launched. The test will complete with an overall test status based on the
@@ -618,7 +618,7 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 1. Retrieve the `CHN` network information from SLS.
 
    ```bash
-   ncn-m001:~ # cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
+   ncn# cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
    ```
 
    Example output:
@@ -638,7 +638,7 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 1. Verify that the compute nodes have `CHN` IP addresses set on the `hsn0` interface.
 
    ```bash
-   nid001160:~ # ip ad show hsn0
+   cn# ip ad show hsn0
    ```
 
    Example output:
@@ -658,7 +658,7 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 1. Verify that the default route is set correctly on the compute nodes.
 
    ```bash
-   nid001160:~ # ip route show
+   cn# ip route show
    ```
 
    Example output:
@@ -681,7 +681,7 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 1. Retrieve the `CHN` network information from SLS.
 
    ```bash
-   ncn-m001:~ # cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
+   ncn# cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
    ```
 
    Example output:
@@ -700,8 +700,10 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 
 1. Verify that the worker nodes have `CHN` IP addresses set on the `hsn0` interface.
 
+   > Adjust the `-w` argument in the following command to cover the range of worker nodes on the system.
+
    ```bash
-   ncn-m001:~ # pdsh -w ncn-w00[1-4] 'ip ad show hsn0 | grep inet\ ' | dshbak -c
+   ncn# pdsh -w ncn-w00[1-4] 'ip ad show hsn0 | grep inet\ ' | dshbak -c
    ```
 
    Example output:
@@ -734,7 +736,7 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 1. Check that the `istio-ingressgateway-chn` API gateway has an IP address.
 
    ```bash
-   ncn-m001:~ # kubectl -n istio-system get svc istio-ingressgateway-chn
+   ncn-mw# kubectl -n istio-system get svc istio-ingressgateway-chn
    ```
 
    Example output:
@@ -747,7 +749,7 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 1. Run the NCN gateway health checks.
 
    ```bash
-   ncn-m001:~ # /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
+   ncn-mw# /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
    ```
 
    The test will complete with an overall test status based on the result of the individual health checks on all of the networks. Example output:
