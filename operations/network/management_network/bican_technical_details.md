@@ -36,7 +36,7 @@
 Bifurcation or splitting of the Customer Access Network (CAN) enables customization of customer traffic to and from the system.
 Customization will be performed during installation.
 For CSM 1.2 there are two new customer access networks being introduced as part of the process to split the existing monolithic CAN:
- 
+
 1. **High Speed Customer Access - CHN (Customer High Speed Network)** : This feature adds the ability to connect to User Application Nodes (UAN), UAI, Compute Nodes
 and Kubernetes API endpoints from the customer site via the High Speed Network (HSN).
 2. **Management Customer Access - CMN (Customer Management Network)** :  Using a new VLAN on the Management Network, this feature allows system administrative access from the customer site.
