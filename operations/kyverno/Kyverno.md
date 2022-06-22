@@ -113,7 +113,7 @@ Step 3: Check the manifest after applying the policy
 ...
 ```
 
-Step 4: Edit the policy to add one more field and apply the policy again
+4. Edit the policy to add one more field and apply the policy again.
 ```text
 apiVersion: kyverno.io/v1
 kind: Policy
