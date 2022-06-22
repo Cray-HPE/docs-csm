@@ -11,7 +11,7 @@ for additional reference material in support of the processes and scripts mentio
 
 For systems with only three worker nodes (typically Testing and  Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be lowered on several
 services in order for this upgrade to succeed. This step is
-executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#prerequisites-check). See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more
+executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#stage-04---prerequisites-check). See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more
 information.
 
 Independently, the `customizations.yaml` file will be edited automatically during upgrade for three worker systems prior to deploying new CSM services. See the file
@@ -20,6 +20,15 @@ are desired in the `customizations.yaml` file for this system.
 
 For more information about modifying `customizations.yaml` and tuning for specific systems, see
 [Post Install Customizations](../../operations/CSM_product_management/Post_Install_Customizations.md).
+
+## Plan and coordinate network upgrade
+
+Prior to CSM 1.2, the single Customer Access Network (CAN) carried both the administrative network traffic and the user network
+traffic. CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate administrative network traffic and user network traffic.
+
+[Plan and coordinate network upgrade](plan_and_coordinate_network_upgrade.md) shows the steps that need to be taken in order to prepare
+for this network upgrade. Follow these steps in order to plan and coordinate the network upgrade with your users, as well as to ensure
+undisrupted access to UANs during the upgrade.
 
 ## Upgrade stages
 
