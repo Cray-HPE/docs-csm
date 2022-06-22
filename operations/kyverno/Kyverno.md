@@ -75,7 +75,7 @@ spec:
     - containerPort: 80
 ```
 
-We can list all the policies using following command
+List all of the policies with the following command:
 
 ```bash
 kubectl get pol -A
