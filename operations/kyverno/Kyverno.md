@@ -140,7 +140,7 @@ spec:
               +(runAsNonRoot): true
 ```
 
-If any of the workloads fails to come up after enforcing the policy, we can delete individual policies and restart the workload.
+If any of the workloads fail to come up after enforcing the policy, then delete the individual policies and restart the workload.
 
 5. Check the pod description when the pod fails to come up.
 ```bash
