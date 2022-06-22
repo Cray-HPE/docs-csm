@@ -226,7 +226,7 @@ default    polr-ns-default        0      1      0      0       0      25d
 Detailed policy report can be fetched using following command –
 
 ```bash
-bash# kubectl get polr -n default polr-ns-default -o yaml
+kubectl get polr -n default polr-ns-default -o yaml
 …
 results:
 - message: 'validation error: Non root security context is not set. Rule container-security-context
