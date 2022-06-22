@@ -120,7 +120,7 @@ Prerequisites for this task:
 Process the SLS file:
 
    ```bash
-   ncn-m001# export DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   ncn-m001# DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
    ncn-m001# ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
    ```
 
