@@ -269,7 +269,7 @@ spec:
     - containerPort: 80
 ```
 
-Step 3: Check the policy report status
+3. Check the policy report status.
 ```bash
 bash# kubectl get polr -A
 
