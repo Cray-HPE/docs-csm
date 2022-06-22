@@ -12,7 +12,8 @@ Kyverno enables administrators to do the following:
 * View policy enforcement as events.
 * Scan existing resources for violations.
 
-Kyverno policies implement the various levels of Kubernetes [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/) for CSM services. The policies are minimally restrictive and enforces the best practices for Pods. The policies make sure the following values are set for workloads (if not present).
+Kyverno policies implement the various levels of Kubernetes [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/) for CSM services.
+The policies are minimally restrictive and enforces the best practices for pods. The policies make sure the following values are set for workloads (if not present).
 
 ```
 securityContext:
