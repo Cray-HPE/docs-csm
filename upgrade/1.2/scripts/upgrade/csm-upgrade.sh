@@ -58,9 +58,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    scp ncn-s001:/srv/cray/scripts/common/csi-configuration.sh /tmp/csi-configuration.sh
-    mkdir -p /srv/cray/tmp
-    . /tmp/csi-configuration.sh
+    . /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csi-configuration.sh
     create_ceph_rbd_1.2_csi_configmap
     create_ceph_cephfs_1.2_csi_configmap
     create_k8s_1.2_ceph_secrets
