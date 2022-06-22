@@ -216,7 +216,7 @@ spec:
 The policy report status can be fetched using the following command –
 
 ```bash
-bash# kubectl get polr -A
+kubectl get polr -A
 
 NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
 default    polr-ns-default        0      1      0      0       0      25d
