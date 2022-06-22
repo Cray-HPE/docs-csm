@@ -30,7 +30,7 @@ This structure was created and its value set during [Prerequisites Stage 0.2](..
 For CSM 1.2, the recommended value for the BICAN `SystemDefaultRoute` is `CAN`.
 This allows continued use of UAN, UAI, and API resources over the `CAN` and allows a fully supported transition to `CHN` in a later CSM release.
 
-(`ncn#`) To update SLS with `CAN` as the `SystemDefaultRoute`:
+(`ncn-mw#`) To update SLS with `CAN` as the `SystemDefaultRoute`:
 
 ```bash
 /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CAN
@@ -45,7 +45,7 @@ Setting SystemDefaultRoute to CAN
 **Preview:** High Speed Network access by users to UAN, UAI, and API resources is the `CHN` option.
 This is available during the CSM 1.2 release for those who wish to forge ahead of release-supported features.
 
-(`ncn#`) To set and use the `CHN` in SLS, update the `SystemDefaultRoute` with:
+(`ncn-mw#`) To set and use the `CHN` in SLS, update the `SystemDefaultRoute` with:
 
 ```bash
 /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CHN
