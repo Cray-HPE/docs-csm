@@ -1,5 +1,8 @@
 # Stage 1 - Ceph image upgrade
 
+**Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
+[Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+
 ## Procedure
 
 1. Run `ncn-upgrade-ceph-nodes.sh` for `ncn-s001`. Follow output of the script carefully. The script will pause for manual interaction.
