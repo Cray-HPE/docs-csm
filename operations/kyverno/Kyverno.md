@@ -183,7 +183,7 @@ Validation policies can be applied any time in `audit` and `enforce` modes.
 Violation is only reported in case of `audit` mode and it blocks the resources from coming up when applied in `enforce` mode.
 Also, it generates the report of policy violation in respective workloads. The following is an example of the validation policy in `audit` mode.
 
-######Example:
+### Example
 
 Step 1: Add the following policy before applying [mutation](#mutation) to workload
 ```
