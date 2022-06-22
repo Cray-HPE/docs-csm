@@ -34,14 +34,14 @@ import click
     type=click.Choice(["ncn_master", "ncn_worker", "ncn_storage", "cn", "uan", "spine_switch", "leaf_switch", "leaf_BMC", "CDU"], case_sensitive=False),
     multiple=True,
     default=["ncn_master", "spine_switch"],
-    help="What types of nodes to run the tests from. Defaults: ('ncn_master', 'cn', 'uan', 'spine_switch')"
+    help="What types of nodes to run the tests from. Defaults: ('ncn_master', 'spine_switch')"
 )
 @click.option(
     "--to-types",
     type=click.Choice(["ncn_master", "ncn_worker", "ncn_storage", "cn", "uan", "spine_switch", "leaf_switch", "leaf_BMC", "CDU"], case_sensitive=False),
     multiple=True,
     default=["ncn_master", "spine_switch"],
-    help="What types of nodes to test SSH access to. Defaults: ('ncn_master', 'cn', 'uan', 'spine_switch')"
+    help="What types of nodes to test SSH access to. Defaults: ('ncn_master', 'spine_switch')"
 )
 @click.option(
     "--networks",
