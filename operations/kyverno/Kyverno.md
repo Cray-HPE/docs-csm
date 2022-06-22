@@ -114,7 +114,7 @@ It mutates the manifest of respective workloads before creating it so that when 
         - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
           name: default-token-vgggw
           readOnly: true
-	  ...
+    ...
 	```
 
 4. Edit the policy to add one more field and apply the policy again.
