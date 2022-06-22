@@ -186,7 +186,7 @@ Also, it generates the report of policy violation in respective workloads. The f
 ### Example
 
 1. Add the following policy before applying the [mutation](#mutation) to the workload.
-```
+```text
 apiVersion: kyverno.io/v1
 kind: Policy
 metadata:
