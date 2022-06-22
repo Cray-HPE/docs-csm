@@ -1,7 +1,7 @@
 # Bifurcating the CAN - CSM 1.2 Feature Details
 
 1. [CAN new features overview](#1-can-new-features-overview)
-2. [High Speed CAN (CHN)](#2-high-speed-can-chn)
+2. [High Speed CAN (CHN)](#2-customer-high-speed-network-chn)
     1. [CHN system ingress endpoints accessible in CSM 1.2](#21-chn-system-ingress-endpoints-accessible-in-CSM-12)
     2. [CHN system egress endpoints accessible in CSM 1.2](#22-chn-system-egress-endpoints-accessible-in-CSM-12)
     3. [Endpoint Naming](#23-endpoint-naming)
@@ -16,7 +16,7 @@
         1. [Touchpoints: effects and changes](#251-touchpoints-effects-and-changes)
         2. [When configuration occurs](#252-when-configuration-occurs)
         3. [Ability to change post-install](#253-ability-to-change-post-install)
-3. [Management CAN (CMN)](#3-management-cancmn)
+3. [Management CAN (CMN)](#3-custeomer-management-network-cmn)
     1. [Traffic separation and routing](#31-traffic-separation-and-routing)
     2. [Endpoint naming](#32-endpoint-naming)
     3. [Endpoint addressing](#33-endpoint-addressing)
@@ -59,9 +59,9 @@ Details of the High Speed CAN (CHN) and the Management CAN (CMN) are described b
 
 ![Customer Access Overview](img/customer_access_overview.png)
 
-## 2 High Speed CAN (CHN)
+## 2 Customer High Speed Network (CHN)
 
-Access to system resources from the customer site over the High Speed Network is provided by the High Speed CAN (CHN).
+Access to system resources from the customer site over the High Speed Network is provided by the High Speed Customer Access Network (CHN).
 As can be seen in the diagram above, traffic ingress from the site for the CHN is over the edge routers.
 Typically these are a pair of Arista switches which provide other HSN access -- for ClusterStor, for example.
 
@@ -80,7 +80,7 @@ Other edge routers, including Cisco and Juniper are out of scope.
 
 ### 2.3 Endpoint Naming
 
-A `.chn` DNS suffix will be used for all endpoints accessed over the High Speed CAN.
+A `.chn` DNS suffix will be used for all endpoints accessed over the CHN.
 Endpoints naming will be resolved and maintained in the system authoritative DNS (another CSM 1.2 feature).
 As part of the introduction of authoritative DNS endpoints, endpoints will also have a top-level-domain appended, creating a fully qualified domain system.
 
@@ -167,7 +167,7 @@ As noted earlier, non-Arista router configurations are out of scope for CSM 1.2.
 - Not Recommended - Edge router controls external access, so change scope is limited.
 - No - Node images could be changed, but routing and IP address changes to CFS configurations would need extensive testing to certify.
 
-## 3 Management CAN (CMN)
+## 3 Customer Management Management Network (CMN)
 
 The original CAN released in Shasta 1.1 contained the ability to access NCN workers, masters, and storage directly via SSH for administrative purposes.
 This administrative traffic was co-mingled with general user traffic for jobs.
@@ -224,7 +224,7 @@ For the CSM 1.2 release, the CMN is only available via customer-supplied IPv4 ad
 
 - Not recommended, and would be manual.
 
-## 4 CAN external/site access (site DNS, LDAP, etc.)
+## 4 Customer Access - external/site access (site DNS, LDAP, etc.)
 
 System access to site or external resources (such as the Internet, site DNS servers, and site LDAP servers) was previously provided over the CAN.
 By default this CAN access path remains, but for the CSM 1.2 release it is possible during installation to select system-to-site access over the CHN or CMN.
