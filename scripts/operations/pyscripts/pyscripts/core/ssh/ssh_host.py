@@ -140,7 +140,9 @@ class SshHost:
         Gets the SSH command to connect to the target host. This assumes this host is the underlying SSH connection.
         """
         if self.is_switch():
-            uses_vrf_Customer = "can" in target_ssh_host.domain_suffix or "chn" in target_ssh_host.domain_suffix or "cmn" in target_ssh_host.domain_suffix
+            target_host_network = target_ssh_host.get_network_type()
+
+            uses_vrf_Customer = "can" == target_host_network or "chn" == target_host_network or "cmn" == target_host_network
 
             vrf = " vrf Customer" if uses_vrf_Customer else ""
 
@@ -177,11 +179,13 @@ class SshHost:
         else:
             return target_ssh_host.get_full_domain_name()
 
-    def get_target_hostname_command_prompt(self):
+    def get_hostname_command_prompt(self):
         """
-        Gets the string that is expected when successfully logged into the target host.
+        Gets the string that is expected when successfully logged into this host.
         """
-        if self.is_management_node() and self.domain_suffix and ("nmnlb." in self.domain_suffix or "hmnlb." in self.domain_suffix):
+        host_network = self.get_network_type()
+
+        if self.is_management_node() and ("nmnlb" == host_network or "hmnlb" == host_network):
             # nmnlb and hmnlb only refer to api gateways so we always get redirected to an ncn, although, we don't know which
             # deterministically at compile time (maybe lb is doing round-robin or some other type of load balancing)
             return r"((.|\n)*)(({})|({}))((.|\n)*)".format(re.escape("ncn-"), re.escape("ncn-"))

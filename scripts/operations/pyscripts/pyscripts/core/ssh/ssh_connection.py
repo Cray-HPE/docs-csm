@@ -81,7 +81,7 @@ class SshConnection:
         self.ssh_conn = ssh_conn
         self.child_process = None if not ssh_conn else ssh_conn.child_process
         self.connected = False
-        self.command_prompt_host_pattern = ssh_host.get_target_hostname_command_prompt()
+        self.command_prompt_host_pattern = ssh_host.get_hostname_command_prompt()
 
     def connect(self):
         if self.connected:
