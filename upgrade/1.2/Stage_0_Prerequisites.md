@@ -204,6 +204,8 @@ If the following command does not complete successfully, check if the `TOKEN` en
      [Management Network 1.0 (`1.2 Preconfig`) to 1.2](../../operations/network/management_network/1.0_to_1.2_upgrade.md).
    - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
    - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
+   - With the 1.2 switch configuration in place, users will only be able to SSH into the switches over the HMN.  
+
 
 ## Stage 0.4 - Prerequisites check
 
