@@ -29,7 +29,8 @@ This structure was created and its value set during [Prerequisites Stage 0.2](..
 
 For CSM 1.2, the recommended value for the BICAN `SystemDefaultRoute` is `CAN`.
 This allows continued use of UAN, UAI, and API resources over the `CAN` and allows a fully supported transition to `CHN` in a later CSM release.
-To update SLS with `CAN` as the `SystemDefaultRoute`:
+
+(`ncn#`) To update SLS with `CAN` as the `SystemDefaultRoute`:
 
 ```bash
 /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CAN
@@ -43,10 +44,11 @@ Setting SystemDefaultRoute to CAN
 
 **Preview:** High Speed Network access by users to UAN, UAI, and API resources is the `CHN` option.
 This is available during the CSM 1.2 release for those who wish to forge ahead of release-supported features.
-To set and use the `CHN` in SLS, update the `SystemDefaultRoute` with:
+
+(`ncn#`) To set and use the `CHN` in SLS, update the `SystemDefaultRoute` with:
 
 ```bash
-ncn# /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CHN
+/usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --route CHN
 ```
 
 Example output:
@@ -95,43 +97,43 @@ Prerequisites for this task:
 
 #### Retrieve SLS data as JSON
 
-1. Obtain a token.
+1. (`ncn-mw#`) Obtain a token.
 
    ```bash
-   ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
-                                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+   export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
+                    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
    ```
 
-1. Create a working directory.
+1. (`ncn-mw#`) Create a working directory.
 
    ```bash
-   ncn-m001# mkdir /root/sls_chn_ips && cd /root/sls_chn_ips
+   mkdir /root/sls_chn_ips && cd /root/sls_chn_ips
    ```
 
-1. Extract SLS data to a file.
+1. (`ncn-mw#`) Extract SLS data to a file.
 
    ```bash
-   ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
+   curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
    ```
 
 #### Add compute IP addresses to CHN SLS data
 
-Process the SLS file:
+(`ncn-mw#`) Process the SLS file:
 
    ```bash
-   ncn-m001# DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
-   ncn-m001# ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
+   DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
    ```
 
 The default output file name will be `chn_with_computes_added_sls_file.json`, but can be changed by using the flag `--sls-output-file` with the script.
 
 #### Upload migrated SLS file to SLS service
 
-If the following command does not complete successfully, check if the `TOKEN` environment variable is set correctly.
+(`ncn-mw#`) If the following command does not complete successfully, check if the `TOKEN` environment variable is set correctly.
 
    ```bash
-   ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@chn_with_computes_added_sls_file.json'
+   curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@chn_with_computes_added_sls_file.json'
    ```
 
 #### Enable CFS layer
@@ -140,10 +142,10 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
 1. Determine the CFS configuration in use on the compute nodes.
 
-   1. Identify the compute nodes.
+   1. (`ncn#`) Identify the compute nodes.
 
       ```bash
-      ncn# cray hsm state components list --role Compute --format json | jq -r '.Components[] | .ID'
+      cray hsm state components list --role Compute --format json | jq -r '.Components[] | .ID'
       ```
 
       Example output:
@@ -155,10 +157,10 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
       x1000c5s0b0n1
       ```
 
-   1. Identify CFS configuration in use on the compute nodes.
+   1. (`ncn#`) Identify CFS configuration in use on the compute nodes.
 
       ```bash
-      ncn# cray cfs components describe --format toml x1000c5s1b0n1
+      cray cfs components describe --format toml x1000c5s1b0n1
       ```
 
       Example output:
@@ -171,18 +173,18 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
       id = "x1000c5s1b0n1"
       ```
 
-   1. Extract the CFS configuration.
+   1. (`ncn#`) Extract the CFS configuration.
 
       ```bash
-      ncn# cray cfs configurations describe cos-config-full-2.3-integration --format json | jq 'del(.lastUpdated) | del(.name)' > cos-config-full-2.3-integration.json
+      cray cfs configurations describe cos-config-full-2.3-integration --format json | jq 'del(.lastUpdated) | del(.name)' > cos-config-full-2.3-integration.json
       ```
 
 1. Identify the UAN CFS configuration.
 
-   1. Identify the UAN nodes.
+   1. (`ncn#`) Identify the UAN nodes.
 
       ```bash
-      ncn# cray hsm state components list --role Application --subrole UAN --format    json | jq -r '.Components[] | .ID'
+      cray hsm state components list --role Application --subrole UAN --format    json | jq -r '.Components[] | .ID'
       ```
 
       Example output:
@@ -193,10 +195,10 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
       x3000c0s15b0n0
       ```
 
-   1. Identify the UAN CFS configuration in use.
+   1. (`ncn#`) Identify the UAN CFS configuration in use.
 
       ```bash
-      ncn# cray cfs components describe --format toml x3000c0s25b0n0
+      cray cfs components describe --format toml x3000c0s25b0n0
       ```
 
       Example output:
@@ -209,10 +211,10 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
       id = "x3000c0s25b0n0"
       ```
 
-   1. Identify the UAN CFS configuration layer.
+   1. (`ncn#`) Identify the UAN CFS configuration layer.
 
       ```bash
-      ncn# cray cfs configurations describe chn-uan-cn --format json
+      cray cfs configurations describe chn-uan-cn --format json
       ```
 
       The resulting output should look similar to this. Installed products, versions, and commit hashes will vary.
@@ -234,10 +236,10 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
 1. Edit the extracted compute node configuration and add the UAN layer to it.
 
-1. Update the compute node CFS configuration.
+1. (`ncn#`) Update the compute node CFS configuration.
 
    ```bash
-   ncn# cray cfs configurations update cos-config-full-2.3-integration --file cos-config-full-2.3-integration.json --format toml
+   cray cfs configurations update cos-config-full-2.3-integration --file cos-config-full-2.3-integration.json --format toml
    ```
 
    Example output:
@@ -306,12 +308,12 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
    playbook = "site.yml"
    ```
 
-1. Check that CFS configuration of the compute node completes successfully.
+1. (`ncn#`) Check that CFS configuration of the compute node completes successfully.
 
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command to verify this has occurred.
 
    ```bash
-   ncn# cray cfs components describe --format toml x1000c5s1b0n1
+   cray cfs components describe --format toml x1000c5s1b0n1
    ```
 
    Example output:
@@ -340,10 +342,10 @@ Prerequisites for this task:
 
 1. Determine the CFS configuration in use on the worker nodes.
 
-   1. Identify the worker nodes.
+   1. (`ncn#`) Identify the worker nodes.
 
       ```bash
-      ncn# cray hsm state components list --role Management --subrole Worker --format json | jq -r '.Components[] | .ID'
+      cray hsm state components list --role Management --subrole Worker --format json | jq -r '.Components[] | .ID'
       ```
 
       Example output:
@@ -355,10 +357,10 @@ Prerequisites for this task:
       x3000c0s7b0n0
       ```
 
-   1. Identify CFS configuration in use on the worker nodes.
+   1. (`ncn#`) Identify CFS configuration in use on the worker nodes.
 
       ```bash
-      ncn# cray cfs components describe --format toml x3000c0s4b0n0
+      cray cfs components describe --format toml x3000c0s4b0n0
       ```
 
       Example output:
@@ -371,10 +373,10 @@ Prerequisites for this task:
       id = "x3000c0s4b0n0"
       ```
 
-1. Extract the CFS configuration
+1. (`ncn#`) Extract the CFS configuration
 
    ```bash
-   ncn# cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
+   cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
    ```
 
    The resulting output file should look similar to this. Installed products, versions, and commit hashes will vary.
@@ -429,10 +431,10 @@ Prerequisites for this task:
 
    **Important:** This new layer *must* run after the SHS and COS `ncn-final.yml` layers, otherwise the HSN interfaces will not be configured correctly and this playbook will fail.
 
-1. Update the NCN personalization configuration.
+1. (`ncn#`) Update the NCN personalization configuration.
 
    ```bash
-   ncn# cray cfs configurations update ncn-personalization --file ncn-personalization.json --format toml
+   cray cfs configurations update ncn-personalization --file ncn-personalization.json --format toml
    ```
 
    Example output:
@@ -477,12 +479,12 @@ Prerequisites for this task:
    playbook = "enable_chn.yml"
    ```
 
-1. Check that NCN personalization runs and completes successfully on the worker nodes.
+1. (`ncn#`) Check that NCN personalization runs and completes successfully on the worker nodes.
 
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command to verify this has occurred.
 
    ```bash
-   ncn# cray cfs components describe --format toml x3000c0s4b0n0
+   cray cfs components describe --format toml x3000c0s4b0n0
    ```
 
    Example output:
@@ -512,10 +514,10 @@ If CHN is selected during CSM installation or upgrade, then the `customer-high-s
 
 ### Validating SLS
 
-To display current setting of the `SystemDefaultRoute` SLS BICAN network, run the following command.
+(`ncn-mw#`) To display current setting of the `SystemDefaultRoute` SLS BICAN network, run the following command.
 
 ```bash
-ncn-m001# /usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --check
+/usr/share/doc/csm/scripts/operations/bifurcated_can/bican_route.py --check
 ```
 
 Example output:
@@ -526,10 +528,10 @@ Configured SystemDefaultRoute: CHN
 
 ### Validating UAN
 
-1. Retrieve the `CHN` network information from SLS.
+1. (`ncn#`) Retrieve the `CHN` network information from SLS.
 
    ```bash
-   ncn-m001:~ # cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
+   cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
    ```
 
    Example output:
@@ -546,10 +548,10 @@ Configured SystemDefaultRoute: CHN
    }
    ```
 
-1. Verify that the default route is set correctly on the UAN.
+1. (`uan#`) Verify that the default route is set correctly on the UAN.
 
    ```bash
-   uan02:~ # ip r
+   ip r
    ```
 
    Example output:
@@ -565,10 +567,10 @@ Configured SystemDefaultRoute: CHN
 
 ### Validating UAI
 
-1. Retrieve the configured CHN subnet from SLS.
+1. (`ncn#`) Retrieve the configured CHN subnet from SLS.
 
    ```bash
-   ncn-m001# cray sls search networks list --name CHN --format json | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="chn_metallb_address_pool")'
+   cray sls search networks list --name CHN --format json | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="chn_metallb_address_pool")'
    ```
 
    Example output:
@@ -584,10 +586,10 @@ Configured SystemDefaultRoute: CHN
    }
    ```
 
-1. Verify that UAIs are being created with IP addresses in the correct range.
+1. (`ncn#`) Verify that UAIs are being created with IP addresses in the correct range.
 
    ```bash
-   ncn-m001# cray uas admin uais list --format json | jq -c '.[] | {uai_name, uai_ip}'
+   cray uas admin uais list --format json | jq -c '.[] | {uai_name, uai_ip}'
    ```
 
    Example output:
@@ -598,10 +600,10 @@ Configured SystemDefaultRoute: CHN
    {"uai_name":"uai-vers-b773a5d9","uai_ip":"10.103.9.71"}
    ```
 
-1. Run the UAI gateway tests.
+1. (`ncn-mw#`) Run the UAI gateway tests.
 
    ```bash
-   ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
+   /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
    ```
 
    The test will launch a UAI with the `gateway-test` image, execute the gateway tests, and then delete the UAI that was launched. The test will complete with an overall test status based on the
@@ -615,10 +617,10 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 
 ### Validate compute nodes
 
-1. Retrieve the `CHN` network information from SLS.
+1. (`ncn#`) Retrieve the `CHN` network information from SLS.
 
    ```bash
-   ncn-m001:~ # cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
+   cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
    ```
 
    Example output:
@@ -635,10 +637,10 @@ See [Gateway Testing](../gateway_testing.md) for more information.
    }
    ```
 
-1. Verify that the compute nodes have `CHN` IP addresses set on the `hsn0` interface.
+1. (`cn#`) Verify that the compute nodes have `CHN` IP addresses set on the `hsn0` interface.
 
    ```bash
-   nid001160:~ # ip ad show hsn0
+   ip ad show hsn0
    ```
 
    Example output:
@@ -655,10 +657,10 @@ See [Gateway Testing](../gateway_testing.md) for more information.
           valid_lft forever preferred_lft forever
    ```
 
-1. Verify that the default route is set correctly on the compute nodes.
+1. (`cn#`) Verify that the default route is set correctly on the compute nodes.
 
    ```bash
-   nid001160:~ # ip route show
+   ip route show
    ```
 
    Example output:
@@ -678,10 +680,10 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 
 ### Validate NCNs
 
-1. Retrieve the `CHN` network information from SLS.
+1. (`ncn#`) Retrieve the `CHN` network information from SLS.
 
    ```bash
-   ncn-m001:~ # cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
+   cray sls search networks list --name CHN --format json  | jq '.[].   ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp") | del(.IPReservations)'
    ```
 
    Example output:
@@ -698,10 +700,12 @@ See [Gateway Testing](../gateway_testing.md) for more information.
    }
    ```
 
-1. Verify that the worker nodes have `CHN` IP addresses set on the `hsn0` interface.
+1. (`ncn#`) Verify that the worker nodes have `CHN` IP addresses set on the `hsn0` interface.
+
+   > Adjust the `-w` argument in the following command to cover the range of worker nodes on the system.
 
    ```bash
-   ncn-m001:~ # pdsh -w ncn-w00[1-4] 'ip ad show hsn0 | grep inet\ ' | dshbak -c
+   pdsh -w ncn-w00[1-4] 'ip ad show hsn0 | grep inet\ ' | dshbak -c
    ```
 
    Example output:
@@ -731,10 +735,10 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 
 ### Validate the API gateways
 
-1. Check that the `istio-ingressgateway-chn` API gateway has an IP address.
+1. (`ncn-mw#`) Check that the `istio-ingressgateway-chn` API gateway has an IP address.
 
    ```bash
-   ncn-m001:~ # kubectl -n istio-system get svc istio-ingressgateway-chn
+   kubectl -n istio-system get svc istio-ingressgateway-chn
    ```
 
    Example output:
@@ -744,10 +748,10 @@ See [Gateway Testing](../gateway_testing.md) for more information.
    istio-ingressgateway-chn   LoadBalancer   10.23.158.228   10.103.9.65   80:30126/TCP,443:31972/TCP   74d
    ```
 
-1. Run the NCN gateway health checks.
+1. (`ncn-mw#`) Run the NCN gateway health checks.
 
    ```bash
-   ncn-m001:~ # /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
+   /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
    ```
 
    The test will complete with an overall test status based on the result of the individual health checks on all of the networks. Example output:
