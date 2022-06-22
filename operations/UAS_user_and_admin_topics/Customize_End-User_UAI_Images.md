@@ -27,7 +27,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
      This example names the custom end-user UAI image called `registry.local/cray/cray-uai-compute:latest`, and places that name in an environment variable for convenience. Alter the name as appropriate for the image to be created:
 
     ```bash
-    ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
+    ncn-mw# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
     ```
 
 1. Query BOS for a `sessiontemplate` ID.
@@ -35,7 +35,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     Identify the `sessiontemplate` name to use. A full list may be found with the following command:
 
     ```bash
-    ncn-w001# cray bos sessiontemplate list --format yaml
+    ncn-mw# cray bos sessiontemplate list --format yaml
     ```
 
     Example output:
@@ -63,7 +63,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     Near the end of that procedure, the step to create a BOS session to boot the compute nodes should contain the name.
 
     ```bash
-    ncn-w001# SESSION_NAME=wlm-sessiontemplate-0.1.0
+    ncn-mw# SESSION_NAME=wlm-sessiontemplate-0.1.0
     ```
 
 1. Download a compute node SquashFS.
@@ -71,9 +71,9 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     Use the `sessiontemplate` name to download a compute node SquashFS from a BOS `sessiontemplate` name:
 
     ```bash
-    ncn-w001# SESSION_ID=$(cray bos sessiontemplate describe $SESSION_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
+    ncn-mw# SESSION_ID=$(cray bos sessiontemplate describe $SESSION_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
 
-    ncn-w001# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
+    ncn-mw# cray artifacts get boot-images $SESSION_ID/rootfs rootfs.squashfs
     ```
 
 1. Mount the SquashFS and create a tarball.
@@ -83,7 +83,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
         ```bash
         ncn-w001# mkdir -v mount
 
-        ncn-w001# mount -v -o loop,ro rootfs.squashfs `pwd`/mount
+        ncn-mw# mount -v -o loop,ro rootfs.squashfs `pwd`/mount
         ```
 
     1. Create the tarball.
@@ -91,7 +91,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
         **IMPORTANT:** `99-slingshot-network.conf` is omitted from the tarball, because that prevents the UAI from running `sshd` as the UAI user with the `su` command.
 
         ```bash
-        ncn-w001# (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) 2> /dev/null
+        ncn-mw# (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$SESSION_ID.tar" .) 2> /dev/null
         ```
 
         This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made.
@@ -100,7 +100,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     1. Check that the tarball contains `./usr/bin/uai-ssh.sh`.
 
         ```bash
-        ncn-w001# tar tf $SESSION_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
+        ncn-mw# tar tf $SESSION_ID.tar | grep '[.]/usr/bin/uai-ssh[.]sh'
         ```
 
         Example output:
@@ -112,11 +112,16 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
         If this script is not present, the easiest place to get a copy of the script is from a UAI built from the end-user UAI image provided with UAS.
         After getting a copy of the script, it can be appended to the tarball.
 
+        1. Create a directory for the script.
+
+            ```bash
+            ncn-mw# mkdir -pv ./usr/bin
+            ```
+
         1. Create a UAI.
 
             ```bash
-            ncn-w001# mkdir -pv ./usr/bin
-            ncn-w001# cray uas create --format toml --publickey ~/.ssh/id_rsa.pub
+            ncn-mw# cray uas create --format toml --publickey ~/.ssh/id_rsa.pub
             ```
 
             Example output:
@@ -137,7 +142,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
         1. Copy the script from the UAI.
 
             ```bash
-            ncn-w001# scp vers@10.26.23.123:/usr/bin/uai-ssh.sh ./usr/bin/uai-ssh.sh
+            ncn-mw# scp vers@10.26.23.123:/usr/bin/uai-ssh.sh ./usr/bin/uai-ssh.sh
             ```
 
             Example output:
@@ -153,7 +158,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
         1. Delete the UAI.
 
             ```bash
-            ncn-w001# cray uas delete --uai-list uai-vers-32079250 --format toml
+            ncn-mw# cray uas delete --uai-list uai-vers-32079250 --format toml
             ```
 
             Example output:
@@ -165,7 +170,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
         1. Append the script to the tarball.
 
             ```bash
-            ncn-w001# tar rvf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
+            ncn-mw# tar rvf 0c0d4081-2e8b-433f-b6f7-e1ef0b907be3.tar ./usr/bin/uai-ssh.sh
             ```
 
 1. Create and push the container image.
@@ -174,35 +179,35 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     The `ENTRYPOINT` layer must be `/usr/bin/uai-ssh.sh` as that starts `sshd` for the user in the UAI container started by UAS.
 
     ```bash
-    ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
+    ncn-mw# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
 
-    ncn-w001# podman import --change "ENTRYPOINT /usr/bin/uai-ssh.sh" $SESSION_ID.tar $UAI_IMAGE_NAME
+    ncn-mw# podman import --change "ENTRYPOINT /usr/bin/uai-ssh.sh" $SESSION_ID.tar $UAI_IMAGE_NAME
 
-    ncn-w001# PODMAN_USER=$(kubectl get secret -n nexus nexus-admin-credential -o json | jq -r '.data.username' | base64 -d)
+    ncn-mw# PODMAN_USER=$(kubectl get secret -n nexus nexus-admin-credential -o json | jq -r '.data.username' | base64 -d)
 
-    ncn-w001# PODMAN_PASSWD=$(kubectl get secret -n nexus nexus-admin-credential -o json | jq -r '.data.password' | base64 -d)
+    ncn-mw# PODMAN_PASSWD=$(kubectl get secret -n nexus nexus-admin-credential -o json | jq -r '.data.password' | base64 -d)
 
-    ncn-w001# podman push --creds "$PODMAN_USER:$PODMAN_PASSWD" $UAI_IMAGE_NAME
+    ncn-mw# podman push --creds "$PODMAN_USER:$PODMAN_PASSWD" $UAI_IMAGE_NAME
     ```
 
 1. Register the new container image with UAS.
 
     ```bash
-    ncn-w001# cray uas admin config images create --imagename $UAI_IMAGE_NAME
+    ncn-mw# cray uas admin config images create --imagename $UAI_IMAGE_NAME
     ```
 
 1. Cleanup the mount directory and tarball.
 
     ```bash
-    ncn-w001# umount -v mount; rmdir -v mount
+    ncn-mw# umount -v mount; rmdir -v mount
 
-    ncn-w001# rm $SESSION_ID.tar rootfs.squashfs
+    ncn-mw# rm $SESSION_ID.tar rootfs.squashfs
 
     # NOTE: The next step could be done as an `rm -rf` but, because the user
     #       is `root` and the path is very similar to an important system
     #       path a more cautious approach is taken.
 
-    ncn-w001# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
+    ncn-mw# rm -fv ./usr/bin/uai-ssh.sh && rmdir ./usr/bin ./usr
     ```
 
 [Top: User Access Service (UAS)](index.md)
