@@ -163,7 +163,7 @@ Events:
   Warning  Failed            <invalid> (x8 over <invalid>)  kubelet            Error: container has runAsNonRoot and image will run as root (pod: "nginx_default(0ea1d573-219a-4927-b3c3-c76150d35a7a)", container: nginx)
 ```
 
-Step 6: Incase of a failure(step 5), delete the policy and restart the workload
+6. If the previous step failed, delete the policy and restart the workload.
 ```bash
 kubectl delete pol -n default add-default-securitycontext
 ```
