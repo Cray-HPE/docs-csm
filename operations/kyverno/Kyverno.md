@@ -59,7 +59,7 @@ spec:
               +(privileged): false
 ```
 
-Step 2: Create a simple pod
+2. Create a simple pod.
 ```text
 apiVersion: v1
 kind: Pod
