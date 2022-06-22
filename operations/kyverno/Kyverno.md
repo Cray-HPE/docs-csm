@@ -1,7 +1,9 @@
 # Kyverno policy management
 
 [Kyverno](https://kyverno.io/) is a policy engine designed specifically for Kubernetes.
+
 Kyverno allows cluster administrators to manage environment specific configurations independently of workload configurations and enforce configuration best practices for their clusters.
+
 Kyverno can be used to scan existing workloads for best practices, or can be used to enforce best practices by blocking or mutating API requests.
 
 Kyverno enables administrators to do the following:
@@ -13,6 +15,7 @@ Kyverno enables administrators to do the following:
 * Scan existing resources for violations.
 
 Kyverno policies implement the various levels of Kubernetes [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/) for CSM services.
+
 The policies are minimally restrictive and enforces the best practices for pods. The policies make sure the following values are set for workloads (if not present).
 
 ```text
@@ -29,50 +32,51 @@ Currently, [mutation](#mutation) and [validation](#validation) policies are enfo
 ## Mutation
 
 Mutation policies are applied in the admission controller while creating pods.
+
 It mutates the manifest of respective workloads before creating it so that when resource comes up, it will abide by the policy constraints.
 
 ### Example
 
 1. Create a sample policy.
-```text
-apiVersion: kyverno.io/v1
-kind: Policy
-metadata:
-  name: add-default-securitycontext
-spec:
-  rules:
-  - name: set-container-security-context
-    match:
-      resources:
-        kinds:
-        - Pod
-        selector:
-          matchLabels:
-            app: nginx
-    mutate:
-      patchStrategicMerge:
-        spec:
-          containers:
-          - (name): "*"
-            securityContext:
-              +(allowPrivilegeEscalation): false
-              +(privileged): false
-```
+	```text
+	apiVersion: kyverno.io/v1
+	kind: Policy
+	metadata:
+  	name: add-default-securitycontext
+	spec:
+  	rules:
+  	- name: set-container-security-context
+    	match:
+      	resources:
+	        kinds:
+    	    - Pod
+        	selector:
+          	matchLabels:
+            	app: nginx
+    	mutate:
+      	patchStrategicMerge:
+        	spec:
+          	containers:
+          	- (name): "*"
+            	securityContext:
+              	+(allowPrivilegeEscalation): false
+              	+(privileged): false
+	```
 
 2. Create a simple pod.
-```text
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
-  labels:
-    app: nginx
-spec:
-  containers:
-  - name: nginx
-    image: nginx:1.14.2
-    ports:
-    - containerPort: 80
+	```text
+	apiVersion: v1
+	kind: Pod
+	metadata:
+  	name: nginx
+  	labels:
+    	app: nginx
+	spec:
+  	containers:
+  	- name: nginx
+    	image: nginx:1.14.2
+    	ports:
+    	- containerPort: 80
 	```
 
 	List all of the policies with the following command:
@@ -83,62 +87,62 @@ spec:
 	NAMESPACE            NAME                        BACKGROUND   ACTION   READY
 	default              add-default-securitycontext true         audit    true
 	…
-```
+	```
 
 3. Check the manifest after applying the policy.
 
 	```text
-...
-  spec:
-    containers:
-    - image: nginx:1.14.2
-      imagePullPolicy: IfNotPresent
-      name: nginx
-      ports:
-      - containerPort: 80
-        protocol: TCP
-      resources:
-        requests:
-          cpu: 10m
-          memory: 64Mi
-      securityContext:
-        allowPrivilegeEscalation: false
-        privileged: false
-      terminationMessagePath: /dev/termination-log
-      terminationMessagePolicy: File
-      volumeMounts:
-      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
-        name: default-token-vgggw
-        readOnly: true
-...
+	  ...
+  	spec:
+    	containers:
+    	- image: nginx:1.14.2
+      	imagePullPolicy: IfNotPresent
+      	name: nginx
+      	ports:
+      	- containerPort: 80
+        	protocol: TCP
+      	resources:
+	        requests:
+    	      cpu: 10m
+        	  memory: 64Mi
+      	securityContext:
+        	allowPrivilegeEscalation: false
+        	privileged: false
+      	terminationMessagePath: /dev/termination-log
+      	terminationMessagePolicy: File
+      	volumeMounts:
+      	- mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        	name: default-token-vgggw
+        	readOnly: true
+	  ...
 	```
 
 4. Edit the policy to add one more field and apply the policy again.
-```text
-apiVersion: kyverno.io/v1
-kind: Policy
-metadata:
-  name: add-default-securitycontext
-spec:
-  rules:
-  - name: set-container-security-context
-    match:
-      resources:
-        kinds:
-        - Pod
-        selector:
-          matchLabels:
-            app: nginx
-    mutate:
-      patchStrategicMerge:
-        spec:
-          containers:
-          - (name): "*"
-            securityContext:
-              +(allowPrivilegeEscalation): false
-              +(privileged): false
-              +(runAsNonRoot): true
-```
+	```text
+	apiVersion: kyverno.io/v1
+	kind: Policy
+	metadata:
+  	name: add-default-securitycontext
+	spec:
+  	rules:
+  	- name: set-container-security-context
+    	match:
+      	resources:
+        	kinds:
+        	- Pod
+        	selector:
+          	matchLabels:
+	            app: nginx
+    	mutate:
+      	patchStrategicMerge:
+        	spec:
+          	containers:
+          	- (name): "*"
+	            securityContext:
+    	          +(allowPrivilegeEscalation): false
+        	      +(privileged): false
+            	  +(runAsNonRoot): true
+	```
 
 	If any of the workloads fail to come up after enforcing the policy, then delete the individual policies and restart the workload.
 
@@ -182,39 +186,42 @@ spec:
 ## Validation
 
 Validation policies can be applied any time in `audit` and `enforce` modes.
+
 Violation is only reported in case of `audit` mode and it blocks the resources from coming up when applied in `enforce` mode.
+
 Also, it generates the report of policy violation in respective workloads. The following is an example of the validation policy in `audit` mode.
 
 ### Example
 
 1. Add the following policy before applying the [mutation](#mutation) to the workload.
-```text
-apiVersion: kyverno.io/v1
-kind: Policy
-metadata:
-  name: validate-securitycontext
-spec:
-  background: true
-  validationFailureAction: audit
-  rules:
-  - name: container-security-context
-    match:
-      resources:
-        kinds:
-        - Pod
-        selector:
-          matchLabels:
-            app: nginx
-    validate:
-      message: "Non root security context is not set."
-      pattern:
-        spec:
-          containers:
-          - (name): "*"
-            securityContext:
-              allowPrivilegeEscalation: false
-              privileged: false
-```
+	```text
+	apiVersion: kyverno.io/v1
+	kind: Policy
+	metadata:
+  	name: validate-securitycontext
+	spec:
+  	background: true
+  	validationFailureAction: audit
+  	rules:
+  	- name: container-security-context
+	    match:
+    	  resources:
+        	kinds:
+        	- Pod
+        	selector:
+          	matchLabels:
+            	app: nginx
+    	validate:
+      	message: "Non root security context is not set."
+      	pattern:
+	        spec:
+    	      containers:
+        	  - (name): "*"
+            	securityContext:
+              	allowPrivilegeEscalation: false
+              	privileged: false
+	```
+
 	View the policy report status with the following command:
 
 	```bash
@@ -257,20 +264,20 @@ spec:
 	```
 
 2. Apply the mutation policy and restart the following workload.
-```text
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx
-  labels:
-    app: nginx
-spec:
-  containers:
-  - name: nginx
-    image: nginx:1.14.2
-    ports:
-    - containerPort: 80
-```
+	```text
+	apiVersion: v1
+	kind: Pod
+	metadata:
+  	name: nginx
+  	labels:
+    	app: nginx
+	spec:
+  	containers:
+  	- name: nginx
+    	image: nginx:1.14.2
+    	ports:
+    	- containerPort: 80
+	```
 
 3. Check the policy report status.
 	```bash
@@ -282,6 +289,7 @@ spec:
 	```
 
 	This shows that the mutation policy for the workload was enforced properly.
+
 	If there are any discrepancies, we can look at the detailed policy report to triage the issue.
 
 ## Known issues
