@@ -42,7 +42,7 @@ To resolve this issue:
 The system administrator can execute the following commands to retrieve UAS and the remote execution service logs:
 
 ```bash
-ncn-w001# kubectl logs -n services -c cray-uas-mgr -l "app=cray-uas-mgr"
+kubectl logs -n services -c cray-uas-mgr -l "app=cray-uas-mgr"
 ```
 
 ## Ensure that Slurm is Running and Configured Correctly
@@ -63,9 +63,9 @@ If this error is returned, it is likely that Slurm is not running.
 The system administrator can use the following commands to debug the issue:
 
 ```bash
-ncn-w001# kubectl logs -n user -l app=slurmdb -c slurmdb --tail=-1
-ncn-w001# kubectl logs -n user -l app=slurmdbd -c slurmdbd --tail=-1
-ncn-w001# kubectl logs -n user -l app=slurmctld -c slurmctld --tail=-1
+kubectl logs -n user -l app=slurmdb -c slurmdb --tail=-1
+kubectl logs -n user -l app=slurmdbd -c slurmdbd --tail=-1
+kubectl logs -n user -l app=slurmctld -c slurmctld --tail=-1
 ```
 
 ## Troubleshoot Default Images Issues when Using the CLI
@@ -73,7 +73,7 @@ ncn-w001# kubectl logs -n user -l app=slurmctld -c slurmctld --tail=-1
 If the image name provided while creating a new UAI is not registered for use by the system, the system returns an error message similar to the following:
 
 ```bash
-ncn-w001# cray uas create --publickey ~/.ssh/id_rsa.pub --imagename fred
+cray uas create --publickey ~/.ssh/id_rsa.pub --imagename fred
 Usage: cray uas create [OPTIONS]
 Try "cray uas create --help" for help.
 
@@ -87,7 +87,7 @@ Retry creating the UAI using the list of images and the name of the default imag
 The system administrator can use the `kubectl` command to check the status of the UAI.
 
 ```bash
-ncn-w001# kubectl get pod -n user -l uas=managed -o wide
+kubectl get pod -n user -l uas=managed -o wide
 ```
 
 Example output:
@@ -103,7 +103,7 @@ If UAS pods are stuck in the `Pending` state, the admin needs to ensure the Kube
 Check that nodes are labeled with `uas=True` and are in the `Ready` state.
 
 ```bash
-ncn-w001# kubectl get nodes -l uas
+kubectl get nodes -l uas
 ```
 
 Example output:
@@ -205,19 +205,19 @@ Delete anything created by the User Access Service \(`uas-mgr`\):
 **WARNING:** This command will delete all UAS resources for the entire system, it is not for targeted cleanup of a single UAI.
 
 ```bash
-ncn-w001# kubectl delete all -n user -l uas=managed
+kubectl delete all -n user -l uas=managed
 ```
 
 Delete all objects associated with a particular UAI:
 
 ```bash
-ncn-w001# kubectl delete all -n user -l app=UAI-NAME
+kubectl delete all -n user -l app=UAI-NAME
 ```
 
 Delete all objects for a single user:
 
 ```bash
-ncn-w001# kubectl delete all -n user -l user=USERNAME
+kubectl delete all -n user -l user=USERNAME
 ```
 
 ## Hard limits on UAI Creation
@@ -261,6 +261,6 @@ Warning  Failed
 Scheduling  21s (x20 over 4m31s)  default-scheduler  0/4 nodes are available: 1 Insufficient pods, 3 node(s) didn't match node selector.
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Troubleshoot UAS by Viewing Log Output](Troubleshoot_UAS_by_Viewing_Log_Output.md)

@@ -45,7 +45,7 @@ switch(config-router)# neighbor IP-ADDR soft-reconfiguration inbound
 Show commands to validate functionality: :
 
 ```
-switch# show bgp all [summary|neighbors]
+show bgp all [summary|neighbors]
 ```
 
 ## Expected Results
@@ -56,4 +56,4 @@ switch# show bgp all [summary|neighbors]
 4. Administrators can validate the BGP relationship is established and that the network statement is advertised to the peer
 5. Soft reconfiguration is enabled
 
-[Back to Index](index.md)
+[Back to Index](README.md)

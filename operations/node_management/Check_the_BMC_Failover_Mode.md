@@ -10,10 +10,10 @@ Check the failover setting on a Gigabyte BMC.
 > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
 ```bash
-ncn# USERNAME=root
-ncn# read -s IPMI_PASSWORD
-ncn# export IPMI_PASSWORD
-ncn# ipmitool -I lanplus -U $USERNAME -E -H 172.30.52.247 raw 0x0c 0x02 0x01 210 0 0
+USERNAME=root
+read -s IPMI_PASSWORD
+export IPMI_PASSWORD
+ipmitool -I lanplus -U $USERNAME -E -H 172.30.52.247 raw 0x0c 0x02 0x01 210 0 0
 ```
 
 Example output:

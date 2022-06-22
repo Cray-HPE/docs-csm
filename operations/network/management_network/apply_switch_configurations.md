@@ -18,8 +18,8 @@ There are some caveats that are mentioned below.
 1. Shutdown all ports. Use `show int physical` to see the range of ports.
 
     ```console
-    switch(config)# int 1/1/1-1/1/52
-    switch(config-if-<1/1/1-1/1/52# shut
+    int 1/1/1-1/1/52
+    shut
     ```
 
 1. Enter `auto-confirm` before pasting in the configuration. This will automatically accept prompts.
@@ -35,8 +35,8 @@ There are some caveats that are mentioned below.
 1. Shut down all ports.
 
     ```console
-    sw-leaf-bmc-001(config)# interface range ethernet 1/1/1-1/1/52
-    sw-leaf-bmc-001(conf-range-eth1/1/1-1/1/52)# shut
+    interface range ethernet 1/1/1-1/1/52
+    shut
     ```
 
 1. Paste in the generated configuration.
@@ -47,21 +47,20 @@ There are some caveats that are mentioned below.
       For example:
 
       ```console
-      sw-leaf-bmc-001(config)# router ospf 1
-      sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
-      sw-leaf-bmc-001(config-router-ospf-1)# router-id ospf 2 vrf Customer
-      % Error: Illegal parameter.
-      sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
+      router ospf 1
+      router-id 10.2.0.4
+      router-id ospf 2 vrf Customer
+      router-id 10.2.0.4
       ```
 
       To fix:
 
       ```console
-      sw-leaf-bmc-001(config)# router ospf 1
-      sw-leaf-bmc-001(config-router-ospf-1)# router-id 10.2.0.4
-      sw-leaf-bmc-001(config-router-ospf-1)# exit
-      sw-leaf-bmc-001(config)# router ospf 2 vrf Customer
-      sw-leaf-bmc-001(config-router-ospf-2)# router-id 10.2.0.4
+      router ospf 1
+      router-id 10.2.0.4
+      exit
+      router ospf 2 vrf Customer
+      router-id 10.2.0.4
       ```
 
 ## Mellanox

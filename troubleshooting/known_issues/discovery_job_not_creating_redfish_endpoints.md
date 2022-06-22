@@ -24,13 +24,13 @@ This troubleshooting procedure is only applicable for air-cooled NodeBMCs and Ro
     > This should be either the component name (xname) for a NodeBMC (`xXcCsSbB`) or RouterBMC (`xXcCrRbB`).
 
     ```console
-    ncn# export BMC=x3000c0s18b0
+    export BMC=x3000c0s18b0
     ```
 
 1. Check to see in HSM if the component ID for a BMC has a MAC address and IP associated with it.
 
     ```console
-    ncn# cray hsm inventory ethernetInterfaces list --component-id $BMC
+    cray hsm inventory ethernetInterfaces list --component-id $BMC
     ```
 
     Example output:
@@ -45,8 +45,7 @@ This troubleshooting procedure is only applicable for air-cooled NodeBMCs and Ro
     Type = "NodeBMC"
     [[results.IPAddresses]]
     IPAddress = "10.254.1.27"
-    
-    
+
     [[results]]
     ID = "54802852b707"
     Description = "Configuration of this Manager Network Interface"
@@ -62,13 +61,13 @@ This troubleshooting procedure is only applicable for air-cooled NodeBMCs and Ro
     > Make sure to use the normalized MAC address from the `ID` field.
 
     ```console
-    ncn# export BMC_MAC=54802852b706
+    export BMC_MAC=54802852b706
     ```
 
 1. Verify that the IP address associated with the MAC address is pingable.
 
     ```console
-    ncn# ping $BMC
+    ping $BMC
     ```
 
     If it is pingable, then output will look similar to the following:
@@ -88,7 +87,7 @@ This troubleshooting procedure is only applicable for air-cooled NodeBMCs and Ro
 1. Verify that no Redfish endpoint for the NodeBMC or RouterBMC is present in HSM.
 
     ```console
-    ncn# cray hsm inventory redfishEndpoints describe $BMC
+    cray hsm inventory redfishEndpoints describe $BMC
     ```
 
     If the endpoint is missing from HMC, then output will look similar to the following:
@@ -96,7 +95,7 @@ This troubleshooting procedure is only applicable for air-cooled NodeBMCs and Ro
     ```text
     Usage: cray hsm inventory redfishEndpoints describe [OPTIONS] XNAME
     Try 'cray hsm inventory redfishEndpoints describe --help' for help.
-    
+
     Error: Missing argument 'XNAME'.
     ```
 
@@ -107,7 +106,7 @@ This troubleshooting procedure is only applicable for air-cooled NodeBMCs and Ro
 Correcting this River Redfish endpoint discovery issue can be done by running the `river_rf_endpoint_discovery_fixup.py` script:
 
 ```console
-ncn# /opt/cray/csm/scripts/hms_verification/river_rf_endpoint_discovery_fixup.py
+/opt/cray/csm/scripts/hms_verification/river_rf_endpoint_discovery_fixup.py
 ```
 
 The return value of the script is 0 if the correction was successful or if no correction was needed. A non-zero return value means
@@ -118,7 +117,7 @@ that manual intervention may be needed to correct the issue. Continue to the nex
 1. Check that the `hms-discovery` cronjob has run to completion since running the script.
 
     ```console
-    ncn# kubectl -n services get pods -l app=hms-discovery
+    kubectl -n services get pods -l app=hms-discovery
     ```
 
     Example output:
@@ -142,7 +141,7 @@ that manual intervention may be needed to correct the issue. Continue to the nex
 1. Verify that the MAC address has a component ID associated with it.
 
     ```console
-    ncn# cray hsm inventory ethernetInterfaces describe $BMC_MAC
+    cray hsm inventory ethernetInterfaces describe $BMC_MAC
     ```
 
     Example output:
@@ -167,7 +166,7 @@ that manual intervention may be needed to correct the issue. Continue to the nex
     > that are not in the `DiscoveryOk` or `DiscoveryStarted` states, such as `HTTPsGetFailed`.
 
     ```console
-    ncn# cray hsm inventory redfishEndpoints describe $BMC
+    cray hsm inventory redfishEndpoints describe $BMC
     ```
 
     Example output:

@@ -62,7 +62,6 @@ Follow the steps in only one of the following sections depending on if it is pre
 
    6.  Click the **Save** button.
 
-
 #### Use the Keycloak REST API
 
 1.  Create the get\_master\_token function to get a token as a Keycloak master administrator.
@@ -81,7 +80,7 @@ Follow the steps in only one of the following sections depending on if it is pre
    The `clientId` should be changed to the name for the new service account.
 
   ```screen
-  ncn-w001# curl -is -H "Authorization: Bearer $(get_master_token)" -H "Content-Type: application/json" -d '
+  curl -is -H "Authorization: Bearer $(get_master_token)" -H "Content-Type: application/json" -d '
   {
     "clientId": "my-test-client",
     "standardFlowEnabled": false,

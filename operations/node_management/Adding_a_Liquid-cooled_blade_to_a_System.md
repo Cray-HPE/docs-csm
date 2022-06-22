@@ -15,8 +15,8 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
   The file then can be used to automate subsequent commands in this procedure, for example:
 
     ```bash
-    ncn-m001# mkdir blade_swap_scripts; cd blade_swap_scripts
-    ncn-m001# cat blade_query.sh
+    mkdir blade_swap_scripts; cd blade_swap_scripts
+    cat blade_query.sh
 
     #!/bin/bash
     BLADE=$1
@@ -30,8 +30,8 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     ```
 
     ```bash
-    ncn-m001# ./blade_query.sh x1000c0s1 x1000c0s1.json
-    ncn-m001# cat x1000c0s1.json
+    ./blade_query.sh x1000c0s1 x1000c0s1.json
+    cat x1000c0s1.json
     {"xname":"x1000c0s1b0n0","ID":"0040a6836339","MAC":"00:40:a6:83:63:39","IP":"10.100.0.10","Desc":"Node Maintenance Network"}
     {"xname":"x1000c0s1b0n1","ID":"0040a683633a","MAC":"00:40:a6:83:63:3a","IP":"10.100.0.98","Desc":"Node Maintenance Network"}
     {"xname":"x1000c0s1b1n0","ID":"0040a68362e2","MAC":"00:40:a6:83:62:e2","IP":"10.100.0.123","Desc":"Node Maintenance Network"}
@@ -41,13 +41,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     To delete an`ethernetInterfaces` entry using `curl`:
 
     ```bash
-    ncn-m001# for ID in $(cat x1000c0s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
+    for ID in $(cat x1000c0s1.json | jq -r '.ID'); do cray hsm inventory ethernetInterfaces delete $ID; done
     ```
 
     To insert an `ethernetInterfaces` entry using `curl`:
 
     ```bash
-    ncn-m001# while read  PAYLOAD ; do curl -H "Authorization: Bearer $TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/
+    while read  PAYLOAD ; do curl -H "Authorization: Bearer $TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/
     smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '
     {ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x1000c0s1.json
     ```
@@ -61,13 +61,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 1. Suspend the `hms-discovery cron job` to disable it.
 
     ```bash
-    ncn-m001# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
+    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
     ```
 
     Verify that the `hms-discovery cron job` has stopped.
 
     ```bash
-    ncn-m001# kubectl get cronjobs -n services hms-discovery
+    kubectl get cronjobs -n services hms-discovery
     ```
 
     Example output. Note the `ACTIVE` = `0` and is `SUSPEND` = `True` in the output indicating the job has been suspended:
@@ -80,7 +80,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 1. Determine if the destination chassis slot is populated. This example is checking slot 0 in chassis 3 of cabinet `x1005`.
 
     ```bash
-    ncn-m001# cray hsm state components describe x1005c3s0
+    cray hsm state components describe x1005c3s0
     ```
 
     Example output:
@@ -102,7 +102,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 1. **Skip this step if the chassis slot is unpopulated**. Verify the chassis slot is powered off.
 
     ```bash
-    ncn-m001# cray capmc get_xname_status create --xnames x1005c3s0
+    cray capmc get_xname_status create --xnames x1005c3s0
     ```
 
     Example output:
@@ -116,7 +116,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     If the slot is powered on, then power the chassis slot off.
 
     ```text
-    ncn-m001# cray capmc component name (xname)_off create --xnames x1005c3s0 --recursive true
+    cray capmc component name (xname)_off create --xnames x1005c3s0 --recursive true
     ```
 
 1. Install the the blade into the system into the desired location.
@@ -124,7 +124,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 1. Obtain an authentication token to access the API gateway.
 
     ```bash
-    ncn-m001# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                           -d client_id=admin-client \
                           -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
@@ -143,7 +143,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         It is expected that if a blade has not been populated in the slot before that no HSM Ethernet Interfaces IDs would be found.
 
         ```bash
-        ncn-m001# cat eth_interfaces
+        cat eth_interfaces
         0040a6836339
         0040a683633a
         0040a68362e2
@@ -154,10 +154,10 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
        Delete the `cray-dhcp-kea` pod to prevent the interfaces from being re-created.
 
         ```bash
-        ncn-m001# kubectl get pods -Ao wide | grep kea
+        kubectl get pods -Ao wide | grep kea
 
-        ncn-m001# kubectl delete -n services pod CRAY_DHCP_KEA_PODNAME
-        ncn-m001# for ETH in $(cat eth_interfaces); do cray hsm inventory ethernetInterfaces delete $ETH --format json ; done
+        kubectl delete -n services pod CRAY_DHCP_KEA_PODNAME
+        for ETH in $(cat eth_interfaces); do cray hsm inventory ethernetInterfaces delete $ETH --format json ; done
         ```
 
     3. **Skip this step if the destination blade location has not been previously populated with a blade.**
@@ -174,11 +174,11 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         ```
 
         ```bash
-        ncn-m001# MAC=NEW_BLADE_MAC_ADDRESS
-        ncn-m001# IP_ADDRESS=DESTLOCATION_IP_ADDRESS
-        ncn-m001# XNAME=DESTLOCATION_XNAME
+        MAC=NEW_BLADE_MAC_ADDRESS
+        IP_ADDRESS=DESTLOCATION_IP_ADDRESS
+        XNAME=DESTLOCATION_XNAME
 
-        ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "{
+        curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "{
             \"Description\": \"Node Maintenance Network\",
             \"MACAddress\": \"$MAC\",
             \"IPAddress\": \"$IP_ADDRESS\",
@@ -186,16 +186,16 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         }"
         ```
 
-        **Note:** Kea may must be restarted when the `curl` command is issued.
+        **`NOTE`** Kea may must be restarted when the `curl` command is issued.
 
         ```bash
-        ncn-m001# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
+        kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
         ```
 
         To change or correct a curl command that has been entered, use a PATCH request, for example:
 
         ```bash
-        ncn-m001# curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \
+        curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \
             'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json' --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.xxx.xxx.xxx","ComponentID":"XNAME"}'
         ```
 
@@ -207,13 +207,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
    Rediscovering the `ChassisBMC` will update HSM to become aware of the newly populated slot and allow CAPMC to perform power actions on the slot.
 
     ```bash
-    ncn-m001# cray hsm inventory discover create --xnames x1005c3b0
+    cray hsm inventory discover create --xnames x1005c3b0
     ```
 
 1. Verify that discovery of the `ChassisBMC` has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3b0 --format json
+    cray hsm inventory redfishEndpoints describe x1005c3b0 --format json
     ```
 
     Example output:
@@ -241,14 +241,14 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 1. Unsuspend the `hms-discovery cronjob` to re-enable the `hms-discovery` job.
 
     ```bash
-    ncn-m001# kubectl -n services patch cronjobs hms-discovery \
+    kubectl -n services patch cronjobs hms-discovery \
       -p '{"spec" : {"suspend" : false }}'
     ```
 
     Verify the `hms-discovery` job has been unsuspended:
 
     ```bash
-    ncn-m001# kubectl get cronjobs.batch -n services hms-discovery
+    kubectl get cronjobs.batch -n services hms-discovery
     ```
 
     Example output. Note the `ACTIVE` = `1` and is `SUSPEND` = `False` in the output indicating the job has been unsuspended:
@@ -263,19 +263,19 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 1. Enable the chassis slot. The example enables slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    ncn-m001# cray hsm state components enabled update --enabled true x1005c3s0
+    cray hsm state components enabled update --enabled true x1005c3s0
     ```
 
 1. Power on the chassis slot. The example powers on slot 0, chassis 3, in cabinet 1005.
 
     ```bash
-    ncn-m001# cray capmc component name (xname)_on create --xnames x1005c3s0 --recursive true
+    cray capmc component name (xname)_on create --xnames x1005c3s0 --recursive true
     ```
 
 1. Wait at least 3 minutes for the blade to power on and the node controllers (BMCs) to be discovered.
 
     ```bash
-    ncn-m001# sleep 180
+    sleep 180
     ```
 
 #### Verify discovery has completed
@@ -283,7 +283,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 1. To verify the two Node BMCs in the blade have been discovered by the HSM, run this command for each BMC in the blade (`x1005c3s0b0` and `x1005c3s0b1`).
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints describe x1005c3s0b0 --format json
+    cray hsm inventory redfishEndpoints describe x1005c3s0b0 --format json
     {
         "ID": "x1005c3s0b0",
         "Type": "NodeBMC",
@@ -314,13 +314,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         Verify the Node BMC is pingable:
 
         ```bash
-        ncn-m001# ping x1005c3s0b0
+        ping x1005c3s0b0
         ```
 
         If the BMC is not pingable, verify the chassis slot has power.
 
         ```bash
-        ncn-m001# cray capmc get_xname_status create --xnames x1005c3s0
+        cray capmc get_xname_status create --xnames x1005c3s0
         ```
 
     * If the Redfish endpoint is in `HTTPsGetFailed`:
@@ -328,13 +328,13 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         Verify the Node BMC is pingable:
 
         ```bash
-        ncn-m001# ping x1005c3s0b0
+        ping x1005c3s0b0
         ```
 
         If the BMC is pingable, verify the node BMC is configured with expected credentials.
 
         ```bash
-        ncn-m001# curl -k -u root:password https://x1005c3s0b0/redfish/v1/Managers
+        curl -k -u root:password https://x1005c3s0b0/redfish/v1/Managers
         ```
 
 1. Enable the nodes in the HSM database.
@@ -342,19 +342,19 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     For a blade with four nodes per blade:
 
     ```bash
-    ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
     For a blade with two nodes per blade:
 
     ```bash
-    ncn-m001# cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b1n0
+    cray hsm state components bulkEnabled update --enabled true --component-ids x1005c3s0b0n0,x1005c3s0b1n0
     ```
 
 1. Verify that the nodes are enabled in the HSM.
 
     ```bash
-    ncn-m001# cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
+    cray hsm state components query create --component-ids x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
     Example output:
@@ -371,7 +371,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     Type = "Node"
     Enabled = true
     State = "Off"
-    
+
     [. . .]
     ```
 
@@ -384,8 +384,8 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
     However, if they are referenced by component name (xname), then these new nodes should added to the BOS Session template.
 
     ```bash
-    ncn-m001# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
+    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
+    cray bos sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
     ```
 
     If this query returns empty, then skip to sub-step 3.
@@ -397,13 +397,13 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
        1. Dump the current Session template.
 
           ```bash
-          ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
+          cray bos sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
           ```
 
        2. Edit the `tmp.txt` file adding the new nodes to the `node_list`.
 
           ```bash
-          ncn-m001# vi tmp.txt
+          vi tmp.txt
           ```
 
     2. Create the Session template.
@@ -415,25 +415,25 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
           The name specified in `tmp.txt` is overridden by the value provided to the `--name` option.
 
           ```bash
-          ncn-m001# BOS_TEMPLATE="New-Session-Template-Name"
+          BOS_TEMPLATE="New-Session-Template-Name"
           ```
 
        2. Create the Session template.
 
           ```bash
-          ncn-m001# cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
+          cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
           ```
 
        3. Verify that the Session template contains the additional nodes and the proper name.
 
            ```bash
-           ncn-m001# cray bos sessiontemplate describe $BOS_TEMPLATE --format json
+           cray bos sessiontemplate describe $BOS_TEMPLATE --format json
            ```
 
     3. Boot the nodes.
 
        ```bash
-       ncn-m001# cray bos session create --template-uuid $BOS_TEMPLATE \
+       cray bos session create --template-uuid $BOS_TEMPLATE \
          --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
        ```
 
@@ -453,7 +453,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 1. Check the `cray-cps` pods on worker nodes and verify they are `Running`.
 
     ```bash
-    ncn-m001# kubectl get pods -Ao wide | grep cps
+    kubectl get pods -Ao wide | grep cps
     ```
 
     Example output:
@@ -472,7 +472,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     The error messages indicate that DVS is detecting an IP address change for one of the client nodes.
 
     ```bash
-    ncn-m001# dmesg -T | grep "DVS: merge_one"
+    dmesg -T | grep "DVS: merge_one"
     ```
 
     Example output:
@@ -488,7 +488,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 1. SSH to the node and check each DVS mount.
 
     ```bash
-    nid# mount | grep dvs | head -1
+    mount | grep dvs | head -1
     ```
 
     Example output:
@@ -502,7 +502,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 1. Determine the pod name for the Slingshot fabric manager pod and check the status of the fabric.
 
     ```bash
-    ncn-m001# kubectl exec -it -n services \
+    kubectl exec -it -n services \
       $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') \
       -- fmn_status
     ```
@@ -515,7 +515,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     1. Verify each node hostname resolves to one IP address.
 
         ```bash
-        ncn-m001# nslookup x1005c3s0b0n0
+        nslookup x1005c3s0b0n0
         ```
 
         Example output with one IP address resolving:
@@ -531,7 +531,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     2. Reload the KEA configuration.
 
         ```bash
-        ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-reload",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea |jq
+        curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-reload",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea |jq
         ```
 
         If there are no duplicate IP addresses within HSM the following response is expected:
@@ -558,7 +558,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     If there are 0 DHCP leases, there is a configuration error.
 
     ```bash
-    ncn-m001# curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
+    curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
     ```
 
     Example output with no active DHCP leases:
@@ -581,7 +581,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     1. Show the `EthernetInterfaces` for the duplicate IP address:
 
        ```bash
-       ncn-m001# cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
+       cray hsm inventory ethernetInterfaces list --ip-address 10.100.0.105 --format json | jq
        ```
 
        Example output for an IP address that is associated with two MAC addresses:
@@ -612,13 +612,13 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     2. Delete the older entry.
 
        ```bash
-       ncn-m001# cray hsm inventory ethernetInterfaces delete 0040a68350a4
+       cray hsm inventory ethernetInterfaces delete 0040a68350a4
        ```
 
 1. Check DNS using `nslookup`.
 
     ```bash
-    ncn-m001# nslookup 10.100.0.105
+    nslookup 10.100.0.105
     105.0.100.10.in-addr.arpa        name = nid001032-nmn.
     105.0.100.10.in-addr.arpa        name = nid001032-nmn.local.
     105.0.100.10.in-addr.arpa        name = x1005c3s0b0n0.
@@ -628,7 +628,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
 1. Check SSH.
 
     ```bash
-    ncn-m001# ssh x1005c3s0b0n0
+    ssh x1005c3s0b0n0
     ```
 
     Example output:

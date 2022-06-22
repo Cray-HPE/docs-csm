@@ -23,6 +23,6 @@ By choosing the correct IP address and logging into the broker, a user ultimatel
 Because the broker is responsible for managing the underlying End-User UAIs, users need not be given authority to create UAIs directly and, therefore, cannot cause a proliferation of unneeded UAIs.
 Because the Broker UAIs each run separately on different IP addresses with, potentially, different user authorizations configured, a site can control which users are given access to which classes of End-User UAIs.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: List UAIs](List_UAIs.md)

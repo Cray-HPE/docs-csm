@@ -2,18 +2,16 @@
 
 Postgres uses SQL language to store and manage databases on the system. This procedure describes how to view and obtain helpful information about system databases, as well as the types of data being stored.
 
-
 ### Prerequisites
 
 This procedure requires administrative privileges.
-
 
 ### Procedure
 
 1.  Log in to the Postgres container.
 
     ```bash
-    ncn-w001# kubectl -n services exec -it cray-smd-postgres-0 -- bash
+    kubectl -n services exec -it cray-smd-postgres-0 -- bash
     ```
 
     Example output:
@@ -46,7 +44,7 @@ This procedure requires administrative privileges.
 2.  Log in as the postgres user.
 
     ```bash
-    root@cray-smd-postgres-0:/home/postgres# psql -U postgres
+    root@cray-smd-postgres-0:/home/psql -U postgres
     ```
 
     Example output:
@@ -99,7 +97,7 @@ This procedure requires administrative privileges.
 5.  List the data types that are in the database being viewed.
 
     ```bash
-    hmsds-# \dt
+    \dt
     ```
 
     Example output:

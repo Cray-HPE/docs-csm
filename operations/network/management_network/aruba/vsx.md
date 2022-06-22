@@ -66,7 +66,7 @@ switch(config-addrgroup)# vsx-sync
 Show commands to validate functionality:
 
 ```text
-switch# show vsx <brief|configuration|status> [config-sync]
+show vsx <brief|configuration|status> [config-sync]
 ```
 
 ## Example Output
@@ -169,7 +169,7 @@ switch(config-if)# apply access-list ip secure_mcast_sources
 switch(config-if)# vsx-sync
 switch(config-if)# end
 
-switch# show run vsx-sync
+show run vsx-sync
 Current vsx-sync configuration:
 vlan 10
     vsx-sync
@@ -195,4 +195,4 @@ access-list ip secure_mcast_sources
 4. Administrators can configure the VLANs and ACLs for synchronization
 5. Everything is synchronized from the primary to the secondary
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

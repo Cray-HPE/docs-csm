@@ -12,10 +12,8 @@ On cluster nodes, the VCS service can be accessed through the gateway. VCS crede
 To clone a repository in the `cray` organization, use the following command:
 
 ```bash
-ncn# git clone https://api-gw-service-nmn.local/vcs/cray/REPO_NAME.git
+git clone https://api-gw-service-nmn.local/vcs/cray/REPO_NAME.git
 ```
-
-<a name="vcs_administrative_user"></a>
 
 ## VCS administrative user
 
@@ -25,7 +23,7 @@ content into VCS.
 The initial VCS credentials for the `crayvcs` user are obtained with the following command:
 
 ```bash
-ncn# kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
+kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
 ```
 
 ## Change VCS administrative user password
@@ -54,7 +52,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
    * The password can be obtained with the following command:
 
      ```bash
-     ncn# kubectl get secret -n services keycloak-master-admin-auth \
+     kubectl get secret -n services keycloak-master-admin-auth \
                   --template={{.data.password}} | base64 --decode
      ```
 
@@ -82,7 +80,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
    * The old VCS password, which can be obtained with the following command:
 
      ```bash
-     ncn# kubectl get secret -n services vcs-user-credentials \
+     kubectl get secret -n services vcs-user-credentials \
              --template={{.data.vcs_password}} | base64 --decode
      ```
 
@@ -94,7 +92,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 1. Save a local copy of the `customizations.yaml` file.
 
     ```bash
-    ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' |
+    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' |
          base64 -d > customizations.yaml
     ```
 
@@ -108,57 +106,57 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
    For example:
 
-    ```yaml
-          gitea:
-            generate:
-              name: vcs-user-credentials
-              data:
-              - type: static
-                args:
-                  name: vcs_password
-                  value: my_secret_password
-              - type: static
-                args:
-                  name: vcs_username
-                  value: crayvcs
-    ```
-
-1. Upload the modified `customizations.yaml` file to Kubernetes.
-
-   ```bash
-   ncn# kubectl delete secret -n loftsman site-init
-   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```yaml
+   gitea:
+      generate:
+         name: vcs-user-credentials
+         data:
+           - type: static
+             args:
+             name: vcs_password
+             value: my_secret_password
+           - type: static
+             args:
+             name: vcs_username
+             value: crayvcs
    ```
 
 1. Encrypt the values after changing the `customizations.yaml` file.
 
     ```bash
-    ncn# ./secrets-seed-customizations.sh customizations.yaml
+    ./utils/secrets-seed-customizations.sh customizations.yaml
     ```
 
-   If the above command complains that it cannot find `certs/sealed_secrets.crt`, then you can run the following commands to create it:
+   If the above command complains that it cannot find `certs/sealed_secrets.crt`, then run the following commands to create it:
 
     ```bash
-    ncn# mkdir -p ../certs &&
-         ./bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > ../certs/sealed_secrets.crt
+    mkdir -p ./certs &&
+         ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > ./certs/sealed_secrets.crt
     ```
+
+1. Upload the modified `customizations.yaml` file to Kubernetes.
+
+   ```bash
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 1. Get the current cached `sysmgmt` manifest and save it into a `gitea.yaml` file.
 
     ```bash
-    ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > gitea.yaml
+    kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > gitea.yaml
     ```
 
 1. Run the following command to remove non-Gitea charts from the `gitea.yaml` file. This will also change the `metadata.name` so
    that it does not overwrite the `sysmgmt.yaml` file that is stored in the `loftsman` namespace.
 
    ```bash
-   ncn# for i in $(yq r gitea.yaml 'spec.charts[*].name' | grep -Ev '^gitea'); do yq d -i gitea.yaml  'spec.charts(name=='"$i"')'; done
-   ncn# yq w -i gitea.yaml metadata.name gitea
-   ncn# yq d -i gitea.yaml spec.sources
-   ncn# yq w -i gitea.yaml spec.sources.charts[0].location 'https://packages.local/repository/charts'
-   ncn# yq w -i gitea.yaml spec.sources.charts[0].name csm-algol60
-   ncn# yq w -i gitea.yaml spec.sources.charts[0].type repo
+   for i in $(yq r gitea.yaml 'spec.charts[*].name' | grep -Ev '^gitea'); do yq d -i gitea.yaml  'spec.charts(name=='"$i"')'; done
+   yq w -i gitea.yaml metadata.name gitea
+   yq d -i gitea.yaml spec.sources
+   yq w -i gitea.yaml spec.sources.charts[0].location 'https://packages.local/repository/charts'
+   yq w -i gitea.yaml spec.sources.charts[0].name csm-algol60
+   yq w -i gitea.yaml spec.sources.charts[0].type repo
    ```
 
 1. Example `gitea.yaml` after the command is run:
@@ -194,7 +192,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 1. Generate the manifest that will be used to redeploy the chart with the modified resources.
 
     ```bash
-    ncn# manifestgen -c customizations.yaml -i gitea.yaml -o manifest.yaml
+    manifestgen -c customizations.yaml -i gitea.yaml -o manifest.yaml
     ```
 
 1. Validate that the `manifest.yaml` file only contains chart information for Gitea, and that the sources chart location
@@ -205,7 +203,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
    This will update the `vcs-user-credentials` SealedSecret which will cause the SealedSecret controller to update the Secret.
 
     ```bash
-    ncn# loftsman ship --manifest-path ${PWD}/manifest.yaml
+    loftsman ship --manifest-path ${PWD}/manifest.yaml
     ```
 
 1. Verify that the Secret has been updated.
@@ -213,15 +211,15 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
    Give the SealedSecret controller a few seconds to update the Secret, then run the following command to see the current value of the Secret:
 
     ```bash
-    ncn# kubectl get secret -n services vcs-user-credentials \
+    kubectl get secret -n services vcs-user-credentials \
                  --template={{.data.vcs_password}} | base64 --decode
     ```
 
 1. Save an updated copy of `customizations.yaml` to the `site-init` secret in the `loftsman` Kubernetes namespace.
 
     ```bash
-    ncn# CUSTOMIZATIONS=$(base64 < customizations.yaml  | tr -d '\n')
-    ncn# kubectl get secrets -n loftsman site-init -o json |
+    CUSTOMIZATIONS=$(base64 < customizations.yaml  | tr -d '\n')
+    kubectl get secrets -n loftsman site-init -o json |
             jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" |
             kubectl apply -f -
     ```
@@ -265,7 +263,7 @@ in a Postgres database. Because of this, both sources must be backed up and rest
 1. Determine which Postgres member is the leader.
 
     ```bash
-    ncn# kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list
+    kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list
     ```
 
     Example output:
@@ -283,14 +281,14 @@ in a Postgres database. Because of this, both sources must be backed up and rest
 1. Log into the leader pod and dump the data to a local file.
 
     ```bash
-    ncn# POSTGRES_LEADER=gitea-vcs-postgres-0
-    ncn# kubectl exec -it ${POSTGRES_LEADER} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
+    POSTGRES_LEADER=gitea-vcs-postgres-0
+    kubectl exec -it ${POSTGRES_LEADER} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
     ```
 
 1. Determine what secrets are associated with the PostgreSQL credentials:
 
     ```bash
-    ncn# kubectl get secrets -n services | grep gitea-vcs-postgres.credentials
+    kubectl get secrets -n services | grep gitea-vcs-postgres.credentials
     ```
 
     Example output:
@@ -304,9 +302,9 @@ in a Postgres database. Because of this, both sources must be backed up and rest
 1. Export each secret to a manifest file:
 
     ```bash
-    ncn# SECRETS="postgres service-account standby"
-    ncn# echo "---" > gitea-vcs-postgres.manifest
-    ncn# for secret in $SECRETS; do
+    SECRETS="postgres service-account standby"
+    echo "---" > gitea-vcs-postgres.manifest
+    for secret in $SECRETS; do
             kubectl get secret "${secret}.gitea-vcs-postgres.credentials" -n services -o yaml >> gitea-vcs-postgres.manifest
             echo "---" >> gitea-vcs-postgres.manifest
          done
@@ -321,9 +319,9 @@ in a Postgres database. Because of this, both sources must be backed up and rest
 The VCS Postgres backups should be accompanied by backups of the VCS PVC. The export process can be run at any time while the service is running using the following commands:
 
 ```bash
-ncn# POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-ncn# kubectl -n services exec ${POD} -- tar -cvf vcs.tar /var/lib/gitea/
-ncn# kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
+POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
+kubectl -n services exec ${POD} -- tar -cvf vcs.tar /var/lib/gitea/
+kubectl -n services cp ${POD}:vcs.tar ./vcs.tar
 ```
 
 Be sure to save the resulting `tar` file to a safe location.
@@ -338,10 +336,10 @@ When restoring the VCS Postgres database, the PVC should also be restored to the
 using the following commands:
 
 ```bash
-ncn# POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-ncn# kubectl -n services cp ./vcs.tar ${POD}:vcs.tar
-ncn# kubectl -n services exec ${POD} -- tar -xvf vcs.tar
-ncn# kubectl -n services rollout restart deployment gitea-vcs
+POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
+kubectl -n services cp ./vcs.tar ${POD}:vcs.tar
+kubectl -n services exec ${POD} -- tar -xvf vcs.tar
+kubectl -n services rollout restart deployment gitea-vcs
 ```
 
 ### Alternative backup/restore strategy
@@ -359,13 +357,13 @@ The following scripts create and use a `vcs-content` directory that contains all
 > supplying the credentials to `curl` using the `--netrc-file` argument instead of the `--user` argument, or replacing it with a simple Python script).
 
 ```bash
-ncn# RESULTS=vcs-content
-ncn# mkdir $RESULTS
-ncn# VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-ncn# VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-ncn# git config --global credential.helper store
-ncn# echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
-ncn# for repo in $(curl -s https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos --user ${VCS_USER}:${VCS_PASSWORD}| jq -r '.[] | .name') ; do
+RESULTS=vcs-content
+mkdir $RESULTS
+VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+git config --global credential.helper store
+echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
+for repo in $(curl -s https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos --user ${VCS_USER}:${VCS_PASSWORD}| jq -r '.[] | .name') ; do
         git clone --mirror https://api-gw-service-nmn.local/vcs/cray/${repo}.git
         cd ${repo}.git
         git bundle create ${repo}.bundle --all
@@ -378,12 +376,12 @@ ncn# for repo in $(curl -s https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray
 #### Import
 
 ```bash
-ncn# SOURCE=vcs-content
-ncn# VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-ncn# VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-ncn# git config --global credential.helper store
-ncn# echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
-ncn# for file in $(ls $SOURCE); do
+SOURCE=vcs-content
+VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+git config --global credential.helper store
+echo "https://${VCS_USER}:${VCS_PASSWORD}@api-gw-service-nmn.local" > ~/.git-credentials
+for file in $(ls $SOURCE); do
         repo=$(echo $file | sed 's/.bundle$//')
         git clone --mirror ${SOURCE}/${repo}.bundle
         cd ${repo}.git
@@ -405,10 +403,10 @@ For example:
 > supplying the credentials to `curl` using the `--netrc-file` argument instead of the `--user` argument, or replacing it with a simple Python script).
 
 ```bash
-ncn# VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-ncn# VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-ncn# REPOS="analytics-config-management cos-config-management cpe-config-management slurm-config-management sma-config-management uan-config-management csm-config-management"
-ncn# for repo in $REPOS ; do
+VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+REPOS="analytics-config-management cos-config-management cpe-config-management slurm-config-management sma-config-management uan-config-management csm-config-management"
+for repo in $REPOS ; do
         curl -X POST https://api-gw-service-nmn.local/vcs/api/v1/orgs/cray/repos -u ${VCS_USER}:${VCS_PASSWORD} -d name=${repo}
      done
 ```

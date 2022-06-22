@@ -22,7 +22,7 @@ This output contains examples of three UAI classes:
 * A non-brokered End-User UAI class
 
 ```bash
-ncn-m001-pit# cray uas admin config classes list --format json
+ncn-m001-cray uas admin config classes list --format json
 ```
 
 Example output:
@@ -452,6 +452,6 @@ There is no way to create a UAI from a class in the Legacy Mode UAI Creation pro
 
 Manually created UAIs must be reached by direct SSH from external hosts, so they need to have a presence on an external network. Setting `public_ip` to `true` makes this work.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: List Available UAI Classes](List_Available_UAI_Classes.md)

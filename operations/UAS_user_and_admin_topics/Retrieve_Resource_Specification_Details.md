@@ -17,19 +17,19 @@ Retrieve a resource specification.
 To examine a particular resource specification, use a command of the following form:
 
 ```bash
-ncn-m001-pit# cray uas admin config resources describe RESOURCE_ID
+ncn-m001-cray uas admin config resources describe RESOURCE_ID
 ```
 
 For example:
 
 ```bash
-ncn-m001-pit# cray uas admin config resources describe f26ee12c-6215-4ad1-a15e-efe4232f45e6
+ncn-m001-cray uas admin config resources describe f26ee12c-6215-4ad1-a15e-efe4232f45e6
 comment = "Resource Specification to use with Brokered End-User UAIs"
 limit = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
 request = "{\"cpu\": \"300m\", \"memory\": \"1Gi\"}"
 resource_id = "f26ee12c-6215-4ad1-a15e-efe4232f45e6"
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Update a Resource Specification](Update_a_Resource_Specification.md)

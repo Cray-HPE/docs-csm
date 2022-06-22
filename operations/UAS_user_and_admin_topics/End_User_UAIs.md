@@ -24,6 +24,6 @@ The [Brokered UAI Management](Broker_Mode_UAI_Management.md) mode simplifies thi
 the user may initiate any number of SSH sessions to that UAI (or, in the case of Broker UAIs the broker serving that UAI), but no other user will be recognized by the UAI when attempting to connect.
 In case of Broker UAIs each unique user will be assigned a unique End-User UAI upon successful login. Multiple sessions of the same user will be will be forwarded by the Broker UAI to the same End-User UAI.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Special Purpose UAIs](Special_Purpose_UAIs.md)

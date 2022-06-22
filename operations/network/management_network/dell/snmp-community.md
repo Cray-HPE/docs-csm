@@ -1,25 +1,25 @@
-# SNMPv2c community
+# Configure SNMPv2c Community
 
-The switch supports SNMPv2c community-based security for Read-Only access.
+The switch supports SNMPv2c community-based security for read-only access.
 
-Relevant Configuration
+## Configuration Commands
 
-Configure an SNMPv2c community name
+Configure an SNMPv2c community name:
 
-```
-switch(config)# snmp-server community community-name
-```
-
-Show Commands to Validate Functionality
-
-```
-switch# show snmp community
+```text
+snmp-server community community-name
 ```
 
-Expected Results
+Show commands to validate functionality:
 
-* Step 1: You can configure the community name
-* Step 2: You can bind the SNMP server to the default VRF
-* Step 3: You can connect from the workstation using the community name
+```text
+show snmp community
+```
 
-[Back to Index](../index.md)
+## Expected Results
+
+1. Administrators can configure the community name
+2. Administrators can bind the SNMP server to the default VRF
+3. Administrators can connect from the workstation using the community name
+
+[Back to Index](../README.md)

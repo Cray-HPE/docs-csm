@@ -14,10 +14,10 @@ To recover from this situation, the following can be done.
 1. Re-run the Keycloak localize job.
 
    ```bash
-   ncn# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
+   kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
            -ojson | jq '.items[0]' > keycloak-users-localize-job.json
-   ncn# kubectl delete job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize
-   ncn# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
+   kubectl delete job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize
+   cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
            jq 'del(.spec.template.metadata.labels)' | kubectl apply -f -
    ```
 
@@ -31,14 +31,14 @@ To recover from this situation, the following can be done.
 1. Check to see if the `keycloak-users-localize` job has completed.
 
    ```bash
-   ncn# kubectl -n services wait --for=condition=complete --timeout=10s job/`kubectl -n services get jobs | grep users-localize | awk '{print $1}'`
+   kubectl -n services wait --for=condition=complete --timeout=10s job/`kubectl -n services get jobs | grep users-localize | awk '{print $1}'`
    ```
 
 1. If the above command returns output containing `condition met` then the issue is resolved and you can skip the rest of the steps.
 1. If the above command returns output containing `error: timed out waiting for the condition` then check the logs of the `keycloak-users-localize` pod.
 
    ```bash
-   ncn# kubectl -n services logs `kubectl -n services get pods | grep users-localize | awk '{print $1}'` keycloak-localize
+   kubectl -n services logs `kubectl -n services get pods | grep users-localize | awk '{print $1}'` keycloak-localize
    ```
 
 1. If you see an error showing that there is a duplicate group, complete the next step.
@@ -47,10 +47,10 @@ To recover from this situation, the following can be done.
 1. Re-run the Keycloak localize job.
 
    ```bash
-   ncn# kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
+   kubectl get job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize \
            -ojson | jq '.items[0]' > keycloak-users-localize-job.json
-   ncn# kubectl delete job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize
-   ncn# cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
+   kubectl delete job -n services -l app.kubernetes.io/name=cray-keycloak-users-localize
+   cat keycloak-users-localize-job.json | jq 'del(.spec.selector)' | \
            jq 'del(.spec.template.metadata.labels)' | kubectl apply -f -
    ```
 
@@ -64,7 +64,7 @@ To recover from this situation, the following can be done.
 1. Check again to make sure the job has now completed.
 
    ```bash
-   ncn# kubectl -n services wait --for=condition=complete --timeout=10s job/`kubectl -n services get jobs | grep users-localize | awk '{print $1}'`
+   kubectl -n services wait --for=condition=complete --timeout=10s job/`kubectl -n services get jobs | grep users-localize | awk '{print $1}'`
    ```
 
    You should see output containing `condition met`.

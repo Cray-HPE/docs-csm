@@ -10,11 +10,10 @@ The System Layout Service \(SLS\) database has been dumped. See [Dump SLS Inform
 
 ### Procedure
 
-
 1.  Use the get\_token function to retrieve a token to validate requests to the API gateway.
 
     ```bash
-    ncn-m001# function get_token () {
+    function get_token () {
         curl -s -S -d grant_type=client_credentials \
             -d client_id=admin-client \
             -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
@@ -27,7 +26,7 @@ The System Layout Service \(SLS\) database has been dumped. See [Dump SLS Inform
     This will upload and overwrite the current SLS database with the contents of the posted file, as well as update the Vault with the encrypted credentials. The private key that was used to generate the SLS dump file is required.
 
     ```bash
-    ncn-m001# curl -X POST \
+    curl -X POST \
     https://api-gw-service-nmn.local/apis/sls/v1/loadstate \
     -H "Authorization: Bearer $(get_token)" \
     -F sls_dump=@sls_dump.json \

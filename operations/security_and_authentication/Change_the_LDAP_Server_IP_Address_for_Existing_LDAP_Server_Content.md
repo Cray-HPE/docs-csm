@@ -12,7 +12,6 @@ The contents of the new LDAP server are the same as the previous LDAP server. Fo
 
 Follow the steps in only one of the sections below depending on if it is preferred to use the Keycloak REST API or Keycloak administration console UI.
 
-
 ### Use the Keycloak Administration Console UI
 
 1.  Log in to the administration console.
@@ -35,7 +34,6 @@ Follow the steps in only one of the sections below depending on if it is preferr
 
     When the synchronize process completes, the pop-up will show that the update was successful. There should be minimal or no changes because the contents of the servers are the same.
 
-
 ### Use the Keycloak REST API
 
 1.  Create a function to get a token as a Keycloak master administrator.
@@ -52,18 +50,18 @@ Follow the steps in only one of the sections below depending on if it is preferr
 2.  Get the component ID for the LDAP user federation.
 
     ```bash
-    ncn-w001# COMPONENT_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
+    COMPONENT_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components \
     | jq -r '.[] | select(.providerId=="ldap").id')
 
-    ncn-w001# echo $COMPONENT_ID
+    echo $COMPONENT_ID
     57817383-e4a0-4717-905a-ea343c2b5722
     ```
 
 3.  Get the current representation of the LDAP user federation.
 
     ```bash
-    ncn-w001# curl -s -H "Authorization: Bearer $(get_master_token)" \
+    curl -s -H "Authorization: Bearer $(get_master_token)" \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components/$COMPONENT_ID \
     | jq . > keycloak_ldap.json
     ```
@@ -96,7 +94,7 @@ Follow the steps in only one of the sections below depending on if it is preferr
 4.  Edit the keycloak\_ldap.json file and set the connectionUrl string to the new URL with the new IP address.
 
     ```bash
-    ncn-w001# vi keycloak_ldap.json
+    vi keycloak_ldap.json
     ```
 
 5.  Apply the updated keycloak\_ldap.json file to the Keycloak server.
@@ -104,7 +102,7 @@ Follow the steps in only one of the sections below depending on if it is preferr
     The output should show the response code is `HTTP/2 204`.
 
     ```bash
-    ncn-w001# curl -i -XPUT -H "Authorization: Bearer $(get_master_token)" -H \
+    curl -i -XPUT -H "Authorization: Bearer $(get_master_token)" -H \
     "Content-Type: application/json" -d @keycloak_ldap.json \
     https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components/$COMPONENT_ID
     ```

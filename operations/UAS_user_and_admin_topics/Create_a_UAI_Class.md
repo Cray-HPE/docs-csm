@@ -14,7 +14,7 @@ Add a new User Access Instance (UAI) class to the User Access Service (UAS) so t
 Add a UAI class by using the command in the following example.
 
 ```bash
-ncn# cray uas admin config classes create --image-id <image-id> [options]
+cray uas admin config classes create --image-id <image-id> [options]
 ```
 
 The only required option is `--image-id IMAGE_ID` which sets the container image that will be used to create a UAI from this UAI class.
@@ -22,11 +22,11 @@ The only required option is `--image-id IMAGE_ID` which sets the container image
 Other options and arguments can be discovered using the following command:
 
 ```bash
-ncn# cray uas admin config classes create --help
+cray uas admin config classes create --help
 ```
 
 See [UAI Classes](UAI_Classes.md) for more information on what the settings in a UAI class mean and how to use them.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: View a UAI Class](View_a_UAI_Class.md)

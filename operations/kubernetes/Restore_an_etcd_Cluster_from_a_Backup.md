@@ -5,7 +5,7 @@ Use an existing backup of a healthy etcd cluster to restore an unhealthy cluster
 The commands in this procedure can be run on any master node \(`ncn-mXXX`\) or worker node \(`ncn-wXXX`\) on the system.
 
 ---
-**NOTE**
+> **`NOTE`**
 
 Etcd Clusters can be restored using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure.
 If the automation script fails to get the date from backups, follow the manual procedure.
@@ -22,7 +22,7 @@ The automated script will restore the cluster from the most recent backup if it 
 If it does not discover a backup within the last 7 days, it will ask the user if they would like to rebuild the cluster.
 
 ```
-ncn-w001# cd /opt/cray/platform-utils/etcd_restore_rebuild_util
+cd /opt/cray/platform-utils/etcd_restore_rebuild_util
 
 # rebuild/restore a single cluster
 ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-bos-etcd
@@ -58,7 +58,7 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
     The example below uses the Boot Orchestration Service \(BOS\).
 
     ```bash
-    ncn-w001# kubectl exec -it -n operators \
+    kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c boto3 -- list_backups cray-bos
     ```
@@ -80,7 +80,7 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
     Replace etcd.backup\_v277935\_2020-03-30-23:52:54 in the command below with the name of the backup being used.
 
     ```bash
-    ncn-w001# kubectl exec -it -n operators \
+    kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c util -- restore_from_backup cray-bos etcd.backup_v277935_2020-03-30-23:52:54
     ```
@@ -98,7 +98,7 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
         This may take a couple minutes.
 
         ```bash
-        ncn-w001# kubectl -n services get pod | grep SERVICE_NAME
+        kubectl -n services get pod | grep SERVICE_NAME
         ```
 
         Example output:
@@ -114,7 +114,7 @@ etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
         This step will make it possible for future restores to occur. Replace the etcdrestore.etcd.database.coreos.com/cray-bos-etcd value with the name returned in step 2.
 
         ```bash
-        ncn-w001# kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
+        kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
         ```
 
         Example output:

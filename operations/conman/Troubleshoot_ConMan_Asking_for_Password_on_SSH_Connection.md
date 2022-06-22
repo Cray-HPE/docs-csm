@@ -10,15 +10,16 @@ This procedure requires administrative privileges.
 
 ## Procedure
 
-**Note:** this procedure has changed since the CSM 0.9 release.
+> **`NOTE`** this procedure has changed since the CSM 0.9 release.
 
 1. Scale the `cray-console-operator` pods to 0 replicas.
 
     ```bash
-    ncn# kubectl -n services scale --replicas=0 deployment/cray-console-operator
+    kubectl -n services scale --replicas=0 deployment/cray-console-operator
     ```
 
     Example output:
+
     ```text
     deployment.apps/cray-console-operator scaled
     ```
@@ -28,23 +29,24 @@ This procedure requires administrative privileges.
     The following command will give no output when the pod is no longer running.
 
     ```bash
-    ncn# kubectl -n services get pods | grep console-operator
+    kubectl -n services get pods | grep console-operator
     ```
 
 1. Delete the SSH keys in a `cray-console-node` pod.
 
     ```bash
-    ncn# kubectl -n services exec -it cray-console-node-0 -- rm -v /var/log/console/conman.key /var/log/console/conman.key.pub
+    kubectl -n services exec -it cray-console-node-0 -- rm -v /var/log/console/conman.key /var/log/console/conman.key.pub
     ```
 
 1. Restart the `cray-console-operator` pod.
 
     ```bash
-    ncn# kubectl -n services scale --replicas=1 deployment/cray-console-operator
+    kubectl -n services scale --replicas=1 deployment/cray-console-operator
     ```
 
     Example output:
-    ```
+
+    ```text
     deployment.apps/cray-console-operator scaled
     ```
 

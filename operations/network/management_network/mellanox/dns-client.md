@@ -19,7 +19,7 @@ switch(config)# ip domain-list mydomain2.com
 Show Commands to Validate Functionality
 
 ```
-switch# show hosts
+show hosts
 ```
 
 Expected Results
@@ -28,4 +28,4 @@ Expected Results
 * Step 2: The output is correct
 * Step 3: You can ping the device
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

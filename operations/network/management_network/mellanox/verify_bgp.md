@@ -5,7 +5,7 @@ Verify the BGP neighbors are in the established state on BOTH the switches.
 How to check Aruba BGP status:
 
 ```
-sw-spine-002# show bgp ipv4 u s
+show bgp ipv4 u s
 
 VRF : default
 BGP Summary
@@ -22,4 +22,4 @@ BGP Summary
  10.252.1.9      65533       78389   90108   02m:02w:02d  Established   Up
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

@@ -81,10 +81,10 @@ but a different path might make customizing SSSD for a given site simpler under 
 
 1. Create a new entrypoint script.
 
-    **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
+    **`NOTE`** A special "here document" form is used to prevent variable substitution in the file.
 
     ```bash
-    ncn-m001-pit# cat <<-"EOF" > entrypoint.sh
+    ncn-m001-cat <<-"EOF" > entrypoint.sh
     #!/bin/bash
 
     # MIT License
@@ -138,15 +138,15 @@ but a different path might make customizing SSSD for a given site simpler under 
 2. Create a new ConfigMap with the content from the script.
 
     ```bash
-    ncn-m001-pit# kubectl create configmap -n uas broker-entrypoint --from-file=entrypoint.sh
+    ncn-m001-kubectl create configmap -n uas broker-entrypoint --from-file=entrypoint.sh
     ```
 
 3. Create a new volume.
 
-    **NOTE**: The `default_mode` setting, which will set the mode on the file /app/broker/entrypoint.sh is decimal 493 here instead of octal 0755. The octal notation is not permitted in a JSON specification. Decimal numbers have to be used.
+   > **`NOTE`**: The `default_mode` setting, which will set the mode on the file /app/broker/entrypoint.sh is decimal 493 here instead of octal 0755. The octal notation is not permitted in a JSON specification. Decimal numbers have to be used.
 
     ```bash
-    ncn-m001-pit# cray uas admin config volumes create --mount-path /app/broker --volume-description '{"config_map": {"name": "broker-entrypoint", "default_mode": 493}}' --volumename broker-entrypoint
+    ncn-m001-cray uas admin config volumes create --mount-path /app/broker --volume-description '{"config_map": {"name": "broker-entrypoint", "default_mode": 493}}' --volumename broker-entrypoint
     ```
 
     Example output:
@@ -164,7 +164,7 @@ but a different path might make customizing SSSD for a given site simpler under 
 4. List the UAI classes.
 
     ```bash
-    ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
+    ncn-m001-cray uas admin config classes list | grep -e class_id -e comment
     ```
 
     Example output:
@@ -182,7 +182,7 @@ but a different path might make customizing SSSD for a given site simpler under 
 5. Describe the desired UAI class.
 
     ```bash
-    ncn-m001-pit# cray uas admin config classes describe d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
+    ncn-m001-cray uas admin config classes describe d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
     ```
 
     Example output:
@@ -239,7 +239,7 @@ but a different path might make customizing SSSD for a given site simpler under 
 6. Update the UAI class.
 
     ```bash
-    ncn-m001-pit# cray uas admin config classes update \
+    ncn-m001-cray uas admin config classes update \
     --volume-list '11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' \
     d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
     ```
@@ -306,13 +306,13 @@ but a different path might make customizing SSSD for a given site simpler under 
 7. After the Broker UAI class is updated, all that remains is to clear out any existing End-User UAIs (existing UAIs will not work with the new broker because the new broker will have a new key-pair shared with its UAIs)
    and the existing Broker UAI (if any) and create a new Broker UAI.
 
-    **NOTE:** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
+    **`NOTE`** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
 
     1. Clear out the UAIs.
 
         ```bash
-        ncn-m001-pit# cray uas admin uais delete --class-id bdb4988b-c061-48fa-a005-34f8571b88b4
-        ncn-m001-pit# cray uas admin uais delete --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d
+        ncn-m001-cray uas admin uais delete --class-id bdb4988b-c061-48fa-a005-34f8571b88b4
+        ncn-m001-cray uas admin uais delete --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d
         ```
 
         Output similar to `results = [ "Successfully deleted uai-vers-e937b810",]` will be returned for each command.
@@ -320,7 +320,7 @@ but a different path might make customizing SSSD for a given site simpler under 
     2. Restart the broker.
 
         ```bash
-        ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
+        ncn-m001-cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
         ```
 
         Example output:
@@ -374,10 +374,10 @@ The following is an example that follows on from the previous section and config
 
 1. Create a new pre-login `banner` file.
 
-    **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
+    **`NOTE`** A special "here document" form is used to prevent variable substitution in the file.
 
     ```bash
-    ncn-m001-pit# cat <<-"EOF" > banner
+    ncn-m001-cat <<-"EOF" > banner
     Here is a banner that will be displayed before login on
     the Broker UAI
 
@@ -386,10 +386,10 @@ The following is an example that follows on from the previous section and config
 
 2. Create a new `sshd_config`.
 
-    **NOTE:** A special "here document" form is used to prevent variable substitution in the file.
+    **`NOTE`** A special "here document" form is used to prevent variable substitution in the file.
 
     ```bash
-    ncn-m001-pit# cat <<-"EOF" > sshd_config
+    ncn-m001-cat <<-"EOF" > sshd_config
     Port 30123
     AuthorizedKeysFile  .ssh/authorized_keys
     UsePAM yes
@@ -411,13 +411,13 @@ The following is an example that follows on from the previous section and config
 3. Add the new `banner` file and `sshd_config` to a Kubernetes ConfigMap.
 
     ```bash
-    ncn-m001-pit# kubectl create configmap -n uas broker-sshd-conf --from-file sshd_config --from-file banner
+    ncn-m001-kubectl create configmap -n uas broker-sshd-conf --from-file sshd_config --from-file banner
     ```
 
 4. Mount the changes over `/etc/switchboard`.
 
     ```bash
-    ncn-m001-pit# cray uas admin config volumes create \
+    ncn-m001-cray uas admin config volumes create \
                 --mount-path /etc/switchboard \
                 --volume-description '{"config_map": {"name": "broker-sshd-conf", "default_mode": 384}}' \
                 --volumename broker-sshd-config
@@ -438,7 +438,7 @@ The following is an example that follows on from the previous section and config
 5. Update the UAI class.
 
     ```bash
-    ncn-m001-pit# cray uas admin config classes update \
+    ncn-m001-cray uas admin config classes update \
     --volume-list '4577eddf-d81e-40c9-9c91-082f3193edd6,11a4a22a-9644-4529-9434-d296eef2dc48,1ec36af0-d5b6-4ad9-b3e8-755729765d76,2246bbb1-4006-4b11-ba57-6588a7b7c02f,a3b149fd-c477-41f0-8f8d-bfcee87fdd0a' \
     d764c880-41b8-41e8-bacc-f94f7c5b053d --format yaml
     ```
@@ -512,14 +512,14 @@ The following is an example that follows on from the previous section and config
 
 6. Once the new configuration is installed, clean out the old UAIs and restart the broker.
 
-    **NOTE:** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
+    **`NOTE`** Clearing out existing UAIs will terminate any user activity on those UAIs, make sure that users are warned of the disruption.
 
     1. Clean out the old UAIs.
 
         ```bash
-        ncn-m001-pit# cray uas admin uais delete --class-id bdb4988b-c061-48fa-a005-34f8571b88b4
+        ncn-m001-cray uas admin uais delete --class-id bdb4988b-c061-48fa-a005-34f8571b88b4
 
-        ncn-m001-pit#  cray uas admin uais delete --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d
+        ncn-m001- cray uas admin uais delete --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d
         ```
 
         Output similar to `results = [ "Successfully deleted uai-vers-e937b810",]` will be returned for each command.
@@ -527,7 +527,7 @@ The following is an example that follows on from the previous section and config
     2. Restart the broker.
 
         ```bash
-        ncn-m001-pit# cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
+        ncn-m001-cray uas admin uais create --class-id d764c880-41b8-41e8-bacc-f94f7c5b053d --owner broker
         ```
 
         Example output:
@@ -555,6 +555,6 @@ The following is an example that follows on from the previous section and config
     Password:
     ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Customize End-User UAI Images](Customize_End-User_UAI_Images.md)

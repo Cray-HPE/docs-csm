@@ -15,7 +15,7 @@ Deleting log entries creates more space and helps improve the usability of viewi
     The following command will list the BOA jobs.
 
     ```bash
-    ncn-m001# kubectl get jobs -n services | grep boa
+    kubectl get jobs -n services | grep boa
     ```
 
     Example output:
@@ -35,6 +35,6 @@ Deleting log entries creates more space and helps improve the usability of viewi
     Do not delete any jobs that are currently running.
 
     ```bash
-    ncn-m001# kubectl delete jobs BOA_JOB_ID
+    kubectl delete jobs BOA_JOB_ID
     ```
 

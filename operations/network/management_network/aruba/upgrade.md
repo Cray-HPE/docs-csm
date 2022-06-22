@@ -20,7 +20,7 @@ The primary switch continues to have with older software. Administrators can sto
   * Via WEB UI
   * Via TFTP or SFTP
 
-> **NOTE:** If you do not want to proceed with pre-staging you can also upload the new software directly using `vsx update-software` command. However, you will be limited to only using TFTP if you choose not to pre-stage the firmware.
+> **`NOTE`** If you do not want to proceed with pre-staging you can also upload the new software directly using `vsx update-software` command. However, you will be limited to only using TFTP if you choose not to pre-stage the firmware.
 
 ## VSX Upgrade Command
 
@@ -48,10 +48,10 @@ vrf <VRF-NAME>
 
 ## Example of Updating Software via TFTP
 
-> **NOTE:** If the new software is already pre-staged, call the image bank where the new image is located instead of using the TFTP.
+> **`NOTE`** If the new software is already pre-staged, call the image bank where the new image is located instead of using the TFTP.
 
 ```text
-switch# vsx update-software tftp://192.168.1.1/XL.10.0x.xxxx vrf mgmt
+vsx update-software tftp://192.168.1.1/XL.10.0x.xxxx vrf mgmt
 Do you want to save the current configuration (y/n)? y
 The running configuration was saved to the startup configuration.
 
@@ -65,4 +65,4 @@ Progress [......................................................................
 Secondary VSX system updated completely. Rebooting primary.
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

@@ -6,20 +6,21 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
 
 > **NOTICE:** These steps are based off [upstream Ceph documentation](https://docs.ceph.com/en/octopus/cephfs/troubleshooting/).
 
-
 ## Prerequisites
 
 * The [Identify Ceph Latency Issues](Identify_Ceph_Latency_Issues.md) procedure has been completed.
 * This issue has been encountered and this page is being used as a reference for commands.
 * The correct version of the documentation for the cluster running is being used.
 
-
 ## Procedure
 
 1. Identify the active MDS.
 
    ```bash
-   ncn-s00(1/2/3)# ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name'
+   ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name'
+   ```
+
+   ```text
    cephfs.ncn-s003.ihwkop
    ```
 
@@ -28,7 +29,7 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
 3. Enter into a cephadm shell.
 
    ```bash
-   ncn-s003# cephadm shell
+   cephadm shell
    ```
 
    Example output:
@@ -40,25 +41,24 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
    [ceph: root@ncn-s003 /]#
    ```
 
-   > **NOTE:** Messages such as "WARNING: The same type, major and minor should not be used for multiple devices" can be ignored. There is an upstream bug to address this issue.
+   > **`NOTE`** Messages such as "WARNING: The same type, major and minor should not be used for multiple devices" can be ignored. There is an upstream bug to address this issue.
 
-4. Dump in-flight ops.
+4. (`ceph#`) Dump in-flight ops.
 
    ```bash
-   [ceph: root@ncn-s003 /]# ceph daemon mds.cephfs.ncn-s003.ihwkop dump_ops_in_flight
+   ceph daemon mds.cephfs.ncn-s003.ihwkop dump_ops_in_flight
    ```
 
    Example output:
 
-   ```
+   ```json
    {
        "ops": [],
        "num_ops": 0
    }
    ```
 
-   > **NOTE:** The example above is about how to run the command. Recreating the exact scenario to provide a full example is not easily done. This will be updated when the information is available.
-
+   > **`NOTE`** The example above is about how to run the command. Recreating the exact scenario to provide a full example is not easily done. This will be updated when the information is available.
 
 ## General Steps from Upstream
 

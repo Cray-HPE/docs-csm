@@ -14,6 +14,6 @@ Broker UAIs present a single SSH endpoint that responds to each SSH connection b
 
 A site may provide any number of [Custom End-User UAI Images](Customize_End-User_UAI_Images.md) as needed to support various use cases and workflows.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Listing Registered UAI Images](List_Registered_UAI_Images.md)

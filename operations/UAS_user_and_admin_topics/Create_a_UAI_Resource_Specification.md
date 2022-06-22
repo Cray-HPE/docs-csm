@@ -17,13 +17,13 @@ Add a resource specification.
 Use a command of the following form:
 
 ```bash
-ncn# cray uas admin config resources create [--limit <k8s-resource-limit>] [--request <k8s-resource-request>] [--comment '<string>']
+cray uas admin config resources create [--limit <k8s-resource-limit>] [--request <k8s-resource-request>] [--comment '<string>']
 ```
 
 For example:
 
 ```bash
-ncn# cray uas admin config resources create --request '{"cpu": "300m", "memory": "1Gi"}' \
+cray uas admin config resources create --request '{"cpu": "300m", "memory": "1Gi"}' \
             --limit '{"cpu": "300m", "memory": "1Gi"}' \
             --comment "Resource Specification to use with Brokered End-User UAIs"
 ```
@@ -36,6 +36,6 @@ If the request is greater than the limit, UAIs created with the request specific
 
 All of the configurable parts are optional when adding a resource specification. If none are provided, an empty resource specification with only a `resource_id` will be created.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Retrieve Resource Specification Details](Retrieve_Resource_Specification_Details.md)

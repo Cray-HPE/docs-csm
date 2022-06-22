@@ -6,12 +6,11 @@ The common image is customized with a storage-ceph layer for the utility storage
 
 ### Topics:
 
-   * [Overview of NCN Images](#overview_ncn_images)
-   * [LiveCD Server](#livecd_server)
+   * [Overview of NCN Images](#overview-ncn-images)
+   * [LiveCD Server](#livecd-server)
 
 ## Details
 
-<a name="overview_ncn_images"></a>
 #### Overview of NCN Images
 
 There are several flavors of NCN images, each share a common base image. When booting NCNs an admin or user will need to choose between
@@ -33,17 +32,16 @@ To boot an NCN, you need 3 artifacts for each node-type (kubernetes-manager/work
     - `$version-[RELEASE].kernel`
     - `storage-ceph-[RELEASE].squashfs`
 
-<a name="livecd_server"></a>
 ### LiveCD Server
 
-1. View the current ephemeral data payload:
-
+1. (`pit#`) View the current ephemeral data payload:
+   
    ```bash
-   pit# ls -l /var/www
+   ls -l /var/www
    total 8
    drwxr-xr-x 1 dnsmasq tftp 4096 Dec 17 21:20 boot
    drwxr-xr-x 7 root    root 4096 Dec  2 04:45 ephemeral
-   pit# ls -l /var/www/ephemeral/data/*
+   ls -l /var/www/ephemeral/data/*
    /var/www/ephemeral/data/ceph:
    total 4
    drwxr-xr-x 2 root root 4096 Dec 17 21:42 0.0.7
@@ -53,10 +51,10 @@ To boot an NCN, you need 3 artifacts for each node-type (kubernetes-manager/work
    drwxr-xr-x 2 root root 4096 Dec 17 21:26 0.0.8
    ```
 
-1. Setup the "booting repositories":
+1. (`pit#`) Setup the "booting repositories":
 
    ```bash
-   pit# set-sqfs-links.sh
+   set-sqfs-links.sh
    Mismatching kernels! The discovered artifacts will deploy an undesirable stack.
    mkdir: created directory 'ncn-m001'
    /var/www/ncn-m001 /var/www
@@ -108,10 +106,10 @@ To boot an NCN, you need 3 artifacts for each node-type (kubernetes-manager/work
    /var/www
    ```
 
-1. View the currently set links
+1. (`pit#`) View the currently set links
 
    ```bash
-   pit# ls -l /var/www/ncn-*
+   ls -l /var/www/ncn-*
    boot:
    total 1552
    -rw-r--r-- 1 root    root 166634 Dec 17 13:21 graffiti.png

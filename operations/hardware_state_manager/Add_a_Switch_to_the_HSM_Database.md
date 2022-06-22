@@ -6,24 +6,20 @@ Manually add a switch to the Hardware State Manager \(HSM\) database. Switches n
 
 -   The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
-
 ### Procedure
-
 
 1.  Add the switch to the HSM database.
 
     The `--rediscover-on-update true` flag forces HSM to discover the switch.
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints create --id XNAME --fqdn IP_ADDRESS --user USERNAME \
+    cray hsm inventory redfishEndpoints create --id XNAME --fqdn IP_ADDRESS --user USERNAME \
     --password PASSWORD --rediscover-on-update true
     ```
 
     For example:
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints create --id x3000c0r41b0 --fqdn 10.254.2.17 --user root \
-    --password YourPassword --rediscover-on-update true
     [[results]]
     URI = "/hsm/v2/Inventory/RedfishEndpoints/x3000c0r41b0"
     ```
@@ -31,7 +27,7 @@ Manually add a switch to the Hardware State Manager \(HSM\) database. Switches n
 2.  Verify that HSM successfully discovered the switch.
 
     ```bash
-    ncn-m001# cray hsm inventory redfishEndpoints list --id XNAME
+    cray hsm inventory redfishEndpoints list --id XNAME
     ```
 
     Example output:

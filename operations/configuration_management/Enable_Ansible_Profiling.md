@@ -7,18 +7,18 @@ Ansible tasks and playbooks can be profiled in order to determine execution time
 1.  Edit the `cfs-default-ansible-cfg` ConfigMap.
 
     ```bash
-    ncn# kubectl edit cm cfs-default-ansible-cfg -n services
+    kubectl edit cm cfs-default-ansible-cfg -n services
     ```
 
-2.  Uncomment the indicated line by removing the \# character from the beginning of the line.
+1.  Uncomment the indicated line by removing the \# character from the beginning of the line.
 
-    ```bash
+    ```yaml
     #callback_whitelist    = cfs_aggregator, timer, profile_tasks, profile_roles
     ```
 
-3.  Comment out the indicated line by adding a \# character to the beginning of the line.
+1.  Comment out the indicated line by adding a \# character to the beginning of the line.
 
-    ```bash
+    ```yaml
     callback_whitelist    = cfs_aggregator
     ```
 

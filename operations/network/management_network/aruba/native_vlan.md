@@ -13,7 +13,7 @@ switch(config-if)# vlan trunk native VLAN
 Show commands to validate functionality:
 
 ```text
-switch# show vlan [VLAN]
+show vlan [VLAN]
 ```
 
 ## Example Output
@@ -27,7 +27,7 @@ switch(config-if)# no shutdown
 switch(config-if)# no routing
 switch(config-if)# vlan trunk native 100
 switch(config-if)# exit
-switch# show vlan
+show vlan
 --------------------------------------------------------------------------------------
 VLAN  Name                              Status  Reason          Type      Interfaces
 --------------------------------------------------------------------------------------
@@ -42,5 +42,5 @@ VLAN  Name                              Status  Reason          Type      Interf
 3. Administrators can configure an IP address on the VLAN interface
 4. Administrators can successfully ping the other switch's VLAN interface
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)
 

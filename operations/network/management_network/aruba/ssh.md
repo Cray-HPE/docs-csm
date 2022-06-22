@@ -33,13 +33,13 @@ switch(config)# ssh known-host remove <all|IP-ADDR>
 Show commands to validate functionality:
 
 ```text
-switch# show ssh server [vrf VRF|all-vrfs]
+show ssh server [vrf VRF|all-vrfs]
 ```
 
 ## Example Output
 
 ```text
-switch# show ssh server all-vrfs
+show ssh server all-vrfs
 SSH server configuration on VRF vrf_default :
 IP Version
 TCP Port
@@ -65,4 +65,4 @@ MACs      :  umac-64-etm@openssh.com,umac-128-etm@openssh.com,
 3. The output of the `show` commands is correct
 4. Administrators can successfully connect to the switch via an SSH client using SSH 2.0
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

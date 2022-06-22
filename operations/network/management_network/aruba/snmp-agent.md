@@ -31,7 +31,7 @@ switch(config)# snmp-server host IP-ADDR <trap|inform> version v2c [community NA
 Show commands to validate functionality:
 
 ```text
-switch# show snmp [agent-port|community|trap|vrf] [vsx-peer]
+show snmp [agent-port|community|trap|vrf] [vsx-peer]
 ```
 
 ## Example Output
@@ -43,20 +43,20 @@ switch(config)# snmp-server community public
 switch(config)# snmp-server host 1.2.3.4 trap version v2c community public
 switch(config)# snmp-server host 1.2.3.4 inform version v2c community public
 switch(config)# end
-switch# show snmp community
+show snmp community
 ---------------------
 SNMP communities
 ---------------------
 Public
 
-switch# show snmp vrf
+show snmp vrf
 SNMP enabled VRF
 ----------------------------
 Default
 
-switch# show snmp agent-port
+show snmp agent-port
 SNMP agent port : 10601
-switch# show snmp trap
+show snmp trap
 ------------------------------------------------------------------------------------------
 Host                     Port  Type      Version SecName                         vrf
 ------------------------------------------------------------------------------------------
@@ -70,4 +70,4 @@ Host                     Port  Type      Version SecName                        
 2. The output of all `show` commands is correct
 3. Administrators can connect to the switch from the workstation
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

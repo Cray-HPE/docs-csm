@@ -13,7 +13,7 @@ Git commit, a name, and the path in the repository to an Ansible playbook to exe
 1. Create a JSON file to hold data about the CFS configuration.
 
    ```bash
-   ncn# cat configurations-example.json
+   cat configurations-example.json
    ```
 
    Example configuration:
@@ -41,8 +41,8 @@ Git commit, a name, and the path in the repository to an Ansible playbook to exe
 2. Add the configuration to CFS with the JSON file.
 
    ```bash
-   ncn# cray cfs configurations update configurations-example \
-   --file ./configurations-example.json --format json
+   cray cfs configurations update configurations-example \
+      --file ./configurations-example.json --format json
    ```
 
    Example output:

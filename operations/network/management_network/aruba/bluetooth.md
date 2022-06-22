@@ -7,19 +7,19 @@ The Bluetooth feature allows Bluetooth enabled devices to connect to and manage 
 Turn on the USB port:
 
 ```
-switch# usb mount
+usb mount
 ```
 
 Enable Bluetooth:
 
 ```
-switch# bluetooth enable
+bluetooth enable
 ```
 
 Show Commands to Validate Functionality:
 
 ```
-switch# show bluetooth
+show bluetooth
 ```
 
 ## Example Output
@@ -46,8 +46,8 @@ Name                   MAC Address
 Bluetooth not enabled:
 
 ```
-Switch# no Bluetooth enable
-Switch# show bluetooth
+no Bluetooth enable
+show bluetooth
 Enabled             : No
 ```
 
@@ -58,4 +58,4 @@ Enabled             : No
 1. Administrators can edit the configuration via the Bluetooth connection
 1. The output of the show commands looks correct
 
-[[Back to Index](../index.md)
+[[Back to Index](../README.md)

@@ -10,12 +10,13 @@ The log file locations for ConMan, DHCP, and TFTP.
 - DHCP:
 
     ```bash
-    ncn-m001# kubectl logs DHCP_POD_ID
+    kubectl logs DHCP_POD_ID
     ```
+
 - TFTP:
 
     ```bash
-    ncn-m001# kubectl logs -n services TFTP_POD_ID
+    kubectl logs -n services TFTP_POD_ID
     ```
 
 ### Port IDs

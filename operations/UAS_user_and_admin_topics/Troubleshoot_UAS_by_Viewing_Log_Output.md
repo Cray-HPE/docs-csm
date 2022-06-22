@@ -8,7 +8,7 @@ It is sometimes useful to examine the UAS service logs to find out what is wrong
 1. Find the names of the Kubernetes pods running UAS:
 
     ```bash
-    ncn-m001-pit# kubectl get po -n services | grep uas | grep -v etcd
+    ncn-m001-kubectl get po -n services | grep uas | grep -v etcd
     ```
 
     Example output:
@@ -30,7 +30,7 @@ It is sometimes useful to examine the UAS service logs to find out what is wrong
     The following is an example where the last 25 lines of useful log output are retrieved from the pod `cray-uas-mgr-6bbd584ccb-zg8vx`:
 
     ```bash
-    ncn-m001-pit# kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v '"GET ' | tail -25
+    ncn-m001-kubectl logs -n services cray-uas-mgr-6bbd584ccb-zg8vx cray-uas-mgr | grep -v '"GET ' | tail -25
     ```
 
     Example output:
@@ -66,6 +66,6 @@ It is sometimes useful to examine the UAS service logs to find out what is wrong
 If an error had occurred in UAS that error would likely show up here.
 Because there are two replicas of `cray-uas-mgr` running, the logging of interest may be in the other pod, so apply the same command to the other pod if the information is not here.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Troubleshoot UAIs by Viewing Log Output](Troubleshoot_UAIs_by_Viewing_Log_Output.md)

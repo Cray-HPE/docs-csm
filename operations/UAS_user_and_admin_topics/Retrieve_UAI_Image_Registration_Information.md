@@ -19,7 +19,7 @@ This procedure returns the same information as [List Registered UAI Images](List
 2. Query UAS for the registration details for a specific registered UAI.
 
     ```bash
-    ncn-m001-pit# cray uas admin config images describe 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
+    ncn-m001-cray uas admin config images describe 8fdf5d4a-c190-24c1-2b96-74ab98c7ec07
     ```
 
     Example output:
@@ -31,6 +31,6 @@ This procedure returns the same information as [List Registered UAI Images](List
     imagename = "registry.local/cray/custom-end-user-uai:latest"
     ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Update a UAI Image Registration](Update_a_UAI_Image_Registration.md)

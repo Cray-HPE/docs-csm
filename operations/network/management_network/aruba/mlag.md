@@ -21,7 +21,7 @@ switch(config-if)# no shutdown switch(config-if)# lag LAG
 Show commands to validate functionality:
 
 ```text
-switch# show mclag <brief|configuration|status>
+show mclag <brief|configuration|status>
 ```
 
 ## Example Output
@@ -43,5 +43,4 @@ switch(config-if)# end
 3. Administrators can add ports to the MCLAG interface
 4. The output of the `show` commands is correct
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

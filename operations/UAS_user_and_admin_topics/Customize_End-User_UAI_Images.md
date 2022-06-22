@@ -18,7 +18,7 @@ Some of the steps are specific to that activity, others would be common to or si
 
 See [Configure the Cray CLI](../configure_cray_cli.md).
 
-**NOTE:** This procedure cannot be run from a PIT node or an external host, it must be run from a Kubernetes worker or master node.
+**NOTE:** This procedure cannot be run from a PIT node or an external host. It must be run from a Kubernetes worker or master node.
 
 ## Procedure
 
@@ -202,7 +202,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     ```bash
     umount -v mount; rmdir -v mount
 
-    rm $ST_ID.tar rootfs.squashfs
+    rm -v $ST_ID.tar rootfs.squashfs
 
     # NOTE: The next step could be done as an `rm -rf` but, because the user
     #       is `root` and the path is very similar to an important system

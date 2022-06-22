@@ -11,7 +11,7 @@ switch(config)# ip route vrf default 0.0.0.0/0 null0
 Show Commands to Validate Functionality
 
 ```
-switch# show ip route
+show ip route
 ```
 
 Expected Results
@@ -20,4 +20,4 @@ Expected Results
 * Step 2: You can validate using the show command(s) above
 * Step 3: You can ping the connected device
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

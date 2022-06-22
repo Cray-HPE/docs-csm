@@ -16,7 +16,7 @@ The LDAP server that provides password resolution and user account federation su
     Set the userExportNameSource field to homeDirectory in the spec.kubernetes.services.cray-keycloak-users-localize field in the customizations.yaml file.
 
     ```bash
-    ncn-w001# vi customizations.yaml
+    vi customizations.yaml
     ```
 
 2.  Re-apply the cray-keycloak-users-localize Helm chart.
@@ -26,7 +26,7 @@ The LDAP server that provides password resolution and user account federation su
 3. Upload the modified customizations.yaml file to Kubernetes.
 
    ```bash
-   ncn-m001# kubectl delete secret -n loftsman site-init
-   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 

@@ -80,7 +80,7 @@ a minimum bound, on the amount of power a system may consume. Separate CAPMC
 calls are required to power cap different compute node types as each compute
 node type has its own power capping capabilities.
 
-**NOTE:** Power capping is not supported for liquid cooled chassis, switch
+**`NOTE`** Power capping is not supported for liquid cooled chassis, switch
 modules, compute blades, and any non-compute nodes (NCNs) in air cooled
 cabinets.
 

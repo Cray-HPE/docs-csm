@@ -21,7 +21,7 @@ This section applies to all node types. The commands in this section assume the 
     1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
 
         ```bash
-        linux# BMC=${NODE}-mgmt
+        BMC=${NODE}-mgmt
         ```
 
     1. Set and export the root password of the BMC.
@@ -30,26 +30,26 @@ This section applies to all node types. The commands in this section assume the 
         > being saved in the shell history.
 
         ```bash
-        linux# read -s IPMI_PASSWORD
-        linux# export IPMI_PASSWORD
+        read -s IPMI_PASSWORD
+        export IPMI_PASSWORD
         ```
 
     1. Set the PXE/efiboot option.
 
         ```bash
-        linux# ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
+        ipmitool -I lanplus -U root -E -H $BMC chassis bootdev pxe options=efiboot
         ```
 
     1. Power off the node.
 
         ```bash
-        linux# ipmitool -I lanplus -U root -E -H $BMC chassis power off
+        ipmitool -I lanplus -U root -E -H $BMC chassis power off
         ```
 
     1. Verify that the node is off.
 
         ```bash
-        linux# ipmitool -I lanplus -U root -E -H $BMC chassis power status
+        ipmitool -I lanplus -U root -E -H $BMC chassis power status
         ```
 
         Ensure the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
@@ -57,7 +57,7 @@ This section applies to all node types. The commands in this section assume the 
     1. Power on the node.
 
         ```bash
-        linux# ipmitool -I lanplus -U root -E -H $BMC chassis power on
+        ipmitool -I lanplus -U root -E -H $BMC chassis power on
         ```
 
     1. Verify that the node is on.
@@ -65,7 +65,7 @@ This section applies to all node types. The commands in this section assume the 
        Ensure the power is reporting as on. This may take 5-10 seconds for this to update.
 
        ```bash
-       linux# ipmitool -I lanplus -U root -E -H $BMC chassis power status
+       ipmitool -I lanplus -U root -E -H $BMC chassis power status
        ```
 
 1. Observe the boot.
@@ -86,7 +86,7 @@ This section applies to all node types. The commands in this section assume the 
     * **Master nodes only:** If `cloud-init` did not complete the newly rebuilt node will need to have its `etcd` service definition manually updated. Reconfigure the `etcd` service, and restart `cloud-init` on the newly rebuilt master:
 
        ```bash
-       ncn-m# systemctl stop etcd.service; sed -i 's/new/existing/' \
+       systemctl stop etcd.service; sed -i 's/new/existing/' \
               /etc/systemd/system/etcd.service /srv/cray/resources/common/etcd/etcd.service; \
               systemctl daemon-reload ; rm -rf /var/lib/etcd/member; \
               systemctl start etcd.service; /srv/cray/scripts/common/kubernetes-cloudinit.sh
@@ -99,7 +99,7 @@ This section applies to all node types. The commands in this section assume the 
     1. Re-run `cloud-init` on the newly rebuilt node:
 
        ```bash
-       ncn-m# cloud-init clean; cloud-init init --local; cloud-init init
+       cloud-init clean; cloud-init init --local; cloud-init init
        ```
 
 1. Set the wipe flag back so it will not wipe the disk when the node is rebooted.
@@ -107,7 +107,7 @@ This section applies to all node types. The commands in this section assume the 
    1. Run the following commands from a node that has `cray` CLI initialized:
 
        ```bash
-       ncn# cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
+       cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
        ```
 
    1. Edit the `XNAME.json` file and set the `metal.no-wipe=1` value.
@@ -115,7 +115,7 @@ This section applies to all node types. The commands in this section assume the 
    1. Get a token to interact with BSS using the REST API.
 
        ```bash
-       ncn# TOKEN=$(curl -s -S -d grant_type=client_credentials \
+       TOKEN=$(curl -s -S -d grant_type=client_credentials \
            -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
            -o jsonpath='{.data.client-secret}' | base64 -d` \
            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
@@ -127,7 +127,7 @@ This section applies to all node types. The commands in this section assume the 
       This command can be run from any node.
 
        ```bash
-       ncn# curl -i -s -k -H "Content-Type: application/json" \
+       curl -i -s -k -H "Content-Type: application/json" \
            -H "Authorization: Bearer ${TOKEN}" \
            "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" \
            -X PUT -d @./${XNAME}.json
@@ -138,13 +138,13 @@ This section applies to all node types. The commands in this section assume the 
       * Export the list from BSS to a file with a different name.
 
         ```bash
-        ncn# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
+        cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
         ```
 
       * Compare the new JSON file with what was put into BSS.
 
         ```bash
-        ncn# diff ${XNAME}.json ${XNAME}.check.json
+        diff ${XNAME}.json ${XNAME}.check.json
         ```
 
       The files should be identical.

@@ -16,7 +16,7 @@ The following services are backed up \(daily, one week's worth of backups retain
 Run the following command on any master node \(`ncn-mXXX`\) or the first worker node \(`ncn-w001`\) to list the backups for a specific project. In the example below, the backups for BSS are listed.
 
 ```bash
-ncn-w001# kubectl exec -it -n operators $(kubectl get pod -n operators \
+kubectl exec -it -n operators $(kubectl get pod -n operators \
 | grep etcd-backup-restore | head -1 | awk '{print $1}') \
 -c boto3 -- list_backups cray-bss
 ```
@@ -33,7 +33,7 @@ cray-bss/etcd.backup_v7210_2020-02-03-20:45:48
 To view all available backups across all projects:
 
 ```bash
-ncn-w001# kubectl exec -it -n operators $(kubectl get pod -n operators \
+kubectl exec -it -n operators $(kubectl get pod -n operators \
 | grep etcd-backup-restore | head -1 | awk '{print $1}') -c boto3 -- list_backups ""
 ```
 

@@ -11,7 +11,6 @@ Restore Postgres Procedures by Service:
   * [Capsules Warehouse Server](#capsules-warehouse-server)
   * [Capsules Dispatch Server](#capsules-dispatch-server)
 
-<a name="spire"> </a>
 
 ## Restore Postgres for Spire
 
@@ -27,9 +26,9 @@ This assumes that a dump of the database exists.
     The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
     ```bash
-    ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
+    export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
 
-    ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
+    export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
     ```
 
     **list.py:**
@@ -84,52 +83,52 @@ This assumes that a dump of the database exists.
 2. Scale the Spire service to 0.
 
     ```bash
-    ncn-w001# CLIENT=spire-server
-    ncn-w001# NAMESPACE=spire
-    ncn-w001# POSTGRESQL=spire-postgres
+    CLIENT=spire-server
+    NAMESPACE=spire
+    POSTGRESQL=spire-postgres
 
-    ncn-w001# kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=0
+    kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=0
 
     # Wait for the pods to terminate
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
 3. Delete the Spire Postgres cluster.
 
     ```bash
-    ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
+    kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
 
-    ncn-w001# kubectl delete -f postgres-cr.json
+    kubectl delete -f postgres-cr.json
 
     # Wait for the pods to terminate
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
 4. Create a new single instance Spire Postgres cluster.
 
     ```bash
-    ncn-w001# cp postgres-cr.json postgres-orig-cr.json
-    ncn-w001# jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
-    ncn-w001# kubectl create -f postgres-cr.json
+    cp postgres-cr.json postgres-orig-cr.json
+    jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
+    kubectl create -f postgres-cr.json
 
     # Wait for the pod and Postgres cluster to start running
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pod to start running"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pod to start running"; sleep 2; done
 
-    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
 5. Copy the database dump file to the Postgres member.
 
     ```bash
-    ncn-w001# DUMPFILE=spire-postgres-2021-07-21T19:03:18.psql
+    DUMPFILE=spire-postgres-2021-07-21T19:03:18.psql
 
-    ncn-w001# kubectl cp ./${DUMPFILE} "${POSTGRESQL}-0":/home/postgres/${DUMPFILE} -c postgres -n ${NAMESPACE}
+    kubectl cp ./${DUMPFILE} "${POSTGRESQL}-0":/home/postgres/${DUMPFILE} -c postgres -n ${NAMESPACE}
     ```
 
 6. Restore the data.
 
     ```bash
-    ncn-w001# kubectl exec "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE} -it -- psql -U postgres < ${DUMPFILE}
+    kubectl exec "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE} -it -- psql -U postgres < ${DUMPFILE}
     ```
 
 7. Either update or re-create the `spire-postgres` secrets.
@@ -141,7 +140,7 @@ This assumes that a dump of the database exists.
         Based off the four `spire-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, `spire`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.
+        for secret in postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.
         spire-postgres.credentials standby.spire-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo 
         -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret $
         {secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
@@ -157,8 +156,8 @@ This assumes that a dump of the database exists.
         ```
 
         ```bash
-        ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- bash
-        root@spire-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
+        kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- bash
+        root@spire-postgres-0:/home//usr/bin/psql postgres postgres
         postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
         ALTER ROLE
         postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
@@ -177,58 +176,58 @@ This assumes that a dump of the database exists.
         Delete and re-create the four `spire-postgres` secrets using the manifest that was copied from S3 in step 1 above.
 
         ```bash
-        ncn-w001# MANIFEST=spire-postgres-2021-07-21T19:03:18.manifest
+        MANIFEST=spire-postgres-2021-07-21T19:03:18.manifest
 
-        ncn-w001# kubectl delete secret postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.spire-postgres.credentials standby.spire-postgres.credentials -n ${NAMESPACE}
+        kubectl delete secret postgres.spire-postgres.credentials service-account.spire-postgres.credentials spire.spire-postgres.credentials standby.spire-postgres.credentials -n ${NAMESPACE}
 
-        ncn-w001# kubectl apply -f ${MANIFEST}
+        kubectl apply -f ${MANIFEST}
         ```
 
 8. Restart the Postgres cluster.
 
     ```bash
-    ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
+    kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
     # Wait for the postgresql pod to start
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
     ```
 
 9. Scale the Postgres cluster back to 3 instances.
 
     ```bash
-    ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
+    kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
 
     # Wait for the postgresql cluster to start running
-    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
 10. Scale the Spire service back to 3 replicas.
 
     ```bash
-    ncn-w001# kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=3
+    kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=3
 
     # Wait for the spire pods to start
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
     ```
 
 11. Restart the `spire-agent` daemonset and the `spire-jwks` service.
 
     ```bash
-    ncn-w001# kubectl rollout restart daemonset spire-agent -n ${NAMESPACE}
+    kubectl rollout restart daemonset spire-agent -n ${NAMESPACE}
     # Wait for the restart to complete
-    ncn-w001# kubectl rollout status daemonset spire-agent -n ${NAMESPACE}
+    kubectl rollout status daemonset spire-agent -n ${NAMESPACE}
 
-    ncn-w001# kubectl rollout restart deployment spire-jwks -n ${NAMESPACE}
+    kubectl rollout restart deployment spire-jwks -n ${NAMESPACE}
     # Wait for the restart to complete
-    ncn-w001# kubectl rollout status deployment spire-jwks -n ${NAMESPACE}
+    kubectl rollout status deployment spire-jwks -n ${NAMESPACE}
     ```
 
 12. Restart the `spire-agent` on all the nodes.
 
     ```bash
-    ncn-w001# pdsh -w ncn-m00[1-3] 'systemctl restart spire-agent'
-    ncn-w001# pdsh -w ncn-w00[1-3] 'systemctl restart spire-agent'
-    ncn-w001# pdsh -w ncn-s00[1-3] 'systemctl restart spire-agent'
+    pdsh -w ncn-m00[1-3] 'systemctl restart spire-agent'
+    pdsh -w ncn-w00[1-3] 'systemctl restart spire-agent'
+    pdsh -w ncn-s00[1-3] 'systemctl restart spire-agent'
     ```
 
 13. Verify the service is working. The following should return a token.
@@ -237,7 +236,6 @@ This assumes that a dump of the database exists.
     ncn-w001:# /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/root/spire/agent.sock -audience test
     ```
 
-<a name="keycloak"> </a>
 
 ## Restore Postgres for Keycloak
 
@@ -253,9 +251,9 @@ This assumes that a dump of the database exists.
     The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
     ```bash
-    ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
+    export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
 
-    ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
+    export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
     ```
 
     **list.py:**
@@ -310,52 +308,52 @@ This assumes that a dump of the database exists.
 2. Scale the Keycloak service to 0.
 
     ```bash
-    ncn-w001# CLIENT=cray-keycloak
-    ncn-w001# NAMESPACE=services
-    ncn-w001# POSTGRESQL=keycloak-postgres
+    CLIENT=cray-keycloak
+    NAMESPACE=services
+    POSTGRESQL=keycloak-postgres
 
-    ncn-w001# kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=0
+    kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=0
 
     # Wait for the pods to terminate
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
 3. Delete the Keycloak Postgres cluster.
 
     ```bash
-    ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
+    kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
 
-    ncn-w001# kubectl delete -f postgres-cr.json
+    kubectl delete -f postgres-cr.json
 
     # Wait for the pods to terminate
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
 4. Create a new single instance Keycloak Postgres cluster.
 
     ```bash
-    ncn-w001# cp postgres-cr.json postgres-orig-cr.json
-    ncn-w001# jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
-    ncn-w001# kubectl create -f postgres-cr.json
+    cp postgres-cr.json postgres-orig-cr.json
+    jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
+    kubectl create -f postgres-cr.json
 
     # Wait for the pod and Postgres cluster to start running
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pod to start running"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pod to start running"; sleep 2; done
 
-    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
 5. Copy the database dump file to the Postgres member.
 
     ```bash
-    ncn-w001# DUMPFILE=keycloak-postgres-2021-07-29T17:56:07.psql
+    DUMPFILE=keycloak-postgres-2021-07-29T17:56:07.psql
 
-    ncn-w001# kubectl cp ./${DUMPFILE} "${POSTGRESQL}-0":/home/postgres/${DUMPFILE} -c postgres -n ${NAMESPACE}
+    kubectl cp ./${DUMPFILE} "${POSTGRESQL}-0":/home/postgres/${DUMPFILE} -c postgres -n ${NAMESPACE}
     ```
 
 6. Restore the data.
 
     ```bash
-    ncn-w001# kubectl exec "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE} -it -- psql -U postgres < ${DUMPFILE}
+    kubectl exec "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE} -it -- psql -U postgres < ${DUMPFILE}
     ```
 
 7. Either update or re-create the `keycloak-postgres` secrets.
@@ -367,7 +365,7 @@ This assumes that a dump of the database exists.
         Based off the three `keycloak-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.
+        for secret in postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.
         keycloak-postgres.credentials; do echo -n "secret ${secret} username & password: "; echo -n "`kubectl get secret $
         {secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} 
         -ojsonpath='{.data.password}'| base64 -d`; done
@@ -378,8 +376,8 @@ This assumes that a dump of the database exists.
         ```
 
         ```bash
-        ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- bash
-        root@keycloak-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
+        kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- bash
+        root@keycloak-postgres-0:/home//usr/bin/psql postgres postgres
         postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
         ALTER ROLE
         postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
@@ -396,44 +394,44 @@ This assumes that a dump of the database exists.
         Delete and re-create the three `keycloak-postgres` secrets using the manifest that was copied from S3 in step 1 above.
 
         ```bash
-        ncn-w001# MANIFEST=keycloak-postgres-2021-07-29T17:56:07.manifest
+        MANIFEST=keycloak-postgres-2021-07-29T17:56:07.manifest
 
-        ncn-w001# kubectl delete secret postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.keycloak-postgres.credentials -n ${NAMESPACE}
+        kubectl delete secret postgres.keycloak-postgres.credentials service-account.keycloak-postgres.credentials standby.keycloak-postgres.credentials -n ${NAMESPACE}
 
-        ncn-w001# kubectl apply -f ${MANIFEST}
+        kubectl apply -f ${MANIFEST}
         ```
 
 8. Restart the Postgres cluster.
 
     ```bash
-    ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
+    kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
     # Wait for the postgresql pod to start
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
     ```
 
 9. Scale the Postgres cluster back to 3 instances.
 
     ```bash
-    ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
+    kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
 
     # Wait for the postgresql cluster to start running. This may take a few minutes to complete.
-    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
 10. Scale the Keycloak service back to 3 replicas.
 
     ```bash
-    ncn-w001# kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=3
+    kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=3
 
     # Wait for the keycloak pods to start
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
     ```
 
     Also check the status of the Keycloak pods. If there are pods that do not show that both containers are ready (READY is `2/2`), wait a few seconds and re-run the command until all containers are ready.
 
     ```bash
-    ncn-w001# kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}"
+    kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}"
 
     NAME              READY   STATUS    RESTARTS   AGE
     cray-keycloak-0   2/2     Running   0          35s
@@ -446,8 +444,8 @@ This assumes that a dump of the database exists.
     * Run the `keycloak-setup` job to restore the Kubernetes client secrets:
 
         ```bash
-        ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak -o json > keycloak-setup.json
-        ncn-w001# cat keycloak-setup.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.
+        kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak -o json > keycloak-setup.json
+        cat keycloak-setup.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.metadata.
         managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | jq 'del(.
         spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -
         ```
@@ -455,7 +453,7 @@ This assumes that a dump of the database exists.
         Check the status of the `keycloak-setup` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`.
 
         ```bash
-        ncn-w001# kubectl get jobs -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak
+        kubectl get jobs -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak
 
         NAME               COMPLETIONS   DURATION   AGE
         keycloak-setup-2   1/1           59s        91s
@@ -464,8 +462,8 @@ This assumes that a dump of the database exists.
     * Run the `keycloak-users-localize` job to restore the users and groups in S3 and the Kubernetes ConfigMap:
 
         ```bash
-        ncn-w001# kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize -o json > cray-keycloak-users-localize.json
-        ncn-w001# cat cray-keycloak-users-localize.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.
+        kubectl get job -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize -o json > cray-keycloak-users-localize.json
+        cat cray-keycloak-users-localize.json | jq '.items[0]' | jq 'del(.metadata.creationTimestamp)' | jq 'del(.
         metadata.managedFields)' | jq 'del(.metadata.resourceVersion)' | jq 'del(.metadata.selfLink)' | jq 'del(.metadata.uid)' | 
         jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | jq 'del(.status)' | kubectl replace --force -f -`
         ```
@@ -473,7 +471,7 @@ This assumes that a dump of the database exists.
         Check the status of the `cray-keycloak-users-localize` job. If the `COMPLETIONS` value is not `1/1`, wait a few seconds and run the command again until the `COMPLETIONS` value is `1/1`.
 
         ```bash
-        ncn-w001# kubectl get jobs -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize
+        kubectl get jobs -n ${NAMESPACE} -l app.kubernetes.io/instance=cray-keycloak-users-localize
 
         NAME                        COMPLETIONS   DURATION   AGE
         keycloak-users-localize-2   1/1           45s        49s
@@ -482,7 +480,7 @@ This assumes that a dump of the database exists.
     * Restart Keycloak gatekeeper:
 
         ```bash
-        ncn-w001# kubectl rollout restart -n ${NAMESPACE} deployment/cray-keycloak-gatekeeper-ingress
+        kubectl rollout restart -n ${NAMESPACE} deployment/cray-keycloak-gatekeeper-ingress
         ```
 
 12. Verify the service is working. The following should return an `access_token` for an existing user. Replace the `<username>` and `<password>` as appropriate.
@@ -493,7 +491,6 @@ This assumes that a dump of the database exists.
     {"access_token":"....
     ```
 
-<a name="vcs"> </a>
 
 ## Restore Postgres for VCS
 
@@ -510,9 +507,9 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
    The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
         ```bash
-        ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
+        export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
 
-        ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
+        export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
         ```
 
         **list.py:**
@@ -566,53 +563,53 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
 2. Scale the VCS service to 0.
 
     ```bash
-    ncn-w001# SERVICE=gitea-vcs
-    ncn-w001# SERVICELABEL=vcs
-    ncn-w001# NAMESPACE=services
-    ncn-w001# POSTGRESQL=gitea-vcs-postgres
+    SERVICE=gitea-vcs
+    SERVICELABEL=vcs
+    NAMESPACE=services
+    POSTGRESQL=gitea-vcs-postgres
 
-    ncn-w001# kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=0
+    kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=0
 
     # Wait for the pods to terminate
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
 3. Delete the VCS Postgres cluster.
 
     ```bash
-    ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
+    kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
 
-    ncn-w001# kubectl delete -f postgres-cr.json
+    kubectl delete -f postgres-cr.json
 
     # Wait for the pods to terminate
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
 4. Create a new single instance VCS Postgres cluster.
 
     ```bash
-    ncn-w001# cp postgres-cr.json postgres-orig-cr.json
-    ncn-w001# jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
-    ncn-w001# kubectl create -f postgres-cr.json
+    cp postgres-cr.json postgres-orig-cr.json
+    jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
+    kubectl create -f postgres-cr.json
 
     # Wait for the pod and Postgres cluster to start running
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pod to start running"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pod to start running"; sleep 2; done
 
-    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
 5. Copy the database dump file to the Postgres member.
 
     ```bash
-    ncn-w001# DUMPFILE=gitea-vcs-postgres-2021-07-21T19:03:18.sql
+    DUMPFILE=gitea-vcs-postgres-2021-07-21T19:03:18.sql
 
-    ncn-w001# kubectl cp ./${DUMPFILE} "${SERVICE}-0":/home/postgres/${DUMPFILE} -c postgres -n services
+    kubectl cp ./${DUMPFILE} "${SERVICE}-0":/home/postgres/${DUMPFILE} -c postgres -n services
     ```
 
 6. Restore the data.
 
     ```bash
-    ncn-w001# kubectl exec "${SERVICE}-0" -c postgres -n services -it -- psql -U postgres < ${DUMPFILE}
+    kubectl exec "${SERVICE}-0" -c postgres -n services -it -- psql -U postgres < ${DUMPFILE}
     ```
 
 7. Either update or re-create the `gitea-vcs-postgres` secrets.
@@ -624,7 +621,7 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
         Based off the three `gitea-vcs-postgres` secrets, collect the password for each Postgres username: `postgres`, `service_account`, and `standby`. Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials gitea.
+        for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials gitea.
         gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials; do echo -n "secret ${secret} username & password: 
         "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "; echo `kubectl get 
         secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
@@ -636,8 +633,8 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
         ```
 
         ```bash
-        ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- bash
-        root@gitea-vcs-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
+        kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- bash
+        root@gitea-vcs-postgres-0:/home//usr/bin/psql postgres postgres
         postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
         ALTER ROLE
         postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
@@ -656,41 +653,40 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
         Delete and re-create the four `gitea-vcs-postgres` secrets using the manifest that was copied from S3 in step 1 above.
 
         ```bash
-        ncn-w001# MANIFEST=gitea-vcs-postgres-2021-07-21T19:03:18.manifest
+        MANIFEST=gitea-vcs-postgres-2021-07-21T19:03:18.manifest
 
-        ncn-w001# kubectl delete secret postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials -n services
+        kubectl delete secret postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials -n services
 
-        ncn-w001# kubectl apply -f ${MANIFEST}
+        kubectl apply -f ${MANIFEST}
         ```
 
 8. Restart the Postgres cluster.
 
     ```bash
-    ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
+    kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
     # Wait for the postgresql pod to start
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
     ```
 
 9. Scale the Postgres cluster back to 3 instances.
 
     ```bash
-    ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
+    kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
 
     # Wait for the postgresql cluster to start running
-    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
 10. Scale the Gitea service back up.
 
     ```bash
-    ncn-w001# kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=3
+    kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=3
 
     # Wait for the gitea pods to start
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
     ```
 
-<a name="capsules"> </a>
 
 ## Restore Postgres for Capsules
 
@@ -708,9 +704,9 @@ This assumes that a dump of the database exists.
    The `aws_access_key_id` and `aws_secret_access_key` will need to be set based on the `postgres-backup-s3-credentials` secret.
 
         ```bash
-        ncn-w001# export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
+        export S3_ACCESS_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.access_key}' | base64 --decode`
 
-        ncn-w001# export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
+        export S3_SECRET_KEY=`kubectl get secrets postgres-backup-s3-credentials -ojsonpath='{.data.secret_key}' | base64 --decode`
         ```
 
         **list.py:**
@@ -765,52 +761,52 @@ This assumes that a dump of the database exists.
 2. Scale the `capsules-warehouse-server` service to 0.
 
     ```bash
-    ncn-w001# CLIENT=capsules-warehouse-server
-    ncn-w001# NAMESPACE=services
-    ncn-w001# POSTGRESQL=capsules-warehouse-server-postgres
+    CLIENT=capsules-warehouse-server
+    NAMESPACE=services
+    POSTGRESQL=capsules-warehouse-server-postgres
 
-    ncn-w001# kubectl scale -n ${NAMESPACE} --replicas=0 deployment/${CLIENT}
+    kubectl scale -n ${NAMESPACE} --replicas=0 deployment/${CLIENT}
 
     # Wait for the pods to terminate
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
 3. Delete the `capsules-warehouse-server` Postgres cluster.
 
     ```bash
-    ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
+    kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.json
 
-    ncn-w001# kubectl delete -f postgres-cr.json
+    kubectl delete -f postgres-cr.json
 
     # Wait for the pods to terminate
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
 4. Create a new single instance `capsules-warehouse-server` Postgres cluster.
 
     ```bash
-    ncn-w001# cp postgres-cr.json postgres-orig-cr.json
-    ncn-w001# jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
-    ncn-w001# kubectl create -f postgres-cr.json
+    cp postgres-cr.json postgres-orig-cr.json
+    jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
+    kubectl create -f postgres-cr.json
 
     # Wait for the pod and Postgres cluster to start running
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pod to start running"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pod to start running"; sleep 2; done
 
-    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
 5. Copy the database dump file to the Postgres member.
 
     ```bash
-    ncn-w001# DUMPFILE=capsules-warehouse-server-postgres-2021-07-21T19:03:18.psql
+    DUMPFILE=capsules-warehouse-server-postgres-2021-07-21T19:03:18.psql
 
-    ncn-w001# kubectl cp ./${DUMPFILE} "${POSTGRESQL}-0":/home/postgres/${DUMPFILE} -c postgres -n ${NAMESPACE}
+    kubectl cp ./${DUMPFILE} "${POSTGRESQL}-0":/home/postgres/${DUMPFILE} -c postgres -n ${NAMESPACE}
     ```
 
 6. Restore the data.
 
     ```bash
-    ncn-w001# kubectl exec "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE} -it -- psql -U postgres < ${DUMPFILE}
+    kubectl exec "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE} -it -- psql -U postgres < ${DUMPFILE}
     ```
 
 7. Either update or re-create the `capsules-warehouse-server-postgres` secrets.
@@ -823,7 +819,7 @@ This assumes that a dump of the database exists.
         Then `kubectl exec` into the Postgres pod and update the password for each user. For example:
 
         ```bash
-        ncn-w001# for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.
+        for secret in postgres.capsules-warehouse-server-postgres.credentials service-account.
         capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials; do echo -n "secret 
         ${secret} username & password: "; echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | 
         base64 -d` "; echo `kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d`; done
@@ -838,8 +834,8 @@ This assumes that a dump of the database exists.
         ```
 
         ```bash
-        ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- bash
-        root@capsules-warehouse-server-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
+        kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- bash
+        root@capsules-warehouse-server-postgres-0:/home//usr/bin/psql postgres postgres
         postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
         ALTER ROLE
         postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
@@ -856,45 +852,45 @@ This assumes that a dump of the database exists.
         Delete and re-create the three `capsules-warehouse-server-postgres` secrets using the manifest that was copied from S3 in step 1 above.
 
         ```bash
-        ncn-w001# MANIFEST=capsules-warehouse-server-postgres-2021-07-21T19:03:18.manifest
+        MANIFEST=capsules-warehouse-server-postgres-2021-07-21T19:03:18.manifest
 
-        ncn-w001# kubectl delete secret postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials -n ${NAMESPACE}
+        kubectl delete secret postgres.capsules-warehouse-server-postgres.credentials service-account.capsules-warehouse-server-postgres.credentials standby.capsules-warehouse-server-postgres.credentials -n ${NAMESPACE}
 
-        ncn-w001# kubectl apply -f ${MANIFEST}
+        kubectl apply -f ${MANIFEST}
         ```
 
 8. Restart the Postgres cluster.
 
     ```bash
-    ncn-w001# kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
+    kubectl delete pod -n ${NAMESPACE} "${POSTGRESQL}-0"
 
     # Wait for the postgresql pod to start
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 1 ] ; do echo "  waiting for pods to start running"; sleep 2; done
     ```
 
 9. Scale the Postgres cluster back to 3 instances.
 
     ```bash
-    ncn-w001# kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
+    kubectl patch postgresql "${POSTGRESQL}" -n "${NAMESPACE}" --type='json' -p='[{"op" : "replace", "path":"/spec/numberOfInstances", "value" : 3}]'
 
     # Wait for the postgresql cluster to start running
-    ncn-w001# while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
+    while [ $(kubectl get postgresql "${POSTGRESQL}" -n "${NAMESPACE}" -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] ; do echo "  waiting for postgresql to start running"; sleep 2; done
     ```
 
 10. Scale the `capsules-warehouse-server` service back to 3 replicas.
 
     ```bash
-    ncn-w001# kubectl scale -n ${NAMESPACE} --replicas=3 deployment/${CLIENT}
+    kubectl scale -n ${NAMESPACE} --replicas=3 deployment/${CLIENT}
 
     # Wait for the capsules-warehouse-server pods to start
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start"; sleep 2; done
     ```
 
     Also check the status of the `capsules-warehouse-server` pods.
     If there are pods that do not show that both containers are ready (READY is `2/2`), wait a few seconds and re-run the command until all containers are ready.
 
     ```bash
-    ncn-w001# kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}"
+    kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}"
     ```
 
     Example output:
@@ -911,7 +907,7 @@ This assumes that a dump of the database exists.
     It is recommended to use a UAN.
 
     ```bash
-    ncn-w001# capsule list
+    capsule list
     ```
 
     Example output:

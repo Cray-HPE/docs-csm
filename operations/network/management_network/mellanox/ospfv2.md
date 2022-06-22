@@ -29,7 +29,7 @@ switch(config interface vlan 10)# ip ospf area 0
 Show Commands to Validate Functionality
 
 ```
-switch# show ip ospf
+show ip ospf
 ```
 
 Expected Results
@@ -38,5 +38,5 @@ Expected Results
 * Step 2: You can enable OSPF on the loopback, SVI or routed interfaces.
 * Step 3: The output of the show commands looks correct.
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)
 

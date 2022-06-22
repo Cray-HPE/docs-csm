@@ -37,7 +37,7 @@ In addition, the following general criteria describe the expected behavior of th
 - At least three utility storage nodes provide persistent storage for the services running on the Kubernetes management nodes. When one of the utility storage nodes goes down, critical operations such as job launch, application run, or compute node boot are expected to continue to work.
 - Not all pods running on a downed NCN worker node are expected to migrate to a remaining NCN worker node. There are some pods which are configured with anti-affinity such that if the pod exists on another NCN worker node, it will not start another of those pods on that same NCN worker node. At this time, this mostly only applies to etcd clusters running in the cluster. It is optimal to have those pods balanced across the NCN worker nodes \(and not have multiple etcd pods, from the same etcd cluster, running on the same NCN worker node\). Thus, when an NCN worker node goes down, the etcd pods running on it will remain in terminated state and will not attempt to relocate to another NCN worker node. This should be fine as there should be at least two other etcd pods \(from the cluster of 3\) running on other NCN worker nodes. Additionally, any pods that are part of a stateful set will not migrate off a worker node when it goes down. Those are expected to stay on the node and also remain in the terminated state until the NCN worker nodes comes back up or unless deliberate action is taken to force that pod off the NCN worker node which is down.
     - The `cps-cm-pm` pods are part of a daemonset and they only run on designated nodes. When the node comes back up the containers will be restarted and service restored. Refer to "Content Projection Service \(CPS\)" in the Cray Operating System \(COS\) product stream documentation for more information on changing node assignments.
-- After an NCN worker, storage, or master node goes down, if there are issues with launching a UAI session or booting compute nodes, that does not necessarily mean that the problem is due to a worker node being down. If possible, it is advised to also check the relevant "Compute Node Boot Troubleshooting Information" and [User Access Service](../UAS_user_and_admin_topics/index.md) (specifically with respect to [Troubleshoot UAS Issues](../UAS_user_and_admin_topics/Troubleshoot_UAS_Issues.md)) procedures. Those sections can give guidance around general known issues and how to troubleshoot them. For any customer support ticket opened on these issues, however, it would be an important piece of data to include in that ticket if the issue was encountered while one or more of the NCNs were down.
+- After an NCN worker, storage, or master node goes down, if there are issues with launching a UAI session or booting compute nodes, that does not necessarily mean that the problem is due to a worker node being down. If possible, it is advised to also check the relevant "Compute Node Boot Troubleshooting Information" and [User Access Service](../UAS_user_and_admin_topics/README.md) (specifically with respect to [Troubleshoot UAS Issues](../UAS_user_and_admin_topics/Troubleshoot_UAS_Issues.md)) procedures. Those sections can give guidance around general known issues and how to troubleshoot them. For any customer support ticket opened on these issues, however, it would be an important piece of data to include in that ticket if the issue was encountered while one or more of the NCNs were down.
 
 ## Known Issues and Workarounds
 
@@ -50,13 +50,13 @@ However, it is important to note that some pods, when running on a worker NCN th
     1. To determine if this is happening, run the following:
 
         ```bash
-        ncn# kubectl get pods -n nexus | grep nexus
+        kubectl get pods -n nexus | grep nexus
         ```
 
     1. Describe the pod obtained in the previous step
 
         ```bash
-        ncn# kubectl describe pod -n nexus NEXUS_FULL_POD_NAME
+        kubectl describe pod -n nexus NEXUS_FULL_POD_NAME
         ```
 
     1. If the event data at the bottom of the `kubectl describe` command output indicates that a Multi-Attach PVC error has occurred, then see the [Troubleshoot Pods Multi-Attach Error](../utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md) procedure to unmount the PVC. This will allow the Nexus pod to begin successfully running on the new NCN worker node.
@@ -68,7 +68,7 @@ However, it is important to note that some pods, when running on a worker NCN th
         Use the following command and check the `NODE` column to check which NCN the pod is running on:
 
         ```bash
-        ncn# kubectl get pod -n services -o wide | awk 'NR == 1 || /slingshot-fabric-manager/'
+        kubectl get pod -n services -o wide | awk 'NR == 1 || /slingshot-fabric-manager/'
         ```
 
     - When the `slingshot-fabric-manager` pod goes down, the switches will continue to run. Even if the status of the switches changes, those changes will be picked up after the `slingshot-fabric-manager` pod is brought back up and the sweeping process restarts.

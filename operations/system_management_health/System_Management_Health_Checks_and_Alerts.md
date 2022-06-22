@@ -17,7 +17,7 @@ Prometheus includes the /api/v1/alerts endpoint, which returns a JSON object con
 Obtain the cluster IP address:
 
 ```bash
-ncn-w001# kubectl -n sysmgmt-health get svc cray-sysmgmt-health-promet-prometheus
+kubectl -n sysmgmt-health get svc cray-sysmgmt-health-promet-prometheus
 ```
 
 Example output:
@@ -30,7 +30,7 @@ cray-sysmgmt-health-promet-prometheus   ClusterIP   10.16.201.80   <none>       
 Get active alerts, which includes `KubeletTooManyPods` if it is going off:
 
 ```bash
-ncn-w001# curl -s http://CLUSTER-IP:PORT/api/v1/alerts | jq . | grep -B 10 -A 20 KubeletTooManyPods
+curl -s http://CLUSTER-IP:PORT/api/v1/alerts | jq . | grep -B 10 -A 20 KubeletTooManyPods
 ```
 
 Example output:

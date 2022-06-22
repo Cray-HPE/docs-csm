@@ -23,9 +23,9 @@ switch(config-msdp-peer)# connect-source <IFNAME>
 Show commands to validate functionality:
 
 ```text
-switch# show ip msdp peer
-switch# show ip msdp count
-switch# show ip msdp sa-cache
+show ip msdp peer
+show ip msdp count
+show ip msdp sa-cache
 ```
 
 ## Test Steps
@@ -38,4 +38,4 @@ switch# show ip msdp sa-cache
 
 Verify MSDP session is up and it is using loopback interface as source.
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

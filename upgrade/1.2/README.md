@@ -11,7 +11,7 @@ for additional reference material in support of the processes and scripts mentio
 
 For systems with only three worker nodes (typically Testing and  Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be lowered on several
 services in order for this upgrade to succeed. This step is
-executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#prerequisites-check). See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more
+executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#stage-04---prerequisites-check). See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more
 information.
 
 Independently, the `customizations.yaml` file will be edited automatically during upgrade for three worker systems prior to deploying new CSM services. See the file
@@ -21,6 +21,15 @@ are desired in the `customizations.yaml` file for this system.
 For more information about modifying `customizations.yaml` and tuning for specific systems, see
 [Post Install Customizations](../../operations/CSM_product_management/Post_Install_Customizations.md).
 
+## Plan and coordinate network upgrade
+
+Prior to CSM 1.2, the single Customer Access Network (CAN) carried both the administrative network traffic and the user network
+traffic. CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate administrative network traffic and user network traffic.
+
+[Plan and coordinate network upgrade](plan_and_coordinate_network_upgrade.md) shows the steps that need to be taken in order to prepare
+for this network upgrade. Follow these steps in order to plan and coordinate the network upgrade with your users, as well as to ensure
+undisrupted access to UANs during the upgrade.
+
 ## Upgrade stages
 
 - [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
@@ -29,7 +38,7 @@ For more information about modifying `customizations.yaml` and tuning for specif
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
 - [Stage 4 - Ceph Upgrade](Stage_4.md)
 - [Stage 5 - Perform NCN Personalization](Stage_5.md)
-- [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
+- [Return to Main Page and Proceed to *Validate CSM Health*](../README.md#6-validate-csm-health)
 
 **`Important:`** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 
@@ -51,8 +60,8 @@ For more information about modifying `customizations.yaml` and tuning for specif
 - Troubleshooting NTP
 
    During upgrades, clock skew may occur when rebooting nodes. If one node is rebooted and its clock differs significantly from those that have **not** been rebooted, it can
-   cause contention among the other nodes. Waiting for Chrony to slowly adjust the clocks can resolve intermittent clock skew issues. If it does not resolve on its own, follow the
-   [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure to troubleshoot it further.
+   cause contention among the other nodes. Waiting for `chronyd` to slowly adjust the clocks can resolve intermittent clock skew issues. This can take up to 15 minutes or
+   longer. If it does not resolve on its own, then follow the [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure to troubleshoot it further.
 
 - Bare-metal Etcd recovery
 
@@ -74,6 +83,10 @@ For more information about modifying `customizations.yaml` and tuning for specif
 
    See [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
 
+- Troubleshoot SLS not working
+
+    See [SLS Not Working During Node Rebuild](../../troubleshooting/known_issues/SLS_Not_Working_During_Node_Rebuild.md).
+
 - Rerun a step
 
    When running upgrade scripts, each script records what has been done successfully on a node. This is recorded in the
@@ -83,7 +96,7 @@ For more information about modifying `customizations.yaml` and tuning for specif
    Here is an example of state file of `ncn-m001`:
 
    ```console
-   ncn# cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
+   cat /etc/cray/upgrade/csm/csm-{CSM_VERSION}/ncn-m001/state
    ```
 
    Example output:
