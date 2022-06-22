@@ -87,7 +87,7 @@ default              add-default-securitycontext true         audit    true
 
 Step 3: Check the manifest after applying the policy
 
-```
+```text
 ...
   spec:
     containers:
