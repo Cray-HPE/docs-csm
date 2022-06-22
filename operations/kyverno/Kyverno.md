@@ -1,6 +1,8 @@
 # Kyverno policy management
 
-[Kyverno](https://kyverno.io/) is a policy engine designed specifically for kubernetes. Kyverno allows cluster administrators to manage environment specific configurations independently of workload configurations and enforce configuration best practices for their clusters. Kyverno can be used to scan existing workloads for best practices, or can be used to enforce best practices by blocking or mutating API requests.
+[Kyverno](https://kyverno.io/) is a policy engine designed specifically for Kubernetes.
+Kyverno allows cluster administrators to manage environment specific configurations independently of workload configurations and enforce configuration best practices for their clusters.
+Kyverno can be used to scan existing workloads for best practices, or can be used to enforce best practices by blocking or mutating API requests.
 
 It allows you to:
 * Manage policies as Kubernetes resources.
