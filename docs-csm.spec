@@ -3,8 +3,8 @@ Name: docs-csm
 License: MIT License
 Summary: Documentation for Cray System Management (CSM) Installation and Upgrade
 BuildArchitectures: noarch
-Version: %(cat .version)
-Release: %(echo ${BUILD_METADATA})
+Version: %(echo $VERSION)
+Release: 1
 Source: %{name}-%{version}.tar.bz2
 Vendor: Hewlett Packard Enterprise Company
 
