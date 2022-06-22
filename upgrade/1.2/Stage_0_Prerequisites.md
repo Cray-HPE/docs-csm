@@ -1,6 +1,10 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **`NOTE`** CSM 1.0.1 or higher is required in order to upgrade to CSM 1.2.0.
+> **Reminders:**
+>
+> - CSM 1.0.1 or higher is required in order to upgrade to CSM 1.2.0.
+> - If any problems are encountered and the procedure or command output does not provide relevant guidance, see
+>   [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
 ## Abstract (Stage 0)
 
@@ -11,11 +15,12 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 ### Stages
 
-- [Stage 0.1 - Prepare assets](#prepare-assets)
-- [Stage 0.2 - Update SLS](#update-sls)
-- [Stage 0.3 - Upgrade Management Network](#update-management-network)
-- [Stage 0.4 - Prerequisites Check](#prerequisites-check)
-- [Stage 0.5 - Backup Workload Manager Data](#backup-workload-manager)
+- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+- [Stage 0.2 - Plan and coordinate network upgrade](#stage-02---plan-and-coordinate-network-upgrade)
+- [Stage 0.3 - Update SLS](#stage-03---update-sls)
+- [Stage 0.4 - Upgrade management network](#stage-04---upgrade-management-network)
+- [Stage 0.5 - Prerequisites check](#stage-05---prerequisites-check)
+- [Stage 0.6 - Backup workload manager data](#stage-06---backup-workload-manager-data)
 - [Stage completed](#stage-completed)
 
 ## Stage 0.1 - Prepare assets
@@ -119,7 +124,8 @@ decision making, see the [Management Network User Guide](../../operations/networ
 
 One detail which must not be overlooked is that the existing Customer Access Network (CAN) will be migrated or retrofitted into the new Customer Management Network (CMN) while
 minimizing changes. A new CAN (or CHN) network is then created. Pivoting the existing CAN to the new CMN allows administrative traffic (already on the CAN) to remain as-is while
-moving standard user traffic to a new site-routable network.
+moving standard user traffic to a new site-routable network. You can read more about this, as well as steps to ensure undisrupted access to UANs during upgrade, in
+[Plan and coordinate network upgrade](plan_and_coordinate_network_upgrade.md).
 
 > **Important:** If this is the first time performing the SLS update to CSM 1.2, review the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md) in order to ensure
 the correct options for the specific environment are used. Two examples are given below. To see all options from the update script, run `./sls_updater_csm_1.2.py --help`.
@@ -147,6 +153,9 @@ the correct options for the specific environment are used. Two examples are give
    ```
 
 ### Migrate SLS data JSON to CSM 1.2
+
+You can now migrate SLS data to CSM 1.2, using the `sls_input_file.json` obtained above, as well as using the desired
+network (new CAN or CHN) and its chosen subnet as per [Decide on subnet ranges for new CAN/CHN](#decide-on-subnet-ranges-for-new-canchn).
 
 - (`ncn-m001#`) Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 

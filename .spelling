@@ -62,6 +62,7 @@ Arista
 artifact
 artifact's
 artifacts
+Artifactory
 ArubaOS-CX
 ASes
 ASICs
@@ -222,7 +223,7 @@ highspeed
 HM
 HMN
 HMNLB
-HMN_MTN 
+HMN_MTN
 HMN_RVR
 honored
 hostname
@@ -529,6 +530,7 @@ untarred
 upgrader
 Upgrader
 upgrader's
+uppercase
 uptimes
 URIs
 v1
@@ -596,7 +598,7 @@ Init
 # To allow Site Init
 Init
 
-- install/prepare_configuration_payload.md
+- install/pre-installation.md
 # To allow Site Init
 Init
 
@@ -619,4 +621,8 @@ Admin
 - operations/network/management_network/upgrade.md
 Preconfig
 preconfig
+
+- upgrade/1.2/plan_and_coordinate_network_upgrade.md
+# To differentiate between old CAN and new CAN
+pre-1
 
