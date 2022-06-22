@@ -203,7 +203,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     ```bash
     ncn-mw# umount -v mount; rmdir -v mount
 
-    ncn-mw# rm $ST_ID.tar rootfs.squashfs
+    ncn-mw# rm -v $ST_ID.tar rootfs.squashfs
 
     # NOTE: The next step could be done as an `rm -rf` but, because the user
     #       is `root` and the path is very similar to an important system
