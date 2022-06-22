@@ -171,7 +171,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
 1. Create and push the container image.
 
     Create a container image using Podman or Docker and push it to the site container registry. Any container-specific modifications may also be done here with a Dockerfile.
-    The `ENTRYPOINT` layer must be `/usr/bin/uai-ssh.sh` as that starts SSHD for the user in the UAI container started by UAS.
+    The `ENTRYPOINT` layer must be `/usr/bin/uai-ssh.sh` as that starts `sshd` for the user in the UAI container started by UAS.
 
     ```bash
     ncn-w001# UAI_IMAGE_NAME=registry.local/cray/cray-uai-compute:latest
