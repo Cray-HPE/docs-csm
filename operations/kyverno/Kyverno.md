@@ -223,7 +223,7 @@ default    polr-ns-default        0      1      0      0       0      25d
 …
 ```
 
-Detailed policy report can be fetched using following command –
+View a detailed policy report with the following command:
 
 ```bash
 kubectl get polr -n default polr-ns-default -o yaml
