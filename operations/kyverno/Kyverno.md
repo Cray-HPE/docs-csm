@@ -271,7 +271,7 @@ spec:
 
 3. Check the policy report status.
 ```bash
-bash# kubectl get polr -A
+kubectl get polr -A
 
 NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
 default    polr-ns-default        1      0      0      0       0      25d
