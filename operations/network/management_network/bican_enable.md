@@ -373,7 +373,7 @@ Prerequisites for this task:
       id = "x3000c0s4b0n0"
       ```
 
-1. (`ncn#`) Extract the CFS configuration
+1. (`ncn#`) Extract the CFS configuration.
 
    ```bash
    cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
