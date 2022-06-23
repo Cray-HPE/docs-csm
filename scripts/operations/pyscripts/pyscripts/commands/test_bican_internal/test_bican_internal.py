@@ -30,7 +30,7 @@ import time
 import logging
 import sys
 import os
-
+import traceback
 
 TEST_PLAN = None
 SSH_TARGETS = None
@@ -63,7 +63,7 @@ def load_test_plan():
     else:
         print("BICAN:CAN detected.")
         filename = "can_toggle_tests.yaml"
-    
+
     path = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
     f = open(path, "r")
     TEST_PLAN = yaml.safe_load(f.read())["tests"]
@@ -123,10 +123,11 @@ def test_from_node_type_over_network(from_node_type, network, config):
             if not from_node:
                 print("""\nTesting SSH access:
         From node type {}
-        Over network {}""".format(
-                    from_node_type, network_suffix))
+        Over network {} ({})""".format(
+                    from_node_type, network, network_suffix))
 
                 print("\t\t^^^^ FAILED: Cannot find a suitable node for node type {} ^^^^".format(from_node_type))
+                total_ran += 1
                 continue
 
             from_node = from_node.with_domain_suffix(None)
@@ -157,29 +158,42 @@ def test_from_node_type_to_node_type_over_network(from_node_type, from_node, fro
     if not to_node:
         print("""\nTesting SSH access:
         From node type {}, using {}
-        Over network {}
+        Over network {} ({})
         To node type {}
         Expected to work: {}""".format(
-            from_node_type, from_node.get_full_domain_name(), network_suffix, to_node_type, expected))
+            from_node_type, from_node.get_full_domain_name(), network, network_suffix, to_node_type, expected))
 
         print("\t\t^^^^ FAILED: Cannot find a suitable node for node type {} ^^^^".format(to_node_type))
-        return 0
+        return 1
 
     to_node = to_node.with_domain_suffix(network_suffix)
 
+    if network == "nmn" and to_node.is_mellanox_switch():
+        print("""\nTesting SSH access:
+        From node type {}, using {}
+        Over network {} ({})
+        To node type {}
+        Expected to work: {}""".format(
+            from_node_type, from_node.get_full_domain_name(), network, network_suffix, to_node_type, expected))
+
+        print("\t\t^^^^ SKIPPED: Please see CASMNET-787 ^^^^")
+        return 0
+
     print("""\nTesting SSH access:
         From node type {}, using {}
-        Over network {}
+        Over network {} ({})
         To node type {}, using {}
         Expected to work: {}""".format(
-        from_node_type, from_node.get_full_domain_name(), network_suffix, to_node_type, to_node.get_full_domain_name(), expected))
+        from_node_type, from_node.get_full_domain_name(), network, network_suffix, to_node_type, to_node.get_full_domain_name(), expected))
+
+    toNodeSshConnection = None
 
     try:
         toNodeSshConnection = SshConnection(to_node, fromNodeSshConnection)
         toNodeSshConnection.connect()
 
         if "switch" in to_node.type:
-            toNodeSshConnection.run_test_command("show hostname", to_node.hostname)
+            toNodeSshConnection.run_test_command("show vlan", "CMN")
         else:
             toNodeSshConnection.run_test_command("echo hello", "hello")
 
@@ -195,8 +209,10 @@ def test_from_node_type_to_node_type_over_network(from_node_type, from_node, fro
         else:
             print("\t\t^^^^ FAILED: not accessible but SHOULD have been accessible ^^^^\n")
             print("{}".format(str(err)))
+            print(traceback.format_exc())
     finally:
-        toNodeSshConnection.close_connection(False)
+        if toNodeSshConnection:
+            toNodeSshConnection.close_connection(False)
 
     return 1
 
