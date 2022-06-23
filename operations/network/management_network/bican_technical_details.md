@@ -66,9 +66,6 @@ Access to system resources from the customer site over the High Speed Network is
 As can be seen in the diagram above, traffic ingress from the site for the CHN is over the edge routers.
 Typically these are a pair of Arista switches which provide other HSN access -- for ClusterStor, for example.
 
-NOTE: Arista routing configurations as a virtual routing instance are in scope for CSM 1.2 CHN work.
-Other edge routers, including Cisco and Juniper are out of scope.
-
 ### 2.1 CHN system ingress endpoints accessible in CSM 1.2
 
 - Designated Application Nodes, particularly **UAN, over SSH**.
@@ -151,7 +148,6 @@ Isolation will be within the Slingshot network as well as separated at the edge 
 #### 2.5.1 Touchpoints: effects and changes
 
 - Edge router provides all **routing and access controls** in CSM 1.2 (via a virtual routing instance, if Arista switch pair is used).
-As noted earlier, non-Arista router configurations are out of scope for CSM 1.2.
 - Internal to the system, CHN traffic will exist in the same Layer 2 domain with internal HSN traffic until the Slingshot network supports VLAN separation.
 - Compute Node (CN) and Application Node (UAN, in this case) configuration or IPv4 addressing and routing is via CFS.
   - When multiple HSN interfaces exist, the CHN will be configured on the HSN0 NIC.
@@ -165,7 +161,7 @@ As noted earlier, non-Arista router configurations are out of scope for CSM 1.2.
 
 #### 2.5.3 Ability to change post-install
 
-- Not Recommended - Edge router controls external access, so change scope is limited.
+- Not Recommended - Edge router controls external access.
 - No - Node images could be changed, but routing and IP address changes to CFS configurations would need extensive testing to certify.
 
 ## 3 Customer Management Management Network (CMN)
