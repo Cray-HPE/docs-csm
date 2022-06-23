@@ -46,6 +46,7 @@ PASSWORD_PROMPT = r"((.|\n)*)password\:"
 COMMAND_PROMPT_ONE_LINE = r"((.|\n)*)\:\~ \#"
 SSH_NEWKEY = r"((.|\n)*)Are you sure you want to continue connecting((.|\n)*)"
 UNRESOLVED_HOSTNAME = r"((.|\n)*)Could not resolve hostname((.|\n)*)"
+IDENTIFICATION_CHANGED = r"((.|\n)*)offending key can be removed using the below command((.|\n)*)"
 
 DEFAULT_TIMEOUT = 5
 
@@ -67,6 +68,11 @@ class CannotLoginException(Exception):
 class UnresolvedHostname(Exception):
     """
     Could not resolve the hostname.
+    """
+
+class RemoteHostIdentificationChanged(Exception):
+    """
+    Remote host identification changed.
     """
 
 class UnexpectedRunCommandOutput(Exception):
@@ -167,18 +173,21 @@ class SshConnection:
 
         logging.info("Connecting to {}".format(self.ssh_host.get_full_domain_name()))
 
-        pattern_list = [PASSWORD_PROMPT, pexpect.TIMEOUT, SSH_NEWKEY, UNRESOLVED_HOSTNAME, self.command_prompt_host_pattern]
+        pattern_list = [PASSWORD_PROMPT, pexpect.TIMEOUT, SSH_NEWKEY, IDENTIFICATION_CHANGED, UNRESOLVED_HOSTNAME, self.command_prompt_host_pattern]
         if self.ssh_conn:
             pattern_list.append(self.ssh_conn.command_prompt_host_pattern)
 
         i = self.__expect(pattern_list)
 
-        if i == 4:
+        if i == 5:
             logging.info("Connected to {}".format(self.ssh_host.get_full_domain_name()))
             self.connected = True
             return
-        elif i == 3:
+        elif i == 4:
             raise UnresolvedHostname
+        elif i == 3:
+            # Note: we don't want to modify the host system ourselves. So just signal this and fail the test.
+            raise RemoteHostIdentificationChanged
         elif i == 2:
             self.child_process.sendline("yes")
             i = self.__expect([PASSWORD_PROMPT, pexpect.TIMEOUT], timeout=DEFAULT_TIMEOUT)
