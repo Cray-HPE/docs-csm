@@ -38,7 +38,7 @@ It mutates the manifest of respective workloads before creating it so that when 
 ### Example
 
 1. Create a sample policy.
-	```text
+    ```text
     apiVersion: kyverno.io/v1
     kind: Policy
     metadata:
@@ -61,10 +61,10 @@ It mutates the manifest of respective workloads before creating it so that when 
                 securityContext:
                   +(allowPrivilegeEscalation): false
                   +(privileged): false
-	```
+    ```
 
 2. Create a simple pod.
-	```text
+    ```text
     apiVersion: v1
     kind: Pod
     metadata:
@@ -77,21 +77,20 @@ It mutates the manifest of respective workloads before creating it so that when 
       image: nginx:1.14.2
       ports:
       - containerPort: 80
-	```
+    ```
 
-	List all of the policies with the following command:
+    List all of the policies with the following command:
 
-	```bash
-	kubectl get pol -A
+    ```bash
+    kubectl get pol -A
 
-	NAMESPACE            NAME                        BACKGROUND   ACTION   READY
-	default              add-default-securitycontext true         audit    true
-	…
-	```
+    NAMESPACE            NAME                        BACKGROUND   ACTION   READY
+    default              add-default-securitycontext true         audit    true
+    …
+    ```
 
 3. Check the manifest after applying the policy.
-
-	```text
+    ```text
     ...
     spec:
       containers:
@@ -115,10 +114,10 @@ It mutates the manifest of respective workloads before creating it so that when 
           name: default-token-vgggw
           readOnly: true
     ...
-	```
+    ```
 
 4. Edit the policy to add one more field and apply the policy again.
-	```text
+    ```text
     apiVersion: kyverno.io/v1
     kind: Policy
     metadata:
@@ -142,46 +141,46 @@ It mutates the manifest of respective workloads before creating it so that when 
                   +(allowPrivilegeEscalation): false
                   +(privileged): false
                   +(runAsNonRoot): true
-	```
+    ```
 
-	If any of the workloads fail to come up after enforcing the policy, then delete the individual policies and restart the workload.
+    If any of the workloads fail to come up after enforcing the policy, then delete the individual policies and restart the workload.
 
 5. Check the pod description when the pod fails to come up.
-	```bash
-	kubectl get pods
-
-	NAME    READY   STATUS                       RESTARTS   AGE
-	nginx   0/1     CreateContainerConfigError   0          5s
-	```
-	```bash
+    ```bash
+    kubectl get pods
+   
+    NAME    READY   STATUS                       RESTARTS   AGE
+    nginx   0/1     CreateContainerConfigError   0          5s
+    ```
+    ```bash
     kubectl describe pods
 
-	Name:         nginx
-	Namespace:    default
-	.
-	.
-	.
-	Events:
-  	Type     Reason            Age                            From               Message
-  	----     ------            ----                           ----               -------
-  	Normal   Scheduled         <invalid>                      default-scheduler  Successfully assigned default/nginx to ncn-w003-b7534262
-  	Warning  DNSConfigForming  <invalid> (x9 over <invalid>)  kubelet            Search Line limits were exceeded, some search paths have been omitted, the applied search line is: default.svc.cluster.local svc.cluster.local cluster.local vshasta.io us-central1-b.c.vsha-sri-ram-35682334251634485.internal c.vsha-sri-ram-35682334251634485.internal
-  	Normal   Pulled            <invalid> (x8 over <invalid>)  kubelet            Container image "nginx:1.14.2" already present on machine
-  	Warning  Failed            <invalid> (x8 over <invalid>)  kubelet            Error: container has runAsNonRoot and image will run as root (pod: "nginx_default(0ea1d573-219a-4927-b3c3-c76150d35a7a)", container: nginx)
-	```
+    Name:         nginx
+    Namespace:    default
+    .
+    .
+    .
+    Events:
+    Type     Reason            Age                            From               Message
+    ----     ------            ----                           ----               -------
+    Normal   Scheduled         <invalid>                      default-scheduler  Successfully assigned default/nginx to ncn-w003-b7534262
+    Warning  DNSConfigForming  <invalid> (x9 over <invalid>)  kubelet            Search Line limits were exceeded, some search paths have been omitted, the applied search line is: default.svc.cluster.local svc.cluster.local cluster.local vshasta.io us-central1-b.c.vsha-sri-ram-35682334251634485.internal c.vsha-sri-ram-35682334251634485.internal
+    Normal   Pulled            <invalid> (x8 over <invalid>)  kubelet            Container image "nginx:1.14.2" already present on machine
+    Warning  Failed            <invalid> (x8 over <invalid>)  kubelet            Error: container has runAsNonRoot and image will run as root (pod: "nginx_default(0ea1d573-219a-4927-b3c3-c76150d35a7a)", container: nginx)
+    ```
 
 6. If the previous step failed, delete the policy and restart the workload.
-	```bash
-	kubectl delete pol -n default add-default-securitycontext
-	```
+    ```bash
+    kubectl delete pol -n default add-default-securitycontext
+    ```
 
 7. Check the pod status after deleting the policy.
-	```bash
-	kubectl get pods
+    ```bash
+    kubectl get pods
 
-	NAME    READY   STATUS    RESTARTS   AGE
-	nginx   1/1     Running   0          6s
-	```
+    NAME    READY   STATUS    RESTARTS   AGE
+    nginx   1/1     Running   0          6s
+    ```
 
 ## Validation
 
@@ -194,7 +193,7 @@ Also, it generates the report of policy violation in respective workloads. The f
 ### Example
 
 1. Add the following policy before applying the [mutation](#mutation) to the workload.
-	```text
+    ```text
     apiVersion: kyverno.io/v1
     kind: Policy
     metadata:
@@ -222,22 +221,22 @@ Also, it generates the report of policy violation in respective workloads. The f
                   privileged: false
     ```
 
-	View the policy report status with the following command:
+    View the policy report status with the following command:
 
-	```bash
-	kubectl get polr -A
+    ```bash
+    kubectl get polr -A
 
-	NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
-	default    polr-ns-default        0      1      0      0       0      25d
-	…
-	```
+    NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
+    default    polr-ns-default        0      1      0      0       0      25d
+    …
+    ```
 
-	View a detailed policy report with the following command:
+    View a detailed policy report with the following command:
 
-	```bash
-	kubectl get polr -n default polr-ns-default -o yaml
+    ```bash
+    kubectl get polr -n default polr-ns-default -o yaml
 
-	…
+    …
     results:
     - message: 'validation error: Non root security context is not set. Rule container-security-context failed at path /spec/containers/0/securityContext/'
       policy: validate-securitycontext
@@ -260,10 +259,10 @@ Also, it generates the report of policy violation in respective workloads. The f
         pass: 0
         skip: 0
         warn: 0
-	```
+    ```
 
 2. Apply the mutation policy and restart the following workload.
-	```text
+    ```text
     apiVersion: v1
     kind: Pod
     metadata:
@@ -276,20 +275,20 @@ Also, it generates the report of policy violation in respective workloads. The f
       image: nginx:1.14.2
       ports:
       - containerPort: 80
-	```
+    ```
 
 3. Check the policy report status.
-	```bash
-	kubectl get polr -A
+    ```bash
+    kubectl get polr -A
 
-	NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
-	default    polr-ns-default        1      0      0      0       0      25d
-	…
-	```
+    NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
+    default    polr-ns-default        1      0      0      0       0      25d
+    …
+    ```
 
-	This shows that the mutation policy for the workload was enforced properly.
+    This shows that the mutation policy for the workload was enforced properly.
 
-	If there are any discrepancies, we can look at the detailed policy report to triage the issue.
+    If there are any discrepancies, we can look at the detailed policy report to triage the issue.
 
 ## Known issues
 
