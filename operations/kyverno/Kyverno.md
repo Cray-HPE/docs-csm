@@ -38,6 +38,7 @@ It mutates the manifest of respective workloads before creating it so that when 
 ### Example
 
 1. Create a sample policy.
+
     ```text
     apiVersion: kyverno.io/v1
     kind: Policy
@@ -64,6 +65,7 @@ It mutates the manifest of respective workloads before creating it so that when 
     ```
 
 2. Create a simple pod.
+
     ```text
     apiVersion: v1
     kind: Pod
@@ -79,10 +81,15 @@ It mutates the manifest of respective workloads before creating it so that when 
       - containerPort: 80
     ```
 
-    List all of the policies with the following command:
+    (`ncn#`) List all of the policies with the following command:
 
     ```bash
     kubectl get pol -A
+    ```
+
+    Example output:
+
+    ```text
 
     NAMESPACE            NAME                        BACKGROUND   ACTION   READY
     default              add-default-securitycontext true         audit    true
@@ -90,6 +97,7 @@ It mutates the manifest of respective workloads before creating it so that when 
     ```
 
 3. Check the manifest after applying the policy.
+
     ```text
     ...
     spec:
@@ -117,6 +125,7 @@ It mutates the manifest of respective workloads before creating it so that when 
     ```
 
 4. Edit the policy to add one more field and apply the policy again.
+
     ```text
     apiVersion: kyverno.io/v1
     kind: Policy
@@ -145,13 +154,19 @@ It mutates the manifest of respective workloads before creating it so that when 
 
     If any of the workloads fail to come up after enforcing the policy, then delete the individual policies and restart the workload.
 
-5. Check the pod description when the pod fails to come up.
+5. (`ncn#`) Check the pod description when the pod fails to come up.
+    
+    Obtain the pod name:
+    
     ```bash
     kubectl get pods
    
     NAME    READY   STATUS                       RESTARTS   AGE
     nginx   0/1     CreateContainerConfigError   0          5s
     ```
+    
+    Describe the pod:
+    
     ```bash
     kubectl describe pods
 
@@ -169,14 +184,19 @@ It mutates the manifest of respective workloads before creating it so that when 
     Warning  Failed            <invalid> (x8 over <invalid>)  kubelet            Error: container has runAsNonRoot and image will run as root (pod: "nginx_default(0ea1d573-219a-4927-b3c3-c76150d35a7a)", container: nginx)
     ```
 
-6. If the previous step failed, delete the policy and restart the workload.
+6. (`ncn#`) If the previous step failed, delete the policy and restart the workload.
     ```bash
     kubectl delete pol -n default add-default-securitycontext
     ```
 
-7. Check the pod status after deleting the policy.
+7. (`ncn#`) Check the pod status after deleting the policy.
     ```bash
     kubectl get pods
+    ```
+
+    Example output:
+    
+    ```text
 
     NAME    READY   STATUS    RESTARTS   AGE
     nginx   1/1     Running   0          6s
@@ -193,6 +213,7 @@ Also, it generates the report of policy violation in respective workloads. The f
 ### Example
 
 1. Add the following policy before applying the [mutation](#mutation) to the workload.
+
     ```text
     apiVersion: kyverno.io/v1
     kind: Policy
@@ -221,20 +242,30 @@ Also, it generates the report of policy violation in respective workloads. The f
                   privileged: false
     ```
 
-    View the policy report status with the following command:
+    (`ncn#`) View the policy report status with the following command:
 
     ```bash
     kubectl get polr -A
+    ```
+
+    Example output:
+
+    ```text
 
     NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
     default    polr-ns-default        0      1      0      0       0      25d
     …
     ```
 
-    View a detailed policy report with the following command:
+    (`ncn#`) View a detailed policy report with the following command:
 
     ```bash
     kubectl get polr -n default polr-ns-default -o yaml
+    ```
+
+    Example output:
+
+    ```text
 
     …
     results:
@@ -262,6 +293,7 @@ Also, it generates the report of policy violation in respective workloads. The f
     ```
 
 2. Apply the mutation policy and restart the following workload.
+    
     ```text
     apiVersion: v1
     kind: Pod
@@ -278,8 +310,14 @@ Also, it generates the report of policy violation in respective workloads. The f
     ```
 
 3. Check the policy report status.
+    
     ```bash
     kubectl get polr -A
+    ```
+
+    Example output:
+
+    ```text
 
     NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
     default    polr-ns-default        1      0      0      0       0      25d
