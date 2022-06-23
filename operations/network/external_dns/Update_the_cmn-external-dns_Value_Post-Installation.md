@@ -72,7 +72,7 @@ The `external-dns` IP reservation in the SLS `CMN` network `cmn_metallb_static_p
    }
    ```
 
-1. Upload the updated NMN.json file to SLS.
+1. Upload the updated `NMN.json` file to SLS.
 
    ```bash
    ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" --header \
