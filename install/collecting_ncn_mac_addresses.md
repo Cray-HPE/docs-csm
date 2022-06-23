@@ -1,6 +1,8 @@
 # Collecting NCN MAC Addresses
 
-This procedure details how to collect the NCN MAC addresses from an HPE Cray EX system. The MAC addresses needed for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns in `ncn_metadata.csv` will be collected. This data will feed into the `cloud-init` metadata.
+This procedure details how to collect the NCN MAC addresses from an HPE Cray EX system.
+The MAC addresses needed for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns
+in `ncn_metadata.csv` will be collected. This data will feed into the `cloud-init` metadata.
 
 The `Bootstrap MAC` address will be used for identification of this node during the early part of the PXE boot process,
 before the bonded interface can be established.
@@ -87,7 +89,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
     1. Set the nodes to PXE boot and restart them.
 
-        ```bash 
+        ```bash
         pit# export IPMI_PASSWORD
         pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
         pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
