@@ -110,7 +110,7 @@ if [[ $state_recorded == "0" ]]; then
         ssh "$target_ncn" mkdir -p /srv/cray/scripts/common/
 
         # copy the NTP script and template to the target ncn
-        rsync -aq "${CSM_ARTI_DIR}"/chrony/ "$target_ncn":/srv/cray/scripts/common/
+        rsync -aq "${CSM_ARTI_DIR}"/chrony "$target_ncn":/srv/cray/scripts/common/
 
         # shellcheck disable=SC2029 # it's ok that $TOKEN expands on the client side
         # run the script
