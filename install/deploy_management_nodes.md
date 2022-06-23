@@ -11,8 +11,6 @@ initialized and the Kubernetes cluster is created and ready for a workload. The 
 will join Kubernetes after it is rebooted later in
 [Redeploy PIT Node](index.md#redeploy_pit_node).
 
-<a name="timing-of-deployments"></a>
-
 ## Timing of deployments
 
 The timing of each set of boots varies based on hardware. Nodes from some manufacturers will
@@ -22,27 +20,27 @@ the number of storage and worker nodes.
 
 ## Topics
 
-   1. [Prepare for management node deployment](#prepare_for_management_node_deployment)
-      1. [Tokens and IPMI password](#tokens-and-ipmi-password)
-      1. [Apply NCN pre-boot workarounds](#apply-ncn-pre-boot-workarounds)
-      1. [Ensure time is accurate before deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
-   1. [Update management node firmware](#update_management_node_firmware)
-   1. [Deploy management nodes](#deploy_management_nodes)
-      1. [Deploy workflow](#deploy-workflow)
-      1. [Deploy](#deploy)
-      1. [Check LVM on Kubernetes NCNs](#check-lvm-on-masters-and-workers)
-      1. [Check for unused drives on utility storage nodes](#check-for-unused-drives-on-utility-storage-nodes)
-      1. [Apply NCN post-boot workarounds](#apply-ncn-post-boot-workarounds)
-   1. [Configure after management node deployment](#configure_after_management_node_deployment)
-      1. [LiveCD cluster authentication](#livecd-cluster-authentication)
-      1. [BGP routing](#bgp-routing)
-      1. [Install tests and test server on NCNs](#install-tests)
-      1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
-   1. [Validate management node deployment](#validate_management_node_deployment)
-      1. [Validation](#validation)
-      1. [Optional validation](#optional-validation)
-   1. [Important checkpoint](#important-checkpoint)
-   1. [Next topic](#next-topic)
+   1. [Prepare for management node deployment](#1-prepare-for-management-node-deployment)
+      1. [Tokens and IPMI password](#11-tokens-and-ipmi-password)
+      2. [Apply NCN pre-boot workarounds](#12-apply-ncn-pre-boot-workarounds)
+      3. [Ensure time is accurate before deploying NCNs](#13-ensure-time-is-accurate-before-deploying-ncns)
+   2. [Update management node firmware](#2-update-management-node-firmware)
+   3. [Deploy management nodes](#3-deploy-management-nodes)
+      1. [Deploy workflow](#31-deploy-workflow)
+      2. [Deploy](#32-deploy)
+      3. [Check LVM on Kubernetes NCNs](#33-check-lvm-on-kubernetes-ncns)
+      4. [Check for unused drives on utility storage nodes](#34-check-for-unused-drives-on-utility-storage-nodes)
+      5. [Apply NCN post-boot workarounds](#35-apply-ncn-post-boot-workarounds)
+   4. [Configure after management node deployment](#4-configure-after-management-node-deployment)
+      1. [LiveCD cluster authentication](#41-livecd-cluster-authentication)
+      2. [BGP routing](#42-bgp-routing)
+      3. [Install tests and test server on NCNs](#43-install-tests-and-test-server-on-ncns)
+      4. [Remove the default NTP pool](#44-remove-the-default-ntp-pool)
+   5. [Validate management node deployment](#5-validate-management-node-deployment)
+      1. [Validation](#51-validation)
+      2. [Optional validation](#52-optional-validation)
+   6. [Important checkpoint](#important-checkpoint)
+   7. [Next topic](#next-topic)
 
 <a name="prepare_for_management_node_deployment"></a>
 
@@ -341,7 +339,8 @@ be performed are in the [Deploy](#deploy) section.
 1. <a name="set-uefi-and-power-off"></a>Set each node to always UEFI Network Boot, and ensure they are powered off
 
     ```bash
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
+    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
@@ -1078,4 +1077,4 @@ Before proceeding, be aware that this is the last point where the other NCN node
 
 After completing the deployment of the management nodes, the next step is to install the CSM services.
 
-See [Install CSM Services](index.md#install_csm_services)
+See [Install CSM Services](index.md#install_csm_services).
