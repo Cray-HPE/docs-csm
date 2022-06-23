@@ -388,7 +388,8 @@ also be of use. As an example, one can sometimes match up `ls -l /dev/disk/by-pa
     ```bash
     ncn/pit# efibootmgr | grep -i bootnext
     ```
-    Example outptut:
+
+    Example output:
 
     ```text
     BootNext: 0014
