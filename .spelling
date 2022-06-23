@@ -256,7 +256,6 @@ iPDU
 iPDUs
 IPMI-based
 IPMI-enabled
-ipvlan
 IPv4
 IPv6
 iPXE
@@ -301,7 +300,6 @@ lowercase
 lowercased
 Luks
 macOS
-macvlan
 maneuver
 maneuvers
 Mbs
