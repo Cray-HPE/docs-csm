@@ -167,7 +167,7 @@ class SshHost:
 
         target_host_network = target_ssh_host.get_network_type()
 
-        if "cmn" == target_host_network and self.is_aruba_switch():
+        if ("cmn" == target_host_network or "chn" == target_host_network or "can" == target_host_network) and self.is_aruba_switch():
             # Condition 1 from above docs
             return socket.gethostbyname(target_ssh_host.get_full_domain_name())
         elif "hmnlb" == target_host_network and target_ssh_host.is_management_node():
