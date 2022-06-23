@@ -27,7 +27,7 @@ securityContext:
   runAsGroup: 65534
 ```
 
-Currently, [mutation](#mutation) and [validation](#validation) policies are enforced for the network services such as load balancer and virtualservice.
+Currently, [mutation](#mutation) and [validation](#validation) policies are enforced for the network services such as load balancer and virtual service.
 
 ## Mutation
 
@@ -90,7 +90,6 @@ It mutates the manifest of respective workloads before creating it so that when 
     Example output:
 
     ```text
-
     NAMESPACE            NAME                        BACKGROUND   ACTION   READY
     default              add-default-securitycontext true         audit    true
     …
@@ -160,6 +159,11 @@ It mutates the manifest of respective workloads before creating it so that when 
     
     ```bash
     kubectl get pods
+    ```
+
+    Example output:
+
+    ```text
    
     NAME    READY   STATUS                       RESTARTS   AGE
     nginx   0/1     CreateContainerConfigError   0          5s
@@ -169,6 +173,11 @@ It mutates the manifest of respective workloads before creating it so that when 
     
     ```bash
     kubectl describe pods
+    ```
+
+    Example output:
+
+    ```text
 
     Name:         nginx
     Namespace:    default
@@ -197,7 +206,6 @@ It mutates the manifest of respective workloads before creating it so that when 
     Example output:
     
     ```text
-
     NAME    READY   STATUS    RESTARTS   AGE
     nginx   1/1     Running   0          6s
     ```
@@ -251,7 +259,6 @@ Also, it generates the report of policy violation in respective workloads. The f
     Example output:
 
     ```text
-
     NAMESPACE  NAME                   PASS   FAIL   WARN   ERROR   SKIP   AGE
     default    polr-ns-default        0      1      0      0       0      25d
     …
@@ -266,7 +273,6 @@ Also, it generates the report of policy violation in respective workloads. The f
     Example output:
 
     ```text
-
     …
     results:
     - message: 'validation error: Non root security context is not set. Rule container-security-context failed at path /spec/containers/0/securityContext/'
@@ -331,5 +337,5 @@ Also, it generates the report of policy violation in respective workloads. The f
 ## Known issues
 
 1. [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
-2. [No event is generated incase of mutation policy being apppled to a resource](https://github.com/kyverno/kyverno/issues/2160)
-2. [Inaccurate annnotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
+2. [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
+2. [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
