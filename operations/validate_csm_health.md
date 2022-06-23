@@ -12,6 +12,7 @@ The following are examples of when to run health checks:
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
+<<<<<<< HEAD
 - [1. Platform health checks](#platform-health-checks)
   - [1.1 `ncnHealthChecks`](#pet-ncnhealthchecks)
   - [1.2 `ncnPostgresHealthChecks`](#pet-ncnpostgreshealthchecks)
@@ -119,6 +120,57 @@ ncn-mw# csi handoff bss-update-param --set metal.no-wipe=1 --limit <SERVER_XNAME
 node in question. Kubernetes will begin evicting pods once the root file system space is at 85% until it is back under 80%. This may commonly happen on `ncn-m001` as it is a
 location that install and documentation files may be downloaded to. It may be necessary to clean-up space in the `/root` directory if this is the cause of pod evictions. The
 following commands can be used to determine if analysis of files under `/root` is needed to free-up space.
+=======
+## Topics
+
+- [0. Cray command line interface](#0-cray-command-line-interface)
+- [1. Platform health checks](#1-platform-health-checks)
+  - [1.1 NCN health checks](#11-ncn-health-checks)
+    - [1.1.1 Known issues with NCN health checks](#111-known-issues-with-ncn-health-checks)
+  - [1.2 NCN resource checks (optional)](#12-ncn-resource-checks-optional)
+    - [1.2.1 Known issues with NCN resource checks](#121-known-issues-with-ncn-resource-checks)
+  - [1.3 Check of system management monitoring tools](#13-check-of-system-management-monitoring-tools)
+- [2. Hardware Management Services health checks](#2-hardware-management-services-health-checks)
+  - [2.1 HMS CT test execution](#21-hms-ct-test-execution)
+  - [2.2 Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
+    - [2.2.1 Interpreting HSM discovery results](#221-interpreting-hsm-discovery-results)
+    - [2.2.2 Known issues with HSM discovery validation](#222-known-issues-with-hsm-discovery-validation)
+- [3. Software Management Services health checks](#3-software-management-services-health-checks)
+  - [3.1 SMS test execution](#31-sms-test-execution)
+  - [3.2 Interpreting `cmsdev` results](#32-interpreting-cmsdev-results)
+  - [3.3 Known issues with SMS tests](#33-known-issues-with-sms-tests)
+- [4. Gateway health and SSH access checks](#4-gateway-health-and-ssh-access-checks)
+  - [4.1 Gateway health tests](#41-gateway-health-tests)
+    - [4.1.1 Gateway health tests overview](#411-gateway-health-tests-overview)
+    - [4.1.2 Gateway health tests on an NCN](#412-gateway-health-tests-on-an-ncn)
+    - [4.1.3 Gateway health tests from outside the system](#413-gateway-health-tests-from-outside-the-system)
+  - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
+  - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
+- [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
+  - [5.1 Run the test script](#51-run-the-test-script)
+- [6. UAS/UAI tests](#6-uasuai-tests)
+  - [6.1 Validate the basic UAS installation](#61-validate-the-basic-uas-installation)
+  - [6.2 Validate UAI creation](#62-validate-uai-creation)
+  - [6.3 Test UAI gateway health](#63-test-uai-gateway-health)
+  - [6.4 UAS/UAI troubleshooting](#64-uasuai-troubleshooting)
+    - [6.4.1 Authorization issues](#641-authorization-issues)
+    - [6.4.2 UAS cannot access Keycloak](#642-uas-cannot-access-keycloak)
+    - [6.4.3 UAI images not in registry](#643-uai-images-not-in-registry)
+    - [6.4.4 Missing volumes and other container startup issues](#644-missing-volumes-and-other-container-startup-issues)
+
+<a name="cray-command-line-interface"></a>
+
+## 0. Cray command line interface
+
+The first time these checks are performed during a CSM install, the Cray Command Line Interface (CLI) has not yet been configured.
+Some of the health check tests cannot be run without the Cray CLI being configured. Tests with this dependency are noted in their
+descriptions below. These tests may be skipped but **this is not recommended**.
+
+The Cray CLI must be configured on all NCNs and the PIT node. The following procedures explain how to do this:
+
+1. [Configure Keycloak Account](../install/configure_administrative_access.md#configure_keycloak_account)
+1. [Configure the Cray Command Line Interface (CLI)](../install/configure_administrative_access.md#configure_cray_cli)
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 ```bash
 ncn# df -h /root
@@ -487,7 +539,44 @@ Execute the following commands on `ncn-m002`:
 ncn-m002# goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-vault-cluster-health.yaml validate
 ```
 
+<<<<<<< HEAD
 Check the output to verify no failures are reported:
+=======
+- Clock skew test failures
+
+   It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
+   fails, wait 15 minutes and try again. To check status, run the following command, preferably on `ncn-m001`:
+
+   ```bash
+   ncn-m001# chronyc sources -v
+   ```
+
+   ```text
+   210 Number of sources = 9
+
+     .-- Source mode  '^' = server, '=' = peer, '#' = local clock.
+    / .- Source state '*' = current synced, '+' = combined , '-' = not combined,
+   | /   '?' = unreachable, 'x' = time may be in error, '~' = time too variable.
+   ||                                                 .- xxxx [ yyyy ] +/- zzzz
+   ||      Reachability register (octal) -.           |  xxxx = adjusted offset,
+   ||      Log2(Polling interval) --.      |          |  yyyy = measured offset,
+   ||                                \     |          |  zzzz = estimated error.
+   ||                                 |    |           \
+   MS Name/IP address         Stratum Poll Reach LastRx Last sample
+   ===============================================================================
+   ^* ntp.hpecorp.net               2  10   377   650   -421us[ -571us] +/-   30ms
+   =? ncn-m002.nmn                 10   4   377   213    +82us[  +82us] +/-  367us
+   =- ncn-m003.nmn                  3   1   377     1  -2033us[-2033us] +/-   28ms
+   =- ncn-s001.nmn                  6   5   377    20    +53us[  +53us] +/-  193us
+   =- ncn-s002.nmn                  5   5   377    25    +29us[  +29us] +/-  275us
+   =- ncn-s003.nmn                  6   6   377    27    +47us[  +47us] +/-  237us
+   =- ncn-w001.nmn                  5   9   377  234m  +8305us[  +10ms] +/-   38ms
+   =- ncn-w002.nmn                  3   5   377     8  -1910us[-1910us] +/-   27ms
+   =- ncn-w003.nmn                  3   8   377   74m  -1122us[-1002us] +/-   31ms
+   ```
+
+<a name="pet-optional-ncnhealthchecks-resources"></a>
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 ```text
 Count: 2, Failed: 0, Skipped: 0
@@ -762,6 +851,11 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 <a name="sms-checks"></a>
 
 ### 3.1 SMS test execution
+<<<<<<< HEAD
+=======
+
+The test in this section requires that the [Cray CLI is configured](#cray-command-line-interface) on nodes where the test is executed.
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 The following test can be run on any Kubernetes node (any master or worker node, but **not** the PIT node).
 
@@ -794,9 +888,36 @@ Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
 ### 3.3 Known issues with SMS tests
 
+<<<<<<< HEAD
 #### `Failed to create vcs organization`
 
 On a fresh install, it is possible that `cmsdev` reports an error similar to the following:
+=======
+If an Etcd restore has been performed on one of the SMS services (such as BOS or CRUS), then the first Etcd pod that
+comes up after the restore will not have a PVC (Persistent Volume Claim) attached to it (until the pod is restarted).
+The Etcd cluster is in a healthy state at this point, but the SMS health checks will detect the above condition and
+may report test failures similar to the following:
+
+```text
+ERROR (run tag 1khv7-bos): persistentvolumeclaims "cray-bos-etcd-ncchqgnczg" not found
+ERROR (run tag 1khv7-crus): persistentvolumeclaims "cray-crus-etcd-ffmszl7bvh" not found
+```
+
+In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
+(as long as the other two Etcd pods are healthy).
+
+## 4. Gateway health and SSH access checks
+
+### 4.1 Gateway health tests
+
+#### 4.1.1 Gateway health tests overview
+
+The gateway tests check the health of the API Gateway on all of the relevant networks. The gateway tests check that the gateway is accessible on all networks where it should be accessible,
+and NOT accessible on all networks where it should NOT be accessible. They also check several service endpoints to verify that they return the proper response
+on each accessible network.
+
+The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 ```text
 ERROR (run tag zl7ak-vcs): POST https://api-gw-service-nmn.local/vcs/api/v1/orgs: expected status code 201, got 401
@@ -805,15 +926,32 @@ ERROR (run tag zl7ak-vcs): Failed to create vcs organization
 
 In this case, follow the [Gitea/VCS 401 Errors](../troubleshooting/known_issues/gitea_vcs_401_errors.md) troubleshooting procedure.
 
-<a name="booting-csm-barebones-image"></a>
+The gateway tests can be run from various locations. For this part of the CSM validation, check gateway access from the NCNs and from outside the system.
+Externally, the API gateway is accessible on the CMN and either the CAN or CHN, depending on the configuration of the system.
+On NCNs, the API gateway is accessible on the same networks (CMN and CAN/CHN) and it is also accessible on the NMNLB network.
+
+#### 4.1.2 Gateway health tests on an NCN
+
+The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#check-for-latest-documentation).
+
+To execute the tests, see [Running Gateway Tests on an NCN Management Node](network/gateway_testing.md#running-gateway-tests-on-an-ncn-management-node).
+
+#### 4.1.3 Gateway health tests from outside the system
+
+To execute the tests, see [Running Gateway Tests on a Device Outside the System](network/gateway_testing.md#running-gateway-tests-on-a-device-outside-the-system).
 
 ## 4. Booting CSM `barebones` image
 
+<<<<<<< HEAD
 Included with the Cray System Management (CSM) release is a pre-built node image that can be used
 to validate that core CSM services are available and responding as expected. The CSM `barebones`
 image contains only the minimal set of RPMs and configuration required to boot an image and is not
 suitable for production usage. To run production work loads, it is suggested that an image from
 the Cray OS (COS) product, or similar, be used.
+=======
+The internal SSH access tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM,
+see [Check for Latest Documentation](../update_product_stream/index.md#check-for-latest-documentation).
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 - This test is **very important to run** during the CSM install prior to redeploying the PIT node
 because it validates all of the services required for that operation.
@@ -839,9 +977,16 @@ Cray OS (COS) product stream is also installed on to the system.
 
 <a name="locate-csm-barebones-image-in-ims"></a>
 
+<<<<<<< HEAD
 ### 4.1 Locate CSM `barebones` image in IMS
 
 Locate the CSM Barebones image and note the `etag` and `path` fields in the output.
+=======
+By default, SSH access will be tested on all relevant networks between master nodes, spine switches, compute nodes, and UANs.
+It is possible to customize which nodes and networks will be tested. For example, it is possible to include storage nodes, to exclude
+UANs, or to exclude the HMN. See the test usage statement for details. The test usage statement is displayed by calling the
+test with the `--help` argument:
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 ```bash
 ncn# cray ims images list --format json | jq '.[] | select(.name | contains("barebones"))'
@@ -866,8 +1011,12 @@ Expected output is similar to the following:
 
 ### 4.2 Create a BOS session template for the CSM `barebones` image
 
+<<<<<<< HEAD
 The session template below can be copied and used as the basis for the BOS session template. As noted below, make sure the S3 path for the manifest matches the S3 path shown in
 the Image Management Service (IMS).
+=======
+1. Python version 3 must be installed (if it is not already).
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 1. Create `sessiontemplate.json`
 
@@ -902,7 +1051,11 @@ the Image Management Service (IMS).
    }
    ```
 
+<<<<<<< HEAD
    **NOTE**: Be sure to replace the values of the `etag` and `path` fields with the ones you noted earlier in the `cray ims images list` command.
+=======
+      See [Check for Latest Documentation](../update_product_stream/index.md#check-for-latest-documentation).
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 2. Create the BOS session template using the file as input:
 
@@ -962,7 +1115,14 @@ Choose a node from those listed and set `XNAME` to its ID. In this example, `x30
 ncn# export XNAME=x3000c0s17b2n0
 ```
 
+<<<<<<< HEAD
 <a name="csm-reboot"></a>
+=======
+    By default, SSH access will be tested on all relevant networks between master nodes, spine switches, compute nodes, and UANs.
+    It is possible to customize which nodes and networks will be tested. For example, it is possible to include storage nodes, to exclude
+    UANs, or to exclude the HMN. See the test usage statement for details. The test usage statement is displayed by calling the
+    test with the `--help` argument:
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 ### 4.4 Reboot the node using a BOS session template
 
@@ -974,6 +1134,7 @@ ncn# cray bos session create --template-uuid shasta-1.5-csm-bare-bones-image --o
 
 Expected output looks similar to the following:
 
+<<<<<<< HEAD
 ```toml
 limit = "x3000c0s17b2n0"
 operation = "reboot"
@@ -989,10 +1150,37 @@ href = "/v1/session/8f2fc013-7817-4fe2-8e6f-c2136a5e3bd1/status"
 rel = "status"
 type = "GET"
 ```
+=======
+<a name="booting-csm-barebones-image"></a>
+
+## 5. Booting CSM `barebones` image
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 <a name="csm-watch-boot"></a>
 
+<<<<<<< HEAD
 ### 4.5 Connect to the node's console and watch the boot
+=======
+- This test is **very important to run**, particularly during the CSM install prior to rebooting the PIT node,
+because it validates all of the services required for nodes to PXE boot from the cluster.
+- The CSM Barebones image included with the release will not successfully complete
+beyond the `dracut` stage of the boot process. However, if the `dracut` stage is reached, the
+boot can be considered successful and shows that the necessary CSM services needed to
+boot a node are up and available.
+  - This inability to boot the Barebones image fully will be resolved in future releases of the
+CSM product.
+- In addition to the CSM Barebones image, the release also includes an IMS Recipe that
+can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
+RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
+Cray OS (COS) product stream is also installed on to the system.
+  - In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
+- This test can be run on any NCN, but not the PIT node.
+- This script uses the Kubernetes API Gateway to access CSM services. This gateway must be properly
+configured to allow an access token to be generated by the script.
+- This script is installed as part of the `cray-cmstools-crayctldeploy` RPM.
+- For additional information on the script and for troubleshooting help look at the document
+  [Barebones Image Boot](../troubleshooting/cms_barebones_image_boot.md).
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 See [Manage Node Consoles](conman/Manage_Node_Consoles.md) for information on how to connect to the node's console (and for
 instructions on how to close it later).
@@ -1025,7 +1213,13 @@ After the node has reached this point, close the console session. The test is co
 
 <a name="uas-uai-tests"></a>
 
+<<<<<<< HEAD
 ## 5. UAS / UAI tests
+=======
+## 6. UAS/UAI tests
+
+The commands in this section require that the [Cray CLI is configured](#cray-command-line-interface) on nodes where the commands are being executed.
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node, while the second part runs on a non-LiveCD
 Kubernetes master or worker node.
@@ -1033,6 +1227,7 @@ In either case, the CLI configuration needs to be initialized on the node and th
 
 The following procedures run on separate nodes of the system. They are, therefore, separated into separate sub-sections.
 
+<<<<<<< HEAD
 1. [Validate Basic UAS Installation](#uas-uai-validate-install)
 1. [Validate UAI Creation](#uas-uai-validate-create)
 1. [UAS/UAI Troubleshooting](#uas-uai-validate-debug)
@@ -1040,6 +1235,16 @@ The following procedures run on separate nodes of the system. They are, therefor
    1. [UAS Cannot Access Keycloak](#uas-uai-validate-debug-keycloak)
    1. [UAI Images not in Registry](#uas-uai-validate-debug-registry)
    1. [Missing Volumes and Other Container Startup Issues](#uas-uai-validate-debug-container)
+=======
+1. [Validate the basic UAS installation](#61-validate-the-basic-uas-installation)
+2. [Validate UAI creation](#62-validate-uai-creation)
+3. [Test UAI gateway health](#63-test-uai-gateway-health)
+4. [UAS/UAI troubleshooting](#64-uas-uai-validate-debug)
+   1. [Authorization issues](#641-authorization-issues)
+   2. [UAS cannot access Keycloak](#642-uas-cannot-access-keycloak)
+   3. [UAI images not in registry](#643-uai-images-not-in-registry)
+   4. [Missing volumes and other container startup issues](#644-missing-volumes-and-other-container-startup-issues)
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 
 <a name="uas-uai-validate-install"></a>
 
@@ -1052,7 +1257,7 @@ This section can be run on any NCN or the PIT node.
 1. Show information about `cray-uas-mgr`.
 
     ```bash
-    ncn# cray uas mgr-info list
+    ncn# cray uas mgr-info list --format toml
     ```
 
     Expected output looks similar to the following:
@@ -1067,7 +1272,7 @@ This section can be run on any NCN or the PIT node.
 1. List UAIs on the system.
 
     ```bash
-    ncn# cray uas list
+    ncn# cray uas list --format toml
     ```
 
     Expected output looks similar to the following:
@@ -1082,7 +1287,7 @@ This section can be run on any NCN or the PIT node.
 1. Verify that the pre-made UAI images are registered with UAS.
 
    ```bash
-   ncn# cray uas images list
+   ncn# cray uas images list --format toml
    ```
 
    Expected output looks similar to the following:
@@ -1114,7 +1319,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 1. Verify that a UAI can be created:
 
    ```bash
-   ncn# cray uas create --publickey ~/.ssh/id_rsa.pub
+   ncn# cray uas create --publickey ~/.ssh/id_rsa.pub --format toml
    ```
 
    Expected output looks similar to the following:
@@ -1144,7 +1349,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 1. Check the current status of the UAI:
 
    ```bash
-   ncn# cray uas list
+   ncn# cray uas list --format toml
    ```
 
    Expected output looks similar to the following:
@@ -1201,7 +1406,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 1. Clean up the UAI.
 
    ```bash
-   ncn# cray uas delete --uai-list $UAINAME
+   ncn# cray uas delete --uai-list $UAINAME --format toml
    ```
 
    Expected output looks similar to the following:
@@ -1212,6 +1417,36 @@ This procedure must run on a master or worker node (**not the PIT node**).
 
 If the commands ran with similar results, then the basic functionality of the UAS and UAI is working.
 
+<<<<<<< HEAD
+=======
+### 6.3 Test UAI gateway health
+
+Like the NCN gateway health check, the gateway tests check the health of the API Gateway on all of the relevant networks.
+On UAIs, the API gateway should only be accessible on the user network (either CAN or CHN depending on the configuration of the system).
+The gateway tests check that the gateway is accessible on all networks where it should be accessible, and NOT accessible on all
+networks where it should NOT be accessible. They also check several service endpoints to verify that they return the proper response
+on each accessible network.
+
+#### 6.3.1 Gateway test execution
+
+The UAI gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#check-for-latest-documentation).
+
+The UAI gateway tests are executed by running the following command.
+
+```bash
+ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
+```
+
+The test will launch a UAI with the `gateway-test image`, execute the gateway tests, and then delete the UAI that was launched.
+The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
+
+```text
+Overall Gateway Test Status:  PASS
+```
+
+For more detailed information on the tests results and examples, see [Gateway Testing](network/gateway_testing.md).
+
+>>>>>>> bde1a1d5ee9 (CASMINST-4847: Minor improvements related to CSM health validation)
 <a name="uas-uai-validate-debug"></a>
 
 ### 5.3 UAS/UAI troubleshooting
