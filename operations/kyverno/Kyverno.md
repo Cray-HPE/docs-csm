@@ -7,10 +7,11 @@ Kyverno allows cluster administrators to manage environment specific configurati
 Kyverno can be used to scan existing workloads for best practices, or can be used to enforce best practices by blocking or mutating API requests.
 
 Kyverno enables administrators to do the following:
+
 * Manage policies as Kubernetes resources.
 * Validate, mutate, and generate resource configurations.
 * Select resources based on labels and wildcards.
-* Block non-conformant resources using admission controls, or report policy violations.
+* Block nonconforming resources using admission controls, or report policy violations.
 * View policy enforcement as events.
 * Scan existing resources for violations.
 
@@ -35,7 +36,7 @@ Mutation policies are applied in the admission controller while creating pods.
 
 It mutates the manifest of respective workloads before creating it so that when resource comes up, it will abide by the policy constraints.
 
-### Example
+### Example mutation policy
 
 1. Create a sample policy.
 
@@ -154,9 +155,7 @@ It mutates the manifest of respective workloads before creating it so that when 
     If any of the workloads fail to come up after enforcing the policy, then delete the individual policies and restart the workload.
 
 5. (`ncn#`) Check the pod description when the pod fails to come up.
-    
     Obtain the pod name:
-    
     ```bash
     kubectl get pods
     ```
@@ -168,9 +167,7 @@ It mutates the manifest of respective workloads before creating it so that when 
     NAME    READY   STATUS                       RESTARTS   AGE
     nginx   0/1     CreateContainerConfigError   0          5s
     ```
-    
     Describe the pod:
-    
     ```bash
     kubectl describe pods
     ```
@@ -194,17 +191,18 @@ It mutates the manifest of respective workloads before creating it so that when 
     ```
 
 6. (`ncn#`) If the previous step failed, delete the policy and restart the workload.
+
     ```bash
     kubectl delete pol -n default add-default-securitycontext
     ```
 
 7. (`ncn#`) Check the pod status after deleting the policy.
+
     ```bash
     kubectl get pods
     ```
 
     Example output:
-    
     ```text
     NAME    READY   STATUS    RESTARTS   AGE
     nginx   1/1     Running   0          6s
@@ -218,7 +216,7 @@ Violation is only reported in case of `audit` mode and it blocks the resources f
 
 Also, it generates the report of policy violation in respective workloads. The following is an example of the validation policy in `audit` mode.
 
-### Example
+### Example validation policy
 
 1. Add the following policy before applying the [mutation](#mutation) to the workload.
 
@@ -299,7 +297,6 @@ Also, it generates the report of policy violation in respective workloads. The f
     ```
 
 2. Apply the mutation policy and restart the following workload.
-    
     ```text
     apiVersion: v1
     kind: Pod
@@ -316,7 +313,6 @@ Also, it generates the report of policy violation in respective workloads. The f
     ```
 
 3. Check the policy report status.
-    
     ```bash
     kubectl get polr -A
     ```
@@ -338,4 +334,4 @@ Also, it generates the report of policy violation in respective workloads. The f
 
 1. [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 2. [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
-2. [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
+3. [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
