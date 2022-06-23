@@ -300,7 +300,8 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
 1. Set next boot with `ipmitool`
 
     ```bash
-    ipmitool chassis bootdev pxe options=efiboot,persistent
+    ipmitool chassis bootdev pxe options=persistent
+    ipmitool chassis bootdev pxe options=efiboot
     ```
 
 1. Boot to BIOS for checkout of boot devices
