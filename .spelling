@@ -622,6 +622,3 @@ pre-1
 
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
-
-- upgrade/1.2/scripts/sls/README.SLS_Upgrade.md
-IP address(es)
