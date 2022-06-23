@@ -134,7 +134,7 @@ if [[ $state_recorded == "0" ]]; then
             exit 1
         fi
       done
-      record_state "${state_name}" "$(hostanme)"
+      record_state "${state_name}" "$(hostname)"
     fi
     } >> ${LOG_FILE} 2>&1
 else
