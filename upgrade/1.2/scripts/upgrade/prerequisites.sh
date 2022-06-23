@@ -120,8 +120,15 @@ if [[ $state_recorded == "0" ]]; then
         fi
 
         ssh "$target_ncn" chronyc makestep
-        sleep 5
+        loop_idx=0
         in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+        # wait up to 90s for the node to be in sync
+        while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
+            sleep 5
+            in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+            loop_idx=$(( loop_idx+1 ))
+        done
+
         if [[ "$in_sync" == "no" ]]; then
             echo "The clock for ${target_ncn} is not in sync.  Wait a bit more or try again."
             exit 1
