@@ -1,7 +1,7 @@
 # Collecting NCN MAC Addresses
 
 This procedure details how to collect the NCN MAC addresses from an HPE Cray EX system.
-The MAC addresses needed for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns 
+The MAC addresses needed for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns
 in `ncn_metadata.csv` will be collected. This data will feed into the `cloud-init` metadata.
 
 The `Bootstrap MAC` address will be used for identification of this node during the early part of the PXE boot process,
@@ -15,7 +15,7 @@ while not optimal, this will still produce a valid configuration.
 ## Topics
 
 - [Procedure: iPXE consoles](#procedure-ipxe-consoles)
-   - [MAC collection](#mac-collection)
+  - [MAC collection](#mac-collection)
 - [Procedure: Serial consoles](#procedure-serial-consoles)
 
 The easy way to do this leverages the NIC dump provided by the `metal-ipxe` package on the LiveCD. This option is
@@ -65,7 +65,7 @@ boot-check nodes to dump network device information without an operating system.
 
     1. Set the nodes to PXE boot and restart them.
 
-        ```bash 
+        ```bash
         export IPMI_PASSWORD
         grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
         grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
@@ -179,6 +179,6 @@ Pick out the MAC addresses for the `Bond` from both the `sw-spine-001` and `sw-s
 
 1. Follow `Metadata BMC` on each spine switch that `port1` and `port2` of the bond are plugged into.
 
-1. Usually the 2nd/3rd/4th/Nth MAC on the PCIe card will be a 0x1 or 0x2 deviation from the first port.
+1. Usually the 2nd/3rd/4th/Nth MAC on the PCIe card will be a `0x1` or `0x2` deviation from the first port.
 
    Collection is quicker if this can be easily confirmed.
