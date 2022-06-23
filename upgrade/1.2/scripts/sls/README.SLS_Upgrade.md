@@ -34,7 +34,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
 
 ## Procedure
 
-1. Get a token:
+1. (`ncn#`) Get a token:
 
     ```bash
     export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
@@ -42,13 +42,13 @@ During the update of SLS, at a minimum, answers to the following questions must 
             https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. Extract SLS data to a file:
+1. (`ncn#`) Extract SLS data to a file:
 
     ```bash
     curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
     ```
 
-1. Upgrade SLS data.
+1. (`ncn#`) Upgrade SLS data.
 
     * Example 1: Upgrade, using the CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
@@ -71,7 +71,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
     NOTE: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components
     (UAN, login nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure subnet reservations are correct to prevent any data loss.
 
-1. Upload migrated SLS file to SLS service:
+1. (`ncn#`) Upload migrated SLS file to SLS service:
 
     ```bash
     curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
