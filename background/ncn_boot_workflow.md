@@ -317,7 +317,8 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
 1. Set next boot with `ipmitool`
 
     ```bash
-    ncn/pit# ipmitool chassis bootdev pxe options=efiboot,persistent
+    ncn/pit# ipmitool chassis bootdev pxe options=persistent
+    ncn/pit# ipmitool chassis bootdev pxe options=efiboot
     ```
 
 1. Boot to BIOS for checkout of boot devices
