@@ -5,9 +5,13 @@ services are available on any system with CMN, BGP, MetalLB, and external DNS pr
 
 The `SYSTEM_DOMAIN_NAME` value in the examples below is an Ansible variable defined as follows and is expected to be the systems' FQDN.
 
-```screen
-ncn-m001# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' \
-| base64 -d | grep "external:"
+```bash
+ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:"
+```
+
+Example output:
+
+```yaml
       external: SYSTEM_DOMAIN_NAME
 ```
 
