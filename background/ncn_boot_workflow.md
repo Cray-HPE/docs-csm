@@ -194,7 +194,7 @@ In this case, the instructions are the same regardless of node type (management,
 
     - Hewlett-Packard Enterprise
 
-        > **NOTE:** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippets](../install/switch_pxe_boot_from_onboard_nic_to_pcie.md#high-speed-network).
+        > **NOTE:** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippets](../operations/node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md#high-speed-network).
 
         ```bash
         efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
