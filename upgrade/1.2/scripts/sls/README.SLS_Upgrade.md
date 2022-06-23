@@ -20,7 +20,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
      case of preserving `external-dns` values, to prevent site-networking changes that might result in NCN IP addresses
      overlapping during the upgrade process. This requires network subnetting expertise and EXPERT mode below.
 
-     If the `external-dns` IP address is changed the `customizations.yaml` `site_to_system_lookups` value needs to be updated to
+     If the `external-dns` IP address is changed, then the `customizations.yaml` `site_to_system_lookups` value must be updated to
      the new IP address. See the "Update `customizations.yaml`" section of the
      [Update the `cmn-external-dns` value post-installation](../../../../operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
      document for instructions on how to do this.

@@ -45,19 +45,19 @@ The system is installed.
 
 ### Update SLS
 
-The `external-dns` IP reservation in the SLS `CMN` network `cmn_metallb_static_pool` subnet should be updated to the desired CMN IP address.
+The `external-dns` IP address reservation in the SLS CMN `cmn_metallb_static_pool` subnet should be updated to the desired CMN IP address.
 
-1. Retrieve the SLS data for `CMN` network.
+1. Retrieve the SLS data for CMN.
 
    ```bash
    ncn-m001# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials \
-   -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
-   -o jsonpath='{.data.client-secret}' | base64 -d` \
-   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
-   | jq -r '.access_token')
+                 -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
+                 -o jsonpath='{.data.client-secret}' | base64 -d` \
+                 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+               | jq -r '.access_token')
 
    ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" \
-   https://api-gw-service-nmn.local/apis/sls/v1/networks/CMN|jq > CMN.json
+                 https://api-gw-service-nmn.local/apis/sls/v1/networks/CMN|jq > CMN.json
 
    ncn-m001# cp CMN.json CMN.json.bak
    ```
@@ -76,8 +76,8 @@ The `external-dns` IP reservation in the SLS `CMN` network `cmn_metallb_static_p
 
    ```bash
    ncn-m001# curl -s -k -H "Authorization: Bearer ${TOKEN}" --header \
-   "Content-Type: application/json" --request PUT --data @CMN.json \
-   https://api-gw-service-nmn.local/apis/sls/v1/networks/CMN
+                 "Content-Type: application/json" --request PUT --data @CMN.json \
+                 https://api-gw-service-nmn.local/apis/sls/v1/networks/CMN
    ```
 
 ### Update `customizations.yaml`
