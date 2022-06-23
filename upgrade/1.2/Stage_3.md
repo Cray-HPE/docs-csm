@@ -1,5 +1,8 @@
 # Stage 3 - CSM Service Upgrades
 
+**Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
+[Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+
 ## Prepare assets on `ncn-m002`
 
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.

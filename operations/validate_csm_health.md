@@ -15,8 +15,11 @@ The areas should be tested in the order they are listed on this page. Errors in 
 **NOTE:** It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
 fails, wait 15 minutes and try again. To check status, run the following command, preferably on `ncn-m001`:
 
-```console
-ncn-m001:~ # chronyc sources -v
+```bash
+ncn-m001# chronyc sources -v
+```
+
+```text
 210 Number of sources = 9
 
   .-- Source mode  '^' = server, '=' = peer, '#' = local clock.
@@ -38,7 +41,6 @@ MS Name/IP address         Stratum Poll Reach LastRx Last sample
 =- ncn-w001.nmn                  5   9   377  234m  +8305us[  +10ms] +/-   38ms
 =- ncn-w002.nmn                  3   5   377     8  -1910us[-1910us] +/-   27ms
 =- ncn-w003.nmn                  3   8   377   74m  -1122us[-1002us] +/-   31ms
-ncn-m001:~ #
 ```
 
 ## Topics
@@ -207,7 +209,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
   - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, then delete
     `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
-    `request-ncn-join-token` daemon set pod.
+    `request-ncn-join-token` `daemonset` pod.
 - `cfs-state-reporter service ran successfully`
   - If this test is failing, it could be due to SSL certificate issues on that NCN.
      1. Run the following command on the node where the test is failing.
@@ -387,8 +389,8 @@ code. Failure information interpretation is described in the next section.
 
 The Cabinet Checks output is divided into three sections:
 
-- Summary information for for each cabinet
-- Detail information for for River cabinets
+- Summary information for each cabinet
+- Detail information for River cabinets
 - Detail information for Mountain/Hill cabinets.
 
 In the River section, any hardware found in SLS and not discovered by HSM is
@@ -437,17 +439,40 @@ BMC can be safely ignored or needs to be addressed before proceeding.
        - x3000c0s10b999 - Not found in HSM Components; Not found in HSM Redfish Endpoints; No mgmt port connection.
    ```
 
-- HPE PDUs are supported and should show up as being found in HSM. If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are
-  required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on
-  if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
-   > Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
+- Cabinet PDU Controllers have component names (xnames) in the form of `xXmM`, where `X` is the cabinet and `M` is the ordinal of the Cabinet PDU Controller.
 
-   Example mismatch for HPE PDU:
+   Example mismatch for a PDU:
 
    ```text
      CabinetPDUControllers: WARNING
        - x3000m0 - Not found in HSM Components ; Not found in HSM Redfish Endpoints
    ```
+
+  If the PDU is accessible over the network, the following can be used to determine the vendor of the PDU.
+
+   ```bash
+  ncn-m001# PDU=x3000m0
+  ncn-m001# curl -k -s --compressed  https://$PDU -i | grep Server:
+  ```
+
+  - Example ServerTech output:
+
+     ```text
+     Server: ServerTech-AWS/v8.0v
+     ```
+
+  - Example HPE output:
+
+     ```text
+     Server: HPE/1.4.0
+     ```
+
+  - ServerTech PDUs may need passwords changed from their defaults to become functional. See [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
+
+  - HPE PDUs are supported and should show up as being found in HSM.
+  If they are not, they should be investigated since that may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered.
+  Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU.
+  The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
 
 - BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
 - In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated
@@ -560,9 +585,10 @@ Execute the tests by running the following command:
 ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
 ```
 
-By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
-It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
-The script usage statement is displayed by calling the test with the `--help` argument:
+By default, SSH access will be tested between master nodes and spine switches on all relevant networks.
+It is possible to customize which nodes and networks will be tested. For example, you may wish to include configured
+UANs as part of the tests. See the test usage statement for details. The test usage statement is displayed by calling the
+test with the `--help` argument:
 
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal --help
@@ -621,9 +647,10 @@ The external SSH access tests may be run on any system external to the cluster.
     external:/usr/share/doc/csm/scripts/operations/pyscripts# ./start.py test_bican_external
     ```
 
-   By default, SSH access will be tested between master nodes , compute nodes, UANs, and spine switches. on all relevant networks.
-   It is possible to customize which nodes and networks will be tested. See the test usage statement for details.
-   The script usage statement is displayed by calling the test with the `--help` argument:
+   By default, SSH access will be tested to master nodes and spine switches on all relevant networks.
+   It is possible to customize which nodes and networks will be tested. For example, you may wish to include configured
+   UANs as part of the tests. See the test usage statement for details. The test usage statement is displayed by calling the
+   test with the `--help` argument:
 
     ```bash
     external:/usr/share/doc/csm/scripts/operations/pyscripts# ./start.py test_bican_external --help

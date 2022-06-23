@@ -54,36 +54,58 @@ usage()
    echo
 }
 
+usage_err_exit()
+{
+    usage
+    err_exit "usage: $*"
+}
+
 while [[ $# -gt 0 ]]; do
   key="$1"
 
   case $key in
     --csm-release)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       RELEASE="$2"
       shift # past argument
       shift # past value
       ;;
     --csm-config-version)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       VERSION="$2"
       shift # past argument
       shift # past value
       ;;
     --git-commit)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       COMMIT="$2"
       shift # past argument
       shift # past value
       ;;
     --git-clone-url)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       CLONE_URL="$2"
       shift # past argument
       shift # past value
       ;;
     --ncn-config-file)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
+      # Make sure the file exists
+      [[ -e "$2" ]] || usage_err_exit "NCN config file ($2) does not exist"
+      [[ -f "$2" ]] || usage_err_exit "NCN config file ($2) exists but is not a regular file"
+      [[ -s "$2" ]] || usage_err_exit "NCN config file ($2) has zero size"
       OLD_NCN_CONFIG_FILE="$2"
       shift # past argument
       shift # past value
       ;;
     --xnames)
+      [[ $# -lt 2 ]] && usage_err_exit "$key requires an argument"
+      [[ -z "$2" ]] && usage_err_exit "Argument to $key may not be blank"
       XNAMES="$2"
       shift # past argument
       shift # past value
@@ -97,14 +119,14 @@ while [[ $# -gt 0 ]]; do
       exit 0
       ;;
     *) # unknown option
-      usage
+      usage_err_exit "Unknown argument: '$key'"
       exit 1
       ;;
   esac
 done
 
 ## CONFIGURATION SETUP ##
-if [[ -z "${RELEASE}" &&  -z "${VERSION}" ]]; then
+if [[ -z "${RELEASE}" && -z "${VERSION}" ]]; then
     RELEASE=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' 2>/dev/null\
         | yq r -j - 2>/dev/null | jq -r ' to_entries | max_by(.key) | .key' 2>/dev/null)
     echo "Using latest release ${RELEASE}"
@@ -127,12 +149,12 @@ if [[ -z "${CLONE_URL}" ]]; then
 fi
 
 if [[ -z "${COMMIT}" ]]; then
-    VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-    VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+    VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template='{{.data.vcs_username}}' | base64 --decode)
+    VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template='{{.data.vcs_password}}' | base64 --decode)
     TEMP_DIR=`mktemp -d`
     TEMP_HOME=$HOME
     HOME=$TEMP_DIR
-    cd $TEMP_DIR
+    cd "$TEMP_DIR" || err_exit "Unable to change directory to '$TEMP_DIR'"
     echo "${CLONE_URL/\/\//\/\/${VCS_USER}:${VCS_PASSWORD}@}" > .git-credentials
     git config --file .gitconfig credential.helper store
     COMMIT=$(git ls-remote $CLONE_URL refs/heads/cray/csm/${VERSION} | awk '{print $1}')
@@ -142,11 +164,12 @@ if [[ -z "${COMMIT}" ]]; then
         echo "No git commit found"
         exit 1
     fi
-    cd - >/dev/null 2>&1
+    cd - >/dev/null || err_exit "Unable to change directory back to previous directory"
     HOME=$TEMP_HOME
-    rm -r $TEMP_DIR
+    rm -r "$TEMP_DIR"
 fi
 
+#shellcheck disable=SC2089
 CONFIG="{
   \"layers\": [
     {
@@ -159,16 +182,16 @@ CONFIG="{
 }"
 
 echo "Creating the configuration file ${CSM_CONFIG_FILE}"
-echo $CONFIG | jq > $CSM_CONFIG_FILE
+echo "$CONFIG" | jq > "$CSM_CONFIG_FILE"
 
 if [[ -n ${OLD_NCN_CONFIG_FILE} && -f ${OLD_NCN_CONFIG_FILE} ]]; then
     echo "Combining new CSM configuration $CSM_CONFIG_FILE with contents of ${OLD_NCN_CONFIG_FILE} to generate ${NCN_CONFIG_FILE}"
-    jq -n --slurpfile new $CSM_CONFIG_FILE --slurpfile old $OLD_NCN_CONFIG_FILE \
+    jq -n --slurpfile new "$CSM_CONFIG_FILE" --slurpfile old "$OLD_NCN_CONFIG_FILE" \
         '{"layers": ($new[0].layers + ($old[0].layers | del(.[] | select(.cloneUrl == $new[0].layers[0].cloneUrl and .playbook == $new[0].layers[0].playbook))))}'\
-        > ${NCN_CONFIG_FILE}
+        > "${NCN_CONFIG_FILE}"
 else
     echo "Creating new NCN configuration file ${NCN_CONFIG_FILE}"
-    cp -p ${CSM_CONFIG_FILE} ${NCN_CONFIG_FILE}
+    cp -p "${CSM_CONFIG_FILE}" "${NCN_CONFIG_FILE}"
 fi
 
 ## RUNNING CFS ##
@@ -184,7 +207,7 @@ for xname in $XNAME_LIST; do
 done
 
 echo "Updating ncn-personalization configuration"
-cray cfs configurations update ncn-personalization --file $NCN_CONFIG_FILE
+cray cfs configurations update ncn-personalization --file "$NCN_CONFIG_FILE"
 
 if [[ -n $CLEAR_STATE ]]; then
     echo "Clearing state from all listed components"

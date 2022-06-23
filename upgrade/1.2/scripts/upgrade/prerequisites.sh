@@ -62,6 +62,47 @@ if [[ -z ${CSM_ARTI_DIR} ]]; then
     exit 1
 fi
 
+state_name="CHECK_WEAVE"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                   -d client_id=admin-client \
+                   -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
+                   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+export TOKEN
+
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    SLEEVE_MODE="yes"
+    weave --local status connections | grep -q sleeve || SLEEVE_MODE="no"
+    if [ "${SLEEVE_MODE}" == "yes" ]; then
+        echo "Detected that weave is in sleeve mode with at least one peer.   Please consult FN6636 before proceeding with the upgrade."
+        exit 1
+    fi
+
+    # get bss global cloud-init data
+    curl -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global|jq .[] > cloud-init-global.json
+
+    CURRENT_MTU=$(jq '."cloud-init"."meta-data"."kubernetes-weave-mtu"' cloud-init-global.json)
+    echo "Current kubernetes-weave-mtu is $CURRENT_MTU"
+
+    # make sure kubernetes-weave-mtu is set to 1376
+    jq '."cloud-init"."meta-data"."kubernetes-weave-mtu" = "1376"' cloud-init-global.json > cloud-init-global-update.json
+
+    echo "Setting kubernetes-weave-mtu to 1376"
+    # post the update json to bss
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
+        --request PUT \
+        --data @cloud-init-global-update.json \
+        https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
+
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+    echo
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPDATE_SSH_KEYS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
@@ -80,6 +121,63 @@ EOF
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="REPAIR_AND_VERIFY_CHRONY_CONFIG"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                   -d client_id=admin-client \
+                   -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
+                   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+export TOKEN
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    if [[ "$(hostname)" == "ncn-m002" ]]; then
+        # we already did this from ncn-m001
+        echo "====> ${state_name} has been completed"
+    else
+      # shellcheck disable=SC2013
+      for target_ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
+
+        # ensure host is accessible, skip it if not
+        if ! ssh "$target_ncn" hostname > /dev/null; then
+            continue
+        fi
+
+        # ensure the directory exists
+        ssh "$target_ncn" mkdir -p /srv/cray/scripts/common/
+
+        # copy the NTP script and template to the target ncn
+        rsync -aq "${CSM_ARTI_DIR}"/chrony "$target_ncn":/srv/cray/scripts/common/
+
+        # shellcheck disable=SC2029 # it's ok that $TOKEN expands on the client side
+        # run the script
+        if ! ssh "$target_ncn" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; then
+            echo "${target_ncn} csm_ntp failed"
+            exit 1
+        fi
+
+        ssh "$target_ncn" chronyc makestep
+        loop_idx=0
+        in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+        # wait up to 90s for the node to be in sync
+        while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
+            sleep 5
+            in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+            loop_idx=$(( loop_idx+1 ))
+        done
+
+        if [[ "$in_sync" == "no" ]]; then
+            echo "The clock for ${target_ncn} is not in sync.  Wait a bit more or try again."
+            exit 1
+        fi
+      done
+      record_state "${state_name}" "$(hostname)"
+    fi
+    } >> ${LOG_FILE} 2>&1
 else
     echo "====> ${state_name} has been completed"
 fi
@@ -496,29 +594,6 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
 
-    kubectl patch deployment -n spire spire-jwks -p '{
-        "spec": {
-        "strategy": {"rollingUpdate": {"maxSurge": 0}},
-        "template": {
-            "spec": {
-                "affinity": {
-                    "podAntiAffinity": {
-                        "requiredDuringSchedulingIgnoredDuringExecution": [
-                            {
-                            "labelSelector": {
-                                "matchLabels": {
-                                    "app.kubernetes.io/name":"spire-jwks"
-                                }
-                            },
-                            "topologyKey": "kubernetes.io/hostname"
-                            }
-                        ]
-                    }
-                }
-            }
-        }
-    }}'
-
     if kubectl get deployment -n istio-system istio-ingressgateway >/dev/null 2>&1; then
         kubectl patch deployment -n istio-system istio-ingressgateway -p '{
             "spec": {
@@ -611,6 +686,91 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
                                 "labelSelector": {
                                     "matchLabels": {
                                         "app":"istio-ingressgateway-hmn"
+                                    }
+                                },
+                                "topologyKey": "kubernetes.io/hostname"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }}'
+    fi
+
+    for deploy in cray-opa cray-opa-ingressgateway cray-opa-ingressgateway-customer-admin cray-opa-ingressgateway-user; do
+        namespace="opa"
+        if kubectl get deployment -n "${namespace}" "${deploy}" >/dev/null 2>&1; then
+            kubectl patch deployment -n "${namespace}" "${deploy}" -p '{
+                "spec": {
+                "strategy": {"rollingUpdate": {"maxSurge": 0, "maxUnavailable": 1 }},
+                "template": {
+                    "spec": {
+                        "affinity": {
+                            "podAntiAffinity": {
+                                "preferredDuringSchedulingIgnoredDuringExecution": null,
+                                "requiredDuringSchedulingIgnoredDuringExecution": [
+                                    {
+                                    "labelSelector": {
+                                        "matchLabels": {
+                                            "app":"'"${deploy}"'"
+                                        }
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }}'
+        fi
+    done
+
+    namespace="spire"
+
+    deploy=spire-jwks
+    if kubectl get deployment -n "${namespace}" "${deploy}" >/dev/null 2>&1; then
+        kubectl patch deployment -n "${namespace}" "${deploy}" -p '{
+            "spec": {
+            "strategy": {"rollingUpdate": {"maxSurge": 0, "maxUnavailable": 1 }},
+            "template": {
+                "spec": {
+                    "affinity": {
+                        "podAntiAffinity": {
+                            "preferredDuringSchedulingIgnoredDuringExecution": null,
+                            "requiredDuringSchedulingIgnoredDuringExecution": [
+                                {
+                                "labelSelector": {
+                                    "matchLabels": {
+                                        "app":"'"${deploy}"'"
+                                    }
+                                },
+                                "topologyKey": "kubernetes.io/hostname"
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }}'
+    fi
+
+    deploy=spire-server
+    if kubectl get statefulset -n "${namespace}" "${deploy}" >/dev/null 2>&1; then
+        kubectl patch statefulset -n "${namespace}" "${deploy}" -p '{
+            "spec": {
+            "strategy": {"rollingUpdate": {"maxSurge": 0, "maxUnavailable": 1 }},
+            "template": {
+                "spec": {
+                    "affinity": {
+                        "podAntiAffinity": {
+                            "preferredDuringSchedulingIgnoredDuringExecution": null,
+                            "requiredDuringSchedulingIgnoredDuringExecution": [
+                                {
+                                "labelSelector": {
+                                    "matchLabels": {
+                                        "app":"'"${deploy}"'"
                                     }
                                 },
                                 "topologyKey": "kubernetes.io/hostname"

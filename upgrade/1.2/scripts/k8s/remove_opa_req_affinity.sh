@@ -1,7 +1,8 @@
+#!/bin/bash
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -22,33 +23,31 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-NAME ?= ${GIT_REPO_NAME}
-ifeq ($(VERSION),)
-VERSION := $(shell git describe --tags | tr -s '-' '~' | tr -d '^v')
-endif
+function remove_opa_req_affinity() {
+    deployment=$1
+    shift
+    namespace="${1:-opa}"
 
-SPEC_FILE ?= ${NAME}.spec
-SOURCE_NAME ?= ${NAME}
-BUILD_DIR ?= $(PWD)/dist/rpmbuild
-SOURCE_PATH := ${BUILD_DIR}/SOURCES/${SOURCE_NAME}-${VERSION}.tar.bz2
+    if kubectl get deployment -n "${namespace}" "${deployment}" >/dev/null 2>&1; then
+       kubectl patch deployment -n "${namespace}" "${deployment}" -p '{
+           "spec": {
+           "template": {
+               "spec": {
+                   "affinity": {
+                       "podAntiAffinity": {
+                           "requiredDuringSchedulingIgnoredDuringExecution": null
+                       }
+                   }
+               }
+           }
+       }}'
 
-all: prepare rpm
+       kubectl rollout status deployment -n "${namespace}" "${deployment}"
+    fi
+}
 
-rpm: prepare rpm_package_source rpm_build_source rpm_build
-
-prepare:
-	rm -rf $(BUILD_DIR)
-	mkdir -p $(BUILD_DIR)/SPECS $(BUILD_DIR)/SOURCES
-	cp $(SPEC_FILE) $(BUILD_DIR)/SPECS/
-
-rpm_package_source:
-	tar --transform 'flags=r;s,^,/${NAME}-${VERSION}/,' --exclude .git --exclude dist -cvjf $(SOURCE_PATH) .
-
-rpm_build_source:
-	rpmbuild -ts $(SOURCE_PATH) --define "_topdir $(BUILD_DIR)"
-
-rpm_build:
-	rpmbuild -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
-
-rpm_latest: 
-	cp $(wildcard $(BUILD_DIR)/RPMS/noarch/docs-csm-$(VERSION)-*.noarch.rpm) "$(BUILD_DIR)/RPMS/noarch/docs-csm-latest.noarch.rpm" 
+# cray-opa is 1.0
+# cray-opa-* is 1.2+
+for deploy in cray-opa cray-opa-ingressgateway cray-opa-ingressgateway-customer-admin cray-opa-ingressgateway-user; do
+  remove_opa_req_affinity "${deploy}"
+done
