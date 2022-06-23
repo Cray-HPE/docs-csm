@@ -1,9 +1,9 @@
 # NCN Boot Workflow
 
-Non-compute nodes boot two ways:
+Non-compute nodes can boot from two sources:
 
-- Network/PXE booting
-- Disk Booting
+- Network/PXE
+- Disk
 
 ## Topics
 
@@ -11,7 +11,7 @@ Non-compute nodes boot two ways:
 - [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
 - [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
 - [Set BMCs to DHCP](#set-bmcs-to-dhcp)
-- [Boot order overview](#setting-boot-order)
+- [Boot order overview](#boot-order-overview)
 - [Setting boot order](#setting-boot-order)
 - [Trimming boot order](#trimming-boot-order)
 - [Example boot orders](#example-boot-orders)
@@ -22,7 +22,7 @@ Non-compute nodes boot two ways:
 
 Under normal operations, the NCNs use the following boot order:
 
-1. PXE (to ensure the NCN is booting with desired images and configuration)
+1. PXE (to ensure that the NCN is booting with desired images and configuration)
 2. Disk (fallback in the event that PXE services are unavailable)
 
 ## Reasons to change the boot order after CSM install
@@ -119,7 +119,7 @@ done
 - `ipmitool` can set and edit boot order; it works better for some vendors based on their BMC implementation
 - `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
-> **`NOTE`** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
+> **NOTE:** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
 > `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-image-build/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).
 
 ## Setting boot order
@@ -194,7 +194,7 @@ In this case, the instructions are the same regardless of node type (management,
 
     - Hewlett-Packard Enterprise
 
-        > **`NOTE`** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippets](../install/switch_pxe_boot_from_onboard_nic_to_pcie.md#high-speed-network).
+        > **NOTE:** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippets](../operations/node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md#high-speed-network).
 
         ```bash
         efibootmgr | grep -vi 'pxe ipv4' | grep -i adapter |tee /tmp/rbbs1
@@ -280,7 +280,7 @@ Each section shows example output of the `efibootmgr` command.
 
 Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt to reset the BIOS with `ipmitool`
 
-> **`NOTE`** When using `ipmitool` against a machine remotely, it requires more arguments:
+> **NOTE:** When using `ipmitool` against a machine remotely, it requires more arguments:
 >
 > `read -s` is used to prevent the password from being written to the screen or the shell history.
 >
@@ -291,19 +291,20 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
 > ipmitool -I lanplus -U $USERNAME -E -H <bmc-hostname>
 > ```
 
-1. (`ncn#` or `pit#`) Reset BIOS with `ipmitool`
+1. (`ncn#` or `pit#`) Reset BIOS with `ipmitool`.
 
     ```bash
     ipmitool chassis bootdev none options=clear-cmos
     ```
 
-1. Set next boot with `ipmitool`
+1. Set next boot with `ipmitool`.
 
     ```bash
-    ipmitool chassis bootdev pxe options=efiboot,persistent
+    ipmitool chassis bootdev pxe options=persistent
+    ipmitool chassis bootdev pxe options=efiboot
     ```
 
-1. Boot to BIOS for checkout of boot devices
+1. Boot to BIOS for checkout of boot devices.
 
     ```bash
     ipmitool chassis bootdev bios options=efiboot
@@ -315,7 +316,7 @@ This is the end of the `Reverting changes` procedure.
 
 This procedure explains how to identify USB devices on NCNs.
 
-Some nodes very obviously display which device is the USB, other nodes (such as Gigabyte) do not.
+Some nodes very obviously display which device is the USB, whereas other nodes (such as Gigabyte) do not.
 
 Parsing the output of `efibootmgr` can be helpful in determining which device is a USB device. Tools such as `lsblk`, `blkid`, or kernel (`/proc`) may
 also be of use. As an example, one can sometimes match up `ls -l /dev/disk/by-partuuid` with `efibootmgr -v`.
@@ -367,21 +368,21 @@ also be of use. As an example, one can sometimes match up `ls -l /dev/disk/by-pa
     efibootmgr -n 0014
     ```
 
-1. (`ncn#` or `pit#`) Verify the `BootNext` device is what was selected:
+1. (`ncn#` or `pit#`) Verify that the `BootNext` device is what was selected.
 
     ```bash
     efibootmgr | grep -i bootnext
     ```
-   
-    Example outptut:
 
-    ```bash
+    Example output:
+
+    ```text
     BootNext: 0014
     ```
 
 1. Now the UEFI Samsung Flash Drive will boot next.
 
-    > **`NOTE`** There are duplicates in the list. During boot, the EFI boot manager will select the first one. If the first one is false, false entries can be deleted with
+    > **NOTE:** There are duplicates in the list. During boot, the EFI boot manager will select the first one. If the first one is false, then it can be deleted with
     > `efibootmgr -b 0014 -d`.
 
 This is the end of the `Locating USB device` procedure.
