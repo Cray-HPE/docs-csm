@@ -33,7 +33,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -111,7 +111,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -189,7 +189,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -267,7 +267,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -345,7 +345,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -423,7 +423,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -501,7 +501,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -579,7 +579,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: false
       ncn_worker: false
@@ -657,7 +657,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: false
       ncn_worker: false
@@ -735,7 +735,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: false
       ncn_worker: false
