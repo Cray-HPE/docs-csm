@@ -200,7 +200,7 @@ For the CSM 1.2 release, the CMN is only available via customer-supplied IPv4 ad
 
 - CMN required beginning with CSM 1.2.
   - Customer will supply a subnet similar to the way the CAN is deployed.
-  Sizing is the number of NCNs plus a couple more addresses (TBD).
+  Sizing is the number of NCNs plus a couple more addresses.
 - Edge access to the CMN will need to be configured with the customer site.
   - ACL development.
 - The Management network will require the following changes:
@@ -209,7 +209,6 @@ For the CSM 1.2 release, the CMN is only available via customer-supplied IPv4 ad
   - Addition of customer-supplied CMN IP addresses to the management switches to support routing.
 - NCN workers, masters, and storage will require the following changes:
   - Image support for CMN VLAN, addressing, and routing.
-- CSI changes to support the new network and naming.
 
 #### 3.4.2 When configuration occurs
 
@@ -228,7 +227,7 @@ By default this CAN access path remains, but for the CSM 1.2 release it is possi
 
 ### 4.1 Traffic separation and routing
 
-At installation time one of the following egress routes from the system to the site may be selected: CAN (default), CHN, CMN.
+At installation time one of the following egress routes from the system to the site must be selected: CAN (default), CHN, CMN.
 
 ### 4.2 Changes
 
