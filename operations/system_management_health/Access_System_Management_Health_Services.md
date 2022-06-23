@@ -3,11 +3,17 @@
 All System Management Health services are exposed outside the cluster through the OAuth2 Proxy and Istio's ingress gateway to enforce the authentication and authorization policies. The URLs to access these
 services are available on any system with CMN, BGP, MetalLB, and external DNS properly configured.
 
-The `SYSTEM_DOMAIN_NAME` value in the examples below is an Ansible variable defined as follows and is expected to be the systems' FQDN.
+The `SYSTEM_DOMAIN_NAME` value in the examples below is an Ansible variable defined as follows and is expected to be the system's FQDN.
 
-```screen
-kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' \
-| base64 -d | grep "external:"
+(`ncn-mw#`) This command can be run on any master or worker NCN.
+
+```bash
+kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:"
+```
+
+Example output:
+
+```yaml
       external: SYSTEM_DOMAIN_NAME
 ```
 
