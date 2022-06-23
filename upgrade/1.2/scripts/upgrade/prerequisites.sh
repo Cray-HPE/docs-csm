@@ -66,6 +66,41 @@ if [[ -z ${CSM_ARTI_DIR} ]]; then
     exit 1
 fi
 
+state_name="CHECK_WEAVE"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    SLEEVE_MODE="yes"
+    weave --local status connections | grep -q sleeve || SLEEVE_MODE="no"
+    if [ "${SLEEVE_MODE}" == "yes" ]; then
+        echo "Detected that weave is in sleeve mode with at least one peer.   Please consult FN6636 before proceeding with the upgrade."
+        exit 1
+    fi
+
+    # get bss global cloud-init data
+    curl -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global|jq .[] > cloud-init-global.json
+
+    CURRENT_MTU=$(jq '."cloud-init"."meta-data"."kubernetes-weave-mtu"' cloud-init-global.json)
+    echo "Current kubernetes-weave-mtu is $CURRENT_MTU"
+
+    # make sure kubernetes-weave-mtu is set to 1376
+    jq '."cloud-init"."meta-data"."kubernetes-weave-mtu" = "1376"' cloud-init-global.json > cloud-init-global-update.json
+
+    echo "Setting kubernetes-weave-mtu to 1376"
+    # post the update json to bss
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" \
+        --request PUT \
+        --data @cloud-init-global-update.json \
+        https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
+
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+    echo
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPDATE_SSH_KEYS"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
