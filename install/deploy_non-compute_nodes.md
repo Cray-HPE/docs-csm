@@ -39,7 +39,7 @@ Preparation of the environment must be done before attempting to deploy the mana
 
 1. (`pit#`) Define shell environment variables that will simplify later commands to deploy management nodes.
 
-   1. Set `IPMI_PASSWORD` to the root password for the NCN BMCs.
+   1. Set `IPMI_PASSWORD` to the `root` password for the NCN BMCs.
 
       > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
@@ -52,7 +52,7 @@ Preparation of the environment must be done before attempting to deploy the mana
       > These values do not need to be altered from what is shown.
 
       ```bash
-      export IPMI_PASSWORD ; mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt' ; export USERNAME=$(whoami)
+      export IPMI_PASSWORD ; mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt' ; USERNAME=root
       ```
 
 ### 1.2. BIOS baseline
@@ -155,7 +155,8 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) Set each node to always UEFI network boot, and ensure that they are powered off.
 
     ```bash
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
+    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
+    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
@@ -429,4 +430,4 @@ If the check fails after doing the rebuild, contact support.
 
 After completing the deployment of the management nodes, the next step is to install the CSM services.
 
-See [Install CSM Services](README.md#2-install-csm-services)
+See [Install CSM Services](README.md#2-install-csm-services).
