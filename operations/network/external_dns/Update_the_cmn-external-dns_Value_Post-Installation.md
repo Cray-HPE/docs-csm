@@ -3,7 +3,7 @@
 By default, the `services/cray-dns-powerdns-cmn-tcp` and `services/cray-dns-powerdns-cmn-udp` services both share the same Customer Management Network \(CMN\) external IP address.
 This is defined by the `cmn-external-dns` value, which is specified during the `csi config init` input.
 
-The IP address must be in the static range reserved in MetalLB's `cmn-static-pool` subnet. Currently, this is the only CMN IP address that must be known external to the system, 
+The IP address must be in the static range reserved in MetalLB's `cmn-static-pool` subnet. Currently, this is the only CMN IP address that must be known external to the system,
 in order for external DNS to delegate the `system-name.site-domain` zone to `services/cray-dns-powerdns` deployment.
 
 Changing this value after install is relatively straightforward, and only requires the external IP address for `services/cray-dns-powerdns-cmn-tcp` and `services/cray-dns-powerdns-cmn-udp` services to be changed. This
