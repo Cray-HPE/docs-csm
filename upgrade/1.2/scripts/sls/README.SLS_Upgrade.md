@@ -35,7 +35,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
 ## Prerequisites
 
 * The latest CSM documentation RPM must be installed on the node where the procedure is being performed. See
-  [Check for Latest Documentation](../../../../update_product_stream/index.md#check-for-latest-documentation).
+  [Check for Latest Documentation](../../../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Procedure
 
