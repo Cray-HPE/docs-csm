@@ -11,7 +11,7 @@ Non-compute nodes can boot from two sources:
 - [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
 - [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
 - [Set BMCs to DHCP](#set-bmcs-to-dhcp)
-- [Boot order overview](#setting-boot-order)
+- [Boot order overview](#boot-order-overview)
 - [Setting boot order](#setting-boot-order)
 - [Trimming boot order](#trimming-boot-order)
 - [Example boot orders](#example-boot-orders)

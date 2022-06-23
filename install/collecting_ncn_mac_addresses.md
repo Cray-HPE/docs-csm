@@ -15,7 +15,7 @@ while not optimal, this will still produce a valid configuration.
 ## Topics
 
 - [Procedure: iPXE consoles](#procedure-ipxe-consoles)
-  - [MAC collection](#mac-collection)
+  - [MAC address collection](#mac-address-collection)
 - [Procedure: Serial consoles](#procedure-serial-consoles)
 
 The easy way to do this leverages the NIC dump provided by the `metal-ipxe` package on the LiveCD. This option is
@@ -30,11 +30,11 @@ in [Procedure: Serial consoles](#procedure-serial-consoles).
 This procedure is faster for those with the LiveCD (CRAY Pre-Install Toolkit). It can be used to quickly
 boot-check nodes to dump network device information without an operating system. This works by accessing the PCI configuration space.
 
-### MAC collection
+### MAC address collection
 
 1. (`pit#`) Modify the boot so that nodes stop network booting after dumping their network devices.
 
-    > **NOTE** Removing the iPXE script will prevent network booting. Be aware that the
+    > **NOTE:** Removing the iPXE script will prevent network booting. Be aware that the
     > nodes may still disk boot.
 
     ```bash
@@ -179,6 +179,6 @@ Pick out the MAC addresses for the `Bond` from both the `sw-spine-001` and `sw-s
 
 1. Follow `Metadata BMC` on each spine switch that `port1` and `port2` of the bond are plugged into.
 
-1. Usually the 2nd/3rd/4th/Nth MAC on the PCIe card will be a `0x1` or `0x2` deviation from the first port.
+1. Usually the 2nd/3rd/4th/Nth MAC address on the PCIe card will be a `0x1` or `0x2` deviation from the first port.
 
    Collection is quicker if this can be easily confirmed.
