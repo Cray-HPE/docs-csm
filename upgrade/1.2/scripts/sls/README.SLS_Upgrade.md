@@ -126,8 +126,8 @@ to point to the CAN, CHN, or CMN, and is used by utilities to systematically tog
 
 ### Migrate existing CAN to new CMN
 
-Using the existing CAN as a template, create the CMN.  The same IP addresses will be preserved for
-NCNs (`bootstrap_dhcp`).  A new `network_hardware` subnet will be created where the end of the previous
+Using the existing CAN as a template, create the CMN. The same IP addresses will be preserved for
+NCNs (`bootstrap_dhcp`). A new `network_hardware` subnet will be created where the end of the previous
 `bootstrap_dhcp` subnet existed to contain switching hardware. MetalLB pools in the `bootstrap_dhcp`
 subnet will be shifted around to remain at the end of the new bootstrap subnet.
 
