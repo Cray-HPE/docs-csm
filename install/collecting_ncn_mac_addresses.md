@@ -30,8 +30,8 @@ boot-check nodes to dump network device information without an operating system.
 
 1. (`pit#`) Shim the boot so nodes bail after dumping their network devices.
 
-   > **`NOTE`** Removing the iPXE script will prevent network booting. Be aware that the 
-   > nodes may disk boot. This will prevent the nodes from continuing to boot and end in undesired states.
+    > **`NOTE`** Removing the iPXE script will prevent network booting. Be aware that the 
+    > nodes may disk boot. This will prevent the nodes from continuing to boot and end in undesired states.
 
     ```bash
     mv -v /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
@@ -49,10 +49,11 @@ boot-check nodes to dump network device information without an operating system.
     export USERNAME=root
     read -s IPMI_PASSWORD
     ```
-   
+
    ```bash 
    export IPMI_PASSWORD
-   grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot,persistent
+   grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
+   grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
    sleep 10
    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
