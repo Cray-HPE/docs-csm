@@ -8,17 +8,15 @@ Non-compute nodes can boot from two sources:
 ## Topics
 
 - [Determine the current boot order](#determine-the-current-boot-order)
-- [Reasons to change the boot order after CSM install](#reasons-to-change-the-bootorder)
+- [Reasons to change the boot order after CSM install](#reasons-to-change-the-bootorder-after-csm-install)
 - [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
 - [Set BMCs to DHCP](#set-bmcs-to-dhcp)
-- [Boot order overview](#set-boot-order)
-- [Setting boot order](#setting-order)
+- [Boot order overview](#boot-order-overview)
+- [Setting boot order](#setting-boot-order)
 - [Trimming boot order](#trimming_boot_order)
-- [Example boot orders](#examples)
+- [Example boot orders](#example-boot-orders)
 - [Reverting changes](#reverting-changes)
 - [Locating USB device](#locating-usb-device)
-
-<a name="determine-the-current-boot-order"></a>
 
 ## Determine the current boot order
 
@@ -38,8 +36,6 @@ It may be desirable to change the boot order under these circumstances:
 - Testing disk-backed booting
 - Booting from a USB or remote ISO
 - Testing or deploying other customizations
-
-<a name="determine-if-ncns-booted-via-disk-or-pxe"></a>
 
 ## Determine if NCNs booted via disk or PXE
 
@@ -91,8 +87,6 @@ PXE. The method to use will vary depending on the system environment.
     Boot0020* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
     Boot0021* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
     ```
-
-<a name="set-bmcs-to-dhcp"></a>
 
 ## Set BMCs to DHCP
 
@@ -181,8 +175,6 @@ The commands are the same for all hardware vendors, except where noted.
 After following the steps above on a given NCN, that NCN will use the desired Shasta boot order.
 
 This is the end of the `Setting boot order` procedure.
-
-<a name="trimming_boot_order"></a>
 
 ## Trimming boot order
 
@@ -285,8 +277,6 @@ Each section shows example output of the `efibootmgr` command.
     Boot000D* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
     ```
 
-<a name="reverting-changes"></a>
-
 ## Reverting changes
 
 **This procedure is only needed if wishing to revert boot order changes.**
@@ -324,8 +314,6 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
     ```
 
 This is the end of the `Reverting changes` procedure.
-
-<a name="locating-usb-device"></a>
 
 ## Locating USB device
 
