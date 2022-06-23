@@ -105,4 +105,3 @@ The `external-dns` IP reservation in the SLS `CMN` network `cmn_metallb_static_p
    ncn-m001# kubectl delete secret -n loftsman site-init
    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
-
