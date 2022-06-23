@@ -856,7 +856,7 @@ pit# pushd /var/www/ephemeral && ${CSM_RELEASE}/lib/install-goss-tests.sh && pop
 
 <a name="clean-up-chrony-configurations"></a>
 
-### 4.3 Clean up chrony configurations
+### 4.3 Clean up `chrony` configurations
 
 Run the following command without editing the value of the `TOKEN` variable.
 
