@@ -10,7 +10,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
 
 1. What is the internal VLAN and the site-routable IP subnet for the new CAN or CHN?
 
-1. Is there a need to preserve any existing IP address(es) during the CAN-to-CMN migration?
+1. Is there a need to preserve any existing IP addresses during the CAN-to-CMN migration?
 
    * One example is the `external-dns` IP address used for DNS lookups of system resources from site DNS servers. Changes to
      `external-dns` often require changes to site resources with requisite process and timeframes from other groups. For
@@ -21,7 +21,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
      overlapping during the upgrade process. This requires network subnetting expertise and EXPERT mode below.
 
      If the `external-dns` IP address is changed the `customizations.yaml` `site_to_system_lookups` value needs to be updated to
-     the new IP address. See the "Update customizations.yaml" section of the
+     the new IP address. See the "Update `customizations.yaml`" section of the
      [Update the `cmn-external-dns` value post-installation](../../../../operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md)
      document for instructions on how to do this.
    * Another, mutually exclusive example is the need to preserve all NCN IP addresses related to the old CAN while migrating
@@ -29,7 +29,7 @@ During the update of SLS, at a minimum, answers to the following questions must 
      handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations
      and the flag is `--preserve-existing-subnet-for-cmn ncns`.
    * Should no preservation flag be set, the default behavior is to recalculate every IP address on the existing CAN while migrating
-     to the CMN. The behavior in this case is to calculate the subnet sizesbased on number of devices (with a bit of spare room),
+     to the CMN. The behavior in this case is to calculate the subnet sizes based on number of devices (with a bit of spare room),
      while maximizing IP address pool sizes for (dynamic) services.
 
 ## Procedure
