@@ -4,9 +4,9 @@ Bifurcated CAN was designed to separate administrative network traffic and user 
 
 ![network traffic pattern](img/network_traffic_pattern.png)
 
-## BiCAN terminology
+## BICAN terminology
 
-- BiCAN – Bifurcated Customer Access Network
+- BICAN – Bifurcated Customer Access Network
 - CAN – Customer Access Network
 - CMN – Customer Management Network
 - CHN – Customer High Speed Network
