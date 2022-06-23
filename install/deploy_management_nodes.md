@@ -11,8 +11,6 @@ initialized and the Kubernetes cluster is created and ready for a workload. The 
 will join Kubernetes after it is rebooted later in
 [Deploy Final NCN](index.md#deploy_final_ncn).
 
-<a name="timing-of-deployments"></a>
-
 ## Timing of deployments
 
 The timing of each set of boots varies based on hardware. Nodes from some manufacturers will
@@ -22,22 +20,22 @@ the number of storage and worker nodes.
 
 ## Topics
 
-   1. [Prepare for management node deployment](#prepare_for_management_node_deployment)
-      1. [Tokens and IPMI password](#tokens-and-ipmi-password)
-      1. [Ensure time is accurate before Deploying NCNs](#ensure-time-is-accurate-before-deploying-ncns)
-   1. [Update management node firmware](#update_management_node_firmware)
-   1. [Deploy management nodes](#deploy_management_nodes)
-      1. [Deploy workflow](#deploy-workflow)
-      1. [Deploy](#deploy)
-      1. [Check LVM on Kubernetes NCNs](#check-lvm-on-masters-and-workers)
-      1. [Check for unused drives on utility storage nodes](#check-for-unused-drives-on-utility-storage-nodes)
-   1. [Configure after management node deployment](#configure_after_management_node_deployment)
-      1. [LiveCD cluster authentication](#livecd-cluster-authentication)
-      1. [Install tests and test server on NCNs](#install-tests)
-      1. [Clean up chrony configurations](#clean-up-chrony-configurations)
-   1. [Validate management node deployment](#validate_management_node_deployment)
-   1. [Important checkpoint](#important-checkpoint)
-   1. [Next topic](#next-topic)
+   1. [Prepare for management node deployment](#1-prepare-for-management-node-deployment)
+      1. [Tokens and IPMI password](#11-tokens-and-ipmi-password)
+      2. [Ensure time is accurate before Deploying NCNs](#12-ensure-time-is-accurate-before-deploying-ncns)
+   2. [Update management node firmware](#2-update-management-node-firmware)
+   3. [Deploy management nodes](#3-deploy-management-nodes)
+      1. [Deploy workflow](#31-deploy-workflow)
+      2. [Deploy](#32-deploy)
+      3. [Check LVM on Kubernetes NCNs](#33-check-lvm-on-kubernetes-ncns)
+      4. [Check for unused drives on utility storage nodes](#34-check-for-unused-drives-on-utility-storage-nodes)
+   4. [Configure after management node deployment](#4-configure-after-management-node-deployment)
+      1. [LiveCD cluster authentication](#41-livecd-cluster-authentication)
+      2. [Install tests and test server on NCNs](#42-install-tests-and-test-server-on-ncns)
+      3. [Clean up `chrony` configurations](#43-clean-up-chrony-configurations)
+   5. [Validate management node deployment](#5-validate-management-node-deployment)
+   6. [Important checkpoint](#important-checkpoint)
+   7. [Next topic](#next-topic)
 
 <a name="prepare_for_management_node_deployment"></a>
 
@@ -318,7 +316,7 @@ be performed are in the [Deploy](#deploy) section.
 1. Create boot directories for any NCN in DNS.
 
     This will create folders for each host in `/var/www`, allowing each host to have its own unique set of artifacts:
-    kernel, initrd, SquashFS, and `script.ipxe` bootscript.
+    kernel, `initrd`, SquashFS, and `script.ipxe` bootscript.
 
     ```bash
     pit# /root/bin/set-sqfs-links.sh
