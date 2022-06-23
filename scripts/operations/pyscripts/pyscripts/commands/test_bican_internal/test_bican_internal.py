@@ -126,8 +126,7 @@ def test_from_node_type_over_network(from_node_type, network, config):
         Over network {} ({})""".format(
                     from_node_type, network, network_suffix))
 
-                print("\t\t^^^^ FAILED: Cannot find a suitable node for node type {} ^^^^".format(from_node_type))
-                total_ran += 1
+                print("\t\t^^^^ SKIPPED: Cannot find a suitable node for node type {} ^^^^".format(from_node_type))
                 continue
 
             from_node = from_node.with_domain_suffix(None)
@@ -163,8 +162,8 @@ def test_from_node_type_to_node_type_over_network(from_node_type, from_node, fro
         Expected to work: {}""".format(
             from_node_type, from_node.get_full_domain_name(), network, network_suffix, to_node_type, expected))
 
-        print("\t\t^^^^ FAILED: Cannot find a suitable node for node type {} ^^^^".format(to_node_type))
-        return 1
+        print("\t\t^^^^ SKIPPED: Cannot find a suitable node for node type {} ^^^^".format(to_node_type))
+        return 0
 
     to_node = to_node.with_domain_suffix(network_suffix)
 

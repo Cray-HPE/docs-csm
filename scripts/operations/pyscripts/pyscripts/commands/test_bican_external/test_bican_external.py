@@ -113,8 +113,8 @@ To node type {}
 Over network {} ({})""".format(
             to_node_type, network, network_suffix))
 
-        print("\t\t^^^^ FAILED: Cannot find a suitable node for node type {} ^^^^".format(to_node_type))
-        return 1
+        print("\t\t^^^^ SKIPPED: Cannot find a suitable node for node type {} ^^^^".format(to_node_type))
+        return 0
 
     to_node = to_node.with_domain_suffix(network_suffix)
 
