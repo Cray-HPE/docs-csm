@@ -202,7 +202,9 @@ For the CSM 1.2 release, the CMN is only available via customer-supplied IPv4 ad
   - Customer will supply a subnet similar to the way the CAN is deployed.
   Sizing is the number of NCNs plus a couple more addresses.
 - Edge access to the CMN will need to be configured with the customer site.
-  - ACL development.
+  - ACL and route updates on the edge switches.
+  - [Arista guide.](../customer_accessible_networks/bi-can_arista_metallb_peering.md)
+  - [MetalLB to Arista peering guide.](../customer_accessible_networks/bi-can_arista_metallb_peering.md)
 - The Management network will require the following changes:
   - Addition of the new CMN VLAN. This should be similar to the existing CAN configuration.
   - Termination of the new CMN VLAN on ports supporting NCNs.
