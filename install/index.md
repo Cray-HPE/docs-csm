@@ -16,6 +16,13 @@ like the checking and updating of firmware on system components or the preparati
 
 Once the CSM installation has completed, other product streams for the HPE Cray EX system can be installed.
 
+A major feature of CSM 1.2 is the Bifurcated CAN (BICAN).
+The BICAN is designed to separate administrative network traffic from user network traffic.
+More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
+Review the BICAN summary before continuing with the CSM 1.2 install.
+
+Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) page.
+
 ## Topics
 
 1. [Validate SHCD](#validate_shcd)
@@ -211,7 +218,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       communicates with at once, or specific devices can be targeted for a firmware update.
 
       **IMPORTANT:** Before FAS can be used to update firmware, refer to the
-      [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040) for more information about how to install
+      [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.07`](http://www.hpe.com/support/ex-gsg-042120221040) for more information about how to install
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
       available. Once FAS is aware that new firmware is available, then see
       [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
@@ -233,7 +240,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
       been fully installed and configured.
-      Refer to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040) on the HPE Customer Support Center
+      Refer to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.07`](http://www.hpe.com/support/ex-gsg-042120221040) on the HPE Customer Support Center
       for more information on other product streams to be installed and configured after CSM.
    <a name="troubleshooting_installation"></a>
 
