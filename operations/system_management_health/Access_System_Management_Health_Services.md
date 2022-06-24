@@ -1,9 +1,23 @@
 # Access System Management Health Services
 
 All System Management Health services are exposed outside the cluster through the Keycloak gatekeeper and Istio's ingress gateway to enforce the authentication and authorization policies. The URLs
-to access these services are available on any system with CAN, BGP, MetalLB, and external DNS properly configured.
+to access these services are available on any system with CAN, BGP, MetalLB, and external DNS properly configured. This page provides administrators with the URLs on the system needed to set up the
+System Management Health services and access their components, via the Grafana and Kiali applications.
 
-The `SYSTEM_DOMAIN_NAME` value in the examples below is an Ansible variable defined as follows and is expected to be the system's FQDN from the CAN.
+- [System domain name](#system-domain-name)
+- [Prerequisites](#prerequisites)
+- [System Management Health service links](#system-management-health-service-links)
+  - [Prometheus](#prometheus)
+  - [Alertmanager](#alertmanager)
+  - [Grafana](#grafana)
+  - [Kiali](#kiali)
+  - [Jaeger](#jaeger)
+- [Additional System Management Health components](#additional-system-management-health-components)
+  - [`prometheus-istio`](#prometheus-istio)
+
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value in the URLs on this page is an Ansible variable that can be retrieved as follows. It is expected to be the system's fully qualified domain name (FQDN) from the CAN.
 
 ```bash
 ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:"
@@ -15,12 +29,10 @@ Example output:
       external: SYSTEM_DOMAIN_NAME
 ```
 
-This procedure enables administrators to set up the service and access its components via the Grafana and Kiali applications.
-
 ## Prerequisites
 
 - Access to the System Management Health web UIs is through Istio's ingress gateway and requires clients \(browsers\) to set the appropriate HTTP Host header to route traffic to the desired service.
-- This procedure requires administrative privileges on the workstation running the user's web browser.
+- Access to these URLs may require administrative privileges on the workstation running the user's web browser.
 - The Customer Access Network \(CAN\), Border Gateway Protocol \(BGP\), MetalLB, and external DNS are properly configured.
 
 ## System Management Health service links
