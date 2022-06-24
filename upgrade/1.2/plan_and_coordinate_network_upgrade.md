@@ -115,7 +115,7 @@ The switch configurations can be updated manually to remove VLAN7 from the UAN p
 This procedure is currently being tested and will be linked here when finished.
 
 Watch this page for updates and always use the latest documentation, in order to have the latest procedures.
-See [Check for Latest Documentation](../../update_product_stream/index.md#check-for-latest-documentation) for details on obtaining and installing the latest CSM documentation.
+See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation) for details on obtaining and installing the latest CSM documentation.
 
 ## UAI migration
 
