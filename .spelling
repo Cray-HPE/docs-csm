@@ -581,7 +581,8 @@ zeroization
 zeroize
 Zypper
 
-# Per-file spelling exceptions
+# Per-file spelling exceptions. Please keep this section sorted in order by filepath, so help make it easier to
+# see if a file already is listed.
 
 - glossary.md
 # To allow 802.3cd/bs
@@ -600,6 +601,9 @@ Init
  - introduction/site_survey.md
 # To allow Site Init
 Init
+
+- operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
+LoadBalancer
 
 - operations/security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md
 # To allow Site Init
