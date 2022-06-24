@@ -33,7 +33,7 @@ Detailed BICAN documentation can be found on the [BICAN technical details](../op
 1. [Collect MAC addresses for NCNs](#collect_mac_addresses_for_ncns)
 1. [Deploy management nodes](#deploy_management_nodes)
 1. [Install CSM services](#install_csm_services)
-1. [Validate CSM Health before final NCN deployment](#validate_csm_health_before_final_ncn_deploy)
+1. [Validate CSM health](#validate_csm_health_before_final_ncn_deploy)
 1. [Deploy final NCN](#deploy_final_ncn)
 1. [Configure administrative access](#configure_administrative_access)
 1. [Validate CSM health](#validate_csm_health)
@@ -59,11 +59,11 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       Having the data in the SHCD which matches the physical cabling will be needed later in both
       [Prepare configuration payload](#prepare_configuration_payload) and [Configure management network switches](#configure_management_network).
 
-      See [Validate SHCD](../operations/network/management_network/validate_shcd.md)
+      See [Validate SHCD](../operations/network/management_network/validate_shcd.md).
 
       **Note**: If a reinstall or fresh install of this software release is being done on this system and the management
-      network cabling has already been validated, then this topic could be skipped and instead move to
-      [Prepare configuration payload](#prepare_configuration_payload)
+      network cabling has already been validated, then skip this step and move to
+      [Prepare configuration payload](#prepare_configuration_payload).
    <a name="prepare_configuration_payload"></a>
 
    1. Prepare configuration payload
@@ -84,7 +84,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       and application nodes, scaling back DHCP on the management nodes, wiping the storage on the management nodes,
       powering off the management nodes, and possibly powering off the PIT node.
 
-      See [Prepare Management Nodes](prepare_management_nodes.md)
+      See [Prepare Management Nodes](prepare_management_nodes.md).
    <a name="bootstrap_pit_node"></a>
 
    1. Bootstrap PIT node
@@ -94,7 +94,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       because it does not require any physical media to prepare. However, remotely mounting an ISO on a BMC does not
       work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.
 
-      Use one of these procedures to bootstrap the PIT node from the LiveCD.
+      Use one of these procedures to bootstrap the PIT node from the LiveCD:
       * [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
          * **Gigabyte BMCs** should not use the RemoteISO method.
          * **Intel BMCs** should not use the RemoteISO method.
@@ -108,11 +108,11 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       Now that the PIT node has been booted with the LiveCD environment and CSI has generated the switch IP addresses,
       the management network switches can be configured.
 
-      See [Management Network User Guide](../operations/network/management_network/index.md)
+      See [Management Network User Guide](../operations/network/management_network/index.md).
 
       **Note**: If a reinstall of this software release is being done on this system and the management network switches
-      have already been configured, then this topic could be skipped and instead move to
-      [Collect MAC addresses for NCNs](#collect_mac_addresses_for_ncns)
+      have already been configured, then skip this step and move to
+      [Collect MAC addresses for NCNs](#collect_mac_addresses_for_ncns).
    <a name="collect_mac_addresses_for_ncns"></a>
 
    1. Collect MAC addresses for NCNs
@@ -122,7 +122,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       of the steps done up to this point because `csi config init` will need to be run with the proper
       MAC addresses.
 
-      See [Collect MAC Addresses for NCNs](collect_mac_addresses_for_ncns.md)
+      See [Collect MAC Addresses for NCNs](collect_mac_addresses_for_ncns.md).
 
       **Note**: If a reinstall of this software release is being done on this system and the `ncn_metadata.csv`
       file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then
@@ -141,27 +141,27 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       except for the PIT node. The PIT node will join Kubernetes after it is rebooted later in
       [Deploy final NCN](#deploy_final_ncn).
 
-      See [Deploy Management Nodes](deploy_management_nodes.md)
+      See [Deploy Management Nodes](deploy_management_nodes.md).
    <a name="install_csm_services"></a>
 
    1. Install CSM services
 
-      Now that deployment of management nodes is complete with initialized Ceph storage and a running Kubernetes
-      cluster on all worker and master nodes, except the PIT node, the CSM services can be installed. The Nexus
-      repository will be populated with artifacts, containerized CSM services will be installed, and a few other configuration steps taken.
+      Deployment of management nodes is complete with initialized Ceph storage and a running Kubernetes
+      cluster on all worker and master nodes, except the PIT node. The Nexus
+      repository will be populated with artifacts, containerized CSM services will be installed, and a few other configuration steps will be taken.
 
-      See [Install CSM Services](install_csm_services.md)
+      See [Install CSM Services](install_csm_services.md).
    <a name="validate_csm_health_before_final_ncn_deploy"></a>
 
-   1. Validate CSM health before final NCN deployment
+   1. Validate CSM health
 
-      After installing all of the CSM services, now validate the health of the management nodes and all CSM services.
+      Validate the health of the management nodes and all CSM services.
       The reason to do it now is that if there are any problems detected with the core infrastructure or the nodes, it is
-      easy to rewind the installation to [Deploy management nodes](#deploy_management_nodes) because the PIT node has not
-      yet been redeployed. In addition, redeploying the PIT node successfully requires several CSM services to be working
-      properly, so validating this is important.
+      easy to rewind the installation to [Deploy management nodes](#deploy_management_nodes), because the PIT node has not
+      yet been rebooted. In addition, rebooting the PIT node and deploying the final NCN successfully requires several CSM
+      services to be working properly, so validating this is important.
 
-      To run the CSM health checks, see [Validate CSM Health](../operations/validate_csm_health.md)
+      See [Validate CSM Health](../operations/validate_csm_health.md).
    <a name="deploy_final_ncn"></a>
 
    1. Deploy final NCN
@@ -170,7 +170,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       of Booting the CSM Barebones Image and the UAS/UAI tests, the PIT node can be rebooted to leave the LiveCD
       environment and assume its intended role as one the Kubernetes master nodes.
 
-      See [Deploy Final NCN](deploy_final_ncn.md)
+      See [Deploy Final NCN](deploy_final_ncn.md).
    <a name="configure_administrative_access"></a>
 
    1. Configure administrative access
@@ -182,7 +182,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization,and configuring the node BMCs (node
       controllers) for nodes in liquid cooled cabinets.
 
-      See [Configure Administrative Access](configure_administrative_access.md)
+      See [Configure Administrative Access](configure_administrative_access.md).
    <a name="validate_csm_health"></a>
 
    1. Validate CSM health
@@ -195,7 +195,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       a management node, checking the health after a management node has rebooted because of a crash, as part of doing
       a full system power down or power up, or after other types of system maintenance.
 
-      See [Validate CSM Health](../operations/validate_csm_health.md)
+      See [Validate CSM Health](../operations/validate_csm_health.md).
    <a name="configure_prometheus_alert_notifications"></a>
 
    1. Configure Prometheus alert notifications
@@ -206,8 +206,8 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       as well as [Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/). Currently supported notification
       types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
 
-      See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for example
-      configuration of an email alert notification for Postgres replication alerts that are defined on the system.
+      See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for an example
+      configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
    <a name="update_firmware_with_fas"></a>
 
    1. Update firmware with FAS
@@ -229,9 +229,10 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       After completion of the firmware update with FAS, compute nodes can be prepared. Some compute node
       types have special preparation steps, but most compute nodes are ready to be used now.
 
-      These compute node types require preparation.
-         * HPE Apollo 6500 XL645D Gen10 Plus
-         * Gigabyte
+      These compute node types require preparation:
+
+      * HPE Apollo 6500 XL645D Gen10 Plus
+      * Gigabyte
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="next_topic"></a>
@@ -249,4 +250,4 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and
       switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install
       for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
-      See [Troubleshooting Installation Problems](troubleshooting_installation.md)
+      See [Troubleshooting Installation Problems](troubleshooting_installation.md).
