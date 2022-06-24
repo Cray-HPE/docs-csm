@@ -47,4 +47,3 @@ This top level procedure outlines the process for adding additional liquid-coole
     > Slingshot switches are updated with procedures from the *Slingshot Operations Guide*.
 
 1. Continue on to the *Slingshot Operations Guide* to bring up the additional cabinets.
-
