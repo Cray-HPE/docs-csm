@@ -5,7 +5,9 @@ Configure an email alert notification for all Prometheus Postgres replication al
 
 ## Procedure
 
-1. Save the current alert notification configuration in case a rollback is needed.
+This procedure can be performed on any master or worker NCN.
+
+1. (`ncn-mw#`) Save the current alert notification configuration, in case a rollback is needed.
 
     ```bash
     kubectl get secret -n sysmgmt-health alertmanager-cray-sysmgmt-health-promet-alertmanager \
@@ -14,10 +16,11 @@ Configure an email alert notification for all Prometheus Postgres replication al
 
 1. Create a secret and an alert configuration that will be used to add email notifications for the alerts.
 
-    1. Create the secret file.
+    1. (`ncn-mw#`) Create the secret file.
 
-        ```console
-        cat << 'EOF' > /tmp/alertmanager-secret.yaml
+        Create a file named `/tmp/alertmanager-secret.yaml` with the following contents:
+
+        ```yaml
         apiVersion: v1
         data:
           alertmanager.yaml: ALERTMANAGER_CONFIG
@@ -31,16 +34,16 @@ Configure an email alert notification for all Prometheus Postgres replication al
           name: alertmanager-cray-sysmgmt-health-promet-alertmanager
           namespace: sysmgmt-health
         type: Opaque
-        EOF
         ```
 
-    1. Create the alert configuration file.
+    1. (`ncn-mw#`) Create the alert configuration file.
 
         In the following example file, the Gmail SMTP server is used in this example to relay the notification to `receiver-email@yourcompany.com`.
-        Update the fields under `email_configs:` accordingly before running the following command.
+        Update the fields under `email_configs:` to reflect the desired configuration.
 
-        ```console
-        cat << 'EOF' > /tmp/alertmanager-new.yaml
+        Create a file named `/tmp/alertmanager-new.yaml` with the following contents:
+
+        ```yaml
         global:
           resolve_timeout: 5m
         route:
@@ -77,10 +80,9 @@ Configure an email alert notification for all Prometheus Postgres replication al
             auth_username: sender-email@gmail.com
             auth_identity: sender-email@gmail.com
             auth_password: xxxxxxxxxxxxxxxx
-        EOF
         ```
 
-1. Replace the alert notification configuration based on the files created in the previous step.
+1. (`ncn-mw#`) Replace the alert notification configuration based on the files created in the previous steps.
 
     ```bash
     sed "s/ALERTMANAGER_CONFIG/$(cat /tmp/alertmanager-new.yaml \
@@ -90,14 +92,14 @@ Configure an email alert notification for all Prometheus Postgres replication al
 
 1. Validate the configuration changes.
 
-    1. View the current configuration.
+    1. (`ncn-mw#`) View the current configuration.
 
         ```bash
         kubectl exec alertmanager-cray-sysmgmt-health-promet-alertmanager-0 \
                 -n sysmgmt-health -c alertmanager -- cat /etc/alertmanager/config/alertmanager.yaml
         ```
 
-    1. Check the logs for any errors if the configuration does not look accurate.
+    1. (`ncn-mw#`) If the configuration does not look accurate, check the logs for errors.
 
         ```bash
         kubectl logs -f -n sysmgmt-health pod/alertmanager-cray-sysmgmt-health-promet-alertmanager-0 alertmanager
