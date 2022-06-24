@@ -48,4 +48,3 @@ This top level procedure outlines the process for adding additional liquid-coole
 
 1. Continue on to the *Slingshot Operations Guide* to bring up the additional cabinets.
 
-    **NOTE:** Placeholder: Provide a link to the procedure once ready.
