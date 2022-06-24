@@ -22,8 +22,6 @@ backup of Workload Manager configuration data and files is created. Once complet
 - [Stage 0.5 - Backup Workload Manager Data](#backup_workload_manager)
 - [Stage completed](#stage_completed)
 
-<a name="prepare-assets"></a>
-
 ## Stage 0.1 - Prepare assets
 
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
@@ -47,8 +45,6 @@ backup of Workload Manager configuration data and files is created. Once complet
 
    - If there is a URL for the CSM `tar` file that is accessible from `ncn-m001`, then the [Direct download](#direct-download) procedure may be used.
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m001`.
-
-<a name="direct-download">
 
 ### Direct download
 
@@ -81,8 +77,6 @@ backup of Workload Manager configuration data and files is created. Once complet
    ```
 
 1. Skip the `Manual copy` subsection and proceed to [Stage 0.2 - Update SLS](#stage-0.2-update-sls).
-
-<a name="manual-copy">
 
 ### Manual copy
 
@@ -117,8 +111,6 @@ backup of Workload Manager configuration data and files is created. Once complet
    ```bash
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
-
-<a name="update-sls"></a>
 
 ## Stage 0.2 - Update SLS
 
@@ -192,8 +184,6 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
    ```
 
-<a name="update-management-network"></a>
-
 ## Stage 0.3 - Upgrade management network
 
 ### Verify that switches have 1.2 configuration in place
@@ -219,8 +209,8 @@ If the following command does not complete successfully, check if the `TOKEN` en
      [Management Network 1.0 (`1.2 Preconfig`) to 1.2](../../operations/network/management_network/1.0_to_1.2_upgrade.md).
    - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
    - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
+   - With the 1.2 switch configuration in place, users will only be able to SSH into the switches over the HMN.  
 
-<a name="prerequisites-check"></a>
 
 ## Stage 0.4 - Prerequisites check
 
@@ -260,8 +250,15 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
    ```
 
-   **IMPORTANT:** If any errors are encountered, then potential fixes should be displayed where the error occurred. **If** the upgrade `prerequisites.sh` script fails and does
-   not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
+   If the script ran correctly, it should end with the following output:
+
+   ```text
+   [OK] - Successfully completed
+   ```
+
+   If the script does not end with this output, then try rerunning it. If it still fails, see
+   [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+   If the failure persists, then open a support ticket for guidance before proceeding.
 
 1. Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
 
@@ -286,15 +283,11 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# git push
    ```
 
-<a name="backup_workload_manager"></a>
-
 ## Stage 0.5 - Backup workload manager data
 
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
-
-<a name="stage_completed"></a>
 
 ## Stage completed
 

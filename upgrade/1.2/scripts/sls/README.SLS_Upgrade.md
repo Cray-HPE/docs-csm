@@ -28,6 +28,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
      the new CMN. This preservation is not often needed as the transition of NCN IP addresses for the CAN-to-CMN is automatically
      handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations
      and the flag is `--preserve-existing-subnet-for-cmn ncns`.
+
    * If no preservation flag is set, then the default behavior is to recalculate every IP address on the existing CAN while migrating
      to the CMN. The behavior in this case is to calculate the subnet sizes based on number of devices (with a bit of spare room),
      while maximizing IP address pool sizes for dynamic services.
@@ -185,3 +186,7 @@ Retention of the unused network is not normal behavior.
 
 * Generally production systems will NOT want to use this flag unless active toggling between CAN and CHN is required. This is not usual behavior.
 * Test/development systems may want to have all networks for testing purposes and might want to retain both user networks.
+
+For technical details on what the sls_update automation. Refer to [sls_udpater.py_technical_details](sls_updater.py_technical_details.md).
+
+[Go Back to Stage 0.2 - Update SLS](../../Stage_0_Prerequisites.md#update-sls)
