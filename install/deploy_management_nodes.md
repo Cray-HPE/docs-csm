@@ -217,7 +217,7 @@ firmware requirement before starting.
 
    See the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.06`](http://www.hpe.com/support/ex-gsg-042120221040)
    on the HPE Customer Support Center for information about the _HPE Cray EX HPC Firmware Pack_ (HFP) product.
-
+22.07
    In the HFP documentation there is information about the recommended firmware packages to be installed.
    See "Product Details" in the HPE Cray EX HPC Firmware Pack Installation Guide.
 
