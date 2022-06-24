@@ -40,7 +40,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [4.3 Find an available compute node](#csm-node)
   - [4.4 Reboot the node using a BOS session template](#csm-reboot)
   - [4.5 Connect to the node's console and watch the boot](#csm-watch-boot)
-- [5. UAS / UAI tests](#uas-uai-tests)
+- [5. UAS/UAI tests](#uas-uai-tests)
   - [5.1 Validate the basic UAS installation](#uas-uai-validate-install)
   - [5.2 Validate UAI creation](#uas-uai-validate-create)
   - [5.3 UAS/UAI troubleshooting](#uas-uai-validate-debug)
@@ -805,8 +805,6 @@ ERROR (run tag zl7ak-vcs): Failed to create vcs organization
 
 In this case, follow the [Gitea/VCS 401 Errors](../troubleshooting/known_issues/gitea_vcs_401_errors.md) troubleshooting procedure.
 
-<a name="booting-csm-barebones-image"></a>
-
 ## 4. Booting CSM `barebones` image
 
 Included with the Cray System Management (CSM) release is a pre-built node image that can be used
@@ -815,14 +813,14 @@ image contains only the minimal set of RPMs and configuration required to boot a
 suitable for production usage. To run production work loads, it is suggested that an image from
 the Cray OS (COS) product, or similar, be used.
 
-- This test is **very important to run** during the CSM install prior to redeploying the PIT node
-because it validates all of the services required for that operation.
+- This test is **very important to run**, particularly during the CSM install prior to rebooting the PIT node,
+because it validates all of the services required for nodes to PXE boot from the cluster.
 - The CSM Barebones image included with the release will not successfully complete
 beyond the `dracut` stage of the boot process. However, if the `dracut` stage is reached the
 boot can be considered successful and shows that the necessary CSM services needed to
 boot a node are up and available.
   - This inability to boot the `barebones` image fully will be resolved in future releases of the
-   CSM product.
+  CSM product.
 - In addition to the CSM Barebones image, the release also includes an IMS Recipe that
 can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
 RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
@@ -921,7 +919,7 @@ the Image Management Service (IMS).
 ### 4.3 Find an available compute node
 
 ```bash
-ncn# cray hsm state components list --role Compute --enabled true
+ncn# cray hsm state components list --role Compute --enabled true --format toml
 ```
 
 Example output:
@@ -969,7 +967,7 @@ ncn# export XNAME=x3000c0s17b2n0
 Create a BOS session to reboot the chosen node using the BOS session template that was created:
 
 ```bash
-ncn# cray bos session create --template-uuid shasta-1.5-csm-bare-bones-image --operation reboot --limit $XNAME
+ncn# cray bos session create --template-uuid shasta-1.5-csm-bare-bones-image --operation reboot --limit $XNAME --format toml
 ```
 
 Expected output looks similar to the following:
@@ -1025,7 +1023,7 @@ After the node has reached this point, close the console session. The test is co
 
 <a name="uas-uai-tests"></a>
 
-## 5. UAS / UAI tests
+## 5. UAS/UAI tests
 
 The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node, while the second part runs on a non-LiveCD
 Kubernetes master or worker node.
@@ -1033,13 +1031,13 @@ In either case, the CLI configuration needs to be initialized on the node and th
 
 The following procedures run on separate nodes of the system. They are, therefore, separated into separate sub-sections.
 
-1. [Validate Basic UAS Installation](#uas-uai-validate-install)
-1. [Validate UAI Creation](#uas-uai-validate-create)
-1. [UAS/UAI Troubleshooting](#uas-uai-validate-debug)
-   1. [Authorization Issues](#uas-uai-validate-debug-auth)
-   1. [UAS Cannot Access Keycloak](#uas-uai-validate-debug-keycloak)
-   1. [UAI Images not in Registry](#uas-uai-validate-debug-registry)
-   1. [Missing Volumes and Other Container Startup Issues](#uas-uai-validate-debug-container)
+1. [Validate the basic UAS installation](#51-validate-the-basic-uas-installation)
+2. [Validate UAI creation](#52-validate-uai-creation)
+3. [UAS/UAI troubleshooting](#53-uas-uai-validate-debug)
+   1. [Authorization issues](#531-authorization-issues)
+   2. [UAS cannot access Keycloak](#532-uas-cannot-access-keycloak)
+   3. [UAI images not in registry](#533-uai-images-not-in-registry)
+   4. [Missing volumes and other container startup issues](#534-missing-volumes-and-other-container-startup-issues)
 
 <a name="uas-uai-validate-install"></a>
 
@@ -1052,7 +1050,7 @@ This section can be run on any NCN or the PIT node.
 1. Show information about `cray-uas-mgr`.
 
     ```bash
-    ncn# cray uas mgr-info list
+    ncn# cray uas mgr-info list --format toml
     ```
 
     Expected output looks similar to the following:
@@ -1067,7 +1065,7 @@ This section can be run on any NCN or the PIT node.
 1. List UAIs on the system.
 
     ```bash
-    ncn# cray uas list
+    ncn# cray uas list --format toml
     ```
 
     Expected output looks similar to the following:
@@ -1082,7 +1080,7 @@ This section can be run on any NCN or the PIT node.
 1. Verify that the pre-made UAI images are registered with UAS.
 
    ```bash
-   ncn# cray uas images list
+   ncn# cray uas images list --format toml
    ```
 
    Expected output looks similar to the following:
@@ -1114,7 +1112,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 1. Verify that a UAI can be created:
 
    ```bash
-   ncn# cray uas create --publickey ~/.ssh/id_rsa.pub
+   ncn# cray uas create --publickey ~/.ssh/id_rsa.pub --format toml
    ```
 
    Expected output looks similar to the following:
@@ -1144,7 +1142,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 1. Check the current status of the UAI:
 
    ```bash
-   ncn# cray uas list
+   ncn# cray uas list --format toml
    ```
 
    Expected output looks similar to the following:
@@ -1201,7 +1199,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 1. Clean up the UAI.
 
    ```bash
-   ncn# cray uas delete --uai-list $UAINAME
+   ncn# cray uas delete --uai-list $UAINAME --format toml
    ```
 
    Expected output looks similar to the following:
@@ -1273,7 +1271,7 @@ The following shows an example of looking at UAS logs effectively (this example 
 1. Determine the pod name of the `uas-mgr` pod.
 
    ```bash
-   ncn# kubectl get po -n services | grep "^cray-uas-mgr" | grep -v etcd
+   ncn-mw# kubectl get po -n services | grep "^cray-uas-mgr" | grep -v etcd
    ```
 
    Expected output looks similar to:
@@ -1285,13 +1283,13 @@ The following shows an example of looking at UAS logs effectively (this example 
 1. Set `PODNAME` to the name of the manager pod whose logs are going to be viewed.
 
    ```bash
-   ncn# export PODNAME=cray-uas-mgr-6bbd584ccb-zg8vx
+   ncn-mw# export PODNAME=cray-uas-mgr-6bbd584ccb-zg8vx
    ```
 
 1. View the last 25 log entries of the `cray-uas-mgr` container in that pod, excluding `GET` events:
 
    ```bash
-   ncn# kubectl logs -n services $PODNAME cray-uas-mgr | grep -v 'GET ' | tail -25
+   ncn-mw# kubectl logs -n services $PODNAME cray-uas-mgr | grep -v 'GET ' | tail -25
    ```
 
    Example output:
@@ -1331,7 +1329,7 @@ The following shows an example of looking at UAS logs effectively (this example 
 When listing or describing a UAI, an error in the `uai_msg` field may be returned. For example:
 
 ```bash
-ncn# cray uas list
+ncn# cray uas list --format toml
 ```
 
 There may be something similar to the following output:
@@ -1363,13 +1361,13 @@ using `kubectl describe`.
 1. Locate the pod.
 
    ```bash
-   ncn# kubectl get po -n user | grep <uai-name>
+   ncn-mw# kubectl get po -n user | grep <uai-name>
    ```
 
 1. Investigate the problem using the pod name from the previous step.
 
    ```bash
-   ncn# kubectl describe pod -n user <pod-name>
+   ncn-mw# kubectl describe pod -n user <pod-name>
    ```
 
    If volumes are missing they will show up in the `Events:` section of the output. Other problems may show up there as well. The names of the missing volumes or other issues
