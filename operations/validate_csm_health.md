@@ -1008,7 +1008,7 @@ The following shows an example of looking at UAS logs effectively (this example 
 1. Determine the pod name of the `uas-mgr` pod
 
    ```bash
-   ncn# kubectl get po -n services | grep "^cray-uas-mgr" | grep -v etcd
+   ncn-mw# kubectl get po -n services | grep "^cray-uas-mgr" | grep -v etcd
    ```
 
    Expected output looks similar to:
@@ -1020,13 +1020,13 @@ The following shows an example of looking at UAS logs effectively (this example 
 1. Set `PODNAME` to the name of the manager pod whose logs are going to be viewed.
 
    ```bash
-   ncn# export PODNAME=cray-uas-mgr-6bbd584ccb-zg8vx
+   ncn-mw# export PODNAME=cray-uas-mgr-6bbd584ccb-zg8vx
    ```
 
 1. View the last 25 log entries of the `cray-uas-mgr` container in that pod, excluding `GET` events:
 
    ```bash
-   ncn# kubectl logs -n services $PODNAME cray-uas-mgr | grep -v 'GET ' | tail -25
+   ncn-mw# kubectl logs -n services $PODNAME cray-uas-mgr | grep -v 'GET ' | tail -25
    ```
 
    Example output:
@@ -1066,7 +1066,7 @@ The following shows an example of looking at UAS logs effectively (this example 
 When listing or describing a UAI, an error in the `uai_msg` field may be returned. For example:
 
 ```bash
-ncn# cray uas list
+ncn# cray uas list --format toml
 ```
 
 There may be something similar to the following output:
@@ -1098,13 +1098,13 @@ using `kubectl describe`.
 1. Locate the pod.
 
    ```bash
-   ncn# kubectl get po -n user | grep <uai-name>
+   ncn-mw# kubectl get po -n user | grep <uai-name>
    ```
 
 1. Investigate the problem using the pod name from the previous step.
 
    ```bash
-   ncn# kubectl describe pod -n user <pod-name>
+   ncn-mw# kubectl describe pod -n user <pod-name>
    ```
 
    If volumes are missing they will show up in the `Events:` section of the output. Other problems may show up there as well. The names of the missing volumes or other issues
