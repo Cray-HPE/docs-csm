@@ -106,6 +106,14 @@ referring to user activity.
    and allows for better easing into BICAN in CSM 1.2. For more details about this transition plan, see
    [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime).
 
+## Manually removing UAN switch ports from the CMN VLAN7 (Placeholder)
+
+After the upgrade to UAN 2.4, the UAN switch ports should be removed from CMN VLAN7 to prevent user traffic from being able to reach endpoints on the CMD.  In the CSM 1.2 and UAN 2.4 upgrade, this removal is not done automatically.  A future release or hotfix to CSM will introduce this automation.
+
+The switch configurations can be updated manually to remove VLAN7 from the UAN port configurations.  A procedure to manually perform this process is in the process of being tested and will be linked here when finished.
+
+Watch this page for updates and be sure to pull the latest CSM 1.2 documentation to ensure you're using the latest procedures.
+
 ## UAI migration
 
 Access to UAIs will be disrupted until CSM 1.2 upgrade completes. After the upgrade is completed, UAIs need to be restarted.
