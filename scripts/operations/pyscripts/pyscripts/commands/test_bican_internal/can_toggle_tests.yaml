@@ -33,7 +33,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -64,9 +64,9 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
+      uan: true
       uai: false
-      cn: false
+      cn: true
     hmn:
       ncn_master: true
       ncn_worker: true
@@ -111,7 +111,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -142,9 +142,9 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
+      uan: true
       uai: false
-      cn: false
+      cn: true
     hmn:
       ncn_master: true
       ncn_worker: true
@@ -189,7 +189,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -220,9 +220,9 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
+      uan: true
       uai: false
-      cn: false
+      cn: true
     hmn:
       ncn_master: true
       ncn_worker: true
@@ -267,7 +267,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -298,9 +298,9 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
+      uan: true
       uai: false
-      cn: false
+      cn: true
     hmn:
       ncn_master: true
       ncn_worker: true
@@ -345,7 +345,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -376,9 +376,9 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
+      uan: true
       uai: false
-      cn: false
+      cn: true
     hmn:
       ncn_master: true
       ncn_worker: true
@@ -423,7 +423,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -454,9 +454,9 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
+      uan: true
       uai: false
-      cn: false
+      cn: true
     hmn:
       ncn_master: true
       ncn_worker: true
@@ -501,7 +501,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: true
       ncn_worker: true
@@ -532,9 +532,9 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
+      uan: true
       uai: false
-      cn: false
+      cn: true
     hmn:
       ncn_master: true
       ncn_worker: true
@@ -579,7 +579,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: false
       ncn_worker: false
@@ -610,8 +610,8 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
-      uai: false
+      uan: true
+      uai: true
       cn: true
     hmn:
       ncn_master: false
@@ -657,7 +657,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: false
       ncn_worker: false
@@ -688,8 +688,8 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
-      uai: false
+      uan: true
+      uai: true
       cn: true
     hmn:
       ncn_master: false
@@ -735,7 +735,7 @@ tests:
       CDU: false
       uan: true
       uai: true
-      cn: true
+      cn: false
     cmn:
       ncn_master: false
       ncn_worker: false
@@ -766,9 +766,9 @@ tests:
       leaf_switch: false
       leaf_BMC: false
       CDU: false
-      uan: false
-      uai: false
-      cn: false
+      uan: true
+      uai: true
+      cn: true
     hmn:
       ncn_master: false
       ncn_worker: false

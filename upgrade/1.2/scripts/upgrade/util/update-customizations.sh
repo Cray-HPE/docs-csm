@@ -245,10 +245,34 @@ if [ -z $NMNLB_CIDR ]; then
     exit 1
 fi
 
+HMN_CIDR=$(echo "${NETWORKSJSON}" | jq -r '.[] | select(.Name == "HMN") | .ExtraProperties.CIDR')
+if [ -z $HMN_CIDR ]; then
+    echo >&2 "error:  Could not find HMN CIDR"
+    exit 1
+fi
+
+HMNLB_CIDR=$(echo "${NETWORKSJSON}" | jq -r '.[] | select(.Name == "HMNLB") | .ExtraProperties.CIDR')
+if [ -z $HMNLB_CIDR ]; then
+    echo >&2 "error:  Could not find HMNLB CIDR"
+    exit 1
+fi
+
 # Replace the NMNLB route in macvlan routes with the UAI NMN blackhole for gateway
 yq d -i "$c" "spec.wlm.macvlansetup.routes.(dst==${NMNLB_CIDR})"
 yq w -i "$c" "spec.wlm.macvlansetup.routes[+].dst" "${NMNLB_CIDR}"
 yq w -i "$c" "spec.wlm.macvlansetup.routes.(dst==${NMNLB_CIDR}).gw" "${UAI_NMN_BH}"
+
+# Add the HMN blackhole route to macvlan routes if it is not already there
+if [[ -z "$(yq r "$c" "spec.wlm.macvlansetup.routes.(dst==${HMN_CIDR})")" ]]; then
+    yq w -i "$c" "spec.wlm.macvlansetup.routes[+].dst" "${HMN_CIDR}"
+    yq w -i "$c" "spec.wlm.macvlansetup.routes.(dst==${HMN_CIDR}).gw" "${UAI_NMN_BH}"
+fi
+
+# Add the HMNLB blackhole route to macvlan routes if it is not already there
+if [[ -z "$(yq r "$c" "spec.wlm.macvlansetup.routes.(dst==${HMNLB_CIDR})")" ]]; then
+    yq w -i "$c" "spec.wlm.macvlansetup.routes[+].dst" "${HMNLB_CIDR}"
+    yq w -i "$c" "spec.wlm.macvlansetup.routes.(dst==${HMNLB_CIDR}).gw" "${UAI_NMN_BH}"
+fi
 
 # Add the CMN route to macvlan routes if it is not already there
 if [[ -z "$(yq r "$c" "spec.wlm.macvlansetup.routes.(dst==${CMN_CIDR})")" ]]; then
