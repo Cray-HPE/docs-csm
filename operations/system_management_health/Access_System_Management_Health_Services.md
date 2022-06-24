@@ -1,9 +1,19 @@
 # Access System Management Health Services
 
-All System Management Health services are exposed outside the cluster through the OAuth2 Proxy and Istio's ingress gateway to enforce the authentication and authorization policies. The URLs to access these
-services are available on any system with CMN, BGP, MetalLB, and external DNS properly configured.
+All System Management Health services are exposed outside the cluster through the OAuth2 Proxy and Istio's ingress gateway to enforce the authentication and authorization policies. The URLs
+to access these services are available on any system with CMN, BGP, MetalLB, and external DNS properly configured.
 
-The `SYSTEM_DOMAIN_NAME` value in the examples below is an Ansible variable defined as follows and is expected to be the system's FQDN.
+- [System domain name](#system-domain-name)
+- [Prerequisites](#prerequisites)
+- [System Management Health service links](#system-management-health-service-links)
+  - [Prometheus](#prometheus)
+  - [Alertmanager](#alertmanager)
+  - [Grafana](#grafana)
+  - [Kiali](#kiali)
+
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value in the URLs on this page is an Ansible variable that can be retrieved as follows. It is expected to be the system's fully qualified domain name (FQDN).
 
 ```bash
 ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:"
@@ -15,12 +25,10 @@ Example output:
       external: SYSTEM_DOMAIN_NAME
 ```
 
-This procedure enables administrators to set up the service and access its components via the Grafana and Kiali applications.
-
 ## Prerequisites
 
 - Access to the System Management Health web UIs is through Istio's ingress gateway and requires clients \(browsers\) to set the appropriate HTTP Host header to route traffic to the desired service.
-- This procedure requires administrative privileges on the workstation running the user's web browser.
+- Access to these URLs may require administrative privileges on the workstation running the user's web browser.
 - The Customer Management Network \(CMN\), Border Gateway Protocol \(BGP\), MetalLB, and external DNS are properly configured.
 
 ## System Management Health service links
