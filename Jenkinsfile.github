@@ -26,7 +26,14 @@
 @Library('csm-shared-library') _
 
 def sleVersion = '15.3'
+def major
+def minor
+def patch
 def isStable = env.TAG_NAME != null ? true : false
+if ( isStable ) {
+    (major, minor, patch) = env.TAG_NAME.tokenize('.')
+    major = major.replaceAll("^v","")
+}
 
 pipeline {
     agent {
@@ -35,12 +42,13 @@ pipeline {
 
     options {
         buildDiscarder(logRotator(numToKeepStr: "10"))
+        disableConcurrentBuilds()
+        timeout(time: 20, unit: 'MINUTES')
         timestamps()
     }
 
     environment {
         GIT_REPO_NAME = getRepoName()
-        RELEASE_BRANCH_VERSION = getReleaseBranchVersion()
         VERSION = sh(returnStdout: true, script: "git describe --tags | tr -s '-' '~' | tr -d '^v'").trim()
     }
     
@@ -56,6 +64,8 @@ pipeline {
                 script {
                     withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
                         runLibraryScript("addRpmMetaData.sh", "${env.GIT_REPO_NAME}.spec")
+                        sh "echo ${env.BRANCH_NAME}"
+                        sh "env"
                         sh "make prepare"
                     }
                 }
@@ -84,8 +94,10 @@ pipeline {
       stage('Publish') {
           steps {
             script {
-                if(env.RELEASE_BRANCH_VERSION){
-                    RELEASE_FOLDER = "/" + env.RELEASE_BRANCH_VERSION
+                if( isStable ){
+                    RELEASE_FOLDER = "/${major}.${minor}"
+                    sh "find dist/rpmbuild/RPMS/noarch/ -name *.rpm -exec cp {} dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-latest.noarch.rpm \\;"
+                    sh "find dist/rpmbuild/SRPMS/ -name *.rpm -exec cp {}  dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-latest.src.rpm \\;"
                 } else {
                     RELEASE_FOLDER = ""
                 }
