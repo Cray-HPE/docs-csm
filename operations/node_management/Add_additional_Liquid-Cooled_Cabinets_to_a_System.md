@@ -23,16 +23,16 @@ This top level procedure outlines the process for adding additional liquid-coole
     1. Review generated switch configurations.
     1. Apply switch configurations.
     1. Update CEC VLAN (if required).
-    
+
     For more information on CANU, see the [CANU `v1.6.5` documentation](https://github.com/Cray-HPE/canu/blob/1.6.5/readme.md).
- 
+
     **DISCLAIMER:** This procedure is for standard mountain cabinet network configurations and does not account for any site customizations that have been made to the management network.
     Site administrators and support teams are responsible for knowing the customizations in effect in Shasta/CSM and configuring CANU to respect them when generating new network configurations.
 
-    See examples of using CANU custom switch configurations and examples of other CSM features that require custom configurationss in the following documentation:
+    See examples of using CANU custom switch configurations and examples of other CSM features that require custom configurations in the following documentation:
 
-    * [Manual Switch Configuration Example](../network/management_network/manual_switch_config.md)
-    * [Custom Switch Configuration Example](https://github.com/Cray-HPE/canu/blob/7e0cb58b6253b4c02be1bd420a619befab1f33ca/docs/network_configuration_and_upgrade/custom_config.md)
+    - [Manual Switch Configuration Example](../network/management_network/manual_switch_config.md)
+    - [Custom Switch Configuration Example](https://github.com/Cray-HPE/canu/blob/7e0cb58b6253b4c02be1bd420a619befab1f33ca/docs/network_configuration_and_upgrade/custom_config.md)
 
 1. Verify that new hardware has been discovered.
 
