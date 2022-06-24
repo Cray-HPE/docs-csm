@@ -12,37 +12,6 @@ The following are examples of when to run health checks:
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
-**NOTE:** It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
-fails, wait 15 minutes and try again. To check status, run the following command, preferably on `ncn-m001`:
-
-```bash
-chronyc sources -v
-```
-
-```text
-210 Number of sources = 9
-
-  .-- Source mode  '^' = server, '=' = peer, '#' = local clock.
- / .- Source state '*' = current synced, '+' = combined , '-' = not combined,
-| /   '?' = unreachable, 'x' = time may be in error, '~' = time too variable.
-||                                                 .- xxxx [ yyyy ] +/- zzzz
-||      Reachability register (octal) -.           |  xxxx = adjusted offset,
-||      Log2(Polling interval) --.      |          |  yyyy = measured offset,
-||                                \     |          |  zzzz = estimated error.
-||                                 |    |           \
-MS Name/IP address         Stratum Poll Reach LastRx Last sample
-===============================================================================
-^* ntp.hpecorp.net               2  10   377   650   -421us[ -571us] +/-   30ms
-=? ncn-m002.nmn                 10   4   377   213    +82us[  +82us] +/-  367us
-=- ncn-m003.nmn                  3   1   377     1  -2033us[-2033us] +/-   28ms
-=- ncn-s001.nmn                  6   5   377    20    +53us[  +53us] +/-  193us
-=- ncn-s002.nmn                  5   5   377    25    +29us[  +29us] +/-  275us
-=- ncn-s003.nmn                  6   6   377    27    +47us[  +47us] +/-  237us
-=- ncn-w001.nmn                  5   9   377  234m  +8305us[  +10ms] +/-   38ms
-=- ncn-w002.nmn                  3   5   377     8  -1910us[-1910us] +/-   27ms
-=- ncn-w003.nmn                  3   8   377   74m  -1122us[-1002us] +/-   31ms
-```
-
 ## Topics
 
 - [0. Cray command line interface](#0-cray-command-line-interface)
@@ -63,11 +32,14 @@ MS Name/IP address         Stratum Poll Reach LastRx Last sample
   - [3.3 Known issues with SMS tests](#33-known-issues-with-sms-tests)
 - [4. Gateway health and SSH access checks](#4-gateway-health-and-ssh-access-checks)
   - [4.1 Gateway health tests](#41-gateway-health-tests)
+    - [4.1.1 Gateway health tests overview](#411-gateway-health-tests-overview)
+    - [4.1.2 Gateway health tests on an NCN](#412-gateway-health-tests-on-an-ncn)
+    - [4.1.3 Gateway health tests from outside the system](#413-gateway-health-tests-from-outside-the-system)
   - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
   - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
   - [5.1 Run the test script](#51-run-the-test-script)
-- [6. UAS / UAI tests](#6-uas--uai-tests)
+- [6. UAS/UAI tests](#6-uasuai-tests)
   - [6.1 Validate the basic UAS installation](#61-validate-the-basic-uas-installation)
   - [6.2 Validate UAI creation](#62-validate-uai-creation)
   - [6.3 Test UAI gateway health](#63-test-uai-gateway-health)
@@ -237,6 +209,41 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
         ```
 
      1. Then re-run the check to see if the problem has been resolved.
+
+- Clock skew test failures
+
+   It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
+   fails, wait 15 minutes and try again.
+
+   (`ncn-m001#`) To check status, run the following command, preferably on `ncn-m001`:
+
+   ```bash
+   chronyc sources -v
+   ```
+
+   ```text
+   210 Number of sources = 9
+
+     .-- Source mode  '^' = server, '=' = peer, '#' = local clock.
+    / .- Source state '*' = current synced, '+' = combined , '-' = not combined,
+   | /   '?' = unreachable, 'x' = time may be in error, '~' = time too variable.
+   ||                                                 .- xxxx [ yyyy ] +/- zzzz
+   ||      Reachability register (octal) -.           |  xxxx = adjusted offset,
+   ||      Log2(Polling interval) --.      |          |  yyyy = measured offset,
+   ||                                \     |          |  zzzz = estimated error.
+   ||                                 |    |           \
+   MS Name/IP address         Stratum Poll Reach LastRx Last sample
+   ===============================================================================
+   ^* ntp.hpecorp.net               2  10   377   650   -421us[ -571us] +/-   30ms
+   =? ncn-m002.nmn                 10   4   377   213    +82us[  +82us] +/-  367us
+   =- ncn-m003.nmn                  3   1   377     1  -2033us[-2033us] +/-   28ms
+   =- ncn-s001.nmn                  6   5   377    20    +53us[  +53us] +/-  193us
+   =- ncn-s002.nmn                  5   5   377    25    +29us[  +29us] +/-  275us
+   =- ncn-s003.nmn                  6   6   377    27    +47us[  +47us] +/-  237us
+   =- ncn-w001.nmn                  5   9   377  234m  +8305us[  +10ms] +/-   38ms
+   =- ncn-w002.nmn                  3   5   377     8  -1910us[-1910us] +/-   27ms
+   =- ncn-w003.nmn                  3   8   377   74m  -1122us[-1002us] +/-   31ms
+   ```
 
 ### 1.2 NCN resource checks (optional)
 
@@ -483,7 +490,7 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 1. [Interpreting `cmsdev` Results](#32-interpreting-cmsdev-results)
 1. [Known issues with SMS tests](#33-known-issues-with-sms-tests)
 
-### 3.1 SMS Test execution
+### 3.1 SMS test execution
 
 The test in this section requires that the [Cray CLI is configured](#0-cray-command-line-interface) on nodes where the test is executed.
 
@@ -531,19 +538,11 @@ In this case, these errors can be ignored, or the pod with the same name as the 
 
 ### 4.1 Gateway health tests
 
-The gateway tests check the health of the API Gateway on all of the relevant networks.  The gateway tests will check that the gateway is accessible on all networks where it should be accessible,
-and NOT accessible on all networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
+#### 4.1.1 Gateway health tests overview
+
+The gateway tests check the health of the API Gateway on all of the relevant networks. The gateway tests check that the gateway is accessible on all networks where it should be accessible,
+and NOT accessible on all networks where it should NOT be accessible. They also check several service endpoints to verify that they return the proper response
 on each accessible network.
-
-The gateway tests can be run from various locations.   For this part of the CSM validation, we will check gateway access from the NCNs and from outside the system.
-Externally, the API gateway is accessible on the CMN network and either the CAN or CHN user network depending on the configuration of the system.
-On NCNs, the API gateway is accessible on the same networks (CMN and CAN/CHN) and it is also accessible on the NMNLB network.
-
-Follow these instructions for executing the gateway tests from an NCN and from outside the system.
-
-- [Running Gateway Tests on an NCN Management Node](./network/Gateway_Testing.md#running-gateway-tests-on-an-ncn-management-node)
-  - The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
-- [Running Gateway Tests on a Device Outside the System](network/Gateway_Testing.md#running-gateway-tests-on-a-device-outside-the-system)
 
 The test will complete with an overall test status based on the result of the individual health checks on all of the networks.
 
@@ -553,21 +552,37 @@ Overall Gateway Test Status:  PASS
 
 For more detailed information on the tests results and examples, see [Gateway Testing](network/Gateway_Testing.md).
 
+The gateway tests can be run from various locations. For this part of the CSM validation, check gateway access from the NCNs and from outside the system.
+Externally, the API gateway is accessible on the CMN and either the CAN or CHN, depending on the configuration of the system.
+On NCNs, the API gateway is accessible on the same networks (CMN and CAN/CHN) and it is also accessible on the NMNLB network.
+
+#### 4.1.2 Gateway health tests on an NCN
+
+The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM,
+see [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
+
+To execute the tests, see [Running Gateway Tests on an NCN Management Node](network/Gateway_Testing.md#running-gateway-tests-on-an-ncn-management-node).
+
+#### 4.1.3 Gateway health tests from outside the system
+
+To execute the tests, see [Running Gateway Tests on a Device Outside the System](network/Gateway_Testing.md#running-gateway-tests-on-a-device-outside-the-system).
+
 ### 4.2 Internal SSH access test execution
 
 The internal SSH access tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM,
 see [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
-Execute the tests by running the following command:
+(`ncn#`) Execute the tests by running the following command:
 
 ```bash
 /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
 ```
 
-By default, SSH access will be tested between master nodes and spine switches on all relevant networks.
-It is possible to customize which nodes and networks will be tested. For example, you may wish to include configured
-UANs as part of the tests. See the test usage statement for details. The test usage statement is displayed by calling the
-test with the `--help` argument:
+By default, SSH access will be tested on all relevant networks between master nodes and spine switches.
+It is possible to customize which nodes and networks will be tested. For example, it is possible to include UANs, to exclude
+master nodes, or to exclude the HMN. See the test usage statement for details.
+
+(`ncn#`) The test usage statement is displayed by calling the test with the `--help` argument:
 
 ```bash
 /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal --help
@@ -583,9 +598,9 @@ Overall status: PASSED (Passed: 40, Failed: 0)
 
 The external SSH access tests may be run on any system external to the cluster.
 
-1. `python3` must be installed (if it is not already).
+1. (`external#`) Python version 3 must be installed (if it is not already).
 
-1. Obtain the test code.
+1. (`external#`) Obtain the test code.
 
    There are two options for doing this:
 
@@ -597,7 +612,7 @@ The external SSH access tests may be run on any system external to the cluster.
 
         - `/usr/share/doc/csm/scripts/operations/pyscripts`
 
-1. Install the Python dependencies.
+1. (`external#`) Install the Python dependencies.
 
    Run the following command from the `pyscripts` directory in order to install the required Python dependencies:
 
@@ -605,10 +620,10 @@ The external SSH access tests may be run on any system external to the cluster.
     cd /usr/share/doc/csm/scripts/operations/pyscripts && pip install .
     ```
 
-1. Obtain the `admin` client secret.
+1. (`ncn#` or `pit#`) Obtain the `admin` client secret.
 
    Because `kubectl` will not work outside of the cluster, obtain the `admin` client secret by running the
-   following command on an NCN.
+   following command on an NCN or the PIT node.
 
     ```bash
     kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
@@ -620,16 +635,17 @@ The external SSH access tests may be run on any system external to the cluster.
     26947343-d4ab-403b-14e937dbd700
     ```
 
-1. On the external system, execute the tests.
+1. (`external#`) On the external system, execute the tests.
 
     ```bash
     cd /usr/share/doc/csm/scripts/operations/pyscripts && ./start.py test_bican_external
     ```
 
-   By default, SSH access will be tested to master nodes and spine switches on all relevant networks.
-   It is possible to customize which nodes and networks will be tested. For example, you may wish to include configured
-   UANs as part of the tests. See the test usage statement for details. The test usage statement is displayed by calling the
-   test with the `--help` argument:
+    By default, SSH access will be tested on all relevant networks between master nodes and spine switches.
+    It is possible to customize which nodes and networks will be tested. For example, it is possible to include compute nodes, to exclude
+    spine switches, or to exclude the NMN. See the test usage statement for details.
+
+    The test usage statement is displayed by calling the test with the `--help` argument:
 
     ```bash
     cd /usr/share/doc/csm/scripts/operations/pyscripts && ./start.py test_bican_external --help
@@ -643,6 +659,8 @@ The external SSH access tests may be run on any system external to the cluster.
     Overall status: PASSED (Passed: 20, Failed: 0)
     ```
 
+<a name="booting-csm-barebones-image"></a>
+
 ## 5. Booting CSM `barebones` image
 
 Included with the Cray System Management (CSM) release is a pre-built node image that can be used
@@ -651,8 +669,8 @@ image contains only the minimal set of RPMs and configuration required to boot a
 suitable for production usage. To run production work loads, it is suggested that an image from
 the Cray OS (COS) product, or similar, be used.
 
-- This test is **very important to run** during the CSM install prior to redeploying the PIT node
-because it validates all of the services required for that operation.
+- This test is **very important to run**, particularly during the CSM install prior to rebooting the PIT node,
+because it validates all of the services required for nodes to PXE boot from the cluster.
 - The CSM Barebones image included with the release will not successfully complete
 beyond the `dracut` stage of the boot process. However, if the `dracut` stage is reached, the
 boot can be considered successful and shows that the necessary CSM services needed to
@@ -673,7 +691,7 @@ configured to allow an access token to be generated by the script.
 
 ### 5.1 Run the test script
 
-The script is executable and can be run without any arguments. It returns zero on success and
+(`ncn#`) The script is executable and can be run without any arguments. It returns zero on success and
 non-zero on failure.
 
 ```bash
@@ -699,7 +717,7 @@ specified but unavailable, an available node will be used instead and a warning 
 /opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b4n0
 ```
 
-## 6. UAS / UAI tests
+## 6. UAS/UAI tests
 
 The commands in this section require that the [Cray CLI is configured](#0-cray-command-line-interface) on nodes where the commands are being executed.
 
@@ -709,14 +727,14 @@ In either case, the CLI configuration needs to be initialized on the node and th
 
 The following procedures run on separate nodes of the system.
 
-1. [Validate Basic UAS Installation](#61-validate-the-basic-uas-installation)
-1. [Validate UAI Creation](#62-validate-uai-creation)
-1. [Test UAI Gateway Health](#63-test-uai-gateway-health)
-1. [UAS/UAI Troubleshooting](#64-uasuai-troubleshooting)
-   1. [Authorization Issues](#641-authorization-issues)
-   1. [UAS Cannot Access Keycloak](#642-uas-cannot-access-keycloak)
-   1. [UAI Images not in Registry](#643-uai-images-not-in-registry)
-   1. [Missing Volumes and Other Container Startup Issues](#644-missing-volumes-and-other-container-startup-issues)
+1. [Validate the basic UAS installation](#61-validate-the-basic-uas-installation)
+2. [Validate UAI creation](#62-validate-uai-creation)
+3. [Test UAI gateway health](#63-test-uai-gateway-health)
+4. [UAS/UAI troubleshooting](#64-uas-uai-validate-debug)
+   1. [Authorization issues](#641-authorization-issues)
+   2. [UAS cannot access Keycloak](#642-uas-cannot-access-keycloak)
+   3. [UAI images not in registry](#643-uai-images-not-in-registry)
+   4. [Missing volumes and other container startup issues](#644-missing-volumes-and-other-container-startup-issues)
 
 ### 6.1 Validate the basic UAS installation
 
@@ -725,7 +743,7 @@ This section can be run on any NCN or the PIT node.
 1. (`ncn#` or `pit#`) Show information about `cray-uas-mgr`.
 
     ```bash
-    cray uas mgr-info list
+    cray uas mgr-info list --format toml
     ```
 
     Expected output looks similar to the following:
@@ -740,7 +758,7 @@ This section can be run on any NCN or the PIT node.
 1. (`ncn#` or `pit#`) List UAIs on the system.
 
     ```bash
-    cray uas list
+    cray uas list --format toml
     ```
 
     Expected output looks similar to the following:
@@ -755,7 +773,7 @@ This section can be run on any NCN or the PIT node.
 1. (`ncn#` or `pit#`) Verify that the pre-made UAI images are registered with UAS
 
    ```bash
-   cray uas images list
+   cray uas images list --format toml
    ```
 
    Expected output looks similar to the following:
@@ -784,7 +802,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 1. (`ncn#` or `pit#`) Verify that a UAI can be created:
 
    ```bash
-   cray uas create --publickey ~/.ssh/id_rsa.pub
+   cray uas create --publickey ~/.ssh/id_rsa.pub --format toml
    ```
 
    Expected output looks similar to the following:
@@ -814,7 +832,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 1. (`ncn#` or `pit#`) Check the current status of the UAI:
 
    ```bash
-   cray uas list
+   cray uas list --format toml
    ```
 
    Expected output looks similar to the following:
@@ -834,14 +852,14 @@ This procedure must run on a master or worker node (**not the PIT node**).
 
    If the `uai_status` field is `Running: Ready`, proceed to the next step. Otherwise, wait and repeat this command until that is the case. It normally should not take more than a minute or two.
 
-1. The UAI is ready for use. Log into it with the command in the `uai_connect_string` field in the previous command output:
+1. (`ncn#` or `pit#`) The UAI is ready for use. Log into it with the command in the `uai_connect_string` field in the previous command output:
 
    ```bash
    ssh vers@10.16.234.10
    vers@uai-vers-a00fb46b-6889b666db-4dfvn:~>
    ```
 
-1. Run a command on the UAI:
+1. (`uai#`) Run a command on the UAI:
 
    ```bash
    vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> ps -afe
@@ -861,7 +879,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
    vers         120      68  0 18:52 pts/0    00:00:00 ps -afe
    ```
 
-1. Log out from the UAI
+1. (`uai#`) Log out from the UAI
 
    ```bash
    vers@uai-vers-a00fb46b-6889b666db-4dfvn:~> exit
@@ -871,7 +889,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 1. (`ncn#` or `pit#`) Clean up the UAI.
 
    ```bash
-   cray uas delete --uai-list $UAINAME
+   cray uas delete --uai-list $UAINAME --format toml
    ```
 
    Expected output looks similar to the following:
@@ -886,15 +904,15 @@ If the commands ran with similar results, then the basic functionality of the UA
 
 Like the NCN gateway health check, the gateway tests check the health of the API Gateway on all of the relevant networks.
 On UAIs, the API gateway should only be accessible on the user network (either CAN or CHN depending on the configuration of the system).
-The gateway tests will check that the gateway is accessible on all networks where it should be accessible, and NOT accessible on all
-networks where it should NOT be accessible. It will also check several service endpoints to verify that they return the proper response
+The gateway tests check that the gateway is accessible on all networks where it should be accessible, and NOT accessible on all
+networks where it should NOT be accessible. They also check several service endpoints to verify that they return the proper response
 on each accessible network.
 
 #### 6.3.1 Gateway test execution
 
 The UAI gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
-The UAI gateway tests are executed by running the following command.
+(`ncn#`) The UAI gateway tests are executed by running the following command.
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
@@ -959,7 +977,7 @@ both to find the specific failure. The logs tend to have a very large number of 
 
 The following shows an example of looking at UAS logs effectively (this example shows only one UAS manager, normally there would be two):
 
-1. (`ncn#` or `pit#`) Determine the pod name of the `uas-mgr` pod
+1. (`ncn-mw#` or `pit#`) Determine the pod name of the `uas-mgr` pod
 
    ```bash
    kubectl get po -n services | grep "^cray-uas-mgr" | grep -v etcd
@@ -971,13 +989,13 @@ The following shows an example of looking at UAS logs effectively (this example 
    cray-uas-mgr-6bbd584ccb-zg8vx                                    2/2     Running            0          12d
    ```
 
-1. (`ncn#` or `pit#`) Set `PODNAME` to the name of the manager pod whose logs are going to be viewed.
+1. (`ncn-mw#` or `pit#`) Set `PODNAME` to the name of the manager pod whose logs are going to be viewed.
 
    ```bash
    export PODNAME=cray-uas-mgr-6bbd584ccb-zg8vx
    ```
 
-1. (`ncn#` or `pit#`) View the last 25 log entries of the `cray-uas-mgr` container in that pod, excluding `GET` events:
+1. (`ncn-mw#` or `pit#`) View the last 25 log entries of the `cray-uas-mgr` container in that pod, excluding `GET` events:
 
    ```bash
    kubectl logs -n services $PODNAME cray-uas-mgr | grep -v 'GET ' | tail -25
@@ -1018,7 +1036,7 @@ The following shows an example of looking at UAS logs effectively (this example 
 When listing or describing a UAI, an error in the `uai_msg` field may be returned. For example:
 
 ```bash
-cray uas list
+cray uas list --format toml
 ```
 
 There may be something similar to the following output:
@@ -1045,13 +1063,13 @@ Various packages install volumes in the UAS configuration. All of those volumes 
 Kubernetes. If a UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause. UAIs run in the `user` Kubernetes namespace, and are pods that can be examined
 using `kubectl describe`.
 
-1. (`ncn#` or `pit#`) Locate the pod.
+1. (`ncn-mw#` or `pit#`) Locate the pod.
 
    ```bash
    kubectl get po -n user | grep <uai-name>
    ```
 
-1. (`ncn#` or `pit#`) Investigate the problem using the pod name from the previous step.
+1. (`ncn-mw#` or `pit#`) Investigate the problem using the pod name from the previous step.
 
    ```bash
    kubectl describe pod -n user <pod-name>
