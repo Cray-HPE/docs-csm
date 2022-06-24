@@ -25,7 +25,7 @@ This procedure enables administrators to set up the service and access its compo
 
 ## Procedure
 
-1.  Access any System Management Health service with the provided links.
+1. Access any System Management Health service with the provided links.
 
     When accessing the URLs listed below, it will be necessary to accept one or more browser security warnings in order to proceed to the login screen and navigate through the application after
     successfully logging in. The details of the security warning will indicate that a self-signed certificate/unknown issuer is being used for the site. Support for incorporation of certificates from
@@ -43,7 +43,7 @@ This procedure enables administrators to set up the service and access its compo
       [https://prometheus.io/docs/prometheus/latest/getting\_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
 
       Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed
-      yet. See [Troubleshoot Prometheus Alerts](operations/system_management_health/Troubleshoot_Prometheus_Alerts.md).
+      yet. See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
 
     - `https://alertmanager.{{shasta_domain}}/`
 
@@ -53,7 +53,7 @@ This procedure enables administrators to set up the service and access its compo
       [https://prometheus.io/docs/prometheus/latest/getting\_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
 
       Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed
-      yet. See [Troubleshoot Prometheus Alerts](operations/system_management_health/Troubleshoot_Prometheus_Alerts.md).
+      yet. See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
 
     - `https://grafana.{{shasta_domain}}`
 
@@ -75,7 +75,7 @@ This procedure enables administrators to set up the service and access its compo
 
       Jaeger provides distributed tracing of requests across micro-services based on headers automatically injected by Envoy.
 
-      For more information regarding the `jaeger-istio` front end/UI configuration, refer to the online documentation \([https://www.jaegertracing.io/](https://www.jaegertracing.io/)\). Click on
+      For more information regarding the `jaeger-istio` front end/UI configuration, refer to the online documentation [https://www.jaegertracing.io/](https://www.jaegertracing.io/). Click on
       the 'Docs' section to get more information around the Jaeger Frontend/UI.
 
     Additional components are also exposed, though only for convenience. Do not rely on these components to always be available:
