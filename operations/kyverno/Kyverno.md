@@ -312,7 +312,7 @@ Also, it generates the report of policy violation in respective workloads. The f
       - containerPort: 80
     ```
 
-3. Check the policy report status.
+3. (`ncn#`) Check the policy report status.
     ```bash
     kubectl get polr -A
     ```
