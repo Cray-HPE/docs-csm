@@ -165,6 +165,9 @@ types include Slack, Pager Duty, email, or a custom integration via a generic we
 See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for example
 configuration of an email alert notification for Postgres replication alerts that are defined on the system.
 
+See [Configure Prometheus Alerta Alert Notifications](../operations/system_management_health/Configure_Prometheus_Alerta_Alert_Notifications.md) for example
+configuration of an alerta alert notification for prometheus alerts that are defined on the system.
+
 ## 8. Update Firmware with FAS
 
 Now that all management nodes and CSM services have been validated as healthy, the firmware on other
