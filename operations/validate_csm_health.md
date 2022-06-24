@@ -594,9 +594,9 @@ Execute the tests by running the following command:
 ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
 ```
 
-By default, SSH access will be tested on all relevant networks between master nodes, spine switches, compute nodes, and UANs.
-It is possible to customize which nodes and networks will be tested. For example, it is possible to include storage nodes, to exclude
-UANs, or to exclude the HMN. See the test usage statement for details. The test usage statement is displayed by calling the
+By default, SSH access will be tested on all relevant networks between master nodes and spine switches.
+It is possible to customize which nodes and networks will be tested. For example, it is possible to include UANs, to exclude
+master nodes, or to exclude the HMN. See the test usage statement for details. The test usage statement is displayed by calling the
 test with the `--help` argument:
 
 ```bash
@@ -656,9 +656,9 @@ The external SSH access tests may be run on any system external to the cluster.
     external:/usr/share/doc/csm/scripts/operations/pyscripts# ./start.py test_bican_external
     ```
 
-    By default, SSH access will be tested on all relevant networks between master nodes, spine switches, compute nodes, and UANs.
-    It is possible to customize which nodes and networks will be tested. For example, it is possible to include storage nodes, to exclude
-    UANs, or to exclude the HMN. See the test usage statement for details. The test usage statement is displayed by calling the
+    By default, SSH access will be tested on all relevant networks between master nodes and spine switches.
+    It is possible to customize which nodes and networks will be tested. For example, it is possible to include compute nodes, to exclude
+    spine switches, or to exclude the NMN. See the test usage statement for details. The test usage statement is displayed by calling the
     test with the `--help` argument:
 
     ```bash
