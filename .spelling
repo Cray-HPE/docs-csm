@@ -1,4 +1,5 @@
 1.0.x
+1.6.x
 100GBASE-CR2
 100GBASE-CR4
 100GBASE-SR2
@@ -626,3 +627,5 @@ preconfig
 # To differentiate between old CAN and new CAN
 pre-1
 
+- operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
+LoadBalancer
