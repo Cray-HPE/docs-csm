@@ -58,7 +58,7 @@ This procedure enables administrators to set up the service and access its compo
 
         Central Grafana instance that includes numerous dashboards for visualizing metrics from `prometheus` and `prometheus-istio`.
 
-        For more information about Grafana's features and dashboard creation, please see the online documentation here: [https://grafana.com/docs/grafana/latest/](https://grafana.com/docs/grafana/latest/).
+        For more information about Grafana's features and dashboard creation, see the online documentation here: [https://grafana.com/docs/grafana/latest/](https://grafana.com/docs/grafana/latest/).
 
         For a description of the Grafana Panel: [https://grafana.com/docs/grafana/latest/features/panels/panels/](https://grafana.com/docs/grafana/latest/features/panels/panels/).
 
