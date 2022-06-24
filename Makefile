@@ -49,6 +49,3 @@ rpm_build_source:
 
 rpm_build:
 	rpmbuild -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
-
-rpm_latest: 
-	cp $(wildcard $(BUILD_DIR)/RPMS/noarch/docs-csm-$(VERSION)-*.noarch.rpm) "$(BUILD_DIR)/RPMS/noarch/docs-csm-latest.noarch.rpm" 
