@@ -23,47 +23,58 @@ This procedure enables administrators to set up the service and access its compo
 - This procedure requires administrative privileges on the workstation running the user's web browser.
 - The Customer Management Network \(CMN\), Border Gateway Protocol \(BGP\), MetalLB, and external DNS are properly configured.
 
-## Procedure
+## System Management Health service links
 
-1. Access any System Management Health service with the provided links.
+Access any System Management Health service with the provided links.
 
-    When accessing the URLs listed below, it will be necessary to accept one or more browser security warnings in order to proceed to the login screen and navigate through the application after successfully
-    logging in. The details of the security warning will indicate that a self-signed certificate/unknown issuer is being used for the site. Support for incorporation of certificates from Trusted Certificate
-    Authorities is planned for a future release.
+When accessing the URLs listed below, it will be necessary to accept one or more browser security warnings in order to proceed to the login screen and navigate through the application after successfully
+logging in. The details of the security warning will indicate that a self-signed certificate/unknown issuer is being used for the site. Support for incorporation of certificates from Trusted Certificate
+Authorities is planned for a future release.
 
-    - `https://prometheus.cmn.SYSTEM_DOMAIN_NAME/`
+### Prometheus
 
-        Central Prometheus instance scrapes metrics from Kubernetes, Ceph, and the hosts (part of `prometheus-operator` Helm chart).
+URL: `https://prometheus.cmn.SYSTEM_DOMAIN_NAME/`
 
-        Prometheus generates alerts based on metrics and reports them to the Alertmanager. The 'Alerts' link at the top of the page will show all of the inactive, pending, and firing alerts on the system. Clicking
-        on any of the alerts will expand them, enabling users to use the 'Labels' data to discern the details of the alert. The details will also show the state of the alert, how long it has been active, and the
-        value for the alert.
+Central Prometheus instance scrapes metrics from Kubernetes, Ceph, and the hosts (part of `prometheus-operator` Helm chart).
 
-        For more information regarding the use of the Prometheus interface, see [https://prometheus.io/docs/prometheus/latest/getting_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
+Prometheus generates alerts based on metrics and reports them to the Alertmanager. The 'Alerts' link at the top of the page will show all of the inactive, pending, and firing alerts on the system.
+Clicking on any of the alerts will expand them, enabling users to use the 'Labels' data to discern the details of the alert. The details will also show the state of the alert, how long it has been
+active, and the value for the alert.
 
-        Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet.
-        See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
+For more information regarding the use of the Prometheus interface, see
+[Getting Started/](https://prometheus.io/docs/prometheus/latest/getting_started/) in the Prometheus online documentation.
 
-    - `https://alertmanager.cmn.SYSTEM_DOMAIN_NAME/`
+Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet.
+See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
 
-        Central Alertmanager instance that manages Prometheus alerts.
+### Alertmanager
 
-        The Alertmanager manages the alerts it receives and generates notifications to users or applications. For more information about `alert-manager`, refer to the following documentation: [https://prometheus.io/docs/prometheus/latest/getting_started/](https://prometheus.io/docs/prometheus/latest/getting_started/).
+URL: `https://alertmanager.cmn.SYSTEM_DOMAIN_NAME/`
 
-        Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
+Central Alertmanager instance that manages Prometheus alerts.
 
-    - `https://grafana.cmn.SYSTEM_DOMAIN_NAME/`
+The Alertmanager manages the alerts it receives and generates notifications to users or applications. For more information about `alert-manager`, see
+[Getting Started/](https://prometheus.io/docs/prometheus/latest/getting_started/) in the Prometheus online documentation.
 
-        Central Grafana instance that includes numerous dashboards for visualizing metrics from `prometheus` and `prometheus-istio`.
+Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet. See
+[Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
 
-        For more information about Grafana's features and dashboard creation, see the online documentation here: [https://grafana.com/docs/grafana/latest/](https://grafana.com/docs/grafana/latest/).
+### Grafana
 
-        For a description of the Grafana Panel: [https://grafana.com/docs/grafana/latest/features/panels/panels/](https://grafana.com/docs/grafana/latest/features/panels/panels/).
+URL: `https://grafana.cmn.SYSTEM_DOMAIN_NAME/`
 
-        For a description of the Grafana Dashboard: [https://grafana.com/docs/grafana/latest/features/dashboard/dashboards/](https://grafana.com/docs/grafana/latest/features/dashboard/dashboards/).
+Central Grafana instance that includes numerous dashboards for visualizing metrics from `prometheus` and `prometheus-istio`.
 
-    - `https://kiali-istio.cmn.SYSTEM_DOMAIN_NAME/`
+For more information, see the Grafana online documentation:
 
-        Kiali provides real-time introspection into the Istio service mesh using metrics and traces from Istio.
+- For more information about Grafana's features and dashboard creation, see [the latest Grafana online documentation](https://grafana.com/docs/grafana/latest/).
+- For a description of the Grafana Panel, see [Grafana panels](https://grafana.com/docs/grafana/latest/features/panels/panels/).
+- For a description of the Grafana Dashboard, see [Grafana dashboards/](https://grafana.com/docs/grafana/latest/features/dashboard/dashboards/).
 
-        For more information about the features of this interface, refer to the following documentation: [https://kiali.io/documentation/](https://kiali.io/documentation/).
+### Kiali
+
+URL: `https://kiali-istio.cmn.SYSTEM_DOMAIN_NAME/`
+
+Kiali provides real-time introspection into the Istio service mesh using metrics and traces from Istio.
+
+For more information about the features of this interface, refer to the [Kiali online documentation/](https://kiali.io/documentation/).
