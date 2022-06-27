@@ -5,7 +5,8 @@ This procedure will install CSM applications and services into the CSM Kubernete
 > **`NOTE`** Check the information in [Known Issues](#known-issues) before starting this procedure to be warned about possible problems.
 
 1. [Install CSM services](#1-install-csm-services)
-1. [Wait for everything to settle](#2-wait-for-everything-to-settle)
+1. [Create base BSS Global boot parameters](#2-create-base-bss-global-boot-parameters)
+1. [Wait for everything to settle](#3-wait-for-everything-to-settle)
 1. [Known issues](#known-issues)
     * [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
     * [`Setup Nexus` known issues](#setup-nexus-known-issues)
@@ -42,7 +43,58 @@ This procedure will install CSM applications and services into the CSM Kubernete
    > * The `yapl` command can safely be rerun. By default, it will skip any steps which were previously completed successfully. To force it to
    >   rerun all steps regardless of what was previously completed, append the `--no-cache` argument to the `yapl` command.
 
-## 2. Wait for everything to settle
+## 2. Create base BSS Global boot parameters
+
+1. (`pit#`) Wait for BSS to ready:
+
+   ```bash
+   kubectl -n services rollout status deployment cray-bss
+   ```
+
+1. (`pit#`) Retrieve API token:
+
+   ```bash
+   export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                     -d client_id=admin-client \
+                     -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+   ```
+
+1. (`pit#`) Create empty boot parameters:
+
+   ```bash
+   curl -i -k -H "Authorization: Bearer ${TOKEN}" -X PUT \
+      https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
+      --data '{"hosts":["Global"]}'
+   ```
+
+   Expected output:
+
+   ```text
+   HTTP/2 200
+   content-type: application/json; charset=UTF-8
+   date: Mon, 27 Jun 2022 17:08:55 GMT
+   content-length: 0
+   x-envoy-upstream-service-time: 7
+   server: istio-envoy
+   ```
+
+1. (`pit#`) Restart the `spire-update-bss` job:
+
+   ```bash
+   SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=spire-update-bss -o name)
+   kubectl -n spire get $SPIRE_JOB -o json | jq 'del(.spec.selector)' \
+       | jq 'del(.spec.template.metadata.labels."controller-uid")' \
+       | kubectl replace --force -f -
+   ```
+
+1. (`pit#`) Wait for the `spire-update-bss` job to complete:
+
+   ```bash
+   kubectl -n spire wait  $SPIRE_JOB --for=condition=complete --timeout=5m
+   ```
+
+## 3. Wait for everything to settle
 
 Wait **at least 15 minutes** to let the various Kubernetes resources initialize and start before proceeding with the rest of the install.
 Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.
