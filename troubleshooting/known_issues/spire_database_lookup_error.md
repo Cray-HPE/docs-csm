@@ -16,12 +16,12 @@ There is a known issue where if Unbound is configured to forward to an invalid o
 
 ## Solution
 
-1. Check to see if `cray-dns-unbound` has a `forward-addr` configured.
+1. (`ncn-mw#`) Check to see if `cray-dns-unbound` has a `forward-addr` configured.
 
    Command:
 
    ```bash
-   ncn-mw# kubectl -n services get cm cray-dns-unbound -o yaml | grep forward-addr
+   kubectl -n services get cm cray-dns-unbound -o yaml | grep forward-addr
    ```
 
    Example output:
@@ -30,12 +30,12 @@ There is a known issue where if Unbound is configured to forward to an invalid o
    forward-addr: 172.30.84.40
    ```
 
-2. Check to see if the `forward-addr` is accessible from the worker nodes.
+2. (`ncn-w#`) Check to see if the `forward-addr` is accessible from the worker nodes.
 
    * Attempt to ping it.
 
      ```bash
-     ncn-mw# ping -c 1 172.30.84.40
+     ping -c 1 172.30.84.40
      ```
 
      Example output:
@@ -52,7 +52,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
    * Attempt to resolve a hostname external to the system.
 
      ```bash
-     ncn-mw# host www.google.com 172.30.84.40
+     host www.google.com 172.30.84.40
      ```
 
      Example output:
