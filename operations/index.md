@@ -564,8 +564,6 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 - [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
 - [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 
-<a name="external-dns"></a>
-
 ### External DNS
 
 External DNS, along with the Customer Management Network \(CMN\), Border Gateway Protocol \(BGP\), and MetalLB, makes it simpler to access the HPE Cray EX API and system
