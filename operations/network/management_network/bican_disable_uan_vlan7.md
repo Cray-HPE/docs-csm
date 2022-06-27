@@ -60,13 +60,13 @@ During this scheduled outage, the UAN IPv4 addresses are transitioned from the C
     Generating the CANU command line for the SHCD as an exercise here and not using the same command line used to update the switches in [Update the Management Network](../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-03---upgrade-management-network)
 will be time consuming and likely error prone. This is why the CCJ/Paddle option is recommended.
 
-    * CCJ/Paddle (recommended)
+    - CCJ/Paddle (recommended)
 
         ```bash
         ncn-m001# canu validate paddle --ccj SYSTEM_CCJ_FILENAME
         ```
 
-    * SHCD (ensure this command line is exactly the same as was used in updating the management network)
+    - SHCD (ensure this command line is exactly the same as was used in updating the management network)
 
         ```bash
         ncn-m001# canu validate shcd -a NETWORK_ARCHITECTURE_TYPE --shcd SHCD_FILENAME --tabs LIST,OF,WORKSHEETS --corners TAB1_UPPER_LEFT, TAB1_LOWER_RIGHT...
@@ -79,7 +79,7 @@ will be time consuming and likely error prone. This is why the CCJ/Paddle option
 Only UAN CAN ports need to be identified. Only the second port of OCP and PCIe slots are used for UAN CAN, according to [cabling standards](../../../install/cable_management_network_servers.md).
 Custom or non-Plan-of-Record UAN configurations will need to be handled appropriately.
 
-    * **Example:** Identify switches and UAN CAN ports.
+    - **Example:** Identify switches and UAN CAN ports.
     
         Only port two for OCP and PCIe cards. Note that CANU output only lists the switch port, not the chassis or slot.
         On Aruba switches themselves, interfaces are identified by `CHASSIS/SLOT/PORT`. On all CSM Management switches, values for `CHASSIS` and `SLOT` are `1`.
@@ -100,7 +100,7 @@ Custom or non-Plan-of-Record UAN configurations will need to be handled appropri
             ...snip...
         ```
 
-    * **Example:** (Recommended) Create a document of UAN ports.
+    - **Example:** (Recommended) Create a document of UAN ports.
     
         This step is simply to consolidate the output and make the manual switch modification steps less error prone.
         Using the identified CANU output, create a document listing switches and associated UAN ports. This should look similar in layout (not content) to the following:
@@ -119,84 +119,84 @@ Custom or non-Plan-of-Record UAN configurations will need to be handled appropri
     Only one port reconfiguration is shown in this example. Ensure that the procedure is run for **all** identified ports.
     Be aware of the particular switch type: Aruba, Dell, or Mellanox.
 
-    * Log in to the switch, entering the administrative password when prompted.
+    - Log in to the switch, entering the administrative password when prompted.
   
         ```bash
         ncn-m001# ssh admin@SWITCH
         ```
 
-    * Enter configuration mode on the switch.
+    - Enter configuration mode on the switch.
 
-        * Aruba
+        - Aruba
 
             ```console
            sw# configure terminal
            ```
 
-        * Mellanox
+        - Mellanox
 
             ```console
             sw# enable
             sw# configure terminal
             ```
 
-    * *For each UAN port identified with UAN CAN* (`UAN_PORT`) find the associated LAG (bond) (`UAN_LAG`).
+    - *For each UAN port identified with UAN CAN* (`UAN_PORT`) find the associated LAG (bond) (`UAN_LAG`).
   
-        * Aruba
+      - Aruba
 
-            ```console
-            sw# show running-config interface 1/1/UAN_PORT
-            ```
+          ```console
+          sw# show running-config interface 1/1/UAN_PORT
+          ```
 
-            Example output:
+          Example output:
 
-            ```text
-            interface 1/1/UAN_PORT
-            no shutdown
-            mtu 9198
-            description uan001:ocp:2<==sw-spine-001
-            lag UAN_LAG
-            ```
+          ```text
+          interface 1/1/UAN_PORT
+          no shutdown
+          mtu 9198
+          description uan001:ocp:2<==sw-spine-001
+          lag UAN_LAG
+          ```
 
-        * Mellanox
+      - Mellanox
 
-            ```console
-            sw# show running-config interface ethernet 1/UAN_PORT
-            ```
+          ```console
+          sw# show running-config interface ethernet 1/UAN_PORT
+          ```
 
-            Example output:
+          Example output:
 
-            ```text
-            interface ethernet 1/UAN_PORT speed 40G force
-            interface ethernet 1/UAN_PORT mlag-channel-group UAN_LAG mode active
-            interface ethernet 1/UAN_PORT description "uan001:ocp:2"
-            ```
+          ```text
+          interface ethernet 1/UAN_PORT speed 40G force
+          interface ethernet 1/UAN_PORT mlag-channel-group UAN_LAG mode active
+          interface ethernet 1/UAN_PORT description "uan001:ocp:2"
+          ```
 
-    * *For each UAN LAG (bond) identified* (`UAN_LAG`) on the switch, allow the port to access only the VLAN identified in a previous step with the `CAN_VLAN`.
+    - *For each UAN LAG (bond) identified* (`UAN_LAG`) on the switch, allow the port to access only the VLAN identified in a previous step with the `CAN_VLAN`.
 
-        * Aruba
+      - Aruba
   
-            ```console
-            sw# interface lag UAN_LAG multi-chassis
-            sw# vlan trunk allowed CAN_VLAN
-            ```
+          ```console
+          sw# interface lag UAN_LAG multi-chassis
+          sw# vlan trunk allowed CAN_VLAN
+          ```
 
-        * Mellanox
+      - Mellanox
   
-            ```console
-            sw# interface mlag-port-channel UAN_LAG switchport hybrid allowed-vlan CAN_VLAN
-            ```
+          ```console
+          sw# interface mlag-port-channel UAN_LAG switchport hybrid allowed-vlan CAN_VLAN
+          ```
 
-    * Save the switch configuration.
+    - Save the switch configuration.
 
-        * Aruba
+      - Aruba
 
-            ```console
-            sw# write memory
-            ```
+          ```console
+          sw# write memory
+          ```
 
-        * Mellanox
+      - Mellanox
 
-            ```console
-            sw# write memory
-            ```
+          ```console
+          sw# write memory
+          ```
