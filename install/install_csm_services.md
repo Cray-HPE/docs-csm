@@ -5,7 +5,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 > **`NOTE`** Check the information in [Known Issues](#known-issues) before starting this procedure to be warned about possible problems.
 
 1. [Install CSM services](#1-install-csm-services)
-1. [Create base BSS Global boot parameters](#2-create-base-bss-global-boot-parameters)
+1. [Create base BSS global boot parameters](#2-create-base-bss-global-boot-parameters)
 1. [Wait for everything to settle](#3-wait-for-everything-to-settle)
 1. [Known issues](#known-issues)
     * [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
@@ -43,7 +43,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
    > * The `yapl` command can safely be rerun. By default, it will skip any steps which were previously completed successfully. To force it to
    >   rerun all steps regardless of what was previously completed, append the `--no-cache` argument to the `yapl` command.
 
-## 2. Create base BSS Global boot parameters
+## 2. Create base BSS global boot parameters
 
 1. (`pit#`) Wait for BSS to be ready.
 
