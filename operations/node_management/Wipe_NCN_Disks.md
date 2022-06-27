@@ -6,21 +6,21 @@ This page details how to wipe NCN disks.
 
 After following these procedures, an NCN can be rebooted and redeployed.
 
-> **`NOTE`** All types of disk wipe can be run from Linux or from an initramFS/initrd emergency shell.
+> **`NOTE`** All types of disk wipe can be run from Linux or from an emergency shell.
 
 The following are potential use cases for wiping disks:
 
-* Adding a node that is not bare-metal, that came from somewhere else and might have a running OS already
-* Adopting new disks that are not bare.
+- Adding a node that is not bare-metal, that came from somewhere else and might have a running OS already
+- Adopting new disks that are not bare.
 
-By default the NCN is wiped by its own deployment code (when `metal.no-wipe=0` is set), this 
+By default the NCN is wiped by its own deployment code (when `metal.no-wipe=0` is set), this
 procedure in this page is offered as an alternative, manual method. This page is not required.
 
 ## Topics
 
-* [Basic Wipe](#basic-wipe)
-* [Advanced Wipe](#advanced-wipe)
-* [Full Wipe](#full-wipe)
+- [Basic Wipe](#basic-wipe)
+- [Advanced Wipe](#advanced-wipe)
+- [Full Wipe](#full-wipe)
 
 ## Basic Wipe
 
@@ -63,13 +63,13 @@ deleting the Ceph volumes, and then wiping the disks and RAIDs.
 
 1. Stop Ceph.
 
-    * ***CSM 0.9 or earlier***
+    - ***CSM 0.9 or earlier***
 
         ```bash
         systemctl stop ceph-osd.target
         ```
 
-    * ***CSM 1.0 or later***
+    - ***CSM 1.0 or later***
 
         ```bash
         cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
@@ -77,13 +77,13 @@ deleting the Ceph volumes, and then wiping the disks and RAIDs.
 
 1. Make sure the OSDs (if any) are not running.
 
-    * ***CSM 0.9 or earlier***
+    - ***CSM 0.9 or earlier***
 
         ```bash
         ps -ef|grep ceph-osd
         ```
 
-    * ***CSM 1.0 or later***
+    - ***CSM 1.0 or later***
 
         ```bash
         podman ps
@@ -109,7 +109,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
 1. Reset Kubernetes **on worker nodes ONLY**.
 
-   This will stop kubelet, underlying containers, and remove the contents of `/var/lib/kubelet`.
+   This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
    1. Reset Kubernetes.
 
@@ -137,7 +137,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
 1. Reset Kubernetes **on master nodes ONLY**.
 
-    This will stop kubelet, underlying containers, and remove the contents of `/var/lib/kubelet`.
+    This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
     1. Reset Kubernetes.
 
@@ -169,13 +169,13 @@ wiping a different type of node than what a step specifies, then skip that step.
 
     1. Stop Ceph.
 
-        * ***CSM 0.9 or earlier***
+        - ***CSM 0.9 or earlier***
 
             ```bash
             systemctl stop ceph-osd.target
             ```
 
-        * ***CSM 1.0 or later***
+        - ***CSM 1.0 or later***
 
             ```bash
             cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
@@ -183,13 +183,13 @@ wiping a different type of node than what a step specifies, then skip that step.
 
     1. Make sure the OSDs (if any) are not running.
 
-        * ***CSM 0.9 or earlier***
+        - ***CSM 0.9 or earlier***
 
             ```bash
             ps -ef|grep ceph-osd
             ```
 
-        * ***CSM 1.0 or later***
+        - ***CSM 1.0 or later***
 
             ```bash
             podman ps
@@ -212,7 +212,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
     The exact commands used depends on the node type:
 
-    * **Master nodes**
+    - **Master nodes**
 
         Stop the `etcd` service on the master node before unmounting `/var/lib/etcd` and other mounts.
 
@@ -221,7 +221,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         umount -v /run/lib-etcd /var/lib/etcd /var/lib/sdu /var/opt/cray/sdu/collection-mount /var/lib/admin-tools /var/lib/s3fs_cache /var/lib/containerd
         ```
 
-    * **Storage nodes**
+    - **Storage nodes**
 
         ```bash
         umount -vf /var/lib/ceph /var/lib/containers /etc/ceph /var/opt/cray/sdu/collection-mount /var/lib/admin-tools /var/lib/s3fs_cache /var/lib/containerd
@@ -251,7 +251,7 @@ wiping a different type of node than what a step specifies, then skip that step.
             umount: /var/lib/containers unmounted
             ```
 
-    * **Worker nodes**
+    - **Worker nodes**
 
         ```bash
         umount -v /var/lib/kubelet /var/lib/sdu /run/containerd /var/lib/containerd /run/lib-containerd /var/opt/cray/sdu/collection-mount /var/lib/admin-tools /var/lib/s3fs_cache /var/lib/containerd

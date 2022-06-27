@@ -258,13 +258,13 @@ The steps in this section load hand-off data before a later procedure reboots th
     export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     SYSTEM_NAME=eniac
     ```
-   
+
     ```bash
     USERNAME=$(whoami)
     read -S IPMI_PASSWORD
     ```
-   
-    ```bash 
+
+    ```bash
     export IPMI_PASSWORD=changeme
     ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
     ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
@@ -451,7 +451,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
     export USERNAME=$(whoami)
     read -s IPMI_PASSWORD
     ```
-   
+
     ```bash
     export IPMI_PASSWORD USERNAME
     ```

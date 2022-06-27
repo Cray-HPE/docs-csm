@@ -6,13 +6,12 @@ for additional information on system hardware, troubleshooting, and administrati
 
 ## Topics
 
-   1. [Reset root Password on a LiveCD USB](#reset-root-password-on-a-livecd-usb)
-   1. [PXE Boot Troubleshooting](#pxe-boot-troubleshooting)
-   1. [Wipe NCN Disks for Reinstallation](#wipe-ncn-disks-for-reinstallation)
-   1. [Restart Network Services and Interfaces on NCNs](#restart-network-services-and-interfaces-on-ncns)
-   1. [Utility Storage Node Installation Troubleshooting](#utility-storage-node-installation-troubleshooting)
-   1. [Ceph CSI Troubleshooting](#ceph-csi-troubleshooting)
-   1. [Postgres Troubleshooting](#postgres-troubleshooting)
+1. [Reset root Password on a LiveCD USB](#reset-root-password-on-a-livecd-usb)
+1. [PXE Boot Troubleshooting](#pxe-boot-troubleshooting)
+1. [Restart Network Services and Interfaces on NCNs](#restart-network-services-and-interfaces-on-ncns)
+1. [Utility Storage Node Installation Troubleshooting](#utility-storage-node-installation-troubleshooting)
+1. [Ceph CSI Troubleshooting](#ceph-csi-troubleshooting)
+1. [Postgres Troubleshooting](#postgres-troubleshooting)
 
 ## Details
 
@@ -32,9 +31,10 @@ See [PXE Boot Troubleshooting](troubleshooting_pxe_boot.md)
 ## Restart Network Services and Interfaces on NCNs
 
 If an NCN shows any of these problems, the network services and interfaces on that node might need to be restarted.
-   * Interfaces not showing up
-   * IP Addresses not applying
-   * Member/children interfaces not being included
+
+- Interfaces not showing up
+- IP Addresses not applying
+- Member/children interfaces not being included
 
 See [Restart Network Services and Interfaces on NCNs](../operations/node_management/NCN_Network_Troubleshooting.md)
 
@@ -42,7 +42,8 @@ See [Restart Network Services and Interfaces on NCNs](../operations/node_managem
 
 If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
 the Ceph storage might need to be reinitialized.
-   * Sometimes a large OSD can be created which is a concatenation of multiple devices, instead of one OSD per device
+
+- Sometimes a large OSD can be created which is a concatenation of multiple devices, instead of one OSD per device
 
 See [Utility Storage Node Installation Troubleshooting](troubleshooting_utility_storage_node_installation.md)
 
@@ -50,13 +51,14 @@ See [Utility Storage Node Installation Troubleshooting](troubleshooting_utility_
 
 If there has been a failure to initialize all Ceph CSI components on `ncn-s001`, then the storage node
 `cloud-init` may need to be rerun.
-   * Verify Ceph CSI
-   * Rerun Storage Node `cloud-init`
+
+- Verify Ceph CSI
+- Rerun Storage Node `cloud-init`
 
 See [Ceph CSI Troubleshooting](troubleshooting_ceph_csi.md)
 
 ## Postgres Troubleshooting
 
-* Timeout on `cray-sls-init-load` during Install CSM Services due to Postgres cluster in `SyncFailed` state
+- Timeout on `cray-sls-init-load` during Install CSM Services due to Postgres cluster in `SyncFailed` state
 
 See [Troubleshoot Postgres Database](../operations/kubernetes/Troubleshoot_Postgres_Database.md#postgres-status-syncfailed)

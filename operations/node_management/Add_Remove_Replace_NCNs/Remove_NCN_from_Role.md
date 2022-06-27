@@ -12,6 +12,7 @@ Remove a master, worker, or storage NCN from current roles. Select the procedure
     - [Master node](#master-node-remove-roles)
     - [Worker node](#worker-node-remove-roles)
     - [Storage node](#storage-node-remove-roles)
+1. [Disable Disk Boots](#disable-disk-boots)
 1. [Power off the node](#power-off-the-node)
 1. [Next step](#next-step)
 
@@ -37,7 +38,7 @@ Determine if the master node being removed is the first master node.
     ncn-m002
     ```
 
-    - If the node returned is not the one being removed, skip the substeps here and proceed to the [remove node from the Kubernetes cluster](#remove-the-node-from-the-kubernetes-cluster) step.
+    - If the node returned is not the one being removed, skip the substeps here and proceed to the [remove node from the Kubernetes cluster](#remove-the-master-node-from-the-kubernetes-cluster) step.
 
 1. Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
 
@@ -217,7 +218,7 @@ rsync /etc/sysconfig/network/ifcfg-lan0 ncn-m002:/tmp/ifcfg-lan0-m001
 
 #### Master Node Role Removal Complete
 
-The master node role removal is complete; proceed to [wipe the drives](#wipe-disks-master-node).
+The master node role removal is complete; proceed to [disable disk boots](#disable-disk-boots).
 
 ### Worker Node Remove Roles
 
@@ -307,18 +308,54 @@ Run the following command **on the node being removed**. The command can be run 
 rbd showmapped
 ```
 
-If mapped devices still exist, perform the [Stop running containers on worker node being removed](#stop-running-containers-on-worker) step again.
+If mapped devices still exist, perform the [Stop running containers on worker node being removed](#stop-running-containers-on-worker-node-being-removed) step again.
 If devices are still mapped, they can be forcibly unmapped using `rbd unmap -o force /dev/rbd#`, where `/dev/rbd#` is the device that is still returned as mapped.
 
 #### Worker Node Role Removal Complete
 
-The worker node role removal is complete; proceed to [wipe the drives](#wipe-disks-worker-node).
+The worker node role removal is complete; proceed to [disable disk boots](#disable-disk-boots).
 
 ### Storage Node Remove Roles
 
 Open a new tab and follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
 
-Once the storage node role removal is complete, then proceed to [wipe the drives](#wipe-disks-utility-storage-node).
+Once the storage node role removal is complete, then proceed to [disable disk boots](#disable-disk-boots).
+
+## Disable Disk Boots
+
+The disk bootloader needs to be disabled to ensure the node fetches an updated configuration and image from
+CSM. This is a preventative measure in the event that the boot order on the target NCNs are inconsistent.
+
+1. (`ncn#`) Create a script to copy out to the NCN(s)
+
+   ```bash
+   cat << EOF > /tmp/disable-disk-boot.sh
+   efibootmgr | grep '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
+   ipmitool chassis bootdev pxe options=efiboot
+   EOF
+   chmod +x /tmp/disable-disk-boot.sh
+   ```
+
+1. (`ncn#`) Copy out the script and invoke it
+
+   - To run on 1 NCN:
+
+      ```bash
+      include='ncn-w001' # Replace this with the actual targetted NCN
+      scp /tmp/disable-disk-boot.sh $target_ncn:/tmp
+      ssh $include /tmp/disable-disk-boot.sh
+      ```
+
+   - To run on more than 1 NCN:
+
+      ```bash
+      include='ncn-w002|ncn-w003'
+      readarray NCNS < <(grep -oP 'ncn-\w\d+' /etc/hosts | grep -P "($include)" | awk '{print $NF}' | sort -u | tr -t '\n' ' ' | sed 's/ *$//g')
+      for ncn in "${NCNS[@]}"; do
+         scp /tmp/disable-disk-boot.sh $ncn:/tmp
+      done
+      pdsh -b -w "$(printf "%s" "${NCNS[@]}")" '/tmp/disable-disk-boot.sh'
+      ```
 
 ## Power Off the Node
 
