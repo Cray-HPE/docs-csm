@@ -20,6 +20,7 @@
   - [Validate compute nodes](#validate-compute-nodes)
   - [Validate NCNs](#validate-ncns)
   - [Validate the API gateways](#validate-the-api-gateways)
+  - [Disabling VLAN7 for UANs](#disabling-vlan7-for-uans)
 
 ## Prerequisites
 
@@ -785,8 +786,6 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 
 See [Gateway Testing](../gateway_testing.md) for more information.
 
-### Disabling VLAN7 for UANs (placeholder)
+### Disabling VLAN7 for UANs
 
-After updating to CSM 1.2, the UAN nodes need to have their access to the CMN (VLAN7) removed.  This access must be restricted by removing VLAN7 from the UAN switch ports.
-
-This procedure is currently being tested but is not available today.  [This page](bican_disable_uan_vlan7.md) will be updated in the future once the full procedure for removing VLAN7 from the UAN switch ports has been validated.
+After updating to CSM 1.2, the UAN nodes need to have their access to the CMN (VLAN7) removed. The procedure to [Remove UAN Access to the CMN](bican_disable_uan_vlan7.md) restricts access to UAN by removing VLAN 7 from the switch ports.
