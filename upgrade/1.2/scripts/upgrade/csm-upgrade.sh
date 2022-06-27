@@ -58,6 +58,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
+    mkdir -p /srv/cray/tmp
     . /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csi-configuration.sh
     create_ceph_rbd_1.2_csi_configmap
     create_ceph_cephfs_1.2_csi_configmap
