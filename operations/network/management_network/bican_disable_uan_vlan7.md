@@ -30,8 +30,8 @@ During this scheduled outage, the UAN IPv4 addresses are transitioned from the C
 1. Query SLS for the BICAN toggle (`SystemDefaultRoute`).
 
     ```bash
-    ncn-m001# export BICAN=$(curl -s -k -S -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/BICAN |
-                                jq -r '.ExtraProperties.SystemDefaultRoute')
+    ncn-m001# BICAN=$(curl -s -k -S -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/BICAN |
+                         jq -r '.ExtraProperties.SystemDefaultRoute')
     ncn-m001# echo $BICAN
     ```
 
@@ -40,8 +40,8 @@ During this scheduled outage, the UAN IPv4 addresses are transitioned from the C
 1. Query SLS for the CAN VLAN.
 
     ```bash
-    ncn-m001# export CAN_VLAN=$(curl -s -k -S -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN |
-                                    jq '.ExtraProperties.Subnets | .[] | select(.Name=="bootstrap_dhcp") | .VlanID')
+    ncn-m001# CAN_VLAN=$(curl -s -k -S -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN |
+                             jq '.ExtraProperties.Subnets | .[] | select(.Name=="bootstrap_dhcp") | .VlanID')
     ncn-m001# echo $CAN_VLAN
     ```
 
