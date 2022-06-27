@@ -69,8 +69,8 @@ If either of the commands fail to meet the two conditions mentioned above, then 
 If there no record in the Unbound pod, that is also an indication that the host is not in DNS.
 
 ```bash
-ncn# kubectl -n services get cm cray-dns-unbound -o jsonpath='{.binaryData.records\.json\.gz}' |
-        base64 --decode | gzip -dc | jq -c '.[]' | grep XNAME
+ncn-mw# kubectl -n services get cm cray-dns-unbound -o jsonpath='{.binaryData.records\.json\.gz}' |
+            base64 --decode | gzip -dc | jq -c '.[]' | grep XNAME
 ```
 
 Example output excerpt:
@@ -84,7 +84,7 @@ Example output excerpt:
 Use the following command to check the logs. Any logs with a message saying `ERROR` or `Exception` are an indication that the Unbound service is not healthy.
 
 ```bash
-ncn# kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c cray-dns-unbound
+ncn-mw# kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c cray-dns-unbound
 ```
 
 Example output excerpt:
@@ -99,8 +99,8 @@ Example output excerpt:
 To view the DNS Helper logs:
 
 ```bash
-ncn# kubectl logs -n services pod/$(kubectl get -n services pods |
-        grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
+ncn-mw# kubectl logs -n services pod/$(kubectl get -n services pods |
+            grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
 ```
 
 Example output:
@@ -119,7 +119,7 @@ Log in to the spine switches and verify that MetalLB is peering to the spines vi
 Check both spines if they are available and powered up. All worker nodes should be peered with the spine BGP.
 
 ```text
-sw-spine-001# show ip bgp neighbors
+sw-spine# show ip bgp neighbors
 ```
 
 Example output:
@@ -149,7 +149,7 @@ BGP neighbor: 10.252.0.4, remote AS: 65533, link: internal:
 Confirm that routes to Kea \(`10.92.100.222`\) via all the NCN worker nodes are available:
 
 ```text
-sw-spine-001# show ip route 10.92.100.222
+sw-spine# show ip route 10.92.100.222
 ```
 
 Example output:
