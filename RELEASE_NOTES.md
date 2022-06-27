@@ -95,10 +95,24 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 
 ### Base platform component upgrades
 
-* `istio` V1.8 from V1.7
+* `istio` V1.8
 * Loftsman V1.2.0-1
-* Kubernetes V1.20.13 from V1.19.9
-* Ceph V15.2.15 from V15.2.8
+* Kubernetes V1.20.13
+* Ceph V15.2.15
+* Containerd V1.5.7
+* CoreDNS V1.7.0
+* Etcd for Kubernetes V3.5.0
+* Etcd cluster V3.3.22
+* Helm V3.2.4
+* Kiali V1.28.1
+* Keepalived V2.0.19
+* Metallb V0.11.0
+* Multus V3.7
+* PostgreSQL V12.11
+* Strimzi Operator V0.27.1
+* Vault V1.5.5
+* Vault Operator V1.8.0
+* Zookeeper V3.5.9
 
 ### Security improvements
 
@@ -148,7 +162,7 @@ See [Deprecated features](introduction/differences.md#deprecated_features).
 
 ## Known issues
 
-### Security Vulnerability Exceptions in CSM 1.2
+### Security vulnerability exceptions in CSM 1.2
 
 A great deal of emphasis was placed on elimination or reduction of critical or high security vulnerabilities of container images included in the CSM 1.2 release.
 There remain, however, a small number of exceptions that are listed below. General reasons for carrying exceptions include needing to version pin certain core components,
