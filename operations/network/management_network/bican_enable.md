@@ -1,25 +1,27 @@
 # Enabling Customer High Speed Network Routing
 
-- [Prerequisites](#prerequisites)
-- [Configuration tasks](#configuration-tasks)
-  - [Configure SLS](#configure-sls)
-  - [Configure UAN](#configure-uan)
-  - [Minimize UAN downtime](#minimize-uan-downtime)
-  - [Configure UAI](#configure-uai)
-  - [Configure compute nodes](#configure-compute-nodes)
-    - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
-    - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
-    - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
-    - [Enable CFS layer](#enable-cfs-layer)
-  - [Configure NCNs](#configure-ncns)
-  - [Configure the API gateways](#configure-the-api-gateways)
-- [Validation tasks](#validation-tasks)
-  - [Validating SLS](#validating-sls)
-  - [Validating UAN](#validating-uan)
-  - [Validating UAI](#validating-uai)
-  - [Validate compute nodes](#validate-compute-nodes)
-  - [Validate NCNs](#validate-ncns)
-  - [Validate the API gateways](#validate-the-api-gateways)
+- [Enabling Customer High Speed Network Routing](#enabling-customer-high-speed-network-routing)
+  - [Prerequisites](#prerequisites)
+  - [Configuration tasks](#configuration-tasks)
+    - [Configure SLS](#configure-sls)
+    - [Configure UAN](#configure-uan)
+    - [Minimize UAN downtime](#minimize-uan-downtime)
+    - [Configure UAI](#configure-uai)
+    - [Configure compute nodes](#configure-compute-nodes)
+      - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
+      - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
+      - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
+      - [Enable CFS layer](#enable-cfs-layer)
+    - [Configure NCNs](#configure-ncns)
+    - [Configure the API gateways](#configure-the-api-gateways)
+  - [Validation tasks](#validation-tasks)
+    - [Validating SLS](#validating-sls)
+    - [Validating UAN](#validating-uan)
+    - [Validating UAI](#validating-uai)
+    - [Validate compute nodes](#validate-compute-nodes)
+    - [Validate NCNs](#validate-ncns)
+    - [Validate the API gateways](#validate-the-api-gateways)
+    - [Disabling VLAN7 for UANs (placeholder)](#disabling-vlan7-for-uans-placeholder)
 
 ## Prerequisites
 
@@ -784,3 +786,9 @@ See [Gateway Testing](../gateway_testing.md) for more information.
    ```
 
 See [Gateway Testing](../gateway_testing.md) for more information.
+
+### Disabling VLAN7 for UANs (placeholder)
+
+After updating to CSM 1.2, the UAN nodes need to have their access to the CMN (VLAN7) removed.  This access must be restricted by removing VLAN7 from the UAN switch ports.
+
+This procedure is currently being tested but is not available today.  [This page](bican_disable_uan_vlan7.md) will be updated in the future once the full procedure for removing VLAN7 from the UAN switch ports has been validated.

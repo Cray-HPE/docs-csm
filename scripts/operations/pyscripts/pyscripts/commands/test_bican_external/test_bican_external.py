@@ -63,7 +63,7 @@ def load_test_plan():
     else:
         print("BICAN:CAN detected.")
         filename = "can_toggle_tests_external.yaml"
-    
+
     path = os.path.abspath(os.path.join(os.path.dirname(__file__), filename))
     f = open(path, "r")
     TEST_PLAN = yaml.safe_load(f.read())["tests"]
@@ -110,11 +110,11 @@ def execute_test(to_node_type, network, expected):
     if not to_node:
         print("""\nTesting SSH access:
 To node type {}
-Over network {}""".format(
-            to_node_type, network_suffix))
+Over network {} ({})""".format(
+            to_node_type, network, network_suffix))
 
-        print("\t\t^^^^ FAILED: Cannot find a suitable node for node type {} ^^^^".format(to_node_type))
-        return 1
+        print("\t\t^^^^ SKIPPED: Cannot find a suitable node for node type {} ^^^^".format(to_node_type))
+        return 0
 
     to_node = to_node.with_domain_suffix(network_suffix)
 
@@ -122,16 +122,16 @@ Over network {}""".format(
 
     print("""\nTesting SSH access:
         To node type {}, using {}
-        Over network {}
+        Over network {} ({})
         Expected to work: {}""".format(
-        to_node_type, to_node.get_full_domain_name(), network_suffix, expected))
+        to_node_type, to_node.get_full_domain_name(), network, network_suffix, expected))
 
     try:
         toNodeSshConnection = SshConnection(to_node)
         toNodeSshConnection.connect()
 
         if "switch" in to_node.type:
-            toNodeSshConnection.run_test_command("show hostname", to_node.hostname)
+            toNodeSshConnection.run_test_command("show vlan", "CMN")
         else:
             toNodeSshConnection.run_test_command("echo hello", "hello")
 
