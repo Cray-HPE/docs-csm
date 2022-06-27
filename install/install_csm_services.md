@@ -54,13 +54,13 @@ pit# popd
 
 ## 3. Create base BSS Global boot parameters
 
-1. Wait for BSS to ready:
+1. Wait for BSS to be ready.
 
    ```bash
    pit# kubectl -n services rollout status deployment cray-bss
    ```
 
-1. Retrieve API token:
+1. Retrieve an API token.
 
    ```bash
    pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
@@ -69,15 +69,15 @@ pit# popd
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
    ```
 
-1. Create empty boot parameters:
+1. Create empty boot parameters.
 
    ```bash
    pit# curl -i -k -H "Authorization: Bearer ${TOKEN}" -X PUT \
-      https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
-      --data '{"hosts":["Global"]}'
+            https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
+            --data '{"hosts":["Global"]}'
    ```
 
-   Expected output:
+   Example of successful output:
 
    ```text
    HTTP/2 200
@@ -88,16 +88,16 @@ pit# popd
    server: istio-envoy
    ```
 
-1. Restart the `spire-update-bss` job:
+1. Restart the `spire-update-bss` job.
 
    ```bash
    pit# SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=spire-update-bss -o name)
    pit# kubectl -n spire get $SPIRE_JOB -o json | jq 'del(.spec.selector)' \
-      | jq 'del(.spec.template.metadata.labels."controller-uid")' \
-      | kubectl replace --force -f -
+            | jq 'del(.spec.template.metadata.labels."controller-uid")' \
+            | kubectl replace --force -f -
    ```
 
-1. Wait for the `spire-update-bss` job to complete:
+1. Wait for the `spire-update-bss` job to complete.
 
    ```bash
    pit# kubectl -n spire wait  $SPIRE_JOB --for=condition=complete --timeout=5m
