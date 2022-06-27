@@ -26,7 +26,7 @@ This top level procedure outlines the process for adding additional liquid-coole
 
     For more information on CANU, see the [CANU `v1.6.5` documentation](https://github.com/Cray-HPE/canu/blob/1.6.5/readme.md).
 
-    **DISCLAIMER:** This procedure is for standard mountain cabinet network configurations and does not account for any site customizations that have been made to the management network.
+    **DISCLAIMER:** This procedure is for standard Mountain cabinet network configurations and does not account for any site customizations that have been made to the management network.
     Site administrators and support teams are responsible for knowing the customizations in effect in Shasta/CSM and configuring CANU to respect them when generating new network configurations.
 
     See examples of using CANU custom switch configurations and examples of other CSM features that require custom configurations in the following documentation:
@@ -44,6 +44,6 @@ This top level procedure outlines the process for adding additional liquid-coole
 
     Perform the procedures in [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md). Perform updates as needed with FAS.
 
-    > Slingshot switches are updated with procedures from the *Slingshot Operations Guide*.
+    > Slingshot switches are updated with procedures from the *HPE Slingshot Operations Guide*.
 
-1. Continue on to the *Slingshot Operations Guide* to bring up the additional cabinets.
+1. Continue on to the *HPE Slingshot Operations Guide* to bring up the additional cabinets.
