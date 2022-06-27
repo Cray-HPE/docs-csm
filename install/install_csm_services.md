@@ -6,6 +6,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 1. [Install YAPL](#install-yapl)
 1. [Install CSM services](#install-csm-services)
+1. [Create base BSS Global boot parameters](#create-base-bss-global-boot-parameters)
 1. [Wait for everything to settle](#wait-for-everything-to-settle)
 1. [Known issues](#known-issues)
     * [`Deploy CSM Applications and Services` known issues](#known-issues-install-sh)
@@ -49,20 +50,73 @@ pit# popd
 > * The `yapl` command can safely be rerun. By default, it will skip any steps which were previously completed successfully. To force it to
 >   rerun all steps regardless of what was previously completed, append the `--no-cache` argument to the `yapl` command.
 
+<a name="create-base-bss-global-boot-parameters"></a>
+
+## 3. Create base BSS Global boot parameters
+
+1. Wait for BSS to ready:
+
+   ```bash
+   pit# kubectl -n services rollout status deployment cray-bss
+   ```
+
+1. Retrieve API token:
+
+   ```bash
+   pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                          -d client_id=admin-client \
+                          -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+   ```
+
+1. Create empty boot parameters:
+
+   ```bash
+   pit# curl -i -k -H "Authorization: Bearer ${TOKEN}" -X PUT \
+      https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
+      --data '{"hosts":["Global"]}'
+   ```
+
+   Expected output:
+
+   ```text
+   HTTP/2 200
+   content-type: application/json; charset=UTF-8
+   date: Mon, 27 Jun 2022 17:08:55 GMT
+   content-length: 0
+   x-envoy-upstream-service-time: 7
+   server: istio-envoy
+   ```
+
+1. Restart the `spire-update-bss` job:
+
+   ```bash
+   pit# SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=spire-update-bss -o name)
+   pit# kubectl -n spire get $SPIRE_JOB -o json | jq 'del(.spec.selector)' \
+      | jq 'del(.spec.template.metadata.labels."controller-uid")' \
+      | kubectl replace --force -f -
+   ```
+
+1. Wait for the `spire-update-bss` job to complete:
+
+   ```bash
+   pit# kubectl -n spire wait  $SPIRE_JOB --for=condition=complete --timeout=5m
+   ```
+
 <a name="wait-for-everything-to-settle"></a>
 
-## 3. Wait for everything to settle
+## 4. Wait for everything to settle
 
 Wait **at least 15 minutes** to let the various Kubernetes resources initialize and start before proceeding with the rest of the install.
 Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.
 
 <a name="known-issues"></a>
 
-## 4. Known issues
+## 5. Known issues
 
 <a name="known-issues-install-sh"></a>
 
-### 4.1 `Deploy CSM Applications and Services` known issues
+### 5.1 `Deploy CSM Applications and Services` known issues
 
 The following error may occur during the `Deploy CSM Applications and Services` step:
 
@@ -117,13 +171,13 @@ The following error may occur during the `Deploy CSM Applications and Services` 
 
 <a name="known-issues-setup-nexus"></a>
 
-### 4.2 `Setup Nexus` known issues
+### 5.2 `Setup Nexus` known issues
 
 Known potential issues along with suggested fixes are listed in [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md).
 
 <a name="next-topic"></a>
 
-## 5. Next Topic
+## 6. Next Topic
 
 The next step is to validate CSM health before redeploying the final NCN.
 
