@@ -96,7 +96,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
   | Platform Component           | Version        |
   |------------------------------|----------------|
   | Ceph                         | `15.2.15`      |
-  | Containerd                   | `1.5.7`        |
+  | `containerd`                 | `1.5.7`        |
   | CoreDNS                      | `1.7.0`        |
   | Etcd for Kubernetes          | `3.5.0`        |
   | Etcd cluster                 | `3.3.22`       |
