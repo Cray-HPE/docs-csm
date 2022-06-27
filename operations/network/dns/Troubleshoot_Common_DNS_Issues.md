@@ -32,13 +32,13 @@ In that case, the following actions must be taken:
 
 ## Check if a host is in DNS
 
-Use the `dig` or `nslookup` commands directly against the Unbound resolver. A host is correctly in DNS if the response from the `dig` command includes the following:
+(`ncn#`) Use the `dig` or `nslookup` commands directly against the Unbound resolver. A host is correctly in DNS if the response from the `dig` command includes the following:
 
 - The `ANSWER SECTION` value exists with a valid hostname and IP address.
 - A `QUERY` value exists that has the `status: NOERROR` message.
 
 ```bash
-ncn# dig HOSTNAME @10.92.100.225
+dig HOSTNAME @10.92.100.225
 ```
 
 Example output:
@@ -66,11 +66,11 @@ x3000c0r41b0.           3600    IN      A       10.254.127.200
 
 If either of the commands fail to meet the two conditions mentioned above, then collect the logs to troubleshoot.
 
-If there no record in the Unbound pod, that is also an indication that the host is not in DNS.
+(`ncn-mw#`) If there no record in the Unbound pod, that is also an indication that the host is not in DNS.
 
 ```bash
-ncn# kubectl -n services get cm cray-dns-unbound -o jsonpath='{.binaryData.records\.json\.gz}' |
-        base64 --decode | gzip -dc | jq -c '.[]' | grep XNAME
+kubectl -n services get cm cray-dns-unbound -o jsonpath='{.binaryData.records\.json\.gz}' |
+    base64 --decode | gzip -dc | jq -c '.[]' | grep XNAME
 ```
 
 Example output excerpt:
@@ -81,10 +81,10 @@ Example output excerpt:
 
 ## Check the `cray-dns-unbound` logs for errors
 
-Use the following command to check the logs. Any logs with a message saying `ERROR` or `Exception` are an indication that the Unbound service is not healthy.
+(`ncn-mw#`) Use the following command to check the logs. Any logs with a message saying `ERROR` or `Exception` are an indication that the Unbound service is not healthy.
 
 ```bash
-ncn# kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c cray-dns-unbound
+kubectl logs -n services -l app.kubernetes.io/instance=cray-dns-unbound -c cray-dns-unbound
 ```
 
 Example output excerpt:
@@ -96,11 +96,11 @@ Example output excerpt:
 [1596224135] unbound[8:0] debug: using localzone health.check.unbound. transparent
 ```
 
-To view the DNS Helper logs:
+(`ncn-mw#`) To view the DNS Helper logs:
 
 ```bash
-ncn# kubectl logs -n services pod/$(kubectl get -n services pods |
-        grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
+kubectl logs -n services pod/$(kubectl get -n services pods |
+    grep unbound | tail -n 1 | cut -f 1 -d ' ') -c manager | tail -n4
 ```
 
 Example output:
@@ -116,10 +116,10 @@ Comparing new and existing DNS records.
 
 Log in to the spine switches and verify that MetalLB is peering to the spines via BGP.
 
-Check both spines if they are available and powered up. All worker nodes should be peered with the spine BGP.
+(`sw-spine#`) Check both spines if they are available and powered up. All worker nodes should be peered with the spine BGP.
 
 ```text
-sw-spine-001# show ip bgp neighbors
+show ip bgp neighbors
 ```
 
 Example output:
@@ -146,10 +146,10 @@ BGP neighbor: 10.252.0.4, remote AS: 65533, link: internal:
   Minimum holdtime from neighbor in seconds            : 90
 ```
 
-Confirm that routes to Kea \(`10.92.100.222`\) via all the NCN worker nodes are available:
+(`sw-spine#`) Confirm that routes to Kea \(`10.92.100.222`\) via all the NCN worker nodes are available:
 
 ```text
-sw-spine-001# show ip route 10.92.100.222
+show ip route 10.92.100.222
 ```
 
 Example output:
@@ -174,39 +174,39 @@ VRF Name default:
 
 ## `tcpdump`
 
-Verify that the NCN is receiving DNS queries. On an NCN worker or manager with `kubectl` installed, run the following command:
+(`ncn-mw#`) Verify that the NCN is receiving DNS queries. On an NCN worker or manager with `kubectl` installed, run the following command:
 
 ```bash
-ncn-mw# tcpdump -envli bond0.nmn0 port 53
+tcpdump -envli bond0.nmn0 port 53
 ```
 
 ## The `ping` and `ssh` commands fail for hosts in DNS
 
-If the IP address returned by the `ping` command is different than the IP address returned by the `dig` command, then restart `nscd` on the impacted node. This is done with the following command:
+(`ncn#`) If the IP address returned by the `ping` command is different than the IP address returned by the `dig` command, then restart `nscd` on the impacted node. This is done with the following command:
 
 ```bash
-ncn# systemctl restart nscd.service
+systemctl restart nscd.service
 ```
 
 Attempt to `ping` or `ssh` to the IP address that was experiencing issues after restarting `nscd`.
 
 ## Check for missing DHCP leases
 
-Search for a DHCP lease by checking active leases for the service:
+(`ncn#`) Search for a DHCP lease by checking active leases for the service:
 
 ```bash
-ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
-        "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
-        [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
+curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
+    "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
+    [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
 ```
 
 For example:
 
 ```bash
-ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X \
-        POST -H "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
-        [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea \
-        | jq | grep x3000c0s19b4 -A 6 -B 4
+curl -s -k -H "Authorization: Bearer ${TOKEN}" -X \
+    POST -H "Content-Type: application/json" \-d '{ "command": "lease4-get-all",  "service": \
+    [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea \
+    | jq | grep x3000c0s19b4 -A 6 -B 4
 ```
 
 Example output:
