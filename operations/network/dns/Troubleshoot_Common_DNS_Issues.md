@@ -65,7 +65,8 @@ If either of the commands fail to meet the two conditions mentioned above, colle
 If there no record in the Unbound pod, that is also an indication that the host is not in DNS.
 
 ```bash
-ncn# kubectl describe -n services configmaps cray-dns-unbound | grep XNAME
+ncn# kubectl -n services get cm cray-dns-unbound -o jsonpath='{.binaryData.records\.json\.gz}' |
+     base64 --decode | gzip -dc | jq -c '.[]' | grep XNAME
 ```
 
 Example output:
