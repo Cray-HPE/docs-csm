@@ -1,17 +1,17 @@
 # Plan and coordinate network upgrade
 
-Prior to CSM 1.2, the single Customer Access Network (CAN) carried both the administrative network traffic and the user network
-traffic. CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate administrative network traffic and user network traffic.
+Prior to CSM 1.2, a single Customer Access Network (CAN) carried both the administrative network traffic and the user network traffic.
+CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate administrative network traffic and user network traffic.
 With BICAN, the pre-1.2 CAN network is split into two separate networks:
 
 1. Customer Management Network (CMN)
 
-   This network allows only system administrative access from the customer site. The pre-1.2 CAN is renamed to CMN. By
-   the end of the CSM 1.2 upgrade, all non-administrative access, such as from UANs, will be removed from CMN.
+   This network allows only system administrative access from the customer site. The pre-1.2 CAN is renamed to CMN.
+   By the end of the CSM 1.2 upgrade, all non-administrative access, such as from UANs, will be removed from CMN.
 
-   During the CSM 1.2 upgrade, UANs will retain their pre-1.2 CAN IP addresses in order to minimize disruption to UANs. However,
-   toward the end of the CSM 1.2 upgrade, UANs will stop registering themselves on CMN and will receive new IP addresses on the
-   CAN/CHN network. This process is described in more detail in [UAN Migration](#uan-migration).
+   During the CSM 1.2 upgrade, UANs will retain their pre-1.2 CAN IP addresses in order to minimize disruption to UANs.
+   However, toward the end of the CSM 1.2 upgrade, UANs will stop registering themselves on CMN and will receive new IP addresses on the CAN/CHN network.
+   This process is described in more detail in [UAN Migration](#uan-migration).
 
    Pivoting the pre-1.2 CAN to the new CMN allows administrative traffic (already on the pre-1.2 CAN) to remain as-is while
    moving standard user traffic to a new site-routable network (CAN / CHN).
@@ -55,14 +55,13 @@ referring to user activity.
    > Note that the above command will disable CFS plays for UANs only. If wishing to disable CFS plays for all types of
    > application nodes (recommended), then remove the `--subrole UAN` portion in the snippet above.
 
-1. UAN reboots must be avoided and are not a supported operation during the CSM 1.2 upgrade. Rebooting a UAN during a CSM 1.2
-   upgrade can re-enable CFS and ultimately lead to removing the CMN interface from UANs, disrupting UAN access for users.
+1. UAN reboots must be avoided and are not a supported operation during the CSM 1.2 upgrade.
+   Rebooting a UAN during a CSM 1.2 upgrade can re-enable CFS and ultimately lead to removing the CMN interface from UANs, disrupting UAN access for users.
    System administrators must inform users to avoid UAN reboots during the CSM 1.2 upgrade process.
 
-   However, if a UAN is rebooted, then the `roles/uan_interfaces/tasks/can-v2.yml` file in the `vcs/cray/uan-config-management.git` repository
-   must be patched for the current CSM release. After that, the UAN must be rebooted again to bring the
-   CMN (pre-1.2 CAN) interface back in the UAN. Use the following patch file and follow the instructions in
-   [Configuration Management](../../operations/index.md#configuration-management) to restore CMN access in the UAN:
+   However, if a UAN is rebooted, then the `roles/uan_interfaces/tasks/can-v2.yml` file in the `vcs/cray/uan-config-management.git` repository must be patched for the current CSM release.
+  The UAN must then be rebooted again to bring the CMN (pre-1.2 CAN) interface back in the UAN.
+  Use the following patch file and follow the instructions in [Configuration Management](../../operations/index.md#configuration-management) to restore CMN access in the UAN.
 
    ```text
    --- a/roles/uan_interfaces/tasks/can-v2.yml
@@ -97,8 +96,8 @@ referring to user activity.
    ```
 
 1. Once UAN has been upgraded to 2.4, the UANs may be rebooted for the new network configuration changes to take effect.
-   UANs will not receive an IP address on the CMN network and instead will default their traffic through the new CAN/CHN. For concrete
-   details on UAN transition plan for users, see
+   UANs will not receive an IP address on the CMN network and instead will default their traffic through the new CAN/CHN.
+   For concrete details on UAN transition plan for users, see
    [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime).
 
 1. Note that in CSM 1.2, UAN ports will not be removed from the CMN VLAN7 in switches. In the next CSM release, switch
@@ -106,9 +105,10 @@ referring to user activity.
    and allows for better easing into BICAN in CSM 1.2. For more details about this transition plan, see
    [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime).
 
-## Manually removing UAN switch ports from the CMN VLAN7 (Placeholder)
+## Manually removing UAN switch ports from the CMN VLAN 7
 
-After the upgrade to UAN 2.4, the UAN switch ports should be removed from CMN VLAN7 to prevent user traffic from being able to reach endpoints on the CMN.  In the CSM 1.2 and UAN 2.4 upgrade, this removal is not done automatically. A future release or hotfix to CSM will introduce this automation.
+After the upgrade to UAN 2.4, the UAN switch ports should be removed from CMN VLAN 7 to prevent user traffic from being able to reach endpoints on the CMN.
+In the CSM 1.2 and UAN 2.4 upgrade, this removal is not done automatically. A future release or hotfix to CSM will introduce this automation.
 
 The switch configurations can be updated manually to remove VLAN7 from the UAN port configurations.
 This procedure is currently being tested and will be linked here when finished.

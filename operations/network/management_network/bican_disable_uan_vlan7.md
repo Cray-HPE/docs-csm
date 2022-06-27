@@ -1,10 +1,12 @@
 # Procedure to Remove UAN Access to the CMN
 
-To [minimize downtime for UAN](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime) during an upgrade from CSM 1.0 to CSM 1.2, switch configurations allow UAN to run on both the CSM 1.0 CAN (which becomes the CSM 1.2 CMN) as well as the new CSM 1.2 CAN.  At the end of upgrade, switch configurations for UAN ports will need to updated to remove the transitionally allowed access of UAN to the CMN.  Manual removal of this port access is described in this document.  The CSM 1.2.6 will automate this procedure.
+To [minimize downtime for UAN](bican_enable.md#minimize-uan-downtime) during an upgrade from CSM 1.0 to CSM 1.2, switch configurations allow UAN to run on both the CSM 1.0 CAN (which becomes the CSM 1.2 CMN) as well as the new CSM 1.2 CAN.
+At the end of upgrade, switch configurations for UAN ports will need to updated to remove the transitionally allowed access of UAN to the CMN.  Manual removal of this port access is described in this document.
+The CSM 1.2.6 will automate this procedure.
 
 ## Prerequisites
 
-As described in [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime), administrators can schedule a minimal-outage transition with users after the Management Network has been upgraded, but before new UAN are booted.
+As described in [Minimize UAN Downtime](bican_enable.md#minimize-uan-downtime), administrators can schedule a minimal-outage transition with users after the Management Network has been upgraded, but before new UAN are booted.
 During this scheduled outage, the UAN IPv4 address is transitioned from CMN to the CSM 1.2 CAN via either reboot or running a CFS play.
 
 1. All users of UAN running during the CSM 1.2 upgrade must have been transitioned to the CSM 1.2 CAN or CHN.
@@ -16,7 +18,7 @@ During this scheduled outage, the UAN IPv4 address is transitioned from CMN to t
 
 ## Procedure
 
-1. (ncn-m001#) Retrieve a token
+1. (`ncn-m001#`) Retrieve a token
 
     ```bash
     export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
@@ -26,7 +28,7 @@ During this scheduled outage, the UAN IPv4 address is transitioned from CMN to t
 
     If the TOKEN is blank it is likely that something is in error on the system or the core system is still being upgraded.
 
-1. (ncn-m001#) Query SLS for the BICAN toggle (SystemDefaultRoute).
+1. (`ncn-m001#`) Query SLS for the BICAN toggle (`SystemDefaultRoute`).
 
     ```bash
     export BICAN=$(curl -s -k -S -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/BICAN | jq -r '.ExtraProperties.SystemDefaultRoute')
@@ -35,7 +37,7 @@ During this scheduled outage, the UAN IPv4 address is transitioned from CMN to t
 
     An error in this step likely means SLS has not been upgraded to include the BICAN network structure. **NOTE** If the value of BICAN is CHN, then skip the rest of this procedure. UAN switch port configurations are already correct.
 
-1. (ncn-m001#) Query SLS for the CAN VLAN.
+1. (`ncn-m001#`) Query SLS for the CAN VLAN.
 
     ```bash
     export CAN_VLAN=$(curl -s -k -S -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN | jq '.ExtraProperties.Subnets | .[] | select(.Name=="bootstrap_dhcp") | .VlanID')
@@ -44,14 +46,16 @@ During this scheduled outage, the UAN IPv4 address is transitioned from CMN to t
 
     An error in this step likely means that SLS has not been upgraded.  Again, if the BICAN "toggle" value is `CHN` this entire procedure can be skipped.
 
-1. (ncn-m001#) Back up the switch configs.
+1. (`ncn-m001#`) Back up the switch configurations.
 
     ```bash
     cd /root
     canu backup network --folder switch_backups
     ```
 
-1. (ncn-m001#) Use CANU to print the network topology. The Paddle/CCJ json file or SHCD used to update the Management Network should be reused here.  The CCJ file is preferred as a means of input.  Generating the CANU command line for the SHCD as an exercise here and not using the same command line used to update the switches in [Update the Management Network](Stage_0_Prerequisites.md#stage-03---upgrade-management-network), will be time consuming and likely error prone.
+1. (`ncn-m001#`) Use CANU to print the network topology. The Paddle/CCJ JSON file or SHCD used to update the Management Network should be reused here. The CCJ file is preferred as a means of input.
+Generating the CANU command line for the SHCD as an exercise here and not using the same command line used to update the switches in [Update the Management Network](../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-03---upgrade-management-network),
+will be time consuming and likely error prone.
 
     * CCJ/Paddle (recommended)
 
@@ -63,10 +67,16 @@ During this scheduled outage, the UAN IPv4 address is transitioned from CMN to t
 
         ```bash
         canu validate shcd -a NETWORK_ARCHITECTURE_TYPE --shcd SHCD_FILENAME --tabs LIST,OF,WORKSHEETS --corners TAB1_UPPER_LEFT, TAB1_LOWER_RIGHT...
+        ```
 
-1. (ncn-m001#) Identify switches and ports associated with UAN on CAN.  The CANU output will contain a list of switches and the port use for each switch.  UAN will only be assocated with leaf or spine switches (named `sw-leaf-` and `sw-spine-` respectively).  UAN will be identified in the output via their common name (e.g. uan001).  Only UAN CAN ports need to be identified.  Only the second (2) port of OCP and PCIe Slots are used for UAN CAN according to [cabling standards](../../install/cable_management_network_servers.md). Custom or non-Plan-of-Record UAN configurations will need to be handled appropriately.
+1. (`ncn-m001#`) Identify switches and ports associated with UAN on CAN. The CANU output will contain a list of switches and the port use for each switch.
+UAN will only be associated with leaf or spine switches (named `sw-leaf-` and `sw-spine-` respectively).  UAN will be identified in the output via their common name (e.g. `uan001`).
+Only UAN CAN ports need to be identified.  Only the second (2) port of OCP and PCIe Slots are used for UAN CAN according to [cabling standards](../../../install/cable_management_network_servers.md).
+Custom or non-Plan-of-Record UAN configurations will need to be handled appropriately.
 
-    * **Example** Identify switches and UAN CAN ports - only port 2 for OCP and PCIe cards.  Note that CANU output only lists the switch port, not the Chassis or Slot.  On Aruba switches themselves interfaces are identified by `CHASSIS/SLOT/PORT`.  On all CSM Management switches values for `CHASSIS` and `SLOT` are `1`.  As an example, CANU slot `27` would be interface `1/1/27` on the switch.  Mellanox switches follow the format `1/PORT`.
+    * **Example** Identify switches and UAN CAN ports - only port 2 for OCP and PCIe cards. Note that CANU output only lists the switch port, not the Chassis or Slot.
+    On Aruba switches themselves interfaces are identified by `CHASSIS/SLOT/PORT`.  On all CSM Management switches values for `CHASSIS` and `SLOT` are `1`.
+    As an example, CANU slot `27` would be interface `1/1/27` on the switch.  Mellanox switches follow the format `1/PORT`.
   
         ```bash
         1: sw-spine-001 has the following port usage:
@@ -83,7 +93,8 @@ During this scheduled outage, the UAN IPv4 address is transitioned from CMN to t
             ...snip...
         ```
 
-    * **Example** (Recommended) Create a document of UAN ports.  This step is simply to consolidate the output and make the manual switch modification steps less error prone.  Using the identified CANU output create a document listing switches and associated UAN ports.  This should look similar in layout (not content) to the following:
+    * **Example** (Recommended) Create a document of UAN ports.  This step is simply to consolidate the output and make the manual switch modification steps less error prone.
+    Using the identified CANU output create a document listing switches and associated UAN ports.  This should look similar in layout (not content) to the following:
 
         ```bash
         sw-spine-001:
@@ -94,9 +105,11 @@ During this scheduled outage, the UAN IPv4 address is transitioned from CMN to t
             1/1/72
         ```
 
-1. (ncn-m001#) Log in to each switch in the previously generated list document and run the following commands *for each identified UAN port*. Only one port reconfiguration is shown ithis example.  Ensure the procedure is run for **all** identified ports. Be aware of the particular switch type: Aruba, Dell or Mellanox.
+1. (`ncn-m001#`) Log in to each switch in the previously generated list document and run the following commands *for each identified UAN port*.
+Only one port reconfiguration is shown in this example. Ensure the procedure is run for **all** identified ports.
+Be aware of the particular switch type: Aruba, Dell or Mellanox.
 
-    * (ncn-m001#) Log in to the switch, entering the administrative password when prompted.
+    * (`ncn-m001#`) Log in to the switch, entering the administrative password when prompted.
   
         ```bash
         ssh admin@SWITCH
