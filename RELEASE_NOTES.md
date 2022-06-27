@@ -175,7 +175,7 @@ of container images spins up with each major CSM release.
 * `quay.io/oauth2-proxy/oauth2-proxy:v7.2.1` - The latest tagged image was pinned to use `alpine:3.15.0` and was not addressed upstream until after CSM 1.2 release content was frozen.
 * `csm-dckr/stable/csm-config:1.9.31` - The vulnerability was discovered after CSM 1.2 release content was frozen and will be addressed in the next major CSM release.
 * `csm-dckr/stable/dckr.io/bitnami/external-dns:0.10.2-debian-10-r23` - Upstream fixes are needed and are not yet available.
-* `csm-dckr/stable/dckr.io/nfvpe/multus:v3.1` - Upstream fixes are needed for resolution. However, this image is only needed for the upgrade to  CSM 1.2 and is purged afterwards.
+* `csm-dckr/stable/dckr.io/nfvpe/multus:v3.1` - Upstream fixes are needed for resolution. However, this image is only needed for the upgrade to CSM 1.2 and is purged afterwards.
 * `csm-dckr/stable/dckr.io/nfvpe/multus:v3.7` - Upstream fixes are needed and are not yet available.
 * `csm-dckr/stable/quay.io/kiali/kiali:v1.28.1` - Upstream fixes are needed and are not yet available. Note that there is a [procedure for removal of Kiali](operations/system_management_health/Remove_Kiali.md) if desired.
-* `csm-dckr/stable/k8s.gcr.io/kube-proxy:v1.20.13` - Upstream fixes are needed and are not yet available for the 1.20.13 version of Kubernetes included in CSM 1.2.
+* `csm-dckr/stable/k8s.gcr.io/kube-proxy:v1.20.13` - Upstream fixes are needed and are not yet available for the `1.20.13` version of Kubernetes included in CSM 1.2.
