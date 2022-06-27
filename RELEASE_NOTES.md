@@ -95,24 +95,26 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 
 ### Base platform component upgrades
 
-* `istio V1.8`
-* `Loftsman V1.2.0-1`
-* `Kubernetes V1.20.13`
-* `Ceph V15.2.15`
-* `Containerd V1.5.7`
-* `CoreDNS V1.7.0`
-* `Etcd for Kubernetes V3.5.0`
-* `Etcd cluster V3.3.22`
-* `Helm V3.2.4`
-* `Kiali V1.28.1`
-* `Keepalived V2.0.19`
-* `Metallb V0.11.0`
-* `Multus V3.7`
-* `PostgreSQL V12.11`
-* `Strimzi Operator V0.27.1`
-* `Vault V1.5.5`
-* `Vault Operator V1.8.0`
-* `Zookeeper V3.5.9`
+  | Platform Component           | Version        |
+  |------------------------------|----------------|
+  | Ceph                         | `15.2.15`      |
+  | Containerd                   | `1.5.7`        |
+  | CoreDNS                      | `1.7.0`        |
+  | Etcd for Kubernetes          | `3.5.0`        |
+  | Etcd cluster                 | `3.3.22`       |
+  | Helm                         | `3.2.4`        |
+  | Istio                        | `1.8`          |
+  | Keepalived                   | `2.0.19`       |
+  | Kiali                        | `1.28.1`       |
+  | Kubernetes                   | `1.20.13`      |
+  | Loftsman                     | `1.2.0-1`      |
+  | MetalLB                      | `0.11.0`       |
+  | Multus                       | `3.7`          |
+  | PostgreSQL                   | `12.11`        |
+  | Strimzi Operator             | `0.27.1`       |
+  | Vault                        | `1.5.5`        |
+  | Vault Operator               | `1.8.0`        |
+  | Zookeeper                    | `3.5.9`        |
 
 ### Security improvements
 
