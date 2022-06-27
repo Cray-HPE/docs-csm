@@ -1,4 +1,4 @@
-# Spire database cluster DNS lookup failure
+# Spire Database Cluster DNS Lookup Failure
 
 ## Description
 
@@ -26,11 +26,11 @@ There is a known issue where if Unbound is configured to forward to an invalid o
 
    Example output:
 
-   ```text  
+   ```yaml  
    forward-addr: 172.30.84.40
    ```
 
-2. (`ncn-w#`) Check to see if the `forward-addr` is accessible from the worker nodes.
+1. (`ncn-w#`) Check to see if the `forward-addr` is accessible from the worker nodes.
 
    * Attempt to ping it.
 
