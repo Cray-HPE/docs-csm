@@ -4,44 +4,41 @@ The Cray System Management (CSM) operational activities are administrative proce
 
 The following administrative topics can be found in this guide:
 
-- [Cray System Management (CSM) Administration Guide](#cray-system-management-csm-administration-guide)
-  - [CSM Product Management](#csm-product-management)
-  - [Pre-Install](#pre-install)
-  - [Image Management](#image-management)
-  - [Boot Orchestration](#boot-orchestration)
-  - [System Power Off Procedures](#system-power-off-procedures)
-  - [System Power On Procedures](#system-power-on-procedures)
-  - [Power Management](#power-management)
-  - [Artifact Management](#artifact-management)
-  - [Compute Rolling Upgrades](#compute-rolling-upgrades)
-  - [Configuration Management](#configuration-management)
-  - [Kubernetes](#kubernetes)
-  - [Package Repository Management](#package-repository-management)
-  - [Security and Authentication](#security-and-authentication)
-  - [Resiliency](#resiliency)
-  - [ConMan](#conman)
-  - [Utility Storage](#utility-storage)
-  - [System Management Health](#system-management-health)
-  - [System Layout Service (SLS)](#system-layout-service-sls)
-  - [System Configuration Service](#system-configuration-service)
-  - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
-  - [Hardware Management (HM) Collector](#hardware-management-hm-collector)
-  - [HPE Power Distribution Unit (PDU)](#hpe-power-distribution-unit-pdu)
-  - [Node Management](#node-management)
-  - [Network](#network)
-    - [Management Network](#management-network)
-    - [Customer Access Network (CAN)](#customer-access-network-can)
-    - [Dynamic Host Configuration Protocol (DHCP)](#dynamic-host-configuration-protocol-dhcp)
-    - [Domain Name Service (DNS)](#domain-name-service-dns)
-    - [External DNS](#external-dns)
-    - [MetalLB in BGP-Mode](#metallb-in-bgp-mode)
-  - [Spire](#spire)
-  - [Update Firmware with FAS](#update-firmware-with-fas)
-  - [User Access Service (UAS)](#user-access-service-uas)
+- [CSM product management](#csm-product-management)
+- [Pre-install](#pre-install)
+- [Image management](#image-management)
+- [Boot orchestration](#boot-orchestration)
+- [System power off procedures](#system-power-off-procedures)
+- [System power on procedures](#system-power-on-procedures)
+- [Power management](#power-management)
+- [Artifact management](#artifact-management)
+- [Compute rolling upgrades](#compute-rolling-upgrades)
+- [Configuration management](#configuration-management)
+- [Kubernetes](#kubernetes)
+- [Package repository management](#package-repository-management)
+- [Security and authentication](#security-and-authentication)
+- [Resiliency](#resiliency)
+- [ConMan](#conman)
+- [Utility storage](#utility-storage)
+- [System management health](#system-management-health)
+- [System Layout Service (SLS)](#system-layout-service-sls)
+- [System configuration service](#system-configuration-service)
+- [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+- [Hardware Management (HM) collector](#hardware-management-hm-collector)
+- [HPE Power Distribution Unit (PDU)](#hpe-power-distribution-unit-pdu)
+- [Node management](#node-management)
+- [Network](#network)
+  - [Management network](#management-network)
+  - [Customer accessible networks (CMN/CAN/CHN)](#customer-accessible-networks-cmncanchn)
+  - [Dynamic Host Configuration Protocol (DHCP)](#dynamic-host-configuration-protocol-dhcp)
+  - [Domain Name Service (DNS)](#domain-name-service-dns)
+  - [External DNS](#external-dns)
+  - [MetalLB in BGP-mode](#metallb-in-bgp-mode)
+- [Spire](#spire)
+- [Update firmware with FAS](#update-firmware-with-fas)
+- [User Access Service (UAS)](#user-access-service-uas)
 
-<a name="csm-product-management"></a>
-
-## CSM Product Management
+## CSM product management
 
 - [Validate CSM Health](validate_csm_health.md)
 - [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
@@ -53,9 +50,7 @@ The following administrative topics can be found in this guide:
 - [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
 - [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
 
-<a name="pre-install"></a>
-
-## Pre-Install
+## Pre-install
 
 General information on what needs to be done before the initial install of CSM.
 
@@ -63,9 +58,7 @@ General information on what needs to be done before the initial install of CSM.
 - [Change Air-Cooled BMC Credentials](preinstall/Change_River_BMC_Credentials.md)
 - [Change ServerTech PDU Credentials](preinstall/Change_ServerTech_PDU_Credentials.md)
 
-<a name="image-management"></a>
-
-## Image Management
+## Image management
 
 Build and customize image recipes with the Image Management Service (IMS).
 
@@ -81,9 +74,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 - [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
 
-<a name="boot-orchestration"></a>
-
-## Boot Orchestration
+## Boot orchestration
 
 Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down collections of nodes.
 
@@ -126,15 +117,13 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
   - [Redeploy the iPXE and TFTP Services](boot_orchestration/Redeploy_the_IPXE_and_TFTP_Services.md)
   - [Upload Node Boot Information to Boot Script Service (BSS)](boot_orchestration/Upload_Node_Boot_Information_to_Boot_Script_Service_BSS.md)
 
-<a name="system-power-off-procedures"></a>
-
-## System Power Off Procedures
+## System power off procedures
 
 Procedures required for a full power off of an HPE Cray EX system.
 
 - [System Power Off Procedures](power_management/System_Power_Off_Procedures.md)
 
-Additional links to *power off sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
+Additional links to power off sub-procedures provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
 
 - [Prepare the System for Power Off](power_management/Prepare_the_System_for_Power_Off.md)
 - [Shut Down and Power Off Compute and User Access Nodes](power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md)
@@ -143,15 +132,13 @@ Additional links to *power off sub procedures* provided for reference. Refer to 
 - [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
 - [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
 
-<a name="system-power-on-procedures"></a>
-
-## System Power On Procedures
+## System power on procedures
 
 Procedures required for a full power on of an HPE Cray EX system.
 
 - [System Power On Procedures](power_management/System_Power_On_Procedures.md)
 
-Additional links to *power on sub procedures* provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
+Additional links to power on sub-procedures provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
 
 - [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
 - [Power On Compute and IO Cabinets](power_management/Power_On_Compute_and_IO_Cabinets.md)
@@ -160,9 +147,7 @@ Additional links to *power on sub procedures* provided for reference. Refer to t
 - [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
 - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md)
 
-<a name="power-management"></a>
-
-## Power Management
+## Power management
 
 HPE Cray System Management (CSM) software manages and controls power out-of-band through Redfish APIs.
 
@@ -174,9 +159,7 @@ HPE Cray System Management (CSM) software manages and controls power out-of-band
 - [Ignore Nodes with CAPMC](power_management/Ignore_Nodes_with_CAPMC.md)
 - [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
 
-<a name="artifact-management"></a>
-
-## Artifact Management
+## Artifact management
 
 Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifacts on the system.
 
@@ -185,9 +168,7 @@ Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifact
 - [Use S3 Libraries and Clients](artifact_management/Use_S3_Libraries_and_Clients.md)
 - [Generate Temporary S3 Credentials](artifact_management/Generate_Temporary_S3_Credentials.md)
 
-<a name="compute-rolling-upgrades"></a>
-
-## Compute Rolling Upgrades
+## Compute rolling upgrades
 
 Upgrade sets of compute nodes with the Compute Rolling Upgrade Service \(CRUS\) without requiring an entire set of nodes to be out of service at once. CRUS enables
 administrators to limit the impact on production caused from upgrading compute nodes by working through one step of the upgrade process at a time.
@@ -202,9 +183,7 @@ See [Deprecated features](../introduction/differences.md#deprecated_features).
 - [Troubleshoot a Failed CRUS Session Because of Unmet Conditions](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
 - [Troubleshoot a Failed CRUS Session Because of Bad Parameters](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
 
-<a name="configuration-management"></a>
-
-## Configuration Management
+## Configuration management
 
 The Configuration Framework Service \(CFS\) is available on systems for remote execution and configuration management of nodes and boot images.
 
@@ -245,12 +224,10 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
 - [CFS Key Management](configuration_management/CFS_Key_Management.md)
 
-<a name="kubernetes"></a>
-
 ## Kubernetes
 
 The system management components are broken down into a series of micro-services. Each service is independently deployable, fine-grained, and uses lightweight protocols.
-As a result, the system's micro-services are modular, resilient, and can be updated independently. Services within the Kubernetes architecture communicate via REST APIs.
+As a result, the system's micro-services are modular, resilient, and can be updated independently. Services within the Kubernetes architecture communicate using REST APIs.
 
 - [Kubernetes Architecture](kubernetes/Kubernetes.md)
 - [About `kubectl`](kubernetes/About_kubectl.md)
@@ -283,9 +260,7 @@ As a result, the system's micro-services are modular, resilient, and can be upda
   - [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
 - [Troubleshoot Intermittent HTTP 503 Code Failures](kubernetes/Troubleshoot_Intermittent_503s.md)
 
-<a name="package-repository-management"></a>
-
-## Package Repository Management
+## Package repository management
 
 Repositories are added to systems to extend the system functionality beyond what is initially delivered. The Sonatype Nexus Repository Manager is the primary method for
 repository management. Nexus hosts the Yum, Docker, raw, and Helm repositories for software and firmware content.
@@ -298,9 +273,7 @@ repository management. Nexus hosts the Yum, Docker, raw, and Helm repositories f
 - [Restrict Admin Privileges in Nexus](package_repository_management/Restrict_Admin_Privileges_in_Nexus.md)
 - [Repair Yum Repository Metadata](package_repository_management/Repair_Yum_Repository_Metadata.md)
 
-<a name="security-and-authentication"></a>
-
-## Security and Authentication
+## Security and authentication
 
 Mechanisms used by the system to ensure the security and authentication of internal and external requests.
 
@@ -358,8 +331,6 @@ Mechanisms used by the system to ensure the security and authentication of inter
 - [API Authorization](security_and_authentication/API_Authorization.md)
 - [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 
-<a name="resiliency"></a>
-
 ## Resiliency
 
 HPE Cray EX systems are designed so that system management services \(SMS\) are fully resilient and that there is no single point of failure.
@@ -369,8 +340,6 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 - [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md)
 - [Recreate `StatefulSet` Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
 - [NTP Resiliency](resiliency/NTP_Resiliency.md)
-
-<a name="conman"></a>
 
 ## ConMan
 
@@ -387,9 +356,7 @@ troubleshooting node boot issues.
 - [Troubleshoot ConMan Failing to Connect to a Console](conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 - [Troubleshoot ConMan Asking for Password on SSH Connection](conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
 
-<a name="utility-storage"></a>
-
-## Utility Storage
+## Utility storage
 
 Ceph is the utility storage platform that is used to enable pods to store persistent data. It is deployed to provide block, object, and file storage to the management
 services running on Kubernetes, as well as for telemetry data coming from the compute nodes.
@@ -419,9 +386,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
 - [Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client](utility_storage/Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)
 
-<a name="system-management-health"></a>
-
-## System Management Health
+## System management health
 
 Enable system administrators to assess the health of their system. Operators need to quickly and efficiently troubleshoot system issues as they occur and be
 confident that a lack of issues indicates the system is operating normally.
@@ -430,10 +395,9 @@ confident that a lack of issues indicates the system is operating normally.
 - [System Management Health Checks and Alerts](system_management_health/System_Management_Health_Checks_and_Alerts.md)
 - [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md)
 - [Configure Prometheus Email Alert Notifications](system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
-- [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
+- [Grafana Dashboards by Component](system_management_health/Grafana_Dashboards_by_Component.md)
+  - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
 - [Remove Kiali](system_management_health/Remove_Kiali.md)
-
-<a name="system-layout-service-sls"></a>
 
 ## System Layout Service (SLS)
 
@@ -451,9 +415,7 @@ stores information about the network, such as which port on which switch should 
 - [Restore SLS Postgres Database from Backup](system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
 - [Restore SLS Postgres without an Existing Backup](system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
 
-<a name="system-configuration-service"></a>
-
-## System Configuration Service
+## System configuration service
 
 The System Configuration Service \(SCSD\) allows administrators to set various BMC and controller parameters. These parameters are typically set during discovery, but
 this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the `scsd` command.
@@ -462,8 +424,6 @@ this tool enables parameters to be set before or after discovery. The operations
 - [Configure BMC and Controller Parameters with SCSD](system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
 - [Manage Parameters with the SCSD Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
 - [Set BMC Credentials](system_configuration_service/Set_BMC_Credentials.md)
-
-<a name="hardware-state-manager-hsm"></a>
 
 ## Hardware State Manager (HSM)
 
@@ -489,15 +449,11 @@ making it available via REST queries and message bus events when changes occur.
 - [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 - [Set BMC Management Role](hardware_state_manager/Set_BMC_Management_Role.md)
 
-<a name=""></a>
-
-## Hardware Management (HM) Collector
+## Hardware Management (HM) collector
 
 The Hardware Management (HM) Collector is used to collect telemetry and Redfish events from hardware in the system.
 
 - [Adjust HM Collector resource limits and requests](hmcollector/adjust_hmcollector_resource_limits_requests.md)
-
-<a name="hpe-power-distribution-unit-pdu"></a>
 
 ## HPE Power Distribution Unit (PDU)
 
@@ -505,9 +461,7 @@ Procedures for managing and setting up HPE PDUs.
 
 - [HPE PDU Admin Procedure](hpe_pdu/hpe_pdu_admin_procedures.md)
 
-<a name="node-management"></a>
-
-## Node Management
+## Node management
 
 Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the HPE Cray EX system.
 
@@ -563,8 +517,6 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 - [Update the Gigabyte Node BIOS Time](node_management/Update_the_Gigabyte_Node_BIOS_Time.md)
 - [S3FS Usage Guidelines](node_management/S3FS_Usage_and_Guidelines.md)
 
-<a name="network"></a>
-
 ## Network
 
 Overview of the several different networks supported by the HPE Cray EX system.
@@ -574,9 +526,7 @@ Overview of the several different networks supported by the HPE Cray EX system.
 - [Default IP Address Ranges](network/Default_IP_Address_Ranges.md)
 - [Connect to the HPE Cray EX Environment](network/Connect_to_the_HPE_Cray_EX_Environment.md)
 
-<a name="management-network"></a>
-
-### Management Network
+### Management network
 
 HPE Cray EX systems can have network switches in many roles: spine switches, leaf switches, `LeafBMC` switches, and CDU switches. Newer systems have HPE Aruba switches,
 while older systems have Dell and Mellanox switches. Switch IP addresses are generated by `Cray Site Init` (CSI).
@@ -587,9 +537,7 @@ while older systems have Dell and Mellanox switches. Switch IP addresses are gen
   - [Mellanox Installation and Configuration](network/management_network/mellanox/index.md)
 - [Update Management Network Firmware](network/management_network/firmware/update_management_network_firmware.md)
 
-<a name="customer-access-network-can"></a>
-
-### Customer Accessible Networks (CMN/CAN/CHN)
+### Customer accessible networks (CMN/CAN/CHN)
 
 The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the customer network to services, NCNs, and User Access Nodes \(UANs\) in the system.
 
@@ -599,16 +547,12 @@ The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the
 - [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)
 - [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 
-<a name="dynamic-host-configuration-protocol-dhcp"></a>
-
 ### Dynamic Host Configuration Protocol (DHCP)
 
 The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
 
 - [DHCP](network/dhcp/DHCP.md)
 - [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
-
-<a name="domain-name-service-dns"></a>
 
 ### Domain Name Service (DNS)
 
@@ -635,9 +579,7 @@ management services. Services are accessible directly from a laptop without need
 - [Troubleshoot Connectivity to Services with External IP addresses](network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
 - [Troubleshoot DNS Configuration Issues](network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
 
-<a name="metallb-in-bgp-mode"></a>
-
-### MetalLB in BGP-Mode
+### MetalLB in BGP-mode
 
 MetalLB is a component in Kubernetes that manages access to `LoadBalancer` services from outside the Kubernetes cluster. There are `LoadBalancer` services on the Node
 Management Network \(NMN\), Hardware Management Network \(HMN\), and Customer Access Network \(CAN\).
@@ -651,8 +593,6 @@ MetalLB can run in either `Layer2-mode` or `BGP-mode` for each address pool it m
 - [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 
-<a name="spire"></a>
-
 ## Spire
 
 Spire provides the ability to authenticate nodes and workloads, and to securely distribute and manage their identities along with the credentials associated with them.
@@ -661,9 +601,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 - [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 - [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
 
-<a name="update-firmware-with-fas"></a>
-
-## Update Firmware with FAS
+## Update firmware with FAS
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State
 Managers (HSM), device data, and image data in order to update firmware.
@@ -678,8 +616,6 @@ stream to update firmware on other components.
 - [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
 - [FAS Use Cases](firmware/FAS_Use_Cases.md)
 - [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
-
-<a name="user-access-service-uas"></a>
 
 ## User Access Service (UAS)
 
