@@ -172,7 +172,7 @@ of container images spins up with each major CSM release.
 * `csm-dckr/stable/dckr.io/ceph/ceph:v15.2.8` - This image is needed for the procedure to upgrade to CSM 1.2, but is purged afterwards.
 * `csm-dckr/stable/quay.io/ceph/ceph:v15.2.15` - This version of Ceph (Octopus) is pinned for the CSM 1.2 release. The next major version of CSM will support Ceph (Pacific).
 * `csm-dckr/stable/quay.io/cephcsi/cephcsi:v3.5.1` - Upstream fixes became available after CSM 1.2 release content was frozen.
-* `quay.io/oauth2-proxy/oauth2-proxy:v7.2.1` - The latest tagged image was pinned to use alpine:3.15.0 and was not addressed upstream until after CSM 1.2 release content was frozen.
+* `quay.io/oauth2-proxy/oauth2-proxy:v7.2.1` - The latest tagged image was pinned to use `alpine:3.15.0` and was not addressed upstream until after CSM 1.2 release content was frozen.
 * `csm-dckr/stable/csm-config:1.9.31` - The vulnerability was discovered after CSM 1.2 release content was frozen and will be addressed in the next major CSM release.
 * `csm-dckr/stable/dckr.io/bitnami/external-dns:0.10.2-debian-10-r23` - Upstream fixes are needed and are not yet available.
 * `csm-dckr/stable/dckr.io/nfvpe/multus:v3.1` - Upstream fixes are needed for resolution. However, this image is only needed for the upgrade to  CSM 1.2 and is purged afterwards.
