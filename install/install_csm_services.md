@@ -6,7 +6,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 1. [Install YAPL](#install-yapl)
 1. [Install CSM services](#install-csm-services)
-1. [Create base BSS Global boot parameters](#create-base-bss-global-boot-parameters)
+1. [Create base BSS global boot parameters](#create-base-bss-global-boot-parameters)
 1. [Wait for everything to settle](#wait-for-everything-to-settle)
 1. [Known issues](#known-issues)
     * [`Deploy CSM Applications and Services` known issues](#known-issues-install-sh)
@@ -52,7 +52,7 @@ pit# popd
 
 <a name="create-base-bss-global-boot-parameters"></a>
 
-## 3. Create base BSS Global boot parameters
+## 3. Create base BSS global boot parameters
 
 1. Wait for BSS to be ready.
 
