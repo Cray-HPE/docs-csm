@@ -107,7 +107,7 @@ referring to user activity.
 
 ## Manually removing UAN switch ports from the CMN VLAN 7
 
-After the upgrade to UAN 2.4, the UAN switch ports should be removed from CMN VLAN 7 to prevent user traffic from being able to reach endpoints on the CMN.
+After the upgrade to UAN 2.4, the UAN switch ports should be removed from CMN VLAN 7, to prevent user traffic from being able to reach endpoints on the CMN.
 In the CSM 1.2 and UAN 2.4 upgrade, this removal is not done automatically. A future release or hotfix to CSM will introduce this automation.
 
 The switch configurations can be updated manually to remove VLAN7 from the UAN port configurations.
