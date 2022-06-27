@@ -48,17 +48,29 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+
 state_name="ELIMINATE_NTP_CLOCK_SKEW"
 state_recorded=$(is_state_recorded "${state_name}" "$target_ncn")
-in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
-if [[ "$in_sync" == "no" ]]; then
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
     {
-    ssh "$target_ncn" chronyc makestep
-    sleep 5
+    loop_idx=0
     in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
     if [[ "$in_sync" == "no" ]]; then
-        echo "The clock on ${target_ncn} is not in sync.  Wait a bit more or try again."
-        exit 1
+        ssh "$target_ncn" chronyc makestep
+        sleep 5
+        in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+        # wait up to 90s for the node to be in sync
+        while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
+            sleep 5
+            in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+            loop_idx=$(( loop_idx+1 ))
+        done
+        if [[ "$in_sync" == "no" ]]; then
+            exit 1
+        else
+            record_state "${state_name}" "${target_ncn}"
+        fi
     else
         record_state "${state_name}" "${target_ncn}"
     fi
@@ -296,25 +308,43 @@ if [[ $target_ncn != ncn-s* ]]; then
     {
         wait_for_kubernetes $target_ncn
     } >> ${LOG_FILE} 2>&1
-fi 
+fi
 
 state_name="FORCE_TIME_SYNC"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-{
+TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                   -d client_id=admin-client \
+                   -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
+                   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+export TOKEN
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
-    # force time to sync immediately
-      ssh "${target_ncn}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null chronyc makestep
-      sleep 5
-      in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
-      if [[ "$in_sync" == "no" ]]; then
-          echo "The clock for ${target_ncn} is not in sync."
-      fi
-      record_state "${state_name}" "${target_ncn}"
+    {
+    ssh "$target_ncn" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"
+    loop_idx=0
+    in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+    if [[ "$in_sync" == "no" ]]; then
+        ssh "$target_ncn" chronyc makestep
+        sleep 5
+        in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+        # wait up to 90s for the node to be in sync
+        while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
+            sleep 5
+            in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+            loop_idx=$(( loop_idx+1 ))
+        done
+        if [[ "$in_sync" == "yes" ]]; then
+            record_state "${state_name}" "${target_ncn}"
+        fi
+        # else wait until the end of the script to fail
+    else
+        record_state "${state_name}" "${target_ncn}"
+    fi
+    } >> ${LOG_FILE} 2>&1
 else
     echo "====> ${state_name} has been completed"
 fi
-} >> ${LOG_FILE} 2>&1
+
 
 {
     # Validate SLS health before calling csi handoff bss-update-*, since
