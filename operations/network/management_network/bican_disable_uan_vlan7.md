@@ -80,7 +80,7 @@ Only UAN CAN ports need to be identified. Only the second port of OCP and PCIe s
 Custom or non-Plan-of-Record UAN configurations will need to be handled appropriately.
 
     - **Example:** Identify switches and UAN CAN ports.
-    
+
         Only port two for OCP and PCIe cards. Note that CANU output only lists the switch port, not the chassis or slot.
         On Aruba switches themselves, interfaces are identified by `CHASSIS/SLOT/PORT`. On all CSM Management switches, values for `CHASSIS` and `SLOT` are `1`.
         As an example, CANU slot `27` would be interface `1/1/27` on the switch. Mellanox switches follow the format `1/PORT`.
@@ -101,7 +101,7 @@ Custom or non-Plan-of-Record UAN configurations will need to be handled appropri
         ```
 
     - **Example:** (Recommended) Create a document of UAN ports.
-    
+
         This step is simply to consolidate the output and make the manual switch modification steps less error prone.
         Using the identified CANU output, create a document listing switches and associated UAN ports. This should look similar in layout (not content) to the following:
 
