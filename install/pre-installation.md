@@ -403,7 +403,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
       --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
       --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
       --no-gpg-checks \
-      update -y csm-testing goss-servers
+      install -y csm-testing goss-servers
    ```
 
 1. (`pit#`) Log the currently installed PIT packages.
