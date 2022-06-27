@@ -4,7 +4,7 @@
 
 There is a known issue where if Unbound is configured to forward to an invalid or inaccessible site DNS server, the Spire server may be unable to resolve the hostname of its PostgreSQL cluster.
 
-### Symptoms
+## Symptoms
 
 * The `spire-server` pods may be in a `CrashLoopBackOff` state.
 * API calls to services may fail with HTTP `503` errors.
@@ -21,7 +21,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
    Command:
 
    ```bash
-   ncn-w# kubectl -n services get cm cray-dns-unbound -o yaml | grep forward-addr
+   ncn-mw# kubectl -n services get cm cray-dns-unbound -o yaml | grep forward-addr
    ```
 
    Example output:
@@ -35,7 +35,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
    * Attempt to ping it.
 
      ```bash
-     ncn-w# ping -c 1 172.30.84.40
+     ncn-mw# ping -c 1 172.30.84.40
      ```
 
      Example output:
@@ -52,7 +52,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
    * Attempt to resolve a hostname external to the system.
 
      ```bash
-     ncn-w# host www.google.com 172.30.84.40
+     ncn-mw# host www.google.com 172.30.84.40
      ```
 
      Example output:
@@ -75,7 +75,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
      www.google.com has IPv6 address 2607:f8b0:4001:c17::67
      ```
 
-   If the above checks fail verify that the Customer Management Network \(CMN\) is working correctly. See [Troubleshoot CMN issues](../../operations/network/customer_accessible_networks/Troubleshoot_CMN_Issues.md) for more information.
+   If the above checks fail, then verify that the Customer Management Network \(CMN\) is working correctly. See [Troubleshoot CMN issues](../../operations/network/customer_accessible_networks/Troubleshoot_CMN_Issues.md) for more information.
 
-If it is not possible to restore access to the `forward-addr` then reconfigure Unbound to point to a working DNS server or temporarily remove the forwarder configuration.
+If it is not possible to restore access to the `forward-addr`, then reconfigure Unbound to point to a working DNS server, or temporarily remove the forwarder configuration.
 See "Change the Site DNS Server" in [Manage the DNS Unbound Resolver](../../operations/network/dns/Manage_the_DNS_Unbound_Resolver.md) for more information.
