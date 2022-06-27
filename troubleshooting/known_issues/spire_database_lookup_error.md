@@ -35,7 +35,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
    * Attempt to ping it.
 
      ```bash
-     ncn-mw# ping -c 1 172.30.84.40
+     ncn-w# ping -c 1 172.30.84.40
      ```
 
      Example output:
@@ -52,7 +52,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
    * Attempt to resolve a hostname external to the system.
 
      ```bash
-     ncn-mw# host www.google.com 172.30.84.40
+     ncn-w# host www.google.com 172.30.84.40
      ```
 
      Example output:
