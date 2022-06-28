@@ -613,7 +613,7 @@ Overall status: PASSED (Passed: 40, Failed: 0)
 #### 4.2.1 Known issues with internal SSH access test execution
 
 It is possible this test will fail if the procedure to deploy the final NCN has not been performed as the static IP reservation data has
-not been loaded into Hardware State Manager at this time so DNS records may be missing.
+not yet been loaded into the Hardware State Manager (HSM), so DNS records may be missing.
 
 ### 4.3 External SSH access test execution
 
