@@ -93,10 +93,26 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 
 ### Base platform component upgrades
 
-* `istio` V1.8 from V1.7
-* Loftsman V1.2.0-1
-* Kubernetes V1.20.13 from V1.19.9
-* Ceph V15.2.15 from V15.2.8
+  | Platform Component           | Version        |
+  |------------------------------|----------------|
+  | Ceph                         | `15.2.15`      |
+  | `containerd`                 | `1.5.7`        |
+  | CoreDNS                      | `1.7.0`        |
+  | Etcd for Kubernetes          | `3.5.0`        |
+  | Etcd cluster                 | `3.3.22`       |
+  | Helm                         | `3.2.4`        |
+  | Istio                        | `1.8`          |
+  | Keepalived                   | `2.0.19`       |
+  | Kiali                        | `1.28.1`       |
+  | Kubernetes                   | `1.20.13`      |
+  | Loftsman                     | `1.2.0-1`      |
+  | MetalLB                      | `0.11.0`       |
+  | Multus                       | `3.7`          |
+  | PostgreSQL                   | `12.11`        |
+  | Strimzi Operator             | `0.27.1`       |
+  | Vault                        | `1.5.5`        |
+  | Vault Operator               | `1.8.0`        |
+  | Zookeeper                    | `3.5.9`        |
 
 ### Security improvements
 
@@ -145,3 +161,23 @@ See [Deprecated features](introduction/differences.md#deprecated_features).
 * The `cray-externaldns-coredns`, `cray-externaldns-etcd`, and `cray-externaldns-wait-for-etcd` pods have been removed. PowerDNS is now the provider of the external DNS service.
 
 ## Known issues
+
+### Security vulnerability exceptions in CSM 1.2
+
+A great deal of emphasis was placed on elimination or reduction of critical or high security vulnerabilities of container images included in the CSM 1.2 release.
+There remain, however, a small number of exceptions that are listed below. General reasons for carrying exceptions include needing to version pin certain core components,
+upstream fixes not being available, or new vulnerability detection or fixes occurring after release content is frozen. A new effort to track and address security vulnerabilities
+of container images spins up with each major CSM release.
+
+| Image | Reason |
+|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| `csm-dckr/stable/dckr.io/ceph/ceph:v15.2.8`                                 | This image is needed for the procedure to upgrade to CSM 1.2, but is purged afterwards. |
+| `csm-dckr/stable/quay.io/ceph/ceph:v15.2.15`                                | This version of Ceph (Octopus) is pinned for the CSM 1.2 release. The next major version of CSM will support Ceph (Pacific). |
+| `csm-dckr/stable/quay.io/cephcsi/cephcsi:v3.5.1`                            | Upstream fixes became available after CSM 1.2 release content was frozen. |
+| `csm-dckr/stable/csm-config:1.9.31`                                         | The vulnerability was discovered after CSM 1.2 release content was frozen and will be addressed in the next major CSM release. |
+| `csm-dckr/stable/dckr.io/bitnami/external-dns:0.10.2-debian-10-r23`         | Upstream fixes are needed and are not yet available. |
+| `csm-dckr/stable/quay.io/kiali/kiali:v1.28.1`                               | Upstream fixes are needed and are not yet available. There is a procedure to [Remove Kiali](operations/system_management_health/Remove_Kiali.md) if desired. |
+| `csm-dckr/stable/k8s.gcr.io/kube-proxy:v1.20.13`                            | Upstream fixes are needed and are not yet available for the `1.20.13` version of Kubernetes included in CSM 1.2. |
+| `csm-dckr/stable/dckr.io/nfvpe/multus:v3.1`                                 | Upstream fixes are needed for resolution. However, this image is only needed for the upgrade to CSM 1.2 and is purged afterwards. |
+| `csm-dckr/stable/dckr.io/nfvpe/multus:v3.7`                                 | Upstream fixes are needed and are not yet available. |
+| `quay.io/oauth2-proxy/oauth2-proxy:v7.2.1`                                  | The latest tagged image was pinned to use `alpine:3.15.0` and was not addressed upstream until after CSM 1.2 release content was frozen. |

@@ -270,6 +270,7 @@ Jinja2
 JViewer
 Kafka
 Kea
+Keepalived
 keychain
 Keycloak
 Keycloak's
@@ -325,6 +326,7 @@ Motivair
 MPOs
 mTLS
 multimode
+Multus
 MyMellanox
 MZ32-AR0-00
 MZ62-HD0-00
@@ -484,6 +486,7 @@ SSHing
 SSHKey
 standalone
 startup
+Strimzi
 Submodule
 subnetting
 subrole
