@@ -36,6 +36,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [4.1.2 Gateway health tests on an NCN](#412-gateway-health-tests-on-an-ncn)
     - [4.1.3 Gateway health tests from outside the system](#413-gateway-health-tests-from-outside-the-system)
   - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
+    - [4.2.1 Known issues with internal SSH access test execution](#421-known-issues-with-internal-ssh-access-test-execution)
   - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
   - [5.1 Run the test script](#51-run-the-test-script)
@@ -608,6 +609,11 @@ The test will complete with an overall pass/failure status such as the following
 ```text
 Overall status: PASSED (Passed: 40, Failed: 0)
 ```
+
+#### 4.2.1 Known issues with internal SSH access test execution
+
+It is possible this test will fail if the procedure to deploy the final NCN has not been performed. Before running this procedure, the static IP reservation data has
+not yet been loaded into the Hardware State Manager (HSM), so DNS records may be missing.
 
 ### 4.3 External SSH access test execution
 
