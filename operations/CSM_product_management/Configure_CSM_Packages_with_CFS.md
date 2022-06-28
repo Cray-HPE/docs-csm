@@ -1,7 +1,7 @@
-# Configure Compute Nodes with CFS
+# Configure CSM packages with CFS
 
-CSM includes a playbook that should be applied to any Compute node images.
-The `compute_nodes.yml` playbook installs the packages for both the CFS and BOS reporters.
+CSM includes a playbook that should be applied to Compute and Application node images.
+The `csm_packages.yml` playbook installs the packages for both the CFS and BOS reporters.
 These packages are necessary for CFS and BOS to run, so a configuration layer containing the
 playbook must be included in the image customization for any nodes that are expected to be
 managed with CFS and BOS.
@@ -56,7 +56,7 @@ To setup the compute configuration layer, first gather the following information
     {
         "name": "csm-<version>",
         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-        "playbook": "compute_nodes.yml",
+        "playbook": "csm_packages.yml",
         "commit": "<retrieved git commit>"
     }
     ```
