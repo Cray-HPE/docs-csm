@@ -6,8 +6,8 @@ This document provides links to troubleshooting information for services and fun
 
 * [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
 * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
-  * [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
-  * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
+* [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
+* [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 
 ## Troubleshooting topics
@@ -23,6 +23,7 @@ This document provides links to troubleshooting information for services and fun
   * [Recover from Postgres WAL Event](../operations/kubernetes/Troubleshoot_Postgres_Database.md)
   * [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
   * [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
+* [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
 * UAS Issues
   * [Viewing UAI Log Output](../operations/UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
   * [Stale Brokered UAIs](../operations/UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md)
@@ -80,4 +81,5 @@ This document provides links to troubleshooting information for services and fun
   * [BGP not Accepting Routes from MetalLB](../operations/network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 * Spire
   * [Restore Spire Postgres without a Backup](../operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
+  * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
   * [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)

@@ -1,23 +1,22 @@
 # Re-Installation
 
-This page details steps to take prior to starting new installation, these pages assume that all 
+This page details steps to take prior to starting new installation, these pages assume that all
 the NCNs have been deployed (e.g. there is no more PIT node).
 
 ## Topics
 
 1. [Quiesce Compute and Application Nodes](#quiesce-application-and-compute-nodes)
 1. [Disable DHCP Service](#disable-dhcp-service)
-1. [Wipe Disks on Booted Nodes](#wipe-disks-on-booted-nodes)
 1. [Set IPMI Credentials](#set-ipmi-credentials)
 1. [Power Off Booted Nodes](#power-off-booted-nodes)
 1. [Set Node BMCs to DHCP](#set-node-bmcs-to-dhcp)
-1. [Power off the PIT Node](#power-off-pit-node) 
+1. [Power off the PIT Node](#power-off-pit-node)
 
 ## Quiesce Application and Compute Nodes
 
 > **`NOTE`** Skip this section if compute nodes and application nodes are not booted.
 
-The application and compute nodes must be shutdown prior to a reinstallation, if they're left on they will degrade and 
+The application and compute nodes must be shutdown prior to a reinstallation, if they're left on they will degrade and
 potentially end up in an undesirable state. The safest approach is to power these off.
 
 See [Shut Down and Power Off Compute and User Access Nodes](../operations/power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
@@ -26,23 +25,13 @@ See [Shut Down and Power Off Compute and User Access Nodes](../operations/power_
 
 > **`NOTE`** Skip this section if the CSM install was incomplete or not started.
 
-The DHCP service running in kubernetes needs to be disabled or it will conflict with the PITs DHCP services.
+The DHCP service running in Kubernetes needs to be disabled or it will conflict with the PITs DHCP services.
 
 1. (`ncn#`) Disable `cray-dhcp-kea`
 
    ```bash
    kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
    ```
-
-## Wipe Disks on Booted Nodes
-
-> **`NOTE`** Skip this section if none of the management nodes are booted.
-
-There is a bug in the automatic wiping of NCNs that entails a manual wipe prior to a re-installation or upgrade.
-
-For each management node (**excluding** `ncn-m001`), log in and do a "full wipe" of the node's disks.
-
-See [full wipe in Wipe NCN Disks](../operations/node_management/Wipe_NCN_Disks.md#full-wipe).
 
 ## Set IPMI credentials
 
@@ -141,7 +130,7 @@ BMCs to be set back to DHCP before proceeding.
 
     ```bash
    function bmcs_cold_reset {
-      for bmc in ${BMCS[@]}; do   
+      for bmc in ${BMCS[@]}; do
          printf "Setting %s to DHCP ... " "$bmc"
          if ipmitool -I lanplus -U $username -E -H $bmc mc reset cold; then
             echo "Done"
@@ -170,4 +159,3 @@ The process is now done, the NCNs are ready for a new deployment.
 ## Next topic
 
 See [Bootstrap PIT Node](README.md#1-boot-installation-environment).
-
