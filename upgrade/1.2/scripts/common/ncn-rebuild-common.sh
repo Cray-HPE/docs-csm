@@ -80,81 +80,74 @@ else
 fi
 
 
-state_name="WIPE_NODE_DISK"
+state_name="SHUTDOWN_SERVICES"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    if [[ -z $NONINTERACTIVE ]]; then
-        echo " ****** DATA LOSS ON ${target_ncn} - FRESH OS INSTALL UPON REBOOT ******"  >/dev/tty
-        echo " ****** BACKUP DATA ON ${target_ncn} TO USB OR OTHER SAFE LOCATION ******" >/dev/tty
-        echo " ****** DATA MANAGED BY K8S/CEPH WILL BE BACKED UP/RESTORED AUTOMATICALLY ******" >/dev/tty
-        echo "Read and act on above steps. Press Enter key to continue ..." >/dev/tty
-        read
-    fi
 
     if [[ $target_ncn == ncn-s* ]]; then
-    cat <<'EOF' > wipe_disk.sh
-    set -e
-    for d in $(lsblk | grep -B2 -F md1 | grep ^s | awk '{print $1}'); do wipefs -af "/dev/$d"; done
-EOF
+        # Nothing to do.
+        :
     elif [[ $target_ncn == ncn-m* ]]; then
-    cat <<'EOF' > wipe_disk.sh
+    cat <<'EOF' > standdown.sh
+    echo 'unmounting USB(s) ... '
     usb_device_path=$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')
     usb_rc=$?
     set -e
     if [[ "$usb_rc" -eq 0 ]]; then
       if blkid -p $usb_device_path; then
         have_mnt=0
+        echo 'unmounting discovered USB mountpoints ... '
         for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
           if mountpoint $mnt_point; then
             have_mnt=1
-            umount $mnt_point
+            umount -v $mnt_point
           fi
         done
         if [ "$have_mnt" -eq 1 ]; then
+          echo 'ejecting discovered USB: [$usb_device_path]
           eject $usb_device_path
         fi
       fi
     fi
-    umount /var/lib/etcd /var/lib/sdu || true
-    for md in /dev/md/*; do mdadm -S $md || echo nope ; done
-    vgremove -f --select 'vg_name=~metal*' || true
-    pvremove /dev/md124 || true
-    # Select the devices we care about; RAID, SATA, and NVME devices/handles (but *NOT* USB)
-    disk_list=$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(raid|sata|nvme|sas)' | sort -u | awk '{print "/dev/"$2}' | tr '\n' ' ')
-    for disk in $disk_list; do
-        wipefs --all --force wipefs --all --force "$disk" || true
-        sgdisk --zap-all "$disk"
-    done
+    umount -v /var/lib/etcd /var/lib/sdu || true
+    
+    echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
+    efibootmgr # print before
+    efibootmgr | grep '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
+    efibootmgr # print after
+    echo 'Setting next boot to PXE ... '
+    ipmitool chassis bootdev pxe options=efiboot
 EOF
     else
-    cat <<'EOF' > wipe_disk.sh
+    cat <<'EOF' > standdown.sh
     lsblk | grep -q /var/lib/sdu
     sdu_rc=$?
     vgs | grep -q metal
     vgs_rc=$?
     set -e
+    echo 'Disabling and stopping kubernetes and containerd daemons ... '
     systemctl disable kubelet.service || true
     systemctl stop kubelet.service || true
     systemctl disable containerd.service || true
     systemctl stop containerd.service || true
-    umount /var/lib/containerd /var/lib/kubelet || true
+    umount -v /var/lib/containerd /var/lib/kubelet || true
     if [[ "$sdu_rc" -eq 0 ]]; then
-      umount /var/lib/sdu || true
+      umount -v /var/lib/sdu || true
     fi
-    for md in /dev/md/*; do mdadm -S $md || echo nope ; done
-    if [[ "$vgs_rc" -eq 0 ]]; then
-      vgremove -f --select 'vg_name=~metal*' || true
-      pvremove /dev/md124 || true
-    fi
-    wipefs --all --force /dev/sd* /dev/disk/by-label/* || true
-    sgdisk --zap-all /dev/sd*
+        
+    echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
+    efibootmgr # print before
+    efibootmgr | grep '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
+    efibootmgr # print after
+    echo 'Setting next boot to PXE ... '
+    ipmitool chassis bootdev pxe options=efiboot
 EOF
     fi
-    chmod +x wipe_disk.sh
-    scp wipe_disk.sh $target_ncn:/tmp/wipe_disk.sh
-    ssh $target_ncn '/tmp/wipe_disk.sh'
+    chmod +x standdown.sh
+    scp standdown.sh $target_ncn:/tmp/standdown.sh
+    ssh $target_ncn '/tmp/standdown.sh'
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
@@ -314,7 +307,7 @@ state_name="FORCE_TIME_SYNC"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 TOKEN=$(curl -s -S -d grant_type=client_credentials \
                    -d client_id=admin-client \
-                   -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
+                   -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 export TOKEN
 if [[ $state_recorded == "0" ]]; then
