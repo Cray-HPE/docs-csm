@@ -156,6 +156,7 @@ It mutates the manifest of respective workloads before creating it so that when 
 
 5. (`ncn#`) Check the pod description when the pod fails to come up.
     Obtain the pod name:
+
     ```bash
     kubectl get pods
     ```
@@ -167,7 +168,9 @@ It mutates the manifest of respective workloads before creating it so that when 
     NAME    READY   STATUS                       RESTARTS   AGE
     nginx   0/1     CreateContainerConfigError   0          5s
     ```
+
     Describe the pod:
+
     ```bash
     kubectl describe pods
     ```
@@ -203,6 +206,7 @@ It mutates the manifest of respective workloads before creating it so that when 
     ```
 
     Example output:
+
     ```text
     NAME    READY   STATUS    RESTARTS   AGE
     nginx   1/1     Running   0          6s
@@ -313,6 +317,7 @@ Also, it generates the report of policy violation in respective workloads. The f
     ```
 
 3. (`ncn#`) Check the policy report status.
+
     ```bash
     kubectl get polr -A
     ```
