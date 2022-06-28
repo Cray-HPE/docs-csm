@@ -34,6 +34,7 @@ Mutation policies are applied in admission controller while creating pods. It mu
 ######Example:
 
 Step 1: Create a sample policy
+
 ```
 apiVersion: kyverno.io/v1
 kind: Policy
@@ -60,6 +61,7 @@ spec:
 ```
 
 Step 2: Create a simple pod
+
 ```
 apiVersion: v1
 kind: Pod
