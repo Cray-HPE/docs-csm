@@ -56,13 +56,13 @@ At this time, the customers must accept:
 Reverting or changing any decisions will be manual.
 
 For the feature matrix of the CAN, see [BICAN Support Matrix](bican_support_matrix.md).
-Details of the High Speed CAN (CHN) and the Management CAN (CMN) are described below.
+Details of the Customer High Speed Network(CHN) and the Customer Management Network(CMN) are described below.
 
 ![Customer Access Overview](img/customer_access_overview.png)
 
 ## 2 Customer High Speed Network (CHN)
 
-Access to system resources from the customer site over the High Speed Network (HSN) is provided by the High Speed Customer Access Network (CHN).
+Access to system resources from the customer site over the High Speed Network (HSN) is provided by the Customer Highspeed Network (CHN).
 As can be seen in the diagram above, traffic ingress from the site for the CHN is over the edge routers.
 Typically, these are a pair of Arista switches which provide other HSN access -- for ClusterStor, for example.
 
