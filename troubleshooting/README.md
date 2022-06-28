@@ -80,4 +80,5 @@ This document provides links to troubleshooting information for services and fun
   * [BGP not Accepting Routes from MetalLB](../operations/network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 * Spire
   * [Restore Spire Postgres without a Backup](../operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
+  * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
   * [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
