@@ -35,9 +35,9 @@
 
 Bifurcation or splitting of the Customer Access Network (CAN) enables customization of customer traffic to and from the system.
 Customization will be performed during installation.
-For CSM 1.2 there are two new customer access networks being introduced as part of the process to split the existing monolithic CAN:
+For CSM 1.2, there are two new customer access networks being introduced as part of the process to split the existing monolithic CAN:
 
-1. **High Speed Customer Access - CHN (Customer High Speed Network)** : This feature adds the ability to connect to User Application Nodes (UAN), UAI, Compute Nodes
+1. **High Speed Customer Access - CHN (Customer High Speed Network)** : This feature adds the ability to connect to User Application Nodes (UAN), User Access Instance (UAI), and Compute nodes
 and Kubernetes API endpoints from the customer site via the High Speed Network (HSN).
 2. **Management Customer Access - CMN (Customer Management Network)** :  Using a new VLAN on the Management Network, this feature allows system administrative access from the customer site.
 Administrative access was previously available on the original CAN; this feature provides a traffic path and access split.
@@ -62,9 +62,9 @@ Details of the High Speed CAN (CHN) and the Management CAN (CMN) are described b
 
 ## 2 Customer High Speed Network (CHN)
 
-Access to system resources from the customer site over the High Speed Network is provided by the High Speed Customer Access Network (CHN).
+Access to system resources from the customer site over the High Speed Network (HSN) is provided by the High Speed Customer Access Network (CHN).
 As can be seen in the diagram above, traffic ingress from the site for the CHN is over the edge routers.
-Typically these are a pair of Arista switches which provide other HSN access -- for ClusterStor, for example.
+Typically, these are a pair of Arista switches which provide other HSN access -- for ClusterStor, for example.
 
 ### 2.1 CHN system ingress endpoints accessible in CSM 1.2
 
@@ -134,11 +134,11 @@ This is intended to be changed during installation to a **customer-supplied IPv4
 
 #### 2.4.2 When addressing occurs
 
-- Installation, as part of CSI data.
+Addressing occurs during installation as part of CSI data.
 
 #### 2.4.3 Ability to change post-install
 
-- No
+Not supported.
 
 ### 2.5 Traffic separation and routing
 
@@ -157,7 +157,7 @@ Isolation will be within the Slingshot network as well as separated at the edge 
 
 #### 2.5.2 When configuration occurs
 
-- Installation, as part of a virtual routing instance on the edge routers.
+Installation, as part of a virtual routing instance on the edge routers.
 
 #### 2.5.3 Ability to change post-install
 
@@ -220,7 +220,7 @@ For the CSM 1.2 release, the CMN is only available via customer-supplied IPv4 ad
 
 #### 3.4.3 Ability to change post-install
 
-- Not recommended, and would be manual.
+This is not recommended and is a manual process.
 
 ## 4 Customer Access - external/site access (site DNS, LDAP, etc.)
 
@@ -229,7 +229,7 @@ By default this CAN access path remains, but for the CSM 1.2 release it is possi
 
 ### 4.1 Traffic separation and routing
 
-At installation time one of the following egress routes from the system to the site must be selected: CAN (default), CHN, CMN.
+At installation time one of the following egress routes from the system to the site must be selected: CAN (default), CHN, or CMN.
 
 ### 4.2 Changes
 
@@ -242,8 +242,8 @@ At installation time one of the following egress routes from the system to the s
 
 #### 4.2.2 When configuration occurs
 
-- During installation, as part of site configuration.
+Configuration occurs during installation as part of the site configuration.
 
 #### 4.2.3 Ability to change post-install
 
-- No
+Not supported.

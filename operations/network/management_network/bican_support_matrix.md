@@ -5,9 +5,9 @@
 ### Overview
 
 Customer Access Networks provide the interface between Shasta system networking and the customer site network. Customer Access Networks (CANs) are routed networks with broadcast domain separation. Customer Access
-Networks provide higher availability and more flexibility in accessing cloud services compared to traditional "bastion hosts", and are more in line with the cloud-native architecture of Shasta as whole.
+CANs provide higher availability and more flexibility in accessing cloud services compared to traditional "bastion hosts", and are more in line with the cloud-native architecture of CSM.
 
-Customer Access Networks (CANs) provide flexible networking at the edge between the site and Shasta system to do the following:
+CANs provide flexible networking at the edge between the site and HPE Cray EX system to do the following:
 
 * Perform administrative tasks on the system.
 * Run jobs and move job data to and from the system.
@@ -24,7 +24,7 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
 | Non-Compute Node (NCN) Servers | Ingress                    | Not Allowed               | Not Allowed            | Allowed                      |
 | System Access to External/Site (LDAP, DNS) | Egress                     | Allowed                   | Allowed                | Not Allowed                  |
 
-* Selection of user access for job control and data movement over the Shasta Management Network (CAN) or the High Speed Network (CHN) is made during system installation or upgrade.
+* Selection of user access for job control and data movement over the Customer Management Network (CMN) or the Customer High Speed Network (CHN) is made during system installation or upgrade.
 
 * Creation of the Customer Management Network (CMN) during installation or upgrade is mandatory.
 
@@ -42,7 +42,7 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
 * Customer Management Network (CMN) \- Provides customer access from the site to the system for administrators.
 * Customer Access Network (CAN) or Customer High Speed Network (CHN) provide:
   * Customer access from the site to the system for job control and jobs data movement.
-  * Access from the system to the site for network services like DNS, LDAP, etc.
+  * Access from the system to the site for network services like DNS, LDAP, and so on.
 
 ## Supported configurations
 
@@ -54,15 +54,15 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
 
 ![cmn plus chn](img/cmn_plus_chn.png)
 
-Note: During installation, the High Speed Network is not configured until relatively late in the process.
-Installation generally requires site access for deployment artifacts, site DNS, etc.
-In order to achieve this, the CMN is used during the installation process for system traffic egress until the High Speed Network is available.
+Note: During installation, the High Speed Network (HSN) is not configured until relatively late in the process.
+Installation generally requires site access for deployment artifacts, site DNS, and more.
+In order to achieve this, the CMN is used during the installation process for system traffic egress until the HSN is available.
 
 ## Network capabilities
 
 ### Layer 2
 
-* CMN, CAN, and CHN have broadcast boundaries at the edge between the system and the site.
+CMN, CAN, and CHN have broadcast boundaries at the edge between the system and the site.
 
 ### Layer 3
 
@@ -86,8 +86,8 @@ In order to achieve this, the CMN is used during the installation process for sy
   * Number of Non-Compute Nodes (NCNs) of type master, worker, or storage used by the Kubernetes cluster
   * Number of switches on the Management Network
   * Number of administrative API endpoints
-  * Several administrative addresses for switch interfaces and routing.
-  * A `/26` block is typically sufficient for systems less than approximately 4000 nodes.
+  * Several administrative addresses for switch interfaces and routing
+  * A `/26` block is typically sufficient for systems with less than approximately 4000 nodes
 
 ### CAN or CHN sizing and requirements
 
@@ -97,8 +97,8 @@ In order to achieve this, the CMN is used during the installation process for sy
 * Contiguous (CIDR block)
 * Non-overlapping with internal networks (configurable during installation)
 * Size estimate is the sum of:
-  * Number of application nodes requiring access from the site (User Access Node (UAN), login nodes, etc.)
-  * Number of User Access Instances (UAI) in Kubernetes (if used).
+  * Number of application nodes requiring access from the site (User Access Node (UAN), login nodes, and more)
+  * Number of User Access Instances (UAI) in Kubernetes (if used)
   * Number of API endpoints
   * Several administrative addresses for switch interfaces and routing
-  * NOTE: CAN or CHN sizing is largely dependent on customer-specific use cases and application node hardware.
+  * CAN or CHN sizing is largely dependent on customer-specific use cases and application node hardware
