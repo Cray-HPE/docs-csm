@@ -4,22 +4,22 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
 
 1. [Boot installation environment](#1-boot-installation-environment)
     1. [Prepare installation environment server](#11-prepare-installation-environment-server)
-    2. [Boot the LiveCD](#12-boot-the-livecd)
-    3. [First login](#13-first-login)
-    4. [Prepare the data partition](#14-prepare-the-data-partition)
-    5. [Set reusable environment variables](#15-set-reusable-environment-variables)
-    6. [Exit the console and login with SSH](#16-exit-the-console-and-login-with-ssh)
-2. [Import CSM tarball](#2-import-csm-tarball)
+    1. [Boot the LiveCD](#12-boot-the-livecd)
+    1. [First login](#13-first-login)
+    1. [Prepare the data partition](#14-prepare-the-data-partition)
+    1. [Set reusable environment variables](#15-set-reusable-environment-variables)
+    1. [Exit the console and login with SSH](#16-exit-the-console-and-login-with-ssh)
+1. [Import CSM tarball](#2-import-csm-tarball)
     1. [Download CSM tarball](#21-download-csm-tarball)
-    2. [Import tarball assets](#22-import-tarball-assets)
-3. [Create system configuration](#3-create-system-configuration)
+    1. [Import tarball assets](#22-import-tarball-assets)
+1. [Create system configuration](#3-create-system-configuration)
     1. [Validate SHCD](#31-validate-shcd)
-    2. [Generate topology files](#32-generate-topology-files)
-    3. [Customize `system_config.yaml`](#33-customize-system_configyaml)
-    4. [Run CSI](#34-run-csi)
-    5. [Prepare Site Init](#35-prepare-site-init)
-    6. [Initialize the LiveCD](#36-initialize-the-livecd)
-4. [Next topic](#next-topic)
+    1. [Generate topology files](#32-generate-topology-files)
+    1. [Customize `system_config.yaml`](#33-customize-system_configyaml)
+    1. [Run CSI](#34-run-csi)
+    1. [Prepare Site Init](#35-prepare-site-init)
+    1. [Initialize the LiveCD](#36-initialize-the-livecd)
+1. [Next topic](#next-topic)
 
 ## 1. Boot installation environment
 
@@ -47,13 +47,16 @@ Any steps run on an `external` server require that server to have the following 
    >
    > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
    > - **If air-gapped or behind a strict firewall**, then the tarball must be obtained from the medium delivered by Cray-HPE. For these cases, copy or download the tarball to the working
-   >   directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [Download CSM tarball](#2-1-download-csm-tarball) step.
+   >   directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [Download CSM tarball](#21-download-csm-tarball) step.
 
    ```bash
    # e.g. an alpha : CSM_RELEASE=1.3.0-alpha.99
    # e.g. an RC    : CSM_RELEASE=1.3.0-rc.1
    # e.g. a stable : CSM_RELEASE=1.3.0  
    CSM_RELEASE=1.3.0-alpha.9
+   ```
+
+   ```curl
    curl -C - -O "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
    ```
 
@@ -361,7 +364,7 @@ These variables will need to be set for many procedures within the CSM installat
 
       > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
 
-      ```bash
+      ```curl
       curl -C - -o /var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
       ```
 
@@ -593,4 +596,4 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
 After completing this procedure, proceed to configure the management network switches.
 
-See [Configure Management Network Switches](README.md#4-configure-management-network-switches).
+See [Configure Management Network Switches](README.md#5-configure-management-network-switches).

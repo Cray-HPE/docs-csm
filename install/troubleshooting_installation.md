@@ -13,11 +13,9 @@ for additional information on system hardware, troubleshooting, and administrati
 1. [Ceph CSI Troubleshooting](#ceph-csi-troubleshooting)
 1. [Postgres Troubleshooting](#postgres-troubleshooting)
 
-## Details
+## Reset `root` password on a LiveCD USB
 
-## Reset root Password on a LiveCD USB
-
-If the root password on the LiveCD needs to be changed, then this procedure does the reset.
+If the `root` password on the LiveCD needs to be changed, then this procedure does the reset.
 
 See [Reset root Password on a LiveCD USB](livecd/Reset_root_Password_on_a_LiveCD_USB.md)
 

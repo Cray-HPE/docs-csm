@@ -21,15 +21,15 @@ the number of storage and worker nodes.
 ## Topics
 
 1. [Prepare for management node deployment](#1-prepare-for-management-node-deployment)
-    1. [Tokens and IPMI password](#1-1-tokens-and-ipmi-password)
-    2. [BIOS baseline](#1-2-bios-baseline)
-2. [Deploy management nodes](#2-deploy-management-nodes)
-    1. [Deploy storage NCNs](#2-1-deploy-storage-ncns)
-    2. [Deploy Kubernetes NCNs](#2-2-deploy-kubernetes-ncns)
-    3. [Check LVM on Kubernetes NCNs](#2-3-check-lvm-on-kubernetes-ncns)
-3. [Cleanup](#3-cleanup)
-4. [Validate deployment](#4-validate-deployment)
-5. [Next topic](#next-topic)
+    1. [Tokens and IPMI password](#11-tokens-and-ipmi-password)
+    1. [BIOS baseline](#12-bios-baseline)
+1. [Deploy management nodes](#2-deploy-management-nodes)
+    1. [Deploy storage NCNs](#21-deploy-storage-ncns)
+    1. [Deploy Kubernetes NCNs](#22-deploy-kubernetes-ncns)
+    1. [Check LVM on Kubernetes NCNs](#23-check-lvm-on-kubernetes-ncns)
+1. [Cleanup](#3-cleanup)
+1. [Validate deployment](#4-validate-deployment)
+1. [Next topic](#next-topic)
 
 ## 1. Prepare for management node deployment
 

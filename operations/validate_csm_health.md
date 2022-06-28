@@ -781,7 +781,7 @@ The following procedures run on separate nodes of the system.
 1. [Validate the basic UAS installation](#61-validate-the-basic-uas-installation)
 2. [Validate UAI creation](#62-validate-uai-creation)
 3. [Test UAI gateway health](#63-test-uai-gateway-health)
-4. [UAS/UAI troubleshooting](#64-uas-uai-validate-debug)
+4. [UAS/UAI troubleshooting](#64-uasuai-troubleshooting)
    1. [Authorization issues](#641-authorization-issues)
    2. [UAS cannot access Keycloak](#642-uas-cannot-access-keycloak)
    3. [UAI images not in registry](#643-uai-images-not-in-registry)

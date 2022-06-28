@@ -1,8 +1,8 @@
 # Prepare Compute Nodes
 
-### Topics:
+## Topics
 
-1. [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](#configure-hpe-apollo-6500-xl645d-gen10-plus-compute-nodes)
+1. [Configure HPE Apollo 6500 XL645d Gen10 Plus compute nodes](#configure-hpe-apollo-6500-xl645d-gen10-plus-compute-nodes)
    1. [Gather information](#1-gather-information)
    1. [Configure the iLO to use HMN VLAN](#2-configure-ilo)
    1. [Configure the switch port for the iLO to use the HMN VLAN](#3-configure-switch-port)
@@ -77,10 +77,10 @@ Expected output may look like:
 ```
 
 The second entry is the indication that the NIC is receiving incorrect IP
-addresses. The 10.254.x.y address is for the HMN and should not be associated
+addresses. The `10.254.x.y` address is for the HMN and should not be associated
 with the node itself (`x3000c0s30b1n0`).
 
-Make a note of the ID, MACAddress, and IPAddress of the entry that has the
+Make a note of the `ID`, `MACAddress`, and `IPAddress` of the entry that has the
 10.254 address listed.
 
  ```bash
@@ -97,10 +97,10 @@ will enable skipping of several steps later on.
 
 1. Configure the iLO to use HMN VLAN.
 
-1. Connect to BMC WebUI and log in with standard root credentials.
+1. Connect to the BMC web user interface and log in with standard `root` credentials.
 
-    1. From the administrators own machine create an SSH tunnel (-L creates
-       the tunnel, and -N prevents a shell and stubs the connection):
+    1. From the administrator's own machine, create an SSH tunnel (`-L` creates
+       the tunnel, and `-N` prevents a shell and stubs the connection):
 
        ```bash
        BMC=x3000c0s30b1
@@ -120,9 +120,9 @@ will enable skipping of several steps later on.
     ```bash
     ILOMAC="<MAC Address>"
     ```
-    
+
     For example:
-    
+
     ```bash
     ILOMAC="94:40:c9:38:08:c7"
     ```
@@ -148,27 +148,27 @@ will enable skipping of several steps later on.
 
 1. Find the port and the switch the iLO is plugged into using the SHCD.
 
-1. ssh to the switch and log in with standard admin credentials. Refer to
-   `/etc/hosts` for exact hostname.
+1. SSH to the switch and log in with standard `admin` user credentials. Refer to
+   `/etc/hosts` for the exact hostname.
 
-1. Verify the MAC on the port.
+1. Verify the MAC address on the port.
 
    Example using port number 46.
 
     ```console
     show mac-address-table | include 1/1/46
     ```
-   
+
     Example output:
 
     ```text
     94:40:c9:38:08:c7    4        dynamic                   1/1/46
     ```
 
-   Make sure the MAC address shown for that port matches the ILOMAC address
-   noted in step 2.3 from the **Information** section of the WebUI.
+   Make sure the MAC address shown for that port matches the `ILOMAC` address
+   noted previously from the **Information** section of the web user interface.
 
-   > **`NOTE`** If the MAC is not correct, double check the server cabling and
+   > **`NOTE`** If the MAC address is not correct, double check the server cabling and
    SHCD for the correct port then start this section over. **Do not** move on
    until the ILOMAC address has been found on the switch at the expected
    port.
@@ -183,26 +183,26 @@ will enable skipping of several steps later on.
     vlan trunk allowed 4
     write mem
     ```
-   
+
     The above snippet should output the following:
-   
+
     ```text
     Copying configuration: [Success]
     ```
 
     Type exit twice to leave the interface configuration, and the main configuration menu:
 
-    ```bash
+    ```console
     exit
     exit
-    ```    
+    ```
 
 1. Verify the settings.
 
-    ```bash
+    ```console
     show running-config interface 1/1/46
     ```
-   
+
     Expect output:
 
     ```text
@@ -219,7 +219,7 @@ will enable skipping of several steps later on.
     ```
 
     After a few minutes the switch will be configured and access to the
-    WebUI will be regained.
+    web user interface will be regained.
 
 #### 4. Cleanup KEA
 
@@ -287,5 +287,5 @@ See [Update the Gigabyte Node BIOS Time](../operations/node_management/Update_th
 After completing the preparation for compute nodes, the CSM product stream
 has been fully installed and configured. Check the next topic.
 
-See [Next Topic](README.md#next-topic) for more information on other product
+See [Next Topic](README.md#10-next-topic) for more information on other product
 streams to be installed and configured after CSM.

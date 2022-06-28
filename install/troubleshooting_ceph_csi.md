@@ -3,23 +3,22 @@
 If there has been a failure to initialize all Ceph CSI components on `ncn-s001`, then the storage node
 `cloud-init` may need to be rerun.
 
-### Topics:
+## Topics
 
 1. [Verify Ceph CSI](#1-verify-ceph-csi)
-1. [Rerun Storage Node cloud-init](#2-rerun-storage-node-cloud-init)
-
-## Details
+1. [Rerun Storage Node `cloud-init`](#2-rerun-storage-node-cloud-init)
 
 ### 1. Verify Ceph CSI
 
-Verify that the ceph-csi requirements are in place.
+Verify that the `ceph-csi` requirements are in place.
 
    1. (`ncn-s001#`) Log in to `ncn-s001` and run the following command.
 
       ```bash
       ceph -s
       ```
-      If it returns a connection error, then assume Ceph is not installed. See [Rerun Storage Node `cloud-init`](#2-rerun-storage-node-cloud-init).
+
+      If it returns a connection error, then assume Ceph is not installed. See [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init).
 
    1. (`ncn-s001#`) Verify all post-Ceph-install tasks have run.
 
@@ -32,9 +31,9 @@ Verify that the ceph-csi requirements are in place.
 
       Check your results against this example.
 
-      If any components are missing, see [Rerun Storage Node `cloud-init`](#2-rerun-storage-node-cloud-init).
+      If any components are missing, see [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init).
 
-   1. (`ncn#`) Check to see if ceph-csi prerequisites have been created in Kubernetes.
+   1. (`ncn#`) Check to see if `ceph-csi` prerequisites have been created in Kubernetes.
 
       These commands can be run from any master node, any worker node, or `ncn-s001`.
 
@@ -66,9 +65,10 @@ Verify that the ceph-csi requirements are in place.
        ```bash
        ls /etc/cray/ceph
        ```
+
        If any files are there they will represent completed stages.
 
-   1. (`ncn-s001#`) If you have a running cluster, edit `storage-ceph-cloudinit.sh` on `ncn-s001`:
+   1. (`ncn-s001#`) If there is a running cluster, then edit `storage-ceph-cloudinit.sh` on `ncn-s001`:
 
        ```bash
        vi /srv/cray/scripts/common/storage-ceph-cloudinit.sh
@@ -98,6 +98,6 @@ Verify that the ceph-csi requirements are in place.
        ceph-csi configuration has been already been completed
        ```
 
-       * If your output is like above, then that means that all the steps ran.
-           - You can also locate the files in `/etc/cray/ceph` that are created as each step completes.
-       * If the script failed, then examine the output for indications of what may be causing the problem.
+       - If the output is like above, then that means that all the steps ran.
+         - Files in `/etc/cray/ceph` are created as each step completes and can be checked to confirm that the steps were run.
+       - If the script failed, then examine the output for indications of what may be causing the problem.

@@ -17,7 +17,7 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 
   - For systems with only three worker nodes (typically Testing and  Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be
     lowered on several services in order for this upgrade to succeed. This step is
-    executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#prerequisites-check) of the upgrade.
+    executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#stage-04---prerequisites-check) of the upgrade.
     See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more information.
 
   - Independently, for three-worker systems the `customizations.yaml` file is edited automatically during the upgrade, prior to deploying new CSM services. These
@@ -44,7 +44,7 @@ undisrupted access to UANs during the upgrade.
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
 - [Stage 4 - Ceph Upgrade](Stage_4.md)
 - [Stage 5 - Perform NCN Personalization](Stage_5.md)
-- [Return to Main Page and Proceed to *Validate CSM Health*](../README.md#6-validate-csm-health)
+- [Validate CSM health](../README.md#3-validate-csm-health)
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 

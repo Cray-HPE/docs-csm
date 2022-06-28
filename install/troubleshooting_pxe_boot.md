@@ -2,16 +2,15 @@
 
 This page is designed to cover various issues that arise when trying to PXE boot nodes in an HPE Cray EX system.
 
-- [PXE Boot Troubleshooting](#pxe-boot-troubleshooting)
-  - [Configuration required for PXE booting](#configuration-required-for-pxe-booting)
-  - [Switch Configuration](#switch-configuration)
-    - [Aruba Configuration](#aruba-configuration)
-    - [Mellanox Configuration](#mellanox-configuration)
-  - [Next steps](#next-steps)
-    - [Node iPXE Retries and NIC Order](#node-ipxe-retries-and-nic-order)
-    - [Restart BSS](#restart-bss)
-    - [Restart KEA](#restart-kea)
-    - [Missing BSS Data](#missing-bss-data)
+- [Configuration required for PXE booting](#configuration-required-for-pxe-booting)
+- [Switch configuration](#switch-configuration)
+  - [Aruba configuration](#aruba-configuration)
+  - [Mellanox configuration](#mellanox-configuration)
+- [Next steps](#next-steps)
+  - [Node iPXE retries and NIC order](#node-ipxe-retries-and-nic-order)
+  - [Restart BSS](#restart-bss)
+  - [Restart KEA](#restart-kea)
+  - [Missing BSS data](#missing-bss-data)
 
 In order for PXE booting to work successfully, the management network switches need to be configured correctly.
 
@@ -258,19 +257,31 @@ EFITIME is 2021-02-26 21:55:04
 HTTP 0x6d35da88 status 404 Not Found
 ```
 
-1. Rollout a restart of the BSS deployment from any other NCN (likely `ncn-m002` if you are executing the `ncn-m001` reboot):
+1. (`ncn-mw#`) Rollout a restart of the BSS deployment from any other master or worker NCN:
 
-    (`ncn-m002#`)
     ```bash
     kubectl -n services rollout restart deployment cray-bss
+    ```
+
+    Example output:
+
+    ```text
+    ```
+
+    Example output:
+
+    ```text
+    ```
+
+    Example output:
+
+    ```text
     deployment.apps/cray-bss restarted
     ```
 
-1. Wait for this command to return (it will block showing status as the pods are refreshed):
+1. (`ncn-m002#`) Wait for this command to return (it will block showing status as the pods are refreshed):
 
-    (`ncn-m002#`)
-    ```bash
-    # kubectl -n services rollout status deployment cray-bss
+    ```text
     Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
     Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
     Waiting for deployment "cray-bss" rollout to finish: 1 out of 3 new replicas have been updated...
@@ -288,17 +299,30 @@ HTTP 0x6d35da88 status 404 Not Found
 
 In some cases, rebooting the KEA pod has resolved PXE issues.
 
-1. Get the KEA pod.
+1. (`ncn-m002#`) Get the KEA pod.
 
-    (`ncn-m002#`)
     ```bash
     kubectl get pods -n services | grep kea
+    ```
+
+    Example output:
+
+    ```text
+    ```
+
+    Example output:
+
+    ```text
+    ```
+
+    Example output:
+
+    ```text
     cray-dhcp-kea-6bd8cfc9c5-m6bgw                                 3/3     Running     0          20h
     ```
 
-1. Delete the KEA Pod.
+1. (`ncn-m002#`) Delete the KEA Pod.
 
-    (`ncn-m002#`)
     ```bash
     kubectl delete pods -n services cray-dhcp-kea-6bd8cfc9c5-m6bgw
     ```
@@ -307,7 +331,7 @@ In some cases, rebooting the KEA pod has resolved PXE issues.
 
 If the PXE boot is giving 404 errors, this could be because the necessary information is not in BSS. The
 information is uploaded into BSS with the `csi handoff bss-metadata` and `csi handoff bss-update-cloud-init`
-commands in the [Deploy Final NCN](deploy_final_non-compute_node.md#csi-handoff-bss-metadata) procedure. If these commands
+commands in the [Deploy Final NCN Handoff Data](deploy_final_non-compute_node.md#31-handoff-data) procedure. If these commands
 failed or were skipped accidentally, this will cause the `ncn-m001` PXE boot to fail.
 
 In that case, use the following recovery procedure.
@@ -322,9 +346,12 @@ In that case, use the following recovery procedure.
 
      1. Select the USB device for the boot.
 
-     1. Once booted, log in and mount the data partition. See [](./pre-installation.md#prepare-the-data-partition)
+     1. Once booted, log in and mount the data partition. See:
 
-   * This assumes the user has made it past the [Set Up The Site Link step in the First Login](pre-installation.md#first-login) procedure.
+        - [First login](pre-installation.md#13-first-login)
+        - [Prepare the data partition](pre-installation.md#14-prepare-the-data-partition)
+
+   - This assumes the user has made it past the [first login](pre-installation.md#13-first-login) procedure.
 
 1. Set variables for the system name, the CAN IP address for `ncn-m002`. the Kubernetes version, and the Ceph version.
 
@@ -340,51 +367,45 @@ In that case, use the following recovery procedure.
     export CEPH_VERSION=x.y.z
     ```
 
-1. **If using a remote ISO PIT**, run the following commands to finish configuring the network and copy files.
+1. (`pit#`) **If using a remote ISO PIT**, then run the following commands to finish configuring the network and copy files.
 
     **Skip these steps if using a USB PIT**.
 
     1. Run the following command to copy files from `ncn-m002` to the PIT node.
 
-        (`pit#`)
         ```bash
         scp -p ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
         ```
 
-    2. Apply the network changes.
+    1. Apply the network changes.
 
-        (`pit#`)
         ```bash
         wicked ifreload all
         systemctl restart wickedd-nanny && sleep 5
         ```
 
-    3. Copy `data.json` from `ncn-m002` to the PIT node.
+    1. Copy `data.json` from `ncn-m002` to the PIT node.
 
-        (`pit#`)
         ```bash
         mkdir -p /var/www/ephemeral/configs
         scp ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/basecamp/data.json /var/www/ephemeral/configs
         ```
 
-1. Copy Kubernetes configuration file from `ncn-m002`.
+1. (`pit#`) Copy Kubernetes configuration file from `ncn-m002`.
 
-    (`pit#`)
     ```bash
     mkdir -pv ~/.kube
     scp ${CAN_IP_NCN_M002}:/etc/kubernetes/admin.conf ~/.kube/config
     ```
 
-1. Set DNS to use unbound.
+1. (`pit#`) Set DNS to use Unbound.
 
-    (`pit#`)
     ```bash
     echo "nameserver 10.92.100.225" > /etc/resolv.conf
     ```
 
-1. Export the API token.
+1. (`pit#`) Export the API token.
 
-    (`pit#`)
     ```bash
     export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
         -d client_id=admin-client \
@@ -392,11 +413,10 @@ In that case, use the following recovery procedure.
         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. Re-run the [BSS handoff commands from the Deploy Final NCN procedure](deploy_final_non-compute_node.md#ncn-boot-artifacts-hand-off).
+1. (`pit#`) Re-run the [BSS handoff commands from the Deploy Final NCN procedure](deploy_final_non-compute_node.md#31-handoff-data).
 
-    **WARNING: These commands should never be run from a node other than the PIT node or `ncn-m001`**
+    > ***WARNING*** These commands should never be run from a node other than the PIT node, or `ncn-m001` during handoff**
 
-    (`pit#`)
     ```bash
     csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
     csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global

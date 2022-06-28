@@ -59,7 +59,7 @@ Management Unit (MMU), and Scalable Storage Unit (SSU))
     * ClusterStor controller data interfaces of all ClusterStor components (SMU, MMU, and SSU)
 
 During initial installation, several of those networks are created with default IP address ranges. See
-[Default IP Address Ranges](#default-ip-address-ranges)
+[Default IP Address Ranges](#2-default-ip-address-ranges)
 
 The network management system (NMS) data model and REST API enable customer sites to construct their own
 "networks" of nodes within the high-speed fabric, where a "network" is a collection of nodes that share a VLAN

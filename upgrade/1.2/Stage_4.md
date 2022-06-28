@@ -263,7 +263,7 @@ Verify that the upgrade has completed using the following procedure.
    1. Troubleshoot the failed upgrade.
 
       The upgrade is not complete. See
-      [`Ceph_Orchestrator_Usage.md`](../operation/../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
+      [`Ceph_Orchestrator_Usage.md`](../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
 
 1. Verify that no processes are running version `15.2.8`.
 
@@ -290,7 +290,7 @@ Verify that the upgrade has completed using the following procedure.
    1. Troubleshoot the failed upgrade.
 
       The upgrade is not complete. See
-      [`Ceph_Orchestrator_Usage.md`](../operation/../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
+      [`Ceph_Orchestrator_Usage.md`](../../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
 
 **DO NOT** proceed past this point if the upgrade has not completed and been verified. Contact support for in-depth troubleshooting.
 

@@ -165,4 +165,4 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
     See [Create a storage pool](../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
     and [Create and map an `rbd` device](../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
 
-After completing the above steps, proceed to [Upgrade Management Nodes and CSM Services](README.md#upgrade_management_nodes_csm_services).
+After completing the above steps, proceed to [Upgrade Management Nodes and CSM Services](README.md#2-upgrade-management-nodes-and-csm-services).

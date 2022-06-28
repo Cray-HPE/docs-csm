@@ -1,39 +1,34 @@
 # Boot LiveCD RemoteISO
 
-This page will walkthrough booting the LiveCD `.iso` file directly onto a BMC.
+This page will guide a user on booting the LiveCD `.iso` file directly onto a BMC.
 
-### Topics
+## Topics
 
-- [Boot LiveCD Virtual ISO](#boot-livecd-virtual-iso)
-    - [Topics](#topics)
-  - [Details](#details)
-    - [Prerequisites](#prerequisites)
-    - [BMCs' Virtual Mounts](#bmcs-virtual-mounts)
-      - [HPE iLO BMCs](#hpe-ilo-bmcs)
-      - [Gigabyte BMCs](#gigabyte-bmcs)
-    - [Configuring](#configuring)
-      - [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
-      - [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
+- [Prerequisites](#prerequisites)
+- [BMCs' virtual mounts](#bmcs-virtual-mounts)
+  - [HPE iLO BMCs](#hpe-ilo-bmcs)
+  - [Gigabyte BMCs](#gigabyte-bmcs)
+- [Configuring](#configuring)
+  - [Backing up the overlay COW FS](#backing-up-the-overlay-cow-fs)
+  - [Restoring from an overlay COW FS backup](#restoring-from-an-overlay-cow-fs-backup)
 
-## Details
-
-### Prerequisites
+## Prerequisites
 
 A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:
 
 - The Cray Pre-Install Toolkit ISO included in a CSM release tar file. It will have a filename similar to
   `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
 
-### BMCs' Virtual Mounts
+## BMCs' virtual mounts
 
-Most BMCs offer a **Web Interface** for controlling the node and for providing access to its BIOS and firmware.
+Most BMCs offer a web interface for controlling the node and providing access to its BIOS and firmware.
 
-Refer to the following pages based on your node vendor for help mounting an ISO image:
+Refer to the following pages based on the node vendor for help mounting an ISO image:
 
-* [HPE iLO BMCs](#hpe-ilo-bmcs)
-* [Gigabyte](#gigabyte-bmcs)
+- [HPE iLO BMCs](#hpe-ilo-bmcs)
+- [Gigabyte](#gigabyte-bmcs)
 
-#### HPE iLO BMCs
+### HPE iLO BMCs
 
 HPE iLO BMCs allow for booting directly from an HTTP-accessible ISO location.
 
@@ -47,9 +42,9 @@ HPE iLO BMCs allow for booting directly from an HTTP-accessible ISO location.
 
 1. Open the virtual terminal by choosing the `HTML5 Console` option when clicking the terminal image in the bottom left corner.
 
-   > **`NOTE`** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it actually begins downloading the ISO's squashfs root file system and can take a few minutes
+   > **`NOTE`** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it begins downloading the ISO's SquashFS root file system, which can take a few minutes.
 
-#### Gigabyte BMCs
+### Gigabyte BMCs
 
 Gigabyte BMCs allow for booting over HTTP.
 
@@ -75,40 +70,38 @@ Gigabyte BMCs allow for booting over HTTP.
 
 1. Reboot the node and select the `Virtual CDROM` option from the manual boot options.
 
-   ![Screen Shot of Gigabyte BMC Boot](../../img/bmc-virtual-media-boot-gigabyte.png)
+   ![Screenshot of Gigabyte BMC boot](../../img/bmc-virtual-media-boot-gigabyte.png)
 
-### Configuring
+## Configuring
 
-- [Boot LiveCD Virtual ISO](#boot-livecd-virtual-iso)
-    - [Topics](#topics)
-  - [Details](#details)
-    - [Prerequisites](#prerequisites)
-    - [BMCs' Virtual Mounts](#bmcs-virtual-mounts)
-      - [HPE iLO BMCs](#hpe-ilo-bmcs)
-      - [Gigabyte BMCs](#gigabyte-bmcs)
-    - [Configuring](#configuring)
-      - [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs)
-      - [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup)
+- [Backing up the overlay COW FS](#backing-up-the-overlay-cow-fs)
+- [Restoring from an overlay COW FS backup](#restoring-from-an-overlay-cow-fs-backup)
 
 The ISO boots with no password, requiring one be set on first login.
 Continue the bootstrap process by setting the root password
-following the procedure [First Login](../pre-installation.md#first-login).
+following the procedure [First Login](../pre-installation.md#13-first-login).
 
-> **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting the machine will result in all changes being lost. Before restarting, consider following [Backing up the Overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying [Restoring from an Overlay COW FS Backup](#restoring-from-an-overlay-cow-fs-backup) section.
+> **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting
+> the machine will result in all changes being lost. Before restarting, consider following
+> [Backing up the overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying
+> [Restoring from an overlay COW FS backup](#restoring-from-an-overlay-cow-fs-backup) section.
 
-#### Backing up the Overlay COW FS
+### Backing up the overlay COW FS
 
-Backup the writable overlay upper-dir so that changes are not lost after a reboot or when updating the ISO.
+Backup the writable overlay's `upperdir` so that changes are not lost after a reboot or when updating the ISO.
 
-This requires a location to `scp` a tar file as a backup.
+(`pit#`) This requires a location to `scp` a tar file as a backup.
 
 ```bash
 tar czf /run/overlay.tar.gz -C /run/overlayfs/rw .
 scp /run/overlay.tar.gz <somelocation>
 ```
-> **`NOTE`** To reduce the size of the backup, delete any squashfs files first, or exclude them in the tar command using `--exclude='*.squashfs'`. Those will need to be repopulated after you restoring the backup.
 
-#### Restoring from an Overlay COW FS Backup
+> **`NOTE`** To reduce the size of the backup, delete any SquashFS files first, or exclude them
+> in the `tar` command using `--exclude='*.squashfs'`. Those will need to be repopulated after
+> restoring the backup.
+
+### Restoring from an overlay COW FS backup
 
 Restore a backed up tar file from the previous command with the following:
 
@@ -118,5 +111,4 @@ tar xf /run/overlay.tar.gz -C /run/overlayfs/rw
 mount -o remount /
 ```
 
-If the `squashfs` files were excluded from the backup, repopulate them following the configuration section.
-
+If the `SquashFS` files were excluded from the backup, repopulate them following the configuration section.
