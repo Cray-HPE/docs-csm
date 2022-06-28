@@ -62,6 +62,14 @@ are being created.
 
 Once the roll out is complete, or the new pod is running, then the HTTP 503 message should clear.
 
+To ensure there are no further pods in this state you may run this script:
+
+```bash
+/usr/share/doc/csm/scripts/operations/known-issues.sh
+```
+
+If any pods are still affected by this specific issue the script will provide a list of `kubectl` delete commands that will need to be run.
+
 ## `UAEX`
 
 ### Symptom (`UAEX`)
