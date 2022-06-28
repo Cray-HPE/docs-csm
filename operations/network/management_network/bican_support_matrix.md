@@ -4,7 +4,7 @@
 
 ### Overview
 
-Customer Access Networks provide the interface between Shasta system networking and the customer site network. Customer Access Networks (CANs) are routed networks with broadcast domain separation. Customer Access
+Customer Access Networks (CANs) provide the interface between HPE Cray EX system networking and the customer site network. CANs are routed networks with broadcast domain separation.
 CANs provide higher availability and more flexibility in accessing cloud services compared to traditional "bastion hosts", and are more in line with the cloud-native architecture of CSM.
 
 CANs provide flexible networking at the edge between the site and HPE Cray EX system to do the following:
