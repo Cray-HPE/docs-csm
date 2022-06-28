@@ -302,7 +302,6 @@ Also, it generates the report of policy violation in respective workloads. The f
 
 2. Apply the mutation policy and restart the following workload.
 
-
     ```text
     apiVersion: v1
     kind: Pod
