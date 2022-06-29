@@ -1,30 +1,41 @@
 # Load Saved Switch Configuration
 
-This procedure shows how to switch between already saved switch configurations.
+> This procedure is intended for internal use only.
+
+This procedure switches between already saved switch configurations. It is used to quickly switch between configurations that are already loaded on the switches.
 
 To save switch configurations, refer to the [Configuration Management](config_management.md) procedure.
 
-This procedure is intended for internal use only. It is used to quickly switch between configurations that are already loaded on the switches.
+When switching between configurations, the procedure must be followed on all management switches.
 
-This procedure needs to be done on all management switches.
-
-- Spine switches will have three total configuration files/checkpoints.
+- Spine switches have three total configuration files/checkpoints.
   - 1.2 fresh install
   - 1.2 upgrade
   - 1.0
 
-- Leaf-BMC switches will have have two configuration files/checkpoints.
+- Leaf-BMC switches have have two configuration files/checkpoints.
   - 1.2
   - 1.0
 
+The procedure depends on the switch manufacturer:
+
+- [Aruba](#aruba)
+- [Dell](#dell)
+- [Mellanox](#mellanox)
+
 ## Aruba
 
-1. (`sw#`) Ensure that the proper checkpoint files exist. `CSM1_0_CANU_1_2_4` and `CSM1_2_UPGRADE_CANU_1_3_2` are used in this example.
+1. (`sw#`) List the checkpoint files.
 
-    Example:
+    Ensure that the proper checkpoint files exist.
 
     ```text
     show checkpoint | include CSM
+    ```
+
+    Example output:
+
+    ```text
     CSM1_2_FRESH_INSTALL_CANU_1_3_2                     latest      User    2022-04-01T20:11:57Z  GL.10.09.0010
     CSM1_2_UPGRADE_CANU_1_3_2                           checkpoint  User    2022-04-01T18:57:06Z  GL.10.09.0010
     CSM1_0_CANU_1_2_4                                   checkpoint  User    2022-03-15T21:37:11Z  GL.10.09.0010
@@ -36,7 +47,9 @@ This procedure needs to be done on all management switches.
     checkpoint rollback CSM1_2_UPGRADE_CANU_1_3_2
     ```
 
-1. (`sw#`) In some rare cases ACLs will not work as expected, to prevent this the following command should be entered after switching checkpoints.
+1. (`sw#`) Reset ACLs.
+
+    In some rare cases, ACLs will not work as expected. In order to prevent this, run the following command after switching checkpoints.
 
     ```text
     access-list all reset
@@ -44,7 +57,9 @@ This procedure needs to be done on all management switches.
 
 ## Dell
 
-1. (`sw#`) Ensure that the proper configuration files exist. `CSM1_0` and `CSM1_2` are used in this example.
+1. (`sw#`) List the configuration files.
+
+    Ensure that the proper configuration files exist.
 
     ```text
     dir config
@@ -73,6 +88,11 @@ This procedure needs to be done on all management switches.
 
     ```text
     reload
+    ```
+
+    Example output:
+
+    ```text
     System configuration has been modified. Save? [yes/no]:no
     ```
 
@@ -80,7 +100,7 @@ This procedure needs to be done on all management switches.
 
 1. (`sw#`) View the configuration files.
 
-    Ensure that the proper backup configuration exists. `CSM1_0` and `CSM1_2` are used in this example.
+    Ensure that the proper backup configurations exist.
 
     ```text
     show configuration files
@@ -89,8 +109,6 @@ This procedure needs to be done on all management switches.
     Example output:
 
     ```text
-    show configuration files
-
     csm1.0.canu1.1.21 (active)
     csm1.0.canu1.1.21.bak
     csm1.2.fresh_install_canu1.1.21
@@ -104,7 +122,7 @@ This procedure needs to be done on all management switches.
     Unsaved changes     : yes
     ```
 
-1. (`sw#`) Switch to desired configuration.
+1. (`sw#`) Switch to the desired configuration.
 
     ```text
     configuration switch-to csm1.2.upgrade_canu1.1.21
