@@ -12,18 +12,18 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
     * **My HPE Software Center:**
 
-    1. Find the signing key.
+        Find the signing key.
 
-       ```bash
-       ncn-m001# curl LINK_TO_KEY_IN_My_HPE_Software_Center
-       ```
+        ```bash
+        ncn-mw# curl LINK_TO_KEY_IN_My_HPE_Software_Center
+        ```
 
     * **Kubernetes Secret**:
 
-    1. Find the key and write it to a file.
+        Find the key and write it to a file.
 
         ```bash
-        ncn-m001# kubectl -n services get secrets hpe-signing-key -o jsonpath='{.data.gpg-pubkey}' | base64 -d | tee hpe-signing-key.asc
+        ncn-mw# kubectl -n services get secrets hpe-signing-key -o jsonpath='{.data.gpg-pubkey}' | base64 -d | tee hpe-signing-key.asc
         ```
 
         Example output:
@@ -71,7 +71,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
    Replace the *PATH-TO-KEY* value in the following command with the path to the signing key.
 
    ```bash
-   ncn-m001# rpm -qpi PATH-TO-KEY/hpe-signing-key.asc
+   ncn-mw# rpm -qpi PATH-TO-KEY/hpe-signing-key.asc
    ```
 
    Example output:
@@ -131,16 +131,16 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
    -----END PGP PUBLIC KEY BLOCK-----
    ```
 
-1. Import the signing key after validating the issuer.
+1. Import the signing key.
 
     ```bash
-    ncn-m001# rpm --import hpe-singing-key.asc
+    ncn-mw# rpm --import hpe-singing-key.asc
     ```
 
 1. Search for the signed packages using the version number from the previous step.
 
     ```bash
-    ncn-m001# rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '9da39f44'
+    ncn-mw# rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '9da39f44'
     ```
 
 1. Validate the signature on an RPM.
@@ -148,7 +148,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     The RPM in this example is `csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm`.
 
     ```bash
-    ncn-m001# rpm -Kvv csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm
+    ncn-mw# rpm -Kvv csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm
     ```
 
     Example output:
