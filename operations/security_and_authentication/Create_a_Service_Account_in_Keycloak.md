@@ -2,7 +2,9 @@
 
 Set up a Keycloak service account using the Keycloak administration console or the Keycloak REST API. A service account can be used to get a long-lived token that is used by automation tools.
 
-In Keycloak, service accounts are associated with a client. See [https://www.keycloak.org/docs/latest/server_admin/\#\_service_accounts](https://www.keycloak.org/docs/latest/server_admin/#_service_accounts) for more information from the Keycloak documentation.
+In Keycloak, service accounts are associated with a client. See
+[https://www.keycloak.org/docs/latest/server_admin/\#\_service_accounts](https://www.keycloak.org/docs/latest/server_admin/#_service_accounts)
+for more information from the Keycloak documentation.
 
 ## Procedure
 
@@ -22,7 +24,7 @@ Follow the steps in only one of the following sections depending on if it is pre
 
    1. Enter a Client ID for the new client.
 
-      The Client Protocol must be openid-connect and the Root URL can be left blank.
+      The Client Protocol must be `openid-connect` and the Root URL can be left blank.
 
    2. Click the **Save** button.
 
@@ -56,7 +58,7 @@ Follow the steps in only one of the following sections depending on if it is pre
 
       In the image above, the example name is "admin-role."
 
-   4. Change the Mapper Type to Hardcoded Role.
+   4. Change the Mapper Type to `Hardcoded` Role.
 
    5. Set the Role to shasta.admin.
 
@@ -64,7 +66,7 @@ Follow the steps in only one of the following sections depending on if it is pre
 
 ### Use the Keycloak REST API
 
-1. Create the get_master_token function to get a token as a Keycloak master administrator.
+1. Create the `get_master_token` function to get a token as a Keycloak master administrator.
 
 ```screen
 MASTER_USERNAME=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.user}' | base64 -d)
