@@ -1,7 +1,6 @@
-# Configure Prometheus Email Alert Notifications
+# Configure Prometheus Alerta Alert Notifications
 
-Configure an email alert notification for all Prometheus Postgres replication alerts: `PostgresReplicationLagSMA`,
-`PostgresReplicationServices`, `PostgresqlFollowerReplicationLagSMA`, and `PostgresqlFollowerReplicationLagServices`.
+Configure an Alerta alert notification for Prometheus Alertmanager alerts.
 
 ## Procedure
 
@@ -14,7 +13,7 @@ This procedure can be performed on any master or worker NCN.
             -ojsonpath='{.data.alertmanager.yaml}' | base64 --decode > /tmp/alertmanager-default.yaml
     ```
 
-1. Create a secret and an alert configuration that will be used to add email notifications for the alerts.
+1. Create a secret and an alert configuration that will be used to add Alerta notifications for the alerts.
 
     1. (`ncn-mw#`) Create the secret file.
 
@@ -28,7 +27,7 @@ This procedure can be performed on any master or worker NCN.
         metadata:
           labels:
             app: prometheus-operator-alertmanager
-            chart: prometheus-operator-8.15.4
+            chart: prometheus-operator-9.3.1
             heritage: Tiller
             release: cray-sysmgmt-health
           name: alertmanager-cray-sysmgmt-health-promet-alertmanager
@@ -36,10 +35,10 @@ This procedure can be performed on any master or worker NCN.
         type: Opaque
         ```
 
-    1. (`ncn-mw#`) Create the alert configuration file.
+    1. (`ncn-mw#`) Create the Alerta alert configuration file.
 
-        In the following example file, the Gmail SMTP server is used in this example to relay the notification to `receiver-email@yourcompany.com`.
-        Update the fields under `email_configs:` to reflect the desired configuration.
+        In the following example file, the Alerta server is used to send the notification to `http://sma-alerta.sma.svc.cluster.local:8080/webhooks/prometheus`.
+        Update the fields under `webhook_configs:` to reflect the desired configuration.
 
         Create a file named `/tmp/alertmanager-new.yaml` with the following contents:
 
@@ -47,39 +46,21 @@ This procedure can be performed on any master or worker NCN.
         global:
           resolve_timeout: 5m
         route:
-          group_by:
-          - job
-          group_interval: 5m
+          group_by: ['alertname']
           group_wait: 30s
-          receiver: "null"
-          repeat_interval: 12h
-          routes:
-          - match:
-              alertname: Watchdog
-            receiver: "null"
-          - match:
-              alertname: PostgresqlReplicationLagSMA
-            receiver:  email-alert
-          - match:
-              alertname: PostgresqlReplicationLagServices
-            receiver:  email-alert
-          - match:
-              alertname: PostgresqlFollowerReplicationLagSMA
-            receiver:  email-alert
-          - match:
-              alertname: PostgresqlFollowerReplicationLagServices
-            receiver:  email-alert
+          group_interval: 5m
+          repeat_interval: 1h
+          receiver: 'web.hook'
         receivers:
-        - name: "null"
-        - name: email-alert
-          email_configs:
-          - to: receiver-email@yourcompany.com
-            from: sender-email@gmail.com
-            # Your smtp server address
-            smarthost: smtp.gmail.com:587
-            auth_username: sender-email@gmail.com
-            auth_identity: sender-email@gmail.com
-            auth_password: xxxxxxxxxxxxxxxx
+        - name: 'web.hook'
+          webhook_configs:
+          - url: 'http://sma-alerta.sma.svc.cluster.local:8080/webhooks/prometheus'
+        inhibit_rules:
+          - source_match:
+              severity: 'critical'
+            target_match:
+              severity: 'warning'
+            equal: ['alertname', 'dev', 'instance']
         ```
 
 1. (`ncn-mw#`) Replace the alert notification configuration based on the files created in the previous steps.
@@ -105,8 +86,5 @@ This procedure can be performed on any master or worker NCN.
         kubectl logs -f -n sysmgmt-health pod/alertmanager-cray-sysmgmt-health-promet-alertmanager-0 alertmanager
         ```
 
-An email notification will be sent once either of the alerts set in this procedure is `FIRING` in Prometheus.
+An Alerta notification will be sent once either of the alerts set in this procedure is `FIRING` in Prometheus.
 See `https://prometheus.SYSTEM-NAME.SITE-DOMAIN/alerts` for more information.
-
-If an alert is received, then refer to [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md) for more information
-about recovering replication.
