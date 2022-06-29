@@ -72,7 +72,7 @@ Follow the steps in only one of the following sections depending on if it is pre
   MASTER_PASSWORD=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d)
 
   function get_master_token {
-    curl -ks -d client_id=admin-cli -d username=$MASTER_USERNAME -d password=$MASTER_PASSWORD -d grant_type=password https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token | python -c "import sys,json; print json.load(sys.stdin)['access_token']"
+    curl -ks -d client_id=admin-cli -d username=$MASTER_USERNAME -d password=$MASTER_PASSWORD -d grant_type=password https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])"
   }
   ```
 
