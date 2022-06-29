@@ -183,4 +183,3 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     D: closed   db index       /var/lib/rpm/Packages
     D: closed   db environment /var/lib/rpm
     ```
-
