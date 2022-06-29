@@ -4,7 +4,7 @@ The HPE Cray EX system signs RPMs to provide an extra level of security. Use the
 
 The RPMs will vary on compute, application, worker, master, and storage nodes. Check each node type to ensure the RPMs are correctly signed.
 
-### Procedure
+## Procedure
 
 1. Retrieve the signing key required to validate the RPMs.
 
@@ -28,7 +28,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
         Example output:
 
-        ```
+        ```text
         -----BEGIN PGP PUBLIC KEY BLOCK-----
         Version: GnuPG v2.0.22 (GNU/Linux)
         mQENBFZp0YMBCADNNhdrR/K7jk6iFh/D/ExEumPSdriJwDUlHY70bkEUChLyRACI
@@ -76,7 +76,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
    Example output:
 
-   ```
+   ```text
    Name        : gpg-pubkey
    Version     : 9da39f44
    Release     : 5669d183
@@ -145,7 +145,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
 1. Validate the signature on an RPM.
 
-    The RPM in this example is *csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm*.
+    The RPM in this example is `csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm`.
 
     ```bash
     ncn-m001# rpm -Kvv csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm
@@ -153,7 +153,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
     Example output:
 
-    ```
+    ```text
     D: loading keyring from pubkeys in /var/lib/rpm/pubkeys/*.key
     D: couldn't find any keys in /var/lib/rpm/pubkeys/*.key
     D: loading keyring from rpmdb
