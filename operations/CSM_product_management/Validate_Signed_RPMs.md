@@ -6,21 +6,21 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
 ## Procedure
 
-1. Retrieve the signing key required to validate the RPMs.
+1. (`ncn-mw#`) Retrieve the signing key required to validate the RPMs.
 
     Use either the My HPE Software Center or Kubernetes Secret method to find the signing key.
 
     * **My HPE Software Center:**
 
-    1. Find the signing key.
+        Find the signing key.
 
-       ```bash
-       ncn-m001# curl LINK_TO_KEY_IN_My_HPE_Software_Center
-       ```
+        ```bash
+        curl LINK_TO_KEY_IN_My_HPE_Software_Center
+        ```
 
     * **Kubernetes Secret:**
 
-    1. Find the key and write it to a file.
+        Find the key and write it to a file.
 
         ```bash
         kubectl -n services get secrets hpe-signing-key -o jsonpath='{.data.gpg-pubkey}' | base64 -d | tee hpe-signing-key.asc
@@ -66,7 +66,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
         -----END PGP PUBLIC KEY BLOCK-----
         ```
 
-1. Verify that HPE is the issuer of the signed packages.
+1. (`ncn-mw#`) Verify that HPE is the issuer of the signed packages.
 
    Replace the *PATH-TO-KEY* value in the following command with the path to the signing key.
 
@@ -131,19 +131,19 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
    -----END PGP PUBLIC KEY BLOCK-----
    ```
 
-1. Import the signing key after validating the issuer.
+1. (`ncn-mw#`) Import the signing key.
 
     ```bash
     rpm --import hpe-singing-key.asc
     ```
 
-1. Search for the signed packages using the version number from the previous step.
+1. (`ncn-mw#`) Search for the signed packages using the version number from the previous step.
 
     ```bash
     rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '9da39f44'
     ```
 
-1. Validate the signature on an RPM.
+1. (`ncn-mw#`) Validate the signature on an RPM.
 
     The RPM in this example is `csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm`.
 
