@@ -1,6 +1,6 @@
 # Validate Signed RPMs
 
-The HPE Cray EX system signs RPMs to provide an extra level of security. Use the following procedure to import a key from either CrayPort or a Kubernetes Secret, and then use that key to validate the RPM package signatures on each node type.
+The HPE Cray EX system signs RPMs to provide an extra level of security. Use the following procedure to import a key from either My HPE Software Center or a Kubernetes Secret, and then use that key to validate the RPM package signatures on each node type.
 
 The RPMs will vary on compute, application, worker, master, and storage nodes. Check each node type to ensure the RPMs are correctly signed.
 
@@ -8,13 +8,14 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
 1. Retrieve the signing key required to validate the RPMs.
 
-    Use either the CrayPort or Kubernetes Secret method to find the signing key.
+    Use either the My HPE Software Center or Kubernetes Secret method to find the signing key.
 
-    * **CrayPort**:
+    * **My HPE Software Center:**
 
     1. Find the signing key.
-        ```bash
-       ncn-m001# curl LINK_TO_KEY_IN_CRAYPORT
+
+       ```bash
+       ncn-m001# curl LINK_TO_KEY_IN_My_HPE_Software_Center
        ```
 
     * **Kubernetes Secret**:
