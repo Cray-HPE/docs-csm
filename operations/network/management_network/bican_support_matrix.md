@@ -15,7 +15,7 @@ CANs provide flexible networking at the edge between the site and HPE Cray EX sy
 
 ## Feature access matrix
 
-For CSM 1.2, the notion of the CAN has been expanded to meet customer requests for increased flexibility and policy control.
+In CSM 1.2, the notion of the CAN was expanded to meet customer requests for increased flexibility and policy control.
 
 | System Resource | Traffic to and from System | Management Network or CAN | High Speed Network CHN | Management Network CMN       |
 | --------------- | :------------------------: | :-----------------------: | :--------------------: |:-----------------------: |
@@ -30,7 +30,7 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
 
 ## Network overview
 
-![tds can overview](img/tds_can_overview.png)
+![TDS CAN overview](img/tds_can_overview.png)
 
 ### Internal networks
 
@@ -48,11 +48,11 @@ For CSM 1.2, the notion of the CAN has been expanded to meet customer requests f
 
 ### Option A: CMN + CAN (Management Network only - Layer 2 separation)
 
-![cmn plus can](img/cmn_plus_can.png)
+![CMN plus CAN](img/cmn_plus_can.png)
 
 ### Option B: CMN + CHN (Administration over Management Network, User Access over High Speed Network)
 
-![cmn plus chn](img/cmn_plus_chn.png)
+![CMN plus CHN](img/cmn_plus_chn.png)
 
 Note: During installation, the High Speed Network (HSN) is not configured until relatively late in the process.
 Installation generally requires site access for deployment artifacts, site DNS, and more.

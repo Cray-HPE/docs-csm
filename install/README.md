@@ -13,10 +13,10 @@ After completing an installation, the CSM product's installed state will need to
 with various health checks before operational tasks or other product installs (such as
 Slingshot) can commence.
 
-A major feature of CSM 1.2 is the Bifurcated CAN (BICAN).
+Introduced in CSM 1.2, a major feature of CSM is the Bifurcated CAN (BICAN).
 The BICAN is designed to separate administrative network traffic from user network traffic.
 More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
-Review the BICAN summary before continuing with the CSM 1.2 install.
+Review the BICAN summary before continuing with the CSM install.
 
 Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) page.
 
