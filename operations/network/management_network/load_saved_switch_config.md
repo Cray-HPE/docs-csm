@@ -6,7 +6,7 @@ To save switch configurations, refer to the [Configuration Management](config_ma
 
 This procedure is intended for internal use only. It is used to quickly switch between configurations that are already loaded on the switches.
 
-This procedure needs to be done on all mgmt switches.
+This procedure needs to be done on all management switches.
 
 - Spine switches will have three total configuration files/checkpoints.
   - 1.2 fresh install
@@ -44,7 +44,7 @@ This procedure needs to be done on all mgmt switches.
 
 ## Dell
 
-1. (`sw#`) Ensure that the proper config files exist. `CSM1_0` and `CSM1_2` are used in this example.
+1. (`sw#`) Ensure that the proper configuration files exist. `CSM1_0` and `CSM1_2` are used in this example.
 
     ```text
     dir config
