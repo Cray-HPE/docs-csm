@@ -1,26 +1,26 @@
 # Validate Signed RPMs
 
-The HPE Cray EX system signs RPMs to provide an extra level of security. Use the following procedure to import a key from either CrayPort or a Kubernetes Secret, and then use that key to validate the RPM package signatures on each node type.
+The HPE Cray EX system signs RPMs to provide an extra level of security. Use the following procedure to import a key from either My HPE Software Center or a Kubernetes Secret, and then use that key to validate the RPM package signatures on each node type.
 
 The RPMs will vary on compute, application, worker, master, and storage nodes. Check each node type to ensure the RPMs are correctly signed.
 
-### Procedure
+## Procedure
 
-1. Retrieve the signing key required to validate the RPMs.
+1. (`ncn-mw#`) Retrieve the signing key required to validate the RPMs.
 
-    Use either the CrayPort or Kubernetes Secret method to find the signing key.
+    Use either the My HPE Software Center or Kubernetes Secret method to find the signing key.
 
-    * **CrayPort:**
+    * **My HPE Software Center:**
 
-    1. Find the signing key.
+        Download the signing key.
 
-       ```bash
-       curl LINK_TO_KEY_IN_CRAYPORT
-       ```
+        ```bash
+        curl LINK_TO_KEY_IN_My_HPE_Software_Center
+        ```
 
     * **Kubernetes Secret:**
 
-    1. Find the key and write it to a file.
+        Find the key and write it to a file.
 
         ```bash
         kubectl -n services get secrets hpe-signing-key -o jsonpath='{.data.gpg-pubkey}' | base64 -d | tee hpe-signing-key.asc
@@ -66,7 +66,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
         -----END PGP PUBLIC KEY BLOCK-----
         ```
 
-1. Verify that HPE is the issuer of the signed packages.
+1. (`ncn-mw#`) Verify that HPE is the issuer of the signed packages.
 
    Replace the *PATH-TO-KEY* value in the following command with the path to the signing key.
 
@@ -131,21 +131,21 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
    -----END PGP PUBLIC KEY BLOCK-----
    ```
 
-1. Import the signing key after validating the issuer.
+1. (`ncn-mw#`) Import the signing key.
 
     ```bash
     rpm --import hpe-singing-key.asc
     ```
 
-1. Search for the signed packages using the version number from the previous step.
+1. (`ncn-mw#`) Search for the signed packages using the version number from the previous step.
 
     ```bash
     rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '9da39f44'
     ```
 
-1. Validate the signature on an RPM.
+1. (`ncn-mw#`) Validate the signature on an RPM.
 
-    The RPM in this example is *csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm*.
+    The RPM in this example is `csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm`.
 
     ```bash
     rpm -Kvv csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm
@@ -183,4 +183,3 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     D: closed   db index       /var/lib/rpm/Packages
     D: closed   db environment /var/lib/rpm
     ```
-
