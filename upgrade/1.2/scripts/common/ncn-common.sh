@@ -69,8 +69,7 @@ export TARGET_NCN=$1
 #shellcheck disable=SC2155
 export STABLE_NCN=$(hostname)
 
-#shellcheck disable=SC2155
-#shellcheck disable=SC2046
+# shellcheck disable=SC2155,SC2046
 export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
    -d client_id=admin-client \
    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
@@ -94,8 +93,8 @@ function check_sls_health() {
     echo "Checking SLS health..."
 
     # To make sure that this is not a case where it will get better by itself,
-    # we will retry for up to 5 minutes before quitting.
-    let timeout=SECONDS+300
+    # we will retry for up to 15 minutes before quitting.
+    let timeout=SECONDS+900
     first=Y
     while [[ $SECONDS -le $timeout ]]; do
         if [[ $first == Y ]]; then
