@@ -12,7 +12,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 
     * **My HPE Software Center:**
 
-        Find the signing key.
+        Download the signing key.
 
         ```bash
         curl LINK_TO_KEY_IN_My_HPE_Software_Center
