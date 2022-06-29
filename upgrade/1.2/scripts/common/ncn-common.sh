@@ -65,20 +65,25 @@ do
 done
 
 export TARGET_NCN=$1
+#shellcheck disable=SC2155
 export STABLE_NCN=$(hostname)
 
+#shellcheck disable=SC2155,SC2046
 export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
    -d client_id=admin-client \
    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
+#shellcheck disable=SC2155
 export TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
 
 
+#shellcheck disable=SC2155
 export TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
 
+#shellcheck disable=SC2155
 export TARGET_IP_NMN=$(dig +short $TARGET_NCN.nmn)
 
 # Just do basic API calls to SLS to make sure that it is responding.
@@ -88,8 +93,8 @@ function check_sls_health() {
     echo "Checking SLS health..."
 
     # To make sure that this is not a case where it will get better by itself,
-    # we will retry for up to 5 minutes before quitting.
-    let timeout=SECONDS+300
+    # we will retry for up to 15 minutes before quitting.
+    let timeout=SECONDS+900
     first=Y
     while [[ $SECONDS -le $timeout ]]; do
         if [[ $first == Y ]]; then
