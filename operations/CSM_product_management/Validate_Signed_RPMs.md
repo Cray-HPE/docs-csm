@@ -1,34 +1,34 @@
 # Validate Signed RPMs
 
-The HPE Cray EX system signs RPMs to provide an extra level of security. Use the following procedure to import a key from either CrayPort or a Kubernetes Secret, and then use that key to validate the RPM package signatures on each node type.
+The HPE Cray EX system signs RPMs to provide an extra level of security. Use the following procedure to import a key from either My HPE Software Center or a Kubernetes Secret, and then use that key to validate the RPM package signatures on each node type.
 
 The RPMs will vary on compute, application, worker, master, and storage nodes. Check each node type to ensure the RPMs are correctly signed.
 
-### Procedure
+## Procedure
 
 1. Retrieve the signing key required to validate the RPMs.
 
-    Use either the CrayPort or Kubernetes Secret method to find the signing key.
+    Use either the My HPE Software Center or Kubernetes Secret method to find the signing key.
 
-    * **CrayPort:**
+    * **My HPE Software Center:**
 
-    1. Find the signing key.
+        Download the signing key.
 
-       ```bash
-       ncn-m001# curl LINK_TO_KEY_IN_CRAYPORT
-       ```
+        ```bash
+        ncn-mw# curl LINK_TO_KEY_IN_My_HPE_Software_Center
+        ```
 
     * **Kubernetes Secret:**
 
-    1. Find the key and write it to a file.
+        Find the key and write it to a file.
 
         ```bash
-        ncn-m001# kubectl -n services get secrets hpe-signing-key -o jsonpath='{.data.gpg-pubkey}' | base64 -d | tee hpe-signing-key.asc
+        ncn-mw# kubectl -n services get secrets hpe-signing-key -o jsonpath='{.data.gpg-pubkey}' | base64 -d | tee hpe-signing-key.asc
         ```
 
         Example output:
 
-        ```
+        ```text
         -----BEGIN PGP PUBLIC KEY BLOCK-----
         Version: GnuPG v2.0.22 (GNU/Linux)
         mQENBFZp0YMBCADNNhdrR/K7jk6iFh/D/ExEumPSdriJwDUlHY70bkEUChLyRACI
@@ -71,12 +71,12 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
    Replace the *PATH-TO-KEY* value in the following command with the path to the signing key.
 
    ```bash
-   ncn-m001# rpm -qpi PATH-TO-KEY/hpe-signing-key.asc
+   ncn-mw# rpm -qpi PATH-TO-KEY/hpe-signing-key.asc
    ```
 
    Example output:
 
-   ```
+   ```text
    Name        : gpg-pubkey
    Version     : 9da39f44
    Release     : 5669d183
@@ -131,29 +131,29 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
    -----END PGP PUBLIC KEY BLOCK-----
    ```
 
-1. Import the signing key after validating the issuer.
+1. Import the signing key.
 
     ```bash
-    ncn-m001# rpm --import hpe-singing-key.asc
+    ncn-mw# rpm --import hpe-singing-key.asc
     ```
 
 1. Search for the signed packages using the version number from the previous step.
 
     ```bash
-    ncn-m001# rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '9da39f44'
+    ncn-mw# rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '9da39f44'
     ```
 
 1. Validate the signature on an RPM.
 
-    The RPM in this example is *csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm*.
+    The RPM in this example is `csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm`.
 
     ```bash
-    ncn-m001# rpm -Kvv csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm
+    ncn-mw# rpm -Kvv csm-install-workarounds-0.1.11-20210504151148_bf748be.src.rpm
     ```
 
     Example output:
 
-    ```
+    ```text
     D: loading keyring from pubkeys in /var/lib/rpm/pubkeys/*.key
     D: couldn't find any keys in /var/lib/rpm/pubkeys/*.key
     D: loading keyring from rpmdb
@@ -183,4 +183,3 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     D: closed   db index       /var/lib/rpm/Packages
     D: closed   db environment /var/lib/rpm
     ```
-
