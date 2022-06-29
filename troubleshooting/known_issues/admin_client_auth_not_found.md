@@ -15,10 +15,10 @@ This can occur if the `keycloak-users-localize` pod has not completed, and that 
 
    1. Follow [Troubleshoot Intermittent HTTP 503 Code Failures](../../operations/kubernetes/Troubleshoot_Intermittent_503s.md) to verify that Istio is healthy.
 
-   1. (`ncn-mw#`) Ensure that the `keycloak-wait-for-postgres-*` pod is in a `Completed` state.
+   1. Ensure that the `keycloak-wait-for-postgres-*` pod is in a `Completed` state.
 
        ```bash
-       kubectl get po -n services | grep keycloak-wait-for-postgres
+       ncn-mw# kubectl get po -n services | grep keycloak-wait-for-postgres
        ```
 
        Example output:
@@ -27,10 +27,10 @@ This can occur if the `keycloak-users-localize` pod has not completed, and that 
        keycloak-wait-for-postgres-1-pv85m                                0/2     Completed   0          15d
        ```
 
-   1. (`ncn-mw#`) If the `keycloak-wait-for-postgres-*` pod is not in a `Completed` state, then resubmit the job.
+   1. If the `keycloak-wait-for-postgres-*` pod is not in a `Completed` state, then resubmit the job.
 
        ```bash
-       kubectl get job -n services -l app.kubernetes.io/name=keycloak-wait-for-postgres -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
+       ncn-mw# kubectl get job -n services -l app.kubernetes.io/name=keycloak-wait-for-postgres -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels)' | kubectl replace --force -f -
        ```
 
        Example output:
