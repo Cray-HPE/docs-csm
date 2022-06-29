@@ -33,7 +33,7 @@ To setup the compute configuration layer, first gather the following information
      `cray-product-catalog` for the current version of CSM. For example:
 
        ```bash
-       ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+       ncn-mw# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
        ```
 
        Part of the output will be a section resembling the following:
