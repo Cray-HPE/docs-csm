@@ -21,7 +21,7 @@ To setup the compute configuration layer, first gather the following information
 | `name` | **Example:** `csm-<version>` | CSM configuration layer name |
 | `playbook` | `compute_nodes.yml` | Default Ansible playbook for CSM configuration of compute nodes |
 
-1. Retrieve the commit in the repository to use for configuration.
+1. (`ncn-mw#`) Retrieve the commit in the repository to use for configuration.
    * If changes have been made to the default branch that was imported during a CSM
      installation or upgrade, use the commit containing the changes.
 
