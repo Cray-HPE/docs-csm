@@ -211,7 +211,6 @@ If the following command does not complete successfully, check if the `TOKEN` en
    - See the [Management Network User Guide](../../operations/network/management_network/index.md) for more information on the management network.
    - With the 1.2 switch configuration in place, users will only be able to SSH into the switches over the HMN.  
 
-
 ## Stage 0.4 - Prerequisites check
 
 1. Set the `SW_ADMIN_PASSWORD` environment variable.
@@ -223,6 +222,17 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ```bash
    ncn-m001# read -s SW_ADMIN_PASSWORD
    ncn-m001# export SW_ADMIN_PASSWORD
+   ```
+
+1. Blacklist the `rpcrdma` modules **only if needed**.
+
+   On worker nodes containing both ConnectX-4 and ConnectX-5 network interface cards, the
+   `rpcrdma` kernel module needs to be blacklisted so that it does not interfere with
+   Slingshot Host Software. Run the following script to add the necessary blacklist parameters
+   to the kernel command line on the worker nodes:
+
+   ```bash
+   ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/blacklist-kernel-modules.sh
    ```
 
 1. Set the `NEXUS_PASSWORD` variable **only if needed**.
