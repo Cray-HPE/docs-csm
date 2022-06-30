@@ -598,41 +598,49 @@ Overall status: PASSED (Passed: 40, Failed: 0)
 #### 4.2.1 Known issues with internal SSH access test execution
 
 - It is possible this test will fail if the procedure to deploy the final NCN has not been performed.
-  Before running this procedure, the static IP reservation data has not yet been loaded into the
+
+  Before running this procedure, the static IP address reservation data has not yet been loaded into the
   Hardware State Manager (HSM), so DNS records may be missing.
 
-- After deploying the final NCN this test may fail reporting an `UnresolvedHostname` error.
+- After deploying the final NCN, this test may fail with an `UnresolvedHostname` error.
 
-  To work around this issue inspect the `cray-powerdns-manager` pod log for `Failed to patch RRsets` errors.
+  To work around this issue, perform the following procedure:
 
-  ```bash
-  ncn# kubectl -n services logs -l app.kubernetes.io/name=cray-powerdns-manager -c cray-powerdns-manager
-  ```
+  1. Inspect the `cray-powerdns-manager` pod log for `Failed to patch RRsets` errors.
 
-  Example output:
+     ```bash
+     ncn-mw# kubectl -n services logs -l app.kubernetes.io/name=cray-powerdns-manager -c cray-powerdns-manager
+     ```
 
-  ```text
-  {"level":"error","ts":1644510069.0068583,"msg":"Failed to patch RRsets!",  "zone":"nmn.hela.dev.cray.com.",
-  "error":"RRset x3000c0s6b0n0.nmn.hela.dev.cray.com. IN CNAME: Conflicts with   pre-existing RRset",
-  "zone":"nmn.hela.dev.cray.com."}
-  ```
+     Example output:
 
-  Identify the `cray-dns-powerdns` pod.
+     ```text
+     {"level":"error","ts":1644510069.0068583,"msg":"Failed to patch RRsets!",  "zone":"nmn.hela.dev.cray.com.",
+     "error":"RRset x3000c0s6b0n0.nmn.hela.dev.cray.com. IN CNAME: Conflicts with   pre-existing RRset",
+     "zone":"nmn.hela.dev.cray.com."}
+     ```
 
-  ```bash
-  ncn# kubectl -n services get pod -l app.kubernetes.io/name=cray-dns-powerdns
-  NAME                                 READY   STATUS    RESTARTS   AGE
-  cray-dns-powerdns-86c9685d78-bxz2z   2/2     Running   0          13d
-  ```
+  1. Identify the `cray-dns-powerdns` pod.
 
-  Delete the zone reported in the `cray-powerdns-manager` log output.
+     ```bash
+     ncn-mw# kubectl -n services get pod -l app.kubernetes.io/name=cray-dns-powerdns
+     ```
 
-  ```bash
-  ncn# kubectl -n services exec -it cray-dns-powerdns-86c9685d78-bxz2z \
-  -c cray-dns-powerdns -- pdnsutil delete-zone nmn.hela.dev.cray.com
-  ```
+     Example output:
 
-  The `cray-powerdns-manager` reconciliation loop runs every 30 seconds and the next run will recreate the zone with the correct records.
+     ```text
+     NAME                                 READY   STATUS    RESTARTS   AGE
+     cray-dns-powerdns-86c9685d78-bxz2z   2/2     Running   0          13d
+     ```
+
+  1. Delete the zone reported in the `cray-powerdns-manager` log output.
+
+     ```bash
+     ncn-mw# kubectl -n services exec -it cray-dns-powerdns-86c9685d78-bxz2z \
+                 -c cray-dns-powerdns -- pdnsutil delete-zone nmn.hela.dev.cray.com
+     ```
+
+  The `cray-powerdns-manager` reconciliation loop runs every 30 seconds, and the next run will recreate the zone with the correct records.
 
 ### 4.3 External SSH access test execution
 
