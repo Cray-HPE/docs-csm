@@ -320,7 +320,7 @@ be performed are in the [Deploy](#deploy) section.
     1. Patch the `set-sqfs-links.sh` script to include the blacklisting of an undesired kernel module.
 
     ```bash
-    pit# sed -i -E 's/rd.luks=0/rd.luks=0 module_blacklist=rpcrdma/g' /root/bin/set-sqfs-links.sh
+    pit# sed -i -E 's:rd.luks=0 /:rd.luks=0 module_blacklist=rpcrdma \/:g' /root/bin/set-sqfs-links.sh
     ```
 
     1. Invoke the script.
