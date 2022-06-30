@@ -63,7 +63,7 @@
 
    The content of the new CFS configuration is described in _HPE Cray EX System Software Getting Started Guide S-8000_, section
    "HPE Cray EX Software Upgrade Workflow" subsection "Cray System Management (CSM)". Replace `${NEW_NCN_CONFIGURATION}` with
-   the name of the new CFS configuration and `${XNAME}` with the xname of ncn-w001.
+   the name of the new CFS configuration and `${XNAME}` with the component name (xname) of the worker node that was upgraded.
 
    ```bash
    ncn-m001# cray cfs components update --desired-config ${NEW_NCN_CONFIGURATION} ${XNAME}
