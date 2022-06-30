@@ -226,10 +226,18 @@ If the following command does not complete successfully, check if the `TOKEN` en
 
 1. Blacklist the `rpcrdma` modules **only if needed**.
 
-   On worker nodes containing both ConnectX-4 and ConnectX-5 network interface cards, the
-   `rpcrdma` kernel module needs to be blacklisted so that it does not interfere with
-   Slingshot Host Software. Run the following script to add the necessary blacklist parameters
-   to the kernel command line on the worker nodes:
+   This step is required if the Kubernetes worker nodes on the system contain Mellanox ConnectX-4
+   network cards. To make this determination, run the following command:
+
+   ```bash
+   ncn-m001# ssh ncn-w001 lspci | grep ConnectX-4
+   ```
+
+   If no output is emitted, you can skip this step and continue to the next step.
+
+   On worker nodes containing ConnectX-4 network interface cards, the `rpcrdma` kernel module needs
+   to be blacklisted so that it does not interfere with Slingshot Host Software. Run the following
+   script to add the necessary blacklist parameters to the kernel command line on the worker nodes:
 
    ```bash
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/blacklist-kernel-modules.sh
