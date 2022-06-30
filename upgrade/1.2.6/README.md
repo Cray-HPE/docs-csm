@@ -31,7 +31,7 @@ Earlier version of CSM must first be upgraded to at least `v1.2.0`. For informat
    **IMPORTANT**: If necessary, change this command to match the actual location of the extracted files.
 
    ```bash
-   ncn-m001# export CSM_DISTDIR="$(pwd)/csm-1.2.6"
+   ncn-m001# CSM_DISTDIR="$(pwd)/csm-1.2.6"
    ncn-m001# echo "${CSM_DISTDIR}"
    ```
 
