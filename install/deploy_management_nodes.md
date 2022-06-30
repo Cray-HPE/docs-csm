@@ -317,6 +317,14 @@ be performed are in the [Deploy](#deploy) section.
     This will create folders for each host in `/var/www`, allowing each host to have its own unique set of artifacts:
     kernel, `initrd`, SquashFS, and `script.ipxe` bootscript.
 
+    1. Patch the `set-sqfs-links.sh` script to include the blacklisting of an undesired kernel module.
+
+    ```bash
+    pit# sed -i -E 's/rd.luks=0/rd.luks=0 module_blacklist=rpcrdma/g' /root/bin/set-sqfs-links.sh
+    ```
+
+    1. Invoke the script.
+
     ```bash
     pit# /root/bin/set-sqfs-links.sh
     ```
@@ -613,6 +621,11 @@ If needed, the LVM checks can be performed manually on the master and worker nod
 
     ```bash
     ncn-m# blkid -L ETCDLVM
+    ```
+
+    Example output:
+
+    ```text
     /dev/sdc
     ```
 
@@ -718,6 +731,11 @@ If there are LVM check failures, then the problem must be resolved before contin
 
     ```bash
     ncn-s# ceph orch device ls|grep dev|wc -l
+    ```
+
+    Example output:
+
+    ```text
     24
     ```
 
@@ -733,6 +751,11 @@ If there are LVM check failures, then the problem must be resolved before contin
 
     ```bash
     ncn-s# lsblk
+    ```
+
+    Example output:
+
+    ```text
     NAME                                                                                                 MAJ:MIN RM   SIZE RO TYPE   MOUNTPOINT
     loop0                                                                                                   7:0    0   4.2G  1 loop  / run/    rootfsbase
     loop1                                                                                                  7:1    0    30G  0 loop
