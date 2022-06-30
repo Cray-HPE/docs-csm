@@ -26,6 +26,16 @@
     * During the storage node rebuild, Ceph health may report `HEALTH_WARN 1 daemons have recently crashed`. This occurs occasionally as part of the shutdown process of the node
       being rebuilt. See [Dump Ceph Crash Data](../../operations/utility_storage/Dump_Ceph_Crash_Data.md).
 
+    * The CSM validation test for detecting clock skew (`Title: Check clock skew on k8s and storage nodes`) can have a false failure. To determine if the clock for an
+      NCN is in sync, run the following command:
+
+      ```bash
+      ncn# timedatectl | awk /synchronized:/'{print $NF}'
+      ```
+
+      If the clock is in sync, the output will be `yes`; otherwise the output will be `no`. If the output is `no`, then wait a few minutes and try again. If it is still `no` after
+      a few minutes, refer to [Fix Broken Configuration](../../operations/node_management/Configure_NTP_on_NCNs.md#fix-broken-configuration).
+
 1. **IMPORTANT:** Ensure that the Ceph cluster is healthy prior to continuing.
 
     If there are processes not running, then see [Utility Storage Operations](../../operations/utility_storage/Utility_Storage.md) for operational and troubleshooting procedures.
