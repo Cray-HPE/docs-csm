@@ -650,6 +650,9 @@ Overall status: PASSED (Passed: 40, Failed: 0)
 
   1. Delete the zone reported in the `cray-powerdns-manager` log output.
 
+     In the following example command, be sure to replace `nmn.hela.dev.cray.com` with
+     the actual zone identified in the earlier step.
+
      ```bash
      ncn-mw# kubectl -n services exec -it cray-dns-powerdns-86c9685d78-bxz2z \
                  -c cray-dns-powerdns -- pdnsutil delete-zone nmn.hela.dev.cray.com
