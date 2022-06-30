@@ -41,3 +41,4 @@ This can occur if the `keycloak-users-localize` pod has not completed, and that 
        ```
 
 Once the `keycloak-wait-for-postgres-*` pod has completed, the `keycloak-users-localize` job should create the `admin-client-auth` secret and complete.
+At that point, resume the CSM install by re-running the failed command.
