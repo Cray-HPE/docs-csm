@@ -317,6 +317,13 @@ be performed are in the [Deploy](#deploy) section.
     This will create folders for each host in `/var/www`, allowing each host to have its own unique set of artifacts:
     kernel, `initrd`, SquashFS, and `script.ipxe` bootscript.
 
+    First, patch the `set-sqfs-links.sh` script to include the blacklisting of an undesired kernel module, then
+    invoke the script:
+
+    ```bash
+    pit# sed -i -E 's/rd.luks=0/rd.luks=0 module_blacklist=rpcrdma/g' /root/bin/set-sqfs-links.sh
+    ```
+
     ```bash
     pit# /root/bin/set-sqfs-links.sh
     ```
