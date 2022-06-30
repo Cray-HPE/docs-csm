@@ -606,10 +606,10 @@ Overall status: PASSED (Passed: 40, Failed: 0)
 
   To work around this issue, perform the following procedure:
 
-  1. Inspect the `cray-powerdns-manager` pod log for `Failed to patch RRsets` errors.
+  1. (`ncn-mw#`) Inspect the `cray-powerdns-manager` pod log for `Failed to patch RRsets` errors.
 
      ```bash
-     ncn-mw# kubectl -n services logs -l app.kubernetes.io/name=cray-powerdns-manager -c cray-powerdns-manager
+     kubectl -n services logs -l app.kubernetes.io/name=cray-powerdns-manager -c cray-powerdns-manager
      ```
 
      Example output:
@@ -620,10 +620,10 @@ Overall status: PASSED (Passed: 40, Failed: 0)
      "zone":"nmn.hela.dev.cray.com."}
      ```
 
-  1. Identify the `cray-dns-powerdns` pod.
+  1. (`ncn-mw#`) Identify the `cray-dns-powerdns` pod.
 
      ```bash
-     ncn-mw# kubectl -n services get pod -l app.kubernetes.io/name=cray-dns-powerdns
+     kubectl -n services get pod -l app.kubernetes.io/name=cray-dns-powerdns
      ```
 
      Example output:
@@ -633,14 +633,14 @@ Overall status: PASSED (Passed: 40, Failed: 0)
      cray-dns-powerdns-86c9685d78-bxz2z   2/2     Running   0          13d
      ```
 
-  1. Delete the zone reported in the `cray-powerdns-manager` log output.
+  1. (`ncn-mw#`) Delete the zone reported in the `cray-powerdns-manager` log output.
 
      In the following example command, be sure to replace `nmn.hela.dev.cray.com` with
      the actual zone identified in the earlier step.
 
      ```bash
-     ncn-mw# kubectl -n services exec -it cray-dns-powerdns-86c9685d78-bxz2z \
-                 -c cray-dns-powerdns -- pdnsutil delete-zone nmn.hela.dev.cray.com
+     kubectl -n services exec -it cray-dns-powerdns-86c9685d78-bxz2z \
+         -c cray-dns-powerdns -- pdnsutil delete-zone nmn.hela.dev.cray.com
      ```
 
   The `cray-powerdns-manager` reconciliation loop runs every 30 seconds, and the next run will recreate the zone with the correct records.
