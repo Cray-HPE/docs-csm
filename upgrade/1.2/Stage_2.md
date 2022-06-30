@@ -59,6 +59,16 @@
 
    > **NOTE:** The root password for the node may need to be reset after it is rebooted.
 
+1. Assign a new CFS configuration to the worker node.
+
+   The content of the new CFS configuration is described in _HPE Cray EX System Software Getting Started Guide S-8000_, section
+   "HPE Cray EX Software Upgrade Workflow" subsection "Cray System Management (CSM)". Replace `${NEW_NCN_CONFIGURATION}` with
+   the name of the new CFS configuration and `${XNAME}` with the component name (xname) of the worker node that was upgraded.
+
+   ```bash
+   ncn-m001# cray cfs components update --desired-config ${NEW_NCN_CONFIGURATION} ${XNAME}
+   ```
+
 1. Repeat the previous steps for each other worker node, one at a time.
 
 ## Stage 2.3
