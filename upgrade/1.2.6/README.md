@@ -31,14 +31,14 @@ Earlier version of CSM must first be upgraded to at least `v1.2.0`. For informat
    **IMPORTANT**: If necessary, change this command to match the actual location of the extracted files.
 
    ```bash
-   ncn-m001# CSM_DISTDIR="$(pwd)/csm-1.2.6"
+   ncn-m001# export CSM_DISTDIR="$(pwd)/csm-1.2.6"
    ncn-m001# echo "${CSM_DISTDIR}"
    ```
 
 1. Set `CSM_RELEASE_VERSION` to the CSM release version.
 
    ```bash
-   ncn-m001# CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
+   ncn-m001# export CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
    ncn-m001# echo "${CSM_RELEASE_VERSION}"
    ```
 
@@ -87,6 +87,7 @@ Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
 ncn-m001# cd "$CSM_DISTDIR"
+ncn-m001# /usr/share/doc/csm/upgrade/1.2.6/scripts/update-customization.sh
 ncn-m001# ./upgrade.sh
 ncn-m001# /usr/share/doc/csm/upgrade/1.2.6/scripts/post-csm-services-upgrade.sh
 ```
