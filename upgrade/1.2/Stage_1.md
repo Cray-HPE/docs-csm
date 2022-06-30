@@ -34,7 +34,7 @@
       ```
 
       If the clock is in sync, the output will be `yes`; otherwise the output will be `no`. If the output is `no`, then wait a few minutes and try again. If it is still `no` after
-      a few minutes, refer to [../../operations/node_management/Configure_NTP_on_NCNs.md#fix-broken-configs](Configure_NTP_on_NCNs.md).
+      a few minutes, refer to [Fix Broken Configuration](../../operations/node_management/Configure_NTP_on_NCNs.md#fix-broken-configuration).
 
 1. **IMPORTANT:** Ensure that the Ceph cluster is healthy prior to continuing.
 
