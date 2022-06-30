@@ -282,7 +282,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
    If the failure persists, then open a support ticket for guidance before proceeding.
 
    `prerequisites.sh` clears the existing CFS configuration for each Management node. As each
-   Management node is upgraded, documentation will refer to the CFS configuration that should be
+   worker node is upgraded, the documentation will refer to the CFS configuration that should be
    assigned to the node at that time. If any Management node is unexpectedly rebooted prior to this,
    CFS will not automatically personalize the node after it has booted.
 
