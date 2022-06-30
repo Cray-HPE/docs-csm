@@ -28,10 +28,11 @@ set -eo pipefail
 SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE_VERSION}/site-init
 mkdir -p "${SITE_INIT_DIR}"
 pushd ${SITE_INIT_DIR}
-kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
-cp customizations.yaml customizations.yaml.bak
-yq w -i --style=single customizations.yaml spec.kubernetes.services.cray-nls.externalHostname 'cmn.{{ network.dns.external }}'
-yq w -i --style=single customizations.yaml spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
+DATETIME=$(date +%Y-%m-%d_%H-%M-%S)
+CUSTOMIZATIONS_YAML=$(mktemp -p "${SITE_INIT_DIR}" "customizations-${DATETIME}-XXX.yaml")
+kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > "${CUSTOMIZATIONS_YAML}"
+cp "${CUSTOMIZATIONS_YAML}" "${CUSTOMIZATIONS_YAML}.bak"
+yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.kubernetes.services.cray-nls.externalHostname 'cmn.{{ network.dns.external }}'
+yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
 kubectl delete secret -n loftsman site-init
-kubectl create secret -n loftsman generic site-init --from-file=./customizations.yaml
-popd
+kubectl create secret -n loftsman generic site-init --from-file="${CUSTOMIZATIONS_YAML}"
