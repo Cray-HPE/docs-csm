@@ -27,7 +27,6 @@ set -eo pipefail
 # update podman config
 SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE_VERSION}/site-init
 mkdir -p "${SITE_INIT_DIR}"
-pushd ${SITE_INIT_DIR}
 DATETIME=$(date +%Y-%m-%d_%H-%M-%S)
 CUSTOMIZATIONS_YAML=$(mktemp -p "${SITE_INIT_DIR}" "customizations-${DATETIME}-XXX.yaml")
 kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > "${CUSTOMIZATIONS_YAML}"
