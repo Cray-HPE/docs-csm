@@ -82,7 +82,7 @@ For example, the following are valid `Source` field values for compute nodes:
 
 Depending on the type of compute node, additional rules may apply. Compute nodes in the follow sections will use the `nid` prefix.
 
-### Dense four node chassis - Gigabyte or Intel chassis
+### Dense four-node chassis - Gigabyte or Intel chassis
 
 > **`NOTE`** Apollo 2000 compute nodes are not currently supported by CSM.
 
@@ -103,7 +103,7 @@ The BMC ordinal for a node's BMC is derived from the NID of the node by applying
 For example, a node with NID 17 will have a BMC ordinal of `(17 modulo 4) + 1 == 1 + 1 == 2`. Therefore a node with NID 17 in slot 10 in cabinet 3000 will have the
 component name (xname) of `x3000s10b2n0`.
 
-#### Compute: Four node chassis: SHCD
+#### Compute: Four-node chassis: SHCD
 
 Example: Four compute nodes in the same chassis with a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the compute
 node BMCs are connected to ports 33-36 in the management `leaf-bmc-bmc` switch in slot 14 of cabinet 3000. Port 32 on the `leaf-bmc-bmc` switch is for the CMC in
@@ -131,7 +131,7 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 
 > **`NOTE`** `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Four node chassis: HMN connections
+#### Compute: Four-node chassis: HMN connections
 
 Example Four compute nodes in the same chassis with the a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the
 compute node BMCs are connected to ports 33-36 in the management `leaf-bmc-bmc` switch in slot 14 of cabinet 3000. The `SourceParent` for the compute nodes
@@ -161,11 +161,11 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Four node chassis: SLS
+#### Compute: Four-node chassis: SLS
 
 The CSI tool will generate the following SLS representations for compute nodes and their BMC connections to the HMN network.
 
-##### Compute: Four node chassis: SLS: Compute node with NID 1
+##### Compute: Four-node chassis: SLS: Compute node with NID 1
 
 - Node:
 
@@ -206,7 +206,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
 
-##### Compute: Four node chassis: SLS: Compute node with NID 2
+##### Compute: Four-node chassis: SLS: Compute node with NID 2
 
 - Node:
 
@@ -247,7 +247,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/35`. Dell `leaf-bmc` switches will have value `ethernet1/1/35`.
 
-##### Compute: Four node chassis: SLS: Compute node with NID 3
+##### Compute: Four-node chassis: SLS: Compute node with NID 3
 
 - Node
 
@@ -288,7 +288,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/34`. Dell `leaf-bmc` switches will have value `ethernet1/1/34`.
 
-##### Compute: Four node chassis: SLS: Compute node with NID 4
+##### Compute: Four-node chassis: SLS: Compute node with NID 4
 
 - Node
 
@@ -329,7 +329,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/33`. Dell `leaf-bmc` switches will have value `ethernet1/1/33`.
 
-### Single node chassis - Apollo 6500 XL675D
+### Single-node chassis - Apollo 6500 XL675D
 
 A single compute node chassis needs to match these additional conditions:
 
@@ -338,7 +338,7 @@ A single compute node chassis needs to match these additional conditions:
 
 This convention applies to all compute nodes that have a single node in a chassis, such as the Apollo XL675D.
 
-#### Compute: Single node chassis: SHCD
+#### Compute: Single-node chassis: SHCD
 
 Example: A single chassis node with NID 1 located in slot 2 of cabinet 3000. The node's BMC is connected to port 36 of the management `leaf-bmc` switch in
 slot 40 of cabinet 3000.
@@ -349,7 +349,7 @@ slot 40 of cabinet 3000.
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Single node chassis: HMN connections
+#### Compute: Single-node chassis: HMN connections
 
 The HMN connections representation for the two SHCD table rows above:
 
@@ -359,7 +359,7 @@ The HMN connections representation for the two SHCD table rows above:
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Single node chassis: SLS
+#### Compute: Single-node chassis: SLS
 
 - Compute node:
 
@@ -400,7 +400,7 @@ The HMN connections representation for the two SHCD table rows above:
 
 > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
 
-### Dual node chassis - Apollo 6500 XL645D
+### Dual-node chassis - Apollo 6500 XL645D
 
 Additional matching conditions:
 
@@ -416,9 +416,9 @@ In addition to the top-level compute node naming requirements, when there are tw
 
 This convention applies to all compute nodes that have two nodes in a chassis, such as the Apollo XL645D.
 
-#### Compute: Dual node chassis: SHCD
+#### Compute: Dual-node chassis: SHCD
 
-Example: A compute node chassis with 2 nodes located in slot 8 of cabinet 3000. NID 1 is on the left side of the chassis, and NID 2 is on the right side.
+Example: A compute node chassis with two nodes located in slot 8 of cabinet 3000. NID 1 is on the left side of the chassis, and NID 2 is on the right side.
 The two node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch in slot 40 of cabinet 3000.
 
 | `Source`          | `Rack`  | `Location` |       | `Parent` |       | `Port` | `Destination` | `Rack`   | `Location` |       | `Port` |
@@ -428,7 +428,7 @@ The two node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` 
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Dual node chassis: HMN connections
+#### Compute: Dual-node chassis: HMN connections
 
 The HMN connections representation for the two SHCD table rows above:
 
@@ -439,9 +439,9 @@ The HMN connections representation for the two SHCD table rows above:
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Dual node chassis: SLS
+#### Compute: Dual-node chassis: SLS
 
-##### Compute: Dual node chassis: SLS: Compute node with NID 1
+##### Compute: Dual-node chassis: SLS: Compute node with NID 1
 
 - Node:
 
@@ -482,7 +482,7 @@ The HMN connections representation for the two SHCD table rows above:
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/38`. Dell `leaf-bmc` switches will have value `ethernet1/1/38`.
 
-##### Compute: Dual node chassis: SLS: Compute node with NID 2
+##### Compute: Dual-node chassis: SLS: Compute node with NID 2
 
 - Node:
 
@@ -825,7 +825,7 @@ The `Source` field needs to match these conditions to be considered an applicati
 > [Create Application Node Configuration YAML](create_application_node_config_yaml.md)
 > procedure for the process to add additional `Source` name prefixes for application nodes.
 
-### Single node chassis
+### Single-node chassis
 
 A single application node chassis needs to match these additional conditions:
 
@@ -834,7 +834,7 @@ A single application node chassis needs to match these additional conditions:
 
 This convention applies to all application nodes that have a single node in a chassis.
 
-#### Application node: Single node chassis: SHCD
+#### Application node: Single-node chassis: SHCD
 
 Example: application node is in slot 4 of cabinet 3000, and its BMC is connected to port 25 of management `leaf-bmc` switch in slot 14 of cabinet 3000.
 
@@ -842,7 +842,7 @@ Example: application node is in slot 4 of cabinet 3000, and its BMC is connected
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `uan01`           | `x3000` | `u04`      | `-`   |          |       | `j3`   | `sw-smn01`    | `x3000`  | `u14`      | `-`   | `j25`  |
 
-#### Application node: Single node chassis: HMN connections
+#### Application node: Single-node chassis: HMN connections
 
 The HMN connections representation for the SHCD table row above:
 
@@ -879,7 +879,7 @@ In addition to the top-level compute node naming requirements, when there are tw
 
 This convention applies to all application nodes that have two nodes in a single chassis.
 
-#### Application node: Dual node chassis: SHCD
+#### Application node: Dual-node chassis: SHCD
 
 Example: An application node chassis with 2 nodes located in slot 8 of cabinet 3000. `uan01` is on the left side of the chassis, and `uan02` is on the right side. The two
 node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch in slot 40 of cabinet 3000.
@@ -891,7 +891,7 @@ node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch i
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Application node: Dual node chassis: HMN connections
+#### Application node: Dual-node chassis: HMN connections
 
 The HMN connections representation for the two SHCD table rows above:
 
