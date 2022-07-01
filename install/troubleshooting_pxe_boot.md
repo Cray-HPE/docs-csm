@@ -348,10 +348,10 @@ In that case, use the following recovery procedure.
 
      1. Once booted, log in and mount the data partition. See:
 
-        - [First login](pre-installation.md#13-first-login)
+        - [First log in](pre-installation.md#13-first-log-in)
         - [Prepare the data partition](pre-installation.md#14-prepare-the-data-partition)
 
-   - This assumes the user has made it past the [first login](pre-installation.md#13-first-login) procedure.
+   - This assumes the user has made it past the [First log in](pre-installation.md#13-first-log-in) procedure.
 
 1. Set variables for the system name, the CAN IP address for `ncn-m002`. the Kubernetes version, and the Ceph version.
 

@@ -5,7 +5,7 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
 1. [Boot installation environment](#1-boot-installation-environment)
     1. [Prepare installation environment server](#11-prepare-installation-environment-server)
     1. [Boot the LiveCD](#12-boot-the-livecd)
-    1. [First login](#13-first-login)
+    1. [First log in](#13-first-log-in)
     1. [Prepare the data partition](#14-prepare-the-data-partition)
     1. [Set reusable environment variables](#15-set-reusable-environment-variables)
     1. [Exit the console and login with SSH](#16-exit-the-console-and-login-with-ssh)

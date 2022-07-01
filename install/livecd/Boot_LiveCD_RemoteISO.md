@@ -79,7 +79,7 @@ Gigabyte BMCs allow for booting over HTTP.
 
 The ISO boots with no password, requiring one be set on first login.
 Continue the bootstrap process by setting the root password
-following the procedure [First login](../pre-installation.md#13-first-login).
+following the procedure [First log in](../pre-installation.md#13-first-log-in).
 
 > **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting
 > the machine will result in all changes being lost. Before restarting, consider following

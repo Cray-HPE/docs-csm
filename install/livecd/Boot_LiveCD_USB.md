@@ -139,4 +139,4 @@ boot order to have the USB device first.
    ipmitool -I lanplus -U ${username} -E -H ${BMC} sol activate
    ```
 
-1. Do not exit the typescript. After completing this procedure, proceed to [First login](../pre-installation.md#13-first-login).
+1. Do not exit the typescript. After completing this procedure, proceed to [First log in](../pre-installation.md#13-first-log-in).
