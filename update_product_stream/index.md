@@ -6,18 +6,23 @@ hotfixes after the release.
 The CSM documentation is included within the CSM product release tarball inside the `docs-csm` RPM.
 After the RPM has been installed, the documentation will be available at `/usr/share/doc/csm`.
 
-- [Download and Extract CSM Product Release](#download-and-extract)
-- [Apply Patch to CSM Release](#patch)
-- [Check for Latest Documentation](#documentation)
-- [Check for Field Notices about Hotfixes](#hotfixes)
+- [Download and extract CSM product release](#download-and-extract-csm-product-release)
+- [Apply patch to CSM release](#apply-patch-to-csm-release)
+  - [Prerequisites](#apply-patch-to-csm-release-prerequisites)
+  - [Procedure](#apply-patch-to-csm-release-procedure)
+- [Check for latest documentation](#check-for-latest-documentation)
+- [Check for field notices about hotfixes](#check-for-field-notices-about-hotfixes)
 
 <a name="download-and-extract"></a>
 
-## Download and Extract CSM Product Release
+## Download and extract CSM product release
 
 Acquire a CSM software release tarball for installation on the HPE Cray EX supercomputer.
 
-1. Download the CSM software release tarball for the HPE Cray EX system to a Linux system.
+The following procedure should work on any Linux system. If directed here from another procedure, then that source procedure should indicate on which system the CSM release should
+be downloaded and extracted.
+
+1. Download the CSM software release tarball.
 
    ```bash
    linux# export ENDPOINT=URL_SERVER_Hosting_tarball
@@ -25,26 +30,34 @@ Acquire a CSM software release tarball for installation on the HPE Cray EX super
    linux# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
    ```
 
-1. Extract the source release distribution.
-
-   If doing a first time install, this can be done on a Linux system, but for an upgrade, it may be done on one of the NCNs, such as `ncn-m001`.
+1. Extract the release distribution.
 
    ```bash
-   linux# tar -xzvf ${CSM_RELEASE}.tar.gz
+   linux# tar -xzvf "${CSM_RELEASE}.tar.gz"
    ```
 
-1. Before using this software release, check for any patches available for it. If patches are available, see [Apply Patch to CSM Release](#patch).
+1. Before using this software release, check for any patches available for it.
+
+   If patches are available, see [Apply patch to CSM release](#apply-patch-to-csm-release).
 
 <a name="patch"></a>
 
-## Apply Patch to CSM Release
+## Apply patch to CSM release
 
-Apply a CSM update patch to the release tarball. This ensures that the latest CSM product artifacts are installed on the HPE Cray EX supercomputer.
+Apply a CSM update patch to the expanded CSM release tarball, and then create a new tarball which contains the patched release.
+This ensures that the latest CSM product artifacts are installed on the HPE Cray EX supercomputer.
 
-1. Verify that the Git version is at least `2.16.5` on the Linux system which will apply the patch.
+### Apply patch to CSM release: Prerequisites
 
-   The patch process is known to work with Git version `2.16.5` or higher. Older versions of Git may not correctly apply the
-   binary patch.
+The following requirements must be met on the system where the procedure is being followed.
+
+- The expanded CSM release tarball is present.
+
+   Because the patch is applied to the expanded CSM release tarball, it is simplest to perform this
+   procedure on the same system where the [Download and extract CSM product release](#download-and-extract-csm-product-release)
+   procedure was followed.
+
+- Git version `2.16.5` or higher must be installed.
 
    ```bash
    linux# git version
@@ -56,56 +69,59 @@ Apply a CSM update patch to the release tarball. This ensures that the latest CS
    git version 2.26.2
    ```
 
-   If the Git version is less than `2.16.15`, update Git to at least that version.
+   If the Git version is less than `2.16.15`, then update Git to at least that version.
 
-1. Download the compressed CSM software package patch `csm-x.y.z-x.z.a.patch.gz` for the HPE Cray EX system.
+### Apply patch to CSM release: Procedure
+
+1. Download the compressed CSM software package patch file.
+
+   The file name will be of the form `csm-x.y.z-x.z.a.patch.gz`.
+   Be sure to modify the following example with the appropriate values.
 
    ```bash
-   linux# export ENDPOINT=URL_SERVER_Hosting_tarball
-   linux# export CSM_RELEASE=csm-x.y.z
-   linux# export PATCH_RELEASE=x.z.a
-   linux# wget ${ENDPOINT}/${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz
+   linux# ENDPOINT=URL_SERVER_Hosting_tarball
+   linux# CSM_RELEASE=csm-x.y.z
+   linux# PATCH_RELEASE=x.z.a
+   linux# wget "${ENDPOINT}/${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
    ```
-
-   Run the remaining steps from the node to which the original `$CSM_RELEASE` release was downloaded and extracted.
 
 1. Uncompress the patch.
 
    ```bash
-   linux# gunzip -v ${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz
+   linux# gunzip -v "${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
    ```
 
 1. Apply the patch.
 
    ```bash
    linux# git apply -p2 --whitespace=nowarn \
-                        --directory=${CSM_RELEASE} \
-                        ${CSM_RELEASE}-${PATCH_RELEASE}.patch
+                        --directory="${CSM_RELEASE}" \
+                        "${CSM_RELEASE}-${PATCH_RELEASE}.patch"
    ```
 
 1. Set a variable to reflect the new version.
 
    ```bash
-   linux# export NEW_CSM_RELEASE="$(./${CSM_RELEASE/lib/version.sh)"
+   linux# NEW_CSM_RELEASE="$(./${CSM_RELEASE/lib/version.sh)"
    ```
 
 1. Update the name of the CSM release distribution directory.
 
    ```bash
-   linux# mv -v $CSM_RELEASE $NEW_CSM_RELEASE
+   linux# mv -v "${CSM_RELEASE}" "${NEW_CSM_RELEASE}"
    ```
 
 1. Create a tarball from the patched release distribution.
 
    ```bash
-   linux# tar -cvzf ${NEW_CSM_RELEASE}.tar.gz "${NEW_CSM_RELEASE}/"
+   linux# tar -cvzf "${NEW_CSM_RELEASE}.tar.gz" "${NEW_CSM_RELEASE}/"
    ```
 
 This tarball can now be used in place of the original CSM software release tarball.
 
 <a name="documentation"></a>
 
-## Check for Latest Documentation
+## Check for latest documentation
 
 Acquire the latest documentation RPM. This may include updates, corrections, and enhancements that were not available until after the software release.
 
@@ -125,15 +141,15 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
 
    ```bash
    linux# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
-   linux# scp -p docs-csm-*rpm ncn-m001:/root
+   linux# scp docs-csm-latest.noarch.rpm ncn-m001:/root
    linux# ssh ncn-m001
-   ncn-m001# rpm -Uvh --force docs-csm-latest.noarch.rpm
+   ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
    ```
 
 1. Repeat the first step in this procedure to display the version of the CSM documentation after the update.
 
 <a name="hotfixes"></a>
 
-## Check for Field Notices about Hotfixes
+## Check for field notices about hotfixes
 
 Collect all available field notices about hotfixes which should be applied to this CSM software release. Check with HPE Cray service for more information.
