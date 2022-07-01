@@ -6,7 +6,7 @@ If there has been a failure to initialize all Ceph CSI components on `ncn-s001`,
 ## Topics
 
 1. [Verify Ceph CSI](#1-verify-ceph-csi)
-1. [Rerun Storage Node `cloud-init`](#2-rerun-storage-node-cloud-init)
+1. [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init)
 
 ### 1. Verify Ceph CSI
 
@@ -29,7 +29,7 @@ Verify that the `ceph-csi` requirements are in place.
       ceph_k8s_initialized  csi_initialized  installed  kubernetes_nodes.txt  tuned
       ```
 
-      Check your results against this example.
+      Check the results against this example.
 
       If any components are missing, see [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init).
 
@@ -66,7 +66,7 @@ Verify that the `ceph-csi` requirements are in place.
        ls /etc/cray/ceph
        ```
 
-       If any files are there they will represent completed stages.
+       If any files are there, they represent completed stages.
 
    1. (`ncn-s001#`) If there is a running cluster, then edit `storage-ceph-cloudinit.sh` on `ncn-s001`:
 
