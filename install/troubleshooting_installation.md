@@ -20,9 +20,6 @@ If the `root` password on the LiveCD needs to be changed, then see
 
 ## PXE boot troubleshooting
 
-If a reinstall of the PIT node is needed, then the data from the PIT node can be saved to the LiveCD USB and
-the LiveCD USB can be rebuilt.
-
 See [Troubleshooting PXE Boot](troubleshooting_pxe_boot.md).
 
 ## Restart network services and interfaces on NCNs
