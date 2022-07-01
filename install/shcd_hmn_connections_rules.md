@@ -4,8 +4,8 @@
 
 1. [Introduction](#introduction)
 1. [Compute node](#compute-node)
-    1. [Dense four node chassis - Gigabyte or Intel chassis](#dense-four-node-chassis---gigabyte-or-intel-chassis)
-    1. [Single node chassis - Apollo 6500 XL675D](#single-node-chassis---apollo-6500-xl675d)
+    1. [Dense four-node chassis - Gigabyte or Intel chassis](#dense-four-node-chassis---gigabyte-or-intel-chassis)
+    1. [Single-node chassis - Apollo 6500 XL675D](#single-node-chassis---apollo-6500-xl675d)
     1. [Dual-node chassis - Apollo 6500 XL645D](#dual-node-chassis---apollo-6500-xl645d)
 1. [Chassis Management Controller (CMC)](#chassis-management-controller-cmc)
 1. [Management node](#management-node)
@@ -13,9 +13,9 @@
     1. [Worker](#worker)
     1. [Storage](#storage)
 1. [Application node](#application-node)
-    1. [Single node chassis](#single-node-chassis)
+    1. [Single-node chassis](#single-node-chassis)
         1. [Building component names (xnames) for nodes in a single application node chassis](#building-component-names-xnames-for-nodes-in-a-single-application-node-chassis)
-    1. [Dual node chassis](#dual-node-chassis)
+    1. [Dual-node chassis](#dual-node-chassis)
         1. [Building component names (xnames) for nodes in a dual application node chassis](#building-component-names-xnames-for-nodes-in-a-dual-application-node-chassis)
 1. [Columbia Slingshot switch](#columbia-slingshot-switch)
 1. [PDU cabinet controller](#pdu-cabinet-controller)
@@ -862,7 +862,7 @@ The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 
 For example, if an application node is in slot 4 of cabinet 3000, then it would have `x3000c0s4b0n0` as its component name (xname).
 
-### Dual node chassis
+### Dual-node chassis
 
 Additional matching conditions:
 
