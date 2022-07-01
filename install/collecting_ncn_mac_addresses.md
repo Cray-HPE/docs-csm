@@ -170,7 +170,7 @@ boot-check nodes to dump network device information without an operating system.
 
 ## Procedure: Serial consoles
 
-Pick out the MAC addresses for the `Bond` from both the `sw-spine-001` and `sw-spine-002` switches, following the [Collecting BMC MAC addresses](collecting_bmc_mac_addresses.md) procedure.
+Pick out the MAC addresses for the `Bond` from both the `sw-spine-001` and `sw-spine-002` switches, following the [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md) procedure.
 
 > **NOTE** The node must be booted into an operating system in order for the `Bond` MAC addresses to appear on the spine switches.
 >

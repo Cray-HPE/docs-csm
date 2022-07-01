@@ -364,7 +364,7 @@ These variables will need to be set for many procedures within the CSM installat
 
       > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
 
-      ```curl
+      ```bash
       curl -C - -o /var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
       ```
 
@@ -596,4 +596,4 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
 After completing this procedure, proceed to configure the management network switches.
 
-See [Configure Management Network Switches](README.md#5-configure-management-network-switches).
+See [Configure management network switches](README.md#5-configure-management-network-switches).

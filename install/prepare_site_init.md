@@ -21,7 +21,7 @@ installation-centric artifacts, such as:
 ## 2. Create and initialize Site-Init directory
 
 > **`NOTE`** If the pre-installation is resuming here, ensure the environment variables have been properly set
-> by following [set environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
+> by following [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
 > to this page.
 
 1. (`pit#`) Set the `SITE_INIT` variable.
@@ -180,7 +180,7 @@ with system-specific customizations.
     > consistent formatting of distinguished names.
     > Unfortunately, older versions of OpenSSL may not support
     > `-nameopt` on the `s_client` command or may use a different
-    > default format. As a result, your mileage may vary; however,
+    > default format. However,
     > you should be able to extract the issuer certificate manually
     > from the output of the above `openssl s_client` example if the
     > following commands are unsuccessful.

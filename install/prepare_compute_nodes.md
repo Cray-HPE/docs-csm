@@ -81,7 +81,7 @@ addresses. The `10.254.x.y` address is for the HMN and should not be associated
 with the node itself (`x3000c0s30b1n0`).
 
 Make a note of the `ID`, `MACAddress`, and `IPAddress` of the entry that has the
-10.254 address listed.
+`10.254` address listed.
 
  ```bash
  ID="9440c938f7b4"
@@ -151,7 +151,7 @@ will enable skipping of several steps later on.
 1. SSH to the switch and log in with standard `admin` user credentials. Refer to
    `/etc/hosts` for the exact hostname.
 
-1. Verify the MAC address on the port.
+1. (`sw#`) Verify the MAC address on the port.
 
    Example using port number 46.
 
@@ -165,12 +165,12 @@ will enable skipping of several steps later on.
     94:40:c9:38:08:c7    4        dynamic                   1/1/46
     ```
 
-   Make sure the MAC address shown for that port matches the `ILOMAC` address
+   Make sure that the MAC address shown for that port matches the `ILOMAC` address
    noted previously from the **Information** section of the web user interface.
 
    > **`NOTE`** If the MAC address is not correct, double check the server cabling and
    SHCD for the correct port then start this section over. **Do not** move on
-   until the ILOMAC address has been found on the switch at the expected
+   until the `ILOMAC` address has been found on the switch at the expected
    port.
 
 1. Configure the port if the MAC is correct.
@@ -197,7 +197,7 @@ will enable skipping of several steps later on.
     exit
     ```
 
-1. Verify the settings.
+1. (`sw#`) Verify the settings.
 
     ```console
     show running-config interface 1/1/46
@@ -221,7 +221,7 @@ will enable skipping of several steps later on.
     After a few minutes the switch will be configured and access to the
     web user interface will be regained.
 
-#### 4. Cleanup KEA
+#### 4. Cleanup Kea
 
 Clear bad MAC and IP address out of KEA.
 
@@ -287,5 +287,5 @@ See [Update the Gigabyte Node BIOS Time](../operations/node_management/Update_th
 After completing the preparation for compute nodes, the CSM product stream
 has been fully installed and configured. Check the next topic.
 
-See [Next Topic](README.md#10-next-topic) for more information on other product
+See [Next topic](README.md#10-next-topic) for more information on other product
 streams to be installed and configured after CSM.
