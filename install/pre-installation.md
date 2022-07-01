@@ -56,7 +56,7 @@ Any steps run on an `external` server require that server to have the following 
    CSM_RELEASE=1.3.0-alpha.9
    ```
 
-   ```curl
+   ```bash
    curl -C - -O "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
    ```
 
