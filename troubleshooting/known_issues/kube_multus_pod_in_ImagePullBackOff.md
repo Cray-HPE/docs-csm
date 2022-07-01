@@ -16,7 +16,7 @@ kube-multus-ds-amd64-4wkb5   0/1    ImagePullBackOff    0          18h
 
 ### Option 1
 
-If you have access to the `quay.io/skopeo/stable` image in nexus or an outside repository, you can use skopeo to retag the multus image in nexus.
+If you have access to the `quay.io/skopeo/stable` image in nexus or an outside repository, you can use `skopeo` to re-tag the `multus` image in nexus.
 
 1. Re-tag the `multus` image in Nexus.
 
@@ -40,7 +40,7 @@ If you have access to the `quay.io/skopeo/stable` image in nexus or an outside r
 
 If you do not have access to the `quay.io/skopeo/stable` image, you can use this hotfix.
 
-1. Download `https://storage.googleapis.com/csm-release-public/hotfix/casmrel-631_multus-image_hotfix-0.0.1.tar.gz` on a device that has access to the internet and transfer the file to one of the management NCNs. 
+1. Download `https://storage.googleapis.com/csm-release-public/hotfix/casmrel-631_multus-image_hotfix-0.0.1.tar.gz` on a device that has access to the internet and transfer the file to one of the management NCNs.
 
 1. Untar the hotfix tarball.
 
@@ -49,5 +49,3 @@ If you do not have access to the `quay.io/skopeo/stable` image, you can use this
    ```
 
 1. Follow the instructions in `./casmrel-631_multus-image_hotfix/README.md`
-
- 
