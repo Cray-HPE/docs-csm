@@ -8,7 +8,7 @@
 1. Set the `root` user password and SSH keys before running NCN personalization.
    The location where the password is stored in Vault has changed since previous
    CSM versions. See
-   [Configure the Root Password and Root SSH Keys in Vault](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#2-configure-the-root-password-and-ssh-keys-in-vault).
+   [Configure the `root` Password and `root` SSH Keys in Vault](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#2-configure-the-root-password-and-ssh-keys-in-vault).
 
 1. If custom configuration content was merged with content from a previous CSM
    installation, then merge the new CSM configuration in with it in the `csm-config-management`
