@@ -218,7 +218,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
     > **NOTES:**
     >
-    > - If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) then see [PXE boot troubleshooting](troubleshooting_pxe_boot.md).
+    > - If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the `ipxe.efi` binary), then see [PXE boot troubleshooting](troubleshooting_pxe_boot.md).
     > - If one of the master nodes seems hung waiting for the storage nodes to create a secret, then check the storage node consoles for error messages.
     >   If any are found, then consult [CEPH CSI Troubleshooting](troubleshooting_ceph_csi.md).
 
