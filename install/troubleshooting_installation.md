@@ -6,57 +6,51 @@ for additional information on system hardware, troubleshooting, and administrati
 
 ## Topics
 
-1. [Reset root Password on a LiveCD USB](#reset-root-password-on-a-livecd-usb)
-1. [PXE Boot Troubleshooting](#pxe-boot-troubleshooting)
-1. [Restart Network Services and Interfaces on NCNs](#restart-network-services-and-interfaces-on-ncns)
-1. [Utility Storage Node Installation Troubleshooting](#utility-storage-node-installation-troubleshooting)
-1. [Ceph CSI Troubleshooting](#ceph-csi-troubleshooting)
-1. [Postgres Troubleshooting](#postgres-troubleshooting)
+- [Reset `root` password on a LiveCD USB](#reset-root-password-on-a-livecd-usb)
+- [PXE boot troubleshooting](#pxe-boot-troubleshooting)
+- [Restart network services and interfaces on NCNs](#restart-network-services-and-interfaces-on-ncns)
+- [Utility storage node installation troubleshooting](#utility-storage-node-installation-troubleshooting)
+- [Ceph CSI troubleshooting](#ceph-csi-troubleshooting)
+- [Postgres troubleshooting](#postgres-troubleshooting)
 
 ## Reset `root` password on a LiveCD USB
 
-If the `root` password on the LiveCD needs to be changed, then this procedure does the reset.
+If the `root` password on the LiveCD needs to be changed, then see
+[Reset `root` Password on a LiveCD USB](livecd/Reset_root_Password_on_a_LiveCD_USB.md).
 
-See [Reset root Password on a LiveCD USB](livecd/Reset_root_Password_on_a_LiveCD_USB.md)
+## PXE boot troubleshooting
 
-## PXE Boot Troubleshooting
-
-If a reinstall of the PIT node is needed, the data from the PIT node can be saved to the LiveCD USB and
+If a reinstall of the PIT node is needed, then the data from the PIT node can be saved to the LiveCD USB and
 the LiveCD USB can be rebuilt.
 
-See [PXE Boot Troubleshooting](troubleshooting_pxe_boot.md)
+See [Troubleshooting PXE Boot](troubleshooting_pxe_boot.md).
 
-## Restart Network Services and Interfaces on NCNs
+## Restart network services and interfaces on NCNs
 
-If an NCN shows any of these problems, the network services and interfaces on that node might need to be restarted.
+If an NCN shows any of these problems, then the network services and interfaces on that node might need to be restarted:
 
 - Interfaces not showing up
-- IP Addresses not applying
-- Member/children interfaces not being included
+- IP addresses not applying
+- Member/child interfaces not being included
 
-See [Restart Network Services and Interfaces on NCNs](../operations/node_management/NCN_Network_Troubleshooting.md)
+See [Restart Network Services and Interfaces on NCNs](../operations/node_management/NCN_Network_Troubleshooting.md#restart-network-services-and-interfaces-on-ncns).
 
-## Utility Storage Node Installation Troubleshooting
+## Utility storage node installation troubleshooting
 
-If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
+Sometimes a large OSD can be created which is a concatenation of multiple devices, instead of one OSD per device. In this case,
 the Ceph storage might need to be reinitialized.
 
-- Sometimes a large OSD can be created which is a concatenation of multiple devices, instead of one OSD per device
+See [Troubleshooting Utility Storage Node Installation](troubleshooting_utility_storage_node_installation.md).
 
-See [Utility Storage Node Installation Troubleshooting](troubleshooting_utility_storage_node_installation.md)
-
-## Ceph CSI Troubleshooting
+## Ceph CSI troubleshooting
 
 If there has been a failure to initialize all Ceph CSI components on `ncn-s001`, then the storage node
 `cloud-init` may need to be rerun.
 
-- Verify Ceph CSI
-- Rerun Storage Node `cloud-init`
+See [Troubleshooting Ceph CSI](troubleshooting_ceph_csi.md).
 
-See [Ceph CSI Troubleshooting](troubleshooting_ceph_csi.md)
-
-## Postgres Troubleshooting
+## Postgres troubleshooting
 
 - Timeout on `cray-sls-init-load` during Install CSM Services due to Postgres cluster in `SyncFailed` state
 
-See [Troubleshoot Postgres Database](../operations/kubernetes/Troubleshoot_Postgres_Database.md#postgres-status-syncfailed)
+See [Postgres status `SyncFailed`](../operations/kubernetes/Troubleshoot_Postgres_Database.md#postgres-status-syncfailed).
