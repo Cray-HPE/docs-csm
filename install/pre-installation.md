@@ -8,7 +8,7 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [First log in](#13-first-log-in)
     1. [Prepare the data partition](#14-prepare-the-data-partition)
     1. [Set reusable environment variables](#15-set-reusable-environment-variables)
-    1. [Exit the console and login with SSH](#16-exit-the-console-and-login-with-ssh)
+    1. [Exit the console and log in with SSH](#16-exit-the-console-and-log-in-with-ssh)
 1. [Import CSM tarball](#2-import-csm-tarball)
     1. [Download CSM tarball](#21-download-csm-tarball)
     1. [Import tarball assets](#22-import-tarball-assets)
@@ -279,7 +279,7 @@ These variables will need to be set for many procedures within the CSM installat
    EOF
    ```
 
-### 1.6 Exit the console and login with SSH
+### 1.6 Exit the console and log in with SSH
 
 1. (`pit#`) Create the `admin` directory and logout.
 
