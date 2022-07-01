@@ -269,7 +269,7 @@ HTTP 0x6d35da88 status 404 Not Found
     deployment.apps/cray-bss restarted
     ```
 
-1. (`ncn-mw#`) Wait for the rollout to complete.
+1. (`ncn-mw#`) Wait for the roll out to complete.
 
     Wait for this command to return (it will block showing status as the pods are refreshed).
 

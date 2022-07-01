@@ -222,7 +222,7 @@ Clear bad MAC and IP address out of Kea.
 
  > **`NOTE`** Skip this section if there was no bad MAC address and IP address found in step 1.
 
- 1. (`ncn-mw#`) Retrieve an API token, if not done previously.
+1. (`ncn-mw#`) Retrieve an API token, if not done previously.
 
      ```bash
      export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
