@@ -358,7 +358,7 @@ In that case, then use the following recovery procedure.
 
     - If using a remote ISO PIT, follow the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) procedure up through (**and including**) the [Set Up The Site Link](bootstrap_livecd_remote_iso.md#set-up-site-link) step.
 
-1. Set variables for the system name, the CAN IP address for `ncn-m002`. the Kubernetes version, and the Ceph version.
+1. Set variables for the system name, the CAN IP address for `ncn-m002`, the Kubernetes version, and the Ceph version.
 
     The CAN IP address for `ncn-m002` is obtained [at this step of the Deploy Final NCN procedure](deploy_final_ncn.md#collect-can-ip-ncn-m002).
 
