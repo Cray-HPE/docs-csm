@@ -10,7 +10,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 
     Point a browser at `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing SYSTEM\_DOMAIN\_NAME with the actual NCN's DNS name.
 
-    The following is an example URL for a system: 'auth.cmn.system1.us.cray.com/keycloak/admin`
+    The following is an example URL for a system: `auth.cmn.system1.us.cray.com/keycloak/admin`
 
     Use the following admin login credentials:
 
@@ -40,9 +40,11 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 
     The Keycloak master admin password is also stored in the `keycloak-master-admin-auth` Kubernetes Secret in the `services` namespace. This must be updated so that clients which need to make requests as the master admin can authenticate with the new password.
 
-    In the `customizations.yaml` file, set the values for the `keycloak_master_admin_auth` keys in the `spec.kubernetes.sealed_secrets` field. The value in the data element where the name is `password` needs to be changed to the new Keycloak master admin password. The section below will replace the existing sealed secret data in the `customizations.yaml` file.
+    In the `customizations.yaml` file, set the values for the `keycloak_master_admin_auth` keys in the `spec.kubernetes.sealed_secrets` field.
+    The value in the data element where the name is `password` needs to be changed to the new Keycloak master admin password. The section below will replace the existing sealed secret data in the `customizations.yaml` file.
 
     For example:
+
     ```yaml
           keycloak_master_admin_auth:
             generate:
@@ -66,13 +68,6 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
                   value: https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token
     ```
 
-1. Upload the modified `customizations.yaml` file to Kubernetes.
-
-   ```bash
-   kubectl delete secret -n loftsman site-init
-   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-   ```
-
 1. Encrypt the values after changing the `customizations.yaml` file.
 
     ```bash
@@ -85,6 +80,13 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
     mkdir -p certs &&
          ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > certs/sealed_secrets.crt
     ```
+
+1. Upload the modified `customizations.yaml` file to Kubernetes.
+
+   ```bash
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 1. Create a local copy of the `platform.yaml` file.
 
