@@ -11,7 +11,6 @@ This page is designed to cover various issues that arise when trying to PXE boot
   - [Restart BSS](#restart-bss)
   - [Restart Kea](#restart-kea)
   - [Missing BSS data](#missing-bss-data)
->>>>>>> 1105be3de3c (CASMINST-4879: Linting):install/troubleshooting_pxe_boot.md
 
 In order for PXE booting to work successfully, the management network switches need to be configured correctly.
 
