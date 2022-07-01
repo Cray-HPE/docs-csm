@@ -41,7 +41,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
     The Keycloak master admin password is also stored in the `keycloak-master-admin-auth` Kubernetes Secret in the `services` namespace. This must be updated so that clients which need to make requests as the master admin can authenticate with the new password.
 
     In the `customizations.yaml` file, set the values for the `keycloak_master_admin_auth` keys in the `spec.kubernetes.sealed_secrets` field.
-    The value in the data element where the name is `password` needs to be changed to the new Keycloak master admin password. The section below will replace the existing sealed secret data in the `customizations.yaml` file.
+    The value in the data element where the name is `password` needs to be changed to the new Keycloak master `admin` password. The section below will replace the existing sealed secret data in the `customizations.yaml` file.
 
     For example:
 
