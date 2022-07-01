@@ -70,8 +70,8 @@ which device will be used for it.
         >
         >    ```bash
         >    bsdtar xvf cray-site-init-*.rpm --include *write-livecd.sh -C ./
-        >    mv ./usr/local/bin/write-livecd.sh ./
-        >    rmdir -p ./usr/local/bin/
+        >    mv -v ./usr/local/bin/write-livecd.sh ./
+        >    rmdir -pv ./usr/local/bin/
         >    ```
         >
 
@@ -139,4 +139,4 @@ boot order to have the USB device first.
    ipmitool -I lanplus -U ${username} -E -H ${BMC} sol activate
    ```
 
-1. Do not exit the typescript. After completing this procedure, proceed to [First Login](../pre-installation.md#13-first-login).
+1. Do not exit the typescript. After completing this procedure, proceed to [First login](../pre-installation.md#13-first-login).

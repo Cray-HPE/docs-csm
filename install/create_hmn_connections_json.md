@@ -19,7 +19,7 @@ the `hmn_connections.json` file.
 ## Procedure
 
 > **`NOTE`** Ensure that the environment variables have been properly set by following
-> [set environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
+> [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
 > to this page.
 
 1. Inspect the `HMN` tab of the SHCD file.

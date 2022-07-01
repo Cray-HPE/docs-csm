@@ -20,8 +20,8 @@ This assumes that the HMN is not setup on the PIT node; these steps cater to bar
 1. (`pit#`) Confirm that the `ncn_metadata.csv` file in this directory has the new information.
 
    > **NOTE** If the file is missing, then generate the file by following
-   > [Generate Topology Files](pre-installation.md#32-generate-topology-files) after the
-   > other steps in [create system configuration](pre-installation.md#3-create-system-configuration).
+   > [Generate topology files](pre-installation.md#32-generate-topology-files) after the
+   > other steps in [Create system configuration](pre-installation.md#3-create-system-configuration).
 
    ```bash
    cat ncn_metadata.csv
@@ -29,7 +29,7 @@ This assumes that the HMN is not setup on the PIT node; these steps cater to bar
 
 1. (`pit#`) Set up the management network if it does not already exist.
 
-   > **NOTE** This network will be overwritten when `/root/bin/pit-init.sh` is invoked during [initialize the LiveCD](pre-installation.md#36-initialize-the-livecd).
+   > **NOTE** This network will be overwritten when `/root/bin/pit-init.sh` is invoked during [Initialize the LiveCD](pre-installation.md#36-initialize-the-livecd).
 
    - Set up the `bond`:
 
@@ -54,6 +54,6 @@ This assumes that the HMN is not setup on the PIT node; these steps cater to bar
 
 ## 2. Collect MAC addresses
 
-1. See [collecting NCN MAC Addresses](collecting_ncn_mac_addresses.md).
+1. See [Collecting NCN MAC Addresses](collecting_ncn_mac_addresses.md).
 
-1. Return to [generate topology files](pre-installation.md#33-customize-system_configyaml).
+1. Return to [Generate topology files](pre-installation.md#33-customize-system_configyaml).

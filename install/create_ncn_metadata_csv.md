@@ -35,8 +35,8 @@ See [Component Names (xnames)](../operations/Component_Names_xnames.md).
 
 There are two interesting parts to the NCN metadata file:
 
-- The MAC of the BMC
-- The MAC(s) of the Shasta management network interfaces
+- The MAC address of the BMC
+- The MAC addresses of the Shasta management network interfaces
 
 The "Shasta management network interfaces" are the interfaces that comprise the NCNs' LACP link-aggregation ports.
 
@@ -57,7 +57,7 @@ For more information, see [NCN Networking](../background/ncn_networking.md).
 ## PXE or bootstrap MAC address
 
 In general this refers to the interface to be used when the node attempts to PXE boot. This varies between vintages
-of systems; systems before Spring 2020 often booted NCNs with onboard NICs; newer systems boot over PCIe cards.
+of systems; systems before Spring 2020 often booted NCNs with onboard NICs, while newer systems boot over PCIe cards.
 
 If the system is **booting over PCIe, then the `Bootstrap MAC` and the `Bond0 MAC0` will be identical**. If the
 system is **booting over onboard NICs, then the `Bootstrap MAC` and the `Bond0 MAC0` will be different.**

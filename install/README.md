@@ -61,19 +61,19 @@ to the [Pre-Installation](#pre-installation) guide.
 
 These steps walk the user through properly setting up a Cray supercomputer for an installation.
 
-See [pre-installation](pre-installation.md).
+See [Pre-installation](pre-installation.md).
 
 ### 2. Boot installation environment
 
-See [boot installation environment](pre-installation.md#1-boot-installation-environment).
+See [Boot installation environment](pre-installation.md#1-boot-installation-environment).
 
 ### 3. Import CSM tarball
 
-See [import CSM tarball](pre-installation.md#2-import-csm-tarball).
+See [Import CSM tarball](pre-installation.md#2-import-csm-tarball).
 
 ### 4. Create system configuration
 
-See [create system configuration](pre-installation.md#3-create-system-configuration).
+See [Create system configuration](pre-installation.md#3-create-system-configuration).
 
 ### 5. Configure management network switches
 
@@ -108,7 +108,7 @@ The first nodes to deploy are the NCNs. These will host CSM services that are re
 See [Deploy Management Nodes](deploy_non-compute_nodes.md).
 
 > **`NOTE`** The PIT node will join Kubernetes after it is rebooted later in
-[Deploy Final NCN](#4-deploy-final-ncn).
+[Deploy final NCN](#4-deploy-final-ncn).
 
 ### 2. Install CSM services
 
@@ -122,7 +122,7 @@ See [Install CSM Services](install_csm_services.md).
 
 After installing all of the CSM services, now validate the health of the management nodes and all CSM services.
 The reason to do it now is that if there are any problems detected with the core infrastructure or the nodes, it is
-easy to rewind the installation to [Deploy Management Nodes](#1-deploy-management-nodes) because the final
+easy to rewind the installation to [Deploy management nodes](#1-deploy-management-nodes), because the final
 NCN has not yet been deployed. In addition, deploying the final NCN successfully requires several CSM services to be working
 properly.
 
@@ -143,8 +143,8 @@ Now that all of the CSM services have been installed and the final NCN has been 
 can be prepared. This may include configuring Keycloak with a local Keycloak account or confirming that Keycloak
 is properly federating LDAP or another Identity Provider (IdP), initializing the `cray` CLI for administrative
 commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by
-CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization,and configuring the node BMCs (node
-controllers) for nodes in liquid cooled cabinets.
+CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs (node
+controllers) for nodes in liquid-cooled cabinets.
 
 See [Configure Administrative Access](configure_administrative_access.md).
 
