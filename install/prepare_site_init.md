@@ -181,8 +181,8 @@ with system-specific customizations.
     > Unfortunately, older versions of OpenSSL may not support
     > `-nameopt` on the `s_client` command or may use a different
     > default format. However,
-    > you should be able to extract the issuer certificate manually
-    > from the output of the above `openssl s_client` example if the
+    > the issuer certificate can be manually extracted
+    > from the output of the above `openssl s_client` example, if the
     > following commands are unsuccessful.
 
     1. (`pit#`) Observe the issuer's DN.
@@ -389,7 +389,7 @@ with system-specific customizations.
     cd "${PITDATA}"
     ```
 
-1. `site-init` is now prepared. Resume [initialize the LiveCD](pre-installation.md#36-initialize-the-livecd).
+1. `site-init` is now prepared. Resume [Initialize the LiveCD](pre-installation.md#36-initialize-the-livecd).
 
 ## 4. Customer-specific customizations
 

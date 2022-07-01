@@ -6,7 +6,7 @@
 1. [Compute node](#compute-node)
     1. [Dense four node chassis - Gigabyte or Intel chassis](#dense-four-node-chassis---gigabyte-or-intel-chassis)
     1. [Single node chassis - Apollo 6500 XL675D](#single-node-chassis---apollo-6500-xl675d)
-    1. [Dual node chassis - Apollo 6500 XL645D](#dual-node-chassis---apollo-6500-xl645d)
+    1. [Dual-node chassis - Apollo 6500 XL645D](#dual-node-chassis---apollo-6500-xl645d)
 1. [Chassis Management Controller (CMC)](#chassis-management-controller-cmc)
 1. [Management node](#management-node)
     1. [Master](#master)
@@ -89,7 +89,7 @@ Depending on the type of compute node, additional rules may apply. Compute nodes
 Air-cooled compute nodes are typically in a `2U` chassis that contains four compute nodes. Each of the compute nodes in the chassis gets its own row in the `HMN` tab,
 plus a parent row.
 
-- The value of the `SourceParent` field is used to group together the 4 nodes that are contained within the same chassis, and it is used to reference another row in
+- The value of the `SourceParent` field is used to group together the four nodes that are contained within the same chassis, and it is used to reference another row in
   the SHCD `HMN` tab. The referenced `SourceParent` row is used to determine the rack slot that the compute nodes occupy.
 - The `SourceParent` row can be a Chassis Management Controller, which can be used to control devices underneath it. This device typically will have a connection to
   the HMN. A Gigabyte CMC is an example of a CMC. If a CMC is not connected to the HMN network, this will prevent CSM services from managing that device.
