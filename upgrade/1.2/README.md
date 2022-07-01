@@ -27,6 +27,10 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
     For more information about modifying `customizations.yaml` and tuning for specific systems, see
     [Post Install Customizations](../../operations/CSM_product_management/Post_Install_Customizations.md).
 
+## Known Issues
+
+- kdump (kernel dump) may hang and fail on NCNs in CSM 1.2 (Raspberry).
+
 ## Plan and coordinate network upgrade
 
 Prior to CSM 1.2, the single Customer Access Network (CAN) carried both the administrative network traffic and the user network
