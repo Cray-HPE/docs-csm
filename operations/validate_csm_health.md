@@ -324,29 +324,60 @@ Run the HMS CT tests. This is done by running the `run_hms_ct_tests.sh` script:
 /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 ```
 
-The return value of the script is 0 if all CT tests ran successfully, non-zero
-if not. On CT test failures the script will instruct the admin to look at the
-CT test log files. If one or more failures occur, investigate the cause of
-each failure. See the [Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+The return code of the script is zero if all HMS CT tests run and pass, non-zero if not.
+On CT test errors or failures the script will print the path to the CT test log file for the admin to inspect.
+If one or more failures occur, investigate the cause of each failure and take remediation steps if needed.
+See the [Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+
+After remediating a test failure for a particular service, just the tests for that individual service
+can be re-run by supplying the name of the service to the `run_hms_ct_tests.sh` script with the -t option:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -t <service>
+```
+
+To list the HMS services that can be tested, use the -l option:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -l
+```
 
 ### 2.2 Hardware State Manager discovery validation
 
 By this point in the installation process, the Hardware State Manager (HSM) should
-have done its discovery of the system.
+have completed its discovery of the system. This section provides steps to verify
+that discovery has completed sucessfully and consists of two parts. First, that all
+hardware attempted to be discovered by HSM was successful, and second, that all of
+the expected hardware in the system is present in HSM.
 
-The foundational information for this discovery is from the System Layout Service (SLS). Thus, a
-comparison needs to be done to see that what is specified in SLS (focusing on
-BMC components and Redfish endpoints) are present in HSM.
+To verify that discovery completed successfully and that Redfish endpoints for the
+system hardware have been populated in HSM, run the `hsm_discovery_status_test.sh`
+script on a master or worker NCN:
 
-To perform this comparison execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN. The result is pass/fail (returns 0 or non-zero):
+```bash
+/opt/cray/csm/scripts/hms_verification/hsm_discovery_status_test.sh
+```
+
+The script will return an exit code of zero if there are no failures. Otherwise, the
+script will return a non-zero exit code along with output indicating which components
+failed discovery and troubleshooting steps for determining why discovery failed.
+
+Next, to verify that all of the expected hardware in the system is present in HSM, a
+comparison needs to be made between HSM and the System Layout Service (SLS) which
+provides the foundational information for the hardware that makes up the system.
+
+To perform this comparison, execute the `verify_hsm_discovery.py` script on a master
+or worker NCN. The result is pass/fail (returns zero or non-zero):
 
 ```bash
 /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 ```
 
-The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
-the output. Refer to [2.2.1 Interpreting results](#221-interpreting-hsm-discovery-results) and
-[2.2.2 Known Issues](#222-known-issues-with-hsm-discovery-validation) below to troubleshoot any mismatched BMCs.
+The output will ideally appear as follows, if there are mismatches these will be
+displayed in the appropriate section of the output. Refer to
+[2.2.1 Interpreting results](#221-interpreting-hsm-discovery-results) and
+[2.2.2 Known Issues](#222-known-issues-with-hsm-discovery-validation) below to
+troubleshoot any mismatched BMCs.
 
 ```text
 HSM Cabinet Summary
