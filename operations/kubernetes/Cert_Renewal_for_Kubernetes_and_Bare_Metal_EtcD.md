@@ -483,7 +483,7 @@ Run the following steps from a master node.
    1. Update the `etcd-client-cert` secret.
 
       ```bash
-      ncn-m# kubectl --namespace=sysmgmt-health create secret generic etcd-client-cert 
+      ncn-m# kubectl --namespace=sysmgmt-health create secret generic etcd-client-cert \
                      --from-file=etcd-client=/etc/kubernetes/pki/apiserver-etcd-client.crt \
                      --from-file=etcd-client-key=/etc/kubernetes/pki/apiserver-etcd-client.key \
                      --from-file=etcd-ca=/etc/kubernetes/pki/etcd/ca.crt \
