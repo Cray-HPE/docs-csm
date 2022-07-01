@@ -27,9 +27,9 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
     For more information about modifying `customizations.yaml` and tuning for specific systems, see
     [Post Install Customizations](../../operations/CSM_product_management/Post_Install_Customizations.md).
 
-## Known Issues
+## Known issues
 
-- kdump (kernel dump) may hang and fail on NCNs in CSM 1.2 (Raspberry).
+- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (Raspberry).
 
 ## Plan and coordinate network upgrade
 
