@@ -13,19 +13,16 @@ directory which contains important customizations for various products.
 The `shasta-cfg` directory included in the CSM release tarball includes relatively static,
 installation-centric artifacts, such as:
 
-*   Cluster-wide network configuration settings required by Helm Charts
-    deployed by product stream Loftsman Manifests
-*   [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
-*   Sealed Secret Generate Blocks -- a form of plain-text input that renders
-    to a Sealed Secret
-*   Helm Chart value overrides that are merged into Loftsman Manifests by
-    product stream installers
+- Cluster-wide network configuration settings required by Helm charts deployed by product stream Loftsman manifests
+- [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
+- Sealed Secret Generate Blocks -- a form of plain-text input that renders to a Sealed Secret
+- Helm chart value overrides that are merged into Loftsman manifests by product stream installers
 
-## 2. Create and Initialize Site-Init Directory
+## 2. Create and initialize Site-Init directory
 
 > **`NOTE`** If the pre-installation is resuming here, ensure the environment variables have been properly set
-> by following [set environment variables](./pre-installation.md#set-reusable-environment-variables) and then coming back 
-> to his page.
+> by following [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
+> to this page.
 
 1. (`pit#`) Set the `SITE_INIT` variable.
 
@@ -52,7 +49,7 @@ installation-centric artifacts, such as:
 The following steps update `${SITE_INIT}/customizations.yaml`
 with system-specific customizations.
 
-1. (`pit#`) Change into the site-init directory
+1. (`pit#`) Change into the `site-init` directory
 
     ```bash
     cd "${SITE_INIT}"
@@ -85,12 +82,13 @@ with system-specific customizations.
     - Replace the `Username` and `Password` references in match the existing settings of your system hardware components.
 
     > **`NOTE`**
-    > - The 'cray_reds_credentials' are used by the River Endpoint Discovery Service (REDS) for River components.
-    > - The 'cray_meds_credentials' are used by the Mountain Endpoint Discovery Service (MEDS) for the liquid-cooled components in an Olympus (Mountain) cabinet.
-    > - The 'cray_hms_rts_credentials' are used by the Redfish Translation Service (RTS) for any hardware components which are not managed by Redfish, such as a ServerTech PDU in a River Cabinet.
-    > 
-    > See the `Decrypt Sealed Secrets for Review` section of [Manage Sealed Secrets](../operations/security_and_authentication/Manage_Sealed_Secrets.md#decrypt-sealed-secrets-for-review)
-    if you need to examine credentials from prior installations.
+    >
+    > - The `cray_reds_credentials` are used by the River Endpoint Discovery Service (REDS) for River components.
+    > - The `cray_meds_credentials` are used by the Mountain Endpoint Discovery Service (MEDS) for the liquid-cooled components in an Olympus (Mountain) cabinet.
+    > - The `cray_hms_rts_credentials` are used by the Redfish Translation Service (RTS) for any hardware components which are not managed by Redfish, such as a ServerTech PDU in a River Cabinet.
+    >
+    > See the `Decrypt Sealed Secrets for Review` section of [Manage Sealed Secrets](../operations/security_and_authentication/Manage_Sealed_Secrets.md#decrypt-sealed-secrets-for-review),
+    > if needing to examine credentials from prior installations.
 
     ```bash
     vim "${SITE_INIT}/customizations.yaml"
@@ -102,16 +100,17 @@ with system-specific customizations.
     diff ${SITE_INIT}/customizations.yaml ${SITE_INIT}/customizations.yaml.prepassword
     ```
 
-1. (`pit#`) VValidate that REDS/MEDS/RTS credentials.
+1. (`pit#`) Validate that REDS/MEDS/RTS credentials are correct.
 
-    For all credentials, Make sure `Username` and `Password` values are correct.
+    For all credentials, make sure that `Username` and `Password` values are correct.
 
     - Validate REDS credentials:
 
         > **`NOTE`** These credentials are used by the REDS and HMS discovery services, targeting River Redfish
         BMC endpoints and management switches
-        > - For vault_redfish_defaults, the only entry used is:
-        >     
+        >
+        > - For `vault_redfish_defaults`, the only entry used is:
+        >
         >     ```json
         >     {"Cray": {"Username": "root", "Password": "XXXX"}
         >     ```
@@ -139,7 +138,7 @@ with system-specific customizations.
         ```
 
 1. To customize the PKI Certificate Authority (CA) used by the platform, see
-    [Certificate_authority](../background/certificate_authority.md).
+    [Certificate Authority](../background/certificate_authority.md).
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
@@ -177,13 +176,13 @@ with system-specific customizations.
     create it automatically.
 
     > **`NOTE`** The following commands were verified using OpenSSL
-    > version 1.1.1d and use the `-nameopt RFC2253` option to ensure
-    > consistent formatting of distinguished names (DNs).
+    > version `1.1.1d` and use the `-nameopt RFC2253` option to ensure
+    > consistent formatting of distinguished names.
     > Unfortunately, older versions of OpenSSL may not support
     > `-nameopt` on the `s_client` command or may use a different
-    > default format. As a result, your mileage may vary; however,
-    > you should be able to extract the issuer certificate manually
-    > from the output of the above `openssl s_client` example if the
+    > default format. However,
+    > the issuer certificate can be manually extracted
+    > from the output of the above `openssl s_client` example, if the
     > following commands are unsuccessful.
 
     1. (`pit#`) Observe the issuer's DN.
@@ -194,7 +193,7 @@ with system-specific customizations.
 
         Expected output includes a line similar to this:
 
-        ```
+        ```text
         emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
         ```
 
@@ -222,7 +221,7 @@ with system-specific customizations.
             -keystore /data/certs.jks -storepass password -noprompt
     ```
 
-1. (`pit#`) Create `certs.jks.b64` by base64 encoding `certs.jks`.
+1. (`pit#`) Create `certs.jks.b64` by base-64 encoding `certs.jks`.
 
     ```bash
     base64 certs.jks > certs.jks.b64
@@ -281,9 +280,9 @@ with system-specific customizations.
 
     1. (`pit#`) Set `localRoleAssignments` in `customizations.yaml`.
 
-       > **`NOTE`** This example sets `localRoleAssignments` for the LDAP groups `employee`, 
-       > `craydev`, and `shasta_admins` to be the admin role and the LDAP group `shasta_users`
-       > to be the user role.
+       > **`NOTE`** This example sets `localRoleAssignments` for the LDAP groups `employee`,
+       > `craydev`, and `shasta_admins` to be the `admin` role, and the LDAP group `shasta_users`
+       > to be the `user` role.
 
        ```bash
        yq write -s - -i "${SITE_INIT}/customizations.yaml" <<EOF
@@ -309,9 +308,12 @@ with system-specific customizations.
 
 1. (`pit#`) Configure the Unbound DNS resolver (if needed).
 
-    **Important:** If access to a site DNS server is required **and** this DNS server was specified to `csi` using the `site-dns` option (either on the command line or in the `system_config.yaml` file), **then no further action is required and this step should be skipped**.
+    > **Important** If access to a site DNS server is required **and** this DNS server was specified to `csi` using the `site-dns`
+    > option (either on the command line or in the `system_config.yaml` file),
+    > **then no further action is required and this step should be skipped**.
 
     The default configuration is as follows:
+
     ```yaml
     cray-dns-unbound:
         domain_name: '{{ network.dns.external }}'
@@ -347,9 +349,9 @@ with system-specific customizations.
 
 1. (Optional) Configure PowerDNS zone transfer and DNSSEC. See the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
 
-   * If zone transfer is to be configured review `customizations.yaml` and ensure the `primary_server`, `secondary_servers`, and `notify_zones` values are set correctly.
+   - If zone transfer is to be configured, then review `customizations.yaml` and ensure that the `primary_server`, `secondary_servers`, and `notify_zones` values are set correctly.
 
-   * If DNSSEC is to be used then add the desired keys into the `dnssec` SealedSecret.
+   - If DNSSEC is to be used, then add the desired keys into the `dnssec` SealedSecret.
 
 1. (Optional) Configure Prometheus SNMP Exporter.
 
@@ -387,9 +389,9 @@ with system-specific customizations.
     cd "${PITDATA}"
     ```
 
-1. `site-init` is now prepared. Resume [initialize the LiveCD](./pre-installation.md#initialize-the-livecd).
+1. `site-init` is now prepared. Resume [Initialize the LiveCD](pre-installation.md#36-initialize-the-livecd).
 
-## 4. Customer-Specific Customizations
+## 4. Customer-specific customizations
 
 Customer-specific customizations are any changes on top of the baseline
 configuration to satisfy customer-specific requirements. It is recommended that

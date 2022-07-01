@@ -31,9 +31,9 @@ Acquire a CSM software release tarball for installation on the HPE Cray EX super
    tar -xzvf ${CSM_RELEASE}.tar.gz
    ```
 
-1. Before using this software release, check for any patches available for it. If patches are available, see [Apply Patch to CSM Release](#patch).
+1. Before using this software release, check for any patches available for it. If patches are available, see [Apply patch to CSM release](#apply-patch-to-csm-release).
 
-## Apply Patch to CSM Release
+## Apply patch to CSM release
 
 Apply a CSM update patch to the release tarball. This ensures that the latest CSM product artifacts are installed on the HPE Cray EX supercomputer.
 
@@ -125,8 +125,6 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
    ```
 
 1. Repeat the first step in this procedure to display the version of the CSM documentation after the update.
-
-## Check for Field Notices about Hotfixes
 
 ## Check for Field Notices about Hotfixes
 

@@ -1,18 +1,15 @@
 # Prepare Compute Nodes
 
-### Topics:
-
-1. [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](#configure-hpe-apollo-6500-xl645d-gen10-plus-compute-nodes)
+1. [Configure HPE Apollo 6500 XL645d Gen10 Plus compute nodes](#configure-hpe-apollo-6500-xl645d-gen10-plus-compute-nodes)
    1. [Gather information](#1-gather-information)
-   1. [Configure the iLO to use HMN VLAN](#2-configure-ilo)
-   1. [Configure the switch port for the iLO to use the HMN VLAN](#3-configure-switch-port)
-   1. [Clear bad MAC and IP address out of KEA](#4-cleanup-kea)
-   1. [Clear bad ID out of HSM](#5-cleanup-hsm)
-   1. [Update the BIOS Time on Gigabyte Compute Nodes](#6-update-the-bios-time-on-gigabyte-compute-nodes)
+   1. [Configure iLO](#2-configure-ilo)
+   1. [Configure switch port](#3-configure-switch-port)
+   1. [Cleanup Kea](#4-cleanup-kea)
+   1. [Cleanup HSM](#5-cleanup-hsm)
+   1. [Update BIOS time](#6-update-bios-time)
+1. [Next topic](#next-topic)
 
-## Details
-
-### Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes
+## Configure HPE Apollo 6500 XL645d Gen10 Plus compute nodes
 
 The HPE Apollo 6500 XL645d Gen10 Plus compute node uses a NIC/shared iLO network
 port. The NIC is also referred to as the Embedded LOM (LAN On Motherboard) and
@@ -32,11 +29,9 @@ so
 on. The node indicator is always a "0." For example, `x3000c0s30b1n0` or
 `x3000c0s30b4n0`.
 
-#### 1. Gather Information
+### 1. Gather information
 
-Gather information.
-
-The following is an example using `x3000c0s30b1n0` as the target compute node
+(`ncn-mw#`) The following is an example using `x3000c0s30b1n0` as the target compute node
 component name (xname):
 
 ```bash
@@ -77,11 +72,11 @@ Expected output may look like:
 ```
 
 The second entry is the indication that the NIC is receiving incorrect IP
-addresses. The 10.254.x.y address is for the HMN and should not be associated
+addresses. The `10.254.x.y` address is for the HMN and should not be associated
 with the node itself (`x3000c0s30b1n0`).
 
-Make a note of the ID, MACAddress, and IPAddress of the entry that has the
-10.254 address listed.
+Make a note of the `ID`, `MACAddress`, and `IPAddress` of the entry that has the
+`10.254` address listed.
 
  ```bash
  ID="9440c938f7b4"
@@ -89,18 +84,18 @@ Make a note of the ID, MACAddress, and IPAddress of the entry that has the
  IPADDR="10.254.1.38"
  ```
 
-These will be used later to clean up KEA and Hardware State Manager (HSM).
-There may not be a 10.254 address associated with the node, that is OK, it
-will enable skipping of several steps later on.
+These will be used later to clean up Kea and Hardware State Manager (HSM).
+There may not be a `10.254` address associated with the node. That is OK; it
+will enable skipping several steps later on.
 
-#### 2. Configure iLO
+### 2. Configure iLO
 
-1. Configure the iLO to use HMN VLAN.
+Configure the iLO to use HMN VLAN.
 
-1. Connect to BMC WebUI and log in with standard root credentials.
+1. Connect to the BMC web user interface and log in with standard `root` credentials.
 
-    1. From the administrators own machine create an SSH tunnel (-L creates
-       the tunnel, and -N prevents a shell and stubs the connection):
+    1. From the administrator's own machine, create an SSH tunnel (`-L` creates
+       the tunnel, and `-N` prevents a shell and stubs the connection):
 
        ```bash
        BMC=x3000c0s30b1
@@ -110,28 +105,28 @@ will enable skipping of several steps later on.
     1. Opening a web browser to `https://localhost:9443` will give access to
        the BMC's web interface.
 
-    1. Login with the root credentials.
+    1. Login with the `root` credentials.
 
 1. Click on **iLO Shared Network Port** on left menu.
 
-1. (`ncn#`) Make a note of the **MAC Address** under the **Information** section,
+1. (`ncn#`) Make a note of the `MAC Address` under the **Information** section;
    that will be needed later.
 
     ```bash
     ILOMAC="<MAC Address>"
     ```
-    
+
     For example:
-    
+
     ```bash
     ILOMAC="94:40:c9:38:08:c7"
     ```
 
 1. Click on **General** on the top menu.
 
-1. Under **NIC Settings** move slider to **Enable VLAN**.
+1. Under `NIC Settings`, move the slider to `Enable VLAN`.
 
-1. In the **VLAN Tag** box, enter **4**.
+1. In the `VLAN Tag` box, enter `4`.
 
 1. Click **Apply**.
 
@@ -142,67 +137,67 @@ will enable skipping of several steps later on.
 1. After accepting the BMC restart, connection to the BMC will be lost until
    the switch port reconfiguration is performed.
 
-#### 3. Configure Switch Port
+### 3. Configure switch port
 
-1. Configure the switch port for the iLO to use HMN VLAN.
+Configure the switch port for the iLO to use HMN VLAN.
 
 1. Find the port and the switch the iLO is plugged into using the SHCD.
 
-1. ssh to the switch and log in with standard admin credentials. Refer to
-   `/etc/hosts` for exact hostname.
+1. SSH to the switch and log in with standard `admin` user credentials. Refer to
+   `/etc/hosts` for the exact hostname.
 
-1. Verify the MAC on the port.
+1. (`sw#`) Verify the MAC address on the port.
 
-   Example using port number 46.
+    Example using port number 46.
 
     ```console
     show mac-address-table | include 1/1/46
     ```
-   
+
     Example output:
 
     ```text
     94:40:c9:38:08:c7    4        dynamic                   1/1/46
     ```
 
-   Make sure the MAC address shown for that port matches the ILOMAC address
-   noted in step 2.3 from the **Information** section of the WebUI.
+   Make sure that the MAC address shown for that port matches the `ILOMAC` address
+   noted previously from the **Information** section of the web user interface.
 
-   > **`NOTE`** If the MAC is not correct, double check the server cabling and
+   > **`NOTE`** If the MAC address is not correct, double check the server cabling and
    SHCD for the correct port then start this section over. **Do not** move on
-   until the ILOMAC address has been found on the switch at the expected
+   until the `ILOMAC` address has been found on the switch at the expected
    port.
 
-1. Configure the port if the MAC is correct.
+1. (`sw#`) Configure the port, if the MAC address is correct.
 
-   Example using port number 46.
+    Example using port number 46.
 
-    ```bash
+    ```console
     configure t
     int 1/1/46
     vlan trunk allowed 4
     write mem
     ```
-   
+
     The above snippet should output the following:
-   
+
     ```text
     Copying configuration: [Success]
     ```
 
     Type exit twice to leave the interface configuration, and the main configuration menu:
 
-    ```bash
+    ```console
     exit
     exit
-    ```    
+    ```
 
-1. Verify the settings.
+1. (`sw#`) Verify the settings.
 
-    ```bash
+    ```console
     show running-config interface 1/1/46
     ```
-   
+
     Expect output:
 
     ```text
@@ -219,46 +214,45 @@ will enable skipping of several steps later on.
     ```
 
     After a few minutes the switch will be configured and access to the
-    WebUI will be regained.
+    web user interface will be regained.
 
-#### 4. Cleanup KEA
+### 4. Cleanup Kea
 
-Clear bad MAC and IP address out of KEA.
+Clear bad MAC and IP address out of Kea.
 
- > **`NOTE`** Skip this step if there was no bad MAC and IPADDR found in step 1.
+ > **`NOTE`** Skip this section if there was no bad MAC address and IP address found in step 1.
 
- Retrieve a bearer token if you have not done so already.
+1. (`ncn-mw#`) Retrieve an API token, if not done previously.
 
- ```bash
- export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-     -d client_id=admin-client \
-     -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
- ```
+     ```bash
+     export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+         -d client_id=admin-client \
+         -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+     ```
 
- Remove the entry from KEA that is associated with the MAC and IPADDRESS
- gathered in section 1.1.
+1. (`ncn-mw#`) Remove the entry from Kea that is associated with the MAC address and IP address gathered previously.
 
- ```bash
- curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
-     "Content-Type: application/json" -d '{"command": "lease4-del", \
-     "service": [ "dhcp4" ], "arguments": {"hw-address": "'${MAC}'", \
-     "ip-address": "'${IPADDR}'"}}' https://api-gw-service-nmn.local/apis/dhcp-kea
- ```
+     ```bash
+     curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
+         "Content-Type: application/json" -d '{"command": "lease4-del", \
+         "service": [ "dhcp4" ], "arguments": {"hw-address": "'${MAC}'", \
+         "ip-address": "'${IPADDR}'"}}' https://api-gw-service-nmn.local/apis/dhcp-kea
+     ```
 
- Expected results:
+     Expected results:
 
- ```json
- [ { "result": 0, "text": "IPv4 lease deleted." } ]
- ```
+     ```json
+     [ { "result": 0, "text": "IPv4 lease deleted." } ]
+     ```
 
 #### 5. Cleanup HSM
 
 Clear bad ID out of HSM.
 
-> **`NOTE`** Skip this step if there was no bad ID found in step 1.
+> **`NOTE`** Skip this section if there was no bad ID found in step 1.
 
-Tell HSM to delete the bad ID out of the Ethernet Interfaces table.
+(`ncn-mw#`) Tell HSM to delete the bad ID out of the Ethernet interfaces table.
 
 ```bash
 cray hsm inventory ethernetInterfaces delete $ID
@@ -277,15 +271,15 @@ Everything is now configured and the CSM software will automatically discover
 the node after several minutes. After it has been discovered, the node is ready
 to be booted.
 
-#### 6. Update the BIOS Time on Gigabyte Compute Nodes
+#### 6. Update BIOS time
 
 The BIOS time for Gigabyte compute nodes must be synced with the rest of the system.
 See [Update the Gigabyte Node BIOS Time](../operations/node_management/Update_the_Gigabyte_Node_BIOS_Time.md).
 
-## Next Topic
+## Next topic
 
 After completing the preparation for compute nodes, the CSM product stream
-has been fully installed and configured. Check the next topic.
+has been fully installed and configured.
 
-See [Next Topic](README.md#next-topic) for more information on other product
+See [Next topic](README.md#10-next-topic) for more information on other product
 streams to be installed and configured after CSM.

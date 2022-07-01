@@ -1,4 +1,5 @@
 # CEPHADM
+
 `cephadm` is a new function introduced in Ceph Octopus 15. It allows for an easier method to install and manage Ceph nodes.
 
 ## Traditional Ceph commands
@@ -11,7 +12,7 @@ cephadm shell
 
 The previous command creates a container and opens an interactive shell with access to run Ceph commands the traditional way.
 
-Or optionally, you can execute your command as follos:
+Alternatively, execute the command as follows:
 
 ```bash
 cephadm shell -- ceph -s
@@ -54,4 +55,3 @@ Optionally you can specify a single node name to just list that node's drives:
 ```bash
 ceph orch device ls ncn-s002
 ```
-

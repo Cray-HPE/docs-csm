@@ -164,6 +164,7 @@ DHCP
 dialog
 diskless
 DNS
+DNSMasq
 Docker
 Dockerfile
 dropdown

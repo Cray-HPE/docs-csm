@@ -158,4 +158,4 @@ The process is now done, the NCNs are ready for a new deployment.
 
 ## Next topic
 
-See [Bootstrap PIT Node](README.md#1-boot-installation-environment).
+See [Boot installation environment](README.md#2-boot-installation-environment).

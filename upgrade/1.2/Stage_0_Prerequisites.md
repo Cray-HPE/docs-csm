@@ -156,7 +156,7 @@ the correct options for the specific environment are used. Two examples are give
 
 Migrate SLS data to CSM 1.2, using the `sls_input_file.json` obtained above, using the desired
 network (new CAN or CHN) and its chosen subnet. For details on choosing the subnet, see
-[Decide on subnet ranges for new CAN/CHN](#decide-on-subnet-ranges-for-new-canchn).
+[Decide on subnet ranges for new CAN/CHN](plan_and_coordinate_network_upgrade.md#decide-on-subnet-ranges-for-new-canchn).
 
 - (`ncn-m001#`) Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
@@ -259,9 +259,9 @@ network (new CAN or CHN) and its chosen subnet. For details on choosing the subn
 
 1. (Optional) (`ncn-m001#`) Commit changes to `customizations.yaml`.
 
-   `customizations.yaml` has been updated in this procedure. If
-   [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
-   then clone a local working tree and commit appropriate changes to `customizations.yaml`.
+   `customizations.yaml` has been updated in this procedure. If using an external Git repository
+   for managing customizations as recommended, then clone a local working tree and commit
+   appropriate changes to `customizations.yaml`.
 
    For example:
 

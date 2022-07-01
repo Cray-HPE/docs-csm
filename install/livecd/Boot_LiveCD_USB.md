@@ -48,36 +48,36 @@ which device will be used for it.
 
 1. Format the USB device.
 
-    * Use the CSI application to do this:
+    - Use the CSI application to do this:
 
-      ```bash
-      csi pit format ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
-      ```
+        ```bash
+        csi pit format ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        ```
 
-   * If CSI is unavailable, then fetch and use the `write-livecd.sh` script:
+    - If CSI is unavailable, then fetch and use the `write-livecd.sh` script:
 
-      > **`NOTE`** This assumes the `write-livecd.sh` script was extracted from the tarball's 
-      > cray-site-init RPM. If that was skipped in 
-      > [the USB section of Boot the LiveCD](../pre-installation.md#boot-the-livecd), the script
-      > is also available on GitHub:
-      > 
-      >    ```bash
-      >    curl -O https://raw.githubusercontent.com/Cray-HPE/cray-site-init/main/scripts/write-livecd.sh && chmod +x write-livecd.sh
-      >    ```          
-      > 
-      > Alternatively if the RPM is available but the LiveCD is being created on a non-RPM based distro, 
-      > then the script can be extracted from the RPM file:
-      > 
-      >    ```bash
-      >    bsdtar xvf cray-site-init-*.rpm --include *write-livecd.sh -C ./
-      >    mv ./usr/local/bin/write-livecd.sh ./
-      >    rmdir -p ./usr/local/bin/
-      >    ```
-      >     
+        > **`NOTE`** This assumes the `write-livecd.sh` script was extracted from the tarball's
+        > `cray-site-init` RPM. If that was skipped in
+        > [the USB section of Boot the LiveCD](../pre-installation.md#12-boot-the-livecd), the script
+        > is also available on GitHub:
+        >
+        >    ```curl
+        >    curl -f -O https://raw.githubusercontent.com/Cray-HPE/cray-site-init/main/scripts/write-livecd.sh && chmod +x write-livecd.sh
+        >    ```
+        >
+        > Alternatively if the RPM is available but the LiveCD is being created on a non-RPM based distro,
+        > then the script can be extracted from the RPM file:
+        >
+        >    ```bash
+        >    bsdtar xvf cray-site-init-*.rpm --include *write-livecd.sh -C ./
+        >    mv -v ./usr/local/bin/write-livecd.sh ./
+        >    rmdir -pv ./usr/local/bin/
+        >    ```
+        >
 
-      ```bash
-      write-livecd.sh ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
-      ```
+        ```bash
+        write-livecd.sh ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
+        ```
 
 ## Boot the LiveCD
 
@@ -106,9 +106,9 @@ boot order to have the USB device first.
 
 1. (`external#`) Power the NCN on and connect to the IPMI console.
 
-   > **`NOTE`** The bootdevice can be set via IPMI, below we use the `floppy` option. At a glance this seems incorrect,
+   > **`NOTE`** The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect,
    > however it selects the primary removable media. This step instructs the user to power off the node to ensure
-   > the BIOS has the best chance at finding the USB via a cold-boot.
+   > the BIOS has the best chance at finding the USB via a cold boot.
    >
    > ```bash
    > ipmitool chassis bootdev
@@ -139,4 +139,4 @@ boot order to have the USB device first.
    ipmitool -I lanplus -U ${username} -E -H ${BMC} sol activate
    ```
 
-1. Do not exit the typescript. After completing this procedure, proceed to [First Login](../pre-installation.md#first-login).
+1. Do not exit the typescript. After completing this procedure, proceed to [First log in](../pre-installation.md#13-first-log-in).

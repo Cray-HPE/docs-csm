@@ -1,26 +1,26 @@
 # SHCD HMN Tab/HMN Connections Rules
 
-## Table of Contents
+## Table of contents
 
-  1. [Introduction](#introduction)
-  2. [Compute node](#compute-node)
-      1. [Dense four node chassis - Gigabyte or Intel chassis](#dense-four-node-chassis---gigabyte-or-intel-chassis)
-      2. [Single node chassis - Apollo 6500 XL675D](#single-node-chassis---apollo-6500-xl675d)
-      3. [Dual node chassis - Apollo 6500 XL645D](#dual-node-chassis---apollo-6500-xl645d)
-  3. [Chassis Management Controller (CMC)](#chassis-management-controller-cmc)
-  4. [Management node](#management-node)
-      1. [Master](#master)
-      2. [Worker](#worker)
-      3. [Storage](#storage)
-  5. [Application node](#application-node)
-      1. [Single node chassis](#single-node-chassis)
-          1. [Building component names (xnames) for nodes in a single application node chassis](#building-component-names-xnames-for-nodes-in-a-single-application-node-chassis)
-      2. [Dual node chassis](#dual-node-chassis)
-          1. [Building component names (xnames) for nodes in a dual application node chassis](#building-component-names-xnames-for-nodes-in-a-dual-application-node-chassis)
-  6. [Columbia Slingshot switch](#columbia-slingshot-switch)
-  7. [PDU cabinet controller](#pdu-cabinet-controller)
-  8. [Cooling door](#cooling-door)
-  9. [Management switches](#management-switches)
+1. [Introduction](#introduction)
+1. [Compute node](#compute-node)
+    1. [Dense four-node chassis - Gigabyte or Intel chassis](#dense-four-node-chassis---gigabyte-or-intel-chassis)
+    1. [Single-node chassis - Apollo 6500 XL675D](#single-node-chassis---apollo-6500-xl675d)
+    1. [Dual-node chassis - Apollo 6500 XL645D](#dual-node-chassis---apollo-6500-xl645d)
+1. [Chassis Management Controller (CMC)](#chassis-management-controller-cmc)
+1. [Management node](#management-node)
+    1. [Master](#master)
+    1. [Worker](#worker)
+    1. [Storage](#storage)
+1. [Application node](#application-node)
+    1. [Single-node chassis](#single-node-chassis)
+        1. [Building component names (xnames) for nodes in a single application node chassis](#building-component-names-xnames-for-nodes-in-a-single-application-node-chassis)
+    1. [Dual-node chassis](#dual-node-chassis)
+        1. [Building component names (xnames) for nodes in a dual application node chassis](#building-component-names-xnames-for-nodes-in-a-dual-application-node-chassis)
+1. [Columbia Slingshot switch](#columbia-slingshot-switch)
+1. [PDU cabinet controller](#pdu-cabinet-controller)
+1. [Cooling door](#cooling-door)
+1. [Management switches](#management-switches)
 
 ## Introduction
 
@@ -58,44 +58,42 @@ Column mapping from SHCD to `hmn_connections.json`:
 
 Some conventions for this document:
 
-* All `Source` names from the SHCD are converted to lowercase before being processed by the CSI tool.
-* Throughout this document, the field names from the `hmn_connections.json` file will be used to referenced values from the SHCD.
-* Each device type has an example of how it is represented in the `HMN` tab of the SHCD, the `hmn_connections.json` file, and in SLS.
+- All `Source` names from the SHCD are converted to lowercase before being processed by the CSI tool.
+- Throughout this document, the field names from the `hmn_connections.json` file will be used to referenced values from the SHCD.
+- Each device type has an example of how it is represented in the `HMN` tab of the SHCD, the `hmn_connections.json` file, and in SLS.
 
 ## Compute node
 
 The `Source` field needs to match these conditions in order to be considered a compute node:
 
-* Has one of the following prefixes:
+- Has one of the following prefixes:
+  - `nid`
+  - `cn`
 
-  * `nid`
-  * `cn`
-
-* Ends with an integer that matches this regular expression: `(\d+$)`
-
-  * This integer is the Node ID (NID) for the node
-  * Each node should have a unique NID value
+- Ends with an integer that matches this regular expression: `(\d+$)`
+  - This integer is the Node ID (NID) for the node
+  - Each node should have a unique NID value
 
 For example, the following are valid `Source` field values for compute nodes:
 
-* `nid000001`
-* `cn1`
-* `cn-01`
+- `nid000001`
+- `cn1`
+- `cn-01`
 
 Depending on the type of compute node, additional rules may apply. Compute nodes in the follow sections will use the `nid` prefix.
 
-### Dense four node chassis - Gigabyte or Intel chassis
+### Dense four-node chassis - Gigabyte or Intel chassis
 
 > **`NOTE`** Apollo 2000 compute nodes are not currently supported by CSM.
 
 Air-cooled compute nodes are typically in a `2U` chassis that contains four compute nodes. Each of the compute nodes in the chassis gets its own row in the `HMN` tab,
 plus a parent row.
 
-* The value of the `SourceParent` field is used to group together the 4 nodes that are contained within the same chassis, and it is used to reference another row in
+- The value of the `SourceParent` field is used to group together the four nodes that are contained within the same chassis, and it is used to reference another row in
   the SHCD `HMN` tab. The referenced `SourceParent` row is used to determine the rack slot that the compute nodes occupy.
-* The `SourceParent` row can be a Chassis Management Controller, which can be used to control devices underneath it. This device typically will have a connection to
+- The `SourceParent` row can be a Chassis Management Controller, which can be used to control devices underneath it. This device typically will have a connection to
   the HMN. A Gigabyte CMC is an example of a CMC. If a CMC is not connected to the HMN network, this will prevent CSM services from managing that device.
-* The `SourceParent` row can be a virtual parent that is used to group the compute nodes together symbolically into a chassis. It does not need to not have a
+- The `SourceParent` row can be a virtual parent that is used to group the compute nodes together symbolically into a chassis. It does not need to not have a
   connection to the HMN.
 
 The rack slot that a compute node occupies is determined by the rack slot of the `SourceParent`. The `SourceLocation` of the parent is the bottom unit number of the
@@ -105,7 +103,7 @@ The BMC ordinal for a node's BMC is derived from the NID of the node by applying
 For example, a node with NID 17 will have a BMC ordinal of `(17 modulo 4) + 1 == 1 + 1 == 2`. Therefore a node with NID 17 in slot 10 in cabinet 3000 will have the
 component name (xname) of `x3000s10b2n0`.
 
-#### Compute: Four node chassis: SHCD
+#### Compute: Four-node chassis: SHCD
 
 Example: Four compute nodes in the same chassis with a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the compute
 node BMCs are connected to ports 33-36 in the management `leaf-bmc-bmc` switch in slot 14 of cabinet 3000. Port 32 on the `leaf-bmc-bmc` switch is for the CMC in
@@ -133,7 +131,7 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 
 > **`NOTE`** `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Four node chassis: HMN connections
+#### Compute: Four-node chassis: HMN connections
 
 Example Four compute nodes in the same chassis with the a CMC connected to the network. The compute node chassis is located in slot 17 of cabinet 3000, and the
 compute node BMCs are connected to ports 33-36 in the management `leaf-bmc-bmc` switch in slot 14 of cabinet 3000. The `SourceParent` for the compute nodes
@@ -163,11 +161,11 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Four node chassis: SLS
+#### Compute: Four-node chassis: SLS
 
 The CSI tool will generate the following SLS representations for compute nodes and their BMC connections to the HMN network.
 
-##### Compute: Four node chassis: SLS: Compute node with NID 1
+##### Compute: Four-node chassis: SLS: Compute node with NID 1
 
 - Node:
 
@@ -208,7 +206,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
 
-##### Compute: Four node chassis: SLS: Compute node with NID 2
+##### Compute: Four-node chassis: SLS: Compute node with NID 2
 
 - Node:
 
@@ -249,7 +247,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/35`. Dell `leaf-bmc` switches will have value `ethernet1/1/35`.
 
-##### Compute: Four node chassis: SLS: Compute node with NID 3
+##### Compute: Four-node chassis: SLS: Compute node with NID 3
 
 - Node
 
@@ -290,7 +288,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/34`. Dell `leaf-bmc` switches will have value `ethernet1/1/34`.
 
-##### Compute: Four node chassis: SLS: Compute node with NID 4
+##### Compute: Four-node chassis: SLS: Compute node with NID 4
 
 - Node
 
@@ -331,16 +329,16 @@ The CSI tool will generate the following SLS representations for compute nodes a
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/33`. Dell `leaf-bmc` switches will have value `ethernet1/1/33`.
 
-### Single node chassis - Apollo 6500 XL675D
+### Single-node chassis - Apollo 6500 XL675D
 
 A single compute node chassis needs to match these additional conditions:
 
-* No `SourceParent` defined
-* No `SourceSubLocation` defined
+- No `SourceParent` defined
+- No `SourceSubLocation` defined
 
 This convention applies to all compute nodes that have a single node in a chassis, such as the Apollo XL675D.
 
-#### Compute: Single node chassis: SHCD
+#### Compute: Single-node chassis: SHCD
 
 Example: A single chassis node with NID 1 located in slot 2 of cabinet 3000. The node's BMC is connected to port 36 of the management `leaf-bmc` switch in
 slot 40 of cabinet 3000.
@@ -351,7 +349,7 @@ slot 40 of cabinet 3000.
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Single node chassis: HMN connections
+#### Compute: Single-node chassis: HMN connections
 
 The HMN connections representation for the two SHCD table rows above:
 
@@ -361,7 +359,7 @@ The HMN connections representation for the two SHCD table rows above:
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Single node chassis: SLS
+#### Compute: Single-node chassis: SLS
 
 - Compute node:
 
@@ -402,25 +400,25 @@ The HMN connections representation for the two SHCD table rows above:
 
 > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
 
-### Dual node chassis - Apollo 6500 XL645D
+### Dual-node chassis - Apollo 6500 XL645D
 
 Additional matching conditions:
 
-* `SourceSubLocation` field contains one of: `L`, `l`, `R`, `r`.
+- `SourceSubLocation` field contains one of: `L`, `l`, `R`, `r`.
 
 In addition to the top-level compute node naming requirements, when there are two nodes in a single chassis, the `SourceSubLocation` is required. The
 `SourceSubLocation` can contain one of the following values: `L`, `l`, `R`, `r`. These values are used to determine the BMC ordinal for the node.
 
-* `L` or `l` translates into the component name (xname) having `b1`.
-  * For example, `x3000c0s10b1b0`
-* `R` or `r` translates into the component name (xname) having `b2`.
-  * For example, `x3000c0s10b1b0`
+- `L` or `l` translates into the component name (xname) having `b1`.
+  - For example, `x3000c0s10b1b0`
+- `R` or `r` translates into the component name (xname) having `b2`.
+  - For example, `x3000c0s10b1b0`
 
 This convention applies to all compute nodes that have two nodes in a chassis, such as the Apollo XL645D.
 
-#### Compute: Dual node chassis: SHCD
+#### Compute: Dual-node chassis: SHCD
 
-Example: A compute node chassis with 2 nodes located in slot 8 of cabinet 3000. NID 1 is on the left side of the chassis, and NID 2 is on the right side.
+Example: A compute node chassis with two nodes located in slot 8 of cabinet 3000. NID 1 is on the left side of the chassis, and NID 2 is on the right side.
 The two node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch in slot 40 of cabinet 3000.
 
 | `Source`          | `Rack`  | `Location` |       | `Parent` |       | `Port` | `Destination` | `Rack`   | `Location` |       | `Port` |
@@ -430,7 +428,7 @@ The two node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` 
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Dual node chassis: HMN connections
+#### Compute: Dual-node chassis: HMN connections
 
 The HMN connections representation for the two SHCD table rows above:
 
@@ -441,9 +439,9 @@ The HMN connections representation for the two SHCD table rows above:
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Compute: Dual node chassis: SLS
+#### Compute: Dual-node chassis: SLS
 
-##### Compute: Dual node chassis: SLS: Compute node with NID 1
+##### Compute: Dual-node chassis: SLS: Compute node with NID 1
 
 - Node:
 
@@ -484,7 +482,7 @@ The HMN connections representation for the two SHCD table rows above:
 
     > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/38`. Dell `leaf-bmc` switches will have value `ethernet1/1/38`.
 
-##### Compute: Dual node chassis: SLS: Compute node with NID 2
+##### Compute: Dual-node chassis: SLS: Compute node with NID 2
 
 - Node:
 
@@ -531,8 +529,8 @@ The HMN connections representation for the two SHCD table rows above:
 
 Matching conditions:
 
-* This row is referenced as a `SourceParent` of another row
-* `Source` field contains `cmc` or `CMC`
+- This row is referenced as a `SourceParent` of another row
+- `Source` field contains `cmc` or `CMC`
 
 A Chassis Management Controller (CMC) is a device which can be used to control the BMCs underneath it. This device typically has a connection to the HMN.
 A Gigabyte CMC is an example of a CMC. If a CMC is not connected to the HMN network, this will prevent CSM services from managing that device.
@@ -595,8 +593,8 @@ The HMN connections representation for the SHCD table row above:
 
 The `Source` field needs to match both of the following conditions:
 
-* `mn` prefix
-* Integer immediately after the prefix; can be padded with `0` characters
+- `mn` prefix
+- Integer immediately after the prefix; can be padded with `0` characters
 
 The integer after the prefix is used to determine the hostname of the master node. For example, `mn02` corresponds to hostname `ncn-m002`.
 
@@ -684,8 +682,8 @@ Example: master node where its BMC is connected to the site network, and no conn
 
 The `Source` field needs to match both of the following conditions:
 
-* `wn` prefix
-* Integer immediately after the prefix; can be padded with `0` characters
+- `wn` prefix
+- Integer immediately after the prefix; can be padded with `0` characters
 
 The integer after the prefix is used to determine the hostname of the worker node. For example, `wn01` corresponds to hostname `ncn-w001`.
 
@@ -751,8 +749,8 @@ The HMN connections representation for the SHCD table row above:
 
 The `Source` field needs to match both of the following conditions:
 
-* `sn` prefix
-* Integer immediately after the prefix; can be padded with `0` characters
+- `sn` prefix
+- Integer immediately after the prefix; can be padded with `0` characters
 
 The integer after the prefix is used to determine the hostname of the storage node. For example, `sn01` corresponds to hostname `ncn-s001`.
 
@@ -818,25 +816,25 @@ The HMN connections representation for the SHCD table row above:
 
 The `Source` field needs to match these conditions to be considered an application node:
 
-* Has one of the following prefixes:
-  * `uan`
-  * `gn`
-  * `ln`
+- Has one of the following prefixes:
+  - `uan`
+  - `gn`
+  - `ln`
 
 > **`NOTE`** The naming conventions for application nodes can be unique to a system. Refer to the
 > [Create Application Node Configuration YAML](create_application_node_config_yaml.md)
 > procedure for the process to add additional `Source` name prefixes for application nodes.
 
-### Single node chassis
+### Single-node chassis
 
 A single application node chassis needs to match these additional conditions:
 
-* No `SourceParent` defined
-* No `SourceSubLocation` defined
+- No `SourceParent` defined
+- No `SourceSubLocation` defined
 
 This convention applies to all application nodes that have a single node in a chassis.
 
-#### Application node: Single node chassis: SHCD
+#### Application node: Single-node chassis: SHCD
 
 Example: application node is in slot 4 of cabinet 3000, and its BMC is connected to port 25 of management `leaf-bmc` switch in slot 14 of cabinet 3000.
 
@@ -844,7 +842,7 @@ Example: application node is in slot 4 of cabinet 3000, and its BMC is connected
 | ----------------- | ------- | ---------- | ----- | -------- | ----- | ------ | ------------- | -------- | ---------- | ----- | ------ |
 | `uan01`           | `x3000` | `u04`      | `-`   |          |       | `j3`   | `sw-smn01`    | `x3000`  | `u14`      | `-`   | `j25`  |
 
-#### Application node: Single node chassis: HMN connections
+#### Application node: Single-node chassis: HMN connections
 
 The HMN connections representation for the SHCD table row above:
 
@@ -856,34 +854,32 @@ The HMN connections representation for the SHCD table row above:
 
 The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 
-* `xX`: where `X` is the cabinet or rack identification number.
-* `cC`: where `C` is the chassis identification number. This should be `0`.
-* `sS`: where `S` is the lowest slot the node chassis occupies.
-* `bB`: where `B` is the ordinal of the node BMC. This should be `0`.
-* `nN`: where `N` is the ordinal of the node This should be `0`.
+- `xX`: where `X` is the cabinet or rack identification number.
+- `cC`: where `C` is the chassis identification number. This should be `0`.
+- `sS`: where `S` is the lowest slot the node chassis occupies.
+- `bB`: where `B` is the ordinal of the node BMC. This should be `0`.
+- `nN`: where `N` is the ordinal of the node This should be `0`.
 
 For example, if an application node is in slot 4 of cabinet 3000, then it would have `x3000c0s4b0n0` as its component name (xname).
 
-### Dual node chassis
+### Dual-node chassis
 
 Additional matching conditions:
 
-* `SourceSubLocation` field contains one of: `L`, `l`, `R`, `r`.
+- `SourceSubLocation` field contains one of: `L`, `l`, `R`, `r`.
 
 In addition to the top-level compute node naming requirements, when there are two nodes in a single chassis, the `SourceSubLocation` is required. The
 `SourceSubLocation` can contain one of the following values: `L`, `l`, `R`, `r`. These values are used to determine the BMC ordinal for the node.
 
-* `L` or `l` translates into the component name (xname) having `b1`
+- `L` or `l` translates into the component name (xname) having `b1`
+  - For example, `x3000c0s10b1b0`
 
-  * For example, `x3000c0s10b1b0`
-
-* `R` or `r` translates into the component name (xname) having `b2`
-
-  * For example, `x3000c0s10b1b0`
+- `R` or `r` translates into the component name (xname) having `b2`
+  - For example, `x3000c0s10b1b0`
 
 This convention applies to all application nodes that have two nodes in a single chassis.
 
-#### Application node: Dual node chassis: SHCD
+#### Application node: Dual-node chassis: SHCD
 
 Example: An application node chassis with 2 nodes located in slot 8 of cabinet 3000. `uan01` is on the left side of the chassis, and `uan02` is on the right side. The two
 node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch in slot 40 of cabinet 3000.
@@ -895,7 +891,7 @@ node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch i
 
 > **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
-#### Application node: Dual node chassis: HMN connections
+#### Application node: Dual-node chassis: HMN connections
 
 The HMN connections representation for the two SHCD table rows above:
 
@@ -908,33 +904,31 @@ The HMN connections representation for the two SHCD table rows above:
 
 The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 
-* `xX`: where `X` is the Cabinet or Rack identification number.
-* `cC`: where `C` is the chassis identification number. This should be `0`.
-* `sS`: where `S` is the lowest slot the node chassis occupies.
-* `bB`: where `B` is the ordinal of the node BMC.
-
-  * If the `SourceSubLocation` is `L` or `l`, then this should be `1`.
-  * If the `SourceSubLocation` is `R` or `r`, then this should be `2`.
-
-* `nN`: where `N` is the ordinal of the node This should be `0`.
+- `xX`: where `X` is the Cabinet or Rack identification number.
+- `cC`: where `C` is the chassis identification number. This should be `0`.
+- `sS`: where `S` is the lowest slot the node chassis occupies.
+- `bB`: where `B` is the ordinal of the node BMC.
+  - If the `SourceSubLocation` is `L` or `l`, then this should be `1`.
+  - If the `SourceSubLocation` is `R` or `r`, then this should be `2`.
+- `nN`: where `N` is the ordinal of the node This should be `0`.
 
 For example:
 
-* If an application node is in slot 8 of cabinet 3000 with a `SourceSubLocation` of `L`, then it would have `x3000c0s8b1n0` as its component name (xname).
-* If an application node is in slot 8 of cabinet 3000 with a `SourceSubLocation` of `R`, then it would have `x3000c0s8b2n0` as its component name (xname).
+- If an application node is in slot 8 of cabinet 3000 with a `SourceSubLocation` of `L`, then it would have `x3000c0s8b1n0` as its component name (xname).
+- If an application node is in slot 8 of cabinet 3000 with a `SourceSubLocation` of `R`, then it would have `x3000c0s8b2n0` as its component name (xname).
 
 ## Columbia Slingshot switch
 
 The `Source` field needs to matching one of the following conditions:
 
-* Prefixed with `sw-hsn`
-* Equal to `columbia` or `Columbia`
+- Prefixed with `sw-hsn`
+- Equal to `columbia` or `Columbia`
 
 The following are examples of valid matches:
 
-* `sw-hsn01`
-* `Columbia`
-* `columbia`
+- `sw-hsn01`
+- `Columbia`
+- `columbia`
 
 ### Columbia Slingshot switch: SHCD
 
@@ -998,13 +992,13 @@ A PDU cabinet controller is the device that is connected to the HMN network and 
 
 The `Source` field for a PDU Cabinet Controller needs to match the following regular expression: `(x\d+p|pdu)(\d+)`. This regular expression matches the following 2 patterns:
 
-* `xXpP` where `X` is the cabinet number and `P` is the ordinal of the PDU controller in the cabinet
-* `pduP` where `P` is the ordinal of the PDU controller in the cabinet
+- `xXpP` where `X` is the cabinet number and `P` is the ordinal of the PDU controller in the cabinet
+- `pduP` where `P` is the ordinal of the PDU controller in the cabinet
 
 The following are examples of valid matches:
 
-* `x3000p0`
-* `pdu0`
+- `x3000p0`
+- `pdu0`
 
 ### PDU cabinet controller: SHCD
 
@@ -1098,11 +1092,11 @@ Cooling doors are not currently supported by HMS services, and are not present i
 
 The `Source` field has one of the following prefixes:
 
-* `sw-agg`
-* `sw-25g`
-* `sw-40g`
-* `sw-100g`
-* `sw-smn`
+- `sw-agg`
+- `sw-25g`
+- `sw-40g`
+- `sw-100g`
+- `sw-smn`
 
 Any management switch that is found in the `HMN` tab of the SHCD will be ignored by CSI.
 

@@ -32,10 +32,10 @@
    cray cps deployment update --nodes "ncn-w002"
    ```
 
-2. Confirm the CFS `configurationStatus` for **all** worker nodes before shutting down this worker node. If the state is `pending`,
+1. Confirm the CFS `configurationStatus` for **all** worker nodes before shutting down this worker node. If the state is `pending`,
    the administrator may want to tail the logs of the CFS pod running on that node to watch the job finish
-   before rebooting this node. If the state is `failed` for this node, then you will know that the failed CFS job state
-   preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.
+   before rebooting this node. If the state is `failed` for this node, then this indicates that the failed CFS job state
+   preceded this worker rebuild, and that it can be addressed independent of rebuilding this worker.
 
    This example uses `ncn-w002`.
 

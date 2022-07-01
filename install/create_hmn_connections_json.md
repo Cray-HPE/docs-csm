@@ -1,26 +1,26 @@
 # Create HMN Connections JSON File
 
 Use this procedure to generate the `hmn_connections.json` from the system's SHCD Excel document.
-This process is typically needed when generating the `hmn_connections.json` file for a new system, 
+This process is typically needed when generating the `hmn_connections.json` file for a new system,
 or regenerating it when a system's SHCD file is changed (specifically the `HMN` tab).
 The `hms-shcd-parser` tool can be used to generate the `hmn_connections.json` file.
 
-The [SHCD/HMN Connections Rules](shcd_hmn_connections_rules.md) document explains the expected 
+The [SHCD/HMN Connections Rules](shcd_hmn_connections_rules.md) document explains the expected
 naming conventions and rules for the `HMN` tab of the SHCD file, and for
 the `hmn_connections.json` file.
 
 ## Prerequisites
 
-* SHCD Excel file for the system
-* Podman is available
+- SHCD Excel file for the system
+- Podman is available
 
 > **`NOTE`** Podman is available on the CSM LiveCD and NCN images.
 
 ## Procedure
 
-> **`NOTE`** Ensure the environment variables have been properly set  by following
-> [set environment variables](./pre-installation.md#set-reusable-environment-variables) and then coming back
-> to his page.
+> **`NOTE`** Ensure that the environment variables have been properly set by following
+> [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
+> to this page.
 
 1. Inspect the `HMN` tab of the SHCD file.
 

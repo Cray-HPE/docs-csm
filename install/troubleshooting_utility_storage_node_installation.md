@@ -3,18 +3,17 @@
 If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
 the Ceph storage might need to be reinitialized.
 
-### Topics
+## Topics
 
-* [Scenario 1](#scenario-1--shasta-14-only) (Shasta v1.4 only)
-* [Scenario 2](#scenario-2--shasta-15-only) (Shasta v1.5 only)
+- [Scenario 1](#scenario-1--shasta-14-only) (Shasta v1.4 only)
+- [Scenario 2](#scenario-2-shasta-15-only) (Shasta v1.5 only)
 
 ## Details
 
-### Scenario 1  (Shasta 1.4 only)
+### Scenario 1 (Shasta 1.4 only)
 
 **`IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY)`:** If the Ceph install failed, check the following:
 
-(`ncn-s#`)
 ```bash
 ceph osd tree
 ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
@@ -65,22 +64,22 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 
 1. Put in safeguard.
 
-   * Edit `/srv/cray/scripts/metal/lib.sh`
-   * Comment out the below lines
+   - Edit `/srv/cray/scripts/metal/lib.sh`
+   - Comment out the below lines
 
    ```bash
-   22   if [ $wipe == 'yes' ]; then
-   23     ansible osds -m shell -a "vgremove -f --select 'vg_name=~ceph*'"
-   24   fi
+   if [ $wipe == 'yes' ]; then
+     ansible osds -m shell -a "vgremove -f --select 'vg_name=~ceph*'"
+   fi
    ```
 
-1. (`ncn-s001#`) Run the cloud init script.
+1. (`ncn-s001#`) Run the `cloud-init` script.
 
    ```bash
    /srv/cray/scripts/common/storage-ceph-cloudinit.sh
    ```
 
-### Scenario 2  (Shasta 1.5 only)
+### Scenario 2 (Shasta 1.5 only)
 
 **IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY):** If the Ceph install failed, check the following:
 
@@ -178,4 +177,3 @@ In order to zap a single OSD, it is necessary to gather some information.
    ```bash
    ceph orch device zap ncn-s002 /dev/sdf
    ```
-

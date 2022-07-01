@@ -34,7 +34,7 @@ boot-check nodes to dump network device information without an operating system.
 
 1. (`pit#`) Modify the boot so that nodes stop network booting after dumping their network devices.
 
-    > **NOTE:** Removing the iPXE script will prevent network booting. Be aware that the
+    > ***NOTE*** Removing the iPXE script will prevent network booting. Be aware that the
     > nodes may still disk boot.
 
     ```bash
@@ -172,7 +172,7 @@ boot-check nodes to dump network device information without an operating system.
 
 Pick out the MAC addresses for the `Bond` from both the `sw-spine-001` and `sw-spine-002` switches, following the [Collecting BMC MAC Addresses](collecting_bmc_mac_addresses.md) procedure.
 
-> **NOTE:** The node must be booted into an operating system in order for the `Bond` MAC addresses to appear on the spine switches.
+> **NOTE** The node must be booted into an operating system in order for the `Bond` MAC addresses to appear on the spine switches.
 >
 > A PCIe card with dual-heads may go to either spine switch, meaning `MAC0` must be collected from
 > `spine-01`. Refer to the cabling diagram or the actual rack (in-person).
