@@ -55,7 +55,7 @@ Snippet of `MTL.yaml`:
 
     Example output:
 
-    ```
+    ```text
     interface vlan 1
         ip mtu 9198
         ip address 10.1.0.2/16
@@ -194,6 +194,7 @@ Snippet of `MTL.yaml`:
     ```console
     sw-spine-001 [standalone: master] # show magp 1
     ```
+
     Example output:
 
     ```text
@@ -435,7 +436,7 @@ In that case, use the following recovery procedure.
         pit# scp ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/basecamp/data.json /var/www/ephemeral/configs
         ```
 
-1. Copy Kubernetes config file from `ncn-m002`.
+1. Copy Kubernetes configuration file from `ncn-m002`.
 
     ```bash
     pit# mkdir -pv ~/.kube
