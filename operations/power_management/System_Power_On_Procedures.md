@@ -20,6 +20,10 @@ The management cabinet is the first part of the system that must be powered on a
 
 After all the system cabinets are powered on, be sure that all management network and Slingshot network switches are powered on and there are no error LEDS or hardware failures.
 
+## Power on the External Lustre File System
+
+To power an external Lustre file system (ClusterStor), refer to [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
+
 ## Power on and Boot the Kubernetes Management Cluster
 
 To power on the management cabinet and bring up the management Kubernetes cluster, refer to [Power On and Start the Management Kubernetes Cluster](Power_On_and_Start_the_Management_Kubernetes_Cluster.md).
@@ -27,17 +31,6 @@ To power on the management cabinet and bring up the management Kubernetes cluste
 ## Power on Compute and IO Cabinets
 
 To power on all liquid-cooled cabinet CDUs and cabinet PDUs, refer to [Power On Compute and IO Cabinets](Power_On_Compute_and_IO_Cabinets.md).
-
-## Power on the External Lustre File System
-
-To power an external Lustre file system (ClusterStor), refer to [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
-
-## Bring up the Slingshot Fabric
-
-To bring up the Slingshot fabric, see:
-
--   The *Slingshot Administration Guide* for Cray EX systems PDF.
--   The *Slingshot Troubleshooting Guide* PDF.
 
 ## Power On and Boot Compute Nodes and User Access Nodes \(UANs\)
 

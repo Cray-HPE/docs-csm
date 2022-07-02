@@ -19,7 +19,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
 ## Procedure
 
-1. If the system does not include Cray EX liquid-cooled cabinets, proceed to step 9.
+1. If the system does not include Cray EX liquid-cooled cabinets, proceed to [POWER OFF STANDARD RACK PDU CIRCUIT BREAKERS]("power-off-standard") below.
 
 ### POWER OFF CRAY EX LIQUID-COOLED CABINETS
 
@@ -82,6 +82,8 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     ![CDU Circuit Breakers](../../img/operations/CDU_Circuit_Breakers.png)
 
+<a name="power-off-standard"></a>
+
 ### POWER OFF STANDARD RACK PDU CIRCUIT BREAKERS
 
 1. Check the power status before shutdown, this example shows nodes in cabinets 3001-3003.
@@ -100,7 +102,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
     Example output:
 
-    ```json
+    ```
     {
       "e": 0,
       "err_msg": "",
@@ -127,6 +129,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
       ]
     }
     ```
+
 
 1.  Use CAPMC to power off **non-management** nodes HPE Cray standard racks.
 
