@@ -5,8 +5,8 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
 ## Prerequisites
 
-* There is a configured switch with SSH access or unconfigured with COM access (Serial Over LAN/DB-9).
-* A file is available to record the collected BMC information.
+- There is a configured switch with SSH access or unconfigured with COM access (Serial Over LAN/DB-9).
+- A file is available to record the collected BMC information.
 
 ## Procedure
 
@@ -21,7 +21,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
       ```
 
    - For configured switches, login to the leaf switch:
-   
+
       ```bash
       ssh admin@10.254.0.4
       ```
@@ -35,7 +35,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
       ```bash
       show mac address-table vlan 4
       ```
-      
+
       The output should look similar to:
 
       ```text
@@ -146,12 +146,12 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    ```
 
-1. (`pit#`) Run `pit-init` to setup the PIT (at least part way); ignore errors regarding site-init (since it may not exist at this time).
+1. (`pit#`) Run `pit-init` to setup the PIT (at least part way); ignore errors regarding `site-init/` (since it may not exist at this time).
 
-   > **`NOTE`** This assumes all other topology files are present in `$PITDATA/prep` from [Generate Topology Files](./pre-installation.md#generate-topology-files). 
+   > **`NOTE`** This assumes all other topology files are present in `$PITDATA/prep` from [Generate Topology Files](pre-installation.md#32-generate-topology-files).
 
    ```bash
    /root/bin/pit-init.sh
    ```
-   
-1. Move onto [Collecting NCN MAC Addresses](./collecting_ncn_mac_addresses.md).
+
+1. Move onto [Collecting NCN MAC Addresses](collecting_ncn_mac_addresses.md).

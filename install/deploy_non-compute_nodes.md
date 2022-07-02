@@ -318,8 +318,6 @@ SUCCESS: LVM checks passed on all master and worker NCNs
 
 If the check fails, stop and:
 
-1. (`pit#`) Wipe the nodes in question. See [Wipe disks on booted nodes](re-installation.md#wipe-disks-on-booted-nodes).
-
 1. (`pit#`) Power cycle the node
 
     ```bash

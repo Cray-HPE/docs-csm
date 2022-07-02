@@ -120,7 +120,7 @@ Any steps run on an `external` server require that server to have the following 
 
       1. Follow [Bootstrap a LiveCD USB](livecd/Boot_LiveCD_USB.md) and then return here.
 
-### 1.3 First login
+### 1.3 First log in
 
 On first login, the LiveCD will prompt the administrator to change the password.
 
