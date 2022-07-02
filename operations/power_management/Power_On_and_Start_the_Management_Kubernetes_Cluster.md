@@ -14,7 +14,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 1. Set all management cabinet PDU circuit breakers to ON \(all cabinets that contain Kubernetes master nodes, worker nodes, or storage nodes\).
 
-1. Power on the HPE Cray EX cabinets and standard rack cabinet PDUs.
+1. Power on the HPE Cray EX cabinet PDUs and standard rack cabinet PDUs.
 
     Be sure that management switches in all racks and CDU cabinets are powered on and healthy.
 

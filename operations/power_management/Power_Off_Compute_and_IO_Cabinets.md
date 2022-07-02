@@ -19,7 +19,7 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 
 ## Procedure
 
-1. If the system does not include Cray EX liquid-cooled cabinets, proceed to step 9.
+1. If the system does not include Cray EX liquid-cooled cabinets, proceed to [POWER OFF STANDARD RACK PDU CIRCUIT BREAKERS]("power-off-standard") below.
 
 ### POWER OFF CRAY EX LIQUID-COOLED CABINETS
 
@@ -81,6 +81,8 @@ When the PDU breakers are switched to OFF, the Chassis Management Modules \(CMMs
 1.  If other systems are **not** being cooled by the floor-standing CDU, open the CDU rear door to access the control panel and set the circuit breakers to OFF.
 
     ![CDU Circuit Breakers](../../img/operations/CDU_Circuit_Breakers.png)
+
+<a name="power-off-standard"></a>
 
 ### POWER OFF STANDARD RACK PDU CIRCUIT BREAKERS
 
