@@ -33,5 +33,8 @@ kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yam
 cp "${CUSTOMIZATIONS_YAML}" "${CUSTOMIZATIONS_YAML}.bak"
 yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.kubernetes.services.cray-nls.externalHostname 'cmn.{{ network.dns.external }}'
 yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
+
+# rename customazations file so k8s secret name stays the same
+mv "${CUSTOMIZATIONS_YAML}" customizations.yaml
 kubectl delete secret -n loftsman site-init
-kubectl create secret -n loftsman generic site-init --from-file="${CUSTOMIZATIONS_YAML}"
+kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
