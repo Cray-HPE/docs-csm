@@ -4,7 +4,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 ## Prerequisites
 
-* All management rack PDUs are connected to facility power and facility power is ON.
+* All management rack PDUs are connected to facility power and facility power is on.
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT)
   product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
@@ -12,7 +12,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 1. If necessary, power on the management cabinet CDU and chilled doors.
 
-1. Set all management cabinet PDU circuit breakers to ON \(all cabinets that contain Kubernetes master nodes, worker nodes, or storage nodes\).
+1. Set all management cabinet PDU circuit breakers to `ON` \(all cabinets that contain Kubernetes master nodes, worker nodes, or storage nodes\).
 
 1. Power on the HPE Cray EX cabinet PDUs and standard rack cabinet PDUs.
 
@@ -20,53 +20,63 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 1. From a remote system, start the Lustre file system, if it was stopped.
 
-1. Activate the serial console window to `ncn-m001`.
+1. (`remote#`) Activate the serial console window to `ncn-m001`.
 
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
-    remote$ USERNAME=root
-    remote$ read -s IPMI_PASSWORD
-    remote$ export IPMI_PASSWORD
-    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME sol activate
+    USERNAME=root
+    read -s IPMI_PASSWORD
+    export IPMI_PASSWORD
+    ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME sol activate
     ```
 
-1. In a separate window, power on the master node 1 \(`ncn-m001`\) chassis using IPMI tool.
+1. (`remote#`) In a separate window, power on the master node 1 \(`ncn-m001`\) chassis using IPMI tool.
 
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
-    remote$ USERNAME=root
-    remote$ read -s IPMI_PASSWORD
-    remote$ export IPMI_PASSWORD
-    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME chassis power on
+    USERNAME=root
+    read -s IPMI_PASSWORD
+    export IPMI_PASSWORD
+    ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME chassis power on
     ```
 
     Wait for the login prompt.
 
-    If `ncn-m001` boots into the PIT (ncn-m001-pit), [Set Boot Order](../../background/ncn_boot_workflow.md) to boot from disk, shutdown the PIT node, and power cycle again to boot into `ncn-m001`.
+    If `ncn-m001` boots into the PIT node, then perform the following procedure:
+
+    1. Set boot order to boot from disk.
+
+        See [NCN Boot Workflow](../../background/ncn_boot_workflow.md).
+
+    1. (`pit#`) Shutdown the PIT node.
+
+        ```bash
+        shutdown -h now
+        ```
+
+    1. (`remote#`) Power cycle again to boot into `ncn-m001`.
+
+        ```bash
+        ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME chassis power on
+        ```
+
+1. (`remote#`) Wait for `ncn-m001` to boot, then `ping` the node to check status.
 
     ```bash
-    ncn-m001-pit:~ # shutdown -h now
-
-    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME chassis power on
+    ping NCN_M001_HOSTNAME
     ```
 
-1. Wait for `ncn-m001` to boot, then `ping` the node to check status.
-
-    ```bash
-    remote$ ping NCN_M001_HOSTNAME
-    ```
-
-1. Log in to `ncn-m001` as `root`.
+1. (`remote#`) Log in to `ncn-m001` as `root`.
 
    ```bash
-   remote$ ssh root@NCN_M001_HOSTNAME
+   ssh root@NCN_M001_HOSTNAME
    ```
 
 ### Power on all other management NCNs
 
-1. Power on and boot other management NCNs.
+1. (`ncn-m001#`) Power on and boot other management NCNs.
 
    ```bash
    sat bootsys boot --stage ncn-power
@@ -105,7 +115,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
    In the preceding example, the `ssh` command to the NCN nodes timed out and reported `ERROR` messages. Repeat the above step until you see `Succeeded with boot of other management NCNs.` Each iteration should get further in the process.
 
-1. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
+1. (`ncn-m001#`) Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
     Alternatively, attach to the screen session \(screen sessions real time, but not saved\):
 
@@ -137,10 +147,11 @@ Verify that the Lustre file system is available from the management cluster.
 
 ### Start Kubernetes and other services
 
-1. Use `sat bootsys` to start the Kubernetes cluster. Note that the default timeout
-    for Ceph to become healthy is 600 seconds, which is excessive. To work
-    around this issue, set the timeout to a more reasonable value like 60
-    seconds using the `--ceph-timeout` option as shown below.
+1. (`ncn-m001#`) Start the Kubernetes cluster.
+
+    Note that the default timeout for Ceph to become healthy is 600 seconds, which is excessive. To work
+    around this issue, set the timeout to a more reasonable value (like 60 seconds) using the `--ceph-timeout`
+    option, as shown below.
 
     ```bash
     sat bootsys boot --stage platform-services --ceph-timeout 60
@@ -166,7 +177,7 @@ Verify that the Lustre file system is available from the management cluster.
     Are the above NCN groupings correct? [yes,no] yes
     ```
 
-1. The previous step may fail with a message like the following:
+    The `sat bootsys boot` command may fail with a message like the following:
 
     ```text
     Executing step: Start inactive Ceph services, unfreeze Ceph cluster and wait for Ceph health.
@@ -175,9 +186,9 @@ Verify that the Lustre file system is available from the management cluster.
     ERROR: Fatal error in step "Start inactive Ceph services, unfreeze Ceph cluster and wait for Ceph health." of platform services start: Ceph is not healthy. Please correct Ceph health and try again.
     ```
 
-    If a failure like the above occurs, see the info-level log messages for
+    (`ncn-m001#`) If a failure like the above occurs, then see the info-level log messages for
     details about the Ceph health check failure. Depending on the configured log
-    level for `sat`, the log messages may appear in stderr or only in the log
+    level for SAT, the log messages may appear in `stderr`, or only in the log
     file. For example:
 
     ```bash
@@ -198,9 +209,9 @@ Verify that the Lustre file system is available from the management cluster.
 
     * If the Ceph services did not start, then see [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md)for instruction on starting Ceph services.
 
-    Once Ceph is healthy, repeat the previous step to finish starting the Kubernetes cluster.
+    Once Ceph is healthy, repeat the `sat bootsys boot` to finish starting the Kubernetes cluster.
 
-1. Check the space available on the Ceph cluster.
+1. (`ncn-m001#`) Check the space available on the Ceph cluster.
 
     ```bash
     ceph df
@@ -233,7 +244,7 @@ Verify that the Lustre file system is available from the management cluster.
 
     To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
-1. Monitor the status of the management cluster and which pods are restarting as indicated by either a `Running` or `Completed` state.
+1. (`ncn-m001#`) Monitor the status of the management cluster and which pods are restarting as indicated by either a `Running` or `Completed` state.
 
     ```bash
     kubectl get pods -A -o wide | grep -v -e Running -e Completed
@@ -246,15 +257,14 @@ Verify that the Lustre file system is available from the management cluster.
 
     If there are pods in the `MatchNodeSelector` state, delete these pods. Then verify that the pods restart and are in the `Running` state.
 
-1. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
+1. (`ncn-m001#`) Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
 
     ```bash
     kubectl describe pod -n user -lapp=slurmctld
-    ```
-
-    ```bash
     kubectl describe pod -n user -lapp=slurmdbd
     ```
+
+    An error similar to the following may be seen:
 
     ```text
     Events:
@@ -274,7 +284,7 @@ Verify that the Lustre file system is available from the management cluster.
     * `/var/lib/cni/networks/macvlan-slurmctld-nmn-conf`
     * `/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf`
 
-1. Check that `spire` pods have started.
+1. (`ncn-m001#`) Check that `spire` pods have started.
 
     ```bash
     kubectl get pods -n spire -o wide | grep spire-jwks
@@ -288,13 +298,13 @@ Verify that the Lustre file system is available from the management cluster.
     spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
     ```
 
-1. If `spire` pods indicate `CrashLoopBackOff`, then restart the `spire` pods.
+1. (`ncn-m001#`) If `spire` pods indicate `CrashLoopBackOff`, then restart the `spire` pods.
 
     ```bash
     kubectl rollout restart -n spire deployment spire-jwks
     ```
 
-1. Check if any pods are in `CrashLoopBackOff` because of errors connecting to Vault. If so, restart the Vault operator, the Vault pods, and finally the pod which is in `CrashLoopBackOff`. For example:
+1. (`ncn-m001#`) Check if any pods are in `CrashLoopBackOff` because of errors connecting to Vault. If so, restart the Vault operator, the Vault pods, and finally the pod which is in `CrashLoopBackOff`. For example:
 
     1. Find the pods in `CrashLoopBackOff`.
 
@@ -308,7 +318,7 @@ Verify that the Lustre file system is available from the management cluster.
         services     cray-console-node-1        2/3     CrashLoopBackOff   206        6d21h
         ```
 
-    2. View the logs for the pods in `CrashLoopBackOff`.
+    1. View the logs for the pods in `CrashLoopBackOff`.
 
         ```bash
         kubectl -n services logs cray-console-node-1 cray-console-node | grep "connection failure" | grep vault
@@ -321,13 +331,13 @@ Verify that the Lustre file system is available from the management cluster.
         panic: Error: &api.ResponseError{HTTPMethod:"PUT", URL:"http://cray-vault.vault:8200/v1/auth/kubernetes/login", StatusCode:503, RawError:true, Errors:[]string{"upstream connect error or disconnect/reset before headers. reset reason: connection failure"}}
         ```
 
-    3. Restart the `vault-operator`.
+    1. Restart the `vault-operator`.
 
         ```bash
         kubectl delete pods -n vault -l app.kubernetes.io/name=vault-operator
         ```
 
-    4. Wait for the `cray-vault` pods to restart with `5/5` ready and `Running`.
+    1. Wait for the `cray-vault` pods to restart with `5/5` ready and `Running`.
 
         ```bash
          kubectl get pods -n vault -l app.kubernetes.io/name=vault-operator
@@ -340,7 +350,7 @@ Verify that the Lustre file system is available from the management cluster.
         cray-vault-operator-69b4b6887-dfn2f   2/2     Running   2          1m
         ```
 
-    5. Restart the pod(s).
+    1. Restart the pod(s).
 
         In this example, `cray-console-node-1` is the pod.
 
@@ -348,7 +358,7 @@ Verify that the Lustre file system is available from the management cluster.
         kubectl delete pod cray-console-node-1 -n services
         ```
 
-    6. Wait for the pod(s) to restart with `3/3` ready and `Running`.
+    1. Wait for the pod(s) to restart with `3/3` ready and `Running`.
 
         In this example, `cray-console-node-1` is the pod.
 
@@ -362,7 +372,7 @@ Verify that the Lustre file system is available from the management cluster.
         cray-console-node-1      3/3     Running            0          2m
         ```
 
-1. Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
+1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
 
     ```bash
     pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
@@ -392,13 +402,13 @@ Verify that the Lustre file system is available from the management cluster.
     pdsh@ncn-m001: ncn-w001: ssh exited with exit code 3
     ```
 
-    1. On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service. For example:
+    1. (`ncn#`) On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service. For example:
 
         ```bash
         systemctl restart cfs-state-reporter
         ```
 
-    1. Check the status again.
+    1. (`ncn-m001#`) Check the status again.
 
         ```bash
         pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
@@ -412,7 +422,7 @@ Verify that the Lustre file system is available from the management cluster.
 
 ### Check `cronjob`s
 
-1. Display all the Kubernetes `cronjob`s.
+1. (`ncn-m001#`) Display all the Kubernetes `cronjob`s.
 
     ```bash
     kubectl get cronjobs.batch -A
@@ -434,11 +444,11 @@ Verify that the Lustre file system is available from the management cluster.
     ```
 
     **Attention:** It is normal for the `hms-discovery` service to be suspended at this point if liquid-cooled cabinets have not been powered on. The `hms-discovery` service is
-    un-suspended during the liquid-cooled cabinet power on procedure. Do not re-create the `hms-discovery` `cronjob` at this point.
+    un-suspended during the liquid-cooled cabinet power on procedure. Do not recreate the `hms-discovery` `cronjob` at this point.
 
 1. Check for `cronjob`s that have a `LAST SCHEDULE` time that is older than the `SCHEDULE` time. These `cronjob`s must be restarted.
 
-1. Check any `cronjob`s in question for errors.
+1. (`ncn-m001#`) Check any `cronjob`s in question for errors.
 
     ```bash
     kubectl describe cronjobs.batch -n kube-system kube-etcdbackup | egrep -A 15 Events
@@ -456,7 +466,7 @@ Verify that the Lustre file system is available from the management cluster.
                                                                               or check clock skew
     ```
 
-1. For any `cronjob`s producing errors, get the YAML representation of the `cronjob` and edit the YAML file:
+1. (`ncn-m001#`) For any `cronjob`s producing errors, get the YAML representation of the `cronjob` and edit the YAML file:
 
     ```bash
     cd ~/k8s
@@ -470,19 +480,19 @@ Verify that the Lustre file system is available from the management cluster.
 
     1. Save the file and quit the editor.
 
-1. Delete the `cronjob`.
+1. (`ncn-m001#`) Delete the `cronjob`.
 
     ```bash
     kubectl delete -f CRON_JOB_NAME-cronjob.yaml
     ```
 
-1. Apply the `cronjob`.
+1. (`ncn-m001#`) Apply the `cronjob`.
 
     ```bash
     kubectl apply -f CRON_JOB_NAME-cronjob.yaml
     ```
 
-1. Verify that the `cronjob` has been scheduled.
+1. (`ncn-m001#`) Verify that the `cronjob` has been scheduled.
 
     ```bash
     kubectl get cronjobs -n backups benji-k8s-backup-backups-namespace
@@ -497,7 +507,7 @@ Verify that the Lustre file system is available from the management cluster.
 
 ### Check the HSM inventory status of NCNs
 
-1. Use the `sat` command to check for management NCNs in an `Off` state.
+1. (`ncn-m001#`) Use the `sat` command to check for management NCNs in an `Off` state.
 
     ```bash
     sat status --filter role=management
@@ -522,10 +532,10 @@ Verify that the Lustre file system is available from the management cluster.
 
     **Attention:** When the NCNs are brought back online after a power outage or planned shutdown, `sat status` may report them as being `Off`.
 
-1. Run a manual discovery of any NCNs in the `Off` state.
+1. (`ncn-m001#`) Run a manual discovery of any NCNs in the `Off` state.
 
     ```bash
-    cray hsm inventory discover create --xnames x3000c0s12b0,x3000c0s20b0
+    cray hsm inventory discover create --xnames x3000c0s12b0,x3000c0s20b0 --format toml
     ```
 
     Example output:
@@ -535,7 +545,7 @@ Verify that the Lustre file system is available from the management cluster.
     URI = "/hsm/v2/Inventory/DiscoveryStatus/0"
     ```
 
-1. Check for NCN status.
+1. (`ncn-m001#`) Check for NCN status.
 
     ```bash
     sat status --filter Role=Management
