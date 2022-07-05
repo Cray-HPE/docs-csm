@@ -2,20 +2,20 @@
 
 The Hardware State Manager (HSM) has two important parts:
 
-* **System Layout Service (SLS):** This is the "expected" state of the system (as populated by networks.yaml and other sources)
+* **System Layout Service (SLS):** This is the "expected" state of the system (as populated by `networks.yaml` and other sources)
 * **State Manager Daemon (SMD):**  This is the "discovered" or active state of the system during runtime
 
 ## Procedure
 
 1. Check SLS.
 
-    ```
-    curl  -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/sls/v1/hardware | jq | less
+    ```bash
+    ncn# curl  -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/hardware | jq | less
     ```
 
     The output from SLS should look similar to the following:
 
-    ```
+    ```json
     {
       "Parent": "x1000c7s1b0",
       "Xname": "x1000c7s1b0n0",
@@ -34,13 +34,13 @@ The Hardware State Manager (HSM) has two important parts:
 
 1. Check SMD.
 
-    ```
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces | jq | less
+    ```bash
+    ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces | jq | less
     ```
 
     The output from SMD should look similar to the following:
 
-    ```
+    ```json
     {
       "ID": "0040a6838b0e",
       "Description": "",
@@ -52,4 +52,4 @@ The Hardware State Manager (HSM) has two important parts:
     },
     ```
 
-[Back to Index](./index.md)
+[Back to index](index.md).

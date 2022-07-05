@@ -5,7 +5,7 @@ A sign of a duplicate IP address is seeing a `DECLINE` message from the client t
 
 For example:
 
-```
+```text
 10.40.0.0.337 > 10.42.0.58.67: BOOTP/DHCP, Request from b4:2e:99:be:1a:d3, length 301, hops 1, xid 0x9d1210d, Flags [none]
      Gateway-IP 10.252.0.2
      Client-Ethernet-Address b4:2e:99:be:1a:d3
@@ -19,6 +19,6 @@ For example:
          Circuit-ID SubOption 1, length 20: vlan2-ethernet1/1/12
 ```
 
-To test for duplicate IP addresses, ping the suspected address while turning off the node. If there continues to be responses, then there is a duplicate IP.
+To test for duplicate IP addresses, ping the suspected address while turning off the node. If there continues to be responses, then there is a duplicate IP address.
 
-[Back to Index](./index.md)
+[Back to index](index.md).
