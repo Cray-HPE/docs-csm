@@ -607,6 +607,9 @@ Init
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
 
+- operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
+lockout-tagout
+
 - operations/security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md
 # To allow Site Init
 Init
