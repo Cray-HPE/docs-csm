@@ -219,9 +219,9 @@ This section provides an example of how to configure the management network.
       10.101.10.12     4  65533             23        11    0    0 00:03:49 Estab  14     14
     ```
 
-    * (`sw-edge#`) The Arista routing table should now include the external IP addresses exposed by MetalLB
+    * (`sw-edge#`) The Arista routing table should now include the external IP addresses exposed by MetalLB.
 
-       The on-site network team will be responsible for distributing these routes to the rest of their network
+       The on-site network team will be responsible for distributing these routes to the rest of their network.
 
        ```text
        show ip route
