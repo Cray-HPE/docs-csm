@@ -35,7 +35,7 @@ For detailed BICAN documentation, see the [BICAN Technical Details](../../operat
 
 ## Known issues
 
-- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (Raspberry).
+- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release).
 
 ## Plan and coordinate network upgrade
 
