@@ -12,19 +12,17 @@ Access to the spine switches is required.
 
 1. Check that MetalLB is peering to the spines via BGP.
 
-    Check both spines if they are available (powered up):
+    (`sw-spine#`) Check both spines if they are available (powered up):
 
     ```text
-    # show ip bgp summary
+    show ip bgp summary
     ```
 
     All the neighbors should be in the `Established` state.
 
     Example working state:
 
-    ```
-    sw-spine01 [standalone: master] # show ip bgp summary
-
+    ```text
     VRF name                  : default
     BGP router identifier     : 10.252.0.1
     local AS number           : 65533
@@ -42,10 +40,10 @@ Access to the spine switches is required.
     10.252.0.6        4    65533        463       500       6         0      0      0:03:36:39    ESTABLISHED/28
     ```
 
-    **Troubleshooting:** If the State/pfxrcd is `IDLE`, restart the BGP process with the following command:
+1. (`sw-spine#`) If the `State/PfxRcd` is `IDLE`, then restart the BGP process.
 
     ```text
-    sw-spine01 [standalone: master] # clear ip bgp all
+    clear ip bgp all
     ```
 
-[Back to Index](./README.md)
+[Back to index](README.md).

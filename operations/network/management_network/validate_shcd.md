@@ -1,28 +1,30 @@
 # Validate the SHCD
 
-Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated. This is an iterative process to create a model of the entire network topology connection-by-connection.
+Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated. This is an iterative process to create a model of the entire network topology connection by connection.
 
 ## Topics
 
-1. [Prerequisites](#prerequisites)
-1. [Validation Steps](#validation-steps)
-1. [Under-the-Hood](#under-the-hood)
-1. [Logging and Updates](#logging-and-updates)
+- [Prerequisites](#prerequisites)
+- [Validation steps](#validation-steps)
+- [Under the hood](#under-the-hood)
+  - [Check warnings](#check-warnings)
+  - [Check SHCD port usage](#check-shcd-port-usage)
+- [Logging and updates](#logging-and-updates)
 
 ## Prerequisites
 
-* Up-to-date SHCD.
-* CANU installed with version 1.1.11 or greater.
-  * Run `canu --version` to see version.
-  * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md)
+- Up-to-date SHCD.
+- CANU installed with version 1.1.11 or greater.
+  - Run `canu --version` to see version.
+  - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md).
 
-## Validation Steps
+## Validation steps
 
 1. Validate the `10G_25G_40G_100G` tab and select the upper left corner and lower right corner of the spreadsheet with the `Source Rack Location Slot Port Destination Rack Location Port` information.
 
    This is a block of data on the right hand of the worksheet and is not the calculated values used for cable labels on the left-hand side.
 
-   ![SHCD example](./img/shcd_example.png "SHCD example")
+   ![SHCD example](img/shcd_example.png "SHCD example")
 
    In this example above, the `10G_25G_40G_100G` worksheet has the upper left and lower right corners of `I37` and `T107` respectively.
    Note, the above screenshot is trimmed and only the first full 68 rows are shown.
@@ -31,12 +33,13 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
 
    > **`NOTE`**
    > `-a` defines the architecture, this will be:
-   >  - v1 if the CRAY system is composed only of river cabinets
-   >  - TDS if the CRAY system has an attached hill cabinet
-   >  - FULL if the CRAY system has an attached mountain (or a mountain and a hill)
-                                                                                          
+   >
+   > - `v1` if the Cray system is composed only of River cabinets
+   > - `TDS` if the Cray system has an attached Hill cabinet
+   > - `FULL` if the Cray system has an attached Mountain cabinet (or a Mountain and a Hill cabinet)
+
    ```bash
-   export ARCH=v1
+   ARCH=v1
    ```
 
    > **`NOTE`** The `canu` command below will start interactive mode for defining `--corners`. If
@@ -46,56 +49,45 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    canu validate shcd --json --out "${SYSTEM_NAME}-hmn-paddle.json" --tabs HMN -a "${ARCH}" --shcd <shcd_file.xlsx>
    ```
 
-    > **`NOTE`** 
-
 1. (`pit#`) Generate the full paddle file (by default the command below will run in interactive mode.)
 
-   > **`NOTE`** The `canu` commands below will start interactive mode for defining `--corners`
+   > **`NOTE`** The `canu` command below will start interactive mode for defining `--corners`. If
+   > the `--corners` are already known, then append `--corners` with the desired corners to bypass interactive mode.
 
    ```bash
    canu validate shcd --json --out "${SYSTEM_NAME}-full-paddle.json" -a "${ARCH}" --shcd <shcd_file>.xlsx
    ```
 
    > **`NOTE`** CANU will ensure that each cell has valid data and that the connections between devices are allowed. Errors will stop processing and must be fixed in
-   the spreadsheet before moving on. A "clean run" through a worksheet will include the model, a port-map of each node and may include warnings. See a
-   list of typical errors at the end of this document to help in fixing the worksheet data.
-                   
+   > the spreadsheet before moving on. A "clean run" through a worksheet will include the model, a port-map of each node and may include warnings. See a
+   > list of typical errors at the end of this document to help in fixing the worksheet data.
+
 1. Proceed to [generate topology files](../../../install/pre-installation.md#generate-topology-files).
 
-## Under-the-Hood
-
-A worksheet that runs "cleanly" will have checked that:
-
-* Nodes are "architecturally allowed" to connect to each other.
-
-* No overlapping ports specified.
+## Under the hood
 
 A worksheet that runs *cleanly* will have checked that:
 
-* Nodes are *architecturally allowed* to connect to each other.
-
-* No overlapping ports specified.
-
-* Node connections can be made at the appropriate speeds.
+- Nodes are *architecturally allowed* to connect to each other.
+- No overlapping ports specified.
+- Node connections can be made at the appropriate speeds.
 
 In addition, a clean run will have the following sections:
 
-* SHCD Node Connections – A high level list of all node connections on the system.
-
-* SHCD Port Usage – A Port-by-port detailed listing of all node connections on the system.
-
-* Warnings:
-  * A list of nodes found that are not categorized on the system.
+- SHCD Node Connections – A high level list of all node connections on the system.
+- SHCD Port Usage – A Port-by-port detailed listing of all node connections on the system.
+- Warnings:
+  - A list of nodes found that are not categorized on the system.
 
     **`NOTE`** This list is important as it could include misspellings of nodes that should be included!
 
-  * A list of cell-by-cell warnings of misspellings and other nit-picking items that CANU has autocorrected on the system.
+  - A list of cell-by-cell warnings of misspellings and other nit-picking items that CANU has autocorrected on the system.
 
-### Check Warnings
+### Check warnings
 
 **Critical:** The `Warnings` output will contain a section headed `Node type could not be determined for the following`. This needs to
-be carefully reviewed because it may contain site uplinks that are not tracked by CANU, and may also contain misspelled or mis-categorized
-nodes. As an example:
+be carefully reviewed because it may contain site uplinks that are not tracked by CANU, and may also contain misspelled or miscategorized
+nodes.
 
 For example:
 
@@ -126,26 +118,26 @@ Cell: P16      Name: SITE
 
 **From the above example, two important observations can be made:**
 
-1. CAN and SITE uplinks are not in the *clean run* model. This means that these ports will not be configured.
+1. CAN and SITE uplinks are not in the "clean run" model. This means that these ports will not be configured.
 
 1. Critically, cell `I38` has a name of `sw-spinx-002`. This should be noted as a misspelling of `sw-spine-002` and corrected.
 
-### Check SHCD Port Usage
+### Check SHCD port usage
 
 Today CANU validates many things, but a future feature is full cable specification checking of nodes (e.g. which NCN ports go to
 which switches to properly form bonds). There are several CANU roadmap items, but today a manual review of the `SHCD Port Usage`
 connections list is vital. Specifically, check:
 
-* Both Management NCNs (manager, worker, storage) and UAN NCNs (UAN, viz, and other Application Nodes) follow Plan of Record (PoR)
+- Both Management NCNs (manager, worker, storage) and UAN NCNs (UAN, viz, and other Application Nodes) follow Plan of Record (PoR)
   cabling. See [Cable Management Network Servers](cable_management_network_servers.md).
 
-* Switch pair cabling is appropriate for VSX, MAGP, etc.
+- Switch pair cabling is appropriate for VSX, MAGP, etc.
 
-* Switch-to-switch cabling is appropriate for LAG formation.
+- Switch-to-switch cabling is appropriate for LAG formation.
 
-* **Other** nodes on the network seem sane.
+- **Other** nodes on the network seem sane.
 
-## Logging and Updates
+## Logging and updates
 
 Once the SHCD has run cleanly through CANU and CANU output has been manually validated, changes to the SHCD should be
 *committed* so that work is not lost, and other users can take advantage of the CANU changes.
@@ -154,13 +146,13 @@ Once the SHCD has run cleanly through CANU and CANU output has been manually val
 
    The changelog should include:
 
-   * The CANU command line used to validate the spreadsheet
-   * The CANU version being used to validate the spreadsheet
-   * An overview of changes made to the spreadsheet
+   - The CANU command line used to validate the spreadsheet
+   - The CANU version being used to validate the spreadsheet
+   - An overview of changes made to the spreadsheet
 
 1. Upload the SHCD to an official storage location after it has been validated.
 
    Either of the following options can be used:
 
-   * `customer communication` (CAST ticket for customers)
-   * SharePoint (internal systems and sometimes customer systems)
+   - `customer communication` (CAST ticket for customers)
+   - SharePoint (internal systems and sometimes customer systems)
