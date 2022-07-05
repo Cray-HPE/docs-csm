@@ -368,6 +368,6 @@ There should now be external connectivity from outside the system to the externa
    ncn-w003: 04:59:36.825591 98:5d:82:71:ba:2d > 02:00:00:00:00:1e, ethertype IPv4 (0x0800), length 98: (tos 0x0, ttl 54, id 33996, offset 0, flags [none], proto ICMP (1), length 84)
    ```
 
-   1. (`external#`) Stop the `ping` command started earlier.
+   1. (`external#`) Stop the `ping` command that was started earlier.
 
 [Back to index](README.md).
