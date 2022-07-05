@@ -129,10 +129,9 @@ Procedures required for a full power on of an HPE Cray EX system.
 
 Additional links to power on sub-procedures provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
 
+- [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
 - [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
 - [Power On Compute and IO Cabinets](power_management/Power_On_Compute_and_IO_Cabinets.md)
-- [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
-- [Bring Up the Slingshot Fabric](power_management/Bring_up_the_Slingshot_Fabric.md)
 - [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
 - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md)
 
