@@ -99,9 +99,9 @@ This section provides an example of how to configure the management network.
         switchport mode trunk
       ```
 
-      > **`NOTE`** VLAN 2 is used for the HSN.
-
    * Example VLAN 2 configuration:
+
+      > **`NOTE`** VLAN 2 is used for the HSN.
 
       ```text
       interface Vlan2
