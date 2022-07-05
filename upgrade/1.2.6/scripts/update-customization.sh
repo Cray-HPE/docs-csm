@@ -39,3 +39,4 @@ pushd "${SITE_INIT_DIR}"
 cp "${CUSTOMIZATIONS_YAML}" customizations.yaml
 kubectl delete secret -n loftsman site-init
 kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+popd
