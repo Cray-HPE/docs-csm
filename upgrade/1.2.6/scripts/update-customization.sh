@@ -35,6 +35,7 @@ yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.kubernetes.services.cray-nl
 yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
 
 # rename customazations file so k8s secret name stays the same
-mv "${CUSTOMIZATIONS_YAML}" customizations.yaml
+pushd "${SITE_INIT_DIR}"
+cp "${CUSTOMIZATIONS_YAML}" customizations.yaml
 kubectl delete secret -n loftsman site-init
 kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
