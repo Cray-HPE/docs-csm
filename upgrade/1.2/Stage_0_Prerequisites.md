@@ -209,6 +209,7 @@ network (new CAN or CHN) and its chosen subnet. For details on choosing the subn
      [Management Network 1.0 (`1.2 Preconfig`) to 1.2](../../operations/network/management_network/1.0_to_1.2_upgrade.md).
    - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
    - See the [Management Network User Guide](../../operations/network/management_network/README.md) for more information on the management network.
+   - With the 1.2 switch configuration in place, users will only be able to SSH into the switches over the HMN.
 
 ## Stage 0.4 - Prerequisites check
 
@@ -223,7 +224,7 @@ network (new CAN or CHN) and its chosen subnet. For details on choosing the subn
    export SW_ADMIN_PASSWORD
    ```
 
-1. (`ncn-m001#`) Set the `NEXUS_PASSWORD` variable **only if needed**.
+2. (`ncn-m001#`) Set the `NEXUS_PASSWORD` variable **only if needed**.
 
    > **IMPORTANT:** If the password for the local Nexus `admin` account has
    > been changed from the default `admin123` (not typical), then set the
@@ -242,22 +243,29 @@ network (new CAN or CHN) and its chosen subnet. For details on choosing the subn
    > Otherwise, a random 32-character base-64-encoded string will be generated
    > and updated as the default `admin` password when Nexus is upgraded.
 
-1. (`ncn-m001#`) Run the script.
+3. (`ncn-m001#`) Run the script.
 
    ```bash
    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
    ```
 
-   **IMPORTANT:** If any errors are encountered, then potential fixes should be displayed where the error occurred. **If** the upgrade `prerequisites.sh` script fails and does
-   not provide guidance, then try rerunning it. If the failure persists, then open a support ticket for guidance before proceeding.
+   If the script ran correctly, it should end with the following output:
 
-1. (`ncn-m001#`) Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
+   ```text
+   [OK] - Successfully completed
+   ```
+
+   If the script does not end with this output, then try rerunning it. If it still fails, see
+   [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+   If the failure persists, then open a support ticket for guidance before proceeding.
+
+4. (`ncn-m001#`) Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
 
    ```bash
    unset NEXUS_PASSWORD
    ```
 
-1. (Optional) (`ncn-m001#`) Commit changes to `customizations.yaml`.
+5. (Optional) (`ncn-m001#`) Commit changes to `customizations.yaml`.
 
    `customizations.yaml` has been updated in this procedure. If using an external Git repository
    for managing customizations as recommended, then clone a local working tree and commit

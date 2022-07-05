@@ -21,6 +21,8 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * Release Cray Automated Network Utility (CANU) V1.0.0
 * Performance improvements to Unbound and DHCP helper
 * Initial release of Bifurcated CAN
+  * [BICAN summary page](operations/network/management_network/bican_technical_summary.md)
+  * [BICAN technical details](operations/network/management_network/bican_technical_details.md)
 
   The user and administrative traffic segregation introduced by Bifurcated CAN has changed the URLs for certain services as it is now necessary to include the network path in the
   fully qualified domain name. Access to administrative services is now restricted to the Customer Management Network (CMN). API access is available via the Customer Management

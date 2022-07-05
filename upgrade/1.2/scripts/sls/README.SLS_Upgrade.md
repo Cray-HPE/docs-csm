@@ -28,6 +28,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
      the new CMN. This preservation is not often needed as the transition of NCN IP addresses for the CAN-to-CMN is automatically
      handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations
      and the flag is `--preserve-existing-subnet-for-cmn ncns`.
+
    * If no preservation flag is set, then the default behavior is to recalculate every IP address on the existing CAN while migrating
      to the CMN. The behavior in this case is to calculate the subnet sizes based on number of devices (with a bit of spare room),
      while maximizing IP address pool sizes for dynamic services.
@@ -59,18 +60,18 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
 
         ```bash
         /usr/share/doc/csm/upgrade/1.2/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
-                --bican-user-network-name CHN \
-                --customer-highspeed-network 5 10.103.11.192/26
+            --bican-user-network-name CHN \
+            --customer-highspeed-network 5 10.103.11.192/26
         ```
 
     * Example 2: Upgrade, using the CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
 
         ```bash
         /usr/share/doc/csm/upgrade/1.2/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
-                --bican-user-network-name CAN \
-                --customer-highspeed-network 5 10.103.11.192/26 \
-                --preserve-existing-subnet-for-cmn external-dns \
-                --retain-unused-user-network
+            --bican-user-network-name CAN \
+            --customer-highspeed-network 5 10.103.11.192/26 \
+            --preserve-existing-subnet-for-cmn external-dns \
+            --retain-unused-user-network
         ```
 
     **NOTE:** A detailed review of the migrated/upgraded data is strongly recommended. Particularly, ensure that subnet reservations are correct to prevent any data loss.
@@ -83,7 +84,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
 
 ## SLS Updater help
 
-For help and all options, run the following:
+(`ncn#`) For help and all options, run the following:
 
 ```bash
 /usr/share/doc/csm/upgrade/1.2/scripts/sls/sls_updater_csm_1.2.py --help
@@ -116,12 +117,12 @@ This needs to be done in the order listed above.
 
 ### Remove `api-gateway` / `istio-ingress-gateway` reservations from HMNLB subnets
 
-For CSM 1.2, the API gateway will no longer listen on the HMNLB MetalLB address pool.
+For CSM 1.2, the API gateway no longer listens on the HMNLB MetalLB address pool.
 These aliases provided DNS records and are being removed.
 
 ### Create the BICAN network "toggle"
 
-New for CSM 1.2, the BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
+New in CSM 1.2, the BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
 to point to the CAN, CHN, or CMN, and is used by utilities to systematically toggle routes.
 
 ### Migrate existing CAN to new CMN
@@ -185,3 +186,7 @@ Retention of the unused network is not normal behavior.
 
 * Generally production systems will NOT want to use this flag unless active toggling between CAN and CHN is required. This is not usual behavior.
 * Test/development systems may want to have all networks for testing purposes and might want to retain both user networks.
+
+For technical details on the SLS update automation, see [`sls_udpater.py` Technical Details](sls_updater.py_technical_details.md).
+
+Go back to [Stage 0.2 - Update SLS](../../Stage_0_Prerequisites.md#update-sls).
