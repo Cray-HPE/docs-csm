@@ -5,7 +5,7 @@ the Ceph storage might need to be reinitialized.
 
 ## Topics
 
-- [Scenario 1](#scenario-1--shasta-14-only) (Shasta v1.4 only)
+- [Scenario 1](#scenario-1-shasta-14-only) (Shasta v1.4 only)
 - [Scenario 2](#scenario-2-shasta-15-only) (Shasta v1.5 only)
 
 ## Details

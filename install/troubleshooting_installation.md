@@ -30,7 +30,7 @@ If an NCN shows any of these problems, then the network services and interfaces 
 - IP addresses not applying
 - Member/child interfaces not being included
 
-See [Restart Network Services and Interfaces on NCNs](../operations/node_management/NCN_Network_Troubleshooting.md#restart-network-services-and-interfaces-on-ncns).
+See [Restart network services and interfaces on NCNs](../operations/node_management/NCN_Network_Troubleshooting.md#restart-network-services-and-interfaces).
 
 ## Utility storage node installation troubleshooting
 
