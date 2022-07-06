@@ -1,5 +1,5 @@
 # Small
 
-![](../img/small.png)
+![Small network](../img/small.png)
 
-[Back to Index](./README.md)
+[Back to index](README.md).
