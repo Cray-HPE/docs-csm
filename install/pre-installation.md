@@ -385,11 +385,11 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    tar -C "${PITDATA}" -zxvf "csm-${CSM_RELEASE}.tar.gz"
    ```
 
-1. (`pit#`) Install/update RPMs necessary for the CSM installation.
+1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
 
    > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
 
-   - Install `docs-csm`:
+   1. Install `docs-csm`.
 
       > ***NOTE*** This installs necessary scripts for deployment checks, as well as the offline manual.
 
@@ -401,9 +401,9 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
            install -y docs-csm
        ```
 
-   - Update `cray-site-init`:
+   1. Update `cray-site-init`.
 
-       > ***NOTE*** This provides `csi`, a tool for creating and managing configurations as well as
+       > ***NOTE*** This provides `csi`, a tool for creating and managing configurations, as well as
        > orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
 
        ```bash
@@ -414,9 +414,9 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
            update -y cray-site-init
        ```
 
-   - Install `csm-testing` and `goss-servers`:
+   1. Install `csm-testing` and `goss-servers`.
 
-       > ***NOTE*** These packages provide necessary tests and their dependencies for validating the pre-installation, installation, and more.
+       > ***NOTE*** These packages provide the necessary tests and their dependencies for validating the pre-installation, installation, and more.
 
        ```bash
        zypper \
