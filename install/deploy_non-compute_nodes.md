@@ -403,27 +403,6 @@ If the check fails after doing the rebuild, contact support.
 
    If these total lines report any failed tests, then look through the full output of the test in `csi-pit-validate-k8s.log` to see which node had the failed test and what the details are for that test.
 
-1. (`pit#`) Ensure that `weave` has not become split-brained.
-
-   To ensure that `weave` is operating as a single cluster, run the following command to check each member of the Kubernetes cluster:
-
-   ```bash
-   pdsh -b -S -w "$(grep -oP 'ncn-[mw][0-9]{3}' /etc/dnsmasq.d/statics.conf | grep -v '^ncn-m001$' | sort -u |  tr -t '\n' ',')" \
-           'weave --local status connections | grep -i failed || true'
-   ```
-
-1. (`pit#`) Verify that all the pods in the `kube-system` namespace are `Running` or `Completed`. (Optional)
-
-   ```bash
-   kubectl get pods -o wide -n kube-system | grep -Ev '(Running|Completed)'
-   ```
-
-   If any pods are listed by this command, it means they are not in the `Running` or `Completed` state. That needs to be investigated before proceeding.
-
-1. Verify that the `ceph-csi` requirements are in place. (Optional)
-
-   See [Ceph CSI Troubleshooting](troubleshooting_ceph_csi.md) for details.
-
 ## Next topic
 
 After completing the deployment of the management nodes, the next step is to install the CSM services.
