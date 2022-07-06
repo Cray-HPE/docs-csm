@@ -385,13 +385,6 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    tar -C "${PITDATA}" -zxvf "csm-${CSM_RELEASE}.tar.gz"
    ```
 
-1. (`pit#`) Copy the NCN images from the expanded tarball.
-
-   ```bash
-   rsync -a -P --delete "${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/"
-   rsync -a -P --delete "${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/"
-   ```
-
 1. (`pit#`) Install or update `cray-site-init`, `csm-testing`, and `goss-servers` RPMs.
 
    > **NOTE:** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
@@ -408,6 +401,47 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
       --no-gpg-checks \
       install -y csm-testing goss-servers
    ```
+
+1. (`pit#`) Get the artifact versions.
+
+   ```bash
+   kubernetes_version="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   ceph_version="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   ```
+
+1. (`pit#`) Copy the NCN images from the expanded tarball.
+
+   > ***NOTE*** This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
+
+   ```bash
+   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${kubernetes_version}"
+   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${ceph_version}"
+   ```
+
+1. (`pit#`) Generate SSH Keys and invoke `ncn-image-modification.sh`:
+
+   - Generate SSH Keys:
+
+       > ***NOTE*** The code block below assumes an RSA key without a passphrase. If the administrator wants to customize this step they may do so
+
+       ```bash
+       ssh-keygen -N "" -t rsa
+       ```
+
+   - Export the password hash for `root`, this is needed by `ncn-image-modification.sh`:
+
+       ```bash
+       export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
+       ```
+
+   - Run `ncn-image-modification.sh` from the CSM Tarball:
+
+       ```bash
+       "${PITDATA}/csm-${CSM_RELEASE}/ncn-image-modification.sh -p \
+          -d /root/.ssh \
+          -k /var/www/ephemeral/data/k8s/${kubernetes_version}/kubernetes-${kubernetes_version}.squashfs \
+          -s /var/www/ephemeral/data/ceph/${kubernetes_version}/storage-ceph-${ceph_version}.squashfs"
+       ```
 
 1. (`pit#`) Log the currently installed PIT packages.
 
