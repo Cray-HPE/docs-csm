@@ -418,23 +418,23 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${ceph_version}"
    ```
 
-1. (`pit#`) Generate SSH Keys and invoke `ncn-image-modification.sh`:
+1. (`pit#`) Generate SSH keys and invoke `ncn-image-modification.sh`:
 
-   - Generate SSH Keys:
+   1. Generate SSH keys.
 
-       > ***NOTE*** The code block below assumes an RSA key without a passphrase. If the administrator wants to customize this step they may do so
+       > ***NOTE*** The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
 
        ```bash
        ssh-keygen -N "" -t rsa
        ```
 
-   - Export the password hash for `root`, this is needed by `ncn-image-modification.sh`:
+   1. Export the password hash for `root` that is needed for the `ncn-image-modification.sh` script:
 
        ```bash
        export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
        ```
 
-   - Run `ncn-image-modification.sh` from the CSM Tarball:
+   1. Run `ncn-image-modification.sh` from the CSM tarball:
 
        ```bash
        "${PITDATA}/csm-${CSM_RELEASE}/ncn-image-modification.sh -p \
