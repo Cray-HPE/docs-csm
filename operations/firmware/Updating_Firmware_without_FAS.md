@@ -1,18 +1,26 @@
 # Updating BMC Firmware and BIOS for NCNs without FAS
 
-> **NOTE:**
+> **`NOTE`**
 >
-> * On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM.
-> * The commands in the procedure must be run on `ncn-m001`.
-> * This procedure should only be used if FAS is not available, such as during initial CSM install.
+> - On HPE nodes, the BMC firmware is iLO 5 and BIOS is System ROM.
+> - The commands in the procedure must be run on `ncn-m001`.
+> - This procedure should only be used if FAS is not available, such as during initial CSM install.
+
+- [Prerequisites](#prerequisites)
+- [Obtain the required firmware](#obtain-the-required-firmware)
+- [Flash the firmware](#flash-the-firmware)
+  - [Gigabyte NCNs](#gigabyte-ncns)
+  - [HPE NCNs](#hpe-ncns)
+    - [Using the `ilorest` command](#using-the-ilorest-command)
+    - [Using the iLO GUI](#using-the-ilo-gui)
 
 ## Prerequisites
 
 The following information is needed:
 
-* IP address of each NCN BMC
-* IP address of `ncn-m001`
-* `root` user password for each NCN BMC
+- IP address of each NCN BMC
+- IP address of `ncn-m001`
+- `root` user password for each NCN BMC
 
 ## Obtain the required firmware
 
@@ -26,33 +34,35 @@ Move the firmware to be updated into an accessible directory.
 
 ### Gigabyte NCNs
 
+This procedure can be followed on any Linux system with network connectivity to the NCN BMCs.
+
 1. Start a webserver from the directory containing the downloaded firmware / BIOS image:
 
     ```bash
-    ncn-m001# python3 -m http.server 8770
+    python3 -m http.server 8770
     ```
 
 1. Update BMC firmware.
 
-    * `passwd` = `root` user password of BMC
-    * `ipaddressOfBMC` = IP address of NCN BMC
-    * `ipaddressOfM001` = IP address of `ncn-m001`
-    * `filename` = Filename of the downloaded image
+    - `passwd` = `root` user password of BMC
+    - `ipaddressOfBMC` = IP address of NCN BMC
+    - `ipaddressOfM001` = IP address of `ncn-m001`
+    - `filename` = Filename of the downloaded image
 
     ```bash
-    ncn-m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
+    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
                   -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
     ```
 
 1. Update BIOS.
 
-    * `passwd` = `root` user password of BMC
-    * `ipaddressOfBMC` = IP address of BMC
-    * `ipaddressOfM001` = IP address of `ncn-m001`
-    * `filename` = Filename of the downloaded image
+    - `passwd` = `root` user password of BMC
+    - `ipaddressOfBMC` = IP address of BMC
+    - `ipaddressOfM001` = IP address of `ncn-m001`
+    - `filename` = Filename of the downloaded image
 
     ```bash
-    ncn-m001# curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
+    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
                   -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
     ```
 
@@ -64,45 +74,43 @@ Move the firmware to be updated into an accessible directory.
 
 ### HPE NCNs
 
-## Using the `ilorest` command
+#### Using the `ilorest` command
 
 If the command `ilorest` is available, then follow the procedure in this section to update the NCNs.
 Otherwise, see [Using the iLO GUI](#using-the-ilo-gui).
 
 1. Use the `ilorest` command to flash the firmware for each NCN that requires an update:
 
-    * `passwd` = `root` user password of BMC
-    * `ipaddressOfBMC` = IP address of BMC
-    * `ipaddressOfM001` = IP address of `ncn-m001`
-    * `filename.fwpkg` = Filename of the downloaded image
+    - `passwd` = `root` user password of BMC
+    - `ipaddressOfBMC` = IP address of BMC
+    - `ipaddressOfM001` = IP address of `ncn-m001`
+    - `filename.fwpkg` = Filename of the downloaded image
 
     ```bash
-    ncn-m001# ilorest flashfwpkg filename.fwpkg --url ipaddressOfBMC -u root -p passwd
+    ilorest flashfwpkg filename.fwpkg --url ipaddressOfBMC -u root -p passwd
     ```
 
     > After updating its System ROM (BIOS), an NCN must be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot NCNs.
 
-<a name="using-the-ilo-gui"></a>
-
-## Using the iLO GUI
+#### Using the iLO GUI
 
 The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM (BIOS) on the HPE NCNs.
 
 1. Copy the iLO 5 firmware and/or System ROM files to a local computer from `ncn-m001` using `scp` or other secure copy tools.
 
     ```bash
-    linux# scp root@ipaddressOfM001Node:pathToFile/filename .
+    scp root@ipaddressOfM001Node:pathToFile/filename .
     ```
 
-Do the following steps for each NCN to be updated:
+On a machine external to the cluster (for example, a laptop), do the following steps for each NCN to be updated:
 
-1. From your own machine, create an SSH tunnel.
+1. Create an SSH tunnel.
 
-    > * `-L` creates the tunnel
-    > * `-N` prevents a shell and stubs the connection
+    > - `-L` creates the tunnel
+    > - `-N` prevents a shell and stubs the connection
 
     ```bash
-    linux# ssh -L 6443:ipaddressOfNCNBMC:443 -N ipaddressofM001
+    ssh -L 6443:ipaddressOfNCNBMC:443 -N ipaddressofM001
     ```
 
 1. Open the following URL in a web browser: `https://127.0.0.1:6443`
