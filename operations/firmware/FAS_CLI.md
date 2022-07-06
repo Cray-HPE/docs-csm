@@ -104,13 +104,13 @@ Firmware updates can be stopped if required. This is useful because only one act
 
 #### Abort an action: Procedure
 
-1. (`ncn-mw#`) Issue the abort command to the action.
+(`ncn-mw#`) Issue the abort command to the action.
 
-    Modify the example command to specify the `actionID` of the action being aborted.
+Modify the example command to specify the `actionID` of the action being aborted.
 
-    ```bash
-    cray fas actions instance delete {actionID}
-    ```
+```bash
+cray fas actions instance delete {actionID}
+```
 
 The action could take up to a minute to fully abort.
 
@@ -810,7 +810,7 @@ See [Load Firmware from Nexus](FAS_Admin_Procedures.md#load-firmware-from-nexus)
 
 1. Copy the RPM or ZIP file to one of the master or worker NCNs.
 
-1. Load the firmware into FAS.
+1. (`ncn-mw#`) Load the firmware into FAS.
 
    Be sure to update the example command with the actual path and filename of the RPM or ZIP file to be loaded.
 
