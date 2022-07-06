@@ -3,18 +3,16 @@
 The procedures described on this page must be completed before any node is booted with the Cray Pre-Install Toolkit (PIT), which is performed in a later document. When the PIT
 node is referenced during these procedures, it means the node that will be booted as the PIT node.
 
-1. [Quiesce compute and application nodes](#quiesce_compute_and_application_nodes)
-1. [Disable DHCP service](#disable_dhcp_service)
-1. [Wipe disks on booted nodes](#wipe_disks_on_booted_nodes)
-1. [Set IPMI credentials](#set_ipmi_credentials)
-1. [Power off booted nodes](#power_off_booted_nodes)
-1. [Set node BMCs to DHCP](#set_node_bmcs_to_dhcp)
-1. [Wipe USB device on PIT node](#wipe_usb_device_on_pit_node)
-1. [Power off PIT node](#power_off_pit_node)
-1. [Configure DNS](#configure_DNS)
-1. [Check Disk Space](#check_disk_space)
-
-<a name="quiesce_compute_and_application_nodes"></a>
+1. [Quiesce compute and application nodes](#quiesce-compute-and-application-nodes)
+1. [Disable DHCP service](#disable-dhcp-service)
+1. [Wipe disks on booted nodes](#wipe-disks-on-booted-nodes)
+1. [Set IPMI credentials](#set-ipmi-credentials)
+1. [Power off booted nodes](#power-off-booted-nodes)
+1. [Set node BMCs to DHCP](#set-node-bmcs-to-dhcp)
+1. [Wipe USB device on PIT node](#wipe-usb-device-on-pit-node)
+1. [Power off PIT node](#power-off-pit-node)
+1. [Configure DNS](#configure-dns)
+1. [Check available disk space](#check-available-disk-space)
 
 ## Quiesce compute nodes and application nodes
 
@@ -31,8 +29,6 @@ While the reinstall process happens, these nodes would not be able to function n
 
 See [Shut Down and Power Off Compute and User Access Nodes](../operations/power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
 
-<a name="disable_dhcp_service"></a>
-
 ## Disable DHCP service
 
 > **Skip this section if none of the management nodes are booted.**
@@ -47,8 +43,6 @@ Scale the deployment from either the LiveCD or any Kubernetes node:
 ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 ```
 
-<a name="wipe_disks_on_booted_nodes"></a>
-
 ## Wipe disks on booted nodes
 
 > **Skip this section if none of the management nodes are booted.**
@@ -58,8 +52,6 @@ If any of the management nodes are booted with Linux, then they have data from p
 **REQUIRED** If the above is true, then for each management node (**excluding** `ncn-m001`), log in and do a "full wipe" of the node's disks.
 
 See [full wipe from Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md#full-wipe).
-
-<a name="set_ipmi_credentials"></a>
 
 ## Set IPMI credentials
 
@@ -72,8 +64,6 @@ linux# USERNAME=root
 linux# read -s IPMI_PASSWORD
 linux# export IPMI_PASSWORD
 ```
-
-<a name="power_off_booted_nodes"></a>
 
 ## Power off booted nodes
 
@@ -108,8 +98,6 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the booted LiveCD, if re
     ```bash
     ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
     ```
-
-<a name="set_node_bmcs_to_dhcp"></a>
 
 ## Set node BMCs to DHCP
 
@@ -185,8 +173,6 @@ BMCs to be set back to DHCP before proceeding.
 
     As long as every BMC is either not reachable or receives a cold reset, this step is successful.
 
-<a name="wipe_usb_device_on_pit_node"></a>
-
 ## Wipe USB device on PIT node
 
 > **Skip this section if intending to boot the PIT node from a USB device for the install.**
@@ -200,8 +186,6 @@ Wipe LiveCD disk labels with the following command:
 ncn-m001# wipefs --all --force /dev/disk/by-label/cow /dev/disk/by-label/PITDATA /dev/disk/by-label/BOOT /dev/disk/by-label/CRAYLIVE
 ```
 
-<a name="power_off_pit_node"></a>
-
 ## Power off PIT node
 
 > **Skip this step if planning to use this node as a staging area to create the USB LiveCD.**
@@ -212,21 +196,15 @@ Shut down the LiveCD or `ncn-m001` node.
 linux# poweroff
 ```
 
-<a name="configure_DNS"></a>
-
 ## Configure DNS
 
 If `ncn-m001` is being used to prepare the USB LiveCD, remove the Kubernetes IP addresses from `/etc/resolv.conf` and add a
 valid external DNS server.
 
-<a name="check_disk_space"></a>
-
 ## Check available disk space
 
 If `ncn-m001` is being used to prepare the USB LiveCD, ensure there is enough free disk space for the CSM tar archive to be
 downloaded and unpacked.
-
-<a name="next-topic"></a>
 
 ## Next topic
 
