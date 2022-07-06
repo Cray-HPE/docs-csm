@@ -5,6 +5,7 @@ prerequisites section before proceeding to any of the sections for the supported
 
 The following CLI operations are described:
 
+- [Prerequisites](#prerequisites)
 - [Actions](#actions)
   - [Execute an action](#execute-an-action)
     - [Procedure](#execute-an-action-procedure)
