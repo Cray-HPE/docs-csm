@@ -1,5 +1,5 @@
 # Large
 
-![](../img/large.png)
+![Large network](../img/large.png)
 
-[Back to Index](./index.md)
+[Back to index](index.md).

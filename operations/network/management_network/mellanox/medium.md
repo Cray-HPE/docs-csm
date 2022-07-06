@@ -1,5 +1,5 @@
 # Medium
 
-![](../img/medium.png)
+![Medium network](../img/medium.png)
 
-[Back to Index](./index.md)
+[Back to index](index.md).
