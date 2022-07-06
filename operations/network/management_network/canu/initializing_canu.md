@@ -28,7 +28,7 @@ Eight IP addresses are saved to `output.txt`.
 
 ## SLS API input
 
-Parsing the Shasta SLS API for IP addresses requires a valid API token. Either the token file can be passed in with the
+Parsing the SLS API for IP addresses requires a valid API token. Either the token file can be passed in with the
 `--auth-token TOKEN_FILE` flag, or the token can be read from the `SLS_TOKEN` environment variable, if it is exported.
 
 The SLS address is by default set to `api-gw-service-nmn.local`. If needed, a different address can be specified using the `--sls-address SLS_ADDRESS` flag.
