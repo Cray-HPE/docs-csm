@@ -11,6 +11,8 @@ node is referenced during these procedures, it means the node that will be boote
 1. [Set node BMCs to DHCP](#set_node_bmcs_to_dhcp)
 1. [Wipe USB device on PIT node](#wipe_usb_device_on_pit_node)
 1. [Power off PIT node](#power_off_pit_node)
+1. [Configure DNS](#configure_DNS)
+1. [Check Disk Space](#check_disk_space)
 
 <a name="quiesce_compute_and_application_nodes"></a>
 
@@ -209,6 +211,20 @@ Shut down the LiveCD or `ncn-m001` node.
 ```bash
 linux# poweroff
 ```
+
+<a name="configure_DNS"></a>
+
+## Configure DNS
+
+If `ncn-m001` is being used to prepare the USB LiveCD, remove the Kubernetes IP addresses from `/etc/resolv.conf` and add a
+valid external DNS server.
+
+<a name="check_disk_space"></a>
+
+## Check available disk space
+
+If `ncn-m00` is being used to prepare the USB LiveCD, ensure there is enough free disk space for the CSM tar archive to be
+downloaded and unpacked..
 
 <a name="next-topic"></a>
 
