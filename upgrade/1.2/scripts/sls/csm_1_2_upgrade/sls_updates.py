@@ -288,6 +288,51 @@ def remove_kube_api_reservations(networks):
                 subnet.reservations().pop("kubeapi-vip")
 
 
+def correct_unbound_dns_address(networks):
+    """Query HMNLB and NMNLB Reservations and correct Unbound DNS IPv4 Address.
+
+    Args:
+        networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
+        unbound_ipv4 (ipaddress.IPv4Address): IPv4 address of unbound
+    """
+    click.secho(
+        "Correcting unbound IPv4 addresses if they are incorrect",
+        fg="bright_white"
+    )
+    network_data = [
+        ("NMNLB", "nmn_metallb_address_pool", ipaddress.IPv4Address("10.92.100.225")),
+        ("HMNLB", "hmn_metallb_address_pool", ipaddress.IPv4Address("10.94.100.225")),
+    ]
+ 
+    for data in network_data:
+        network = networks.get(data[0])
+        subnet = network.subnets().get(data[1])
+        reservations = subnet.reservations()
+        unbound_reservation = reservations.get("unbound")
+        if unbound_reservation is None:
+            # create the reservation
+            click.secho(
+                f"    Creating new unbound reservation in {data[1]} subnet with {data[2]}"
+            )
+            reservations.update(
+                {
+                    "unbound":
+                    Reservation(
+                        name="unbound",
+                        ipv4_address=data[2],
+                        aliases=["unbound"],
+                        comment="unbound"
+                    )
+                }
+            )
+        else:
+            if unbound_reservation.ipv4_address() != data[2]:
+                click.secho(
+                    f"    Updating unbound reservation in {data[1]} subnet with {data[2]}"
+                )
+                unbound_reservation.ipv4_address(data[2])
+
+
 def create_bican_network(networks, default_route_network_name):
     """Create a new SLS BICAN network data structure.
 

@@ -120,6 +120,11 @@ This needs to be done in the order listed above.
 For CSM 1.2, the API gateway will no longer listen on the HMNLB MetalLB address pool.
 These aliases provided DNS records and are being removed.
 
+### Correct any erroneous Unbound DNS IPv4 addresses
+
+Some systems installed Shasta 1.4 and prior contained a bug in CSI which created reservations
+with incorrect IP addresses.
+
 ### Create the BICAN network "toggle"
 
 New for CSM 1.2, the BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
@@ -187,6 +192,6 @@ Retention of the unused network is not normal behavior.
 * Generally production systems will NOT want to use this flag unless active toggling between CAN and CHN is required. This is not usual behavior.
 * Test/development systems may want to have all networks for testing purposes and might want to retain both user networks.
 
-For technical details on what the sls_update automation. Refer to [sls_udpater.py_technical_details](sls_updater.py_technical_details.md).
+For technical details on what the `sls_update` automation, refer to [SLS Updater Technical Details](sls_updater.py_technical_details.md).
 
 [Go Back to Stage 0.2 - Update SLS](../../Stage_0_Prerequisites.md#update-sls)
