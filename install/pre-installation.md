@@ -272,7 +272,7 @@ These variables will need to be set for many procedures within the CSM installat
    ```bash
    cat << EOF >/etc/environment
    CSM_RELEASE=${CSM_RELEASE}
-   CSM_PATH=${PITDATA}/csm-${CSM_RELEASE} 
+   CSM_PATH=${PITDATA}/csm-${CSM_RELEASE}
    GOSS_BASE=${GOSS_BASE}
    PITDATA=${PITDATA}
    SYSTEM_NAME=${SYSTEM_NAME}
