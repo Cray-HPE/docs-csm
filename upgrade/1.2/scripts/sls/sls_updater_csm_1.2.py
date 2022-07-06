@@ -27,6 +27,7 @@ import sys
 
 import click
 from csm_1_2_upgrade.sls_updates import convert_can_ips
+from csm_1_2_upgrade.sls_updates import correct_unbound_dns_address
 from csm_1_2_upgrade.sls_updates import create_bican_network
 from csm_1_2_upgrade.sls_updates import create_chn_network
 from csm_1_2_upgrade.sls_updates import create_metallb_pools_and_asns
@@ -54,6 +55,7 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     9. Rename uai_macvlan_bridge reservation to uai_nmn_blackhole
    10. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network to keep].\n
    11. Create the new BICAN "toggle" network.\n
+   12. Correct Unbound IP addresses in HMNLB and NMNLB.\n
 """
 
 
@@ -261,6 +263,11 @@ def main(
     # Remove api-gw aliases from HMNLB reservations
     #   (not order dependent)
     remove_api_gw_from_hmnlb_reservations(networks)
+
+    #
+    # Correct Unbound IPv4 addresses in HMNLB and NMNLB reservations
+    #   (not order dependent)
+    correct_unbound_dns_address(networks)
 
     #
     # Clone (existing) CAN network to CMN

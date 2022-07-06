@@ -120,6 +120,11 @@ This needs to be done in the order listed above.
 For CSM 1.2, the API gateway will no longer listen on the HMNLB MetalLB address pool.
 These aliases provided DNS records and are being removed.
 
+### Correct any erroneous Unbound DNS IPv4 addresses
+
+Some systems installed Shasta 1.4 and prior contained a bug in CSI which created reservations
+with incorrect IP addresses.
+
 ### Create the BICAN network "toggle"
 
 New for CSM 1.2, the BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
