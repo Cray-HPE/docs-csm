@@ -15,7 +15,7 @@ Access to the spine switches is required.
     Check both spines if they are available (powered up):
 
     ```console
-    `sw-spine# show ip bgp summary
+    sw-spine# show ip bgp summary
     ```
 
     All the neighbors should be in the `Established` state.
