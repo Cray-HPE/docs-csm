@@ -11,6 +11,8 @@ the NCNs have been deployed (e.g. there is no more PIT node).
 1. [Power Off Booted Nodes](#power-off-booted-nodes)
 1. [Set Node BMCs to DHCP](#set-node-bmcs-to-dhcp)
 1. [Power off the PIT Node](#power-off-pit-node)
+1. [Configure DNS](#configure-dns)
+1. [Check Disk Space](#check-disk-space)
 
 ## Quiesce Application and Compute Nodes
 
@@ -155,6 +157,16 @@ BMCs to be set back to DHCP before proceeding.
    ```
 
 The process is now done, the NCNs are ready for a new deployment.
+
+## Configure DNS
+
+If `ncn-m001` is being used to prepare the USB LiveCD, remove the Kubernetes IP addresses from `/etc/resolv.conf` and add a
+valid external DNS server.
+
+## Check Disk Space
+
+If `ncn-m001` is being used to prepare the USB LiveCD, ensure there is enough free disk space for the CSM tar archive to be
+downloaded and unpacked.
 
 ## Next topic
 
