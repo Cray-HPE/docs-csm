@@ -21,7 +21,7 @@ ncn-m# kubectl logs <podname> -n <namespace> -c istio-proxy | grep 503
    are being created. When this happens, delete the pod if it is a single replica or perform a rolling restart of the Deployment
    or StatefulSet if it is part of a multiple replica exhibiting the issue, like:
 
-   ```
+   ```bash
    ncn-m# kubectl rollout restart -n istio-system deployment istio-ingressgateway
    ```
 
@@ -37,7 +37,7 @@ ncn-m# kubectl logs <podname> -n <namespace> -c istio-proxy | grep 503
 
    This error code typically indicates an issue with the authorization service (i.e., spire). When this happens, perform a rolling restart of the following:
 
-   ```
+   ```bash
    ncn-m# kubectl rollout restart -n spire statefulset spire-server
    ncn-m# kubectl rollout restart -n spire daemonset spire-agent
    ncn-m# kubectl rollout restart -n spire deployment spire-jwks
