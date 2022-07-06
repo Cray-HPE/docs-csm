@@ -224,7 +224,7 @@ valid external DNS server.
 ## Check available disk space
 
 If `ncn-m001` is being used to prepare the USB LiveCD, ensure there is enough free disk space for the CSM tar archive to be
-downloaded and unpacked..
+downloaded and unpacked.
 
 <a name="next-topic"></a>
 
