@@ -622,7 +622,7 @@ EOF
     # needs so it can move around on an upgraded NCN (before we deploy
     # the new nexus chart)
     #
-    kubectl get configmap -n nexus cray-precache-images -o yaml | sed '/kind: ConfigMap/i\    docker.io/sonatype/nexus3:3.25.0\n    dtr.dev.cray.com/baseos/busybox:1\n    dtr.dev.cray.com/cray/istio/proxyv2:1.7.8-cray2-distroless\n    docker.io/openpolicyagent/opa:0.24.0-envoy-1' | kubectl apply -f -
+    kubectl get configmap -n nexus cray-precache-images -o yaml | sed '/kind: ConfigMap/i\    docker.io/sonatype/nexus3:3.38.0-1\n    dtr.dev.cray.com/baseos/busybox:1\n    dtr.dev.cray.com/cray/istio/proxyv2:1.7.8-cray2-distroless\n    docker.io/openpolicyagent/opa:0.24.0-envoy-1' | kubectl apply -f -
 
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
