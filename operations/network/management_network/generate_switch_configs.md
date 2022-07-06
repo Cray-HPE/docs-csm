@@ -40,11 +40,11 @@ Generating a configuration file can be done for a single switch, or for the full
 * Generate a configuration file for single switch:
 
     ```console
-    ncn# canu generate switch configuration--csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --name sw-spine-001
+    canu generate switch configuration--csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --name sw-spine-001
     ```
 
 * Generate configuration files for full system:
 
     ```console
-    ncn# canu generate network configuration--csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
+    canu generate network configuration--csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
     ```

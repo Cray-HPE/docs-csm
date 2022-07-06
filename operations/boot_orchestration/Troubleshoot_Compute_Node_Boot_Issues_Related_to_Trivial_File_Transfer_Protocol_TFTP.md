@@ -10,13 +10,12 @@ This procedure requires administrative privileges.
 
 Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.
 
-
 1.  Log onto a non-compute node \(NCN\) as root.
 
 2.  Check that the TFTP service is running.
 
     ```bash
-    ncn-m001#  kubectl get pods -n services -o wide | grep cray-tftp
+     kubectl get pods -n services -o wide | grep cray-tftp
     ```
 
 3.  Start a tcpdump session on the NCN.
@@ -24,8 +23,8 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 4.  Obtain the TFTP pod's ID.
 
     ```bash
-    ncn-m001# PODID=$(kubectl get pods -n services --no-headers -o wide | grep cray-tftp | awk '{print $1}')
-    ncn-m001# echo $PODID
+    PODID=$(kubectl get pods -n services --no-headers -o wide | grep cray-tftp | awk '{print $1}')
+    echo $PODID
     ```
 
 5.  Enter the TFTP pod using the pod ID.
@@ -33,7 +32,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     Double check that `PODID` contains only one ID. If there are multiple TFTP pods listed, just choose one as the ID.
 
     ```bash
-    ncn-m001# kubectl exec -n services -it $PODID /bin/sh
+    kubectl exec -n services -it $PODID /bin/sh
     ```
 
 6.  Start a tcpdump session from within the TFTP pod.

@@ -4,26 +4,26 @@ Create a UAI using the default UAI image or the default UAI class in legacy mode
 
 ## Procedure
 
-1. Create a UAI with a command of the following form:
+1. (`user>`) Create a UAI with a command of the following form:
 
     ```bash
-    user> cray uas create --public-key '<path>'
+    cray uas create --public-key '<path>'
     ```
 
     `<path>` is the path to a file containing an SSH public-key matched to the SSH private key belonging to the user.
 
-2. Watch the UAI and see when it is ready for logins.
+1. (`user>`) Watch the UAI and see when it is ready for logins.
 
     ```bash
-    user> cray uas list
+    cray uas list
     ```
 
-3. Log into the UAI using the `ssh` command.
+1. Log into the UAI using the `ssh` command.
 
-4. Delete the UAI when finished working with it.
+1. (`user>`) Delete the UAI when finished working with it.
 
     ```bash
-    user> cray uas delete --uai-list '<uai-list>'
+    cray uas delete --uai-list '<uai-list>'
     ```
 
 ## Example UAI Lifecycle
@@ -99,6 +99,6 @@ vers> cray uas delete --uai-list uai-vers-01b26dd1
 results = [ "Successfully deleted uai-vers-01b26dd1",]
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: List Available UAI Images in Legacy Mode](List_Available_UAI_Images_in_Legacy_Mode.md)

@@ -6,11 +6,9 @@ The example in this procedure is for creating a repair task to rebuild Yum metad
 
 See the Nexus documentation on Tasks for more details: [https://help.sonatype.com/repomanager3/system-configuration/tasks](https://help.sonatype.com/repomanager3/system-configuration/tasks)
 
-
 ### Prerequisites
 
 The system is fully installed.
-
 
 ### Procedure
 
@@ -91,7 +89,7 @@ The system is fully installed.
     1.  Retrieve the Nexus pod name.
 
         ```bash
-        ncn# kubectl -n nexus get pods | grep nexus
+        kubectl -n nexus get pods | grep nexus
         ```
 
         Example output:
@@ -103,7 +101,7 @@ The system is fully installed.
     2.  Use `kubectl exec` to access the running `nexus` pod.
 
         ```bash
-        ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
+        kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
         -c nexus -- ls -ltr /nexus-data/log/tasks
         ```
 
@@ -118,7 +116,7 @@ The system is fully installed.
         If multiple repositories are being rebuilt, search the logs for the specific repository to find the latest corresponding log file. The example below is for `mirror-1.3.0-opensuse-leap-15`:
 
         ```bash
-        ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
+        kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
         -c nexus -- grep -R 'Rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15' \
         /nexus-data/log/tasks
         ```
@@ -134,7 +132,7 @@ The system is fully installed.
         The log file for a successful rebuild will look similar to the following:
 
         ```bash
-        ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
+        kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
         -c nexus -- cat /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822235306934.log
         ```
 
@@ -162,11 +160,10 @@ The system is fully installed.
 
     ![Repodata Attributes](../../img/operations/Nexus_Repodata_Attributes_After.png "Repodata Attributes")
 
-
 **Troubleshooting:** When a rebuild fails, expect to see `ERROR` and `WARN` messages around the same time as the `Finished rebuilding yum metadata for repository` message. For example, consider the log from a failed rebuild of `mirror-1.3.0-opensuse-leap-15`:
 
 ```bash
-ncn# kubectl -n nexus exec -ti nexus-55d8c77547-65k6q -c nexus -- \
+kubectl -n nexus exec -ti nexus-55d8c77547-65k6q -c nexus -- \
 cat /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822231259523.log
 ```
 

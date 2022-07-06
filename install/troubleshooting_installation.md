@@ -6,100 +6,48 @@ for additional information on system hardware, troubleshooting, and administrati
 
 ## Topics
 
-   1. [Reset root Password on LiveCD](#reset_root_password_on_LiveCD)
-   1. [Reinstall LiveCD](#reinstall_livecd)
-   1. [PXE Boot Troubleshooting](#pxe_boot_troubleshooting)
-   1. [Wipe NCN Disks for Reinstallation](#wipe_ncn_disks_for_reinstallation)
-   1. [Restart Network Services and Interfaces on NCNs](#restart_network_services_and_interfaces_on_ncns)
-   1. [Utility Storage Node Installation Troubleshooting](#utility_storage_node_installation_troubleshooting)
-   1. [Ceph CSI Troubleshooting](#ceph_csi_troubleshooting)
-   1. [Safeguards for CSM NCN Upgrades](#safeguards_for_csm_ncn_upgrades)
-   1. [Postgres Troubleshooting](#postgres_troubleshooting)
-   1. [CSM Services Install Fails Because of Missing Secret](#csm_installation_failure_missing_secret)
+- [Reset `root` password on a LiveCD USB](#reset-root-password-on-a-livecd-usb)
+- [PXE boot troubleshooting](#pxe-boot-troubleshooting)
+- [Restart network services and interfaces on NCNs](#restart-network-services-and-interfaces-on-ncns)
+- [Utility storage node installation troubleshooting](#utility-storage-node-installation-troubleshooting)
+- [Ceph CSI troubleshooting](#ceph-csi-troubleshooting)
+- [Postgres troubleshooting](#postgres-troubleshooting)
 
-## Details
+## Reset `root` password on a LiveCD USB
 
-   <a name="reset_root_password_on_LiveCD"></a>
+If the `root` password on the LiveCD needs to be changed, then see
+[Reset `root` Password on a LiveCD USB](livecd/Reset_root_Password_on_a_LiveCD_USB.md).
 
-   1. Reset root Password on LiveCD
+## PXE boot troubleshooting
 
-      If the root password on the LiveCD needs to be changed, then this procedure does the reset.
+See [Troubleshooting PXE Boot](troubleshooting_pxe_boot.md).
 
-      See [Reset root Password on LiveCD](reset_root_password_on_LiveCD.md)
-   <a name="reinstall_livecd"></a>
+## Restart network services and interfaces on NCNs
 
-   1. Reinstall LiveCD
+If an NCN shows any of these problems, then the network services and interfaces on that node might need to be restarted:
 
-      If a reinstall of the PIT node is needed, the data from the PIT node can be saved to the LiveCD USB and
-      the LiveCD USB can be rebuilt.
+- Interfaces not showing up
+- IP addresses not applying
+- Member/child interfaces not being included
 
-      See [Reinstall LiveCD](reinstall_livecd.md)
-   <a name="pxe_boot_troubleshooting"></a>
+See [Restart network services and interfaces on NCNs](../operations/node_management/NCN_Network_Troubleshooting.md#restart-network-services-and-interfaces).
 
-   1. PXE Boot Troubleshooting
+## Utility storage node installation troubleshooting
 
-      If a reinstall of the PIT node is needed, the data from the PIT node can be saved to the LiveCD USB and
-      the LiveCD USB can be rebuilt.
+Sometimes a large OSD can be created which is a concatenation of multiple devices, instead of one OSD per device. In this case,
+the Ceph storage might need to be reinitialized.
 
-      See [PXE Boot Troubleshooting](pxe_boot_troubleshooting.md)
-   <a name="wipe_ncn_disks_for_reinstallation"></a>
+See [Troubleshooting Utility Storage Node Installation](troubleshooting_utility_storage_node_installation.md).
 
-   1. Wipe NCN Disks for Reinstallation
+## Ceph CSI troubleshooting
 
-      If it has been determined an NCN did not properly configure its storage while trying to
-      [Deploy Management Nodes](deploy_management_nodes.md) during the install, then the
-      storage should be wiped so the node can be redeployed.
+If there has been a failure to initialize all Ceph CSI components on `ncn-s001`, then the storage node
+`cloud-init` may need to be rerun.
 
-      See [Wipe NCN Disks for Reinstallation](wipe_ncn_disks_for_reinstallation.md)
-   <a name="restart_network_services_and_interfaces_on_ncns"></a>
+See [Troubleshooting Ceph CSI](troubleshooting_ceph_csi.md).
 
-   1. Restart Network Services and Interfaces on NCNs
+## Postgres troubleshooting
 
-      If an NCN shows any of these problems, the network services and interfaces on that node might need to be restarted.
-         * Interfaces not showing up
-         * IP Addresses not applying
-         * Member/children interfaces not being included
+- Timeout on `cray-sls-init-load` during Install CSM Services due to Postgres cluster in `SyncFailed` state
 
-      See [Restart Network Services and Interfaces on NCNs](restart_network_services_and_interfaces_on_ncns.md)
-   <a name="utility_storage_node_installation_troubleshooting"></a>
-
-   1. Utility Storage Node Installation Troubleshooting
-
-      If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
-      the Ceph storage might need to be reinitialized.
-         * Sometimes a large OSD can be created which is a concatenation of multiple devices, instead of one OSD per device
-
-      See [Utility Storage Node Installation Troubleshooting](utility_storage_node_installation_troubleshooting.md)
-   <a name="ceph_csi_troubleshooting"></a>
-
-   1. Ceph CSI Troubleshooting
-
-      If there has been a failure to initialize all Ceph CSI components on `ncn-s001`, then the storage node
-      `cloud-init` may need to be rerun.
-         * Verify Ceph CSI
-         * Rerun Storage Node `cloud-init`
-
-      See [Ceph CSI Troubleshooting](ceph_csi_troubleshooting.md)
-   <a name="safeguards_for_csm_ncn_upgrades"></a>
-
-   1. Safeguards for CSM NCN Upgrades
-
-      If a reinstall or upgrade is being done, there might be a reason to use one of these safeguards.
-         * Preserve Ceph on Utility Storage Nodes
-         * Protect RAID Configuration on Management Nodes
-
-      See [Safeguards for CSM NCN Upgrades](safeguards_for_csm_ncn_upgrades.md)
-
-   <a name="postgres_troubleshooting"></a>
-
-   1. Postgres Troubleshooting
-
-      * Timeout on `cray-sls-init-load` during Install CSM Services due to Postgres cluster in `SyncFailed` state
-
-      See [Troubleshoot Postgres Database](../operations//kubernetes/Troubleshoot_Postgres_Database.md#syncfailed)
-   <a name="csm_installation_failure_missing_secret"></a>
-
-   1. CSM Services Install Fails Because of Missing Secret
-
-      If a new installation is failing with a missing `admin-client-auth` secret, then see
-      [CSM Services Install Fails Because of Missing Secret](csm_installation_failure.md).
+See [Postgres status `SyncFailed`](../operations/kubernetes/Troubleshoot_Postgres_Database.md#postgres-status-syncfailed).

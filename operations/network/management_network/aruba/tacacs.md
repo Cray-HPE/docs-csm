@@ -27,7 +27,7 @@ switch(config)# aaa accounting all default start-stop group tacacs
 Show commands to validate functionality:
 
 ```text
-switch# show tacacs-server [detail]
+show tacacs-server [detail]
 ```
 
 ## Expected Results
@@ -41,5 +41,4 @@ switch# show tacacs-server [detail]
 1. Administrators can see the start-stop logs in the logfile of the TACACS server
 1. Administrators can log into the switch via SSH from the client, but the CLI available to you is restricted
 
-
-[Back to Index](../index.md)
+[Back to Index](../README.md)

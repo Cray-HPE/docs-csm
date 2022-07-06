@@ -5,7 +5,7 @@ A configuration session can be a long-running process, and depends on many syste
 To view the session status of a session named *example*, use the following command:
 
 ```bash
-# cray cfs sessions describe example --format json
+cray cfs sessions describe example --format json
 ```
 
 Example output:
@@ -43,7 +43,7 @@ Example output:
 The `jq` tool, along with the `--format json` output option of the CLI, are helpful for filtering the session data to view just the session status:
 
 ```bash
-# cray cfs sessions describe example \
+cray cfs sessions describe example \
 --format json | jq .status.session
 ```
 

@@ -17,7 +17,7 @@ The generated S3 credentials will expire after one hour.
         The following command to call STS assumes the environment variable $TOKEN contains the JWT.
 
         ```bash
-        ncn# curl -X PUT -H "Authorization: Bearer $TOKEN" \
+        curl -X PUT -H "Authorization: Bearer $TOKEN" \
         https://api-gw-service-nmn.local/apis/sts/token
         ```
 

@@ -22,7 +22,6 @@ reference information for these disks, their partition tables, and their managem
 
 ## Details
 
-<a name="disk-layout-quick-reference-tables"></a>
 ### Disk Layout Quick-Reference Tables
 
 The table below represents all recognizable FS labels on any given management node, varying slightly by node role (Kubernetes master or Kubernetes worker).
@@ -53,7 +52,6 @@ The above table's rows with `overlayFS` map their `Mount Paths` to the `Upper Di
 
 > For notes on previous/old labels, scroll to the bottom.
 
-<a name="overlayfs-and-persistence"></a>
 ### OverlayFS and Persistence
 
 There are a few overlays used for NCN image boots. These enable two critical functions; changes to data and new data will persist between reboots, and RAM (memory) is freed because we are using our block-devices (SATA/PCIe).
@@ -62,7 +60,6 @@ There are a few overlays used for NCN image boots. These enable two critical fun
 2. `CONLIB` is a persistent overlayFS for containerd, it commits and saves all new changes while allowing read-through to pre-existing (baked-in) data from the squashFS.
 3. `ETCDK8S` is a persistent overlayFS for etcd, it works like the `CONLIB` overlayFS however this exists in an encrypted LUKS2 partition.
 
-<a name="overlayfs-example"></a>
 ##### OverlayFS Example
 
 > Helpful commands... the overlayFS organization can be best viewed with these three commands:
@@ -80,12 +77,12 @@ Let us pick apart the `SQFSRAID` and `ROOTRAID` overlays.
 Using the above bullets, one may be able to better understand the machine output below:
 
 ```bash
-ncn-m002# mount | grep  ' / '
+mount | grep  ' / '
 LiveOS_rootfs on / type overlay (rw,relatime,lowerdir=/run/rootfsbase,upperdir=/run/overlayfs,workdir=/run/ovlwork)
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
-ncn-m002#  losetup -a
+ losetup -a
 /dev/loop1: [0025]:74858 (/run/initramfs/thin-overlay/meta)
 /dev/loop2: [0025]:74859 (/run/initramfs/thin-overlay/data)
 /dev/loop0: [2430]:100 (/run/initramfs/live/LiveOS/filesystem.squashfs)
@@ -100,7 +97,7 @@ overlays that are, by default, toggled `off` (so data persistence be default is 
 not assume).
 
 ```bash
-ncn-m002# lsblk
+lsblk
 NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
 loop0                 7:0    0   3.8G  1 loop  /run/rootfsbase
 loop1                 7:1    0    30G  0 loop
@@ -126,7 +123,6 @@ sdc                   8:32   1 447.1G  0 disk
   └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
 ```
 
-<a name="persistent-directories"></a>
 ##### Persistent Directories
 
 **Not all directories are persistent!**
@@ -161,7 +157,6 @@ drwxr-xr-x 8 root root  76 Oct 13 16:52 var
 ```
 > Remember: `/run/overlayfs` is a symbolic link to the real disk `/run/initramfs/overlayfs/*`.
 
-<a name="layering---upperdir-and-lowerdirs"></a>
 ###### Layering - Upperdir and Lowerdir(s)
 
 The file system the user is working on is really two layered file systems (overlays).
@@ -172,22 +167,23 @@ The file system the user is working on is really two layered file systems (overl
 > There are fancier options for overlays, such as multiple lower-layers, copy-up (lower-layer precedence),
 >  and opaque (removing a directory in the upper layer hides it in the lower layer). You can read more [here|https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html#inode-properties]
 
-<a name="layering-real-world-example"></a>
 ###### Layering Real World Example
 
 Let us take `/root` for example, we can see in the upper-dir (the overlay) we have these files:
 
 The upper-dir has these files:
+
 ```bash
-ncn-m001# ls -l /run/overlayfs/root/
+ls -l /run/overlayfs/root/
 total 4
 -rw------- 1 root root 252 Nov  4 18:23 .bash_history
 drwxr-x--- 4 root root  37 Nov  4 04:35 .kube
 drwx------ 2 root root  29 Oct 21 21:57 .ssh
 ```
 Then in the squashFS image (lower-dir) we have these...
+
 ```bash
-ncn-m001# ls -l /run/rootfsbase/root/
+ls -l /run/rootfsbase/root/
 total 1
 -rw------- 1 root root   0 Oct 19 15:31 .bash_history
 drwxr-xr-x 2 root root   3 May 25  2018 bin
@@ -204,8 +200,9 @@ drwx------ 2 root root  70 Oct 21 21:57 .ssh
 - Notice the `.kube` dir exists in the upper, but not the lower?
 
 Finally, looking at `/root` we see the magic:
+
 ```bash
-ncn-m001# ls -l /root
+ls -l /root
 total 5
 -rw------- 1 root root 252 Nov  4 18:23 .bash_history
 drwxr-xr-x 2 root root   3 May 25  2018 bin
@@ -218,24 +215,22 @@ drwxr-xr-x 5 root root  53 Oct 19 15:34 spire
 drwx------ 1 root root  29 Oct 21 21:57 .ssh
 -rw-r--r-- 1 root root 172 Oct 26 15:25 .wget-hsts
 ```
+
 - Notice how `.bash_history` matches the upper-dir?
 - Notice how `.kube` exists here?
 
 The take-away here is: any change done to `/root/` will persist through `/run/overlayfs/root` and will take precedence to the squashFS image root.
 
-<a name="overlayfs-control"></a>
 #### OverlayFS Control
 
 These features or toggles are passable on the kernel command line, and change the behavior of the overlayFS.
 
-<a name="reset-toggles"></a>
 ##### Reset Toggles
 
 The overlay FS provides a few reset toggles to clear out the persistence directories without reinstall.
 
 **The toggles require rebooting.**
 
-<a name="reset-on-next-boot"></a>
 ###### Reset On Next Boot
 
 The preferred way to reset persistent storage is to use the overlayFS reset toggle.
@@ -255,7 +250,6 @@ will persist.
 rd.live.overlay.reset=0
 ```
 
-<a name="reset-on-every-boot"></a>
 ###### Reset on Every Boot
 
 There are two options one can leave enabled to accomplish this:
@@ -268,7 +262,6 @@ For long-term usage, `rd.live.overlay.readonly=1` should be added to the command
 The `reset=1` toggle is usually used to fix a problematic overlay. If you want to refresh
 and purge the overlay completely, then use `rd.live.overlay.reset`.
 
-
 ```
 # Authorize METAL to purge
 metal.no-wipe=0 rd.live.overlay.reset=1
@@ -277,7 +270,6 @@ metal.no-wipe=0 rd.live.overlay.reset=1
 > Note: `metal.no-wipe=1` does not protect against `rd.live.overlay.reset`, `metal.no-wipe` is not
 > a feature of dmsquash-live.
 
-<a name="re-sizing-the-persistent-overlay"></a>
 ##### Re-sizing the Persistent Overlay
 
 - Default Size: 300 GiB
@@ -299,7 +291,6 @@ rd.live.overlay.size=307200
 rd.live.overlay.size=1000000
 ```
 
-<a name="thin-overlay-feature"></a>
 ##### Thin Overlay Feature
 
 The persistent overlayFS leverages newer, "thin" overlays that support discards and that will
@@ -317,7 +308,6 @@ rd.live.overlay.thin=1
 rd.live.overlay.thin=0
 ```
 
-<a name="systemd-metalfs"></a>
 ### SystemD MetalFS
 
 The `metalfs` systemd service will try to mount any metal created partitions.
@@ -327,10 +317,9 @@ This runs against the `/run/initramfs/overlayfs/fstab.metal` when it exists. Thi
 The service will continuously attempt to mount the partitions, if problems arise please stop the service:
 
 ```bash
-ncn# systemctl stop metalfs
+systemctl stop metalfs
 ```
 
-<a name="oldretired-fs-labels"></a>
 ### Old/Retired FS-Labels
 
 Deprecated FS labels/partitions from Shasta 1.3.X (no longer in Shasta 1.4.0 and onwards).

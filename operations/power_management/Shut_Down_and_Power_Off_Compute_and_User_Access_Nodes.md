@@ -7,7 +7,6 @@ Shut down and power off compute and user access nodes \(UANs\). This procedure p
 The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, then see
 [Configure the Cray Command Line Interface (cray CLI)](../configure_cray_cli.md) and refer to the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
-
 ## Procedure
 
 1.  List detailed information about the available boot orchestration service \(BOS\) session template names.
@@ -15,7 +14,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     Identify the BOS session template names such as `cos-2.0.x`, `uan-slurm`, and choose the appropriate compute and UAN node templates for the shutdown.
 
     ```bash
-    ncn# cray bos sessiontemplate list
+    cray bos sessiontemplate list
     ```
 
     Example output:
@@ -39,7 +38,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
 1.  To display more information about a session template, for example `cos-2.0.x`, use the `describe` option.
 
     ```bash
-    ncn# cray bos sessiontemplate describe cos-2.0.x
+    cray bos sessiontemplate describe cos-2.0.x
     ```
 
 1.  Use `sat bootsys shutdown` to shut down and power off UANs and compute nodes.
@@ -49,7 +48,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     An optional `--loglevel debug` can be used to provide more information as the system shuts down. If used, it must be added after `sat` but before `bootsys`.
 
     ```bash
-    ncn# sat bootsys shutdown --stage bos-operations \
+    sat bootsys shutdown --stage bos-operations \
              --bos-templates COS_SESSION_TEMPLATE,UAN_SESSION_TEMPLATE
     ```
 
@@ -77,7 +76,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     The command to run is displayed in the output of the `sat bootsys shutdown` command.
 
     ```bash
-    ncn# kubectl logs -n services -c boa -f \
+    kubectl logs -n services -c boa -f \
                  --selector job-name=boa-boa-79584ffe-104c-4766-b584-06c5a3a60996
     ```
 
@@ -103,7 +102,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
 1.  In another shell window, use a similar command to monitor the UAN session.
 
     ```bash
-    ncn# kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
+    kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
     ```
 
 1.  Check the status of UAN and compute nodes to verify they are `Off`.
@@ -111,7 +110,7 @@ The `cray` and `sat` commands must be initialized and authenticated with valid c
     There may be delay in nodes reaching the `Off` state in the hardware state manager \(HSM\).
 
     ```bash
-    ncn# sat status
+    sat status
     ```
 
     Example output:

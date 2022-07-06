@@ -9,19 +9,19 @@ Diagnose the problem as follows:
 1. Find the UAI name of the Broker UAI in a list of existing UAIs:
 
    ```bash
-   ncn-m001# cray uas admin uais list --format yaml
+   cray uas admin uais list --format yaml
    ```
 
 2. Find the Broker UAI pod name by looking for a pod with the UAI name as the first part of its name in the list of Broker UAI pods:
 
    ```bash
-   ncn-m001# kubectl get po -n uas
+   kubectl get po -n uas
    ```
 
 3. Obtain logs from the Broker UAI:
 
    ```bash
-   ncn-m001# kubectl logs -n uas <pod-name> -c <uai-name>
+   kubectl logs -n uas <pod-name> -c <uai-name>
    ```
 
 4. See if the the following errors appear in the log output:
@@ -50,7 +50,7 @@ then change the existing Cluster Role Binding to bind the new Cluster Role inste
 1. Verify that the system is set up the same way as the system on which this workaround was prepared. To do that, list the Cluster Role Binding named `uas-default-psp` and determine what Cluster Role it is bound to:
 
    ```bash
-   ncn-m001# kubectl get clusterrolebindings uas-default-psp -o yaml
+   kubectl get clusterrolebindings uas-default-psp -o yaml
    ```
 
    Example output:
@@ -87,13 +87,13 @@ then change the existing Cluster Role Binding to bind the new Cluster Role inste
 2. Remove the existing Cluster Role Binding:
 
    ```bash
-   ncn-m001# kubectl delete clusterrolebindings uas-default-psp
+   kubectl delete clusterrolebindings uas-default-psp
    ```
 
 3. Prepare a YAML file containing the new Kubernetes objects:
 
    ```bash
-   ncn-m001# cat << EOF > /tmp/uas-default-psp.yaml
+   cat << EOF > /tmp/uas-default-psp.yaml
    apiVersion: policy/v1beta1
    kind: PodSecurityPolicy
    metadata:
@@ -163,19 +163,19 @@ then change the existing Cluster Role Binding to bind the new Cluster Role inste
 4. Apply this new configuration to Kubernetes:
 
    ```bash
-   ncn-m001# kubectl apply -f /tmp/uas-default-psp.yaml
+   kubectl apply -f /tmp/uas-default-psp.yaml
    ```
 
 5. Delete and re-create the offending Broker UAI(s) and they should come up and SSSD should run properly.
 
    ```bash
-   ncn-m001# cray uas admin uais delete OPTIONS
+   cray uas admin uais delete OPTIONS
    ```
 
    ```bash
-   ncn-m001# cray uas admin uais create OPTIONS
+   cray uas admin uais create OPTIONS
    ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Clear UAS Configuration](Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)

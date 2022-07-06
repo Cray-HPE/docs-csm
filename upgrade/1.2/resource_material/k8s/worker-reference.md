@@ -9,7 +9,7 @@
    > NOTE: If the `cray` command is not initialized, see [Initialize the CLI Configuration](../../../../operations/configure_cray_cli.md)
 
     ```bash
-    ncn# cray cps deployment list --format json | jq '.[] | [.node,.podname]'
+    cray cps deployment list --format json | jq '.[] | [.node,.podname]'
     [
       "ncn-w003",
       "cray-cps-cm-pm-9tdg5"
@@ -29,20 +29,20 @@
    > Do not run this command now. It is part of the manual instructions for upgrading a worker node. This example uses `ncn-w002`.
 
    ```bash
-   ncn# cray cps deployment update --nodes "ncn-w002"
+   cray cps deployment update --nodes "ncn-w002"
    ```
 
-2. Confirm the CFS `configurationStatus` for **all** worker nodes before shutting down this worker node. If the state is `pending`,
+1. Confirm the CFS `configurationStatus` for **all** worker nodes before shutting down this worker node. If the state is `pending`,
    the administrator may want to tail the logs of the CFS pod running on that node to watch the job finish
-   before rebooting this node. If the state is `failed` for this node, then you will know that the failed CFS job state
-   preceded this worker rebuild, and that can be addressed independent of rebuilding this worker.
+   before rebooting this node. If the state is `failed` for this node, then this indicates that the failed CFS job state
+   preceded this worker rebuild, and that it can be addressed independent of rebuilding this worker.
 
    This example uses `ncn-w002`.
 
    ```bash
-   ncn# export NODE=ncn-w002
-   ncn# export XNAME=$(ssh $NODE cat /etc/cray/xname)
-   ncn# cray cfs components describe $XNAME --format json
+   export NODE=ncn-w002
+   export XNAME=$(ssh $NODE cat /etc/cray/xname)
+   cray cfs components describe $XNAME --format json
    {
      "configurationStatus": "configured",
      "desiredConfig": "ncn-personalization-full",

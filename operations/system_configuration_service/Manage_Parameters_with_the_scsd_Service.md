@@ -10,7 +10,7 @@ Command line options can be used to set parameters as desired. For example, if o
 
 The following is an example payload file that was used to generate the output in the command below:
 
-```
+```json
 {
     "Force": true,
     "Targets": [
@@ -29,8 +29,11 @@ The following is an example payload file that was used to generate the output in
 
 To retrieve information from the targets:
 
+```bash
+cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
 ```
-ncn-m001# cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
+
+```json
 {
     "Targets": [
     {
@@ -87,13 +90,13 @@ ncn-m001# cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
 
 Retrieve NTP server information, syslog information, or the SSH key from a single target.
 
-```
-ncn-m001# cray scsd bmc cfg describe XNAME --format json
+```bash
+cray scsd bmc cfg describe XNAME --format json
 ```
 
 Example output:
 
-```
+```json
 {
   "Force": false,
   "Params": {
@@ -121,8 +124,11 @@ Example output:
 Individual parameters can be specified in the command line with the `--param` option. Multiple parameters can be specified by using a comma-separated list with the `--params` option. This makes it easier to find information for certain parameters. For example, to only view the NTP server information, the following option can be used:
 
 ```
-ncn-m001# cray scsd bmc cfg describe --param NTPServerInfo \
+cray scsd bmc cfg describe --param NTPServerInfo \
 XNAME --format json
+```
+
+```json
 {
   "Force": false,
   "Params": {
@@ -142,7 +148,7 @@ Set syslog, NTP server information, or SSH key for a set of targets.
 
 The following is an example payload file that was used to generate the output in the command below:
 
-```
+```json
 {
     "Force": false,
     "Targets": [
@@ -172,8 +178,11 @@ The following is an example payload file that was used to generate the output in
 
 To set parameters for the specified targets:
 
+```bash
+cray scsd bmc loadcfg create PAYLOAD_FILE --format json
 ```
-ncn-w001# cray scsd bmc loadcfg create PAYLOAD_FILE --format json
+
+```json
 {
     "Targets": [
         {
@@ -223,7 +232,10 @@ The following is an example payload file that was used to generate the output in
 To set the parameters for a single BMC or controller:
 
 ```
-ncn-m001# cray scsd bmc cfg create XNAME --format json
+cray scsd bmc cfg create XNAME --format json
+```
+
+```json
 {
     "StatusMsg": "OK"
 }
@@ -239,7 +251,7 @@ The payload for this API is amenable to setting different credentials for differ
 
 The following is an example payload file that was used to generate the output in the command below:
 
-```
+```json
 {
     "Force": false,
     "Targets": [
@@ -263,8 +275,11 @@ The following is an example payload file that was used to generate the output in
 
 To set the Redfish credentials for multiple targets:
 
+```bas
+cray scsd bmc discreetcreds create PAYLOAD_FILE --format json
 ```
-ncn-m001# cray scsd bmc discreetcreds create PAYLOAD_FILE --format json
+
+```json
 {
     "Targets": [
         {
@@ -287,7 +302,7 @@ Set Redfish credentials for a single target. This command is similar to the `cra
 
 The following is an example payload file that was used to generate the output in the command below:
 
-```
+```json
 {
     "Force": true,
     "Creds": {
@@ -299,13 +314,13 @@ The following is an example payload file that was used to generate the output in
 
 To set the Redfish credentials for a single target:
 
-```
-ncn-m001# cray scsd bmc creds create XNAME --format json
+```bash
+cray scsd bmc creds create XNAME --format json
 ```
 
 Example output:
 
-```
+```json
 {
     "StatusMsg": "OK"
 }

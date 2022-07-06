@@ -15,7 +15,7 @@ Use this procedure to obtain important triage information for Ansible plays bein
     In the example below, the $CFS\_POD\_NAME is cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn.
 
     ```bash
-    ncn# kubectl get pods -n services $CFS_POD_NAME
+    kubectl get pods -n services $CFS_POD_NAME
     ```
 
     Example output:
@@ -28,7 +28,7 @@ Use this procedure to obtain important triage information for Ansible plays bein
 2.  Check to see what containers are in the pod.
 
     ```bash
-    ncn# kubectl logs -n services $CFS_POD_NAME
+    kubectl logs -n services $CFS_POD_NAME
     ```
 
     Example output:
@@ -44,7 +44,7 @@ Use this procedure to obtain important triage information for Ansible plays bein
     1.  Check the git-clone-0 container.
 
         ```bash
-        ncn# kubectl logs -n services CFS_POD_NAME git-clone-0
+        kubectl logs -n services CFS_POD_NAME git-clone-0
         ```
 
     2.  Check the inventory container.
@@ -83,7 +83,7 @@ Use this procedure to obtain important triage information for Ansible plays bein
         Look towards the end of the Ansible log in the PLAY RECAP section to see if any have failed. If it failed, look above at the immediately preceding play. In the example below, the ncmp\_hsn\_cns role has an issue when being run against the compute nodes.
 
         ```bash
-        ncn# kubectl logs -n services CFS_POD_NAME ansible-0
+        kubectl logs -n services CFS_POD_NAME ansible-0
         ```
 
         Example output:
@@ -112,7 +112,6 @@ Use this procedure to obtain important triage information for Ansible plays bein
         x3000c0s19b3n0             : ok=27   changed=19   unreachable=0    failed=1    skipped=63   rescued=0    ignored=1
         x3000c0s19b4n0             : ok=27   changed=19   unreachable=0    failed=1    skipped=63   rescued=0    ignored=1
         ```
-
 
 Run the Ansible play again once the underlying issue has been resolved.
 

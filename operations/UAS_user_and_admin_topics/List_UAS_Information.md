@@ -5,7 +5,7 @@ Use the `cray uas mgr-info list` command to determine the version and service na
 ## List UAS Version with `cray uas mgr-info list`
 
 ```bash
-ncn-w001# cray uas mgr-info list
+cray uas mgr-info list
 ```
 
 Example output:
@@ -15,6 +15,6 @@ service_name = "cray-uas-mgr"
 version = "1.16.1"
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next-Topic: End-User UAIs](End_User_UAIs.md)

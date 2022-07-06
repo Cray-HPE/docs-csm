@@ -45,8 +45,8 @@ switch(config-tunnel)# apply policy NAME [in|routed-in]
 Show commands to validate functionality: :
 
 ```
-switch# show class [ip|ipv6|mac] [NAME]
-switch# show policy [NAME]
+show class [ip|ipv6|mac] [NAME]
+show policy [NAME]
 ```
 
 ## Expected Results
@@ -74,7 +74,7 @@ switch(config-policy)# exit
 switch(config)# interface 1/1/1
 switch(config-if)# apply policy USERPORTS i
 switch(config-if)# end
-switch# show class ip BROWSER
+show class ip BROWSER
 Type       Name
 Sequence Comment
          Action
@@ -96,7 +96,7 @@ tcp
 = 8080 tcp
            any
 -------------------------------------------------------------------------------
-switch# show class ip NMS_CLASS
+show class ip NMS_CLASS
 Type       Name
 Sequence Comment
          Action
@@ -113,7 +113,7 @@ IPv4       NMS_CLASS
            any
            any                              =   161
 -------------------------------------------------------------------------------
-switch# show policy USERPORTS
+show policy USERPORTS
            Name
   Sequence Comment
            Class Type
@@ -127,13 +127,13 @@ pcp 6 dscp CS6
            BROWSER ipv4
 pcp 1 dscp CS1
 -------------------------------------------------------------------------------
-switch# show policy configuration commands
+show policy configuration commands
 policy USERPORTS
     10 class ip NMS_CLASS action pcp 6 action dscp CS6
     20 class ip BROWSER action pcp 1 action dscp CS1
 interface 1/1/1
     apply policy USERPORTS in
-switch# show policy hitcounts USERPORTS
+show policy hitcounts USERPORTS
 Statistics for Policy USERPORTS:
 Interface 1/1/1* (in):
            Hit Count  Configuration
@@ -145,4 +145,4 @@ Interface 1/1/1* (in):
   use 'policy NAME copy' to create a uniquely-named policy
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

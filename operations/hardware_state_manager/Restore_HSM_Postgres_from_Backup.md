@@ -11,7 +11,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
   Use `patronictl list` on the HSM Postgres cluster to determine the current state of the cluster, and a healthy cluster will look similar to the following:
 
   ```bash
-  ncn# kubectl exec cray-smd-postgres-0 -n services -c postgres -it -- patronictl list
+  kubectl exec cray-smd-postgres-0 -n services -c postgres -it -- patronictl list
   ```
 
   Example output:
@@ -31,7 +31,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
   Check for any available automatic HSM Postgres backups:
 
   ```bash
-  ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("smd"))'
+  cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("smd"))'
   ```
 
   Example output:
@@ -52,13 +52,13 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         2. Set the environment variable `POSTGRES_SQL_FILE` to point toward the `.psql` file in the backup folder:
 
             ```bash
-            ncn# export POSTGRES_SQL_FILE=/root/cray-smd-postgres-backup_2021-07-07_16-39-44/cray-smd-postgres-backup_2021-07-07_16-39-44.psql
+            export POSTGRES_SQL_FILE=/root/cray-smd-postgres-backup_2021-07-07_16-39-44/cray-smd-postgres-backup_2021-07-07_16-39-44.psql
             ```
 
         3. Set the environment variable `POSTGRES_SECRET_MANIFEST` to point toward the `.manifest` file in the backup folder:
 
             ```bash
-            ncn# export POSTGRES_SECRET_MANIFEST=/root/cray-smd-postgres-backup_2021-07-07_16-39-44/cray-smd-postgres-backup_2021-07-07_16-39-44.manifest
+            export POSTGRES_SECRET_MANIFEST=/root/cray-smd-postgres-backup_2021-07-07_16-39-44/cray-smd-postgres-backup_2021-07-07_16-39-44.manifest
             ```
 
     - From a previous automatic Postgres backup:
@@ -66,7 +66,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         1. Check for available backups.
 
             ```bash
-            ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("smd"))'
+            cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("smd"))'
             ```
 
             Example output:
@@ -79,68 +79,68 @@ This procedure can be used to restore the HSM Postgres database from a previousl
             Set the following environment variables for the name of the files in the backup:
 
             ```bash
-            ncn# export POSTGRES_SECRET_MANIFEST_NAME=cray-smd-postgres-2021-07-11T23:10:08.manifest
-            ncn# export POSTGRES_SQL_FILE_NAME=cray-smd-postgres-2021-07-11T23:10:08.psql
+            export POSTGRES_SECRET_MANIFEST_NAME=cray-smd-postgres-2021-07-11T23:10:08.manifest
+            export POSTGRES_SQL_FILE_NAME=cray-smd-postgres-2021-07-11T23:10:08.psql
             ```
 
         2. Download the `.psql` file for the Postgres backup.
 
             ```bash
-            ncn# cray artifacts get postgres-backup "$POSTGRES_SQL_FILE_NAME" "$POSTGRES_SQL_FILE_NAME"
+            cray artifacts get postgres-backup "$POSTGRES_SQL_FILE_NAME" "$POSTGRES_SQL_FILE_NAME"
             ```
 
         3. Download the `.manifest` file for the HSM backup.
 
             ```bash
-            ncn# cray artifacts get postgres-backup "$POSTGRES_SECRET_MANIFEST_NAME" "$POSTGRES_SECRET_MANIFEST_NAME"
+            cray artifacts get postgres-backup "$POSTGRES_SECRET_MANIFEST_NAME" "$POSTGRES_SECRET_MANIFEST_NAME"
             ```
 
         4. Setup environment variables pointing to the full path of the `.psql` and `.manifest` files.
 
             ```bash
-            ncn# export POSTGRES_SQL_FILE=$(realpath "$POSTGRES_SQL_FILE_NAME")
-            ncn# export POSTGRES_SECRET_MANIFEST=$(realpath "$POSTGRES_SECRET_MANIFEST_NAME")
+            export POSTGRES_SQL_FILE=$(realpath "$POSTGRES_SQL_FILE_NAME")
+            export POSTGRES_SECRET_MANIFEST=$(realpath "$POSTGRES_SECRET_MANIFEST_NAME")
             ```
 
 2. Verify the `POSTGRES_SQL_FILE` and `POSTGRES_SECRET_MANIFEST` environment variables are set correctly.
 
     ```bash
-    ncn# echo "$POSTGRES_SQL_FILE"
+    echo "$POSTGRES_SQL_FILE"
     /root/cray-smd-postgres-backup_2021-07-07_16-39-44/cray-smd-postgres-backup_2021-07-07_16-39-44.psql
 
-    ncn# echo "$POSTGRES_SECRET_MANIFEST"
+    echo "$POSTGRES_SECRET_MANIFEST"
     /root/cray-smd-postgres-backup_2021-07-07_16-39-44/cray-smd-postgres-backup_2021-07-07_16-39-44.manifest
     ```
 
 3. Scale HSM to 0.
 
     ```bash
-    ncn-w001# CLIENT=cray-smd
-    ncn-w001# POSTGRESQL=cray-smd-postgres
-    ncn-w001# NAMESPACE=services
+    CLIENT=cray-smd
+    POSTGRESQL=cray-smd-postgres
+    NAMESPACE=services
 
-    ncn-w001# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=0
+    kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=0
     deployment.apps/cray-smd scaled
 
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
     ```
 
 4. Re-run the HSM loader job.
 
     ```bash
-    ncn# kubectl -n services get job cray-smd-init -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
+    kubectl -n services get job cray-smd-init -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
     ```
 
     Wait for the job to complete:
 
     ```bash
-    ncn# kubectl wait -n services job cray-smd-init --for=condition=complete --timeout=5m
+    kubectl wait -n services job cray-smd-init --for=condition=complete --timeout=5m
     ```
 
 5. Determine which Postgres member is the leader.
 
     ```bash
-    ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
+    kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
     ```
 
     Example output:
@@ -158,7 +158,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     Create a variable for the identified leader:
 
     ```
-    ncn-w001# POSTGRES_LEADER=cray-smd-postgres-0
+    POSTGRES_LEADER=cray-smd-postgres-0
     ```
 
 6. Determine the database schema version of the currently running HSM database, and then verify that it matches the database schema version from the Postgres backup:
@@ -166,7 +166,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     Database schema of the currently running HSM Postgres instance.
 
     ```bash
-    ncn# kubectl exec $POSTGRES_LEADER -n services -c postgres -it -- bash -c "psql -U hmsdsuser -d hmsds -c 'SELECT * FROM system'"
+    kubectl exec $POSTGRES_LEADER -n services -c postgres -it -- bash -c "psql -U hmsdsuser -d hmsds -c 'SELECT * FROM system'"
     ```
 
     Example output:
@@ -183,7 +183,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     Database schema version from the Postgres backup:
 
     ```bash
-    ncn# cat "$POSTGRES_SQL_FILE" | grep "COPY public.system" -A 2
+    cat "$POSTGRES_SQL_FILE" | grep "COPY public.system" -A 2
     COPY public.system (id, schema_version, dirty) FROM stdin;
     0       17       f
     \.
@@ -198,27 +198,27 @@ This procedure can be used to restore the HSM Postgres database from a previousl
 7. Delete and re-create the postgresql resource (which includes the PVCs).
 
     ```bash
-    ncn-w001# CLIENT=cray-smd
-    ncn-w001# POSTGRESQL=cray-smd-postgres
-    ncn-w001# NAMESPACE=services
+    CLIENT=cray-smd
+    POSTGRESQL=cray-smd-postgres
+    NAMESPACE=services
 
-    ncn-w001# kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.yaml
+    kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | jq 'del(.status)' > postgres-cr.yaml
 
-    ncn-w001# kubectl delete -f postgres-cr.yaml
+    kubectl delete -f postgres-cr.yaml
     postgresql.acid.zalan.do "cray-smd-postgres" deleted
 
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 0 ] ; do echo "  waiting for pods to terminate"; sleep 2; done
 
-    ncn-w001# kubectl create -f postgres-cr.yaml
+    kubectl create -f postgres-cr.yaml
     postgresql.acid.zalan.do/cray-smd-postgres created
 
-    ncn-w001# while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start running"; sleep 2; done
+    while [ $(kubectl get pods -l "application=spilo,cluster-name=${POSTGRESQL}" -n ${NAMESPACE} | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start running"; sleep 2; done
     ```
 
 8. Determine which Postgres member is the new leader.
 
     ```bash
-    ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
+    kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
     ```
 
     Example output:
@@ -236,7 +236,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     Set a variable for the new leader:
 
     ```
-    ncn-w001# POSTGRES_LEADER=cray-smd-postgres-0
+    POSTGRES_LEADER=cray-smd-postgres-0
     ```
 
 9. Copy the dump taken above to the Postgres leader pod and restore the data.
@@ -244,9 +244,9 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     If the dump exists in a different location, adjust this example as needed.
 
     ```bash
-    ncn-w001# kubectl cp ${POSTGRES_SQL_FILE} ${POSTGRES_LEADER}:/home/postgres/cray-smd-postgres-dumpall.sql -c postgres -n ${NAMESPACE}
+    kubectl cp ${POSTGRES_SQL_FILE} ${POSTGRES_LEADER}:/home/postgres/cray-smd-postgres-dumpall.sql -c postgres -n ${NAMESPACE}
 
-    ncn-w001# kubectl exec ${POSTGRES_LEADER} -c postgres -n ${NAMESPACE} -it -- psql -U postgres < cray-smd-postgres-dumpall.sql
+    kubectl exec ${POSTGRES_LEADER} -c postgres -n ${NAMESPACE} -it -- psql -U postgres < cray-smd-postgres-dumpall.sql
     ```
 
 10. Clear out of sync data from tables in postgres.
@@ -256,7 +256,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     Delete the entries in the EthernetInterfaces table. These will automatically get repopulated during rediscovery.
 
     ```bash
-    ncn# kubectl exec $POSTGRES_LEADER -n services -c postgres -it -- bash -c "psql -U hmsdsuser -d hmsds -c 'DELETE FROM comp_eth_interfaces'"
+    kubectl exec $POSTGRES_LEADER -n services -c postgres -it -- bash -c "psql -U hmsdsuser -d hmsds -c 'DELETE FROM comp_eth_interfaces'"
     ```
 
 11. Restore the secrets.
@@ -269,9 +269,9 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         Delete and re-create the four `cray-smd-postgres` secrets using the manifest set to `POSTGRES_SECRET_MANIFEST` in step 1 above.
 
         ```bash
-        ncn-w001# kubectl delete secret postgres.cray-smd-postgres.credentials service-account.cray-smd-postgres.credentials hmsdsuser.cray-smd-postgres.credentials standby.cray-smd-postgres.credentials -n ${NAMESPACE}
+        kubectl delete secret postgres.cray-smd-postgres.credentials service-account.cray-smd-postgres.credentials hmsdsuser.cray-smd-postgres.credentials standby.cray-smd-postgres.credentials -n ${NAMESPACE}
 
-        ncn-w001# kubectl apply -f ${POSTGRES_SECRET_MANIFEST}
+        kubectl apply -f ${POSTGRES_SECRET_MANIFEST}
         ```
 
     - Without the previous secrets from a backup
@@ -280,7 +280,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         Determine which Postgres member is the leader.
 
         ```bash
-        ncn-w001# kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
+        kubectl exec "${POSTGRESQL}-0" -n ${NAMESPACE} -c postgres -it -- patronictl list
         ```
 
         Example output:
@@ -298,13 +298,13 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         Set a variable for the leader:
 
         ```
-        ncn-w001# POSTGRES_LEADER=cray-smd-postgres-0
+        POSTGRES_LEADER=cray-smd-postgres-0
         ```
 
         Determine what secrets are associated with the postgresql credentials.
 
         ```bash
-        ncn-w001# kubectl get secrets -n ${NAMESPACE} | grep "${POSTGRESQL}.credentials"
+        kubectl get secrets -n ${NAMESPACE} | grep "${POSTGRESQL}.credentials"
         ```
 
         Example output:
@@ -321,16 +321,16 @@ This procedure can be used to restore the HSM Postgres database from a previousl
         For example (hmsdsuser.cray-smd-postgres.credentials):
 
         ```bash
-        ncn-w001# kubectl get secret hmsdsuser.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d
+        kubectl get secret hmsdsuser.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d
 
-        ncn-w001# kubectl get secret hmsdsuser.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d
+        kubectl get secret hmsdsuser.cray-smd-postgres.credentials -n ${NAMESPACE} -ojsonpath='{.data.password}'| base64 -d
         ```
 
         Exec into the leader pod to reset the user's password:
 
         ```bash
-        ncn-w001# kubectl exec ${POSTGRES_LEADER} -n ${NAMESPACE} -c postgres -it -- bash
-        root@cray-smd-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
+        kubectl exec ${POSTGRES_LEADER} -n ${NAMESPACE} -c postgres -it -- bash
+        root@cray-smd-postgres-0:/home//usr/bin/psql postgres postgres
         postgres=# ALTER USER hmsdsuser WITH PASSWORD 'ABCXYZ';
         ALTER ROLE
         postgres=#
@@ -340,23 +340,23 @@ This procedure can be used to restore the HSM Postgres database from a previousl
 12. Restart the postgresql cluster.
 
     ```bash
-    ncn-w001# kubectl delete pod "${POSTGRESQL}-0" "${POSTGRESQL}-1" "${POSTGRESQL}-2" -n ${NAMESPACE}
+    kubectl delete pod "${POSTGRESQL}-0" "${POSTGRESQL}-1" "${POSTGRESQL}-2" -n ${NAMESPACE}
 
-    ncn-w001# while [ $(kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq -r '.status.PostgresClusterStatus') != "Running" ]; do echo "waiting for ${POSTGRESQL} to start running"; sleep 2; done
+    while [ $(kubectl get postgresql ${POSTGRESQL} -n ${NAMESPACE} -o json | jq -r '.status.PostgresClusterStatus') != "Running" ]; do echo "waiting for ${POSTGRESQL} to start running"; sleep 2; done
     ```
 
 13. Scale the client service back to 3.
 
     ```bash
-    ncn-w001# kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=3
+    kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=3
 
-    ncn-w001# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start running"; sleep 2; done
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${CLIENT}" | grep -v NAME | wc -l) != 3 ] ; do echo "  waiting for pods to start running"; sleep 2; done
     ```
 
 14. Verify that the service is functional.
 
     ```bash
-    ncn# cray hsm service ready
+    cray hsm service ready
     ```
 
     Example output:
@@ -369,7 +369,7 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     Get the number of node objects stored in HSM:
 
     ```bash
-    ncn# cray hsm state components list --type node --format json | jq .[].ID | wc -l
+    cray hsm state components list --type node --format json | jq .[].ID | wc -l
     ```
 
 15. Resync the component state and inventory.
@@ -377,20 +377,20 @@ This procedure can be used to restore the HSM Postgres database from a previousl
     After restoring HSM's postgres from a back up, some of the transient data like component state and hardware inventory may be out of sync with reality. This involves kicking off an HSM rediscovery.
 
     ```bash
-    ncn# endpoints=$(cray hsm inventory redfishEndpoints list --format json | jq -r '.[]|.[]|.ID')
-    ncn# for e in $endpoints; do cray hsm inventory discover create --xnames ${e}; done
+    endpoints=$(cray hsm inventory redfishEndpoints list --format json | jq -r '.[]|.[]|.ID')
+    for e in $endpoints; do cray hsm inventory discover create --xnames ${e}; done
     ```
 
     Wait for discovery to complete. Discovery is complete after there are no redfishEndpoints left in the 'DiscoveryStarted' state. A value of `0` will be returned.
 
     ```bash
-    ncn# cray hsm inventory redfishEndpoints list --format json | grep -c "DiscoveryStarted"
+    cray hsm inventory redfishEndpoints list --format json | grep -c "DiscoveryStarted"
     ```
 
 16. Check for discovery errors.
 
     ```bash
-    ncn# cray hsm inventory redfishEndpoints list --format json | grep LastDiscoveryStatus | grep -v -c "DiscoverOK"
+    cray hsm inventory redfishEndpoints list --format json | grep LastDiscoveryStatus | grep -v -c "DiscoverOK"
     ```
 
     If any of the RedfishEndpoint entries have a `LastDiscoveryStatus` other than `DiscoverOK` after discovery has completed, refer to the [Troubleshoot Issues with Redfish Endpoint Discovery](../node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md) procedure for guidance.

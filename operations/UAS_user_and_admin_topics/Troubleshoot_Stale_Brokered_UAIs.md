@@ -11,7 +11,7 @@ cray uas admin uais delete --class-id <creation-class-id>
 For example:
 
 ```bash
-ncn-m001-pit# cray uas admin config classes list | grep -e class_id -e comment
+ncn-m001-cray uas admin config classes list | grep -e class_id -e comment
 class_id = "74970cdc-9f94-4d51-8f20-96326212b468"
 comment = "UAI broker class"
 class_id = "a623a04a-8ff0-425e-94cc-4409bdd49d9c"
@@ -19,15 +19,15 @@ comment = "UAI User Class"
 class_id = "bb28a35a-6cbc-4c30-84b0-6050314af76b"
 comment = "Non-Brokered UAI User Class"
 
-ncn-m001-pit# cray uas admin config classes describe 74970cdc-9f94-4d51-8f20-96326212b468 | grep uai_creation_class
+ncn-m001-cray uas admin config classes describe 74970cdc-9f94-4d51-8f20-96326212b468 | grep uai_creation_class
 uai_creation_class = "a623a04a-8ff0-425e-94cc-4409bdd49d9c"
 
-ncn-m001-pit# cray uas admin uais delete --class-id a623a04a-8ff0-425e-94cc-4409bdd49d9c
+ncn-m001-cray uas admin uais delete --class-id a623a04a-8ff0-425e-94cc-4409bdd49d9c
 results = [ "Successfully deleted uai-vers-6da50e7a",]
 ```
 
 After that, users should be able to log into the Broker UAI and be directed to an End-User UAI as before.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Troubleshoot UAI Stuck in "ContainerCreating"](Troubleshoot_UAI_Stuck_in_ContainerCreating.md)

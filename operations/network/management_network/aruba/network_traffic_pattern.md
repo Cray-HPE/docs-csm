@@ -14,5 +14,4 @@ External and Edge Networks:
 	* Customer access from the site to the system for job control and jobs data movement
 	* Access from the System to the Site for network services like DNS, LDAP, and more
 
-
-[Back to Index](./index.md)
+[Back to Index](./README.md)

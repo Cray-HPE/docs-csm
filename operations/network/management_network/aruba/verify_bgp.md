@@ -7,7 +7,7 @@ Verify the BGP neighbors are in the established state on BOTH the switches.
 1. Check Aruba BGP status.
 
     ```bash
-    sw-spine-002# show bgp ipv4 u s
+    show bgp ipv4 u s
     ```
 
     Example output:
@@ -28,4 +28,4 @@ Verify the BGP neighbors are in the established state on BOTH the switches.
     10.252.1.9      65533       78389   90108   02m:02w:02d  Established   Up
     ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

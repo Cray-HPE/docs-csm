@@ -21,7 +21,7 @@ switch(config)# snmp-server host IP-ADDR <trap|inform> version v2c [community NA
 Show Commands to Validate Functionality
 
 ```
-switch# show snmp
+show snmp
 ```
 
 Expected Results
@@ -30,4 +30,4 @@ Expected Results
 * Step 2: You can bind the SNMP server to the default VRF
 * Step 3: You can connect from the workstation using the community name
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

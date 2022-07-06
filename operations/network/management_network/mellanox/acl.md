@@ -27,7 +27,7 @@ switch (config interface ethernet 1/1) # mac port access-group mac-acl
 Show Commands to Validate Functionality
 
 ```
-switch# show ipv4 access-lists <access-list-name>
+show ipv4 access-lists <access-list-name>
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

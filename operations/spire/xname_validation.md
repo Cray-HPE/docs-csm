@@ -25,15 +25,18 @@ these nodes then they will be unable to acquire JWTs from spire.
 ### Example Commands
 
 ```bash
-cd /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5
+CSM_RELEASE=1.2.5
+cd /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}
 /usr/share/doc/csm/scripts/operations/xnamevalidation.sh enable
 ```
 
-### Example Output
+Example Output
 
 ```bash
-ncn:/etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5 # /usr/share/doc/csm/scripts/operations/xnamevalidation.sh enable
+/usr/share/doc/csm/scripts/operations/xnamevalidation.sh enable
+```
 
+```text
 Backup copy of the site-init secret has been saved to /tmp/tmp.rsDPG4zZf6/site-init.yaml
 Stopping spire on NCNs
 Warning: Permanently added 'ncn-s001,10.252.1.6' (ECDSA) to the list of known hosts.
@@ -130,15 +133,17 @@ these nodes then they will be unable to acquire JWTs from spire.
 ### Example Commands
 
 ```bash
-cd /etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5
+CSM_RELEASE=1.2.5
+cd /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}
+/usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
+```
+Example Output
+
+```bash
 /usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
 ```
 
-### Example Output
-
-```bash
-ncn:/etc/cray/upgrade/csm/csm-1.2.5/tarball/csm-1.2.5 # /usr/share/doc/csm/scripts/operations/xnamevalidation.sh disable
-
+```text
 Backup copy of the site-init secret has been saved to /tmp/tmp.HbfRHgiQzP/site-init.yaml
 Stopping spire on NCNs
 Warning: Permanently added 'ncn-s001,10.252.1.6' (ECDSA) to the list of known hosts.

@@ -26,13 +26,13 @@ switch(vsf-member)# link <ID> <IFACE-RANGE>
 Show commands to validate functionality:
 
 ```text
-switch# show vsf <brief|configuration|status>
+show vsf <brief|configuration|status>
 ```
 
 ## Example Output
 
 ```text
-switch# show vsf topology
+show vsf topology
           Stby     Master
 CPU Utilization
 Memory Utilization : 15%
@@ -43,4 +43,4 @@ VSF link 2         : Down
 +---+    +---+    +---+
 ```
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

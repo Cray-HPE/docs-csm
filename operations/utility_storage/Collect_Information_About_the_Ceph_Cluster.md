@@ -19,7 +19,7 @@ As a reference, the Ceph commands below are run from a ceph-mon node. Certain co
 Print the status of the Ceph cluster with the following command:
 
 ```bash
-ncn-m001# ceph -s
+ceph -s
 ```
 
 Example output:
@@ -53,7 +53,7 @@ The `-w` option can be used to watch the cluster.
 Check the OSD status, weight, and location.
 
 ```bash
-ncn-m001# ceph osd tree
+ceph osd tree
 ```
 
 Example output:
@@ -89,7 +89,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 The following command shows the storage utilization of the cluster and pools:
 
 ```bash
-ncn-m001# ceph df
+ceph df
 ```
 
 Example output:
@@ -120,7 +120,7 @@ POOLS:
 Show the utilization of the OSDs with the following command. This is very helpful to see if the data is not balanced across OSDs, which can create hotspots.
 
 ```bash
-ncn-m001# ceph osd df
+ceph osd df
 ```
 
 Example output:
@@ -142,7 +142,7 @@ MIN/MAX VAR: 0.96/1.02  STDDEV: 1.51
 Use the following command to obtain information about a single OSD using the OSD number. For example, osd.0 would be an OSD number.
 
 ```bash
-ncn-m001# ceph osd find OSD.ID
+ceph osd find OSD.ID
 ```
 
 Example output:
@@ -173,7 +173,7 @@ Example output:
 List the storage pools with the following commands:
 
 ```bash
-ncn-m001# ceph osd lspools
+ceph osd lspools
 ```
 
 Example output:

@@ -35,7 +35,7 @@ Log into the switches. Get the configurations of the ports and the default route
 ### Aruba site connection
 
 ```console
-sw-spine-001# show run int 1/1/36
+show run int 1/1/36
 interface 1/1/36
     no shutdown
     description to:CANswitch_cfcanb6s1-31:from:sw-25g01_x3000u39-j36
@@ -49,7 +49,7 @@ system interface-group 3 speed 10g
 ```
 
 ```console
-sw-spine-002# show run int 1/1/36
+show run int 1/1/36
 interface 1/1/36
     no shutdown
     description to:CANswitch_cfcanb6s1-46:from:sw-25g02_x3000u40-j36
@@ -63,12 +63,12 @@ system interface-group 3 speed 10g
 ```
 
 ```console
-sw-spine-001# show run | include "ip route"
+show run | include "ip route"
 ip route 0.0.0.0/0 10.101.15.141
 ```
 
 ```console
-sw-spine-002# show run | include "ip route"
+show run | include "ip route"
 ip route 0.0.0.0/0 10.101.15.189
 ```
 
@@ -107,14 +107,14 @@ sw-spine-002 [mlag-domain: master] # show run | include "ip route"
 ### Aruba users/passwords
 
 ```console
-sw-leaf-bmc-001# show run | include user
+show run | include user
 user admin group administrators password ciphertext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ### Dell users/passwords
 
 ```console
-sw-leaf-001# show running-configuration | grep user
+show running-configuration | grep user
 system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
@@ -136,7 +136,7 @@ Once these credentials are retrieved from Vault, the `xxxxxx` fields below can b
 ### Aruba SNMP
 
 ```console
-sw-leaf-001# show run | include snmp
+show run | include snmp
 snmp-server vrf default
 snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxxx
 ```
@@ -144,7 +144,7 @@ snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plai
 ### Dell SNMP
 
 ```console
-sw-leaf-001# show running-configuration | grep snmp
+show running-configuration | grep snmp
 snmp-server group cray-reds-group 3 noauth read cray-reds-view
 snmp-server user xxxxxx cray-reds-group 3 auth md5 xxxxxx priv des xxxxxx
 snmp-server view cray-reds-view 1.3.6.1.2 included

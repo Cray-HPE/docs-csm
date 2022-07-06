@@ -34,7 +34,7 @@ switch (config interfaces ethernet 1/7)# lacp rate fast
 Show Commands to Validate Functionality
 
 ```
-switch# show interface port-channel
+show interface port-channel
 ```
 
 Expected Results
@@ -43,5 +43,5 @@ Expected Results
 * Step 2: You can add ports to a LAG
 * Step 3: You can configure a LAG interface
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)
 

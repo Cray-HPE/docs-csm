@@ -21,7 +21,7 @@ After the PIT node has been redeployed, the `sls_input_file.json` file may be fo
 To get the switch IP addresses from CSI output, run the following command:
 
 ```bash
-linux# canu -s 1.4 init --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --out output.txt
+canu -s 1.4 init --csi-folder /CSI/OUTPUT/FOLDER/ADDRESS --out output.txt
 ```
 
 Eight IP addresses are saved to `output.txt`.
@@ -36,7 +36,7 @@ The SLS address is by default set to `api-gw-service-nmn.local`. If needed, a di
 To get the switch IP addresses from the Shasta SLS API, run the following command:
 
 ```bash
-linux# canu -s 1.4 init --auth-token ~./config/cray/tokens/ --sls-address 1.2.3.4 --out output.txt
+canu -s 1.4 init --auth-token ~./config/cray/tokens/ --sls-address 1.2.3.4 --out output.txt
 ```
 
-[Back to Index](./index.md)
+[Back to Index](./README.md)

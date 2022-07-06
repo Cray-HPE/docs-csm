@@ -33,24 +33,24 @@ Follow these steps on any NCN to fix the issue:
    1. Run the `CASMINST-2689.sh` script from the `CASMINST-2689` workaround at the `livecd-post-reboot` breakpoint:
 
       ```bash
-      ncn# /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
+      /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh
       ```
 
    1. Run these commands:
 
       ```bash
-      ncn# for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
+      for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ' '); do
                scp -r /opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689 \
                     $i:/opt/cray/csm/workarounds/livecd-post-reboot/
             done
-      ncn# pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+      pdsh -b -S -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
             '/opt/cray/csm/workarounds/livecd-post-reboot/CASMINST-2689/CASMINST-2689.sh'
       ```
 
    1. Remove the Shasta 1.4 install workaround RPM from the NCN.
 
       ```bash
-      ncn# rpm -e csm-install-workarounds
+      rpm -e csm-install-workarounds
       ```
 
 ## Validate

@@ -20,7 +20,7 @@ The UAI has been in the `ContainerCreating` status for several minutes.
 1. Find the UAI.
 
     ```bash
-    ncn-m001-pit# cray uas admin uais list --owner ctuser
+    ncn-m001-cray uas admin uais list --owner ctuser
     ```
 
     Example output:
@@ -41,7 +41,7 @@ The UAI has been in the `ContainerCreating` status for several minutes.
 2. Look up the UAI's pod in Kubernetes.
 
     ```bash
-    ncn-m001-pit# kubectl get po -n user | grep uai-ctuser-bcd1ff74
+    ncn-m001-kubectl get po -n user | grep uai-ctuser-bcd1ff74
     ```
 
     Example output:
@@ -53,7 +53,7 @@ The UAI has been in the `ContainerCreating` status for several minutes.
 3. Describe the pod in Kubernetes.
 
     ```bash
-    ncn-m001-pit# kubectl describe pod -n user uai-ctuser-bcd1ff74-7d94967bdc-4vm66
+    ncn-m001-kubectl describe pod -n user uai-ctuser-bcd1ff74-7d94967bdc-4vm66
     ```
 
     Example output:
@@ -90,6 +90,6 @@ The UAI has been in the `ContainerCreating` status for several minutes.
 
     Other problems can usually be quickly identified using this and other information found in the output from the `kubectl describe pod` command.
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Troubleshoot Duplicate Mount Paths in a UAI](Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)

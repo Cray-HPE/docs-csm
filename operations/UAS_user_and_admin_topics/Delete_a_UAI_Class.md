@@ -23,9 +23,9 @@ cray uas admin config classes delete UAI_CLASS_ID
 Delete a UAI class.
 
 ```screen
-ncn-m001-pit# cray uas admin config classes delete bb28a35a-6cbc-4c30-84b0-6050314af76b
+ncn-m001-cray uas admin config classes delete bb28a35a-6cbc-4c30-84b0-6050314af76b
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: UAI Management](UAI_Management.md)

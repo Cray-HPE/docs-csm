@@ -35,7 +35,7 @@ To keep track of what configuration version is running on the switch, create a n
 1. Get the CSM and CANU version from the MOTD banner.
 
     ```
-    sw-leaf-bmc-001# show running-configuration | grep motd
+    show running-configuration | grep motd
     ```
 
     Example output:

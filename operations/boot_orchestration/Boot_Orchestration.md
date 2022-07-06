@@ -12,13 +12,12 @@ BOS depends on each of the following services to complete its tasks:
 -   Cray Advanced Platform Monitoring and Control \(CAPMC\) - Used to power on and off the nodes.
 -   Hardware State Manager \(HSM\) - Tracks the state of each node and what groups and roles nodes are included in.
 
-
 ### Use the BOS Cray CLI Commands
 
 BOS utilizes the Cray CLI commands. The latest API information can be found with the following command:
 
 ```bash
-ncn-m001# cray bos list
+cray bos list
 ```
 
 Example output:

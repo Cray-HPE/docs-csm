@@ -13,13 +13,13 @@ switch(config)# snmp-server host IP-ADDR trap version v2c community xxx
 Show commands to validate functionality:
 
 ```
-switch# show snmp trap
+show snmp trap
 ```
 
 ## Example Output
 
 ```
-switch# show snmp trap
+show snmp trap
 ------------------------------------------------------------------------------------------
 Host                     Port  Type      Version SecName                         vrf
 ------------------------------------------------------------------------------------------
@@ -37,4 +37,4 @@ default
 2. Administrators can log trap events
 3. Administrators can successfully trigger a trap event
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

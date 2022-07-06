@@ -15,7 +15,7 @@ NAME                       RUNNING  REFRESHED  AGE  PLACEMENT  IMAGE NAME       
 osd.all-available-devices      9/9  4m ago     3d   *          registry.local/ceph/ceph:v15.2.8  5553b0cb212c
 ```
 
->**NOTE:** Ceph version 15.2.x and newer will utilize the ceph orchestrator to add any available drives on the storage nodes to the OSD pool. The process below is in the event that the orchestrator did not add the available drives into the cluster
+>**`NOTE`** Ceph version 15.2.x and newer will utilize the ceph orchestrator to add any available drives on the storage nodes to the OSD pool. The process below is in the event that the orchestrator did not add the available drives into the cluster
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ This procedure requires administrative privileges and will require at least two 
 1. In the first window, log in as `root` on the first master node \(`ncn-m001`\).
 
     ```bash
-    ncn-w001# ssh ncn-m001
+    ssh ncn-m001
     ```
 
 1. Watch the status of the cluster to monitor the progress of the drives being added.
@@ -34,7 +34,7 @@ This procedure requires administrative privileges and will require at least two 
     The following example shows only six OSDs in use.
 
     ```bash
-    ncn-m001# watch -n 10 ceph -s
+    watch -n 10 ceph -s
     ```
 
     Example output:
@@ -65,7 +65,7 @@ This procedure requires administrative privileges and will require at least two 
     1. There is an issue where orchestration tasks can get hung up and the failover will clear that up.
 
     ```bash
-    ncn-w001# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
+    ceph mgr fail $(ceph mgr dump | jq -r .active_name)
     ```
 
 1. In the second window, list your available drives on the node(s) where the OSDs are missing
@@ -73,7 +73,7 @@ This procedure requires administrative privileges and will require at least two 
    The following example is utilizing ncn-s001. Ensure the correct host for the situation is used.
 
    ```bash
-   ncn-s001# ceph orch device ls
+   ceph orch device ls
    ```
 
    Example output:
@@ -84,10 +84,10 @@ This procedure requires administrative privileges and will require at least two 
    ncn-s001  /dev/sdb  hdd   f94bd091-cc25-476b-9  48.3G  Unknown  N/A    N/A    No
    ```
 
-   > **NOTE:** The drive in question is reporting available. The following steps are going to erase that drive so PLEASE make sure to verify that drive is not being used.
+   > **`NOTE`** The drive in question is reporting available. The following steps are going to erase that drive so PLEASE make sure to verify that drive is not being used.
 
    ```bash
-   ncn-s001# podman ps
+   podman ps
    ```
 
    Example output:
@@ -108,7 +108,7 @@ This procedure requires administrative privileges and will require at least two 
    Repeat this step for all drives on the storage node\(s\) that have unused storage which should be added to Ceph.
 
    ```bash
-   ncn-s001# ceph orch device zap ncn-s001 /dev/sdb (optional --force)
+   ceph orch device zap ncn-s001 /dev/sdb (optional --force)
    ```
 
    Proceed to the next step after all of the OSDs have been added to the storage nodes.
@@ -145,7 +145,7 @@ This procedure requires administrative privileges and will require at least two 
     ```
 
    ```bash
-   ncn-s001# ceph orch ps --daemon_type osd ncn-s001
+   ceph orch ps --daemon_type osd ncn-s001
    ```
 
    Example output:

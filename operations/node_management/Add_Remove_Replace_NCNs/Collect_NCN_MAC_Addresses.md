@@ -10,39 +10,39 @@ A temporary MAC address collection iPXE bootscript is put into place on the syst
 1. Verify that the `BMC_IP` environment variable is set.
 
     ```bash
-    ncn-m# echo $BMC_IP
+    echo $BMC_IP
     ```
 
 1. Put the MAC address collection iPXE script in place.
     1. Save a backup of the current iPXE BSS bootscript.
 
         ```bash
-        ncn-m# kubectl -n services get cm cray-ipxe-bss-ipxe -o yaml > cray-ipxe-bss-ipxe.backup.yaml
+        kubectl -n services get cm cray-ipxe-bss-ipxe -o yaml > cray-ipxe-bss-ipxe.backup.yaml
         ```
 
     1. Delete the `cray-ipxe-bss-ipxe` Kubernetes ConfigMap.
 
         ```bash
-        ncn-m# kubectl -n services delete cm cray-ipxe-bss-ipxe
+        kubectl -n services delete cm cray-ipxe-bss-ipxe
         ```
 
     1. Put the MAC address collection iPXE booscript into place.
 
         ```bash
-        ncn-m# kubectl -n services create cm cray-ipxe-bss-ipxe --from-file=bss.ipxe=/usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/mac_collection_script.ipxe
+        kubectl -n services create cm cray-ipxe-bss-ipxe --from-file=bss.ipxe=/usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/mac_collection_script.ipxe
         ```
 
     1. Take note of the last timestamp in the `cray-ipxe` log.
 
         ```bash
-        ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe
+        kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe
         ```
 
     1. Wait for the updated iPXE binary to be built.
 
         ```bash
-        ncn-m# sleep 30
-        ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
+        sleep 30
+        kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
         The following output means the new iPXE binary has been built:
@@ -59,19 +59,19 @@ A temporary MAC address collection iPXE bootscript is put into place on the syst
         > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
 
         ```bash
-        ncn-m# read -s IPMI_PASSWORD
-        ncn-m# export IPMI_PASSWORD
-        ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP chassis power status
+        read -s IPMI_PASSWORD
+        export IPMI_PASSWORD
+        ipmitool -I lanplus -U root -E -H $BMC_IP chassis power status
         ```
 
     1. In another terminal, capture the NCN's Serial Over Lan (SOL) console.
         > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
 
         ```bash
-        ncn-m# BMC_IP=10.254.1.20
-        ncn-m# read -s IPMI_PASSWORD
-        ncn-m# export IPMI_PASSWORD
-        ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP sol activate
+        BMC_IP=10.254.1.20
+        read -s IPMI_PASSWORD
+        export IPMI_PASSWORD
+        ipmitool -I lanplus -U root -E -H $BMC_IP sol activate
         ```
 
         > Note when disconnecting from the IPMI SOL console you can perform the key sequence `~~.` to exit `ipmitool` without exiting your SSH session.
@@ -79,13 +79,13 @@ A temporary MAC address collection iPXE bootscript is put into place on the syst
     1. Set the `pxe` `efiboot` option.
 
         ```bash
-        ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP chassis bootdev pxe options=efiboot
+        ipmitool -I lanplus -U root -E -H $BMC_IP chassis bootdev pxe options=efiboot
         ```
 
     1. Power on the NCN.
 
         ```bash
-        ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP chassis power on
+        ipmitool -I lanplus -U root -E -H $BMC_IP chassis power on
         ```
 
     1. Watch the NCN SOL console and wait for the following output to appear. The output below shows the mapping of MAC addresses to interface names (`mgmt0`, `mgmt1`, `hsn0`, `lan0`, etc.).
@@ -112,36 +112,36 @@ A temporary MAC address collection iPXE bootscript is put into place on the syst
     1. Power off the NCN.
 
         ```bash
-        ncn-m# ipmitool -I lanplus -U root -E -H $BMC_IP chassis power off
+        ipmitool -I lanplus -U root -E -H $BMC_IP chassis power off
         ```
 
 1. Restore the original iPXE bootscript.
     1. Delete the `cray-ipxe-bss-ipxe` Kubernetes ConfigMaps.
 
         ```bash
-        ncn-m# kubectl -n services delete cm cray-ipxe-bss-ipxe
+        kubectl -n services delete cm cray-ipxe-bss-ipxe
         ```
 
     2. Put the original iPXE bootscript into place.
 
         ```bash
-        ncn-m# cp cray-ipxe-bss-ipxe.backup.yaml cray-ipxe-bss-ipxe.yaml
-        ncn-m# yq d -i cray-ipxe-bss-ipxe.yaml metadata.resourceVersion
-        ncn-m# yq d -i cray-ipxe-bss-ipxe.yaml metadata.uid
-        ncn-m# kubectl -n services apply -f cray-ipxe-bss-ipxe.yaml
+        cp cray-ipxe-bss-ipxe.backup.yaml cray-ipxe-bss-ipxe.yaml
+        yq d -i cray-ipxe-bss-ipxe.yaml metadata.resourceVersion
+        yq d -i cray-ipxe-bss-ipxe.yaml metadata.uid
+        kubectl -n services apply -f cray-ipxe-bss-ipxe.yaml
         ```
 
     3. Take note of the last timestamp in the `cray-ipxe` log.
 
         ```bash
-        ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe
+        kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe
         ```
 
     4. Wait for the updated iPXE binary to be built.
 
         ```bash
-        ncn-m# sleep 30
-        ncn-m# kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
+        sleep 30
+        kubectl -n services logs -l app.kubernetes.io/name=cray-ipxe -c cray-ipxe -f
         ```
 
         The following output means the new iPXE binary has been built.

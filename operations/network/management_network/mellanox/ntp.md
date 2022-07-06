@@ -17,51 +17,39 @@ This document shows how to view NTP status and configure NTP on a Mellanox switc
 - [Validate functionality](#validate-functionality)
 - [Expected results](#expected-results)
 
-<a name="enable-ntp"></a>
-
 ## Enable NTP
 
 ```console
-switch (config) # ntp enable
+ntp enable
 ```
-
-<a name="test-the-ntp-server"></a>
 
 ## Test the NTP server
 
 Test the NTP server by querying the current time:
 
 ```console
-switch (config) # ntpdate 10.4.0.134
+ntpdate 10.4.0.134
 ```
-
-<a name="specify-a-remote-ntp-server"></a>
 
 ## Specify a remote NTP server
 
 Specify a remote NTP server to use for time synchronization:
 
 ```console
-switch(config)# ntp server <FQDN|IP-ADDR>
+ntp server <FQDN|IP-ADDR>
 ```
-
-<a name="configure-the-system-timezone"></a>
 
 ## Configure the system timezone
 
 ```console
-switch (config) # clock timezone UTC-offset UTC-7
+clock timezone UTC-offset UTC-7
 ```
-
-<a name="validate-functionality"></a>
 
 ## Validate functionality
 
 ```console
-switch (config)# show ntp
+show ntp
 ```
-
-<a name="expected-results"></a>
 
 ## Expected results
 
@@ -69,4 +57,4 @@ switch (config)# show ntp
 1. The functionality can be validated using the `show` command.
 1. The system time of the switch matches that of the NTP server.
 
-[Back to index](index.md).
+[Back to Index](../README.md)

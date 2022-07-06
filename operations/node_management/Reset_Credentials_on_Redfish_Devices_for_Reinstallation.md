@@ -27,7 +27,7 @@ Administrative privileges are required.
 2.  Set credentials for multiple targets.
 
     ```bash
-    ncn-m001# cray scsd bmc globalcreds create PAYLOAD_FILE --format json
+    cray scsd bmc globalcreds create PAYLOAD_FILE --format json
     {    "Targets": [
             {
                 "Xname": "x0c0s0b0",
@@ -42,7 +42,6 @@ Administrative privileges are required.
         ]
     }
     ```
-
 
 For more information about using the System Configuration Service, refer to [System Configuration Service](../system_configuration_service/System_Configuration_Service.md)
 

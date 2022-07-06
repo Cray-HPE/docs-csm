@@ -5,21 +5,19 @@ This section describes the basic capabilities of the Firmware Action Service (FA
 The following CLI operations are described:
 
 1. Action
-   1. [Execute an Action](#action)
-   2. [Abort an Action](#abort)
-   3. [Describe an Action](#describe)
-2. Snapshots
-   1. [Create a Snapshot](#create)
-   2. [View a Snapshot](#view)
-   3. [List Snapshots](#list)
-3. [Update an Image](#update)
-4. [FAS Loader Commands](#loader)
+   1. [Execute an Action](#execute-an-action)
+   1. [Abort an Action](#abort-an-action)
+   1. [Describe an Action](#describe-an-action)
+1. Snapshots
+   1. [Create a Snapshot](#create-snapshots)
+   1. [View a Snapshot](#view-snapshots)
+   1. [List Snapshots](#list-snapshots)
+1. [Update an Image](#update-a-firmware-image)
+1. [FAS Loader Commands](#fas-loader-commands)
 
 ## Prerequisites
 
 The Cray command line interface (CLI) tool is initialized and configured on the system.
-
-<a name="action"></a>
 
 ## Execute an Action
 
@@ -35,7 +33,7 @@ This will cover the generic process for executing an action. For more specific e
 
    Filters narrow the scope of FAS to target specific component names (xnames), manufacturers, targets, and so on. For this example, FAS will run with no selection filters applied.
 
-2. Create a JSON file {whole-system-dryrun.json}; to make this a `live update` set `"overrideDryrun": true`.
+1. Create a JSON file {whole-system-dryrun.json}; to make this a `live update` set `"overrideDryrun": true`.
 
     ```json
     {  "command": {
@@ -48,11 +46,11 @@ This will cover the generic process for executing an action. For more specific e
     }
     ```
 
-3. Execute the dry-run.
+1. Execute the dry-run.
 
     ```bash
-    ncn# cray fas actions create {whole-system-dryrun.json}
-    
+    cray fas actions create {whole-system-dryrun.json}
+
     [...]
 
     {
@@ -65,9 +63,6 @@ This will cover the generic process for executing an action. For more specific e
 
 See [Interpreting Output](#interpreting) for more information.
 
-
-<a name="abort"></a>
-
 ## Abort an Action
 
 Firmware updates can be stopped if required. This is useful given only one action can be run at a time. This is to protect hardware from multiple actions trying to modify it at the same time.
@@ -79,20 +74,14 @@ Firmware updates can be stopped if required. This is useful given only one actio
 1. Issue the abort command to the action.
 
     ```bash
-    ncn# cray fas actions instance delete {actionID}
+    cray fas actions instance delete {actionID}
     ```
 
 The action could take up to a minute to fully abort.
 
-
-
-<a name="describe"></a>
-
 ## Describe an Action
 
 There are several ways to get more information about a firmware update. An `actionID` and `operationID`s are generated when a live update or dry-run is created. These values can be used to learn more about what is happening on the system during an update.
-
-<a name="interpreting"></a>
 
 ## Interpreting Output
 
@@ -116,7 +105,7 @@ Data can be viewed at several levels of information:
 To view counts of operations, what state they are in, the overall state of the action, and what parameters were used to create the action:
 
   ```bash
-  ncn# cray fas actions status list {actionID}
+  cray fas actions status list {actionID}
   actionID = "e6dc14cd-5e12-4d36-a97b-0dd372b0930f"
   snapshotID = "00000000-0000-0000-0000-000000000000"
   startTime = "2021-09-07 16:43:04.294233199 +0000 UTC"
@@ -153,130 +142,132 @@ To view counts of operations, what state they are in, the overall state of the a
 
 #### Get Details of Action
 
-  ```
-    ncn# cray fas actions describe {actionID} --format json
-    {
-      "parameters": {
-        "stateComponentFilter": {
-          "deviceTypes": [
-            "nodeBMC"
-          ]
-        },
-        "command": {
-          "dryrun": false,
-          "description": "upgrade of nodeBMCs for cray",
-          "tag": "default",
-          "restoreNotPossibleOverride": true,
-          "timeLimit": 1000,
-          "version": "latest"
-        },
-        "inventoryHardwareFilter": {
-          "manufacturer": "cray"
-        },
-        "imageFilter": {
-          "imageID": "00000000-0000-0000-0000-000000000000"
-        },
-        "targetFilter": {
-          "targets": [
-            "BMC"
-          ]
-        }
-      },
-      "blockedBy": [],
-      "state": "completed",
-      "command": {
-        "dryrun": false,
-        "description": "upgrade of nodeBMCs for cray",
-        "tag": "default",
-        "restoreNotPossibleOverride": true,
-        "timeLimit": 1000,
-        "version": "latest"
-      },
-      "actionID": "e0cdd7c2-32b1-4a25-9b2a-8e74217eafa7",
-      "startTime": "2020-06-26 20:03:37.316932354 +0000 UTC",
-      "snapshotID": "00000000-0000-0000-0000-000000000000",
-      "endTime": "2020-06-26 20:04:07.118243184 +0000 UTC",
-      "operationSummary": {
-        "succeeded": {
-          "OperationsKeys": []
-        },
-        "verifying": {
-          "OperationsKeys": []
-        },
-        "unknown": {
-          "OperationsKeys": []
-        },
-        "configured": {
-          "OperationsKeys": []
-        },
-        "initial": {
-          "OperationsKeys": []
-        },
-        "failed": {
-          "OperationsKeys": [
-            {
-              "stateHelper": "unexpected change detected in firmware version. Expected sc.1.4.35-prod- master.arm64.2020-06-26T08:36:42+00:00.0c2bb02 got: sc.1.3.307-prod-master.arm64.2020-06-13T00:28:26+00:00.f91edff",
-              "fromFirmwareVersion": "",
-              "xname": "x5000c1r7b0",
-              "target": "BMC",
-              "operationID": "0796eed0-e95d-45ea-bc71-8903d52cffde"
-            },
-          ]
-        },
-        "noSolution": {
-          "OperationsKeys": []
-        },
-        "aborted": {
-          "OperationsKeys": []
-        },
-        "needsVerified": {
-          "OperationsKeys": []
-        },
-        "noOperation": {
-          "OperationsKeys": []
-        },
-        "inProgress": {
-          "OperationsKeys": []
-        },
-        "blocked": {
-          "OperationsKeys": []
-        }
-      }
+```bash
+cray fas actions describe {actionID} --format json
+```
+
+```json
+{
+  "parameters": {
+    "stateComponentFilter": {
+      "deviceTypes": [
+        "nodeBMC"
+      ]
+    },
+    "command": {
+      "dryrun": false,
+      "description": "upgrade of nodeBMCs for cray",
+      "tag": "default",
+      "restoreNotPossibleOverride": true,
+      "timeLimit": 1000,
+      "version": "latest"
+    },
+    "inventoryHardwareFilter": {
+      "manufacturer": "cray"
+    },
+    "imageFilter": {
+      "imageID": "00000000-0000-0000-0000-000000000000"
+    },
+    "targetFilter": {
+      "targets": [
+        "BMC"
+      ]
     }
-  ```
+  },
+  "blockedBy": [],
+  "state": "completed",
+  "command": {
+    "dryrun": false,
+    "description": "upgrade of nodeBMCs for cray",
+    "tag": "default",
+    "restoreNotPossibleOverride": true,
+    "timeLimit": 1000,
+    "version": "latest"
+  },
+  "actionID": "e0cdd7c2-32b1-4a25-9b2a-8e74217eafa7",
+  "startTime": "2020-06-26 20:03:37.316932354 +0000 UTC",
+  "snapshotID": "00000000-0000-0000-0000-000000000000",
+  "endTime": "2020-06-26 20:04:07.118243184 +0000 UTC",
+  "operationSummary": {
+    "succeeded": {
+      "OperationsKeys": []
+    },
+    "verifying": {
+      "OperationsKeys": []
+    },
+    "unknown": {
+      "OperationsKeys": []
+    },
+    "configured": {
+      "OperationsKeys": []
+    },
+    "initial": {
+      "OperationsKeys": []
+    },
+    "failed": {
+      "OperationsKeys": [
+        {
+          "stateHelper": "unexpected change detected in firmware version. Expected sc.1.4.35-prod- master.arm64.2020-06-26T08:36:42+00:00.0c2bb02 got: sc.1.3.307-prod-master.arm64.2020-06-13T00:28:26+00:00.f91edff",
+          "fromFirmwareVersion": "",
+          "xname": "x5000c1r7b0",
+          "target": "BMC",
+          "operationID": "0796eed0-e95d-45ea-bc71-8903d52cffde"
+        },
+      ]
+    },
+    "noSolution": {
+      "OperationsKeys": []
+    },
+    "aborted": {
+      "OperationsKeys": []
+    },
+    "needsVerified": {
+      "OperationsKeys": []
+    },
+    "noOperation": {
+      "OperationsKeys": []
+    },
+    "inProgress": {
+      "OperationsKeys": []
+    },
+    "blocked": {
+      "OperationsKeys": []
+    }
+  } 
+}
+```
 
 #### Get Details of Operation
 
 Using the `operationID` listed in the actions array we can see the full detail of the operation.
 
-  ```
-  ncn# cray fas operations describe {operationID} --format json
-  {
-  "fromFirmwareVersion": "", "fromTag": "",
-  "fromImageURL": "",
-  "endTime": "2020-06-24 14:23:37.544814197 +0000 UTC",
-  "actionID": "f48aabf1-1616-49ae-9761-a11edb38684d", "startTime": "2020-06-24 14:19:15.10128214 +0000 UTC",
-  "fromSemanticFirmwareVersion": "", "toImageURL": "",
-  "model": "WindomNodeCard_REV_D",
-  "operationID": "24a5e5fb-5c4f-4848-bf4e-b071719c1850", "fromImageID": "00000000-0000-0000-0000-000000000000",
-  "target": "BMC",
-  "toImageID": "71c41a74-ab84-45b2-95bd-677f763af168", "toSemanticFirmwareVersion": "",
-  "refreshTime": "2020-06-24 14:23:37.544824938 +0000 UTC",
-  "blockedBy": [],
-  "toTag": "",
-  "state": "succeeded",
-  "stateHelper": "unexpected change detected in firmware version. Expected nc.1.3.8-shasta-release.arm.2020-06-15T22:57:31+00:00.b7f0725 got: nc.1.2.25-shasta-release.arm.2020-05-15T17:27:16+00:00.0cf7f51",
-  "deviceType": "",
-  "expirationTime": "",
-  "manufacturer": "cray",
-  "xname": "x9000c1s3b1",
-  "toFirmwareVersion": ""
-  }
-  ```
+```
+cray fas operations describe {operationID} --format json
+```
 
-
-
-<a name="create"></a>
+```json
+{
+    "fromFirmwareVersion": "", "fromTag": "",
+    "fromImageURL": "",
+    "endTime": "2020-06-24 14:23:37.544814197 +0000 UTC",
+    "actionID": "f48aabf1-1616-49ae-9761-a11edb38684d", "startTime": "2020-06-24 14:19:15.10128214 +0000 UTC",
+    "fromSemanticFirmwareVersion": "", "toImageURL": "",
+    "model": "WindomNodeCard_REV_D",
+    "operationID": "24a5e5fb-5c4f-4848-bf4e-b071719c1850", "fromImageID": "00000000-0000-0000-0000-000000000000",
+    "target": "BMC",
+    "toImageID": "71c41a74-ab84-45b2-95bd-677f763af168", "toSemanticFirmwareVersion": "",
+    "refreshTime": "2020-06-24 14:23:37.544824938 +0000 UTC",
+    "blockedBy": [],
+    "toTag": "",
+    "state": "succeeded",
+    "stateHelper": "unexpected change detected in firmware version. Expected nc.1.3.8-shasta-release.arm.2020-06-15T22:57:31+00:00.b7f0725 got: nc.1.2.25-shasta-release.arm.2020-05-15T17:27:16+00:00.0cf7f51",
+    "deviceType": "",
+    "expirationTime": "",
+    "manufacturer": "cray",
+    "xname": "x9000c1s3b1",
+    "toFirmwareVersion": ""
+}
+```
 
 ## Create Snapshots
 
@@ -289,47 +280,45 @@ A snapshot of the system captures the firmware version for every device that is 
 1. Determine what part of the system to take a snapshot.
 
    * Full System:
-         ```json
-         {
-         "name":"fullSystem_20200701"
-         }
-         ```
 
-   * Partial System
-         ```json
-         {
-           "name": "20200402_all_xnames",
-           "expirationTime": "2020-06-26T16:32:53.275Z",
-           "stateComponentFilter": {
-             "partitions": [
-               "p1"
-             ],
-             "deviceTypes": [
-               "nodeBMC"
-             ]
-           },
-           "inventoryHardwareFilter": {
-             "manufacturer": "gigabyte"
-           },
-           "targetFilter": {
-             "targets": [
-               "BMC"
-             ]
-           }
-         }
-         ```
-
-2. Create the snapshot.
-
-    ```bash
-    ncn# cray fas snapshots create {file.json}
+    ```json
+    {
+        "name":"fullSystem_20200701"
+    }
     ```
 
-3. Use the snapshot name to query the snapshot. This is a long running operation, so monitor the `state` field to determine if the snapshot is complete.
+   * Partial System
 
+    ```json
+    {
+        "name": "20200402_all_xnames",
+        "expirationTime": "2020-06-26T16:32:53.275Z",
+        "stateComponentFilter": {
+            "partitions": [
+                "p1"
+            ],
+            "deviceTypes": [
+                "nodeBMC"
+            ]
+        },
+        "inventoryHardwareFilter": {
+            "manufacturer": "gigabyte"
+        },
+        "targetFilter": {
+            "targets": [
+                "BMC"
+            ]
+        }
+    }
+    ```
 
+1. Create the snapshot.
 
-<a name="list"></a>
+    ```bash
+    cray fas snapshots create {file.json}
+    ```
+
+1. Use the snapshot name to query the snapshot. This is a long running operation, so monitor the `state` field to determine if the snapshot is complete.
 
 ## List Snapshots
 
@@ -339,38 +328,37 @@ A list of all snapshots can be viewed on the system. Any of the snapshots listed
 
 1. List the snapshots.
 
+    ```bash
+    cray fas snapshots list --format json
     ```
-    ncn# cray fas snapshots list --format json
+    
+    ```json
     {
-      "snapshots": [
-        {
-          "ready": true,
-          "captureTime": "2020-06-25 22:47:11.072268274 +0000 UTC",
-          "relatedActions": [],
-          "name": "1",
-          "uniqueDeviceCount": 9
-        },
-        {
-          "ready": true,
-          "captureTime": "2020-06-25 22:49:13.314876084 +0000 UTC",
-          "relatedActions": [],
-          "name": "3",
-          "uniqueDeviceCount": 9
-        },
-        {
-          "ready": true,
-          "captureTime": "2020-06-26 22:38:12.309979483 +0000 UTC",
-          "relatedActions": [],
-          "name": "adn0",
-          "uniqueDeviceCount": 6
-        }
-      ]
+        "snapshots": [
+            {
+              "ready": true,
+              "captureTime": "2020-06-25 22:47:11.072268274 +0000 UTC",
+              "relatedActions": [],
+              "name": "1",
+              "uniqueDeviceCount": 9
+            },
+            {
+              "ready": true,
+              "captureTime": "2020-06-25 22:49:13.314876084 +0000 UTC",
+              "relatedActions": [],
+              "name": "3",
+              "uniqueDeviceCount": 9
+            },
+            {
+              "ready": true,
+              "captureTime": "2020-06-26 22:38:12.309979483 +0000 UTC",
+              "relatedActions": [],
+              "name": "adn0",
+              "uniqueDeviceCount": 6
+            }
+        ]
     }
     ```
-
-
-
-<a name="view"></a>
 
 ## View Snapshots
 
@@ -381,7 +369,10 @@ View a snapshot to see which versions of firmware are set for each target. The c
 1. View a snapshot.
 
     ```
-    ncn# cray fas snapshots describe {snapshot_name} --format json
+    cray fas snapshots describe {snapshot_name} --format json
+    ```
+   
+    ```json
     {
       "relatedActions": [],
       "name": "all",
@@ -438,10 +429,6 @@ View a snapshot to see which versions of firmware are set for each target. The c
     }
     ```
 
-
-
-<a name="update"></a>
-
 ## Update a Firmware Image
 
 If FAS indicates hardware is in a `nosolution` state as a result of a dry-run or update, it is an indication that there is no matching image available to update firmware. A missing image is highly possible, but the issue could also be that the hardware has inconsistent model names in the image file.
@@ -453,13 +440,16 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 1.  List the existing firmware images to find the imageID of the desired firmware image.
 
     ```
-    ncn# cray fas images list
+    cray fas images list
     ```
 
-2. Describe the image file using the imageID.
+1. Describe the image file using the imageID.
 
     ```bash
-    ncn# cray fas images describe {imageID}
+    cray fas images describe {imageID}
+    ```
+
+    ```json
     {
       "semanticFirmwareVersion": "0.2.6",
       "target": "Node0.BIOS",
@@ -483,11 +473,13 @@ Given the nature of the `model` field and its likelihood to not be standardized,
     }
     ```
 
-3. Describe the FAS operation and compare it to the image file from the previous step. Look at the hardware models to see if some of the population is in a `noSolution` state, while others are in a `succeeded` state. If that is the case, view the operation data and examine the models.
-
+1. Describe the FAS operation and compare it to the image file from the previous step. Look at the hardware models to see if some of the population is in a `noSolution` state, while others are in a `succeeded` state. If that is the case, view the operation data and examine the models.
+    
+    ```bash
+    cray fas actions describe {actionID} --format json
     ```
-    ncn# cray fas actions describe {actionID} --format json
-    {
+ 
+   ```json
       "parameters": {
         "stateComponentFilter": {
           "deviceTypes": [
@@ -624,13 +616,15 @@ Given the nature of the `model` field and its likelihood to not be standardized,
         }
       }
     }
-
     ```
 
     View the operation data. If the model name is different between identical hardware, it may be appropriate to update the image model with the model of the noSolution hardware.
 
     ```bash
-    ncn# cray fas operations describe {operationID} --format json
+    cray fas operations describe {operationID} --format json
+    ```
+
+    ```json
     {
       "fromFirmwareVersion": "sc.1.3.307-prod-master.arm64.2020-06-13T00:28:26+00:00.f91edff",
       "fromTag": "",
@@ -659,7 +653,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
     }
     ```
 
-4. Update the firmware image file.
+1. Update the firmware image file.
 
    This step should be skipped if there is no clear evidence of a missing image or incorrect model name.
 
@@ -668,7 +662,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
    1. Dump the content of the firmware image to a JSON file.
 
       ```bash
-      ncn# cray fas images describe {imageID} --format json > imagedata.json
+      cray fas images describe {imageID} --format json > imagedata.json
       ```
 
    2. Edit the new `imagedata.json` file. Update any incorrect firmware information, such as the model name.
@@ -676,11 +670,9 @@ Given the nature of the `model` field and its likelihood to not be standardized,
    3. Update the firmware image.
 
       ```bash
-      ncn# cray fas images update {imagedata.json} {imageID}
+      cray fas images update {imagedata.json} {imageID}
       ```
 ---
-
-<a name="loader"></a>
 
 ## FAS Loader Commands
 
@@ -689,7 +681,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 To check if the loader is currently busy and receive a list of loader run IDs:
 
 ```bash
-ncn# cray fas loader list
+cray fas loader list
 
 loaderStatus = "ready"
 [[loaderRunList]]
@@ -708,7 +700,7 @@ Use the `loaderRunID` to check the results of the loader run.
 To load the firmware from Nexus into FAS, use the following command:
 
 ```bash
-ncn# cray fas loader nexus create
+cray fas loader nexus create
 
 loaderRunID = "c2b7e9bb-f428-4e4c-aa83-d8fd8bcfd820"
 ```
@@ -722,10 +714,10 @@ FAS will return a `loaderRunID`.
 Use the `loaderRunID` to check the results of the loader run.
 Run the following command (The RPM in this example is `firmware.rpm`):
 
-> **NOTE:** If firmware is not in the current directory, add the path to the filename.
+> **`NOTE`** If firmware is not in the current directory, add the path to the filename.
 
 ```bash
-ncn# cray fas loader create --file firmware.rpm
+cray fas loader create --file firmware.rpm
 
 loaderRunID = "dd37dd45-84ec-4bd6-b3c9-7af480048966"
 ```
@@ -736,10 +728,13 @@ See [Load Firmware from RPM or ZIP file in FAS Admin Procedures](./FAS_Admin_Pro
 
 Using the `loaderRunID` returned from the loader upload command, run the following command to get the output from the upload. The `--format json` parameter makes it easier to read.
 
-> **NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the `loaderRunID` from the previous `run` command.
+> **`NOTE`** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the `loaderRunID` from the previous `run` command.
 
 ```bash
-ncn# cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format json
+cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format json
+```
+
+```json
 
 {
   "loaderRunOutput": [
@@ -770,18 +765,18 @@ ncn# cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format json
 ```
 A successful run will end with `*** Number of Updates: x ***`.
 
-> **NOTE:** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
+> **`NOTE`** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
 
 ### Delete Loader Run Data
 
 To delete the output from a loader run and remove it from the loader run list:
 
-> **NOTE:** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the `loaderRunID` from the previous `run` command.
+> **`NOTE`** `dd37dd45-84ec-4bd6-b3c9-7af480048966` is the `loaderRunID` from the previous `run` command.
 
 ```bash
-ncn# cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
+cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
 ```
 
 The delete command does not return anything if successful.
 
-> **NOTE:** The `loader delete` command does not delete any images from FAS; it only deletes the loader run saved status and removes the ID from the loader run list.
+> **`NOTE`** The `loader delete` command does not delete any images from FAS; it only deletes the loader run saved status and removes the ID from the loader run list.

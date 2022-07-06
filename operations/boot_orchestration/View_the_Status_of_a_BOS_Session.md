@@ -28,7 +28,6 @@ Each session, boot set, and phase contains similar metadata. The following is a 
 
     The time a session, boot set, or phase ended work.
 
-
 The following table summarizes how to interpret the various combinations of values for the in\_progress and complete flags.
 
 |in\_progress Flag|complete Flag|Meaning|
@@ -51,7 +50,7 @@ The in\_progress flags, complete flags, and error\_count flags are cumulative, m
 The BOS session ID is required to view the status of a session. To list the available sessions, use the following command:
 
 ```bash
-ncn-m001# cray bos session list --format json
+cray bos session list --format json
 ```
 
 Example output:
@@ -77,7 +76,7 @@ Example output:
 It is recommended to describe the session using the session ID above to verify the desired selection was selected:
 
 ```bash
-ncn-m001# cray bos session describe SESSION_ID
+cray bos session describe SESSION_ID
 ```
 
 Example output:
@@ -98,7 +97,7 @@ The status for the session will show the session ID, the boot sets in the sessio
 To display the status for the session:
 
 ```bash
-ncn-m001# cray bos session status list SESSION_ID -–format json
+cray bos session status list SESSION_ID -–format json
 ```
 
 Example output:
@@ -150,9 +149,8 @@ Run the following command to view the status for a specific boot set in a sessio
 
     Each phase contains the following categories: not\_started, in\_progress, succeeded, failed, and excluded. The nodes are listed in the category they are currently occupying.
 
-
 ```bash
-ncn-m001# cray bos session status describe BOOT_SET_NAME SESSION_ID --format json
+cray bos session status describe BOOT_SET_NAME SESSION_ID --format json
 ```
 
 Example output:
@@ -305,14 +303,14 @@ Example output:
 Direct calls to the API are needed to retrieve the status for an individual phase. Support for the Cray CLI is not currently available. The following command is used to view the status of a phase:
 
 ```bash
-ncn-m001# curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
+curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
 https://api-gw-service-nmn.local/apis/bos/v1/session/SESSION_ID/status/BOOT_SET_NAME/PHASE
 ```
 
 In the following example, the session ID is *f89eb554-c733-4197-b2f2-4e1e5ba0c0ec*, the boot set name is computes, and the individual phase is shutdown.
 
 ```bash
-ncn-m001# curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
+curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
 https://api-gw-service-nmn.local/apis/bos/v1/session/f89eb554-c733-4197-b2f2-4e1e5ba0c0ec/status/computes/shutdown
 {
   "categories": [
@@ -369,14 +367,14 @@ https://api-gw-service-nmn.local/apis/bos/v1/session/f89eb554-c733-4197-b2f2-4e1
 Direct calls to the API are needed to retrieve the status for an individual category. Support for the Cray CLI is not currently available. The following command is used to view the status of a phase:
 
 ```bash
-ncn-m001# curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
+curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
 https://api-gw-service-nmn.local/apis/bos/v1/session/SESSION_ID/status/BOOT_SET_NAME/PHASE/CATEGORY
 ```
 
 In the following example, the session ID is f89eb554-c733-4197-b2f2-4e1e5ba0c0ec, the boot set name is computes, the phase is shutdown, and the category is in\_progress.
 
 ```bash
-ncn-m001# curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
+curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
 https://api-gw-service-nmn.local/apis/bos/v1/session/f89eb554-c733-4197-b2f2-4e1e5ba0c0ec/status/computes/shutdown/in_progress
     {
   "name": "in_progress",

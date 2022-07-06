@@ -16,7 +16,6 @@ instance, and applied with the `csm.ssh_keys` Ansible role via a CFS session. If
 no keys are added to Vault as in the procedure below, this Ansible role will
 skip any updates.
 
-<a name="configure_root_keys_in_vault"></a>
 ## Procedure: Configure Root SSH Keys in Vault
 
 1. Generate a new SSH key pair for the root user. Use `ssh-keygen` to generate a
@@ -26,7 +25,7 @@ skip any updates.
 1. Get the [HashiCorp Vault](HashiCorp_Vault.md) root token:
 
    ```bash
-   ncn# kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
+   kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
    ```
 
 1. Write the private and public halves of the key pair gathered in step 1 to the
@@ -37,16 +36,16 @@ skip any updates.
    The `ssh_private_key` and `ssh_public_key` fields should contain the exact
    content from the `id_rsa` and `id_rsa.pub` files (if using RSA key types).
 
-   ***NOTE***: It is important to enclose the key content in single quotes to
+   ***`NOTE`***: It is important to enclose the key content in single quotes to
    preserve any special characters.
 
    ```bash
-   ncn# kubectl exec -itn vault cray-vault-0 -- sh
-   cray-vault-0# export VAULT_ADDR=http://cray-vault:8200
-   cray-vault-0# vault login
-   cray-vault-0# vault write secret/csm/users/root ssh_private_key='...' ssh_public_key='...' [... other fields (see warning below) ...]
-   cray-vault-0# vault read secret/csm/users/root
-   cray-vault-0# exit
+   kubectl exec -itn vault cray-vault-0 -- sh
+   export VAULT_ADDR=http://cray-vault:8200
+   vault login
+   vault write secret/csm/users/root ssh_private_key='...' ssh_public_key='...' [... other fields (see warning below) ...]
+   vault read secret/csm/users/root
+   exit
    ncn#
    ```
 
@@ -76,10 +75,11 @@ procedure above.
    configuration management Git repository that is in use.
 
    ```bash
-   ncn# cat config.json
+   cat config.json
    ```
 
    Example output:
+
    ```json
    {
      "layers": [
@@ -94,16 +94,16 @@ procedure above.
    ```
 
    ```bash
-   ncn# cray cfs configurations update ncn-root-keys-update --file ./config.json
+   cray cfs configurations update ncn-root-keys-update --file ./config.json
    ```
 
 1. Create a CFS configuration session to apply the SSH keypair update.
 
    ```bash
-   ncn# cray cfs sessions create --name ncn-root-keys-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-root-keys-update
+   cray cfs sessions create --name ncn-root-keys-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-root-keys-update
    ```
 
-   ***NOTE***: Subsequent SSH key changes need only update the field contents in
+   ***`NOTE`***: Subsequent SSH key changes need only update the field contents in
    HashiCorp Vault and create the CFS session as long as the branch of the CSM
    configuration management repository has not changed. If the commit has
    changed, repeat this procedure from the beginning.

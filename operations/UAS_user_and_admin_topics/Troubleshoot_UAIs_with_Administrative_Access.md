@@ -21,7 +21,7 @@ Here is an example session showing a `ps` command inside the container of a UAI 
 1. List the UAIs.
 
     ```console
-    ncn# cray uas admin uais list
+    cray uas admin uais list
     ```
 
     Example output:
@@ -37,7 +37,7 @@ Here is an example session showing a `ps` command inside the container of a UAI 
     uai_name = "uai-broker-2e6ce6b7"
     uai_status = "Running: Ready"
     username = "broker"
-    
+
     [[results]]
     uai_age = "0m"
     uai_connect_string = "ssh vers@10.29.162.104"
@@ -53,7 +53,7 @@ Here is an example session showing a `ps` command inside the container of a UAI 
 1. Find the pod name.
 
     ```console
-    ncn# kubectl get po -n user | grep uai-vers-4ebe1966
+    kubectl get po -n user | grep uai-vers-4ebe1966
     ```
 
     Example output:
@@ -65,13 +65,13 @@ Here is an example session showing a `ps` command inside the container of a UAI 
 1. Open an interactive shell in the pod.
 
     ```console
-    ncn# kubectl exec -it -n user uai-vers-4ebe1966-77b7c9c84f-xgqm4 -c uai-vers-4ebe1966 -- /bin/sh
+    kubectl exec -it -n user uai-vers-4ebe1966-77b7c9c84f-xgqm4 -c uai-vers-4ebe1966 -- /bin/sh
     ```
 
 1. Run the `ps` command inside the container of a UAI.
 
     ```console
-    sh-4.4# ps -afe
+    sh-4.ps -afe
     ```
 
     Example output:

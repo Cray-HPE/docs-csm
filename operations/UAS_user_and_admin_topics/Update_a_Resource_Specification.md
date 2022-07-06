@@ -15,7 +15,7 @@ Modify a specific UAI resource specification using the `resource_id` of that spe
 To modify a particular resource specification, use a command of the following form:
 
 ```bash
-ncn-m001-pit# cray uas admin config resources update [OPTIONS] RESOURCE_ID
+ncn-m001-cray uas admin config resources update [OPTIONS] RESOURCE_ID
 ```
 
 The `[OPTIONS]` used by this command are the same options used to create resource specifications.
@@ -26,17 +26,17 @@ Update a UAI resource specification.
 The following example changes the CPU and memory limits on a UAI resource specification to 1 CPU and 1GiB, respectively.
 
 ```bash
-ncn-m001-pit# cray uas admin config resources update \
+ncn-m001-cray uas admin config resources update \
 --limit '{"cpu": "1", "memory": "1Gi"}' 85645ff3-1ce0-4f49-9c23-05b8a2d31849
 ```
 
 The following example does the same for the CPU and memory requests:
 
 ```bash
-ncn-m001-pit# cray uas admin config resources update \
+ncn-m001-cray uas admin config resources update \
 --request '{"cpu": "1", "memory": "1Gi"}' 85645ff3-1ce0-4f49-9c23-05b8a2d31849
 ```
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Delete a UAI Resource Specification](Delete_a_UAI_Resource_Specification.md)

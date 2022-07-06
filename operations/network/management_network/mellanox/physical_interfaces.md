@@ -13,7 +13,7 @@ switch (config) # interface ethernet 1/1
 Show Commands to Validate Functionality
 
 ```
-switch# show interfaces ethernet 1/1
+show interfaces ethernet 1/1
 ```
 
 Expected Results
@@ -22,4 +22,4 @@ Expected Results
 * Step 2: You can establish a link with a partner
 * Step 3: You can pass traffic as expected
 
-[Back to Index](../index.md)
+[Back to Index](../README.md)

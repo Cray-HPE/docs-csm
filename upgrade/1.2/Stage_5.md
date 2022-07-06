@@ -1,11 +1,14 @@
 # Stage 5 - Perform NCN Personalization
 
+**Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
+[Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+
 ## Procedure
 
 1. Set the `root` user password and SSH keys before running NCN personalization.
    The location where the password is stored in Vault has changed since previous
    CSM versions. See
-   [Configure the Root Password and Root SSH Keys in Vault](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password).
+   [Configure the `root` Password and `root` SSH Keys in Vault](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#2-configure-the-root-password-and-ssh-keys-in-vault).
 
 1. If custom configuration content was merged with content from a previous CSM
    installation, then merge the new CSM configuration in with it in the `csm-config-management`
@@ -18,7 +21,7 @@
    the `commit` field.
 
    ```bash
-   ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+   kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
    ```
 
    The output will contain a section resembling the following:
@@ -38,7 +41,7 @@
 1. View the current `ncn-personalization` configuration and write it to a JSON file.
 
    ```bash
-   ncn# cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json
+   cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json
    ```
 
 1. Run the `apply_csm_configuration.sh` script. This script will update the CSM
@@ -61,18 +64,18 @@
        `ncn-personalization` configuration.
 
    ```bash
-   ncn# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+   /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
             [--csm-release 1.2.0] [--git-commit COMMIT] [--ncn-config-file  /path/to/ncn-personalization.json]
    ```
 
-   For more information on this script, see [Automatically Apply CSM Configuration to NCNs](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#auto_apply_csm_config).
+   For more information on this script, see [Automatically Apply CSM Configuration to NCNs](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#option-1-automatically-apply-csm-configuration).
 
 1. Review the new `ncn-personalization` configuration and write it to a JSON file.
 
    ```bash
-   ncn# cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json.new
+   cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json.new
    ```
 
 ## Stage completed
 
-This stage is completed. Continue to [Validate CSM Health](../index.md#validate_csm_health) on the main upgrade page.
+This stage is completed. Proceed to [Validate CSM health](../README.md#3-validate-csm-health) on the main upgrade page.

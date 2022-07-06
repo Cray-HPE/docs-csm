@@ -2,24 +2,49 @@
 
 ## Introduction
 
-This document is intended to guide an administrator through the upgrade process going from Cray Systems Management v1.0 to v1.2. When upgrading a system, this top-level `README.md`
-file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the
-[`resource_material` directory](resource_material/README.md)
-for additional reference material in support of the processes and scripts mentioned explicitly on this page.
+This document guides an administrator through the upgrade of Cray Systems Management from v1.0 to v1.2. When upgrading a system, follow this top-level file
+from top to bottom. The content on this top-level page is meant to be terse. For additional reference material on the upgrade processes and scripts
+mentioned explicitly on this page, see [resource material](resource_material/README.md).
 
-## Notes
+A major feature of CSM 1.2 is the Bifurcated CAN (BICAN). The BICAN is designed to separate administrative network traffic from user network traffic.
+For more information, see the [BICAN Summary](../../operations/network/management_network/bican_technical_summary.md).
+Review the BICAN Summary before continuing with the CSM 1.2 upgrade.
 
-For systems with only three worker nodes (typically Testing and  Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be lowered on several
-services in order for this upgrade to succeed. This step is
-executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#prerequisites-check). See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more
-information.
+For detailed BICAN documentation, see the [BICAN Technical Details](../../operations/network/management_network/bican_technical_details.md) page.
 
-Independently, the `customizations.yaml` file will be edited automatically during upgrade for three worker systems prior to deploying new CSM services. See the file
-`/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml` for these settings. This file can be modified (prior to proceeding with this upgrade), if other settings
-are desired in the `customizations.yaml` file for this system.
+## Important Notes
 
-For more information about modifying `customizations.yaml` and tuning for specific systems, see
-[Post Install Customizations](../../operations/CSM_product_management/Post_Install_Customizations.md).
+- The SMA Grafana service is temporarily inaccessible during the upgrade.
+
+  During stage 3 of the CSM 1.2 upgrade, the SMA Grafana service will become inaccessible at its previous DNS location. It will
+  remain inaccessible until the upgrade to SMA 1.6.x is applied. This is because of a change in DNS names for the service.
+
+- Service request adjustments are needed for small systems.
+
+  - For systems with only three worker nodes (typically Testing and  Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be
+    lowered on several services in order for this upgrade to succeed. This step is
+    executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#stage-04---prerequisites-check) of the upgrade.
+    See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more information.
+
+  - Independently, for three-worker systems the `customizations.yaml` file is edited automatically during the upgrade, prior to deploying new CSM services. These
+    settings are contained in `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml`. This file can be modified (prior to proceeding with this
+    upgrade), if other settings are desired in the `customizations.yaml` file for this system.
+
+    For more information about modifying `customizations.yaml` and tuning for specific systems, see
+    [Post Install Customizations](../../operations/CSM_product_management/Post_Install_Customizations.md).
+
+## Known issues
+
+- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release).
+
+## Plan and coordinate network upgrade
+
+Prior to CSM 1.2, the single Customer Access Network (CAN) carried both the administrative network traffic and the user network
+traffic. CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate administrative network traffic and user network traffic.
+
+[Plan and coordinate network upgrade](plan_and_coordinate_network_upgrade.md) shows the steps that need to be taken in order to prepare
+for this network upgrade. Follow these steps in order to plan and coordinate the network upgrade with your users, as well as to ensure
+undisrupted access to UANs during the upgrade.
 
 ## Upgrade stages
 
@@ -29,9 +54,9 @@ For more information about modifying `customizations.yaml` and tuning for specif
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
 - [Stage 4 - Ceph Upgrade](Stage_4.md)
 - [Stage 5 - Perform NCN Personalization](Stage_5.md)
-- [Return to Main Page and Proceed to *Validate CSM Health*](../index.md#validate_csm_health)
+- [Validate CSM health](../README.md#3-validate-csm-health)
 
-**`Important:`** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
+**Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 
 ## Relevant troubleshooting links for upgrade-related issues
 
@@ -43,16 +68,16 @@ For more information about modifying `customizations.yaml` and tuning for specif
 
    For general Kubernetes commands for troubleshooting, see [Kubernetes Troubleshooting Information](../../troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md).
 
-- Troubleshooting PXE Boot Issues
+- PXE boot troubleshooting
 
    If execution of the upgrade procedures results in NCNs that have errors booting, then refer to the troubleshooting procedures in the
    [PXE Booting Runbook](../../troubleshooting/pxe_runbook.md).
 
-- Troubleshooting NTP
+- NTP troubleshooting
 
    During upgrades, clock skew may occur when rebooting nodes. If one node is rebooted and its clock differs significantly from those that have **not** been rebooted, it can
-   cause contention among the other nodes. Waiting for Chrony to slowly adjust the clocks can resolve intermittent clock skew issues. If it does not resolve on its own, follow the
-   [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure to troubleshoot it further.
+   cause contention among the other nodes. Waiting for `chronyd` to slowly adjust the clocks can resolve intermittent clock skew issues. This can take up to 15 minutes or
+   longer. If it does not resolve on its own, then follow the [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md) procedure to troubleshoot it further.
 
 - Bare-metal Etcd recovery
 
@@ -74,16 +99,20 @@ For more information about modifying `customizations.yaml` and tuning for specif
 
    See [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
 
+- Troubleshoot SLS not working
+
+    See [SLS Not Working During Node Rebuild](../../troubleshooting/known_issues/SLS_Not_Working_During_Node_Rebuild.md).
+
 - Rerun a step
 
    When running upgrade scripts, each script records what has been done successfully on a node. This is recorded in the
    `/etc/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state` file.
    If a rerun is required, the recorded steps to be re-run must be removed from this file.
 
-   Here is an example of state file of `ncn-m001`:
+   (`ncn#`) Here is an example of state file of `ncn-m001`:
 
-   ```console
-   ncn# cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
+   ```bash
+   cat /etc/cray/upgrade/csm/csm-{CSM_VERSION}/ncn-m001/state
    ```
 
    Example output:
@@ -106,4 +135,4 @@ For more information about modifying `customizations.yaml` and tuning for specif
    ```
 
   - See the inline comment above on how to rerun a single step.
-  - In order to rerun the whole upgrade of a node, delete the state file.
+  - In order to rerun the whole upgrade of a node, delete its state file.

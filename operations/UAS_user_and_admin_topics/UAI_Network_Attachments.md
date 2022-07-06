@@ -152,6 +152,6 @@ In this example, Kubernetes will assign UAI IP addresses in the range `10.252.2.
   * `10.106.0.0/17`
   * `10.104.0.0/17`
 
-[Top: User Access Service (UAS)](index.md)
+[Top: User Access Service (UAS)](README.md)
 
 [Next Topic: Configure UAIs in UAS](Configure_UAIs_in_UAS.md)
