@@ -22,6 +22,8 @@ ncn# echo $XNAME
 
 Only follow the steps in the section for the node type that is being rebuilt.
 
+***NOTE*** After rebuilding an NCN, kernel dump will need to be fixed. See [Kernel Dump Hotfix](../../../scripts/hotfixes/kdump/README.md) for more information.
+
 ### Worker node
 
 1. Make sure that not all pods of `ingressgateway-hmn` or `spire-server` are running on the same worker node.

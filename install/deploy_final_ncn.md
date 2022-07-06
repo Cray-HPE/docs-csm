@@ -7,14 +7,14 @@ join the Kubernetes cluster as the final of three master nodes, forming a quorum
 **IMPORTANT:** While the node is rebooting, it will only be available through Serial-Over-LAN (SOL) and local terminals. This
 procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be unavailable.
 
-1. [Required services](#required-services)
-2. [Notice of danger](#notice-of-danger)
-3. [Hand-off](#hand-off)
-4. [Reboot](#reboot)
-5. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
-6. [Clean up `chrony` configurations](#clean-up-chrony-configurations)
-7. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
-8. [Next topic](#next-topic)
+1. [Required services](#1-required-services)
+1. [Notice of danger](#2-notice-of-danger)
+1. [Hand-off](#3-hand-off)
+1. [Reboot](#4-reboot)
+1. [Enable NCN disk wiping safeguard](#5-enable-ncn-disk-wiping-safeguard)
+1. [Clean up `chrony` configurations](#6-clean-up-chrony-configurations)
+1. [Configure DNS and NTP on each BMC](#7-configure-dns-and-ntp-on-each-bmc)
+1. [Next topic](#8-next-topic)
 
 <a name="required-services"></a>
 
@@ -459,6 +459,47 @@ The steps in this section load hand-off data before a later procedure reboots th
     # typescript exited
     ncn-m002# rsync -rltDv -P /metal/bootstrap ncn-m001:/metal/ && rm -rfv /metal/bootstrap
     ncn-m002# exit
+    ```
+
+1. Apply the `kdump` hotfix.
+
+    `kdump` assists in taking a dump of the NCN if it encounters a kernel panic.
+    `kdump` does not work properly in CSM 1.2. Until this hotfix is applied, `kdump` may not produce a proper dump.
+    Earlier in the install, this hotfix was applied to all of the NCNs except for `ncn-m001`, because it was the PIT
+    node. Running it now applies the fix to `ncn-m001` as well.
+
+    ```bash
+    ncn-m001# /usr/share/doc/csm/scripts/hotfixes/kdump/hotfix.sh
+    ```
+
+    Example output:
+
+    ```text
+    Uploading hotfix files to ncn-m001:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-m002:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-m003:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-s001:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-s002:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-s003:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-s004:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-w001:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-w002:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-w003:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-w004:/srv/cray/scripts/common/ ... Done
+    Running updated create-kdump-artifacts.sh script on [11] NCNs ... Done
+    The following NCNs contain the kdump patch:
+    ncn-m001
+    ncn-m002
+    ncn-m003
+    ncn-s001
+    ncn-s002
+    ncn-s003
+    ncn-s004
+    ncn-w001
+    ncn-w002
+    ncn-w003
+    ncn-w004
+    This hotfix has completed.
     ```
 
 <a name="enable-ncn-disk-wiping-safeguard"></a>

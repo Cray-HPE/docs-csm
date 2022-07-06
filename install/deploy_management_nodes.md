@@ -22,20 +22,20 @@ the number of storage and worker nodes.
 
    1. [Prepare for management node deployment](#1-prepare-for-management-node-deployment)
       1. [Tokens and IPMI password](#11-tokens-and-ipmi-password)
-      2. [Ensure time is accurate before Deploying NCNs](#12-ensure-time-is-accurate-before-deploying-ncns)
-   2. [Update management node firmware](#2-update-management-node-firmware)
-   3. [Deploy management nodes](#3-deploy-management-nodes)
+      1. [Ensure time is accurate before Deploying NCNs](#12-ensure-time-is-accurate-before-deploying-ncns)
+   1. [Update management node firmware](#2-update-management-node-firmware)
+   1. [Deploy management nodes](#3-deploy-management-nodes)
       1. [Deploy workflow](#31-deploy-workflow)
-      2. [Deploy](#32-deploy)
-      3. [Check LVM on Kubernetes NCNs](#33-check-lvm-on-kubernetes-ncns)
-      4. [Check for unused drives on utility storage nodes](#34-check-for-unused-drives-on-utility-storage-nodes)
-   4. [Configure after management node deployment](#4-configure-after-management-node-deployment)
+      1. [Deploy](#32-deploy)
+      1. [Check LVM on Kubernetes NCNs](#33-check-lvm-on-kubernetes-ncns)
+      1. [Check for unused drives on utility storage nodes](#34-check-for-unused-drives-on-utility-storage-nodes)
+   1. [Configure after management node deployment](#4-configure-after-management-node-deployment)
       1. [LiveCD cluster authentication](#41-livecd-cluster-authentication)
-      2. [Install tests and test server on NCNs](#42-install-tests-and-test-server-on-ncns)
-      3. [Clean up `chrony` configurations](#43-clean-up-chrony-configurations)
-   5. [Validate management node deployment](#5-validate-management-node-deployment)
-   6. [Important checkpoint](#important-checkpoint)
-   7. [Next topic](#next-topic)
+      1. [Install tests and test server on NCNs](#42-install-tests-and-test-server-on-ncns)
+      1. [Clean up `chrony` configurations](#43-clean-up-chrony-configurations)
+   1. [Validate management node deployment](#5-validate-management-node-deployment)
+   1. [Important checkpoint](#important-checkpoint)
+   1. [Next topic](#next-topic)
 
 <a name="prepare_for_management_node_deployment"></a>
 
@@ -564,6 +564,46 @@ be performed are in the [Deploy](#deploy) section.
     ```text
     &.
     pit#
+    ```
+
+1. Apply the `kdump` hotfix.
+
+    `kdump` assists in taking a dump of the NCN if it encounters a kernel panic.
+    `kdump` does not work properly in CSM 1.2. Until this hotfix is applied, `kdump` may not produce a proper dump.
+    Running this script applies the hotfix on all of the NCNs that were just deployed.
+
+    ```bash
+    pit# /usr/share/doc/csm/scripts/hotfixes/kdump/hotfix.sh
+    ```
+
+    Example output:
+
+    ```text
+    Uploading hotfix files to ncn-m001:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-m002:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-m003:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-s001:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-s002:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-s003:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-s004:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-w001:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-w002:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-w003:/srv/cray/scripts/common/ ... Done
+    Uploading hotfix files to ncn-w004:/srv/cray/scripts/common/ ... Done
+    Running updated create-kdump-artifacts.sh script on [11] NCNs ... Done
+    The following NCNs contain the kdump patch:
+    ncn-m001
+    ncn-m002
+    ncn-m003
+    ncn-s001
+    ncn-s002
+    ncn-s003
+    ncn-s004
+    ncn-w001
+    ncn-w002
+    ncn-w003
+    ncn-w004
+    This hotfix has completed.
     ```
 
 <a name="check-lvm-on-masters-and-workers"></a>
