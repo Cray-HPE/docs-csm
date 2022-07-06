@@ -2,4 +2,4 @@
 
 If this point is reached and PXE booting is still not possible, it is likely the IP-Helper is broken on the switch.
 
-[Back to Index](./README.md)
+[Back to index](README.md).

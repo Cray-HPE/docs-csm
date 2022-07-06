@@ -272,7 +272,7 @@ These variables will need to be set for many procedures within the CSM installat
    ```bash
    cat << EOF >/etc/environment
    CSM_RELEASE=${CSM_RELEASE}
-   CSM_PATH=${PITDATA}/csm-${CSM_RELEASE} 
+   CSM_PATH=${PITDATA}/csm-${CSM_RELEASE}
    GOSS_BASE=${GOSS_BASE}
    PITDATA=${PITDATA}
    SYSTEM_NAME=${SYSTEM_NAME}
@@ -385,29 +385,87 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    tar -C "${PITDATA}" -zxvf "csm-${CSM_RELEASE}.tar.gz"
    ```
 
+1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
+
+   > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
+
+   1. Install `docs-csm`.
+
+      > ***NOTE*** This installs necessary scripts for deployment checks, as well as the offline manual.
+
+       ```bash
+       zypper \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --no-gpg-checks \
+           install -y docs-csm
+       ```
+
+   1. Update `cray-site-init`.
+
+       > ***NOTE*** This provides `csi`, a tool for creating and managing configurations, as well as
+       > orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
+
+       ```bash
+       zypper \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --no-gpg-checks \
+           update -y cray-site-init
+       ```
+
+   1. Install `csm-testing` and `goss-servers`.
+
+       > ***NOTE*** These packages provide the necessary tests and their dependencies for validating the pre-installation, installation, and more.
+
+       ```bash
+       zypper \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --no-gpg-checks \
+           install -y csm-testing goss-servers
+      ```
+
+1. (`pit#`) Get the artifact versions.
+
+   ```bash
+   kubernetes_version="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   ceph_version="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   ```
+
 1. (`pit#`) Copy the NCN images from the expanded tarball.
 
-   ```bash
-   rsync -a -P --delete "${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/"
-   rsync -a -P --delete "${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/"
-   ```
-
-1. (`pit#`) Install or update `cray-site-init`, `csm-testing`, and `goss-servers` RPMs.
-
-   > **NOTE:** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
+   > ***NOTE*** This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
 
    ```bash
-   zypper \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
-      --no-gpg-checks \
-      update -y cray-site-init
-   zypper \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
-      --no-gpg-checks \
-      install -y csm-testing goss-servers
+   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${kubernetes_version}"
+   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${ceph_version}"
    ```
+
+1. (`pit#`) Generate SSH keys and invoke `ncn-image-modification.sh`:
+
+   1. Generate SSH keys.
+
+       > ***NOTE*** The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
+
+       ```bash
+       ssh-keygen -N "" -t rsa
+       ```
+
+   1. Export the password hash for `root` that is needed for the `ncn-image-modification.sh` script:
+
+       ```bash
+       export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
+       ```
+
+   1. Run `ncn-image-modification.sh` from the CSM tarball:
+
+       ```bash
+       "${PITDATA}/csm-${CSM_RELEASE}/ncn-image-modification.sh -p \
+          -d /root/.ssh \
+          -k /var/www/ephemeral/data/k8s/${kubernetes_version}/kubernetes-${kubernetes_version}.squashfs \
+          -s /var/www/ephemeral/data/ceph/${kubernetes_version}/storage-ceph-${ceph_version}.squashfs"
+       ```
 
 1. (`pit#`) Log the currently installed PIT packages.
 
