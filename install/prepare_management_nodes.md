@@ -12,7 +12,7 @@ node is referenced during these procedures, it means the node that will be boote
 1. [Wipe USB device on PIT node](#wipe-usb-device-on-pit-node)
 1. [Power off PIT node](#power-off-pit-node)
 1. [Configure DNS](#configure-dns)
-1. [Check available disk space](#check-available-disk-space)
+1. [Check disk space](#check-disk-space)
 
 ## Quiesce compute nodes and application nodes
 
@@ -201,7 +201,7 @@ linux# poweroff
 If `ncn-m001` is being used to prepare the USB LiveCD, remove the Kubernetes IP addresses from `/etc/resolv.conf` and add a
 valid external DNS server.
 
-## Check available disk space
+## Check disk space
 
 If `ncn-m001` is being used to prepare the USB LiveCD, ensure there is enough free disk space for the CSM tar archive to be
 downloaded and unpacked.
