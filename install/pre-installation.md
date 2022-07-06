@@ -385,22 +385,46 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    tar -C "${PITDATA}" -zxvf "csm-${CSM_RELEASE}.tar.gz"
    ```
 
-1. (`pit#`) Install or update `cray-site-init`, `csm-testing`, and `goss-servers` RPMs.
+1. (`pit#`) Install/update RPMs necessary for the CSM installation.
 
-   > **NOTE:** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
+   > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
 
-   ```bash
-   zypper \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
-      --no-gpg-checks \
-      update -y cray-site-init
-   zypper \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-      --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
-      --no-gpg-checks \
-      install -y csm-testing goss-servers
-   ```
+   - Install `docs-csm`:
+
+      > ***NOTE*** This installs necessary scripts for deployment checks, as well as the offline manual.
+
+       ```bash
+       zypper \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --no-gpg-checks \
+           install -y docs-csm
+       ```
+
+   - Update `cray-site-init`:
+
+       > ***NOTE*** This provides `csi`, a tool for creating and managing configurations as well as
+       > orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
+
+       ```bash
+       zypper \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --no-gpg-checks \
+           update -y cray-site-init
+       ```
+
+   - Install `csm-testing` and `goss-servers`:
+
+       > ***NOTE*** These packages provide necessary tests and their dependencies for validating the pre-installation, installation, and more.
+
+       ```bash
+       zypper \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --no-gpg-checks \
+           install -y csm-testing goss-servers
+      ```
 
 1. (`pit#`) Get the artifact versions.
 
