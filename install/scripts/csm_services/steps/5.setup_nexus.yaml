@@ -89,7 +89,7 @@ spec:
         description: |-
           Nothing
         command: |-
-          cd /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}
+          cd {{ getEnv "CSM_PATH" }}
           ./lib/setup-nexus.sh
         troubleshooting: |-
           Note that subsequent runs of `setup-nexus.sh` may report `FAIL` when uploading

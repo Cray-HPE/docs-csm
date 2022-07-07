@@ -62,8 +62,8 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. Start a new typescript on the PIT node.
 
         ```bash
-        mkdir -pv /var/www/ephemeral/prep/admin &&
-             pushd /var/www/ephemeral/prep/admin &&
+        mkdir -pv "${PITDATA}"/prep/admin &&
+             pushd "${PITDATA}"/prep/admin &&
              script -af csm-livecd-reboot.$(date +%Y-%m-%d).txt
         export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
         ```
@@ -73,7 +73,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     > **`NOTE`** The environment variable `SYSTEM_NAME` must be set.
 
     ```bash
-    csi upload-sls-file --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_file.json
+    csi upload-sls-file --sls-file "${PITDATA}"/prep/${SYSTEM_NAME}/sls_input_file.json
     ```
 
     Expected output looks similar to the following:
@@ -114,7 +114,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     > **`NOTE`** This step will prompt for the root password of the NCNs.
 
     ```bash
-    csi handoff bss-metadata --data-file "$PITDATA/configs/data.json" || echo "ERROR: csi handoff bss-metadata failed"
+    csi handoff bss-metadata --data-file "${PITDATA}/configs/data.json" || echo "ERROR: csi handoff bss-metadata failed"
     ```
 
 1. (`pit#`) Patch the metadata for the Ceph nodes to have the correct run commands.
@@ -139,7 +139,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     The following commands create a `tar` archive of these files, storing it in a directory that will be backed up in the next step.
 
     ```bash
-    mkdir -pv /var/www/ephemeral/prep/logs &&
+    mkdir -pv "${PITDATA}"/prep/logs &&
          ls -d \
                     /etc/dnsmasq.d \
                     /etc/os-release \
@@ -155,7 +155,7 @@ The steps in this section load hand-off data before a later procedure reboots th
                     /var/log/conman \
                     /var/log/zypper.log 2>/dev/null |
          sed 's_^/__' |
-         xargs tar -C / -czvf /var/www/ephemeral/prep/logs/pit-backup-$(date +%Y-%m-%d_%H-%M-%S).tgz
+         xargs tar -C / -czvf "${PITDATA}"/prep/logs/pit-backup-$(date +%Y-%m-%d_%H-%M-%S).tgz
     ```
 
 1. (`pit#`) Backup the bootstrap information from `ncn-m001`.
@@ -180,8 +180,8 @@ The steps in this section load hand-off data before a later procedure reboots th
         ```bash
         ssh ncn-m002 \
             "mkdir -pv /metal/bootstrap
-            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${PITDATA}'/prep /metal/bootstrap/
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
     1. Back up files from the PIT to `ncn-m003`.
@@ -189,8 +189,8 @@ The steps in this section load hand-off data before a later procedure reboots th
         ```bash
         ssh ncn-m003 \
             "mkdir -pv /metal/bootstrap
-            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
-            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${PITDATA}'/prep /metal/bootstrap/
+            rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/cray-pre-install-toolkit*.iso /metal/bootstrap/"
         ```
 
 ### 3.3 Prepare for Rebooting

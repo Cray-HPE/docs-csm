@@ -206,7 +206,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
     1. Determine the first Kubernetes master.
 
         ```bash
-        FM=$(cat /var/www/ephemeral/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
+        FM=$(cat "${PITDATA}"/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
         echo $FM
         ```
 
@@ -331,7 +331,7 @@ If the check fails after doing the rebuild, contact support.
 1. (`pit#`) Install tests and test server on NCNs.
 
     ```bash
-    pushd /var/www/ephemeral && ${CSM_RELEASE}/lib/install-goss-tests.sh && popd
+    "${CSM_PATH}"/lib/install-goss-tests.sh
     ```
 
 1. (`pit#`) Remove the default NTP pool.
