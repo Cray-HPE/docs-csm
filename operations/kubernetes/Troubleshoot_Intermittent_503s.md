@@ -2,7 +2,7 @@
 
 There are cases where API calls or `cray` command invocations will fail (sometimes intermittently) with an HTTP 503 error code.
 In the event that this occurs, attempt to remediate the issue by taking the following actions, according to specific error codes
-found in the pod or Envoy container log. 
+found in the pod or Envoy container log.
 
 (`ncn-mw#`) The Envoy container is typically named `istio-proxy`, and it runs as a sidecar for pods that are part of the Istio mesh.
 For pods with this sidecar, the logs can be viewed by running a command similar to the following:
@@ -31,7 +31,7 @@ are being created.
 (`ncn-mw#`) Do a Kubernetes delete or rolling restart:
 
 - If it is a single replica, then delete the pod.
-- If it is part of a multiple replica exhibiting the issue, then perform a rolling restart of the deployment or StatefulSet.
+- If it is part of a multiple replica exhibiting the issue, then perform a rolling restart of the deployment or `StatefulSet`.
 
     For example:
 
