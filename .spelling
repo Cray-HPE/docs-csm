@@ -62,8 +62,8 @@ APIs
 Arista
 artifact
 artifact's
-artifacts
 Artifactory
+artifacts
 ArubaOS-CX
 ASes
 ASICs
@@ -164,7 +164,7 @@ DHCP
 dialog
 diskless
 DNS
-DNSMasq
+dnsmasq
 Docker
 Dockerfile
 dropdown
@@ -290,7 +290,7 @@ laborers
 laboring
 labors
 license
-licences
+licenses
 lifecycle
 LiveCD
 LiveCD's
@@ -593,7 +593,7 @@ zeroization
 zeroize
 Zypper
 
-# Per-file spelling exceptions. Please keep this section sorted in order by filepath, so help make it easier to
+# Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
 
 - glossary.md
@@ -606,6 +606,9 @@ Init
 # To allow Site Init
 Init
 
+- install/configure_management_network.md
+# To allow Site Init
+Init
 
 - install/pre-installation.md
 # To allow Site Init
