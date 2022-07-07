@@ -12,46 +12,51 @@ Results may vary if an unconfigured switch is being used.
 
 ## Procedure
 
-1. Start a session on the leaf switch, either using SSH or a USB serial cable (see [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md) for details on how to do that).
+1. Start a session on the leaf switch, either using SSH or a USB serial cable.
 
-    > **NOTE:** These IP addresses are examples; `10.X.0.4` may or may not match the setup.
+    * SSH
 
-    * SSH over `METAL MANAGEMENT`
+        > **NOTE:** These IP addresses are examples; `10.X.0.4` may not match the setup.
 
-        ```bash
-        pit# ssh admin@10.1.0.4
-        ```
+        * over `METAL MANAGEMENT`
 
-    * SSH over `NODE MANAGEMENT`
+            ```bash
+            pit# ssh admin@10.1.0.4
+            ```
 
-        ```bash
-        pit# ssh admin@10.252.0.4
-        ```
+        * over `NODE MANAGEMENT`
 
-    * SSH over `HARDWARE MANAGEMENT`
+            ```bash
+            pit# ssh admin@10.252.0.4
+            ```
 
-        ```bash
-        pit# ssh admin@10.254.0.4
-        ```
+        * SSH over `HARDWARE MANAGEMENT`
 
-    * Serial (device name will vary).
+            ```bash
+            pit# ssh admin@10.254.0.4
+            ```
 
-        ```bash
-        pit# minicom -b 115200 -D /dev/tty.USB1
-        ```
+    * Serial
 
-1. Display the MAC addresses for the BMC ports (if known). If they exist on the same VLAN, dump the VLAN to get the MAC addresses.
+        See [Connect to Switch over USB-Serial Cable](connect_to_switch_over_usb_serial_cable.md), if wanting to use that option.
 
-    In order to find the ports of the BMCs, cross reference the HMN tab of the SHCD.
+1. Display the MAC addresses for the BMC ports (if known).
+
+    If they exist on the same VLAN, then dump the VLAN to get the MAC addresses. In order to find the ports of the BMCs, cross-reference the `HMN` tab of the SHCD file.
 
     > Reference the CLI for more information (press `?` or `tab`).
 
     * Print using the VLAN ID:
 
-        * `DellOS 10`
+        * DellOS 10
 
             ```console
             sw-leaf-bmc-001# show mac address-table vlan 4
+            ```
+
+            The output should look similar to:
+
+            ```text
             VlanId Mac Address  Type        Interface
             4 00:1e:67:98:fe:2c dynamic     ethernet1/1/11
             4 a4:bf:01:38:f0:b1 dynamic     ethernet1/1/27
@@ -64,10 +69,15 @@ Results may vary if an unconfigured switch is being used.
             4 a4:bf:01:4d:d9:9a dynamic     ethernet1/1/32
             ```
 
-        * `Aruba AOS-CX`
+        * Aruba AOS-CX
 
             ```console
             sw-leaf-bmc-001# show mac-address-table vlan 4
+            ```
+
+            The output should look similar to:
+
+            ```text
             MAC age-time            : 300 seconds
             Number of MAC addresses : 21
 
@@ -90,20 +100,30 @@ Results may vary if an unconfigured switch is being used.
 
     * Print using the interface and trunk:
 
-        * `DellOS 10`
+        * DellOS 10
 
             ```console
             sw-leaf-bmc-001# show mac address-table interface ethernet 1/1/32
+            ```
+
+            The output should look similar to:
+
+            ```text
             VlanId  Mac Address  Type      Interface
             4 a4:bf:01:4d:d9:9a  dynamic   ethernet1/1/32
             ```
 
-        * `Aruba AOS-CX`
+        * Aruba AOS-CX
+
+            The final argument of the command is the list of ports. For example: `1/1/1`, `1/1/1-1/1/3`, or `lag1`.
 
             ```console
-            sw-leaf-bmc-001# show mac-address-table port
-              PORTS  List of Ports [e.g. 1/1/1 or 1/1/1-1/1/3 or lag1]
             sw-leaf-bmc-001# show mac-address-table port 1/1/36
+            ```
+
+            The output should look similar to:
+
+            ```text
             MAC age-time            : 300 seconds
             Number of MAC addresses : 1
 
@@ -114,19 +134,29 @@ Results may vary if an unconfigured switch is being used.
 
     * Print everything:
 
-        * `DellOS 10`
+        * DellOS 10
 
             ```console
             sw-leaf-bmc-001# show mac address-table
+            ```
+
+            The output should look similar to:
+
+            ```text
             VlanId Mac Address   Type       Interface
             4 a4:bf:01:4d:d9:9a  dynamic    ethernet1/1/32
             ....
             ```
 
-        * `Aruba AOS-CX`
+        * Aruba AOS-CX
 
             ```console
             sw-leaf-bmc-001# show mac-address-table
+            ```
+
+            The output should look similar to:
+
+            ```text
             MAC age-time            : 300 seconds
             Number of MAC addresses : 52
 
@@ -135,19 +165,18 @@ Results may vary if an unconfigured switch is being used.
             ec:eb:b8:3d:89:41    1        dynamic                   1/1/42
             ```
 
-1. Ensure the management NCNs are present in the `ncn_metadata.csv` file.
+1. Ensure that the management NCNs are present in the `ncn_metadata.csv` file.
 
-   The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as `ncn-m001`. The BMC MAC address for `ncn-m001` will be collected in the next
-   step, as this BMC is not connected to the system's management network like the other management nodes.
+   The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as `ncn-m001`.
+   The BMC MAC address for `ncn-m001` will be collected in the next step, as this BMC is not connected to the system's management network like the other management nodes.
 
    All of the management NCNs should be present in the `ncn_metadata.csv` file.
 
    Fill in the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns with a placeholder value, such as `de:ad:be:ef:00:00`,
    as a marker that the correct value is not in this file yet.
 
-   **IMPORTANT:** Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3).
-   If storage nodes are `ncn-s001 x3000c0s7b0n0`, `ncn-s002 x3000c0s8b0n0`, `ncn-s003 x3000c0s9b0n0`,
-   then their portion of the file would be ordered `x3000c0s9b0n0`, `x3000c0s8b0n0`, `x3000c0s7b0n0`.
+   > **IMPORTANT** NCNs of each type (master, storage, and worker) are grouped together in the file and are listed in
+   > **descending** numerical order within their group (for example, `ncn-s003` is listed directly before `ncn-s002`).
 
    ```csv
    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
@@ -155,12 +184,14 @@ Results may vary if an unconfigured switch is being used.
    x3000c0s8b0n0,Management,Storage,a4:bf:01:48:1f:e0,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    x3000c0s7b0n0,Management,Storage,a4:bf:01:38:f0:b1,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
                                     ^^^^^^^^^^^^^^^^^
-                                    BMC MAC Address
+                                    BMC MAC address
    ```
 
-   The column heading must match that shown above for `csi` to parse it correctly.
+   The column heading line must match that shown above in order for `csi` to parse it correctly.
 
-1. Collect the BMC MAC address information for `ncn-m001`, which is currently the PIT node.
+1. Collect the BMC MAC address information for the PIT node.
+
+   The PIT node BMC is not connected to the switch like the other management nodes.
 
    * For HPE and Gigabyte nodes:
 
@@ -180,20 +211,22 @@ Results may vary if an unconfigured switch is being used.
    MAC Address             : a4:bf:01:37:87:32
    ```
 
-   Add this information for `ncn-m001` to the `ncn_metadata.csv` file. There should be `ncn-m003`, then `ncn-m002`, and this new entry for `ncn-m001` as the last line in the file.
+1. Add this information for `ncn-m001` to the `ncn_metadata.csv` file.
 
-   ```csv
-   x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
-                                   ^^^^^^^^^^^^^^^^^
-                                   BMC MAC Address
-   ```
+      There should be `ncn-m003`, then `ncn-m002`, and this new entry for `ncn-m001` as the last line in the file.
 
-1. Verify the `ncn_metadata.csv` file has a row for every management node in the SHCD.
+      ```text
+      x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
+                                      ^^^^^^^^^^^^^^^^^
+                                      BMC MAC address
+      ```
+
+1. Verify that the `ncn_metadata.csv` file has a row for every management node in the SHCD.
 
    There may be placeholder entries for some MAC addresses.
 
-   Sample file showing storage nodes 3, 2, and 1, then worker nodes 3, 2, and 1, and finally master nodes 3, 2, and 1 with valid `BMC MAC`
-  addresses, but placeholder value `de:ad:be:ef:00:00` for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`.
+   Below is a sample file showing storage nodes 3, 2, and 1, then worker nodes 3, 2, and 1, and finally master nodes 3, 2, and 1, with valid `BMC MAC`
+   addresses, but placeholder value `de:ad:be:ef:00:00` for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`.
 
    ```csv
    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
