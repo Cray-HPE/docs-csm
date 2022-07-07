@@ -4,13 +4,13 @@ Use the following commands to run the HMS CT tests manually. These are the same 
 
 ## CSM-1.3
 
-To run all of the HMS CT tests manually:
+To run all of the HMS CT tests:
 
 ```bash
 /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 ```
 
-To run the CT tests for a specific HMS service manually:
+To run the CT tests for an individual HMS service:
 
 ```bash
 /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -t <service>
@@ -22,23 +22,23 @@ To list the HMS services that can be tested:
 /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -l
 ```
 
-Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+Examine the output. If one or more failures occur, investigate the cause of each failure. See [Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) for more information.
 
 ## CSM-1.2 and Prior Releases
 
-To run the HMS CT smoke tests manually:
+To run the HMS CT smoke tests:
 
-```bash
+```text
 /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 ```
 
-Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+Examine the output. If one or more failures occur, investigate the cause of each failure. See
+[Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) for more information.
 
-To run the HMS CT functional tests manually:
+To run the HMS CT functional tests:
 
 ```bash
 /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 ```
 
-Examine the output. If one or more failures occur, investigate the cause of each failure. See the [interpreting_hms_health_check_results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
-
+Examine the output. If one or more failures occur, investigate the cause of each failure. See [Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) for more information.
