@@ -4,11 +4,11 @@ There are cases where API calls or `cray` command invocations will fail (sometim
 In the event that this occurs, attempt to remediate the issue by taking the following actions, according to specific error codes
 found in the pod or Envoy container log.
 
-(`ncn-mw#`) The Envoy container is typically named `istio-proxy`, and it runs as a sidecar for pods that are part of the Istio mesh.
+The Envoy container is typically named `istio-proxy`, and it runs as a sidecar for pods that are part of the Istio mesh.
 For pods with this sidecar, the logs can be viewed by running a command similar to the following:
 
 ```bash
-kubectl logs <podname> -n <namespace> -c istio-proxy | grep 503
+ncn-mw# kubectl logs <podname> -n <namespace> -c istio-proxy | grep 503
 ```
 
 This page is broken into different sections, based on the errors found in the log.
@@ -28,7 +28,7 @@ are being created.
 
 ### Remediation (`UF,URX` with a TLS error)
 
-(`ncn-mw#`) Do a Kubernetes delete or rolling restart:
+Do a Kubernetes delete or rolling restart:
 
 - If it is a single replica, then delete the pod.
 - If it is part of a multiple replica exhibiting the issue, then perform a rolling restart of the deployment or `StatefulSet`.
@@ -36,8 +36,8 @@ are being created.
     For example:
 
     ```bash
-    kubectl rollout restart -n istio-system deployment istio-ingressgateway
-    kubectl rollout status -n istio-system deployment istio-ingressgateway
+    ncn-mw# kubectl rollout restart -n istio-system deployment istio-ingressgateway
+    ncn-mw# kubectl rollout status -n istio-system deployment istio-ingressgateway
     ```
 
 Once the roll out is complete, or the new pod is running, then the HTTP 503 message should clear.
@@ -56,18 +56,18 @@ This error code typically indicates an issue with the authorization service (for
 
 ### Remediation (`UAEX`)
 
-(`ncn-mw#`) Perform a rolling restart of all of the following:
+Perform a rolling restart of all of the following:
 
 ```bash
-kubectl rollout restart -n spire statefulset spire-server
-kubectl rollout restart -n spire daemonset spire-agent request-ncn-join-token
-kubectl rollout restart -n spire deployment spire-jwks spire-postgres spire-postgres-pooler
-kubectl rollout status -n spire statefulset spire-server
-kubectl rollout status -n spire daemonset spire-agent
-kubectl rollout status -n spire daemonset request-ncn-join-token
-kubectl rollout status -n spire deployment spire-jwks
-kubectl rollout status -n spire deployment spire-postgres
-kubectl rollout status -n spire deployment spire-postgres-pooler
+ncn-mw# kubectl rollout restart -n spire statefulset spire-server
+ncn-mw# kubectl rollout restart -n spire daemonset spire-agent request-ncn-join-token
+ncn-mw# kubectl rollout restart -n spire deployment spire-jwks spire-postgres spire-postgres-pooler
+ncn-mw# kubectl rollout status -n spire statefulset spire-server
+ncn-mw# kubectl rollout status -n spire daemonset spire-agent
+ncn-mw# kubectl rollout status -n spire daemonset request-ncn-join-token
+ncn-mw# kubectl rollout status -n spire deployment spire-jwks
+ncn-mw# kubectl rollout status -n spire deployment spire-postgres
+ncn-mw# kubectl rollout status -n spire deployment spire-postgres-pooler
 ```
 
 Once the roll out is complete, the HTTP 503 message should clear.
