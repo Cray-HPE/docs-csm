@@ -27,7 +27,7 @@ This section walks the user through booting and connecting to the LiveCD.
 
 Before proceeding, the user must obtain the CSM tarball containing the LiveCD.
 
-> **NOTE:** Each step denotes where its commands must run; `external#` refers to a server that is **not** the CRAY, whereas `pit#` refers to the LiveCD itself.
+> **NOTE:** Each step denotes where its commands must run; `external#` refers to a server that is **not** the Cray, whereas `pit#` refers to the LiveCD itself.
 
 Any steps run on an `external` server require that server to have the following tools:
 
@@ -381,7 +381,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
 1. (`pit#`) Extract the tarball.
 
-   ```text
+   ```bash
    tar -C "${PITDATA}" -zxvf "csm-${CSM_RELEASE}.tar.gz"
    ```
 
@@ -547,13 +547,13 @@ Run the following steps before starting any of the system configuration procedur
    > If using this file, then do not forget to set the `cabinets-yaml` field in the
    > [Customize `system_config.yaml`](#33-customize-system_configyaml) step.
 
-   See [Create `cabinets.yaml`](./create_cabinets_yaml.md).
+   See [Create `cabinets.yaml`](create_cabinets_yaml.md).
 
 1. Fill in the `ncn_metadata.csv` placeholder values with the actual values.
 
    > **NOTE:** If a previous `ncn_metadata.csv` file is available, simply copy it into place by overriding the generated one.
 
-   See [Collect MAC Addresses for NCNs](./collect_mac_addresses_for_ncns.md).
+   See [Collect MAC Addresses for NCNs](collect_mac_addresses_for_ncns.md).
 
 ### 3.3 Customize `system_config.yaml`
 

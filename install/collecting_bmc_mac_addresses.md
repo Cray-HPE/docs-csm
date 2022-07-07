@@ -10,29 +10,33 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
 ## Procedure
 
-1. (`pit#`) Start a session on the `leaf-bmc` switch, either using SSH or a USB serial cable (see [Connect to Switch over USB-Serial Cable](../operations/network/Connect_to_Switch_Over_USB_Serial_Cable.md) for details on how to do that).
+1. (`pit#`) Start a session on the `leaf-bmc` switch, either using SSH or a USB serial cable.
 
-   > **`NOTE`** These IP addresses are examples; `10.X.0.4` may or may not match the setup.
+   See [Connect to Switch over USB-Serial Cable](../operations/network/Connect_to_Switch_Over_USB_Serial_Cable.md), if wanting to use that option.
 
-   - For bare-metal switches, login over the MTL network:
+   > **`NOTE`** These IP addresses are examples; `10.X.0.4` may not match the setup.
+
+   - For bare-metal switches, log in over the MTL network:
 
       ```bash
       ssh admin@10.1.0.4
       ```
 
-   - For configured switches, login to the leaf switch:
+   - For configured switches, log in to the leaf switch:
 
       ```bash
       ssh admin@10.254.0.4
       ```
 
-1. (`sw-leaf-001`) Display the MAC addresses for the BMC ports (if known). If they exist on the same VLAN, dump the VLAN to get the MAC addresses. In order to find the ports of the BMCs, cross-reference the HMN tab of the SHCD.
+1. (`sw-leaf-001`) Display the MAC addresses for the BMC ports (if known).
 
-   > **`NOTE`** Please reference the CLI for more information (press `?` or `tab` to assist on-the-fly).
+   If they exist on the same VLAN, then dump the VLAN to get the MAC addresses. In order to find the ports of the BMCs, cross-reference the `HMN` tab of the SHCD file.
+
+   > **`NOTE`** Reference the CLI for more information (press `?` or `tab`).
 
    - DellOS 10
 
-      ```bash
+      ```console
       show mac address-table vlan 4
       ```
 
@@ -53,7 +57,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
    - Aruba AOS-CX
 
-      ```bash
+      ```console
       show mac-address-table vlan 4
       ```
 
@@ -80,18 +84,16 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
       b4:2e:99:df:eb:c1    4        dynamic                   1/1/34
       ```
 
-1. Ensure the management NCNs are present in the `ncn_metadata.csv` file.
+1. Ensure that the management NCNs are present in the `ncn_metadata.csv` file.
 
-   The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as `ncn-m001`. The BMC MAC address for `ncn-m001` will be collected in the next
-   step, as this BMC is not connected to the system's management network like the other management nodes.
+   The output from the previous `show mac address-table` command will display information for all management NCNs that do not have an external connection for their BMC, such as `ncn-m001`.
+   The BMC MAC address for `ncn-m001` will be collected in the next step, as this BMC is not connected to the system's management network like the other management nodes.
 
    Fill in the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns with a placeholder value, such as `de:ad:be:ef:00:00`,
    as a marker that the correct value is not in this file yet.
 
-   > **IMPORTANT**
-   > Mind the index for each group of nodes (3, 2, 1.... ; not 1, 2, 3).
-   > If storage nodes are `ncn-s001 x3000c0s7b0n0`, `ncn-s002 x3000c0s8b0n0`, `ncn-s003 x3000c0s9b0n0`,
-   > then their portion of the file would be ordered `x3000c0s9b0n0`, `x3000c0s8b0n0`, `x3000c0s7b0n0`.
+   > **IMPORTANT** NCNs of each type (master, storage, and worker) are grouped together in the file and are listed in
+   > **descending** numerical order within their group (for example, `ncn-s003` is listed directly before `ncn-s002`).
 
    ```csv
    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
@@ -102,36 +104,43 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
    ```text
                                     ^^^^^^^^^^^^^^^^^
-                                    BMC MAC Address
+                                    BMC MAC address
    ```
 
-   > **`NOTE`** The column heading must match that shown above for `csi` to parse it correctly.
+   > **`NOTE`** The column heading line must match that shown above in order for `csi` to parse it correctly.
 
 1. (`pit#`) Collect the BMC MAC address information for the PIT node.
 
-   - The PIT node BMC is not connected to the switch like the other management nodes.
+   The PIT node BMC is not connected to the switch like the other management nodes.
 
-      ```bash
-      ipmitool lan print | grep "MAC Address"
-      MAC Address             : a4:bf:01:37:87:32
-      ```
+   ```bash
+   ipmitool lan print | grep "MAC Address"
+   ```
 
-      > **`NOTE`** An Intel node needs to use `ipmitool lan print 3` instead of the above command.
+   Example output:
 
-   - Add this information for `ncn-m001` to the `ncn_metadata.csv` file. There should be `ncn-m003`, then `ncn-m002`, and this new entry for `ncn-m001` as the last line in the file.
+   ```text
+   MAC Address             : a4:bf:01:37:87:32
+   ```
 
-      ```text
-      x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
-                                      ^^^^^^^^^^^^^^^^^
-                                      BMC MAC Address
-      ```
+   > **`NOTE`** An Intel node needs to use `ipmitool lan print 3` instead of the above command.
 
-1. Verify the `ncn_metadata.csv` file has a row for every management node in the SHCD.
+1. Add this information for `ncn-m001` to the `ncn_metadata.csv` file.
+
+   There should be `ncn-m003`, then `ncn-m002`, and this new entry for `ncn-m001` as the last line in the file.
+
+   ```text
+   x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
+                                   ^^^^^^^^^^^^^^^^^
+                                   BMC MAC address
+   ```
+
+1. Verify that the `ncn_metadata.csv` file has a row for every management node in the SHCD.
 
    > **`NOTE`** There may be placeholder entries for some MAC addresses.
 
-   Below is a sample file showing storage nodes 3, 2, and 1, then worker nodes 3, 2, and 1, and finally master nodes 3, 2, and 1 with valid `BMC MAC`
-  addresses, but placeholder value `de:ad:be:ef:00:00` for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`.
+   Below is a sample file showing storage nodes 3, 2, and 1, then worker nodes 3, 2, and 1, and finally master nodes 3, 2, and 1, with valid `BMC MAC`
+   addresses, but placeholder value `de:ad:be:ef:00:00` for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`.
 
    ```csv
    Xname,Role,Subrole,BMC MAC,Bootstrap MAC,Bond0 MAC0,Bond0 MAC1
@@ -146,7 +155,9 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
    x3000c0s1b0n0,Management,Master,a4:bf:01:37:87:32,de:ad:be:ef:00:00,de:ad:be:ef:00:00,de:ad:be:ef:00:00
    ```
 
-1. (`pit#`) Run `pit-init` to setup the PIT (at least part way); ignore errors regarding `site-init/` (since it may not exist at this time).
+1. (`pit#`) Run `pit-init` to setup the PIT (at least part way).
+
+   Ignore errors regarding `site-init` (because it may not exist at this time).
 
    > **`NOTE`** This assumes all other topology files are present in `$PITDATA/prep` from [Generate Topology Files](pre-installation.md#32-generate-topology-files).
 
@@ -154,4 +165,4 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
    /root/bin/pit-init.sh
    ```
 
-1. Move onto [Collecting NCN MAC Addresses](collecting_ncn_mac_addresses.md).
+1. Proceed to [Collecting NCN MAC Addresses](collecting_ncn_mac_addresses.md).

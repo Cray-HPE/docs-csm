@@ -2,31 +2,32 @@
 
 This procedure will install CSM applications and services into the CSM Kubernetes cluster.
 
-> **`NOTE`** Check the information in [Known Issues](#known-issues) before starting this procedure to be warned about possible problems.
+> **`NOTE`** Check the information in [Known issues](#known-issues) before starting this procedure to be warned about possible problems.
 
 1. [Install CSM services](#1-install-csm-services)
 1. [Create base BSS global boot parameters](#2-create-base-bss-global-boot-parameters)
 1. [Wait for everything to settle](#3-wait-for-everything-to-settle)
-1. [Known issues](#known-issues)
-    * [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
-    * [`Setup Nexus` known issues](#setup-nexus-known-issues)
+
+* [Known issues](#known-issues)
+  * [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
+  * [`Setup Nexus` known issues](#setup-nexus-known-issues)
 
 ## 1. Install CSM services
 
 > **`NOTE`**: During this step, only on systems with only three worker nodes (typically Testing and  Development Systems (TDS)), the `customizations.yaml` file will be
-> automatically edited to lower pod CPU requests for some services, in order to better facilitate scheduling on smaller systems. See the file:
+> automatically edited to lower pod CPU requests for some services, in order to better facilitate scheduling on smaller systems. See the file
 > `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings. This file can be modified with different values (prior to executing the
 > `yapl` command below), if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml`
 > and tuning for specific systems, see
-> [Post Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
+> [Post-Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
 
-1. (`pit#`) Install YAPL
+1. (`pit#`) Install YAPL.
 
    ```bash
    rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
    ```
 
-1. (`pit#`) Install CSM services using `yapl`:
+1. (`pit#`) Install CSM services using YAPL.
 
    ```bash
    pushd /usr/share/doc/csm/install/scripts/csm_services
@@ -99,7 +100,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 Wait **at least 15 minutes** to let the various Kubernetes resources initialize and start before proceeding with the rest of the install.
 Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.
 
-1. The next step is to validate CSM health before redeploying the final NCN. See [Validate CSM Health Before Final NCN Deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
+1. The next step is to validate CSM health before redeploying the final NCN. See [Validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
 
 ## Known issues
 
@@ -121,10 +122,10 @@ The following error may occur during the `Deploy CSM Applications and Services` 
 
    Example output:
 
-      ```text
-      NAME                 TYPE     DATA   AGE
-      sls-s3-credentials   Opaque   7      28d
-      ```
+   ```text
+   NAME                 TYPE     DATA   AGE
+   sls-s3-credentials   Opaque   7      28d
+   ```
 
 1. (`pit#`) Check for running `sonar-sync` jobs. If there are no `sonar-sync` jobs, then wait for one to complete. The `sonar-sync` `CronJob` is responsible
    for copying the `sls-s3-credentials` secret from the `default` namespace to the `services` namespace.
@@ -135,11 +136,11 @@ The following error may occur during the `Deploy CSM Applications and Services` 
 
    Example output:
 
-      ```text
-      NAME                          READY   STATUS      RESTARTS   AGE
-      sonar-sync-1634322840-4fckz   0/1     Completed   0          73s
-      sonar-sync-1634322900-pnvl6   1/1     Running     0          13s
-      ```
+   ```text
+   NAME                          READY   STATUS      RESTARTS   AGE
+   sonar-sync-1634322840-4fckz   0/1     Completed   0          73s
+   sonar-sync-1634322900-pnvl6   1/1     Running     0          13s
+   ```
 
 1. (`pit#`) Verify that the `sls-s3-credentials` secret now exists in the `services` namespace.
 
