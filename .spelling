@@ -1,4 +1,5 @@
 1.0.x
+1.6.x
 100GBASE-CR2
 100GBASE-CR4
 100GBASE-SR2
@@ -61,6 +62,7 @@ APIs
 Arista
 artifact
 artifact's
+Artifactory
 artifacts
 ArubaOS-CX
 ASes
@@ -162,6 +164,7 @@ DHCP
 dialog
 diskless
 DNS
+dnsmasq
 Docker
 Dockerfile
 dropdown
@@ -223,7 +226,7 @@ highspeed
 HM
 HMN
 HMNLB
-HMN_MTN 
+HMN_MTN
 HMN_RVR
 honored
 hostname
@@ -268,6 +271,7 @@ Jinja2
 JViewer
 Kafka
 Kea
+Keepalived
 keychain
 Keycloak
 Keycloak's
@@ -275,6 +279,7 @@ KeyStore
 Kiali
 Kibana
 Kubernetes
+Kyverno
 labeled
 labeler
 labeling
@@ -285,7 +290,7 @@ laborers
 laboring
 labors
 license
-licences
+licenses
 lifecycle
 LiveCD
 LiveCD's
@@ -323,6 +328,7 @@ Motivair
 MPOs
 mTLS
 multimode
+Multus
 MyMellanox
 MZ32-AR0-00
 MZ62-HD0-00
@@ -445,6 +451,7 @@ RPMs
 RPs
 RSAv1
 RSAv2
+Rsyslog
 Runbook
 S-8000
 S-8024
@@ -481,6 +488,7 @@ SSHing
 SSHKey
 standalone
 startup
+Strimzi
 Submodule
 subnetting
 subrole
@@ -519,6 +527,8 @@ unixODBC
 unmap
 unregister
 unregisters
+unset
+unsets
 unsquashed
 Unsuspend
 untainting
@@ -583,7 +593,7 @@ zeroization
 zeroize
 Zypper
 
-# Per-file spelling exceptions. Please keep this section sorted in order by filepath, so help make it easier to
+# Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
 
 - glossary.md
@@ -596,11 +606,15 @@ Init
 # To allow Site Init
 Init
 
- - install/prepare_configuration_payload.md
+- install/configure_management_network.md
 # To allow Site Init
 Init
 
- - introduction/site_survey.md
+- install/prepare_configuration_payload.md
+# To allow Site Init
+Init
+
+- introduction/site_survey.md
 # To allow Site Init
 Init
 

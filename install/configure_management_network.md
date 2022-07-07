@@ -5,7 +5,8 @@ Newer systems have HPE Aruba switches, while older systems have Dell and Mellano
 
 The configuration steps are different for these switch vendors. The switch configuration procedures for HPE Aruba will be grouped separately from the switch configuration procedures for other vendors.
 
-It is assumed that the administrator configuring the Management Network has a basic understanding of networking protocols (STP, VLAN, OSPF, LAG/MLAG, BGP, etc.), and knows how to configure network equipment. It is also assumed that they understand and know how to read an SHCD file.
+It is assumed that the administrator configuring the Management Network has a basic understanding of networking protocols (STP, VLAN, OSPF, LAG/MLAG, BGP, etc.), and knows how to configure network
+equipment. It is also assumed that they understand and know how to read an SHCD file.
 
 Before configuring/reconfiguring any switches, make sure to get the current running configuration and save that in case the configuration must be reverted.
 
@@ -13,50 +14,43 @@ All switch configuration should be done with a console or out of band connection
 
 Save the output of the following:
 
-```bash
-# show run
+```console
+sw# show run
 ```
 
-***Topics***
+## Topics
 
-* [HPE Aruba switch configuration](#hpe_aruba_switch_configuration)
-* [Dell and Mellanox switch configuration](#dell_and_mellanox_switch_configuration)
-* [Next Topic](#next-topic)
+* [HPE Aruba switch configuration](#hpe-aruba-switch-configuration)
+* [Dell and Mellanox switch configuration](#dell-and-mellanox-switch-configuration)
+* [Next topic](#next-topic)
 
 ## Details
 
-<a name="hpe_aruba_switch_configuration"></a>
-### HPE Aruba Switch Configuration
+### HPE Aruba switch configuration
 
 The management network switches should be configured in this order: Spine, Aggregation (if present), CDU (if present), and Leaf.
 Only systems with liquid-cooled cabinets will have the CDU switches. Only systems with many nodes in air-cooled cabinets
 will have Aggregation switches.
 
-   1. [Configure Aruba Spine Switch](configure_aruba_spine_switch.md)
-   1. [Configure Aruba Aggregation Switch](configure_aruba_aggregation_switch.md) (if present)
-   1. [Configure Aruba CDU Switch](configure_aruba_cdu_switch.md) (if present)
-   1. [Configure Aruba Leaf Switch](configure_aruba_leaf_switch.md)
-   1. [Update Management Network Firmware](../operations/network/management_network/Update_Management_Network_Firmware.md)
-   1. [Workaround for known mac-learning issue with 8325.](8325_mac_learning_hotfix.md)
+1. [Configure Aruba Spine switch](configure_aruba_spine_switch.md)
+1. [Configure Aruba Aggregation switch](configure_aruba_aggregation_switch.md) (if present)
+1. [Configure Aruba CDU switch](configure_aruba_cdu_switch.md) (if present)
+1. [Configure Aruba Leaf switch](configure_aruba_leaf_switch.md)
+1. [Update management network firmware](../operations/network/management_network/update_management_network_firmware.md)
+1. [Workaround for known MAC-learning issue with 8325.](8325_mac_learning_hotfix.md)
 
-<a name="dell_and_mellanox_switch_configuration"></a>
-### Dell and Mellanox Switch Configuration
-
-The management network switches should be configured in this order: Spine, Aggregation (if present), CDU (if present), and Leaf.
-Only systems with liquid-cooled cabinets will have the CDU switches. Only systems with many nodes in air-cooled
-cabinets will have Aggregation switches.
+### Dell and Mellanox switch configuration
 
 On a typical system, the Mellanox switches are Spine switches and the Dell switches are used for Aggregation, CDU, and Leaf switches.
 
-   1. [Configure Mellanox Spine Switch](configure_mellanox_spine_switch.md)
-   1. [Configure Dell Aggregation Switch](configure_dell_aggregation_switch.md) (if present)
-   1. [Configure Dell CDU Switch](configure_dell_cdu_switch.md) (if present)
-   1. [Configure Dell Leaf Switch](configure_dell_leaf_switch.md)
-   1. [Update Management Network Firmware](../operations/network/management_network/Update_Management_Network_Firmware.md)
+1. [Configure Mellanox Spine switch](configure_mellanox_spine_switch.md)
+1. [Configure Dell Aggregation switch](configure_dell_aggregation_switch.md) (if present)
+1. [Configure Dell CDU switch](configure_dell_cdu_switch.md) (if present)
+1. [Configure Dell Leaf switch](configure_dell_leaf_switch.md)
+1. [Update management network firmware](../operations/network/management_network/update_management_network_firmware.md)
 
-<a name="next-topic"></a>
-# Next Topic
+## Next topic
 
-   After completing this procedure, the next step is to collect MAC Addresses for the management nodes using the PIT node and the management network switches configured in this procedure.
+After completing this procedure, collect MAC addresses for the management nodes using the PIT node and the management network switches configured in this procedure.
 
-   * See [Collect Mac Addresses](index.md#collect_mac_addresses_for_ncns)
+See [Collect MAC addresses for NCNs](index.md#collect_mac_addresses_for_ncns).
