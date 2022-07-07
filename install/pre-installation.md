@@ -438,6 +438,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    > ***NOTE*** This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
 
    ```bash
+   mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
    rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${kubernetes_version}"
    rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${ceph_version}"
    ```
