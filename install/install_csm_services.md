@@ -2,43 +2,39 @@
 
 This procedure will install CSM applications and services into the CSM Kubernetes cluster.
 
-> **NOTE:** Check the information in [Known Issues](#known-issues) before starting this procedure to be warned about possible problems.
+> **NOTE:** Check the information in [Known issues](#known-issues) before starting this procedure to be warned about possible problems.
 
-1. [Install YAPL](#install-yapl)
-1. [Install CSM services](#install-csm-services)
-1. [Create base BSS global boot parameters](#create-base-bss-global-boot-parameters)
-1. [Wait for everything to settle](#wait-for-everything-to-settle)
-1. [Known issues](#known-issues)
-    * [`Deploy CSM Applications and Services` known issues](#known-issues-install-sh)
-    * [`Setup Nexus` known issues](#known-issues-setup-nexus)
-1. [Next topic](#next-topic)
+1. [Install CSM services](#1-install-csm-services)
+1. [Create base BSS global boot parameters](#2-create-base-bss-global-boot-parameters)
+1. [Wait for everything to settle](#3-wait-for-everything-to-settle)
+1. [Next topic](#4-next-topic)
 
-<a name="install-yapl"></a>
+* [Known issues](#known-issues)
+  * [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
+  * [`Setup Nexus` known issues](#setup-nexus-known-issues)
 
-## 1. Install YAPL
-
-```bash
-pit# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
-```
-
-<a name="install-csm-services"></a>
-
-## 2. Install CSM services
+## 1. Install CSM services
 
 > **NOTE**: During this step, only on systems with only three worker nodes (typically Testing and  Development Systems (TDS)), the `customizations.yaml` file will be
-> automatically edited to lower pod CPU requests for some services, in order to better facilitate scheduling on smaller systems. See the file:
+> automatically edited to lower pod CPU requests for some services, in order to better facilitate scheduling on smaller systems. See the file
 > `/var/www/ephemeral/${CSM_RELEASE}/tds_cpu_requests.yaml` for these settings. This file can be modified with different values (prior to executing the
 > `yapl` command below), if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml`
 > and tuning for specific systems, see
-> [Post Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
+> [Post-Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
 
-Install CSM services using `yapl`:
+1. Install YAPL.
 
-```bash
-pit# pushd /usr/share/doc/csm/install/scripts/csm_services && \
-     yapl -f install.yaml execute
-pit# popd
-```
+   ```bash
+   pit# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
+   ```
+
+1. Install CSM services using YAPL.
+
+   ```bash
+   pit# pushd /usr/share/doc/csm/install/scripts/csm_services && \
+        yapl -f install.yaml execute
+   pit# popd
+   ```
 
 > **NOTES:**
 >
@@ -50,9 +46,7 @@ pit# popd
 > * The `yapl` command can safely be rerun. By default, it will skip any steps which were previously completed successfully. To force it to
 >   rerun all steps regardless of what was previously completed, append the `--no-cache` argument to the `yapl` command.
 
-<a name="create-base-bss-global-boot-parameters"></a>
-
-## 3. Create base BSS global boot parameters
+## 2. Create base BSS global boot parameters
 
 1. Wait for BSS to be ready.
 
@@ -103,20 +97,20 @@ pit# popd
    pit# kubectl -n spire wait  $SPIRE_JOB --for=condition=complete --timeout=5m
    ```
 
-<a name="wait-for-everything-to-settle"></a>
-
-## 4. Wait for everything to settle
+## 3. Wait for everything to settle
 
 Wait **at least 15 minutes** to let the various Kubernetes resources initialize and start before proceeding with the rest of the install.
 Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.
 
-<a name="known-issues"></a>
+## 4. Next topic
 
-## 5. Known issues
+The next step is to validate CSM health before redeploying the final NCN.
 
-<a name="known-issues-install-sh"></a>
+See [Validate CSM health before final NCN deployment](index.md#validate_csm_health_before_final_ncn_deploy).
 
-### 5.1 `Deploy CSM Applications and Services` known issues
+## Known issues
+
+### `Deploy CSM Applications and Services` known issues
 
 The following error may occur during the `Deploy CSM Applications and Services` step:
 
@@ -169,16 +163,6 @@ The following error may occur during the `Deploy CSM Applications and Services` 
 
 1. Running the `yapl` command again is expected to succeed.
 
-<a name="known-issues-setup-nexus"></a>
-
 ### 5.2 `Setup Nexus` known issues
 
 Known potential issues along with suggested fixes are listed in [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md).
-
-<a name="next-topic"></a>
-
-## 6. Next Topic
-
-The next step is to validate CSM health before redeploying the final NCN.
-
-See [Validate CSM Health Before Final NCN Deployment](index.md#validate_csm_health_before_final_ncn_deploy).
