@@ -125,13 +125,51 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 ## Stage 2.4
 
+Apply the hotfix for `kdump`:
+
+```bash
+ncn-m002# /usr/share/doc/csm/scripts/hotfixes/kdump/hotfix.sh
+```
+
+Example output:
+
+```text
+Uploading hotfix files to ncn-m001:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-m002:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-m003:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-s001:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-s002:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-s003:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-s004:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-w001:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-w002:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-w003:/srv/cray/scripts/common/ ... Done
+Uploading hotfix files to ncn-w004:/srv/cray/scripts/common/ ... Done
+Running updated create-kdump-artifacts.sh script on [11] NCNs ... Done
+The following NCNs contain the kdump patch:
+ncn-m001
+ncn-m002
+ncn-m003
+ncn-s001
+ncn-s002
+ncn-s003
+ncn-s004
+ncn-w001
+ncn-w002
+ncn-w003
+ncn-w004
+This hotfix has completed.
+```
+
+## Stage 2.5
+
 Run the following command to complete the upgrade of the `weave` and `multus` manifest versions:
 
 ```bash
 ncn-m002# /srv/cray/scripts/common/apply-networking-manifests.sh
 ```
 
-## Stage 2.5
+## Stage 2.6
 
 Run the following script to apply anti-affinity to `coredns` pods:
 
@@ -139,7 +177,7 @@ Run the following script to apply anti-affinity to `coredns` pods:
 ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/apply-coredns-pod-affinity.sh
 ```
 
-## Stage 2.6
+## Stage 2.7
 
 Complete the Kubernetes upgrade. This script will restart several pods on each master node to their new Docker containers.
 

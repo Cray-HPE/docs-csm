@@ -16,8 +16,6 @@
    - If there is a URL for the CSM `tar` file that is accessible from `ncn-m002`, then the [Direct download](#direct-download) procedure may be used.
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m002`.
 
-<a name="direct-download">
-
 ### Direct download
 
 1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
@@ -39,8 +37,6 @@
    ```
 
 1. Skip the `Manual copy` subsection and proceed to [Perform upgrade](#perform-upgrade).
-
-<a name="manual-copy">
 
 ### Manual copy
 

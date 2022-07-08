@@ -6,6 +6,7 @@
 /install/*                                               @Cray-HPE/metal
 /install/livecd                                          @Cray-HPE/metal
 /operations/bare_metal                                   @Cray-HPE/metal
+/scripts/hotfixes/kdump                                  @Cray-HPE/metal
 
 # Continuous Integration Items
 Jenkinsfile.github                                       @Cray-HPE/ci

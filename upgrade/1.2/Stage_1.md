@@ -15,7 +15,7 @@
 
     **Known Issues:**
 
-    * If the below error is observed, then re-run the same command for the node upgrade. It will pick up at that point and continue.
+    - If the below error is observed, then re-run the same command for the node upgrade. It will pick up at that point and continue.
 
         ```text
         ====> REDEPLOY_CEPH ...
@@ -23,10 +23,10 @@
         and check to make sure that only the key(s) you wanted were added.Error EINVAL: Traceback (most recent call last):
         ```
 
-    * During the storage node rebuild, Ceph health may report `HEALTH_WARN 1 daemons have recently crashed`. This occurs occasionally as part of the shutdown process of the node
+    - During the storage node rebuild, Ceph health may report `HEALTH_WARN 1 daemons have recently crashed`. This occurs occasionally as part of the shutdown process of the node
       being rebuilt. See [Dump Ceph Crash Data](../../operations/utility_storage/Dump_Ceph_Crash_Data.md).
 
-    * The CSM validation test for detecting clock skew (`Title: Check clock skew on k8s and storage nodes`) can have a false failure. To determine if the clock for an
+    - The CSM validation test for detecting clock skew (`Title: Check clock skew on k8s and storage nodes`) can have a false failure. To determine if the clock for an
       NCN is in sync, run the following command:
 
       ```bash
@@ -85,9 +85,9 @@
 
         The `VERSION` may be reported as `<unknown>`. This is not an error. The three things to verify in the output are:
 
-        * The number of `node-exporter` pods matches the number of Ceph nodes.
-        * The `STATUS` for each pod is `running`.
-        * The `REFRESHED` time for each pod is low enough that it indicates the refresh did not happen **before** the `ceph orch apply` commands issued earlier in this procedure.
+        - The number of `node-exporter` pods matches the number of Ceph nodes.
+        - The `STATUS` for each pod is `running`.
+        - The `REFRESHED` time for each pod is low enough that it indicates the refresh did not happen **before** the `ceph orch apply` commands issued earlier in this procedure.
 
     1. Verify that `alertmanager` is running.
 
@@ -106,9 +106,9 @@
 
         The `VERSION` may be reported as `<unknown>`. This is not an error. The three things to verify in the output are:
 
-        * There is exactly one `alertmanager` pod.
-        * The `STATUS` for each pod is `running`.
-        * The `REFRESHED` time for each pod is low enough that it indicates the refresh did not happen **before** the `ceph orch apply` commands issued earlier in this procedure.
+        - There is exactly one `alertmanager` pod.
+        - The `STATUS` for each pod is `running`.
+        - The `REFRESHED` time for each pod is low enough that it indicates the refresh did not happen **before** the `ceph orch apply` commands issued earlier in this procedure.
 
 1. Update BSS to ensure that the Ceph images are loaded if a node is rebuilt.
 
