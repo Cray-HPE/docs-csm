@@ -29,6 +29,7 @@ Jenkinsfile.github                                       @Cray-HPE/ci
 /operations/system_management_health                     @Cray-HPE/platform-engineering
 /operations/utility_storage                              @Cray-HPE/platform-engineering
 troubleshooting/kubernetes                               @Cray-HPE/platform-engineering
+/workflows                                               @Cray-HPE/platform-engineering
 
 # HMS Items
 /operations/firmware                                     @Cray-HPE/hardware-management
