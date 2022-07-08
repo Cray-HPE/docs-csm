@@ -113,18 +113,18 @@ spec:
           TODO: make sure passwordless ssh is enabled
           TODO: make sure passwordless ssh to m001 is enabled
         command: |-
-          cd /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}
+          cd {{ getEnv "CSM_PATH" }}
           ./lib/list-ncns.sh
         troubleshooting: |-
           If any management NCNs are missing from the output, take corrective action before proceeding.
           
-          {{ readFile "../../../install/csm_installation_failure.md" | indent 10 }}
+          {{ readFile "../../csm_installation_failure.md" | indent 10 }}
       action:
         description: |-
           Next, run `lib/set-ncns-to-unbound.sh` to SSH to each management NCN and update
           /etc/resolv.conf to use Unbound as the nameserver.
         command: |-
-          cd /var/www/ephemeral/{{ getEnv "CSM_RELEASE" }}
+          cd {{ getEnv "CSM_PATH" }}
           ./lib/set-ncns-to-unbound.sh
         troubleshooting: |-
           > **`NOTE`** If passwordless SSH is not configured, the administrator will have
