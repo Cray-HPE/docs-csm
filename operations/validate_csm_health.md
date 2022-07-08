@@ -307,7 +307,7 @@ The checks in this section require that the [Cray CLI is configured](#0-cray-com
 
 Execute the HMS tests to confirm that the Hardware Management Services are running and operational.
 
-Note: Do not run HMS tests concurrently on multiple nodes. They may interfere with one another and cause false failures.
+Note: Do not run multiple instances of the HMS tests concurrently as they may interfere with one another and cause false failures.
 
 1. [HMS CT test execution](#21-hms-ct-test-execution)
 1. [Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
@@ -318,71 +318,101 @@ Note: Do not run HMS tests concurrently on multiple nodes. They may interfere wi
 
 These tests may be executed on any one worker or master NCN (but **not** `ncn-m001` if it is still the PIT node).
 
-Run the HMS CT tests. This is done by running the `run_hms_ct_tests.sh` script:
+(`ncn-mw#`) Run the HMS CT tests.
 
 ```bash
 /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 ```
 
-The return value of the script is 0 if all CT tests ran successfully, non-zero
-if not. On CT test failures the script will instruct the admin to look at the
-CT test log files. If one or more failures occur, investigate the cause of
-each failure. See the [Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+The return code of the script is zero if all HMS CT tests run and pass, non-zero if not.
+On CT test errors or failures, the script will print the path to the CT test log file for the administrator to inspect.
+If one or more failures occur, investigate the cause of each and take remediation steps if needed.
+See the [Interpreting HMS Health Check Results](../troubleshooting/interpreting_hms_health_check_results.md) documentation for more information.
+
+After remediating a test failure for a particular service, just the tests for that individual service
+can be re-run by supplying the name of the service to the `run_hms_ct_tests.sh` script with the `-t` option:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -t <service>
+```
+
+To list the HMS services that can be tested, use the `-l` option:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -l
+```
 
 ### 2.2 Hardware State Manager discovery validation
 
-By this point in the installation process, the Hardware State Manager (HSM) should
-have done its discovery of the system.
+By the time the CSM health validation is first performed on a system, the Hardware State Manager (HSM)
+should have completed its discovery of the system. This section provides steps to verify
+that discovery has completed successfully and consists of two steps.
 
-The foundational information for this discovery is from the System Layout Service (SLS). Thus, a
-comparison needs to be done to see that what is specified in SLS (focusing on
-BMC components and Redfish endpoints) are present in HSM.
+1. Verify that all hardware attempted to be discovered by HSM was successfully discovered.
 
-To perform this comparison execute the `verify_hsm_discovery.py` script on a Kubernetes master or worker NCN. The result is pass/fail (returns 0 or non-zero):
+    (`ncn-mw#`) To verify that discovery completed successfully and that Redfish endpoints for the
+    system hardware have been populated in HSM, run the following script:
 
-```bash
-/opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
-```
+    ```bash
+    /opt/cray/csm/scripts/hms_verification/hsm_discovery_status_test.sh
+    ```
 
-The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
-the output. Refer to [2.2.1 Interpreting results](#221-interpreting-hsm-discovery-results) and
-[2.2.2 Known Issues](#222-known-issues-with-hsm-discovery-validation) below to troubleshoot any mismatched BMCs.
+    The script will return an exit code of zero if there are no failures. Otherwise, the
+    script will return a non-zero exit code along with output indicating which components
+    failed discovery and troubleshooting steps for determining why discovery failed.
 
-```text
-HSM Cabinet Summary
-===================
-x1000 (Mountain)
-  Discovered Nodes:          50
-  Discovered Node BMCs:      25
-  Discovered Router BMCs:    32
-  Discovered Chassis BMCs:    8
-x3000 (River)
-  Discovered Nodes:          23 (12 Mgmt, 7 Application, 4 Compute)
-  Discovered Node BMCs:      24
-  Discovered Router BMCs:     2
-  Discovered Cab PDU Ctlrs:   0
+1. Verify that all hardware that is expected to be in the system is present in HSM.
 
-River Cabinet Checks
-====================
-x3000
-  Nodes: PASS
-  NodeBMCs: PASS
-  RouterBMCs: PASS
-  ChassisBMCs: PASS
-  CabinetPDUControllers: PASS
+    To verify this, a comparison is made between HSM and the System Layout Service (SLS), which
+    provides the foundational information for the hardware that makes up the system.
 
-Mountain/Hill Cabinet Checks
-============================
-x1000 (Mountain)
-  ChassisBMCs: PASS
-  Nodes: PASS
-  NodeBMCs: PASS
-  RouterBMCs: PASS
-```
+    (`ncn-mw#`) To perform this comparison, run the following script:
 
-The script will have an exit code of 0 if there are no failures. If there is
-any FAIL information displayed, the script will exit with a non-zero exit
-code. Failure information interpretation is described in the next section.
+    ```bash
+    /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
+    ```
+
+    The script will have an exit code of 0 if there are no failures. If there is
+    any FAIL information displayed, the script will exit with a non-zero exit
+    code.
+
+    Example of successful output:
+
+    ```text
+    HSM Cabinet Summary
+    ===================
+    x1000 (Mountain)
+      Discovered Nodes:          50
+      Discovered Node BMCs:      25
+      Discovered Router BMCs:    32
+      Discovered Chassis BMCs:    8
+    x3000 (River)
+      Discovered Nodes:          23 (12 Mgmt, 7 Application, 4 Compute)
+      Discovered Node BMCs:      24
+      Discovered Router BMCs:     2
+      Discovered Cab PDU Ctlrs:   0
+
+    River Cabinet Checks
+    ====================
+    x3000
+      Nodes: PASS
+      NodeBMCs: PASS
+      RouterBMCs: PASS
+      ChassisBMCs: PASS
+      CabinetPDUControllers: PASS
+
+    Mountain/Hill Cabinet Checks
+    ============================
+    x1000 (Mountain)
+      ChassisBMCs: PASS
+      Nodes: PASS
+      NodeBMCs: PASS
+      RouterBMCs: PASS
+    ```
+
+    Refer to [2.2.1 Interpreting results](#221-interpreting-hsm-discovery-results) and
+    [2.2.2 Known Issues](#222-known-issues-with-hsm-discovery-validation) in order to
+    troubleshoot any errors or warnings.
 
 #### 2.2.1 Interpreting HSM discovery results
 
