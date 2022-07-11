@@ -217,12 +217,18 @@ tasks:
 
             set +e
             echo "waiting for k8s: $TARGET_NCN ..."
+            MAX_RETRY=120
+            n=0
             until /host_usr_bin/csi automate ncn kubernetes --action is-member --ncn $TARGET_NCN --kubeconfig mykubeconfig/admin.conf
             do
+                n=$((n+1))
+                if [[ $n -ge $MAX_RETRY ]]; then
+                    # Restore set -e
+                    set -e
+                    exit 1
+                fi
                 sleep 5
             done
-            # Restore set -e
-            set -e
   - name: "cray-cli-init"
     dependencies:
       - wait-for-cloud-init
