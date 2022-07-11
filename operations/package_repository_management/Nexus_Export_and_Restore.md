@@ -1,26 +1,26 @@
-# Nexus Export and Restore process
+# Nexus Export and Restore
 
-The current process for ensuring the saftey of the nexus data is a one time, space intesive, manual process and is only recommeded to be done while nexus is in a known good state. The process is needed to be done if a second copy of the nexus data is needed.
-This could be done before an upgrade (with the data taken off cluster) to ensure if the upgrade creates issue nexus can be downgraded again. Taking an export can also be used to ensure nexus resiliency. This process is still a run at your own risk procedure,
-and is not recommended for all cases.
+The current process for ensuring the saftey of the nexus-data PVC is a one time, space intesive, manual process and is only recommeded to be done while Nexus is in a known good state. 
+A export is recomended to be done before an upgrade to enable the ablitiy of rollback. Taking an export can also be used to improve Nexus resiliency by allowing easy fixes for data courption. 
+This process is still a run at your own risk procedure, and is not recommended for all cases.
 
-## Step One - Check Cluster Storage Size
+## Export
 
-To check the size of the exported tar file (on the cluster), and the amount of storage the cluster has left run the following command on a master node:
+Prior to making an export check the size of the exported tar file (on the cluster, e.g. 3 times size of just the export), and the amount of storage the cluster has left, run the following command on a master node:
 
 ```bash
-kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{print "Amount of space the nexus export will take up on cluster: "(($3 * 3)/1048576)" GiB";}' && ceph df | grep 'zone1.rgw.buckets.data' | awk '{ print "Currently used: " $7 $8 ", Max Available " $10 $11;}'
+kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{print "Amount of space the Nexus export will take up on cluster: "(($3 * 3)/1048576)" GiB";}' && ceph df | grep 'zone1.rgw.buckets.data' | awk '{ print "Currently used: " $7 $8 ", Max Available " $10 $11;}'
 ```
 
-This will print out the amount of space the nexus export will take on the cluster as well as the amount of space currently used in the pool the tar will be stored. This also gives the max amount of space available in that pool. If the size of the nexus export 
-plus the size of the currenty used space is larger than the max available size please submit a help request to figure out a solution. 
+This will print out the amount of space the Nexus export will take on the cluster as well as the amount of space currently used in the pool the export will be stored. 
+This also gives the max amount of space available in that pool. If the size of the Nexus export plus the size of the currenty used space is larger than the max available 
+size please submit a help request to figure out a solution. 
 
-## Step Two - Take the export
+Taking the export can take multiple hours and Nexus will be unavailable for the entire time. For a fresh install of Nexus the export takes around 
+1 hour for every 60 GiB stored in the nexus-data PVC. So for example if the nexus-data PVC is 120 GiB (meaning the first step showed the export will take 360 GiB on cluster) 
+Nexus would be unavaibale for around 2 hours while the export was taking place.
 
-Taking the export can take multiple hours and nexus will be unavailable for the entire time the export is being taken. For a fresh install of nexus the export takes around 1 hour for every 60 GiB stored in the nexus-data PVC. So for example if the nexus-data
-PVC is 120 GiB (meaning the first step showed the export will take 360 GiB on cluster) nexus would be unavaibale for around 2 hours while the export was taking place.
-
-To run the export run the following script on a master node:
+To get an export run the following script on any master node:
 
 ```bash
 #!/bin/bash
@@ -84,12 +84,12 @@ done
 kubectl -n nexus scale deployment nexus --replicas=1;
 ```
 
-## Step Three - Restore Nexus
+## Restore
 
-The restore step will delete any changes to made to Nexus after the backup was taken. The restore takes around half the time that the export took (e.g. if the export took 2 hours the restore would take around 1 hour) and during the time to restore 
-Nexus is unavailable. 
+The restore will delete any changes to made to Nexus after the backup was taken. The restore takes around half the time that the export took 
+(e.g. if the export took 2 hours the restore would take around 1 hour) and during the time to restore Nexus is unavailable. 
 
-To restore Nexus to the state of the backup run the following command on any master node:
+To restore Nexus to the state of the backup run the following script on any master node:
 
 ```bash
 #!/bin/bash
