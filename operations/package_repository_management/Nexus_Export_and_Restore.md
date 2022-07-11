@@ -36,7 +36,7 @@ The restore will delete any changes to made to Nexus after the backup was taken.
 To restore Nexus to the state of the backup run the restore script on any master node:
 
 ```bash
-/usr/share/doc/csm/scripts/nexus-export.sh
+/usr/share/doc/csm/scripts/nexus-restore.sh
 ```
 
 ## Cleanup
