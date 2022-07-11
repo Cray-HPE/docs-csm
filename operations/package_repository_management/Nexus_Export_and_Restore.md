@@ -14,8 +14,8 @@ Prior to making an export check the size of the exported tar file (on the cluste
 kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{print "Amount of space the Nexus export will take up on cluster: "(($3 * 3)/1048576)" GiB";}' && ceph df | grep 'zone1.rgw.buckets.data' | awk '{ print "Currently used: " $7 $8 ", Max Available " $10 $11;}'
 ```
 
-This command prints out the amount of space the Nexus export will take on the cluster. The command also prints the amount of space currently used in the ceph pool that the export will be stored.
-The command also gives the max amount of space available in that ceph pool. If the size of the Nexus export plus the size of the currently used space is larger than the max available
+This command prints out the amount of space the Nexus export will take on the cluster. The command also prints the amount of space currently used in the Ceph pool that the export will be stored.
+The command also gives the max amount of space available in that Ceph pool. If the size of the Nexus export plus the size of the currently used space is larger than the max available
 size please submit a help request to figure out a solution.
 
 Taking the export can take multiple hours and Nexus will be unavailable for the entire time. For a fresh install of Nexus the export takes around
