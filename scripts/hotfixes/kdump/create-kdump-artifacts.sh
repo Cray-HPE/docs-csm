@@ -192,6 +192,7 @@ function build_initrd {
     # kdump-specific modules to add
     kdump_add=${ADD[*]}
     kdump_add+=( 'kdump' )
+    kdump_add+=( 'rd.debug=1' )
 
     # modules to remove
     kdump_omit=${OMIT[*]}
