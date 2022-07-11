@@ -25,7 +25,7 @@
 
 set -ex
 
-if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath={.status.phase}) ]]; then
+if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phase}') ]]; then
 cat << EOF | kubectl -n nexus create -f -
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -74,7 +74,7 @@ spec:
           claimName: nexus-bak
 EOF
 
-while [[ -z $(kubectl get job nexus-backup -n nexus -o jsonpath={.status.succeeded}) ]]; do
+while [[ -z $(kubectl get job nexus-backup -n nexus -o jsonpath='{.status.succeeded}') ]]; do
     echo  "Waiting for the backup to finish for another 10 seconds."
     sleep 10
 done
