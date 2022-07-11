@@ -314,24 +314,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="DISABLE_SERVICE_REPOS"
-#shellcheck disable=SC2046
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    {
-    NCNS=$(${CSM_ARTI_DIR}/lib/list-ncns.sh | paste -sd,)
-    pdsh -w "$NCNS" 'zypper ms -d Basesystem_Module_15_SP2_x86_64'
-    pdsh -w "$NCNS" 'zypper ms -d Public_Cloud_Module_15_SP2_x86_64'
-    pdsh -w "$NCNS" 'zypper ms -d SUSE_Linux_Enterprise_Server_15_SP2_x86_64'
-    pdsh -w "$NCNS" 'zypper ms -d Server_Applications_Module_15_SP2_x86_64'
-    } >> ${LOG_FILE} 2>&1
-    #shellcheck disable=SC2046
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 state_name="REMOVE_DUPLICATE_BMC_DNS_RECORDS"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
