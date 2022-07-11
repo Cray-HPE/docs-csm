@@ -638,46 +638,6 @@ fi
 
 ${locOfScript}/../cps/snapshot-cps-deployment.sh
 
-state_name="ADD_MTL_ROUTES"
-#shellcheck disable=SC2046
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    {
-
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
-    Ncount=$(echo $NCNS | wc -w)
-    HOSTS=$(echo $NCNS | tr -t ' ' ',')
-    GATEWAY=$(cray sls networks describe NMN --format json | \
-        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="NMN Management Network Infrastructure")|.Gateway')
-    SUBNET=$(cray sls networks describe MTL --format json | \
-        jq -r '.ExtraProperties.Subnets[]|select(.FullName=="MTL Management Network Infrastructure")|.CIDR')
-    DEVICE="vlan002"
-    set +e
-    ip addr show | grep $DEVICE
-    if [[ $? -ne 0 ]]; then
-        DEVICE="bond0.nmn0"
-    fi
-    set -e
-    pdsh -w $HOSTS ip route add $SUBNET via $GATEWAY dev $DEVICE
-    Rcount=$(pdsh -w $HOSTS ip route show | grep $SUBNET | wc -l)
-    pdsh -w $HOSTS ip route show | grep $SUBNET
-
-
-    if [[ $Rcount -ne $Ncount ]]; then
-        echo ""
-        echo "Could not set routes on all worker and storage nodes."
-        exit 1
-    fi
-
-    } >> ${LOG_FILE} 2>&1
-    #shellcheck disable=SC2046
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
 state_name="CREATE_CEPH_RO_KEY"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
