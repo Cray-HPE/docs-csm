@@ -138,7 +138,7 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
         read -s SW_ADMIN_PASSWORD
         export SW_ADMIN_PASSWORD
         ```
-       
+
         ```bash
         GOSS_BASE=/opt/cray/tests/install/ncn goss \
             -g /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml \
@@ -212,7 +212,7 @@ Before rebooting NCNs:
             USERNAME=root
             read -s IPMI_PASSWORD
             ```
-           
+
             ```bash
             export IPMI_PASSWORD
             ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power off
@@ -257,7 +257,7 @@ Before rebooting NCNs:
        ssh NODE cat /etc/cray/xname
        ```
 
-    1.  (`ncn#`) Check the Configuration Framework Service (CFS) `configurationStatus` for the rebooted node's `desiredConfig`.
+    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configurationStatus` for the rebooted node's `desiredConfig`.
 
        The following command will indicate if a CFS job is currently in progress for this node.
        Replace the `XNAME` value in the following command with the component name (xname) of the node that was rebooted.
@@ -318,8 +318,8 @@ Before rebooting NCNs:
 
          Remove the following files on every worker node to resolve the failure:
 
-         - `/var/lib/cni/networks/macvlan-slurmctld-nmn-conf`
-         - `/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf`
+         * `/var/lib/cni/networks/macvlan-slurmctld-nmn-conf`
+         * `/var/lib/cni/networks/macvlan-slurmdbd-nmn-conf`
 
     1. Disconnect from the console.
 
@@ -396,7 +396,7 @@ Before rebooting NCNs:
             USERNAME=root
             read -s IPMI_PASSWORD
             ```
-           
+
             ```bash
             export IPMI_PASSWORD
             ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power off
@@ -530,7 +530,7 @@ Before rebooting NCNs:
             USERNAME=root
             read -s IPMI_PASSWORD
             ```
-           
+
             ```bash
             export IPMI_PASSWORD
             ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power off

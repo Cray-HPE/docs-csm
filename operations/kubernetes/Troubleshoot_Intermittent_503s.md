@@ -12,7 +12,7 @@ kubectl logs <podname> -n <namespace> -c istio-proxy | grep 503
 ```
 
 For general Kubernetes troubleshooting information, including more information on viewing pod logs, see
-[Kubernetes troubleshooting topics](../../troubleshooting/index.md#kubernetes).
+[Kubernetes troubleshooting topics](../../troubleshooting/README.md#kubernetes).
 
 This page is broken into different sections, based on the errors found in the log.
 
