@@ -46,12 +46,19 @@ are being created.
 - If it is a single replica, then delete the pod.
 - If it is part of a multiple replica exhibiting the issue, then perform a rolling restart of the deployment or `StatefulSet`.
 
-    For example:
+    Here is an example of how to do that for the `istio-ingressgateway` deployment in the `istio-system` namespace.
 
-    ```bash
-    kubectl rollout restart -n istio-system deployment istio-ingressgateway
-    kubectl rollout status -n istio-system deployment istio-ingressgateway
-    ```
+    1. Initiate a rolling restart of the deployment.
+
+        ```bash
+        kubectl rollout restart -n istio-system deployment istio-ingressgateway
+        ```
+
+    1. Wait for the restart to complete.
+
+        ```bash
+        kubectl rollout status -n istio-system deployment istio-ingressgateway
+        ```
 
 Once the roll out is complete, or the new pod is running, then the HTTP 503 message should clear.
 
@@ -69,21 +76,26 @@ This error code typically indicates an issue with the authorization service (for
 
 ### Remediation (`UAEX`)
 
-(`ncn-mw#`) Perform a rolling restart of all of the following:
+1. (`ncn-mw#`) Initiate a rolling restart of Spire.
 
-```bash
-kubectl rollout restart -n spire statefulset spire-postgres spire-server
-kubectl rollout restart -n spire daemonset spire-agent request-ncn-join-token
-kubectl rollout restart -n spire deployment spire-jwks spire-postgres-pooler
-kubectl rollout status -n spire statefulset spire-postgres
-kubectl rollout status -n spire statefulset spire-server
-kubectl rollout status -n spire daemonset spire-agent
-kubectl rollout status -n spire daemonset request-ncn-join-token
-kubectl rollout status -n spire deployment spire-jwks
-kubectl rollout status -n spire deployment spire-postgres-pooler
-```
+    ```bash
+    kubectl rollout restart -n spire statefulset spire-postgres spire-server
+    kubectl rollout restart -n spire daemonset spire-agent request-ncn-join-token
+    kubectl rollout restart -n spire deployment spire-jwks spire-postgres-pooler
+    ```
 
-Once the roll out is complete, the HTTP 503 message should clear.
+1. (`ncn-mw#`) Wait for all of the restarts to complete.
+
+    ```bash
+    kubectl rollout status -n spire statefulset spire-postgres
+    kubectl rollout status -n spire statefulset spire-server
+    kubectl rollout status -n spire daemonset spire-agent
+    kubectl rollout status -n spire daemonset request-ncn-join-token
+    kubectl rollout status -n spire deployment spire-jwks
+    kubectl rollout status -n spire deployment spire-postgres-pooler
+    ```
+
+Once the restarts are all complete, the HTTP 503 message should clear.
 
 ## Other error codes
 
