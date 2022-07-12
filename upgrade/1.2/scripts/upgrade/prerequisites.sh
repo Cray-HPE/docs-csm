@@ -268,29 +268,25 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    
-    # update podman config
-    sed -i 's/.*mount_program =.*/mount_program = "\/usr\/bin\/fuse-overlayfs"/' /etc/containers/storage.conf
+    # get existing customization.yaml file
+    SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE_VERSION}/site-init
+    mkdir -p "${SITE_INIT_DIR}"
+    DATETIME=$(date +%Y-%m-%d_%H-%M-%S)
+    CUSTOMIZATIONS_YAML=$(mktemp -p "${SITE_INIT_DIR}" "customizations-${DATETIME}-XXX.yaml")
+    kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > "${CUSTOMIZATIONS_YAML}"
+    cp "${CUSTOMIZATIONS_YAML}" "${CUSTOMIZATIONS_YAML}.bak"
 
-    SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/site-init
-    mkdir -p ${SITE_INIT_DIR}
-    pushd ${SITE_INIT_DIR}
-    ${CSM_ARTI_DIR}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
-    cp -r ${CSM_ARTI_DIR}/shasta-cfg/* ${SITE_INIT_DIR}
-    mkdir -p certs
-    set -o pipefail
-    kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
-    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
-    kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
-    set +o pipefail
-    . ${locOfScript}/util/update-customizations.sh -i ${SITE_INIT_DIR}/customizations.yaml
-    yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_reds_credentials
-    yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_meds_credentials
-    yq delete -i ./customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
-    ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
-    ./utils/secrets-seed-customizations.sh customizations.yaml || true
+    # argo/cray-nls: update customization.yaml
+    yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.kubernetes.services.cray-nls.externalHostname 'cmn.{{ network.dns.external }}'
+    yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
+
+    # rename customazations file so k8s secret name stays the same
+    pushd "${SITE_INIT_DIR}"
+    cp "${CUSTOMIZATIONS_YAML}" customizations.yaml
+
+    # push updated customizations.yaml to k8s 
     kubectl delete secret -n loftsman site-init
-    kubectl create secret -n loftsman generic site-init --from-file=./customizations.yaml
+    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
     popd
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
