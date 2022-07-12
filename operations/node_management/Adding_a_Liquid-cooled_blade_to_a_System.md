@@ -48,8 +48,8 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
     ```bash
     while read  PAYLOAD ; do curl -H "Authorization: Bearer $TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/
-    smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '
-    {ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddress: .IP}')";sleep 5;  done < x1000c0s1.json
+    smd/hsm/v2/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "$(echo $PAYLOAD | jq -c '
+    {ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddresses: [{IPAddress: .IP}]}')";sleep 5;  done < x1000c0s1.json
     ```
 
 * The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
@@ -178,10 +178,14 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
         IP_ADDRESS=DESTLOCATION_IP_ADDRESS
         XNAME=DESTLOCATION_XNAME
 
-        curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "{
+        curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces' -H 'Content-Type: application/json' --data-raw "{
             \"Description\": \"Node Maintenance Network\",
             \"MACAddress\": \"$MAC\",
-            \"IPAddress\": \"$IP_ADDRESS\",
+            \"IPAddresses\": [
+                {
+                    \"IPAddress\": \"$IP_ADDRESS\"
+                }
+            ],
             \"ComponentID\": \"$XNAME\"
         }"
         ```
@@ -196,7 +200,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
         ```bash
         curl -k -H "Authorization: Bearer $TOKEN" -L -X PATCH \
-            'https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json' --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddress":"10.xxx.xxx.xxx","ComponentID":"XNAME"}'
+            'https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/0040a68350a4' -H 'Content-Type: application/json' --data-raw '{"MACAddress":"xx:xx:xx:xx:xx:xx","IPAddresses":[{"IPAddress":"10.xxx.xxx.xxx"}],"ComponentID":"XNAME"}'
         ```
 
     4. Repeat the preceding command for each node in the blade.

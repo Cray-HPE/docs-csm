@@ -35,7 +35,7 @@ The Hardware State Manager (HSM) has two important parts:
 1. (`ncn#`) Check SMD.
 
     ```bash
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces | jq | less
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces | jq | less
     ```
 
     The output from SMD should look similar to the following:
@@ -45,7 +45,12 @@ The Hardware State Manager (HSM) has two important parts:
       "ID": "0040a6838b0e",
       "Description": "",
       "MACAddress": "0040a6838b0e",
-      "IPAddress": "10.100.1.147",
+      "IPAddresses": [
+        {
+          "IPAddress": "10.100.1.147",
+          "Network": "HMN"
+        }
+      ],
       "LastUpdate": "2020-07-24T23:44:24.578476Z",
       "ComponentID": "x1000c7s1b0n0",
       "Type": "Node"

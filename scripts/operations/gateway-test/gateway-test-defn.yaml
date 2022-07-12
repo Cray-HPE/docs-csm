@@ -150,7 +150,7 @@ ingress_api_services:
   gateways: ["services-gateway","customer-admin-gateway"]
   project: CSM
 - name: cray-smd
-  path: apis/smd/hsm/v1/service/ready
+  path: apis/smd/hsm/v2/service/ready
   port: 443
   expected-result: 200
   namespace: services
