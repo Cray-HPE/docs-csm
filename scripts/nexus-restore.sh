@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -ex
+set -exo pipefail
 
 if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phase}') ]]; then
 echo "Error no backup PVC was found\nPlease run nexus-backup.sh before trying to restore"
