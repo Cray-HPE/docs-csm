@@ -32,8 +32,8 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
 
-    See [Create a storage pool](../../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
-    and [Create and map an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
+    See [Create a storage pool](../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
+    and [Create and map an `rbd` device](../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
 
     **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
     However, the `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
@@ -82,7 +82,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 1. Copy the `docs-csm` RPM package and CSM release `tar` file to `ncn-m001`.
 
-   See [Update Product Stream](../../update_product_stream/README.md).
+   See [Update Product Stream](../update_product_stream/README.md).
 
 1. (`ncn-m001#`) Copy the documentation RPM to `/root` and install it.
 
@@ -120,7 +120,7 @@ CSM 1.2 introduces the bifurcated CAN (BICAN) as well as network configuration c
 upgrade and its sequence of events, see the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md).
 
 The SLS data upgrade is a critical step in moving to CSM 1.2. Upgraded SLS data is used in DNS and management network configuration. For details to aid in understanding and
-decision making, see the [Management Network User Guide](../../operations/network/management_network/README.md).
+decision making, see the [Management Network User Guide](../operations/network/management_network/README.md).
 
 One detail which must not be overlooked is that the existing Customer Access Network (CAN) will be migrated or retrofitted into the new Customer Management Network (CMN) while
 minimizing changes. A new CAN (or CHN) network is then created. Pivoting the existing CAN to the new CMN allows administrative traffic (already on the CAN) to remain as-is while
@@ -206,9 +206,9 @@ network (new CAN or CHN) and its chosen subnet. For details on choosing the subn
    ```
 
    - Output like the above text means that the switches have a CANU-generated configuration for CSM 1.2 in place. In this case, follow the steps in
-     [Management Network 1.0 (`1.2 Preconfig`) to 1.2](../../operations/network/management_network/1.0_to_1.2_upgrade.md).
+     [Management Network 1.0 (`1.2 Preconfig`) to 1.2](../operations/network/management_network/1.0_to_1.2_upgrade.md).
    - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
-   - See the [Management Network User Guide](../../operations/network/management_network/README.md) for more information on the management network.
+   - See the [Management Network User Guide](../operations/network/management_network/README.md) for more information on the management network.
    - With the 1.2 switch configuration in place, users will only be able to SSH into the switches over the HMN.
 
 ## Stage 0.4 - Prerequisites check

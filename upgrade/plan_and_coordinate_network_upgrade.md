@@ -62,7 +62,7 @@ referring to user activity.
    However, if a UAN is rebooted, then the `roles/uan_interfaces/tasks/can-v2.yml` file in the `vcs/cray/uan-config-management.git` repository
    must be patched for the current CSM release. After that, the UAN must be rebooted again to bring the
    CMN (pre-1.2 CAN) interface back in the UAN. Use the following patch file and follow the instructions in
-   [Configuration Management](../../operations/README.md#configuration-management) to restore CMN access in the UAN:
+   [Configuration Management](../operations/README.md#configuration-management) to restore CMN access in the UAN:
 
    ```text
    --- a/roles/uan_interfaces/tasks/can-v2.yml
@@ -99,12 +99,12 @@ referring to user activity.
 1. Once UAN has been upgraded to 2.4, the UANs may be rebooted for the new network configuration changes to take effect.
    UANs will not receive an IP address on the CMN network and instead will default their traffic through the new CAN/CHN. For concrete
    details on UAN transition plan for users, see
-   [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime).
+   [Minimize UAN Downtime](../operations/network/management_network/bican_enable.md#minimize-uan-downtime).
 
 1. Note that in CSM 1.2, UAN ports will not be removed from the CMN VLAN7 in switches. In the next CSM release, switch
    configuration will be updated to remove UAN ports from the CMN VLAN7. This enables non-rebooted UANs to continue to work
    and allows for better easing into BICAN in CSM 1.2. For more details about this transition plan, see
-   [Minimize UAN Downtime](../../operations/network/management_network/bican_enable.md#minimize-uan-downtime).
+   [Minimize UAN Downtime](../operations/network/management_network/bican_enable.md#minimize-uan-downtime).
 
 ## Manually removing UAN switch ports from the CMN VLAN7 (Placeholder)
 
@@ -115,7 +115,7 @@ The switch configurations can be updated manually to remove VLAN7 from the UAN p
 This procedure is currently being tested and will be linked here when finished.
 
 Watch this page for updates and always use the latest documentation, in order to have the latest procedures.
-See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation) for details on obtaining and installing the latest CSM documentation.
+See [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation) for details on obtaining and installing the latest CSM documentation.
 
 ## UAI migration
 
@@ -124,7 +124,7 @@ Access to UAIs will be disrupted until CSM 1.2 upgrade completes. After the upgr
 ## Decide on subnet ranges for new CAN/CHN
 
 After deciding whether to use the new CAN or to use CHN for user access, the subnet range must be decided. Refer
-to [Customer Accessible Networks](../../operations/network/customer_accessible_networks/Customer_Accessible_Networks.md)
+to [Customer Accessible Networks](../operations/network/customer_accessible_networks/Customer_Accessible_Networks.md)
 for subnet ranges and defaults for CAN/CHN.
 
 ## Preserving CMN subnet range

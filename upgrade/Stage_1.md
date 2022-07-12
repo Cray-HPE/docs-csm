@@ -24,11 +24,11 @@
         ```
 
     * During the storage node rebuild, Ceph health may report `HEALTH_WARN 1 daemons have recently crashed`. This occurs occasionally as part of the shutdown process of the node
-      being rebuilt. See [Dump Ceph Crash Data](../../operations/utility_storage/Dump_Ceph_Crash_Data.md).
+      being rebuilt. See [Dump Ceph Crash Data](../operations/utility_storage/Dump_Ceph_Crash_Data.md).
 
 1. **IMPORTANT:** Ensure that the Ceph cluster is healthy prior to continuing.
 
-    If there are processes not running, then see [Utility Storage Operations](../../operations/utility_storage/Utility_Storage.md) for operational and troubleshooting procedures.
+    If there are processes not running, then see [Utility Storage Operations](../operations/utility_storage/Utility_Storage.md) for operational and troubleshooting procedures.
 
 1. Repeat the previous steps for each other storage node, one at a time.
 

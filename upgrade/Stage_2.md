@@ -69,7 +69,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 1. If the CSM tarball is located on an `rbd` device, then remap that device to `ncn-m002`.
 
-    See [Move an `rbd` device to another node](../../operations/utility_storage/Alternate_Storage_Pools.md#move-an-rbd-device-to-another-node).
+    See [Move an `rbd` device to another node](../operations/utility_storage/Alternate_Storage_Pools.md#move-an-rbd-device-to-another-node).
 
 1. Log in to `ncn-m002` from outside the cluster.
 
@@ -84,7 +84,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
 
-   See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
+   See [Configure the Cray Command Line Interface](../operations/configure_cray_cli.md) for details on how to do this.
 
 1. (`ncn-m002#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 

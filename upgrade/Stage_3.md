@@ -42,7 +42,7 @@
 
 1. Copy the CSM release `tar` file to `ncn-m002`.
 
-   See [Update Product Stream](../../update_product_stream/README.md).
+   See [Update Product Stream](../update_product_stream/README.md).
 
 1. Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m002`.
 
@@ -90,7 +90,7 @@ Verify that the Keycloak users localize job has completed as expected.
 > This section can be skipped if user localization is not required.
 
 After an upgrade, it is possible that all expected Keycloak users were not localized.
-See [Verification procedure](../../operations/security_and_authentication/Keycloak_User_Localization.md#Verification-procedure) to confirm that Keycloak localization has completed as expected.
+See [Verification procedure](../operations/security_and_authentication/Keycloak_User_Localization.md#Verification-procedure) to confirm that Keycloak localization has completed as expected.
 
 ## Stage completed
 

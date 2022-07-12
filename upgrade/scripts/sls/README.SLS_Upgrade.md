@@ -23,7 +23,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
      overlapping during the upgrade process. This requires network subnetting expertise and "expert mode" (described below).
 
      If the `external-dns` IP address is changed, then the `customizations.yaml` `site_to_system_lookups` value must be updated to the new IP address. For instructions on how to do this. see
-     [Update `customizations.yaml`](../../../../operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md#update-customizationsyaml).
+     [Update `customizations.yaml`](../../../operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md#update-customizationsyaml).
    * A mutually exclusive example is the need to preserve all NCN IP addresses related to the old CAN while migrating
      the new CMN. This preservation is not often needed as the transition of NCN IP addresses for the CAN-to-CMN is automatically
      handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations
@@ -36,7 +36,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
 ## Prerequisites
 
 * The latest CSM documentation RPM must be installed on the node where the procedure is being performed. See
-  [Check for Latest Documentation](../../../../update_product_stream/README.md#check-for-latest-documentation).
+  [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Procedure
 
@@ -189,4 +189,4 @@ Retention of the unused network is not normal behavior.
 
 For technical details on the SLS update automation, see [`sls_udpater.py` Technical Details](sls_updater.py_technical_details.md).
 
-Go back to [Stage 0.2 - Update SLS](../../Stage_0_Prerequisites.md#update-sls).
+Go back to [Stage 0.2 - Update SLS](../Stage_0_Prerequisites.md#update-sls).
