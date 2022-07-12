@@ -97,7 +97,7 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
 
         Remediate any reported failures before proceeding.
 
-    1. (`ncn-mw#`) Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
+    1. (`ncn-mw#`) Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting.
 
         ```bash
         kubectl describe pod -n user -lapp=slurmctld
@@ -129,7 +129,7 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
     1. (`ncn#`) Check that the BGP peering sessions are established.
 
         This check will need to be run after all worker node have been rebooted.
-        Ensure that the checks have been run to check BGP peering sessions on the spine switches
+        Ensure that the checks have been run to check BGP peering sessions on the spine switches.
 
         > Set `SW_ADMIN_PASSWORD` to the `admin` user password for the management switches in the system.
         > `read -s` is used to prevent the password from being written to the screen or the shell history.
@@ -142,8 +142,7 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
         ```bash
         GOSS_BASE=/opt/cray/tests/install/ncn goss \
             -g /opt/cray/tests/install/ncn/tests/goss-switch-bgp-neighbor-aruba-or-mellanox.yaml \
-            --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml \
-            validate
+            --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
         ```
 
 1. (`ncn#`) Ensure that no nodes are in a `failed` state in CFS.
@@ -159,9 +158,9 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
    This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
    ```bash
-    cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
-        echo "$xname"
-        cray cfs components update $xname --enabled False --error-count 0
+   cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
+       echo "$xname"
+       cray cfs components update $xname --enabled False --error-count 0
    done
    ```
 
@@ -183,7 +182,7 @@ Execute the rolling NCN reboot procedure steps for the particular node type bein
 
 Before rebooting NCNs:
 
-- Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
+* Ensure that pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 
 ### Utility storage nodes (Ceph)
 
@@ -205,7 +204,9 @@ Before rebooting NCNs:
 
         1. (`ncn#`) Power off the node.
 
-           > `read -s` is used to prevent the password from being written to the screen or the shell history.
+            > `read -s` is used to prevent the password from being written to the screen or the shell history.
+            >
+            > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-s002`.
 
             ```bash
             USERNAME=root
@@ -214,8 +215,8 @@ Before rebooting NCNs:
            
             ```bash
             export IPMI_PASSWORD
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power off
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
             ```
 
             Ensure that the power is reporting as off. It may take 5-10 seconds for this to update.
@@ -223,12 +224,14 @@ Before rebooting NCNs:
 
         1. (`ncn#`) Power on the node.
 
+            > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-s002`.
+
             ```bash
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power on
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
             ```
 
-           Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
+            Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
 
     1. Watch on the console until the node has successfully booted and the login prompt is reached.
 
@@ -385,7 +388,9 @@ Before rebooting NCNs:
 
         1. (`ncn#`) Power off the node.
 
-           > `read -s` is used to prevent the password from being written to the screen or the shell history.
+            > `read -s` is used to prevent the password from being written to the screen or the shell history.
+            >
+            > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-w002`.
 
             ```bash
             USERNAME=root
@@ -394,8 +399,8 @@ Before rebooting NCNs:
            
             ```bash
             export IPMI_PASSWORD
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power off
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
             ```
 
             Ensure that the power is reporting as off. It may take 5-10 seconds for this to update.
@@ -403,12 +408,14 @@ Before rebooting NCNs:
 
         1. (`ncn#`) Power on the node.
 
+            > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-w002`.
+
             ```bash
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power on
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
             ```
 
-           Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
+            Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
 
     1. Watch on the console until the node has successfully booted and the login prompt is reached.
 
@@ -516,16 +523,18 @@ Before rebooting NCNs:
         1. (`ncn#`) Power off the node.
 
             > `read -s` is used to prevent the password from being written to the screen or the shell history.
+            >
+            > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-m002`.
 
             ```bash
             USERNAME=root
             read -s IPMI_PASSWORD
             ```
-
+           
             ```bash
             export IPMI_PASSWORD
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power off
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
             ```
 
             Ensure that the power is reporting as off. It may take 5-10 seconds for this to update.
@@ -533,9 +542,11 @@ Before rebooting NCNs:
 
         1. (`ncn#`) Power on the node.
 
+            > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-m002`.
+
             ```bash
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power on
+            ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
             ```
 
             Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
@@ -611,11 +622,13 @@ Before rebooting NCNs:
 
     1. If booting from disk is desired, then [set the boot order](../../background/ncn_boot_workflow.md#setting-boot-order).
 
-    1. (`external#`) Power cycle the node.
+    1. (`external#`) Power cycle `ncn-m001`.
 
         Ensure that the expected results are returned from the power status check before rebooting.
 
         > `read -s` is used to prevent the password from being written to the screen or the shell history.
+        >
+        > In the example commands below, be sure to replace `<ncn-m001-bmc>` with the external IP or hostname of the BMC of `ncn-m001`.
 
         ```bash
         USERNAME=root
@@ -624,42 +637,60 @@ Before rebooting NCNs:
 
         ```bash
         export IPMI_PASSWORD
-        ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+        ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power status
         ```
 
-        1. Power off the node.
+        1. Power off `ncn-m001`.
+
+            > In the example commands below, be sure to replace `<ncn-m001-bmc>` with the external IP or hostname of the BMC of `ncn-m001`.
 
             ```bash
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power off
+            ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power status
             ```
 
             Ensure that power is reporting as off. It may take 5-10 seconds for this to update.
             Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
-        1. Power on the node.
+        1. Power on the `ncn-m001`.
+
+            > In the example commands below, be sure to replace `<ncn-m001-bmc>` with the external IP or hostname of the BMC of `ncn-m001`.
 
             ```bash
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power on
+            ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power status
             ```
 
             Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
 
-    1. Watch on the console until the node has successfully booted and the login prompt is reached.
+    1. Watch on the console until `ncn-m001` has successfully booted and the login prompt is reached.
 
-    1. (`ncn#`) Retrieve the component name (xname) for the node that was rebooted.
+    1. (`ncn-m001#`) If desired, verify that the method of boot is as expected.
 
-        This xname is available on the node that was rebooted in the `/etc/cray/xname` file.
+       If the `/proc/cmdline` file begins with `BOOT_IMAGE`, then this NCN booted from disk.
+
+       ```bash
+       egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
+       ```
+
+       Example output for a disk boot is:
+
+       ```text
+       BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+       ```
+
+    1. (`ncn#`) Retrieve the component name (xname) for `ncn-m001`.
+
+        This xname is available on `ncn-m001` in the `/etc/cray/xname` file.
 
         ```bash
         ssh ncn-m001 cat /etc/cray/xname
         ```
 
-    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configurationStatus` for the `desiredConfig` after rebooting the node.
+    1. (`ncn#`) Check the Configuration Framework Service (CFS) `configurationStatus` for the `desiredConfig` after rebooting `ncn-m001`.
 
-       The following command will indicate if a CFS job is currently in progress for this node.
-       Replace the `XNAME` value in the following command with the component name (xname) of the node that was rebooted.
+       The following command will indicate if a CFS job is currently in progress for `ncn-m001`.
+       Replace the `XNAME` value in the following command with the component name (xname) of `ncn-m001`.
 
        This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
