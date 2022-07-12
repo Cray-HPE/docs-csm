@@ -437,6 +437,8 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
+    tmp_current_configmap=/tmp/precache-current-configmap.yaml
+    kubectl get configmap -n nexus cray-precache-images -o yaml > $tmp_current_configmap
     helm uninstall -n nexus cray-precache-images
     tmp_manifest=/tmp/precache-manifest.yaml
 
@@ -453,11 +455,17 @@ EOF
     loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path $tmp_manifest
 
     #
-    # Now edit the configmap with the three images that 1.x nexus
-    # needs so it can move around on an upgraded NCN (before we deploy
-    # the new nexus chart)
+    # Now edit the configmap with the images necessary to move the former nexus
+    # pod around on an upgraded NCN (before we deploy the new nexus chart)
     #
-    kubectl get configmap -n nexus cray-precache-images -o yaml | sed '/kind: ConfigMap/i\    docker.io/sonatype/nexus3:3.38.0-1\n    dtr.dev.cray.com/baseos/busybox:1\n    dtr.dev.cray.com/cray/istio/proxyv2:1.7.8-cray2-distroless\n    docker.io/openpolicyagent/opa:0.24.0-envoy-1' | kubectl apply -f -
+    current_nexus_mobility_images=$(yq r $tmp_current_configmap 'data.images_to_cache' | grep -e 'sonatype\|busy\|proxyv2\|envoy' | sort | uniq)
+    current_nexus_mobility_images=$(echo ${current_nexus_mobility_images} | sed 's/ /\n/g; s/^/\n/')
+
+    echo "Adding the following pre-upgrade images to new pre-cache configmap:"
+    echo "$current_nexus_mobility_images"
+    echo ""
+
+    kubectl get configmap -n nexus cray-precache-images -o json | jq --arg value "$current_nexus_mobility_images" '.data.images_to_cache |= . + $value' | kubectl replace --force -f -
 
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
