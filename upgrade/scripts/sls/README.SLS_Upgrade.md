@@ -189,4 +189,4 @@ Retention of the unused network is not normal behavior.
 
 For technical details on the SLS update automation, see [`sls_udpater.py` Technical Details](sls_updater.py_technical_details.md).
 
-Go back to [Stage 0.2 - Update SLS](../Stage_0_Prerequisites.md#update-sls).
+Go back to [Stage 0.2 - Update SLS](../../Stage_0_Prerequisites.md#update-sls).
