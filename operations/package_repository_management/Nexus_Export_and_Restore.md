@@ -18,10 +18,10 @@ kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-
 
 The above command will return the following information:
 
- - The amount of space the Nexus export will take on the cluster.
- - The amount of space currently used in the Ceph pool that the export will be stored.
- - The max amount of space available in that Ceph pool.
- - If the size of the Nexus export plus the size of the currently used space is larger than the max available size, submit a help request to figure out a solution.
+- The amount of space the Nexus export will take on the cluster.
+- The amount of space currently used in the Ceph pool that the export will be stored.
+- The max amount of space available in that Ceph pool.
+- If the size of the Nexus export plus the size of the currently used space is larger than the max available size, submit a help request to figure out a solution.
 
 Taking the export can take multiple hours and Nexus will be unavailable for the entire time. For a fresh install of Nexus the export takes around
 1 hour for every 60 GiB stored in the nexus-data PVC. For example, if the nexus-data PVC is 120 GiB (meaning the first step showed the export will take 360 GiB on cluster)
