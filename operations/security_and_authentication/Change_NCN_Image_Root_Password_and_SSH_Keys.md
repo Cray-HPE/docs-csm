@@ -331,7 +331,7 @@ This step updates the entries in BSS for the NCNs to use the new images.
         kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
         initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
         params=$(cat bss_$xname.json | jq '.[]  .params')
-        cray bss bootparameters update --initrd $initrd --kernel $kernel --params $params --hosts $xname --format json
+        cray bss bootparameters update --initrd $initrd --kernel $kernel --params "$params" --hosts $xname --format json
     done
     ```
 
@@ -349,7 +349,7 @@ This step updates the entries in BSS for the NCNs to use the new images.
         kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
         initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
         params=$(cat bss_$xname.json | jq '.[]  .params')
-        cray bss bootparameters update --initrd $initrd --kernel $kernel --params $params --hosts $xname --format json
+        cray bss bootparameters update --initrd $initrd --kernel $kernel --params "$params" --hosts $xname --format json
     done
     ```
 
