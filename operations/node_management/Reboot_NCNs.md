@@ -132,7 +132,7 @@ ncn-mw# /usr/share/doc/csm/scripts/CASMINST-2015.sh
         This window can be kept up throughout the reboot process to ensure Ceph remains healthy
         and to watch if Ceph goes into a `WARN` state when rebooting storage node.
 
-    1. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting:
+    1. Check the status of the `slurmctld` and `slurmdbd` pods to determine if they are starting.
 
         ```bash
         ncn-mw# kubectl describe pod -n user -lapp=slurmctld
@@ -164,7 +164,7 @@ ncn-mw# /usr/share/doc/csm/scripts/CASMINST-2015.sh
     1. Check that the BGP peering sessions are established.
 
         This check will need to be run after all worker node have been rebooted.
-        Ensure that the checks have been run to check BGP peering sessions on the spine switches \(instructions will vary for Aruba and Mellanox switches\).
+        Ensure that the checks have been run to check BGP peering sessions on the spine switches.
 
         If there are BGP Peering sessions that are not `ESTABLISHED` on either switch, then refer to
         [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
@@ -182,16 +182,16 @@ ncn-mw# /usr/share/doc/csm/scripts/CASMINST-2015.sh
    This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
    ```bash
-   ncn-mw# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
-                echo "$xname"
-                cray cfs components update $xname --enabled False --error-count 0
-           done
+   ncn# cray cfs components list --status failed | jq .[].id -r | while read -r xname ; do
+            echo "$xname"
+            cray cfs components update $xname --enabled False --error-count 0
+        done
    ```
 
    Alternatively, this can be done manually. To get a list of nodes in the failed state:
 
    ```bash
-   ncn-mw# cray cfs components list --status failed | jq .[].id
+   ncn# cray cfs components list --status failed | jq .[].id
    ```
 
    To reset the error count and disable a node:
@@ -199,15 +199,14 @@ ncn-mw# /usr/share/doc/csm/scripts/CASMINST-2015.sh
    **NOTE:** Be sure to replace the `<xname>` in the following command with the component name (xname) of the NCN component to be reset and disabled.
 
    ```bash
-   ncn-mw# cray cfs components update <xname> --enabled False --error-count 0
+   ncn# cray cfs components update <xname> --enabled False --error-count 0
    ```
 
 ## NCN rolling reboot
 
 Before rebooting NCNs:
 
-* Ensure pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN.
-  Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
+* Ensure that pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 
 ### Utility storage nodes (Ceph)
 
@@ -225,30 +224,35 @@ Before rebooting NCNs:
          ncn-s# shutdown -r now
         ```
 
-        **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below
+        **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below.
 
         1. Power off the node.
 
            > `read -s` is used to prevent the password from being written to the screen or the shell history.
+           >
+           > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-s002`.
 
            ```bash
            ncn# USERNAME=root
            ncn# read -s IPMI_PASSWORD
            ncn# export IPMI_PASSWORD
-           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power off
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
            ```
 
-           Ensure the power is reporting as off. It may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing the next command.
+           Ensure that the power is reporting as off. It may take 5-10 seconds for this to update.
+           Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
-        1. To power back on the node:
+        1. Power on the node.
+
+           > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-s002`.
 
            ```bash
-           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power on
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
            ```
 
-           Ensure the power is reporting as on. It may take 5-10 seconds for this to update.
+           Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
 
     1. Watch on the console until the node has successfully booted and the login prompt is reached.
 
@@ -257,7 +261,7 @@ Before rebooting NCNs:
        If the `/proc/cmdline` file begins with `BOOT_IMAGE`, then this NCN booted from disk.
 
        ```bash
-       ncn# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
+       ncn-s# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
        ```
 
        Example output for a disk boot is:
@@ -372,10 +376,10 @@ Before rebooting NCNs:
        ncn-mw# /usr/share/doc/csm/upgrade/1.0.1/scripts/k8s/failover-leader.sh <node to be rebooted>
        ```
 
-    1. Cordon and drain the node
+    1. Cordon and drain the node.
 
        ```bash
-       ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+       ncn-mw# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
        There may be pods that cannot be gracefully evicted because of Pod Disruption Budgets (PDB). This will result in messages like the following:
@@ -389,14 +393,14 @@ Before rebooting NCNs:
        However, it will probably be necessary to force the deletion of the pod:
 
        ```bash
-       ncn-m# kubectl delete pod [-n <namespace>] --force --grace-period=0 <pod>
+       ncn-mw# kubectl delete pod [-n <namespace>] --force --grace-period=0 <pod>
        ```
 
        This will delete the offending pod, and Kubernetes should schedule a replacement on another node.
        Then rerun the `kubectl drain` command, and it should report that the node is drained.
 
        ```bash
-       ncn-m# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
+       ncn-mw# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
        ```
 
     1. If booting from disk is desired, then [set the boot order](../../background/ncn_boot_workflow.md#set-boot-order).
@@ -412,13 +416,15 @@ Before rebooting NCNs:
         1. Power off the node.
 
            > `read -s` is used to prevent the password from being written to the screen or the shell history.
+           >
+           > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-w002`.
 
            ```bash
            ncn# USERNAME=root
            ncn# read -s IPMI_PASSWORD
            ncn# export IPMI_PASSWORD
-           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power off
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
            ```
 
            Ensure that the power is reporting as off. It may take 5-10 seconds for this to update.
@@ -426,9 +432,11 @@ Before rebooting NCNs:
 
         1. Power on the node.
 
+           > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-w002`.
+
            ```bash
-           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-           ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power on
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
            ```
 
            Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
@@ -440,7 +448,7 @@ Before rebooting NCNs:
        If the `/proc/cmdline` file begins with `BOOT_IMAGE`, then this NCN booted from disk.
 
        ```bash
-       ncn# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
+       ncn-w# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
        ```
 
        Example output for a disk boot is:
@@ -493,7 +501,7 @@ Before rebooting NCNs:
     1. Remove the node cordon.
 
         ```bash
-        ncn-m# kubectl uncordon <node that just rebooted>
+        ncn-mw# kubectl uncordon <node that just rebooted>
         ```
 
     1. Verify that pods are running on the rebooted node.
@@ -501,7 +509,7 @@ Before rebooting NCNs:
          Within a minute or two, the following command should begin to show pods in a `Running` state (replace NCN in the command below with the name of the rebooted worker node):
 
          ```bash
-         ncn-m# kubectl get pods -o wide -A | grep <node that was rebooted>
+         ncn-mw# kubectl get pods -o wide -A | grep <node that was rebooted>
          ```
 
     1. Remove any dynamically assigned interface IP addresses that did not get released automatically by running the `CASMINST-2015.sh` script:
@@ -544,27 +552,31 @@ Before rebooting NCNs:
 
         1. Power off the node.
 
-            > `read -s` is used to prevent the password from being written to the screen or the shell history.
+           > `read -s` is used to prevent the password from being written to the screen or the shell history.
+           >
+           > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-m002`.
 
-            ```bash
-            ncn# USERNAME=root
-            ncn# read -s IPMI_PASSWORD
-            ncn# export IPMI_PASSWORD
-            ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-            ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
-            ```
+           ```bash
+           ncn# USERNAME=root
+           ncn# read -s IPMI_PASSWORD
+           ncn# export IPMI_PASSWORD
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power off
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
+           ```
 
-            Ensure that the power is reporting as off. It may take 5-10 seconds for this to update.
-            Wait about 30 seconds after receiving the correct power status before issuing the next command.
+           Ensure that the power is reporting as off. It may take 5-10 seconds for this to update.
+           Wait about 30 seconds after receiving the correct power status before issuing the next command.
 
         1. Power on the node.
 
-            ```bash
-            ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            ncn# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
-            ```
+           > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-m002`.
 
-            Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
+           ```bash
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power on
+           ncn# ipmitool -U $USERNAME -E -H <node>-mgmt -I lanplus power status
+           ```
+
+           Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
 
     1. Watch on the console until the node has successfully booted and the login prompt is reached.
 
@@ -573,7 +585,7 @@ Before rebooting NCNs:
        If the `/proc/cmdline` file begins with `BOOT_IMAGE`, then this NCN booted from disk.
 
        ```bash
-       ncn# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
+       ncn-m# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
        ```
 
        Example output for a disk boot is:
@@ -648,19 +660,23 @@ Before rebooting NCNs:
         Ensure that the expected results are returned from the power status check before rebooting.
 
         > `read -s` is used to prevent the password from being written to the screen or the shell history.
+        >
+        > In the example commands below, be sure to replace `<ncn-m001-bmc>` with the external IP or hostname of the BMC of `ncn-m001`.
 
         ```bash
         external# USERNAME=root
         external# read -s IPMI_PASSWORD
         external# export IPMI_PASSWORD
-        external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+        external# ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power status
         ```
 
         1. Power off the node.
 
+            > In the example commands below, be sure to replace `<ncn-m001-bmc>` with the external IP or hostname of the BMC of `ncn-m001`.
+
             ```bash
-            external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power off
-            external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            external# ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power off
+            external# ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power status
             ```
 
             Ensure that power is reporting as off. It may take 5-10 seconds for this to update.
@@ -668,14 +684,30 @@ Before rebooting NCNs:
 
         1. Power on the node.
 
+            > In the example commands below, be sure to replace `<ncn-m001-bmc>` with the external IP or hostname of the BMC of `ncn-m001`.
+
             ```bash
-            external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power on
-            external# ipmitool -U $USERNAME -E -H ${hostname}-mgmt -I lanplus power status
+            external# ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power on
+            external# ipmitool -U $USERNAME -E -H <ncn-m001-bmc> -I lanplus power status
             ```
 
             Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
 
     1. Watch on the console until the node has successfully booted and the login prompt is reached.
+
+    1. If desired, verify that the method of boot is as expected.
+
+       If the `/proc/cmdline` file begins with `BOOT_IMAGE`, then this NCN booted from disk.
+
+       ```bash
+       ncn-m001# egrep -o '^(BOOT_IMAGE|kernel)' /proc/cmdline
+       ```
+
+       Example output for a disk boot is:
+
+       ```text
+       BOOT_IMAGE=(mduuid/a3899572a56f5fd88a0dec0e89fc12b4)/boot/grub2/../kernel
+       ```
 
     1. Retrieve the component name (xname) for the node that was rebooted.
 
