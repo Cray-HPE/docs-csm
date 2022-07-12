@@ -1,7 +1,12 @@
 # Check BGP Status and Reset Sessions
 
 Check the Border Gateway Protocol \(BGP\) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state.
-If the state of any session in the table is Idle, the BGP sessions must be reset.
+If the state of any session in the table is Idle, then the BGP sessions must be reset.
+
+- [Prerequisites](#prerequisites)
+- [Procedure](#procedure)
+  - [Mellanox](#mellanox)
+  - [Aruba](#aruba)
 
 ## Prerequisites
 
@@ -9,25 +14,27 @@ This procedure requires administrative privileges.
 
 ## Procedure
 
-### MELLANOX
+The following procedures may not resolve the problem after just one attempt. In some cases, the procedures need to be followed multiple times before the situation resolves.
+
+### Mellanox
 
 1. Verify that all BGP sessions are in an `ESTABLISHED` state for the Mellanox spine switches.
 
-    SSH to each spine switch to check the status of all BGP sessions.
+    SSH to each spine switch and check the status of all BGP sessions.
 
     1. SSH to a spine switch.
 
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.hmn
+        ncn# ssh admin@sw-spine-001.hmn
         ```
 
     1. View the status of the BGP sessions.
 
         ```text
-        sw-spine-001 [standalone: master] > enable
-        sw-spine-001 [standalone: master] # show ip bgp vrf all summary
+        sw-spine# enable
+        sw-spine# show ip bgp vrf all summary
         ```
 
         Example output:
@@ -66,7 +73,7 @@ This procedure requires administrative privileges.
         10.252.1.9        4    65533        595842    595817    40        0      0      6:21:30:16    ESTABLISHED/12
         ```
 
-        If any of the sessions are in an `IDLE` state, proceed to the next step.
+        If any of the sessions are in an `IDLE` state, then proceed to the next step.
 
 1. Reset BGP to re-establish the sessions.
 
@@ -77,21 +84,26 @@ This procedure requires administrative privileges.
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.hmn
+        ncn# ssh admin@sw-spine-001.hmn
         ```
 
     1. Verify that BGP is enabled.
 
         ```text
-        sw-spine-001 [standalone: master] > show protocols | include bgp
+        sw-spine# show protocols | include bgp
+        ```
+
+        If BGP is enabled, then the output should be similar to the following:
+
+        ```text
          bgp:                    enabled
         ```
 
     1. Clear the BGP sessions.
 
         ```text
-        sw-spine-001 [standalone: master] > enable
-        sw-spine-001 [standalone: master] # clear ip bgp all
+        sw-spine# enable
+        sw-spine# clear ip bgp all
         ```
 
     1. Check the status of the BGP sessions to see if they are now `ESTABLISHED`.
@@ -99,8 +111,8 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become `ESTABLISHED`.
 
         ```text
-        sw-spine-001 [standalone: master] > enable
-        sw-spine-001 [standalone: master] # show ip bgp vrf all summary
+        sw-spine# enable
+        sw-spine# show ip bgp vrf all summary
         ```
 
         Example output:
@@ -139,28 +151,24 @@ This procedure requires administrative privileges.
         10.252.1.9        4    65533        595842    595817    40        0      0      6:21:30:16    ESTABLISHED/12
         ```
 
-    Once all sessions are in an `ESTABLISHED` state, BGP reset is complete for the Mellanox switches.
-
-    **Troubleshooting:** If some sessions remain `IDLE`, then re-run the Mellanox reset steps to clear and re-check status.
-    If some sessions still remain `IDLE`, then proceed to [reapply the `cray-metallb` helm chart](#reapply), along with the BGP reset,
-    in order to force the speaker pods to re-establish sessions with the switch.
+    Once all sessions are in an `ESTABLISHED` state, BGP reset is complete.
 
 ### Aruba
 
 1. Verify that all BGP sessions are in an `Established` state for the Aruba spine switches.
 
-    SSH to each spine switch to check the status of all BGP sessions.
+    SSH to each spine switch and check the status of all BGP sessions.
 
     1. SSH to a spine switch.
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.hmn
+        ncn# ssh admin@sw-spine-001.hmn
         ```
 
     1. View the status of the BGP sessions.
 
         ```text
-        sw-spine-001# show bgp all-vrf all summary
+        sw-spine# show bgp all-vrf all summary
         ```
 
         Example output:
@@ -208,7 +216,7 @@ This procedure requires administrative privileges.
         -----------------------------
         ```
 
-        If any of the sessions are in an `Idle` state, proceed to the next step.
+        If any of the sessions are in an `Idle` state, then proceed to the next step.
 
 1. Reset BGP to re-establish the sessions.
 
@@ -219,13 +227,13 @@ This procedure requires administrative privileges.
         For example:
 
         ```bash
-        ncn-m001# ssh admin@sw-spine-001.hmn
+        ncn# ssh admin@sw-spine-001.hmn
         ```
 
     1. Clear the BGP sessions.
 
         ```text
-        sw-spine-001# clear bgp all *
+        sw-spine# clear bgp *
         ```
 
     1. Check the status of the BGP sessions.
@@ -233,7 +241,7 @@ This procedure requires administrative privileges.
         It may take a few minutes for sessions to become `Established`.
 
         ```text
-        sw-spine-001# show bgp all-vrf all summary
+        sw-spine# show bgp all-vrf all summary
         ```
 
         Example output:
@@ -281,6 +289,4 @@ This procedure requires administrative privileges.
         -----------------------------
         ```
 
-    Once all sessions are in an `Established` state, BGP reset is complete for the Aruba switches.
-
-    **Troubleshooting:** If some sessions remain `Idle`, then re-run the Aruba reset steps to clear and re-check status.
+    Once all sessions are in an `Established` state, BGP reset is complete.
