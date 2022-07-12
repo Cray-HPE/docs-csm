@@ -11,7 +11,20 @@ For pods with this sidecar, the logs can be viewed by running a command similar 
 kubectl logs <podname> -n <namespace> -c istio-proxy | grep 503
 ```
 
+For general Kubernetes troubleshooting information, including more information on viewing pod logs, see
+[Kubernetes troubleshooting topics](../../troubleshooting/index.md#kubernetes).
+
 This page is broken into different sections, based on the errors found in the log.
+
+- [`UF,URX` with TLS error](#ufurx-with-tls-error)
+  - [Symptom](#symptom-ufurx-with-tls-error)
+  - [Description](#description-ufurx-with-tls-error)
+  - [Remediation](#remediation-ufurx-with-tls-error)
+- [`UAEX`](#uaex)
+  - [Symptom](#symptom-uaex)
+  - [Description](#description-uaex)
+  - [Remediation](#remediation-uaex)
+- [Other error codes](#other-error-codes)
 
 ## `UF,URX` with TLS error
 
@@ -23,7 +36,7 @@ This page is broken into different sections, based on the errors found in the lo
 
 ### Description (`UF,URX` with a TLS error)
 
-Envoy container can occasionally get into this state when NCNs are being rebooted or upgraded, as well as when many deployments
+Envoy containers can occasionally get into this state when NCNs are being rebooted or upgraded, as well as when many deployments
 are being created.
 
 ### Remediation (`UF,URX` with a TLS error)
@@ -59,14 +72,14 @@ This error code typically indicates an issue with the authorization service (for
 (`ncn-mw#`) Perform a rolling restart of all of the following:
 
 ```bash
-kubectl rollout restart -n spire statefulset spire-server
+kubectl rollout restart -n spire statefulset spire-postgres spire-server
 kubectl rollout restart -n spire daemonset spire-agent request-ncn-join-token
-kubectl rollout restart -n spire deployment spire-jwks spire-postgres spire-postgres-pooler
+kubectl rollout restart -n spire deployment spire-jwks spire-postgres-pooler
+kubectl rollout status -n spire statefulset spire-postgres
 kubectl rollout status -n spire statefulset spire-server
 kubectl rollout status -n spire daemonset spire-agent
 kubectl rollout status -n spire daemonset request-ncn-join-token
 kubectl rollout status -n spire deployment spire-jwks
-kubectl rollout status -n spire deployment spire-postgres
 kubectl rollout status -n spire deployment spire-postgres-pooler
 ```
 
@@ -76,5 +89,5 @@ Once the roll out is complete, the HTTP 503 message should clear.
 
 Although the above codes are most common, various other issues such as networking or application errors can cause different errors in
 the pod or sidecar logs. Refer to the [Envoy access log documentation](https://www.envoyproxy.io/docs/envoy/latest/configuration/observability/access_log/usage#)
-for a list of possible Envoy response flags. In general, running a rolling restart of the application itself to see if it clears the error is a good practice;
-otherwise, an understanding of what the error message or response flag means is required to further troubleshoot the issue.
+for a list of possible Envoy response flags. In general, running a rolling restart of the application itself to see if it clears the error is a good practice.
+If that does not resolve the problem, then an understanding of what the error message or response flag means is required to further troubleshoot the issue.
