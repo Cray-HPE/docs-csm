@@ -1,6 +1,6 @@
 # Interpreting HMS Health Check Results
 
-## Table of contents:
+## Table of contents
 
 1. [Introduction](#introduction)
 1. [HMS Smoke Tests](#hms-smoke-tests)
@@ -129,7 +129,7 @@ When API test failures occur, output from Tavern is printed by `pytest` indicati
 
 * The `Source test stage` that was executing when the failure occurred which is a portion of the source code for the failed test case.
 * The `Formatted stage` that was executing when the failure occurred which is a portion of the source code for the failed test case with its variables filled in with the values that were set at the time of the failure. This includes the request header, method, URL, and other options of the failed test case which is useful for attempting to reproduce the failure using the `curl` command.
-* The specific *Errors* encountered when processing the API response that caused the failure. **This is the first place to look when debugging API test failures.**
+* The specific `Errors` encountered when processing the API response that caused the failure. **This is the first place to look when debugging API test failures.**
 
 The following is an example `Source test stage`:
 
@@ -174,7 +174,7 @@ E   tavern.util.exceptions.TestFailError: Test 'Ensure the boot script service c
 
 This section provides guidance for handling specific HMS Health Check failures that may occur.
 
-### smd_discovery_status_test_ncn-smoke.sh
+### `smd_discovery_status_test_ncn-smoke.sh`
 
 This test verifies that the system hardware has been discovered successfully.
 
@@ -227,7 +227,7 @@ If discovery failures for Gigabyte CMCs with component names (xnames) of the for
 
 If discovery failures for HPE PDUs with component names (xnames) of the form `xXmM` occur, this may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](../operations/hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
 
-#### ChildVerificationFailed
+#### `ChildVerificationFailed`
 
 Check the SMD logs to determine the cause of the bad Redfish path encountered during discovery.
 
@@ -245,9 +245,9 @@ ncn# kubectl -n services logs <cray-smd-pod2> cray-smd > smd_pod2_logs
 ncn# kubectl -n services logs <cray-smd-pod3> cray-smd > smd_pod3_logs
 ```
 
-#### DiscoveryStarted
+#### `DiscoveryStarted`
 
-The endpoint is in the process of being inventoried by Hardware State Manager (HSM). Wait for the current discovery operation to end which should result in a new LastDiscoveryStatus state being set for the endpoint.
+The endpoint is in the process of being inventoried by Hardware State Manager (HSM). Wait for the current discovery operation to end which should result in a new `LastDiscoveryStatus` state being set for the endpoint.
 
 Use the following command to check the current discovery status of the endpoint:
 
@@ -273,11 +273,11 @@ It is typically safe to postpone the investigation and resolution of non-blockin
 
 ## Known Issues
 
-This section outlines known issues that cause HMS Health Check failures. These issues have been fixed in CSM-1.2 but may still be encountered on CSM-1.2 systems that have been upgraded from a previous release.
+This section outlines known issues that cause HMS Health Check failures. These issues have been fixed in `CSM-1.2` but may still be encountered on `CSM-1.2` systems that have been upgraded from a previous release.
 
 * [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
 * [BMCs set to "On" state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
-* [ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
+* [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
 * [Custom Roles and SubRoles for components in HSM](#hms-custom-component-roles-subroles-hsm)
 
 ### Warning flags incorrectly set in HSM for Mountain BMCs
@@ -285,6 +285,7 @@ This section outlines known issues that cause HMS Health Check failures. These i
 The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures.
 
 The following HMS functional test may fail due to this issue:
+
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
 The symptom of this issue is the test fails with error messages about Warning flags being set on one or more BMCs. It may look similar to the following in the test output:
@@ -339,6 +340,7 @@ Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manag
 ### BMCs set to "On" state in HSM
 
 The following HMS functional test may fail due to a known issue because of CMMs setting BMC states to "On" instead of "Ready" in HSM:
+
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
 This issue looks similar to the following in the test output:
@@ -355,9 +357,10 @@ This issue looks similar to the following in the test output:
 
 Failures of this test caused by BMCs in the "On" state can be safely ignored.
 
-### ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM
+### `ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM
 
-The following HMS functional test may fail due to a known issue because of ComponentEndpoints of Redfish subtype "AuxiliaryController" in HSM:
+The following HMS functional test may fail due to a known issue because of `ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM:
+
 * `test_smd_component_endpoints_ncn-functional_remote-functional.tavern.yaml`
 
 This issue looks similar to the following in the test output:
@@ -376,11 +379,12 @@ This issue looks similar to the following in the test output:
          - Enum 'AuxiliaryController' does not exist. Path: '/ComponentEndpoints/126/RedfishSubtype'.: Path: '/'>
 ```
 
-Failures of this test caused by AuxiliaryController endpoints for Cassini mezzanine cards can be safely ignored.
+Failures of this test caused by `AuxiliaryController` endpoints for Cassini mezzanine cards can be safely ignored.
 
 ### Custom Roles and SubRoles for Components in HSM
 
 The following HMS functional test may fail due to a known issue because of Components with custom Roles or SubRoles set in HSM:
+
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
 This issue looks similar to the following in the test output:
