@@ -176,6 +176,7 @@ function build_initrd {
         fi
     done
     kdump_cmdline+=( "rd.info" )
+    kdump_cmdline+=( "rd.debug=1" )
     
     # Resolve the filesystem and the live directory dynamically.
     [ -n "${sqfs_label_arg:-''}" ] && sqfs_label="${sqfs_label_arg#*=}"
@@ -192,7 +193,6 @@ function build_initrd {
     # kdump-specific modules to add
     kdump_add=${ADD[*]}
     kdump_add+=( 'kdump' )
-    kdump_add+=( 'rd.debug=1' )
 
     # modules to remove
     kdump_omit=${OMIT[*]}
