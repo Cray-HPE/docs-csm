@@ -461,15 +461,15 @@ The steps in this section load hand-off data before a later procedure reboots th
     ncn-m002# exit
     ```
 
-1. Apply the `kdump` hotfix.
+1. Apply the `kdump` workaround.
 
     `kdump` assists in taking a dump of the NCN if it encounters a kernel panic.
-    `kdump` does not work properly in CSM 1.2. Until this hotfix is applied, `kdump` may not produce a proper dump.
-    Earlier in the install, this hotfix was applied to all of the NCNs except for `ncn-m001`, because it was the PIT
+    `kdump` does not work properly in CSM 1.2. Until this workaround is applied, `kdump` may not produce a proper dump.
+    Earlier in the install, this workaround was applied to all of the NCNs except for `ncn-m001`, because it was the PIT
     node. Running it now applies the fix to `ncn-m001` as well.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/scripts/hotfixes/kdump/hotfix.sh
+    ncn-m001# /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
     ```
 
     Example output:
