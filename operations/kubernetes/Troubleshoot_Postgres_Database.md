@@ -182,8 +182,6 @@ The following is an example where replication is broken:
 +-------------------+---------------------+--------------+--------+----------+----+-----------+
 ```
 
-
-
 ### Recover replication
 
 In the event that a state of broken Postgres replication persists and the space allocated for the WAL files fills up, the affected database will likely shut down and create a
@@ -199,7 +197,7 @@ For example:
 1. Reinitialize the first lagging replica member.
 
     ```bash
-    kubectl exec keycloak-postgres-1 -n services -it -- bash
+    kubectl exec keycloak-postgres-1 -c postgres -n services -it -- bash
     root@keycloak-postgres-1:/home/patronictl reinit keycloak-postgres keycloak-postgres-0
     ```
 
@@ -252,7 +250,7 @@ For example:
     For example:
 
     ```bash
-    kubectl exec cray-console-data-postgres-0 -n services -- bash
+    kubectl exec cray-console-data-postgres-0 -c postgres -n services -- bash
     root@cray-console-data-postgres-0:~# patronictl reinit cray-console-data-postgres cray-console-data-postgres-1
     ```
 
@@ -370,7 +368,7 @@ For example:
         `kubectl exec` into that pod that is `stopped` and check the most recent Postgres log for any `invalid segment number 0` errors relating to `pg_internal.init.*` files.
 
         ```bash
-        kubectl exec keycloak-postgres-2 -n services -it -- bash
+        kubectl exec keycloak-postgres-2 -c postgres -n services -it -- bash
         postgres@keycloak-postgres-2:~$ export LOG=`ls -t /home/postgres/pgdata/pgroot/pg_log/*.csv | head -1`
         postgres@keycloak-postgres-2:~$ grep pg_internal.init $LOG | grep "invalid segment number 0" | tail -1
         ```
@@ -1048,8 +1046,6 @@ If a Postgres cluster no longer has a leader, the database will need to be recov
 
         If any of the above are not true, this indicates that the cluster members are no longer properly synchronized.
         In this case, attempt the [Recover replication](#recover-replication) remediation procedures.
-
-
 
 ### Recover from a missing Postgres leader
 
