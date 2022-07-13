@@ -23,9 +23,7 @@ cray-hms-hmcollector-ingress-554bb46784-zdhwc   cray-hms-hmcollector-ingress   5
 cray-hms-hmcollector-ingress-554bb46784-zdhwc   istio-proxy                    4m           133Mi
 ```
 
-The default replica count for the cray-hms-hmcollector-ingress deployment is 3.
-
-**NOTE: Tuning the replica count requires cray-hms-hmcollector chart v2.15.7**
+The default replica count for the cray-hms-hmcollector-ingress deployment is 3. **NOTE: Tuning the replica count requires cray-hms-hmcollector chart v2.15.7**
 
 The default resource limits for the cray-hms-hmcollector-ingress containers are:
 
@@ -204,7 +202,8 @@ For reference, on a system with 4 fully populated liquid cooled cabinets a singl
    podAnnotations: {}
    ```
 
-5. If desired adjust the replica count or resource limits and requests for `cray-hms-hmcollector-ingress`. Otherwise this step can be skipped. Refer to [Resource Limit Tuning Guidance](#resource-limit-tuning) for information on how the resource limits could be adjusted.
+5. If desired adjust the replica count or resource limits and requests for `cray-hms-hmcollector-ingress`. Otherwise this step can be skipped.
+   Refer to [Resource Limit Tuning Guidance](#resource-limit-tuning) for information on how the resource limits could be adjusted.
 
    Edit `customizations.yaml` and the value overrides for the `cray-hms-hmcollector-ingress` Helm chart are defined at `spec.kubernetes.services.cray-hms-hmcollector.collectorIngressConfig`
 
@@ -259,7 +258,8 @@ For reference, on a system with 4 fully populated liquid cooled cabinets a singl
    ncn-m001# git push
    ```
 
-10. **If this document was referenced during an upgrade procure, then skip.** Otherwise, continue on to [Redeploy cray-hms-hmcollector with new resource limits and requests](#redeploy-cray-hms-hmcollector) for the new replica count and resource limits and requests to take effect.
+10. **If this document was referenced during an upgrade procure, then skip.** Otherwise, continue on to [Redeploy cray-hms-hmcollector with new resource limits and requests](#redeploy-cray-hms-hmcollector)
+    for the new replica count and resource limits and requests to take effect.
 
 <a name="redeploy-cray-hms-hmcollector"></a>
 
