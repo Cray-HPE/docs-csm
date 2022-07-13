@@ -645,7 +645,3 @@ Admin
 
 - operations/system_management_health/Configure_Prometheus_Alerta_Alert_Notifications.md
 Alerta
-
-- upgrade/plan_and_coordinate_network_upgrade.md
-# To differentiate between old CAN and new CAN
-pre-1
