@@ -74,7 +74,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * Improved CFS session resiliency after power outages
 * Pod priority class additions to improve upgrades and fail-over
 * New procedure for exporting and restoring Nexus data
-  * [Nexus Export and Restore](operations/package_repository_management/Nexus_Export_and_Restore.md) 
+  * [Nexus Export and Restore](operations/package_repository_management/Nexus_Export_and_Restore.md)
   * New recommendation to take and save off cluster an export of all data using the procedure
 
 ### New hardware support
