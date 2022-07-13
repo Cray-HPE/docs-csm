@@ -22,7 +22,7 @@ See [Prepare for Upgrade](prepare_for_upgrade.md).
 
 The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
-The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](1.2/README.md).
+The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](upgrade_ncn_nodes.md).
 
 ## 3. Validate CSM health
 
