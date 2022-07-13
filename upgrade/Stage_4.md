@@ -17,12 +17,11 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
 
 1. Check to ensure that the upgrade is possible.
 
-   On ncn-s001:
+   On `ncn-s001`:
 
    ```bash
    /srv/cray/scripts/common/cubs_tool.py --version 16.2.9 --registry localhost
    ```
-
 
    Example output:
 
@@ -53,7 +52,7 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
 
 1. Monitor the upgrade.
 
-   The cubs_tool will automatically watch the upgrade.  As services are upgraded they will move from the ***Current*** column to the ***Upgraded*** column.
+   The `cubs_tool` will automatically watch the upgrade.  As services are upgraded they will move from the ***Current*** column to the ***Upgraded*** column.
 
    ```text
    +---------+---------------+----------------+
@@ -85,7 +84,7 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
 
 1. Verify completed upgrade
 
-   On ncn-s001:
+   On `ncn-s001`:
 
    ```bash
    /srv/cray/scripts/common/cubs_tool.py --report
@@ -144,7 +143,7 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
    +----------+-------------+-----------------------+---------+---------+
    ```
 
-   **NOTE:** This is an example only and is showing only the core ceph components.  
+   **NOTE:** This is an example only and is showing only the core Ceph components.  
 
 ### Diagnose a stalled upgrade
 
@@ -203,7 +202,7 @@ If these steps do not resolve the issue, then contact support for further assist
       The upgrade is not complete. See
       See [Ceph Orchestrator Usage](../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
 
-1. Verify that no processes are running version `15.2.15`.
+   1. Verify that no processes are running the old version `15.2.15`.
 
    The following command will count the number of processes which are running version `15.2.15`.
 
@@ -219,13 +218,13 @@ If these steps do not resolve the issue, then contact support for further assist
       ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.15")]'
       ```
 
-   1. Make sure the upgrade has stopped.
+   2. Make sure the upgrade has stopped.
 
       ```bash
       ceph orch upgrade stop
       ```
 
-   1. Troubleshoot the failed upgrade.
+   3. Troubleshoot the failed upgrade.
 
       The upgrade is not complete. See
       [Ceph Orchestrator Usage](../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
