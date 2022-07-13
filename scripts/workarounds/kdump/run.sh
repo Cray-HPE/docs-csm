@@ -22,7 +22,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-# Origin of hotfix: https://jira-pro.its.hpecorp.net:8443/browse/CASMTRIAGE-3591
+# Origin of workaround: https://jira-pro.its.hpecorp.net:8443/browse/CASMTRIAGE-3591
 
 set -euo pipefail
 
@@ -60,10 +60,10 @@ for ncn in "${NCNS[@]}"; do
 done
 
 printf "Running updated create-kdump-artifacts.sh script on [${#NCNS[@]}] NCNs ... "
-pdsh -S -b -w "$(printf '%s,' "${NCNS[@]}")" '/srv/cray/scripts/common/create-kdump-artifacts.sh > /var/log/metal-kdump-hotfix.log 2>/var/log/metal-kdump-hotfix.error.log'
+pdsh -S -b -w "$(printf '%s,' "${NCNS[@]}")" '/srv/cray/scripts/common/create-kdump-artifacts.sh > /var/log/metal-kdump-workarounds.log 2>/var/log/metal-kdump-workarounds.error.log'
 echo "Done"
 
 echo "The following NCNs contain the kdump patch:"
 printf "\t%s\n" "${NCNS[@]}"
-echo "This hotfix has completed."
+echo "This workaround has completed."
 

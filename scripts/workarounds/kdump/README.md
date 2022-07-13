@@ -1,13 +1,13 @@
-# Kernel Dump Hotfix
+# Kernel Dump Workaround
 
-This directory includes the script and the library necessary for applying the hotfix to all reachable NCNs.
+This directory includes the script and the library necessary for applying the workaround to all reachable NCNs.
 
 ## Usage
 
-1. Run `hotfix.sh`.
+1. Run `run.sh`.
 
     ```bash
-    ncn# /usr/share/doc/csm/scripts/hotfixes/kdump/hotfix.sh
+    ncn# /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
     ```
 
    Example output:
@@ -37,7 +37,7 @@ This directory includes the script and the library necessary for applying the ho
    ncn-w002
    ncn-w003
    ncn-w004
-   This hotfix has completed.
+   This workaround has completed.
    ```
 
 ## Origin

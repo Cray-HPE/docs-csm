@@ -566,14 +566,14 @@ be performed are in the [Deploy](#deploy) section.
     pit#
     ```
 
-1. Apply the `kdump` hotfix.
+1. Apply the `kdump` workaround.
 
     `kdump` assists in taking a dump of the NCN if it encounters a kernel panic.
-    `kdump` does not work properly in CSM 1.2. Until this hotfix is applied, `kdump` may not produce a proper dump.
-    Running this script applies the hotfix on all of the NCNs that were just deployed.
+    `kdump` does not work properly in CSM 1.2. Until this workaround is applied, `kdump` may not produce a proper dump.
+    Running this script applies the workaround on all of the NCNs that were just deployed.
 
     ```bash
-    pit# /usr/share/doc/csm/scripts/hotfixes/kdump/hotfix.sh
+    pit# /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
     ```
 
     Example output:

@@ -125,10 +125,10 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 ## Stage 2.4
 
-Apply the hotfix for `kdump`:
+Apply the workaround for `kdump`:
 
 ```bash
-ncn-m002# /usr/share/doc/csm/scripts/hotfixes/kdump/hotfix.sh
+ncn-m002# /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
 ```
 
 Example output:
