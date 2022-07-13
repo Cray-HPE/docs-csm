@@ -5,11 +5,13 @@
 * [Redeploy cray-hms-hmcollector with new resource limits and requests](#redeploy-cray-hms-hmcollector)
 
 <a name="resource-limit-tuning"></a>
+
 ## Resource Limit Tuning Guidance
 
 ### Inspect current resource usage in the cray-hms-hmcollector-ingress pods
 
 View resource usage of the containers in the cray-hms-hmcollector-ingress pods:
+
 ```console
 ncn-m001# kubectl -n services top pod -l app.kubernetes.io/name=cray-hms-hmcollector-ingress --containers
 POD                                             NAME                           CPU(cores)   MEMORY(bytes)
@@ -22,12 +24,16 @@ cray-hms-hmcollector-ingress-554bb46784-zdhwc   istio-proxy                    4
 ```
 
 The default resource limits for the cray-hms-hmcollector-ingress containers are:
-   * CPU: `4` or `4000m`
-   * Memory: `5Gi`
+
+* CPU: `4` or `4000m`
+
+* Memory: `5Gi`
 
 The default resource limits for the istio-proxy containers are:
-   * CPU: `2` or `2000m`
-   * Memory: `1Gi`
+
+* CPU: `2` or `2000m`
+
+* Memory: `1Gi`
 
 ### Inspect the cray-hms-hmcollector-ingress pods for OOMKilled events
 
@@ -59,9 +65,11 @@ Containers:
 
 [...]
 ```
+
 > In the above example output the `cray-hms-hmcollector-ingress` container was previously OOMKilled, but the container is currently running.
 
 Look for the `isitio-proxy` containers and check their `Last State` (if present) to see if the container has been previously terminated due to it running out of memory:
+
 ```console
 [...]
 
@@ -93,10 +101,13 @@ Look for the `isitio-proxy` containers and check their `Last State` (if present)
 
 [...]
 ```
+
 > In the above example output the `istio-proxy` container was previously OOMKilled, but the container is currently running.
 
 ### How to adjust CPU and Memory limits
-If the `cray-hms-hmcollector-ingress` containers are hitting their CPU limit and memory usage is steadily increasing till they get OOMKilled, then the CPU limit for `cray-hms-hmcollector-ingress` should be increased. It can be increased in increments of `8` or `8000m` This is a situation were the collector is unable to process events fast enough and they start to collect build up inside of it.
+
+If the `cray-hms-hmcollector-ingress` containers are hitting their CPU limit and memory usage is steadily increasing till they get OOMKilled, then the CPU limit for `cray-hms-hmcollector-ingress` should be increased.
+It can be increased in increments of `8` or `8000m` This is a situation were the collector is unable to process events fast enough and they start to collect build up inside of it.
 
 If the `cray-hms-hmcollector-ingress` containers are consistency hitting their CPU limit, then their CPU limit should be increased. It can be increased in increments of `8` or `8000m`.
 
@@ -109,6 +120,7 @@ Otherwise, if the `cray-hms-hmcollector-ingress` and `istio-proxy` containers ar
 For reference, on a system with 4 fully populated liquid cooled cabinets a single `cray-hms-hmcollector-ingress` pod (replicas = 1) was consuming `~5` or `~5000m` of CPU and `~300Mi` of memory.
 
 <a name="customize-resource-limits"></a>
+
 ## Customize cray-hms-hmcollector resource limits and requests in customizations.yaml
 
 1. If the [`site-init` repository is available as a remote repository](../../install/prepare_site_init.md#push-to-a-remote-repository)
@@ -192,6 +204,7 @@ For reference, on a system with 4 fully populated liquid cooled cabinets a singl
    Edit `customizations.yaml` and the value overrides for the `cray-hms-hmcollector-ingress` Helm chart are defined at `spec.kubernetes.services.cray-hms-hmcollector.collectorIngressConfig`
 
    Adjust the resource limits and requests for the `cray-hms-hmcollector-ingress` deployment in `customizations.yaml`:
+
    ```yaml
          cray-hms-hmcollector:
             hmcollector_external_ip: '{{ network.netstaticips.hmn_api_gw }}'
@@ -240,11 +253,13 @@ For reference, on a system with 4 fully populated liquid cooled cabinets a singl
    ncn-m001# git push
    ```
 
-10. __If this document was referenced during an upgrade procure, then skip__ Otherwise, continue on to [Redeploy cray-hms-hmcollector with new resource limits and requests](#redeploy-cray-hms-hmcollector) for the the new resource limits and requests to take effect.
-
+10. **If this document was referenced during an upgrade procure, then skip.** Otherwise, continue on to [Redeploy cray-hms-hmcollector with new resource limits and requests](#redeploy-cray-hms-hmcollector)
+    for the the new resource limits and requests to take effect.
 
 <a name="redeploy-cray-hms-hmcollector"></a>
+
 ## Redeploy cray-hms-hmcollector with new resource limits and requests
+
 1. Determine the version of HM Collector:
 
     ```console
