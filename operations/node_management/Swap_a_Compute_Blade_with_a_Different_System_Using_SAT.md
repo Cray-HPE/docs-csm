@@ -35,8 +35,6 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 1. Using the work load manager (WLM), drain running jobs from the affected nodes on the blade. Refer to the vendor documentation for the WLM for more information.
 
-
-
 1. Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
 
    There will be separate session templates for UANs and computes nodes.
@@ -190,8 +188,6 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 1. Install the blade from the source system into the destination system.
 
-
-
 ## Bring up the blade in the destination system
 
 ### Destination: Use SAT to add the blade to hardware management
@@ -304,8 +300,6 @@ one on `ncn-w002` and one on another worker node.
            $(kubectl get pods --all-namespaces |grep slingshot | awk '{print $2}') \
            -- fmn_status
    ```
-
-
 
 ### Destination: Check DNS
 

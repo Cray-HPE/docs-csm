@@ -7,13 +7,13 @@ Hardware State Manager has two important parts:
 
 SLS:
 
-```
+```bash
 curl  -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/sls/v1/hardware | jq | less
 ```
 
 The output from SLS should look like this:
 
-```
+```json
 {
   "Parent": "x1000c7s1b0",
   "Xname": "x1000c7s1b0n0",
@@ -32,13 +32,13 @@ The output from SLS should look like this:
 
 SMD:
 
-```
+```bash
 curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces | jq | less
 ```
 
 Your output from SMD should look like this:
 
-```
+```json
 {
   "ID": "0040a6838b0e",
   "Description": "",

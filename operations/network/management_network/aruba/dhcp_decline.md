@@ -2,7 +2,7 @@
 
 If something similar to the following is in the logs, this indicates an issue that an IP address being allocated is already being used and is not able to get the IP assigned to the device as previously set.
 
-```
+```bash
 dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.56
 dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.57
 dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.58
@@ -24,13 +24,13 @@ dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252
 
 * Check by MAC address (no colons):
 
-  ```
+  ```bash
   curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/18c04d13d73c
   ```
 
 * Check by component name (xname):
 
-  ```
+  ```bash
   curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=x3000c0s25b0n0
   ```
 
