@@ -8,7 +8,7 @@ This procedure requires administrative privileges.
 
 ## Procedure
 
-1. Log in to the Postgres container.
+1. (`ncn-mw#`) Log in to the Postgres container.
 
     ```bash
     kubectl -n services exec -it cray-smd-postgres-0 -c postgres -- bash
@@ -41,10 +41,10 @@ This procedure requires administrative privileges.
     run: /etc/service/pgqd: (pid 25) 487273s
     ```
 
-2. Log in as the `postgres` user.
+1. (`postgres-container#`) Log in as the `postgres` user.
 
     ```bash
-    root@cray-smd-postgres-0:/home/psql -U postgres
+    psql -U postgres
     ```
 
     Example output:
@@ -56,10 +56,10 @@ This procedure requires administrative privileges.
     postgres=#
     ```
 
-3. List the existing databases.
+1. (`postgres#`) List the existing databases.
 
-    ```bash
-    postgres=# \l
+    ```text
+    \l
     ```
 
     Example output:
@@ -78,12 +78,12 @@ This procedure requires administrative privileges.
     (5 rows)
     ```
 
-4. Establish a connection to the desired database.
+1. (`postgres#`) Establish a connection to the desired database.
 
     In the example below, the `hmsds` database is used.
 
-    ```bash
-    postgres=# \c hmsds
+    ```text
+    \c hmsds
     ```
 
     Example output:
@@ -94,9 +94,9 @@ This procedure requires administrative privileges.
     hmsds=#
     ```
 
-5. List the data types that are in the database being viewed.
+1. (`postgres#`) List the data types that are in the database being viewed.
 
-    ```bash
+    ```text
     \dt
     ```
 
