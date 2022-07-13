@@ -122,11 +122,6 @@ upgrade and its sequence of events, see the [SLS upgrade `README`](scripts/sls/R
 The SLS data upgrade is a critical step in moving to CSM 1.2. Upgraded SLS data is used in DNS and management network configuration. For details to aid in understanding and
 decision making, see the [Management Network User Guide](../operations/network/management_network/README.md).
 
-One detail which must not be overlooked is that the existing Customer Access Network (CAN) will be migrated or retrofitted into the new Customer Management Network (CMN) while
-minimizing changes. A new CAN (or CHN) network is then created. Pivoting the existing CAN to the new CMN allows administrative traffic (already on the CAN) to remain as-is while
-moving standard user traffic to a new site-routable network. You can read more about this, as well as steps to ensure undisrupted access to UANs during upgrade, in
-[Plan and coordinate network upgrade](plan_and_coordinate_network_upgrade.md).
-
 > **Important:** If this is the first time performing the SLS update to CSM 1.2, review the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md) in order to ensure
 the correct options for the specific environment are used. Two examples are given below. To see all options from the update script, run `./sls_updater_csm_1.2.py --help`.
 
@@ -155,8 +150,7 @@ the correct options for the specific environment are used. Two examples are give
 ### Migrate SLS data JSON to CSM 1.2
 
 Migrate SLS data to CSM 1.2, using the `sls_input_file.json` obtained above, using the desired
-network (new CAN or CHN) and its chosen subnet. For details on choosing the subnet, see
-[Decide on subnet ranges for new CAN/CHN](plan_and_coordinate_network_upgrade.md#decide-on-subnet-ranges-for-new-canchn).
+network (new CAN or CHN) and its chosen subnet.
 
 - (`ncn-m001#`) Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 

@@ -37,15 +37,6 @@ For detailed BICAN documentation, see the [BICAN Technical Details](../operation
 
 - `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release).
 
-## Plan and coordinate network upgrade
-
-Prior to CSM 1.2, the single Customer Access Network (CAN) carried both the administrative network traffic and the user network
-traffic. CSM 1.2 introduces bifurcated CAN (BICAN), which is designed to separate administrative network traffic and user network traffic.
-
-[Plan and coordinate network upgrade](plan_and_coordinate_network_upgrade.md) shows the steps that need to be taken in order to prepare
-for this network upgrade. Follow these steps in order to plan and coordinate the network upgrade with your users, as well as to ensure
-undisrupted access to UANs during the upgrade.
-
 ## Upgrade stages
 
 - [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
