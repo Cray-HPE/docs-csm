@@ -3,111 +3,155 @@
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-## Addresses CVEs
+## Addresses Bugs and CVEs
 
-* `CVE-2021-3531`: Swift API denial of service.
-* `CVE-2021-3524`: HTTP header injects via `CORS` in `RGW.`.
-* `CVE-2021-3509`: Dashboard `XSS` via token cookie.
-* `CVE-2021-20288`: Unauthorized `global_id` reuse in `cephx`.
-
-The upgrade includes all fixes from `v15.2.9` through `v15.2.15`. See the [Ceph version index](https://docs.ceph.com/en/latest/releases/octopus/) for details.
+The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph version index](https://docs.ceph.com/en/latest/releases/pacific/) for details.
 
 ## Procedure
 
-This upgrade is performed using the `ceph` orchestrator. Unless otherwise noted, all `ceph` commands in this stage may be run on any master node or any
-of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
+* This upgrade is performed using the `cubs_tool`.
+* The `cubs_tool.py` can be found on `ncn-s00[1-3]` in `/srv/cray/script/common/`
+* Unless otherwise noted, all `ceph` commands that may need to be used in this stage may be run on any master node or any of the first three storage nodes (`ncn-s00[1-3]`).
 
 ### Initiate upgrade
 
 1. Check to ensure that the upgrade is possible.
 
+   On ncn-s001:
+
    ```bash
-   ceph orch upgrade check --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   /srv/cray/scripts/common/cubs_tool.py --version 16.2.9 --registry localhost
    ```
+
 
    Example output:
 
-   ```json
-   {
-       "needs_update": {
-           "alertmanager.ncn-s001": {
-               "current_id": "6ec9fa439af31102c9e6581cbb3d12ee2ab258dada41d40d0f8ad987e8ff266f",
-               "current_name": "registry.local/quay.io/prometheus/alertmanager:v0.21.0",
-               "current_version": "0.21.0"
-           },
-           "crash.ncn-s001": {
-               "current_id": "6a777b4f888c24feec6e12eeeff4ab485f2c043b415bc2213815d5fb791f2597",
-               "current_name": "registry.local/ceph/ceph:v15.2.8",
-               "current_version": "15.2.8"
-           },
-           "crash.ncn-s002": {
-               "current_id": "6a777b4f888c24feec6e12eeeff4ab485f2c043b415bc2213815d5fb791f2597",
-               "current_name": "registry.local/ceph/ceph:v15.2.8",
-               "current_version": "15.2.8"
-           },
-
-           "[ ... lines omitted for readability ... ]",
-
-           "rgw.site1.zone1.ncn-s003.adrubu": {
-               "current_id": "6a777b4f888c24feec6e12eeeff4ab485f2c043b415bc2213815d5fb791f2597",
-               "current_name": "registry.local/ceph/ceph:v15.2.8",
-               "current_version": "15.2.8"
-           }
-       },
-       "target_id": "cba763a65a95e8849d578e05b111123f55a78ab096e67e8ecf7fdc98e67aea71",
-       "target_name": "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15",
-       "target_version": "ceph version 15.2.15 (2dfb18841cfecc2f7eb7eb2afd65986ca4d95985) octopus (stable)",
-       "up_to_date": []
-   }
+   ```text
+   Upgrade Available!!  The specified version v16.2.9 has been found in the registry
    ```
 
    **Notes:**
 
-   * This upgrade is targeting the Ceph processes running `15.2.8` only.
-   * The monitoring services may be listed but those are patched internally and will not be upgraded with this upgrade.
+   * This upgrade is targeting the Ceph processes running `15.2.15` only.
+   * The monitoring services may be listed but those are patched internally and may not be upgraded with this upgrade.
      * This includes `alertmanager`, `prometheus`, `node-exporter`, and `grafana`.
-   * The main goals of this check are to see the listed `15.2.8` services and to see the output at the bottom that confirms the presence of the `15.2.15` target image.
    * If the output does not match what is expected, then this can indicate that a previous step has failed.
      Review output from [Stage 1](Stage_1.md) for errors or contact support.
-
-1. Set the container image.
-
-   ```bash
-   ceph config set global container_image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
-   ```
-
-1. Verify that the change has occurred.
-
-   ```bash
-   ceph config dump -f json-pretty|jq '.[]|select(.name=="container_image")|.value'
-   ```
-
-   Expected result:
-
-   ```text
-   "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15"
-   ```
 
 1. Start the upgrade.
 
    ```bash
-   ceph orch upgrade start --image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+   /srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry localhost --upgrade
+   ```
+
+   Example output:
+
+   ```text
+   Upgrade Available!!  The specified version v16.2.9 has been found in the registry
+   Initiating Ceph upgrade from v16.2.7 to v16.2.9
    ```
 
 1. Monitor the upgrade.
 
-   > If upgrading a larger cluster, consider splitting this into two different `watch` commands in separate windows.
+   The cubs_tool will automatically watch the upgrade.  As services are upgraded they will move from the ***Current*** column to the ***Upgraded*** column.
 
-   ```bash
-   watch "ceph -s; ceph orch ps"
+   ```text
+   +---------+---------------+----------------+
+   | Service | Total Current | Total Upgraded |
+   +---------+---------------+----------------+
+   |   MGR   |       0       |       2        |
+   |   MON   |       3       |       0        |
+   |  Crash  |       3       |       0        |
+   |   OSD   |       9       |       0        |
+   |   MDS   |       3       |       0        |
+   |   RGW   |       3       |       0        |
+   +---------+---------------+----------------+
    ```
 
-### Monitor upgrade
+   This will progress to the end result of:
 
-The processes running the Ceph container image will go through the upgrade process. This involves stopping the old process running the version `15.2.8`
-container and restarting the process with the new version `15.2.15` container image.
+   ```text
+   +---------+---------------+----------------+
+   | Service | Total Current | Total Upgraded |
+   +---------+---------------+----------------+
+   |   MGR   |       0       |       3        |
+   |   MON   |       0       |       3        |
+   |  Crash  |       0       |       3        |
+   |   OSD   |       0       |       9        |
+   |   MDS   |       0       |       3        |
+   |   RGW   |       0       |       3        |
+   +---------+---------------+----------------+
+   ```
 
-**IMPORTANT:** Only processes running the `15.2.8` image will be upgraded. This includes `crash`, `mds`, `mgr`, `mon`, `osd`, and `rgw` processes only.
+1. Verify completed upgrade
+
+   On ncn-s001:
+
+   ```bash
+   /srv/cray/scripts/common/cubs_tool.py --report
+   ```
+
+   Expected output:
+
+   ```bash
+   +----------+-------------+-----------------+---------+---------+
+   |   Host   | Daemon Type |        ID       | Version |  Status |
+   +----------+-------------+-----------------+---------+---------+
+   | ncn-s001 |     mgr     | ncn-s001.antgnu |  16.2.9 | running |
+   | ncn-s002 |     mgr     | ncn-s002.jhwgup |  16.2.9 | running |
+   | ncn-s003 |     mgr     | ncn-s003.wzoivk |  16.2.9 | running |
+   +----------+-------------+-----------------+---------+---------+
+   +----------+-------------+----------+---------+---------+
+   |   Host   | Daemon Type |    ID    | Version |  Status |
+   +----------+-------------+----------+---------+---------+
+   | ncn-s001 |     mon     | ncn-s001 |  16.2.9 | running |
+   | ncn-s002 |     mon     | ncn-s002 |  16.2.9 | running |
+   | ncn-s003 |     mon     | ncn-s003 |  16.2.9 | running |
+   +----------+-------------+----------+---------+---------+
+   +----------+-------------+----------+---------+---------+
+   |   Host   | Daemon Type |    ID    | Version |  Status |
+   +----------+-------------+----------+---------+---------+
+   | ncn-s001 |    crash    | ncn-s001 |  16.2.9 | running |
+   | ncn-s002 |    crash    | ncn-s002 |  16.2.9 | running |
+   | ncn-s003 |    crash    | ncn-s003 |  16.2.9 | running |
+   +----------+-------------+----------+---------+---------+
+   +----------+-------------+----+---------+---------+
+   |   Host   | Daemon Type | ID | Version |  Status |
+   +----------+-------------+----+---------+---------+
+   | ncn-s001 |     osd     | 0  |  16.2.9 | running |
+   | ncn-s001 |     osd     | 3  |  16.2.9 | running |
+   | ncn-s001 |     osd     | 7  |  16.2.9 | running |
+   | ncn-s002 |     osd     | 1  |  16.2.9 | running |
+   | ncn-s002 |     osd     | 5  |  16.2.9 | running |
+   | ncn-s002 |     osd     | 8  |  16.2.9 | running |
+   | ncn-s003 |     osd     | 2  |  16.2.9 | running |
+   | ncn-s003 |     osd     | 4  |  16.2.9 | running |
+   | ncn-s003 |     osd     | 6  |  16.2.9 | running |
+   +----------+-------------+----+---------+---------+
+   +----------+-------------+------------------------+---------+---------+
+   |   Host   | Daemon Type |           ID           | Version |  Status |
+   +----------+-------------+------------------------+---------+---------+
+   | ncn-s001 |     mds     | cephfs.ncn-s001.sbtjip |  16.2.9 | running |
+   | ncn-s002 |     mds     | cephfs.ncn-s002.gywfal |  16.2.9 | running |
+   | ncn-s003 |     mds     | cephfs.ncn-s003.emebxe |  16.2.9 | running |
+   +----------+-------------+------------------------+---------+---------+
+   +----------+-------------+-----------------------+---------+---------+
+   |   Host   | Daemon Type |           ID          | Version |  Status |
+   +----------+-------------+-----------------------+---------+---------+
+   | ncn-s001 |     rgw     | site1.ncn-s001.rrfbvo |  16.2.9 | running |
+   | ncn-s002 |     rgw     | site1.ncn-s002.axqnca |  16.2.9 | running |
+   | ncn-s003 |     rgw     | site1.ncn-s003.pxhahp |  16.2.9 | running |
+   +----------+-------------+-----------------------+---------+---------+
+   ```
+
+   **NOTE:** This is an example only and is showing only the core ceph components.  
+
+### Diagnose a stalled upgrade
+
+The processes running the Ceph container image will go through the upgrade process. This involves stopping the old process running the version `15.2.15`
+container and restarting the process with the new version `16.2.9` container image.
+
+**IMPORTANT:** Only processes running the `15.2.15` image will be upgraded. This includes `crash`, `mds`, `mgr`, `mon`, `osd`, and `rgw` processes only.
 
 #### `UPGRADE_FAILED_PULL: Upgrade: failed to pull target image`
 
@@ -149,136 +193,30 @@ on any of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 1. If the issue occurs again, then log into each of the storage nodes and perform a `podman` pull of the image.
 
     ```bash
-    podman pull registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v15.2.15
+    podman pull localhost/quay.io/ceph/ceph:v16.2.9
     ```
 
 If these steps do not resolve the issue, then contact support for further assistance.
-
-#### Expected warnings
-
-* From `ceph -s`:
-
-    ```text
-    health: HEALTH_WARN
-            clients are using insecure global_id reclaim
-            mons are allowing insecure global_id reclaim
-    ```
-
-* From `ceph health detail`:
-
-    ```text
-    HEALTH_WARN clients are using insecure global_id reclaim; mons are allowing insecure global_id reclaim; 1 osds down
-    [WRN] AUTH_INSECURE_GLOBAL_ID_RECLAIM: clients are using insecure global_id reclaim
-        osd.4 at [REDACTED] is using insecure global_id reclaim
-        mds.cephfs.ncn-s001.qcalye at [REDACTED] is using insecure global_id reclaim
-        client.rgw.site1.zone1.ncn-s001.lgfngf at [REDACTED] is using insecure global_id reclaim
-        client.rgw.site1.zone1.ncn-s001.lgfngf at [REDACTED] is using insecure global_id reclaim
-        osd.0 at [REDACTED] is using insecure global_id reclaim
-        client.rgw.site1.zone1.ncn-s003.wllbbx at [REDACTED] is using insecure global_id reclaim
-        osd.5 at [REDACTED] is using insecure global_id reclaim
-        osd.7 at [REDACTED] is using insecure global_id reclaim
-        client.rgw.site1.zone1.ncn-s002.aanqmw at [REDACTED] is using insecure global_id reclaim
-        client.rgw.site1.zone1.ncn-s002.aanqmw at [REDACTED] is using insecure global_id reclaim
-        client.rgw.site1.zone1.ncn-s002.aanqmw a [REDACTED] is using insecure global_id reclaim
-        osd.3 at [REDACTED]] is using insecure global_id reclaim
-        mds.cephfs.ncn-s002.tdrohq at [REDACTED]] is using insecure global_id reclaim
-        client.rgw.site1.zone1.ncn-s003.wllbbx a [REDACTED] is using insecure global_id reclaim
-        client.rgw.site1.zone1.ncn-s001.lgfngf a [REDACTED] is using insecure global_id reclaim
-        client.rgw.site1.zone1.ncn-s003.wllbbx a [REDACTED] is using insecure global_id reclaim
-        mds.cephfs.ncn-s003.ddbgzt at [REDACTED]] is using insecure global_id reclaim
-        osd.8 at [REDACTED]] is using insecure global_id reclaim
-        osd.1 at [REDACTED]] is using insecure global_id reclaim
-    [WRN] AUTH_INSECURE_GLOBAL_ID_RECLAIM_ALLOWED: mons are allowing insecure global_id reclaim
-        mon.ncn-s001 has auth_allow_insecure_global_id_reclaim set to true
-        mon.ncn-s002 has auth_allow_insecure_global_id_reclaim set to true
-        mon.ncn-s003 has auth_allow_insecure_global_id_reclaim set to true
-    ```
-
-### Verify completed upgrade
-
-Verify that the upgrade has completed using the following procedure.
-
-1. Verify that the upgrade is no longer in progress.
-
-   ```bash
-   ceph orch upgrade status
-   ```
-
-   In the output of this command, validate that the `in_progress` field is `false`. If it is `true`, then
-   the upgrade is still underway. In that case, retry this step after waiting for a few minutes.
-
-   If the upgrade encountered any problems, there may be indications of this in the `messages` field of the
-   command output.
-
-   In the case of a completed upgrade without errors, the output will resemble the following:
-
-   ```json
-   {
-       "target_image": null,
-       "in_progress": false,
-       "services_complete": [],
-       "message": ""
-   }
-   ```
-
-1. Verify that `ceph health detail` only shows the following:
-
-   ```text
-   HEALTH_WARN mons are allowing insecure global_id reclaim
-   [WRN] AUTH_INSECURE_GLOBAL_ID_RECLAIM_ALLOWED: mons are allowing insecure global_id reclaim
-    mon.ncn-s001 has auth_allow_insecure_global_id_reclaim set to true
-    mon.ncn-s002 has auth_allow_insecure_global_id_reclaim set to true
-    mon.ncn-s003 has auth_allow_insecure_global_id_reclaim set to true
-   ```
-
-1. Verify that `ceph -s` shows the following for its `health`:
-
-   ```text
-       health: HEALTH_WARN
-            mons are allowing insecure global_id reclaim
-   ```
-
-1. Verify that all Ceph `crash`, `mds`, `mgr`, `mon`, `osd`, and `rgw` processes are running version `15.2.15`.
-
-   The following command will count the number of `crash`, `mds`, `mgr`, `mon`, `osd`, and `rgw` processes which are not running version `15.2.15`.
-
-   ```bash
-   ceph orch ps -f json-pretty|jq -r '[.[]|select(.version!="15.2.15")|select(.daemon_type as $d | [ "crash", "mds", "mgr", "mon", "osd", "rgw" ] | index($d))] | length'
-   ```
-
-   If the command outputs any number other than zero, then this means that not all expected processes are running `15.2.15`. In that case, do the following:
-
-   1. List the processes which are not at the expected version.
-
-      ```bash
-      ceph orch ps -f json-pretty|jq -r '[.[]|select(.version!="15.2.15")|select(.daemon_type as $d | [ "crash", "mds", "mgr", "mon", "osd", "rgw" ] | index($d))]'
-      ```
-
-   1. Make sure the upgrade has stopped.
-
-      ```bash
-      ceph orch upgrade stop
-      ```
 
    1. Troubleshoot the failed upgrade.
 
       The upgrade is not complete. See
       See [Ceph Orchestrator Usage](../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
 
-1. Verify that no processes are running version `15.2.8`.
+1. Verify that no processes are running version `15.2.15`.
 
-   The following command will count the number of processes which are running version `15.2.8`.
+   The following command will count the number of processes which are running version `15.2.15`.
 
    ```bash
-   ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.8")] | length'
+   ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.15")] | length'
    ```
 
-   If the command outputs any number other than zero, then this means there are processes still running `15.2.8`. In that case, do the following:
+   If the command outputs any number other than zero, then this means there are processes still running `15.2.15`. In that case, do the following:
 
    1. List the processes which are not at the expected version.
 
       ```bash
-      ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.8")]'
+      ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.15")]'
       ```
 
    1. Make sure the upgrade has stopped.
@@ -293,28 +231,6 @@ Verify that the upgrade has completed using the following procedure.
       [Ceph Orchestrator Usage](../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
 
 **DO NOT** proceed past this point if the upgrade has not completed and been verified. Contact support for in-depth troubleshooting.
-
-### Post-upgrade
-
-1. Disable `auth_allow_insecure_global_id_reclaim`:
-
-   ```bash
-   ceph config set mon auth_allow_insecure_global_id_reclaim false
-   ```
-
-1. Wait until the Ceph cluster health is `HEALTH_OK`.
-
-    It may take up to 30 seconds for the health to return to `HEALTH_OK`.
-
-    ```bash
-    ceph health detail
-    ```
-
-    Successful output is:
-
-    ```text
-    HEALTH_OK
-    ```
 
 ## Stage completed
 
