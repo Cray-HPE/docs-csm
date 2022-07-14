@@ -40,6 +40,7 @@ key="$1"
 case $key in
     --csm-version)
     CSM_RELEASE="$2"
+    CSM_REL_NAME="csm-${CSM_RELEASE}"
     shift # past argument
     shift # past value
     ;;
@@ -269,7 +270,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     # get existing customization.yaml file
-    SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE_VERSION}/site-init
+    SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/site-init
     mkdir -p "${SITE_INIT_DIR}"
     DATETIME=$(date +%Y-%m-%d_%H-%M-%S)
     CUSTOMIZATIONS_YAML=$(mktemp -p "${SITE_INIT_DIR}" "customizations-${DATETIME}-XXX.yaml")

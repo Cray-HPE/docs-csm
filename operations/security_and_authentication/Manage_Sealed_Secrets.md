@@ -50,13 +50,11 @@ If LDAP user federation is required, then refer to
    If there is not a backup of `site-init`, perform the following steps to create a new one using the
    values stored in the Kubernetes cluster.
 
+   1. Set the `CSM_DISTDIR` variable to the path to the unpacked CSM release tarball.
+
+      See [Download and extract CSM product release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
+
    1. Create a new `site-init` directory using the CSM tarball.
-
-      Determine the location of the initial unpacked install tarball and set `${CSM_DISTDIR}` accordingly.
-
-      > **`NOTE`** If the unpacked set of CSM directories was copied, no action is required to expand the tarball.
-      If the tarball tgz file was copied, the command to unpack it is `tar -zxvf CSM_RELEASE.tar.gz`.
-      Replace the `CSM_RELEASE` value before running the command to unpack the tarball.
 
       ```bash
       cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
@@ -166,7 +164,7 @@ use of `utils/secrets-seed-customizations.sh` above).
 To view currently tracked sealed secrets:
 
 ```bash
-yq read /mnt/pitdata/${CSM_RELEASE}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets
+yq read ${CSM_PATH}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets
 ```
 
 Expected output looks similar to the following:
@@ -206,7 +204,8 @@ in the `cray_reds_credentials` secret, resulting in hardware not being discovere
 
 The general process outlined in the following steps can be followed if a different value is incorrect.
 
-```bash./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
+```bash
+./utils/secrets-decrypt.sh cray_reds_credentials | jq -r '.data.vault_switch_defaults' | base64 --decode
 ```
 
 Output looks similar to the following:
