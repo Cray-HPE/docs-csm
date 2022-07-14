@@ -1,4 +1,4 @@
-# CSM 1.0.0 or later to 1.2.0 Upgrade Process
+# CSM 1.2.0 or later to 1.3.0 Upgrade Process
 
 ## Introduction
 
@@ -27,7 +27,7 @@ For detailed BICAN documentation, see the [BICAN Technical Details](../operation
     See [TDS Lower CPU Requests](../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more information.
 
   - Independently, for three-worker systems the `customizations.yaml` file is edited automatically during the upgrade, prior to deploying new CSM services. These
-    settings are contained in `/usr/share/doc/csm/upgrade/1.2/scripts/upgrade/tds_cpu_requests.yaml`. This file can be modified (prior to proceeding with this
+    settings are contained in `/usr/share/doc/csm/upgrade/scripts/upgrade/tds_cpu_requests.yaml`. This file can be modified (prior to proceeding with this
     upgrade), if other settings are desired in the `customizations.yaml` file for this system.
 
     For more information about modifying `customizations.yaml` and tuning for specific systems, see

@@ -85,3 +85,4 @@ function patchKeycloak() {
 }
 
 deployNLS
+patchKeycloak

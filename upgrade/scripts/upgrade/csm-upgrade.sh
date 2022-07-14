@@ -48,7 +48,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/util/verify-k8s-nodes-upgraded.sh
+    /usr/share/doc/csm/upgrade/scripts/upgrade/util/verify-k8s-nodes-upgraded.sh
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
@@ -86,7 +86,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    pushd /usr/share/doc/csm/upgrade/1.2/scripts/strimzi
+    pushd /usr/share/doc/csm/upgrade/scripts/strimzi
     ./kafka-prereq.sh
     popd +0
     } >> ${LOG_FILE} 2>&1
@@ -118,7 +118,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    /usr/share/doc/csm/upgrade/1.2/scripts/k8s/enable-psp.sh
+    /usr/share/doc/csm/upgrade/scripts/k8s/enable-psp.sh
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
@@ -132,7 +132,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    /usr/share/doc/csm/upgrade/1.2/scripts/strimzi/kafka-restart.sh
+    /usr/share/doc/csm/upgrade/scripts/strimzi/kafka-restart.sh
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)

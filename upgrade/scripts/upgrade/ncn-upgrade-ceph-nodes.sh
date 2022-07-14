@@ -152,7 +152,7 @@ if [[ $state_recorded == "0" ]]; then
         scp /etc/kubernetes/admin.conf ${target_ncn}:/etc/kubernetes
     fi
 
-    ssh ${target_ncn} '/usr/share/doc/csm/upgrade/1.2/scripts/ceph/ceph-services-stage2.sh'
+    ssh ${target_ncn} '/usr/share/doc/csm/upgrade/scripts/ceph/ceph-services-stage2.sh'
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
@@ -160,7 +160,7 @@ else
 fi
 
 {
-. /usr/share/doc/csm/upgrade/1.2/scripts/ceph/lib/ceph-health.sh
+. /usr/share/doc/csm/upgrade/scripts/ceph/lib/ceph-health.sh
 wait_for_health_ok ${target_ncn}
 
 # Wait for rgw to start before executing goss tests
@@ -187,7 +187,7 @@ if [[ ${target_ncn} == "ncn-s001" ]]; then
             ssh_keygen_keyscan "${target_ncn}"
             ssh_keys_done=1
         fi
-        scp /usr/share/doc/csm/upgrade/1.2/scripts/ceph/create_rgw_buckets.sh $target_ncn:/tmp
+        scp /usr/share/doc/csm/upgrade/scripts/ceph/create_rgw_buckets.sh $target_ncn:/tmp
         ssh ${target_ncn} '/tmp/create_rgw_buckets.sh'
         } >> ${LOG_FILE} 2>&1
         record_state "${state_name}" ${target_ncn}
