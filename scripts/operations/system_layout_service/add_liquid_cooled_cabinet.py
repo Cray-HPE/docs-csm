@@ -90,19 +90,38 @@ DEFAULT_NMN_MTN_CIDR="10.100.0.0/17"
 parser = argparse.ArgumentParser()
 parser.add_argument("sls_state_file", type=str, help="SLS State file to modify")
 parser.add_argument("--cabinet", type=str, required=True, help="Cabinet component name (xname) to add, ex: x1000")
-parser.add_argument("--cabinet-type", type=str, required=True, help="Cabinet type", choices={"Hill", "Mountain"})
+parser.add_argument("--cabinet-type", type=str, required=True, help="Cabinet type", choices={"Hill", "Mountain", "EX2500"})
 parser.add_argument("--cabinet-vlan-hmn", type=int, required=True, help="Hardware Management Network (HMN) VLAN ID configured on the CEC, ex: 1000")
 parser.add_argument("--cabinet-vlan-nmn", type=int, required=True, help="Cabinet NMN vlan add, ex: 2000")
 parser.add_argument("--starting-nid", type=int, required=True, help="Starting NID for new cabinet, ex: 1000")
+parser.add_argument("--liquid-cooled-chassis-count", type=int, required=False, help="Number of liquid-cooled chassis present in a EX2500 cabinet, ex 3")
 args = parser.parse_args()
 
 if re.match("^x([0-9]{1,4})$", args.cabinet) == None:
     print("Invalid cabinet component name (xname) provided: ", args.cabinet)
     exit(1)
 
-chassis_list = MOUNTAIN_CHASSIS_LIST
-if args.cabinet_type == "Hill":
+cabinet_class=None
+if args.cabinet_type == "Mountain":
     chassis_list = MOUNTAIN_CHASSIS_LIST
+    cabinet_class = "Mountain"
+elif args.cabinet_type == "Hill":
+    chassis_list = HILL_TDS_CHASSIS_LIST
+    cabinet_class = "Hill"
+elif args.cabinet_type == "EX2500":
+    if args.liquid_cooled_chassis_count == None:
+        print("Error --liquid-cooled-chassis-count argument is required for EX2500 cabinet", args.cabinet)
+        exit(1)
+    
+    if (args.liquid_cooled_chassis_count < 1) or (3 < args.liquid_cooled_chassis_count):
+        print("Error --liquid-cooled-chassis-count argument is out of range: {} Expected range is 1 to 3".format(args.liquid_cooled_chassis_count))
+        exit(1)
+
+    chassis_list = ["c{}".format(i) for i in range(0, args.liquid_cooled_chassis_count)]
+    cabinet_class = "Hill"
+else:
+    print("Error unknown --cabinet-type specified:", args.cabinet_type)
+    exit(1)
 
 print("========================")
 print("Configuration")
@@ -111,8 +130,10 @@ print("SLS State File:   ", args.sls_state_file)
 print("Starting NID:     ", args.starting_nid)
 print("Cabinet:          ", args.cabinet)
 print("Cabinet Type:     ", args.cabinet_type)
+print("Cabinet Class:    ", cabinet_class)
 print("Cabinet VLAN HMN: ", args.cabinet_vlan_hmn)
 print("Cabinet VLAN NMN: ", args.cabinet_vlan_nmn)
+print("Chassis List:      [{}]".format(','.join(chassis_list)))
 print()
 
 # Load in existing SLS State
@@ -139,7 +160,7 @@ hardwareToAdd = []
 cabinet = {
     "Parent": "s0",
     "Xname": args.cabinet,
-    "Class": args.cabinet_type,
+    "Class": cabinet_class,
     "Type": "comptype_cabinet",
     "TypeString": "Cabinet",
     "ExtraProperties": {
@@ -151,6 +172,9 @@ cabinet = {
         }
     }
 }
+
+if args.cabinet_type == "EX2500":
+    cabinet["ExtraProperties"]["Model"] = "EX2500"
 
 hardwareToAdd.append(cabinet)
 
@@ -166,7 +190,7 @@ for chassis in chassis_list:
         "Xname": chassisBMCXname,
         "Type": "comptype_chassis_bmc",
         "TypeString": "ChassisBMC",
-        "Class": args.cabinet_type,
+        "Class": cabinet_class,
     }
     hardwareToAdd.append(chassisBMC)
 
@@ -176,7 +200,7 @@ for chassis in chassis_list:
         "Xname": chassisXname,
         "Type": "comptype_chassis",
         "TypeString": "Chassis",
-        "Class": args.cabinet_type,
+        "Class": cabinet_class,
     }
     hardwareToAdd.append(chassis)
 
