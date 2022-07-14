@@ -6,8 +6,19 @@
 1. [HMS Smoke Tests](#hms-smoke-tests)
 1. [HMS Functional Tests](#hms-functional-tests)
 1. [Additional Troubleshooting](#additional-troubleshooting)
+
+    - [`smd_discovery_status_test_ncn-smoke.sh`](#smd-discovery-status-test)
+      - [`HTTPsGetFailed`](#https-get-failed)
+      - [`ChildVerificationFailed`](#child-verification-failed)
+      - [`DiscoveryStarted`](#discovery-started)
+
 1. [Install Blocking vs. Non-Blocking Failures](#blocking-vs-nonblocking-failures)
 1. [Known Issues](#known-issues)
+
+    - [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
+    - [BMCs set to `On` state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
+    - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
+    - [Custom Roles and SubRoles for Components in HSM](#hms-custom-component-roles-subroles-hsm)
 
 ## Introduction
 
@@ -153,7 +164,7 @@ Formatted stage:
   name: Ensure the boot script service can provide the bootscript for a given node
   request:
     headers:
-      Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJXcXFhelBLNnNVSnpUV250bThmYWh3cGVLOGRjeTB4SjFpSmRWRGZaLV8wIn0.eyJqdGkiOiI4ZGZkNTQ0YS1jNTY5LTQyNmUtYThiYy02NDg4MzgxOWUyOTAiLCJleHAiOjE2NDQ0MzczODEsIm5iZiI6MCwiaWF0IjoxNjEyOTAxMzgxLCJpc3MiOiJodHRwczovL2FwaS1ndy1zZXJ2aWNlLW5tbi5sb2NhbC9rZXljbG9hay9yZWFsbXMvc2hhc3RhIiwiYXVkIjpbImdhdGVrZWVwZXIiLCJzaGFzdGEiLCJhY2NvdW50Il0sInN1YiI6IjJjNDFiYjgwLTM2NGEtNGNkOS1hMGZkLTQyYzQ5ODRmMTM2ZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFkbWluLWNsaWVudCIsImF1dGhfdGltZSI6MCwic2Vzc2lvbl9zdGF0ZSI6IjEzZGQ1YmY2LWQxNGMtNDcwZC05ZWI0LTQ5MDFmYzc3YWYwOSIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InNoYXN0YSI6eyJyb2xlcyI6WyJhZG1pbiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiY2xpZW50SG9zdCI6IjEwLjMyLjAuMSIsImNsaWVudElkIjoiYWRtaW4tY2xpZW50IiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtYWRtaW4tY2xpZW50IiwiY2xpZW50QWRkcmVzcyI6IjEwLjMyLjAuMSJ9.c37RtSOzcM_-6poyPecS7HP_t1hnqURkgjRcXTQj2S0IEZAkMyfeOVYRFr1gDlAFP-BnRPkf_X2_B7d63j9gI15M1gksYcv8PP0bZFX3PAOaBu-hHGfIw2pDsNsJEA-L72Pb9nmcaPR1CnnVijwRFV-jAmGBJ_vv612mjR5nbI_YJUHDkgdzDfWbpWKQzuCxiJ8USxPD-ASqx_pLecUzcihorb6PNngMaeisc2TqLTV8YRhSZYeL3cssEcXyTxRBe3zjPDawlPArjY2FUkEdzbtl-Tq3D2Ulii44esOf4_ooGmUsOc9vrvYvM_JNPAVamv0-0709PRwwNjFl9nEd5g
+      Authorization: Bearer <REDACTED>
     method: GET
     url: 'https://api-gw-service-nmn.local/apis/bss/boot/v1/bootscript?nid=None'
     verify: !bool 'False'
@@ -184,7 +195,7 @@ The following is an example of a failed test execution:
 Running smd_discovery_status_test...
 (22:19:34) Running 'kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}''...
 (22:19:34) Running 'curl -k -i -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=4c591ddc-b770-41c8-a4de-465ec034c7cf https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token'...
-(22:19:35) Testing 'curl -s -k -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJEdDZ3ZGNMSzNvT196LWFKaGNkYzBMTkpNSVY5cXRiX25GSXhlRUxCaWFRIn0.eyJqdGkiOiI2NGI0OWE0Zi03YzFiLTRkMjQtYmI2Zi1lYzRhYjczYTI0MDIiLCJleHAiOjE2NTk2NTE1NzQsIm5iZiI6MCwiaWF0IjoxNjI4MTE1NTc0LCJpc3MiOiJodHRwczovL2FwaS1ndy1zZXJ2aWNlLW5tbi5sb2NhbC9rZXljbG9hay9yZWFsbXMvc2hhc3RhIiwiYXVkIjpbImdhdGVrZWVwZXIiLCJzaGFzdGEiLCJhY2NvdW50Il0sInN1YiI6IjdhNGM3YWI5LTMyY2EtNGE5Ny04NGJiLWIzNjc3NmUyZTUwZSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFkbWluLWNsaWVudCIsImF1dGhfdGltZSI6MCwic2Vzc2lvbl9zdGF0ZSI6ImZjOTdiMzVlLWVjMmUtNGZmYy05NjEzLTg2MDZhY2RiODUxMyIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InNoYXN0YSI6eyJyb2xlcyI6WyJhZG1pbiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJjbGllbnRIb3N0IjoiMTAuNDYuMC4wIiwiY2xpZW50SWQiOiJhZG1pbi1jbGllbnQiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtYWRtaW4tY2xpZW50IiwiY2xpZW50QWRkcmVzcyI6IjEwLjQ2LjAuMCJ9.Moecw0ygc_G5whueojAwT3V6Tqtyp7pmqJlvMS5fMz0NxLhb6-3FYK60N5XIqK4RgXeP8TY004hxMyfel9ZqHwI1e5jC8ZHx0y4N41-1t3dgPZnmxvKiaIE14WfovYFDJGU3xcugZcFAnpylVFIABrPQG4Sk66MVaiOubsqW-i855Z0GZurSJOJMAl6LceJ_ek6OWhVlEsEh3S2phCmUA4C-lxRNviDcXhHThPZ0ruOb9bhtQV5uVD7BviIA_VBBN1BSrNJIfIyps5ZwpYr0KwbnntwbYap8zf56UC5MVz0kOyGk1n6qMlVNKn2W0tB4oTJynBdGgehNIqv93rXZyA" https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/RedfishEndpoints'...
+(22:19:35) Testing 'curl -s -k -H "Authorization: Bearer <REDACTED>" https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/RedfishEndpoints'...
 (22:19:35) Processing response with: 'jq '.RedfishEndpoints[] | { ID: .ID, LastDiscoveryStatus: .DiscoveryInfo.LastDiscoveryStatus}' -c | sort -V | jq -c'...
 (19:06:02) Verifying endpoint discovery statuses...
 {"ID":"x3000c0s1b0","LastDiscoveryStatus":"HTTPsGetFailed"}
@@ -275,11 +286,6 @@ It is typically safe to postpone the investigation and resolution of non-blockin
 
 This section outlines known issues that cause HMS Health Check failures. These issues have been fixed in `CSM-1.2` but may still be encountered on `CSM-1.2` systems that have been upgraded from a previous release.
 
-* [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
-* [BMCs set to "On" state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
-* [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
-* [Custom Roles and SubRoles for components in HSM](#hms-custom-component-roles-subroles-hsm)
-
 ### Warning flags incorrectly set in HSM for Mountain BMCs
 
 The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures.
@@ -337,9 +343,9 @@ If you see this, perform the following steps:
 
 Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manager status shown above can be safely ignored.
 
-### BMCs set to "On" state in HSM
+### BMCs set to `On` state in HSM
 
-The following HMS functional test may fail due to a known issue because of CMMs setting BMC states to "On" instead of "Ready" in HSM:
+The following HMS functional test may fail due to a known issue because of CMMs setting BMC states to `On` instead of `Ready` in HSM:
 
 * `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
@@ -355,7 +361,7 @@ This issue looks similar to the following in the test output:
          - Enum 'On' does not exist. Path: '/Components/10/State'.: Path: '/'>
 ```
 
-Failures of this test caused by BMCs in the "On" state can be safely ignored.
+Failures of this test caused by BMCs in the `On` state can be safely ignored.
 
 ### `ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM
 
