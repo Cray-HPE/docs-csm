@@ -10,7 +10,7 @@
   - [Functional test failure](#functional-test-failure)
 - [Tavern output](#tavern-output)
 - [Additional troubleshooting](#additional-troubleshooting)
-  - [`hsm_discovery_status_test.sh`](#hsmdiscoverystatustestsh)
+  - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
     - [`HTTPsGetFailed`](#httpsgetfailed)
     - [`ChildVerificationFailed`](#childverificationfailed)
     - [`DiscoveryStarted`](#discoverystarted)
