@@ -311,6 +311,11 @@ It is typically safe to postpone the investigation and resolution of non-blockin
 
 This section outlines known issues that cause HMS health check failures. These issues have been fixed in `CSM-1.2` but may still be encountered on `CSM-1.2` systems that have been upgraded from a previous release.
 
+- [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
+- [BMCs set to `On` state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
+- [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
+- [Custom Roles and SubRoles for Components in HSM](#hms-custom-component-roles-subroles-hsm)
+
 ### Warning flags incorrectly set in HSM for Mountain BMCs
 
 The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue that can cause Warning flags to be
