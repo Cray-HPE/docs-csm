@@ -102,7 +102,7 @@ The following requirements must be met on the system where the procedure is bein
 1. Set a variable to reflect the new version.
 
    ```bash
-   linux# NEW_CSM_RELEASE="$(./${CSM_RELEASE/lib/version.sh)"
+   linux# NEW_CSM_RELEASE="$(./${CSM_RELEASE}/lib/version.sh)"
    ```
 
 1. Update the name of the CSM release distribution directory.
