@@ -305,7 +305,7 @@ The following types of HMS test failures should **not** be considered blocking f
 
 - Failures due to hardware issues on individual compute nodes (alerts or warning flags set in HSM)
 
-It is typically safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation has completed.
+It is typically safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation or upgrade has completed.
 
 ## Known issues
 
