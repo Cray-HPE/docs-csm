@@ -10,7 +10,7 @@
    Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
    ```
 
    > **`NOTE`** The root password for the node may need to be reset after it is rebooted.
@@ -54,7 +54,7 @@
    Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
    ```
 
    > **`NOTE`** The root password for the node may need to be reset after it is rebooted.
@@ -110,7 +110,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 1. Upgrade `ncn-m001`.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
    ```
 
 ## Stage 2.4
@@ -126,7 +126,7 @@ Run the following command to complete the upgrade of the `weave` and `multus` ma
 Run the following script to apply anti-affinity to `coredns` pods:
 
 ```bash
-/usr/share/doc/csm/upgrade/1.2/scripts/k8s/apply-coredns-pod-affinity.sh
+/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh
 ```
 
 ## Stage 2.6
@@ -134,7 +134,7 @@ Run the following script to apply anti-affinity to `coredns` pods:
 Complete the Kubernetes upgrade. This script will restart several pods on each master node to their new Docker containers.
 
 ```bash
-/usr/share/doc/csm/upgrade/1.2/scripts/k8s/upgrade_control_plane.sh
+/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh
 ```
 
 > **`NOTE`**: `kubelet` has been upgraded already, ignore the warning to upgrade it.

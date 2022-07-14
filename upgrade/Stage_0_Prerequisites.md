@@ -73,7 +73,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    **NOTE** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
+   /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
 1. Skip the `Manual copy` subsection and proceed to [Stage 0.2 - Update SLS](#stage-02---update-sls)
@@ -109,7 +109,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 1. (`ncn-m001#`) Run the script.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
+   /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
 ## Stage 0.2 - Update SLS
@@ -155,7 +155,7 @@ network (new CAN or CHN) and its chosen subnet.
 - (`ncn-m001#`) Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
    ```bash
-   DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   DOCDIR=/usr/share/doc/csm/upgrade/scripts/sls
    ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
        --bican-user-network-name CHN \
        --customer-highspeed-network REPLACE_CHN_VLAN REPLACE_CHN_IPV4_SUBNET
@@ -164,7 +164,7 @@ network (new CAN or CHN) and its chosen subnet.
 - (`ncn-m001#`) Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
 
    ```bash
-   DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   DOCDIR=/usr/share/doc/csm/upgrade/scripts/sls
    ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
        --bican-user-network-name CAN \
        --customer-access-network REPLACE_CHN_VLAN REPLACE_CHN_IPV4_SUBNET \
@@ -240,7 +240,7 @@ network (new CAN or CHN) and its chosen subnet.
 3. (`ncn-m001#`) Run the script.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
+   /usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
    ```
 
    If the script ran correctly, it should end with the following output:

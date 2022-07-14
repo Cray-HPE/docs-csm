@@ -59,7 +59,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
     * Example 1: Upgrade, using the CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
         ```bash
-        /usr/share/doc/csm/upgrade/1.2/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+        /usr/share/doc/csm/upgrade/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
             --bican-user-network-name CHN \
             --customer-highspeed-network 5 10.103.11.192/26
         ```
@@ -67,7 +67,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
     * Example 2: Upgrade, using the CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
 
         ```bash
-        /usr/share/doc/csm/upgrade/1.2/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+        /usr/share/doc/csm/upgrade/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
             --bican-user-network-name CAN \
             --customer-highspeed-network 5 10.103.11.192/26 \
             --preserve-existing-subnet-for-cmn external-dns \
@@ -87,7 +87,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
 (`ncn#`) For help and all options, run the following:
 
 ```bash
-/usr/share/doc/csm/upgrade/1.2/scripts/sls/sls_updater_csm_1.2.py --help
+/usr/share/doc/csm/upgrade/scripts/sls/sls_updater_csm_1.2.py --help
 ```
 
 ## Actions and order

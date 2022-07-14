@@ -33,7 +33,7 @@
    > **`NOTE`** For Cray/HPE internal installs, if `ncn-m002` can reach the internet, then the `--endpoint` argument may be omitted.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --endpoint "${ENDPOINT}"
+   /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
 1. Skip the `Manual copy` subsection and proceed to [Perform upgrade](#perform-upgrade).
@@ -56,7 +56,7 @@
    > append the `--no-delete-tarball-file` argument when running the script.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
+   /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
 ## Perform upgrade
@@ -80,7 +80,7 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    Run `csm-upgrade.sh` to deploy upgraded CSM applications and services.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
+   /usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh
    ```
 
 ## Verify Keycloak users
