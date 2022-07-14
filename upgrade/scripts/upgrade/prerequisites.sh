@@ -284,7 +284,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     pushd "${SITE_INIT_DIR}"
     cp "${CUSTOMIZATIONS_YAML}" customizations.yaml
 
-    # push updated customizations.yaml to k8s 
+    # push updated customizations.yaml to k8s
     kubectl delete secret -n loftsman site-init
     kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
     popd
@@ -398,7 +398,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         --data @cloud-init-global_update.json \
         https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
 
-    csi upgrade metadata --1-0-to-1-2 \
+    csi upgrade metadata --1-2-to-1-3 \
         --k8s-version ${KUBERNETES_VERSION} \
         --storage-version ${CEPH_VERSION}
 
@@ -559,7 +559,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
     #shellcheck disable=SC2046
     cray artifacts create ${backupBucket} bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json
-    
+
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
@@ -573,7 +573,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    
+
     pgLeaderPod=$(kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list | grep Leader | awk -F'|' '{print $2}')
     kubectl exec -it ${pgLeaderPod} -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
 
@@ -608,7 +608,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     cray artifacts create ${backupBucket} gitea-vcs-postgres.sql gitea-vcs-postgres.sql
     cray artifacts create ${backupBucket} gitea-vcs-postgres.manifest gitea-vcs-postgres.manifest
     cray artifacts create ${backupBucket} vcs.tar vcs.tar
-    
+
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
@@ -622,7 +622,7 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    
+
     numOfActiveWokers=$(kubectl get nodes | grep "ncn-w" | grep "Ready" | wc -l)
     minimal_count=4
     if [[ $numOfActiveWokers -lt $minimal_count ]]; then
@@ -630,7 +630,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     else
         echo "==> TDS: false"
     fi
-    
+
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
@@ -644,14 +644,14 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    
+
     export CRAY_FORMAT=json
     # Even though we export the CRAY_FORMAT environment variable, it still is safest to also specify the --format command line argument
     for xname in $(cray hsm state components list --role Management --type node --format json | jq -r .Components[].ID)
     do
         cray cfs components update --enabled false --desired-config "" $xname
     done
-    
+
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
