@@ -80,120 +80,133 @@ else
 fi
 
 
-state_name="SHUTDOWN_SERVICES"
+state_name="SET rd.live.dir AND rd.live.overlay.reset"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
+    rm -f ${basedir}/standdown.sh
     echo "====> ${state_name} ..."
     {
-
-    if [[ $target_ncn == ncn-s* ]]; then
-        # Nothing to do.
-        :
-    elif [[ $target_ncn == ncn-m* ]]; then
-    cat <<'EOF' > standdown.sh
-    echo 'unmounting USB(s) ... '
-    usb_device_path=$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')
-    usb_rc=$?
-    set -e
-    if [[ "$usb_rc" -eq 0 ]]; then
-      if blkid -p $usb_device_path; then
-        have_mnt=0
-        echo 'unmounting discovered USB mountpoints ... '
-        for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
-          if mountpoint $mnt_point; then
-            have_mnt=1
-            umount -v $mnt_point
-          fi
-        done
-        if [ "$have_mnt" -eq 1 ]; then
-          echo 'ejecting discovered USB: [$usb_device_path]
-          eject $usb_device_path
-        fi
-      fi
+    if [ -z "${CSM_RELEASE}" ]; then
+        echo 2>& "CSM_RELEASE is not set!"
+        exit 1
     fi
-    umount -v /var/lib/etcd /var/lib/sdu || true
-    
-    echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-    efibootmgr # print before
-    efibootmgr | grep '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
-    efibootmgr # print after
-    echo 'Setting next boot to PXE ... '
-    ipmitool chassis bootdev pxe options=efiboot
-EOF
-    else
-    cat <<'EOF' > standdown.sh
-    lsblk | grep -q /var/lib/sdu
-    sdu_rc=$?
-    vgs | grep -q metal
-    vgs_rc=$?
-    set -e
-    echo 'Disabling and stopping kubernetes and containerd daemons ... '
-    systemctl disable kubelet.service || true
-    systemctl stop kubelet.service || true
-    systemctl disable containerd.service || true
-    systemctl stop containerd.service || true
-    umount -v /var/lib/containerd /var/lib/kubelet || true
-    if [[ "$sdu_rc" -eq 0 ]]; then
-      umount -v /var/lib/sdu || true
-    fi
-        
-    echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-    efibootmgr # print before
-    efibootmgr | grep '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
-    efibootmgr # print after
-    echo 'Setting next boot to PXE ... '
-    ipmitool chassis bootdev pxe options=efiboot
-EOF
-    fi
-    chmod +x standdown.sh
-    scp standdown.sh $target_ncn:/tmp/standdown.sh
-    ssh $target_ncn '/tmp/standdown.sh'
-    } >> ${LOG_FILE} 2>&1
+    csi handoff bss-update-param --delete rd.live.dir --limit $TARGET_XNAME
+    csi handoff bss-update-param --set rd.live.dir=${CSM_RELEASE} --limit $TARGET_XNAME
+    csi handoff bss-update-param --delete rd.live.overlay.reset --limit $TARGET_XNAME
+    csi handoff bss-update-param --set rd.live.overlay.reset=1 --limit $TARGET_XNAME
+  } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
     echo "====> ${state_name} has been completed"
 fi
-{
-    target_ncn_mgmt_host="${target_ncn}-mgmt"
-    if [[ ${target_ncn} == "ncn-m001" ]]; then
-        target_ncn_mgmt_host=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ncn-m001 "ipmitool lan print | grep 'IP Address' | grep -v 'Source'"  | awk -F ": " '{print $2}')
-    fi
-    echo "mgmt IP/Host: ${target_ncn_mgmt_host}"
 
-    # retrieve IPMI username/password from vault
-    VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath='{.data.vault-root}' | base64 -d)
-    # Make sure we got a vault token
-    [[ -n ${VAULT_TOKEN} ]]
 
-    # During worker upgrades, one vault pod might be offline, so we look for one that works.
-    # List names of all Running vault pods, grep for just the cray-vault-# pods, and try them in
-    # turn until one of them has the IPMI credentials.
-    IPMI_USERNAME=""
-    IPMI_PASSWORD=""
-    for VAULT_POD in $(kubectl get pods -n vault --field-selector status.phase=Running --no-headers \
-                        -o custom-columns=:.metadata.name | grep -E "^cray-vault-(0|[1-9][0-9]*)$") ; do
-        IPMI_USERNAME=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
-            "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
-            vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" | 
-            jq -r '.data.Username')
-        # If we are not able to get the username, no need to try and get the password.
-        [[ -n ${IPMI_USERNAME} ]] || continue
-        IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
-            "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
-            vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" | 
-            jq -r '.data.Password')
-        export IPMI_PASSWORD
-        break
-    done
-    # Make sure we found a pod that worked
-    [[ -n ${IPMI_USERNAME} ]]
-} >> ${LOG_FILE} 2>&1
-state_name="SET_PXE_BOOT"
+state_name="SHUTDOWN_SERVICES"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
+    rm -f ${basedir}/standdown.sh
     echo "====> ${state_name} ..."
     {
-        ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $target_ncn_mgmt_host chassis bootdev pxe options=efiboot
+        if [[ $target_ncn == ncn-s* ]]; then
+        cat << 'EOF' > ${basedir}/standdown.sh
+set -ou pipefail
+function wait_on_dev {
+    local dev=$1
+    local count=${2:-0}
+    while lsof | grep -q $dev ; do
+        [ $count == 10 ] && echo >&2 "waited for $count seconds to no avail." && return 1
+        echo "waiting on $dev usage to reach 0"
+        count=$((count + 1))
+        sleep 1
+    done
+    echo "nothing is using $dev"
+}
+echo 'Removing metalvg since storage nodes do not rebuld with metal.no-wipe=0'
+systemctl stop ceph.target
+systemctl stop registry.container.service
+wait_on_dev /etc/ceph
+wait_on_dev /var/lib/ceph
+wait_on_dev /var/lib/containers
+umount /etc/ceph /var/lib/ceph /var/lib/containers || true
+vgremove -f -v --select 'vg_name=~metal*'
+if [ "$(vgs -S 'vg_name=~metal*' | wc -l)" != 0 ]; then
+    echo >&2 "Failed to destroy metalvg, it is either in use or in a bad state, the upgrade can not continue."
+    exit 1
+fi
+echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
+efibootmgr # print before
+efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
+efibootmgr # print after
+echo 'Setting next boot to PXE ... '
+ipmitool chassis bootdev pxe options=efiboot
+EOF
+        elif [[ $target_ncn == ncn-m* ]]; then
+        cat << 'EOF' > ${basedir}/standdown.sh
+set -ou pipefail
+echo 'unmounting USB(s) ... '
+usb_device_path=$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')
+usb_rc=$?
+set -e
+if [[ "$usb_rc" -eq 0 ]]; then
+  if blkid -p $usb_device_path; then
+    have_mnt=0
+    echo 'unmounting discovered USB mountpoints ... '
+    for mnt_point in /mnt/rootfs /mnt/sqfs /mnt/livecd /mnt/pitdata; do
+      if mountpoint $mnt_point; then
+        have_mnt=1
+        umount -v $mnt_point
+      fi
+    done
+    if [ "$have_mnt" -eq 1 ]; then
+      echo "ejecting discovered USB: [$usb_device_path]"
+      eject $usb_device_path
+    fi
+  fi
+fi
+umount -v /var/lib/etcd /var/lib/sdu || true
+
+echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
+efibootmgr # print before
+efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
+efibootmgr # print after
+echo 'Setting next boot to PXE ... '
+ipmitool chassis bootdev pxe options=efiboot
+EOF
+        else
+        cat << 'EOF' > ${basedir}/standdown.sh
+set -ou pipefail
+lsblk | grep -q /var/lib/sdu
+sdu_rc=$?
+vgs | grep -q metal
+vgs_rc=$?
+set -e
+echo 'Disabling and stopping kubernetes and containerd daemons ... '
+systemctl disable kubelet.service || true
+systemctl stop kubelet.service || true
+systemctl disable containerd.service || true
+systemctl stop containerd.service || true
+umount -v /var/lib/containerd /var/lib/kubelet || true
+if [[ "$sdu_rc" -eq 0 ]]; then
+  umount -v /var/lib/sdu || true
+fi
+
+echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
+efibootmgr # print before
+efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
+efibootmgr # print after
+echo 'Setting next boot to PXE ... '
+ipmitool chassis bootdev pxe options=efiboot
+EOF
+        fi
+        if [ -f ${basedir}/standdown.sh ]; then
+            chmod +x ${basedir}/standdown.sh
+            scp ${basedir}/standdown.sh $target_ncn:/tmp/standdown.sh
+            ssh $target_ncn '/tmp/standdown.sh'
+        else
+            echo >&2 "$target_ncn has nothing to standdown! This is not expected."
+            exit 1
+        fi
+
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
@@ -210,6 +223,41 @@ state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
+
+        target_ncn_mgmt_host="${target_ncn}-mgmt"
+        if [[ ${target_ncn} == "ncn-m001" ]]; then
+            target_ncn_mgmt_host=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ncn-m001 "ipmitool lan print | grep 'IP Address' | grep -v 'Source'"  | awk -F ": " '{print $2}')
+        fi
+        echo "mgmt IP/Host: ${target_ncn_mgmt_host}"
+
+        # retrieve IPMI username/password from vault
+        VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath='{.data.vault-root}' | base64 -d)
+        # Make sure we got a vault token
+        [[ -n ${VAULT_TOKEN} ]]
+
+        # During worker upgrades, one vault pod might be offline, so we look for one that works.
+        # List names of all Running vault pods, grep for just the cray-vault-# pods, and try them in
+        # turn until one of them has the IPMI credentials.
+        IPMI_USERNAME=""
+        IPMI_PASSWORD=""
+        for VAULT_POD in $(kubectl get pods -n vault --field-selector status.phase=Running --no-headers \
+                            -o custom-columns=:.metadata.name | grep -E "^cray-vault-(0|[1-9][0-9]*)$") ; do
+            IPMI_USERNAME=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
+                "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
+                vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" | 
+                jq -r '.data.Username')
+            # If we are not able to get the username, no need to try and get the password.
+            [[ -n ${IPMI_USERNAME} ]] || continue
+            IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
+                "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
+                vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" | 
+                jq -r '.data.Password')
+            export IPMI_PASSWORD
+            break
+        done
+        # Make sure we found a pod that worked
+        [[ -n ${IPMI_USERNAME} ]]
+
         # power cycle node
         ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $target_ncn_mgmt_host chassis power off
         sleep 20
@@ -347,6 +395,7 @@ fi
     set +e
     while true ; do
         csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
+        csi handoff bss-update-param --delete rd.live.overlay.reset --limit $TARGET_XNAME
         if [[ $? -eq 0 ]]; then
             break
         else
