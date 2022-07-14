@@ -2,34 +2,38 @@
 
 ## Table of contents
 
-1. [Introduction](#introduction)
-1. [HMS Smoke Tests](#hms-smoke-tests)
-1. [HMS Functional Tests](#hms-functional-tests)
-1. [Additional Troubleshooting](#additional-troubleshooting)
-
-    - [`smd_discovery_status_test_ncn-smoke.sh`](#smd-discovery-status-test)
-      - [`HTTPsGetFailed`](#https-get-failed)
-      - [`ChildVerificationFailed`](#child-verification-failed)
-      - [`DiscoveryStarted`](#discovery-started)
-
-1. [Install Blocking vs. Non-Blocking Failures](#blocking-vs-nonblocking-failures)
-1. [Known Issues](#known-issues)
-
-    - [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
-    - [BMCs set to `On` state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
-    - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
-    - [Custom Roles and SubRoles for Components in HSM](#hms-custom-component-roles-subroles-hsm)
+- [Introduction](#introduction)
+- [HMS smoke tests](#hms-smoke-tests)
+- [HMS functional tests](#hms-functional-tests)
+- [Additional troubleshooting](#additional-troubleshooting)
+  - [`smd_discovery_status_test_ncn-smoke.sh`](#smd-discovery-status-test)
+    - [`HTTPsGetFailed`](#https-get-failed)
+    - [`ChildVerificationFailed`](#child-verification-failed)
+    - [`DiscoveryStarted`](#discovery-started)
+- [Install blocking vs. Non-blocking failures](#blocking-vs-nonblocking-failures)
+- [Known issues](#known-issues)
+  - [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
+  - [BMCs set to `On` state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
+  - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
+  - [Custom Roles and SubRoles for Components in HSM](#hms-custom-component-roles-subroles-hsm)
 
 ## Introduction
 
-This document describes how to interpret the results of the HMS Health Check scripts and techniques for troubleshooting when failures occur.
+This document describes how to interpret the results of the HMS health check scripts and techniques for troubleshooting when failures occur.
 
-## HMS Smoke Tests
+## HMS smoke tests
 
-The HMS smoke tests consist of bash scripts that check the status of HMS service pods and jobs in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one test called `smd_discovery_status_test_ncn-smoke.sh` which verifies that the system hardware has been discovered successfully. The `hms_run_ct_smoke_tests_ncn-resources.sh` wrapper script checks for executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
+The HMS smoke tests consist of bash scripts that check the status of HMS service pods and jobs in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one
+test called `smd_discovery_status_test_ncn-smoke.sh` which verifies that the system hardware has been discovered successfully. The `hms_run_ct_smoke_tests_ncn-resources.sh` wrapper script checks for
+executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
 
 ```bash
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+```
+
+Example output:
+
+```text
 searching for HMS CT smoke tests...
 found 11 HMS CT smoke tests...
 running HMS CT smoke tests...
@@ -77,12 +81,19 @@ cleaning up...
 '/opt/cray/tests/ncn-smoke/hms/hms-capmc/capmc_smoke_test_ncn-smoke.sh' exited with status code: 1
 ```
 
-## HMS Functional Tests
+## HMS functional tests
 
-The HMS functional tests consist of Tavern-based API tests for HMS services that are written in YAML and execute within `hms-pytest` containers on the NCNs that are spun up using `podman`. The functional tests are more rigorous than the smoke tests and verify the behavior of HMS service APIs in greater detail. The `hms_run_ct_functional_tests_ncn-resources.sh` wrapper script checks for executable files in the HMS functional test directory on the NCN and runs all tests found in succession.
+The HMS functional tests consist of Tavern-based API tests for HMS services that are written in YAML and execute within `hms-pytest` containers on the NCNs that are spun up using `podman`. The
+functional tests are more rigorous than the smoke tests and verify the behavior of HMS service APIs in greater detail. The `hms_run_ct_functional_tests_ncn-resources.sh` wrapper script checks for
+executable files in the HMS functional test directory on the NCN and runs all tests found in succession.
 
 ```bash
 ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
+```
+
+Initial output will resemble following:
+
+```text
 searching for HMS CT functional tests...
 found 4 HMS CT functional tests...
 running HMS CT functional tests...
@@ -139,12 +150,13 @@ test_smd_state_change_notifications_ncn-functional_remote-functional.tavern.yaml
 When API test failures occur, output from Tavern is printed by `pytest` indicating the following:
 
 - The `Source test stage` that was executing when the failure occurred which is a portion of the source code for the failed test case.
-- The `Formatted stage` that was executing when the failure occurred which is a portion of the source code for the failed test case with its variables filled in with the values that were set at the time of the failure. This includes the request header, method, URL, and other options of the failed test case which is useful for attempting to reproduce the failure using the `curl` command.
+- The `Formatted stage` that was executing when the failure occurred which is a portion of the source code for the failed test case with its variables filled in with the values that were set at the
+  time of the failure. This includes the request header, method, URL, and other options of the failed test case which is useful for attempting to reproduce the failure using the `curl` command.
 - The specific `Errors` encountered when processing the API response that caused the failure. **This is the first place to look when debugging API test failures.**
 
 The following is an example `Source test stage`:
 
-```text
+```yaml
 Source test stage (line 179):
   - name: Ensure the boot script service can provide the bootscript for a given node
     request:
@@ -174,16 +186,16 @@ Formatted stage:
 
 The following is an example `Errors` section:
 
-```text
+```yaml
 Errors:
 E   tavern.util.exceptions.TestFailError: Test 'Ensure the boot script service can provide the bootscript for a given node' failed:
     - Status code was 400, expected 200:
         {"type": "about:blank", "title": "Bad Request", "detail": "Need a mac=, name=, or nid= parameter", "status": 400}
 ```
 
-## Additional Troubleshooting
+## Additional troubleshooting
 
-This section provides guidance for handling specific HMS Health Check failures that may occur.
+This section provides guidance for handling specific HMS health check failures that may occur.
 
 ### `smd_discovery_status_test_ncn-smoke.sh`
 
@@ -206,55 +218,68 @@ FAIL: smd_discovery_status_test found 4 endpoints that failed discovery, maximum
 '/opt/cray/tests/ncn-smoke/hms/hms-smd/smd_discovery_status_test_ncn-smoke.sh' exited with status code: 1
 ```
 
-The expected state of `LastDiscoveryStatus` is `DiscoverOK` for all endpoints with the exception of the BMC for `ncn-m001`, which is not normally connected to the site network and expected to be `HTTPsGetFailed`. If the test fails because of two or more endpoints not having been discovered successfully, the following additional steps can be taken to determine the cause of the failure:
+The expected state of `LastDiscoveryStatus` is `DiscoverOK` for all endpoints with the exception of the BMC for `ncn-m001`, which is not normally connected to the site network and expected to be
+`HTTPsGetFailed`. If the test fails because of two or more endpoints not having been discovered successfully, then take the following additional steps in order to determine the cause of the failure:
 
 #### `HTTPsGetFailed`
 
-1. (`ncn#`) Check to see if the failed component name (xname) resolves using the `nslookup` command.
+1. Check to see if the failed component name (xname) resolves using the `nslookup` command.
 
     If not, then the problem may be a DNS issue.
 
     ```bash
-    nslookup <xname>
+    ncn# nslookup <xname>
     ```
 
-1. (`ncn#`) Check to see if the failed component name (xname) responds to the `ping` command.
+1. Check to see if the failed component name (xname) responds to the `ping` command.
 
     If not, then the problem may be a network or hardware issue.
 
     ```bash
-    ping -c 1 <xname>
+    ncn# ping -c 1 <xname>
     ```
 
-1. (`ncn#`) Check to see if the failed component name (xname) responds to a Redfish query.
+1. Check to see if the failed component name (xname) responds to a Redfish query.
 
     If not, then the problem may be a credentials issue. Use the password set in the REDS sealed secret.
 
     ```bash
-    curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
+    ncn# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
     ```
 
-If discovery failures for Gigabyte CMCs with component names (xnames) of the form `xXc0sSb999` occur, verify that the root service account is configured for the CMC and add it if needed by following the steps outlined in [Add Root Service Account for Gigabyte Controllers](../operations/security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
+If discovery failures for Gigabyte CMCs with component names (xnames) of the form `xXc0sSb999` occur, verify that the root service account is configured for the CMC and add it if needed by following
+the steps outlined in [Add Root Service Account for Gigabyte Controllers](../operations/security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
 
-If discovery failures for HPE PDUs with component names (xnames) of the form `xXmM` occur, this may indicate that configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to [HPE PDU Admin Procedures](../operations/hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
+If discovery failures for HPE PDUs with component names (xnames) of the form `xXmM` occur, this may indicate that configuration steps have not yet been executed which are required for the PDUs to be
+discovered. Refer to [HPE PDU Admin Procedures](../operations/hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has
+been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
 
 #### `ChildVerificationFailed`
 
 Check the SMD logs to determine the cause of the bad Redfish path encountered during discovery.
 
-```bash
-# get the SMD pod names
-ncn # kubectl -n services get pods -l app.kubernetes.io/name=cray-smd
-NAME                        READY   STATUS    RESTARTS   AGE
-cray-smd-5b9d574756-9b2lj   2/2     Running   0          24d
-cray-smd-5b9d574756-bnztf   2/2     Running   0          24d
-cray-smd-5b9d574756-hhc5p   2/2     Running   0          24d
+1. Get the SMD pod names.
 
-# get the logs from each of the SMD pods
-ncn# kubectl -n services logs <cray-smd-pod1> cray-smd > smd_pod1_logs
-ncn# kubectl -n services logs <cray-smd-pod2> cray-smd > smd_pod2_logs
-ncn# kubectl -n services logs <cray-smd-pod3> cray-smd > smd_pod3_logs
-```
+    ```bash
+    ncn-mw # kubectl -n services get pods -l app.kubernetes.io/name=cray-smd
+    ```
+
+    Example output:
+
+    ```text
+    NAME                        READY   STATUS    RESTARTS   AGE
+    cray-smd-5b9d574756-9b2lj   2/2     Running   0          24d
+    cray-smd-5b9d574756-bnztf   2/2     Running   0          24d
+    cray-smd-5b9d574756-hhc5p   2/2     Running   0          24d
+    ```
+
+1. Get the logs from each of the SMD pods.
+
+    ```bash
+    ncn-mw# kubectl -n services logs <cray-smd-pod1> cray-smd > smd_pod1_logs
+    ncn-mw# kubectl -n services logs <cray-smd-pod2> cray-smd > smd_pod2_logs
+    ncn-mw# kubectl -n services logs <cray-smd-pod3> cray-smd > smd_pod3_logs
+    ```
 
 #### `DiscoveryStarted`
 
@@ -266,15 +291,15 @@ Use the following command to check the current discovery status of the endpoint:
 ncn# cray hsm inventory redfishEndpoints describe <xname>
 ```
 
-## Install Blocking vs. Non-Blocking Failures
+## Install blocking vs. Non-blocking failures
 
-The HMS Health Checks include tests for multiple types of system components, some of which are critical for the installation of the system, while others are not.
+The HMS health checks include tests for multiple types of system components, some of which are critical for the installation of the system, while others are not.
 
 The following types of HMS test failures should be considered blocking for system installations:
 
 - HMS service pods not running
 - HMS service APIs unreachable through the API Gateway or Cray CLI
-- Failures related to HMS discovery (unreachable BMCs, unresponsive controller hardware, no Redfish connectivity)
+- Failures related to HMS discovery (for example: unreachable BMCs, unresponsive controller hardware, or no Redfish connectivity)
 
 The following types of HMS test failures should **not** be considered blocking for system installations:
 
@@ -282,13 +307,14 @@ The following types of HMS test failures should **not** be considered blocking f
 
 It is typically safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation has completed.
 
-## Known Issues
+## Known issues
 
-This section outlines known issues that cause HMS Health Check failures. These issues have been fixed in `CSM-1.2` but may still be encountered on `CSM-1.2` systems that have been upgraded from a previous release.
+This section outlines known issues that cause HMS health check failures. These issues have been fixed in `CSM-1.2` but may still be encountered on `CSM-1.2` systems that have been upgraded from a previous release.
 
 ### Warning flags incorrectly set in HSM for Mountain BMCs
 
-The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue that can cause Warning flags to be incorrectly set in HSM for Mountain BMCs and result in test failures.
+The HMS functional tests include a check for unexpected flags that may be set in Hardware State Manager (HSM) for the BMCs on the system. There is a known issue that can cause Warning flags to be
+incorrectly set in HSM for Mountain BMCs and result in test failures.
 
 The following HMS functional test may fail due to this issue:
 
@@ -317,12 +343,18 @@ E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fie
          - Enum 'Warning' does not exist. Path: '/Components/14/Flag'.: Path: '/'>
 ```
 
-If you see this, perform the following steps:
+If this failure is encountered, then perform the following steps:
 
-1. Retrieve the xnames of all Mountain BMCs with Warning flags set in HSM:
+1. Retrieve the component names (xnames) of all Mountain BMCs with Warning flags set in HSM.
 
     ```bash
-    ncn-mw# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
+    ncn-mw# curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v1/State/Components?Type=NodeBMC\&Class=Mountain\&Flag=Warning | 
+                jq '.Components[] | { ID: .ID, Flag: .Flag, Class: .Class }' -c | sort -V | jq -c
+    ```
+
+    Example output:
+
+    ```json
     {"ID":"x5000c1s0b0","Flag":"Warning","Class":"Mountain"}
     {"ID":"x5000c1s0b1","Flag":"Warning","Class":"Mountain"}
     {"ID":"x5000c1s1b0","Flag":"Warning","Class":"Mountain"}
@@ -335,6 +367,11 @@ If you see this, perform the following steps:
 
     ```bash
     ncn-mw# curl -s -k -u root:${BMC_PASSWORD} https://x5000c1s0b0/redfish/v1/Managers/BMC | jq '.Status'
+    ```
+
+    Example output:
+
+    ```json
     {
       "Health": "OK",
       "State": "Online"
