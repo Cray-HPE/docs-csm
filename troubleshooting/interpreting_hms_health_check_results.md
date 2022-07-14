@@ -138,9 +138,9 @@ test_smd_state_change_notifications_ncn-functional_remote-functional.tavern.yaml
 
 When API test failures occur, output from Tavern is printed by `pytest` indicating the following:
 
-* The `Source test stage` that was executing when the failure occurred which is a portion of the source code for the failed test case.
-* The `Formatted stage` that was executing when the failure occurred which is a portion of the source code for the failed test case with its variables filled in with the values that were set at the time of the failure. This includes the request header, method, URL, and other options of the failed test case which is useful for attempting to reproduce the failure using the `curl` command.
-* The specific `Errors` encountered when processing the API response that caused the failure. **This is the first place to look when debugging API test failures.**
+- The `Source test stage` that was executing when the failure occurred which is a portion of the source code for the failed test case.
+- The `Formatted stage` that was executing when the failure occurred which is a portion of the source code for the failed test case with its variables filled in with the values that were set at the time of the failure. This includes the request header, method, URL, and other options of the failed test case which is useful for attempting to reproduce the failure using the `curl` command.
+- The specific `Errors` encountered when processing the API response that caused the failure. **This is the first place to look when debugging API test failures.**
 
 The following is an example `Source test stage`:
 
@@ -272,13 +272,13 @@ The HMS Health Checks include tests for multiple types of system components, som
 
 The following types of HMS test failures should be considered blocking for system installations:
 
-* HMS service pods not running
-* HMS service APIs unreachable through the API Gateway or Cray CLI
-* Failures related to HMS discovery (unreachable BMCs, unresponsive controller hardware, no Redfish connectivity)
+- HMS service pods not running
+- HMS service APIs unreachable through the API Gateway or Cray CLI
+- Failures related to HMS discovery (unreachable BMCs, unresponsive controller hardware, no Redfish connectivity)
 
 The following types of HMS test failures should **not** be considered blocking for system installations:
 
-* Failures due to hardware issues on individual compute nodes
+- Failures due to hardware issues on individual compute nodes (alerts or warning flags set in HSM)
 
 It is typically safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation has completed.
 
@@ -292,7 +292,7 @@ The HMS functional tests include a check for unexpected flags that may be set in
 
 The following HMS functional test may fail due to this issue:
 
-* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+- `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
 The symptom of this issue is the test fails with error messages about Warning flags being set on one or more BMCs. It may look similar to the following in the test output:
 
@@ -347,7 +347,7 @@ Test failures and HSM Warning flags for Mountain BMCs with the Redfish BMC Manag
 
 The following HMS functional test may fail due to a known issue because of CMMs setting BMC states to `On` instead of `Ready` in HSM:
 
-* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+- `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
 This issue looks similar to the following in the test output:
 
@@ -367,7 +367,7 @@ Failures of this test caused by BMCs in the `On` state can be safely ignored.
 
 The following HMS functional test may fail due to a known issue because of `ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM:
 
-* `test_smd_component_endpoints_ncn-functional_remote-functional.tavern.yaml`
+- `test_smd_component_endpoints_ncn-functional_remote-functional.tavern.yaml`
 
 This issue looks similar to the following in the test output:
 
@@ -391,7 +391,7 @@ Failures of this test caused by `AuxiliaryController` endpoints for Cassini mezz
 
 The following HMS functional test may fail due to a known issue because of Components with custom Roles or SubRoles set in HSM:
 
-* `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
+- `test_smd_components_ncn-functional_remote-functional.tavern.yaml`
 
 This issue looks similar to the following in the test output:
 
