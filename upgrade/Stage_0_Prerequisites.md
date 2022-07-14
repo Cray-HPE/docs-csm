@@ -2,7 +2,7 @@
 
 > **Reminders:**
 >
-> - CSM 1.0.1 or higher is required in order to upgrade to CSM 1.2.0.
+> - CSM 1.2.0 or higher is required in order to upgrade to CSM 1.3.0.
 > - If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 >   [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
@@ -27,7 +27,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 1. (`ncn-m001#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   CSM_RELEASE=csm-1.2.0
+   CSM_RELEASE=csm-1.3.0
    ```
 
 1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
@@ -53,7 +53,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
 
    ```bash
-   wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm \
+   wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.3/noarch/docs-csm-latest.noarch.rpm \
         -O /root/docs-csm-latest.noarch.rpm &&
    rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
    ```
@@ -272,7 +272,7 @@ network (new CAN or CHN) and its chosen subnet.
    cd site-init
    kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
    git add customizations.yaml
-   git commit -m 'CSM 1.2 upgrade - customizations.yaml'
+   git commit -m 'CSM 1.3 upgrade - customizations.yaml'
    git push
    ```
 
