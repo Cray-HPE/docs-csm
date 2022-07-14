@@ -2,23 +2,19 @@
 
 ## Table of contents
 
-1. [Introduction](#introduction)
-1. [Overview](#overview)
-1. [Execution](#execution)
-1. [Failure analysis](#failure-analysis)
-
-    - [Smoke test failure](#smoke-test-failure)
-    - [Functional test failure](#functional-test-failure)
-
-1. [Tavern output](#tavern-output)
-1. [Additional troubleshooting](#additional-troubleshooting)
-
-    - [`hsm_discovery_status_test.sh`](#hsmdiscoverystatustestsh)
-      - [`HTTPsGetFailed`](#httpsgetfailed)
-      - [`ChildVerificationFailed`](#childverificationfailed)
-      - [`DiscoveryStarted`](#discoverystarted)
-
-1. [Blocking vs. non-blocking failures](#blocking-vs-non-blocking-failures)
+- [Introduction](#introduction)
+- [Overview](#overview)
+- [Execution](#execution)
+- [Failure analysis](#failure-analysis)
+  - [Smoke test failure](#smoke-test-failure)
+  - [Functional test failure](#functional-test-failure)
+- [Tavern output](#tavern-output)
+- [Additional troubleshooting](#additional-troubleshooting)
+  - [`hsm_discovery_status_test.sh`](#hsmdiscoverystatustestsh)
+    - [`HTTPsGetFailed`](#httpsgetfailed)
+    - [`ChildVerificationFailed`](#childverificationfailed)
+    - [`DiscoveryStarted`](#discoverystarted)
+- [Blocking vs. non-blocking failures](#blocking-vs-non-blocking-failures)
 
 ## Introduction
 
