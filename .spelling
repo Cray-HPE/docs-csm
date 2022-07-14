@@ -610,6 +610,10 @@ Init
 # To allow Site Init
 Init
 
+- install/create_cabinets_yaml.md
+# To allow Site Init
+Init
+
 - install/pre-installation.md
 # To allow Site Init
 Init

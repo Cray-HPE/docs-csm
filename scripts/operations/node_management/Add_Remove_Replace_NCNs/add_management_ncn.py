@@ -2027,7 +2027,7 @@ def main():
         sys.exit(1)
 
     # Validate provided node xname (used by both)
-    if re.match("^x([0-9]{1,4})c0s([0-9]+)b0n0$", args.xname) is None:
+    if re.match("^x([0-9]{1,4})c[0,4]s([0-9]+)b0n0$", args.xname) is None:
         print("Invalid node xname provided: ", args.xname, ", expected format xXc0sSb0n0")
         sys.exit(1)
 
