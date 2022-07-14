@@ -28,7 +28,7 @@ test called `smd_discovery_status_test_ncn-smoke.sh` which verifies that the sys
 executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
 
 ```bash
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
+ncn-mw# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_smoke_tests_ncn-resources.sh
 ```
 
 Example output:
@@ -88,7 +88,7 @@ functional tests are more rigorous than the smoke tests and verify the behavior 
 executable files in the HMS functional test directory on the NCN and runs all tests found in succession.
 
 ```bash
-ncn# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
+ncn-mw# /opt/cray/tests/ncn-resources/hms/hms-test/hms_run_ct_functional_tests_ncn-resources.sh
 ```
 
 Initial output will resemble the following:
@@ -228,7 +228,7 @@ The expected state of `LastDiscoveryStatus` is `DiscoverOK` for all endpoints wi
     If not, then the problem may be a DNS issue.
 
     ```bash
-    ncn# nslookup <xname>
+    ncn-mw# nslookup <xname>
     ```
 
 1. Check to see if the failed component name (xname) responds to the `ping` command.
@@ -236,7 +236,7 @@ The expected state of `LastDiscoveryStatus` is `DiscoverOK` for all endpoints wi
     If not, then the problem may be a network or hardware issue.
 
     ```bash
-    ncn# ping -c 1 <xname>
+    ncn-mw# ping -c 1 <xname>
     ```
 
 1. Check to see if the failed component name (xname) responds to a Redfish query.
@@ -244,7 +244,7 @@ The expected state of `LastDiscoveryStatus` is `DiscoverOK` for all endpoints wi
     If not, then the problem may be a credentials issue. Use the password set in the REDS sealed secret.
 
     ```bash
-    ncn# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
+    ncn-mw# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
     ```
 
 If discovery failures for Gigabyte CMCs with component names (xnames) of the form `xXc0sSb999` occur, verify that the root service account is configured for the CMC and add it if needed by following
@@ -261,7 +261,7 @@ Check the SMD logs to determine the cause of the bad Redfish path encountered du
 1. Get the SMD pod names.
 
     ```bash
-    ncn-mw # kubectl -n services get pods -l app.kubernetes.io/name=cray-smd
+    ncn-mw# kubectl -n services get pods -l app.kubernetes.io/name=cray-smd
     ```
 
     Example output:
@@ -288,7 +288,7 @@ The endpoint is in the process of being inventoried by Hardware State Manager (H
 Use the following command to check the current discovery status of the endpoint:
 
 ```bash
-ncn# cray hsm inventory redfishEndpoints describe <xname>
+ncn-mw# cray hsm inventory redfishEndpoints describe <xname>
 ```
 
 ## Install blocking vs. Non-blocking failures
