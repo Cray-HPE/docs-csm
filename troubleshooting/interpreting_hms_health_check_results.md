@@ -6,16 +6,16 @@
 - [HMS smoke tests](#hms-smoke-tests)
 - [HMS functional tests](#hms-functional-tests)
 - [Additional troubleshooting](#additional-troubleshooting)
-  - [`smd_discovery_status_test_ncn-smoke.sh`](#smd-discovery-status-test)
-    - [`HTTPsGetFailed`](#https-get-failed)
-    - [`ChildVerificationFailed`](#child-verification-failed)
-    - [`DiscoveryStarted`](#discovery-started)
-- [Install blocking vs. Non-blocking failures](#blocking-vs-nonblocking-failures)
+  - [`smd_discovery_status_test_ncn-smoke.sh`](#smddiscoverystatustestncnsmokesh)
+    - [`HTTPsGetFailed`](#httpsgetfailed)
+    - [`ChildVerificationFailed`](#childverificationfailed)
+    - [`DiscoveryStarted`](#discoverystarted)
+- [Install blocking vs. Non-blocking failures](#install-blocking-vs-nonblocking-failures)
 - [Known issues](#known-issues)
-  - [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
-  - [BMCs set to `On` state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
-  - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
-  - [Custom Roles and SubRoles for Components in HSM](#hms-custom-component-roles-subroles-hsm)
+  - [Warning flags incorrectly set in HSM for Mountain BMCs](#warning-flags-incorrectly-set-in-hsm-for-mountain-bmcs)
+  - [BMCs set to `On` state in HSM](#bmcs-set-to-on-state-in-hsm)
+  - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#componentendpoints-of-redfish-subtype-auxiliarycontroller-in-hsm)
+  - [Custom Roles and SubRoles for Components in HSM](#custom-roles-and-subroles-for-components-in-hsm)
 
 ## Introduction
 
@@ -311,10 +311,10 @@ It is typically safe to postpone the investigation and resolution of non-blockin
 
 This section outlines known issues that cause HMS health check failures. These issues have been fixed in `CSM-1.2` but may still be encountered on `CSM-1.2` systems that have been upgraded from a previous release.
 
-- [Warning flags incorrectly set in HSM for Mountain BMCs](#hms-known-issue-mountain-bmcs-warning-flags)
-- [BMCs set to `On` state in HSM](#hms-bmcs-set-to-on-state-in-hsm)
-- [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#hms-component-endpoints-auxiliary-controller-redfish-subtype-hsm)
-- [Custom Roles and SubRoles for Components in HSM](#hms-custom-component-roles-subroles-hsm)
+- [Warning flags incorrectly set in HSM for Mountain BMCs](#warning-flags-incorrectly-set-in-hsm-for-mountain-bmcs)
+- [BMCs set to `On` state in HSM](#bmcs-set-to-on-state-in-hsm)
+- [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#componentendpoints-of-redfish-subtype-auxiliarycontroller-in-hsm)
+- [Custom Roles and SubRoles for Components in HSM](#custom-roles-and-subroles-for-components-in-hsm)
 
 ### Warning flags incorrectly set in HSM for Mountain BMCs
 
