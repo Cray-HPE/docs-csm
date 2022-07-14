@@ -90,7 +90,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    Other LDAP configuration settings are set in the `spec.kubernetes.services.cray-keycloak-users-localize` field in the `customizations.yaml` file.
 
    A list of the fields follows. The format of the entries in this list is:
-   ```
+
+   ```yaml
      * <cray-keycloak-users-localize chart option name> : <description>
        - default: <the default value if not overridden in customizations.yaml
        - type: <type that the value in customizations.yaml has to be. e.g., if type is string and a number is entered then you need to quote it>
@@ -98,6 +99,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    ```
 
    The fields are:
+
    ```yaml
      * ldapProviderId : The Keycloak provider ID for the component. This must be "ldap"
        - default: ldap
@@ -276,19 +278,19 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       **Troubleshooting:**
 
-      * If the output shows the `skopeo.tar` file cannot be found, then ensure that the `$CSM_DISTDIR` directory looks contains the `dtr.dev.cray.com` directory which includes the originally installed docker images.
+      - If the output shows the `skopeo.tar` file cannot be found, then ensure that the `$CSM_DISTDIR` directory looks contains the `dtr.dev.cray.com` directory which includes the originally installed docker images.
 
          The following is an example of the skopeo.tar file not being found:
 
-         ```bash
+         ```text
          ++ podman load -q -i ./hack/../vendor/skopeo.tar
          ++ sed -e 's/^.*: //'
          + SKOPEO_IMAGE=
          ```
 
-      * If the following overlay error is returned, it could be caused by an earlier podman invocation using a different configuration:
+      - If the following overlay error is returned, it could be caused by an earlier podman invocation using a different configuration:
 
-         ```
+         ```text
          "ERRO[0000] [graphdriver] prior storage driver overlay failed: 'overlay' is not supported over overlayfs, a mount_program is required: backing file system is unsupported for this graph driver"
          ```
 
@@ -307,8 +309,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       ```bash
       podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
-                -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
-                -storepass password -noprompt
+         -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
+         -storepass password -noprompt
       ```
 
    1. Set variables for the LDAP server.
@@ -316,12 +318,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       In the following example, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port `636`.
 
       ```bash
-      export LDAP=dcldap2.us.cray.com
-      export PORT=636
+      LDAP=dcldap2.us.cray.com
+      PORT=636
       ```
 
-   1. Get the issuer certificate for the LDAP server at port `636`. Use `openssl s_client` to connect
-      and show the certificate chain returned by the LDAP host.
+   1. Get the issuer certificate for the LDAP server at port `636`.
+
+      Use `openssl s_client` to connect and show the certificate chain returned by the LDAP host.
 
       ```bash
       openssl s_client -showcerts -connect $LDAP:${PORT} </dev/null
@@ -334,14 +337,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       create it automatically.
 
       > **`NOTE`** The following commands were verified using OpenSSL
-      > version 1.1.1d and use the `-nameopt RFC2253` option to ensure
-      > consistent formatting of distinguished names (DNs).
-      > Unfortunately, older versions of OpenSSL may not support
+      > version `1.1.1d` and use the `-nameopt RFC2253` option to ensure
+      > consistent formatting of distinguished names.
+      > Older versions of OpenSSL may not support
       > `-nameopt` on the `s_client` command or may use a different
-      > default format. As a result, mileage may vary; however,
-      > administrators should be able to extract the issuer certificate manually
-      > from the output of the above `openssl s_client` example if the
-      > following commands are unsuccessful.
+      > default format. However, administrators should be able to extract
+      > the issuer certificate manually from the output of the above
+      > `openssl s_client` example, if necessary.
 
       1. Observe the issuer's DN.
 
@@ -349,7 +351,11 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
          ```bash
          openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+         ```
 
+         Example output:
+
+         ```text
          emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
          ```
 
@@ -357,12 +363,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
          > **`NOTE`** The issuer DN is properly escaped as part of the
          > `awk` pattern below. If the value being used is
-         > different, be sure to escape it properly!
+         > different, then be sure to escape it properly!
 
          ```bash
          openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null |
-                    awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' |
-                    awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
+            awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' |
+            awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
          ```
 
    1. Verify the issuer's certificate was properly extracted and saved in `cacert.pem`.
@@ -373,7 +379,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       Expected output looks similar to the following:
 
-      ```
+      ```text
       -----BEGIN CERTIFICATE-----
       MIIDvTCCAqWgAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU8cwDQYJKoZIhvcNAQEL
       BQAwbjELMAkGA1UEBhMCVVMxCzAJBgNVBAgMAldJMQwwCgYDVQQKDANIUEUxEDAO
@@ -403,8 +409,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       ```bash
       podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
-                    -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
-                    -storepass password -noprompt
+        -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
+        -storepass password -noprompt
       ```
 
    1. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
@@ -415,9 +421,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    1. Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
 
-      ```bash
-      cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" |
-                    yq r -j - | /root/site-init/utils/secrets-encrypt.sh |
+      ```console
+      cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
+                    yq r -j - | /root/site-init/utils/secrets-encrypt.sh | \
                     yq w -f - -i /root/site-init/customizations.yaml \
                     spec.kubernetes.sealed_secrets.cray-keycloak
       {
@@ -461,7 +467,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    Expected output looks similar to:
 
-   ```
+   ```text
    Creating Sealed Secret keycloak-certs
    Generating type static_b64...
    Creating Sealed Secret keycloak-master-admin-auth
@@ -503,7 +509,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    ```
 
    Expected output looks similar to the following:
-   ```
+
+   ```text
    ldaps://my_ldap.my_org.test
    ```
 
@@ -558,19 +565,20 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       kubectl rollout status statefulset -n services cray-keycloak
       ```
 
-1.  Re-apply the `cray-keycloak-users-localize` Helm chart with the updated `customizations.yaml` file.
+1. Re-apply the `cray-keycloak-users-localize` Helm chart with the updated `customizations.yaml` file.
 
-   1.  Determine the `cray-keycloak-users-localize` chart version that is currently deployed.
+   1. Determine the `cray-keycloak-users-localize` chart version that is currently deployed.
 
       ```bash
       helm ls -A -a | grep cray-keycloak-users-localize | awk '{print $(NF-1)}'
       cray-keycloak-users-localize-1.5.6
       ```
 
-   1.  Create a manifest file that will be used to reapply the same chart version.
+   1. Create a manifest file that will be used to reapply the same chart version.
 
-      ```bash
-      cat << EOF > ./cray-keycloak-users-localize-manifest.yaml
+      Create the file `./cray-keycloak-users-localize-manifest.yaml` with the following contents:
+
+      ```yaml
       apiVersion: manifests/v1beta1
       metadata:
         name: reapply-cray-keycloak-users-localize
@@ -579,7 +587,6 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
           - name: cray-keycloak-users-localize
             namespace: services
             version: 1.5.6
-      EOF
       ```
 
    1. Uninstall the current `cray-keycloak-users-localize` chart.
@@ -598,7 +605,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       ```bash
       loftsman ship --manifest-path ./deploy.yaml \
-                --charts-repo https://packages.local/repository/charts
+        --charts-repo https://packages.local/repository/charts
       ```
 
    1. Watch the pod to check the status of the job.
@@ -607,16 +614,25 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       ```bash
       kubectl get pods -n services | grep keycloak-users-localize
+      ```
+
+      Example output:
+
+      ```text
       keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
       ```
 
-   1.  Check the pod's logs.
+   1. Check the pod's logs.
 
       Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
       ```bash
       kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
-      <logs showing it has updated the "s3" objects and ConfigMaps>
+      ```
+
+      Example log entry showing that it has updated the "s3" objects and `ConfigMaps`:
+
+      ```text
       2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
       ```
 
@@ -626,10 +642,10 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       ```bash
       kubectl get secret -n services vcs-user-credentials \
-                    --template={{.data.vcs_password}} | base64 --decode
+        --template={{.data.vcs_password}} | base64 --decode
       ```
 
-   1. Checkout content from the `cos-config-management` VCS repository.
+   1. Check out content from the `cos-config-management` VCS repository.
 
       ```bash
       git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
@@ -639,9 +655,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    1. Create the `group_vars/Compute/keycloak.yaml` file.
 
-      The file should contain the following values:
+      The file contents should be:
 
-      ```bash
+      ```yaml
       ---
       keycloak_config_computes: True
       ```
@@ -657,8 +673,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Update the Configuration Framework Service (CFS) configuration.
 
       ```bash
-      cray cfs configurations update configurations-example \
-        --file ./configurations-example.json --format json
+      cray cfs configurations update configurations-example --file ./configurations-example.json --format json
+      ```
+
+      Example output:
+
+      ```json
       {
         "lastUpdated": "2021-07-28T03:26:30:37Z",
         "layers": [
@@ -687,7 +707,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
       ```
 
-   1. Login to the Keycloak UI using the `admin` user and the password obtained in the previous step.
+   1. Log in to the Keycloak UI using the `admin` user and the password obtained in the previous step.
 
       The Keycloak UI URL is typically similar to the following: `https://auth.cmn.<system_name>/keycloak`
 
@@ -698,9 +718,9 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Verify that a token can be retrieved from Keycloak using an LDAP user/password.
 
       In the example below, replace `myuser`, `mypass`, and `shasta` in the cURL command with
-      site-specific values. The shasta client is created during the SMS install process.
+      site-specific values. The `shasta` client is created during the SMS install process.
 
-      In the following example, the `python -mjson.tool` is not required; it is simply used to
+      In the following example, the `jq` command is not required; it is simply used to
       format the output for readability.
 
       ```bash
@@ -710,7 +730,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
          -d username=myuser \
          -d password=mypass \
          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
-         python -mjson.tool
+      jq
       ```
 
       Expected output:
@@ -731,7 +751,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Validate that the `access_token` looks correct.
 
       Copy the `access_token` from the previous step and open a browser window.
-      Navigate to http://jwt.io and paste the token in the `Encoded` field.
+      Navigate to `http://jwt.io` and paste the token in the `Encoded` field.
 
       Verify that the `preferred_username` is the expected LDAP user, and that the
       role is `admin` (or other role appropriate for the user).

@@ -635,6 +635,10 @@ lockout-tagout
 # To allow System Admin Toolkit
 Admin
 
+- operations/security_and_authentication/Manage_Sealed_Secrets.md
+# To allow Site Init
+Init
+
 - operations/security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md
 # To allow Site Init
 Init
