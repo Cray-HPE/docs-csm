@@ -28,153 +28,58 @@ basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
 
-target_ncn=$1
+target_ncns=$1
+IFS=', ' read -r -a array <<< "$target_ncns"
+jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
 
-. ${basedir}/../common/ncn-common.sh ${target_ncn}
+${basedir}/../../../workflows/scripts/upload-worker-rebuild-templates.sh
 
-CSM_REL_NAME=${CSM_REL_NAME-"csm-${CSM_RELEASE}"}
-
-ssh_keygen_keyscan $1 || true # or true to unblock rerun
-
-${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
-
-state_name="ENSURE_NEXUS_CAN_START_ON_ANY_NODE"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."  
-    {
-    workers="$(kubectl get node --selector='!node-role.kubernetes.io/master' -o name | sed -e 's,^node/,,' | paste -sd,)"
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image" 2>/dev/null; done
-    } >> ${LOG_FILE} 2>&1
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-# Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary).
-# We do not want to begin rebuilding the next worker node until etcd pods have reached quorum.
-state_name="ENSURE_ETCD_PODS_RUNNING"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    {
-    while [[ "$(kubectl get po -A -l 'app=etcd' | grep -v "Running"| wc -l)" != "1" ]]; do
-        echo "Some etcd pods are not in running state, wait for 5s ..."
-        kubectl get po -A -l 'app=etcd' | grep -v "Running"
-        sleep 5
-    done
-
-    etcdClusters=$(kubectl get Etcdclusters -n services | grep "cray-"|awk '{print $1}')
-    for cluster in $etcdClusters
-    do
-        numOfPods=$(kubectl get pods -A -l 'app=etcd'| grep $cluster | grep "Running" | wc -l)
-        if [[ $numOfPods -ne 3 ]];then
-            echo "ERROR - Etcd cluster: $cluster should have 3 pods running but only $numOfPods are running"
-            exit 1
-        fi
-    done
-    } >> ${LOG_FILE} 2>&1
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="ENSURE_POSTGRES_HEALTHY"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    {
-    wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/bin/csi
-    csi pit validate --postgres
-    } >> ${LOG_FILE} 2>&1
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-drain_node $target_ncn
-
-# Validate SLS health before calling csi handoff bss-update-*, since
-# it relies on SLS
-check_sls_health >> "${LOG_FILE}" 2>&1
-
+cat << EOF > data.json
 {
-set +e
-while true ; do    
-    csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
-    if [[ $? -eq 0 ]]; then
-        break
-    else
-        sleep 5
-    fi
-done
-set -e
-} >> ${LOG_FILE} 2>&1
-
-${basedir}/../common/ncn-rebuild-common.sh $target_ncn
-
-{
-${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
-
-### redeploy CPS if required
-redeploy=$(cat /etc/cray/upgrade/csm/${CSM_REL_NAME}/cp.deployment.snapshot | grep $target_ncn | wc -l)
-if [[ $redeploy == "1" ]];then
-    cray cps deployment update --nodes $target_ncn
-fi
-} >> ${LOG_FILE} 2>&1
-
-state_name="ENSURE_KEY_PODS_HAVE_STARTED"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    {
-    while true; do
-      output=$(kubectl get po -A -o wide | grep -e etcd -e speaker | grep $target_ncn | awk '{print $4}')
-      if [ ! -n "$output" ]; then
-        #
-        # No pods scheduled to start on this node, we are done
-        #
-        break
-      fi
-      rc=0
-      echo "$output" | grep -v -e Running -e Completed > /dev/null || rc=$?
-      if [[ "$rc" -eq 1 ]]; then
-        echo "All etcd and speaker pods are running on $target_ncn"
-        break
-      fi
-      echo "Some etcd and speaker pods are not running on $target_ncn -- sleeping for 10 seconds..."
-      sleep 10
-    done
-    scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
-    ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
-    } >> ${LOG_FILE} 2>&1
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-if [[ -z $SW_ADMIN_PASSWORD ]]; then
-    echo "******************************************"
-    echo "******************************************"
-    echo "**** You can export SW_ADMIN_PASSWORD ****"
-    echo "********* to avoid manual input  *********"
-    echo "******************************************"
-    echo "******************************************"
-    echo "**** Enter SSH password of switches: ****"
-    read -s -p "" SW_ADMIN_PASSWORD
-    echo
-fi
-
-cat <<EOF
-
-NOTE:
-    If below test failed, try to fix it based on test output. Then run current script again
+  "dryRun": false,
+  "hosts": ${jsonArray}
+}
 EOF
+# shellcheck disable=SC2155,SC2046
+export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+   -d client_id=admin-client \
+   -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
-ssh $target_ncn -t "SW_ADMIN_PASSWORD=$SW_ADMIN_PASSWORD GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
+response=$(curl -sk -XPOST -H "Authorization: Bearer ${TOKEN}" -H 'Content-Type: application/json' -d @data.json "https://api-gw-service-nmn.local/apis/nls/v1/ncns/rebuild")
 
-move_state_file ${target_ncn}
+if echo "${response}" | grep "message"; then
+    echo
+    echo "${response}" | jq -r '.message'
+fi
 
-ok_report
+workflow=$(echo "${response}" | grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*"')
+workflow=${workflow::-1}
+
+echo
+echo "Running workflow: ${workflow}"
+
+while true; do
+    # TODO: limit to worker rebuild request
+    phase=$(curl -sk -XGET -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/nls/v1/workflows" | \
+        jq -r ".[] | select(.name==\"${workflow}\") | .status.phase")
+    echo "${phase}"
+
+    if [[ "${phase}" == "Succeeded" ]]; then
+        break;
+    fi
+
+    if [[ "${phase}" == "Failed" ]]; then
+        # TODO: get los/troubleshooting
+        break;
+    fi
+
+    if [[ "${phase}" == "Error" ]]; then
+        echo "Workflow in Error state, Retry ..."
+        curl -sk -XPUT -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/nls/v1/workflows/${workflow}/retry"
+        sleep 20
+    fi
+
+    sleep 10
+done
 
