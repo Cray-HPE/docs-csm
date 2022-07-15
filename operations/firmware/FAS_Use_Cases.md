@@ -29,7 +29,7 @@ All of the example JSON files below are set to run a dry-run. Update the `overri
 
 This procedure updates node controller \(nC\) firmware.
 
-### Prerequisites
+**Prerequisites**
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
@@ -104,7 +104,7 @@ There are two nodes that must be updated on each BMC; these have the targets `No
 The targets can be run in the same action (as shown in the example) or run separately by only including one target in the action.
 On larger systems, it is recommended to run as two actions one after each other as the output will be shorter.
 
-##### Prerequisites
+**Prerequisites**
 
 * The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require. See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
 * Compute node BIOS updates require the nodes to be off. If nodes are not off when the update command is issued, it will report as a failed update.
@@ -140,7 +140,7 @@ It is recommended that the `Node0/1` BIOS be updated in a separate action, eithe
 }
 ```
 
-### Procedure
+**Procedure**
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -284,7 +284,7 @@ Update the Chassis Management Module \(CMM\) controller \(cC\) firmware using FA
 
 The CMM firmware update process also checks and updates the Cabinet Environmental Controller \(CEC\) firmware.
 
-### Prerequisites
+**Prerequisites**
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
@@ -320,7 +320,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 }
 ```
 
-### Procedure
+**Procedure**
 
 1. Power off the liquid-cooled chassis slots and chassis rectifiers.
 
@@ -466,7 +466,7 @@ After updating the BIOS or System ROM, the compute node will need to be rebooted
 
 This procedure updates node controller \(nC\) firmware.
 
-### Prerequisites
+**Prerequisites**
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
@@ -623,7 +623,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 }
 ```
 
-### Procedure
+**Procedure**
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -792,7 +792,7 @@ After updating the BIOS, the NCN will need to be rebooted. Follow the [Reboot NC
 
 Due to networking, FAS cannot update `ncn-m001`. See [Updating Firmware on `ncn-m001`](Updating_Firmware_m001.md)
 
-### Gigabyte
+### Gigabyte NCNs
 
 **Device Type: `NodeBMC` | Target: BMC**
 
@@ -873,7 +873,7 @@ Make sure you have waited for the current firmware to be updated before starting
 
 > **IMPORTANT:** The `timeLimit` is `4000` because the Gigabytes can take a lot longer to update.
 
-### HPE
+### HPE NCNs
 
 **Device Type: `NodeBMC` | Target: `iLO 5` aka BMC**
 
@@ -908,7 +908,10 @@ Make sure you have waited for the current firmware to be updated before starting
 
 **Device Type: `NodeBMC` | Target: `System ROM` aka BIOS**
 
-> **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values. See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#configure-dns-and-ntp-on-each-bmc).
+> **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
+> For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
+> Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
+> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#configure-dns-and-ntp-on-each-bmc).
 
 ```json
 {
@@ -941,7 +944,7 @@ Make sure you have waited for the current firmware to be updated before starting
 
 The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
-### Procedure
+**Procedure**
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#configure-dns-and-ntp-on-each-bmc) for more information.
@@ -968,7 +971,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 
 Correct an issue where the model of the liquid-cooled compute node BIOS is the incorrect name. The name has changed from `WNC-ROME` to `HPE CRAY EX425` or `HPE CRAY EX425 (ROME)`.
 
-### Prerequisites
+**Prerequisites**
 
 * The system is running HPE Cray EX release v1.4 or higher.
 * The system has completed the Cray System Management \(CSM\) installation.
@@ -1017,7 +1020,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
   The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
 
-### Procedure
+**Procedure**
 
 1. Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
 
