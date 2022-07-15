@@ -24,7 +24,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure
 
@@ -170,7 +170,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     Example output:
 
-    ```text
+    ```toml
     Type = "Node"
     Enabled = **true**
     State = "Off"
