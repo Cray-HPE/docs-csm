@@ -167,6 +167,7 @@ DNS
 dnsmasq
 Docker
 Dockerfile
+dracut
 dropdown
 dryrun
 DSAv2
@@ -379,6 +380,7 @@ organizers
 organizes
 organizing
 OSDs
+OverlayFS
 oversubscription
 PaaS
 PAM-4
@@ -596,6 +598,9 @@ Zypper
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
 
+- background/ncn_mounts_and_file_systems.md
+Inode
+
 - glossary.md
 # To allow 802.3cd/bs
 bs
@@ -623,6 +628,10 @@ LoadBalancer
 
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
 lockout-tagout
+
+- operations/security_and_authentication/Manage_Sealed_Secrets.md
+# To allow Site Init
+Init
 
 - operations/security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md
 # To allow Site Init
