@@ -61,6 +61,30 @@ tasks:
             "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
             | jq '.[]| select(.endpoint=="bootscript")|.last_epoch' 2> /dev/null)
             echo $bootscript_last_epoch
+  - name: set-next-boot-to-pxe
+    templateRef:
+      name: ssh-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            {{- include "common.envar" . | indent 12 }}
+            
+            cat <<'EOF' > set-next-boot-to-pxe.sh
+              echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
+              efibootmgr # print before
+              efibootmgr | grep '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
+              efibootmgr # print after
+              echo 'Setting next boot to PXE ... '
+              ipmitool chassis bootdev pxe options=efiboot
+            EOF
+            
+            chmod +x set-next-boot-to-pxe.sh
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null set-next-boot-to-pxe.sh $TARGET_NCN:/tmp/set-next-boot-to-pxe.sh
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TARGET_NCN '/tmp/set-next-boot-to-pxe.sh'
   - name: "pxe-boot-node"
     dependencies:
       - get-bootscript-last-access-timestamp
