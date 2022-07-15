@@ -51,7 +51,7 @@ Scenarios where this procedure is applicable:
         export XNAME=x3000c0s4b0n0
         ```
 
-    1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Determine the NCN BMC xname by removing the trailing `n0` from the NCN node xname:
+    1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Determine the NCN BMC xname by removing the trailing `n0` from the NCN xname:
 
         ```bash
         export BMC_XNAME=x3000c0s4b0
@@ -79,7 +79,7 @@ Scenarios where this procedure is applicable:
         export MGMT_SWITCH_CONNECTOR=x3000c0w14j48
         ```
 
-    1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Determine the xname of the management switch by removing the trailing `jJ` from the `MgmtSwitchConnector` xname:
+    1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Determine the xname of the management switch by removing the trailing `jJ` from the `MgmtSwitchConnector` xname.
 
         ```bash
         export MGMT_SWITCH=x3000c0w14
@@ -90,7 +90,7 @@ Scenarios where this procedure is applicable:
 
         * Alternatively, view the MAC address table on the management switch that the BMC is cabled to.
 
-            1. (`ncn-m#`) Determine the alias of the management switch that the BMC is connected to:
+            1. (`ncn-m#`) Determine the alias of the management switch that is connected to the BMC.
 
                 ```bash
                 cray sls hardware describe $MGMT_SWITCH --format json | jq .ExtraProperties.Aliases[] -r
@@ -102,7 +102,7 @@ Scenarios where this procedure is applicable:
                 sw-leaf-bmc-001
                 ```
 
-            1. (`ncn-m#`) SSH into the management switch that the BMC is connected to:
+            1. (`ncn-m#`) SSH into the management switch that is connected to the BMC.
 
                 ```bash
                 ssh admin@sw-leaf-bmc-001.hmn
@@ -148,15 +148,15 @@ Scenarios where this procedure is applicable:
                 a4:bf:01:65:68:54    4        dynamic                   1/1/48
                 ```
 
-    1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Set the `BMC_MAC` environment variable to the BMC MAC address:
+    1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Set the `BMC_MAC` environment variable to the BMC MAC address.
 
         ```bash
         export BMC_MAC=a4:bf:01:65:68:54
         ```
 
-    1. **Skip if adding `ncn-m001`:** Determine the current IP address of the NCN BMC:
+    1. **Skip if adding `ncn-m001`:** Determine the current IP address of the NCN BMC.
 
-        1. (`ncn-m#`) Query Kea for the BMC MAC address to determine its current IP address:
+        1. (`ncn-m#`) Query Kea for the BMC MAC address to determine its current IP address.
 
             ```bash
             export BMC_IP=$(curl -sk -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
@@ -176,7 +176,7 @@ Scenarios where this procedure is applicable:
             1. Verify that the BMC is powered up and has an active connection to the network.
             1. Verify that the BMC is set to DHCP instead of a static IP address.
 
-        1. (`ncn-m#`) Ping the BMC to see if it is reachable:
+        1. (`ncn-m#`) Ping the BMC to see if it is reachable.
 
             ```bash
             ping $BMC_IP
@@ -366,9 +366,9 @@ Scenarios where this procedure is applicable:
     ping $NODE-mgmt
     ```
 
-    Wait 5 minutes for Kea and the Hardware State Manager to sync. If `ping` continues to fail, re-run the previous step to restart the BMC.
+    Wait 5 minutes for Kea and the HSM to sync. If `ping` continues to fail, re-run the previous step to restart the BMC.
 
-1. (`ncn-m#`) Restart the REDS deployment:
+1. (`ncn-m#`) Restart the REDS deployment.
 
     ```bash
     kubectl -n services rollout restart deployment cray-reds
@@ -380,7 +380,7 @@ Scenarios where this procedure is applicable:
     deployment.apps/cray-reds restarted
     ```
 
-1. (`ncn-m#`) Wait for REDS to restart:
+1. (`ncn-m#`) Wait for REDS to restart.
 
     ```bash
     kubectl -n services rollout status  deployment cray-reds
@@ -425,7 +425,7 @@ Scenarios where this procedure is applicable:
 
     **Discovery troubleshooting**
     The `redfishEndpoint` may cycle between `DiscoveryStarted` and `HTTPsGetFailed` before the endpoint becomes `DiscoverOK`. If the BMC is in `HTTPSGetFailed` for a long period of time, then the following steps may help to determine the cause:
-    * (`ncn-m#`) Verify that the xname of the BMC resolves in DNS:
+    * (`ncn-m#`) Verify that the xname of the BMC resolves in DNS.
 
         ```bash
         nslookup x3000c0s38b0
@@ -441,7 +441,7 @@ Scenarios where this procedure is applicable:
         Address: 10.254.1.13
         ```
 
-    * (`ncn-m#`) Verify that the BMC is reachable at the expected IP address:
+    * (`ncn-m#`) Verify that the BMC is reachable at the expected IP address.
 
         ```bash
         ping $NODE-mgmt
@@ -453,7 +453,7 @@ Scenarios where this procedure is applicable:
         curl -k -u root:changeme https://x3000c0s38b0/redfish/v1/Managers
         ```
 
-1. (`ncn-m#`) Verify that the NCN exists under HSM State Components:
+1. (`ncn-m#`) Verify that the NCN exists under HSM State Components.
 
     ```bash
     cray hsm state components describe $XNAME

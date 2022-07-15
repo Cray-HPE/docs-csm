@@ -44,7 +44,7 @@ This procedure will perform and verify the following:
     export XNAME=x3000c0s4b0n0
     ```
 
-1. (`ncn-m#`) Perform a dry-run of allocating IP addresses for the NCN:
+1. (`ncn-m#`) Perform a dry-run of allocating IP addresses for the NCN.
 
     ```bash
     ./add_management_ncn.py allocate-ips \

@@ -66,9 +66,9 @@ Some conventions for this document:
 ### Chassis selection
 
 Typically air-cooled hardware is located within a standard EIA 42U rack, and chassis `c0` is used for all air-cooled hardware present within a standard rack. If air-cooled hardware is located within an EX2500 cabinet that contains a single liquid-cooled
-chassis and one air-cooled chassis the chassis `c4` will be used.
+chassis and one air-cooled chassis, then the chassis `c4` will be used.
 
-All of the examples below assume air-cooled hardware is located within a standard rack and use chassis `c0`.
+All of the following examples assume air-cooled hardware is located within a standard rack and use chassis `c0`.
 
 ## Compute node
 
@@ -864,7 +864,7 @@ The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 
 - `xX`: where `X` is the cabinet or rack identification number.
 - `cC`: where `C` is the chassis identification number.
-  - If the node is within an air-cooled cabinet this should be `0`.
+  - If the node is within an air-cooled cabinet, then this should be `0`.
   - If the node is located within a air-cooled chassis in an EX2500 cabinet, then this should be `4`.
 - `sS`: where `S` is the lowest slot the node chassis occupies.
 - `bB`: where `B` is the ordinal of the node BMC. This should be `0`.
