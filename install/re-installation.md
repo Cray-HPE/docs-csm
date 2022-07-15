@@ -5,29 +5,29 @@ the NCNs have been deployed (e.g. there is no more PIT node).
 
 ## Topics
 
-1. [Quiesce Compute and Application Nodes](#quiesce-application-and-compute-nodes)
-1. [Disable DHCP Service](#disable-dhcp-service)
-1. [Set IPMI Credentials](#set-ipmi-credentials)
-1. [Power Off Booted Nodes](#power-off-booted-nodes)
-1. [Set Node BMCs to DHCP](#set-node-bmcs-to-dhcp)
-1. [Power off the PIT Node](#power-off-pit-node)
+1. [Quiesce compute and application nodes](#quiesce-application-and-compute-nodes)
+1. [Disable DHCP service](#disable-dhcp-service)
+1. [Set IPMI credentials](#set-ipmi-credentials)
+1. [Power off booted nodes](#power-off-booted-nodes)
+1. [Set node BMCs to DHCP](#set-node-bmcs-to-dhcp)
+1. [Power off the PIT node](#power-off-pit-node)
 1. [Configure DNS](#configure-dns)
-1. [Check Disk Space](#check-disk-space)
+1. [Check disk space](#check-disk-space)
 
-## Quiesce Application and Compute Nodes
+## Quiesce application and compute nodes
 
 > **`NOTE`** Skip this section if compute nodes and application nodes are not booted.
 
-The application and compute nodes must be shutdown prior to a reinstallation, if they're left on they will degrade and
-potentially end up in an undesirable state. The safest approach is to power these off.
+The application and compute nodes must be shutdown prior to a reinstallation. If they are left on, then they will
+potentially end up in an undesirable state.
 
 See [Shut Down and Power Off Compute and User Access Nodes](../operations/power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
 
-## Disable DHCP Service
+## Disable DHCP service
 
 > **`NOTE`** Skip this section if the CSM install was incomplete or not started.
 
-The DHCP service running in Kubernetes needs to be disabled or it will conflict with the PITs DHCP services.
+The DHCP service running in Kubernetes needs to be disabled or it will conflict with the PIT's DHCP services.
 
 1. (`ncn#`) Disable `cray-dhcp-kea`
 
@@ -54,7 +54,7 @@ The upcoming procedures use `ipmitool`. Set IPMI credentials for the BMCs of the
    export IPMI_PASSWORD
    ```
 
-## Power Off Booted Nodes
+## Power off booted nodes
 
 > **`NOTE`** Skip this section if none of the management nodes are booted.
 
@@ -88,7 +88,7 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the `pit`, if reinstalli
 
 ## Set node BMCs to DHCP
 
-Set the BMCs on the management nodes to DHCP. During the install of the management nodes their BMCs get set to static IP addresses. The installation expects these
+During the install of the management nodes, their BMCs get set to static IP addresses. The installation expects these
 BMCs to be set back to DHCP before proceeding.
 
 > **`NOTE`** These steps require that the **[Set IPMI credentials](#set-ipmi-credentials)** steps have been performed.
@@ -156,16 +156,16 @@ BMCs to be set back to DHCP before proceeding.
    poweroff
    ```
 
-The process is now done, the NCNs are ready for a new deployment.
+The process is now done; the NCNs are ready for a new deployment.
 
 ## Configure DNS
 
-If `ncn-m001` is being used to prepare the USB LiveCD, remove the Kubernetes IP addresses from `/etc/resolv.conf` and add a
+If `ncn-m001` is being used to prepare the USB LiveCD, then remove the Kubernetes IP addresses from `/etc/resolv.conf` and add a
 valid external DNS server.
 
-## Check Disk Space
+## Check disk space
 
-If `ncn-m001` is being used to prepare the USB LiveCD, ensure there is enough free disk space for the CSM tar archive to be
+If `ncn-m001` is being used to prepare the USB LiveCD, then ensure that there is enough free disk space for the CSM tar archive to be
 downloaded and unpacked.
 
 ## Next topic
