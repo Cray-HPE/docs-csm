@@ -35,7 +35,7 @@ This procedure will perform and verify the following:
     |   |                | SHCD Column to reference | Description
     | - | -------------- | ------------------------ | -----------
     | X | Cabinet number | Source Rack (K20)        | The Cabinet or rack number containing the Management NCN.
-    | C | Chassis number |                          | For air-cooled nodes located within a standard rack the chassis is `0`. If the air-cooled node node is located within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+    | C | Chassis number |                          | For air-cooled nodes within a standard rack, the chassis is `0`. If the air-cooled node node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
     | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.
     | B | BMC number     |                          | For Management NCNs the BMC number is 0.
     | N | Node number    |                          | For Management NCNs the Node number is 0.
@@ -78,7 +78,7 @@ This procedure will perform and verify the following:
         HMN     | 10.254.1.21
     ```
 
-    > Depending on the networking configuration of the system, the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP addresses will be allocated for that network.
+    > Depending on the networking configuration of the system, the CMN or CAN networks may not be present in SLS network data. No IP addresses will be allocated for networks that do not exist in SLS.
 
 1. (`ncn-m#`) Allocate IP addresses for the NCN in SLS and HSM by adding the `--perform-changes` argument to the command in the previous step.
 
