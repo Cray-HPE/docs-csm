@@ -89,7 +89,8 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 1. (`ncn-m002#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   CSM_RELEASE=1.2.0
+   CSM_RELEASE=1.3.0
+   CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
 1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
@@ -97,11 +98,11 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
    A later stage of the upgrade expects the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm` on `ncn-m002`; that is why this command copies it there.
 
    ```bash
-   mkdir -pv /etc/cray/upgrade/csm/csm-${CSM_RELEASE} &&
+   mkdir -pv /etc/cray/upgrade/csm/${CSM_REL_NAME} &&
              scp ncn-m001:/etc/cray/upgrade/csm/myenv /etc/cray/upgrade/csm/myenv &&
              scp ncn-m001:/root/output.log /root/pre-m001-reboot-upgrade.log &&
              cray artifacts create config-data pre-m001-reboot-upgrade.log /root/pre-m001-reboot-upgrade.log
-   csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/ -name 'cray-site-init*.rpm'") &&
+   csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/ -name 'cray-site-init*.rpm'") &&
              scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm &&
              scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm &&
              rpm -Uvh --force /tmp/cray-site-init.rpm /root/docs-csm-latest.noarch.rpm

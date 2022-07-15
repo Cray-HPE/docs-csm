@@ -41,6 +41,7 @@ do
     case $key in
         --csm-version)
         CSM_RELEASE="$2"
+        CSM_REL_NAME="csm-${CSM_RELEASE}"
         shift # past argument
         shift # past value
         ;;
@@ -114,9 +115,9 @@ if [[ -z ${TARBALL_FILE} ]]; then
         touch /etc/cray/upgrade/csm/myenv
         echo "====> ${state_name} ..."
         {
-        wget --progress=dot:giga ${ENDPOINT}/${CSM_RELEASE}.tar.gz
+        wget --progress=dot:giga ${ENDPOINT}/${CSM_REL_NAME}.tar.gz
         # set TARBALL_FILE to newly downloaded file
-        TARBALL_FILE=${CSM_RELEASE}.tar.gz
+        TARBALL_FILE=${CSM_REL_NAME}.tar.gz
         } >> ${LOG_FILE} 2>&1
         #shellcheck disable=SC2046
         record_state ${state_name} $(hostname)
@@ -133,9 +134,9 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    mkdir -p /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
-    tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_RELEASE}/tarball
-    CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}
+    mkdir -p /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball
+    tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball
+    CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}
     if [[ "${DELETE_TARBALL_FILE}" != N ]]; then
         rm -rf "${TARBALL_FILE}"
     fi
@@ -143,8 +144,9 @@ if [[ $state_recorded == "0" ]]; then
     # if we have to untar a file, we assume this is a new upgrade
     # remove existing myenv file just in case
     rm -rf /etc/cray/upgrade/csm/myenv
-    echo "export CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE}/tarball/${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
+    echo "export CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
+    echo "export CSM_REL_NAME=${CSM_REL_NAME}" >> /etc/cray/upgrade/csm/myenv
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)

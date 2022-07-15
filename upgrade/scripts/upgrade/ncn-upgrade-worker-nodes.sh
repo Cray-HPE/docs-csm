@@ -32,6 +32,8 @@ target_ncn=$1
 
 . ${basedir}/../common/ncn-common.sh ${target_ncn}
 
+CSM_REL_NAME=${CSM_REL_NAME-"csm-${CSM_RELEASE}"}
+
 ssh_keygen_keyscan $1 || true # or true to unblock rerun
 
 ${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
@@ -116,7 +118,7 @@ ${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 ${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
 
 ### redeploy CPS if required
-redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $target_ncn | wc -l)
+redeploy=$(cat /etc/cray/upgrade/csm/${CSM_REL_NAME}/cp.deployment.snapshot | grep $target_ncn | wc -l)
 if [[ $redeploy == "1" ]];then
     cray cps deployment update --nodes $target_ncn
 fi

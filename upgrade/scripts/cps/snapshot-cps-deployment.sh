@@ -23,13 +23,16 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 # Take cps deployment snapshot (if cps installed)
+
+CSM_REL_NAME=${CSM_REL_NAME-"csm-${CSM_RELEASE}"}
+
 set +e
 trap - ERR
 kubectl get pod -n services | grep -q cray-cps
 if [ "$?" -eq 0 ]; then
   cps_deployment_snapshot=$(cray cps deployment list --format json | jq -r \
     '.[] | select(."podname" != "NA" and ."podname" != "") | .node' || true)
-  echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot
+  echo $cps_deployment_snapshot > /etc/cray/upgrade/csm/${CSM_REL_NAME}/cp.deployment.snapshot
 fi
 trap 'err_report' ERR
 set -e

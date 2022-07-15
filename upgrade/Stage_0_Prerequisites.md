@@ -27,7 +27,8 @@ backup of Workload Manager configuration data and files is created. Once complet
 1. (`ncn-m001#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   CSM_RELEASE=csm-1.3.0
+   CSM_RELEASE=1.3.0
+   CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
 1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
@@ -60,7 +61,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 1. (`ncn-m001#`) Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
 
-   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
+   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}${CSM_REL_NAME}.tar.gz`
 
    **NOTE** This step is optional for Cray/HPE internal installs, if `ncn-m001` can reach the internet.
 
@@ -103,7 +104,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    > copy the tarball file to a different location, and set the `CSM_TAR_PATH` to point to this new location.
 
    ```bash
-   CSM_TAR_PATH=/path/to/${CSM_RELEASE}.tar.gz
+   CSM_TAR_PATH=/path/to/${CSM_REL_NAME}.tar.gz
    ```
 
 1. (`ncn-m001#`) Run the script.
