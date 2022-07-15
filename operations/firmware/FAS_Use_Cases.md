@@ -383,25 +383,25 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         * Lists the nodes that have a valid image for updating:
 
-            ```
+            ```text
             [operationSummary.succeeded]
             ```
 
         * Lists the nodes that will not be updated because they are already at the correct version:
 
-            ```
+            ```text
             [operationSummary.noOperation]
             ```
 
         * Lists the nodes that had an error when attempting to update:
 
-            ```
+            ```text
             [operationSummary.failed]
             ```
 
         * Lists the nodes that do not have a valid image for updating:
 
-            ```
+            ```text
             [operationSummary.noSolution]
             ```
 
@@ -411,7 +411,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         The following example is for the `chassisBMC.json` file. Update the following values:
 
-        ```
+        ```text
         "overrideDryrun":true,
         "description":"Update Cray Chassis Management Module controllers"
         ```
@@ -453,7 +453,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
     * The *HPE Slingshot Troubleshooting Guide* PDF.
 
-2. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+1. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
 ## Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM
 
