@@ -462,10 +462,10 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    1. Run `ncn-image-modification.sh` from the CSM tarball:
 
        ```bash
-       "${PITDATA}/csm-${CSM_RELEASE}/ncn-image-modification.sh -p \
+       "${PITDATA}/csm-${CSM_RELEASE}/ncn-image-modification.sh" -p \
           -d /root/.ssh \
-          -k /var/www/ephemeral/data/k8s/${kubernetes_version}/kubernetes-${kubernetes_version}.squashfs \
-          -s /var/www/ephemeral/data/ceph/${kubernetes_version}/storage-ceph-${ceph_version}.squashfs"
+          -k "/var/www/ephemeral/data/k8s/${kubernetes_version}/kubernetes-${kubernetes_version}.squashfs" \
+          -s "/var/www/ephemeral/data/ceph/${kubernetes_version}/storage-ceph-${ceph_version}.squashfs"
        ```
 
 1. (`pit#`) Log the currently installed PIT packages.
