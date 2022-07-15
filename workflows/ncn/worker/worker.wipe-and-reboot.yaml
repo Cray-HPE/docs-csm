@@ -42,7 +42,6 @@ tasks:
   - name: "get-bootscript-last-access-timestamp"
     dependencies:
       - validate-bss-ntp
-      - wipe-node-disk
     templateRef:
       name: kubectl-and-curl-template
       template: shell-script
