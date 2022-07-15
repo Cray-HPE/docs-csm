@@ -2,7 +2,9 @@
 
 This procedure adds one or more liquid-cooled cabinets and associated CDU management switches to SLS.
 
-**`NOTE`** This procedure is intended to be used in conjunction with the top level [Add additional Liquid-Cooled Cabinets to a System](../node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md) procedure.
+**`NOTES`**
+
+- This procedure is intended to be used in conjunction with the top level [Add additional Liquid-Cooled Cabinets to a System](../node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md) procedure.
 
 **`NOTE`** This procedure will only add the liquid-cooled hardware present in an EX2500 cabinet with a single liquid-cooled chassis and one air-cooled chassis.
 
