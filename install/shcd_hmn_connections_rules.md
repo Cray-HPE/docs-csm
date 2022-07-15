@@ -865,7 +865,7 @@ The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 - `xX`: where `X` is the cabinet or rack identification number.
 - `cC`: where `C` is the chassis identification number.
   - If the node is within an air-cooled cabinet, then this should be `0`.
-  - If the node is located within a air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+  - If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
 - `sS`: where `S` is the lowest slot the node chassis occupies.
 - `bB`: where `B` is the ordinal of the node BMC. This should be `0`.
 - `nN`: where `N` is the ordinal of the node This should be `0`.
@@ -916,8 +916,8 @@ The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 
 - `xX`: where `X` is the Cabinet or Rack identification number.
 - `cC`: where `C` is the chassis identification number.
-  - If the node is within an air-cooled cabinet this should be `0`.
-  - If the node is located within a air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+  - If the node is within an air-cooled cabinet, then this should be `0`.
+  - If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
 - `sS`: where `S` is the lowest slot the node chassis occupies.
 - `bB`: where `B` is the ordinal of the node BMC.
   - If the `SourceSubLocation` is `L` or `l`, then this should be `1`.
