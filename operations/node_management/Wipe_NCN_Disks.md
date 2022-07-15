@@ -1,20 +1,18 @@
 # Manual Wipe Procedures
 
-This page details how to wipe NCN disks.
+This page details how to wipe NCN disks, this page uses the same wipe commands that the automatic
+wipe uses. However this page accounts for running services that are present on a running CSM NCN.
 
-> **Everything in this section should be considered DESTRUCTIVE**.
+**Everything in this section should be considered DESTRUCTIVE**.
 
-After following these procedures, an NCN can be rebooted and redeployed.
-
-> **`NOTE`** All types of disk wipe can be run from Linux or from an emergency shell.
+> ***NOTE*** All types of disk wipe can be run from Linux or from an emergency shell.
 
 The following are potential use cases for wiping disks:
 
-- Adding a node that is not bare-metal, that came from somewhere else and might have a running OS already
-- Adopting new disks that are not bare.
+- Clean slating an NCN
+- Forcing a node to net-boot that may or may not have a working or desired operating system installed (e.g. a node that might have a non-CSM Linux distro installed)
 
-By default the NCN is wiped by its own deployment code (when `metal.no-wipe=0` is set), this
-procedure in this page is offered as an alternative, manual method. This page is not required.
+For wiping Linux on an NCN that was recently adopted from another place, where a previous OS is installed, the [basic wipe](#basic-wipe) is sufficient for clean slating that node.
 
 ## Topics
 
@@ -24,19 +22,20 @@ procedure in this page is offered as an alternative, manual method. This page is
 
 ## Basic Wipe
 
-A basic wipe includes wiping the disks and all of the RAIDs. These basic wipe instructions can be
-executed on **any type of management node** (master, storage, or worker).
+This wipe erases the magic bits on the disk to prevent them from being recognized and making them ready for deployment, as well as removing the common volume groups.
 
-1. List the disks for verification.
+1. (`ncn#`) List the disks for verification.
 
     ```bash
-    ls -1 /dev/sd* /dev/disk/by-label/*
+    disks_to_wipe="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(raid|'"$metal_transports"')' | sort -u | awk '{print "/dev/"$2}' | tr '\n' ' ' | sed 's/ *$//')"
     ```
 
-1. Wipe the disks and the RAIDs.
+1. (`ncn#`) Wipe the disks and the RAIDs.
 
     ```bash
-    wipefs --all --force /dev/sd* /dev/disk/by-label/*
+    for disk in $disks_to_wipe; do
+        wipefs --all --force ${disk}* 2> /dev/null
+    done
     ```
 
     If any disks had labels present, then the output looks similar to the following:
@@ -56,12 +55,23 @@ executed on **any type of management node** (master, storage, or worker).
 
     The `wipefs` command may fail if no labeled disks are found, which is an indication of a larger problem.
 
+1. (`ncn#`) On all NCNs, remove the volume groups.
+
+   > ***NOTE*** The Ceph volume group will only exist on storage-nodes, but this code snippet will work on all NCNs.
+
+    ```bash
+    local ceph_vgs='vg_name=~ceph*'
+    local metal_vgs='vg_name=~metal*'
+    for volume_group in $doomed_ceph_vgs $doomed_metal_vgs; do
+        vgremove -f -v --select $volume_group -y >/dev/null 2>&1
+    done
+    ```
+
 ## Advanced Wipe
 
-**This section is specific to utility storage nodes**. An advanced wipe includes stopping Ceph,
-deleting the Ceph volumes, and then wiping the disks and RAIDs.
+An advanced wipe includes handling storage-node specific items before running the [basic wipe](#basic-wipe).
 
-1. Stop Ceph.
+1. (`ncn-s#`) On storage-nodes, stop Ceph.
 
     - ***CSM 0.9 or earlier***
 
@@ -75,7 +85,7 @@ deleting the Ceph volumes, and then wiping the disks and RAIDs.
         cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
         ```
 
-1. Make sure the OSDs (if any) are not running.
+1. (`ncn-s#`) On storage nodes, make sure the OSDs (if any) are not running.
 
     - ***CSM 0.9 or earlier***
 
@@ -91,23 +101,19 @@ deleting the Ceph volumes, and then wiping the disks and RAIDs.
 
     Examine the output. There should be no running `ceph-osd` processes or containers.
 
-1. Remove the Ceph volume groups.
-
-    ```bash
-    vgremove -f -v --select 'vg_name=~ceph*'
-    ```
-
-1. Perform the [Basic Wipe](#basic-wipe) procedure.
+1. Perform the [basic wipe](#basic-wipe) procedure.
 
 ## Full-Wipe
 
-This section is the preferred method for all nodes. A full wipe includes deleting the Ceph volumes (where applicable), stopping the
-RAIDs, zeroing the disks, and then wiping the disks and RAIDs.
+This section walks a user through cleanly stopping all running services that require partitions as well as completely scrubbing and removing
+the system.
 
-**IMPORTANT:** For each step, pay attention to whether the command is to be run on a master node, storage node, or worker node. If
+This does not zero disks, this will ensure that all disks look RAW on the next reboot.
+
+***IMPORTANT*** For each step, pay attention to whether the command is to be run on a master node, storage node, or worker node. If
 wiping a different type of node than what a step specifies, then skip that step.
 
-1. Reset Kubernetes **on worker nodes ONLY**.
+1. (`ncn-w#`) Reset Kubernetes **on worker nodes ONLY**.
 
    This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
@@ -135,7 +141,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         crictl stop <container id from the CONTAINER column>
         ```
 
-1. Reset Kubernetes **on master nodes ONLY**.
+1. (`ncn-m#`) Reset Kubernetes **on master nodes ONLY**.
 
     This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
@@ -163,45 +169,7 @@ wiping a different type of node than what a step specifies, then skip that step.
        crictl stop <container id from the CONTAINER column>
        ```
 
-1. Delete Ceph Volumes **on utility storage nodes ONLY**.
-
-    For each storage node, perform the following steps:
-
-    1. Stop Ceph.
-
-        - ***CSM 0.9 or earlier***
-
-            ```bash
-            systemctl stop ceph-osd.target
-            ```
-
-        - ***CSM 1.0 or later***
-
-            ```bash
-            cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
-            ```
-
-    1. Make sure the OSDs (if any) are not running.
-
-        - ***CSM 0.9 or earlier***
-
-            ```bash
-            ps -ef|grep ceph-osd
-            ```
-
-        - ***CSM 1.0 or later***
-
-            ```bash
-            podman ps
-            ```
-
-        Examine the output. There should be no running `ceph-osd` processes or containers.
-
-    1. Remove the Ceph volume groups.
-
-        ```bash
-        vgremove -f -v --select 'vg_name=~ceph*'
-        ```
+1. (`ncn-s#`) Stop Storage-CEPH, run the [advanced wipe](#advanced-wipe) but stop when it mentions the "basic wipe" and return here.
 
 1. Unmount volumes.
 
@@ -257,7 +225,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         umount -v /var/lib/kubelet /var/lib/sdu /run/containerd /var/lib/containerd /run/lib-containerd /var/opt/cray/sdu/collection-mount /var/lib/admin-tools /var/lib/s3fs_cache /var/lib/containerd
         ```
 
-1. Stop `cray-sdu-rda` on **all node types** (master, storage, or worker).
+1. (`ncn#`) Stop `cray-sdu-rda` on **all node types** (master, storage, or worker).
 
     1. See if any `cray-sdu-rda` containers are running.
 
@@ -274,7 +242,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         7741d50966259410298bb4c3210e6665cdbd57a82e34e467d239f519ae3f17d4
         ```
 
-1. Remove `etcd` device **on master nodes ONLY**.
+1. (`ncn-m#`) Remove `etcd` device **on master nodes ONLY**.
 
     1. Determine whether or not an `etcd` volume is present.
 
@@ -301,54 +269,10 @@ wiping a different type of node than what a step specifies, then skip that step.
         Command failed.
         ```
 
-1. Remove `etcd` volumes **on master nodes ONLY**.
+1. (`ncn-m#`) Remove `etcd` volumes **on master nodes ONLY**.
 
     ```bash
     vgremove etcdvg0
     ```
 
-1. Remove metal LVM on **all node types** (master, storage, or worker).
-
-    ```bash
-    vgremove -f -v --select 'vg_name=~metal*'
-    ```
-
-    > **`NOTE`** Optionally, run the `pvs` command. If any drives are still listed, then remove them with `pvremove`, but this is rarely needed.
-    >Also, if the above command fails or returns a warning about the filesystem being in use, ignore the error and proceed to the next step.
-    >This will not inhibit the wipe process.
-
-1. Wipe the disks and RAIDs on **all node types** (master, storage, or worker).
-
-    If wiping multiple nodes, this group of commands should be done in succession on one node before moving to do the same set of commands on the next node.
-    The nodes should be addressed in descending order for each type of node. Start with the utility storage nodes, then the worker nodes, then `ncn-m003`, and finally `ncn-m002`.
-
-    > **WARNING:** Do not run these commands on `ncn-m001`
-
-    1. List the disks for verification.
-
-        ```bash
-        ls -1 /dev/sd* /dev/disk/by-label/*
-        ```
-
-    1. Wipe the disks and RAIDs.
-
-        ```bash
-        wipefs --all --force /dev/sd* /dev/disk/by-label/*
-        ```
-
-        If any disks had labels present, then output from `wipefs` looks similar to the following:
-
-        ```text
-        /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
-        /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
-        /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
-        /dev/sdb: 6 bytes were erased at offset 0x00000000 (crypto_LUKS): 4c 55 4b 53 ba be
-        /dev/sdb: 6 bytes were erased at offset 0x00004000 (crypto_LUKS): 53 4b 55 4c ba be
-        /dev/sdc: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
-        /dev/sdc: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
-        /dev/sdc: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
-        ```
-
-        Verify that there are no error messages in the output.
-
-        The `wipefs` command may fail if no labeled disks are found, which is an indication of a larger problem.
+1. Perform the [basic wipe](#basic-wipe) procedure.
