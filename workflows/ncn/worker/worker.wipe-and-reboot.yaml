@@ -88,6 +88,7 @@ tasks:
   - name: "pxe-boot-node"
     dependencies:
       - get-bootscript-last-access-timestamp
+      - set-next-boot-to-pxe
     templateRef:
       name: ssh-template
       template: shell-script
