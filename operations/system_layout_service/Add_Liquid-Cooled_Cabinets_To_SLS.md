@@ -5,18 +5,18 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 **`NOTES`**
 
 - This procedure is intended to be used in conjunction with the top level [Add additional Liquid-Cooled Cabinets to a System](../node_management/Add_additional_Liquid-Cooled_Cabinets_to_a_System.md) procedure.
-
-**`NOTE`** This procedure will only add the liquid-cooled hardware present in an EX2500 cabinet with a single liquid-cooled chassis and one air-cooled chassis.
+- This procedure will only add the liquid-cooled hardware present in an EX2500 cabinet with a single liquid-cooled chassis and a single air-cooled chassis.
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+- The latest CSM documentation is installed on the system. See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 - Collect information for the liquid-cooled cabinets being added to the system. For each cabinet collect:
   - Cabinet component name (xname) (for example `x1004`)
   - Hardware Management Network (HMN) VLAN ID configured on the CEC (for example `3004`)
   - Node Management Network (NMN) VLAN ID configured on the CEC (for example `2004`)
   - Starting compute node ID (NID) (for example `2025`)
-  - Cabinet Type: Mountain (8 chassis) or Hill (2 chassis)
+  - Cabinet type: Mountain (8 chassis) or Hill (2 chassis)
 
 - Collect information for the CDU switches (if any) being added to the system. For each CDU management switch, collect:
   - CDU switch component name (xname) (for example `d1w1`)
@@ -38,7 +38,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     - Hardware Management Network (HMN) VLAN ID configured on the CEC (for example `3004`)
     - Node Management Network (NMN) VLAN ID configured on the CEC (for example `2004`)
     - Starting compute node ID (NID) (for example `2025`)
-    - Cabinet Type (Mountain (8 Chassis) or Hill (2 Chassis))
+    - Cabinet type: Mountain (8 chassis) or Hill (2 chassis)
 
     > The `inspect_sls_cabinets.py` script can be used to help display information about existing cabinets present in the system:
     >
@@ -198,14 +198,14 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 1. **For each** new CDU switch being added to the system, collect the following information about it:
 
     - CDU switch component name (xname)
-      - If located within a CDU: `dDwW`
-            - `dD` : where `D` is the Coolant Distribution Unit (CDU)
-            - `wW` : where `W` is the management switch in a CDU
-      - If located in a standard rack: `xXcChHsS`
-        - `xX` : where `X` is the River cabinet identification number (the figure above is `3000`)
+      - If within a CDU: `dDwW`
+            - `dD` : where `D` is the Coolant Distribution Unit (CDU).
+            - `wW` : where `W` is the management switch in a CDU.
+      - If within a standard rack: `xXcChHsS`
+        - `xX` : where `X` is the River cabinet identification number (the figure above is `3000`).
         - `cC` : where `C` is the chassis identification number. This should be `0`.
-          - If the switch is within an air-cooled cabinet this should be `0`.
-          - If the switch is located within a air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+          - If the switch is within an air-cooled cabinet, then this should be `0`.
+          - If the switch is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
         - `hH` : where `H` is the slot number in the cabinet (height).
         - `sS` : where `S` is the horizontal space number.
     - CDU switch brand (for example Dell or Aruba)
