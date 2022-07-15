@@ -26,8 +26,8 @@
 set -exo pipefail
 
 nexus-get-blob-usage(){
-    NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)";
-    NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)";
+    NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template '{{.data.username}}' | base64 -d)";
+    NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template '{{.data.password}}' | base64 -d)";
     BASIC_AUTH=$(echo -ne "$NEXUS_USERNAME:$NEXUS_PASSWORD" | base64 --wrap 0)
 
     echo "Nexus blob usage by size in descending order."
