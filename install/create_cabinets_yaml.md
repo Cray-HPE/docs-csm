@@ -9,18 +9,20 @@ The following example file is manually created and follows this format. Each `ty
 - `cabinets` to specify individual cabinet overrides, or specify non-contiguous cabinet ranges. These values are optional.
   - `id` is the cabinet number.
   - `nmn-vlan` and `hmn-vlan` specify the desired VLAN configuration of the cabinet, instead of allowing Cray Site Init (CSI) to prescribe it.
-    > This is typically used for liquid-cooled cabinets to specify the current networking information configured on a cabinet.
+
+      > This is typically used for liquid-cooled cabinets, to specify the current networking information configured on a cabinet.
+
   - `chassis-count` is a required field for EX2500 cabinets, and has no effect on non EX2500 cabinet types.
+    - `liquid-cooled` is the number of liquid-cooled chassis present. This is `1`, '2', or `3`.
+    - `air-cooled` with the number of air-cooled chassis present. This is `0` or `1`.
+
     > EX2500 cabinets can have a variable number of liquid-cooled and air-cooled chassis within them.
-    >  EX2500 cabinets can come in the following configurations:
+    > EX2500 cabinets can come in the following configurations:
     >
     > - 1 liquid-cooled chassis
     > - 2 liquid-cooled chassis
     > - 3 liquid-cooled chassis
-    > - 1 liquid-cooled chassis and 1 air-cooled chassis.
-    >
-    - `liquid-cooled` is the number of liquid-cooled chassis present. This can be between `1` and `3`.
-    - `air-cooled` with the number of air-cooled chassis present. This is either `0` or `1`.
+    > - 1 liquid-cooled chassis and 1 air-cooled chassis
 
 ```yaml
 ---
@@ -63,4 +65,5 @@ In this example file, there are:
 
 A system with Hill cabinets can have one to four cabinet IDs. There is no limit on the number of Mountain or River cabinets.
 
-When the above `cabinets.yaml` file is used, `csi` will ignore any command-line argument to `csi config init` for `starting-mountain-cabinet`, `starting-river-cabinet`, `starting-hill-cabinet`, `mountain-cabinets`, `river-cabinets`, or `hill-cabinets`.
+When the above `cabinets.yaml` file is used, `csi` will ignore any command-line argument to `csi config init` for `starting-mountain-cabinet`,
+`starting-river-cabinet`, `starting-hill-cabinet`, `mountain-cabinets`, `river-cabinets`, or `hill-cabinets`.
