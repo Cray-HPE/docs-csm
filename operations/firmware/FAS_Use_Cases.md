@@ -35,7 +35,7 @@ This procedure updates node controller \(nC\) firmware.
 
 ### Liquid-Cooled Nodes Update Procedures
 
-**Manufacturer: Cray | Device Type: NodeBMC | Target: BMC**
+#### Manufacturer: Cray | Device Type: `NodeBMC` | Target: BMC
 
 BMC firmware with FPGA updates require the nodes to be off.
 If the nodes are not off when the update command is issued, the update will get deferred until the next power cycle of the BMC, which may be a long period of time.
@@ -67,7 +67,7 @@ If the nodes are not off when the update command is issued, the update will get 
 }
 ```
 
-**Manufacturer: Cray | Device Type: NodeBMC | Target: Redstone FPGA**
+#### Manufacturer: Cray | Device Type: `NodeBMC` | Target: Redstone FPGA
 
 > **IMPORTANT:** The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
 
@@ -98,21 +98,20 @@ If the nodes are not off when the update command is issued, the update will get 
 }
 ```
 
-**Manufacturer: Cray | Device Type : NodeBMC | Target : NodeBIOS**
+#### Manufacturer: Cray | Device Type : `NodeBMC` | Target : `NodeBIOS`
 
 There are two nodes that must be updated on each BMC; these have the targets `Node0.BIOS` and `Node1.BIOS`.
 The targets can be run in the same action (as shown in the example) or run separately by only including one target in the action.
 On larger systems, it is recommended to run as two actions one after each other as the output will be shorter.
 
-### Prerequisites
+##### Prerequisites
 
-* The Cray nodeBMC device needs to be updated before the nodeBIOS because the nodeBMC adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require. See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
+* The Cray `nodeBMC` device needs to be updated before the nodeBIOS because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require. See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
 * Compute node BIOS updates require the nodes to be off. If nodes are not off when the update command is issued, it will report as a failed update.
 
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes. The BMC will still have power and will perform the update.
-
 > **IMPORTANT:** When the BMC is updated or rebooted after updating the `Node0.BIOS` and/or `Node1.BIOS` liquid-cooled nodes, the node BIOS version will not report the new version string until the nodes are powered back on.
-It is recommended that the Node0/1 BIOS be updated in a separate action, either before or after a BMC update. It is also recommended that the nodes be powered back on after the updates are completed.
+It is recommended that the `Node0/1` BIOS be updated in a separate action, either before or after a BMC update. It is also recommended that the nodes be powered back on after the updates are completed.
 
 ```json
 {
@@ -143,11 +142,11 @@ It is recommended that the Node0/1 BIOS be updated in a separate action, either 
 
 ### Procedure
 
-1.  Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
+1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
-1.  Initiate a dry-run to verify that the firmware can be updated.
+1. Initiate a dry-run to verify that the firmware can be updated.
 
-    1.  Create the dry-run session.
+    1. Create the dry-run session.
 
         The `overrideDryrun = false` value indicates that the command will do a dry run.
 
@@ -157,7 +156,7 @@ It is recommended that the Node0/1 BIOS be updated in a separate action, either 
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
 
-    1.  Describe the `actionID` for firmware update dry-run job.
+    1. Describe the `actionID` for firmware update dry-run job.
 
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
@@ -181,33 +180,33 @@ It is recommended that the Node0/1 BIOS be updated in a separate action, either 
 
         If `state = "completed"`, the dry-run has found and checked all the nodes. Check the following sections for more information:
 
-        *   Lists the nodes that have a valid image for updating:
+        * Lists the nodes that have a valid image for updating:
 
             ```
             [operationSummary.succeeded]
             ```
 
-        *   Lists the nodes that will not be updated because they are already at the correct version:
+        * Lists the nodes that will not be updated because they are already at the correct version:
 
             ```
             [operationSummary.noOperation]
             ```
 
-        *   Lists the nodes that had an error when attempting to update:
+        * Lists the nodes that had an error when attempting to update:
 
             ```
             [operationSummary.failed]
             ```
 
-        *   Lists the nodes that do not have a valid image for updating:
+        * Lists the nodes that do not have a valid image for updating:
 
             ```
             [operationSummary.noSolution]
             ```
 
-1.  Update the firmware after verifying that the dry-run worked as expected.
+1. Update the firmware after verifying that the dry-run worked as expected.
 
-    1.  Edit the JSON file and update the values so an actual firmware update can be run.
+    1. Edit the JSON file and update the values so an actual firmware update can be run.
 
         The following example is for the `nodeBMC.json` file. Update the following values:
 
@@ -216,7 +215,7 @@ It is recommended that the Node0/1 BIOS be updated in a separate action, either 
         "description":"Update Cray Node BMCs"
         ```
 
-    1.  Run the firmware update.
+    1. Run the firmware update.
 
         The output `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be displayed.
 
@@ -230,7 +229,7 @@ It is recommended that the Node0/1 BIOS be updated in a separate action, either 
 
         The liquid-cooled node BMC automatically reboots after the BMC firmware has been loaded.
 
-1.  Retrieve the `operationID` and verify that the update is complete.
+1. Retrieve the `operationID` and verify that the update is complete.
 
     ```bash
     cray fas actions describe {actionID}
@@ -243,7 +242,7 @@ It is recommended that the Node0/1 BIOS be updated in a separate action, either 
     operationID = "e910c6ad-db98-44fc-bdc5-90477b23386f"
     ```
 
-1.  View more details for an operation using the `operationID` from the previous step.
+1. View more details for an operation using the `operationID` from the previous step.
 
     Check the list of nodes for the `failed` or `completed` state.
 
@@ -291,7 +290,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
 ### Example Recipes
 
-**Manufacturer: Cray | Device Type: ChassisBMC | Target: BMC**
+**Manufacturer: Cray | Device Type: `ChassisBMC` | Target: BMC**
 
 > **IMPORTANT:** Before updating a CMM, make sure all slot and rectifier power is off and the discovery job is stopped (see procedure below).
 
@@ -323,15 +322,15 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
 ### Procedure
 
-1.  Power off the liquid-cooled chassis slots and chassis rectifiers.
+1. Power off the liquid-cooled chassis slots and chassis rectifiers.
 
-    1.  Disable the `hms-discovery` Kubernetes cronjob:
+    1. Disable the `hms-discovery` Kubernetes cronjob:
 
         ```bash
         kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
         ```
 
-    1.  Power off all the components. For example, in chassis 0-7, cabinets 1000-1003:
+    1. Power off all the components. For example, in chassis 0-7, cabinets 1000-1003:
 
         ```bash
         cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
@@ -341,11 +340,11 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         When power is removed from a chassis, the high-voltage DC rectifiers that support the chassis are powered off. If a component is not populated, the `--continue` option enables the command to continue instead of returning error messages.
 
-1.  Create a JSON file using the example recipe above with the command parameters required for updating the CMM firmware.
+1. Create a JSON file using the example recipe above with the command parameters required for updating the CMM firmware.
 
-1.  Initiate a dry-run to verify that the firmware can be updated.
+1. Initiate a dry-run to verify that the firmware can be updated.
 
-    1.  Create the dry-run session.
+    1. Create the dry-run session.
 
         The `overrideDryrun = false` value indicates that the command will do a dry-run.
 
@@ -355,7 +354,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
 
-    1.  Describe the `actionID` to see the firmware update dry-run job status.
+    1. Describe the `actionID` to see the firmware update dry-run job status.
 
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
@@ -406,9 +405,9 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
             [operationSummary.noSolution]
             ```
 
-1.  Update the firmware after verifying that the dry-run worked as expected.
+1. Update the firmware after verifying that the dry-run worked as expected.
 
-    1.  Edit the JSON file and update the values so an actual firmware update can be run.
+    1. Edit the JSON file and update the values so an actual firmware update can be run.
 
         The following example is for the `chassisBMC.json` file. Update the following values:
 
@@ -417,7 +416,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         "description":"Update Cray Chassis Management Module controllers"
         ```
 
-    1.  Run the firmware update.
+    1. Run the firmware update.
 
         The output `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be displayed.
 
@@ -432,7 +431,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         The time it takes for a firmware update varies. It can be a few minutes or over 20 minutes depending on response time.
 
-1.  Restart the `hms-discovery` cronjob.
+1. Restart the `hms-discovery` cronjob.
 
     ```bash
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
@@ -446,7 +445,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
 
-1.  Bring up the Slingshot Fabric.
+1. Bring up the Slingshot Fabric.
 
     Refer to the following documentation on the HPE Customer Support Center
     for more information on how to bring up the Slingshot Fabric:
@@ -454,7 +453,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
     * The *HPE Slingshot Troubleshooting Guide* PDF.
 
-2.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+2. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
 ## Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM
 
@@ -473,7 +472,7 @@ This procedure updates node controller \(nC\) firmware.
 
 ### Gigabyte
 
-**Device Type: NodeBMC | Target: BMC**
+**Device Type: `NodeBMC` | Target: BMC**
 
 ```json
 {
@@ -504,7 +503,7 @@ This procedure updates node controller \(nC\) firmware.
 }
 ```
 
-> **IMPORTANT:** The *timeLimit* is `4000` because the Gigabytes can take a lot longer to update.
+> **IMPORTANT:** The *`timeLimit`* is `4000` because the Gigabytes can take a lot longer to update.
 
 **Troubleshooting:**
 
@@ -523,7 +522,7 @@ To resolve this issue, do either of the following actions:
 
 Make sure to wait for the current firmware to be updated before starting a new FAS action on the same node.
 
-**Device Type: NodeBMC | Target: BIOS**
+**Device Type: `NodeBMC` | Target: BIOS**
 
 ```json
 {
@@ -559,7 +558,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 ### HPE
 
-**Device Type: NodeBMC | Target: `iLO 5` aka BMC**
+**Device Type: `NodeBMC` | Target: `iLO 5` aka BMC**
 
 ```json
 {
@@ -590,7 +589,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 }
 ```
 
-**Device Type: NodeBMC | Target: `System ROM` aka BIOS**
+**Device Type: `NodeBMC` | Target: `System ROM` aka BIOS**
 
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values. See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#configure-dns-and-ntp-on-each-bmc).
 
@@ -625,11 +624,11 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 ### Procedure
 
-1.  Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
+1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
-1.  Initiate a dry-run to verify that the firmware can be updated.
+1. Initiate a dry-run to verify that the firmware can be updated.
 
-    1.  Create the dry-run session.
+    1. Create the dry-run session.
 
         The `overrideDryrun = false` value indicates that the command will do a dry run.
 
@@ -642,7 +641,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
 
-    1.  Describe the `actionID` for firmware update dry-run job.
+    1. Describe the `actionID` for firmware update dry-run job.
 
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
@@ -693,9 +692,9 @@ Make sure to wait for the current firmware to be updated before starting a new F
             [operationSummary.noSolution]
             ```
 
-1.  Update the firmware after verifying that the dry-run worked as expected.
+1. Update the firmware after verifying that the dry-run worked as expected.
 
-    1.  Edit the JSON file and update the values so an actual firmware update can be run.
+    1. Edit the JSON file and update the values so an actual firmware update can be run.
 
         The following example is for the `nodeBMC.json` file. Update the following values:
 
@@ -704,7 +703,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
         "description":"Update of HPE node iLO 5"
         ```
 
-    1.  Run the firmware update.
+    1. Run the firmware update.
 
         The returned `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be returned.
 
@@ -721,7 +720,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
         The air-cooled node BMC automatically reboots after the BMC or iLO 5 firmware has been loaded.
 
-1.  Retrieve the `operationID` and verify that the update is complete.
+1. Retrieve the `operationID` and verify that the update is complete.
 
     ```bash
     cray fas actions describe {actionID}
@@ -737,7 +736,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
     operationID = "e910c6ad-db98-44fc-bdc5-90477b23386f"
     ```
 
-1.  View more details for an operation using the `operationID` from the previous step.
+1. View more details for an operation using the `operationID` from the previous step.
 
     Check the list of nodes for the `failed` or `completed` state.
 
@@ -794,7 +793,7 @@ Due to networking, FAS cannot update `ncn-m001`. See [Updating Firmware on `ncn-
 
 ### Gigabyte
 
-**Device Type: NodeBMC | Target: BMC**
+**Device Type: `NodeBMC` | Target: BMC**
 
 ```json
 {
@@ -837,7 +836,7 @@ To resolve this issue, do either of the following actions:
 * Rerun FAS to verify that the BMC firmware was updated.
 Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
 
-**Device Type: NodeBMC | Target: BIOS**
+**Device Type: `NodeBMC` | Target: BIOS**
 
 ```json
 {
@@ -873,7 +872,7 @@ Make sure you have waited for the current firmware to be updated before starting
 
 ### HPE
 
-**Device Type: NodeBMC | Target: `iLO 5` aka BMC**
+**Device Type: `NodeBMC` | Target: `iLO 5` aka BMC**
 
 ```json
 {
@@ -904,7 +903,7 @@ Make sure you have waited for the current firmware to be updated before starting
 }
 ```
 
-**Device Type: NodeBMC | Target: `System ROM` aka BIOS**
+**Device Type: `NodeBMC` | Target: `System ROM` aka BIOS**
 
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values. See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#configure-dns-and-ntp-on-each-bmc).
 
@@ -1092,7 +1091,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
 1. Get a high-level summary of the job to verify the changes corrected the issue.
 
-   Use the returned actionID from the `cray fas actions create` command.
+   Use the returned `actionID` from the `cray fas actions create` command.
 
    ```bash
    cray fas actions create UPDATED_COMMAND.json
