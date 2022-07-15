@@ -18,7 +18,7 @@ The following procedures are included in this section:
 1. [Update NCN BIOS and BMC Firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
 1. [Compute Node BIOS Workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
 
-> **`NOTE`** To update Switch Controllers \(sC\) or RouterBMC, refer to the Rosetta Documentation.
+> **`NOTE`** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
 ## Update Liquid-Cooled Nodes BMC, FPGA, and Node BIOS
 
@@ -106,7 +106,7 @@ On larger systems, it is recommended to run as two actions one after each other 
 
 ##### Prerequisites
 
-* The Cray `nodeBMC` device needs to be updated before the nodeBIOS because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require. See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
+* The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require. See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
 * Compute node BIOS updates require the nodes to be off. If nodes are not off when the update command is issued, it will report as a failed update.
 
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes. The BMC will still have power and will perform the update.
@@ -182,25 +182,25 @@ It is recommended that the `Node0/1` BIOS be updated in a separate action, eithe
 
         * Lists the nodes that have a valid image for updating:
 
-            ```
+            ```text
             [operationSummary.succeeded]
             ```
 
         * Lists the nodes that will not be updated because they are already at the correct version:
 
-            ```
+            ```text
             [operationSummary.noOperation]
             ```
 
         * Lists the nodes that had an error when attempting to update:
 
-            ```
+            ```text
             [operationSummary.failed]
             ```
 
         * Lists the nodes that do not have a valid image for updating:
 
-            ```
+            ```text
             [operationSummary.noSolution]
             ```
 
@@ -381,25 +381,25 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         If `state = "completed"`, the dry-run has found and checked all the nodes. Check the following sections for more information:
 
-        *   Lists the nodes that have a valid image for updating:
+        * Lists the nodes that have a valid image for updating:
 
             ```
             [operationSummary.succeeded]
             ```
 
-        *   Lists the nodes that will not be updated because they are already at the correct version:
+        * Lists the nodes that will not be updated because they are already at the correct version:
 
             ```
             [operationSummary.noOperation]
             ```
 
-        *   Lists the nodes that had an error when attempting to update:
+        * Lists the nodes that had an error when attempting to update:
 
             ```
             [operationSummary.failed]
             ```
 
-        *   Lists the nodes that do not have a valid image for updating:
+        * Lists the nodes that do not have a valid image for updating:
 
             ```
             [operationSummary.noSolution]
@@ -517,6 +517,7 @@ FAS has incorrectly marked this node as failed.
 It most likely will complete the update successfully.
 
 To resolve this issue, do either of the following actions:
+
 * Check the update status by looking at the Redfish `FirmwareInventory` (`/redfish/v1/UpdateService/FirmwareInventory/BMC`).
 * Rerun FAS to verify that the BMC firmware was updated.
 
@@ -668,27 +669,27 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
         If `state = "completed"`, the dry-run has found and checked all the nodes. Check the following sections for more information:
 
-        *   Lists the nodes that have a valid image for updating:
+        * Lists the nodes that have a valid image for updating:
 
-            ```
+            ```text
             [operationSummary.succeeded]
             ```
 
-        *   Lists the nodes that will not be updated because they are already at the correct version:
+        * Lists the nodes that will not be updated because they are already at the correct version:
 
-            ```
+            ```text
             [operationSummary.noOperation]
             ```
 
-        *   Lists the nodes that had an error when attempting to update:
+        * Lists the nodes that had an error when attempting to update:
 
-            ```
+            ```text
             [operationSummary.failed]
             ```
 
-        *   Lists the nodes that do not have a valid image for updating:
+        * Lists the nodes that do not have a valid image for updating:
 
-            ```
+            ```text
             [operationSummary.noSolution]
             ```
 
@@ -698,7 +699,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
         The following example is for the `nodeBMC.json` file. Update the following values:
 
-        ```
+        ```text
         "overrideDryrun":true,
         "description":"Update of HPE node iLO 5"
         ```
@@ -832,8 +833,10 @@ It may report that a node failed to update with the output:
 FAS has incorrectly marked this node as failed.
 It most likely will complete the update successfully.
 To resolve this issue, do either of the following actions:
+
 * Check the update status by looking at the Redfish `FirmwareInventory` (`/redfish/v1/UpdateService/FirmwareInventory/BMC`)
 * Rerun FAS to verify that the BMC firmware was updated.
+
 Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
 
 **Device Type: `NodeBMC` | Target: BIOS**
@@ -1048,7 +1051,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
    Take note of the returned `imageID` value to use in the next step.
 
-2. Create a JSON file to override the existing image with the corrected values.
+1. Create a JSON file to override the existing image with the corrected values.
 
    > **IMPORTANT:** The `imageID` must be changed to match the identified `imageID` in the previous step.
 
