@@ -61,6 +61,14 @@
 
 1. Repeat the previous steps for each other worker node, one at a time.
 
+> **`Tech Perview`**
+>> 
+>> You can also upgrade multiple workers at the same time with comma separated list.
+> ```
+> /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001,ncn-w002,ncn-w003
+>```
+>>
+
 ## Stage 2.3
 
 By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrade process so far, `ncn-m001`
