@@ -8,6 +8,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 - This procedure does not update the default credentials that RTS uses for new ServerTech PDUs added to a system. To change the default credentials, see
   [Update default ServerTech PDU Credentials used by the Redfish Translation Service](Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md).
 - ServerTech PDUs running firmware version `8.0q` or greater must have the password of the `admn` user changed before the JAWS REST API will function as expected.
+- The default user/password for ServerTech PDUs is `admn`/`admn`
 
 ## Prerequisites
 
@@ -19,7 +20,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
     ```bash
     PDU=x3000m0
-    curl -k https://$PDU -i | grep Server
+    curl -k -s --compressed  https://$PDU -i | grep Server:
     ```
 
     Expected output for a ServerTech PDU:
@@ -27,6 +28,8 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     ```text
     Server: ServerTech-AWS/v8.0v
     ```
+
+    *NOTE*: The firmware version is listed after the '/' in the output in this case the firmware version is `8.0v`
 
 ## Procedure
 
@@ -42,6 +45,8 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     ```text
     x3000m0
     ```
+
+    If some or all of the PDUs have NOT been discovered by HSM, you will need to obtain the xname for each of the ServerTech PDUs on the system.
 
 1. (`ncn-mw#`) Set up Vault password variable and command alias.
 
@@ -88,8 +93,6 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
     - Update the password on a single ServerTech PDU
 
-        **NOTE**: To change the password on a single PDU, that PDU must be successfully discovered by HSM.
-
         1. (`ncn-mw#`) Set the PDU hostname to change the `admn` credentials:
 
             ```bash
@@ -130,6 +133,8 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
             ```
 
     - Update all ServerTech PDUs in the system to the same password.
+
+        **NOTE**: To change the password on all PDUs, that PDUs must be successfully discovered by HSM.
 
         1. (`ncn-mw#`) Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
 
@@ -175,7 +180,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
             done
             ```
 
-    **NOTE**: After five minutes, the previous credential should stop working as the existing sessions time out.
+            **NOTE**: After five minutes, the previous credential should stop working as the existing sessions time out.
 
 1. (`ncn-mw#`) Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials.
 

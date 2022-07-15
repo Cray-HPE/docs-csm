@@ -4,6 +4,10 @@ Use the Firmware Action Service (FAS) to update the firmware on supported hardwa
 
 When updating an entire system, walk down the device hierarchy component type by component type, starting first with Routers (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.
 
+**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
+
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
 The following procedures are included in this section:
@@ -645,7 +649,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
         ```bash
         cray fas actions describe {actionID}
         ```
-        
+
         ```text
         blockedBy = []
         state = "completed"
@@ -976,7 +980,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
   ```bash
   cray fas operations describe {operationID} --format json
   ```
-  
+
   ```json
   {
     "operationID":"102c949f-e662-4019-bc04-9e4b433ab45e",
@@ -1019,7 +1023,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
    cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") \
    | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
    ```
-   
+
    ```json
    {
        "imageID": "e23f5465-ed29-4b18-9389-f8cf0580ca60",

@@ -172,7 +172,7 @@ Data is repopulated in BSS when the REDS `init` job is run.
         ```bash
         TMPFILE=$(mktemp)
         sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$3);}' > $TMPFILE
-        pdsh -w ^${TMPFILE} "systemctl restart cray-dvs-orca"
+        pdsh -w ^${TMPFILE} "systemctl restart cray-orca"
         rm -rf $TMPFILE
         ```
 
@@ -181,6 +181,6 @@ Data is repopulated in BSS when the REDS `init` job is run.
         **`NOTE`** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
 
         ```bash
-        pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-dvs-orca"
-        pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-dvs-orca"
+        pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-orca"
+        pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-orca"
         ```

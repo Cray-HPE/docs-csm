@@ -37,6 +37,10 @@ Non-compute nodes (NCNs) and their BMCs should be locked with the HSM locking AP
 See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
+**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
+
 Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS Recipes](FAS_Recipes.md) to update each supported type.
 
 > **`NOTE`** Each system is different and may not have all hardware options.
@@ -173,7 +177,7 @@ The following is an example of an image:
   "manufacturer": "intel",
   "model": ["s2600","s2600_REV_a"],
   "target": "BIOS",
-  "tag": ["recovery", default"],
+  "tag": ["recovery", "default"],
   "firmwareVersion": "f1.123.24xz",
   "semanticFirmwareVersion": "v1.2.252",
   "updateURI": "/redfish/v1/Systems/UpdateService/BIOS",
