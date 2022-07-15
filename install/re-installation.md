@@ -115,10 +115,10 @@ BMCs to be set back to DHCP before proceeding.
       for bmc in ${BMCS[@]}; do
          # by default the LAN for the BMC is lan channel 1, except on Intel systems.
          if ipmitool -I lanplus -U $username -E -H $bmc lan print 3 2>/dev/null; then
-            LAN=3
+            lan=3
          fi
          printf "Setting %s to DHCP ... " "$bmc"
-         if ipmitool -I lanplus -U $username -E -H $bmc lan set $LAN ipsrc dhcp; then
+         if ipmitool -I lanplus -U $username -E -H $bmc lan set $lan ipsrc dhcp; then
             echo "Done"
          else
             echo "Failed!"
