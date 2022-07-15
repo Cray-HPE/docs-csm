@@ -42,7 +42,7 @@ Scenarios where this procedure is applicable:
         |   |                | SHCD Column to reference | Description
         | - | -------------- | ------------------------ | -----------
         | X | Cabinet number | Source Rack (K20)        | The Cabinet or rack number containing the Management NCN.
-        | C | Chassis number |                          | For air-cooled nodes located within a standard rack, the chassis is `0`. If the air-cooled node is located within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+        | C | Chassis number |                          | For air-cooled nodes within a standard rack, the chassis is `0`. If the air-cooled node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
         | S | Slot/Rack U    | Source Location (L20)    | The Slot of the node is determined by the bottom most rack U that node occupies.
         | B | BMC number     |                          | For Management NCNs the BMC number is 0.
         | N | Node number    |                          | For Management NCNs the Node number is 0.
@@ -71,7 +71,7 @@ Scenarios where this procedure is applicable:
         |   |                    | SHCD Column to reference   | Description
         | - | ------------------ | -------------------------- | ----
         | X | Cabinet number     | Destination Rack (R20)     | The Cabinet or rack number containing the management NCN.
-        | C | Chassis number     | | For air-cooled management switch located within a standard rack the chassis is `0`. If the air-cooled management switch is located within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+        | C | Chassis number     | | For air-cooled management switches within standard racks, the chassis is `0`. If the air-cooled management switch is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
         | W | Slot/Rack U        | Destination Location (S20) | The Slot/Rack U that the management switch occupies.
         | J | Switch port number | Destination Port (U20)     | The switch port on the switch that the NCN BMC is cabled to.
 
@@ -109,7 +109,7 @@ Scenarios where this procedure is applicable:
                 ```
 
             1. (`ncn-m#`) Locate the switch port that the BMC is connected to and record its MAC address.
-               In the commands below, change the value of `1/1/39` to match the BMC switch port number (the BMC Switch port number is the `J` value in the in the `MgmtSwitchConnector` xname `xXwWjJ`).
+               In the commands below, change the value of `1/1/39` to match the BMC switch port number (the BMC switch port number is the `J` value in the in the `MgmtSwitchConnector` xname `xXwWjJ`).
                 For example, with the following `$MGMT_SWITCH_CONNECTOR` value:
 
                 ```bash
@@ -339,7 +339,7 @@ Scenarios where this procedure is applicable:
         HMN     | 10.254.1.13
     ```
 
-    > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. If CMN or CAN networks do not exist in SLS, then no IP address will be allocated for that network.
+    > Depending on the networking configuration of the system the CMN or CAN networks may not be present in SLS network data. No IP addresses will be allocated for networks that do not exist in SLS.
 
 1. (`ncn-m#`) **If the following text is present** at the end of the `add_management_ncn.py` script output, then the NCN BMC was given an IP address by DHCP, and it is not at the expected IP address.
     Sample output when the BMC has an unexpected IP address.
@@ -360,13 +360,13 @@ Scenarios where this procedure is applicable:
     sleep 60
     ```
 
-1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Verify that the BMC is reachable at the expected IP address:
+1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Verify that the BMC is reachable at the expected IP address.
 
     ```bash
     ping $NODE-mgmt
     ```
 
-    Wait 5 minutes for Kea and the HSM to sync. If `ping` continues to fail, re-run the previous step to restart the BMC.
+    Wait five minutes for Kea and the HSM to sync. If `ping` continues to fail, then re-run the previous step to restart the BMC.
 
 1. (`ncn-m#`) Restart the REDS deployment.
 
@@ -394,8 +394,8 @@ Scenarios where this procedure is applicable:
     deployment "cray-reds" successfully rolled out
     ```
 
-1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Wait for the NCN BMC to get discovered by HSM:
-    > If the BMC of `ncn-m001` is connected to the site network, then we will be unable to discover the BMC, because it is not connected via the HMN network.
+1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Wait for the NCN BMC to get discovered by HSM.
+    > If the BMC of `ncn-m001` is connected to the site network, then the BMC will not be discovered, because it is not connected via the HMN network.
 
     ```bash
     watch -n 0.2 "cray hsm inventory redfishEndpoints describe $BMC_XNAME --format json" 
@@ -424,8 +424,9 @@ Scenarios where this procedure is applicable:
     ```
 
     **Discovery troubleshooting**
+
     The `redfishEndpoint` may cycle between `DiscoveryStarted` and `HTTPsGetFailed` before the endpoint becomes `DiscoverOK`. If the BMC is in `HTTPSGetFailed` for a long period of time, then the following steps may help to determine the cause:
-    * (`ncn-m#`) Verify that the xname of the BMC resolves in DNS.
+    1. (`ncn-m#`) Verify that the xname of the BMC resolves in DNS.
 
         ```bash
         nslookup x3000c0s38b0
@@ -441,13 +442,13 @@ Scenarios where this procedure is applicable:
         Address: 10.254.1.13
         ```
 
-    * (`ncn-m#`) Verify that the BMC is reachable at the expected IP address.
+    1. (`ncn-m#`) Verify that the BMC is reachable at the expected IP address.
 
         ```bash
         ping $NODE-mgmt
         ```
 
-    * (`ncn-m#`) Verify that the BMC Redfish `v1/Managers` endpoint is reachable.
+    1. (`ncn-m#`) Verify that the BMC Redfish `v1/Managers` endpoint is reachable.
 
         ```bash
         curl -k -u root:changeme https://x3000c0s38b0/redfish/v1/Managers

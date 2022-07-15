@@ -32,13 +32,13 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     New node objects require the following information:
     - `Parent`: component name (xname) of the new node's BMC
-    - `Xname`: component name (xname) of the new node
-    - `Role`: Either `Compute` or `Application`
-    - `Aliases`: Array of aliases for the node, for compute nodes, this is in the form of `nid0000`
-    - NID: The Node ID integer for the node, applies only to compute nodes
+    - `Xname`: xname of the new node
+    - `Role`: `Compute` or `Application`
+    - `Aliases`: Array of aliases for the node. For compute nodes, this is in the form of `nid0000`
+    - NID: The Node ID integer for the node. This applies only to compute nodes
     - SubRole: Such as `UAN`, `Gateway`, or other valid HSM SubRoles
 
-    1. If adding a compute node:
+    - (`ncn#`) If adding a compute node:
 
         ```bash
         curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST --data '{
@@ -57,7 +57,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
             }' https://api-gw-service-nmn.local/apis/sls/v1/hardware | jq
         ```
 
-    1. If adding a UAN:
+    - (`ncn#`) If adding a UAN:
 
         ```bash
         curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST --data '{
@@ -76,20 +76,20 @@ For this procedure, a new object must be created in the SLS and modifications wi
             }' https://api-gw-service-nmn.local/apis/sls/v1/hardware
         ```
 
-2. Create a new `MgmtSwitchConnector` object in SLS.
+1. (`ncn#`) Create a new `MgmtSwitchConnector` object in SLS.
 
-    The `MgmtSwitchConnector` connector is used by the `hms-discovery` job to determine which management switch port the node's BMC is connected to. The SLS requires the following information:
+    The `MgmtSwitchConnector` connector is used by the `hms-discovery` job to determine which management switch port is connected to the node's BMC. The SLS requires the following information:
 
-    - The management switch port that the new node's BMC is connected to
+    - The management switch port that is connected to the new node's BMC
     - `Xname`: The component name (xname) for the `MgmtSwitchConnector` in the form of `xXcCwWjJ`
       - `X` is the rack number
       - `C` is the chassis
-        - If the destination `LeafBMC` switch is within an standard rack this should be `0`
-        - If the destination `LeafBMC` switch is located within a air-cooled chassis in an EX2500 cabinet, then this should be `4`
+        - If the destination `LeafBMC` switch is within a standard rack, then this should be `0`
+        - If the destination `LeafBMC` switch is located within an air-cooled chassis in an EX2500 cabinet, then this should be `4`
       - `W` is the rack U position of the management network leaf switch
       - `J` is the switch port number
     - `NodeNics`: The component name (xname) of the new node's BMC; this field is an array in the payloads below, but should only contain one element
-      - `VendorName`: this field varies depending on the OEM for the management switch; for example, if the BMC is plugged into port 36 of the switch the following vendor names could apply:
+      - `VendorName`: This field varies depending on the OEM for the management switch; for example, if the BMC is plugged into switch port 36, then the following vendor names could apply:
       - Aruba leaf switches use this format: `1/1/36`
       - Dell leaf switches use this format: `ethernet1/1/36`
 
@@ -113,7 +113,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 1. Install the new node hardware in the rack and connect power cables, HSN cables, and management network cables \(if it has not already been installed\).
 
-    If the node was added before modifying the SLS, then the node's BMC should have been able to DHCP with Kea, and there will be an unknown MAC address in HSM Ethernet interfaces table.
+    If the node was added before modifying the SLS, then the node's BMC should have been able to DHCP with Kea, and there will be an unknown MAC address in the HSM Ethernet interfaces table.
 
     Refer to the OEM documentation for the node for information about the hardware installation and cabling.
 
@@ -123,23 +123,23 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 1. Wait for the `hms-discovery` cronjob to run, and for DNS to update.
 
-    The `hms-discovery` cronjob will attempt to identity Node and BMC MAC addresses from the HSM Ethernet interfaces table with the connection information present in SLS to correctly identity the new node.
+    The `hms-discovery` cronjob will attempt to correctly identity the new node by comparing node and BMC MAC addresses from the HSM Ethernet interfaces table with the connection information present in SLS.
 
-1. (`ncn-m#`) After roughly 5-10 minutes the node's BMC should be discovered by the HSM, and the node's BMC can be resolved by using its xname in DNS.
+1. (`ncn#`) After roughly 5-10 minutes, the node's BMC should be discovered by the HSM, and the node's BMC can be resolved by using its xname in DNS.
 
     ```bash
     ping x3000c0s27b0
     ```
 
-1. (`ncn-m#`) Verify that discovery has completed.
+1. (`ncn#`) Verify that discovery has completed.
 
     ```bash
-    cray hsm inventory redfishEndpoints describe x3000c0s27b0
+    cray hsm inventory redfishEndpoints describe x3000c0s27b0 --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     ID = "x3000c0s2b0"
     Type = "NodeBMC"
     Hostname = ""
@@ -162,10 +162,10 @@ For this procedure, a new object must be created in the SLS and modifications wi
     - If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed`, then an error has
       occurred during the discovery process.
 
-1. (`ncn-m#`) Verify that the nodes are enabled in the HSM.
+1. (`ncn#`) Verify that the nodes are enabled in the HSM.
 
     ```bash
-    cray hsm state components describe x3000c0s27b0n0
+    cray hsm state components describe x3000c0s27b0n0 --format toml
     ```
 
     Example output:
@@ -210,16 +210,18 @@ For this procedure, a new object must be created in the SLS and modifications wi
     - If the last discovery state is `DiscoveryStarted` then the BMC is currently being inventoried by HSM.
     - If the last discovery state is `HTTPsGetFailed` or `ChildVerificationFailed` then an error occurred during the discovery process.
 
-1. (`ncn-m#`) Enable the nodes in the HSM database \(in this example, the nodes are `x3000c0s27b1n0-n3`\).
+1. (`ncn#`) Enable the nodes in the HSM database.
+
+     In this example, the nodes are `x3000c0s27b1n0-n3`.
 
     ```bash
     cray hsm state components bulkEnabled update --enabled true \
-    --component-ids x3000c0s27b1n0,x3000c0s27b1n1,x3000c0s27b1n2,x3000c0s27b1n3
+        --component-ids x3000c0s27b1n0,x3000c0s27b1n1,x3000c0s27b1n2,x3000c0s27b1n3
     ```
 
-1. Verify that the correct firmware versions for node BIOS, BMC, HSN NICs, GPUs, and so on.
+1. Verify that the correct firmware versions are present for node BIOS, BMC, HSN NICs, GPUs, and so on.
 
-1. (`ncn-m#`) If necessary, update the firmware.
+1. (`ncn#`) If necessary, update the firmware.
 
     ```bash
     cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
@@ -227,13 +229,13 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md).
 
-1. (`ncn-m#`) Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
+1. (`ncn#`) Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
 
     Use the appropriate BOS template for the node type.
 
     ```bash
     cray bos session create --template-uuid cle-VERSION \
-    --operation reboot --limit x3000c0s27b0n0,x3000c0s27b0n1,x3000c0s27b0n2,x3000c0s27b00n3
+        --operation reboot --limit x3000c0s27b0n0,x3000c0s27b0n1,x3000c0s27b0n2,x3000c0s27b00n3
     ```
 
-1. Verify the chassis status LEDs indicate normal operation.
+1. Verify that the chassis status LEDs indicate normal operation.
