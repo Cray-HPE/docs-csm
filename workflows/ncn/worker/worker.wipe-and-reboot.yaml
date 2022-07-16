@@ -74,9 +74,8 @@ tasks:
             {{- include "common.envar" . | indent 12 }}
             
             cat <<'EOF' > set-next-boot-to-pxe.sh
-              echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
               efibootmgr # print before
-              efibootmgr | grep '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
+              efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
               efibootmgr # print after
               echo 'Setting next boot to PXE ... '
               ipmitool chassis bootdev pxe options=efiboot

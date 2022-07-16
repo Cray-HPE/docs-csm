@@ -63,6 +63,11 @@ while true; do
     # TODO: limit to worker rebuild request
     phase=$(curl -sk -XGET -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/nls/v1/workflows" | \
         jq -r ".[] | select(.name==\"${workflow}\") | .status.phase")
+    # skip null because workflow hasn't started yet
+    if [[ "${phase}" == "null" ]]; then
+        continue;
+    fi
+
     echo "${phase}"
 
     if [[ "${phase}" == "Succeeded" ]]; then
