@@ -115,7 +115,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
 1. (`ncn-w#`) Reset Kubernetes **on worker nodes ONLY**.
 
-   This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
+   This will stop `kubelet`, stop underlying containers, and remove the contents of `/var/lib/kubelet`.
 
    1. Reset Kubernetes.
 
@@ -143,7 +143,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
 1. (`ncn-m#`) Reset Kubernetes **on master nodes ONLY**.
 
-    This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
+    This will stop `kubelet`, stop underlying containers, and remove the contents of `/var/lib/kubelet`.
 
     1. Reset Kubernetes.
 
