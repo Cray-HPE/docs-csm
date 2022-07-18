@@ -2,17 +2,6 @@
 
 These procedures are intended for trained technicians and support personnel only. Always follow ESD precautions when handling this equipment.
 
-- An authentication token has been retrieved.
-
-    ```bash
-    function get_token () {
-        curl -s -S -d grant_type=client_credentials \
-            -d client_id=admin-client \
-            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'
-    }
-    ```
-
 The example is this procedure adds a User Access Node \(UAN\) or compute node to an HPE Cray standard rack system. This example adds a node to rack number 3000 at U27.
 
 Procedures for updating the Hardware State Manager \(HSM\) or System Layout Service \(SLS\) are similar when adding additional compute nodes or User Application Nodes \(UANs\). The contents of the node object in the SLS are slightly different
@@ -27,6 +16,15 @@ For this procedure, a new object must be created in the SLS and modifications wi
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure
+
+1. (`ncn#`) Retrieve an authentication token.
+
+    ```bash
+    export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client \
+            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    ```
 
 1. Create a new node object in SLS.
 
@@ -154,7 +152,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
     [DiscoveryInfo]
     LastDiscoveryAttempt = "2021-10-20T21:19:32.332521Z"
     RedfishVersion = "1.6.0"
-    LastDiscoveryStatus = **"DiscoverOK"**
+    LastDiscoveryStatus = "DiscoverOK"
     ```
 
     - When `LastDiscoveryStatus` displays as `DiscoverOK`, the node BMC has been successfully discovered.
