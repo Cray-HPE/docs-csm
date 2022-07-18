@@ -312,7 +312,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
 
 1. Check available space in Nexus, and free up space if needed.
 
-   See [Nexus Space Cleanup](../operations/package_repository_management/Nexus_Space_Cleanup.md).
+   See [Nexus Space Cleanup](../../operations/package_repository_management/Nexus_Space_Cleanup.md).
 
 ## Stage 0.5 - Backup workload manager data
 
