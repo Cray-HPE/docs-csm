@@ -26,12 +26,12 @@ Before submitting the help request, run a script to gather data about the system
 Nexus, and how much space they use.
 
 The script can be run on any master NCN where the latest CSM documentation is installed. See
-[Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+[Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
-Run the script as follows:
+(`ncn-m#`) Run the script as follows:
 
 ```bash
-ncn-m# /usr/share/doc/csm/scripts/nexus-space-usage.sh
+/usr/share/doc/csm/scripts/nexus-space-usage.sh
 ```
 
 ## Increase PVC size

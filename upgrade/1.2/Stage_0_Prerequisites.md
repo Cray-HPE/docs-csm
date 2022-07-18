@@ -310,6 +310,10 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# git push
    ```
 
+1. Check Nexus Space.
+
+   Review [Nexus Space Cleanup](../operations/package_repository_management/Nexus_Space_Cleanup.md), to clean up space that Nexus needs for upgrading.
+
 ## Stage 0.5 - Backup workload manager data
 
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in

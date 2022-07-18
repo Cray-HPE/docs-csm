@@ -25,21 +25,26 @@
 
 set -exo pipefail
 
+PYSCRIPT='
+import os, requests
+resp=requests.get("https://packages.local/service/rest/v1/blobstores", 
+                  auth=(os.environ["NEXUS_USERNAME"], os.environ["NEXUS_PASSWORD"]))
+print(resp.text)
+'
+
 nexus-get-blob-usage(){
     NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template '{{.data.username}}' | base64 -d)"
     NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template '{{.data.password}}' | base64 -d)"
-    BASIC_AUTH=$(echo -ne "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" | base64 --wrap 0)
+    export NEXUS_USERNAME NEXUS_PASSWORD
 
     echo "Nexus blob usage by size in descending order."
-    echo "Blob Size (Gb), Blob Name"
+    echo "Blob Size (GiB), Blob Name"
     echo ""
-    curl -sk --header "Authorization: Basic ${BASIC_AUTH}" https://packages.local/service/rest/v1/blobstores | \
-      jq -r '.[] | {"bsize":(.totalSizeInBytes/1024/1024/1024), "bname":.name} | join(", ")' | sort -g -r
+    python3 -c "${PYSCRIPT}" | jq -r '.[] | {"bsize":(.totalSizeInBytes/1024/1024/1024), "bname":.name} | join(", ")' | sort -g -r
 
     echo ""
-    echo "Remaining free storage (Gb):"
-    curl -sk --header "Authorization: Basic ${BASIC_AUTH}" https://packages.local/service/rest/v1/blobstores | \
-      jq -r '.[0].availableSpaceInBytes/1024/1024/1024'
+    echo "Remaining free storage (GiB):"
+    python3 -c "${PYSCRIPT}" | jq -r '.[0].availableSpaceInBytes/1024/1024/1024'
 }
 
 nexus-get-repo-usage(){
