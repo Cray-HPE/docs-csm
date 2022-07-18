@@ -61,7 +61,7 @@
 
 1. Repeat the previous steps for each other worker node, one at a time.
 
-> **`Tech Perview`**
+> **`Tech Preview`**
 >>
 >> You can also upgrade multiple workers at the same time with comma separated list.
 >

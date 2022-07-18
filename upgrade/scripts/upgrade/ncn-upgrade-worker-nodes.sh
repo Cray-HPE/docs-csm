@@ -68,8 +68,6 @@ while true; do
         continue;
     fi
 
-    echo "${phase}"
-
     if [[ "${phase}" == "Succeeded" ]]; then
         break;
     fi
@@ -84,6 +82,7 @@ while true; do
         curl -sk -XPUT -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/nls/v1/workflows/${workflow}/retry"
         sleep 20
     fi
-
+    runningSteps=$(curl -sk -XGET -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/nls/v1/workflows" |         jq -r ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .displayName")
+    echo "${phase}: ${runningSteps}"
     sleep 10
 done
