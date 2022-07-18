@@ -3,6 +3,7 @@
 ## Table of contents
 
 1. [Introduction](#introduction)
+   1. [Chassis selection](#chassis-selection)
 1. [Compute node](#compute-node)
     1. [Dense four-node chassis - Gigabyte or Intel chassis](#dense-four-node-chassis---gigabyte-or-intel-chassis)
     1. [Single-node chassis - Apollo 6500 XL675D](#single-node-chassis---apollo-6500-xl675d)
@@ -61,6 +62,13 @@ Some conventions for this document:
 - All `Source` names from the SHCD are converted to lowercase before being processed by the CSI tool.
 - Throughout this document, the field names from the `hmn_connections.json` file will be used to referenced values from the SHCD.
 - Each device type has an example of how it is represented in the `HMN` tab of the SHCD, the `hmn_connections.json` file, and in SLS.
+
+### Chassis selection
+
+Typically air-cooled hardware is located within a standard EIA 42U rack, and chassis `c0` is used for all air-cooled hardware present within a standard rack. If air-cooled hardware is located within an EX2500 cabinet that contains a single liquid-cooled
+chassis and one air-cooled chassis, then the chassis `c4` will be used.
+
+All of the following examples assume air-cooled hardware is located within a standard rack and use chassis `c0`.
 
 ## Compute node
 
@@ -855,12 +863,14 @@ The HMN connections representation for the SHCD table row above:
 The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 
 - `xX`: where `X` is the cabinet or rack identification number.
-- `cC`: where `C` is the chassis identification number. This should be `0`.
+- `cC`: where `C` is the chassis identification number.
+  - If the node is within an air-cooled cabinet, then this should be `0`.
+  - If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
 - `sS`: where `S` is the lowest slot the node chassis occupies.
 - `bB`: where `B` is the ordinal of the node BMC. This should be `0`.
 - `nN`: where `N` is the ordinal of the node This should be `0`.
 
-For example, if an application node is in slot 4 of cabinet 3000, then it would have `x3000c0s4b0n0` as its component name (xname).
+For example, if an application node is in slot 4 of air-cooled cabinet 3000, then it would have `x3000c0s4b0n0` as its component name (xname).
 
 ### Dual-node chassis
 
@@ -905,7 +915,9 @@ The HMN connections representation for the two SHCD table rows above:
 The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 
 - `xX`: where `X` is the Cabinet or Rack identification number.
-- `cC`: where `C` is the chassis identification number. This should be `0`.
+- `cC`: where `C` is the chassis identification number.
+  - If the node is within an air-cooled cabinet, then this should be `0`.
+  - If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
 - `sS`: where `S` is the lowest slot the node chassis occupies.
 - `bB`: where `B` is the ordinal of the node BMC.
   - If the `SourceSubLocation` is `L` or `l`, then this should be `1`.

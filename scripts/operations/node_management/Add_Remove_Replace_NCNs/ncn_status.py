@@ -382,7 +382,7 @@ def log_error_and_exit(actions, message):
 
 
 def node_bmc_to_enclosure(xname_for_bmc):
-    p = re.compile('^(x[0-9]{1,4}c0s[0-9]+)(b)([0-9]+)$')
+    p = re.compile('^(x[0-9]{1,4}c[0,4]s[0-9]+)(b)([0-9]+)$')
     if xname_for_bmc and p.match(xname_for_bmc):
         # convert node bmc to enclosure, for example, convert x3000c0s36b0 to x3000c0s36e0
         enclosure = re.sub(p, r'\1e\3', xname_for_bmc)
