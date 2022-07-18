@@ -115,8 +115,8 @@ An advanced wipe includes handling storage node specific items before running th
 
 ## Full-Wipe
 
-This section walks a user through cleanly stopping all running services that require partitions, as well as completely scrubbing and removing
-the node.
+This section walks a user through cleanly stopping all running services that require partitions, as well
+removing the node from the Ceph or Kubernetes cluster (as appropriate for the node type).
 
 This does not zero disks; this will ensure that all disks look raw on the next reboot.
 
