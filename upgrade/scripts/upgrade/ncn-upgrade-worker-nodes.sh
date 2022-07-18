@@ -53,7 +53,7 @@ if echo "${response}" | grep "message"; then
     echo "${response}" | jq -r '.message'
 fi
 
-workflow=$(echo "${response}" | grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*"')
+workflow=$(echo "${response}" | grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*["|\.]')
 workflow=${workflow::-1}
 
 echo
