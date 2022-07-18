@@ -310,9 +310,9 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# git push
    ```
 
-1. Check Nexus Space.
+1. Check available space in Nexus, and free up space if needed.
 
-   Review [Nexus Space Cleanup](../../operations/package_repository_management/Nexus_Space_Cleanup.md), to clean up space that Nexus needs for upgrading.
+   See [Nexus Space Cleanup](../operations/package_repository_management/Nexus_Space_Cleanup.md).
 
 ## Stage 0.5 - Backup workload manager data
 
