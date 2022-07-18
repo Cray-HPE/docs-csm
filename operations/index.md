@@ -273,6 +273,7 @@ repository management. Nexus hosts the Yum, Docker, raw, and Helm repositories f
 - [Nexus Export and Restore](package_repository_management/Nexus_Export_and_Restore.md)
 - [Restrict Admin Privileges in Nexus](package_repository_management/Restrict_Admin_Privileges_in_Nexus.md)
 - [Repair Yum Repository Metadata](package_repository_management/Repair_Yum_Repository_Metadata.md)
+- [Nexus Space Cleanup](package_repository_management/Nexus_Space_Cleanup.md)
 
 ## Security and authentication
 
