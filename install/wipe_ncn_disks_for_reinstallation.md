@@ -79,7 +79,7 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 
 An advanced wipe includes handling storage node specific items before running the [basic wipe](#basic-wipe).
 
-1. On storage nodes, stop Ceph.
+1. Stop Ceph on all of the storage nodes.
 
     * ***CSM 0.9 or earlier***
 
@@ -93,7 +93,7 @@ An advanced wipe includes handling storage node specific items before running th
         ncn-s# cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
         ```
 
-1. On storage nodes, make sure the OSDs (if any) are not running.
+1. Make sure the OSDs (if any) are not running on the storage nodes.
 
     * ***CSM 0.9 or earlier***
 
@@ -153,7 +153,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
 1. Reset Kubernetes **on master nodes ONLY**.
 
-    This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
+    This will stop `kubelet`, stop underlying containers, and remove the contents of `/var/lib/kubelet`.
 
     1. Reset Kubernetes.
 
@@ -179,7 +179,7 @@ wiping a different type of node than what a step specifies, then skip that step.
        ncn-m# crictl stop <container id from the CONTAINER column>
        ```
 
-1. (`ncn-s#`) Stop Storage-CEPH, run the [advanced wipe](#advanced-wipe) but stop when it mentions the "basic wipe" and return here.
+1. Stop Storage-Ceph, run the [advanced wipe](#advanced-wipe), but stop when it mentions the "basic wipe". Then return here.
 
 1. Unmount volumes.
 
