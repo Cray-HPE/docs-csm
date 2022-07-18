@@ -15,12 +15,17 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 ### Stages
 
-- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
-- [Stage 0.2 - Update SLS](#stage-02---update-sls)
-- [Stage 0.3 - Upgrade management network](#stage-03---upgrade-management-network)
-- [Stage 0.4 - Prerequisites check](#stage-04---prerequisites-check)
-- [Stage 0.5 - Backup workload manager data](#stage-05---backup-workload-manager-data)
-- [Stage completed](#stage-completed)
+- [Stage 0 - Prerequisites and Preflight Checks](#stage-0---prerequisites-and-preflight-checks)
+  - [Abstract (Stage 0)](#abstract-stage-0)
+    - [Stages](#stages)
+  - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+    - [Direct download](#direct-download)
+    - [Manual copy](#manual-copy)
+  - [Stage 0.2 - Upgrade management network](#stage-02---upgrade-management-network)
+    - [Verify that switches have 1.2 configuration in place](#verify-that-switches-have-12-configuration-in-place)
+  - [Stage 0.3 - Prerequisites check](#stage-03---prerequisites-check)
+  - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+  - [Stage completed](#stage-completed)
 
 ## Stage 0.1 - Prepare assets
 
@@ -113,77 +118,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
-## Stage 0.2 - Update SLS
-
-### Abstract (Stage 0.2)
-
-CSM 1.2 introduces the bifurcated CAN (BICAN) as well as network configuration controlled by data in SLS. An offline upgrade of SLS data is performed. For more details on the
-upgrade and its sequence of events, see the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md).
-
-The SLS data upgrade is a critical step in moving to CSM 1.2. Upgraded SLS data is used in DNS and management network configuration. For details to aid in understanding and
-decision making, see the [Management Network User Guide](../operations/network/management_network/README.md).
-
-> **Important:** If this is the first time performing the SLS update to CSM 1.2, review the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md) in order to ensure
-the correct options for the specific environment are used. Two examples are given below. To see all options from the update script, run `./sls_updater_csm_1.2.py --help`.
-
-### Retrieve SLS data as JSON
-
-1. (`ncn-m001#`) Obtain a token.
-
-   ```bash
-   export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
-                                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-   ```
-
-1. (`ncn-m001#`) Create a working directory.
-
-   ```bash
-   mkdir /root/sls_upgrade && cd /root/sls_upgrade
-   ```
-
-1. (`ncn-m001#`) Extract SLS data to a file.
-
-   ```bash
-   curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
-   ```
-
-### Migrate SLS data JSON to CSM 1.2
-
-Migrate SLS data to CSM 1.2, using the `sls_input_file.json` obtained above, using the desired
-network (new CAN or CHN) and its chosen subnet.
-
-- (`ncn-m001#`) Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
-
-   ```bash
-   DOCDIR=/usr/share/doc/csm/upgrade/scripts/sls
-   ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
-       --bican-user-network-name CHN \
-       --customer-highspeed-network REPLACE_CHN_VLAN REPLACE_CHN_IPV4_SUBNET
-   ```
-
-- (`ncn-m001#`) Example 2: The CAN as the system default route, keep the generated CHN (for testing), and preserve the existing `external-dns` entry.
-
-   ```bash
-   DOCDIR=/usr/share/doc/csm/upgrade/scripts/sls
-   ${DOCDIR}/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
-       --bican-user-network-name CAN \
-       --customer-access-network REPLACE_CHN_VLAN REPLACE_CHN_IPV4_SUBNET \
-       --preserve-existing-subnet-for-cmn external-dns
-   ```
-
-- **Note:**: A detailed review of the migrated/upgraded data (using `vimdiff` or otherwise) for production systems and for systems which have many add-on components (UANs, login
-  nodes, storage integration points, etc.) is strongly recommended. Particularly, ensure that subnet reservations are correct in order to prevent any data mismatches.
-
-### Upload migrated SLS file to SLS service
-
-(`ncn-m001#`) If the following command does not complete successfully, check if the `TOKEN` environment variable is set correctly.
-
-   ```bash
-   curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
-   ```
-
-## Stage 0.3 - Upgrade management network
+## Stage 0.2 - Upgrade management network
 
 ### Verify that switches have 1.2 configuration in place
 
@@ -206,7 +141,7 @@ network (new CAN or CHN) and its chosen subnet.
    - See the [Management Network User Guide](../operations/network/management_network/README.md) for more information on the management network.
    - With the 1.2 switch configuration in place, users will only be able to SSH into the switches over the HMN.
 
-## Stage 0.4 - Prerequisites check
+## Stage 0.3 - Prerequisites check
 
 1. (`ncn-m001#`) Set the `SW_ADMIN_PASSWORD` environment variable.
 
@@ -277,7 +212,7 @@ network (new CAN or CHN) and its chosen subnet.
    git push
    ```
 
-## Stage 0.5 - Backup workload manager data
+## Stage 0.4 - Backup workload manager data
 
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
