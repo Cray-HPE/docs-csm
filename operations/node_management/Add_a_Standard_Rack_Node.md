@@ -172,7 +172,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     ```toml
     Type = "Node"
-    Enabled = **true**
+    Enabled = true
     State = "Off"
     . . .
     ```
