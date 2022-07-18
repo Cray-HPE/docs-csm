@@ -9,7 +9,7 @@
 ## Abstract (Stage 0)
 
 Stage 0 has several critical procedures which prepares and verify if the environment is ready for upgrade. First, the latest documentation RPM is installed; it includes
-critical install scripts used in the upgrade procedure. Next, the current configuration of the System Layout Service (SLS) is updated to have necessary information for CSM 1.2.
+critical install scripts used in the upgrade procedure.
 The management network configuration is also upgraded. Towards the end, prerequisite checks are performed to ensure that the upgrade is ready to proceed. Finally, a
 backup of Workload Manager configuration data and files is created. Once complete, the upgrade proceeds to Stage 1.
 
@@ -131,15 +131,15 @@ backup of Workload Manager configuration data and files is created. Once complet
    ```text
    ##################################################################################
    # CSM version:  1.2
-   # CANU version: 1.3.2
+   # CANU version: 1.6.5
    ##################################################################################
    ```
 
    - Output like the above text means that the switches have a CANU-generated configuration for CSM 1.2 in place. In this case, follow the steps in
-     [Management Network 1.0 (`1.2 Preconfig`) to 1.2](../operations/network/management_network/1.0_to_1.2_upgrade.md).
-   - If the banner does NOT contain text like the above, then contact support in order to get the `1.2 Preconfig` applied to the system.
+     [Management Network 1.2 to 1.3](../operations/network/management_network/1.2_to_1.3_upgrade.md).
+   - If the banner does NOT contain text like the above, then contact support in order to get `CSM 1.2 switch configuration` applied to the system.
    - See the [Management Network User Guide](../operations/network/management_network/README.md) for more information on the management network.
-   - With the 1.2 switch configuration in place, users will only be able to SSH into the switches over the HMN.
+   - With CSM >=1.2 switch configurations in place, users will only be able to SSH into the switches over the HMN and CMN.
 
 ## Stage 0.3 - Prerequisites check
 
