@@ -1,7 +1,7 @@
 # Manual Wipe Procedures
 
-This page details how to wipe NCN disks, this page uses the same wipe commands that the automatic
-wipe uses. However this page accounts for running services that are present on a running CSM NCN.
+This page details how to wipe NCN disks. This page uses the same wipe commands that the automatic
+wipe uses. However, this page accounts for running services that are present on a running CSM NCN.
 
 **Everything in this section should be considered DESTRUCTIVE**.
 
@@ -12,7 +12,7 @@ The following are potential use cases for wiping disks:
 - Clean slating an NCN
 - Forcing a node to net-boot that may or may not have a working or desired operating system installed (e.g. a node that might have a non-CSM Linux distro installed)
 
-For wiping Linux on an NCN that was recently adopted from another place, where a previous OS is installed, the [basic wipe](#basic-wipe) is sufficient for clean slating that node.
+For wiping Linux on an NCN with a previously installed OS, the [basic wipe](#basic-wipe) is sufficient.
 
 ## Topics
 
@@ -55,15 +55,15 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 
     The `wipefs` command may fail if no labeled disks are found, which is an indication of a larger problem.
 
-1. (`ncn#`) On all NCNs, remove the volume groups.
+1. (`ncn#`) Remove the volume groups on all NCNs.
 
    > ***NOTE*** The Ceph volume group will only exist on storage-nodes, but this code snippet will work on all NCNs.
 
     ```bash
-    local ceph_vgs='vg_name=~ceph*'
-    local metal_vgs='vg_name=~metal*'
-    for volume_group in $doomed_ceph_vgs $doomed_metal_vgs; do
-        vgremove -f -v --select $volume_group -y >/dev/null 2>&1
+    ceph_vgs='vg_name=~ceph*'
+    metal_vgs='vg_name=~metal*'
+    for volume_group in ${ceph_vgs} ${metal_vgs}; do
+        vgremove -f -v --select "${volume_group}" -y >/dev/null 2>&1
     done
     ```
 
@@ -71,7 +71,7 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 
 An advanced wipe includes handling storage-node specific items before running the [basic wipe](#basic-wipe).
 
-1. (`ncn-s#`) On storage-nodes, stop Ceph.
+1. (`ncn-s#`) Stop Ceph on all of the storage nodes.
 
     - ***CSM 0.9 or earlier***
 
@@ -85,7 +85,7 @@ An advanced wipe includes handling storage-node specific items before running th
         cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
         ```
 
-1. (`ncn-s#`) On storage nodes, make sure the OSDs (if any) are not running.
+1. (`ncn-s#`) Make sure the OSDs (if any) are not running on the storage nodes.
 
     - ***CSM 0.9 or earlier***
 
@@ -105,10 +105,10 @@ An advanced wipe includes handling storage-node specific items before running th
 
 ## Full-Wipe
 
-This section walks a user through cleanly stopping all running services that require partitions as well as completely scrubbing and removing
+This section walks a user through cleanly stopping all running services that require partitions, as well as completely scrubbing and removing
 the system.
 
-This does not zero disks, this will ensure that all disks look RAW on the next reboot.
+This does not zero disks; this will ensure that all disks look raw on the next reboot.
 
 ***IMPORTANT*** For each step, pay attention to whether the command is to be run on a master node, storage node, or worker node. If
 wiping a different type of node than what a step specifies, then skip that step.
@@ -169,7 +169,7 @@ wiping a different type of node than what a step specifies, then skip that step.
        crictl stop <container id from the CONTAINER column>
        ```
 
-1. (`ncn-s#`) Stop Storage-CEPH, run the [advanced wipe](#advanced-wipe) but stop when it mentions the "basic wipe" and return here.
+1. (`ncn-s#`) Stop Storage-Ceph, run the [advanced wipe](#advanced-wipe), but stop when it mentions the "basic wipe". Then return here.
 
 1. Unmount volumes.
 
