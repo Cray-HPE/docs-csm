@@ -2,17 +2,21 @@
 
 ## Description
 
-Add NCN data to System Layout Service (SLS), Boot Script Service (BSS), and Hardware State Manager (HSM) as needed, in order to add an NCN to the system.
+Add NCN data to the System Layout Service (SLS), Boot Script Service (BSS), and Hardware State Manager (HSM) as needed, in order to add an NCN to the system.
 
 Scenarios where this procedure is applicable:
 
-1. Adding a management NCN that has not previously been in the system before:
-   * Add an additional NCN to an existing cabinet
-   * Add an NCN that is replacing another NCN of the same type and in the same slot
-   * Add a new NCN that replaces an NCN removed from the system in a different location
+* Adding a management NCN that has not previously been in the system:
+  * Add an additional NCN to an existing cabinet
+  * Add an NCN that is replacing another NCN of the same type and in the same slot
+  * Add a new NCN that replaces an NCN removed from the system in a different location
+* Adding a management NCN that has been present in the system previously:
+  * Add an NCN that was previously removed from the system to move it to a new location
 
-1. Adding a management NCN that has been present in the system previously:
-   * Add an NCN that was previously removed from the system to move it to a new location
+## Prerequisites
+
+* The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../../configure_cray_cli.md).
+* The latest CSM documentation is installed on the system. See [Check for latest documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Procedure
 
@@ -108,45 +112,35 @@ Scenarios where this procedure is applicable:
                 ssh admin@sw-leaf-bmc-001.hmn
                 ```
 
-            1. (`ncn-m#`) Locate the switch port that the BMC is connected to and record its MAC address.
-               In the commands below, change the value of `1/1/39` to match the BMC switch port number (the BMC switch port number is the `J` value in the in the `MgmtSwitchConnector` xname `xXwWjJ`).
-                For example, with the following `$MGMT_SWITCH_CONNECTOR` value:
+            1. (`sw-leaf#`) Locate the switch port that the BMC is connected to and record its MAC address.
 
-                ```bash
-                echo $MGMT_SWITCH_CONNECTOR
-                ```
+                In the commands below, change the value of `1/1/39` to match the BMC switch port number (the BMC switch port number is the `J` value in the in the `MgmtSwitchConnector` xname `xXwWjJ`).
+                For example, with a `MgmtSwitchConnector` xname of `x3000c0w14j39`, the switch port number would be `39`. In that case,
+                `1/1/39` would be used instead of `1/1/48` in the following commands.
 
-                Example output:
+                * Dell Management Switch
 
-                ```text
-                x3000c0w14j39
-                ```
+                    ```console
+                    show mac address-table | grep 1/1/48
+                    ```
 
-                The switch port number for the above `MgmtSwitchConnector` xname would be `39`, so use `1/1/39` instead of `1/1/48` in the commands below.
+                    Example output:
 
-                **Dell Management Switch**
+                    ```text
+                    4    a4:bf:01:65:68:54    dynamic        1/1/48
+                    ```
 
-                ```bash
-                show mac address-table | grep 1/1/48
-                ```
+                * Aruba Management Switch
 
-                Example output:
+                    ```console
+                    show mac-address-table | include 1/1/48
+                    ```
 
-                ```text
-                4    a4:bf:01:65:68:54    dynamic        1/1/48
-                ```
+                    Example output:
 
-                **Aruba Management Switch**
-
-                ```bash
-                show mac-address-table | include 1/1/48
-                ```
-
-                Example output:
-
-                ```text
-                a4:bf:01:65:68:54    4        dynamic                   1/1/48
-                ```
+                    ```text
+                    a4:bf:01:65:68:54    4        dynamic                   1/1/48
+                    ```
 
     1. (`ncn-m#`) **Skip if adding `ncn-m001`:** Set the `BMC_MAC` environment variable to the BMC MAC address.
 
@@ -457,12 +451,12 @@ Scenarios where this procedure is applicable:
 1. (`ncn-m#`) Verify that the NCN exists under HSM State Components.
 
     ```bash
-    cray hsm state components describe $XNAME
+    cray hsm state components describe $XNAME --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     ID = "x3000c0s11b0n0"
     Type = "Node"
     State = "Off"
@@ -476,6 +470,6 @@ Scenarios where this procedure is applicable:
     Class = "River"
     ```
 
-## Next Step
+## Next step
 
 Proceed to the next step to [Update Firmware](Update_Firmware.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
