@@ -15,8 +15,8 @@ Scenarios where this procedure is applicable:
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
-* The latest CSM documentation is installed on the system. See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+* The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../../configure_cray_cli.md).
+* The latest CSM documentation is installed on the system. See [Check for latest documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Procedure
 
