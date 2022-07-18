@@ -1,7 +1,7 @@
 # Wipe NCN Disks for Reinstallation
 
-This page details how to wipe NCN disks, this page uses the same wipe commands that the automatic
-wipe uses. However this page accounts for running services that are present on a running CSM NCN.
+This page details how to wipe NCN disks. This page uses the same wipe commands that the automatic
+wipe uses. However, this page accounts for running services that are present on a running CSM NCN.
 
 > **Everything in this section should be considered DESTRUCTIVE**.
 
@@ -16,7 +16,7 @@ The following are potential use cases for wiping disks:
 * Adopting new disks that are not bare.
 * Doing a fresh install.
 
-For wiping Linux on an NCN that was recently adopted from another place, where a previous OS is installed, the [basic wipe](#basic-wipe) is sufficient for clean slating that node.
+For wiping Linux on an NCN with a previously installed OS, the [basic wipe](#basic-wipe) is sufficient.
 
 ## Topics
 
@@ -30,18 +30,18 @@ For wiping Linux on an NCN that was recently adopted from another place, where a
 
 This wipe erases the magic bits on the disk to prevent them from being recognized and making them ready for deployment, as well as removing the common volume groups.
 
-1. (`ncn#`) List the disks for verification.
+1. List the disks for verification.
 
     ```bash
-    disks_to_wipe="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(raid|'"$metal_transports"')' | sort -u | awk '{print "/dev/"$2}' | tr '\n' ' ' | sed 's/ *$//')"
+    ncn# disks_to_wipe="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(raid|'"$metal_transports"')' | sort -u | awk '{print "/dev/"$2}' | tr '\n' ' ' | sed 's/ *$//')"
     ```
 
-1. (`ncn#`) Wipe the disks and the RAIDs.
+1. Wipe the disks and the RAIDs.
 
     ```bash
-    for disk in $disks_to_wipe; do
-        wipefs --all --force ${disk}* 2> /dev/null
-    done
+    ncn# for disk in $disks_to_wipe; do
+             wipefs --all --force ${disk}* 2> /dev/null
+         done
     ```
 
     If any disks had labels present, then the output looks similar to the following:
@@ -61,16 +61,16 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 
     The `wipefs` command may fail if no labeled disks are found, which is an indication of a larger problem.
 
-1. (`ncn#`) On all NCNs, remove the volume groups.
+1. On all NCNs, remove the volume groups.
 
    > ***NOTE*** The Ceph volume group will only exist on storage-nodes, but this code snippet will work on all NCNs.
 
     ```bash
-    local ceph_vgs='vg_name=~ceph*'
-    local metal_vgs='vg_name=~metal*'
-    for volume_group in $doomed_ceph_vgs $doomed_metal_vgs; do
-        vgremove -f -v --select $volume_group -y >/dev/null 2>&1
-    done
+    ncn# ceph_vgs='vg_name=~ceph*'
+    ncn# metal_vgs='vg_name=~metal*'
+    ncn# for volume_group in ${ceph_vgs} ${metal_vgs}; do
+             vgremove -f -v --select "${volume_group}" -y >/dev/null 2>&1
+         done
     ```
 
 <a name="advanced-wipe"></a>
@@ -79,7 +79,7 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 
 An advanced wipe includes handling storage-node specific items before running the [basic wipe](#basic-wipe).
 
-1. (`ncn-s#`) On storage-nodes, stop Ceph.
+1. On storage-nodes, stop Ceph.
 
     * ***CSM 0.9 or earlier***
 
@@ -93,7 +93,7 @@ An advanced wipe includes handling storage-node specific items before running th
         ncn-s# cephadm rm-cluster --fsid $(cephadm ls|jq -r '.[0].fsid') --force
         ```
 
-1. (`ncn-s#`) On storage nodes, make sure the OSDs (if any) are not running.
+1. On storage nodes, make sure the OSDs (if any) are not running.
 
     * ***CSM 0.9 or earlier***
 
@@ -115,15 +115,15 @@ An advanced wipe includes handling storage-node specific items before running th
 
 ## Full-Wipe
 
-This section walks a user through cleanly stopping all running services that require partitions as well as completely scrubbing and removing
+This section walks a user through cleanly stopping all running services that require partitions, as well as completely scrubbing and removing
 the system.
 
-This does not zero disks, this will ensure that all disks look RAW on the next reboot.
+This does not zero disks; this will ensure that all disks look raw on the next reboot.
 
 ***IMPORTANT*** For each step, pay attention to whether the command is to be run on a master node, storage node, or worker node. If
 wiping a different type of node than what a step specifies, then skip that step.
 
-1. (`ncn-w#`) Reset Kubernetes **on worker nodes ONLY**.
+1. Reset Kubernetes **on worker nodes ONLY**.
 
    This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
@@ -151,7 +151,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         ncn-w# crictl stop <container id from the CONTAINER column>
         ```
 
-1. (`ncn-m#`) Reset Kubernetes **on master nodes ONLY**.
+1. Reset Kubernetes **on master nodes ONLY**.
 
     This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
@@ -235,7 +235,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         ncn-w# umount -v /var/lib/kubelet /var/lib/sdu /run/containerd /var/lib/containerd /run/lib-containerd /var/opt/cray/sdu/collection-mount /var/lib/admin-tools /var/lib/s3fs_cache /var/lib/containerd
         ```
 
-1. (`ncn#`) Stop `cray-sdu-rda` on **all node types** (master, storage, or worker).
+1. Stop `cray-sdu-rda` on **all node types** (master, storage, or worker).
 
     1. See if any `cray-sdu-rda` containers are running.
 
@@ -252,7 +252,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         7741d50966259410298bb4c3210e6665cdbd57a82e34e467d239f519ae3f17d4
         ```
 
-1. (`ncn-m#`) Remove `etcd` device **on master nodes ONLY**.
+1. Remove `etcd` device **on master nodes ONLY**.
 
     1. Determine whether or not an `etcd` volume is present.
 
@@ -279,7 +279,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         Command failed.
         ```
 
-1. (`ncn-m#`) Remove `etcd` volumes **on master nodes ONLY**.
+1. Remove `etcd` volumes **on master nodes ONLY**.
 
     ```bash
     ncn-m# vgremove etcdvg0
