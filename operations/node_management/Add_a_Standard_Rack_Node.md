@@ -166,13 +166,12 @@ For this procedure, a new object must be created in the SLS and modifications wi
     cray hsm state components describe x3000c0s27b0n0 --format toml
     ```
 
-    Example output:
+    Example output (truncated):
 
     ```toml
     Type = "Node"
     Enabled = true
     State = "Off"
-    . . .
     ```
 
     To verify the node BMC has been discovered by the HSM.
