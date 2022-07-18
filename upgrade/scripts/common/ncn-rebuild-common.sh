@@ -108,6 +108,7 @@ if [[ ${state_recorded} == "0" ]]; then
     {
         if [[ ${target_ncn} == ncn-s* ]]; then
             cat << 'EOF' > "${basedir}/standdown.sh"
+#!/bin/bash
 set -ou pipefail
 function wait_on_dev {
     local dev=$1
@@ -133,14 +134,20 @@ if [[ $(vgs -S 'vg_name=~metal*' | wc -l) != 0 ]]; then
     exit 1
 fi
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-efibootmgr # print before
-efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
-efibootmgr # print after
+to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+if [ "${to_delete}" ]; then
+    for item in ${to_delete}; do
+        efibootmgr # print before
+        efibootmgr -b ${item} -B
+        efibootmgr # print after
+    done
+fi
 echo 'Setting next boot to PXE ... '
 ipmitool chassis bootdev pxe options=efiboot
 EOF
         elif [[ ${target_ncn} == ncn-m* ]]; then
             cat << 'EOF' > "${basedir}/standdown.sh"
+#!/bin/bash
 set -ou pipefail
 echo 'unmounting USB(s) ... '
 usb_device_path=$(lsblk -b -l -o TRAN,PATH | awk /usb/'{print $2}')
@@ -165,14 +172,20 @@ fi
 umount -v /var/lib/etcd /var/lib/sdu || true
 
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-efibootmgr # print before
-efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
-efibootmgr # print after
+to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+if [ "${to_delete}" ]; then
+    for item in ${to_delete}; do
+        efibootmgr # print before
+        efibootmgr -b ${item} -B
+        efibootmgr # print after
+    done
+fi
 echo 'Setting next boot to PXE ... '
 ipmitool chassis bootdev pxe options=efiboot
 EOF
         else
             cat << 'EOF' > "${basedir}/standdown.sh"
+#!/bin/bash
 set -ou pipefail
 lsblk | grep -q /var/lib/sdu
 sdu_rc=$?
@@ -190,9 +203,14 @@ if [[ ${sdu_rc} -eq 0 ]]; then
 fi
 
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
-efibootmgr # print before
-efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
-efibootmgr # print after
+to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
+if [ "${to_delete}" ]; then
+    for item in ${to_delete}; do
+        efibootmgr # print before
+        efibootmgr -b ${item} -B
+        efibootmgr # print after
+    done
+fi
 echo 'Setting next boot to PXE ... '
 ipmitool chassis bootdev pxe options=efiboot
 EOF
