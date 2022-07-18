@@ -130,7 +130,7 @@ Scenarios where this procedure is applicable:
                     4    a4:bf:01:65:68:54    dynamic        1/1/48
                     ```
 
-                * Aruba Management Switch**
+                * Aruba Management Switch
 
                     ```console
                     show mac-address-table | include 1/1/48
