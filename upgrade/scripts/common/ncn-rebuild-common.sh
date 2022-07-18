@@ -83,7 +83,6 @@ fi
 state_name="SET rd.live.dir AND rd.live.overlay.reset"
 state_recorded=$(is_state_recorded "${state_name}" "${target_ncn}")
 if [[ ${state_recorded} == "0" ]]; then
-    rm -f "${basedir}/standdown.sh"
     echo "====> ${state_name} ..."
     {
     if [[ -z ${CSM_RELEASE} ]]; then
@@ -351,6 +350,40 @@ if [[ $target_ncn != ncn-s* ]]; then
     } >> ${LOG_FILE} 2>&1
 fi
 
+
+state_name="UNSET rd.live.overlay.reset AND SET metal.wipe=1"
+state_recorded=$(is_state_recorded "${state_name}" "${target_ncn}")
+if [[ ${state_recorded} == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    if [[ -z ${CSM_RELEASE} ]]; then
+        echo 2>& "CSM_RELEASE is not set!"
+        exit 1
+    fi
+    # Validate SLS health before calling csi handoff bss-update-*, since
+    # it relies on SLS
+    check_sls_health
+
+    set +e
+    while true ; do 
+        csi handoff bss-update-param --set metal.no-wipe=1 --limit "${TARGET_XNAME}"
+        wipe_return=$?
+        csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"
+        reset_return=$?
+        if [[ ${wipe_return} -eq 0 ]] && [[ $reset_return -eq 0 ]]; then
+            break
+        else
+            sleep 5
+        fi
+    done
+    set -e
+  } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "${target_ncn}"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+
 state_name="FORCE_TIME_SYNC"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 TOKEN=$(curl -s -S -d grant_type=client_credentials \
@@ -394,8 +427,7 @@ fi
 
     set +e
     while true ; do
-        csi handoff bss-update-param --set metal.no-wipe=1 --limit "${TARGET_XNAME}"
-        csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"
+        csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
         if [[ $? -eq 0 ]]; then
             break
         else
