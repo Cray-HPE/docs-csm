@@ -82,7 +82,7 @@ Spine and leaf switches use the format `xXcChHsS`. `LeafBMC` switches use `xXcCw
 
     > This format also applies to CDU switches that are in a River cabinet that make connections to an adjacent Hill cabinet.
     - `xX` : where `X` is the River cabinet identification number (the figure above is `3000`).
-    - `cC` : where `C` is the chassis identification number. This should be `0`.
+    - `cC` : where `C` is the chassis identification number.
       - If the switch is within an air-cooled cabinet, then this should be `0`.
       - If the switch is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
     - `hH` : where `H` is the slot number in the cabinet (height).
