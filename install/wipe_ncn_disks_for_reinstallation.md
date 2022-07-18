@@ -61,7 +61,7 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 
     The `wipefs` command may fail if no labeled disks are found, which is an indication of a larger problem.
 
-1. On all NCNs, remove the volume groups.
+1. Remove the volume groups on all NCNs.
 
    > ***NOTE*** The Ceph volume group will only exist on storage nodes, but this code snippet will work on all NCNs.
 
