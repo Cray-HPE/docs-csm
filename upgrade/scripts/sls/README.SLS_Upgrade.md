@@ -23,7 +23,7 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
      overlapping during the upgrade process. This requires network subnetting expertise and "expert mode" (described below).
 
      If the `external-dns` IP address is changed, then the `customizations.yaml` `site_to_system_lookups` value must be updated to the new IP address. For instructions on how to do this. see
-     [Update `customizations.yaml`](../../../operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md#update-customizationsyaml).
+     [Update `customizations.yaml`](../../../operations/CSM_product_management/Post_Install_Customizations.md).
    * A mutually exclusive example is the need to preserve all NCN IP addresses related to the old CAN while migrating
      the new CMN. This preservation is not often needed as the transition of NCN IP addresses for the CAN-to-CMN is automatically
      handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations
@@ -35,59 +35,58 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
 
 ## Prerequisites
 
-* The latest CSM documentation RPM must be installed on the node where the procedure is being performed. See
-  [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
+* The latest CSM documentation RPM must be installed on the node where the procedure is being performed.
 
 ## Procedure
 
-1. (`ncn#`) Get a token.
+1. Get a token.
 
     ```bash
-    export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
+    ncn# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
             -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
             https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. (`ncn#`) Extract SLS data to a file.
+1. Extract SLS data to a file.
 
     ```bash
-    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
+    ncn# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
     ```
 
-1. (`ncn#`) Upgrade SLS data.
+1. Upgrade SLS data.
 
     * Example 1: Upgrade, using the CHN as the system default route (will by default output to `migrated_sls_file.json`).
 
         ```bash
-        /usr/share/doc/csm/upgrade/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
-            --bican-user-network-name CHN \
-            --customer-highspeed-network 5 10.103.11.192/26
+        ncn# /usr/share/doc/csm/upgrade/1.2/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+                --bican-user-network-name CHN \
+                --customer-highspeed-network 5 10.103.11.192/26
         ```
 
     * Example 2: Upgrade, using the CAN as the system default route, keep the generated CHN (for testing), and preserve the existing external-dns entry.
 
         ```bash
-        /usr/share/doc/csm/upgrade/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
-            --bican-user-network-name CAN \
-            --customer-highspeed-network 5 10.103.11.192/26 \
-            --preserve-existing-subnet-for-cmn external-dns \
-            --retain-unused-user-network
+        ncn# /usr/share/doc/csm/upgrade/1.2/scripts/sls/sls_updater_csm_1.2.py --sls-input-file sls_input_file.json \
+                --bican-user-network-name CAN \
+                --customer-highspeed-network 5 10.103.11.192/26 \
+                --preserve-existing-subnet-for-cmn external-dns \
+                --retain-unused-user-network
         ```
 
     **NOTE:** A detailed review of the migrated/upgraded data is strongly recommended. Particularly, ensure that subnet reservations are correct to prevent any data loss.
 
-1. (`ncn#`) Upload migrated SLS file to SLS service.
+1. Upload migrated SLS file to SLS service.
 
     ```bash
-    curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
+    ncn# curl -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F 'sls_dump=@migrated_sls_file.json'
     ```
 
 ## SLS Updater help
 
-(`ncn#`) For help and all options, run the following:
+For help and all options, run the following:
 
 ```bash
-/usr/share/doc/csm/upgrade/scripts/sls/sls_updater_csm_1.2.py --help
+ncn# /usr/share/doc/csm/upgrade/1.2/scripts/sls/sls_updater_csm_1.2.py --help
 ```
 
 ## Actions and order
@@ -117,12 +116,17 @@ This needs to be done in the order listed above.
 
 ### Remove `api-gateway` / `istio-ingress-gateway` reservations from HMNLB subnets
 
-For CSM 1.2, the API gateway no longer listens on the HMNLB MetalLB address pool.
+For CSM 1.2, the API gateway will no longer listen on the HMNLB MetalLB address pool.
 These aliases provided DNS records and are being removed.
+
+### Correct any erroneous Unbound DNS IPv4 addresses
+
+Some systems installed Shasta 1.4 and prior contained a bug in CSI which created reservations
+with incorrect IP addresses.
 
 ### Create the BICAN network "toggle"
 
-New in CSM 1.2, the BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
+New for CSM 1.2, the BICAN network `ExtraProperties` value of `SystemDefaultRoute` is used
 to point to the CAN, CHN, or CMN, and is used by utilities to systematically toggle routes.
 
 ### Migrate existing CAN to new CMN
@@ -187,6 +191,6 @@ Retention of the unused network is not normal behavior.
 * Generally production systems will NOT want to use this flag unless active toggling between CAN and CHN is required. This is not usual behavior.
 * Test/development systems may want to have all networks for testing purposes and might want to retain both user networks.
 
-For technical details on the SLS update automation, see [`sls_udpater.py` Technical Details](sls_updater.py_technical_details.md).
+For technical details on what the `sls_update` automation, refer to [SLS Updater Technical Details](sls_updater.py_technical_details.md).
 
-Go back to [Stage 0.2 - Update SLS](../../Stage_0_Prerequisites.md#update-sls).
+[Go Back to Stage 0.2 - Update SLS](../../Stage_0_Prerequisites.md#update-sls)
