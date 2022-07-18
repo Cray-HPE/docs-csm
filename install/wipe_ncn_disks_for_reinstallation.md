@@ -63,7 +63,7 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 
 1. On all NCNs, remove the volume groups.
 
-   > ***NOTE*** The Ceph volume group will only exist on storage-nodes, but this code snippet will work on all NCNs.
+   > ***NOTE*** The Ceph volume group will only exist on storage nodes, but this code snippet will work on all NCNs.
 
     ```bash
     ncn# ceph_vgs='vg_name=~ceph*'
@@ -77,9 +77,9 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 
 ## Advanced Wipe
 
-An advanced wipe includes handling storage-node specific items before running the [basic wipe](#basic-wipe).
+An advanced wipe includes handling storage node specific items before running the [basic wipe](#basic-wipe).
 
-1. On storage-nodes, stop Ceph.
+1. On storage nodes, stop Ceph.
 
     * ***CSM 0.9 or earlier***
 
@@ -116,7 +116,7 @@ An advanced wipe includes handling storage-node specific items before running th
 ## Full-Wipe
 
 This section walks a user through cleanly stopping all running services that require partitions, as well as completely scrubbing and removing
-the system.
+the node.
 
 This does not zero disks; this will ensure that all disks look raw on the next reboot.
 
