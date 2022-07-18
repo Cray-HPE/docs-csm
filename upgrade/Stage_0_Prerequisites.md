@@ -154,7 +154,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    export SW_ADMIN_PASSWORD
    ```
 
-2. (`ncn-m001#`) Set the `NEXUS_PASSWORD` variable **only if needed**.
+1. (`ncn-m001#`) Set the `NEXUS_PASSWORD` variable **only if needed**.
 
    > **IMPORTANT:** If the password for the local Nexus `admin` account has
    > been changed from the default `admin123` (not typical), then set the
@@ -173,7 +173,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    > Otherwise, a random 32-character base-64-encoded string will be generated
    > and updated as the default `admin` password when Nexus is upgraded.
 
-3. (`ncn-m001#`) Run the script.
+1. (`ncn-m001#`) Run the script.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
@@ -189,13 +189,13 @@ backup of Workload Manager configuration data and files is created. Once complet
    [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
    If the failure persists, then open a support ticket for guidance before proceeding.
 
-4. (`ncn-m001#`) Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
+1. (`ncn-m001#`) Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
 
    ```bash
    unset NEXUS_PASSWORD
    ```
 
-5. (Optional) (`ncn-m001#`) Commit changes to `customizations.yaml`.
+1. (Optional) (`ncn-m001#`) Commit changes to `customizations.yaml`.
 
    `customizations.yaml` has been updated in this procedure. If using an external Git repository
    for managing customizations as recommended, then clone a local working tree and commit
