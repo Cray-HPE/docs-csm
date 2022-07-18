@@ -203,7 +203,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
             - `wW` : where `W` is the management switch in a CDU.
       - If within a standard rack: `xXcChHsS`
         - `xX` : where `X` is the River cabinet identification number (the figure above is `3000`).
-        - `cC` : where `C` is the chassis identification number. This should be `0`.
+        - `cC` : where `C` is the chassis identification number.
           - If the switch is within an air-cooled cabinet, then this should be `0`.
           - If the switch is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
         - `hH` : where `H` is the slot number in the cabinet (height).
