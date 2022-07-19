@@ -1,28 +1,24 @@
 # SHCD HMN Tab/HMN Connections Rules
 
-## Table of Contents
-
-  1. [Introduction](#introduction)
-  2. [Compute node](#compute-node)
-      1. [Dense four node chassis - Gigabyte or Intel chassis](#compute-node-dense)
-      2. [Single node chassis - Apollo 6500 XL675D](#compute-node-single)
-      3. [Dual node chassis - Apollo 6500 XL645D](#compute-node-dual)
-  3. [Chassis Management Controller (CMC)](#chassis-management-controller)
-  4. [Management node](#management-node)
-      1. [Master](#management-node-master)
-      2. [Worker](#management-node-worker)
-      3. [Storage](#management-node-storage)
-  5. [Application node](#application-node)
-      1. [Single node chassis](#application-node-single-node-chassis)
-          1. [Building component names (xnames) for nodes in a single application node chassis](#application-node-single-node-chassis-xname)
-      2. [Dual node chassis](#application-node-dual-node-chassis)
-          1. [Building component names (xnames) for nodes in a dual application node chassis](#application-node-dual-node-chassis-xname)
-  6. [Columbia Slingshot switch](#columbia-slingshot-switch)
-  7. [PDU cabinet controller](#pdu-cabinet-controller)
-  8. [Cooling door](#cooling-door)
-  9. [Management switches](#management-switches)
-
-<a name="introduction"></a>
+1. [Introduction](#introduction)
+1. [Compute node](#compute-node)
+    1. [Dense four node chassis - Gigabyte or Intel chassis](#compute-node-dense)
+    1. [Single node chassis - Apollo 6500 XL675D](#compute-node-single)
+    1. [Dual node chassis - Apollo 6500 XL645D](#compute-node-dual)
+1. [Chassis Management Controller (CMC)](#chassis-management-controller)
+1. [Management node](#management-node)
+    1. [Master](#management-node-master)
+    1. [Worker](#management-node-worker)
+    1. [Storage](#management-node-storage)
+1. [Application node](#application-node)
+    1. [Single node chassis](#application-node-single-node-chassis)
+        1. [Building component names (xnames) for nodes in a single application node chassis](#application-node-single-node-chassis-xname)
+    1. [Dual node chassis](#application-node-dual-node-chassis)
+        1. [Building component names (xnames) for nodes in a dual application node chassis](#application-node-dual-node-chassis-xname)
+1. [Columbia Slingshot switch](#columbia-slingshot-switch)
+1. [PDU cabinet controller](#pdu-cabinet-controller)
+1. [Cooling door](#cooling-door)
+1. [Management switches](#management-switches)
 
 ## Introduction
 
@@ -63,8 +59,6 @@ Some conventions for this document:
 * All `Source` names from the SHCD are converted to lowercase before being processed by the CSI tool.
 * Throughout this document, the field names from the `hmn_connections.json` file will be used to referenced values from the SHCD.
 * Each device type has an example of how it is represented in the `HMN` tab of the SHCD, the `hmn_connections.json` file, and in SLS.
-
-<a name="compute-node"></a>
 
 ## Compute node
 
@@ -888,7 +882,7 @@ The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 * `bB`: where `B` is the ordinal of the node BMC. This should be `0`.
 * `nN`: where `N` is the ordinal of the node This should be `0`.
 
-For example, if an application node is in slot 4 of cabinet 3000, then it would have `x3000c0s4b0n0` as its component name (xname).
+For example, if an application node is in slot 4 of air-cooled cabinet 3000, then it would have `x3000c0s4b0n0` as its component name (xname).
 
 <a name="application-node-dual-node-chassis"></a>
 
@@ -942,10 +936,8 @@ The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 * `cC`: where `C` is the chassis identification number. This should be `0`.
 * `sS`: where `S` is the lowest slot the node chassis occupies.
 * `bB`: where `B` is the ordinal of the node BMC.
-
   * If the `SourceSubLocation` is `L` or `l`, then this should be `1`.
   * If the `SourceSubLocation` is `R` or `r`, then this should be `2`.
-
 * `nN`: where `N` is the ordinal of the node This should be `0`.
 
 For example:

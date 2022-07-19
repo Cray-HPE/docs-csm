@@ -479,7 +479,7 @@ def migrate_can_to_cmn(networks, preserve=None, overrides=None):
 
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
-        preserve (str): Network to preferentially preserve IP addresses whenc cloning
+        preserve (str): Network to preferentially preserve IP addresses when cloning
         overrides (str, ipaddress.IPv4Network): Tuple of tuples forcing subnet addressing
     """
     can_network = networks.get("CAN")
@@ -526,7 +526,7 @@ def convert_can_ips(networks, can_data, preserve=None, overrides=None):
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         can_data (int, ipaddress.IPv4Network): VLAN and IPv4 CIDR for the CAN
-        preserve (str): Network to preferentially preserve IP addresses whenc cloning
+        preserve (str): Network to preferentially preserve IP addresses when cloning
         overrides (str, ipaddress.IPv4Network): Tuple of tuples forcing subnet addressing
     """
     can_network = networks.get("CAN")
@@ -589,7 +589,7 @@ def clone_subnet_and_pivot(
         destination_network_name (str): Name of the network to create
         destination_network_full_name (str): Long/Full name of the network to create
         subnet_names (list): Subnets in an ordered list to be cloned/expanded
-        preserve (str): Network to preferentially preserve IP addresses whenc cloning
+        preserve (str): Network to preferentially preserve IP addresses when cloning
         overrides (str, ipaddress.IPv4Network): Tuple of tuples forcing subnet addressing
     """
     #

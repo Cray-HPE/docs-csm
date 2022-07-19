@@ -39,7 +39,7 @@ This procedure adds all Compute nodes to the Customer Highspeed Network (CHN).  
 not required.  Generalized User access to computes over the CHN is only required in the following cases:
 
 1. **Ingress** Users need to access *all* computes from the site (ssh or otherwise).
-2. **Egrss** The HSN has no NAT device in place and the CHN subnet is both large enough and site-routable.
+2. **Egress** The HSN has no NAT device in place and the CHN subnet is both large enough and site-routable.
 
 Processing of SLS records will only occur if both the BICAN network exists (CSM >= 1.2) and the
 SystemDefaultRoute values has been set to "CHN".  If these conditions are not met, running the
@@ -49,9 +49,9 @@ Script processing involves:
 * Ensuring CHN is large enough to fit all HSN Reservations.
   * If not it's possible that either a NAT device is in place, or
   * This procedure is not required, or
-  * The CHN was truly not large enough to accomodate all the compute nodes (typical).
+  * The CHN was truly not large enough to accommodate all the compute nodes (typical).
  
-NOTE:  Typicaly you will want a NAT device instead of running this, unless a very large CHN is allocated.
+NOTE:  Typically you will want a NAT device instead of running this, unless a very large CHN is allocated.
 
 """
 

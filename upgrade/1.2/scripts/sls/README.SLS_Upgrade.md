@@ -4,7 +4,7 @@
 
 Prior to updating SLS, at a minimum, answers to the following questions must be known:
 
-1. Will user traffic (non-administrative) come in via the CAN, CHN or is the site air-gapped?
+1. Will user traffic (non-administrative) come in via the CAN or CHN, or is the site air-gapped?
 
    By default when upgrading to CSM 1.2, non-administrative user traffic is migrated from the CAN to the CHN while minimizing changes. If
    instead it is desired that the non-administrative user traffic continue to come in via the CAN, or if the site is air-gapped,
@@ -22,8 +22,9 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
      case of preserving `external-dns` values, the administrator must ensure there are no site-networking changes that might result in NCN IP addresses
      overlapping during the upgrade process. This requires network subnetting expertise and "expert mode" (described below).
 
-     If the `external-dns` IP address is changed, then the `customizations.yaml` `site_to_system_lookups` value must be updated to the new IP address. For instructions on how to do this. see
+     If the `external-dns` IP address is changed, then the `customizations.yaml` `site_to_system_lookups` value must be updated to the new IP address. For instructions on how to do this, see
      [Update `customizations.yaml`](../../../../operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md#update-customizationsyaml).
+
    * A mutually exclusive example is the need to preserve all NCN IP addresses related to the old CAN while migrating
      the new CMN. This preservation is not often needed as the transition of NCN IP addresses for the CAN-to-CMN is automatically
      handled during the upgrade. The flag to preserve CAN-to-CMN NCN IP addresses is mutually exclusive with other preservations
@@ -44,8 +45,8 @@ Prior to updating SLS, at a minimum, answers to the following questions must be 
 
     ```bash
     ncn# export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
-            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
 1. Extract SLS data to a file.
@@ -192,6 +193,6 @@ Retention of the unused network is not normal behavior.
 * Generally production systems will NOT want to use this flag unless active toggling between CAN and CHN is required. This is not usual behavior.
 * Test/development systems may want to have all networks for testing purposes and might want to retain both user networks.
 
-For technical details on what the `sls_update` automation, refer to [SLS Updater Technical Details](sls_updater.py_technical_details.md).
+For technical details on the SLS update automation, see [SLS Updater Technical Details](sls_updater.py_technical_details.md).
 
-[Go Back to Stage 0.2 - Update SLS](../../Stage_0_Prerequisites.md#update-sls)
+Go back to [Stage 0.2 - Update SLS](../../Stage_0_Prerequisites.md#update-sls).
