@@ -100,9 +100,8 @@ component. Nodes consult BSS for their boot artifacts and boot parameters when n
 
 The Boot Orchestration Service (BOS) is responsible for booting, configuring, and shutting down
 collections of nodes. This is accomplished using BOS components, such as boot orchestration session
-templates and sessions, as well as launching a Boot Orchestration Agent (BOA) that fulfills boot
-requests. BOS uses other services which provide boot artifact configuration (BSS), power control
-(CAPMC), node status (HSM), and configuration (CFS).
+templates and sessions. BOS uses other services which provide boot artifact configuration (BSS),
+power control (CAPMC), node status (HSM), and configuration (CFS).
 
 ## Cabinet Cooling Group
 
