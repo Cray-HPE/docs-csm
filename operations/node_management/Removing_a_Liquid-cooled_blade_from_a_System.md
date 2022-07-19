@@ -215,7 +215,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
     ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
-    Verify that the `hms-discovery` cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `False`).
+1. Verify that the `hms-discovery` cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `False`).
 
     ```bash
     ncn-mw# kubectl get cronjobs -n services hms-discovery
