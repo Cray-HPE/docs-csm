@@ -28,7 +28,7 @@ dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252
     > This requires an API token. See [Retrieve an Authentication Token](../../../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information.
 
     ```bash
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/18c04d13d73c
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/18c04d13d73c
     ```
 
 * (`ncn#`) Check by component name (xname):
@@ -36,7 +36,7 @@ dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252
     > This requires an API token. See [Retrieve an Authentication Token](../../../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information.
 
     ```bash
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=x3000c0s25b0n0
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=x3000c0s25b0n0
     ```
 
 [Back to Index](../README.md)

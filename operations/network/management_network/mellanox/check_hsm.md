@@ -17,7 +17,7 @@ Hardware State Manager has two important parts:
 * (`ncn#`) API call
 
     ```bash
-    curl  -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/sls/v1/hardware | jq
+    curl  -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/hardware | jq
     ```
 
 * (`ncn#`) CLI command
@@ -50,7 +50,7 @@ In either case, the output from SLS should consist of a list of objects that loo
 * (`ncn#`) API call
 
     ```bash
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces | jq
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces | jq
     ```
 
 * (`ncn#`) CLI command
