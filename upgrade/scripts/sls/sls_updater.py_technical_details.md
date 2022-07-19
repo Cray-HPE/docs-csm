@@ -99,4 +99,4 @@ Retention of the unused network is not normal behavior.
 * Generally production systems will NOT want to use this flag unless active toggling between CAN and CHN is required. This is not usual behavior.
 * Test/development systems may want to have all networks for testing purposes and might want to retain both user networks.
 
-[Go Back to the SLS Upgrade page](README.SLS_Upgrade.md)
+Go back to [SLS Upgrade](README.SLS_Upgrade.md).

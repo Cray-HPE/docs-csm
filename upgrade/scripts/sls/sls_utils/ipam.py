@@ -227,7 +227,7 @@ def is_supernet_hacked(network_address, subnet):
     Additional information is found from cray-site-init:
     * The supernet hack is only applied to the HMN, NMN, CMN and MTL networks.
     * A supernet-like hack is applied to the CAN.
-    * The supernet hack is only applied to bootstrap_dhcp, network_hardware, can_metallb_static pool
+    * The supernet hack is only applied to bootstrap_dhcp, network_hardware, can_metallb_static_pool,
      and can_metallb_address_pool subnets
     * default network hardware netmask = /24
     * default bootstrap dhcp netmask = /24
@@ -361,7 +361,7 @@ def prefixlength_from_hosts(num_hosts):
 
 
 def hosts_from_prefixlength(prefixlength):
-    """Calculate the number of hosts supported ia given prefix length.
+    """Calculate the number of hosts supported for a given prefix length.
 
     Args:
         prefixlength (int): CIDR mask to find the number of supported hosts.

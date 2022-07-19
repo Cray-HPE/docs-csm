@@ -1,7 +1,5 @@
 # SHCD HMN Tab/HMN Connections Rules
 
-## Table of contents
-
 1. [Introduction](#introduction)
    1. [Chassis selection](#chassis-selection)
 1. [Compute node](#compute-node)

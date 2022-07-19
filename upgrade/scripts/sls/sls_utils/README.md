@@ -1,4 +1,4 @@
-# Summary
+# `sls_utils` Library
 
 This is a reusable Python library for safely interacting with SLS network data (in JSON format).
 

@@ -128,11 +128,13 @@ wait_on_dev /etc/ceph
 wait_on_dev /var/lib/ceph
 wait_on_dev /var/lib/containers
 umount /etc/ceph /var/lib/ceph /var/lib/containers || true
-vgremove -f -v --select 'vg_name=~metal*'
-if [[ $(vgs -S 'vg_name=~metal*' | wc -l) != 0 ]]; then
-    echo >&2 "Failed to destroy metalvg. It is either in use or in a bad state. The upgrade can not continue."
-    exit 1
-fi
+sleep 10
+lvremove -f --select 'lvname=~CEPH*' || true
+lvremove -f --select 'lvname=~CONTAIN' || true
+vgremove -f --select 'vgname=~metalvg*' || true
+wipefs --all --force /dev/mapper/metalvg*
+echo 'Disabling the bootloader by removing it'
+rm -rf /metal/recovery/*
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
 to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
 if [ "${to_delete}" ]; then
@@ -171,6 +173,8 @@ if [[ "$usb_rc" -eq 0 ]]; then
 fi
 umount -v /var/lib/etcd /var/lib/sdu || true
 
+echo 'Disabling the bootloader by removing it'
+rm -rf /metal/recovery/*
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
 to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
 if [ "${to_delete}" ]; then
@@ -202,6 +206,8 @@ if [[ ${sdu_rc} -eq 0 ]]; then
   umount -v /var/lib/sdu || true
 fi
 
+echo 'Disabling the bootloader by removing it'
+rm -rf /metal/recovery/*
 echo 'Deactivating disk boot entries to force netbooting for rebuilding ... '
 to_delete="$(efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*')"
 if [ "${to_delete}" ]; then

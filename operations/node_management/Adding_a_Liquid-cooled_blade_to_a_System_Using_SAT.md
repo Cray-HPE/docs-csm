@@ -259,7 +259,11 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
           "ID": "0040a68350a4",
           "Description": "Node Maintenance Network",
           "MACAddress": "00:40:a6:83:50:a4",
-          "IPAddress": "10.100.0.105",
+          "IPAddresses": [
+            {
+              "IPAddress": "10.100.0.105"
+            }
+          ],
           "LastUpdate": "2021-08-24T20:24:23.214023Z",
           "ComponentID": "x9000c3s0b0n1",
           "Type": "Node"
@@ -268,7 +272,11 @@ There should be a `cray-cps` pod (the broker), three `cray-cps-etcd` pods and th
           "ID": "0040a683639a",
           "Description": "Node Maintenance Network",
           "MACAddress": "00:40:a6:83:63:9a",
-          "IPAddress": "10.100.0.105",
+          "IPAddresses": [
+            {
+              "IPAddress": "10.100.0.105"
+            }
+          ],
           "LastUpdate": "2021-08-27T19:15:53.697459Z",
           "ComponentID": "x9000c3s0b0n1",
           "Type": "Node"

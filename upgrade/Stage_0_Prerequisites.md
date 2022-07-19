@@ -6,26 +6,19 @@
 > - If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 >   [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-## Abstract (Stage 0)
-
 Stage 0 has several critical procedures which prepares and verify if the environment is ready for upgrade. First, the latest documentation RPM is installed; it includes
 critical install scripts used in the upgrade procedure.
 The management network configuration is also upgraded. Towards the end, prerequisite checks are performed to ensure that the upgrade is ready to proceed. Finally, a
 backup of Workload Manager configuration data and files is created. Once complete, the upgrade proceeds to Stage 1.
 
-### Stages
-
-- [Stage 0 - Prerequisites and Preflight Checks](#stage-0---prerequisites-and-preflight-checks)
-  - [Abstract (Stage 0)](#abstract-stage-0)
-    - [Stages](#stages)
-  - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
-    - [Direct download](#direct-download)
-    - [Manual copy](#manual-copy)
-  - [Stage 0.2 - Upgrade management network](#stage-02---upgrade-management-network)
-    - [Verify that switches have 1.2 configuration in place](#verify-that-switches-have-12-configuration-in-place)
-  - [Stage 0.3 - Prerequisites check](#stage-03---prerequisites-check)
-  - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
-  - [Stage completed](#stage-completed)
+- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+  - [Direct download](#direct-download)
+  - [Manual copy](#manual-copy)
+- [Stage 0.2 - Upgrade management network](#stage-02---upgrade-management-network)
+  - [Verify that switches have 1.2 configuration in place](#verify-that-switches-have-12-configuration-in-place)
+- [Stage 0.3 - Prerequisites check](#stage-03---prerequisites-check)
+- [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+- [Stage completed](#stage-completed)
 
 ## Stage 0.1 - Prepare assets
 
@@ -139,7 +132,7 @@ backup of Workload Manager configuration data and files is created. Once complet
      [Management Network 1.2 to 1.3](../operations/network/management_network/1.2_to_1.3_upgrade.md).
    - If the banner does NOT contain text like the above, then contact support in order to get `CSM 1.2 switch configuration` applied to the system.
    - See the [Management Network User Guide](../operations/network/management_network/README.md) for more information on the management network.
-   - With CSM >=1.2 switch configurations in place, users will only be able to SSH into the switches over the HMN and CMN.
+   - With CSM >= 1.2 switch configurations in place, users will only be able to SSH into the switches over the HMN and CMN.
 
 ## Stage 0.3 - Prerequisites check
 
