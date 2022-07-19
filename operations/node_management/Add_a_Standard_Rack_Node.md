@@ -20,10 +20,10 @@ For this procedure, a new object must be created in the SLS and modifications wi
 1. (`ncn#`) Retrieve an authentication token.
 
     ```bash
-    export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-            -d client_id=admin-client \
-            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                -d client_id=admin-client \
+                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
 1. Create a new node object in SLS.
@@ -107,7 +107,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
         }' https://api-gw-service-nmn.local/apis/sls/v1/hardware | jq
     ```
 
-### Install the Node Hardware in the Rack
+### Install the node hardware in the rack
 
 1. Install the new node hardware in the rack and connect power cables, HSN cables, and management network cables \(if it has not already been installed\).
 
@@ -115,7 +115,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     Refer to the OEM documentation for the node for information about the hardware installation and cabling.
 
-### Power on and Boot Compute Node
+### Power on and boot compute node
 
 1. Power on the node to boot the BMC.
 
@@ -123,7 +123,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     The `hms-discovery` cronjob will attempt to correctly identity the new node by comparing node and BMC MAC addresses from the HSM Ethernet interfaces table with the connection information present in SLS.
 
-1. (`ncn#`) After roughly 5-10 minutes, the node's BMC should be discovered by the HSM, and the node's BMC can be resolved by using its xname in DNS.
+1. (`ncn#`) After roughly 5-10 minutes, the node's BMC should be discovered by the HSM, and the node's BMC can be resolved by using its component name (xname) in DNS.
 
     ```bash
     ping x3000c0s27b0
@@ -174,7 +174,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
     State = "Off"
     ```
 
-    To verify the node BMC has been discovered by the HSM.
+1. (`ncn#`) Verify that the node BMC has been discovered by the HSM.
 
     ```bash
     cray hsm inventory redfishEndpoints describe x3000c0s27b0 --format json
@@ -209,7 +209,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 1. (`ncn#`) Enable the nodes in the HSM database.
 
-     In this example, the nodes are `x3000c0s27b1n0-n3`.
+     In this example, the nodes are `x3000c0s27b1n0` - `x3000c0s27b1n3`.
 
     ```bash
     cray hsm state components bulkEnabled update --enabled true \

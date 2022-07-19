@@ -633,6 +633,9 @@ Init
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
 
+- operations/network/management_network/1.2_to_1.3_upgrade.md
+VRFs
+
 - operations/network/management_network/upgrade.md
 Preconfig
 preconfig
