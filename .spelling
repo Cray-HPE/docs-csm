@@ -615,7 +615,15 @@ Init
 # To allow Site Init
 Init
 
+<<<<<<< HEAD
 - install/prepare_configuration_payload.md
+=======
+- install/create_cabinets_yaml.md
+# To allow Site Init
+Init
+
+- install/pre-installation.md
+>>>>>>> 4e43be16dc5 (CASMHMS-5568)
 # To allow Site Init
 Init
 
