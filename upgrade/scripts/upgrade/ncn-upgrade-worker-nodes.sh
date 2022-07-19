@@ -53,6 +53,8 @@ export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
 
 response=$(curl -sk -XPOST -H "Authorization: Bearer ${TOKEN}" -H 'Content-Type: application/json' -d @data.json "https://api-gw-service-nmn.local/apis/nls/v1/ncns/rebuild")
 
+rm -rf data.json
+
 if echo "${response}" | grep "message"; then
     echo
     echo "${response}" | jq -r '.message'
