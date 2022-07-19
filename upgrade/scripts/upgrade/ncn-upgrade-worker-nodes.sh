@@ -34,10 +34,15 @@ jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${
 
 ${basedir}/../../../workflows/scripts/upload-worker-rebuild-templates.sh
 
+if [[ -z "${SW_PASSWORD}" ]]; then
+  read -r -s -p "Switch password:" SW_PASSWORD
+fi
+
 cat << EOF > data.json
 {
   "dryRun": false,
-  "hosts": ${jsonArray}
+  "hosts": ${jsonArray},
+  "switchPassword": "${SW_PASSWORD}"
 }
 EOF
 # shellcheck disable=SC2155,SC2046
@@ -47,6 +52,8 @@ export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
 response=$(curl -sk -XPOST -H "Authorization: Bearer ${TOKEN}" -H 'Content-Type: application/json' -d @data.json "https://api-gw-service-nmn.local/apis/nls/v1/ncns/rebuild")
+
+rm -rf data.json
 
 if echo "${response}" | grep "message"; then
     echo
