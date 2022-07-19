@@ -4,7 +4,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
 ## Perquisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 - Knowledge of whether Data Virtualization Service (DVS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 
@@ -22,9 +22,14 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
 ### Step 1: Prepare the source system blade for removal
 
-1. Use the workload manager (WLM) to drain running jobs from the affected nodes on the blade. Refer to the vendor documentation for the WLM for more information.
+1. Use the workload manager (WLM) to drain running jobs from the affected nodes on the blade.
 
-1. Use Boot Orchestration Services (BOS) to shut down the affected nodes in the source blade (in this example, `x9000c3s0`). Specify the appropriate component name (xname) and BOS template for the node type in the following command.
+    Refer to the vendor documentation for the WLM for more information.
+
+1. Use Boot Orchestration Services (BOS) to shut down the affected nodes in the source blade.
+
+    In this example, `x9000c3s0` is the source blade. Specify the appropriate component name (xname) and BOS
+    template for the node type in the following command.
 
     ```bash
     ncn# BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
@@ -42,16 +47,16 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
 ### Step 3: Clear the node controller settings
 
-1. Remove the system specific settings from each node controller on the blade.
+1. Remove the system-specific settings from each node controller on the blade.
 
    ```bash
    ncn# curl -k -u root:PASSWORD -X POST -H \
-     'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
-     https://x9000c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
+          'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
+          https://x9000c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
 
    ncn# curl -k -u root:PASSWORD -X POST -H \
-     'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
-     https://x9000c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
+          'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
+          https://x9000c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
    ```
 
    Use Ctrl-C to return to the prompt if command does not return.
@@ -61,26 +66,35 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 1. Suspend the `hms-discovery` cron job.
 
     ```bash
-    ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
+    ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
     ```
 
-    1. Verify that the `hms-discovery` cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `True`).
+1. Verify that the `hms-discovery` cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `True`).
 
-        ```bash
-        ncn# kubectl get cronjobs -n services hms-discovery
-        NAME             SCHEDULE        SUSPEND     ACTIVE   LAST   SCHEDULE  AGE
-        hms-discovery    */3 * * * *     True         0       117s             15d
-        ```
+    ```bash
+    ncn-mw# kubectl get cronjobs -n services hms-discovery
+    ```
 
-    1. Power off the chassis slot. This examples powers off slot 0, chassis 3, in cabinet 9000.
+    Example output:
 
-        ```bash
-        ncn# cray capmc xname_off create --xnames x9000c3s0 --recursive true
-        ```
+    ```text
+    NAME             SCHEDULE        SUSPEND     ACTIVE   LAST   SCHEDULE  AGE
+    hms-discovery    */3 * * * *     True         0       117s             15d
+    ```
+
+1. Power off the chassis slot.
+
+    This examples powers off slot 0, chassis 3, in cabinet 9000.
+
+    ```bash
+    ncn# cray capmc xname_off create --xnames x9000c3s0 --recursive true
+    ```
 
 ### Step 5: Disable the chassis slot
 
-1. Disable the chassis slot. Disabling the slot prevents `hms-discovery` from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000.
+1. Disable the chassis slot.
+
+    Disabling the slot prevents `hms-discovery` from automatically powering on the slot. This example disables slot 0, chassis 3, in cabinet 9000.
 
     ```bash
     ncn# cray hsm state components enabled update --enabled false x9000c3s0
@@ -93,11 +107,17 @@ be maintained in the HSM when the blade is swapped and discovered.
 
 The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be deleted* from the HSM.
 
-1. **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** Query HSM to determine the `ComponentID`, MAC, and IP addresses for each node in the blade.
-   The prerequisites show an example of how to gather HSM values and store them to a file.
+1. **Skip this step if DVS is operating over the HSN, otherwise proceed with this step.** Query HSM to determine the `ComponentID`, MAC addresses, and IP addresses for each node in the blade.
+
+    The prerequisites show an example of how to gather HSM values and store them to a file.
 
     ```bash
     ncn# cray hsm inventory ethernetInterfaces list --component-id x9000c3s0b0n0 --format json
+    ```
+
+    Example output:
+
+    ```json
     [
         {
         "ID": "0040a6836339",
@@ -115,77 +135,95 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
     ]
     ```
 
-    1. Record the following values for the blade:
+1. Record the following values for the blade:
 
-        ```bash
-        `ComponentID: "x9000c3s0b0n0"`
-        `MACAddress: "00:40:a6:83:63:39"`
-        `IPAddress: "10.100.0.10"`
-        ```
+    ```text
+    `ComponentID: "x9000c3s0b0n0"`
+    `MACAddress: "00:40:a6:83:63:39"`
+    `IPAddress: "10.100.0.10"`
+    ```
 
-    1. Repeat the command to record the ComponentID, MAC, and IP addresses for the `Node Maintenance Network` the other nodes in the blade.
+1. Repeat the command to record the `ComponentID`, MAC addresses, and IP addresses for the `Node Maintenance Network` for the other nodes in the blade.
 
 ### Step 7: Cleanup Hardware State Manager
 
 1. Set an environment variable that corresponds to the chassis slot of the blade.
 
     ```bash
-    ncn# export CHASSIS_SLOT=x9000c3s0
+    ncn# CHASSIS_SLOT=x9000c3s0
     ```
 
 1. Delete the Redfish endpoints for each node.
 
     ```bash
-    ncn# for xname in $(cray hsm inventory redfishEndpoints list --format json | jq -r --arg CHASSIS_SLOT $CHASSIS_SLOT '.RedfishEndpoints[] | select(.ID | startswith($CHASSIS_SLOT)) | .ID'); do
-        echo "Removing $xname from HSM Inventory RedfishEndpoints"
-        cray hsm inventory redfishEndpoints delete "$xname"
-    done
+    ncn# for xname in $(cray hsm inventory redfishEndpoints list --format json |
+                          jq -r --arg CHASSIS_SLOT "${CHASSIS_SLOT}" \
+                            '.RedfishEndpoints[] | select(.ID | startswith($CHASSIS_SLOT)) | .ID')
+         do
+             echo "Removing $xname from HSM Inventory RedfishEndpoints"
+             cray hsm inventory redfishEndpoints delete "$xname"
+         done
     ```
 
 1. Remove entries from the state components.
 
     ```bash
-    for xname in $(cray hsm state components list --class Mountain --format json |  jq -r --arg CHASSIS_SLOT $CHASSIS_SLOT '.Components[] | select((.ID | startswith($CHASSIS_SLOT)) and (.ID != $CHASSIS_SLOT)) | .ID' ); do
-        echo "Removing $xname from HSM State components"
-        cray hsm state components delete "$xname"
-    done
+    ncn# for xname in $(cray hsm state components list --class Mountain --format json |
+                          jq -r --arg CHASSIS_SLOT "${CHASSIS_SLOT}" \
+                            '.Components[] | select((.ID | startswith($CHASSIS_SLOT)) and (.ID != $CHASSIS_SLOT)) | .ID' )
+         do
+             echo "Removing $xname from HSM State components"
+             cray hsm state components delete "$xname"
+         done
     ```
 
-1. Delete the NMN MAC and IP addresses each node in the blade from the HSM. *Do not delete the MAC and IP addresses for the node BMC*.
+1. Delete the NMN MAC and IP addresses each node in the blade from the HSM.
+
+    *Do not delete the MAC and IP addresses for the node BMC*.
 
     ```bash
-    for mac in $(cray hsm inventory ethernetInterfaces list --type Node --format json | jq -r --arg CHASSIS_SLOT $CHASSIS_SLOT '.[] | select(.ComponentID | startswith($CHASSIS_SLOT)) | .ID'); do
-        echo "Removing $mac from HSM Inventory EthernetInterfaces"
-        cray hsm inventory ethernetInterfaces delete $mac
-    done
+    ncn# for mac in $(cray hsm inventory ethernetInterfaces list --type Node --format json |
+                        jq -r --arg CHASSIS_SLOT "${CHASSIS_SLOT}" \
+                          '.[] | select(.ComponentID | startswith($CHASSIS_SLOT)) | .ID')
+         do
+             echo "Removing $mac from HSM Inventory EthernetInterfaces"
+             cray hsm inventory ethernetInterfaces delete "$mac"
+         done
     ```
 
-1. Restart KEA.
+1. Restart Kea.
 
     ```bash
-    ncn# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
+    ncn-mw# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
     ```
 
 ### Step 8: Remove the blade
 
 1. Remove the blade from the source location.
-    - Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades. These procedures can be found on the [HPE Support Center](https://internal.support.hpe.com/).
+
+    - Review the *Remove a Compute Blade Using the Lift* procedure in *HPE Cray EX Hardware Replacement Procedures H-6173* for detailed instructions for replacing liquid-cooled blades. These procedures can be found on the [HPE Support Center](https://support.hpe.com/).
 
 1. Drain the coolant from the blade and fill with fresh coolant to minimize cross-contamination of cooling systems.
-    - Review *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, review procedures in the *HPE Cray EX Hand Pump User Guide H-6200*. These procedures can be found on the [HPE Support Center](https://internal.support.hpe.com/).
+
+    - Review *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, then review procedures in the *HPE Cray EX Hand Pump User Guide H-6200*. These procedures can be found on the [HPE Support Center](https://support.hpe.com/).
 
 1. Install the blade from the source system in a storage rack or leave it on the cart.
 
 1. Un-suspend the `hms-discovery` cron job if no more liquid-cooled blades are planned to be removed from the system.
 
     ```bash
-    ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+    ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
-    Verify that the hms-discovery cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `False`).
+    Verify that the `hms-discovery` cron job has stopped (`ACTIVE` = `0` and `SUSPEND` = `False`).
 
     ```bash
-    ncn# kubectl get cronjobs -n services hms-discovery
+    ncn-mw# kubectl get cronjobs -n services hms-discovery
+    ```
+
+    Example output:
+
+    ```text
     NAME            SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
     hms-discovery   */3 * * * *   False     1        46s             15d
     ```
