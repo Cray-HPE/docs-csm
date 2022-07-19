@@ -218,7 +218,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. (`pit#`) Get the IP address.
 
         ```bash
-        ssh ncn-m002 ip -4 a show bond0.can0 | grep inet | awk '{print $2}' | cut -d / -f1
+        ssh ncn-m002 ip -4 a show bond0.cmn0 | grep inet | awk '{print $2}' | cut -d / -f1
         ```
 
         Expected output will look similar to the following (exact values may differ):
@@ -231,7 +231,6 @@ The steps in this section load hand-off data before a later procedure reboots th
 
         ```bash
         ssh root@10.102.11.13
-        ncn-m002#
         ```
 
         > Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN.
@@ -265,7 +264,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     ```
 
     ```bash
-    export IPMI_PASSWORD=changeme
+    export IPMI_PASSWORD
     ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt chassis power status
     ipmitool -I lanplus -U $USERNAME -E -H ${SYSTEM_NAME}-ncn-m001-mgmt sol activate
     ```
