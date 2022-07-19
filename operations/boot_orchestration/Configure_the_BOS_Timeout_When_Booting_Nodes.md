@@ -1,16 +1,18 @@
 # Configure the BOS Timeout When Booting Compute Nodes
 
+> **`NOTE`** This section is for BOS V1 only.  For similar functionality in BOS V2 see the BOS V2 [Options](Options.md).
+
 Manually update the boa-job-template ConfigMap to tune the timeout and sleep intervals for the Boot Orchestration Agent \(BOA\). Correcting the timeout value is a good troubleshooting option for when BOS sessions hang waiting for nodes to be in a Ready state.
 
 If the BOS timeout occurs when booting compute nodes, the system will be unable to boot via BOS.
 
-### Prerequisites
+## Prerequisites
 
 A Boot Orchestration Service \(BOS\) session was run and compute nodes are failing to move to a Ready state.
 
-### Procedure
+## Procedure
 
-1.  Edit the boa-job-template ConfigMap to add the new timeout values.
+1. Edit the boa-job-template ConfigMap to add the new timeout values.
 
     ```bash
     kubectl edit configmap -n services boa-job-template
@@ -18,11 +20,11 @@ A Boot Orchestration Service \(BOS\) session was run and compute nodes are faili
 
     Node boots can be set to time out faster by adding the following environment variables to the boa-job-template. These variables do not appear in the ConfigMap by default.
 
-    -   **NODE\_STATE\_CHECK\_NUMBER\_OF\_RETRIES**
+    - **NODE\_STATE\_CHECK\_NUMBER\_OF\_RETRIES**
 
         BOA will check on the expected state of nodes this many times before giving up. This number can be set to a very low number to make BOA time-out quickly.
 
-    -   **NODE\_STATE\_CHECK\_SLEEP\_INTERVAL**
+    - **NODE\_STATE\_CHECK\_SLEEP\_INTERVAL**
 
         This is how long BOA will sleep between checks. This number can be set to a very low number to make BOA time-out quickly.
 
@@ -84,7 +86,7 @@ A Boot Orchestration Service \(BOS\) session was run and compute nodes are faili
          value: "360"**
     ```
 
-2.  Restart BOA.
+2. Restart BOA.
 
     Restarting BOA will allow the new timeout values to take effect.
 
@@ -92,4 +94,3 @@ A Boot Orchestration Service \(BOS\) session was run and compute nodes are faili
     kubectl scale deployment -n services cray-bos --replicas=0
     kubectl scale deployment -n services cray-bos --replicas=1
     ```
-
