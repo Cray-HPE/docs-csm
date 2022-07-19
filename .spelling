@@ -615,6 +615,10 @@ Init
 # To allow Site Init
 Init
 
+- install/create_cabinets_yaml.md
+# To allow Site Init
+Init
+
 - install/prepare_configuration_payload.md
 # To allow Site Init
 Init
