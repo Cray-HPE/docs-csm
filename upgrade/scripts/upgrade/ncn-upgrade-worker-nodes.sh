@@ -34,10 +34,15 @@ jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${
 
 ${basedir}/../../../workflows/scripts/upload-worker-rebuild-templates.sh
 
+if [[ -z "${SW_PASSWORD}" ]]; then
+  read -r -s -p "Switch password:" SW_PASSWORD
+fi
+
 cat << EOF > data.json
 {
   "dryRun": false,
-  "hosts": ${jsonArray}
+  "hosts": ${jsonArray},
+  "switchPassword": "${SW_PASSWORD}"
 }
 EOF
 # shellcheck disable=SC2155,SC2046

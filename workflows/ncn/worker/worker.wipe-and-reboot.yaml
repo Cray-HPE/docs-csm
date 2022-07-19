@@ -79,6 +79,7 @@ tasks:
               efibootmgr # print after
               echo 'Setting next boot to PXE ... '
               ipmitool chassis bootdev pxe options=efiboot
+              rm -rf /metal/recovery/*
             EOF
             
             chmod +x set-next-boot-to-pxe.sh
