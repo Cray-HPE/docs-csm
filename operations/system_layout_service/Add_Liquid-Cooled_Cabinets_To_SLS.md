@@ -29,7 +29,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
 
     ```bash
     cray sls dumpstate list --format json > sls_dump.json
-    cp sls_dump.json sls_dump.original.json
+    cp -v sls_dump.json sls_dump.original.json
     ```
 
 1. **For each** new liquid-cooled cabinet being added to the system, collect the following information about each cabinet:
@@ -277,10 +277,10 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     Get an API Token:
 
     ```bash
-    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                          -d client_id=admin-client \
-                          -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                          https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                -d client_id=admin-client \
+                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
     Perform the load state operation:
