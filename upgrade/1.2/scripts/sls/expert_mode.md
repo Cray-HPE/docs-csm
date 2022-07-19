@@ -74,7 +74,7 @@ To allow some semblance of control over the need to preserve one or more IP addr
   from the site. **NOTE:** Because of this, `--preserve-existing-subnet-for-cmn external-dns` is the most frequent use of this command line flag.
 * `ncns`: During the migration of CAN to CMN, all system switches need to be added to a new `network_hardware` subnet inside the CMN. Without guidance, NCN IP addresses for
 the existing CAN (as it is migrated to CMN) will shift to allow room for the new `network_hardware` subnet. Using `--preserve-existing-subnet-for-cmn ncns` will prevent changes to CMN
-NCN IP addresses (managers, workers and storage only) during the upgrade process.
+NCN IP addresses (managers, workers, and storage only) during the upgrade process.
 
 Note that `external-dns` preservation is mutually exclusive from `ncns`. This is the last "easy button" before full expert mode is required.
 
