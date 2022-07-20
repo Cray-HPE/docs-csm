@@ -40,11 +40,17 @@ kubectl -n kube-system apply -f /tmp/kubeadm-config.yaml
 
 export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
+
+# get version of new k8s
+# note: this is running on m002 which should have newer version already
+#       so we can query "next" version here
+k8sVersionUpgradeTo=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion')
+
 for master in $masters
 do
   echo "Upgrading kube-system pods for $master:"
   echo ""
-  pdsh -b -S -w $master 'kubeadm upgrade apply v1.20.13 -y'
+  pdsh -b -S -w $master "kubeadm upgrade apply ${k8sVersionUpgradeTo} -y"
   rc=$?
   if [ "$rc" -ne 0 ]; then
     echo ""
