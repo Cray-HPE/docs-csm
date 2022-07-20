@@ -88,7 +88,7 @@ Determine if the master node being removed is the first master node.
    export MAX_PODS_PER_NODE=$(craysys metadata get kubernetes-max-pods-per-node)
    export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
    export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
-   envsubst < /srv/cray/resources/common/kubeadm.yaml > /etc/cray/kubernetes/kubeadm.yaml
+   envsubst < /srv/cray/resources/common/kubeadm.cfg > /etc/cray/kubernetes/kubeadm.yaml
    kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
    echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" > /etc/cray/kubernetes/join-command-control-plane
    mkdir -p /srv/cray/scripts/kubernetes
