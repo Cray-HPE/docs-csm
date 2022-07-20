@@ -75,6 +75,11 @@ The following steps are structured to be executed on one node at a time. However
 
 ## Fix broken configuration
 
+Clock sync is performed in increments vs. all at once, so it may take some time for the clocks to sync.
+Before executing any commands, give the nodes some time to update. Sync typically happens within a few seconds, but on
+occasion could take up to 30+ minutes. Periodically running `chronyc tracking` will show clock statistics and can be
+used to determine if the clocks are gradually syncing.
+
 On each affected NCN run the following:
 
 1. Set a token as described in [Identify Nodes and Update Metadata](Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md).
