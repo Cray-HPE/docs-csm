@@ -429,8 +429,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 1. (`pit#`) Get the artifact versions.
 
    ```bash
-   kubernetes_version="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
-   ceph_version="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
    ```
 
 1. (`pit#`) Copy the NCN images from the expanded tarball.
@@ -439,8 +439,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    ```bash
    mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
-   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${kubernetes_version}"
-   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${ceph_version}"
+   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${KUBERNETES_VERSION}"
+   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${CEPH_VERSION}"
    ```
 
 1. (`pit#`) Generate SSH keys and invoke `ncn-image-modification.sh`:
@@ -464,8 +464,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        ```bash
        "${PITDATA}/csm-${CSM_RELEASE}/ncn-image-modification.sh" -p \
           -d /root/.ssh \
-          -k "/var/www/ephemeral/data/k8s/${kubernetes_version}/kubernetes-${kubernetes_version}.squashfs" \
-          -s "/var/www/ephemeral/data/ceph/${kubernetes_version}/storage-ceph-${ceph_version}.squashfs"
+          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
        ```
 
 1. (`pit#`) Log the currently installed PIT packages.
@@ -621,7 +621,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
 1. (`pit#`) Setup boot links to the artifacts extracted from the CSM tarball.
 
-   > **NOTES:**
+   > ***NOTES***
    >
    > - This will also set all the BMCs to DHCP.
    > - Changing into the `$HOME` directory ensures the proper operation of the script.
