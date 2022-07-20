@@ -124,10 +124,13 @@ copies the `root` user password from the PIT node. It does not change the timezo
 
 ```bash
 export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
+KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   
 ${CSM_PATH}/ncn-image-modification.sh -p \
                                       -t rsa \
-                                      -k "${PITDATA}"/data/k8s/kubernetes-*.squashfs \
-                                      -s "${PITDATA}"/data/ceph/storage-ceph-*.squashfs
+                                      -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+                                      -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
 ```
 
 ### Example 2: Provide keys, prompt for password, change timezone
@@ -139,8 +142,8 @@ administrator for the `root` user password during execution. It changes the time
 ${CSM_PATH}/ncn-image-modification.sh -p \
                                       -d /my/pre-existing/keys \
                                       -z America/Chicago \
-                                      -k "${PITDATA}"/data/k8s/kubernetes-*.squashfs \
-                                      -s "${PITDATA}"/data/ceph/storage-ceph-*.squashfs
+                                      -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+                                      -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
 ```
 
 ### Example 3: New keys, copy PIT password, keep UTC, no prompting
@@ -154,8 +157,8 @@ export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
 ${CSM_PATH}/ncn-image-modification.sh -p \
                                       -t rsa \
                                       -N "" \
-                                      -k "${PITDATA}"/data/k8s/kubernetes-*.squashfs \
-                                      -s "${PITDATA}"/data/ceph/storage-ceph-*.squashfs
+                                      -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+                                      -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
 ```
 
 ## Cleanup

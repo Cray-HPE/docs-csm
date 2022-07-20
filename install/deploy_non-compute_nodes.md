@@ -124,28 +124,7 @@ After the operating system boots on each node, there are some configuration acti
 console or the console log for certain nodes can help to understand what happens and when. When the process is complete
 for all nodes, the Ceph storage will have been initialized and the Kubernetes cluster will be created ready for a workload.
 
-1. (`pit#`) Set the default `root` password and SSH keys and optionally change the timezone.
-
-   > **NOTE:** The management nodes images do not contain a default `root` password or SSH keys.
-   > If this step is skipped and the nodes are booted, then they will be inaccessible via console or SSH.
-   > In that case, the nodes would have to be rebooted with the secure images built from this step, have their disks wiped,
-   > and then redeployed.
-
-   It is **required** to set the default `root` password and SSH keys in the images used to boot the management nodes.
-   Follow the NCN image customization steps in [Change NCN Image Root Password and SSH Keys on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md)
-
-1. (`pit#`) Create boot directories for any NCN in DNS.
-
-    > **NOTE:** This script also sets the BMCs to DHCP. This script only sets up boot directories
-    > for nodes that appear in `/var/lib/misc/dnsmasq.leases`. Since nodes may take a few seconds
-    > to DHCP after switching from their old, static IP addresses, it is advised to run this twice when
-    > reinstalling a system.
-
-    ```bash
-    /root/bin/set-sqfs-links.sh
-    ```
-
-1. (`pit#`) Customize boot scripts for any out-of-baseline NCNs.
+1. (`pit#`) Customize boot scripts for any out-of-baseline NCNs if needed (see below).
 
     - See the [Plan of Record](../background/ncn_plan_of_record.md) and compare against the server's hardware.
     - If modifications are needed for the PCIe hardware, then see [Customize PCIe Hardware](../operations/node_management/Customize_PCIe_Hardware.md).
