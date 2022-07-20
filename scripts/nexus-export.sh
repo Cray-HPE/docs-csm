@@ -25,6 +25,21 @@
 
 set -exo pipefail
 
+usedRGW=$(ceph df -f json | jq '.pools[] | select(.name | contains("rgw.buckets.data")) | .stats.bytes_used' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
+availRGW=$(ceph df -f json | jq '.pools[] | select(.name | contains("rgw.buckets.data")) | .stats.max_avail' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
+usedNexus=$(kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{printf "%.0f", ($3/1024/1024)}')
+availNexus=$(kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{printf "%.0f", ($4/1024/1024)}')
+echo  "Gibibytes used in rgw.buckets.data: $usedRGW"
+echo  "Gibibytes available in rgw.buckets.data: $availRGW"
+echo  "Gibibytes used in nexus-data: $usedNexus"
+echo  "Gibibytes available in nexus-data: $availNexus"
+echo $usedNexus | awk '{print "Space to be used from backup: ", ($1 * 3)}'
+
+if (( $usedNexus*3 > $availRGW-$usedRGW )); then
+  echo "Not Enough Space on the Cluster for the Export."
+  exit 1
+fi
+
 if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phase}') ]]; then
 cat << EOF | kubectl -n nexus create -f -
 apiVersion: v1
