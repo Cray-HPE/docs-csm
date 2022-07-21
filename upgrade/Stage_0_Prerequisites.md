@@ -205,6 +205,10 @@ backup of Workload Manager configuration data and files is created. Once complet
    git push
    ```
 
+1. Check available space in Nexus, and free up space if needed.
+
+   See [Nexus Space Cleanup](../operations/package_repository_management/Nexus_Space_Cleanup.md).
+
 ## Stage 0.4 - Backup workload manager data
 
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
