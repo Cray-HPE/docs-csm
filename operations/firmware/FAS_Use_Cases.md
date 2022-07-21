@@ -968,6 +968,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 Correct an issue where the model of the liquid-cooled compute node BIOS is the incorrect name. The name has changed from `WNC-ROME` to `HPE CRAY EX425` or `HPE CRAY EX425 (ROME)`.
 
 Prerequisites:
+
 * The system is running HPE Cray EX release v1.4 or higher.
 * A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#cn-bios).
   * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
