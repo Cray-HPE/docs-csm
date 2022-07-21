@@ -295,6 +295,7 @@ The following is a high-level overview of the add NCN workflow:
 1. [Add Switch Configuration](Add_Remove_Replace_NCNs/Add_Switch_Config.md).
 1. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM.
 1. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS.
+1. [Update NCN BIOS TPM State](Add_Remove_Replace_NCNs/Update_NCN_BIOS_TPM_State.md)
 1. [Boot NCN and Configure](Add_Remove_Replace_NCNs/Boot_NCN.md).
 1. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md).
 1. [Validate NCN](Add_Remove_Replace_NCNs/Validate_NCN.md).
