@@ -186,6 +186,7 @@ if $force && [ "${numOfUnsucceededWorkflows}" -eq 1 ]; then
     workflow=$(echo "${unsucceededWorkflows[0]}" | grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*')
     echo "Delete workflow: ${workflow}"
     deleteRebuildWorkflow "${workflow}"
+    numOfUnsucceededWorkflows=0
 fi
 
 # dealing with RETRY
@@ -218,11 +219,12 @@ while true; do
         fi
 
         if [[ "${phase}" == "Succeeded" ]]; then
+            ok_report
             break;
         fi
 
         if [[ "${phase}" == "Failed" ]]; then
-            # TODO: get los/troubleshooting
+            exit 1
             break;
         fi
 
@@ -236,6 +238,7 @@ while true; do
         echo "  ${succeededSteps}"
         printf "%s\n" "${phase}:"
         echo "  ${runningSteps}"
+        echo "============================="
         sleep 10
     fi
 done
