@@ -2,21 +2,21 @@
 
 Non-compute nodes can boot from two sources:
 
-- Network/PXE
-- Disk
+* Network/PXE
+* Disk
 
 ## Topics
 
-- [Determine the current boot order](#determine-the-current-boot-order)
-- [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
-- [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
-- [Set BMCs to DHCP](#set-bmcs-to-dhcp)
-- [Boot order overview](#boot-order-overview)
-- [Setting boot order](#setting-boot-order)
-- [Trimming boot order](#trimming-boot-order)
-- [Example boot orders](#example-boot-orders)
-- [Reverting changes](#reverting-changes)
-- [Locating USB device](#locating-usb-device)
+* [Determine the current boot order](#determine-the-current-boot-order)
+* [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
+* [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
+* [Set BMCs to DHCP](#set-bmcs-to-dhcp)
+* [Boot order overview](#boot-order-overview)
+* [Setting boot order](#setting-boot-order)
+* [Trimming boot order](#trimming-boot-order)
+* [Example boot orders](#example-boot-orders)
+* [Reverting changes](#reverting-changes)
+* [Locating USB device](#locating-usb-device)
 
 ## Determine the current boot order
 
@@ -31,9 +31,9 @@ After the CSM install is complete, it is usually not necessary to change the boo
 
 It may be desirable to change the boot order under these circumstances:
 
-- Testing disk-backed booting
-- Booting from a USB or remote ISO
-- Testing or deploying other customizations
+* Testing disk-backed booting
+* Booting from a USB or remote ISO
+* Testing or deploying other customizations
 
 ## Determine if NCNs booted via disk or PXE
 
@@ -116,8 +116,8 @@ done
 
 ## Boot order overview
 
-- `ipmitool` can set and edit boot order; it works better for some vendors based on their BMC implementation
-- `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
+* `ipmitool` can set and edit boot order; it works better for some vendors based on their BMC implementation
+* `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
 > **NOTE:** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
 > `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-image-build/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).
@@ -134,19 +134,19 @@ The commands are the same for all hardware vendors, except where noted.
 
     Follow the section corresponding to the hardware manufacturer of the system:
 
-    - Gigabyte Technology
+    * Gigabyte Technology
 
         ```bash
         efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
         ```
 
-    - Hewlett-Packard Enterprise
+    * Hewlett-Packard Enterprise
 
         ```bash
         efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
         ```
 
-    - Intel Corporation
+    * Intel Corporation
 
         ```bash
         efibootmgr | grep -i 'ipv4' | grep -iv 'baseboard' | tee /tmp/bbs1
@@ -185,14 +185,14 @@ In this case, the instructions are the same regardless of node type (management,
 
 1. (`ncn#` or `pit#`) Make lists of the unwanted boot entries.
 
-    - Gigabyte Technology
+    * Gigabyte Technology
 
         ```bash
         efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
         efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
         ```
 
-    - Hewlett-Packard Enterprise
+    * Hewlett-Packard Enterprise
 
         > **NOTE:** This does not trim HSN Mellanox cards; these should disable their OpROMs using [the high speed network snippets](../operations/node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md#high-speed-network).
 
@@ -201,7 +201,7 @@ In this case, the instructions are the same regardless of node type (management,
         efibootmgr | grep -iP '(sata|nvme)' | tee /tmp/rbbs2
         ```
 
-    - Intel Corporation
+    * Intel Corporation
 
         ```bash
         efibootmgr | grep -vi 'ipv4' | grep -iP '(sata|nvme|uefi)' | tee /tmp/rbbs1
@@ -222,7 +222,7 @@ This is the end of the `Trimming boot order` procedure.
 
 Each section shows example output of the `efibootmgr` command.
 
-- Master node (with onboard NICs enabled)
+* Master node (with onboard NICs enabled)
 
     ```text
     BootCurrent: 0009
@@ -241,7 +241,7 @@ Each section shows example output of the `efibootmgr` command.
     Boot0013* UEFI: PNY USB 3.1 FD PMAP, Partition 2
     ```
 
-- Storage node (with onboard NICs enabled)
+* Storage node (with onboard NICs enabled)
 
     ```text
     BootNext: 0005
@@ -257,7 +257,7 @@ Each section shows example output of the `efibootmgr` command.
     Boot000B* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
     ```
 
-- Worker node (with onboard NICs enabled)
+* Worker node (with onboard NICs enabled)
 
     ```text
     BootNext: 0005

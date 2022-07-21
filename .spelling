@@ -304,7 +304,11 @@ loopback
 loopbacks
 lowercase
 lowercased
+LAN
+LANs
 Luks
+LVM
+LVMs
 macOS
 maneuver
 maneuvers
@@ -598,8 +602,11 @@ Zypper
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
 
-- background/ncn_mounts_and_file_systems.md
-Inode
+- background/README.md
+initramFS
+initrd
+overlayFS
+squashFS
 
 - glossary.md
 # To allow 802.3cd/bs
