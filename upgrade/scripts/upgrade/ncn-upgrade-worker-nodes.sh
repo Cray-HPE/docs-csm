@@ -205,7 +205,11 @@ if [ "${numOfUnsucceededWorkflows}" -eq 0 ]; then
 fi
 
 if [[ -z "${workflow}" ]]; then
+    echo
     echo "No workflow to pull, something is wrong"
+else 
+    echo
+    echo "Poll status of: ${workflow}"
 fi
 
 sleep 20
