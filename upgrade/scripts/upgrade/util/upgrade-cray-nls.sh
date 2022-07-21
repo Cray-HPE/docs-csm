@@ -46,9 +46,9 @@ function patchKeycloak() {
     argoUrl=$(kubectl get VirtualService/cray-argo -n argo -o json | jq -r '.spec.hosts[0]')
 
     TOKEN=$(curl -ks -d grant_type=password \
-    -d client_id="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.client-id}' -n services | base64 -d)" \
-    -d username="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.user}' -n services | base64 -d)" \
-    -d password="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.password}' -n services | base64 -d)" \
+    --data-urlencode client_id="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.client-id}' -n services | base64 -d)" \
+    --data-urlencode username="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.user}' -n services | base64 -d)" \
+    --data-urlencode password="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.password}' -n services | base64 -d)" \
     https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token | jq -r '.access_token')
     #shellcheck disable=SC2126
     foundArgoInRedirectUris=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients" | jq '.[] | select(.clientId=="oauth2-proxy-customer-management") | .redirectUris' | grep "https://argo.cmn" | wc -l)
