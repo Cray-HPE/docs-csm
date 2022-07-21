@@ -105,8 +105,8 @@ There are two nodes that must be updated on each BMC; these have the targets `No
 The targets can be run in the same action (as shown in the example) or run separately by only including one target in the action.
 On larger systems, it is recommended to run as two actions one after each other as the output will be shorter.
 
-
-> **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require. See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
+> **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require.
+See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes.
 The BMC will still have power and will perform the update.
 If nodes are not off when the update command is issued, it will report as a failed update.
@@ -317,7 +317,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 }
 ```
 
-##### Cray Chassis BMC Update Procedure
+#### Cray Chassis BMC Update Procedure
 
 1. Power off the liquid-cooled chassis slots and chassis rectifiers.
 
@@ -619,7 +619,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 }
 ```
 
-##### HPE Node System ROM (BIOS) Update Procedure
+#### HPE Node System ROM (BIOS) Update Procedure
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -940,7 +940,7 @@ Make sure you have waited for the current firmware to be updated before starting
 
 The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
-##### HPE Node System ROM (BIOS) Procedure for NCN
+#### HPE Node System ROM (BIOS) Procedure for NCN
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#configure-dns-and-ntp-on-each-bmc) for more information.
@@ -967,7 +967,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 
 Correct an issue where the model of the liquid-cooled compute node BIOS is the incorrect name. The name has changed from `WNC-ROME` to `HPE CRAY EX425` or `HPE CRAY EX425 (ROME)`.
 
-**Prerequisites**
+Prerequisites:
 * The system is running HPE Cray EX release v1.4 or higher.
 * A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#cn-bios).
   * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
@@ -1014,7 +1014,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
   The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
 
-##### Compute Node BIOS Workaround for HPE CRAY EX425 Procedure
+### Compute Node BIOS Workaround for HPE CRAY EX425 Procedure
 
 1. Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
 

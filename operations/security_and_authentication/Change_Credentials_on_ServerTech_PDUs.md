@@ -8,7 +8,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 - This procedure does not update the default credentials that RTS uses for new ServerTech PDUs added to a system. To change the default credentials, see
   [Update default ServerTech PDU Credentials used by the Redfish Translation Service](Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md).
 - ServerTech PDUs running firmware version `8.0q` or greater must have the password of the `admn` user changed before the JAWS REST API will function as expected.
-- The default user/password for ServerTech PDUs is `admn`/`admn`
+- The default user/password for ServerTech PDUs is `admn`/`admn`.
 
 ## Prerequisites
 
@@ -29,7 +29,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     Server: ServerTech-AWS/v8.0v
     ```
 
-    *NOTE*: The firmware version is listed after the '/' in the output in this case the firmware version is `8.0v`
+    *NOTE*: The firmware version is listed after the '/'. In this case, the firmware version is `8.0v`.
 
 ## Procedure
 
@@ -46,7 +46,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     x3000m0
     ```
 
-    If some or all of the PDUs have NOT been discovered by HSM, you will need to obtain the xname for each of the ServerTech PDUs on the system.
+    If some or all of the PDUs have NOT been discovered by HSM, you must obtain the component name (xname) for each of the ServerTech PDUs on the system.
 
 1. (`ncn-mw#`) Set up Vault password variable and command alias.
 
