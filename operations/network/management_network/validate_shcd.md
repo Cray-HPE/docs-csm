@@ -36,7 +36,7 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    > **`NOTE`**
    > `-a` defines the architecture, this will be:
    >
-   > - `v1` if the Cray system is composed of Mellanox and Dell switches, typically with Gigabyte or Intel server hardware.
+   > - `v1` if the HPE Cray EX system is composed of Mellanox and Dell switches, typically with Gigabyte or Intel server hardware.
    > - `tds` if the Cray system has Aruba switches with HPE servers **and NCNs are connected to the Aruba Spine switches**.
    > - `full` if the Cray system has Aruba switches with HPE servers **and NCNs are connected to the Aruba Leaf switches**.
 
