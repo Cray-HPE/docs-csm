@@ -31,7 +31,7 @@ trap 'err_report' ERR
 #global vars
 dryRun=false
 baseUrl="https://api-gw-service-nmn.local"
-retry=false
+retry=true
 force=false
 
 function usage() {
@@ -172,6 +172,7 @@ function retryRebuildWorkflow() {
 }
 
 printCmdArgs
+# shellcheck disable=SC2207
 unsucceededWorkflows=($(getUnsucceededWorkerRebuildWorkflows))
 numOfUnsucceededWorkflows="${#unsucceededWorkflows[*]}"
 
@@ -203,7 +204,11 @@ if [ "${numOfUnsucceededWorkflows}" -eq 0 ]; then
     echo "Create workflow: ${workflow}"
 fi
 
-#sleep 20
+if [[ -z "${workflow}" ]]; then
+    echo "No workflow to pull, something is wrong"
+fi
+
+sleep 20
 
 # poll
 while true; do
