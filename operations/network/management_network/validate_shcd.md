@@ -38,7 +38,7 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    >
    > - `v1` if the HPE Cray EX system is composed of Mellanox and Dell switches, typically with Gigabyte or Intel server hardware.
    > - `tds` if the HPE Cray EX system has Aruba switches with HPE servers **and NCNs are connected to the Aruba Spine switches**.
-   > - `full` if the Cray system has Aruba switches with HPE servers **and NCNs are connected to the Aruba Leaf switches**.
+   > - `full` if the HPE Cray EX system has Aruba switches with HPE servers **and NCNs are connected to the Aruba Leaf switches**.
 
    ```bash
    ARCH=v1
