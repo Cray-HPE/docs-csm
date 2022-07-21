@@ -10,6 +10,11 @@ This includes NCNs which are manually locked to prevent accidental rebooting and
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
+## Prerequisites
+
+* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+See [Configure the Cray CLI](../configure_cray_cli.md).
+
 The following procedures are included in this section:
 
 1. [Update Liquid-Cooled Compute Node BMC, FPGA, and BIOS](#liquid-cooled-nodes-update-procedures)
@@ -28,10 +33,6 @@ This section includes templates for JSON files that can be used and the procedur
 All of the example JSON files below are set to run a dry-run. Update the `overrideDryrun` value to `true` to update the firmware.
 
 This procedure updates node controller \(nC\) firmware.
-
-**Prerequisites**
-
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Liquid-Cooled Nodes Update Procedures
 
@@ -104,14 +105,14 @@ There are two nodes that must be updated on each BMC; these have the targets `No
 The targets can be run in the same action (as shown in the example) or run separately by only including one target in the action.
 On larger systems, it is recommended to run as two actions one after each other as the output will be shorter.
 
-**Prerequisites**
 
-* The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require. See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
-* Compute node BIOS updates require the nodes to be off. If nodes are not off when the update command is issued, it will report as a failed update.
-
-> **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes. The BMC will still have power and will perform the update.
+> **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require. See [Update Liquid-Cooled Node Firmware](#liquidcooled) for more information.
+> **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes.
+The BMC will still have power and will perform the update.
+If nodes are not off when the update command is issued, it will report as a failed update.
 > **IMPORTANT:** When the BMC is updated or rebooted after updating the `Node0.BIOS` and/or `Node1.BIOS` liquid-cooled nodes, the node BIOS version will not report the new version string until the nodes are powered back on.
-It is recommended that the `Node0/1` BIOS be updated in a separate action, either before or after a BMC update. It is also recommended that the nodes be powered back on after the updates are completed.
+It is recommended that the `Node0/1` BIOS be updated in a separate action, after a BMC update.
+It is also recommended that the nodes be powered back on after the updates are completed.
 
 ```json
 {
@@ -140,7 +141,7 @@ It is recommended that the `Node0/1` BIOS be updated in a separate action, eithe
 }
 ```
 
-**Procedure**
+##### Cray Node BOIS Update Procedure
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -284,10 +285,6 @@ Update the Chassis Management Module \(CMM\) controller \(cC\) firmware using FA
 
 The CMM firmware update process also checks and updates the Cabinet Environmental Controller \(CEC\) firmware.
 
-**Prerequisites**
-
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-
 ### Example Recipes
 
 **Manufacturer: Cray | Device Type: `ChassisBMC` | Target: BMC**
@@ -320,7 +317,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 }
 ```
 
-**Procedure**
+##### Cray Chassis BMC Update Procedure
 
 1. Power off the liquid-cooled chassis slots and chassis rectifiers.
 
@@ -465,10 +462,6 @@ All of the example JSON files below are set to run a dry-run. Update the `overri
 After updating the BIOS or System ROM, the compute node will need to be rebooted before the new version will be displayed in the Redfish output.
 
 This procedure updates node controller \(nC\) firmware.
-
-**Prerequisites**
-
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
 ### Gigabyte
 
@@ -626,7 +619,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 }
 ```
 
-**Procedure**
+##### HPE Node System ROM (BIOS) Update Procedure
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -947,7 +940,7 @@ Make sure you have waited for the current firmware to be updated before starting
 
 The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
-**Procedure**
+##### HPE Node System ROM (BIOS) Procedure for NCN
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#configure-dns-and-ntp-on-each-bmc) for more information.
@@ -975,9 +968,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 Correct an issue where the model of the liquid-cooled compute node BIOS is the incorrect name. The name has changed from `WNC-ROME` to `HPE CRAY EX425` or `HPE CRAY EX425 (ROME)`.
 
 **Prerequisites**
-
 * The system is running HPE Cray EX release v1.4 or higher.
-* The system has completed the Cray System Management \(CSM\) installation.
 * A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#cn-bios).
   * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
   * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
@@ -1023,7 +1014,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
   The model in this example is `WNC-Rome` and the firmware version currently running is `wnc.bios-1.2.5`.
 
-**Procedure**
+##### Compute Node BIOS Workaround for HPE CRAY EX425 Procedure
 
 1. Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
 
