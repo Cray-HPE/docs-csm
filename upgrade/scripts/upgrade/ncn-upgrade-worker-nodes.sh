@@ -172,6 +172,7 @@ function retryRebuildWorkflow() {
 }
 
 printCmdArgs
+uploadWorkflowTemplates
 # shellcheck disable=SC2207
 unsucceededWorkflows=($(getUnsucceededWorkerRebuildWorkflows))
 numOfUnsucceededWorkflows="${#unsucceededWorkflows[*]}"
