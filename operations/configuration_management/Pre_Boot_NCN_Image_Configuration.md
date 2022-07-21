@@ -6,24 +6,24 @@ is only relevant for booting compute nodes and can be ignored when working with 
 This document describes the configuration of a Kubernetes NCN image. The same steps are relevant for modifying
 a Ceph image.
 
-1. Locate the NCN Image to be Modified
+1. (`ncn#`) Locate the NCN Image to be Modified
 
     This example assumes the administrator wants to modify the Kubernetes image that is currently in use by NCNs. However, the steps are the same for any NCN SquashFS image.
 
-    ```console
-    ncn# ARTIFACT_VERSION=<your-version>
+    ```bash
+    ARTIFACT_VERSION=<your-version>
 
-    ncn# cray artifacts get ncn-images k8s/$ARTIFACT_VERSION/filesystem.squashfs ./$ARTIFACT_VERSION-filesystem.squashfs
+    cray artifacts get ncn-images k8s/$ARTIFACT_VERSION/filesystem.squashfs ./$ARTIFACT_VERSION-filesystem.squashfs
 
-    ncn# cray artifacts get ncn-images k8s/$ARTIFACT_VERSION/kernel ./$ARTIFACT_VERSION-kernel
+    cray artifacts get ncn-images k8s/$ARTIFACT_VERSION/kernel ./$ARTIFACT_VERSION-kernel
 
-    ncn# cray artifacts get ncn-images k8s/$ARTIFACT_VERSION/initrd ./$ARTIFACT_VERSION-initrd
+    cray artifacts get ncn-images k8s/$ARTIFACT_VERSION/initrd ./$ARTIFACT_VERSION-initrd
 
-    ncn# export IMS_ROOTFS_FILENAME=$ARTIFACT_VERSION-filesystem.squashfs
+    export IMS_ROOTFS_FILENAME=$ARTIFACT_VERSION-filesystem.squashfs
 
-    ncn# export IMS_KERNEL_FILENAME=$ARTIFACT_VERSION-kernel
+    export IMS_KERNEL_FILENAME=$ARTIFACT_VERSION-kernel
 
-    ncn# export IMS_INITRD_FILENAME=$ARTIFACT_VERSION-initrd
+    export IMS_INITRD_FILENAME=$ARTIFACT_VERSION-initrd
     ```
 
 1. [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md)
@@ -60,46 +60,46 @@ a Ceph image.
 
 1. [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md)
 
-1. Download the Resultant NCN Artifacts
+1. (`ncn#`) Download the Resultant NCN Artifacts
 
     **NOTE:** `$IMS_RESULTANT_IMAGE_ID` is the `result_id` returned in the output of the last command
     in the previous step:
 
-    ```console
-    ncn# cray cfs sessions describe example --format json | jq .status.artifacts
+    ```bash
+    cray cfs sessions describe example --format json | jq .status.artifacts
     ```
 
     **NOTE:** If `create-ims-initrd.sh` was not run in the CFS session, do *not* download the `initrd` and `kernel`. Only download the SquashFS file.
 
-    ```console
-    ncn# cray artifacts get boot-images $IMS_RESULTANT_IMAGE_ID/rootfs kubernetes-$ARTIFACT_VERSION-1.squashfs
+    ```bash
+    cray artifacts get boot-images $IMS_RESULTANT_IMAGE_ID/rootfs kubernetes-$ARTIFACT_VERSION-1.squashfs
 
     ncn# cray artifacts get boot-images $IMS_RESULTANT_IMAGE_ID/initrd initrd.img-$ARTIFACT_VERSION-1.xz
 
     ncn# cray artifacts get boot-images $IMS_RESULTANT_IMAGE_ID/kernel 5.3.18-150300.59.43-default-$ARTIFACT_VERSION-1.kernel
     ```
 
-1. Upload NCN boot artifacts into S3
+1. (`ncn#`) Upload NCN boot artifacts into S3
 
     This steps assumes that the `docs-csm` RPM is installed.
 
     **NOTE:** If `create-ims-initrd.sh` was not run in the CFS session, use the same `initrd` and `kernel` that were retrieved in step 1.
 
-    ```console
-    ncn# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/$ARTIFACT_VERSION-1/filesystem.squashfs" --file-name kubernetes-$ARTIFACT_VERSION-1.squashfs
+    ```bash
+    /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/$ARTIFACT_VERSION-1/filesystem.squashfs" --file-name kubernetes-$ARTIFACT_VERSION-1.squashfs
 
-    ncn# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/$ARTIFACT_VERSION-1/initrd" --file-name initrd.img-$ARTIFACT_VERSION-1.xz
+    /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/$ARTIFACT_VERSION-1/initrd" --file-name initrd.img-$ARTIFACT_VERSION-1.xz
 
-    ncn# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/$ARTIFACT_VERSION-1/kernel" --file-name $ARTIFACT_VERSION-1.kernel
+    /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/$ARTIFACT_VERSION-1/kernel" --file-name $ARTIFACT_VERSION-1.kernel
     ```
 
-1. Update NCN Boot Parameters
+1. (`ncn#`) Update NCN Boot Parameters
 
     Get the existing `metal.server` setting for the xname of the node of interest:
 
-    ```console
-    ncn# XNAME=<your-xname>
-    ncn# METAL_SERVER=$(cray bss bootparameters list --hosts $XNAME --format json | jq '.[] |."params"' \
+    ```bash
+    XNAME=<your-xname>
+    METAL_SERVER=$(cray bss bootparameters list --hosts $XNAME --format json | jq '.[] |."params"' \
          | awk -F 'metal.server=' '{print $2}' \
          | awk -F ' ' '{print $1}')
     ```
@@ -108,24 +108,35 @@ a Ceph image.
 
     Update the kernel, initrd, and metal server to point to the new artifacts.
 
-    ```console
-    ncn# S3_ARTIFACT_PATH=ncn-images/k8s/$ARTIFACT_VERSION-1
-    ncn# NEW_METAL_SERVER=http://rgw-vip.nmn/$S3_ARTIFACT_PATH
+    ```bash
+    S3_ARTIFACT_PATH=ncn-images/k8s/$ARTIFACT_VERSION-1
+    NEW_METAL_SERVER=http://rgw-vip.nmn/$S3_ARTIFACT_PATH
 
-    ncn# PARAMS=$(cray bss bootparameters list --hosts $XNAME --format json | jq '.[] |."params"' | \
+    PARAMS=$(cray bss bootparameters list --hosts $XNAME --format json | jq '.[] |."params"' | \
          sed "/metal.server/ s|$METAL_SERVER|$NEW_METAL_SERVER|" | \
+         sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
          tr -d \")
     ```
 
     Verify the value of `$NEW_METAL_SERVER` was set correctly within the boot parameters: `echo $PARAMS`
 
-    ```console
-    ncn# cray bss bootparameters update --hosts $XNAME   \
+    ```bash
+    cray bss bootparameters update --hosts $XNAME \
          --kernel "s3://$S3_ARTIFACT_PATH/kernel" \
          --initrd "s3://$S3_ARTIFACT_PATH/initrd" \
          --params "$PARAMS"
     ```
 
-1. [Wipe the Disks](../node_management/Rebuild_NCNs/Wipe_Drives.md)
+1. (`ncn#`) Prepare for Reboot
+
+   On the node or nodes being rebooted, run the following command to disable the bootloader and prepare the
+   node to accept a new SquashFS.
+
+   ```bash
+   rm -rf /metal/recovery/*
+   ```
 
 1. [Reboot the NCN](../node_management/Reboot_NCNs.md)
+
+   **NOTE:** The procedure above indicates that `metal.no-wipe` should be set to `1`. However, in this case
+   it needs to be set to `0`, and that was done in a prior step.
