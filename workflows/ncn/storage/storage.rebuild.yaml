@@ -1,0 +1,227 @@
+#
+# This file is for TESTING purposes only. Real workflows are found in docs-csm/workflows.
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: ncn-lifecycle-rebuild-
+  labels:
+    target-ncns: "{{$length := len .TargetNcns }}{{range $index,$value := .TargetNcns }}{{$myvar := add $index 1}}{{if lt $myvar $length}}{{$value}}.{{else}}{{$value}}{{end}}{{ end }}"
+    type: rebuild
+    node-type: storage
+spec:
+  podMetadata:
+    annotations:
+      sidecar.istio.io/inject: "false"    
+  volumes:
+    - name: ssh
+      hostPath:
+        path: /root/.ssh
+        type: Directory
+    - name: host-usr-bin
+      hostPath:
+        path: /usr/bin
+        type: Directory
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+  # schedule workflow jobs asap
+  priorityCLassName: system-node-critical
+  # Pod GC strategy must be one of the following:
+  # * OnPodCompletion - delete pods immediately when pod is completed (including errors/failures)
+  # * OnPodSuccess - delete pods immediately when pod is successful
+  # * OnWorkflowCompletion - delete pods when workflow is completed
+  # * OnWorkflowSuccess - delete pods when workflow is successful
+  podGC:
+    strategy: OnPodCompletion
+  # allow workflow jobs running on master node
+  #   we may have a situation that all worker nodes
+  #   are marked as "being rebuilt" (cray.nls=ncn-w001)
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+  affinity:
+    nodeAffinity:
+      # avoid putting workflow jobs onto workers that will be rebuilt
+      # this label is set onto each workers at beginning of workflow
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: cray.nls
+            operator: NotIn
+            values:
+            {{- range $index,$value := .TargetNcns }}
+            - {{$value -}}
+            {{- end }}
+      # try to use master nodes as much as possible
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 50
+          preference:
+            matchExpressions:
+            - key: node-role.kubernetes.io/master
+              operator: Exists
+  entrypoint: main
+  templates:
+    - name: main
+      dag:
+        tasks:
+          {{- range $index,$value := .TargetNcns }}
+          - name: upgrade-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              # each upgrade depends on previous upgrade action
+              # so we make sure only one node is drained at a time
+              {{ if ne $index 0 }}
+              - upgrade-{{ index $.TargetNcns (add $index -1) }}
+              {{ end }}
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: scriptContent
+                value: |
+                /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-ceph-nodes.sh {{$value}}
+          - name: check-ceph-health-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              # check health once node upgrade is complete
+              - upgrade-{{$value}} 
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: scriptContent
+                value: |
+                RESULT=$(/opt/cray/platform-utils/ceph-service-status.sh)
+                if [[ $RESULT -ne 0 ]]
+                  echo "ceph serice status check failed"
+                  exit 1
+                fi
+                RESULT=$(/opt/cray/platform-utils/ceph-service-status.sh -n {{$value}} -a true)
+                if [[ $RESULT -ne 0 ]]
+                  echo "ceph serice status check failed for node {{$value}}"
+                  exit 1
+                fi
+          {{- end }}
+          - name: rescan-ssh-keys
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+            # wait for health check of last storage node complete
+            - check-ceph-health-{{ with $length := len $.TargetNcns }}{{ index $.TargetNcns (add $length -1) }}{{end}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                  grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+                  grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
+          - name: deploy-node-exporter-and-alertmanager
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                  cat <<'EOF' > apply_exporter_alertmanager.sh
+                    ceph orch apply node-exporter && ceph orch apply alertmanager
+                    sleep 10
+                    # verify correct number of pods are running for node-exporter
+                    node_exporter_json=$(ceph orch ps --daemon_type node-exporter -f json-pretty)
+                    num_running=$(echo $node_exporter_json | jq '.[] | select(.status_desc=="running") | .hostname' | wc -w)
+                    if [[ $num_running -ne $(craysys metadata get num-storage-nodes) ]] || [[ $num_running -ne $(echo $node_exporter_json | jq '. | length') ]]
+                    then
+                      echo "Incorrect number of node exporter pods or not all pods are running"
+                      exit 2
+                    fi
+                    # verify refresh times for node-exporter
+                    refresh_times=$(echo $node_exporter_json  | jq '.[] | .last_refresh')
+                    for refresh_time in $refresh_times
+                    do
+                      refresh_time=$(echo $refresh_time | tr -d '"')
+                      refresh_time_SEC=$(date -d $refresh_time +%s)
+                      if [[ $refresh_time_SEC -lt before_apply_time ]]
+                      then
+                        echo "A Node exporter was not refreshed after node exporter was deployed in the previous step."
+                        exit 3
+                      fi
+                    done
+                    # verify there is only 1 alertmanager
+                    alertmanager_json=$(ceph orch ps --daemon_type alertmanager -f json-pretty)
+                    if [[ $(echo $alertmanager_json | jq '. | length') -ne 1 ]]
+                    then
+                      echo "Error: Need to be exactly 1 alertmanager
+                      exit 4
+                    fi
+                    if [[ $(echo $alertmanager_json | jq '.[] | select(.status_desc=="running") | .hostname' | wc -w) -ne 1 ]]
+                    then
+                      exit 5
+                    fi
+                    refresh_time=$(echo $alertmanager_json  | jq '.[] | .last_refresh')
+                    refresh_time=$(echo $refresh_time | tr -d '"')
+                    refresh_time_SEC=$(date -d $refresh_time +%s)
+                    if [[ $refresh_time_SEC -lt before_apply_time ]]
+                    then
+                      exit 6
+                    fi
+                  EOF
+
+                  # find storage node running ceph-mon
+                  storage_node=$(echo $(ceph -s -f json | jq '.quorum_names[0]') | tr -d '"')
+                  chmod +x apply_exporter_alertmanager.sh
+                  scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null apply_exporter_alertmanager.sh $storage_node:/tmp/apply_exporter_alertmanager.sh
+                  ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $storage_node '/tmp/apply_exporter_alertmanager.sh'
+          - name: update-bss
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                  . /usr/share/doc/csm/upgrade/scripts/ceph/lib/update_bss_metadata.sh
+                  RESULT=$(update_bss_storage)
+                  # check that result contains success!
+                  
+       
+         
