@@ -522,7 +522,7 @@ Run the following steps before starting any of the system configuration procedur
 
 1. (`pit#`) Download the SHCD to the `prep` directory.
 
-    This will need to be retrieved from the administrators Cray deliverable.
+    This will need to be retrieved from the administrator's Cray deliverable.
 
 1. Validate the SHCD.
 
@@ -531,43 +531,41 @@ Run the following steps before starting any of the system configuration procedur
 ### 3.2 Generate topology files
 
 The following steps use the new, automated method for generating files. The previous step for
-[validate SHCD](#31-validate-shcd) will have generated "paddle" files, these are necessary for generating
+[validate SHCD](#31-validate-shcd) generated "paddle" files; these are necessary for generating
 the rest of the seed files.
 
 > ***NOTE*** The paddle files are temporarily not used due to bugs in the seed file generation software.
 > Until these bugs are resolved, the seed files must be manually generated.
 
-If seed files from a prior installation of the same major-minor version of CSM exist, these can be used and
+If seed files from a prior installation of the same major-minor version of CSM exist, then these can be used and
 this step may be skipped.
 
-1. (`pit#`) Create each seed file unless they already exist from a previous installation:
+1. (`pit#`) Create each seed file, unless they already exist from a previous installation.
 
    - For new installations of CSM that have no prior seed files, each one must be created:
 
-      - [Create `application_node_config.yaml`](./create_application_node_config_yaml.md)
-      - [Create `cabinets.yaml`](./create_cabinets_yaml.md)
-      - [Create `hmn_connections.json`](./create_hmn_connections_json.md)
-      - [Create `ncn_metadata.csv`](./create_ncn_metadata_csv.md)
-      - [Create `switch_metadata.csv`](./create_switch_metadata_csv.md)
+      - [Create `application_node_config.yaml`](create_application_node_config_yaml.md)
+      - [Create `cabinets.yaml`](create_cabinets_yaml.md)
+      - [Create `hmn_connections.json`](create_hmn_connections_json.md)
+      - [Create `ncn_metadata.csv`](create_ncn_metadata_csv.md)
+      - [Create `switch_metadata.csv`](create_switch_metadata_csv.md)
 
    - For re-installations of CSM 1.3, the previous seed files may be used and this step can be skipped.
-   - For new installations of CSM 1.3 that have prior seed files from CSM 1.2 or older, the following files
-   need to be recreated due to changes in their content or formatting:
+   - For new installations of CSM 1.3 that have prior seed files from CSM 1.2 or older, the previous seed files
+   may be used **except that the following files must be recreated** because of content or formatting changes:
 
-      - [Create `cabinets.yaml`](./create_cabinets_yaml.md)
-      - [Create `hmn_connections.json`](./create_hmn_connections_json.md)
+      - [Create `cabinets.yaml`](create_cabinets_yaml.md)
+      - [Create `hmn_connections.json`](create_hmn_connections_json.md)
 
-   The other files can be re-used (e.g. `application_node_config.yaml`, `ncn_metadata.csv`, and `switch_metadata.csv`).
-
-1. (`pit#`) Confirm that the following files exist:
+1. (`pit#`) Confirm that the following files exist.
 
    ```bash
-   ls -l ${PITDATA}/prep/{application_node_config.yaml,cabinets.yaml,hmn_connections.json,ncn_metadata.csv,switch_metadata.csv}
+   ls -l "${PITDATA}"/prep/{application_node_config.yaml,cabinets.yaml,hmn_connections.json,ncn_metadata.csv,switch_metadata.csv}
    ```
 
    Expected output may look like:
 
-   ```bash
+   ```text
    -rw-r--r-- 1 root root  146 Jun  6 00:12 /var/www/ephemeral/prep/application_node_config.yaml
    -rw-r--r-- 1 root root  392 Jun  6 00:12 /var/www/ephemeral/prep/cabinets.yaml
    -rwxr-xr-x 1 root root 3768 Jun  6 00:12 /var/www/ephemeral/prep/hmn_connections.json
