@@ -404,6 +404,40 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     csi upgrade metadata --1-0-to-1-2 \
         --k8s-version ${KUBERNETES_VERSION} \
         --storage-version ${CEPH_VERSION}
+    
+    } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
+    record_state ${state_name} $(hostname)
+    echo
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPDATE NCN KERNEL PARAMETERS"
+#shellcheck disable=SC2046
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    # shellcheck disable=SC2155,SC2046
+    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+        -d client_id=admin-client \
+        -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    export TOKEN
+
+    # As boot parameters are added or removed, update these arrays.
+    # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
+    bootparameters_to_set=( "psi=1" )
+    bootparameters_to_delete=()
+
+    for bootparameter in "${bootparameters_to_delete[@]}"; do
+        csi handoff bss-update-param --delete ${bootparameter}
+    done
+
+    for bootparameter in "${bootparameters_to_set[@]}"; do
+        csi handoff bss-update-param --set ${bootparameter}
+    done
 
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
