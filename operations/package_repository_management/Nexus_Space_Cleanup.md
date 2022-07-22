@@ -6,7 +6,7 @@ issues for Nexus as well as all the services that rely on Nexus. There is no aut
 During the install of any CSM version, a large amount data is added to Nexus. If there has not been a manual cleanup of old files in Nexus,
 then there is likely to be insufficient space for the next version of CSM to be installed.
 
-**Note:** The Raspberry release has around 130 Gigabytes of space needed in Nexus
+**NOTE:** The HPE Cray EX System Software 22.07 release has around 130 Gigabytes of space needed in Nexus
 
 This page outlines the procedure to manually cleanup Nexus, in order to ensure that there is sufficient free space for a CSM upgrade.
 
