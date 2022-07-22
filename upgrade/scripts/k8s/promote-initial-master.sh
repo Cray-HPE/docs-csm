@@ -44,7 +44,15 @@ export MAX_PODS_PER_NODE=$(craysys metadata get kubernetes-max-pods-per-node)
 export PODS_CIDR=$(craysys metadata get kubernetes-pods-cidr)
 #shellcheck disable=SC2155
 export SERVICES_CIDR=$(craysys metadata get kubernetes-services-cidr)
-envsubst < /srv/cray/resources/common/kubeadm.cfg > /etc/cray/kubernetes/kubeadm.yaml
+
+# Note: for pre 1.3 the kubeadm source file had a .yaml suffix for 1.3+ it is
+# .cfg if we have the .yaml file symlink .cfg to that for 1.2 upgrades.
+k8scfg="/srv/cray/resources/common/kubeadm.cfg"
+k8syaml="/srv/cray/resources/common/kubeadm.yaml"
+if [ -f "${k8syaml}" ]; then
+  ln -sf "${k8syaml}" "${k8scfg}"
+fi
+envsubst < "${k8scfg}" > /etc/cray/kubernetes/kubeadm.yaml
 
 kubeadm token create --print-join-command > /etc/cray/kubernetes/join-command 2>/dev/null
 echo "$(cat /etc/cray/kubernetes/join-command) --control-plane --certificate-key $(cat /etc/cray/kubernetes/certificate-key)" > /etc/cray/kubernetes/join-command-control-plane
