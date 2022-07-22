@@ -167,20 +167,20 @@ Data is repopulated in BSS when the REDS `init` job is run.
 
 1. Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their State Change Notifications \(SCN\).
 
-    1. Resubscribe all compute nodes.
+    1. (`ncn-m#`) Resubscribe all compute nodes.
 
         ```bash
         TMPFILE=$(mktemp)
-        sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$3);}' > $TMPFILE
+        sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$4);}' > $TMPFILE
         pdsh -w ^${TMPFILE} "systemctl restart cray-orca"
         rm -rf $TMPFILE
         ```
 
-    1. Resubscribe the NCNs.
+    1. (`ncn-m#`) Resubscribe the NCNs.
 
         **`NOTE`** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
 
         ```bash
-        pdsh -w ncn-w00[0-4]-can.local "systemctl restart cray-orca"
-        pdsh -w ncn-s00[0-4]-can.local "systemctl restart cray-orca"
+        pdsh -w ncn-w00[1-4]-can.local "systemctl restart cray-orca"
+        pdsh -w ncn-s00[1-4]-can.local "systemctl restart cray-orca"
         ```
