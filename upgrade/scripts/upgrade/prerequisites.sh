@@ -272,17 +272,19 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     # get existing customization.yaml file
     SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/site-init
     mkdir -p "${SITE_INIT_DIR}"
+    pushd "${SITE_INIT_DIR}"
     DATETIME=$(date +%Y-%m-%d_%H-%M-%S)
     CUSTOMIZATIONS_YAML=$(mktemp -p "${SITE_INIT_DIR}" "customizations-${DATETIME}-XXX.yaml")
+    set -o pipefail
     kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > "${CUSTOMIZATIONS_YAML}"
+    set +o pipefail
+
+    # NOTE:  There are currently no sealed secrets being added so we are skipping the sealed secrets steps
+
     cp "${CUSTOMIZATIONS_YAML}" "${CUSTOMIZATIONS_YAML}.bak"
+    . ${locOfScript}/util/update-customizations.sh -i ${CUSTOMIZATIONS_YAML}
 
-    # argo/cray-nls: update customization.yaml
-    yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.kubernetes.services.cray-nls.externalHostname 'cmn.{{ network.dns.external }}'
-    yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
-
-    # rename customazations file so k8s secret name stays the same
-    pushd "${SITE_INIT_DIR}"
+    # rename customizations file so k8s secret name stays the same
     cp "${CUSTOMIZATIONS_YAML}" customizations.yaml
 
     # push updated customizations.yaml to k8s 
