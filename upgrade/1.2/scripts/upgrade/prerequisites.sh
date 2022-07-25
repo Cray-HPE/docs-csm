@@ -109,7 +109,12 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
 
-    test -f /root/.ssh/config && mv /root/.ssh/config /root/.ssh/config.bak
+    if [ -f /root/.ssh/config ]; then
+        # shellcheck disable=SC2034 # it is referenced in upgrade-state.sh, which is sourced at the
+        # top of this file.
+        RESTORE_SSH_CONFIG=1
+        mv /root/.ssh/config /root/.ssh/config.bak
+    fi
     cat <<EOF> /root/.ssh/config
 Host *
     StrictHostKeyChecking no
