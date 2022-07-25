@@ -40,6 +40,7 @@ Detailed BICAN documentation can be found on the [BICAN technical details](../op
 1. [Configure Prometheus alert notifications](#configure_prometheus_alert_notifications)
 1. [Update firmware with FAS](#update_firmware_with_fas)
 1. [Prepare compute nodes](#prepare_compute_nodes)
+1. [Apply security hardening](#apply_security_hardening)
 1. [Next topic](#next_topic)
 1. [Troubleshooting installation problems](#troubleshooting_installation)
 
@@ -237,7 +238,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="apply_security_hardening"></a>
 
-   1. Apply Security Hardening
+   1. Apply security hardening
 
       After preparing compute nodes, and prior to the installation of other product streams, review the security hardening guide. 
 

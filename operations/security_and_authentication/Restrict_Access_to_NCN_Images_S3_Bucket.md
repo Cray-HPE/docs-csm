@@ -108,7 +108,7 @@ haproxy_test "$SCSNS_NMN" "MGMT HAProxy over NMN"
 Execute the script, if the ACLs have not been applied, you should see results similar to those below. 
 
 ```
-# bash ./con_test.sh 
+ncn-m001# bash ./con_test.sh 
 [i] MGMT RADOS over NMN
   RADOS ncn-s001.nmn: PASS
   RADOS ncn-s002.nmn: PASS
@@ -139,7 +139,7 @@ Necessary to limit RGW VIP access, to the ncn-images bucket, to management NCNs.
 Cross-check to verify the count seems appropriate for your system.
 
 ```
-# grep 'ncn-[mws].*.nmn' /etc/hosts | awk '{print $1;}' | sed -e 's/\./ /g' | sort -nk 4 | sed -e 's/ /\./g' | tee allowed_ncns.lst
+ncn-m001# grep 'ncn-[mws].*.nmn' /etc/hosts | awk '{print $1;}' | sed -e 's/\./ /g' | sort -nk 4 | sed -e 's/ /\./g' | tee allowed_ncns.lst
 10.252.1.4
 10.252.1.5
 10.252.1.6
@@ -156,13 +156,13 @@ Cross-check to verify the count seems appropriate for your system.
 ### Add the MTL subnet (needed for network boots of NCNs)
 
 ```
-# echo '10.1.0.0/16' >> allowed_ncns.lst
+ncn-m001# echo '10.1.0.0/16' >> allowed_ncns.lst
 ```
 
 ### Verify the allowed_ncns.lst contents, should contain NMN addresses for all management NCNs nodes, and the MTL subnet (10.1.0.0/16)
 
 ```
-# cat allowed_ncns.lst 
+ncn-m001# cat allowed_ncns.lst 
 10.252.1.4
 10.252.1.5
 10.252.1.6
@@ -182,7 +182,7 @@ Cross-check to verify the count seems appropriate for your system.
 Make sure you adjust the ```-w``` predicate to represent the full set of storage nodes your system. Applies to this and subsequent steps.
 
 ```
-# pdsh -w ncn-s00[1-4] "cat /etc/haproxy/haproxy.cfg" | dshbak -c
+ncn-m001# pdsh -w ncn-s00[1-4] "cat /etc/haproxy/haproxy.cfg" | dshbak -c
 ----------------
 ncn-s[001-004]
 ----------------
@@ -239,20 +239,20 @@ backend rgw-backend
 ### Create a backup of haproxy.cfg files on storage nodes
 
 ```
-# pdsh -w ncn-s00[1-4] "cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg-dist"
+ncn-m001# pdsh -w ncn-s00[1-4] "cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg-dist"
 ```
 
 ### Grab a copy to modify from a storage node, preserving permissions
 
 ```
-# scp -p ncn-s001:/etc/haproxy/haproxy.cfg . 
+ncn-m001# scp -p ncn-s001:/etc/haproxy/haproxy.cfg . 
 haproxy.cfg            
 ```
 
 ### Edit the haproxy.cfg, adding in the following ACLs and log directives to each frontend
 
 ```
-# diff -Naur haproxy.cfg-dist haproxy.cfg
+ncn-m001# diff -Naur haproxy.cfg-dist haproxy.cfg
 --- haproxy.cfg-dist	2022-06-30 18:20:55.000000000 +0000
 +++ haproxy.cfg	2022-07-07 16:56:40.000000000 +0000
 @@ -1,6 +1,6 @@
@@ -293,8 +293,8 @@ haproxy.cfg
 With the log directive additions to HAProxy, and allowing a localhost UDP 514 socket, access logging should work properly. Set permissions to 640 on the file.
 
 ```
-# cat haproxy.conf 
-# Collect log with UDP
+ncn-m001# cat haproxy.conf 
+ncn-m001# Collect log with UDP
 $ModLoad imudp
 $UDPServerAddress 127.0.0.1
 $UDPServerRun 514
@@ -305,7 +305,7 @@ $UDPServerRun 514
 ### Make sure haproxy is running/happy on storage nodes.
 
 ```
-# pdsh -w ncn-s00[1-4] "systemctl status haproxy" | grep "Active"
+ncn-m001# pdsh -w ncn-s00[1-4] "systemctl status haproxy" | grep "Active"
 ncn-s001:      Active: active (running) since Thu 2022-07-07 17:38:49 UTC; 54min ago
 ncn-s003:      Active: active (running) since Thu 2022-07-07 17:38:49 UTC; 54min ago
 ncn-s002:      Active: active (running) since Thu 2022-07-07 17:38:49 UTC; 54min ago
@@ -315,13 +315,13 @@ ncn-s004:      Active: active (running) since Thu 2022-07-07 17:38:49 UTC; 54min
 ### Determine where the HAProxy VIP currently resides (for awareness in the event debug is necessary)
 
 ```
-# host rgw-vip
+ncn-m001# host rgw-vip
 rgw-vip.nmn has address 10.252.1.3
 
-# host rgw-vip.nmn
+ncn-m001# host rgw-vip.nmn
 rgw-vip.nmn has address 10.252.1.3
 
-# host 10.252.1.3
+ncn-m001# host 10.252.1.3
 3.1.252.10.in-addr.arpa domain name pointer rgw-vip.
 3.1.252.10.in-addr.arpa domain name pointer rgw-vip.local.
 3.1.252.10.in-addr.arpa domain name pointer rgw-vip.local.local.
@@ -335,19 +335,19 @@ ncn-s001
 ### Propagate the rsyslog configuration out to all storage nodes
 
 ```
-# pdcp -w ncn-s00[1-4] haproxy.conf /etc/rsyslog.d/
+ncn-m001# pdcp -w ncn-s00[1-4] haproxy.conf /etc/rsyslog.d/
 ```
 
 ### Propagate the HAProxy configuration out to all storage nodes
 
 ```
-# pdcp -w ncn-s00[1-4] haproxy.cfg allowed_ncns.lst /etc/haproxy/
+ncn-m001# pdcp -w ncn-s00[1-4] haproxy.cfg allowed_ncns.lst /etc/haproxy/
 ```
 
 ### Verify the configurations are identical across storage nodes
 
 ```
-# pdsh -w ncn-s00[1-4] "cat /etc/haproxy/haproxy.cfg" | dshbak -c
+ncn-m001# pdsh -w ncn-s00[1-4] "cat /etc/haproxy/haproxy.cfg" | dshbak -c
 ----------------
 ncn-s[001-004]
 ----------------
@@ -410,8 +410,8 @@ backend rgw-backend
 ### Restart rsyslog across all storage nodes
 
 ```
-# pdsh -w ncn-s00[1-4] "systemctl restart rsyslog"
-# pdsh -w ncn-s00[1-4] "systemctl status rsyslog" | grep Active
+ncn-m001# pdsh -w ncn-s00[1-4] "systemctl restart rsyslog"
+ncn-m001# pdsh -w ncn-s00[1-4] "systemctl status rsyslog" | grep Active
 ncn-s001:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ago
 ncn-s002:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ago
 ncn-s003:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ago
@@ -421,8 +421,8 @@ ncn-s004:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ag
 ### Restart HAProxy across all storage nodes
 
 ```
-# pdsh -w ncn-s00[1-4] "systemctl restart haproxy"
-# pdsh -w ncn-s00[1-4] "systemctl status haproxy" | grep Active
+ncn-m001# pdsh -w ncn-s00[1-4] "systemctl restart haproxy"
+ncn-m001# pdsh -w ncn-s00[1-4] "systemctl status haproxy" | grep Active
 ncn-s001:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ago
 ncn-s002:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ago
 ncn-s003:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ago
@@ -496,7 +496,7 @@ Chain OUTPUT (policy ACCEPT 22099 packets, 30141111 bytes)
 Re-run the connectivity test. While the results will be similar, they should all now be passing:
 
 ```
-# bash ./con_test.sh 
+ncn-m001# bash ./con_test.sh 
 [i] MGMT RADOS over NMN
   RADOS ncn-s001.nmn: PASS
   RADOS ncn-s002.nmn: PASS
@@ -555,7 +555,7 @@ For further validation, the following script can be saved to a UAN or compute no
 This will test cross-network select access that should not be possible based on a correctly configured switch ACL posture, as well. 
 
 ```
-# cat user_con_test.sh 
+nid000002:~ # cat user_con_test.sh 
 CURL_O="--connect-timeout 2 -f"
 NODE_COUNT="$1"
 
@@ -582,7 +582,7 @@ do
    done
 done
 
-# bash ./user_con_test.sh 4
+nid000002:~ # bash ./user_con_test.sh 4
 [i] curl --connect-timeout 2 -f ncn-s001.nmn:8080 -> PASS
 [i] curl --connect-timeout 2 -f http://ncn-s001.nmn/ncn-images/ -> PASS
 [i] curl --connect-timeout 2 -f -k https://ncn-s001.nmn/ncn-images/ -> PASS
@@ -644,19 +644,19 @@ WantedBy=multi-user.target
 Make a backup of the firewall rules. 
 
 ```
-# pdsh -w ncn-s00[1-4] "cp -a /etc/iptables/metal.conf /etc/iptables/metal.conf-dist"
+ncn-m001# pdsh -w ncn-s00[1-4] "cp -a /etc/iptables/metal.conf /etc/iptables/metal.conf-dist"
 ```
 
 Use iptables-save to commit running rules to the persistent configuration. 
 
 ```
-# pdsh -w ncn-s00[1-4] "iptables-save -f /etc/iptables/metal.conf"
+ncn-m001# pdsh -w ncn-s00[1-4] "iptables-save -f /etc/iptables/metal.conf"
 ```
 
 Verify the ruleset is consistent across nodes. 
 
 ```
-# pdsh -w ncn-s00[1-4] "cat /etc/iptables/metal.conf" | grep "8080" | dshbak -c
+ncn-m001# pdsh -w ncn-s00[1-4] "cat /etc/iptables/metal.conf" | grep "8080" | dshbak -c
 ----------------
 ncn-s[001-004]
 ----------------
@@ -674,7 +674,7 @@ Note: If SMA log forwarders are not yet running, you may need to temporarily dis
 Look for RADOSGW drops in ```/var/log/firewall``` on storage nodes, not that the connectivity test will attempt access on the CMN.
 
 ```
-# pdsh -N -w ncn-s00[1-3] "grep RADOSGW /var/log/firewall"
+ncn-m001# pdsh -N -w ncn-s00[1-3] "grep RADOSGW /var/log/firewall"
 2022-07-11T19:26:22.655077+00:00 xxx-ncn-s003 kernel: [265870.330981] RADOSGW-DROPIN=bond0.cmn0 OUT= MAC=b8:59:9f:f9:1b:fa:b8:59:9f:f9:1b:fe:08:00 SRC=10.101.8.35 DST=10.101.8.43 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=1170 DF PROTO=TCP SPT=52462 DPT=8080 WINDOW=35840 RES=0x00 SYN URGP=0 
 2022-07-11T19:26:23.690023+00:00 xxx-ncn-s003 kernel: [265871.365959] RADOSGW-DROPIN=bond0.cmn0 OUT= MAC=b8:59:9f:f9:1b:fa:b8:59:9f:f9:1b:fe:08:00 SRC=10.101.8.35 DST=10.101.8.43 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=1171 DF PROTO=TCP SPT=52462 DPT=8080 WINDOW=35840 RES=0x00 SYN URGP=0 
 ...
@@ -683,5 +683,5 @@ Look for RADOSGW drops in ```/var/log/firewall``` on storage nodes, not that the
 Look for HAProxy access logs in ```/var/log/messages``` on storage nodes, that have HTTP 403 responses (or other responses depending upon context). 
 
 ```
-# pdsh -N -w ncn-s00[1-3] "cd /var/log && zgrep -h 'haproxy.*frontend' messages || exit 0" | grep " 403 " | sort -k 1
+ncn-m001# pdsh -N -w ncn-s00[1-3] "cd /var/log && zgrep -h 'haproxy.*frontend' messages || exit 0" | grep " 403 " | sort -k 1
 ```
