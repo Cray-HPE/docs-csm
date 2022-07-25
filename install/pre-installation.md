@@ -288,7 +288,7 @@ These variables will need to be set for many procedures within the CSM installat
    ls -l "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
    ```
 
-1. (`pit#`) Exit the typescript and logout.
+1. (`pit#`) Exit the typescript and log out.
 
    ```bash
    exit
