@@ -281,16 +281,17 @@ These variables will need to be set for many procedures within the CSM installat
 
 ### 1.6 Exit the console and log in with SSH
 
-1. (`pit#`) Create the `admin` directory and logout.
+1. (`pit#`) Create the `admin` directory for the typescripts and administrative scratch work.
 
    ```bash
    mkdir -pv "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
-   logout
+   ls -l "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
    ```
 
-1. (`pit#`) Exit the typescript
+1. (`pit#`) Exit the typescript and logout.
 
    ```bash
+   exit
    exit
    ```
 
