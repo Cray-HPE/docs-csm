@@ -70,7 +70,7 @@ until kafkaok && podsready; do
 
     if ! podsready; then
 	printf "Found pods not at Ready = 1/1, deleting to force an update\n" >&2
-	for pod in $(kubectl get pods --no-headers=true --namespace services --selector strimzi.io/name=cray-shared-kafka-kafka --field-selector="status.phase=Running" | grep -Ev '1/1'); do
+	for pod in $(kubectl get pods --no-headers=true --namespace services --selector strimzi.io/name=cray-shared-kafka-kafka --field-selector="status.phase=Running" | grep -Ev '1/1' | awk '{print $1}'); do
 	    printf "Deleting %s\n" "${pod}" >&2
 	    kubectl delete --namespace services pod "$pod"
 	    sleep 10
