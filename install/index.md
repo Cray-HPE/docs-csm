@@ -235,6 +235,13 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       * Gigabyte
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
+   <a name="apply_security_hardening"></a>
+
+   1. Apply Security Hardening
+
+      After preparing compute nodes, and prior to the installation of other product streams, review the security hardening guide. 
+
+      See [Security Hardening](../operations/CSM_product_management/Security_Hardening.md)
    <a name="next_topic"></a>
 
    1. Next topic
