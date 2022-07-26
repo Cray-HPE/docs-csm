@@ -2,15 +2,15 @@
 
 Check and set the time for Gigabyte compute nodes.
 
-If the console log indicates the time between the rest of the system and the compute nodes is off by several hours, it prevents the `spire-agent` from getting a valid certificate,
-causing the node boot to drop into the `dracut` emergency shell.
+If the console log indicates the time between the rest of the system and the compute nodes is off by several hours, then it prevents the `spire-agent` from getting a valid certificate,
+which causes the node boot to drop into the `dracut` emergency shell.
 
 ## Procedure
 
 1. Retrieve the `cray-console-operator` pod ID.
 
     ```bash
-    ncn# CONPOD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}'); echo $CONPOD
+    ncn-mw# CONPOD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}'); echo ${CONPOD}
     ```
 
     Example output:
@@ -24,14 +24,14 @@ The following steps should be repeated for each Gigabyte node which needs to hav
 1. Set the `XNAME` variable to the component name (xname) of the node whose console you wish to open.
 
     ```bash
-    ncn# XNAME=x1001c0s24b1n0
+    ncn-mw# XNAME=x1001c0s24b1n0
     ```
 
 1. Find the `cray-console-node` pod that is connected to that node.
 
     ```bash
-    ncn# NODEPOD=$(kubectl -n services exec $CONPOD -c cray-console-operator -- \
-            sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g') ; echo $NODEPOD
+    ncn-mw# NODEPOD=$(kubectl -n services exec "${CONPOD}" -c cray-console-operator -- \
+                        sh -c "/app/get-node ${XNAME}" | jq .podname | sed 's/"//g') ; echo ${NODEPOD}
     ```
 
     Example output:
@@ -43,7 +43,7 @@ The following steps should be repeated for each Gigabyte node which needs to hav
 1. Connect to the node's console using ConMan on the identified `cray-console-node` pod.
 
     ```bash
-    ncn# kubectl exec -it -n services $NODEPOD -- conman -j $XNAME
+    ncn-mw# kubectl exec -it -n services "${NODEPOD}" -- conman -j "${XNAME}"
     ```
 
     Example output:
@@ -52,25 +52,29 @@ The following steps should be repeated for each Gigabyte node which needs to hav
     <ConMan> Connection to console [x1001c0s24b1] opened.
     ```
 
-1. Set the `BMC` variable to the component name (xname) of the BMC for the node.
+1. In another terminal, boot the node to BIOS.
 
-   ```bash
-   ncn# BMC=x1001c0s24b1  # Change this to be each node in turn.
-   ```
+    1. Set the `BMC` variable to the component name (xname) of the BMC for the node.
 
-1. Using another terminal to watch the console, boot the node to BIOS.
+        This value will be different for each node.
 
-   > `read -s` is used to prevent the password from being written to the screen or the shell history.
+        ```bash
+        ncn# BMC=x1001c0s24b1
+        ```
 
-   ```bash
-   ncn# USERNAME=root
-   ncn# read -s IPMI_PASSWORD
-   ncn# export IPMI_PASSWORD
-   ncn# ipmitool -I lanplus -U $USERNAME -E -H $BMC chassis bootdev bios
-   ncn# ipmitool -I lanplus -U $USERNAME -E -H $BMC chassis power off
-   ncn# sleep 10
-   ncn# ipmitool -I lanplus -U $USERNAME -E -H $BMC chassis power on
-   ```
+    1. Boot the node to BIOS.
+
+        > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
+        ```bash
+        ncn# USERNAME=root
+        ncn# read -r -s -p "$BMC ${USERNAME} password: " IPMI_PASSWORD
+        ncn# export IPMI_PASSWORD
+        ncn# ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis bootdev bios
+        ncn# ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power off
+        ncn# sleep 10
+        ncn# ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power on
+        ```
 
 1. Update the `System Date` field to match the time on the system.
 
@@ -83,6 +87,6 @@ The following steps should be repeated for each Gigabyte node which needs to hav
 
 1. Enter the `F10` key followed by the `Enter` key to save the BIOS time.
 
-1. Exit the connection to the console with the `&.` command.
+1. Exit the connection to the console by entering `&.`.
 
 1. Repeat the above steps for other nodes which need their BIOS time reset.

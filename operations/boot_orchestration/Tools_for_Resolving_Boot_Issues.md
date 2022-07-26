@@ -112,15 +112,15 @@ There are two tools that can be used to access a BMC's console via SOL:
 
     ```bash
     ncn# USERNAME=root
-    ncn# read -s IPMI_PASSWORD
+    ncn# read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
     ncn# export IPMI_PASSWORD
-    ncn# ipmitool -I lanplus -U $USERNAME -E -H <node_management_network_IP_address_of_node> sol activate
+    ncn# ipmitool -I lanplus -U "${USERNAME}" -E -H <node_management_network_IP_address_of_node> sol activate
     ```
 
     Example:
 
     ```bash
-    ncn# ipmitool -I lanplus -U $USERNAME -E -H  10.100.165.2 sol activate
+    ncn# ipmitool -I lanplus -U "${USERNAME}" -E -H  10.100.165.2 sol activate
     ```
 
 - ConMan
