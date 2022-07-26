@@ -11,9 +11,9 @@ Check the failover setting on a Gigabyte BMC.
 
 ```bash
 ncn# USERNAME=root
-ncn# read -s IPMI_PASSWORD
+ncn# read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
 ncn# export IPMI_PASSWORD
-ncn# ipmitool -I lanplus -U $USERNAME -E -H 172.30.52.247 raw 0x0c 0x02 0x01 210 0 0
+ncn# ipmitool -I lanplus -U "${USERNAME}" -E -H BMC_HOSTNAME_OR_IP raw 0x0c 0x02 0x01 210 0 0
 ```
 
 Example output:
