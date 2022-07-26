@@ -11,14 +11,15 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
 
 ## Procedure
 
-1. Use `ipmitool` to deactivate the current console connection.
+1. Deactivate the current console connection.
 
     1. Enter `root` user password for the BMC of the affected node.
 
         > `read -s` is used to prevent the password from being displayed on the screen or preserved in the shell history.
 
         ```bash
-        ncn# read -s IPMI_PASSWORD
+        ncn# USERNAME=root
+        ncn# read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
         ```
 
     1. Export the variable.
@@ -32,7 +33,7 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
         > In the following command, replace `XNAME` with the component name (xname) of the BMC of the affected node.
 
         ```bash
-        ncn# ipmitool -H XNAME -U root -E sol deactivate
+        ncn# ipmitool -I lanplus -H XNAME -U "${USERNAME}" -E sol deactivate
         ```
 
 1. Manually open a console connection to the node using the Cray console services.
