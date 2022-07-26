@@ -29,11 +29,11 @@ See [Shut Down and Power Off Compute and User Access Nodes](../operations/power_
 
 The DHCP service running in Kubernetes needs to be disabled or it will conflict with the PIT's DHCP services.
 
-1. (`ncn#`) Disable `cray-dhcp-kea`
+(`ncn-mw#`) Disable `cray-dhcp-kea`
 
-   ```bash
-   kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
-   ```
+```bash
+kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
+```
 
 ## Set IPMI credentials
 
@@ -44,8 +44,8 @@ The upcoming procedures use `ipmitool`. Set IPMI credentials for the BMCs of the
 1. (`ncn#` or `pit#`) Set the username and IPMI password:
 
    ```bash
-   username=$(whoami)
-   read -s IPMI_PASSWORD
+   username=root
+   read -r -s -p "NCN BMC ${username} password: " IPMI_PASSWORD
    ```
 
 1. (`ncn#` or `pit#`) Export `IPMI_PASSWORD` for the `-E` option to work on `ipmitool`:
@@ -58,9 +58,9 @@ The upcoming procedures use `ipmitool`. Set IPMI credentials for the BMCs of the
 
 > **`NOTE`** Skip this section if none of the management nodes are booted.
 
-Power each NCN off using `ipmitool` from `ncn-m001` (or the `pit`, if reinstalling an incomplete install).
+Power each NCN off using `ipmitool` from `ncn-m001` (or the PIT node, if reinstalling an incomplete install).
 
-1. Get the inventory of BMCs:
+1. Get the inventory of BMCs.
 
    - (`pit#`) From the PIT:
 
@@ -74,16 +74,16 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the `pit`, if reinstalli
       readarray BMCS < <(grep mgmt /etc/hosts | awk '{print $NF}' | grep -v m001 | sort -u)
       ```
 
-1. (`ncn#` or `pit#`) Power off NCNs:
+1. (`ncn#` or `pit#`) Power off NCNs.
 
     ```bash
-    printf "%s\n" "${BMCS[@]}" | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power off
+    printf "%s\n" "${BMCS[@]}" | xargs -t -i ipmitool -I lanplus -U "${username}" -E -H {} power off
     ```
 
-1. (`ncn#` or `pit#`) Check the power status to confirm that the nodes have powered off:
+1. (`ncn#` or `pit#`) Check the power status to confirm that the nodes have powered off.
 
     ```bash
-    printf "%s\n" "${BMCS[@]}" | xargs -t -i ipmitool -I lanplus -U $username -E -H {} power status
+    printf "%s\n" "${BMCS[@]}" | xargs -t -i ipmitool -I lanplus -U "${username}" -E -H {} power status
     ```
 
 ## Set node BMCs to DHCP
@@ -93,7 +93,7 @@ BMCs to be set back to DHCP before proceeding.
 
 > **`NOTE`** These steps require that the **[Set IPMI credentials](#set-ipmi-credentials)** steps have been performed.
 
-1. Get the inventory of BMCs:
+1. Get the inventory of BMCs.
 
    - (`pit#`) From the PIT:
 
@@ -107,18 +107,18 @@ BMCs to be set back to DHCP before proceeding.
       readarray BMCS < <(grep mgmt /etc/hosts | awk '{print $NF}' | grep -v m001 | sort -u)
       ```
 
-1. Set the BMCs to DHCP:
+1. Set the BMCs to DHCP.
 
    ```bash
    function bmcs_set_dhcp {
       local lan=1
-      for bmc in ${BMCS[@]}; do
+      for bmc in "${BMCS[@]}"; do
          # by default the LAN for the BMC is lan channel 1, except on Intel systems.
-         if ipmitool -I lanplus -U $username -E -H $bmc lan print 3 2>/dev/null; then
+         if ipmitool -I lanplus -U "${username}" -E -H "${bmc}" lan print 3 2>/dev/null; then
             lan=3
          fi
-         printf "Setting %s to DHCP ... " "$bmc"
-         if ipmitool -I lanplus -U $username -E -H $bmc lan set $lan ipsrc dhcp; then
+         printf "Setting %s to DHCP ... " "${bmc}"
+         if ipmitool -I lanplus -U "${username}" -E -H "${bmc}" lan set "${lan}" ipsrc dhcp; then
             echo "Done"
          else
             echo "Failed!"
@@ -132,9 +132,9 @@ BMCs to be set back to DHCP before proceeding.
 
     ```bash
    function bmcs_cold_reset {
-      for bmc in ${BMCS[@]}; do
-         printf "Setting %s to DHCP ... " "$bmc"
-         if ipmitool -I lanplus -U $username -E -H $bmc mc reset cold; then
+      for bmc in "${BMCS[@]}"; do
+         printf "Setting %s to DHCP ... " "${bmc}"
+         if ipmitool -I lanplus -U "${username}" -E -H "${bmc}" mc reset cold; then
             echo "Done"
          else
             echo "Failed!"
@@ -150,7 +150,7 @@ BMCs to be set back to DHCP before proceeding.
 
 > **`NOTE`** Skip this step if planning to use this node as a staging area to create the USB LiveCD.
 
-1. Shut down the LiveCD or `ncn-m001` node.
+1. (`ncn-m001#` or `pit#`) Shut down the LiveCD or `ncn-m001` node.
 
    ```bash
    poweroff

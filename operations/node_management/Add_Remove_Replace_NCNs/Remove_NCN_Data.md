@@ -8,28 +8,31 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 
 **IMPORTANT:** The following procedures assume that you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites).
 
-1. Prepare for the procedure.
+1. (`ncn-mw#`) Prepare for the procedure.
 
-    ```bash
-    cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
-    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
-                -o jsonpath='{.data.client-secret}' | base64 -d` \
-                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
-                | jq -r '.access_token')
-    ```
+    1. Obtain an API token.
 
-    Set the IPMI password for the BMC for the NCN. This step is required for every NCN except `ncn-m001`.
-    The default username is `root`.
-    Set and export `IPMI_USERNAME` if this needs to be different for the given BMC.
-    > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
+        ```bash
+        cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
+        export TOKEN=$(curl -s -S -d grant_type=client_credentials -d client_id=admin-client \
+                        -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+                        | jq -r '.access_token')
+        ```
 
-    ```bash
-    read -s IPMI_PASSWORD
-    export IPMI_PASSWORD
-    ```
+    1. Set BMC credentials for the NCN (unless doing this for `ncn-m001`).
 
-1. Fetch the status of the nodes.
+        The default username is `root`.
+        Set `IPMI_USERNAME` if this needs to be different for the given BMC.
+
+        > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
+
+        ```bash
+        read -r -s -p "BMC ${IPMI_USERNAME-root} password: " IPMI_PASSWORD
+        export IPMI_PASSWORD
+        ```
+
+1. (`ncn-mw#`) Fetch the status of the nodes.
 
     ```bash
     ./ncn_status.py --all
@@ -53,10 +56,10 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
         ncn-s004 x3000c0s26b0n0 storage
     ```
 
-1. Fetch the status of the node to be removed.
+1. (`ncn-mw#`) Fetch the status of the node to be removed.
 
     ```bash
-    ./ncn_status.py --xname $XNAME
+    ./ncn_status.py --xname "${XNAME}"
     ```
 
     Example output:
@@ -78,18 +81,18 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
         bmc_mac: a4:bf:01:38:f4:54
     ```
 
-    **Important**: Save the `ifnames` and `bmc_mac` information if you plan to add this NCN back at some time in the future.
+    **Important**: Save the `ifnames` and `bmc_mac` information if planning to add this NCN back at some time in the future.
 
-1. Shutdown `cray-reds`.
+1. (`ncn-mw#`) Shutdown `cray-reds`.
 
     ```bash
     kubectl -n services scale deployment cray-reds --replicas=0
     ```
 
-1. Remove the node from SLS, HSM, and BSS.
+1. (`ncn-mw#`) Remove the node from SLS, HSM, and BSS.
 
     ```bash
-    ./remove_management_ncn.py --xname $XNAME
+    ./remove_management_ncn.py --xname "${XNAME}"
     ```
 
     Example output:
@@ -113,7 +116,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     ```
 
     **`NOTE`**
-    If workers have been removed and the worker count is currently at two, a timeout restarting `cray-bss` can be ignored. For example, the following failure output from `remove_management_ncn.py` can be ignored.
+    If workers have been removed and the worker count is currently at two, then a timeout restarting `cray-bss` can be ignored.
+    For example, the following failure output from `remove_management_ncn.py` can be ignored.
 
     ```text
     Waiting for cray-bss to start.
@@ -129,13 +133,13 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     error: timed out waiting for the condition
     ```
 
-1. Start `cray-reds`.
+1. (`ncn-mw#`) Start `cray-reds`.
 
     ```bash
     kubectl -n services scale deployment cray-reds --replicas=1
     ```
 
-1. Verify the results by fetching the status of the management nodes.
+1. (`ncn-mw#`) Verify the results by fetching the status of the management nodes.
 
     ```bash
     ./ncn_status.py --all
@@ -158,10 +162,10 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
         ncn-s003 x3000c0s17b0n0 storage
     ```
 
-1. Fetch the status of the node that was removed:
+1. (`ncn-mw#`) Fetch the status of the node that was removed.
 
     ```bash
-    ./ncn_status.py --xname $XNAME
+    ./ncn_status.py --xname "${XNAME}"
     ```
 
     Example output:
@@ -170,4 +174,5 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     Not found: x3000c0s26b0n0
     ```
 
-Proceed to the next step to [Remove Switch Configuration](Remove_Switch_Config.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+Proceed to [Remove Switch Configuration](Remove_Switch_Config.md) or return to the main
+[Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

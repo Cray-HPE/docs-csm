@@ -17,7 +17,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     > `read -s` is used to enter the password in order to prevent it from being echoed to the screen or saved in the shell history.
 
     ```bash
-    read -s IPMI_PASSWORD
+    read -r -s -p "BMC root password: " IPMI_PASSWORD
     export IPMI_PASSWORD
     ipmitool -I lanplus -U root -E -H NCN_NODE-mgmt power status
     ```
@@ -34,9 +34,9 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
     ```bash
     USERNAME=defaultuser
-    read -s IPMI_PASSWORD
+    read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
     export IPMI_PASSWORD
-    ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt power status
+    ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_NODE-mgmt power status
     ```
 
     Example output:
@@ -56,16 +56,16 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
            ipmitool raw 0x32 0x66
            ```
 
-    2. Troubleshoot HPE NCNs.
+    1. Troubleshoot HPE NCNs.
 
         **Coming soon**
 
-1. Determine if the root user is configured.
+1. Determine if the `root` user is configured.
 
-    In the example below, the root user does not exist yet.
+    In the example below, the `root` user does not exist yet.
 
     ```bash
-    ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user list 1
+    ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_NODE-mgmt user list 1
     ```
 
     Example output:
@@ -95,43 +95,43 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     1. Enable the creation of new credentials.
 
         ```bash
-        ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user enable 4
+        ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_NODE-mgmt user enable 4
         ```
 
-    2. Set the new username to `root`.
+    1. Set the new username to `root`.
 
         ```bash
-        ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user set name 4 root
+        ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_NODE-mgmt user set name 4 root
         ```
 
-    3. Set the new password.
+    1. Set the new password.
 
         ```bash
-        ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user set password 4 <BMC root password>
+        ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_NODE-mgmt user set password 4 <BMC_root_password>
         ```
 
-    4. Grant user privileges to the new credentials.
+    1. Grant user privileges to the new credentials.
 
         ```bash
-        ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user priv 4 4 1
+        ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_NODE-mgmt user priv 4 4 1
         ```
 
-    5. Enable messaging for the identified slot and set the privilege level for that slot when it is accessed over LAN.
+    1. Enable messaging for the identified slot and set the privilege level for that slot when it is accessed over LAN.
 
         ```bash
-        ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt channel setaccess 1 4 callin=on ipmi=on link=on
+        ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_NODE-mgmt channel setaccess 1 4 callin=on ipmi=on link=on
         ```
 
-    6. Enable access to the serial over LAN \(SOL\) payload.
+    1. Enable access to the serial over LAN \(SOL\) payload.
 
         ```bash
-        ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt sol payload enable 1 4
+        ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_NODE-mgmt sol payload enable 1 4
         ```
 
-1. Verify the root credentials have been configured.
+1. Verify that the root credentials have been configured.
 
     ```bash
-    ipmitool -I lanplus -U $USERNAME -E -H NCN_NODE-mgmt user list 1
+    ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_NODE-mgmt user list 1
     ```
 
     Example output:
@@ -156,11 +156,13 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     16                   true    false      false      NO ACCESS
     ```
 
-1. Confirm the new credentials can be used with `ipmitool`.
+1. Confirm that the new credentials can be used with `ipmitool`.
 
     The new credentials work if the command succeeds and generates output similar to the example below.
 
     ```bash
+    read -r -s -p "BMC root password: " IPMI_PASSWORD
+    export IPMI_PASSWORD
     ipmitool -I lanplus -U root -E -H NCN_NODE-mgmt user list 1
     ```
 
@@ -186,6 +188,4 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
     16                   true    false      false      NO ACCESS
     ```
 
-1. Verify the time is set correctly in the BIOS
-
-    Please refer to the [Ensure Time Is Accurate Before Deploying NCNs](../../install/deploy_non-compute_nodes.md#ensure-time-is-accurate-before-deploying-ncns) procedure.
+1. Verify that the time is set correctly in the BIOS

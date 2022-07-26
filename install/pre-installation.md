@@ -184,7 +184,7 @@ On first login, the LiveCD will prompt the administrator to change the password.
       >    ```
 
       ```bash
-      /root/bin/csi-setup-lan0.sh "$site_ip" "$site_gw" "$site_dns" "$site_nics"
+      /root/bin/csi-setup-lan0.sh "${site_ip}" "${site_gw}" "${site_dns}" "${site_nics}"
       ```
 
 1. (`pit#`) Verify that the assigned IP address was successfully applied to `lan0` .
@@ -210,8 +210,8 @@ On first login, the LiveCD will prompt the administrator to change the password.
 
       ```bash
       disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
-      echo $disk
-      parted --wipesignatures -m --align=opt --ignore-busy -s /dev/$disk -- mklabel gpt mkpart primary ext4 2048s 100%
+      echo ${disk}
+      parted --wipesignatures -m --align=opt --ignore-busy -s "/dev/$disk" -- mklabel gpt mkpart primary ext4 2048s 100%
       mkfs.ext4 -L PITDATA "/dev/${disk}1"
       mount -vL PITDATA
       ```
@@ -312,7 +312,7 @@ These variables will need to be set for many procedures within the CSM installat
 
    ```bash
    livecd=eniac-ncn-m001.example.company.com
-   ssh root@$livecd
+   ssh root@"${livecd}"
    ```
 
 1. (`pit#`) Copy the previous typescript and start a new one.
@@ -320,7 +320,7 @@ These variables will need to be set for many procedures within the CSM installat
    ```bash
    cd "${PITDATA}/admin"
    cp -pv /tmp/boot.livecd.*.txt ./
-   script -af ~/csm-install.$(date +%Y-%m-%d).txt
+   script -af ~/"csm-install.$(date +%Y-%m-%d).txt"
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
@@ -366,7 +366,8 @@ These variables will need to be set for many procedures within the CSM installat
       > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
 
       ```bash
-      curl -C - -o /var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
+      curl -C - -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
+        "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
       ```
 
    - `scp` from the external server used in [Prepare installation environment server](#11-prepare-installation-environment-server):
@@ -629,7 +630,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 1. (`pit#`) Set the `IPMI_PASSWORD` variable.
 
    ```bash
-   read -s IPMI_PASSWORD
+   read -r -s -p "NCN BMC root password: " IPMI_PASSWORD
    ```
 
 1. (`pit#`) Export the `IPMI_PASSWORD` variable.

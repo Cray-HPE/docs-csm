@@ -1,14 +1,14 @@
 # Restore System Functionality if a Kubernetes Worker Node is Down
 
 Services running on Kubernetes worker nodes can be properly restored if downtime occurs. Use this procedure to ensure that if a Kubernetes worker node is lost or restored after
-being down, certain features the node was providing can also be restored or recovered on another node.
+being down, then certain features the node was providing can also be restored or recovered on another node.
 
 Capture the metadata for the unhealthy node before bringing down the node. The pods will successfully terminate when the node goes down, which should resolve most pods in an
 error state. Once any remaining testing or validation work is complete, these pods can be restored with the file used to capture the metadata.
 
 ## Collect information before powering down the node
 
-1. Check the Persistent Volume Claims \(PVC\) that have been created on the system.
+1. (`ncn-mw#`) Check the Persistent Volume Claims \(PVC\) that have been created on the system.
 
     1. View the PVCs in all namespaces.
 
@@ -30,11 +30,12 @@ error state. Once any remaining testing or validation work is complete, these po
     1. Get a list of PVCs for a particular pod.
 
         ```bash
-        kubectl get pod POD_NAME -o \
-                jsonpath='{.spec.volumes[*].persistentVolumeClaim.claimName}{"\n"}'
+        kubectl get pod POD_NAME -o jsonpath='{.spec.volumes[*].persistentVolumeClaim.claimName}{"\n"}'
         ```
 
-1. Verify that the time is synced across all NCNs.
+1. (`ncn-mw#`) Verify that the time is synced across all NCNs.
+
+    > Adjust the ranges in the example command to reflect the actual NCNs on the system.
 
     ```bash
     pdsh -w ncn-s00[1-3],ncn-m00[1-3],ncn-w00[1-3] date
@@ -54,7 +55,7 @@ error state. Once any remaining testing or validation work is complete, these po
     ncn-w002: Thu Feb 27 08:41:11 CST 2020
     ```
 
-1. Generate a list of pods that are running on the node that will be taken down.
+1. (`ncn-mw#`) Generate a list of pods that are running on the node that will be taken down.
 
     The example below is displaying all of the pods running on `ncn-w001`.
 
@@ -113,7 +114,7 @@ error state. Once any remaining testing or validation work is complete, these po
     services    cfs-0336105c-e697-4d9d-a129-badde6da3218-vn6n4         0/3     Error   0          6d20h   10.42.0.98    ncn-w002   <none>           <none>
     ```
 
-1. View the status of the node before taking it down.
+1. (`ncn-mw#`) View the status of the node before taking it down.
 
     ```bash
     kubectl get nodes -o wide
@@ -133,24 +134,24 @@ error state. Once any remaining testing or validation work is complete, these po
 
 ### Collect information after powering down the node
 
-1. Shut down the node.
+1. (`ncn-mw#`) Shut down the node.
 
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
     USERNAME=root
-    read -s IPMI_PASSWORD
+    read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
     export IPMI_PASSWORD
-    ipmitool -H BMC_IP_ADDRESS -v -I lanplus -U $USERNAME -E chassis power off
+    ipmitool -H BMC_IP_ADDRESS -v -I lanplus -U "${USERNAME}" -E chassis power off
     ```
 
-1. View the node status after the node is taken down.
+1. (`ncn-mw#`) View the node status after the node is taken down.
 
     ```bash
     kubectl get nodes
     ```
 
-1. View the pods on the system to see if their states have changed.
+1. (`ncn-mw#`) View the pods on the system to see if their states have changed.
 
     1. View all of the pods on the system.
 
@@ -175,20 +176,20 @@ error state. Once any remaining testing or validation work is complete, these po
         kubectl describe pod POD_NAME
         ```
 
-1. Power the node back on.
+### Collect information after the node is powered on
 
-### Collect Information After the Node is Powered On
+1. (`ncn-mw#`) Power the node back on.
 
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
     USERNAME=root
-    read -s IPMI_PASSWORD
+    read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
     export IPMI_PASSWORD
-    ipmitool -H BMC_IP_ADDRESS -v -I lanplus -U $USERNAME -E chassis power on
+    ipmitool -H BMC_IP_ADDRESS -v -I lanplus -U "${USERNAME}" -E chassis power on
     ```
 
-1. Record the status of the pods again.
+1. (`ncn-mw#`) Record the status of the pods again.
 
     The pods will go to an `Unknown` state as the node is coming up and taking inventory of its assigned pods. The number of pods in `Unknown` states will increase as this
     inventory takes place, and then will decrease as their actual states are restored to `Running`, `Terminated`, or another state.
