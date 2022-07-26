@@ -39,12 +39,13 @@ Preparation of the environment must be done before attempting to deploy the mana
 
 1. (`pit#`) Define shell environment variables that will simplify later commands to deploy management nodes.
 
-   1. Set `IPMI_PASSWORD` to the `root` password for the NCN BMCs.
+   1. Set `USERNAME` and `IPMI_PASSWORD` to the credentials for the NCN BMCs.
 
       > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
       ```bash
-      read -s IPMI_PASSWORD
+      USERNAME=root
+      read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
       ```
 
    1. Set the remaining helper variables.
@@ -52,7 +53,7 @@ Preparation of the environment must be done before attempting to deploy the mana
       > These values do not need to be altered from what is shown.
 
       ```bash
-      export IPMI_PASSWORD ; mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt' ; USERNAME=root
+      export IPMI_PASSWORD ; mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt'
       ```
 
 ### 1.2. BIOS baseline
@@ -68,15 +69,15 @@ Preparation of the environment must be done before attempting to deploy the mana
 1. (`pit#`) Check power status of all NCNs.
 
     ```bash
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
-          xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
+    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+          xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power status
     ```
 
 1. (`pit#`) Power off all NCNs.
 
     ```bash
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
-          xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+          xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
     ```
 
 1. (`pit#`) Clear CMOS; ensure default settings are applied to all NCNs.
@@ -89,17 +90,17 @@ Preparation of the environment must be done before attempting to deploy the mana
    - Disable VT-x, AMD-V, SVM, VT-d, and AMD IOMMU for Virtualization, on both AMD and Intel CPUs; there is no way to enable at this time.
 
     ```bash
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
-          xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev none options=clear-cmos
+    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+          xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev none options=clear-cmos
     ```
 
 1. (`pit#`) Boot NCNs to BIOS to allow the CMOS to reinitialize.
 
     ```bash
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
-          xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev bios options=efiboot
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
-          xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
+    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+          xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev bios options=efiboot
+    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+          xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
     ```
 
 1. (`pit#`) Run `bios-baseline.sh`.
@@ -113,8 +114,8 @@ Preparation of the environment must be done before attempting to deploy the mana
 1. (`pit#`) Power off the nodes.
 
     ```bash
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
-          xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+          xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
     ```
 
 ## 2. Deploy management nodes
@@ -134,9 +135,9 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) Set each node to always UEFI network boot, and ensure that they are powered off.
 
     ```bash
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
-    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=persistent
+    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=efiboot
+    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
     ```
 
     > **NOTE:** The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
@@ -146,7 +147,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) Boot the **storage NCNs**.
 
     ```bash
-    grep -oP $stoken /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on 
+    grep -oP "${stoken}" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on 
     ```
 
 1. (`pit#`) Observe the installation through the console of `ncn-s001-mgmt`.
@@ -173,7 +174,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) Boot the **Kubernetes NCNs**.
 
     ```bash
-    grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
+    grep -oP "(${mtoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
     ```
 
 1. (`pit#`) Start watching the the first Kubernetes master's console.
@@ -186,13 +187,13 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
         ```bash
         FM=$(cat "${PITDATA}"/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
-        echo $FM
+        echo ${FM}
         ```
 
     1. Open its console.
 
         ```bash
-        conman -j ${FM}-mgmt
+        conman -j "${FM}-mgmt"
         ```
 
     > **NOTES:**
@@ -221,7 +222,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
         > Enter the `root` password for the first Kubernetes master node, if prompted.
 
         ```bash
-        ssh ${FM} kubectl get nodes -o wide
+        ssh "${FM}" kubectl get nodes -o wide
         ```
 
         Expected output looks similar to the following:
@@ -247,7 +248,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
    ```bash
    mkdir -v ~/.kube
-   scp ${FM}.nmn:/etc/kubernetes/admin.conf ~/.kube/config
+   scp "${FM}.nmn:/etc/kubernetes/admin.conf" ~/.kube/config
    ```
 
 1. (`pit#`) Ensure that the working directory is the `prep` directory.
@@ -300,7 +301,7 @@ If the check fails, stop and:
 1. (`pit#`) Power cycle the node
 
     ```bash
-    ipmitool -I lanplus -U $USERNAME -E -H <node-in-question> power reset    
+    ipmitool -I lanplus -U "${USERNAME}" -E -H <node-in-question> power reset    
     ```
 
 If the check fails after doing the rebuild, contact support.

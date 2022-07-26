@@ -2,38 +2,56 @@
 
 Shut down management services and power off the HPE Cray EX management Kubernetes cluster.
 
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Check health of the management cluster](#check-health-of-the-management-cluster)
+- [Shut down the Kubernetes management cluster](#shut-down-the-kubernetes-management-cluster)
+- [Next step]
+
+## Overview
+
 Understand the following concepts before powering off the management non-compute nodes \(NCNs\) for the Kubernetes cluster and storage:
 
-- The etcd cluster provides storage for the state of the management Kubernetes cluster. The three node etcd cluster runs on the same nodes that are configured as Kubernetes Master nodes. The management cluster state must be frozen when powering off the Kubernetes cluster. When one member is unavailable, the two other members continue to provide full access to the data. When two members are down, the remaining member will switch to only providing read-only access to the data.
-- **Avoid Unnecessary Data Movement with Ceph** - The Ceph cluster runs not only on the dedicated storage nodes, but also on the nodes configured as Kubernetes Master nodes. Specifically, the `mon` processes. If one of the storage nodes goes down, Ceph can rebalance the data onto the remaining nodes and object storage daemons \(OSDs\) to regain full protection.
-- **Avoid Spinning up Replacement Pods on Worker Nodes** - Kubernetes keeps all pods running on the management cluster. The `kubelet` process on each node retrieves information from the `etcd` cluster about what pods must be running. If a node becomes unavailable for more than five minutes, Kubernetes creates replacement pods on other management nodes.
-- **High-Speed Network \(HSN\)** - When the management cluster is shut down the HSN is also shut down.
+- The etcd cluster provides storage for the state of the management Kubernetes cluster. The three node etcd cluster runs on the same nodes that are configured as Kubernetes master nodes. The
+  management cluster state must be frozen when powering off the Kubernetes cluster. When one member is unavailable, the two other members continue to provide full access to the data. When two
+  members are down, the remaining member will switch to only providing read-only access to the data.
+- **Avoid unnecessary data movement with Ceph**: The Ceph cluster runs not only on the dedicated storage nodes, but also on the nodes configured as Kubernetes master nodes. Specifically, the `mon`
+  processes. If one of the storage nodes goes down, then Ceph can rebalance the data onto the remaining nodes and object storage daemons \(OSDs\) to regain full protection.
+- **Avoid spinning up replacement pods on worker nodes**: Kubernetes keeps all pods running on the management cluster. The `kubelet` process on each node retrieves information from the etcd
+  cluster about which pods must be running. If a node becomes unavailable for more than five minutes, then Kubernetes creates replacement pods on other management nodes.
+- **High-Speed Network \(HSN\)**: When the management cluster is shut down the HSN is also shut down.
 
 The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes management cluster and performs these tasks:
 
 - Stops `etcd` and which freezes the state of the Kubernetes cluster on each management node.
-- Stops **and disables** the kubelet on each management and worker node.
+- Stops **and disables** the `kubelet` on each management and worker node.
 - Stops all containers on each management and worker node.
 - Stop `containerd` on each management and worker node.
 - Stops Ceph from rebalancing on the management node that is running a `mon` process.
 
 ## Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
+An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream
+documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
-## Procedure
+## Check health of the management cluster
 
-**CHECK HEALTH OF THE MANAGEMENT CLUSTER**
+1. To check the health and status of the management cluster before shutdown, see the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 
-1.  To check the health and status of the management cluster before shutdown, see the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
+1. Check the health and backup etcd clusters:
 
-2. Check the health and backup etcd clusters:
+   1. Determine which etcd clusters must be backed up and if they are healthy.
 
-   a. Determine what etcd clusters must be backed up and if they are healthy. Review [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
+      Review [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
-   b. Backup etcd clusters. See [Backups for etcd-operator Clusters](../kubernetes/Backups_for_etcd-operator_Clusters.md).
+   1. Backup etcd clusters.
 
-3. Check the status of NCN no wipe settings. Make sure `metal.no-wipe=1`. If a management NCN is set to `metal.no-wipe==wipe`, review [Check and Set the metal.no-wipe Setting on NCNs](../node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md) before proceeding.
+      See [Backups for etcd-operator Clusters](../kubernetes/Backups_for_etcd-operator_Clusters.md).
+
+1. (`ncn-mw#`) Check the status of NCN no wipe settings.
+
+   Make sure that `metal.no-wipe=1`. If any management NCNs do not have that set, then review
+   [Check and Set the `metal.no-wipe` Setting on NCNs](../node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md) before proceeding.
 
    ```bash
    /opt/cray/platform-utils/ncnGetXnames.sh
@@ -41,7 +59,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
    Example output:
 
-   ```
+   ```text
                 +++++ Get NCN Xnames +++++
    === Can be executed on any worker or master ncn node. ===
    === Executing on ncn-m001, Thu Mar 18 20:58:04 UTC 2021 ===
@@ -62,12 +80,11 @@ An authentication token is required to access the API gateway and to use the `sa
    ncn-s001: x3000c0s7b0n0 - metal.no-wipe=1
    ncn-s002: x3000c0s8b0n0 - metal.no-wipe=1
    ncn-s003: x3000c0s9b0n0 - metal.no-wipe=1
-   root@ncn-m001 2021-03-18 20:58:21 ~ #
    ```
 
-### SHUT DOWN THE KUBERNETES MANAGEMENT CLUSTER
+## Shut down the Kubernetes management cluster
 
-1. Shut down platform services.
+1. (`ncn-mw#`) Shut down platform services.
 
    ```bash
    sat bootsys shutdown --stage platform-services
@@ -75,7 +92,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
    Example output:
 
-   ```
+   ```text
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
@@ -106,15 +123,16 @@ An authentication token is required to access the API gateway and to use the `sa
    Aborting.
    ```
 
-   In the preceding example, the commands to stop containers timed out on all the worker nodes and reported `WARNING` and `ERROR` messages. A summary of the issue displays and prompts the user to continue or stop. Respond `no` stop the shutdown. Then review the containers running on the nodes.
+   In the preceding example, the commands to stop containers timed out on all the worker nodes and reported `WARNING` and `ERROR` messages.
+   A summary of the issue displays and prompts the user to continue or stop. Respond `no` stop the shutdown. Then review the containers running on the nodes.
 
    ```bash
-   for ncn in ncn-w00{1,2,3}; do echo "$ncn"; ssh $ncn "crictl ps"; echo; done
+   for ncn in ncn-w00{1,2,3}; do echo "${ncn}"; ssh "${ncn}" "crictl ps"; echo; done
    ```
 
    Example output:
 
-   ```
+   ```text
    ncn-w001
    CONTAINER         IMAGE             CREATED           STATE         NAME              ATTEMPT         POD ID
    032d69162ad24     302d9780da639     54 minutes ago    Running       cray-dhcp-kea     0               e4d1c01818a5a
@@ -136,7 +154,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
    Example output:
 
-   ```
+   ```text
    The following Non-compute Nodes (NCNs) will be included in this operation:
    managers:
    - ncn-m001
@@ -166,9 +184,10 @@ An authentication token is required to access the API gateway and to use the `sa
    Executing step: Check health of Ceph cluster and freeze state.
    ```
 
-   If the process continues to report errors due to `Failed to stop containers`, iterate on the above step. Each iteration should reduce the number of containers running. If necessary, containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, re-run the above procedure to complete any final steps in the process.
+   If the process continues to report errors due to `Failed to stop containers`, then iterate on the above step. Each iteration should reduce the number of containers running. If necessary,
+   containers can be manually stopped using `crictl stop CONTAINER`. If containers are stopped manually, then re-run the above procedure to complete any final steps in the process.
 
-1. Shut down and power off all management NCNs except `ncn-m001`.
+1. (`ncn-mw#`) Shut down and power off all management NCNs except `ncn-m001`.
 
    ```bash
    sat bootsys shutdown --stage ncn-power
@@ -176,7 +195,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
    Example output:
 
-   ```
+   ```text
    Proceed with shutdown of other management NCNs? [yes,no] yes
    Proceeding with shutdown of other management NCNs.
    IPMI username: root
@@ -203,7 +222,9 @@ An authentication token is required to access the API gateway and to use the `sa
    Are the above NCN groupings and exclusions correct? [yes,no] yes
    ```
 
-1. Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
+1. (`ncn-mw#`) Monitor the consoles for each NCN.
+
+   Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
    Alternately attach to the screen session \(screen sessions real time, but not saved\):
 
@@ -213,7 +234,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
    Example output:
 
-   ```
+   ```text
    There are screens on:
    26745.SAT-console-ncn-m003-mgmt (Detached)
    26706.SAT-console-ncn-m002-mgmt (Detached)
@@ -225,35 +246,32 @@ An authentication token is required to access the API gateway and to use the `sa
    26444.SAT-console-ncn-w001-mgmt (Detached)
    ```
 
-   ```
+   ```bash
    screen -x 26745.SAT-console-ncn-m003-mgmt
    ```
 
-1. Use `ipmitool` to check the power off status of management nodes.
+1. (`ncn-m001#`) Check the power off status of management nodes.
 
     > NOTE: `read -s` is used to read the password in order to prevent it from being
     > echoed to the screen or preserved in the shell history.
 
     ```bash
-    export USERNAME=root
-    read -s IPMI_PASSWORD
+    USERNAME=root
+    read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
     export IPMI_PASSWORD
     for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do
-                  echo -n "$ncn: "
-                  ipmitool -U $USERNAME -H ${ncn}-mgmt -E -I lanplus chassis power status
-              done
+        echo -n "${ncn}: "
+        ipmitool -U "${USERNAME}" -H "${ncn}-mgmt" -E -I lanplus chassis power status
+    done
     ```
 
-1. From a remote system, activate the serial console for `ncn-m001`.
+1. (`external#`) From a remote system, activate the serial console for `ncn-m001`.
 
     ```bash
-    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME sol activate
-
-    ncn-m001 login: root
-    Password:
+    ipmitool -I lanplus -U "${USERNAME}" -E -H NCN-M001_BMC_HOSTNAME sol activate
     ```
 
-1. From the serial console, shut down Linux.
+1. (`ncn-m001#`) From the serial console of `ncn-m001`, shut down Linux.
 
     ```bash
     shutdown -h now
@@ -261,18 +279,21 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1. Wait until the console indicates that the node has shut down.
 
-1. From a remote system that has access to the management plane, use IPMI tool to power off `ncn-m001`.
+1. (`external#`) From a remote system that has access to the management plane, power off `ncn-m001`.
 
     ```bash
-    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power status
-    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power off
-    remote$ ipmitool -I lanplus -U $USERNAME -E -H NCN-M001_BMC_HOSTNAME chassis power status
+    ipmitool -I lanplus -U "${USERNAME}" -E -H NCN-M001_BMC_HOSTNAME chassis power status
+    ipmitool -I lanplus -U "${USERNAME}" -E -H NCN-M001_BMC_HOSTNAME chassis power off
+    ipmitool -I lanplus -U "${USERNAME}" -E -H NCN-M001_BMC_HOSTNAME chassis power status
     ```
 
-    **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled HPE Cray EX2000 cabinet (also referred to as a Hill or TDS cabinet) typically receives power from its management cabinet PDUs. If the system includes an EX2000 cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the cabinet and may result in data loss or equipment damage.
+    **CAUTION:** The modular coolant distribution unit \(MDCU\) in a liquid-cooled HPE Cray EX2000 cabinet (also referred to as a Hill or TDS cabinet) typically receives power from its management
+    cabinet PDUs. If the system includes an EX2000 cabinet, then **do not power off** the management cabinet PDUs. Powering off the MDCU will cause an emergency power off \(EPO\) of the cabinet and
+    may result in data loss or equipment damage.
 
-1. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
+1. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, then power off the PDU circuit breakers or disconnect the PDUs from facility power and
+   follow lock out/tag out procedures for the site.
 
-## Next Step
+## Next step
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.

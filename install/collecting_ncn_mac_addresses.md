@@ -60,18 +60,18 @@ boot-check nodes to dump network device information without an operating system.
     1. Record the password for this user.
 
         ```bash
-        read -s IPMI_PASSWORD
+        read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
         ```
 
     1. Set the nodes to PXE boot and restart them.
 
         ```bash
         export IPMI_PASSWORD
-        grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
-        grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
-        grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+        grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=persistent
+        grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=efiboot
+        grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
         sleep 10
-        grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
+        grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
         ```
 
 1. (`pit#`) Wait for the nodes to network boot.
@@ -94,8 +94,8 @@ boot-check nodes to dump network device information without an operating system.
 
     ```bash
     for file in /var/log/conman/*; do
-        echo $file
-        grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI && echo -----
+        echo ${file}
+        grep -Eoh '(net[0-9] MAC .*)' "${file}" | sort -u | grep PCI && echo -----
     done
     ```
 
@@ -134,7 +134,7 @@ boot-check nodes to dump network device information without an operating system.
     This information will be used to populate the MAC addresses for `ncn-m001`.
 
     ```bash
-    cat /proc/net/bonding/bond0 | grep -i perm 
+    grep -i perm /proc/net/bonding/bond0
     ```
 
     For example:

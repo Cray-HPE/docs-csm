@@ -11,13 +11,14 @@ Add, remove, replace, or move non-compute nodes (NCNs). This applies to worker, 
 The following workflows are available:
 
 * [Prerequisites](#prerequisites)
-* [Add Worker, Storage, or Master NCNs](#add-worker-storage-master)
-  * [Add NCN Prerequisites](#add-ncn-prerequisites)
-  * [Add NCN Procedure](#add-ncn-procedure)
-* [Remove Worker, Storage, or Master NCNs](#remove-worker-storage-master)
-  * [Remove NCN Prerequisites](#remove-ncn-prerequisites)
-  * [Remove NCN Procedure](#remove-ncn-procedure)
-* [Replace or Move Worker, Storage, or Master NCNs](#replace-worker-storage-master)
+* [Add worker, storage, or master NCNs](#add-worker-storage-master-ncns)
+  * [Add NCN prerequisites](#add-ncn-prerequisites)
+  * [Add NCN procedure](#add-ncn-procedure)
+* [Remove worker, storage, or master NCNs](#remove-worker-storage-master-ncns)
+  * [Remove NCN prerequisites](#remove-ncn-prerequisites)
+  * [Remove NCN procedure](#remove-ncn-procedure)
+* [Replace or move worker, storage, or master NCNs](#replace-worker-storage-master-ncns)
+  * [Replace NCN procedure](#replace-ncn-procedure)
 
 ## Prerequisites
 
@@ -25,9 +26,9 @@ The system is fully installed and has transitioned off of the LiveCD.
 
 All activities required for site maintenance are complete.
 
-The latest `docs-csm` RPM has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation)
+The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
-1. Run `ncn_add_pre-req.py` to adjust the network.
+1. (`ncn-m#`) Run `ncn_add_pre-req.py` to adjust the network.
 
    ```bash
    cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
@@ -147,9 +148,12 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
     Restarting cray-dhcp-kea
    ```
 
-   1. When adding new NCNs, there will be network configuration changes that will impact changing IP addresses on computes. **That will require DVS restart to update the IP addresses in the DVS `node_map`.**
+   1. When adding new NCNs, there will be network configuration changes that will impact changing IP addresses on computes.
 
-   1. `ncn_add_pre-req.py` will make the network adjustments and will list the component names (xnames) that will need to be rebooted after DVS is restarted. See example below:
+      **That will require a DVS restart to update the IP addresses in the DVS `node_map`.**
+
+      `ncn_add_pre-req.py` will make the network adjustments and will list the component names (xnames) that will need to be
+      rebooted after DVS is restarted. See example below:
 
       ```text
       Please restart DVS and rebooting the following nodes before proceeding to the next step.:["x3000c0s21b4", "x3000c0s19b0", "x3000c0s21b3", "x3000c0s21b1", "x3000c0s21b2", "x3000c0s21b2n0", "x3000c0s21b3n0", "x3000c0s21b1n0"]
@@ -158,38 +162,38 @@ The latest `docs-csm` RPM has been installed on the master nodes. See [Check for
       Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-04-01_21-21-04
       ```
 
-## Add Worker, Storage, or Master NCNs
+## Add worker, storage, or master NCNs
 
 Use this procedure to add a worker, storage, or master NCN.
 
-### Add NCN Prerequisites
+### Add NCN prerequisites
 
 For several of the commands in this section, variables must be set with the name of the node being added and its component name (xname).
-Set `NODE` to the hostname of the node being added (for example `ncn-w001`, `ncn-s002`, etc).
+
+(`ncn-m#`) Set `NODE` to the hostname of the node being added (for example `ncn-w001`, `ncn-s002`, etc).
 
 ```bash
 NODE=ncn-x00n
 ```
 
-If the component name (xname) is known, set it now. Otherwise it will be determined in a later step.
+(`ncn-m#`) If the component name (xname) is known, then set it now. Otherwise it will be determined in a later step.
 
 ```bash
 XNAME=<xname>
-echo $XNAME
 ```
 
 **IMPORTANT:** Ensure that the node being added to the system has been properly configured. If the node being added to the system has not been previously in the system, several settings need to be verified.
 
 * Ensure that the NCN device to be added has been racked and cabled per the SHCD.
-* Ensure the NCN BMC is configured with the expected root user credentials.
+* Ensure that the NCN BMC is configured with the expected root user credentials.
 
-   The NCN BMC credentials need to match the current global air-cooled BMC default credentials. These can be viewed with the following commands:
+   (`ncn-m#`) The NCN BMC credentials need to match the current global air-cooled BMC default credentials. These can be viewed with the following commands:
 
    ```bash
    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json |
                          jq -r '.data["vault-root"]' |  base64 -d)
    kubectl -n vault exec -it cray-vault-0 -c vault -- env \
-      VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 \
+      VAULT_TOKEN="${VAULT_PASSWD}" VAULT_ADDR=http://127.0.0.1:8200 \
       vault kv get secret/reds-creds/defaults
    ```
 
@@ -202,22 +206,26 @@ echo $XNAME
    Cray    map[password:foobar username:root] 
    ```
 
-* If adding an NCN that was not previously in the system, follow the [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md) procedure.
-* Ensure the NCN BMC is configured to use DHCP. (This does not apply to the BMC for `ncn-m001`, because it is statically configured for the site.)
-* Ensure that the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs using the [Switch PXE Boot from Onboard NIC to PCIe](Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md) procedure.
+* If adding an NCN that was not previously in the system, then follow the
+  [Access and Update the Settings for Replacement NCNs](Access_and_Update_the_Settings_for_Replacement_NCNs.md) procedure.
+* Ensure that the NCN BMC is configured to use DHCP.
+  * This does not apply to the BMC for `ncn-m001`, because it is statically configured for the site.
+* Ensure that the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs.
+  * See the [Switch PXE Boot from Onboard NIC to PCIe](Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md) procedure.
 
-* If adding an HPE NCN, ensure that IPMI is enabled.
+* If adding an HPE NCN, then ensure that IPMI is enabled.
 
-   1. Check to see if IPMI is enabled:
+   1. (`ncn-m#`) Check to see if IPMI is enabled:
 
       > `read -s` is used to read the password in order to prevent it from being echoed to the screen or saved in the shell history.
-      > Note that the subsequent `curl` commands **will** do both of these things. If this is not desired, the call should be made in
+      > Note that the subsequent `curl` commands **will** do both of these things. If this is not desired, then the call should be made in
       > another way.
 
       ```bash
-      read -s IPMI_PASSWORD
+      NCN_BMC=ncn_bmc_hostname_or_ip_address
+      read -r -s -p "${NCN_BMC} root password: " IPMI_PASSWORD
       export IPMI_PASSWORD
-      curl -k -u root:$IPMI_PASSWORD https://NCN_NODE-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq .IPMI
+      curl -k -u root:"${IPMI_PASSWORD}" "https://${NCN_BMC}/redfish/v1/Managers/1/NetworkProtocol" | jq .IPMI
       ```
 
       Expected output:
@@ -229,121 +237,109 @@ echo $XNAME
       }
       ```
 
-   2. If IPMI is disabled, then enable IPMI:
+   1. (`ncn-m#`) If IPMI is disabled, then enable IPMI and restart the BMC.
 
-      ```bash
-      curl -k -u root:$IPMI_PASSWORD -X PATCH \
-         -H 'Content-Type: application/json' \
-         -d '{"IPMI": {"Port": 623, "ProtocolEnabled": true}}' \
-         https://${NODE}-mgmt/redfish/v1/Managers/1/NetworkProtocol | jq
-      ```
+      1. Enable IPMI.
 
-      Expected output:
+         ```bash
+         curl -k -u root:"${IPMI_PASSWORD}" -X PATCH -H 'Content-Type: application/json' \
+            -d '{"IPMI": {"Port": 623, "ProtocolEnabled": true}}' \
+            "https://${NCN_BMC}/redfish/v1/Managers/1/NetworkProtocol" | jq
+         ```
 
-      ```json
-      {
-         "error": {
-            "code": "iLO.0.10.ExtendedInfo",
-            "message": "See @Message.ExtendedInfo for more information.",
-            "@Message.ExtendedInfo": [
-               {
-               "MessageId": "iLO.2.14.ResetRequired"
-               }
-            ]
+         Expected output:
+
+         ```json
+         {
+            "error": {
+               "code": "iLO.0.10.ExtendedInfo",
+               "message": "See @Message.ExtendedInfo for more information.",
+               "@Message.ExtendedInfo": [
+                  {
+                  "MessageId": "iLO.2.14.ResetRequired"
+                  }
+               ]
+            }
          }
-      }
-      ```
+         ```
 
-   3. If IPMI was disabled, then restart the BMC:
+      1. Restart the BMC.
 
-      ```bash
-      curl -k -u root:$IPMI_PASSWORD -X POST \
-         -H 'Content-Type: application/json' \
-         -d '{"ResetType": "GracefulRestart"}' \
-         https://${NODE}-mgmt/redfish/v1/Managers/1/Actions/Manager.Reset | jq
-      ```
+         ```bash
+         curl -k -u root:"${IPMI_PASSWORD}" -X POST -H 'Content-Type: application/json' \
+            -d '{"ResetType": "GracefulRestart"}' \
+            "https://${NCN_BMC}/redfish/v1/Managers/1/Actions/Manager.Reset" | jq
+         ```
 
-      Expected output:
+         Expected output:
 
-      ```json
-      {
-         "error": {
-            "code": "iLO.0.10.ExtendedInfo",
-            "message": "See @Message.ExtendedInfo for more information.",
-            "@Message.ExtendedInfo": [
-               {
-               "MessageId": "iLO.2.14.ResetInProgress"
-               }
-            ]
+         ```json
+         {
+            "error": {
+               "code": "iLO.0.10.ExtendedInfo",
+               "message": "See @Message.ExtendedInfo for more information.",
+               "@Message.ExtendedInfo": [
+                  {
+                  "MessageId": "iLO.2.14.ResetInProgress"
+                  }
+               ]
+            }
          }
-      }
-      ```
+         ```
 
-### Add NCN Procedure
+### Add NCN procedure
 
 The following is a high-level overview of the add NCN workflow:
 
-1. [Allocate NCN IP Addresses](Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md)
+1. [Allocate NCN IP Addresses](Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md).
+1. [Add Switch Configuration](Add_Remove_Replace_NCNs/Add_Switch_Config.md).
+1. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM.
+1. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS.
+1. [Boot NCN and Configure](Add_Remove_Replace_NCNs/Boot_NCN.md).
+1. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md).
+1. [Validate NCN](Add_Remove_Replace_NCNs/Validate_NCN.md).
+1. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md).
 
-1. [Add Switch Configuration](Add_Remove_Replace_NCNs/Add_Switch_Config.md)
+## Remove worker, storage, or master NCNs
 
-1. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM
+Use this procedure to remove a worker, storage, or master NCN.
 
-1. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS
-
-1. [Boot NCN and Configure](Add_Remove_Replace_NCNs/Boot_NCN.md)
-
-1. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md)
-
-1. [Validate NCN](Add_Remove_Replace_NCNs/Validate_NCN.md)
-
-1. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md)
-
-## Remove Worker, Storage, or Master NCNs
-
-Use this procedure to remove a worker, storage, or master node (NCN).
-
-### Remove NCN Prerequisites
+### Remove NCN prerequisites
 
 Open two sessions: one on the node that is to be removed and another on a different master or worker node.
-For several of the commands in this section, variables must be set with the name of the node being removed and its component name (xname).
+
+(`ncn#`) For several of the commands in this section, variables must be set with the name of the node being removed and its component name (xname).
 Set `NODE` to the hostname of the node being removed (for example `ncn-w001`, `ncn-s002`, etc).
 Set `XNAME` to the xname of that node.
 
 ```bash
 NODE=ncn-x00n
-XNAME=$(ssh $NODE cat /etc/cray/xname)
-echo $XNAME
+XNAME=$(ssh ${NODE} cat /etc/cray/xname)
+echo "${XNAME}"
 ```
 
-### Remove NCN Procedure
+### Remove NCN procedure
 
 The following is a high-level overview of the remove NCN workflow:
 
-1. [Remove NCN from Role, Wipe the Disks, and Power Down](Add_Remove_Replace_NCNs/Remove_NCN_from_Role.md)
-
-1. [Remove NCN data](Add_Remove_Replace_NCNs/Remove_NCN_Data.md) from SLS, BSS and HSM
-
-1. [Remove Switch Configuration](Add_Remove_Replace_NCNs/Remove_Switch_Config.md)
-
-1. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md)
-
-1. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md)
+1. [Remove NCN from Role, Wipe the Disks, and Power Down](Add_Remove_Replace_NCNs/Remove_NCN_from_Role.md).
+1. [Remove NCN data](Add_Remove_Replace_NCNs/Remove_NCN_Data.md) from SLS, BSS and HSM.
+1. [Remove Switch Configuration](Add_Remove_Replace_NCNs/Remove_Switch_Config.md).
+1. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md).
+1. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md).
 
 **IMPORTANT:** Update the SHCD to remove the device. This is only needed if no NCN device will be added back to same location with the same cabling.
 
-## Replace or Move Worker, Storage, or Master NCNs
+## Replace or move worker, storage, or master NCNs
 
 Replacing an NCN is defined as removing an NCN of a given type and adding a different NCN of the same type (but with different MAC addresses) back into the same cabinet slot.
 Moving an NCN is defined as removing an NCN of a given type from one cabinet and adding it back into a different cabinet.
 
-Use the [Remove Worker, Storage, or Master NCNs](#remove-worker-storage-master) procedure followed by the [Add Worker, Storage, or Master NCNs](#add-worker-storage-master) procedure to replace a worker, storage, or master node (NCN).
 In general, scaling master nodes is not recommended because it can cause Etcd latency.
 
-### Replace NCN Procedure
+### Replace NCN procedure
 
 The following is a high-level overview of the replace NCN workflow:
 
-1. [Remove Worker, Storage, or Master NCNs](#remove-worker-storage-master)
-
-1. [Add Worker, Storage, or Master NCNs](#add-worker-storage-master)
+1. [Remove Worker, Storage, or Master NCNs](#remove-worker-storage-master-ncns)
+1. [Add Worker, Storage, or Master NCNs](#add-worker-storage-master-ncns)

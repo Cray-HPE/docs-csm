@@ -2,15 +2,15 @@
 
 Check and set the time for Gigabyte compute nodes.
 
-If the console log indicates the time between the rest of the system and the compute nodes is off by several hours, it prevents the `spire-agent` from getting a valid certificate,
-causing the node boot to drop into the `dracut` emergency shell.
+If the console log indicates the time between the rest of the system and the compute nodes is off by several hours, then it prevents the `spire-agent` from getting a valid certificate,
+which causes the node boot to drop into the `dracut` emergency shell.
 
 ## Procedure
 
-1. Retrieve the `cray-console-operator` pod ID.
+1. (`ncn-mw#`) Retrieve the `cray-console-operator` pod ID.
 
     ```bash
-    CONPOD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}'); echo $CONPOD
+    CONPOD=$(kubectl get pods -n services -o wide|grep cray-console-operator|awk '{print $1}'); echo ${CONPOD}
     ```
 
     Example output:
@@ -21,17 +21,17 @@ causing the node boot to drop into the `dracut` emergency shell.
 
 The following steps should be repeated for each Gigabyte node which needs to have its BIOS time reset.
 
-1. Set the `XNAME` variable to the component name (xname) of the node whose console you wish to open.
+1. (`ncn-mw#`) Set the `XNAME` variable to the component name (xname) of the node whose console you wish to open.
 
     ```bash
     XNAME=x1001c0s24b1n0
     ```
 
-1. Find the `cray-console-node` pod that is connected to that node.
+1. (`ncn-mw#`) Find the `cray-console-node` pod that is connected to that node.
 
     ```bash
-    NODEPOD=$(kubectl -n services exec $CONPOD -c cray-console-operator -- \
-            sh -c "/app/get-node $XNAME" | jq .podname | sed 's/"//g') ; echo $NODEPOD
+    NODEPOD=$(kubectl -n services exec "${CONPOD}" -c cray-console-operator -- \
+            sh -c "/app/get-node ${XNAME}" | jq .podname | sed 's/"//g') ; echo ${NODEPOD}
     ```
 
     Example output:
@@ -40,10 +40,10 @@ The following steps should be repeated for each Gigabyte node which needs to hav
     cray-console-node-1
     ```
 
-1. Connect to the node's console using ConMan on the identified `cray-console-node` pod.
+1. (`ncn-mw#`) Connect to the node's console using ConMan on the identified `cray-console-node` pod.
 
     ```bash
-    kubectl exec -it -n services $NODEPOD -- conman -j $XNAME
+    kubectl exec -it -n services "${NODEPOD}" -- conman -j "${XNAME}"
     ```
 
     Example output:
@@ -52,27 +52,31 @@ The following steps should be repeated for each Gigabyte node which needs to hav
     <ConMan> Connection to console [x1001c0s24b1] opened.
     ```
 
-1. Set the `BMC` variable to the component name (xname) of the BMC for the node.
+1. (`ncn-mw#`) In another terminal, boot the node to BIOS.
 
-   ```bash
-   BMC=x1001c0s24b1  # Change this to be each node in turn.
-   ```
+    1. Set the `BMC` variable to the component name (xname) of the BMC for the node.
 
-1. Using another terminal to watch the console, boot the node to BIOS.
+        This value will be different for each node.
 
-   > `read -s` is used to prevent the password from being written to the screen or the shell history.
+        ```bash
+        BMC=x1001c0s24b1
+        ```
 
-   ```bash
-   USERNAME=root
-   read -s IPMI_PASSWORD
-   export IPMI_PASSWORD
-   ipmitool -I lanplus -U $USERNAME -E -H $BMC chassis bootdev bios
-   ipmitool -I lanplus -U $USERNAME -E -H $BMC chassis power off
-   sleep 10
-   ipmitool -I lanplus -U $USERNAME -E -H $BMC chassis power on
-   ```
+    1. Boot the node to BIOS.
 
-1. Update the `System Date` field to match the time on the system.
+        > `read -s` is used to prevent the password from being written to the screen or the shell history.
+
+        ```bash
+        USERNAME=root
+        read -r -s -p "$BMC ${USERNAME} password: " IPMI_PASSWORD
+        export IPMI_PASSWORD
+        ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis bootdev bios
+        ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power off
+        sleep 10
+        ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power on
+        ```
+
+1. (`ncn-mw#`) Update the `System Date` field to match the time on the system.
 
    Use the terminal which is watching the console for this step.
    As the node powers on, it will complete POST (Power On Self Test) and then display the BIOS menu.
@@ -83,6 +87,6 @@ The following steps should be repeated for each Gigabyte node which needs to hav
 
 1. Enter the `F10` key followed by the `Enter` key to save the BIOS time.
 
-1. Exit the connection to the console with the `&.` command.
+1. Exit the connection to the console by entering `&.`.
 
 1. Repeat the above steps for other nodes which need their BIOS time reset.
