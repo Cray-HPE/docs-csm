@@ -84,18 +84,18 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
         > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
         ```bash
-        pit# read -s IPMI_PASSWORD
+        pit# read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
         ```
 
     1. Set the nodes to PXE boot and restart them.
 
         ```bash
         pit# export IPMI_PASSWORD
-        pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
-        pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
-        pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+        pit# grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=persistent
+        pit# grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=efiboot
+        pit# grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
         pit# sleep 10
-        pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
+        pit# grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
         ```
 
 1. Wait for the nodes to network boot.
@@ -118,9 +118,9 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 
     ```bash
     pit# for file in /var/log/conman/*; do
-        echo $file
-        grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI && echo -----
-    done
+            echo ${file}
+            grep -Eoh '(net[0-9] MAC .*)' "${file}" | sort -u | grep PCI && echo -----
+         done
     ```
 
 1. Use the output from the previous step to collect two MAC addresses to use for `bond0`, and two more to use for `bond1`, based on the topology.
@@ -135,11 +135,11 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     Worker nodes also have the high-speed network cards. If these cards are known, filter their device IDs out from the above output using this snippet:
 
     ```bash
-    pit# unset did # clear it if you used it.
+    pit# unset did # clear it if set
     pit# did=1017 # ConnectX-5 example.
     pit# for file in /var/log/conman/*; do
-             echo $file
-             grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI | grep -Ev "$did" && echo -----
+             echo ${file}
+             grep -Eoh '(net[0-9] MAC .*)' "${file}" | sort -u | grep PCI | grep -Ev "${did}" && echo -----
          done
     ```
 
@@ -148,11 +148,11 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     **This snippet prints out only `mgmt` MAC addresses; the `did` is the HSN and onboard NICs that are being ignored.**
 
     ```bash
-    pit# unset did # clear it if you used it.
+    pit# unset did # clear it if set
     pit# did='(1017|8086|ffff)'
     pit# for file in /var/log/conman/*; do
-            echo $file
-            grep -Eoh '(net[0-9] MAC .*)' $file | sort -u | grep PCI | grep -Ev "$did" && echo -----
+            echo ${file}
+            grep -Eoh '(net[0-9] MAC .*)' "${file}" | sort -u | grep PCI | grep -Ev "${did}" && echo -----
          done
     ```
 
@@ -191,7 +191,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     This information will be used to populate the MAC addresses for `ncn-m001`.
 
     ```bash
-    pit# cat /proc/net/bonding/bond0 | grep -i perm 
+    pit# grep -i perm /proc/net/bonding/bond0
     ```
 
     For example:
