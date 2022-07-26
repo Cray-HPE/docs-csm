@@ -330,7 +330,7 @@ function setup_ssh() {
         eval ssh-keygen -q "${SSH_KEYGEN_ARGS[*]}"
     fi
 
-    # set the password and set up passwordless ssh if appropriate
+    # set the password and set up passwordless ssh if appropriate; remove ssh host keys
     for squash in "${SQUASH_PATHS[@]}"; do
         squashfs_root=$(realpath "$(dirname "$squash")/squashfs-root")
         name=$(basename "$squash")
@@ -356,6 +356,8 @@ function setup_ssh() {
             cat "$KEY_SOURCE"/*.pub >> "$squashfs_root"/root/.ssh/authorized_keys
             chmod 600 "$squashfs_root"/root/.ssh/authorized_keys
         fi
+
+        rm -f "$squashfs_root"/etc/ssh/*key*
     done
 }
 
