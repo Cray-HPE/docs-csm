@@ -27,7 +27,7 @@ The configuration applied in this procedure was tested against barebones images 
 
    Save the following script to a file (for example, `con_test.sh`).
 
-   ```
+   ```bash
    #!/bin/bash
 
 
@@ -245,7 +245,7 @@ The configuration applied in this procedure was tested against barebones images 
    ncn-m001# pdsh -w ncn-s00[1-4] "cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg-dist"
    ```
 
-1. Grab a copy to modify from a storage node, preserving permissions
+1. Grab a copy of `haproxy.cfg` to modify from a storage node, preserving permissions
 
    ```bash
    ncn-m001# scp -p ncn-s001:/etc/haproxy/haproxy.cfg . 
@@ -302,10 +302,10 @@ The configuration applied in this procedure was tested against barebones images 
    $UDPServerAddress 127.0.0.1
    $UDPServerRun 514
 
-   # chmod 0640 haproxy.conf 
+   ncn-m001# chmod 0640 haproxy.conf 
    ```
 
-1. Make sure HAProxy is running/happy on storage nodes
+1. Make sure HAProxy is running on storage nodes
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "systemctl status haproxy" | grep "Active"
@@ -331,7 +331,7 @@ The configuration applied in this procedure was tested against barebones images 
    3.1.252.10.in-addr.arpa domain name pointer rgw-vip.nmn.
    3.1.252.10.in-addr.arpa domain name pointer rgw-vip.nmn.local.
 
-   # ssh rgw-vip 'hostname'
+   ncn-m001# ssh rgw-vip 'hostname'
    ncn-s001
    ```
 
@@ -432,11 +432,13 @@ The configuration applied in this procedure was tested against barebones images 
    ncn-s004:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ago
    ```
 
-1. Apply server-side iptables rules to storage nodes, need to execute for each storage node
+1. Apply server-side `iptables` rules to storage nodes
 
    This is needed to prevent direct access to the Ceph Rados GW Service (not through HAProxy). 
 
    The process is written to support change on individual nodes, but could be scripted after analysis of the running firewall rule set (notably with respect to local modifications, if they exist). 
+
+   This process must be completed on each storage node (steps 19 - 22). 
 
 1. Document where RadosGW is running (port wise)
 
@@ -494,7 +496,7 @@ The configuration applied in this procedure was tested against barebones images 
       pkts      bytes target     prot opt in     out     source               destination   
    ```
 
-1.  Test connectivity after applying the ACL
+1. Test connectivity after applying the ACL
 
    Re-run the connectivity test. While the results will be similar, they should all now be passing:
 
@@ -523,7 +525,7 @@ The configuration applied in this procedure was tested against barebones images 
 
 1. Validate that you cannot connect to HAProxy for `ncn-images` or Ceph RADOS GW (at all) from compute and UAN nodes
 
-Use `rgw-vip` as it will resolve to one of the storage nodes.
+   Use `rgw-vip` as it will resolve to one of the storage nodes.
 
    ```bash
    nid000002# host rgw-vip
@@ -624,7 +626,7 @@ Use `rgw-vip` as it will resolve to one of the storage nodes.
    [i] curl --connect-timeout 2 -f -k https://ncn-s004.hmn/ncn-images/ -> PASS
    ```
 
-1. Save the iptables ruleset
+1. Save the `iptables` ruleset on all storage nodes
 
    Iptables is currently reloaded via a oneshot systemd service. 
 
