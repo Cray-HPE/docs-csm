@@ -12,6 +12,7 @@ how to interpret the results of the script, and provides a procedure to manually
 * [Test script](#test-script)
   * [Steps the script performs](#steps-the-script-performs)
   * [Controlling which node is used](#controlling-which-node-is-used)
+  * [Controlling which image is used](#controlling-which-image-is-used)
   * [Controlling test script output level](#controlling-test-script-output-level)
 * [Manual test procedure](#manual-test-procedure)
    1. [Locate CSM barebones image in IMS](#1-locate-csm-barebones-image-in-ims)
@@ -53,6 +54,7 @@ Review the [Test prerequisites](#test-prerequisites) before proceeding.
 
 * [Steps the script performs](#steps-the-script-performs)
 * [Controlling which node is used](#controlling-which-node-is-used)
+* [Controlling which image is used](#controlling-which-image-is-used)
 * [Controlling test script output level](#controlling-test-script-output-level)
 
 ### Steps the script performs
@@ -77,11 +79,13 @@ successful if the boot reaches the `dracut` stage.
 
 ### Controlling which node is used
 
-(`ncn-mw#`) By default, the script will list all enabled compute nodes in HSM and use the first one
+By default, the script will list all enabled compute nodes in HSM and use the first one
 as the target for the test. This may be overridden by using the `--xname` command line argument
 to specify the component name (xname) of the target compute node. The target
-compute node must be enabled and present in HSM. If the input compute node is
+compute node must be enabled and present in HSM. If the specified compute node is
 not available, then the test will fail with an appropriate error message.
+
+(`ncn-mw#`) An example of specifying the target node:
 
 ```bash
 /opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b1n0
@@ -90,6 +94,31 @@ not available, then the test will fail with an appropriate error message.
 > Troubleshooting: If any compute nodes are missing from HSM database, then refer to
 > [2.2.2 Known issues with HSM discovery validation](../operations/validate_csm_health.md#222-known-issues-with-hsm-discovery-validation)
 > in order to troubleshoot any node BMCs that have not been discovered.
+
+### Controlling which image is used
+
+By default, the script will list all IMS images with `barebones` in their names, and use the first
+one as the boot image for the test. This may be overridden using the `--id` command line argument
+to specify the ID of the desired IMS image. If the specified image is not found, then the test
+will fail with an appropriate error message.
+
+The most common reason that this option may be needed is if some other IMS image has `barebones` in its name,
+and the test is choosing it instead of the regular CSM barebones image.
+
+(`ncn-mw#`) An example of specifying the image for the test:
+
+```bash
+/opt/cray/tests/integration/csm/barebonesImageTest --id 0eacdcaa-74ad-40d6-b2b3-801f244ef868
+```
+
+(`ncn-mw#`) Available IMS images on the system can be listed using the Cray Command Line Interface (CLI)
+with the following command:
+
+```bash
+cray ims images list --format json
+```
+
+For help configuring the Cray CLI, see [Configure the Cray CLI](../operations/configure_cray_cli.md).
 
 ### Control test script output level
 

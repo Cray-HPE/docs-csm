@@ -689,14 +689,14 @@ The external SSH access tests may be run on any system external to the cluster.
     Overall status: PASSED (Passed: 20, Failed: 0)
     ```
 
-<a name="booting-csm-barebones-image"></a>
-
 ## 5. Booting CSM barebones image
 
 This test is **very important to run**, particularly during the CSM install prior to rebooting the PIT node,
 because it validates all of the services required for nodes to PXE boot from the cluster.
 
-For additional information and troubleshooting related to the barebones image or the test, see
+By default the test automatically chooses an enabled compute node and a barebones IMS image to use
+for the test. This default behavior can be overridden, however. For additional information and troubleshooting
+related to the barebones image or the test, see
 [Troubleshoot the CMS Barebones Image Boot Test](../troubleshooting/cms_barebones_image_boot.md).
 
 ### 5.1 Run the test script
@@ -710,7 +710,7 @@ non-zero on failure.
 /opt/cray/tests/integration/csm/barebonesImageTest
 ```
 
-A successful run would generate output like the following:
+Successful output looks similar to the following:
 
 ```text
 cray.barebones-boot-test: INFO     Barebones image boot test starting
@@ -720,15 +720,6 @@ cray.barebones-boot-test: INFO     Starting boot on compute node: x3000c0s10b1n0
 cray.barebones-boot-test: INFO     Found dracut message in console output - success!!!
 cray.barebones-boot-test: INFO     Successfully completed barebones image boot test.
 ```
-
-(`ncn-mw#`) The script will choose an enabled compute node that is listed in the Hardware State Manager (HSM) for
-the test, unless the user passes in a specific node using the `--xname` argument.
-
-```bash
-/opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b4n0
-```
-
-If a compute node is specified but unavailable, then the test will fail with an appropriate error message.
 
 ## 6. UAS/UAI tests
 
