@@ -26,7 +26,7 @@
 set -e
 basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${basedir}/../common/upgrade-state.sh
-trap 'err_report' ERR
+trap 'argo_err_report' ERR
 
 #global vars
 dryRun=false
@@ -141,7 +141,9 @@ function getUnsucceededWorkerRebuildWorkflows() {
 
 function createRebuildWorkflow() {
     res_file=$(mktemp)
+    set -x
     http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPOST -H "Authorization: Bearer $(getToken)" -H 'Content-Type: application/json' -d "$(createWorkflowPayload)" "${baseUrl}/apis/nls/v1/ncns/rebuild")
+    set +x
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"

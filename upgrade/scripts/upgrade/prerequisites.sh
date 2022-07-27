@@ -561,8 +561,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-${locOfScript}/../cps/snapshot-cps-deployment.sh
-
 state_name="CREATE_CEPH_RO_KEY"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
@@ -670,27 +668,6 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     else
         echo "==> TDS: false"
     fi
-    
-    } >> ${LOG_FILE} 2>&1
-    #shellcheck disable=SC2046
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="SUSPEND_NCN_CONFIGURATION"
-#shellcheck disable=SC2046
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    {
-    
-    export CRAY_FORMAT=json
-    # Even though we export the CRAY_FORMAT environment variable, it still is safest to also specify the --format command line argument
-    for xname in $(cray hsm state components list --role Management --type node --format json | jq -r .Components[].ID)
-    do
-        cray cfs components update --enabled false --desired-config "" $xname
-    done
     
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
