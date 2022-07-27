@@ -1,6 +1,8 @@
-# Procedure to Restrict Network Access to the ncn-images S3 Bucket
+# Restrict Network Access to the `ncn-images` S3 Bucket
 
-The configuration documented in this procedure is intended to prevent user-facing dedicated nodes (UANs, Compute Nodes) from retrieving NCN image content from Ceph S3 services, as running on storage nodes. Specifically, the controls enacted via this procedure should:
+The configuration documented in this procedure is intended to prevent user-facing dedicated nodes (UANs, Compute Nodes) from retrieving NCN image content from Ceph S3 services, as running on storage nodes.
+
+Specifically, the controls enacted via this procedure should do the following:
 
 1. Block HAProxy access to the `ncn-images` bucket if the client is not an NCN (NMN) or PXE booting from the MTL network. This via a HAProxy ACL on the storage servers.
 2. Enable access logging for HAProxy.
@@ -8,22 +10,21 @@ The configuration documented in this procedure is intended to prevent user-facin
 
 ## Limitations
 
-This is not designed to prevent UAIs (if in use) from retrieving NCN image content. 
+This is not designed to prevent UAIs (if in use) from retrieving NCN image content.
 
-If a storage node is rebuilt, this procedure (for the rebuilt node) will need to be applied after the rebuild. The same is true if NCNs are added or removed from the system. 
+If a storage node is rebuilt, this procedure (for the rebuilt node) will need to be applied after the rebuild. The same is true if NCNs are added or removed from the system.
 
 ## Prerequisites and scope
 
-Procedure should be executed after install or upgrade is otherwise complete, but prior to opening the system for user access. 
+Procedure should be executed after install or upgrade is otherwise complete, but prior to opening the system for user access.
 
 Unless otherwise noted, the procedure should be run from `ncn-m001` (not PIT).  
 
-The configuration applied in this procedure was tested against barebones images boot, FAS firmware upgrade and downgrade, and NCN rebuilds. The version tested was CSM 1.2.0. 
-
+The configuration applied in this procedure was tested against barebones images boot, FAS firmware upgrade and downgrade, and NCN rebuilds. The version tested was CSM 1.2.0.
 
 ## Procedure
 
-1. Test Connectivity Before Applying the ACL
+1. Test connectivity before applying the ACL.
 
    Save the following script to a file (for example, `con_test.sh`).
 
@@ -108,7 +109,7 @@ The configuration applied in this procedure was tested against barebones images 
    haproxy_test "$SCSNS_NMN" "MGMT HAProxy over NMN"
    ```
 
-   Execute the script, if the ACLs have not been applied, you should see results similar to those below. 
+   Execute the script, if the ACLs have not been applied, results similar to the following will be returned:
 
    ```bash
    ncn-m001# bash ./con_test.sh 
@@ -133,11 +134,11 @@ The configuration applied in this procedure was tested against barebones images 
    HAPROXY (CEPH) HTTPS ncn-s003.nmn: PASS
    ```
 
-1. Configure HAProxy ACLs and Logging
+2. Configure HAProxy ACLs and logging.
 
    Required to limit RGW VIP access for the `ncn-images` bucket to only management NCNs.
 
-1. Build IP address list of NCNs, on NMN
+3. Build an IP address list of NCNs on the NMN.
 
    Cross-check to verify the count seems appropriate for the system in use.
 
@@ -156,13 +157,13 @@ The configuration applied in this procedure was tested against barebones images 
    10.252.1.14
    ```
 
-1. Add the MTL subnet (needed for network boots of NCNs)
+4. Add the MTL subnet (needed for network boots of NCNs).
 
    ```bash
    ncn-m001# echo '10.1.0.0/16' >> allowed_ncns.lst
    ```
 
-1. Verify the `allowed_ncns.lst` contains contain NMN addresses for all management NCNs nodes and the MTL subnet (10.1.0.0/16)
+5. Verify the `allowed_ncns.lst` contains contain NMN addresses for all management NCNs nodes and the MTL subnet (10.1.0.0/16).
 
    ```bash
    ncn-m001# cat allowed_ncns.lst 
@@ -180,9 +181,9 @@ The configuration applied in this procedure was tested against barebones images 
    10.1.0.0/16
    ```
 
-1. Confirm haproxy configurations are identical across storage nodes
+6. Confirm HAProxy configurations are identical across storage nodes.
 
-   Make sure you adjust the `-w` predicate to represent the full set of storage nodes for the system. Applies to this and subsequent steps.
+   Adjust the `-w` predicate to represent the full set of storage nodes for the system. Applies to this step and subsequent steps.
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "cat /etc/haproxy/haproxy.cfg" | dshbak -c
@@ -239,25 +240,25 @@ The configuration applied in this procedure was tested against barebones images 
          server server-ncn-s004-rgw0 10.252.1.4:8080 check weight 100
    ```
 
-1. Create a backup of `haproxy.cfg` files on storage nodes
+7. Create a backup of `haproxy.cfg` files on storage nodes.
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg-dist"
    ```
 
-1. Grab a copy of `haproxy.cfg` to modify from a storage node, preserving permissions
+8. Grab a copy of `haproxy.cfg` to modify from a storage node, preserving permissions.
 
    ```bash
    ncn-m001# scp -p ncn-s001:/etc/haproxy/haproxy.cfg . 
    haproxy.cfg            
    ```
 
-1. Edit the `haproxy.cfg`, adding in the following ACLs and log directives to each frontend
+9. Edit the `haproxy.cfg`, adding in the following ACLs and log directives to each front-end.
 
    ```bash
    ncn-m001# diff -Naur haproxy.cfg-dist haproxy.cfg
-   --- haproxy.cfg-dist	2022-06-30 18:20:55.000000000 +0000
-   +++ haproxy.cfg	2022-07-07 16:56:40.000000000 +0000
+   --- haproxy.cfg-dist 2022-06-30 18:20:55.000000000 +0000
+   +++ haproxy.cfg   2022-07-07 16:56:40.000000000 +0000
    @@ -1,6 +1,6 @@
    # Please do not change this file directly since it is managed by Ansible and will be overwritten
    global
@@ -290,10 +291,10 @@ The configuration applied in this procedure was tested against barebones images 
    backend rgw-backend
       option forwardfor
    ```
-   
-1. Create a new rsyslog configuration for HAProxy to have it listen to UDP 514 on localhost
 
-   With the log directive additions to HAProxy, and allowing a localhost UDP 514 socket, access logging should work properly. Set permissions to 640 on the file.
+10. Create a new `rsyslog` configuration for HAProxy to have it listen to UDP 514 on the local host.
+
+   With the log directive additions to HAProxy, and allowing a local host UDP 514 socket, access logging should work properly. Set permissions to 640 on the file.
 
    ```bash
    ncn-m001# cat haproxy.conf 
@@ -305,7 +306,7 @@ The configuration applied in this procedure was tested against barebones images 
    ncn-m001# chmod 0640 haproxy.conf 
    ```
 
-1. Make sure HAProxy is running on storage nodes
+11. Make sure HAProxy is running on storage nodes.
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "systemctl status haproxy" | grep "Active"
@@ -315,7 +316,7 @@ The configuration applied in this procedure was tested against barebones images 
    ncn-s004:      Active: active (running) since Thu 2022-07-07 17:38:49 UTC; 54min ago
    ```
 
-1. Determine where the HAProxy VIP currently resides (for awareness in the event debug is necessary)
+12. Determine where the HAProxy VIP currently resides (for awareness in the event debug is necessary).
 
    ```bash
    ncn-m001# host rgw-vip
@@ -335,19 +336,19 @@ The configuration applied in this procedure was tested against barebones images 
    ncn-s001
    ```
 
-1. Propagate the rsyslog configuration out to all storage nodes
+13. Propagate the `rsyslog` configuration out to all storage nodes.
 
    ```bash
    ncn-m001# pdcp -w ncn-s00[1-4] haproxy.conf /etc/rsyslog.d/
    ```
 
-1. Propagate the HAProxy configuration out to all storage nodes
+14. Propagate the HAProxy configuration out to all storage nodes.
 
    ```bash
    ncn-m001# pdcp -w ncn-s00[1-4] haproxy.cfg allowed_ncns.lst /etc/haproxy/
    ```
 
-1. Verify the configurations are identical across storage nodes
+15. Verify the configurations are identical across storage nodes.
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "cat /etc/haproxy/haproxy.cfg" | dshbak -c
@@ -410,7 +411,7 @@ The configuration applied in this procedure was tested against barebones images 
          server server-ncn-s004-rgw0 10.252.1.4:8080 check weight 100
    ```
 
-1. Restart rsyslog across all storage nodes
+16. Restart `rsyslog` across all storage nodes.
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "systemctl restart rsyslog"
@@ -421,7 +422,7 @@ The configuration applied in this procedure was tested against barebones images 
    ncn-s004:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ago
    ```
 
-1. Restart HAProxy across all storage nodes
+17. Restart HAProxy across all storage nodes.
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "systemctl restart haproxy"
@@ -432,15 +433,15 @@ The configuration applied in this procedure was tested against barebones images 
    ncn-s004:      Active: active (running) since Thu 2022-07-07 13:50:39 UTC; 7s ago
    ```
 
-1. Apply server-side `iptables` rules to storage nodes
+18. Apply server-side `iptables` rules to storage nodes.
 
-   This is needed to prevent direct access to the Ceph Rados GW Service (not through HAProxy). 
+   This is needed to prevent direct access to the Ceph Rados GW Service (not through HAProxy).
 
-   The process is written to support change on individual nodes, but could be scripted after analysis of the running firewall rule set (notably with respect to local modifications, if they exist). 
+   The process is written to support change on individual nodes, but could be scripted after analysis of the running firewall rule set (notably with respect to local modifications, if they exist).
 
-   This process must be completed on each storage node (steps 19 - 22). 
+   This process must be completed on each storage node (steps 19 - 22).
 
-1. Document where RadosGW is running (port wise)
+19. Document where Rados GW is running (port wise).
 
    ```bash
    ncn-s001# ss -tnpl | grep rados
@@ -448,7 +449,7 @@ The configuration applied in this procedure was tested against barebones images 
    LISTEN    0         128                   [::]:8080                [::]:*        users:(("radosgw",pid=25018,fd=78))  
    ```
 
-1. List existing `iptables` rules
+20. List existing `iptables` rules.
 
    ```bash
    ncn-s001# iptables -L -nx -v
@@ -464,7 +465,7 @@ The configuration applied in this procedure was tested against barebones images 
 
    ```
 
-1. Run the following to add `iptables` rules for control
+21. Run the following to add `iptables` rules for control.
 
    The range should include all NMN NCN IP addresses generated for the HAProxy ACL step.
 
@@ -476,7 +477,7 @@ The configuration applied in this procedure was tested against barebones images 
    iptables -A INPUT -p tcp --dport 8080 -j DROP
    ```
 
-1. List `iptables` rules again, verify rules are in place
+22. List `iptables` rules again, verify rules are in place.
 
    ```bash
    ncn-s001# iptables -L -nx -v
@@ -496,7 +497,7 @@ The configuration applied in this procedure was tested against barebones images 
       pkts      bytes target     prot opt in     out     source               destination   
    ```
 
-1. Test connectivity after applying the ACL
+23. Test connectivity after applying the ACL.
 
    Re-run the connectivity test. While the results will be similar, they should all now be passing:
 
@@ -523,7 +524,7 @@ The configuration applied in this procedure was tested against barebones images 
    HAPROXY (CEPH) HTTPS ncn-s003.nmn: PASS
    ```
 
-1. Validate that you cannot connect to HAProxy for `ncn-images` or Ceph RADOS GW (at all) from compute and UAN nodes
+24. Validate no connection can be made to HAProxy for `ncn-images` or Ceph RADOS GW (at all) from compute nodes and UANs.
 
    Use `rgw-vip` as it will resolve to one of the storage nodes.
 
@@ -540,7 +541,7 @@ The configuration applied in this procedure was tested against barebones images 
    curl: (28) Connection timed out after 2001 milliseconds
    ```
 
-   In HAProxy logs, you should see a 403 response, from HAProxy:
+   Look for a 403 response in the HAProxy logs:
 
    ```bash
    ncn-m001# pdsh -N -w ncn-s00[1-4] "cd /var/log && zgrep -h -i -E 'haproxy.*frontend' messages || exit 0" | grep "ncn-images" | grep "10.252.1.13"
@@ -557,7 +558,7 @@ The configuration applied in this procedure was tested against barebones images 
 
    For further validation, the following script can be saved to a UAN or compute node with a storage node count as an input.
 
-   This will test cross-network select access that should not be possible based on a correctly configured switch ACL posture, as well. 
+   This will test cross-network select access that should not be possible based on a correctly configured switch ACL posture, as well.
 
    ```bash
    nid000002# cat user_con_test.sh 
@@ -626,9 +627,9 @@ The configuration applied in this procedure was tested against barebones images 
    [i] curl --connect-timeout 2 -f -k https://ncn-s004.hmn/ncn-images/ -> PASS
    ```
 
-1. Save the `iptables` ruleset on all storage nodes
+25. Save the `iptables` rule set on all storage nodes.
 
-   Iptables is currently reloaded via a oneshot systemd service. 
+   `iptables` is currently reloaded via a one shot `systemd` service.
 
    ```bash
    ncn-s001:/usr/lib/systemd # cat ./system/metal-iptables.service 
@@ -646,19 +647,19 @@ The configuration applied in this procedure was tested against barebones images 
    WantedBy=multi-user.target
    ```
 
-   Make a backup of the firewall rules. 
+   Make a backup of the firewall rules.
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "cp -a /etc/iptables/metal.conf /etc/iptables/metal.conf-dist"
    ```
 
-   Use `iptables-save` to commit running rules to the persistent configuration. 
+   Use `iptables-save` to commit running rules to the persistent configuration.
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "iptables-save -f /etc/iptables/metal.conf"
    ```
 
-   Verify the ruleset is consistent across nodes. 
+   Verify the rule set is consistent across nodes.
 
    ```bash
    ncn-m001# pdsh -w ncn-s00[1-4] "cat /etc/iptables/metal.conf" | grep "8080" | dshbak -c
@@ -674,19 +675,20 @@ The configuration applied in this procedure was tested against barebones images 
 
 ## Troubleshooting
 
-**NOTE**: If SMA log forwarders are not yet running, you may need to temporarily disable the `/etc/rsyslog.d/01-cray-rsyslog.conf` rule (for logs to flow to the local nodes without delay). Be sure to restart rsyslog if you do. 
+**NOTE**: If SMA log forwarders are not yet running, then it might be necessary to temporarily disable the `/etc/rsyslog.d/01-cray-rsyslog.conf` rule (for logs to flow to the local nodes without delay).
+Restart `rsyslog` if this action is required.
 
 Look for RADOSGW drops in `/var/log/firewall` on storage nodes, not that the connectivity test will attempt access on the CMN.
 
-```
+```bash
 ncn-m001# pdsh -N -w ncn-s00[1-3] "grep RADOSGW /var/log/firewall"
 2022-07-11T19:26:22.655077+00:00 xxx-ncn-s003 kernel: [265870.330981] RADOSGW-DROPIN=bond0.cmn0 OUT= MAC=b8:59:9f:f9:1b:fa:b8:59:9f:f9:1b:fe:08:00 SRC=10.101.8.35 DST=10.101.8.43 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=1170 DF PROTO=TCP SPT=52462 DPT=8080 WINDOW=35840 RES=0x00 SYN URGP=0 
 2022-07-11T19:26:23.690023+00:00 xxx-ncn-s003 kernel: [265871.365959] RADOSGW-DROPIN=bond0.cmn0 OUT= MAC=b8:59:9f:f9:1b:fa:b8:59:9f:f9:1b:fe:08:00 SRC=10.101.8.35 DST=10.101.8.43 LEN=60 TOS=0x00 PREC=0x00 TTL=64 ID=1171 DF PROTO=TCP SPT=52462 DPT=8080 WINDOW=35840 RES=0x00 SYN URGP=0 
 ...
 ```
 
-Look for HAProxy access logs in `/var/log/messages` on storage nodes, that have HTTP 403 responses (or other responses depending upon context). 
+Look for HAProxy access logs in `/var/log/messages` on storage nodes that have HTTP 403 responses (or other responses depending upon context).
 
-```
+```bash
 ncn-m001# pdsh -N -w ncn-s00[1-3] "cd /var/log && zgrep -h 'haproxy.*frontend' messages || exit 0" | grep " 403 " | sort -k 1
 ```
