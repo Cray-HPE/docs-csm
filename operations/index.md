@@ -529,9 +529,8 @@ Overview of the several different networks supported by the HPE Cray EX system.
 - [Access to System Management Services](network/Access_to_System_Management_Services.md)
 - [Default IP Address Ranges](network/Default_IP_Address_Ranges.md)
 - [Connect to the HPE Cray EX Environment](network/Connect_to_the_HPE_Cray_EX_Environment.md)
-- [Connect to Switch over USB-Serial Cable](network/Connect_to_Switch_Over_USB_Serial_Cable.md)
 - [Create a CSM Configuration Upgrade Plan](network/Create_a_CSM_Configuration_Upgrade_Plan.md)
-- [Gateway Testing](network/Gateway_Testing.md)
+- [Gateway Testing](network/gateway_testing.md)
 
 ### Management network
 
