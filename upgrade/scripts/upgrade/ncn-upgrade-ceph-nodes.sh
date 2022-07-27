@@ -68,14 +68,14 @@ if [[ $state_recorded == "0" ]]; then
     fi
 
     ## TEMP - Remove ceph v15.2.12 from images before backups - CASMINST-4099
-    if [[ $(ssh ${target_ncn} "podman images --format json|jq '.[].Names|.[]'|grep -q 15.2.12") ]]
+    if [[ $(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${target_ncn} "podman images --format json|jq '.[].Names|.[]'|grep -q 15.2.12") ]]
     then
-      ssh ${target_ncn} 'podman rmi -af'
+      ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${target_ncn} 'podman rmi -af'
     fi
     ## END TEMP - CASMINST-4099
 
-    ssh ${target_ncn} 'systemctl stop ceph.target;sleep 30;podman prune -af;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /etc/ceph;systemctl start ceph.target'
-    scp ${target_ncn}:/tmp/${target_ncn}-ceph.tgz .
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${target_ncn} 'systemctl stop ceph.target;sleep 30;podman prune -af;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /etc/ceph;systemctl start ceph.target'
+    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${target_ncn}:/tmp/${target_ncn}-ceph.tgz .
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
@@ -93,8 +93,8 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
     fi
-    scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
-    ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
+    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
@@ -110,9 +110,9 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
     fi
-    scp ./${target_ncn}-ceph.tgz $target_ncn:/
-    ssh ${target_ncn} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
-    ssh ${target_ncn} '/srv/cray/scripts/common/pre-load-images.sh'
+    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ./${target_ncn}-ceph.tgz $target_ncn:/
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${target_ncn} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${target_ncn} '/srv/cray/scripts/common/pre-load-images.sh'
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
@@ -128,7 +128,7 @@ if [[ $state_recorded == "0" ]]; then
     sleep 30
     ## Added
     ceph cephadm get-pub-key > ~/ceph.pub
-    ssh-copy-id -f -i ~/ceph.pub root@${target_ncn}
+    ssh-copy-id -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -f -i ~/ceph.pub root@${target_ncn}
     ceph orch host add ${target_ncn}
     sleep 20
     for s in $(ceph orch ps | grep ${target_ncn} | awk '{print $1}'); do  ceph orch daemon redeploy $s; done    
@@ -149,10 +149,10 @@ if [[ $state_recorded == "0" ]]; then
     fi
 
     if [[ ${target_ncn} =~ ncn-s00[1-3] ]]; then
-        scp /etc/kubernetes/admin.conf ${target_ncn}:/etc/kubernetes
+        scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /etc/kubernetes/admin.conf ${target_ncn}:/etc/kubernetes
     fi
 
-    ssh ${target_ncn} '/usr/share/doc/csm/upgrade/scripts/ceph/ceph-services-stage2.sh'
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${target_ncn} '/usr/share/doc/csm/upgrade/scripts/ceph/ceph-services-stage2.sh'
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
@@ -187,8 +187,8 @@ if [[ ${target_ncn} == "ncn-s001" ]]; then
             ssh_keygen_keyscan "${target_ncn}"
             ssh_keys_done=1
         fi
-        scp /usr/share/doc/csm/upgrade/scripts/ceph/create_rgw_buckets.sh $target_ncn:/tmp
-        ssh ${target_ncn} '/tmp/create_rgw_buckets.sh'
+        scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /usr/share/doc/csm/upgrade/scripts/ceph/create_rgw_buckets.sh $target_ncn:/tmp
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${target_ncn} '/tmp/create_rgw_buckets.sh'
         } >> ${LOG_FILE} 2>&1
         record_state "${state_name}" ${target_ncn}
     else
@@ -207,7 +207,7 @@ if [[ $ssh_keys_done == "0" ]]; then
     ssh_keys_done=1
 fi
 sleep 30
-ssh $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate' 
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $target_ncn -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate' 
 
 move_state_file ${target_ncn}
 

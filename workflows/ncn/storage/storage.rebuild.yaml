@@ -97,7 +97,7 @@ spec:
             templateRef:
               name: ssh-template
               template: shell-script
-            dependencies:
+            dependencies: 
               # each upgrade depends on previous upgrade action and success
               # so we make sure only one node is drained at a time
               {{ if ne $index 0 }}
@@ -109,9 +109,7 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: scriptContent
                   value: |
-                    echo "starting upgrade on {{$Value}}"
-                    upgrade_output=$(/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-ceph-nodes.sh {{$value}})
-                    echo ${upgrade_output}
+                    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-ceph-nodes.sh {{$value}}
           - name: check-ceph-health-{{$value}}
             templateRef:
               name: ssh-template
@@ -127,11 +125,13 @@ spec:
                   value: |
                     RESULT=$(/opt/cray/platform-utils/ceph-service-status.sh)
                     if [[ $RESULT -ne 0 ]]
+                    then
                       echo "ceph serice status check failed"
                       exit 1
                     fi
                     RESULT=$(/opt/cray/platform-utils/ceph-service-status.sh -n {{$value}} -a true)
                     if [[ $RESULT -ne 0 ]]
+                    then
                       echo "ceph serice status check failed for node {{$value}}"
                       exit 1
                     fi
@@ -183,8 +183,8 @@ spec:
                         refresh_time_SEC=$(date -d $refresh_time +%s)
                         if [[ $refresh_time_SEC -lt $before_apply_time ]]
                         then
-                          echo "Error: A node exporter was not refreshed after node exporter was deployed in the previous step."
-                          exit 3
+                          echo "WARNING: A node exporter was not refreshed after node exporter was deployed in the previous step."
+                          echo $(ceph orch ps --daemon_type node-exporter)
                         fi
                       done
                       # verify there is only 1 alertmanager
@@ -204,8 +204,8 @@ spec:
                       refresh_time_SEC=$(date -d $refresh_time +%s)
                       if [[ $refresh_time_SEC -lt $before_apply_time ]]
                       then
-                        echo "Error: Alertmanager was not refreshed after alertmanager was deployed in the previous step."
-                        exit 6
+                        echo "WARNING: Alertmanager was not refreshed after alertmanager was deployed in the previous step."
+                        echo $(ceph orch ps --daemon_type alertmanager)
                       fi
                     EOF
 

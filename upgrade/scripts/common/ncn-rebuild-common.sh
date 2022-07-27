@@ -55,15 +55,15 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     loop_idx=0
-    in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+    in_sync=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
     if [[ "$in_sync" == "no" ]]; then
-        ssh "$target_ncn" chronyc makestep
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$target_ncn" chronyc makestep
         sleep 5
-        in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+        in_sync=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
         # wait up to 90s for the node to be in sync
         while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
             sleep 5
-            in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+            in_sync=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
             loop_idx=$(( loop_idx+1 ))
         done
         if [[ "$in_sync" == "no" ]]; then
@@ -223,8 +223,8 @@ EOF
         fi
         if [[ -f ${basedir}/standdown.sh ]]; then
             chmod +x "${basedir}/standdown.sh"
-            scp "${basedir}/standdown.sh" "${target_ncn}:/tmp/standdown.sh"
-            ssh "${target_ncn}" '/tmp/standdown.sh'
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${basedir}/standdown.sh" "${target_ncn}:/tmp/standdown.sh"
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" '/tmp/standdown.sh'
         else
             echo >&2 "${target_ncn} has nothing to standdown! This is not expected."
             exit 1
@@ -418,17 +418,17 @@ export TOKEN
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    ssh "$target_ncn" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$target_ncn" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"
     loop_idx=0
-    in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+    in_sync=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
     if [[ "$in_sync" == "no" ]]; then
-        ssh "$target_ncn" chronyc makestep
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$target_ncn" chronyc makestep
         sleep 5
-        in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+        in_sync=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
         # wait up to 90s for the node to be in sync
         while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
             sleep 5
-            in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+            in_sync=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
             loop_idx=$(( loop_idx+1 ))
         done
         if [[ "$in_sync" == "yes" ]]; then
@@ -471,8 +471,8 @@ if [[ ${target_ncn} == "ncn-m001" ]]; then
                 ssh_keygen_keyscan "${target_ncn}"
                 ssh_keys_done=1
             fi
-            scp ifcfg-lan0 root@ncn-m001:/etc/sysconfig/network/
-            ssh root@ncn-m001 'wicked ifreload lan0'
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ifcfg-lan0 root@ncn-m001:/etc/sysconfig/network/
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@ncn-m001 'wicked ifreload lan0'
         } >> ${LOG_FILE} 2>&1
         record_state "${state_name}" ${target_ncn}
     else
@@ -490,7 +490,7 @@ if [[ ${target_ncn} != ncn-s* ]]; then
             ssh_keygen_keyscan "${target_ncn}"
             ssh_keys_done=1
         fi
-        ssh ${TARGET_NCN} 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
+        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ${TARGET_NCN} 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
         } >> ${LOG_FILE} 2>&1
         record_state "${state_name}" ${target_ncn}
     else
