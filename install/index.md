@@ -242,7 +242,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
 
       After preparing compute nodes, and prior to the installation of other product streams, review the security hardening guide. 
 
-      See [Security Hardening](../operations/CSM_product_management/Security_Hardening.md)
+      See [Security Hardening](../operations/CSM_product_management/Apply_Security_Hardening.md)
    <a name="next_topic"></a>
 
    1. Next topic
