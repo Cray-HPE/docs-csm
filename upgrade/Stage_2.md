@@ -35,7 +35,7 @@
 >>
 >> You can also upgrade multiple workers at the same time with comma separated list. Note that in some cases, you can't rebuild all workers in one request. It is system admin's responsibility to make sure a multiple workers request meets following conditions:
 >>
->> 1. If your system has more than 5 workers, you can't rebuild ncn-w001,ncn-w002 and ncn-w003 together in one request. You will need at least two requests (example: rebuild ncn-w001,ncn-w003,ncn-w004,... first and then rebuild ncn-w002,ncn-w003,...)
+>> 1. If your system has more than 5 workers, you can't rebuild ncn-w001,ncn-w002 and ncn-w003 together in one request. You will need at least two requests (example: rebuild `ncn-w001,ncn-w003,ncn-w004,...` first and then rebuild `ncn-w002,ncn-w003,...`)
 >> 2. If your system has more that 5 worker, you can't rebuild all workers that has DVS running in one request.
 >
 > ```bash
