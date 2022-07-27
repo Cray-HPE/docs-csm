@@ -2,6 +2,10 @@
 
 Use this procedure for either a first-time install or in the event a previous CSM was wiped and requires a new install.
 
+***Before continuing with install*** please make sure that Canu is running the most current version: 
+
+  * [Install/Upgrade Canu](canu_install_upgrade.md)
+
 ## Procedure
 
 > **CAUTION:** All of the following steps should be done using an out-of-band connection. This process is disruptive and will require downtime.

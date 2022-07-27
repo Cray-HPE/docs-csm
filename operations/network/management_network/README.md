@@ -42,6 +42,8 @@ To check the current state of the switches, see the [upgrade](upgrade.md) page.
 
 ## Starting Points
 
+* Upgrade Canu to latest version: 
+  * [Install/Upgrade Canu](canu_install_upgrade.md)
 * Current switch configurations are not generated and need to upgrade to generated configurations.
   * This can either be 1.0 generated or 1.2 generated.
   * [upgrade](upgrade.md)

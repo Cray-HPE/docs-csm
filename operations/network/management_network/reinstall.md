@@ -2,6 +2,10 @@
 
 Reinstall the same CSM version.
 
+***Before continuing*** please make sure that Canu is running the most current version: 
+
+  * [Install/Upgrade Canu](canu_install_upgrade.md)
+
 > **CAUTION:** All of these steps should be done using an out-of-band connection. This process is disruptive and will require downtime.
 
 ## Procedure
