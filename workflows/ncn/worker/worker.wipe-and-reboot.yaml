@@ -60,7 +60,13 @@ tasks:
             -H "Authorization: Bearer ${TOKEN}" \
             "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
             | jq '.[]| select(.endpoint=="bootscript")|.last_epoch' 2> /dev/null)
-            echo $bootscript_last_epoch
+            
+            if [[ $bootscript_last_epoch -gt 0 ]]; then
+              echo $bootscript_last_epoch
+            else
+              echo "Failed to get endpoint-history from BSS for: $TARGET_NCN"
+              exit 1
+            fi
   - name: set-next-boot-to-pxe
     templateRef:
       name: ssh-template
