@@ -41,6 +41,7 @@ The following administrative topics can be found in this guide:
 ## CSM product management
 
 - [Validate CSM Health](validate_csm_health.md)
+- [Apply Security Hardening](CSM_product_management/Apply_Security_Hardening.md)
 - [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
 - [Configure the Cray Command Line Interface (Cray CLI)](configure_cray_cli.md)
 - [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
@@ -332,6 +333,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
   - [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
 - [API Authorization](security_and_authentication/API_Authorization.md)
 - [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
+- [Restrict Network Access to the `ncn-images` S3 Bucket](security_and_authentication/Restrict_Access_to_NCN_Images_S3_Bucket.md)
 
 ## Resiliency
 
