@@ -461,10 +461,11 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
        ```
 
-   1. Run `ncn-image-modification.sh` from the CSM tarball:
+   1. Run `ncn-image-modification.sh` from the CSM documentation RPM:
 
        ```bash
-       "${PITDATA}/csm-${CSM_RELEASE}/ncn-image-modification.sh" -p \
+       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modificaiton.sh)
+       $NCN_MOD_SCRIPT -p \
           -d /root/.ssh \
           -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
           -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"

@@ -337,7 +337,10 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     artdir=${CSM_ARTI_DIR}/images
     #shellcheck disable=SC2155
     export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
-    DEBUG=1 ${CSM_ARTI_DIR}/ncn-image-modification.sh \
+    set -o pipefail
+    NCN_IMAGE_MOD_SCRIPT="$(rpm -ql docs-csm | grep ncn-image-modification.sh)"
+    set +o pipefail
+    DEBUG=1 $NCN_IMAGE_MOD_SCRIPT \
         -d /root/.ssh \
         -k $artdir/kubernetes/kubernetes*.squashfs \
         -s $artdir/storage-ceph/storage-ceph*.squashfs \

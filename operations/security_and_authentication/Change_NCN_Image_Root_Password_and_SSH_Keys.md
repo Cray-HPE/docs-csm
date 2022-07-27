@@ -15,7 +15,6 @@ All of the commands in this procedure are intended to be run on a single master 
 - This procedure can only be done after the PIT node is rebuilt to become a normal master node.
 - The Cray CLI must be configured on the node where the procedure is being done. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 - The CSM documentation RPM must be installed on the node where the procedure is being run. See [Check for Latest Documentation](../../update_product_stream/README.md#documentation).
-- The `ncn-image-modification.sh` script must be extracted from the top level of the CSM release tarball.
 
 ## Procedure
 
@@ -136,11 +135,14 @@ mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/wo
     done
     ```
 
-### 3. Customize the images
+### 3. (`ncn#`) Customize the images
 
 Add SSH keys and the `root` password to the NCN SquashFS images. Optionally set their timezone, if a timezone other than UTC
-(the default) is desired. This is all done by running the `ncn-image-modification.sh` script, which is located at the top
-level of the CSM release tarball.
+(the default) is desired. This is all done by running the `ncn-image-modification.sh` script, which is located in the `scripts/operations/node_management` directory of the CSM documentation. Set the path to the script:
+
+```bash
+NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
+```
 
 This document provides common ways of using the script to accomplish this. However, specific environments may require
 deviations from these examples. In those cases, it may be helpful to view the complete script usage statement by running
@@ -235,10 +237,10 @@ copies the `root` user password from the current node. It does not change the ti
 
 ```bash
 export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
-ncn-image-modification.sh -p \
-                          -t rsa \
-                          -k k8s/${K8SVERSION}/filesystem.squashfs \
-                          -s ceph/${CEPHVERSION}/filesystem.squashfs
+$NCN_MOD_SCRIPT -p \
+                -t rsa \
+                -k k8s/${K8SVERSION}/filesystem.squashfs \
+                -s ceph/${CEPHVERSION}/filesystem.squashfs
 ```
 
 ##### Example 2: Provide keys, prompt for password, change timezone
@@ -247,11 +249,11 @@ This example uses existing SSH keys located in the `/my/pre-existing/keys` direc
 administrator for the `root` user password during execution. It changes the timezone to `America/Chicago`.
 
 ```bash
-ncn-image-modification.sh -p \
-                          -d /my/pre-existing/keys \
-                          -z America/Chicago \
-                          -k k8s/${K8SVERSION}/filesystem.squashfs \
-                          -s ceph/${CEPHVERSION}/filesystem.squashfs
+$NCN_MOD_SCRIPT -p \
+                -d /my/pre-existing/keys \
+                -z America/Chicago \
+                -k k8s/${K8SVERSION}/filesystem.squashfs \
+                -s ceph/${CEPHVERSION}/filesystem.squashfs
 ```
 
 ##### Example 3: New keys, no password change, keep UTC, no prompting
@@ -261,10 +263,10 @@ change the timezone from the UTC default. A blank passphrase is provided, so tha
 no input from the administrator while it is running.
 
 ```bash
-ncn-image-modification.sh -t rsa \
-                          -N "" \
-                          -k k8s/${K8SVERSION}/filesystem.squashfs \
-                          -s ceph/${CEPHVERSION}/filesystem.squashfs
+$NCN_MOD_SCRIPT -t rsa \
+                -N "" \
+                -k k8s/${K8SVERSION}/filesystem.squashfs \
+                -s ceph/${CEPHVERSION}/filesystem.squashfs
 ```
 
 ### 4. Upload artifacts into S3

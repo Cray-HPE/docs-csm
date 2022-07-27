@@ -27,8 +27,11 @@ see [Set NCN Image Root Password, SSH Keys, and Timezone](Change_NCN_Image_Root_
 ## Overview
 
 Add SSH keys and the `root` password to the NCN SquashFS images. Optionally set their timezone, if a timezone other than UTC
-(the default) is desired. This is all done by running the `ncn-image-modification.sh` script, which is located at the top
-level of the CSM release tarball: `${CSM_PATH}/ncn-image-modification.sh`
+(the default) is desired. This is all done by running the `ncn-image-modification.sh` script, which is located in the `scripts/operations/node_management` directory of the CSM documentation. Set the path to the script:
+
+```bash
+NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modificaiton.sh)
+```
 
 This document provides common ways of using the script to accomplish this. However, specific environments may require
 deviations from these examples. In those cases, it may be helpful to view the complete script usage statement by running
@@ -127,10 +130,10 @@ export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
 KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
 CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
    
-${CSM_PATH}/ncn-image-modification.sh -p \
-                                      -t rsa \
-                                      -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-                                      -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+$NCN_MOD_SCRIPT -p \
+                -t rsa \
+                -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+                -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
 ```
 
 ### Example 2: Provide keys, prompt for password, change timezone
@@ -139,11 +142,11 @@ This example uses existing SSH keys located in the `/my/pre-existing/keys` direc
 administrator for the `root` user password during execution. It changes the timezone to `America/Chicago`.
 
 ```bash
-${CSM_PATH}/ncn-image-modification.sh -p \
-                                      -d /my/pre-existing/keys \
-                                      -z America/Chicago \
-                                      -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-                                      -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+$NCN_MOD_SCRIPT -p \
+                -d /my/pre-existing/keys \
+                -z America/Chicago \
+                -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+                -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
 ```
 
 ### Example 3: New keys, copy PIT password, keep UTC, no prompting
@@ -154,11 +157,11 @@ is provided, so that the script requires no input from the administrator while i
 
 ```bash
 export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
-${CSM_PATH}/ncn-image-modification.sh -p \
-                                      -t rsa \
-                                      -N "" \
-                                      -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-                                      -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+$NCN_MOD_SCRIPT -p \
+                -t rsa \
+                -N "" \
+                -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+                -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
 ```
 
 ## Cleanup
