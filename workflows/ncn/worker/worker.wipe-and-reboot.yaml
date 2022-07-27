@@ -79,6 +79,7 @@ tasks:
               efibootmgr # print after
               echo 'Setting next boot to PXE ... '
               ipmitool chassis bootdev pxe options=efiboot
+              mount -L BOOTRAID -T /etc/fstab.metal
               rm -rf /metal/recovery/*
             EOF
             
