@@ -164,7 +164,6 @@ fi
 wait_for_health_ok ${target_ncn}
 
 # Wait for rgw to start before executing goss tests
-target_ncn=ncn-s001
 rgw_counter=0
 until [[ $(ceph orch ps --daemon_type rgw ${target_ncn} --format json-pretty|jq -r '.[].status_desc') == "running" ]]
 do
