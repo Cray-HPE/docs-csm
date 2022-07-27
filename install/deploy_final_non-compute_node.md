@@ -457,7 +457,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
    except `ncn-m001-mgmt`:
 
     ```bash
-    readarray BMCS < <(grep mgmt /etc/hosts | awk '{print $NF}' | grep -v m001 | sort -u)
+    readarray BMCS < <(grep mgmt /etc/hosts | awk '{print $NF}' | grep -v m001 | sort -u | tr '\n' ' ')
     for BMC in "${BMCS[@]}"; do echo ${BMC}; done
     ```
 
