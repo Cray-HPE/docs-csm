@@ -24,23 +24,32 @@ Vault instance and then apply it immediately to management nodes with the `csm.p
 role via a CFS session. The same root password from Vault will be applied anytime that the NCN
 personalization including the CSM layer is run.
 
-## Procedure: Configure Root Password in Vault
+## Procedure: Configure `root` password in Vault
 
+1. Generate a new password hash for the `root` user.
 
-1. Generate a new password hash for the root user. Type in your new password
-   after running the `read` command. The echo will verify that the hash is set
-   to the password you expect.
+   > This script uses `read -s` to prevent the password from being echoed to the screen or saved
+   > in the shell history. It unsets the plaintext password variables at the end, so that they
+   > cannot be viewed later.
 
    ```bash
-   ncn# read -s NEWPASSWORD
-   ncn# openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) "$NEWPASSWORD"
-   ncn# echo "Password: $NEWPASSWORD"
+   ncn# read -r -s -p "New root password for NCN images: " PW1 ; echo ; if [[ -z ${PW1} ]]; then
+            echo "ERROR: Password cannot be blank"
+        else
+            read -r -s -p "Enter again: " PW2
+            echo
+            if [[ ${PW1} != ${PW2} ]]; then
+                echo "ERROR: Passwords do not match"        
+            else
+                echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin
+            fi
+        fi ; unset PW1 PW2
    ```
 
 1. Get the HashiCorp Vault root token:
 
    ```bash
-   ncn# kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
+   ncn-mw# kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
    ```
 
 1. Write the password hash from step 1 to the HashiCorp Vault. The `vault login`
@@ -51,8 +60,7 @@ personalization including the CSM layer is run.
    any special characters.
 
    ```bash
-   ncn# kubectl exec -itn vault cray-vault-0 -- sh
-
+   ncn-mw# kubectl exec -itn vault cray-vault-0 -- sh
    cray-vault-0# export VAULT_ADDR=http://cray-vault:8200
    cray-vault-0# vault login
    cray-vault-0# vault write secret/csm/management_nodes root_password='HASH'
@@ -60,7 +68,7 @@ personalization including the CSM layer is run.
    cray-vault-0# exit
    ```
 
-## Procedure: Apply Root Password to NCNs (Standalone)
+## Procedure: Apply `root` password to NCNs (standalone)
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
 **only** change the root password on NCNs. This is a quick alternative to
@@ -75,6 +83,7 @@ procedure above.
    ```
 
    Example output:
+
    ```json
    {
      "layers": [
