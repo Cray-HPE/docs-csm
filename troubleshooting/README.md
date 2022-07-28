@@ -2,23 +2,37 @@
 
 This document provides links to troubleshooting information for services and functionality provided by CSM.
 
+### Helpful tips navigating around the CSM repository: 
+
+In the main doc-csm landing page:
+
+* Change the docs-csm branch to the CSM version being used on the system (e.g., release/1.0, release/1.2, release/1.3) 
+
+Use the pre-populated GitHub “Search or jump to...” function in the upper left hand of the page and append keywords related to the exiting problem seen into the existing search. (The example searches for “ping” and “ipxe” related troubleshooting resources on the “main” branch.)  
+
+* Follow any runbooks, guides or procedures which are directly related to the problem. 
+
+* Change the branch in docs-csm to “main” and search a second time to retrieve very recent or beta runbooks and guides. 
+
+* The user could also expand the search beyond the “troubleshooting” section (instead of doing “path troubleshooting”) and/or use more advanced GitHub searches such as "path configure" to find the right context. 
+
+## Quick links:
+
 * [Known issues](#known-issues)
-* [Kubernetes](#kubernetes)
-* [Grafana dashboards](#grafana-dashboards)
-* [UAS](#uas)
 * [Booting](#booting)
-  * [UAN](#uan-boot-issues)
-  * [Compute node](#compute-node-boot-issues)
+* [ConMan](#conman)
 * [Compute rolling upgrades](#compute-rolling-upgrades)
 * [Configuration management](#configuration-management)
-* [Security and authentication](#security-and-authentication)
-* [ConMan](#conman)
-* [Utility storage](#utility-storage)
-* [Node management](#node-management)
 * [Customer Management Network (CMN)](#customer-management-network-cmn)
 * [Domain Name Service (DNS)](#domain-name-service-dns)
+* [Grafana dashboards](#grafana-dashboards)
+* [Kubernetes](#kubernetes)
 * [MetalLB](#metallb)
+* [Node management](#node-management)
+* [Security and authentication](#security-and-authentication)
 * [Spire](#spire)
+* [UAS](#user-access-service-uas)
+* [Utility storage](#utility-storage)
 
 ## Known issues
 
@@ -27,32 +41,6 @@ This document provides links to troubleshooting information for services and fun
 * [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
 * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
-
-## Kubernetes
-
-* [General Kubernetes Commands for Troubleshooting](kubernetes/Kubernetes_Troubleshooting_Information.md)
-* [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
-* [Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
-* [Unresponsive `kubectl` Commands](kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
-* [Kubernetes Node `NotReady`](kubernetes/Troubleshoot_Kubernetes_Node_NotReady.md)
-* [Kubernetes Pods not Starting](kubernetes/Troubleshoot_Kubernetes_Pods_Not_Starting.md)
-* [Postgres Database](../operations/kubernetes/Troubleshoot_Postgres_Database.md)
-* [Recover from Postgres WAL Event](../operations/kubernetes/Troubleshoot_Postgres_Database.md)
-* [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
-* [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
-
-## Grafana dashboards
-
-* [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
-
-## UAS
-
-* [Viewing UAI Log Output](../operations/UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
-* [Stale Brokered UAIs](../operations/UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md)
-* [UAI Stuck in `ContainerCreating`](../operations/UAS_user_and_admin_topics/Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
-* [Duplicate Mount Paths in a UAI](../operations/UAS_user_and_admin_topics/Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)
-* [Missing or Incorrect UAI Images](../operations/UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
-* [Common Mistakes When Creating a Custom End-User UAI Image](../operations/UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
 
 ## Booting
 
@@ -70,6 +58,12 @@ This document provides links to troubleshooting information for services and fun
 * [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
 * [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
 
+## ConMan
+
+* [ConMan Blocking Access to a Node BMC](../operations/conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
+* [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
+* [ConMan Asking for Password on SSH Connection](../operations/conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
+
 ## Compute rolling upgrades
 
 CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
@@ -84,16 +78,71 @@ See [Deprecated features](../introduction/differences.md#deprecated_features).
 * [Ansible Play Failures in CFS Sessions](../operations/configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
 * [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
 
+## Customer Management Network (CMN)
+
+* [General configuration and troubleshooting](../operations/network/management_network/README.md)
+* [Troubleshoot CMN Issues](../operations/network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
+* [Troubleshoot DHCP Issues](../operations/network/dhcp/Troubleshoot_DHCP_Issues.md)
+* [Troubleshoot Common DNS Issues](../operations/network/dns/Troubleshoot_Common_DNS_Issues.md)
+* [Troubleshoot PowerDNS Issues](../operations/network/dns/Troubleshoot_PowerDNS.md)
+* [Troubleshoot Common DNS configuration Issues](../operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
+* [Troubleshoot External DNS Issues](../operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
+* [Troubleshoot BGP not accepting routes from MetalLB](../operations/network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
+* [Troubleshoot BGP services without an allocated IP address](../operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
+* [Troubleshoot PXE boot](../install/troubleshooting_pxe_boot.md)
+
+## Grafana dashboards
+
+* [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
+
+## Domain Name Service (DNS)
+
+* [Connectivity to Services with External IP addresses](../operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
+* [DNS Configuration Issues](../operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
+
+## Kubernetes
+
+* [General Kubernetes Commands for Troubleshooting](kubernetes/Kubernetes_Troubleshooting_Information.md)
+* [Kubernetes Log File Locations](kubernetes/Kubernetes_Log_File_Locations.md)
+* [Liveliness or Readiness Probe Failures](kubernetes/Troubleshoot_Liveliness_Readiness_Probe_Failures.md)
+* [Unresponsive `kubectl` Commands](kubernetes/Troubleshoot_Unresponsive_kubectl_Commands.md)
+* [Kubernetes Node `NotReady`](kubernetes/Troubleshoot_Kubernetes_Node_NotReady.md)
+* [Kubernetes Pods not Starting](kubernetes/Troubleshoot_Kubernetes_Pods_Not_Starting.md)
+* [Postgres Database](../operations/kubernetes/Troubleshoot_Postgres_Database.md)
+* [Recover from Postgres WAL Event](../operations/kubernetes/Troubleshoot_Postgres_Database.md)
+* [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
+* [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
+
+## MetalLB
+
+* [Services Without an Allocated IP Address](../operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
+* [BGP not Accepting Routes from MetalLB](../operations/network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
+
+## Node management
+
+* [Issues with Redfish Endpoint `DiscoveryCheck` for Redfish Events from Nodes](../operations/node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
+* [Interfaces with IP Address Issues](../operations/node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
+* [Loss of Console Connections and Logs on Gigabyte Nodes](../operations/node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
+
 ## Security and authentication
 
 * [Common Vault Cluster Issues](../operations/security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
 * [Keycloak User Localization](../operations/security_and_authentication/Keycloak_User_Localization.md)
 
-## ConMan
+## Spire
 
-* [ConMan Blocking Access to a Node BMC](../operations/conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
-* [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
-* [ConMan Asking for Password on SSH Connection](../operations/conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
+* [Restore Spire Postgres without a Backup](../operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
+* [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
+* [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+
+## User Access service UAS
+
+* [Viewing UAI Log Output](../operations/UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
+* [Stale Brokered UAIs](../operations/UAS_user_and_admin_topics/Troubleshoot_Stale_Brokered_UAIs.md)
+* [UAI Stuck in `ContainerCreating`](../operations/UAS_user_and_admin_topics/Troubleshoot_UAI_Stuck_in_ContainerCreating.md)
+* [Duplicate Mount Paths in a UAI](../operations/UAS_user_and_admin_topics/Troubleshoot_Duplicate_Mount_Paths_in_a_UAI.md)
+* [Missing or Incorrect UAI Images](../operations/UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
+* [Common Mistakes When Creating a Custom End-User UAI Image](../operations/UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
 
 ## Utility storage
 
@@ -107,28 +156,3 @@ See [Deprecated features](../introduction/differences.md#deprecated_features).
 * [Failure of RGW Health Check](../operations/utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
 * [Troubleshoot S3FS Mounts](../operations/utility_storage/Troubleshoot_S3FS_Mounts.md)
 
-## Node management
-
-* [Issues with Redfish Endpoint `DiscoveryCheck` for Redfish Events from Nodes](../operations/node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md)
-* [Interfaces with IP Address Issues](../operations/node_management/Troubleshoot_Interfaces_with_IP_Address_Issues.md)
-* [Loss of Console Connections and Logs on Gigabyte Nodes](../operations/node_management/Troubleshoot_Loss_of_Console_Connections_and_Logs_on_Gigabyte_Nodes.md)
-
-## Customer Management Network (CMN)
-
-* [CMN Issues](../operations/network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
-
-## Domain Name Service (DNS)
-
-* [Connectivity to Services with External IP addresses](../operations/network/external_dns/Troubleshoot_Systems_Not_Provisioned_with_External_IP_Addresses.md)
-* [DNS Configuration Issues](../operations/network/external_dns/Troubleshoot_DNS_Configuration_Issues.md)
-
-## MetalLB
-
-* [Services Without an Allocated IP Address](../operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
-* [BGP not Accepting Routes from MetalLB](../operations/network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
-
-## Spire
-
-* [Restore Spire Postgres without a Backup](../operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
-* [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
-* [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
