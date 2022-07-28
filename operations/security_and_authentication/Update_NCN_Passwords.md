@@ -18,7 +18,7 @@ role via a CFS session. The same root password from Vault will be applied anytim
 personalization including the CSM layer is run. If no password is added to Vault as in the
 procedure below, this Ansible role will skip any password updates.
 
-## New in CSM Release 1.2.0
+## New in CSM release 1.2.0
 
 The location of the password secret in Vault has changed in CSM version 1.2. The
 previous location (`secret/csm/management_nodes root_password=...`) has been
@@ -26,16 +26,26 @@ changed to `secret/csm/users/root password=...`. You must set the password in
 the new location using the _Configure Root Password in Vault_ procedure below
 for it to be applied to the NCNs.
 
-## Procedure: Configure Root Password in Vault
+## Procedure: Configure `root` password in Vault
 
-1. Generate a new password hash for the root user. Type in your new password
-   after running the `read` command. The echo will verify that the hash is set
-   to the password you expect.
+1. Generate a new password hash for the `root` user.
+
+   > This script uses `read -s` to prevent the password from being echoed to the screen or saved
+   > in the shell history. It unsets the plaintext password variables at the end, so that they
+   > cannot be viewed later.
 
    ```bash
-   read -s NEWPASSWORD
-   openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) "$NEWPASSWORD"
-   echo "Password: $NEWPASSWORD"
+   read -r -s -p "New root password for NCN images: " PW1 ; echo ; if [[ -z ${PW1} ]]; then
+       echo "ERROR: Password cannot be blank"
+   else
+       read -r -s -p "Enter again: " PW2
+       echo
+       if [[ ${PW1} != ${PW2} ]]; then
+           echo "ERROR: Passwords do not match"        
+       else
+           echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin
+       fi
+   fi ; unset PW1 PW2
    ```
 
 1. Get the [HashiCorp Vault](HashiCorp_Vault.md) root token:
@@ -59,10 +69,9 @@ for it to be applied to the NCNs.
    vault write secret/csm/users/root password='<INSERT HASH HERE>' [... other fields (see warning below) ...]
    vault read secret/csm/users/root
    exit
-   ncn#
    ```
 
-   > ***WARNING***: The CSM instance of [HashiCorp Vault](HashiCorp_Vault.md) does
+   > **WARNING**: The CSM instance of [HashiCorp Vault](HashiCorp_Vault.md) does
    > not support the `patch` operation, only `write`. Ensure that if the `password`
    > field in the `secret/csm/users/root` secret is being updated that the other
    > fields, for example the user's [SSH keys](SSH_Keys.md#configure_root_keys_in_vault),
@@ -76,7 +85,7 @@ for it to be applied to the NCNs.
    the values in the Ansible role. See `roles/csm.password/README.md` in the
    repository for more information.
 
-## Procedure: Apply Root Password to NCNs (Standalone)
+## Procedure: Apply `root` password to NCNs (standalone)
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
 **only** change the root password on NCNs. This is a quick alternative to
@@ -122,7 +131,7 @@ procedure above.
    configuration management repository has not changed. If the commit has
    changed, repeat this procedure from the beginning.
 
-## Procedure for Other Users
+## Procedure for other users
 
 The `csm.password` Ansible role supports setting passwords for non-root users.
 Make a copy of the `rotate-pw-mgmt-nodes.yml` Ansible playbook and modify the
