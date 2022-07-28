@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -exo pipefail
+set -eo pipefail
 
 PYSCRIPT_BLOBS='
 import os, requests
@@ -56,7 +56,7 @@ nexus-get-blob-usage(){
 
 nexus-get-repo(){
 
-  echo "Running repository usage report now."
+  echo "Repositories by Blobstore."
   python3 -c "${PYSCRIPT_REPOS}" | jq -r 'group_by(.storage | .blobStoreName) | map({ blobStore: (.[0].storage.blobStoreName), repositoryName: [.[] | .name] })'
   # To select one Blobstores list of repositories append "| jq -r '.[] | select(.blobStore=="csm") | .repositoryName | .[]'"
 
