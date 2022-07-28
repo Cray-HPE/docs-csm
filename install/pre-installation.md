@@ -318,9 +318,8 @@ These variables will need to be set for many procedures within the CSM installat
 1. (`pit#`) Copy the previous typescript and start a new one.
 
    ```bash
-   cd "${PITDATA}/admin"
-   cp -pv /tmp/boot.livecd.*.txt ./
-   script -af ~/"csm-install.$(date +%Y-%m-%d).txt"
+   cp -pv /tmp/boot.livecd.*.txt "${PITDATA}/admin"
+   script -af "${PITDATA}/admin/csm-install.$(date +%Y-%m-%d).txt"
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 

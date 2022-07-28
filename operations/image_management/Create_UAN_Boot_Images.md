@@ -59,10 +59,13 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
           id: cbd5cdf6-eac3-47e6-ace4-aa1aecb1359a                         # <--- IMS recipe id
     ```
 
-1. Generate the password hash for the `root` user. Replace `PASSWORD` with the desired `root` password.
+1. Generate the password hash for the `root` user.
+
+    > Replace `PASSWORD` with the desired `root` password.
+    > Do not omit the `-n` from the echo command. It is necessary to generate a valid hash.
 
     ```bash
-    openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) PASSWORD
+    echo -n PASSWORD | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin
     ```
 
 1. Obtain the HashiCorp Vault `root` token.
