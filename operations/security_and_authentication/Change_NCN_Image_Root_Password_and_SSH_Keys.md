@@ -138,10 +138,10 @@ mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/wo
 ### 3. (`ncn#`) Customize the images
 
 Add SSH keys and the `root` password to the NCN SquashFS images. Optionally set their timezone, if a timezone other than UTC
-(the default) is desired. This is all done by running the `ncn-image-modification.sh` script, which is located in the `scripts/operations/node_management` directory of the CSM documentation. Set the path to the script:
+(the default) is desired. This is all done by running the `ncn-image-modification.sh` script. Set the path to the script:
 
 ```bash
-NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
+NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification[.]sh)
 ```
 
 This document provides common ways of using the script to accomplish this. However, specific environments may require
@@ -203,22 +203,21 @@ export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
 
 The following script can be used to manually enter a new password, and then generate its hash.
 
-> The script uses `read -s` to prevent the password from being echoed to the screen or saved
+> This script uses `read -s` to prevent the password from being echoed to the screen or saved
 > in the shell history. It unsets the plaintext password variables at the end, so that only
 > the hash is preserved.
 
 ```bash
-echo -n "Enter root password for NCN images: " ; read -s PW1 ; echo ; if [[ -z $PW1 ]]; then
+read -r -s -p "Enter root password for NCN images: " PW1 ; echo ; if [[ -z ${PW1} ]]; then
     echo "ERROR: Password cannot be blank"
 else
-    echo -n "Enter again: "
-    read -s PW2
+    read -r -s -p "Enter again: " PW2
     echo
-    if [[ $PW1 != $PW2 ]]; then
+    if [[ ${PW1} != ${PW2} ]]; then
         echo "ERROR: Passwords do not match"
     else
-        export SQUASHFS_ROOT_PW_HASH=$(echo "$PW1" | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin)
-        [[ -n $SQUASHFS_ROOT_PW_HASH ]] && echo "Password hash set and exported" || echo "ERROR: Problem generating hash"
+        export SQUASHFS_ROOT_PW_HASH=$(echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin)
+        [[ -n ${SQUASHFS_ROOT_PW_HASH} ]] && echo "Password hash set and exported" || echo "ERROR: Problem generating hash"
     fi
 fi ; unset PW1 PW2
 ```
