@@ -119,7 +119,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
 
     ```json
     [
-        {
+      {
         "ID": "0040a6836339",
         "Description": "Node Maintenance Network",
         "MACAddress": "00:40:a6:83:63:39",
@@ -127,11 +127,11 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
         "ComponentID": "x9000c3s0b0n0",
         "Type": "Node",
         "IPAddresses": [
-            {
+          {
             "IPAddress": "10.100.0.10"
-            }
+          }
         ]
-        }
+      }
     ]
     ```
 
@@ -168,7 +168,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
 1. (`ncn#`) Remove entries from the state components.
 
     ```bash
-    for xname in $(cray hsm state components list --class Mountain --format json |
+    for xname in $(cray hsm state components list --format json |
                      jq -r --arg CHASSIS_SLOT "${CHASSIS_SLOT}" \
                        '.Components[] | select((.ID | startswith($CHASSIS_SLOT)) and (.ID != $CHASSIS_SLOT)) | .ID' )
     do
@@ -208,6 +208,29 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
     - Review *HPE Cray EX Coolant Service Procedures H-6199*. If using the hand pump, then review procedures in the *HPE Cray EX Hand Pump User Guide H-6200*. These procedures can be found on the [HPE Support Center](https://support.hpe.com/).
 
 1. Install the blade from the source system in a storage rack or leave it on the cart.
+
+### Step 9: Rediscover the Chassis BMC of the chassis the blade was removed from
+
+1. (`ncn-mw#`) Determine the name of the Chassis BMC.
+
+    ```bash
+    CHASSIS_BMC="$(echo $CHASSIS_SLOT | egrep -o 'x[0-9]+c[0-9]+')b0"
+    echo $CHASSIS_BMC
+    ```
+
+    Example output:
+
+    ```text
+    x9000c3b0
+    ```
+
+1. (`ncn-mw#`) Rediscover the Chassis BMC.
+
+    ```bash
+    cray hsm inventory discover create --xnames $CHASSIS_BMC
+    ```
+
+### Step 10: Re-enable the `hms-discovery` cronjob
 
 1. (`ncn-mw#`) Un-suspend the `hms-discovery` cron job if no more liquid-cooled blades are planned to be removed from the system.
 
