@@ -33,7 +33,7 @@ rpm -Uhv <canu.rpm>
 
 ### Remove CANU
 
-To remove Canu from your system: 
+If it is necessary to remove CANU from the system, the following command can be used:
 
 ```text
 rpm -e <canu.rpm>
