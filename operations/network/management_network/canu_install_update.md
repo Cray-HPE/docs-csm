@@ -1,5 +1,7 @@
 # Upgrade Canu
 
+## Prerequisite
+
 Before using the CSM Automated Network Utility (CANU) to test, validate, or configure the network, ensure that CANU is running on the latest version. 
 
 If CANU is already installed, then check the CANU version with following command: 
