@@ -2,7 +2,7 @@
 
 Reinstall the same CSM version.
 
-***Before continuing with install*** please make sure that Canu is running the most current version: 
+***Before continuing with install***, make sure that CANU is running the most current version: 
 
   * [Install/Upgrade Canu](canu_install_upgrade.md)
 
