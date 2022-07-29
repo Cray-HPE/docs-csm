@@ -39,7 +39,7 @@ function usage() {
     echo
     echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run]"
     echo "options:"
-    echo "--retry        Send RETRY request instead of CREATE if there is a failed worker rebuild/upgrade workflow already  (default: ${retry})"
+    echo "--no-retry     Do not automatically retry  (default: false)"
     echo "-f|--force     Remove failed worker rebuild/upgrade workflow and create a new one  (default: ${force})"
     echo "--base-url     Specify base url (default: ${baseUrl})"
     echo "--dry-run      Print out steps of workflow instead of running steps (default: ${dryRun})"
@@ -52,8 +52,8 @@ function usage() {
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --retry)
-        retry=true
+    --no-retry)
+        retry=false
         shift # past argument
         ;;
     -f|--force)
@@ -236,8 +236,8 @@ while true; do
         fi
 
         if [[ "${phase}" == "Failed" ]]; then
-            exit 1
-            break;
+            echo "Workflow in Failed state, Retry ..."
+            curl -sk -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${workflow}/retry"
         fi
 
         if [[ "${phase}" == "Error" ]]; then
