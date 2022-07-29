@@ -31,6 +31,8 @@ To upgrade existing version of Canu:
 rpm -Uhv <canu.rpm>
 ```
 
+### Remove CANU
+
 To remove Canu from your system: 
 
 ```text
