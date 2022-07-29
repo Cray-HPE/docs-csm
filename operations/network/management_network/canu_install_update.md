@@ -1,8 +1,10 @@
 # Upgrade Canu
 
-Before using CANU (CSM Automated Network Utility) to test, validate or configure your network. Please ensure that Canu is running on the latest version. 
+## Prerequisite
 
-   * If Canu is already installed in your system, you can check the canu version with following command: 
+Before using the CSM Automated Network Utility (CANU) to test, validate, or configure the network, ensure that CANU is running on the latest version. 
+
+If CANU is already installed, then check the CANU version with following command: 
 
 ```text
 canu --version
@@ -10,7 +12,7 @@ canu --version
 
 Upgrade/Install procedure:
 
-   * Download latest CANU from link below.  
+1. Download the latest version of CANU.  
 
    * [Canu releases](https://github.com/Cray-HPE/canu/releases)
 
@@ -29,10 +31,13 @@ To upgrade existing version of Canu:
 rpm -Uhv <canu.rpm>
 ```
 
-To remove Canu from your system: 
+### Remove CANU
+
+If it is necessary to remove CANU from the system, the following command can be used:
 
 ```text
 rpm -e <canu.rpm>
 ```
 
-[Back to README](README.md)
+[Back to README](index.md)
+
