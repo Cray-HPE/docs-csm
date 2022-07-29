@@ -25,7 +25,7 @@ To fresh install CANU on system:
 rpm -ihv <canu.rpm>
 ```
 
-To upgrade existing version of Canu: 
+To upgrade an existing version of CANU: 
 
 ```text
 rpm -Uhv <canu.rpm>
