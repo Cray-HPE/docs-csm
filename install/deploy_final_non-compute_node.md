@@ -458,7 +458,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
 
     ```bash
     readarray BMCS < <(grep mgmt /etc/hosts | awk '{print $NF}' | grep -v m001 | sort -u | tr '\n' ' ')
-    for BMC in "${BMCS[@]}"; do echo ${BMC}; done
+    for BMC in ${BMCS[@]}; do echo ${BMC}; done
     ```
 
     Expected output looks similar to the following:
@@ -494,7 +494,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
 1. (`ncn-m001#`) Run the following to loop through all of the BMCs (except `ncn-m001-mgmt`) and apply the desired settings.
 
     ```bash
-    for BMC in "${BMCS[@]}"; do
+    for BMC in ${BMCS[@]}; do
         echo "${BMC}: Disabling DHCP and configure NTP on the BMC using data from unbound service"
         /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${BMC}" -S -n
         echo
