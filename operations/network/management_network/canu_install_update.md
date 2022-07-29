@@ -10,7 +10,7 @@ canu --version
 
 Upgrade/Install procedure:
 
-   * Download latest CANU from link below.  
+1. Download the latest version of CANU.  
 
    * [Canu releases](https://github.com/Cray-HPE/canu/releases)
 
