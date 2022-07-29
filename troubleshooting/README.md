@@ -20,9 +20,9 @@ Use the pre-populated GitHub “Search or jump to...” function in the upper le
 
 * [Known issues](#known-issues)
 * [Booting](#booting)
-* [ConMan](#conman)
 * [Compute rolling upgrades](#compute-rolling-upgrades)
 * [Configuration management](#configuration-management)
+* [ConMan](#conman)
 * [Customer Management Network (CMN)](#customer-management-network-cmn)
 * [Domain Name Service (DNS)](#domain-name-service-dns)
 * [Grafana dashboards](#grafana-dashboards)
@@ -58,12 +58,6 @@ Use the pre-populated GitHub “Search or jump to...” function in the upper le
 * [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
 * [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
 
-## ConMan
-
-* [ConMan Blocking Access to a Node BMC](../operations/conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
-* [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
-* [ConMan Asking for Password on SSH Connection](../operations/conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
-
 ## Compute rolling upgrades
 
 CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
@@ -77,6 +71,12 @@ See [Deprecated features](../introduction/differences.md#deprecated_features).
 
 * [Ansible Play Failures in CFS Sessions](../operations/configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
 * [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+
+## ConMan
+
+* [ConMan Blocking Access to a Node BMC](../operations/conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
+* [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
+* [ConMan Asking for Password on SSH Connection](../operations/conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
 
 ## Customer Management Network (CMN)
 
