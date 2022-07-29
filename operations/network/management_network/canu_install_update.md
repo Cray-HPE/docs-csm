@@ -10,7 +10,7 @@ If CANU is already installed, then check the CANU version with following command
 canu --version
 ```
 
-Upgrade/Install procedure:
+### Upgrade/install procedure
 
 1. Download the latest version of CANU.  
 
