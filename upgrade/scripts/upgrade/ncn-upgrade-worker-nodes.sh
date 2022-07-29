@@ -166,7 +166,7 @@ function deleteRebuildWorkflow() {
 
 function retryRebuildWorkflow() {
     res_file=$(mktemp)
-    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}/retry")
+    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}/retry" -d '{}')
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
@@ -244,12 +244,12 @@ while true; do
             echo "Workflow in Error state, Retry ..."
             curl -sk -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${workflow}/retry" -d '{}'
         fi
-        runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .displayName + \"\n  \" " < "${res_file}")
-        succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .displayName +\"\n  \" " < "${res_file}")
+        runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " < "${res_file}")
+        succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")
         printf "\n%s\n" "Succeeded:"
-        echo "  ${succeededSteps}"
+        echo "  ${succeededSteps}" | awk -F'.' '{print $2" -  "$3}'
         printf "%s\n" "${phase}:"
-        echo "  ${runningSteps}"
+        echo "  ${runningSteps}"  | awk -F'.' '{print $2" -  "$3}'
         echo "============================="
         sleep 10
     fi
