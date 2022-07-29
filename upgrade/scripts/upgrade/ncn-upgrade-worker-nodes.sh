@@ -255,3 +255,4 @@ while true; do
     fi
 done
 
+ok_report
