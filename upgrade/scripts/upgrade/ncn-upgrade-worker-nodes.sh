@@ -39,7 +39,7 @@ function usage() {
     echo
     echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run]"
     echo "options:"
-    echo "--retry        Send RETRY request instead of CREATE if there is a failed worker rebuild/upgrade workflow already  (default: ${retry})"
+    echo "--no-retry     Do not automatically retry  (default: false)"
     echo "-f|--force     Remove failed worker rebuild/upgrade workflow and create a new one  (default: ${force})"
     echo "--base-url     Specify base url (default: ${baseUrl})"
     echo "--dry-run      Print out steps of workflow instead of running steps (default: ${dryRun})"
@@ -52,8 +52,8 @@ function usage() {
 
 while [[ $# -gt 0 ]]; do
   case $1 in
-    --retry)
-        retry=true
+    --no-retry)
+        retry=false
         shift # past argument
         ;;
     -f|--force)
@@ -166,7 +166,7 @@ function deleteRebuildWorkflow() {
 
 function retryRebuildWorkflow() {
     res_file=$(mktemp)
-    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}/retry")
+    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}/retry" -d '{}')
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
@@ -236,22 +236,21 @@ while true; do
         fi
 
         if [[ "${phase}" == "Failed" ]]; then
-            exit 1
-            break;
+            echo "Workflow in Failed state, Retry ..."
+            curl -sk -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${workflow}/retry" -d '{}'
         fi
 
         if [[ "${phase}" == "Error" ]]; then
             echo "Workflow in Error state, Retry ..."
-            curl -sk -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${workflow}/retry"
+            curl -sk -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${workflow}/retry" -d '{}'
         fi
-        runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .displayName + \"\n  \" " < "${res_file}")
-        succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .displayName +\"\n  \" " < "${res_file}")
+        runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " < "${res_file}")
+        succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")
+        clear
         printf "\n%s\n" "Succeeded:"
-        echo "  ${succeededSteps}"
+        echo "  ${succeededSteps}" | awk -F'.' '{print $2" -  "$3}'
         printf "%s\n" "${phase}:"
-        echo "  ${runningSteps}"
-        echo "============================="
+        echo "  ${runningSteps}"  | awk -F'.' '{print $2" -  "$3}'
         sleep 10
     fi
 done
-
