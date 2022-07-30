@@ -22,8 +22,6 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-#
-#
 #  ./gateway-test.py <system-domain> <token-network>
 #
 
@@ -180,7 +178,8 @@ def get_vs(service):
 def get_vs_gateways(vsyaml):
 
     vs = yaml.safe_load(vsyaml)
-    gws = vs['spec']['gateways']
+    specgws = vs['spec']['gateways']
+    gws = ' '.join(specgws).replace('services/','').split()
     return gws
 
 if __name__ == '__main__':
@@ -237,6 +236,7 @@ if __name__ == '__main__':
 
     if NODE_TYPE == "ncn":
       reachnets.append("nmnlb")
+      reachnets.append("hmnlb")
       reachnets.append("cmn")
     elif NODE_TYPE == "cn":
       reachnets.append("nmnlb")
@@ -278,7 +278,7 @@ if __name__ == '__main__':
       for net in svcs['test-networks']:
 
         netname = net['name'].lower()
-        if netname.lower() == "nmnlb" and svcs['use-api-gw-override']:
+        if netname == "nmnlb" and svcs['use-api-gw-override']:
            domain = "api-gw-service-nmn.local"
         else:
            domain = "api.{}.{}".format(netname, SYSTEM_DOMAIN)
@@ -334,7 +334,11 @@ if __name__ == '__main__':
                   continue
 
           if net['gateway'] not in svcgws:
-            svcexp = 404
+            # HMNLB behaves differently than other networks right now (CASMPET-5853)
+            if netname == "hmnlb":
+              svcexp = 403
+            else:
+              svcexp = 404
           # if the token we have does not match the network we are testing, we expect a 403
           # CMN tokens will work with NMN and vice versa, because they are using the same gateway in 1.2.
           elif tokname == "cmn" and netname != tokname and netname != "nmnlb":
@@ -359,7 +363,7 @@ if __name__ == '__main__':
           if response.status_code == svcexp:
               print("PASS - [" + svcname + "]: " + url + " - " + str(response.status_code))
           else:
-              print("FAIL - [" + svcname + "]: " + url + " - " + str(response.status_code))
+              print("FAIL - [" + svcname + "]: " + url + " - " + str(response.status_code) + " (expecting: " + str(svcexp) + ")")
               TEST_FAILED = 1
 
     if TEST_FAILED:
