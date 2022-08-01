@@ -17,16 +17,17 @@ This page outlines the procedure to manually cleanup Nexus, in order to ensure t
 
 ## Cleanup of data not being used
 
-Any data in Nexus that is not currently being used can be deleted to make space for the upgrade. This can include data added after the
-previous install, or data that was added during an install that is no longer needed. If there is anything in Nexus that is no longer
-needed, then it is recommended to delete that first, before taking any further steps.
+Any data in Nexus that is not currently being used can be deleted to make space for the upgrade. Data includes repositories or artifacts,
+to delete a blob store refer to [Remove Data Marked For Deletion](#remove-data-marked-for-deletion).This can include data added after the
+previous install, or data that was added during an install that is no longer needed. If there is anything in Nexus that is no longer needed,
+then it is recommended to delete that first, before taking any further steps.
 
 ## Cleanup of old installs
 
 There is no documented list of files that are known to be older versions. If the system has been installed and around for
 an extended period of time, or been put through multiple upgrades, then submit a help request in order to determine what can be safely deleted from Nexus.
 Before submitting the help request, run a script to gather data about the system. This script outputs all of the blob stores and repositories in
-Nexus, and how much space they use.
+Nexus, and a list of what blob store each repository point to.
 
 The script can be run on any master NCN where the latest CSM documentation is installed. See
 [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
