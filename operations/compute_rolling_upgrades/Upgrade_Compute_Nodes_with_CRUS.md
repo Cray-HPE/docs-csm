@@ -19,6 +19,7 @@ This procedure can be run on any master or worker NCN.
 
     This is the group of nodes that will be upgraded.
 
+    <meta argoflow="/qwe/qwe/as/df">
     1. Create a starting node group \(starting label\).
 
         Label names are defined by the user. The names used in this procedure are only examples. The label name used in this example is `slurm-nodes`.
@@ -26,7 +27,9 @@ This procedure can be run on any master or worker NCN.
         ```bash
         cray hsm groups create --label slurm-nodes --description 'Starting Node Group for my Compute Node upgrade'
         ```
-
+    </meta>
+   
+    
     1. Add members to the group.
 
         Add compute nodes to the group by using the component name (xname) for each node being added.
