@@ -10,9 +10,9 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 
 ### Bifurcated CAN
 
-  A major feature of CSM 1.2 is the Bifurcated CAN (BICAN). The BICAN is designed to separate administrative network traffic from user network traffic. For more information, see the BICAN Summary. Review the BICAN Summary before continuing with the CSM 1.2 upgrade.
+A major feature of CSM 1.2 is the Bifurcated CAN (BICAN). The BICAN is designed to separate administrative network traffic from user network traffic. For more information, see the [BICAN Summary](../operations/network/management_network/bican_technical_summary.md). Review the BICAN Summary before continuing with the CSM 1.2 upgrade.
 
-For detailed BICAN documentation, see the BICAN Technical Details page.
+For detailed BICAN documentation, see the [BICAN Technical Details](../operations/network/management_network/bican_technical_details.md) page.
 
 ### The SMA Grafana service is temporarily inaccessible during the upgrade.
 
