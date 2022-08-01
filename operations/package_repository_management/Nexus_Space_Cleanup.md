@@ -12,6 +12,7 @@ This page outlines the procedure to manually cleanup Nexus, in order to ensure t
 
 - [Cleanup of data not being used](#cleanup-of-data-not-being-used)
 - [Cleanup of old installs](#cleanup-of-old-installs)
+- [Remove Data Marked for Deletion](#remove-data-marked-for-deletion)
 - [Increase PVC size](#increase-pvc-size)
 
 ## Cleanup of data not being used
@@ -35,6 +36,27 @@ The script can be run on any master NCN where the latest CSM documentation is in
 ```bash
 /usr/share/doc/csm/scripts/nexus-space-usage.sh
 ```
+
+## Remove Data Marked for Deletion
+
+After something is deleted in Nexus the data is marked for deletion but not removed from the disk. This can lead to a situation
+where there is no space left on the disk but no way to see what is taking up space. After removing data from Nexus a clean up task needs
+to be created to clear data from the disk. After data (a repository or just some artifacts) are deleted from Nexus create a task in Nexus
+by going to the Nexus admin section then clicking on System, then Tasks. The task that should be created is called "Admin - Compact blob store".
+
+  ![Nexus Task Location](../../img/operations/Nexus_Task_Location.png "Nexus Task Location")
+
+The task has 3 required fields. A Name, a blob store, and task frequency. The name can be anything as long as it is not the same as another task.
+The blob store should be a blob store that has some data marked for deletion. The task frequency should be manual.
+
+  ![Nexus Create Blob Compact Task](../../img/operations/Nexus_Compact_Task.png "Nexus Create Blob Compact Task")
+
+Once the task is created you need to run the task. Click on the task name from the task list, then click on run. It should take anywhere from
+30 seconds to 5 minutes depending on how much is marked for deletion. Check in the blob store section under repositories to make sure the total size
+decreases. If the task takes zero seconds to run then either no data is marked for deletion or the task needs to be run again. After the blob store has zero
+total size it can be deleted.
+
+**NOTE:** If the task fails to run and never cleans any data, and the `nexus-data` PVC is completely full the PVC will need to be grown to run the task.
 
 ## Increase PVC size
 
