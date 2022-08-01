@@ -43,14 +43,15 @@ warrant development of more full-featured tools.
 
 The following actions are described in this section:
 
--   Check the Status of Nexus
--   List Repositories
--   List Assets
--   Create a Repository
--   Update a Repository
--   Delete a Repository
--   Create a Blob Store
--   Delete a Blob Store
+- [Check the Status of Nexus](#check-the-status-of-nexus)
+- [List Repositories](#list-repositories)
+- [List Assets](#list-assets)
+- [Create a Repository](#create-a-repository)
+- [Update a Repository](#update-a-repository)
+- [Delete a Repository](#delete-a-repository)
+- [Create a Blob Store](#create-a-blob-store)
+- [Delete a Blob Store](#delete-a-blob-store)
+- [Authenticate to access the RestAPI](#authenticate-to-access-the-rest-api)
 
 ### Pagination
 
