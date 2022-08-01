@@ -109,7 +109,7 @@ This procedure was back-ported from CSM 1.2. For CSM 1.0, connectivity tests wer
     haproxy_test "$SCSNS_NMN" "MGMT HAProxy over NMN"
     ```
 
-   Execute the script, if the ACLs have not been applied, results similar to the following will be returned:
+   Execute the script, if the ACLs have not been applied, results similar to the following will be returned (failures are expected):
 
     ```bash
     [i] MGMT RADOS over NMN
@@ -248,7 +248,7 @@ This procedure was back-ported from CSM 1.2. For CSM 1.0, connectivity tests wer
    haproxy.cfg
    ```
 
-8. Edit the `haproxy.cfg`, adding in the following ACLs and log directives to each front-end.
+8. Edit the `haproxy.cfg`, adding in the following ACLs and log directives to each front-end (a diff shown to illustrate changes necessary).
 
    ```bash
    ncn-m001# diff -Naur haproxy.cfg-dist haproxy.cfg
@@ -434,9 +434,9 @@ This procedure was back-ported from CSM 1.2. For CSM 1.0, connectivity tests wer
 
       The process is written to support change on individual nodes, but could be scripted after analysis of the running firewall rule set (notably with respect to local modifications, if they exist).
 
-      This process must be completed on each storage node (steps 19 - 21).
+      This process must be completed on each storage node (steps 18 - 21).
 
-18. Document where Rados GW is running (port wise).
+18. Document where Rados GW is running (port wise). It should be the same across all storage nodes.
 
       ```bash
       ncn-s001# ss -tnpl | grep rados
@@ -481,7 +481,7 @@ This procedure was back-ported from CSM 1.2. For CSM 1.0, connectivity tests wer
             0        0 DROP       tcp  --  *      *       0.0.0.0/0            10.102.4.135         tcp dpt:22
             0        0 ACCEPT     tcp  --  vlan004 *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080
             85     4862 ACCEPT     tcp  --  lo     *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080
-         276    15438 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080 source IP range 10.252.1.4-10.252.1.14
+         276    15438 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080 source IP range 10.252.1.4-10.252.1.12
             0        0 LOG        tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080 LOG flags 0 level 4 prefix "RADOSGW-DROP"
             0        0 DROP       tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:8080
 
@@ -544,16 +544,18 @@ This procedure was back-ported from CSM 1.2. For CSM 1.0, connectivity tests wer
       Look for a 403 response in the HAProxy logs:
 
       ```bash
-      ncn-m001# pdsh -N -w ncn-s00[1-4] "cd /var/log && zgrep -h -i -E 'haproxy.*frontend' messages || exit 0" | grep "ncn-images" | grep "10.252.1.13"
+      ncn-m001# pdsh -N -w ncn-s00[1-4] "cd /var/log && zgrep -h -i -E 'haproxy.*frontend' messages || exit 0" | grep "ncn-images"
       2022-07-13T13:57:08+00:00 xxx-ncn-s001.local haproxy[43591]: 10.252.1.13:50238 [13/Jul/2022:13:57:08.363] http-rgw-frontend http-rgw-frontend/<NOSRV> 0/-1/-1/-1/0 403 212 - - PR-- 1/1/0/0/0 0/0 "GET /ncn-images/ HTTP/1.1"
       2022-07-13T14:01:11+00:00 xxx-ncn-s001.local haproxy[43591]: 10.252.1.13:50240 [13/Jul/2022:14:01:11.038] http-rgw-frontend http-rgw-frontend/<NOSRV> 0/-1/-1/-1/0 403 212 - - PR-- 1/1/0/0/0 0/0 "GET /ncn-images/ HTTP/1.1"
+      ...
       ```
 
       In the firewall logs, the Ceph RADOS GW traffic will be dropped on the storage node. For example:
 
       ```bash
-      ncn-m001# pdsh -N -w ncn-s00[1-4] "grep RADOSGW /var/log/firewall" | grep "10.252.1.13" | head -1
+      ncn-m001# pdsh -N -w ncn-s00[1-4] "grep RADOSGW /var/log/firewall"
       2022-07-13T14:02:03.418750+00:00 xxx-ncn-s001 kernel: [4397628.546654] RADOSGW-DROPIN=bond0.nmn0 OUT= MAC=b8:59:9f:f9:1d:22:a4:bf:01:3f:6f:91:08:00 SRC=10.252.1.13 DST=10.252.1.3 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=9727 DF PROTO=TCP SPT=59278 DPT=8080 WINDOW=42340 RES=0x00 SYN URGP=0 
+      ...
       ```
 
       For further validation, the following script can be saved to a UAN or compute node with a storage node count as an input.
