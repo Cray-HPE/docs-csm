@@ -16,7 +16,7 @@ canu --version
 
    * [Canu releases](https://github.com/Cray-HPE/canu/releases)
 
-   * Once you have succesfully moved the new RPM to your system, wether that is your workstation or live system. You can issue the following command(s) to upgrade or install Canu:   
+   * Once you have successfully downloaded the CANU RPM to your target system, issue the following command(s) to upgrade or install CANU.  
 
 
 To fresh install CANU on system: 
