@@ -23,8 +23,10 @@
 #
 
 
-use-api-gw-override: true
+use-api-gw-override: false
 test-networks:
+- name: hmnlb
+  gateway: hmn-gateway
 - name: nmnlb
   gateway: services-gateway
 - name: cmn
@@ -37,6 +39,13 @@ test-networks:
 reachable-networks: [ "can", "chn" ]
 
 ingress_api_services:
+- name: cray-argo
+  path: apis/nls/v1/readiness
+  port: 443
+  expected-result: 204
+  namespace: argo
+  gateways: ["services-gateway","customer-admin-gateway"]
+  project: CSM
 - name: cray-bos
   path: apis/bos/v1/session 
   port: 443
@@ -182,7 +191,7 @@ ingress_api_services:
   port: 443
   expected-result: 200
   namespace: services
-  gateways: ["services-gateway"]
+  gateways: ["services-gateway", "customer-admin-gateway", "hmn-gateway"]
   project: HSN
 - name: sma-telemetry
   path: apis/sma-telemetry-api/v1/ping
