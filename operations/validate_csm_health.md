@@ -36,7 +36,6 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [4.1.2 Gateway health tests on an NCN](#412-gateway-health-tests-on-an-ncn)
     - [4.1.3 Gateway health tests from outside the system](#413-gateway-health-tests-from-outside-the-system)
   - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
-    - [4.2.1 Known issues with internal SSH access test execution](#421-known-issues-with-internal-ssh-access-test-execution)
   - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
   - [5.1 Run the test script](#51-run-the-test-script)
@@ -625,56 +624,6 @@ The test will complete with an overall pass/failure status such as the following
 Overall status: PASSED (Passed: 40, Failed: 0)
 ```
 
-#### 4.2.1 Known issues with internal SSH access test execution
-
-- It is possible this test will fail if the procedure to deploy the final NCN has not been performed.
-
-  Before running this procedure, the static IP address reservation data has not yet been loaded into the
-  Hardware State Manager (HSM), so DNS records may be missing.
-
-- After deploying the final NCN, this test may fail with an `UnresolvedHostname` error.
-
-  To work around this issue, perform the following procedure:
-
-  1. (`ncn-mw#`) Inspect the `cray-powerdns-manager` pod log for `Failed to patch RRsets` errors.
-
-     ```bash
-     kubectl -n services logs -l app.kubernetes.io/name=cray-powerdns-manager -c cray-powerdns-manager
-     ```
-
-     Example output:
-
-     ```text
-     {"level":"error","ts":1644510069.0068583,"msg":"Failed to patch RRsets!",  "zone":"nmn.hela.dev.cray.com.",
-     "error":"RRset x3000c0s6b0n0.nmn.hela.dev.cray.com. IN CNAME: Conflicts with   pre-existing RRset",
-     "zone":"nmn.hela.dev.cray.com."}
-     ```
-
-  1. (`ncn-mw#`) Identify the `cray-dns-powerdns` pod.
-
-     ```bash
-     kubectl -n services get pod -l app.kubernetes.io/name=cray-dns-powerdns
-     ```
-
-     Example output:
-
-     ```text
-     NAME                                 READY   STATUS    RESTARTS   AGE
-     cray-dns-powerdns-86c9685d78-bxz2z   2/2     Running   0          13d
-     ```
-
-  1. (`ncn-mw#`) Delete the zone reported in the `cray-powerdns-manager` log output.
-
-     In the following example command, be sure to replace `nmn.hela.dev.cray.com` with
-     the actual zone identified in the earlier step.
-
-     ```bash
-     kubectl -n services exec -it cray-dns-powerdns-86c9685d78-bxz2z \
-         -c cray-dns-powerdns -- pdnsutil delete-zone nmn.hela.dev.cray.com
-     ```
-
-  The `cray-powerdns-manager` reconciliation loop runs every 30 seconds, and the next run will recreate the zone with the correct records.
-
 ### 4.3 External SSH access test execution
 
 The external SSH access tests may be run on any system external to the cluster.
@@ -740,46 +689,28 @@ The external SSH access tests may be run on any system external to the cluster.
     Overall status: PASSED (Passed: 20, Failed: 0)
     ```
 
-<a name="booting-csm-barebones-image"></a>
+## 5. Booting CSM barebones image
 
-## 5. Booting CSM `barebones` image
-
-Included with the Cray System Management (CSM) release is a pre-built node image that can be used
-to validate that core CSM services are available and responding as expected. The CSM Barebones
-image contains only the minimal set of RPMs and configuration required to boot an image and is not
-suitable for production usage. To run production work loads, it is suggested that an image from
-the Cray OS (COS) product, or similar, be used.
-
-- This test is **very important to run**, particularly during the CSM install prior to rebooting the PIT node,
+This test is **very important to run**, particularly during the CSM install prior to rebooting the PIT node,
 because it validates all of the services required for nodes to PXE boot from the cluster.
-- The CSM Barebones image included with the release will not successfully complete
-beyond the `dracut` stage of the boot process. However, if the `dracut` stage is reached, the
-boot can be considered successful and shows that the necessary CSM services needed to
-boot a node are up and available.
-  - This inability to boot the Barebones image fully will be resolved in future releases of the
-CSM product.
-- In addition to the CSM Barebones image, the release also includes an IMS Recipe that
-can be used to build the CSM Barebones image. However, the CSM Barebones recipe currently requires
-RPMs that are not installed with the CSM product. The CSM Barebones recipe can be built after the
-Cray OS (COS) product stream is also installed on to the system.
-  - In future releases of the CSM product, work will be undertaken to resolve these dependency issues.
-- This test can be run on any NCN, but not the PIT node.
-- This script uses the Kubernetes API Gateway to access CSM services. This gateway must be properly
-configured to allow an access token to be generated by the script.
-- This script is installed as part of the `cray-cmstools-crayctldeploy` RPM.
-- For additional information on the script and for troubleshooting help look at the document
-  [Barebones Image Boot](../troubleshooting/cms_barebones_image_boot.md).
+
+By default the test automatically chooses an enabled compute node and a barebones IMS image to use
+for the test. This default behavior can be overridden, however. For additional information and troubleshooting
+related to the barebones image or the test, see
+[Troubleshoot the CMS Barebones Image Boot Test](../troubleshooting/cms_barebones_image_boot.md).
 
 ### 5.1 Run the test script
 
-(`ncn#`) The script is executable and can be run without any arguments. It returns zero on success and
+This test can be run on any master or worker NCN, but not the PIT node.
+
+(`ncn-mw#`) The script is executable and can be run without any arguments. It returns zero on success and
 non-zero on failure.
 
 ```bash
 /opt/cray/tests/integration/csm/barebonesImageTest
 ```
 
-A successful run would generate output like the following:
+Successful output looks similar to the following:
 
 ```text
 cray.barebones-boot-test: INFO     Barebones image boot test starting
@@ -788,14 +719,6 @@ cray.barebones-boot-test: INFO     Creating bos session with template:csm-barebo
 cray.barebones-boot-test: INFO     Starting boot on compute node: x3000c0s10b1n0
 cray.barebones-boot-test: INFO     Found dracut message in console output - success!!!
 cray.barebones-boot-test: INFO     Successfully completed barebones image boot test.
-```
-
-The script will choose an enabled compute node that is listed in the Hardware State Manager (HSM) for
-the test, unless the user passes in a specific node using the `--xname` argument. If a compute node is
-specified but unavailable, an available node will be used instead and a warning will be logged.
-
-```bash
-/opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b4n0
 ```
 
 ## 6. UAS/UAI tests

@@ -111,19 +111,19 @@ There are two tools that can be used to access a BMC's console via SOL:
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
     ```bash
-    USERNAME=$(whoami)
-    read -s IPMI_PASSWORD
+    USERNAME=root
+    read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
     ```
 
     ```bash
     export IPMI_PASSWORD
-    ipmitool -I lanplus -U $USERNAME -E -H <node_management_network_IP_address_of_node> sol activate
+    ipmitool -I lanplus -U "${USERNAME}" -E -H <node_management_network_IP_address_of_node> sol activate
     ```
 
     Example:
 
     ```bash
-    ipmitool -I lanplus -U $USERNAME -E -H  10.100.165.2 sol activate
+    ipmitool -I lanplus -U "${USERNAME}" -E -H  10.100.165.2 sol activate
     ```
 
 - ConMan

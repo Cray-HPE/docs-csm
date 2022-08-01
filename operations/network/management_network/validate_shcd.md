@@ -4,12 +4,14 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
 
 ## Topics
 
-- [Prerequisites](#prerequisites)
-- [Validation steps](#validation-steps)
-- [Under the hood](#under-the-hood)
-  - [Check warnings](#check-warnings)
-  - [Check SHCD port usage](#check-shcd-port-usage)
-- [Logging and updates](#logging-and-updates)
+- [Validate the SHCD](#validate-the-shcd)
+  - [Topics](#topics)
+  - [Prerequisites](#prerequisites)
+  - [Validation steps](#validation-steps)
+  - [Under the hood](#under-the-hood)
+    - [Check warnings](#check-warnings)
+    - [Check SHCD port usage](#check-shcd-port-usage)
+  - [Logging and updates](#logging-and-updates)
 
 ## Prerequisites
 
@@ -34,9 +36,9 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    > **`NOTE`**
    > `-a` defines the architecture, this will be:
    >
-   > - `v1` if the Cray system is composed only of River cabinets
-   > - `TDS` if the Cray system has an attached Hill cabinet
-   > - `FULL` if the Cray system has an attached Mountain cabinet (or a Mountain and a Hill cabinet)
+   > - `v1` if the HPE Cray EX system is composed of Mellanox and Dell switches, typically with Gigabyte or Intel server hardware.
+   > - `tds` if the HPE Cray EX system has Aruba switches with HPE servers **and NCNs are connected to the Aruba Spine switches**.
+   > - `full` if the HPE Cray EX system has Aruba switches with HPE servers **and NCNs are connected to the Aruba Leaf switches**.
 
    ```bash
    ARCH=v1

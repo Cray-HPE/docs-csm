@@ -10,7 +10,7 @@
    Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
    ```
 
    > **`NOTE`** The root password for the node may need to be reset after it is rebooted.
@@ -19,47 +19,30 @@
 
 ## Stage 2.2
 
-1. Make sure that not all pods of `ingressgateway-hmn` or `spire-server` are running on the same worker node.
-
-    1. (`ncn-m001#`) See where the pods are running.
-
-        ```bash
-        kubectl get pods -A -o wide | grep -E 'ingressgateway-hmn|spire-server|^NAMESPACE'
-        ```
-
-        Example output:
-
-        ```text
-        NAMESPACE           NAME                                                              READY   STATUS              RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
-        istio-system        istio-ingressgateway-hmn-555dbc8c6b-2b6rv                         1/1     Running             0          5h2m    10.42.1.41    ncn-w001   <none>           <none>
-        istio-system        istio-ingressgateway-hmn-555dbc8c6b-ks75r                         1/1     Running             0          5h3m    10.44.1.16    ncn-w003   <none>           <none>
-        istio-system        istio-ingressgateway-hmn-555dbc8c6b-npmhz                         1/1     Running             0          5h2m    10.47.0.185   ncn-w002   <none>           <none>
-        spire               spire-server-0                                                    2/2     Running             0          22d     10.47.0.190   ncn-w002   <none>           <none>
-        spire               spire-server-1                                                    2/2     Running             0          22d     10.42.1.133   ncn-w001   <none>           <none>
-        spire               spire-server-2                                                    2/2     Running             0          22d     10.44.0.184   ncn-w003   <none>           <none>
-        ```
-
-        In the example output, for each deployment, the pods are spread out across different worker nodes, so no action would be required.
-
-    1. For either of those two deployments, if all pods are running on a single worker node, then move at least one pod to a different worker node.
-
-        (`ncn-m001#`) Use the `/opt/cray/platform-utils/move_pod.sh` script to do this.
-
-        ```bash
-        /opt/cray/platform-utils/move_pod.sh <pod_name> <target_node>
-        ```
-
 1. (`ncn-m001#`) Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`.
 
    Follow output of the script carefully. The script will pause for manual interaction.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
    ```
 
    > **`NOTE`** The root password for the node may need to be reset after it is rebooted.
 
 1. Repeat the previous steps for each other worker node, one at a time.
+
+> **`Tech Preview`**
+>>
+>> You can also upgrade multiple workers at the same time with comma separated list. Note that in some cases, you can't rebuild all workers in one request. It is system admin's responsibility to make sure a multiple workers request meets following conditions:
+>>
+>> 1. If your system has more than 5 workers, you can't rebuild `ncn-w001,ncn-w002 and ncn-w003` together in one request. You will need at least two requests (example: rebuild `ncn-w001,ncn-w003,ncn-w004,...` first and then rebuild `ncn-w002,ncn-w003,...`)
+>> 2. If your system has more that 5 workers, you can't rebuild all workers that has DVS running in one request.
+>
+> ```bash
+> /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001,ncn-w002,ncn-w003
+>```
+>
+>>
 
 ## Stage 2.3
 
@@ -89,7 +72,8 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 1. (`ncn-m002#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   CSM_RELEASE=1.2.0
+   CSM_RELEASE=1.3.0
+   CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
 1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
@@ -97,11 +81,11 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
    A later stage of the upgrade expects the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm` on `ncn-m002`; that is why this command copies it there.
 
    ```bash
-   mkdir -pv /etc/cray/upgrade/csm/csm-${CSM_RELEASE} &&
+   mkdir -pv /etc/cray/upgrade/csm/${CSM_REL_NAME} &&
              scp ncn-m001:/etc/cray/upgrade/csm/myenv /etc/cray/upgrade/csm/myenv &&
              scp ncn-m001:/root/output.log /root/pre-m001-reboot-upgrade.log &&
              cray artifacts create config-data pre-m001-reboot-upgrade.log /root/pre-m001-reboot-upgrade.log
-   csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/ -name 'cray-site-init*.rpm'") &&
+   csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/ -name 'cray-site-init*.rpm'") &&
              scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm &&
              scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm &&
              rpm -Uvh --force /tmp/cray-site-init.rpm /root/docs-csm-latest.noarch.rpm
@@ -110,7 +94,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 1. Upgrade `ncn-m001`.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
    ```
 
 ## Stage 2.4
@@ -126,7 +110,7 @@ Run the following command to complete the upgrade of the `weave` and `multus` ma
 Run the following script to apply anti-affinity to `coredns` pods:
 
 ```bash
-/usr/share/doc/csm/upgrade/1.2/scripts/k8s/apply-coredns-pod-affinity.sh
+/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh
 ```
 
 ## Stage 2.6
@@ -134,7 +118,7 @@ Run the following script to apply anti-affinity to `coredns` pods:
 Complete the Kubernetes upgrade. This script will restart several pods on each master node to their new Docker containers.
 
 ```bash
-/usr/share/doc/csm/upgrade/1.2/scripts/k8s/upgrade_control_plane.sh
+/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh
 ```
 
 > **`NOTE`**: `kubelet` has been upgraded already, ignore the warning to upgrade it.

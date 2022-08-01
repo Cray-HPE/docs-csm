@@ -94,7 +94,7 @@ tasks:
         - name: scriptContent
           value: |
             ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ `{{inputs.parameters.targetNcn}}` }} \
-              -t "SW_ADMIN_PASSWORD='!nitial0' \
+              -t "SW_ADMIN_PASSWORD='{{.SwitchPassword}}' \
                   GOSS_BASE=/opt/cray/tests/install/ncn \
                   goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml \
                     --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate \

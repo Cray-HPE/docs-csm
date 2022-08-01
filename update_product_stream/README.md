@@ -24,14 +24,14 @@ be downloaded and extracted.
 
    ```bash
    ENDPOINT=URL_SERVER_Hosting_tarball
-   CSM_RELEASE=csm-x.y.z
-   wget "${ENDPOINT}/${CSM_RELEASE}.tar.gz"
+   CSM_RELEASE=x.y.z
+   wget "${ENDPOINT}/csm-${CSM_RELEASE}.tar.gz"
    ```
 
 1. Extract the release distribution.
 
    ```bash
-   tar -xzvf "${CSM_RELEASE}.tar.gz"
+   tar -xzvf "csm-${CSM_RELEASE}.tar.gz"
    ```
 
 1. Before using this software release, check for any patches available for it.
@@ -76,41 +76,41 @@ The following requirements must be met on the system where the procedure is bein
 
    ```bash
    ENDPOINT=URL_SERVER_Hosting_tarball
-   CSM_RELEASE=csm-x.y.z
+   CSM_RELEASE=x.y.z
    PATCH_RELEASE=x.z.a
-   wget "${ENDPOINT}/${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
+   wget "${ENDPOINT}/csm-${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
    ```
 
 1. Uncompress the patch.
 
    ```bash
-   gunzip -v "${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
+   gunzip -v "csm-${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
    ```
 
 1. Apply the patch.
 
    ```bash
    git apply -p2 --whitespace=nowarn \
-                        --directory="${CSM_RELEASE}" \
-                        "${CSM_RELEASE}-${PATCH_RELEASE}.patch"
+                        --directory="csm-${CSM_RELEASE}" \
+                        "csm-${CSM_RELEASE}-${PATCH_RELEASE}.patch"
    ```
 
 1. Set a variable to reflect the new version.
 
    ```bash
-   NEW_CSM_RELEASE="$(./${CSM_RELEASE/lib/version.sh)"
+   NEW_CSM_RELEASE="$(./csm-${CSM_RELEASE}/lib/version.sh)"
    ```
 
 1. Update the name of the CSM release distribution directory.
 
    ```bash
-   mv -v "${CSM_RELEASE}" "${NEW_CSM_RELEASE}"
+   mv -v "csm-${CSM_RELEASE}" "csm-${NEW_CSM_RELEASE}"
    ```
 
 1. Create a tarball from the patched release distribution.
 
    ```bash
-   tar -cvzf "${NEW_CSM_RELEASE}.tar.gz" "${NEW_CSM_RELEASE}/"
+   tar -cvzf "csm-${NEW_CSM_RELEASE}.tar.gz" "csm-${NEW_CSM_RELEASE}/"
    ```
 
 This tarball can now be used in place of the original CSM software release tarball.
@@ -128,13 +128,13 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
 1. Download and upgrade the latest documentation RPM.
 
    ```bash
-   rpm -Uvh --force https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm
+   rpm -Uvh --force https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.3/noarch/docs-csm-latest.noarch.rpm
    ```
 
    If this machine does not have direct internet access, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
 
    ```bash
-   wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
+   wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.3/noarch/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
    scp docs-csm-latest.noarch.rpm ncn-m001:/root
    ssh ncn-m001
    rpm -Uvh --force /root/docs-csm-latest.noarch.rpm

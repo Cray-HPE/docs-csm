@@ -3,101 +3,135 @@
 The management nodes use drive storage for persistence and block storage. This page outlines
 reference information for these disks, their partition tables, and their management.
 
-## Topics
+- [Disk layout quick-reference tables](#disk-layout-quick-reference-tables)
+- [OverlayFS and persistence](#overlayfs-and-persistence)
+  - [`SQFSRAID` and `ROOTRAID` overlays](#sqfsraid-and-rootraid-overlays)
+  - [Helpful commands](#helpful-commands)
+  - [OverlayFS example](#overlayfs-example)
+    - [`mount` command](#mount-command)
+    - [`losetup` command](#losetup-command)
+    - [`lsblk` command](#lsblk-command)
+  - [Persistent directories](#persistent-directories)
+    - [Layering: Upper and lower directory](#layering-upper-and-lower-directory)
+    - [Layering: Real world example](#layering-real-world-example)
+  - [OverlayFS control](#overlayfs-control)
+    - [Reset toggles](#reset-toggles)
+    - [Reset on next boot](#reset-on-next-boot)
+    - [Reset on every boot](#reset-on-every-boot)
+    - [Re-sizing the persistent overlay](#re-sizing-the-persistent-overlay)
+    - [Thin overlay feature](#thin-overlay-feature)
+- [`metalfs`](#metalfs)
+- [Old/retired FS labels](#oldretired-fs-labels)
 
-   * [Disk Layout Quick-Reference Tables](#disk-layout-quick-reference-tables)
-   * [OverlayFS and Persistence](#overlayfs-and-persistence)
-       * [OverlayFS Example](#overlayfs-example)
-       * [Persistent Directories](#persistent-directories)
-         * [Layering - Upperdir and Lowerdir(s)](#layering---upperdir-and-lowerdirs)
-         * [Layering Real World Example](#layering-real-world-example)
-       * [OverlayFS Control](#overlayfs-control)
-           * [Reset Toggles](#reset-toggles)
-           * [Reset On Next Boot](#reset-on-next-boot)
-           * [Reset on Every Boot](#reset-on-every-boot)
-           * [Re-sizing the Persistent Overlay](#re-sizing-the-persistent-overlay)
-           * [Thin Overlay Feature](#thin-overlay-feature)
-   * [SystemD MetalFS](#systemd-metalfs)
-   * [Old/Retired FS-Labels](#oldretired-fs-labels)
-
-## Details
-
-### Disk Layout Quick-Reference Tables
+## Disk layout quick-reference tables
 
 The table below represents all recognizable FS labels on any given management node, varying slightly by node role (Kubernetes master or Kubernetes worker).
 
-| k8s-master | k8s-worker | storage-ceph | FS Label | Partitions | Device |  Partition Size | OverlayFS | Work Order(s) | Memo
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| ✅ | ✅ | ✅ | `BOOTRAID` | `/metal/recovery` | 2 small disks in RAID1 | `500 MiB` | ❌ | Present since Shasta-Preview 1 |
-| ✅ | ✅ | ✅ | `SQFSRAID` | `/run/initramfs/live` | 2 small disks in RAID1 | `25 GiB` | ✅ | [CASM-1885](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1885) |  squashfs should compress our images to about 1/3rd their uncompressed size. (20G → 6.6G) On pepsi's ncn-w001, we are at about 20G of non-volatile data storage needed. |
-| ✅ | ✅ | ✅ | `ROOTRAID` | `/run/initramfs/overlayfs` | 2 small disks in RAID1 | `150 GiB` | ✅ | Present since Shasta-Preview 1 | The persistent image file is loaded from this partition, when the image file is loaded the underlying drive is lazily unmounted (`umount -l`) so that when the overlay closes the disk follows suit. |
-| ✅ | ✅ | ✅ | `AUX` | `/dev/md/AUX` _(Not Mounted)_ | 2 small disks in RAID0 (stripe) | `250 GiB` | ❌ | [MTL-1308](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1308) [MTL-1562](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1562) | Auxiliary RAID array for cloud-init to use. |
-| ❌ | ❌ | ✅ | `CEPHETC` | `/etc/ceph` | LVM | `10 GiB` | ❌ | [MTL-1308](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1308) | |
-| ❌ | ❌ | ✅ | `CEPHVAR` | `/var/lib/ceph` | LVM | `60 GiB` | ❌ | [MTL-1308](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1308) |  |
-| ❌ | ❌ | ✅ | `CONTAIN` | `/run/containers` | LVM | `60 GiB` | ❌ | [MTL-1308](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1308) | |
-| ✅ | ✅ | ❌ | `CRAYS3FSCACHE` | `/var/lib/s3fs_cache` | LVM | `100 GiB` | ❌ | [MTL-1562](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1562) | |
-| ❌ | ✅ | ❌ | `CONRUN` | `/run/containerd` | Ephemeral | `75 GiB` | ❌ | [MTL-916](https://jira-pro.its.hpecorp.net:8443/browse/MTL-916) | On pepsi ncn-w001, we have less than 200G of operational storage for this. |
-| ❌ | ✅ | ❌ | `CONLIB` | `/run/lib-containerd` | Ephemeral | `25%` | ✅ | [MTL-892](https://jira-pro.its.hpecorp.net:8443/browse/MTL-892) [CASMINST-255](https://jira-pro.its.hpecorp.net:8443/browse/CASMINST-255) | |
-| ✅ | ❌ | ❌ | `ETCDLVM` | `/run/lib-etcd` | Ephemeral | `32 GiB` | ✅ | [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) | |
-| ✅ | ❌ | ❌ | `K8SLET` | `/var/lib/kubelet` | Ephemeral | `25%` | ❌ | [MTL-892](https://jira-pro.its.hpecorp.net:8443/browse/MTL-892) [CASMINST-255](https://jira-pro.its.hpecorp.net:8443/browse/CASMINST-255) | |
+| Master | Worker | Storage | FS Label        | Partitions                    | Devices              |  Partition Size | OverlayFS | Notes                                                          |
+| ------ | ------ | ------- | --------------- | ----------------------------- | -------------------- | --------------- | --------- | -------------------------------------------------------------- |
+|   Yes  |  Yes   |   Yes   | `BOOTRAID`      | `/metal/recovery`             | RAID1: 2 small disks | 500 MiB         |    No     |                                                                |
+|   Yes  |  Yes   |   Yes   | `SQFSRAID`      | `/run/initramfs/live`         | RAID1: 2 small disks | 25 GiB          |    Yes    |                                                                |
+|   Yes  |  Yes   |   Yes   | `ROOTRAID`      | `/run/initramfs/overlayfs`    | RAID1: 2 small disks | 150 GiB         |    Yes    | The persistent image file is loaded from this partition[^1].   |
+|   Yes  |  Yes   |   Yes   | `AUX`           | `/dev/md/AUX` _(Not Mounted)_ | RAID0: 2 small disks | 250 GiB         |    No     | Auxiliary RAID array for `cloud-init` to use.                  |
+|   No   |   No   |   Yes   | `CEPHETC`       | `/etc/ceph`                   | LVM                  | 10 GiB          |    No     |                                                                |
+|   No   |   No   |   Yes   | `CEPHVAR`       | `/var/lib/ceph`               | LVM                  | 60 GiB          |    No     |                                                                |
+|   No   |   No   |   Yes   | `CONTAIN`       | `/run/containers`             | LVM                  | 60 GiB          |    No     |                                                                |
+|   Yes  |  Yes   |   No    | `CRAYS3FSCACHE` | `/var/lib/s3fs_cache`         | LVM                  | 100 GiB         |    No     |                                                                |
+|   No   |  Yes   |   No    | `CONRUN`        | `/run/containerd`             | Ephemeral            | 75 GiB          |    No     |                                                                |
+|   No   |  Yes   |   No    | `CONLIB`        | `/run/lib-containerd`         | Ephemeral            | 25%             |    Yes    |                                                                |
+|   Yes  |   No   |   No    | `ETCDLVM`       | `/run/lib-etcd`               | Ephemeral            | 32 GiB          |    Yes    |                                                                |
+|   Yes  |   No   |   No    | `K8SLET`        | `/var/lib/kubelet`            | Ephemeral            | 25%             |    No     |                                                                |
 
-The above table's rows with `overlayFS` map their `Mount Paths` to the `Upper Directory` in the table below:
+[^1]:  When the image is loaded, the underlying drive is lazily unmounted (`umount -l`), so that it will close once the overlay closes.
 
-> The "OverlayFS Name" is the name used in fstab and seen in the output of `mount`.
+The above table's rows with OverlayFS map their `Mount Paths` to the `Upper Directory` in the table below:
 
-| OverlayFS Name | Upper Directory | Lower Directory (or more)
-| --- | --- | --- |
-| `etcd_overlayfs` | `/run/lib-etcd` | `/var/lib/etcd` |
+> The "OverlayFS Name" is the name used in `/etc/fstab` and seen in the output of `mount`.
+
+| OverlayFS Name         | Upper Directory       | Lower Directory       |
+| ---------------------- | --------------------- | --------------------- |
+| `etcd_overlayfs`       | `/run/lib-etcd`       | `/var/lib/etcd`       |
 | `containerd_overlayfs` | `/run/lib-containerd` | `/var/lib/containerd` |
 
-> For notes on previous/old labels, scroll to the bottom.
+> For notes on previous/old labels, see [Old/retired FS labels](#oldretired-fs-labels).
 
-### OverlayFS and Persistence
+## OverlayFS and persistence
 
-There are a few overlays used for NCN image boots. These enable two critical functions; changes to data and new data will persist between reboots, and RAM (memory) is freed because we are using our block-devices (SATA/PCIe).
+The overlays used on NCNs enable two critical functions:
 
-1. `ROOTRAID` is the persistent root overlayFS, it commits and saves all changes made to the running OS and it stands on a RAID1 mirror.
-2. `CONLIB` is a persistent overlayFS for containerd, it commits and saves all new changes while allowing read-through to pre-existing (baked-in) data from the squashFS.
-3. `ETCDK8S` is a persistent overlayFS for etcd, it works like the `CONLIB` overlayFS however this exists in an encrypted LUKS2 partition.
+- Changes to data and new data will persist between reboots.
+- RAM (memory) is freed because the data is stored on block devices (SATA/PCIe).
 
-##### OverlayFS Example
+There are a few overlays used for NCN image boots:
 
-> Helpful commands... the overlayFS organization can be best viewed with these three commands:
-> 1. `lsblk`, `lsblk -f` will show how the RAIDs and disks are mounted
-> 2. `losetup -a` will show where the squashFS is mounted from
-> 3. `mount | grep ' / '` will show you the overlay being layered atop the squashFS
+- `ROOTRAID` is the persistent root OverlayFS. It commits and saves all changes made to the running OS.
+- `CONLIB` is a persistent OverlayFS for `containerd`. It commits and saves all new changes while allowing read-through to pre-existing data from the SquashFS.
+- `ETCDK8S` is a persistent OverlayFS for etcd. It works like the `CONLIB` OverlayFS, but it exists in an encrypted LUKS2 partition.
 
-Let us pick apart the `SQFSRAID` and `ROOTRAID` overlays.
-- `/run/rootfsbase` is the SquashFS image itself
-- `/run/initramfs/live` is the squashFS's storage array, where one or more squashFS can live
-- `/run/initramfs/overlayfs` is the overlayFS storage array, where the persistent directories live
-- `/run/overlayfs` and `/run/ovlwork` are symlinks to `/run/initramfs/overlayfs/overlayfs-SQFSRAID-$(blkid -s UUID -o value /dev/disk/by-label/SQFSRAID) and the neighboring work directory
-- Admin note: The "work" directory is where the operating system processes data. It is the interim where data passes between RAM and persistent storage.
+### `SQFSRAID` and `ROOTRAID` overlays
 
-Using the above bullets, one may be able to better understand the machine output below:
+- `/run/rootfsbase` is the SquashFS image itself.
+- `/run/initramfs/live` is the SquashFS's storage array, where one or more SquashFS can be stored.
+- `/run/initramfs/overlayfs` is the OverlayFS storage array, where the persistent directories are stored.
+- `/run/overlayfs` and `/run/ovlwork` are symbolic links to `/run/initramfs/overlayfs/overlayfs-SQFSRAID-$(blkid -s UUID -o value /dev/disk/by-label/SQFSRAID)` and the neighboring "work" directory[^2].
+
+[^2]: The "work" directory is where the operating system processes data. It is the interim where data passes between RAM and persistent storage.
+
+### Helpful commands
+
+| Commands             | Details                                         |
+| -------------------- | ----------------------------------------------- |
+| `lsblk`, `lsblk -f`  | Shows how the RAIDs and disks are mounted       |
+| `losetup -a`         | Shows where the SquashFS is mounted from        |
+| `mount | grep ' / '` | Shows the overlay being layered on the SquashFS |
+
+### OverlayFS examples
+
+#### `mount` command
 
 ```bash
 mount | grep  ' / '
+```
+
+Example output:
+
+```text
 LiveOS_rootfs on / type overlay (rw,relatime,lowerdir=/run/rootfsbase,upperdir=/run/overlayfs,workdir=/run/ovlwork)
+```
+
+```text
                                              ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
-                                             ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
-                                             ^^^R/O^SQUASHFS IMAGE^^^|^^^ R/W PERSISTENCE ^^^|^^^^^^INTERIM^^^^^^
- losetup -a
+```
+
+#### `losetup` command
+
+```bash
+losetup -a
+```
+
+Example output:
+
+```text
 /dev/loop1: [0025]:74858 (/run/initramfs/thin-overlay/meta)
 /dev/loop2: [0025]:74859 (/run/initramfs/thin-overlay/data)
 /dev/loop0: [2430]:100 (/run/initramfs/live/LiveOS/filesystem.squashfs)
 ```
 
-> The THIN OVERLAY is the transient space the system uses behind the scenes to allow data to live in RAM as it is written to disk.
-> The THIN part of the overlay is the magic, using THIN overlays means the kernel will automatically clear free blocks.
+The "thin overlay" is the transient space the system uses behind the scenes to allow data to be in RAM as it is written to disk.
+The "thin" part of the overlay is the magic; using thin overlays means that the kernel will automatically clear free blocks.
+For more details, see [Thin overlay feature](#thin-overlay-feature).
 
-Below is the layout of what a persistent system looks like. Note, this means that persistent capacity
-is there, but administrators should beware of reset toggles on unfamiliar systems. There are toggles to reset
-overlays that are, by default, toggled `off` (so data persistence be default is safe but one should
-not assume).
+#### `lsblk` command
+
+Below is the layout of what a persistent system looks like.
 
 ```bash
 lsblk
+```
+
+Example output:
+
+```text
 NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
 loop0                 7:0    0   3.8G  1 loop  /run/rootfsbase
 loop1                 7:1    0    30G  0 loop
@@ -123,30 +157,39 @@ sdc                   8:32   1 447.1G  0 disk
   └─etcdvg0-ETCDK8S 254:1    0    32G  0 lvm   /run/lib-etcd
 ```
 
-##### Persistent Directories
+Note that the above output means that persistent capacity is there, but administrators should beware of reset toggles on unfamiliar systems.
+There are toggles to reset overlays that are, by default, toggled `off` (so that data persistence by default is safe, but one should
+not assume). For more information, see [OverlayFS control](#overlayfs-control).
+
+### Persistent directories
 
 **Not all directories are persistent!**
 
 Only the following directories are persistent _by default_:
 
-- `etc`
-- `home`
-- `root`
-- `srv`
-- `tmp`
-- `var`
+- `/etc`
+- `/home`
+- `/root`
 - `/run/containerd`
 - `/run/lib-containerd`
 - `/run/lib-etcd`
 - `/run/lib/kubelet`
+- `/srv`
+- `/tmp`
+- `/var`
 
-More directories can be added, but mileage varies. The initial set is actually managed by dracut, when
-using a reset toggle the above list is "reset/cleared". If more directories are added, they will be eradicated when
-enabling a reset toggle.
+This initial set is managed by dracut. When using a reset toggle, the above list is reset to the above default value. While more directories can be added to the list,
+they will be eradicated when enabling a reset toggle. For more information, see [OverlayFS control](#overlayfs-control).
 
-These are all provided through the Overlay from `/run/overlayfs`:
+(`ncn-m#`) These are all provided through the overlay from `/run/overlayfs`:
+
 ```bash
-ncn-m001:/run/overlayfs # ls -l
+cd /run/overlayfs && ls -l
+```
+
+Example output:
+
+```text
 total 0
 drwxr-xr-x 8 root root 290 Oct 15 22:41 etc
 drwxr-xr-x 3 root root  18 Oct 15 22:41 home
@@ -155,35 +198,49 @@ drwxr-xr-x 3 root root  18 Oct  5 19:16 srv
 drwxrwxrwt 2 root root  85 Oct 16 14:50 tmp
 drwxr-xr-x 8 root root  76 Oct 13 16:52 var
 ```
+
 > Remember: `/run/overlayfs` is a symbolic link to the real disk `/run/initramfs/overlayfs/*`.
 
-###### Layering - Upperdir and Lowerdir(s)
+#### Layering: Upper and lower directory
 
 The file system the user is working on is really two layered file systems (overlays).
-- The lower layer is the SquashFS image itself, read-only, which provides all that we need to run.
-- The upper layer is the OverlayFS, read-write, which does a bit-wise `xor` with the lower-layer
-- Anything in the upper-layer takes precedence by default.
 
-> There are fancier options for overlays, such as multiple lower-layers, copy-up (lower-layer precedence),
->  and opaque (removing a directory in the upper layer hides it in the lower layer). You can read more [here|https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html#inode-properties]
+- The lower layer (also called the lower directory) is the SquashFS image itself. It is read-only and provides all that is needed to run.
+- The upper layer (also called the upper directory) is the OverlayFS. It is read-write, and does a bit-wise `xor` with the lower layer.
+- Anything in the upper layer takes precedence by default.
 
-###### Layering Real World Example
+> There are fancier options for overlays, such as multiple lower layers, copy-up (lower layer precedence),
+> and opaque (removing a directory in the upper layer hides it in the lower layer). For details, see
+> [Overlay Filesystem: Inode properties](https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html#inode-properties).
 
-Let us take `/root` for example, we can see in the upper-dir (the overlay) we have these files:
+#### Layering: Real world example
 
-The upper-dir has these files:
+Take `/root` for example.
+
+(`ncn#`) The upper directory (the overlay) has these files:
 
 ```bash
 ls -l /run/overlayfs/root/
+```
+
+Example output:
+
+```text
 total 4
 -rw------- 1 root root 252 Nov  4 18:23 .bash_history
 drwxr-x--- 4 root root  37 Nov  4 04:35 .kube
 drwx------ 2 root root  29 Oct 21 21:57 .ssh
 ```
-Then in the squashFS image (lower-dir) we have these...
+
+(`ncn#`) The lower directory (the SquashFS image) has these files:
 
 ```bash
 ls -l /run/rootfsbase/root/
+```
+
+Example output:
+
+```text
 total 1
 -rw------- 1 root root   0 Oct 19 15:31 .bash_history
 drwxr-xr-x 2 root root   3 May 25  2018 bin
@@ -196,13 +253,20 @@ drwx------ 2 root root  70 Oct 21 21:57 .ssh
 -rw-r--r-- 1 root root 172 Oct 26 15:25 .wget-hsts
 ```
 
-- Notice how the `.bash_history` file in the lower-dir is `0` bytes, but it is `252` bytes in the upperdir?
-- Notice the `.kube` dir exists in the upper, but not the lower?
+Notice the following:
 
-Finally, looking at `/root` we see the magic:
+- The `.bash_history` file in the lower directory is 0 bytes, but it is 252 bytes in the upper directory.
+- The `.kube` directory exists in the upper directory, but not the lower directory.
+
+(`ncn#`) Keeping the above in mind, look at the contents of `/root` itself:
 
 ```bash
 ls -l /root
+```
+
+Example output:
+
+```text
 total 5
 -rw------- 1 root root 252 Nov  4 18:23 .bash_history
 drwxr-xr-x 2 root root   3 May 25  2018 bin
@@ -216,24 +280,26 @@ drwx------ 1 root root  29 Oct 21 21:57 .ssh
 -rw-r--r-- 1 root root 172 Oct 26 15:25 .wget-hsts
 ```
 
-- Notice how `.bash_history` matches the upper-dir?
-- Notice how `.kube` exists here?
+Notice the following:
 
-The take-away here is: any change done to `/root/` will persist through `/run/overlayfs/root` and will take precedence to the squashFS image root.
+- `.bash_history` matches the upper directory.
+- The `.kube` directory exists here.
 
-#### OverlayFS Control
+The take-away here is that any change done to `/root/` will persist through `/run/overlayfs/root` and will take precedence to the SquashFS image root.
 
-These features or toggles are passable on the kernel command line, and change the behavior of the overlayFS.
+### OverlayFS control
 
-##### Reset Toggles
+These features or toggles are passable on the kernel command line, and change the behavior of the OverlayFS.
+
+#### Reset toggles
 
 The overlay FS provides a few reset toggles to clear out the persistence directories without reinstall.
 
 **The toggles require rebooting.**
 
-###### Reset On Next Boot
+#### Reset on next boot
 
-The preferred way to reset persistent storage is to use the overlayFS reset toggle.
+The preferred way to reset persistent storage is to use the OverlayFS reset toggle.
 
 Modify the boot command line on the PXE server, adding this
 
@@ -242,65 +308,65 @@ Modify the boot command line on the PXE server, adding this
 rd.live.overlay.reset=1
 ```
 
-Once reset, you may want to enable persistence again. Simply revert your change and the next reboot
+Once reset, if wanting to enable persistence again, then simply revert the change; the next reboot
 will persist.
 
 ```bash
-# Cease resetting the overlayFS
+# Cease resetting the OverlayFS
 rd.live.overlay.reset=0
 ```
 
-###### Reset on Every Boot
+#### Reset on every boot
 
 There are two options one can leave enabled to accomplish this:
 
 1. `rd.live.overlay.reset=1` will eradicate/recreate the overlay every reboot.
-2. `rd.live.overlay.readonly=1` will clear the overlay on every reboot.
+1. `rd.live.overlay.readonly=1` will clear the overlay on every reboot.
 
 For long-term usage, `rd.live.overlay.readonly=1` should be added to the command line.
 
-The `reset=1` toggle is usually used to fix a problematic overlay. If you want to refresh
-and purge the overlay completely, then use `rd.live.overlay.reset`.
+The `reset=1` toggle is usually used to fix a problematic overlay. For example, if one wants to refresh
+and purge the overlay completely.
 
-```
+```bash
 # Authorize METAL to purge
 metal.no-wipe=0 rd.live.overlay.reset=1
 ```
 
-> Note: `metal.no-wipe=1` does not protect against `rd.live.overlay.reset`, `metal.no-wipe` is not
-> a feature of dmsquash-live.
+> Note: `metal.no-wipe=1` does not protect against `rd.live.overlay.reset`. `metal.no-wipe` is not
+> a feature of `dmsquash-live`.
 
-##### Re-sizing the Persistent Overlay
+#### Re-sizing the persistent overlay
 
-- Default Size: 300 GiB
-- File System: XFS
+- Default size: 300 GiB
+- File system: XFS
 
 The overlay can be resized to fit a variety of needs or use cases. The size is provided directly
-on the command line. Any value can be provided, but it must be in *megabytes*.
+on the command line. Any value can be provided, but it must be in **megabytes**.
 
-If you are resetting the overlay on a deployed node, you will need to also set `rd.live.overlay.reset=1`.
+If resetting the overlay on a deployed node, `rd.live.overlay.reset=1` must also be set.
 
-It is recommended to set the size before deployment. There is a linkage between the metal-dracut module and the
-live-module that makes this inflexible.
+It is recommended to set the size before deployment. There is a linkage between the `metal-dracut` module and the
+`live-module` that makes this inflexible.
 
 ```bash
-# Use a 300 GiB overlayFS (default)
+# Use a 300 GiB OverlayFS (default)
 rd.live.overlay.size=307200
 
-# Use a 1 TiB overlayFS
+# Use a 1 TiB OverlayFS
 rd.live.overlay.size=1000000
 ```
 
-##### Thin Overlay Feature
+#### Thin overlay feature
 
-The persistent overlayFS leverages newer, "thin" overlays that support discards and that will
-free blocks that are not claimed by the file system. This means that memory is free/released
-when the file system does not claim it anymore.
+The persistent OverlayFS leverages newer "thin" overlays. These "thin" overlays support discards, and that will
+free blocks that are not claimed by the file system. This means that memory is freed/released
+when the file system no longer claims it.
 
 Thin overlays can be disabled, and instead classic DM Snapshots can be used to manage the overlay. This
-will use more RAM. It is not recommended, because `dmraid` is not included in the initrd.
+will use more RAM. It is not recommended, because `dmraid` is not included in the `initrd`.
 
-```shell script
+```bash
 # Enable (default)
 rd.live.overlay.thin=1
 
@@ -308,27 +374,27 @@ rd.live.overlay.thin=1
 rd.live.overlay.thin=0
 ```
 
-### SystemD MetalFS
+## `metalfs`
 
-The `metalfs` systemd service will try to mount any metal created partitions.
+The `metalfs` `systemd` service will try to mount any metal-created partitions.
 
 This runs against the `/run/initramfs/overlayfs/fstab.metal` when it exists. This file is dynamically created by most metal dracut modules.
 
-The service will continuously attempt to mount the partitions, if problems arise please stop the service:
+(`ncn#`) The service will continuously attempt to mount the partitions. If problems arise, then stop the service:
 
 ```bash
 systemctl stop metalfs
 ```
 
-### Old/Retired FS-Labels
+## Old/retired FS labels
 
-Deprecated FS labels/partitions from Shasta 1.3.X (no longer in Shasta 1.4.0 and onwards).
+This is a table of deprecated FS labels/partitions from Shasta 1.3 (no longer in Shasta 1.4 / CSM 0.9 and onwards).
 
-| FS Label | Partitions | Nodes	| Device | Size on Disk | Work Order | Memo
-| --- | --- | ---| --- | --- | --- | --- |
-| `K8SKUBE` | `/var/lib/kubelet` | ncn-w001, ncn-w002 | Ephemeral | Max/Remainder | [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `K8SEPH` | `/var/lib/cray/k8s_ephemeral` | ncn-w001, ncn-w002 | Ephemeral | Max/Remainder | [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `CRAYINSTALL` | `/var/cray/vfat` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `CRAYVBIS` | `/var/cray/vbis` | ncn-w001, ncn-w002 | Ephemeral | `900 GiB` |  [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `CRAYNFS` | `/var/lib/nfsroot/nmd` | ncn-w001, ncn-w002 | Ephemeral | `12 GiB` |  [CASMPET-338](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-338) [CASMPET-342](https://jira-pro.its.hpecorp.net:8443/browse/CASMPET-342) | No longer mounted/used in shasta-1.4 |
-| `CRAYSDU` | `/var/lib/sdu` | all masters and workers | LVM | `100 GiB` | [MTL-1292](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1292) [MTL-1562](https://jira-pro.its.hpecorp.net:8443/browse/MTL-1562) | Implemented in MTL-1292 and refactored in MTL-1562 |
+| FS Label      | Partitions                    | Nodes                   | Device    | Size on Disk  |
+| ------------- | ----------------------------- | ----------------------- | --------- | ------------- |
+| `K8SKUBE`     | `/var/lib/kubelet`            | `ncn-w001`, `ncn-w002`  | Ephemeral | Max/Remainder |
+| `K8SEPH`      | `/var/lib/cray/k8s_ephemeral` | `ncn-w001`, `ncn-w002`  | Ephemeral | Max/Remainder |
+| `CRAYINSTALL` | `/var/cray/vfat`              | `ncn-w001`, `ncn-w002`  | Ephemeral | 12 GiB        |
+| `CRAYVBIS`    | `/var/cray/vbis`              | `ncn-w001`, `ncn-w002`  | Ephemeral | 900 GiB       |
+| `CRAYNFS`     | `/var/lib/nfsroot/nmd`        | `ncn-w001`, `ncn-w002`  | Ephemeral | 12 GiB        |
+| `CRAYSDU`     | `/var/lib/sdu`                | All masters and workers | LVM       | 100 GiB       |

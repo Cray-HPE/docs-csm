@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-#
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -21,7 +20,6 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-#
 """Upgrade an SLS file from any CSM 1.0.x version to CSM 1.2 idempotently."""
 import ipaddress
 import json
@@ -29,6 +27,7 @@ import sys
 
 import click
 from csm_1_2_upgrade.sls_updates import convert_can_ips
+from csm_1_2_upgrade.sls_updates import correct_unbound_dns_address
 from csm_1_2_upgrade.sls_updates import create_bican_network
 from csm_1_2_upgrade.sls_updates import create_chn_network
 from csm_1_2_upgrade.sls_updates import create_metallb_pools_and_asns
@@ -48,14 +47,15 @@ help = """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
     1. Migrate switch naming (in order):  leaf to leaf-bmc and agg to leaf.\n
     2. Remove api-gateway entries from HMLB subnets for CSM 1.2 security.\n
     3. Remove kubeapi-vip reservations for all networks except NMN.\n
-    4. Create the new BICAN "toggle" network.\n
-    5. Migrate the existing CAN to CMN.\n
-    7. Create the CHN network.\n
-    7. Convert IPs of the CAN network.\n
-    8. Create MetalLB Pools and ASN entries on CMN and NMN networks.\n
-    9. Update uai_macvlan in NMN dhcp ranges and uai_macvlan VLAN.\n
-   10. Rename uai_macvlan_bridge reservation to uai_nmn_blackhole
-   11. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network to keep].\n
+    4. Migrate the existing CAN to CMN.\n
+    5. Create the CHN network.\n
+    6. Convert IPs of the CAN network.\n
+    7. Create MetalLB Pools and ASN entries on CMN and NMN networks.\n
+    8. Update uai_macvlan in NMN dhcp ranges and uai_macvlan VLAN.\n
+    9. Rename uai_macvlan_bridge reservation to uai_nmn_blackhole
+   10. Remove unused user networks (CAN or CHN) if requested [--retain-unused-user-network to keep].\n
+   11. Create the new BICAN "toggle" network.\n
+   12. Correct Unbound IP addresses in HMNLB and NMNLB.\n
 """
 
 
@@ -265,9 +265,9 @@ def main(
     remove_api_gw_from_hmnlb_reservations(networks)
 
     #
-    # Create BICAN network
+    # Correct Unbound IPv4 addresses in HMNLB and NMNLB reservations
     #   (not order dependent)
-    create_bican_network(networks, default_route_network_name=bican_user_network_name)
+    correct_unbound_dns_address(networks)
 
     #
     # Clone (existing) CAN network to CMN
@@ -331,15 +331,20 @@ def main(
     #   NEVER REMOVE THE HSN!!!
     if retain_unused_user_network:
         if bican_user_network_name == "CAN":
-            click.secho("Removing unused CHN as requested", fg="bright_white")
-            networks.pop("CHN")
+            click.secho("Removing unused CHN (if it exists) as requested", fg="bright_white")
+            networks.pop("CHN", None)
         if bican_user_network_name == "CHN":
-            click.secho("Removing unused CAN as requested", fg="bright_white")
-            networks.pop("CAN")
+            click.secho("Removing unused CAN (if it exists) as requested", fg="bright_white")
+            networks.pop("CAN", None)
         if bican_user_network_name == "HSN":
-            click.secho("Removing unused CAN as requested", fg="bright_white")
-            networks.pop("CAN")
-            networks.pop("CHN")
+            click.secho("Removing unused CAN and CHN (if they exist) as requested", fg="bright_white")
+            networks.pop("CAN", None)
+            networks.pop("CHN", None)
+
+    #
+    # Create BICAN network
+    #   (not order dependent)
+    create_bican_network(networks, default_route_network_name=bican_user_network_name)
 
     click.secho(
         f"Writing CSM 1.2 upgraded and schema validated SLS file to {sls_output_file.name}",

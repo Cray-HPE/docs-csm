@@ -2,6 +2,15 @@
 
 This page provides directions on constructing the `switch_metadata.csv` file.
 
+## Prerequisites
+
+- The SHCD file for the system.
+
+    Check the description for component names while mapping names between the SHCD and the `switch_metadata.csv` file.
+    See [Component Names (xnames)](../operations/Component_Names_xnames.md).
+
+## Overview
+
 This file is manually created to include information about all spine, `LeafBMC`, CDU, and leaf switches in the system.
 None of the Slingshot switches for the HSN should be included in this file.
 
@@ -30,9 +39,21 @@ The above file would lead to this pairing between component name and hostname:
 
 The hostnames are automatically generated in ascending order by switch type.
 
-The Brand name of the management switches can be determined from one of two places.
-The Device Diagrams or River Device Diagrams tab of the SHCD has pictures and diagrams of the components of the system including the management network switches.
-This will have a long name which shows the part number and the vendor name. The Rack Layout or River Rack Layout tab shows the part number in the context of its location within the cabinet.
+## Switch brands
+
+The general guidelines for any abbreviations are that `MLNX` or `MLX` is for Mellanox and `DL` is for Dell.
+All other switches are HPE Aruba switches.
+
+The brand name of the management switches can be determined from one of two places:
+
+### Device Diagrams tab
+
+The Device Diagrams or River Device Diagrams tab of the SHCD has pictures and diagrams of the components of the system including
+the management network switches. This will have a long name which shows the part number and the vendor name.
+
+### Rack Layout tab
+
+The Rack Layout or River Rack Layout tab shows the part number in the context of its location within the cabinet.
 
 | Part Number | Brand |
 | ----------- | ----- |
@@ -44,21 +65,11 @@ This will have a long name which shows the part number and the vendor name. The 
 | `XC-XGE-48P-DL2` Ethernet switch (Dell `S3048-ON`) | Dell |
 | `XC-XGT-48P-DL2` Ethernet switch (Dell `S4048-ON`) | Dell |
 
-There may be other switches in a specific SHCD, but the general guidelines for any abbreviations are that `MLNX` or `MLX` is for Mellanox and `DL` is for Dell.
-All other switches are HPE Aruba switches.
-
-## Prerequisites
-
-- The SHCD for the system
-
-    Check the description for component names while mapping names between the SHCD and the `switch_metadata.csv` file.
-    See [Component Names (xnames)](../operations/Component_Names_xnames.md).
-
 ## Format
 
 Spine and leaf switches use the format `xXcChHsS`. `LeafBMC` switches use `xXcCwW`. CDU switches use `dDwW`.
 
-## Reference Diagram for Subsequent Sections
+## Reference diagram for subsequent sections
 
    ![Reference diagram of a cabinet with side-by-side switches in SHCD](../img/shcd-rack-example.png)
    > Diagram of a cabinet with side-by-side switches in SHCD.
@@ -69,50 +80,50 @@ Spine and leaf switches use the format `xXcChHsS`. `LeafBMC` switches use `xXcCw
 
     Look for the following:
 
-    - The slot number(s) for the `LeafBMC` switches (usually 48-port switches)
+    - The slot numbers for the `LeafBMC` switches (usually 48-port switches)
 
         - In the above diagram this is `x3000u22`
 
-    - The slot number(s) for the spine switches
+    - The slot numbers for the spine switches
 
         - In the above diagram these are `x3000u23R` and `x3000u23L` (two side-by-side switches)
         - Newer side-by-side switches use slot numbers of `s1` and `s2` instead of `R` and `L`
 
-2. Each spine or leaf switch will follow this format: `xXcChHsS`:
+1. Each spine or leaf switch will follow this format: `xXcChHsS`:
 
     > This format also applies to CDU switches that are in a River cabinet that make connections to an adjacent Hill cabinet.
-    - `xX` : where `X` is the River cabinet identification number (the figure above is `3000`)
-    - `cC` : where `C` is the chassis identification number. This should be `0`.
+    - `xX` : where `X` is the River cabinet identification number (the figure above is `3000`).
+    - `cC` : where `C` is the chassis identification number.
+      - If the switch is within an air-cooled cabinet, then this should be `0`.
+      - If the switch is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
     - `hH` : where `H` is the slot number in the cabinet (height).
     - `sS` : where `S` is the horizontal space number.
 
-3. Each `LeafBMC` switch will follow this format: `xXcCwW`:
+1. Each `LeafBMC` switch will follow this format: `xXcCwW`:
 
     - `xX` : where `X` is the River cabinet identification number (the figure above is `3000`).
-    - `cC` : where `C` is the chassis identification number. This should be `0`.
+    - `cC` : where `C` is the chassis identification number.
+      - If the switch is within an air-cooled cabinet, then this should be `0`.
+      - If the switch is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
     - `wW` : where `W` is the slot number in the cabinet (height).
 
-4. Each CDU switch will follow this format: `dDwW`:
+1. Each CDU switch will follow this format: `dDwW`:
 
-    > If a CDU switch is in a River cabinet, then follow the naming convention in step 2 instead.
+    > If a CDU switch is in a River cabinet, then follow the naming convention in earlier "spine or leaf switch" step instead.
     - `dD` : where `D` is the Coolant Distribution Unit (CDU)
     - `wW` : where `W` is the management switch in a CDU
 
-5. Each item in the file is either of type `leaf`, `CDU`, `LeafBMC`, or `Spine`.
+1. Each line in the file must specify the type: `leaf`, `CDU`, `LeafBMC`, or `Spine`.
 
-6. Each line in the file must denote the Brand, either `Dell`, `Mellanox`, or `Aruba`.
+1. Each line in the file must specify the brand: `Dell`, `Mellanox`, or `Aruba`.
 
-7. (`pit#`) Create the `switch_metadata.csv` file with this information.
+1. Create the `switch_metadata.csv` file with this information.
 
-   ```console
-   vim switch_metadata.csv
-   ```
-
-See the following example files for reference.
+    See the example files in the next section for reference.
 
 ### Examples of `switch_metadata.csv`
 
-> __Use case:__ two Aruba CDU Switches, two Aruba `LeafBMC` switches, four Aruba leaf switches, and two Aruba spine switches:
+> __Example:__ Two Aruba CDU switches, two Aruba `LeafBMC` switches, four Aruba leaf switches, and two Aruba spine switches:
 
 ```csv
 Switch Xname,Type,Brand
@@ -128,7 +139,7 @@ x3000c0h37s1,Spine,Aruba
 x3000c0h38s1,Spine,Aruba
 ```
 
-> __Use case:__ two Dell CDU switches, two Dell `LeafBMC` switches, and two Mellanox spine switches:
+> __Example:__ Two Dell CDU switches, two Dell `LeafBMC` switches, and two Mellanox spine switches:
 
 ```csv
 Switch Xname,Type,Brand
@@ -140,7 +151,7 @@ x3000c0h33s1,Spine,Mellanox
 x3000c0h34s1,Spine,Mellanox
 ```
 
-> __Use case:__ two Dell `LeafBMC` switches and two Mellanox switches in the same slot number:
+> __Example:__ Two Dell `LeafBMC` switches and two Mellanox switches in the same slot number:
 
 ```csv
 Switch Xname,Type,Brand

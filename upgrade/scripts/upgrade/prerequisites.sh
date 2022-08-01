@@ -40,6 +40,7 @@ key="$1"
 case $key in
     --csm-version)
     CSM_RELEASE="$2"
+    CSM_REL_NAME="csm-${CSM_RELEASE}"
     shift # past argument
     shift # past value
     ;;
@@ -269,19 +270,21 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     # get existing customization.yaml file
-    SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE_VERSION}/site-init
+    SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/site-init
     mkdir -p "${SITE_INIT_DIR}"
+    pushd "${SITE_INIT_DIR}"
     DATETIME=$(date +%Y-%m-%d_%H-%M-%S)
     CUSTOMIZATIONS_YAML=$(mktemp -p "${SITE_INIT_DIR}" "customizations-${DATETIME}-XXX.yaml")
+    set -o pipefail
     kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > "${CUSTOMIZATIONS_YAML}"
+    set +o pipefail
+
+    # NOTE:  There are currently no sealed secrets being added so we are skipping the sealed secrets steps
+
     cp "${CUSTOMIZATIONS_YAML}" "${CUSTOMIZATIONS_YAML}.bak"
+    . ${locOfScript}/util/update-customizations.sh -i ${CUSTOMIZATIONS_YAML}
 
-    # argo/cray-nls: update customization.yaml
-    yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.kubernetes.services.cray-nls.externalHostname 'cmn.{{ network.dns.external }}'
-    yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
-
-    # rename customazations file so k8s secret name stays the same
-    pushd "${SITE_INIT_DIR}"
+    # rename customizations file so k8s secret name stays the same
     cp "${CUSTOMIZATIONS_YAML}" customizations.yaml
 
     # push updated customizations.yaml to k8s
@@ -334,7 +337,10 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     artdir=${CSM_ARTI_DIR}/images
     #shellcheck disable=SC2155
     export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
-    DEBUG=1 ${CSM_ARTI_DIR}/ncn-image-modification.sh \
+    set -o pipefail
+    NCN_IMAGE_MOD_SCRIPT="$(rpm -ql docs-csm | grep ncn-image-modification.sh)"
+    set +o pipefail
+    DEBUG=1 $NCN_IMAGE_MOD_SCRIPT \
         -d /root/.ssh \
         -k $artdir/kubernetes/kubernetes*.squashfs \
         -s $artdir/storage-ceph/storage-ceph*.squashfs \
@@ -401,6 +407,40 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     csi upgrade metadata --1-2-to-1-3 \
         --k8s-version ${KUBERNETES_VERSION} \
         --storage-version ${CEPH_VERSION}
+
+    } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
+    record_state ${state_name} $(hostname)
+    echo
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPDATE NCN KERNEL PARAMETERS"
+#shellcheck disable=SC2046
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    # shellcheck disable=SC2155,SC2046
+    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+        -d client_id=admin-client \
+        -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    export TOKEN
+
+    # As boot parameters are added or removed, update these arrays.
+    # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
+    bootparameters_to_set=( "psi=1" )
+    bootparameters_to_delete=()
+
+    for bootparameter in "${bootparameters_to_delete[@]}"; do
+        csi handoff bss-update-param --delete ${bootparameter}
+    done
+
+    for bootparameter in "${bootparameters_to_set[@]}"; do
+        csi handoff bss-update-param --set ${bootparameter}
+    done
 
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
@@ -521,8 +561,6 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-${locOfScript}/../cps/snapshot-cps-deployment.sh
-
 state_name="CREATE_CEPH_RO_KEY"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
@@ -626,31 +664,10 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     numOfActiveWokers=$(kubectl get nodes | grep "ncn-w" | grep "Ready" | wc -l)
     minimal_count=4
     if [[ $numOfActiveWokers -lt $minimal_count ]]; then
-        /usr/share/doc/csm/upgrade/1.2/scripts/k8s/tds_lower_cpu_requests.sh
+        /usr/share/doc/csm/upgrade/scripts/k8s/tds_lower_cpu_requests.sh
     else
         echo "==> TDS: false"
     fi
-
-    } >> ${LOG_FILE} 2>&1
-    #shellcheck disable=SC2046
-    record_state ${state_name} $(hostname)
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="SUSPEND_NCN_CONFIGURATION"
-#shellcheck disable=SC2046
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
-    {
-
-    export CRAY_FORMAT=json
-    # Even though we export the CRAY_FORMAT environment variable, it still is safest to also specify the --format command line argument
-    for xname in $(cray hsm state components list --role Management --type node --format json | jq -r .Components[].ID)
-    do
-        cray cfs components update --enabled false --desired-config "" $xname
-    done
 
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046

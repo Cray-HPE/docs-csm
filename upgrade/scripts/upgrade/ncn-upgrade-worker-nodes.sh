@@ -26,153 +26,231 @@
 set -e
 basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${basedir}/../common/upgrade-state.sh
-trap 'err_report' ERR
+trap 'argo_err_report' ERR
 
-target_ncn=$1
+#global vars
+dryRun=false
+baseUrl="https://api-gw-service-nmn.local"
+retry=true
+force=false
 
-. ${basedir}/../common/ncn-common.sh ${target_ncn}
+function usage() {
+    echo "CSM ncn worker upgrade script"
+    echo
+    echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run]"
+    echo "options:"
+    echo "--no-retry     Do not automatically retry  (default: false)"
+    echo "-f|--force     Remove failed worker rebuild/upgrade workflow and create a new one  (default: ${force})"
+    echo "--base-url     Specify base url (default: ${baseUrl})"
+    echo "--dry-run      Print out steps of workflow instead of running steps (default: ${dryRun})"
+    echo
+    echo "*COMMA_SEPARATED_NCN_HOSTNAMES"
+    echo "  example 1) ncn-w001"
+    echo "  example 2) ncn-w001,ncn-w002,ncn-w003"
+    echo
+}
 
-ssh_keygen_keyscan $1 || true # or true to unblock rerun
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --no-retry)
+        retry=false
+        shift # past argument
+        ;;
+    -f|--force)
+        force=true
+        shift # past argument
+        ;;
+    --base-url)
+        baseUrl="$2"
+        shift # past argument
+        shift # past value
+        ;;
+    --dry-run)
+        dryRun=true
+        shift # past argument
+        ;;
+    ncn-w[0-9][0-9][0-9]*)
+        target_ncns=$1
+        shift # past argument
+        IFS=', ' read -r -a array <<< "$target_ncns"
+        jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
+        ;;
+    *)
+        echo 
+        echo "Unknown option $1" 
+        usage
+        exit 1
+        ;;
+  esac
+done
 
-${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
-
-state_name="ENSURE_NEXUS_CAN_START_ON_ANY_NODE"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."  
-    {
-    workers="$(kubectl get node --selector='!node-role.kubernetes.io/master' -o name | sed -e 's,^node/,,' | paste -sd,)"
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    kubectl get configmap -n nexus cray-precache-images -o json | jq -r '.data.images_to_cache' | while read image; do echo >&2 "+ caching $image"; pdsh -w "$workers" "crictl pull $image" 2>/dev/null; done
-    } >> ${LOG_FILE} 2>&1
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
+if $retry && $force; then
+    echo "WARNING: RETRY is ignored when FORCE is set"
+    retry=false
 fi
 
-# Ensure that the previously rebuilt worker node (if applicable) has started any etcd pods (if necessary).
-# We do not want to begin rebuilding the next worker node until etcd pods have reached quorum.
-state_name="ENSURE_ETCD_PODS_RUNNING"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    {
-    while [[ "$(kubectl get po -A -l 'app=etcd' | grep -v "Running"| wc -l)" != "1" ]]; do
-        echo "Some etcd pods are not in running state, wait for 5s ..."
-        kubectl get po -A -l 'app=etcd' | grep -v "Running"
-        sleep 5
-    done
+function uploadWorkflowTemplates() {
+    "${basedir}"/../../../workflows/scripts/upload-worker-rebuild-templates.sh
+}
 
-    etcdClusters=$(kubectl get Etcdclusters -n services | grep "cray-"|awk '{print $1}')
-    for cluster in $etcdClusters
-    do
-        numOfPods=$(kubectl get pods -A -l 'app=etcd'| grep $cluster | grep "Running" | wc -l)
-        if [[ $numOfPods -ne 3 ]];then
-            echo "ERROR - Etcd cluster: $cluster should have 3 pods running but only $numOfPods are running"
-            exit 1
-        fi
-    done
-    } >> ${LOG_FILE} 2>&1
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-state_name="ENSURE_POSTGRES_HEALTHY"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    {
-    wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/bin/csi
-    csi pit validate --postgres
-    } >> ${LOG_FILE} 2>&1
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-drain_node $target_ncn
-
-# Validate SLS health before calling csi handoff bss-update-*, since
-# it relies on SLS
-check_sls_health >> "${LOG_FILE}" 2>&1
-
+function createWorkflowPayload() {
+    # ask for switch password if it's not set
+    if [[ -z "${SW_ADMIN_PASSWORD}" ]]; then
+    read -r -s -p "Switch password:" SW_ADMIN_PASSWORD
+    fi
+    echo
+    cat << EOF
 {
-set +e
-while true ; do    
-    csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
-    if [[ $? -eq 0 ]]; then
-        break
-    else
-        sleep 5
+  "dryRun": ${dryRun},
+  "hosts": ${jsonArray},
+  "switchPassword": "${SW_ADMIN_PASSWORD}"
+}
+EOF
+}
+
+function getToken() {
+    # shellcheck disable=SC2155,SC2046
+    curl -k -s -S -d grant_type=client_credentials \
+        -d client_id=admin-client \
+        -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+        "${baseUrl}"/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'
+}
+
+function printCmdArgs() {
+    echo "Inputs: "
+    echo "============================================================"
+    echo "Target Ncn(s):    ${jsonArray}"
+    echo "Base URL:         ${baseUrl}"
+    echo "Retry:            ${retry}"
+    echo "Dry Run:          ${dryRun}"
+    echo "Force:            ${force}"
+    echo "============================================================="
+}
+
+function getUnsucceededWorkerRebuildWorkflows() {
+    res_file=$(mktemp)
+    local labelSelector="node-type=worker,workflows.argoproj.io/phase!=Succeeded"
+    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}")
+    if [[ ${http_code} -ne 200 ]]; then
+        echo "Request Failed, Response code: ${http_code}"
+        cat "${res_file}"
+        exit 1
+    fi
+    jq -r ".[]? | .name?" < "${res_file}"
+}
+
+function createRebuildWorkflow() {
+    res_file=$(mktemp)
+    set -x
+    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPOST -H "Authorization: Bearer $(getToken)" -H 'Content-Type: application/json' -d "$(createWorkflowPayload)" "${baseUrl}/apis/nls/v1/ncns/rebuild")
+    set +x
+    if [[ ${http_code} -ne 200 ]]; then
+        echo "Request Failed, Response code: ${http_code}"
+        cat "${res_file}"
+        exit 1
+    fi
+    local workflow
+    workflow=$(grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*' < "${res_file}" )
+    echo "${workflow}"
+}
+
+function deleteRebuildWorkflow() {
+    res_file=$(mktemp)
+    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XDELETE -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}")
+    if [[ ${http_code} -ne 200 ]]; then
+        echo "Request Failed, Response code: ${http_code}"
+        cat "${res_file}"
+        exit 1
+    fi
+}
+
+function retryRebuildWorkflow() {
+    res_file=$(mktemp)
+    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}/retry" -d '{}')
+    if [[ ${http_code} -ne 200 ]]; then
+        echo "Request Failed, Response code: ${http_code}"
+        cat "${res_file}"
+    fi
+}
+
+printCmdArgs
+uploadWorkflowTemplates
+# shellcheck disable=SC2207
+unsucceededWorkflows=($(getUnsucceededWorkerRebuildWorkflows))
+numOfUnsucceededWorkflows="${#unsucceededWorkflows[*]}"
+
+if [[ ${numOfUnsucceededWorkflows} -gt 1 ]]; then
+    echo "ERROR: There are multiple unsucceeded worker rebuild workflows"
+    exit 1
+fi
+
+# dealing with FORCE
+# shellcheck disable=SC2046
+if $force && [ "${numOfUnsucceededWorkflows}" -eq 1 ]; then
+    workflow=$(echo "${unsucceededWorkflows[0]}" | grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*')
+    echo "Delete workflow: ${workflow}"
+    deleteRebuildWorkflow "${workflow}"
+    numOfUnsucceededWorkflows=0
+fi
+
+# dealing with RETRY
+# shellcheck disable=SC2046
+if $retry && [ "${numOfUnsucceededWorkflows}" -eq 1 ]; then
+    workflow=$(echo "${unsucceededWorkflows[0]}" | grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*')
+    echo "Retry workflow: ${workflow}"
+    retryRebuildWorkflow "${workflow}"
+fi
+
+if [ "${numOfUnsucceededWorkflows}" -eq 0 ]; then
+    # create a new workflow
+    workflow=$(createRebuildWorkflow)
+    echo "Create workflow: ${workflow}"
+fi
+
+if [[ -z "${workflow}" ]]; then
+    echo
+    echo "No workflow to pull, something is wrong"
+else 
+    echo
+    echo "Poll status of: ${workflow}"
+fi
+
+sleep 20
+
+# poll
+while true; do
+    labelSelector="node-type=worker"
+    res_file="$(mktemp)"
+    http_status=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}")
+    
+    if [ "${http_status}" -eq 200 ]; then
+        phase=$(jq -r ".[] | select(.name==\"${workflow}\") | .status.phase" < "${res_file}")
+        # skip null because workflow hasn't started yet
+        if [[ "${phase}" == "null" ]]; then
+            continue;
+        fi
+
+        if [[ "${phase}" == "Succeeded" ]]; then
+            ok_report
+            break;
+        fi
+
+        if [[ "${phase}" == "Failed" ]]; then
+            echo "Workflow in Failed state, Retry ..."
+            curl -sk -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${workflow}/retry" -d '{}'
+        fi
+
+        if [[ "${phase}" == "Error" ]]; then
+            echo "Workflow in Error state, Retry ..."
+            curl -sk -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${workflow}/retry" -d '{}'
+        fi
+        runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " < "${res_file}")
+        succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")
+        clear
+        printf "\n%s\n" "Succeeded:"
+        echo "  ${succeededSteps}" | awk -F'.' '{print $2" -  "$3}'
+        printf "%s\n" "${phase}:"
+        echo "  ${runningSteps}"  | awk -F'.' '{print $2" -  "$3}'
+        sleep 10
     fi
 done
-set -e
-} >> ${LOG_FILE} 2>&1
-
-${basedir}/../common/ncn-rebuild-common.sh $target_ncn
-
-{
-${basedir}/../cfs/wait_for_configuration.sh --xnames $TARGET_XNAME
-
-### redeploy CPS if required
-redeploy=$(cat /etc/cray/upgrade/csm/${CSM_RELEASE}/cp.deployment.snapshot | grep $target_ncn | wc -l)
-if [[ $redeploy == "1" ]];then
-    cray cps deployment update --nodes $target_ncn
-fi
-} >> ${LOG_FILE} 2>&1
-
-state_name="ENSURE_KEY_PODS_HAVE_STARTED"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    {
-    while true; do
-      output=$(kubectl get po -A -o wide | grep -e etcd -e speaker | grep $target_ncn | awk '{print $4}')
-      if [ ! -n "$output" ]; then
-        #
-        # No pods scheduled to start on this node, we are done
-        #
-        break
-      fi
-      rc=0
-      echo "$output" | grep -v -e Running -e Completed > /dev/null || rc=$?
-      if [[ "$rc" -eq 1 ]]; then
-        echo "All etcd and speaker pods are running on $target_ncn"
-        break
-      fi
-      echo "Some etcd and speaker pods are not running on $target_ncn -- sleeping for 10 seconds..."
-      sleep 10
-    done
-    scp /root/docs-csm-latest.noarch.rpm $target_ncn:/root/docs-csm-latest.noarch.rpm
-    ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
-    } >> ${LOG_FILE} 2>&1
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
-fi
-
-if [[ -z $SW_ADMIN_PASSWORD ]]; then
-    echo "******************************************"
-    echo "******************************************"
-    echo "**** You can export SW_ADMIN_PASSWORD ****"
-    echo "********* to avoid manual input  *********"
-    echo "******************************************"
-    echo "******************************************"
-    echo "**** Enter SSH password of switches: ****"
-    read -s -p "" SW_ADMIN_PASSWORD
-    echo
-fi
-
-cat <<EOF
-
-NOTE:
-    If below test failed, try to fix it based on test output. Then run current script again
-EOF
-
-ssh $target_ncn -t "SW_ADMIN_PASSWORD=$SW_ADMIN_PASSWORD GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate"
-
-move_state_file ${target_ncn}
-
-ok_report
-

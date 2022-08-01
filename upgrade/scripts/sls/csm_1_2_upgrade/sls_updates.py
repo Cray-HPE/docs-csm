@@ -1,7 +1,6 @@
-#
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,7 +19,6 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-#
 """Functions used to update SLS from CSM 1.0.x to CSM 1.2."""
 from collections import defaultdict
 import ipaddress
@@ -290,6 +288,51 @@ def remove_kube_api_reservations(networks):
                 subnet.reservations().pop("kubeapi-vip")
 
 
+def correct_unbound_dns_address(networks):
+    """Query HMNLB and NMNLB Reservations and correct Unbound DNS IPv4 Address.
+
+    Args:
+        networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
+        unbound_ipv4 (ipaddress.IPv4Address): IPv4 address of unbound
+    """
+    click.secho(
+        "Correcting unbound IPv4 addresses if they are incorrect",
+        fg="bright_white"
+    )
+    network_data = [
+        ("NMNLB", "nmn_metallb_address_pool", ipaddress.IPv4Address("10.92.100.225")),
+        ("HMNLB", "hmn_metallb_address_pool", ipaddress.IPv4Address("10.94.100.225")),
+    ]
+ 
+    for data in network_data:
+        network = networks.get(data[0])
+        subnet = network.subnets().get(data[1])
+        reservations = subnet.reservations()
+        unbound_reservation = reservations.get("unbound")
+        if unbound_reservation is None:
+            # create the reservation
+            click.secho(
+                f"    Creating new unbound reservation in {data[1]} subnet with {data[2]}"
+            )
+            reservations.update(
+                {
+                    "unbound":
+                    Reservation(
+                        name="unbound",
+                        ipv4_address=data[2],
+                        aliases=["unbound"],
+                        comment="unbound"
+                    )
+                }
+            )
+        else:
+            if unbound_reservation.ipv4_address() != data[2]:
+                click.secho(
+                    f"    Updating unbound reservation in {data[1]} subnet with {data[2]}"
+                )
+                unbound_reservation.ipv4_address(data[2])
+
+
 def create_bican_network(networks, default_route_network_name):
     """Create a new SLS BICAN network data structure.
 
@@ -436,7 +479,7 @@ def migrate_can_to_cmn(networks, preserve=None, overrides=None):
 
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
-        preserve (str): Network to preferentially preserve IP addresses whenc cloning
+        preserve (str): Network to preferentially preserve IP addresses when cloning
         overrides (str, ipaddress.IPv4Network): Tuple of tuples forcing subnet addressing
     """
     can_network = networks.get("CAN")
@@ -483,7 +526,7 @@ def convert_can_ips(networks, can_data, preserve=None, overrides=None):
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         can_data (int, ipaddress.IPv4Network): VLAN and IPv4 CIDR for the CAN
-        preserve (str): Network to preferentially preserve IP addresses whenc cloning
+        preserve (str): Network to preferentially preserve IP addresses when cloning
         overrides (str, ipaddress.IPv4Network): Tuple of tuples forcing subnet addressing
     """
     can_network = networks.get("CAN")
@@ -546,7 +589,7 @@ def clone_subnet_and_pivot(
         destination_network_name (str): Name of the network to create
         destination_network_full_name (str): Long/Full name of the network to create
         subnet_names (list): Subnets in an ordered list to be cloned/expanded
-        preserve (str): Network to preferentially preserve IP addresses whenc cloning
+        preserve (str): Network to preferentially preserve IP addresses when cloning
         overrides (str, ipaddress.IPv4Network): Tuple of tuples forcing subnet addressing
     """
     #

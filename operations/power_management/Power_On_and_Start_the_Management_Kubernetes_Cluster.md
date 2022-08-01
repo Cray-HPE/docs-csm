@@ -26,9 +26,9 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
     ```bash
     USERNAME=root
-    read -s IPMI_PASSWORD
+    read -r -s -p "ncn-m001 BMC ${USERNAME} password: " IPMI_PASSWORD
     export IPMI_PASSWORD
-    ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME sol activate
+    ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_M001_BMC_HOSTNAME sol activate
     ```
 
 1. (`remote#`) In a separate window, power on the master node 1 \(`ncn-m001`\) chassis using IPMI tool.
@@ -37,9 +37,9 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
     ```bash
     USERNAME=root
-    read -s IPMI_PASSWORD
+    read -r -s -p "ncn-m001 BMC ${USERNAME} password: " IPMI_PASSWORD
     export IPMI_PASSWORD
-    ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME chassis power on
+    ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_M001_BMC_HOSTNAME chassis power on
     ```
 
     Wait for the login prompt.
@@ -59,7 +59,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     1. (`remote#`) Power cycle again to boot into `ncn-m001`.
 
         ```bash
-        ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME chassis power on
+        ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_M001_BMC_HOSTNAME chassis power on
         ```
 
 1. (`remote#`) Wait for `ncn-m001` to boot, then `ping` the node to check status.
@@ -115,7 +115,9 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
    In the preceding example, the `ssh` command to the NCN nodes timed out and reported `ERROR` messages. Repeat the above step until you see `Succeeded with boot of other management NCNs.` Each iteration should get further in the process.
 
-1. (`ncn-m001#`) Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
+1. (`ncn-m001#`) Monitor the consoles for each NCN.
+
+    Use `tail` to monitor the log files in `/var/log/cray/console_logs` for each NCN.
 
     Alternatively, attach to the screen session \(screen sessions real time, but not saved\):
 
@@ -207,7 +209,8 @@ Verify that the Lustre file system is available from the management cluster.
 
     Verify that the Ceph services started.
 
-    * If the Ceph services did not start, then see [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md)for instruction on starting Ceph services.
+    * If the Ceph services did not start, then see [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md)
+      for instruction on starting Ceph services.
 
     Once Ceph is healthy, repeat the `sat bootsys boot` to finish starting the Kubernetes cluster.
 
@@ -240,11 +243,11 @@ Verify that the Lustre file system is available from the management cluster.
         default.rgw.buckets.non-ec     11         0 B           0         0 B         0        18 TiB
     ```
 
-1. If `%USED` for any pool approaches 80% used, resolve the space issue.
+1. If `%USED` for any pool approaches 80% used, then resolve the space issue.
 
     To resolve the space issue, see [Troubleshoot Ceph OSDs Reporting Full](../utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md).
 
-1. (`ncn-m001#`) Monitor the status of the management cluster and which pods are restarting as indicated by either a `Running` or `Completed` state.
+1. (`ncn-m001#`) Monitor the status of the management cluster and which pods are restarting (as indicated by either a `Running` or `Completed` state).
 
     ```bash
     kubectl get pods -A -o wide | grep -v -e Running -e Completed
@@ -276,7 +279,6 @@ Verify that the Lustre file system is available from the management cluster.
     plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
       Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod
     sandbox: rpc error: code = Unknown desc = failed to setup network for sandbox
-    ...
     ```
 
     If the preceding error is displayed, then remove all files in the following directories on all worker nodes:
@@ -298,15 +300,17 @@ Verify that the Lustre file system is available from the management cluster.
     spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
     ```
 
-1. (`ncn-m001#`) If `spire` pods indicate `CrashLoopBackOff`, then restart the `spire` pods.
+1. (`ncn-m001#`) If Spire pods indicate `CrashLoopBackOff`, then restart the Spire deployment.
 
     ```bash
     kubectl rollout restart -n spire deployment spire-jwks
     ```
 
-1. (`ncn-m001#`) Check if any pods are in `CrashLoopBackOff` because of errors connecting to Vault. If so, restart the Vault operator, the Vault pods, and finally the pod which is in `CrashLoopBackOff`. For example:
+1. (`ncn-m001#`) Check if any pods are in `CrashLoopBackOff` state because of errors connecting to Vault.
 
-    1. Find the pods in `CrashLoopBackOff`.
+    If so, restart the Vault operator, then the Vault pods, and finally the pod which is in `CrashLoopBackOff`. For example:
+
+    1. Find the pods that are in `CrashLoopBackOff` state.
 
         ```bash
         kubectl get pods -A | grep CrashLoopBackOff
@@ -340,7 +344,7 @@ Verify that the Lustre file system is available from the management cluster.
     1. Wait for the `cray-vault` pods to restart with `5/5` ready and `Running`.
 
         ```bash
-         kubectl get pods -n vault -l app.kubernetes.io/name=vault-operator
+        kubectl get pods -n vault -l app.kubernetes.io/name=vault-operator
         ```
 
         Example output:
@@ -350,17 +354,17 @@ Verify that the Lustre file system is available from the management cluster.
         cray-vault-operator-69b4b6887-dfn2f   2/2     Running   2          1m
         ```
 
-    1. Restart the pod(s).
+    1. Restart the pods.
 
-        In this example, `cray-console-node-1` is the pod.
+        In this example, `cray-console-node-1` is the only pod.
 
         ```bash
         kubectl delete pod cray-console-node-1 -n services
         ```
 
-    1. Wait for the pod(s) to restart with `3/3` ready and `Running`.
+    1. Wait for the pods to restart with `3/3` ready and `Running`.
 
-        In this example, `cray-console-node-1` is the pod.
+        In this example, `cray-console-node-1` is the only pod.
 
         ```bash
         kubectl get pods -n services | grep cray-console-node-1
@@ -402,7 +406,9 @@ Verify that the Lustre file system is available from the management cluster.
     pdsh@ncn-m001: ncn-w001: ssh exited with exit code 3
     ```
 
-    1. (`ncn#`) On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service. For example:
+    1. (`ncn#`) On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service.
+
+        Do this by logging in to each affected NCN and running the following command:
 
         ```bash
         systemctl restart cfs-state-reporter
@@ -416,9 +422,13 @@ Verify that the Lustre file system is available from the management cluster.
 
 ### Verify BGP peering sessions
 
-1. Check the status of the Border Gateway Protocol \(BGP\). For more information, see [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+1. Check the status of the Border Gateway Protocol \(BGP\).
 
-1. Check the status and health of `etcd` clusters, see [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
+    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+
+1. Check the status and health of `etcd` clusters.
+
+    See [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
 ### Check `cronjob`s
 
@@ -470,26 +480,27 @@ Verify that the Lustre file system is available from the management cluster.
 
     ```bash
     cd ~/k8s
-    kubectl get cronjobs.batch -n NAMESPACE CRON_JOB_NAME -o yaml > CRON_JOB_NAME-cronjob.yaml
-    vi CRON_JOB_NAME-cronjob.yaml
+    CRON_JOB_NAME=name-of-k8s-cron-job
+    kubectl get cronjobs.batch -n NAMESPACE "${CRON_JOB_NAME}" -o yaml > "${CRON_JOB_NAME}-cronjob.yaml"
+    vi "${CRON_JOB_NAME}-cronjob.yaml"
     ```
 
     1. Delete all lines that contain `uid:`.
 
-    1. Delete the entire `status:` section including the `status` key.
+    1. Delete the entire `status:` section, including the `status` key.
 
     1. Save the file and quit the editor.
 
 1. (`ncn-m001#`) Delete the `cronjob`.
 
     ```bash
-    kubectl delete -f CRON_JOB_NAME-cronjob.yaml
+    kubectl delete -f "${CRON_JOB_NAME}-cronjob.yaml"
     ```
 
 1. (`ncn-m001#`) Apply the `cronjob`.
 
     ```bash
-    kubectl apply -f CRON_JOB_NAME-cronjob.yaml
+    kubectl apply -f "${CRON_JOB_NAME}-cronjob.yaml"
     ```
 
 1. (`ncn-m001#`) Verify that the `cronjob` has been scheduled.

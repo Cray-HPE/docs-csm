@@ -4,38 +4,48 @@ While a system is being installed for the first time, a certificate authority (C
 generated for a system, or one can be supplied from a customer intermediate CA. Outside of a new
 installation, there is no supported method to rotate or change the platform CA in this release.
 
-### Topics:
-   * [Overview](#overview)
-   * [Use Default Platform Generated CA](#use-default-platform-generated-ca)
-   * [Customize Platform Generated CA](#customize-platform-generated-ca)
-   * [Use External CA](#use-external-ca)
+## Topics
+
+- [Overview](#overview)
+- [Use default platform-generated CA](#use-default-platform-generated-ca)
+- [Customize platform-generated CA](#customize-platform-generated-ca)
+- [Use external CA](#use-external-ca)
 
 ## Overview
 
-At *install time*, a PKI certificate authority (CA) can either be generated for a system, or a customer can opt to supply their own (intermediate) CA.
+**At install time**, a PKI certificate authority (CA) can either be generated for a system, or a customer can opt to supply their own intermediate CA.
 
 > Outside of a new installation, there is currently no supported method to rotate (change) the platform CA. The ability to rotate CAs is anticipated as part of a future release.
 
-Sealed Secrets, part of shasta-cfg, are used by the installation process to inject CA material in an encrypted form. Vault (cray-vault instance) ultimately sources and stores the CA from a K8S secret (result of decrypting the corresponding Sealed Secret).
+Sealed Secrets, part of `shasta-cfg`, are used by the installation process to inject CA material in an encrypted form. Vault (`cray-vault` instance) ultimately sources and stores the CA from a
+Kubernetes secret (the result of decrypting the corresponding Sealed Secret).
 
-The resulting CA will be used to sign multiple workloads on the platform (Ingress, mTLS for PostgreSQL Clusters, Spire, ...).
+The resulting CA will be used to sign multiple workloads on the platform (such as ingress, mTLS for PostgreSQL Clusters, Spire, etc.).
 
 > Management of Sealed Secrets should ideally take place on a secure workstation.
 
-## Use Default Platform Generated CA
+## Use default platform-generated CA
 
-In shasta-cfg, there is a Sealed Secret generator named `platform_ca`. By default, the `customizations.yaml` file will contain a generation template to use this generator, and will create a sealed secret named `generated-platform-ca-1`. The `cray-vault` overrides in `customizations.yaml` contain a) a templated reference to expand the `generated-platform-ca-1` Sealed Secret and b) directives instructing vault to load the CA material on start-up -- ultimately initializing a HashiCorp Vault PKI Engine instance with the material.
+In `shasta-cfg`, there is a Sealed Secret generator named `platform_ca`. By default, the `customizations.yaml` file will contain a generation template to use this generator, and will create a Sealed
+Secret named `generated-platform-ca-1`. The `cray-vault` overrides in `customizations.yaml` contain both of the following:
 
-> Note: the intermediate CA gets installed into Vault, not the root CA (as generated). Use of a root CA is not recommended.
+- A templated reference to expand the `generated-platform-ca-1` Sealed Secret.
+- Directives instructing Vault to load the CA material on start-up -- ultimately initializing a HashiCorp Vault PKI Engine instance with the material.
+
+> Note: The intermediate CA gets installed into Vault, not the root CA (as generated). Use of a root CA is not recommended.
 
 The resulting default configuration (prior to seeding customizations) should look like the following `customizations.yaml` snippet:
 
 ```yaml
 spec:
-  ...
+
+  # ...lines omitted...
+
   kubernetes:
     sealed_secrets:
-      ...
+
+      # ...lines omitted...
+
       gen_platform_ca_1:
         generate:
           name: generated-platform-ca-1
@@ -47,7 +57,9 @@ spec:
               root_cn: "Platform CA"
               int_cn: "Platform CA - L1"
     services:
-        ...
+
+        # ...lines omitted...
+
         cray-vault:
             sealedSecrets:
             - "{{ kubernetes.sealed_secrets.gen_platform_ca_1 | toYaml }}"
@@ -58,31 +70,40 @@ spec:
                     private_key: int_ca.key
                     certificate: int_ca.crt
                     ca_bundle: root_ca.crt
-            ...
+
+            # ...lines omitted...
 ```
 
-> The `platform_ca` generator will produce RSA CAs with a 3072-bit modulus, using SHA256 as the base signature algorithm.
+> The `platform_ca` generator produces RSA CAs with a 3072-bit modulus, using SHA256 as the base signature algorithm.
 
-## Customize Platform Generated CA
+## Customize platform-generated CA
 
-The `platform_ca` generator inputs can be customized, if desired. Notably, the `root_days`, `int_days`, `root_cn`, and `int_cn` fields can be modified. While the shasta-cfg documentation on the use of generators supplies additional detail, the `*_days` settings control the validity period and the `*_cn` settings control the common name value for the resulting CA certificates. Ensure the Sealed Secret name reference in `spec.kubernetes.services.cray-vault.sealedSecrets` is updated if you opt to use a different name.
+The `platform_ca` generator inputs can be customized, if desired. Notably, the `root_days`, `int_days`, `root_cn`, and `int_cn` fields can be modified. While the `shasta-cfg` documentation on the use
+of generators supplies additional detail, the `*_days` settings control the validity period and the `*_cn` settings control the common name value for the resulting CA certificates. Ensure that the
+Sealed Secret name reference in `spec.kubernetes.services.cray-vault.sealedSecrets` is updated if opting to use a different name.
 
-> Outside of a new installation, there is currently no supported method to rotate (change) the platform CA. Please set validity periods accordingly. The ability to rotate CAs is anticipated as part of a future release.
+> Outside of a new installation, there is currently no supported method to rotate (change) the platform CA. Set validity periods accordingly. The ability to rotate CAs is anticipated as part of a future release.
 
-## Use External CA
+## Use external CA
 
-The `static_platform_ca` generator, part of shasta-cfg, can be used to supply an external CA private key, certificate, and associated upstream CAs that form the trust chain. The generator will attempt to prevent you from supplying a root CA. You must also supply the entire trust chain up to the root CA certificate.
+The `static_platform_ca` generator, part of `shasta-cfg`, can be used to supply an external CA private key, certificate, and associated upstream CAs that form the trust chain. The generator attempts
+to prevent a root CA from being supplied. The entire trust chain up to the root CA certificate must also be supplied.
 
-> Outside of a new installation, there is currently no supported method to rotate (change) the platform CA. Please ensure validity periods are set accordingly for external CAs you use in this process. The ability to rotate CAs is anticipated as part of a future release.
+> Outside of a new installation, there is currently no supported method to rotate (change) the platform CA. Ensure that validity periods are set accordingly for external CAs used in this process. The
+> ability to rotate CAs is anticipated as part of a future release.
 
 Here is an example `customizations.yaml` snippet illustrating the generator input to inject a static CA:
 
 ```yaml
 spec:
-  ...
+
+  # ...lines omitted...
+
   kubernetes:
     sealed_secrets:
-      ...
+
+      # ...lines omitted...
+
       external_platform_ca_1:
         generate:
           name: external-platform-ca-1
@@ -185,7 +206,9 @@ spec:
                   y3sefnrlqaRanHYkmOnOBTwImPSq8RE8eJP2aRrnu+2YrnoACXxS+XWUXtNhXJ4=
                   -----END CERTIFICATE-----
     services:
-        ...
+
+        # ...lines omitted...
+
         cray-vault:
             sealedSecrets:
             - "{{ kubernetes.sealed_secrets.external_platform_ca_1 | toYaml }}"
@@ -196,7 +219,8 @@ spec:
                     private_key: int_ca.key
                     certificate: int_ca.crt
                     ca_bundle: ca_bundle.crt
-            ...
+
+            # ...lines omitted...
 ```
 
-> Only RSA-based CAs with 3072- or 4096-bit moduli, using RSA256 as a signature/digest algorithm have been tested/are supported. Also note, the generator does not support password-protected private keys.
+> Only RSA-based CAs with 3072- or 4096-bit moduli, using RSA256 as a signature/digest algorithm, have been tested and are supported. Also note, the generator does not support password-protected private keys.

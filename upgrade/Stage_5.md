@@ -27,11 +27,11 @@
    The output will contain a section resembling the following:
 
    ```yaml
-   1.2.0:
+   1.3.0:
      configuration:
        clone_url: https://vcs.cmn.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
        commit: 43ecfa8236bed625b54325ebb70916f55884b3a4
-       import_branch: cray/csm/1.9.24
+       import_branch: cray/csm/1.10.0
        import_date: 2022-07-28 03:26:01.869501
        ssh_url: git@vcs.cmn.SYSTEM_DOMAIN_NAME:cray/csm-config-management.git
    ```
@@ -65,7 +65,7 @@
 
    ```bash
    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            [--csm-release 1.2.0] [--git-commit COMMIT] [--ncn-config-file  /path/to/ncn-personalization.json]
+            [--csm-release 1.3.0] [--git-commit COMMIT] [--ncn-config-file  /path/to/ncn-personalization.json]
    ```
 
    For more information on this script, see [Automatically Apply CSM Configuration to NCNs](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#option-1-automatically-apply-csm-configuration).

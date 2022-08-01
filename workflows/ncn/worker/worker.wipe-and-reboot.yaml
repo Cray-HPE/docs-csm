@@ -39,48 +39,9 @@ tasks:
               echo "${TARGET_NCN} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
               exit 1
             fi
-  - name: "wipe-node-disk"
-    templateRef:
-      name: ssh-template
-      template: shell-script
-    arguments:
-      parameters:
-        - name: dryRun
-          value: "{{ `{{inputs.parameters.dryRun}}` }}"
-        - name: scriptContent
-          value: |
-            {{- include "common.envar" . | indent 12 }}
-
-            cat <<'EOF' > wipe_disk.sh
-              lsblk | grep -q /var/lib/sdu
-              sdu_rc=$?
-              vgs | grep -q metal
-              vgs_rc=$?
-              set -e
-              systemctl disable kubelet.service || true
-              systemctl stop kubelet.service || true
-              systemctl disable containerd.service || true
-              systemctl stop containerd.service || true
-              umount /var/lib/containerd /var/lib/kubelet || true
-              if [[ "$sdu_rc" -eq 0 ]]; then
-                umount /var/lib/sdu || true
-              fi
-              for md in /dev/md/*; do mdadm -S $md || echo nope ; done
-              if [[ "$vgs_rc" -eq 0 ]]; then
-                vgremove -f --select 'vg_name=~metal*' || true
-                pvremove /dev/md124 || true
-              fi
-              wipefs --all --force /dev/sd* /dev/disk/by-label/* || true
-              sgdisk --zap-all /dev/sd*
-            EOF
-            
-            chmod +x wipe_disk.sh
-            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null wipe_disk.sh $TARGET_NCN:/tmp/wipe_disk.sh
-            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TARGET_NCN '/tmp/wipe_disk.sh'
   - name: "get-bootscript-last-access-timestamp"
     dependencies:
       - validate-bss-ntp
-      - wipe-node-disk
     templateRef:
       name: kubectl-and-curl-template
       template: shell-script
@@ -94,15 +55,51 @@ tasks:
             TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                 jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
             /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
-            
+
             bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${TOKEN}" \
             "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
             | jq '.[]| select(.endpoint=="bootscript")|.last_epoch' 2> /dev/null)
-            echo $bootscript_last_epoch
+            
+            if [[ $bootscript_last_epoch -gt 0 ]]; then
+              echo $bootscript_last_epoch
+            else
+              # sometimes we don't have endpoint history
+              # because a node might never pxe booted in the past
+              # we set it to zero as default value
+              echo "No endpoint-history from BSS for: $TARGET_NCN"
+              $bootscript_last_epoch=0
+              echo bootscript_last_epoch
+            fi
+  - name: set-next-boot-to-pxe
+    templateRef:
+      name: ssh-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            {{- include "common.envar" . | indent 12 }}
+            
+            cat <<'EOF' > set-next-boot-to-pxe.sh
+              efibootmgr # print before
+              efibootmgr | grep -P '(UEFI OS|cray)' | awk -F'[^0-9]*' '{print $0}' | sed 's/^Boot//g' | awk '{print $1}' | tr -d '*' | xargs -r -i efibootmgr -b {} -B
+              efibootmgr # print after
+              echo 'Setting next boot to PXE ... '
+              ipmitool chassis bootdev pxe options=efiboot
+              mount -L BOOTRAID -T /etc/fstab.metal
+              rm -rf /metal/recovery/*
+            EOF
+            
+            chmod +x set-next-boot-to-pxe.sh
+            scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null set-next-boot-to-pxe.sh $TARGET_NCN:/tmp/set-next-boot-to-pxe.sh
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TARGET_NCN '/tmp/set-next-boot-to-pxe.sh'
   - name: "pxe-boot-node"
     dependencies:
       - get-bootscript-last-access-timestamp
+      - set-next-boot-to-pxe
     templateRef:
       name: ssh-template
       template: shell-script

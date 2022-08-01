@@ -5,15 +5,15 @@ Gigabyte BMCs must have their failover mode disabled to prevent incorrect networ
 If Gigabyte BMC failover mode is not disabled, then some BMCs may receive incorrect IP addresses. Specifically, a BMC may request an IP address on the wrong subnet and be unable
 to re-acquire a new IP address on the correct subnet. If this occurs, administrators should ensure that the impacted BMC has its failover feature disabled.
 
-Check the failover setting on a Gigabyte BMC.
+(`ncn#`) Check the failover setting on a Gigabyte BMC.
 
 > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
 ```bash
 USERNAME=root
-read -s IPMI_PASSWORD
+read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
 export IPMI_PASSWORD
-ipmitool -I lanplus -U $USERNAME -E -H 172.30.52.247 raw 0x0c 0x02 0x01 210 0 0
+ipmitool -I lanplus -U "${USERNAME}" -E -H BMC_HOSTNAME_OR_IP raw 0x0c 0x02 0x01 210 0 0
 ```
 
 Example output:

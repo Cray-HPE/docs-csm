@@ -2,23 +2,19 @@
 
 ## Table of contents
 
-1. [Introduction](#introduction)
-1. [Overview](#overview)
-1. [Execution](#execution)
-1. [Failure analysis](#failure-analysis)
-
-    - [Smoke test failure](#smoke-test-failure)
-    - [Functional test failure](#functional-test-failure)
-
-1. [Tavern output](#tavern-output)
-1. [Additional troubleshooting](#additional-troubleshooting)
-
-    - [`hsm_discovery_status_test.sh`](#hsmdiscoverystatustestsh)
-      - [`HTTPsGetFailed`](#httpsgetfailed)
-      - [`ChildVerificationFailed`](#childverificationfailed)
-      - [`DiscoveryStarted`](#discoverystarted)
-
-1. [Blocking vs. non-blocking failures](#blocking-vs-non-blocking-failures)
+- [Introduction](#introduction)
+- [Overview](#overview)
+- [Execution](#execution)
+- [Failure analysis](#failure-analysis)
+  - [Smoke test failure](#smoke-test-failure)
+  - [Functional test failure](#functional-test-failure)
+- [Tavern output](#tavern-output)
+- [Additional troubleshooting](#additional-troubleshooting)
+  - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
+    - [`HTTPsGetFailed`](#httpsgetfailed)
+    - [`ChildVerificationFailed`](#childverificationfailed)
+    - [`DiscoveryStarted`](#discoverystarted)
+- [Blocking vs. non-blocking failures](#blocking-vs-non-blocking-failures)
 
 ## Introduction
 
@@ -308,7 +304,7 @@ The following is an example of a failed test execution:
 Running hsm_discovery_status_test...
 (22:19:34) Running 'kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}''...
 (22:19:34) Running 'curl -k -i -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=<REDACTED> https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token'...
-(22:19:35) Testing 'curl -s -k -H "Authorization: Bearer <REDACTED>" https://api-gw-service-nmn.local/apis/smd/hsm/v1/Inventory/RedfishEndpoints'...
+(22:19:35) Testing 'curl -s -k -H "Authorization: Bearer <REDACTED>" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/RedfishEndpoints'...
 (22:19:35) Processing response with: 'jq '.RedfishEndpoints[] | { ID: .ID, LastDiscoveryStatus: .DiscoveryInfo.LastDiscoveryStatus}' -c | sort -V | jq -c'...
 (19:06:02) Verifying endpoint discovery statuses...
 {"ID":"x3000c0s1b0","LastDiscoveryStatus":"HTTPsGetFailed"}

@@ -54,7 +54,7 @@ tasks:
               exit 1
             fi
             
-  - name: ensure-etcd-pods
+  - name: ensure-etcd-pods-are-healthy
     templateRef:
       name: ssh-template
       template: shell-script
@@ -97,7 +97,7 @@ tasks:
                   fi
                 done
             done
-  - name: ensure-pg-pods
+  - name: ensure-pg-pods-are-healthy
     templateRef:
       name: ssh-template
       template: shell-script
@@ -122,8 +122,8 @@ tasks:
   - name: drain
     dependencies:
       - wait-for-cfs
-      - ensure-etcd-pods
-      - ensure-pg-pods
+      - ensure-etcd-pods-are-healthy
+      - ensure-pg-pods-are-healthy
     templateRef:
       name: kubectl-and-curl-template
       template: shell-script
@@ -141,8 +141,8 @@ tasks:
   - name: update-bss
     dependencies:
       - wait-for-cfs
-      - ensure-etcd-pods
-      - ensure-pg-pods
+      - ensure-etcd-pods-are-healthy
+      - ensure-pg-pods-are-healthy
     templateRef:
       name: kubectl-and-curl-template
       template: shell-script
@@ -155,5 +155,6 @@ tasks:
             TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
             TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                 jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+            /host_usr_bin/csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
             /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
 {{end}}

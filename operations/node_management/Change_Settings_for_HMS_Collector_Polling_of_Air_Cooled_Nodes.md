@@ -16,9 +16,10 @@ or BIOS update on the nodes. Check the service logs of CAPMC and FAS for error i
 
 The following are the best practices for using the HMS Collector polling:
 
-- Do not query the power state of air-cooled nodes using CAPMC more than two or three times a minute.
+- (`ncn#`) Do not query the power state of air-cooled nodes using CAPMC more than two or three times a minute.
 
   - This is done via the CAPMC `get_xname_status` command.
+  - The Cray CLI must be configured on the node where this command is run. See [Configure the Cray CLI](../configure_cray_cli.md).
 
       ```bash
       cray capmc get_xname_status create --xnames LIST_OF_NODES
@@ -26,14 +27,14 @@ The following are the best practices for using the HMS Collector polling:
 
 - Polling of air-cooled nodes should be disabled by default. Before nodes are booted, verify that `cray-hms-hmcollector` polling is disabled.
 
-  - To check if polling is disabled:
+  - (`ncn-mw#`) To check if polling is disabled:
 
       ```bash
       kubectl get deployments.apps -n services cray-hms-hmcollector -o json | \
                jq '.spec.template.spec.containers[].env[]|select(.name=="POLLING_ENABLED")'
       ```
 
-  - To disable polling, if it is not already:
+  - (`ncn-mw#`) To disable polling, if it is not already disabled:
 
       ```bash
       kubectl edit deployment -n services cray-hms-hmcollector
@@ -42,7 +43,7 @@ The following are the best practices for using the HMS Collector polling:
       Change the value for the `POLLING_ENABLED` environment variable to `false` in the `spec:` section. Save and quit the editor for the changes to take effect. The
       `cray-hms-hmcollector` pod will automatically restart.
 
-- Only enable telemetry polling when needed, such as when running jobs.
+- (`ncn-mw#`) Only enable telemetry polling when needed, such as when running jobs.
 
     ```bash
     kubectl edit deployment -n services cray-hms-hmcollector
@@ -50,7 +51,7 @@ The following are the best practices for using the HMS Collector polling:
 
     Change the value for the `POLLING_ENABLED` environment variable to `true` in the `spec:` section. Save and quit the editor for the changes to take effect. The `cray-hms-hmcollector` pod will automatically restart.
 
-- If BMCs are encountering issues at a high rate, increase the polling interval. Do not set the polling interval to less than the default of 10 seconds.
+- (`ncn-mw#`) If BMCs are encountering issues at a high rate, then increase the polling interval. Do not set the polling interval to less than the default of 10 seconds.
 
     ```bash
     kubectl edit deployment -n services cray-hms-hmcollector
@@ -63,25 +64,25 @@ The following are the best practices for using the HMS Collector polling:
 
 Even with the polling recommendations above, it is still possible for the BMCs to end up in a bad state, necessitating a reset.
 
-To restart the BMCs:
+(`ncn#`) To restart the BMCs:
 
 > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
 ```bash
 USERNAME=root
-read -s IPMI_PASSWORD
+read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
 export IPMI_PASSWORD
-ipmitool -H BMC_HOSTNAME -U $USERNAME -E -I lanplus mc reset cold
+ipmitool -H BMC_HOSTNAME -U "${USERNAME}" -E -I lanplus mc reset cold
 ```
 
 If the reset does not recover the BMCs, then use the following steps to shut down the nodes, unplug the servers, and plug them back in:
 
-1. Shut down the nodes.
+1. (`ncn#`) Shut down the nodes.
 
     For each server with a BMC in a bad state:
 
     ```bash
-    ipmitool -H BMC_HOSTNAME -U $USERNAME -E -I lanplus chassis power soft
+    ipmitool -H BMC_HOSTNAME -U "${USERNAME}" -E -I lanplus chassis power soft
     ```
 
     Wait 30 seconds after shutting down the nodes before proceeding.
@@ -92,13 +93,13 @@ If the reset does not recover the BMCs, then use the following steps to shut dow
 
     Wait at least two minutes before proceeding.
 
-1. Verify that the BMCs are available again.
+1. (`ncn#`) Verify that the BMCs are available again.
 
     ```bash
     ping -c 1 BMC_HOSTNAME
     ```
 
-1. Check the power of the nodes.
+1. (`ncn#`) Check the power of the nodes.
 
     ```bash
     cray capmc get_xname_status create --xnames LIST_OF_NODES

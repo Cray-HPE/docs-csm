@@ -52,7 +52,7 @@ ingress_api_services:
   gateways: ["services-gateway","customer-admin-gateway"]
   project: CSM
 - name: cray-capmc
-  path: apis/capmc/capmc/get_node_rules
+  path: apis/capmc/capmc/v1/health
   port: 443
   expected-result: 200
   namespace: services
@@ -150,7 +150,7 @@ ingress_api_services:
   gateways: ["services-gateway","customer-admin-gateway"]
   project: CSM
 - name: cray-smd
-  path: apis/smd/hsm/v1/service/ready
+  path: apis/smd/hsm/v2/service/ready
   port: 443
   expected-result: 200
   namespace: services

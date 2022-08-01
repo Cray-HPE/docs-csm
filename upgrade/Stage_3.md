@@ -8,7 +8,8 @@
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   CSM_RELEASE=1.2.0
+   CSM_RELEASE=1.3.0
+   CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
@@ -20,7 +21,7 @@
 
 1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
 
-   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}${CSM_RELEASE}.tar.gz`
+   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}${CSM_REL_NAME}.tar.gz`
 
    > **`NOTE`** This step is optional for Cray/HPE internal installs, if `ncn-m002` can reach the internet.
 
@@ -33,7 +34,7 @@
    > **`NOTE`** For Cray/HPE internal installs, if `ncn-m002` can reach the internet, then the `--endpoint` argument may be omitted.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --endpoint "${ENDPOINT}"
+   /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
 1. Skip the `Manual copy` subsection and proceed to [Perform upgrade](#perform-upgrade).
@@ -47,7 +48,7 @@
 1. Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m002`.
 
    ```bash
-   CSM_TAR_PATH=/path/to/csm-${CSM_RELEASE}.tar.gz
+   CSM_TAR_PATH=/path/to/${CSM_REL_NAME}.tar.gz
    ```
 
 1. Run the script.
@@ -56,7 +57,7 @@
    > append the `--no-delete-tarball-file` argument when running the script.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version csm-${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
+   /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
 ## Perform upgrade
@@ -80,7 +81,7 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
    Run `csm-upgrade.sh` to deploy upgraded CSM applications and services.
 
    ```bash
-   /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/csm-upgrade.sh
+   /usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh
    ```
 
 ## Verify Keycloak users

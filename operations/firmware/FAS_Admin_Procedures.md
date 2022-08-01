@@ -19,6 +19,10 @@ NCNs and their BMCs should be locked with the HSM locking API to ensure they are
 Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
+**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
+
 ---
 
 ## Ignore Nodes within FAS

@@ -112,7 +112,7 @@ if [[ ${first_master_hostname} == ${target_ncn} ]]; then
 
       scp /root/docs-csm-latest.noarch.rpm $promotingMaster:/root/docs-csm-latest.noarch.rpm
       ssh $promotingMaster "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
-      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/1.2/scripts/k8s/promote-initial-master.sh"
+      ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "/usr/share/doc/csm/upgrade/scripts/k8s/promote-initial-master.sh"
       VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster --limit Global
 
       record_state "${state_name}" ${target_ncn}
@@ -193,47 +193,6 @@ if [[ $state_recorded == "0" ]]; then
     ssh $target_ncn "rpm --force -Uvh /root/docs-csm-latest.noarch.rpm"
 else
     echo "====> ${state_name} has been completed"
-fi
-
-if [[ ${target_ncn} != "ncn-m001" ]]; then
-   state_name="UPDATE_M001_KUBEAPI_SERVICE_ISSUER"
-   state_recorded=$(is_state_recorded "${state_name}" ncn-m001)
-   if [[ $state_recorded == "0" ]]; then
-      echo "====> ${state_name} ..."
-
-      /usr/share/doc/csm/upgrade/1.2/scripts/k8s/update_kubeapi_service_issuer.sh ncn-m001
-
-      record_state "${state_name}" ncn-m001
-   else
-      echo "====> ${state_name} has been completed"
-   fi
-fi
-
-if [[ ${target_ncn} != "ncn-m001" ]]; then
-   state_name="UPDATE_M001_KUBEAPI_ISTIO_CA"
-   state_recorded=$(is_state_recorded "${state_name}" ncn-m001)
-   if [[ $state_recorded == "0" ]]; then
-      echo "====> ${state_name} ..."
-
-      /usr/share/doc/csm/upgrade/1.2/scripts/k8s/update_kubeapi_istio_ca.sh ncn-m001
-
-      record_state "${state_name}" ncn-m001
-   else
-      echo "====> ${state_name} has been completed"
-   fi
-fi
-
-# Update kubeapi istio-ca audience newly upgraded master
-state_name="UPDATE_KUBEAPI_ISTIO_CA"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-   echo "====> ${state_name} ..."
-
-   /usr/share/doc/csm/upgrade/1.2/scripts/k8s/update_kubeapi_istio_ca.sh ${target_ncn}
-
-   record_state "${state_name}" ${target_ncn}
-else
-   echo "====> ${state_name} has been completed"
 fi
 
 cat <<EOF

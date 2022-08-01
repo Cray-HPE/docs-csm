@@ -8,6 +8,10 @@ The following example JSON files are useful to reference when updating specific 
 When updating an entire system, walk down the device hierarchy component type by component type, starting first with routers (switches), proceeding to chassis, and then finally to nodes.
 While this is not strictly necessary, it does help eliminate confusion.
 
+**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
+
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
 ## Manufacturer : Cray

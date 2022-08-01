@@ -184,7 +184,7 @@ On first login, the LiveCD will prompt the administrator to change the password.
       >    ```
 
       ```bash
-      /root/bin/csi-setup-lan0.sh "$site_ip" "$site_gw" "$site_dns" "$site_nics"
+      /root/bin/csi-setup-lan0.sh "${site_ip}" "${site_gw}" "${site_dns}" "${site_nics}"
       ```
 
 1. (`pit#`) Verify that the assigned IP address was successfully applied to `lan0` .
@@ -210,8 +210,8 @@ On first login, the LiveCD will prompt the administrator to change the password.
 
       ```bash
       disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
-      echo $disk
-      parted --wipesignatures -m --align=opt --ignore-busy -s /dev/$disk -- mklabel gpt mkpart primary ext4 2048s 100%
+      echo ${disk}
+      parted --wipesignatures -m --align=opt --ignore-busy -s "/dev/$disk" -- mklabel gpt mkpart primary ext4 2048s 100%
       mkfs.ext4 -L PITDATA "/dev/${disk}1"
       mount -vL PITDATA
       ```
@@ -281,16 +281,17 @@ These variables will need to be set for many procedures within the CSM installat
 
 ### 1.6 Exit the console and log in with SSH
 
-1. (`pit#`) Create the `admin` directory and logout.
+1. (`pit#`) Create the `admin` directory for the typescripts and administrative scratch work.
 
    ```bash
    mkdir -pv "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
-   logout
+   ls -l "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
    ```
 
-1. (`pit#`) Exit the typescript
+1. (`pit#`) Exit the typescript and log out.
 
    ```bash
+   exit
    exit
    ```
 
@@ -311,15 +312,14 @@ These variables will need to be set for many procedures within the CSM installat
 
    ```bash
    livecd=eniac-ncn-m001.example.company.com
-   ssh root@$livecd
+   ssh root@"${livecd}"
    ```
 
 1. (`pit#`) Copy the previous typescript and start a new one.
 
    ```bash
-   cd "${PITDATA}/admin"
-   cp -pv /tmp/boot.livecd.*.txt ./
-   script -af ~/csm-install.$(date +%Y-%m-%d).txt
+   cp -pv /tmp/boot.livecd.*.txt "${PITDATA}/admin"
+   script -af "${PITDATA}/admin/csm-install.$(date +%Y-%m-%d).txt"
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
@@ -365,7 +365,8 @@ These variables will need to be set for many procedures within the CSM installat
       > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
 
       ```bash
-      curl -C - -o /var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
+      curl -C - -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
+        "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
       ```
 
    - `scp` from the external server used in [Prepare installation environment server](#11-prepare-installation-environment-server):
@@ -429,8 +430,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 1. (`pit#`) Get the artifact versions.
 
    ```bash
-   kubernetes_version="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
-   ceph_version="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
    ```
 
 1. (`pit#`) Copy the NCN images from the expanded tarball.
@@ -439,8 +440,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    ```bash
    mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
-   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${kubernetes_version}"
-   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${ceph_version}"
+   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${KUBERNETES_VERSION}"
+   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${CEPH_VERSION}"
    ```
 
 1. (`pit#`) Generate SSH keys and invoke `ncn-image-modification.sh`:
@@ -459,13 +460,14 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
        ```
 
-   1. Run `ncn-image-modification.sh` from the CSM tarball:
+   1. Run `ncn-image-modification.sh` from the CSM documentation RPM:
 
        ```bash
-       "${PITDATA}/csm-${CSM_RELEASE}/ncn-image-modification.sh -p \
+       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modificaiton.sh)
+       $NCN_MOD_SCRIPT -p \
           -d /root/.ssh \
-          -k /var/www/ephemeral/data/k8s/${kubernetes_version}/kubernetes-${kubernetes_version}.squashfs \
-          -s /var/www/ephemeral/data/ceph/${kubernetes_version}/storage-ceph-${ceph_version}.squashfs"
+          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
        ```
 
 1. (`pit#`) Log the currently installed PIT packages.
@@ -522,38 +524,56 @@ Run the following steps before starting any of the system configuration procedur
 
 1. (`pit#`) Download the SHCD to the `prep` directory.
 
-   This will need to be retrieved from the administrators Cray deliverable.
+    This will need to be retrieved from the administrator's Cray deliverable.
 
 1. Validate the SHCD.
 
-   See [Validate SHCD](../operations/network/management_network/validate_shcd.md) and then return to this page.
+    See [Validate SHCD](../operations/network/management_network/validate_shcd.md) and then return to this page.
 
 ### 3.2 Generate topology files
 
-1. (`pit#`) Generate `hmn_connections.json`.
+The following steps use the new, automated method for generating files. The previous step for
+[validate SHCD](#31-validate-shcd) generated "paddle" files; these are necessary for generating
+the rest of the seed files.
+
+> ***NOTE*** The paddle files are temporarily not used due to bugs in the seed file generation software.
+> Until these bugs are resolved, the seed files must be manually generated.
+
+If seed files from a prior installation of the same major-minor version of CSM exist, then these can be used and
+this step may be skipped.
+
+1. (`pit#`) Create each seed file, unless they already exist from a previous installation.
+
+   - For new installations of CSM that have no prior seed files, each one must be created:
+
+      - [Create `application_node_config.yaml`](create_application_node_config_yaml.md)
+      - [Create `cabinets.yaml`](create_cabinets_yaml.md)
+      - [Create `hmn_connections.json`](create_hmn_connections_json.md)
+      - [Create `ncn_metadata.csv`](create_ncn_metadata_csv.md)
+      - [Create `switch_metadata.csv`](create_switch_metadata_csv.md)
+
+   - For re-installations of CSM 1.3, the previous seed files may be used and this step can be skipped.
+   - For new installations of CSM 1.3 that have prior seed files from CSM 1.2 or older, the previous seed files
+   may be used **except that the following files must be recreated** because of content or formatting changes:
+
+      - [Create `cabinets.yaml`](create_cabinets_yaml.md)
+      - [Create `hmn_connections.json`](create_hmn_connections_json.md)
+
+1. (`pit#`) Confirm that the following files exist.
 
    ```bash
-   csi config shcd "$SYSTEM_NAME-hmn-paddle.json" -H
+   ls -l "${PITDATA}"/prep/{application_node_config.yaml,cabinets.yaml,hmn_connections.json,ncn_metadata.csv,switch_metadata.csv}
    ```
 
-1. (`pit#`) Create `application_node_config.yaml`, `ncn_metadata.csv`, and `switch_metadata.csv`.
+   Expected output may look like:
 
-    ```bash
-    csi config shcd "${SYSTEM_NAME}-full-paddle.json" -ANS
-    ```
-
-1. Create the `cabinents.yaml` file.
-
-   > If using this file, then do not forget to set the `cabinets-yaml` field in the
-   > [Customize `system_config.yaml`](#33-customize-system_configyaml) step.
-
-   See [Create `cabinets.yaml`](create_cabinets_yaml.md).
-
-1. Fill in the `ncn_metadata.csv` placeholder values with the actual values.
-
-   > **NOTE:** If a previous `ncn_metadata.csv` file is available, simply copy it into place by overriding the generated one.
-
-   See [Collect MAC Addresses for NCNs](collect_mac_addresses_for_ncns.md).
+   ```text
+   -rw-r--r-- 1 root root  146 Jun  6 00:12 /var/www/ephemeral/prep/application_node_config.yaml
+   -rw-r--r-- 1 root root  392 Jun  6 00:12 /var/www/ephemeral/prep/cabinets.yaml
+   -rwxr-xr-x 1 root root 3768 Jun  6 00:12 /var/www/ephemeral/prep/hmn_connections.json
+   -rw-r--r-- 1 root root 1216 Jun  6 00:12 /var/www/ephemeral/prep/ncn_metadata.csv
+   -rw-r--r-- 1 root root  150 Jun  6 00:12 /var/www/ephemeral/prep/switch_metadata.csv
+   ```
 
 ### 3.3 Customize `system_config.yaml`
 
@@ -610,7 +630,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 1. (`pit#`) Set the `IPMI_PASSWORD` variable.
 
    ```bash
-   read -s IPMI_PASSWORD
+   read -r -s -p "NCN BMC root password: " IPMI_PASSWORD
    ```
 
 1. (`pit#`) Export the `IPMI_PASSWORD` variable.
@@ -621,7 +641,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
 1. (`pit#`) Setup boot links to the artifacts extracted from the CSM tarball.
 
-   > **NOTES:**
+   > ***NOTES***
    >
    > - This will also set all the BMCs to DHCP.
    > - Changing into the `$HOME` directory ensures the proper operation of the script.

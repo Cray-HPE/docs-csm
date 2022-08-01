@@ -18,7 +18,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
 
 ### Identify the `kworker` issue
 
-1. Check to see if `kubectl` is not responding because of a `kworker` issue.
+1. (`ncn-mw#`) Check to see if `kubectl` is not responding because of a `kworker` issue.
 
     1. List the process identification \(`PID`\) numbers of the `kworker`s in the `D` state.
 
@@ -35,11 +35,11 @@ In the following procedures, unless otherwise directed, run the commands on the 
 
         ```bash
         for i in `ps aux | grep [k]worker | grep -e " D" | awk '{print $2}'` ; do
-                cat /proc/$i/stack; echo
-             done
+            cat "/proc/${i}/stack"; echo
+        done
         ```
 
-1. Check to see what the load is on the node and gather data for any `PID`s consuming a lot of CPU.
+1. (`ncn-mw#`) Check the load on the node and gather data for any `PID`s consuming a lot of CPU.
 
     1. Monitor the processes and system resource usage.
 
@@ -96,7 +96,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
         ps -ef
         ```
 
-1. Check the `/var/log/messages` file on the node to see if there are any errors.
+1. (`ncn-mw#`) Check the `/var/log/messages` file on the node to see if there are any errors.
 
     ```bash
     grep -i error /var/log/messages
@@ -122,24 +122,24 @@ In the following procedures, unless otherwise directed, run the commands on the 
 
 ### Recovery steps
 
-1. Restart the `kubelet` on the node with the issue.
+1. (`ncn-mw#`) Restart the `kubelet` on the node with the issue.
 
     ```bash
     systemctl restart kubelet
     ```
 
-    If restarting the `kubelet` did not resolve the issue, then proceed to the next step to restart the container runtime environment.
+    If restarting the `kubelet` did not resolve the issue, then proceed to the next step.
 
-1. Restart the container runtime environment on the node with the issue.
+1. (`ncn-mw#`) Restart the container runtime environment on the node with the issue.
 
-    This will likely hang or fail to complete without a timeout. If that is the case, cancel the command with control-C and proceed to
+    This will likely hang or fail to complete without a timeout. If that is the case, then cancel the command with control-C and proceed to
     the next step.
 
     ```bash
     systemctl restart containerd
     ```
 
-1. Reboot the node with the issue.
+1. (`ncn#`) Reboot the node with the issue.
 
     The node must be rebooted if the remediation of restarting `kubelet` and `containerd` did not resolve the `kworker` and high load average issue.
 
@@ -152,12 +152,12 @@ In the following procedures, unless otherwise directed, run the commands on the 
     ```bash
     NCN_NAME=ncn-w999
     USERNAME=root
-    read -s IPMI_PASSWORD
+    read -r -s -p "${NCN_NAME} BMC ${USERNAME} password: " IPMI_PASSWORD
     export IPMI_PASSWORD    
-    ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power off; sleep 5;
-    ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power show; echo
-    ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power on; sleep 5;
-    ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME} power show; echo
+    ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power off; sleep 5;
+    ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power show; echo
+    ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power on; sleep 5;
+    ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power show; echo
     ```
 
 1. Watch the console of the node being rebooted.
@@ -166,13 +166,13 @@ In the following procedures, unless otherwise directed, run the commands on the 
 
     * The recommended method is to use the Cray console service. See [Log in to a Node Using ConMan](../../operations/conman/Log_in_to_a_Node_Using_ConMan.md).
 
-    * Alternatively, the console can be accessed by using `ipmitool`.
+    * (`ncn#`) Alternatively, the console can be accessed by using `ipmitool`.
 
         ```bash
-        ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt sol activate
+        ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" sol activate
         ```
 
        This command will not return anything, but will show the `ttyS0` console of the node. Use `~.` to disconnect.
        **`NOTE`** The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
 
-Try running a `kubectl` command on the node where it was previously unresponsive.
+1. (`ncn-mw#`) Try running a `kubectl` command on the node where it was previously unresponsive.

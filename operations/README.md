@@ -5,7 +5,7 @@ The Cray System Management (CSM) operational activities are administrative proce
 The following administrative topics can be found in this guide:
 
 - [CSM product management](#csm-product-management)
-- [Pre-install](#pre-install)
+- [Bare-metal](#bare-metal)
 - [Image management](#image-management)
 - [Boot orchestration](#boot-orchestration)
 - [System power off procedures](#system-power-off-procedures)
@@ -40,6 +40,8 @@ The following administrative topics can be found in this guide:
 
 ## CSM product management
 
+Important procedures for configuring, managing, and validating the CSM environment.
+
 - [Validate CSM Health](validate_csm_health.md)
 - [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
 - [Configure the Cray Command Line Interface (Cray CLI)](configure_cray_cli.md)
@@ -51,11 +53,11 @@ The following administrative topics can be found in this guide:
 - [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
 - [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
 
-## Pre-install
+## Bare-metal
 
 General information on what needs to be done before the initial install of CSM.
 
-- [Pre-Install Steps](bare_metal/Bare-Metal.md)
+- [Bare-Metal Steps](bare_metal/Bare-Metal.md)
 - [Change Air-Cooled BMC Credentials](bare_metal/Change_River_BMC_Credentials.md)
 - [Change ServerTech PDU Credentials](bare_metal/Change_ServerTech_PDU_Credentials.md)
 
@@ -145,7 +147,6 @@ Additional links to power on sub-procedures provided for reference. Refer to the
 - [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
 - [Power On Compute and IO Cabinets](power_management/Power_On_Compute_and_IO_Cabinets.md)
 - [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
-- [Bring Up the Slingshot Fabric](power_management/Bring_up_the_Slingshot_Fabric.md)
 - [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
 - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md)
 
@@ -260,6 +261,7 @@ As a result, the system's micro-services are modular, resilient, and can be upda
   - [Restore Postgres](kubernetes/Restore_Postgres.md)
   - [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
   - [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
+- [Kyverno policy management](kubernetes/Kyverno.md)
 - [Troubleshoot Intermittent HTTP 503 Code Failures](kubernetes/Troubleshoot_Intermittent_503s.md)
 
 ## Package repository management
@@ -275,6 +277,7 @@ repository management. Nexus hosts the Yum, Docker, raw, and Helm repositories f
 - [Nexus Export and Restore](package_repository_management/Nexus_Export_and_Restore.md)
 - [Restrict Admin Privileges in Nexus](package_repository_management/Restrict_Admin_Privileges_in_Nexus.md)
 - [Repair Yum Repository Metadata](package_repository_management/Repair_Yum_Repository_Metadata.md)
+- [Nexus Space Cleanup](package_repository_management/Nexus_Space_Cleanup.md)
 
 ## Security and authentication
 
@@ -531,6 +534,9 @@ Overview of the several different networks supported by the HPE Cray EX system.
 - [Access to System Management Services](network/Access_to_System_Management_Services.md)
 - [Default IP Address Ranges](network/Default_IP_Address_Ranges.md)
 - [Connect to the HPE Cray EX Environment](network/Connect_to_the_HPE_Cray_EX_Environment.md)
+- [Connect to Switch over USB-Serial Cable](network/Connect_to_Switch_Over_USB_Serial_Cable.md)
+- [Create a CSM Configuration Upgrade Plan](network/Create_a_CSM_Configuration_Upgrade_Plan.md)
+- [Gateway Testing](network/Gateway_Testing.md)
 
 ### Management network
 
@@ -550,6 +556,8 @@ The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the
 - [Customer Accessible Networks](network/customer_accessible_networks/Customer_Accessible_Networks.md)
 - [Externally Exposed Services](network/customer_accessible_networks/Externally_Exposed_Services.md)
 - [Connect to the CMN and CAN](network/customer_accessible_networks/Connect_to_the_CMN_CAN.md)
+- [BI-CAN Aruba/Arista Configuration](network/customer_accessible_networks/bi-can_arista_aruba_config.md)
+- [MetalLB Peering with Arista Edge Router](network/customer_accessible_networks/bi-can_arista_metallb_peering.md)
 - [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)
 - [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 
@@ -567,6 +575,8 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 - [DNS](network/dns/DNS.md)
 - [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
 - [Enable `ncsd` on UANs](network/dns/Enable_ncsd_on_UANs.md)
+- [PowerDNS Configuration](network/dns/PowerDNS_Configuration.md)
+- [PowerDNS Migration Guide](network/dns/PowerDNS_migration.md)
 - [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
 - [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 

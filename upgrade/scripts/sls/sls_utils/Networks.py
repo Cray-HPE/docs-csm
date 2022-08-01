@@ -1,7 +1,6 @@
-#
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -20,7 +19,6 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-#
 """Classes for management of SLS Networks and Subnets."""
 from collections import defaultdict
 import ipaddress
@@ -252,7 +250,7 @@ class BicanNetwork(Network):
         self.__system_default_route = default_route_network_name
         self.mtu(network_mtu=9000)
 
-    def system_default_route(self, default_route_network_name):
+    def system_default_route(self, default_route_network_name=None):
         """Retrieve or set the default route network name.
 
         Args:
