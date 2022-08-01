@@ -1,12 +1,16 @@
 # FAS Recipes
 
-> **NOTE:** This is a collection of various FAS recipes for performing updates.
+> **`NOTE`** This is a collection of various FAS recipes for performing updates.
 > For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update.
 
 When updating an entire system, walk down the device hierarchy component type by component type, starting first with routers (switches), proceeding to chassis, and then finally to nodes.
 While this is not strictly necessary, it does help eliminate confusion.
+
+**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
@@ -18,8 +22,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 >
 > - Make sure all slot and rectifier power is off.
 > - The `hms-discovery` job must also be stopped before updates and restarted after updates are complete.
->   - Stop `hms-discovery` job: `ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'`
->   - Start `hms-discovery` job: `ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'`
+>   - (`ncn-mw#`) Stop `hms-discovery` job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'`
+>   - (`ncn-mw#`) Start `hms-discovery` job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'`
 
 ```json
 {
@@ -112,7 +116,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-> **NOTE:** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#cn-workaround) procedure.
+> **`NOTE`** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#compute-node-bios-workaround-for-hpe-cray-ex425) procedure.
 
 ### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA
 
@@ -185,7 +189,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 >
 > - If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored. For NCNs **other than `ncn-m001`**, this can be done using the
 >   `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script. Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
->   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_ncn.md#7-configure-dns-and-ntp-on-each-bmc).
+>   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc).
 > - Node should be powered on for System ROM update and will need to be rebooted to use the updated BIOS.
 
 ```json
@@ -214,7 +218,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-> **NOTE:** Update of System ROM may report as an error when it actually succeeded because of an incorrect string in the image metadata in FAS. Manually check the update version to get around this error.
+> **`NOTE`** Update of System ROM may report as an error when it actually succeeded because of an incorrect string in the image metadata in FAS. Manually check the update version to get around this error.
 
 ## Manufacturer: Gigabyte
 
@@ -247,7 +251,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-> **NOTE:** The `timeLimit` is `4000` because the Gigabytes can take a lot longer to update.
+> **`NOTE`** The `timeLimit` is `4000` because the Gigabytes can take a lot longer to update.
 
 #### Troubleshooting
 
@@ -298,4 +302,4 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 ## Update Non-Compute Nodes (NCNs)
 
-See [Uploading BIOS and BMC Firmware for NCNs in FAS Use Cases](FAS_Use_Cases.md#ncn-bios-bmc).
+See [Uploading BIOS and BMC Firmware for NCNs in FAS Use Cases](FAS_Use_Cases.md#update-non-compute-node-ncn-bios-and-bmc-firmware).

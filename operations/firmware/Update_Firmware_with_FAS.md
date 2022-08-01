@@ -5,7 +5,7 @@ If FAS has not yet been installed, firmware for NCNs can be updated manually wit
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
 
 Reset Gigabyte node BMC to factory defaults if having problems with `ipmitool`, problems using Redfish, or when flashing procedures fail.
-See [Set Gigabyte Node BMC to Factory Defaults](../../install/set_gigabyte_node_bmc_to_factory_defaults.md).
+See [Set Gigabyte Node BMC to Factory Defaults](../../operations/node_management/Set_Gigabyte_Node_BMC_to_Factory_Defaults.md).
 
 FAS images contain the following information that is needed for a hardware device to update firmware versions:
 
@@ -20,12 +20,10 @@ FAS images contain the following information that is needed for a hardware devic
 * [Current capabilities](#current-capabilities)
 * [Order of operations](#order-of-operations)
 * [Hardware precedence order](#hardware-precedence-order)
-* [FAS administrative procedures](#fas-admin-procedures)
+* [FAS administrative procedures](#fas-administrative-procedures)
 * [Firmware actions](#firmware-actions)
 * [Firmware operations](#firmware-operations)
 * [Firmware images](#firmware-images)
-
-<a name="prerequisites"></a>
 
 ## Prerequisites
 
@@ -33,19 +31,19 @@ FAS images contain the following information that is needed for a hardware devic
 1. All management nodes have been locked.
 1. Identify the type and manufacturers of hardware in the system. If Gigabyte nodes are not in use on the system, do not update them!
 
-<a name="warning"></a>
-
 ## Warning
 
 Non-compute nodes (NCNs) and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.
 See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
+**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
+
 Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS Recipes](FAS_Recipes.md) to update each supported type.
 
-> **NOTE:** Each system is different and may not have all hardware options.
-
-<a name="current-capabilities"></a>
+> **`NOTE`** Each system is different and may not have all hardware options.
 
 ## Current capabilities
 
@@ -60,8 +58,6 @@ Table 1. Upgradable Firmware Items
 | Cray             | `routerBMC`  | `BMC`, `Recovery`                                                                   |
 | Gigabyte         | `nodeBMC`    | `BMC`, `BIOS`                                                                       |
 | HPE              | `nodeBMC`    | `iLO 5` (`BMC` or `1` ), `System ROM` ,`Redundant System ROM` (`BIOS` or `2`)       |
-
-<a name="order-of-operations"></a>
 
 ## Order of operations
 
@@ -100,8 +96,6 @@ For each item in the `Hardware Precedence Order`:
 
 1. Interpret the outcome of the live update; proceed to next type of hardware.
 
-<a name="hardware-precedence-order"></a>
-
 ## Hardware precedence order
 
 After identifying which hardware is in the system, start with the top item on this list to update. If any of the following hardware is not in the system, then skip it.
@@ -109,22 +103,20 @@ After identifying which hardware is in the system, start with the top item on th
 > **IMPORTANT:**
 > This process does not communicate the SAFE way to update NCNs. If the NCNs and their BMCs have not been locked, or if FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
 > Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
-> **NOTE:** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
+> **`NOTE`** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
-1. [Cray](FAS_Recipes.md#manufacturer-cray)
-   1. [`ChassisBMC`](FAS_Recipes.md#cray-device-type-chassisbmc-target-bmc)
+1. [Cray](FAS_Recipes.md#manufacturer--cray)
+   1. [`ChassisBMC`](FAS_Recipes.md#device-type-chassisbmc--target-bmc)
    1. `NodeBMC`
-      1. [BMC](FAS_Recipes.md#cray-device-type-nodebmc-target-bmc)
-      1. [`NodeBIOS`](FAS_Recipes.md#cray-device-type-nodebmc-target-nodebios)
-      1. [Redstone FPGA](FAS_Recipes.md#cray-device-type-nodebmc-target-redstone-fpga)
+      1. [BMC](FAS_Recipes.md#device-type-nodebmc--target-bmc)
+      1. [`NodeBIOS`](FAS_Recipes.md#device-type-nodebmc--target-nodebios)
+      1. [Redstone FPGA](FAS_Recipes.md#device-type-nodebmc--target-redstone-fpga)
 1. [Gigabyte](FAS_Recipes.md#manufacturer-gigabyte)
-   1. [BMC](FAS_Recipes.md#gb-device-type-nodebmc-target-bmc)
-   1. [BIOS](FAS_Recipes.md#gb-device-type-nodebmc-target-bios)
+   1. [BMC](FAS_Recipes.md#device-type-nodebmc--target-bmc)
+   1. [BIOS](FAS_Recipes.md#device-type-nodebmc--target-bios)
 1. [HPE](FAS_Recipes.md#manufacturer-hpe)
-   1. [BMC (`iLO5`)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bmc)
-   1. [BIOS (System ROM)](FAS_Recipes.md#hpe-device-type-nodebmc-target--aka-bios)
-
-<a name="fas-admin-procedures"></a>
+   1. [BMC (`iLO5`)](FAS_Recipes.md#device-type-nodebmc--target-ilo-5-aka-bmc)
+   1. [BIOS (System ROM)](FAS_Recipes.md#device-type-nodebmc--target-system-rom-aka-bios)
 
 ## FAS administrative procedures
 
@@ -137,8 +129,6 @@ Under no circumstances should non-administrator users attempt to use FAS or perf
 * Take a snapshot of the system: Record the firmware versions present on each target for the identified component names (xnames). If the firmware version corresponds to an image available in the images repository, link the `imageID` to the record.
 * Restore the snapshot of the system: Take the previously recorded snapshot and use the related `imageIDs` to put the component name (xname)/targets back to the firmware version they were at, at the time of the snapshot.
 * Provide firmware for updating: FAS can only update a component name (xname)/target if it has an image record that is applicable. Most administrators will not encounter this use case.
-
-<a name="firmware-actions"></a>
 
 ## Firmware actions
 
@@ -157,8 +147,6 @@ The static portion of the life cycle is where the action is created and configur
 
 The dynamic portion of the life cycle is where the action is executed to completion. It begins when the actions is transitioned from the `new` to `configured` state. The action will then be ultimately transitioned to an end state of `aborted` or `completed`.
 
-<a name="firmware-operations"></a>
-
 ## Firmware operations
 
 Operations are individual tasks in a FAS action.
@@ -175,8 +163,6 @@ FAS operations will have one of the following states:
 * `noSolution` - FAS does not have a suitable image for an update.
 * `aborted` - The operation was aborted before it could determine if it was successful. If aborted after the update command was sent to the node, then the node may still have updated.
 
-<a name="firmware-images"></a>
-
 ## Firmware images
 
 FAS requires images in order to update firmware for any device on the system. An image contains the data that allows FAS to establish a link between an administrative command, available devices \(xname/targets\), and available firmware.
@@ -191,7 +177,7 @@ The following is an example of an image:
   "manufacturer": "intel",
   "model": ["s2600","s2600_REV_a"],
   "target": "BIOS",
-  "tag": ["recovery", default"],
+  "tag": ["recovery", "default"],
   "firmwareVersion": "f1.123.24xz",
   "semanticFirmwareVersion": "v1.2.252",
   "updateURI": "/redfish/v1/Systems/UpdateService/BIOS",

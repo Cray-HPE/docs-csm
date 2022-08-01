@@ -58,7 +58,7 @@ This covers the generic process for executing an action. For more specific examp
 
    Filters narrow the scope of FAS to target specific component names (xnames), manufacturers, targets, and so on. For this example, FAS will run with no selection filters applied.
 
-1. Create a JSON file.
+1. (`ncn-mw#`) Create a JSON file.
 
     To make this a `live update` set `"overrideDryrun": true`.
 
@@ -73,12 +73,12 @@ This covers the generic process for executing an action. For more specific examp
     }
     ```
 
-1. Execute the dry-run.
+1. (`ncn-mw#`) Execute the dry-run.
 
     Modify the example command to specify the JSON file created in the previous step.
 
     ```bash
-    ncn-mw# cray fas actions create filename.json --format json
+    cray fas actions create filename.json --format json
     ```
 
     Example output:
@@ -104,12 +104,12 @@ Firmware updates can be stopped if required. This is useful because only one act
 
 #### Abort an action: Procedure
 
-Issue the abort command to the action.
+(`ncn-mw#`) Issue the abort command to the action.
 
 Modify the example command to specify the `actionID` of the action being aborted.
 
 ```bash
-ncn-mw# cray fas actions instance delete {actionID}
+cray fas actions instance delete {actionID}
 ```
 
 The action could take up to a minute to fully abort.
@@ -132,18 +132,22 @@ For the steps below, the following returned messages will help determine if a fi
   - If `dryrun`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
   - If `live update`: The operation failed; the identified version could not be put on the component name (xname) + target.
 
+**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
+
 Data can be viewed at several levels of information:
 
 #### Describe an action: Procedure
 
 ##### Get high level summary
 
-To view counts of operations, what state they are in, the overall state of the action, and what parameters were used to create the action:
+(`ncn-mw#`) To view counts of operations, what state they are in, the overall state of the action, and what parameters were used to create the action:
 
 Modify the following command to specify the actual `actionID` of the action to be examined.
 
 ```bash
-ncn-mw# cray fas actions status list {actionID} --format toml
+cray fas actions status list {actionID} --format toml
 ```
 
 Example output:
@@ -185,10 +189,10 @@ unknown = 0
 
 ##### Get details of action
 
-Modify the following command to specify the actual `actionID` of the action to be examined.
+(`ncn-mw#`) Modify the following command to specify the actual `actionID` of the action to be examined.
 
 ```bash
-ncn-mw# cray fas actions describe {actionID} --format json
+cray fas actions describe {actionID} --format json
 ```
 
 Example output:
@@ -280,18 +284,18 @@ Example output:
     "blocked": {
       "OperationsKeys": []
     }
-  } 
+  }
 }
 ```
 
 ##### Get details of operation
 
-Using the `operationID` listed in the actions array, see the full detail of the operation.
+(`ncn-mw#`) Using the `operationID` listed in the actions array, see the full detail of the operation.
 
 Modify the following command to specify the actual `operationID` of the operation to be examined.
 
 ```bash
-ncn-mw# cray fas operations describe {operationID} --format json
+cray fas operations describe {operationID} --format json
 ```
 
 Example output:
@@ -332,7 +336,7 @@ A snapshot of the system captures the firmware version for every device that is 
 
 #### Create a snapshot: Procedure
 
-1. Determine the desired snapshot level.
+1. (`ncn-mw#`) Determine the desired snapshot level.
 
    Create a JSON file based on the desired level.
 
@@ -369,12 +373,12 @@ A snapshot of the system captures the firmware version for every device that is 
       }
       ```
 
-1. Create the snapshot.
+1. (`ncn-mw#`) Create the snapshot.
 
     Modify the example command to specify the JSON file created in the previous step.
 
     ```bash
-    ncn-mw# cray fas snapshots create {file.json}
+    cray fas snapshots create {file.json}
     ```
 
 1. Use the snapshot name to query the snapshot. This is a long-running operation, so monitor the `state` field to determine if the snapshot is complete.
@@ -385,10 +389,10 @@ A list of all snapshots can be viewed on the system. Any of the snapshots listed
 
 #### List snapshots: Procedure
 
-1. List the snapshots.
+1. (`ncn-mw#`) List the snapshots.
 
     ```bash
-    ncn-mw# cray fas snapshots list --format json
+    cray fas snapshots list --format json
     ```
 
     Example output:
@@ -427,12 +431,12 @@ View a snapshot to see which versions of firmware are set for each target.
 
 #### View snapshots: Procedure
 
-1. View a snapshot.
+1. (`ncn-mw#`) View a snapshot.
 
     Modify the following command to specify the actual name of the snapshot to be examined.
 
     ```bash
-    ncn-mw# cray fas snapshots describe {snapshot_name} --format json
+    cray fas snapshots describe {snapshot_name} --format json
     ```
 
     Example output:
@@ -503,18 +507,18 @@ Given the nature of the `model` field and its likelihood to not be standardized,
 
 ### Update a firmware image: Procedure
 
-1. List the existing firmware images to find the `imageID` of the desired firmware image.
+1. (`ncn-mw#`) List the existing firmware images to find the `imageID` of the desired firmware image.
 
     ```bash
-    ncn-mw# cray fas images list
+    cray fas images list
     ```
 
-1. Describe the image using the `imageID`.
+1. (`ncn-mw#`) Describe the image using the `imageID`.
 
     Modify the following command to specify the actual `imageID` of the image to be examined.
 
     ```bash
-    ncn-mw# cray fas images describe {imageID} --format json
+    cray fas images describe {imageID} --format json
     ```
 
     Example output:
@@ -543,7 +547,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
     }
     ```
 
-1. Describe the FAS action and compare it to the image from the previous step.
+1. (`ncn-mw#`) Describe the FAS action and compare it to the image from the previous step.
 
     Look at the hardware models to see if some of the population is in a `noSolution` state, while others are in a `succeeded` state.
     If that is the case, then view the operation data and examine the models.
@@ -551,7 +555,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
     Modify the following command to specify the actual `actionID` of the action to be examined.
 
     ```bash
-    ncn-mw# cray fas actions describe {actionID} --format json
+    cray fas actions describe {actionID} --format json
     ```
 
     Example output:
@@ -695,14 +699,14 @@ Given the nature of the `model` field and its likelihood to not be standardized,
     }
     ```
 
-1. View the operation data.
+1. (`ncn-mw#`) View the operation data.
 
     If the model name is different between identical hardware, it may be appropriate to update the image model with the model of the `noSolution` hardware.
 
     Modify the following command to specify the actual `operationID` of the operation to be examined.
 
     ```bash
-    ncn-mw# cray fas operations describe {operationID} --format json
+    cray fas operations describe {operationID} --format json
     ```
 
     Example output:
@@ -736,7 +740,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
     }
     ```
 
-1. Update the firmware image file.
+1. (`ncn-mw#`) Update the firmware image file.
 
    This step should be skipped if there is no clear evidence of a missing image or incorrect model name.
 
@@ -747,7 +751,7 @@ Given the nature of the `model` field and its likelihood to not be standardized,
       Modify the following command to specify the actual `imageID` of the image to be updated.
 
       ```bash
-      ncn-mw# cray fas images describe {imageID} --format json > imagedata.json
+      cray fas images describe {imageID} --format json > imagedata.json
       ```
 
    1. Edit the new `imagedata.json` file.
@@ -760,17 +764,17 @@ Given the nature of the `model` field and its likelihood to not be standardized,
       and be sure that the filename matches the edited file from the previous step.
 
       ```bash
-      ncn-mw# cray fas images update imagedata.json {imageID}
+      cray fas images update imagedata.json {imageID}
       ```
 
 ## FAS loader commands
 
 ### Loader status
 
-To check if the loader is currently busy and receive a list of loader run IDs:
+(`ncn-mw#`) To check if the loader is currently busy and receive a list of loader run IDs:
 
 ```bash
-ncn-mw# cray fas loader list --format toml
+cray fas loader list --format toml
 ```
 
 Example output:
@@ -790,10 +794,10 @@ The loader can only run one job at a time. If the loader is busy, then it will r
 
 Firmware may be released and placed into the Nexus repository.
 
-To load the firmware from Nexus into FAS, use the following command:
+(`ncn-mw#`) To load the firmware from Nexus into FAS, use the following command:
 
 ```bash
-ncn-mw# cray fas loader nexus create --format toml
+cray fas loader nexus create --format toml
 ```
 
 Example output:
@@ -810,12 +814,12 @@ See [Load Firmware from Nexus](FAS_Admin_Procedures.md#load-firmware-from-nexus)
 
 1. Copy the RPM or ZIP file to one of the master or worker NCNs.
 
-1. Load the firmware into FAS.
+1. (`ncn-mw#`) Load the firmware into FAS.
 
    Be sure to update the example command with the actual path and filename of the RPM or ZIP file to be loaded.
 
    ```bash
-   ncn-mw# cray fas loader create --file firmware.rpm --format toml
+   cray fas loader create --file firmware.rpm --format toml
    ```
 
    Example output:
@@ -830,12 +834,12 @@ See [Load Firmware from RPM or ZIP file](FAS_Admin_Procedures.md#load-firmware-f
 
 ### Display results of loader run
 
-Using the `loaderRunID` returned from the loader upload command, run the following command to get the output from the upload.
+(`ncn-mw#`) Using the `loaderRunID` returned from the loader upload command, run the following command to get the output from the upload.
 
 Be sure to update the example command with the actual `loaderRunID` whose output is to be checked.
 
 ```bash
-ncn-mw# cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format json
+cray fas loader describe dd37dd45-84ec-4bd6-b3c9-7af480048966 --format json
 ```
 
 Example output:
@@ -875,12 +879,12 @@ A successful run will end with `*** Number of Updates: x ***`.
 
 ### Delete loader run data
 
-To delete the output from a loader run and remove it from the loader run list:
+(`ncn-mw#`) To delete the output from a loader run and remove it from the loader run list:
 
 Be sure to update the example command with the actual `loaderRunID` whose output should be deleted.
 
 ```bash
-ncn-mw# cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
+cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
 ```
 
 The delete command does not return anything if successful.
