@@ -4,7 +4,7 @@ Use this procedure for either a first-time install or in the event a previous CS
 
 ***Before continuing with install***, make sure that CANU is running the most current version: 
 
-  * [Install/Upgrade Canu](canu_install_update.md)
+  * [Install/Upgrade CANU](canu_install_update.md)
 
 ## Procedure
 
@@ -43,8 +43,8 @@ Use this procedure for either a first-time install or in the event a previous CS
 
    Refer to one of the following procedures:
 
-   - [Apply Custom Switch Configurations 1.0](apply_custom_config_1.0.md)
-   - [Apply Custom Switch Configurations 1.2](apply_custom_config_1.2.md)
+   [Apply Custom Switch Configurations 1.0](apply_custom_config_1.0.md)
+   [Apply Custom Switch Configurations 1.2](apply_custom_config_1.2.md)
 
 1. Setup connection to the site.
 
