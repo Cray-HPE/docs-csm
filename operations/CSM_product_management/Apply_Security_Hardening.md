@@ -17,4 +17,3 @@ None.
 2. Restrict access to `ncn-images` S3 Bucket.
 
    Perform procedure(s) in [Restrict Access to `ncn-images` S3 Bucket](../security_and_authentication/Restrict_Access_to_NCN_Images_S3_Bucket.md).
-   
