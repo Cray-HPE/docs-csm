@@ -42,7 +42,7 @@ The script can be run on any master NCN where the latest CSM documentation is in
 ## Remove data marked for deletion
 
 After something is deleted in Nexus, the data is marked for deletion but not removed from the disk. This can lead to a situation
-where there is no space left on the disk but no way to see what is taking up space. After removing data from Nexus a clean up, task needs
+where there is no space left on the disk but no way to see what is taking up space. After removing data from Nexus a clean up task needs
 to be created to clear data from the disk. After data (a repository or just some artifacts) are deleted from Nexus create a task in Nexus
 by going to the Nexus admin section then clicking on **System**, then **Tasks**. The task that should be created is called "Admin - Compact blob store".
 
@@ -56,7 +56,7 @@ The blob store should be a blob store that has some data marked for deletion. Th
 Once the task is created, then the task must be run. Click on the task name from the task list, then click on run. It should take anywhere from
 30 seconds to 5 minutes depending on how much is marked for deletion. Check in the blob store section under repositories to make sure the total size
 decreases. If the task takes zero seconds to run, then either no data is marked for deletion or the task needs to be run again. After the blob store has zero
-total size it can be deleted.
+total size the blob store can be deleted.
 
 **NOTE:** If the task fails to run and never cleans any data, and the `nexus-data` PVC is completely full the PVC will need to be grown to run the task.
 
