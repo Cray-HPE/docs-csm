@@ -2,9 +2,9 @@
 
 Use this procedure for either a first-time install or in the event a previous CSM was wiped and requires a new install.
 
-***Before continuing with install***, make sure that CANU is running the most current version: 
+***Before continuing with install***, make sure that CANU is running the most current version:
 
-  * [Install/Upgrade CANU](canu_install_update.md)
+[Install/Upgrade CANU](canu_install_update.md)
 
 ## Procedure
 
