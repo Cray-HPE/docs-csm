@@ -1,28 +1,30 @@
 # Check the Health and Balance of etcd Clusters
 
-Check to see if all of the etcd clusters have healthy pods, are balanced, and have a healthy cluster database. There needs to be the same number of pods running on each worker node for the etcd clusters to be balanced. If the number of pods is not the same for each worker node, the cluster is not balanced.
+Check to see if all of the etcd clusters have healthy pods, are balanced, and have a healthy cluster database.
+There needs to be the same number of pods running on each worker node for the etcd clusters to be balanced.
+If the number of pods is not the same for each worker node, the cluster is not balanced.
 
 Any clusters that do not have healthy pods will need to be rebuilt. Kubernetes cluster data will not be stored as efficiently when etcd clusters are not balanced.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires root privileges.
 
-### Procedure
+## Procedure
 
-1.  Check the health of the clusters.
+1. Check the health of the clusters.
 
     To check the health of the etcd clusters in the services namespace without TLS authentication:
 
     ```bash
     for pod in $(kubectl get pods -l app=etcd -n services \
     -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} ###"; \
-    kubectl -n services exec ${pod} -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint health"; done
+    kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint health"; done
     ```
 
     Example output:
 
-    ```
+    ```text
     ### cray-bos-etcd-6nkn6dzhv7 ###
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.670457ms
     ### cray-bos-etcd-6xtp2gqs64 ###
@@ -43,7 +45,7 @@ This procedure requires root privileges.
 
     If any of the etcd clusters are not healthy, refer to [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
 
-2.  Check the number of pods in each cluster and verify they are balanced.
+2. Check the number of pods in each cluster and verify they are balanced.
 
     Each cluster should contain at least three pods, but may contain more. Ensure that no two pods in a given cluster exist on the same worker node.
 
@@ -55,7 +57,7 @@ This procedure requires root privileges.
 
     Example output:
 
-    ```
+    ```text
     NAME                                    READY   STATUS    RESTARTS AGE   IP            NODE       NOMINATED NODE  READINESS GATE
     cray-bos-etcd-7gl9dccmrq                1/1     Running   0        8d    10.40.0.88    ncn-w003   <none>          <none>
     cray-bos-etcd-g65fjhhlbg                1/1     Running   0        8d    10.42.0.36    ncn-w002   <none>          <none>
@@ -100,16 +102,16 @@ This procedure requires root privileges.
 
     If the etcd clusters are not balanced, see [Rebalance Healthy etcd Clusters](Rebalance_Healthy_etcd_Clusters.md).
 
-3.  Check the health of an etcd cluster database.
+3. Check the health of an etcd cluster database.
 
-    -   To check the health of an etcd cluster's database in the services namespace:
+    - To check the health of an etcd cluster's database in the services namespace:
 
         ```bash
         for pod in $(kubectl get pods -l app=etcd -n services \
                              -o jsonpath='{.items[*].metadata.name}')
         do
             echo "### ${pod} Etcd Database Check: ###"
-            dbc=$(kubectl -n services exec ${pod} -- /bin/sh \
+            dbc=$(kubectl -n services exec ${pod} -c etcd -- /bin/sh \
                           -c "ETCDCTL_API=3 etcdctl put foo fooCheck && \
                           ETCDCTL_API=3 etcdctl get foo && \
                           ETCDCTL_API=3 etcdctl del foo && \
@@ -128,7 +130,7 @@ This procedure requires root privileges.
         ```bash
         for pod in $(kubectl get pods -l app=etcd -n services -o \
         jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} \
-        Etcd Database Check: ###"; dbc=$(kubectl -n services exec ${pod} \
+        Etcd Database Check: ###"; dbc=$(kubectl -n services exec ${pod} -c etcd \
         -- /bin/sh -c "ETCDCTL_API=3 etcdctl put foo fooCheck && ETCDCTL_API=3 \
         etcdctl get foo && ETCDCTL_API=3 etcdctl del foo && ETCDCTL_API=3 \
         etcdctl get foo" 2>&1); echo $dbc | awk '{ if ( $1=="OK" && \
@@ -139,7 +141,7 @@ This procedure requires root privileges.
 
         Example output:
 
-        ```
+        ```text
         ### cray-bos-etcd-7cxq6qrhz5 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
         ### cray-bos-etcd-b9m4k5qfrd Etcd Database Check: ###
@@ -170,14 +172,14 @@ This procedure requires root privileges.
         [...]
         ```
 
-    -   To check one cluster:
+    - To check one cluster:
 
         ```bash
         for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd -n services \
                              -o jsonpath='{.items[*].metadata.name}')
         do
             echo "### ${pod} Etcd Database Check: ###"
-            dbc=$(kubectl -n services exec ${pod} -- /bin/sh \
+            dbc=$(kubectl -n services exec ${pod} -c etcd -- /bin/sh \
                           -c "ETCDCTL_API=3 etcdctl put foo fooCheck && \
                           ETCDCTL_API=3 etcdctl get foo && \
                           ETCDCTL_API=3 etcdctl del foo && \
@@ -197,7 +199,7 @@ This procedure requires root privileges.
         for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
         -n services -o jsonpath='{.items[*].metadata.name}'); do echo \
         "### ${pod} Etcd Database Check: ###";  dbc=$(kubectl -n \
-        services exec ${pod} -- /bin/sh -c "ETCDCTL_API=3 etcdctl \
+        services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl \
         put foo fooCheck && ETCDCTL_API=3 etcdctl get foo && \
         ETCDCTL_API=3 etcdctl del foo && ETCDCTL_API=3 etcdctl get \
         foo" 2>&1); echo $dbc | awk '{ if ( $1=="OK" && $2=="foo" && \
@@ -208,7 +210,7 @@ This procedure requires root privileges.
 
         Example output:
 
-        ```
+        ```text
         ### cray-bos-etcd-7cxq6qrhz5 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
         ### cray-bos-etcd-b9m4k5qfrd Etcd Database Check: ###
@@ -221,4 +223,3 @@ This procedure requires root privileges.
 
     - Refer to [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
     - Refer to [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
-
