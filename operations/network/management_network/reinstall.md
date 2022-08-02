@@ -12,7 +12,7 @@ Reinstall the same CSM version.
 
 1. If the switches being reinstalled are already in the right CSM version, no configuration changes should be required.
 
-2. Check the differences between generated configurations and the configrations on the system.
+2. Check the differences between generated configurations and the configurations on the system.
 
    Refer to [Validate switch configurations](validate_switch_configs.md).
 
