@@ -638,7 +638,7 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
       ```
 
       Create a one-shot systemd service to load iptables on system boot.
-      
+
       ```bash
       ncn-m001# cat << EOF > metal-iptables.service
       [Unit]
