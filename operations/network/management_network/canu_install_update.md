@@ -11,7 +11,6 @@ Since CANU is a python application, it can be run on Linux and Mac, but the RPM 
 The Windows operating system is untested and currently not officially supported.  We recommend that Windows users install or update CANU on the Shasta NCN nodes instead of attempting a workstation installation.
 
 If CANU is already installed, then check the CANU version with following command:
-
 ```text
 canu --version
 ```
@@ -24,13 +23,13 @@ canu --version
 
    * Once you have successfully downloaded the CANU RPM to your target system, issue the following command(s) to upgrade or install CANU.  
 
-To fresh install CANU on system:
+### To fresh install CANU on system:
 
 ```text
 rpm -ihv <canu.rpm>
 ```
 
-To upgrade an existing version of CANU:
+### To upgrade an existing version of CANU:
 
 ```text
 rpm -Uhv <canu.rpm>
