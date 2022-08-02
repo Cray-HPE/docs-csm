@@ -2,7 +2,7 @@
 
 This section describes how to connect to Nexus with the Web UI, as well as how to access the REST API from non-compute nodes \(NCNs\) or compute nodes to manage repositories.
 
-## Access Nexus with the Web UI
+## Access Nexus with the web UI
 
 Use the hostname set in `istio.ingress.hosts.ui.authority` (see below) to connect to Nexus over the Customer Access Network (CAN) using a web browser. For example:
 
@@ -10,7 +10,7 @@ Use the hostname set in `istio.ingress.hosts.ui.authority` (see below) to connec
 https://nexus.{{network.dns.external}}/
 ```
 
-## Use Keycloak to Create and Manage Accounts
+## Use Keycloak to create and manage accounts
 
 In order to log into the Web UI or authenticate with the REST API, a user account with appropriate permissions must be created. Accounts are managed in Keycloak
 (see [Configure Keycloak Accounts](../CSM_product_management/Configure_Keycloak_Account.md)). To add administrator permissions for Nexus, add the `nx-admin` role
@@ -21,7 +21,7 @@ client (see below).
 
   ![Nexus Anonymous Account](../../img/operations/Nexus_Anonymous_Account.png "Nexus Anonymous Account")
 
-## Use the Local Nexus Admin Account
+## Use the local Nexus admin account
 
 During the deployment or update of Nexus, a local admin account is created. To access the local admin account for Nexus on any NCN, run the following commands:
 
@@ -88,7 +88,7 @@ function paginate() {
 }
 ```
 
-## Check the Status of Nexus
+## Check the status of Nexus
 
 Send an HTTP `GET` request to `/service/rest/v1/status` to check the operating status of Nexus. An HTTP `200 OK` response indicates it is healthy:
 
@@ -114,7 +114,7 @@ content-length: 0
 x-envoy-upstream-service-time: 6
 ```
 
-## List Repositories
+## List repositories
 
 Use the `/service/rest/v1/repositories` endpoint to get a basic listing of available repositories:
 
@@ -147,7 +147,7 @@ The `/service/rest/beta/repositories` endpoint provides a more detailed listing 
 
 Neither the `v1` or `beta/repositories` endpoints are paginated.
 
-## List Assets
+## List assets
 
 Use the `/service/rest/v1/components` endpoint to list the assets in a specific repository \(REPO\_NAME\). The `/service/rest/v1/components` endpoint is paginated.
 
@@ -255,7 +255,7 @@ https://packages.local/repository/csm-sle-15sp2/x86_64/cfs-trust-1.0.2-202012161
 
 ```
 
-## Create a Repository
+## Create a repository
 
 Repositories are created by an HTTP `POST` request to the `/service/rest/beta/repositories/<format>/<type>` endpoint with an appropriate body that defines the repository settings.
 
@@ -321,7 +321,7 @@ The `proxy`, `httpClient`, and `negativeCache` options impact the proxy behavior
 Installers typically define Nexus repositories in `nexus-repositories.yaml` and rely on the `nexus-repositories-create` helper script included in the `cray/cray-nexus-setup` container
 image to facilitate creation.
 
-## Update a Repository
+## Update a repository
 
 Update the configuration for a repository by sending an HTTP `PUT` request to the `/service/rest/beta/repositories/FORMAT/TYPE/NAME` endpoint.
 
@@ -379,7 +379,7 @@ x-envoy-upstream-service-time: 9
 }
 ```
 
-## Delete a Repository
+## Delete a repository
 
 To delete a repository, send an HTTP `DELETE` request to the `/service/rest/beta/repositories/NAME`.
 
@@ -389,7 +389,7 @@ For example:
 # curl -sfkSL -X DELETE "https://packages.local/service/rest/beta/repositories/NAME"
 ```
 
-## Create a Blob Store
+## Create a blob store
 
 A `File` type blob store may be created by sending an HTTP `POST` request to the `/service/rest/beta/blobstores/file` with the following body (replace NAME as appropriate):
 
@@ -403,7 +403,7 @@ A `File` type blob store may be created by sending an HTTP `POST` request to the
 
 Installers typically define Nexus blob stores in `nexus-blobstores.yaml` and rely on the `nexus-blobstores-create` helper script included in the `cray/cray-nexus-setup` container image to facilitate creation.
 
-## Delete a Blob Store
+## Delete a blob store
 
 To delete a blob store, send an HTTP `DELETE` request to the `/service/rest/v1/blobstores/NAME` endpoint.
 
@@ -413,7 +413,7 @@ For example:
 # curl -sfkSL -X DELETE "https://packages.local/service/rest/v1/blobstores/NAME"
 ```
 
-## Authenticate to Access the REST API
+## Authenticate to access the REST API
 
 An authenticated username and password are required to access some of the REST API functions not listed above. This username and password are the same used to sign into the Web UI.
 Either the username and password of a properly permissioned Keycloak account or the Nexus local admin account must be used.
