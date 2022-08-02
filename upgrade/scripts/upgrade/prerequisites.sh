@@ -689,7 +689,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     # mark the NCN BMCs with the Management role in HSM
     #shellcheck disable=SC2046
     cray hsm state components bulkRole update --role Management --component-ids \
-                            $(cray hsm state components list --role management --type node --format json | \
+                            $(cray hsm state components list --role management --type Node --format json | \
                                 jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//')
 
     # ensure that they are all locked
