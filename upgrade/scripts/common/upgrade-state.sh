@@ -85,7 +85,7 @@ function err_report() {
     #shellcheck disable=SC2155
     local caller="$(caller)"
     local cmd="$BASH_COMMAND"
-    if [[ ! -z $NO_ERROR_TRAP ]]; then
+    if [[ -n $NO_ERROR_TRAP ]]; then
         return 0
     fi
     # add more logging to capture next where exactly the error happened
@@ -126,6 +126,24 @@ function ok_report() {
     # force output to console regardless of redirection
     echo >/dev/tty 
     echo "[OK] - Successfully completed" >/dev/tty
+    # avoid shell double trap
+    NO_ERROR_TRAP=1
+}
+
+function argo_err_report() {
+    #shellcheck disable=SC2155
+    local caller="$(caller)"
+    local cmd="$BASH_COMMAND"
+    if [[ -n $NO_ERROR_TRAP ]]; then
+        return 0
+    fi
+    # add more logging to capture next where exactly the error happened
+    echo "${caller}"
+    echo "${cmd}"
+
+    
+    echo >/dev/tty 
+    echo "[ERROR] - Unexpected errors" >/dev/tty 
     # avoid shell double trap
     NO_ERROR_TRAP=1
 }
