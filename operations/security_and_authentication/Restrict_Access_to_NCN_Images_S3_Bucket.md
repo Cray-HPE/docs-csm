@@ -20,7 +20,7 @@ Procedure should be executed after install or upgrade is otherwise complete, but
 
 Unless otherwise noted, the procedure should be run from `ncn-m001` (not PIT).  
 
-This procedure was back-ported from CSM 1.2. For CSM 1.0, connectivity tests were verified before and after application of the procedure. Verification that the `iptables` rules persisted across storage node reboot was also complete. 
+This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 system. 
 
 ## Procedure
 

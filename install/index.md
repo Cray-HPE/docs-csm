@@ -28,6 +28,7 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
 1. [Configure Prometheus alert notifications](#configure_prometheus_alert_notifications)
 1. [Update firmware with FAS](#update_firmware_with_fas)
 1. [Prepare compute nodes](#prepare_compute_nodes)
+1. [Apply security hardening](#apply_security_hardening)
 1. [Next topic](#next_topic)
 1. [Troubleshooting installation problems](#troubleshooting_installation)
 
@@ -221,7 +222,6 @@ sections, but there is also a general troubleshooting topic.
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
       available. Once FAS is aware that new firmware is available, then see
       [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
-
    <a name="prepare_compute_nodes"></a>
 
    1. Prepare compute nodes
@@ -235,6 +235,13 @@ sections, but there is also a general troubleshooting topic.
       * Gigabyte
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
+   <a name="apply_security_hardening"></a>
+
+   1. Apply security hardening
+
+      After preparing compute nodes, and prior to the installation of other product streams, review the security hardening guide.
+
+      See [Security Hardening](../operations/CSM_product_management/Apply_Security_Hardening.md)
    <a name="next_topic"></a>
    1. Next topic
 
