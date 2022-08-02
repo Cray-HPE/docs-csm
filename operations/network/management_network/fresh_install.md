@@ -4,7 +4,7 @@ Use this procedure for either a first-time install or in the event a previous CS
 
 ***Before continuing with install***, make sure that CANU is running the most current version: 
 
-  * [Install/Upgrade Canu](canu_install_upgrade.md)
+  * [Install/Upgrade Canu](canu_install_update.md)
 
 ## Procedure
 
