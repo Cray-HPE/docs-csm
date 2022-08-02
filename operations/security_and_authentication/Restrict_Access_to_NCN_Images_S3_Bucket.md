@@ -20,7 +20,7 @@ Procedure should be executed after install or upgrade is otherwise complete, but
 
 Unless otherwise noted, the procedure should be run from `ncn-m001` (not PIT).  
 
-This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 system. 
+This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 system.
 
 ## Procedure
 
@@ -631,14 +631,14 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
 
 24. Save the `iptables` rule set on all storage nodes and make it persistent across reboots.
 
-       Create a directory to hold the iptables configuration.
+       Create a directory to hold the `iptables` configuration.
 
        ```bash
        ncn-m001# pdsh -w ncn-s00[1-4] "mkdir --mode=750 /etc/iptables"
        ```
 
-       Create a one-shot systemd service to load iptables on system boot. 
-       
+       Create a one-shot systemd service to load iptables on system boot.
+      
       ```bash
       ncn-m001# cat << EOF > metal-iptables.service
       [Unit]
@@ -658,7 +658,7 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
       ncn-m001# chmod 640 metal-iptables.service
       ```
 
-      Distribute the one-shot systemd service to the storage nodes. 
+      Distribute the one-shot systemd service to the storage nodes.
 
       ```bash
       ncn-m001# pdcp -w ncn-s00[1-4] metal-iptables.service /usr/lib/systemd/system
@@ -695,7 +695,6 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
       -A INPUT -p tcp -m tcp --dport 8080 -j LOG --log-prefix RADOSGW-DROP
       -A INPUT -p tcp -m tcp --dport 8080 -j DROP
       ```
-
 
 ## Troubleshooting
 
