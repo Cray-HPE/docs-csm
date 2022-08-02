@@ -4,7 +4,7 @@
 
 Before using the CSM Automated Network Utility (CANU) to test, validate, or configure the network, ensure that CANU is running on the latest version.
 
-CANU can be run from your personal workstation (the instructions below are targeted at Mac users), or on the Shasta NCN nodes.Since CANU is a python application, it can be run on Linux and Mac, but the RPM is not currently designed to support multiple operating system environments.
+CANU can be run from your personal workstation (the instructions below are targeted at Mac users), or on the Shasta NCN nodes. Since CANU is a python application, it can be run on Linux and Mac, but the RPM is not currently designed to support multiple operating system environments.
 
 The CANU project can be cloned from GitHub and run directly by Python, but the project dependencies will need to be installed manually. This process is not supported by this documentation.
 
