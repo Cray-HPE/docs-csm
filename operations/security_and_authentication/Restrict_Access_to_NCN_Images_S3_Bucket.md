@@ -6,7 +6,7 @@ Specifically, the controls enacted via this procedure should do the following:
 
 1. Block HAProxy access to the `ncn-images` bucket if the client is not an NCN (NMN) or PXE booting from the MTL network. This via a HAProxy ACL on the storage servers.
 2. Enable access logging for HAProxy.
-3. Block Rados GW network access (port 8080) to if the client is not an NCN (NMN) or originating from the HMN network. This via `iptables` rules on the storage servers.
+3. Block Rados GW network access (port 8080) if the client is not an NCN (NMN) or originating from the HMN network. This via `iptables` rules on the storage servers.
 
 ## Limitations
 
@@ -506,10 +506,10 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
       RADOS ncn-s001.hmn: PASS
       RADOS ncn-s002.hmn: PASS
       RADOS ncn-s003.hmn: PASS
-      [i] MGMT RADOS over CMN
-      RADOS ncn-s001.cmn: PASS
-      RADOS ncn-s002.cmn: PASS
-      RADOS ncn-s003.cmn: PASS
+      [i] MGMT RADOS over CAN
+      RADOS ncn-s001.can: PASS
+      RADOS ncn-s002.can: PASS
+      RADOS ncn-s003.can: PASS
       [i] MGMT HAProxy over NMN
       HAPROXY (CEPH) HTTP ncn-s001.nmn: PASS
       HAPROXY (CEPH) HTTPS ncn-s001.nmn: PASS
@@ -554,7 +554,7 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
 
       ```bash
       ncn-m001# pdsh -N -w ncn-s00[1-4] "grep RADOSGW /var/log/firewall"
-      2022-07-13T14:02:03.418750+00:00 xxx-ncn-s001 kernel: [4397628.546654] RADOSGW-DROPIN=bond0.nmn0 OUT= MAC=b8:59:9f:f9:1d:22:a4:bf:01:3f:6f:91:08:00 SRC=10.252.1.13 DST=10.252.1.3 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=9727 DF PROTO=TCP SPT=59278 DPT=8080 WINDOW=42340 RES=0x00 SYN URGP=0 
+      2022-07-13T14:02:03.418750+00:00 xxx-ncn-s001 kernel: [4397628.546654] RADOSGW-DROPIN=vlan002 OUT= MAC=b8:59:9f:f9:1d:22:a4:bf:01:3f:6f:91:08:00 SRC=10.252.1.13 DST=10.252.1.3 LEN=52 TOS=0x00 PREC=0x00 TTL=64 ID=9727 DF PROTO=TCP SPT=59278 DPT=8080 WINDOW=42340 RES=0x00 SYN URGP=0 
       ...
       ```
 
@@ -594,7 +594,7 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
       [i] curl --connect-timeout 2 -f ncn-s001.nmn:8080 -> PASS
       [i] curl --connect-timeout 2 -f http://ncn-s001.nmn/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f -k https://ncn-s001.nmn/ncn-images/ -> PASS
-      [i] curl --connect-timeout 2 -f ncn-s001.cmn:8080 -> PASS
+      [i] curl --connect-timeout 2 -f ncn-s001.can:8080 -> PASS
       [i] curl --connect-timeout 2 -f http://ncn-s001.can/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f -k https://ncn-s001.can/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f ncn-s001.hmn:8080 -> PASS
@@ -603,7 +603,7 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
       [i] curl --connect-timeout 2 -f ncn-s002.nmn:8080 -> PASS
       [i] curl --connect-timeout 2 -f http://ncn-s002.nmn/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f -k https://ncn-s002.nmn/ncn-images/ -> PASS
-      [i] curl --connect-timeout 2 -f ncn-s002.cmn:8080 -> PASS
+      [i] curl --connect-timeout 2 -f ncn-s002.can:8080 -> PASS
       [i] curl --connect-timeout 2 -f http://ncn-s002.can/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f -k https://ncn-s002.can/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f ncn-s002.hmn:8080 -> PASS
@@ -612,7 +612,7 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
       [i] curl --connect-timeout 2 -f ncn-s003.nmn:8080 -> PASS
       [i] curl --connect-timeout 2 -f http://ncn-s003.nmn/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f -k https://ncn-s003.nmn/ncn-images/ -> PASS
-      [i] curl --connect-timeout 2 -f ncn-s003.cmn:8080 -> PASS
+      [i] curl --connect-timeout 2 -f ncn-s003.can:8080 -> PASS
       [i] curl --connect-timeout 2 -f http://ncn-s003.can/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f -k https://ncn-s003.can/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f ncn-s003.hmn:8080 -> PASS
@@ -621,7 +621,7 @@ This procedure was back-ported from CSM 1.2 and was tested on a CSM 1.0.11 syste
       [i] curl --connect-timeout 2 -f ncn-s004.nmn:8080 -> PASS
       [i] curl --connect-timeout 2 -f http://ncn-s004.nmn/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f -k https://ncn-s004.nmn/ncn-images/ -> PASS
-      [i] curl --connect-timeout 2 -f ncn-s004.cmn:8080 -> PASS
+      [i] curl --connect-timeout 2 -f ncn-s004.can:8080 -> PASS
       [i] curl --connect-timeout 2 -f http://ncn-s004.can/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f -k https://ncn-s004.can/ncn-images/ -> PASS
       [i] curl --connect-timeout 2 -f ncn-s004.hmn:8080 -> PASS
