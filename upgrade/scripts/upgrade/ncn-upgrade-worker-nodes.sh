@@ -237,12 +237,12 @@ while true; do
 
         if [[ "${phase}" == "Failed" ]]; then
             echo "Workflow in Failed state, Retry ..."
-            curl -sk -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${workflow}/retry" -d '{}'
+            retryRebuildWorkflow "$workflow"
         fi
 
         if [[ "${phase}" == "Error" ]]; then
             echo "Workflow in Error state, Retry ..."
-            curl -sk -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${workflow}/retry" -d '{}'
+            retryRebuildWorkflow "$workflow"
         fi
         runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " < "${res_file}")
         succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")

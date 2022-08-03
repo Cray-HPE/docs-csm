@@ -67,8 +67,7 @@ tasks:
               # sometimes we don't have endpoint history
               # because a node might never pxe booted in the past
               # we set it to zero as default value
-              echo "No endpoint-history from BSS for: $TARGET_NCN"
-              $bootscript_last_epoch=0
+              bootscript_last_epoch=0
               echo bootscript_last_epoch
             fi
   - name: set-next-boot-to-pxe
@@ -113,10 +112,13 @@ tasks:
             
             # Set ncn to pxe boot
             ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis bootdev pxe options=efiboot
-            # power cycle node
-            ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power off
-            sleep 20
-            ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power status
+            
+            powerStatus=$(ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power status)
+            if [[ "$powerStatus" == *"is on"* ]]; then
+              # power cycle node
+              ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power off
+              sleep 20
+            fi
             ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power on
   - name: "wait-for-boot"
     dependencies:

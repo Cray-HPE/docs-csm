@@ -19,6 +19,8 @@
 
 ## Stage 2.2
 
+### Option 1
+
 1. (`ncn-m001#`) Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`.
 
    Follow output of the script carefully. The script will pause for manual interaction.
@@ -30,6 +32,8 @@
    > **`NOTE`** The root password for the node may need to be reset after it is rebooted.
 
 1. Repeat the previous steps for each other worker node, one at a time.
+
+### Option 2
 
 > **`Tech Preview`**
 >>
