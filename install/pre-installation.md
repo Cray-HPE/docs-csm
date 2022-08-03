@@ -463,7 +463,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    1. Run `ncn-image-modification.sh` from the CSM documentation RPM:
 
        ```bash
-       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modificaiton.sh)
+       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
        $NCN_MOD_SCRIPT -p \
           -d /root/.ssh \
           -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
