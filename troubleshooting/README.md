@@ -14,8 +14,6 @@ Use the pre-populated GitHub “Search or jump to...” function in the upper le
 
 * Users can also expand the search beyond the “troubleshooting” section (instead of doing “path troubleshooting”) and/or use more advanced GitHub searches such as "path configure" to find the right context.
 
-LINTYLINTERBBOOGIEMAN:/ 
-
 ## Quick links
 
 * [Known issues](#known-issues)
