@@ -66,7 +66,7 @@ a Ceph image.
     - role: csm.ncn.ca_cert
    ```
 
-   The first layer in the CFS session should be similar to this, where <example-playbook.yml> is the playbook
+   The first layer in the CFS session should be similar to this, where `<example-playbook.yml>` is the playbook
    that includes the csm.ncn.ca_cert role.
 
    ```console
