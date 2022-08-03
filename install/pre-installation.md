@@ -665,11 +665,6 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
    This needs to be copied off the system and either stored in a secure location or in a secured Git repository.
    There are secrets in this directory that should not be accidentally exposed.
 
-1. (`pit#`) Exit the typescript.
-
-   ```bash
-   exit
-   ```
 
 ## Next topic
 
