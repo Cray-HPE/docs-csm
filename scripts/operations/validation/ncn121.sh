@@ -36,7 +36,7 @@ main() {
 pod_notrunning() {
     echo "Checking for any Pod with status different of  Completed/Running"
     sleep 2
-    velero=$(kubectl get pods -A -o wide | grep -v "Completed\|Running")
+    pod=$(kubectl get pods -A -o wide | grep -v "Completed\|Running")
     if [[ $? != 0 ]]; then
         echo "No issues found."
         echo "---------------------------------------"
