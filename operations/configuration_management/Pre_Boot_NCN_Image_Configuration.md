@@ -79,7 +79,7 @@ a Ceph image.
    },
    ```
 
-   **NOTE:** There are three existing playbooks availabe for NCN'S
+   **NOTE:** There are three existing playbooks available for NCNs:
    - ansible/ncn-worker_nodes.yml
    - ansible/ncn-storage_nodes.yml
    - ansible/ncn-master_nodes.yml
