@@ -54,7 +54,7 @@ As with earlier CSM releases it is possible to delegate to PowerDNS to resolve s
 
 ### PowerDNS Manager (`cray-powerdns-manager`)
 
-The PowerDNS Manager serves a similar purpose to the Unbound Manager. It runs in the background and periodically queries the System Layout Service, the Hardware State Manager, and the Kea DHCP server for new or changed hardware components and creates DNS records for these components in PowerDNS.
+The PowerDNS Manager serves a similar purpose to the Unbound Manager. It runs in the background and periodically queries the System Layout Service, the Hardware State Manager, and the Kea DHCP server for new or changed hardware components and creates DNS records for these components in PowerDNS. It also creates and removes reverse DNS PTR records that correspond to the A records that are created by ExternalDNS.
 
 The PowerDNS Manager also configures the PowerDNS server for zone transfer and DNSSEC if required.
 
