@@ -42,11 +42,13 @@ To check the current state of the switches, see the [upgrade](upgrade.md) page.
 
 ## Starting Points
 
+* Upgrade CANU to the latest version:  
+  * [Install/Upgrade CANU](canu_install_update.md)
 * Current switch configurations are not generated and need to upgrade to generated configurations.
   * This can either be 1.0 generated or 1.2 generated.
   * [upgrade](upgrade.md)
-* Current switch configurations are generated and need to go to 1.2.
-  * [`1.2 (Preconfig)` to 1.2](1.0_to_1.2_upgrade.md)
+* Current switch configurations are generated and need to go to 1.3.
+  * [`1.3 (Preconfig)` to 1.3](1.2_to_1.3_upgrade.md)
 * Switches have no configuration on them.
   * [Fresh Install](fresh_install.md)
 * Reinstalling the same CSM version.
