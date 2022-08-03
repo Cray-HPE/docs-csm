@@ -61,7 +61,7 @@ a Ceph image.
    **NOTE:** If the platform certificate is needed for the purpose of accessing Zypper repos,
    the `csm.ncn.ca_cert` role can be added to a playbook within the `csm-config-management` repo.
 
-   ```console
+   ```yaml
     # Install the platform certificate
     - role: csm.ncn.ca_cert
    ```
@@ -69,7 +69,7 @@ a Ceph image.
    The first layer in the CFS session should be similar to this, where `<example-playbook.yml>` is the playbook
    that includes the `csm.ncn.ca_cert` role.
 
-   ```console
+   ```json
    "layers": [
    {
      "name": "csm-config",
