@@ -81,7 +81,7 @@ a Ceph image.
 
    **NOTE:** There are three existing playbooks available for NCNs:
    - `ansible/ncn-worker_nodes.yml`
-   - ansible/ncn-storage_nodes.yml
+   - `ansible/ncn-storage_nodes.yml`
    - ansible/ncn-master_nodes.yml
 
 1. [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md)
