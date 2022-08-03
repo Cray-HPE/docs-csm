@@ -18,7 +18,9 @@
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
 ## Stage 2.2
+
 ### Option 1
+
 1. (`ncn-m001#`) Run `ncn-upgrade-worker-nodes.sh` for `ncn-w001`.
 
    Follow output of the script carefully. The script will pause for manual interaction.
@@ -30,7 +32,9 @@
    > **`NOTE`** The root password for the node may need to be reset after it is rebooted.
 
 1. Repeat the previous steps for each other worker node, one at a time.
+
 ### Option 2
+
 > **`Tech Preview`**
 >>
 >> You can also upgrade multiple workers at the same time with comma separated list. Note that in some cases, you can't rebuild all workers in one request. It is system admin's responsibility to make sure a multiple workers request meets following conditions:
