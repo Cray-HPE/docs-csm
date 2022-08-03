@@ -59,15 +59,18 @@ a Ceph image.
 1. [Create a CFS Configuration](Create_a_CFS_Configuration.md)
 
    **NOTE:** If the platform certificate is needed for the purpose of accessing zypper repos,
-   the `csm.ncn.ca_cert` role can be added to your playbook.
+   the `csm.ncn.ca_cert` role can be added to your playbook within the csm-config-management repo.
+
    ```console
     # Install the platform certificate
     - role: csm.ncn.ca_cert
    ```
+
    The first layer in the CFS session should be similar to this, where <example-playbook.yml> is the playbook
    that includes the csm.ncn.ca_cert role.
+
    ```console
-    "layers": [
+   "layers": [
    {
      "name": "csm-config",
      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
@@ -75,6 +78,11 @@ a Ceph image.
      "commit": "<git commit id>"
    },
    ```
+
+   **NOTE:** There are three existing playbooks availabe for NCN'S
+   - ansible/ncn-worker_nodes.yml
+   - ansible/ncn-storage_nodes.yml
+   - ansible/ncn-master_nodes.yml
 
 1. [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md)
 
