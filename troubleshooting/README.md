@@ -2,19 +2,17 @@
 
 This document provides links to troubleshooting information for services and functionality provided by CSM.
 
-## Helpful tips navigating around the CSM repository:
+## Helpful tips for navigating the CSM repository
 
-In the main repository landing page:
+In the main repository landing page, change the branch to the CSM version being used on the system (for example, release/1.0, release/1.2, release/1.3).
 
-* Change the branch to the CSM version being used on the system (e.g., release/1.0, release/1.2, release/1.3
+Use the pre-populated GitHub “Search or jump to...” function in the upper left hand side of the page and append keywords related to the exiting problem seen into the existing search. (The example searches for “ping” and “PXE” related troubleshooting resources on the “main” branch.)
 
-Use the pre-populated GitHub “Search or jump to...” function in the upper left hand of the page and append keywords related to the exiting problem seen into the existing search. (The example searches for “ping” and “PXE” related troubleshooting resources on the “main” branch.)
-
-* Follow any run-books, guides or procedures which are directly related to the problem.
+* Follow any run-books, guides, or procedures which are directly related to the problem.
 
 * Change the branch to “main” and search a second time to retrieve very recent or beta run-books and guides.
 
-* The user could also expand the search beyond the “troubleshooting” section (instead of doing “path troubleshooting”) and/or use more advanced GitHub searches such as "path configure" to find the right context.
+* Users can also expand the search beyond the “troubleshooting” section (instead of doing “path troubleshooting”) and/or use more advanced GitHub searches such as "path configure" to find the right context.
 
 ## Quick links
 
