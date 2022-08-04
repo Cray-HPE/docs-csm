@@ -5,20 +5,18 @@
 
 ## Procedure
 
-1. (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for `ncn-s001`. 
+1. (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for `ncn-s001`.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001
    ```
 
-   > **`NOTE`** 
+   > **`NOTE`**
    >> You can also upgrade multiple storage nodes with a comma separated list. This will upgrade the storage nodes sequentially.
    >
    >```bash
    > /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001,ncn-s002,ncn-s003
    >```
-
-
 
 ## Stage completed
 
