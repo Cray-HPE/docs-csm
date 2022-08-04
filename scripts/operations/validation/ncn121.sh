@@ -23,12 +23,12 @@ main() {
     echo "Summary: $count_failed of $count_total tests FAILED"
     if [[ "$pod_count" == 0 ]]; then
         echo " "
-        echo "- Some pods are in not running or completed state follow https://github.com/Cray-HPE/docs-csm/blob/main/operations/validate_csm_health.md#111-known-issues-with-ncn-health-checks for remediation steps"
+        echo "- Some pods are in not running or completed state follow https://github.com/Cray-HPE/docs-csm/blob/main/troubleshooting/known_issues/ncn_resource_checks.md for remediation steps"
         echo " "
     fi
 
     if [[ "$fs_full" == 0 ]]; then
-        echo "- Root Fileystem has over 80% of use, follow https://github.com/Cray-HPE/docs-csm/blob/main/operations/validate_csm_health.md#121-known-issues-with-ncn-resource-checks to remediate"
+        echo "- Root Fileystem has over 80% of use, follow https://github.com/Cray-HPE/docs-csm/blob/main/troubleshooting/known_issues/ncn_resource_checks.md to remediate"
         echo " "
     fi
 }
