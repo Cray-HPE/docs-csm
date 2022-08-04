@@ -169,7 +169,7 @@ until [[ $(ceph orch ps --daemon_type rgw ${target_ncn} --format json-pretty|jq 
 do
   sleep 30
   let rgw_counter+=1
-  if rgw_counter -gt 10
+  if [[ $rgw_counter -gt 10 ]]
   then
     exit 1
   fi
