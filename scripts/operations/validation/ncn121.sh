@@ -23,7 +23,7 @@ main() {
     echo "Summary: $count_failed of $count_total tests FAILED"
     if [[ "$pod_count" == 0 ]]; then
         echo " "
-        echo "- Some pods are in not running or completed state follow https://github.com/Cray-HPE/docs-csm/blob/main/operations/validate_csm_health.md#12-ncn-resource-checks-optional for remediation steps"
+        echo "- Some pods are in not running or completed state follow https://github.com/Cray-HPE/docs-csm/blob/main/operations/validate_csm_health.md#111-known-issues-with-ncn-health-checks for remediation steps"
         echo " "
     fi
 
