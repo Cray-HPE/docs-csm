@@ -165,8 +165,8 @@ function ssh_keygen_keyscan() {
     {
         NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
         HOSTS=$(echo $NCNS | tr -t ' ' ',')
-        pdsh -w $HOSTS ssk-keygen -R ${target-ncn}
-        pdsh -w $HOSTS ssk-keygen -R ${ncn_ip}
+        pdsh -w $HOSTS ssh-keygen -R ${target-ncn}
+        pdsh -w $HOSTS ssh-keygen -R ${ncn_ip}
     } >& /dev/null
 
     set -e
