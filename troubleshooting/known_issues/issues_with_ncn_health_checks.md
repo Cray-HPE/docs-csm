@@ -3,7 +3,7 @@
 
 - It is possible that the first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes.
   In this case, please wait five minutes and re-run the tests.
-- For any failures related to SSL certificates, see the [SSL Certificate Validation Issues](../troubleshooting/known_issues/ssl_certificate_validation_issues.md) troubleshooting guide.
+- For any failures related to SSL certificates, see the [SSL Certificate Validation Issues](ssl_certificate_validation_issues.md) troubleshooting guide.
 
 - `Kubernetes Query BSS Cloud-init for ca-certs`
 
@@ -77,7 +77,7 @@
 
      1. If the previous command gives any output, this indicates possible SSL certificate problems on that NCN.
 
-        - See the [SSL Certificate Validation Issues](../troubleshooting/known_issues/ssl_certificate_validation_issues.md) troubleshooting guide.
+        - See the [SSL Certificate Validation Issues](ssl_certificate_validation_issues.md) troubleshooting guide.
 
   - If this test is failing on a storage node, it could be an issue with the node's Spire token. The following procedure may resolve the problem:
 
