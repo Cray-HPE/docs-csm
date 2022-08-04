@@ -35,22 +35,22 @@ main() {
     echo "Summary: $count_failed of $count_total tests FAILED"
     if [[ "$velero_count" == 0 ]]; then
         echo " "
-        echo "- Velero failed backups found, proceed to https://github.com/Cray-HPE/docs-csm/blob/main/operations/validate_csm_health.md#111-known-issues-with-ncn-health-checks for remediation steps"
+        echo "- Velero failed backups found, proceed to https://github.com/Cray-HPE/docs-csm/blob/CASMINST-5064/troubleshooting/known_issues/issues_with_ncn_health_checks.md for remediation steps"
         echo " "
     fi
 
     if [[ "$spire_count" == 0 ]]; then
-        echo "- spire-agent is not enabled please follow documentation at https://github.com/Cray-HPE/docs-csm/blob/main/operations/validate_csm_health.md#111-known-issues-with-ncn-health-checks"
+        echo "- spire-agent is not enabled please follow documentation at https://github.com/Cray-HPE/docs-csm/blob/CASMINST-5064/troubleshooting/known_issues/issues_with_ncn_health_checks.md"
         echo " "
     fi
 
     if [[ "$cfs_count" == 0 ]]; then
-        echo "- Issues found on CFS, please proceed to https://github.com/Cray-HPE/docs-csm/blob/main/operations/validate_csm_health.md#111-known-issues-with-ncn-health-checks"
+        echo "- Issues found on CFS, please proceed to https://github.com/Cray-HPE/docs-csm/blob/CASMINST-5064/troubleshooting/known_issues/issues_with_ncn_health_checks.md"
         echo " "
     fi
 
     if [[ "$clock_count" == 0 ]]; then
-        echo "- Issues found on clock, please proceed to https://github.com/Cray-HPE/docs-csm/blob/main/operations/validate_csm_health.md#111-known-issues-with-ncn-health-checks"
+        echo "- Issues found on clock, please proceed to https://github.com/Cray-HPE/docs-csm/blob/CASMINST-5064/troubleshooting/known_issues/issues_with_ncn_health_checks.md"
         echo " "
     fi
 }
@@ -106,7 +106,7 @@ clock_skew() {
         echo "---------------------------------------"
         return 0
     else
-        echo "Issues found, proceed to https://github.com/Cray-HPE/docs-csm/blob/main/operations/validate_csm_health.md#111-known-issues-with-ncn-health-checks"
+        echo "Issues found, proceed to https://github.com/Cray-HPE/docs-csm/blob/CASMINST-5064/troubleshooting/known_issues/issues_with_ncn_health_checks.md"
         return 1
     fi
 }
