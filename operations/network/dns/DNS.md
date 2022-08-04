@@ -15,7 +15,7 @@ The DNS infrastructure is comprised of a number of components.
 Unbound is a caching DNS resolver which is also used as the primary DNS server.
 
 The DNS records served by Unbound include system component names (xnames), node hostnames,
-and service names and these records are read from the `cray-dns-unbound` ConfigMap which is populated by `cray-dns-unbound-manager`.
+and service names. These records are read from the `cray-dns-unbound` ConfigMap which is populated by `cray-dns-unbound-manager`.
 
 The DNS server functionality will be migrated to PowerDNS in a future release leaving Unbound acting purely as a caching DNS resolver.
 
@@ -23,7 +23,7 @@ Unbound also forwards queries to PowerDNS or the site DNS server if the query ca
 
 ### Unbound Manager (`cray-dns-unbound-manager`)
 
-The `cray-dns-unbound-manager` cron job runs every three minutes and queries the System Layout Service, the Hardware State Manager,
+The `cray-dns-unbound-manager` cron job runs every three minutes and queries the System Layout Service (SLS), the Hardware State Manager (HSM),
 and the Kea DHCP server for new or changed hardware components and creates DNS records for these components in the `cray-dns-unbound` ConfigMap.
 
 This job also initiates a rolling restart of Unbound if the `cray-dns-unbound` ConfigMap was modified.
@@ -40,7 +40,7 @@ See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/services-
 ### ExternalDNS (`cray-externaldns-external-dns`)
 
 ExternalDNS creates DNS records for services that are intended to be accessible via the Customer Access Network (CAN), Customer Management Network (CMN),
-and Customer High-Speed Network (CHN). For example `grafana.cmn.wasp.dev.cray.com`.
+and Customer High-Speed Network (CHN). For example, `grafana.cmn.wasp.dev.cray.com`.
 
 Kubernetes Services annotated with `external-dns.alpha.kubernetes.io/hostname` have DNS records created.
 
@@ -58,9 +58,9 @@ As with earlier CSM releases it is possible to delegate to PowerDNS to resolve s
 
 ### PowerDNS Manager (`cray-powerdns-manager`)
 
-The PowerDNS Manager serves a similar purpose to the Unbound Manager. It runs in the background and periodically queries the System Layout Service, the Hardware State Manager,
+The PowerDNS Manager serves a similar purpose to the Unbound Manager. It runs in the background and periodically queries the SLS, HSM,
 and the Kea DHCP server for new or changed hardware components and creates DNS records for these components in PowerDNS. It also creates and removes reverse DNS PTR records
-that correspond to the A records that are created by ExternalDNS.
+that correspond to the records that are created by ExternalDNS.
 
 The PowerDNS Manager also configures the PowerDNS server for zone transfer and DNSSEC if required.
 
