@@ -661,3 +661,6 @@ Admin
 
 - operations/system_management_health/Configure_Prometheus_Alerta_Alert_Notifications.md
 Alerta
+
+- operations/network/dns/DNS.md
+ExternalDNS
