@@ -74,7 +74,7 @@ if [[ $state_recorded == "0" ]]; then
     fi
     ## END TEMP - CASMINST-4099
 
-    ssh ${target_ncn} 'systemctl stop ceph.target;sleep 30;podman prune -af;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /etc/ceph;systemctl start ceph.target'
+    ssh ${target_ncn} 'systemctl stop ceph.target;sleep 30;podman image prune -af;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /etc/ceph;systemctl start ceph.target'
     scp ${target_ncn}:/tmp/${target_ncn}-ceph.tgz .
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
