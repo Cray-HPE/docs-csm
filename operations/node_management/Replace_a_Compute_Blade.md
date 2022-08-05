@@ -2,7 +2,7 @@
 
 Replace an HPE Cray EX liquid-cooled compute blade.
 
-### Shutdown software and power off the blade
+## Shutdown software and power off the blade
 
 1. Temporarily disable endpoint discovery service (MEDS) for the compute nodes(s) being replaced.
    This example disables MEDS for the compute node in cabinet 1000, chassis 3, slot 0 (x1000c3s0b0). If there is more than 1 node card, in the blade specify each node card (x1000c3s0b0,x1000c3s0b1).
@@ -60,7 +60,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    --recursive true --format json
    ```
 
-### Delete the HSM entries
+## Delete the HSM entries
 
 6. Delete the node Ethernet interface MAC addresses and the Redfish endpoint from the Hardware State
    Manager (HSM).
@@ -127,7 +127,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    If this is not possible, disconnect the coolant hoses, then quickly unlatch/unseat the device (within 10
    seconds). Failure to do so may damage the equipment.
 
-### Power on and boot the compute nodes
+## Power on and boot the compute nodes
 
 8. Un-suspend the hms-discovery cronjob in k8s.
 
@@ -260,7 +260,11 @@ Replace an HPE Cray EX liquid-cooled compute blade.
        -X PUT -d @newHSN.json
        ```
 
-19. Reload DVS on NCNs.
+19. Optional: If necessary, reload DVS on NCNs.
+
+    DVS should be reloaded if it is running over the NMN. It is recommended that DVS be run over the HSN for simplified management and significant performance benefits.
+
+    See *HPE Cray Operating System Administration Guide: CSM on HPE Cray EX Systems (S-8024)* for more information.
 
 20. Use boot orchestration to power on and boot the nodes.
 

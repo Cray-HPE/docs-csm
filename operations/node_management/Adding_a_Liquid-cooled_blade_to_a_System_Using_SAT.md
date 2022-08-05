@@ -35,6 +35,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
    `--dst-mapping` argument should be a mappings file of the MAC addresses, IP addresses, and component xnames from the new blade. If the new
    blade was removed from another system, the mappings file was saved while performing the
    [Removing a Liquid-cooled Blade from a System Using SAT](Removing_a_Liquid-cooled_blade_from_a_System_Using_SAT.md) procedure on the other system.
+   If the new blade is a brand new blade, (i.e. not from another running system,) then neither `--src-mapping` or `--dst-mapping` should be used.
 
    ```bash
    sat swap blade --src-mapping <SRC_MAPPING> --dst-mapping <DST_MAPPING> --action enable <SLOT_XNAME>

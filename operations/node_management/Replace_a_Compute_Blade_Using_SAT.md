@@ -19,6 +19,8 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
 - The System Admin Toolkit \(SAT\) is installed and configured on the system.
 
+- DVS must be running over the HSN.
+
 ## Shutdown nodes on the compute blade
 
 1. Verify that the workload manager (WLM) is not using the affected nodes.
@@ -151,10 +153,6 @@ Replace an HPE Cray EX liquid-cooled compute blade.
       curl -s -k -H "Authorization: Bearer ${TOKEN}" https://API_SYSTEM/apis/sls/v1/networks/HSN \
                 -X PUT -d @newHSN.json
       ```
-
-1. Reload DVS on NCNs.
-
-   See *HPE Cray Operating System Administration Guide: CSM on HPE Cray EX Systems (S-8024)* for more information.
 
 1. Power on and boot the nodes.
 
