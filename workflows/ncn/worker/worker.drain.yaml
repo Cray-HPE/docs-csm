@@ -119,11 +119,34 @@ tasks:
             goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-pods-running.yaml ${GOSS_ARG}
 
             goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-replication-lag.yaml ${GOSS_ARG}
+  - name: ensure-critical-pods-are-running
+    templateRef:
+      name: kubectl-and-curl-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            labels=( "cray-bss" "cray-scsd" )
+            for label in ${labels[@]};do
+              while true; do
+                numOfRunningPods=$( kubectl get po -A -l "app.kubernetes.io/name=$label" | grep "Running"| wc -l)
+                if [[ $numOfRunningPods -ge 2 ]]; then
+                  echo "$label has met with the minimum requirement"
+                  break;
+                fi
+                echo "$label hasn't met with the minimum requirement(2): $numOfRunningPods"
+                sleep 5
+              done
+            done
   - name: drain
     dependencies:
       - wait-for-cfs
       - ensure-etcd-pods-are-healthy
       - ensure-pg-pods-are-healthy
+      - ensure-critical-pods-are-running
     templateRef:
       name: kubectl-and-curl-template
       template: shell-script
@@ -143,6 +166,7 @@ tasks:
       - wait-for-cfs
       - ensure-etcd-pods-are-healthy
       - ensure-pg-pods-are-healthy
+      - ensure-critical-pods-are-running
     templateRef:
       name: kubectl-and-curl-template
       template: shell-script

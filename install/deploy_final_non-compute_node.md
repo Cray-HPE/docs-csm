@@ -332,22 +332,6 @@ The steps in this section load hand-off data before a later procedure reboots th
        addr:     ipv4 172.30.53.88/20 [static]
     ```
 
-1. (`ncn-m001#`) Verify that the site link (`lan0`) and the VLANs have IP addresses.
-
-    > Examine the output to ensure that each interface has been assigned an IPv4 address.
-
-    ```bash
-    for INT in lan0 bond0.nmn0 bond0.hmn0 bond0.can0 bond0.cmn0 ; do
-        ip a show "${INT}" || echo "ERROR: Command failed: ip a show ${INT}"
-    done
-    ```
-
-1. (`ncn-m001#`) Verify that the default route is via the CMN.
-
-    ```bash
-    ip r show default
-    ```
-
 1. (`ncn-m001#`) Verify that there **is not** a metal bootstrap IP address.
 
     ```bash

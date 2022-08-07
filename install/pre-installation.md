@@ -209,9 +209,10 @@ On first login, the LiveCD will prompt the administrator to change the password.
       Use a local disk for `PITDATA`:
 
       ```bash
-      disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
-      echo ${disk}
-      parted --wipesignatures -m --align=opt --ignore-busy -s "/dev/$disk" -- mklabel gpt mkpart primary ext4 2048s 100%
+      disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN -e7 -d -n | sort -h | awk '{print $2}' | xargs -I {} bash -c "if ! grep -Fq {} /proc/mdstat; then echo {}; fi")"
+      echo "Using ${disk}"
+      parted --wipesignatures -m --align=opt --ignore-busy -s "/dev/${disk}" -- mklabel gpt mkpart primary ext4 2048s 100%
+      partprobe "/dev/${disk}"
       mkfs.ext4 -L PITDATA "/dev/${disk}1"
       mount -vL PITDATA
       ```
@@ -463,7 +464,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    1. Run `ncn-image-modification.sh` from the CSM documentation RPM:
 
        ```bash
-       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modificaiton.sh)
+       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
        $NCN_MOD_SCRIPT -p \
           -d /root/.ssh \
           -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
@@ -664,12 +665,6 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
    This needs to be copied off the system and either stored in a secure location or in a secured Git repository.
    There are secrets in this directory that should not be accidentally exposed.
-
-1. (`pit#`) Exit the typescript.
-
-   ```bash
-   exit
-   ```
 
 ## Next topic
 
