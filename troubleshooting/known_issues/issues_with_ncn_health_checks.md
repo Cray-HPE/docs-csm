@@ -14,7 +14,7 @@
 
   - Because of a [known issue  with Velero](https://github.com/vmware-tanzu/velero/issues/1980), a backup may be attempted immediately
     upon the deployment of a backup schedule (for example, Vault). It may be necessary to delete backups from a Kubernetes node to
-    clear this situation. See the output of the test for more details on how to cleanup backups that have failed due to a known
+    clear this situation. For more information on how to clean up backups that have failed due to a known interruption, see the output of the test. 
     interruption. For example:
 
      1. (`ncn#` or `pit#`) Find the failed backup.
