@@ -1,7 +1,7 @@
 #### Known issues with NCN health checks
 
 
-- It is possible that the first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes.
+- The first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes. In the case of failure, wait for five minutes and rerun the tests.
   In this case, please wait five minutes and re-run the tests.
 - For any failures related to SSL certificates, see the [SSL Certificate Validation Issues](ssl_certificate_validation_issues.md) troubleshooting guide.
 
