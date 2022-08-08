@@ -7,7 +7,7 @@
 
 - `Kubernetes Query BSS Cloud-init for ca-certs`
 
-  - This test may fail immediately after platform install. It should pass after the TrustedCerts operator has updated BSS
+  - This test may fail immediately after platform installation. It should pass after the `TrustedCerts` operator has updated BSS
     (Global `cloud-init` meta) with CA certificates.
 
 - `Kubernetes Velero No Failed Backups`
