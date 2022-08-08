@@ -24,7 +24,7 @@ The following test can be run on any Kubernetes node (any master or worker node,
   - The return code will be zero.
   - The final line of output will begin with `SUCCESS`.
     - For example: `SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs`
-- If one or more checks failed, then the following will be true:
+- If one or more checks are failed, the following will be true:
   - The return code will be non-zero.
   - The final line of output will begin with `FAILURE` and will list which checks failed.
     - For example: `FAILURE: 2 service tests FAILED (conman, ims), 5 passed (bos, cfs, crus, tftp, vcs)`
