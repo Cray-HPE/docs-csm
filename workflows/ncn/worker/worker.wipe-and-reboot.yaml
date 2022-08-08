@@ -68,7 +68,7 @@ tasks:
               # because a node might never pxe booted in the past
               # we set it to zero as default value
               bootscript_last_epoch=0
-              echo bootscript_last_epoch
+              echo $bootscript_last_epoch
             fi
   - name: set-next-boot-to-pxe
     templateRef:
