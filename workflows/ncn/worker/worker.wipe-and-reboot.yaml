@@ -51,7 +51,7 @@ tasks:
           value: |
             {{- include "common.envar" . | indent 12 }}
 
-            SSH_OPT="-i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+            SSH_OPT="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
             ssh $SSH_OPT "$TARGET_NCN" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"
             loop_idx=0
@@ -66,7 +66,7 @@ tasks:
                     in_sync=$(ssh $SSH_OPT "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
                     loop_idx=$(( loop_idx+1 ))
                 done
-                if [[ "$in_sync" == "no" ]]; then
+                if [[ "$in_sync" != "yes" ]]; then
                     exit 1
                 fi
             fi
