@@ -177,7 +177,7 @@ Upgrade sets of compute nodes with the Compute Rolling Upgrade Service \(CRUS\) 
 administrators to limit the impact on production caused from upgrading compute nodes by working through one step of the upgrade process at a time.
 
 > **NOTE** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
-See [Deprecated features](../introduction/differences.md#deprecated-features).
+> See [Deprecated features](../introduction/differences.md#deprecated-features).
 
 - [Compute Rolling Upgrade Service (CRUS)](compute_rolling_upgrades/Compute_Rolling_Upgrades.md)
 - [CRUS Workflow](compute_rolling_upgrades/CRUS_Workflow.md)
@@ -615,6 +615,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 - [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 - [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
 - [Xname Validation](spire/xname_validation.md)
+- [Restore Missing Spire Meta-Data](spire/Restore_Missing_Spire_Metadata.md)
 
 ## Update firmware with FAS
 
