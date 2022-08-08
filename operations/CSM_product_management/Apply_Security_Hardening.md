@@ -20,8 +20,8 @@ None.
 
 3. Limit Kubernetes Audit Log Retention.
 
-   If Kubernetes API Auditing was enabled at install, perform procedure(s) in [Limit Kubernetes API Audit Log Maximum Backups](../kubernetes/Limit_Kubernetes_API_Audit_Log_Maxbackups.md). 
-   
+   If Kubernetes API Auditing was enabled at install, perform procedure(s) in [Limit Kubernetes API Audit Log Maximum Backups](../kubernetes/Limit_Kubernetes_API_Audit_Log_Maxbackups.md).
+
    Failure to apply the referenced configuration could result in NCN disk space exhaustion on Kubernetes Master Nodes.
 
 4. (Optional) Change Keycloak OAuth token lifetime.
