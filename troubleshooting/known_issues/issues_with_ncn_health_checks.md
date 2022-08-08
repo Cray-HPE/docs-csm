@@ -15,7 +15,7 @@
   - Because of a [known issue  with Velero](https://github.com/vmware-tanzu/velero/issues/1980), a backup may be attempted immediately
     upon the deployment of a backup schedule (for example, Vault). It may be necessary to delete backups from a Kubernetes node to
     clear this situation. For more information on how to clean up backups that have failed due to a known interruption, see the output of the test. 
-    interruption. For example:
+    For example:
 
      1. (`ncn#` or `pit#`) Find the failed backup.
 
@@ -61,7 +61,7 @@
         renewncnjoin ncn-xxxx
         ```
 
-  - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens expired. If this happens, then delete
+  - The `spire-agent` service may also fail if an NCN was powered off for too long and its tokens are expired. If this happens, delete
     `/root/spire/agent_svid.der`, `/root/spire/bundle.der`, and `/root/spire/data/svid.key` off the NCN before deleting the
     `request-ncn-join-token` daemon set pod.
 
@@ -87,12 +87,12 @@
         /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
         ```
 
-     1. Then re-run the check to see if the problem has been resolved.
+     1. Rerun the check to see if the problem is resolved.
 
 - Clock skew test failures
 
-   It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is brought back up. If a clock skew test
-   fails, wait 15 minutes and try again.
+   It can take up to 15 minutes, and sometimes longer, for NCN clocks to synchronize after an upgrade or when a system is restored. If a clock skew test
+   fails, wait for 15 minutes, and try again.
 
    (`ncn-m001#`) To check status, run the following command, preferably on `ncn-m001`:
 
