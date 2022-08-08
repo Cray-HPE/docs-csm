@@ -8,7 +8,7 @@
 
 The test in this section requires that the [Cray CLI is configured](#0-cray-command-line-interface) on nodes where the test is executed.
 
-The following test can be run on any Kubernetes node (any master or worker node, but **not** the PIT node).
+The following test can be run on any Kubernetes node (any master or worker node, but **not** on the PIT node).
 
 ```bash
 /usr/local/bin/cmsdev test -q all
