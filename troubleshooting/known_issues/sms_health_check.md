@@ -28,7 +28,7 @@ The following test can be run on any Kubernetes node (any master or worker node,
   - The return code will be non-zero.
   - The final line of output will begin with `FAILURE` and lists the failed checks.
     - For example: `FAILURE: 2 service tests FAILED (conman, ims), 5 passed (bos, cfs, crus, tftp, vcs)`
-  - After remediating a test failure for a particular service, just that single service test can be re-run by replacing
+  - After remediating a test failure for a particular service, just that single service test can be rerun by replacing
     `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
 
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
