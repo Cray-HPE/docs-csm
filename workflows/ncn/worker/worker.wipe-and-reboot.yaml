@@ -39,9 +39,41 @@ tasks:
               echo "${TARGET_NCN} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
               exit 1
             fi
+  - name: "force-time-sync"
+    templateRef:
+      name: ssh-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            {{- include "common.envar" . | indent 12 }}
+
+            SSH_OPT="-i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+            ssh $SSH_OPT "$TARGET_NCN" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"
+            loop_idx=0
+            in_sync=$(ssh $SSH_OPT "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
+            if [[ "$in_sync" == "no" ]]; then
+                ssh $SSH_OPT "$TARGET_NCN" chronyc makestep
+                sleep 5
+                in_sync=$(ssh $SSH_OPT "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
+                # wait up to 90s for the node to be in sync
+                while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
+                    sleep 5
+                    in_sync=$(ssh $SSH_OPT "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
+                    loop_idx=$(( loop_idx+1 ))
+                done
+                if [[ "$in_sync" == "no" ]]; then
+                    exit 1
+                fi
+            fi
   - name: "get-bootscript-last-access-timestamp"
     dependencies:
       - validate-bss-ntp
+      - force-time-sync
     templateRef:
       name: kubectl-and-curl-template
       template: shell-script
