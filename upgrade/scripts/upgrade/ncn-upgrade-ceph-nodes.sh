@@ -106,10 +106,8 @@ state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    if [[ $ssh_keys_done == "0" ]]; then
-        ssh_keygen_keyscan "${target_ncn}"
-        ssh_keys_done=1
-    fi
+    ssh_keygen_keyscan "${target_ncn}"
+    ssh_keys_done=1
     scp ./${target_ncn}-ceph.tgz $target_ncn:/
     ssh ${target_ncn} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
     ssh ${target_ncn} '/srv/cray/scripts/common/pre-load-images.sh'
