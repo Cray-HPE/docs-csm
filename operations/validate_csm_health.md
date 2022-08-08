@@ -372,7 +372,7 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 
 ## 3 Software Management Services health checks
 
-Please run [this script](../scripts/operations/validation/ncn3.sh) to validate all resources
+To validate all resources, run [`ncn3.sh`](../scripts/operations/validation/ncn3.sh) script.
 
 ## 4. Gateway health and SSH access checks
 
