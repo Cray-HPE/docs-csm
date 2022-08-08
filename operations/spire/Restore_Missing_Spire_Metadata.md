@@ -15,7 +15,7 @@ to be rerun.
 
 ## Check
 
-Command:
+(`ncn-m#`) Run `goss-spire-bss-metadata-exist` goss test
 
 ```bash
 goss -g /opt/cray/tests/install/ncn/tests/goss-spire-bss-metadata-exist.yaml v
@@ -44,6 +44,8 @@ Count: 1, Failed: 1, Skipped: 0
 
 Run the following command on a master node to restart the job that populates
 the meta-data server with the correct spire information
+
+(`ncn-m#`) Re-run the spire-update-bss job
 
 ```bash
 JOB=$(kubectl get jobs -n spire -l app.kubernetes.io/name=spire-update-bss --no-headers -oname |sort -u | tail -n1); kubectl get -n spire $JOB -o json  | jq 'del(.spec.selector,.spec.template.metadata.labels)' | kubectl replace --force -f -
