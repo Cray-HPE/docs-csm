@@ -442,6 +442,8 @@ export TOKEN
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
+    ssh_keygen_keyscan "${target_ncn}"
+    ssh_keys_done=1
     ssh "$target_ncn" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"
     loop_idx=0
     in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
