@@ -1,8 +1,8 @@
-# Restore missing spire metadata
+# Restore missing Spire metadata
 
-If the BSS meta-data server does contain the proper spire meta-data then
+If the Boot Script Service (BSS) metadata server does contain the proper Spire metadata, then the
 computes will fail to boot. This is due to `dracut` pulling server data from the
-meta-data during startup. To fix this issue, the `spire-update-bss` job needs
+metadata during startup. To fix this issue, the `spire-update-bss` job needs
 to be rerun.
 
 ## Error
@@ -15,7 +15,7 @@ to be rerun.
 
 ## Check
 
-(`ncn-m#`) Run `goss-spire-bss-metadata-exist` test
+(`ncn-m#`) Run the `goss-spire-bss-metadata-exist` test.
 
 ```bash
 goss -g /opt/cray/tests/install/ncn/tests/goss-spire-bss-metadata-exist.yaml v
@@ -43,9 +43,9 @@ Count: 1, Failed: 1, Skipped: 0
 ## Solution
 
 Run the following command on a master node to restart the job that populates
-the meta-data server with the correct spire information
+the metadata server with the correct Spire information.
 
-(`ncn-m#`) Re-run the `spire-update-bss` job
+(`ncn-m#`) Re-run the `spire-update-bss` job.
 
 ```bash
 JOB=$(kubectl get jobs -n spire -l app.kubernetes.io/name=spire-update-bss --no-headers -oname |sort -u | tail -n1); kubectl get -n spire $JOB -o json  | jq 'del(.spec.selector,.spec.template.metadata.labels)' | kubectl replace --force -f -
