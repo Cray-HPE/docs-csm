@@ -35,9 +35,9 @@ retry=true
 force=false
 
 function usage() {
-    echo "CSM ncn worker upgrade script"
+    echo "CSM ncn worker and storage upgrade script"
     echo
-    echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run]"
+    echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run]"
     echo "options:"
     echo "--no-retry     Do not automatically retry  (default: false)"
     echo "-f|--force     Remove failed worker rebuild/upgrade workflow and create a new one  (default: ${force})"
@@ -45,8 +45,10 @@ function usage() {
     echo "--dry-run      Print out steps of workflow instead of running steps (default: ${dryRun})"
     echo
     echo "*COMMA_SEPARATED_NCN_HOSTNAMES"
-    echo "  example 1) ncn-w001"
-    echo "  example 2) ncn-w001,ncn-w002,ncn-w003"
+    echo "  worker upgrade  - example 1) ncn-w001"
+    echo "  worker upgrade  - example 2) ncn-w001,ncn-w002,ncn-w003"
+    echo "  storage upgrade - example 3) ncn-s001"
+    echo "  storage upgrade - example 4) ncn-s001,ncn-s002,ncn-s003"
     echo
 }
 
@@ -74,6 +76,14 @@ while [[ $# -gt 0 ]]; do
         shift # past argument
         IFS=', ' read -r -a array <<< "$target_ncns"
         jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
+        nodeType="worker"
+        ;;
+    ncn-s[0-9][0-9][0-9]*)
+        target_ncns=$1
+        shift # past argument
+        IFS=', ' read -r -a array <<< "$target_ncns"
+        jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
+        nodeType="storage"
         ;;
     *)
         echo 
@@ -94,18 +104,31 @@ function uploadWorkflowTemplates() {
 }
 
 function createWorkflowPayload() {
-    # ask for switch password if it's not set
-    if [[ -z "${SW_ADMIN_PASSWORD}" ]]; then
-    read -r -s -p "Switch password:" SW_ADMIN_PASSWORD
-    fi
-    echo
-    cat << EOF
+    if [[ ${nodeType} == "worker" ]]
+    then    
+        # ask for switch password if it's not set
+        if [[ -z "${SW_ADMIN_PASSWORD}" ]]; then
+        read -r -s -p "Switch password:" SW_ADMIN_PASSWORD
+        fi
+        echo
+        cat << EOF
 {
-  "dryRun": ${dryRun},
-  "hosts": ${jsonArray},
-  "switchPassword": "${SW_ADMIN_PASSWORD}"
+"dryRun": ${dryRun},
+"hosts": ${jsonArray},
+"switchPassword": "${SW_ADMIN_PASSWORD}"
 }
 EOF
+    fi
+    if [[ ${nodeType} == "storage" ]]
+    then    
+        echo
+        cat << EOF
+{
+"dryRun": ${dryRun},
+"hosts": ${jsonArray}
+}
+EOF
+    fi
 }
 
 function getToken() {
@@ -127,9 +150,9 @@ function printCmdArgs() {
     echo "============================================================="
 }
 
-function getUnsucceededWorkerRebuildWorkflows() {
+function getUnsucceededRebuildWorkflows() {
     res_file=$(mktemp)
-    local labelSelector="node-type=worker,workflows.argoproj.io/phase!=Succeeded"
+    local labelSelector="node-type=${nodeType},workflows.argoproj.io/phase!=Succeeded"
     http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}")
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
@@ -176,7 +199,7 @@ function retryRebuildWorkflow() {
 printCmdArgs
 uploadWorkflowTemplates
 # shellcheck disable=SC2207
-unsucceededWorkflows=($(getUnsucceededWorkerRebuildWorkflows))
+unsucceededWorkflows=($(getUnsucceededRebuildWorkflows))
 numOfUnsucceededWorkflows="${#unsucceededWorkflows[*]}"
 
 if [[ ${numOfUnsucceededWorkflows} -gt 1 ]]; then
@@ -219,7 +242,7 @@ sleep 20
 
 # poll
 while true; do
-    labelSelector="node-type=worker"
+    labelSelector="node-type=${nodeType}"
     res_file="$(mktemp)"
     http_status=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}")
     
