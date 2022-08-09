@@ -483,13 +483,9 @@ information for this system has not yet been prepared.
 > **Note:**: It is assumed at this point that `$PITDATA` (that is, `/mnt/pitdata`) is still mounted on the Linux system. This is important because the following procedure
 > depends on that mount existing.
 
-1. Install Git if not already installed (recommended).
+1. Install Git if not already installed.
 
-   Although not strictly required, the procedures for setting up the
-   `site-init` directory recommend persisting `site-init` files in a Git
-   repository.
-
-2. Prepare the `site-init` directory.
+1. Prepare the `site-init` directory.
 
    Perform the [Prepare `Site Init`](prepare_site_init.md) procedures.
 
@@ -736,7 +732,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
 
    ```bash
-   pit# script -af /var/www/ephemeral/prep/admin/booted-csm-livecd.$(date +%Y-%m-%d).txt
+   pit# script -af "${PITDATA}/prep/admin/booted-csm-livecd.$(date +%Y-%m-%d).txt"
    pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
@@ -835,8 +831,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    The following assumes the `CSM_PATH` environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1) \
-                         $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
 <a name="next-topic"></a>

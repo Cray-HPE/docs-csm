@@ -32,8 +32,11 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
 
-    See [Create a storage pool](../../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
-    and [Create and map an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
+    1. [Create a storage pool](../../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool).
+
+    1. [Create and map an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
+
+    1. [Mount an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#mount-an-rbd-device).
 
     **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
     However, the `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
