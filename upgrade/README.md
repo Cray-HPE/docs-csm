@@ -26,21 +26,19 @@ The upgrade is a guided process starting with [Upgrade Management Nodes and CSM 
 
 ## 3. Validate CSM health
 
- **`NOTE`**
-
 - Before performing the health validation, be sure that at least 15 minutes have elapsed
   since the CSM services were upgraded. This allows the various Kubernetes resources to
   initialize and start.
-- If the site does not use UAIs, skip UAS and UAI validation. If UAIs are used, there are
-  products that configure UAS like Cray Analytics and Cray Programming Environment that
-  must be working correctly with UAIs, and should be validated (the procedures for this are
-  beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
+- If the site does not use UAIs, then skip UAS and UAI validation. If UAIs are used, then
+  before validating UAS and UAI, first validate any products that configure UAS (such as
+  Cray Analytics and Cray Programming Environment); the procedures for this are
+  beyond the scope of this document. Failures in UAI creation that result
   from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
-  waiting state trying to set up volume mounts.
-- Performing the [Booting CSM `barebones` image](../operations/validate_csm_health.md#5-booting-csm-barebones-image) test may be skipped if no
-  compute nodes are available (but only if all compute nodes are active running application workloads).
+  `waiting` state, trying to set up volume mounts.
+- Although it is not recommended, the [Booting CSM `barebones` image](../operations/validate_csm_health.md#5-booting-csm-barebones-image)
+  test may be skipped if all compute nodes are active running application workloads.
 
- See [Validate CSM Health](../operations/validate_csm_health.md)
+See [Validate CSM Health](../operations/validate_csm_health.md).
 
 ## 4. Next topic
 
@@ -50,6 +48,6 @@ on the [HPE Customer Support Center](https://www.hpe.com/support/ex-gsg)
 for more information on other product streams to be upgraded and configured after CSM.
 
 > **`NOTE`** If a newer version of the HPE Cray EX HPC Firmware Pack (HFP) is available, then the next step
-would be to install HFP which will inform the Firmware Action Services (FAS) of the newest firmware
+is to install HFP. This will inform the Firmware Action Services (FAS) of the newest firmware
 available. Once FAS is aware that new firmware is available, then see
 [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).

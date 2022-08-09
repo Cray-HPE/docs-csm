@@ -416,16 +416,16 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
            update -y cray-site-init
        ```
 
-   1. Install `csm-testing` and `goss-servers`.
+   1. Install `csm-testing` RPM.
 
-       > ***NOTE*** These packages provide the necessary tests and their dependencies for validating the pre-installation, installation, and more.
+       > ***NOTE*** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
 
        ```bash
        zypper \
            --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
            --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
            --no-gpg-checks \
-           install -y csm-testing goss-servers
+           install -y csm-testing
       ```
 
 1. (`pit#`) Get the artifact versions.
