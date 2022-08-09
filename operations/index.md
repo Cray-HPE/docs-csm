@@ -260,6 +260,7 @@ As a result, the system's micro-services are modular, resilient, and can be upda
   - [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
   - [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
 - [Troubleshoot Intermittent HTTP 503 Code Failures](kubernetes/Troubleshoot_Intermittent_503s.md)
+- [Configure API Audit Log Retention](kubernetes/Limit_Kubernetes_API_Audit_Log_Maxbackups.md)
 
 ## Package repository management
 
@@ -608,6 +609,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 - [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
 - [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 - [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
+- [Restore Missing Spire Meta-Data](spire/Restore_Missing_Spire_Metadata.md)
 
 ## Update firmware with FAS
 

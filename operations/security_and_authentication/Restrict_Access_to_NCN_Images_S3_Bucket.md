@@ -298,7 +298,7 @@ The configuration applied in this procedure was tested against barebones images 
 
     ```bash
     ncn-m001# cat haproxy.conf 
-    ncn-m001# Collect log with UDP
+    # Collect log with UDP
     $ModLoad imudp
     $UDPServerAddress 127.0.0.1
     $UDPServerRun 514
@@ -439,7 +439,7 @@ The configuration applied in this procedure was tested against barebones images 
 
       The process is written to support change on individual nodes, but could be scripted after analysis of the running firewall rule set (notably with respect to local modifications, if they exist).
 
-      This process must be completed on each storage node (steps 19 - 22).
+      This process must be completed on each storage node (steps 19 - 22) before continuing to subsequent steps.
 
 19. Document where Rados GW is running (port wise).
 
@@ -584,7 +584,7 @@ The configuration applied in this procedure was tested against barebones images 
          do
             curl_rept "curl $CURL_O ncn-s00${n}.${t}:8080" # ceph rados
             curl_rept "curl $CURL_O http://ncn-s00${n}.${t}/ncn-images/" # ncn images, http
-            curl_rept "curl $CURL_O-k  https://ncn-s00${n}.${t}/ncn-images/" # ncn images, https
+            curl_rept "curl $CURL_O -k  https://ncn-s00${n}.${t}/ncn-images/" # ncn images, https
          done
       done
 
