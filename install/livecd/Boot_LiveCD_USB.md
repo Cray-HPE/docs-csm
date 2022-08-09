@@ -40,7 +40,7 @@ which device will be used for it.
 
    In the above example, internal disks are the `ATA` devices and USB drives are the final two devices.
 
-   Set a variable with the USB device:
+   Set a variable with the USB device and for the `CSM_PATH`:
 
    ```bash
    USB=/dev/sd<disk_letter>
@@ -51,7 +51,7 @@ which device will be used for it.
     - Use the CSI application to do this:
 
         ```bash
-        csi pit format "${USB}" "${CSM_PATH}/"cray-pre-install-toolkit-*.iso 50000
+        csi pit format "${USB}" cray-pre-install-toolkit-*.iso 50000
         ```
 
     - If CSI is unavailable, then fetch and use the `write-livecd.sh` script:
@@ -76,7 +76,7 @@ which device will be used for it.
         >
 
         ```bash
-        write-livecd.sh "${USB}" "${CSM_PATH}/"cray-pre-install-toolkit-*.iso 50000
+        write-livecd.sh "${USB}" cray-pre-install-toolkit-*.iso 50000
         ```
 
 ## Boot the LiveCD
