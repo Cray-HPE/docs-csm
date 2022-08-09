@@ -92,12 +92,33 @@ spec:
     - name: main
       dag:
         tasks:
+          - name: check-ceph-ro-key
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    for node in $(ceph orch host ls --format=json|jq -r '.[].hostname'); do
+                      ceph_ro_key_exists=$(ssh $node [[ -f /etc/ceph/ceph.client.ro.keyring ]] && echo 0 || echo 1)
+                      if [[ $ceph_ro_key_exists -ne 0 ]]; then
+                        # ceph ro key does not exist so create it
+                        ceph-authtool -C /etc/ceph/ceph.client.ro.keyring -n client.ro --cap mon 'allow r' --cap mds 'allow r' --cap osd 'allow r' --cap mgr 'allow r' --gen-key
+                        ceph auth import -i /etc/ceph/ceph.client.ro.keyring
+                        for node in $(ceph orch host ls --format=json|jq -r '.[].hostname'); do scp /etc/ceph/ceph.client.ro.keyring $node:/etc/ceph/ceph.client.ro.keyring; done
+                        break;
+                      fi
+                    done
           {{- range $index,$value := .TargetNcns}}
           - name: upgrade-{{$value}}
             templateRef:
               name: ssh-template
               template: shell-script
             dependencies: 
+              - check-ceph-ro-key
               # each upgrade depends on previous upgrade action and success
               # so we make sure only one node is drained at a time
               {{ if ne $index 0 }}
