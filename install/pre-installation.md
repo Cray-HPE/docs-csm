@@ -285,8 +285,8 @@ These variables will need to be set for many procedures within the CSM installat
 1. (`pit#`) Create the `admin` directory for the typescripts and administrative scratch work.
 
    ```bash
-   mkdir -pv "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
-   ls -l "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
+   mkdir -pv "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/prep/admin"
+   ls -l "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/prep/admin"
    ```
 
 1. (`pit#`) Exit the typescript and log out.
@@ -319,8 +319,8 @@ These variables will need to be set for many procedures within the CSM installat
 1. (`pit#`) Copy the previous typescript and start a new one.
 
    ```bash
-   cp -pv /tmp/boot.livecd.*.txt "${PITDATA}/admin"
-   script -af "${PITDATA}/admin/csm-install.$(date +%Y-%m-%d).txt"
+   cp -pv /tmp/boot.livecd.*.txt "${PITDATA}/prep/admin"
+   script -af "${PITDATA}/prep/admin/csm-install.$(date +%Y-%m-%d).txt"
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
