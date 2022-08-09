@@ -86,7 +86,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
    ```bash
    pit# SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=spire-update-bss -o name)
-   pit# kubectl -n spire get $SPIRE_JOB -o json | jq 'del(.spec.selector)' \
+   pit# kubectl -n spire get "${SPIRE_JOB}" -o json | jq 'del(.spec.selector)' \
             | jq 'del(.spec.template.metadata.labels."controller-uid")' \
             | kubectl replace --force -f -
    ```
@@ -94,7 +94,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 1. Wait for the `spire-update-bss` job to complete.
 
    ```bash
-   pit# kubectl -n spire wait  $SPIRE_JOB --for=condition=complete --timeout=5m
+   pit# kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
    ```
 
 ## 3. Wait for everything to settle

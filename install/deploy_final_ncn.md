@@ -461,6 +461,15 @@ The steps in this section load hand-off data before a later procedure reboots th
     ncn-m002# exit
     ```
 
+1. SSH back into `ncn-m001` or restart a local console.
+
+1. Resume the typescript.
+
+    ```bash
+    ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
+    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    ```
+
 1. Apply the `kdump` workaround.
 
     `kdump` assists in taking a dump of the NCN if it encounters a kernel panic.
@@ -499,7 +508,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     ncn-w002
     ncn-w003
     ncn-w004
-    This hotfix has completed.
+    This workaround has completed.
     ```
 
 <a name="enable-ncn-disk-wiping-safeguard"></a>
@@ -508,15 +517,6 @@ The steps in this section load hand-off data before a later procedure reboots th
 
 The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because
 it is used for Cray installation and bootstrap.
-
-1. SSH back into `ncn-m001` or restart a local console.
-
-1. Resume the typescript.
-
-    ```bash
-    ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
-    ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-    ```
 
 1. Obtain access to CSI.
 
