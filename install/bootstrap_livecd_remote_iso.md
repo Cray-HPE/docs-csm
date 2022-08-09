@@ -588,7 +588,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
    pit# /root/bin/configure-ntp.sh
    ```
 
-1. Check that our services are ready and investigate any test failures.
+1. Check that the services are ready and investigate any test failures.
 
    ```bash
    pit# csi pit validate --services

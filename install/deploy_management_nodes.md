@@ -20,27 +20,27 @@ the number of storage and worker nodes.
 
 ## Topics
 
-   1. [Prepare for management node deployment](#1-prepare-for-management-node-deployment)
-      1. [Tokens and IPMI password](#11-tokens-and-ipmi-password)
-      2. [Apply NCN pre-boot workarounds](#12-apply-ncn-pre-boot-workarounds)
-      3. [Ensure time is accurate before deploying NCNs](#13-ensure-time-is-accurate-before-deploying-ncns)
-   2. [Update management node firmware](#2-update-management-node-firmware)
-   3. [Deploy management nodes](#3-deploy-management-nodes)
-      1. [Deploy workflow](#31-deploy-workflow)
-      2. [Deploy](#32-deploy)
-      3. [Check LVM on Kubernetes NCNs](#33-check-lvm-on-kubernetes-ncns)
-      4. [Check for unused drives on utility storage nodes](#34-check-for-unused-drives-on-utility-storage-nodes)
-      5. [Apply NCN post-boot workarounds](#35-apply-ncn-post-boot-workarounds)
-   4. [Configure after management node deployment](#4-configure-after-management-node-deployment)
-      1. [LiveCD cluster authentication](#41-livecd-cluster-authentication)
-      2. [BGP routing](#42-bgp-routing)
-      3. [Install tests and test server on NCNs](#43-install-tests-and-test-server-on-ncns)
-      4. [Remove the default NTP pool](#44-remove-the-default-ntp-pool)
-   5. [Validate management node deployment](#5-validate-management-node-deployment)
-      1. [Validation](#51-validation)
-      2. [Optional validation](#52-optional-validation)
-   6. [Important checkpoint](#important-checkpoint)
-   7. [Next topic](#next-topic)
+1. [Prepare for management node deployment](#1-prepare-for-management-node-deployment)
+   1. [Tokens and IPMI password](#11-tokens-and-ipmi-password)
+   1. [Apply NCN pre-boot workarounds](#12-apply-ncn-pre-boot-workarounds)
+   1. [Ensure time is accurate before deploying NCNs](#13-ensure-time-is-accurate-before-deploying-ncns)
+1. [Update management node firmware](#2-update-management-node-firmware)
+1. [Deploy management nodes](#3-deploy-management-nodes)
+   1. [Deploy workflow](#31-deploy-workflow)
+   1. [Deploy](#32-deploy)
+   1. [Check LVM on Kubernetes NCNs](#33-check-lvm-on-kubernetes-ncns)
+   1. [Check for unused drives on utility storage nodes](#34-check-for-unused-drives-on-utility-storage-nodes)
+   1. [Apply NCN post-boot workarounds](#35-apply-ncn-post-boot-workarounds)
+1. [Configure after management node deployment](#4-configure-after-management-node-deployment)
+   1. [LiveCD cluster authentication](#41-livecd-cluster-authentication)
+   1. [BGP routing](#42-bgp-routing)
+   1. [Install tests and test server on NCNs](#43-install-tests-and-test-server-on-ncns)
+   1. [Remove the default NTP pool](#44-remove-the-default-ntp-pool)
+1. [Validate management node deployment](#5-validate-management-node-deployment)
+   1. [Validation](#51-validation)
+   1. [Optional validation](#52-optional-validation)
+1. [Important checkpoint](#important-checkpoint)
+1. [Next topic](#next-topic)
 
 <a name="prepare_for_management_node_deployment"></a>
 
@@ -333,6 +333,7 @@ be performed are in the [Deploy](#deploy) section.
     > re-run the `set-sqfs-links.sh` script.
 
 1. Customize boot scripts for any out-of-baseline NCNs
+
     * **Worker nodes** with more than two small disks need to make adjustments to [prevent bare-metal `etcd` creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd).
     * For a brief overview of what is expected, see [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline).
 
@@ -476,13 +477,117 @@ be performed are in the [Deploy](#deploy) section.
     ncn-w003   Ready    <none>   5m58s   v1.18.6   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP2   5.3.18-24.43-default   containerd://1.3.4
     ```
 
-1. Stop watching the console from `ncn-m002`.
+1. Stop watching the console of `ncn-m002`.
 
     Type the ampersand character and then the period character to exit from the conman session on `ncn-m002`.
 
     ```text
     &.
     pit#
+    ```
+
+1. Enable passwordless SSH for the PIT node.
+
+    1. Copy SSH files from `ncn-m002` to the PIT node.
+
+        > When the following command prompts for a password, enter the root password for `ncn-m002`.
+
+        ```ShellSession
+        pit# rsync -av ncn-m002:.ssh/ /root/.ssh/
+        ```
+
+        Expected output looks similar to the following:
+
+        ```text
+        Password:
+        receiving incremental file list
+        ./
+        authorized_keys
+        id_rsa
+        id_rsa.pub
+        known_hosts
+
+        sent 145 bytes  received 13,107 bytes  3,786.29 bytes/sec
+        total size is 12,806  speedup is 0.97
+        ```
+
+    1. Make a list of all of the NCNs (including `ncn-m001`).
+
+        ```ShellSession
+        pit# NCNS=$(grep -oP "ncn-[msw][0-9]{3}" /etc/dnsmasq.d/statics.conf | sort -u | tr '\n' ',') ; echo "${NCNS}"
+        ```
+
+        Expected output looks similar to the following:
+
+        ```text
+        ncn-m001,ncn-m002,ncn-m003,ncn-s001,ncn-s002,ncn-s003,ncn-w001,ncn-w002,ncn-w003,
+        ```
+
+    1. Verify that passwordless SSH is now working from the PIT node to the other NCNs.
+
+        The following command should not prompt for a password.
+
+        ```ShellSession
+        pit# PDSH_SSH_ARGS_APPEND='-o StrictHostKeyChecking=no' pdsh -Sw "${NCNS}" date && echo SUCCESS || echo ERROR
+        ```
+
+        Expected output looks similar to the following:
+
+        ```text
+        ncn-w001: Warning: Permanently added 'ncn-w001,10.252.1.7' (ECDSA) to the list of known hosts.
+        ncn-w003: Warning: Permanently added 'ncn-w003,10.252.1.9' (ECDSA) to the list of known hosts.
+        ncn-m003: Warning: Permanently added 'ncn-m003,10.252.1.6' (ECDSA) to the list of known hosts.
+        ncn-s002: Warning: Permanently added 'ncn-s002,10.252.1.11' (ECDSA) to the list of known hosts.
+        ncn-m001: Warning: Permanently added 'ncn-m001,10.252.1.4' (ECDSA) to the list of known hosts.
+        ncn-w002: Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
+        ncn-m002: Warning: Permanently added 'ncn-m002,10.252.1.5' (ECDSA) to the list of known hosts.
+        ncn-s003: Warning: Permanently added 'ncn-s003,10.252.1.12' (ECDSA) to the list of known hosts.
+        ncn-s001: Warning: Permanently added 'ncn-s001,10.252.1.10' (ECDSA) to the list of known hosts.
+        ncn-s003: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-s001: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-s002: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-m001: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-m003: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-m002: Thu 28 Apr 2022 02:43:21 PM UTC
+        ncn-w001: Thu 28 Apr 2022 02:43:22 PM UTC
+        ncn-w002: Thu 28 Apr 2022 02:43:22 PM UTC
+        ncn-w003: Thu 28 Apr 2022 02:43:22 PM UTC
+        SUCCESS
+        ```
+
+        <a name="check-lvm-on-masters-and-workers"></a>
+
+1. Validate that the expected LVM labels are present on disks on the master and worker nodes.
+
+    ```bash
+    pit# /usr/share/doc/csm/install/scripts/check_lvm.sh
+    ```
+
+    Expected output looks similar to the following:
+
+    ```text
+    When prompted, please enter the NCN password for ncn-m002
+    Warning: Permanently added 'ncn-m002,10.252.1.11' (ECDSA) to the list of known hosts.
+    Password:
+    Checking ncn-m002...
+    ncn-m002: OK
+    Checking ncn-m003...
+    Warning: Permanently added 'ncn-m003,10.252.1.10' (ECDSA) to the list of known hosts.
+    Warning: Permanently added 'ncn-m003,10.252.1.10' (ECDSA) to the list of known hosts.
+    ncn-m003: OK
+    Checking ncn-w001...
+    Warning: Permanently added 'ncn-w001,10.252.1.9' (ECDSA) to the list of known hosts.
+    Warning: Permanently added 'ncn-w001,10.252.1.9' (ECDSA) to the list of known hosts.
+    ncn-w001: OK
+    Checking ncn-w002...
+    Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
+    Warning: Permanently added 'ncn-w002,10.252.1.8' (ECDSA) to the list of known hosts.
+    ncn-w002: OK
+    Checking ncn-w003...
+    Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list of known hosts.
+    Warning: Permanently added 'ncn-w003,10.252.1.7' (ECDSA) to the list of known hosts.
+    ncn-w003: OK
+    SUCCESS: LVM checks passed on all master and worker NCNs
     ```
 
 <a name="check-lvm-on-masters-and-workers"></a>
@@ -578,7 +683,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 
-### 3.4 Check for unused drives on utility storage nodes
+### 3.3 Check for unused drives on utility storage nodes
 
 > **IMPORTANT:** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
 >

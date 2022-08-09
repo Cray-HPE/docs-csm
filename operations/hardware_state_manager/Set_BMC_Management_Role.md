@@ -79,6 +79,8 @@ Use the `cray hsm state components bulkRole update` command to perform setting r
    ncn-mw# cray hsm state components bulkRole update --role Management --component-ids "${BMCList}"
    ```
 
+   This command gives no output when it completes successfully.
+
 ### How to set BMC management roles on specific BMCs of management nodes
 
 1. Set the `Management` role for specific BMCs.
@@ -86,3 +88,5 @@ Use the `cray hsm state components bulkRole update` command to perform setting r
    ```bash
    ncn-mw# cray hsm state components bulkRole update --role Management --component-ids x3000c0s8b0
    ```
+
+   This command gives no output when it completes successfully.
