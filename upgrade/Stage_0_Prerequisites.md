@@ -6,10 +6,7 @@
 > - If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 >   [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-Stage 0 has several critical procedures which prepares and verify if the environment is ready for upgrade. First, the latest documentation RPM is installed; it includes
-critical install scripts used in the upgrade procedure.
-The management network configuration is also upgraded. Towards the end, prerequisite checks are performed to ensure that the upgrade is ready to proceed. Finally, a
-backup of Workload Manager configuration data and files is created. Once complete, the upgrade proceeds to Stage 1.
+Stage 0 has several critical procedures which prepare the environment and verify if the environment is ready for the upgrade.
 
 - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
   - [Direct download](#direct-download)
@@ -31,8 +28,11 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
 
-    See [Create a storage pool](../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
-    and [Create and map an `rbd` device](../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
+    1. [Create a storage pool](../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool).
+
+    1. [Create and map an `rbd` device](../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
+
+    1. [Mount an `rbd` device](../operations/utility_storage/Alternate_Storage_Pools.md#mount-an-rbd-device).
 
     **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
     However, the `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.

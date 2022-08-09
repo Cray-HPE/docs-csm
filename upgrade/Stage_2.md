@@ -1,4 +1,4 @@
-# Stage 2 - Kubernetes Upgrade from 1.19.9 to 1.20.13
+# Stage 2 - Kubernetes Upgrade
 
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
@@ -13,7 +13,7 @@
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
    ```
 
-   > **`NOTE`** The root password for the node may need to be reset after it is rebooted.
+   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
@@ -29,24 +29,32 @@
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001
    ```
 
-   > **`NOTE`** The root password for the node may need to be reset after it is rebooted.
+   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
 
 1. Repeat the previous steps for each other worker node, one at a time.
 
-### Option 2
+### Option 2 (Tech preview)
 
-> **`Tech Preview`**
->>
->> You can also upgrade multiple workers at the same time with comma separated list. Note that in some cases, you can't rebuild all workers in one request. It is system admin's responsibility to make sure a multiple workers request meets following conditions:
->>
->> 1. If your system has more than 5 workers, you can't rebuild `ncn-w001,ncn-w002 and ncn-w003` together in one request. You will need at least two requests (example: rebuild `ncn-w001,ncn-w003,ncn-w004,...` first and then rebuild `ncn-w002,ncn-w003,...`)
->> 2. If your system has more that 5 workers, you can't rebuild all workers that has DVS running in one request.
->
-> ```bash
-> /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w001,ncn-w002,ncn-w003
->```
->
->>
+Multiple workers can be upgraded simultaneously by passing them as a comma-separated list into the upgrade script.
+
+#### Restrictions
+
+In some cases, it is not possible to upgrade all workers in one request. It is system administrator's responsibility to
+make sure that the following conditions are met:
+
+* If the system has more than five workers, then they cannot all be upgraded with a single request.
+
+    In this case, the upgrade should be split into multiple requests, with each request specifying no more than five workers.
+
+* No single upgrade request should include all of the worker nodes that have DVS running on them.
+
+#### Example
+
+(`ncn-m001#`) An example of a single request to upgrade multiple worker nodes simultaneously:
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-nodes.sh ncn-w002,ncn-w003,ncn-w004
+```
 
 ## Stage 2.3
 
