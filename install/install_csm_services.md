@@ -260,82 +260,81 @@ duplicate assets. This is okay as long as `setup-nexus.sh` outputs
 
 ## 6. Set management NCNs to use Unbound
 
-First, verify that SLS properly reports all management NCNs in the system:
+1. Verify that SLS properly reports all management NCNs in the system.
 
-```bash
-pit# ./lib/list-ncns.sh
-```
+    ```bash
+    pit# ./lib/list-ncns.sh
+    ```
 
-On success, each management NCN will be output, e.g.:
+    On success, each management NCN will be output. For example:
 
-```text
-+ Getting admin-client-auth secret
-+ Obtaining access token
-+ Querying SLS
-ncn-m001
-ncn-m002
-ncn-m003
-ncn-s001
-ncn-s002
-ncn-s003
-ncn-w001
-ncn-w002
-ncn-w003
-```
+    ```text
+    + Getting admin-client-auth secret
+    + Obtaining access token
+    + Querying SLS
+    ncn-m001
+    ncn-m002
+    ncn-m003
+    ncn-s001
+    ncn-s002
+    ncn-s003
+    ncn-w001
+    ncn-w002
+    ncn-w003
+    ```
 
-If any management NCNs are missing from the output, then take corrective action before
-proceeding.
+    If any management NCNs are missing from the output, then take corrective action before proceeding.
 
-Next, run `lib/set-ncns-to-unbound.sh` to SSH to each management NCN and update
-`/etc/resolv.conf` to use `Unbound` as the `nameserver`.
+1. Update management NCNs to use Unbound for DNS.
 
-```bash
-pit# ./lib/set-ncns-to-unbound.sh
-```
+    ```bash
+    pit# ./lib/set-ncns-to-unbound.sh
+    ```
 
-> **`NOTE`** If passwordless SSH is not configured, then the administrator will have
-> to enter the corresponding password as the script attempts to connect to each
-> NCN.
+    > **`NOTES`**
+    >
+    > * If passwordless SSH is not configured, then the administrator will have
+    >   to enter the corresponding password as the script attempts to connect to each
+    >   NCN.
+    > * The script connects to `ncn-m001` which will be the PIT node; the PIT node
+    >   password may be different from that of the other NCNs.
 
-On success, the `nameserver` configuration in `/etc/resolv.conf` will be printed
-for each management NCN, e.g.,:
+    On success, the `nameserver` configuration in `/etc/resolv.conf` will be printed
+    for each management NCN. For example:
 
-```text
-+ Getting admin-client-auth secret
-+ Obtaining access token
-+ Querying SLS
-+ Updating ncn-m001
-Password:
-ncn-m001: nameserver 127.0.0.1
-ncn-m001: nameserver 10.92.100.225
-+ Updating ncn-m002
-Password:
-ncn-m002: nameserver 10.92.100.225
-+ Updating ncn-m003
-Password:
-ncn-m003: nameserver 10.92.100.225
-+ Updating ncn-s001
-Password:
-ncn-s001: nameserver 10.92.100.225
-+ Updating ncn-s002
-Password:
-ncn-s002: nameserver 10.92.100.225
-+ Updating ncn-s003
-Password:
-ncn-s003: nameserver 10.92.100.225
-+ Updating ncn-w001
-Password:
-ncn-w001: nameserver 10.92.100.225
-+ Updating ncn-w002
-Password:
-ncn-w002: nameserver 10.92.100.225
-+ Updating ncn-w003
-Password:
-ncn-w003: nameserver 10.92.100.225
-```
-
-> **`NOTE`** The script connects to `ncn-m001` which will be the PIT node, whose
-> password may be different from that of the other NCNs.
+    ```text
+    + Getting admin-client-auth secret
+    + Obtaining access token
+    + Querying SLS
+    + Updating ncn-m001
+    Password:
+    ncn-m001: nameserver 127.0.0.1
+    ncn-m001: nameserver 10.92.100.225
+    + Updating ncn-m002
+    Password:
+    ncn-m002: nameserver 10.92.100.225
+    + Updating ncn-m003
+    Password:
+    ncn-m003: nameserver 10.92.100.225
+    + Updating ncn-s001
+    Password:
+    ncn-s001: nameserver 10.92.100.225
+    + Updating ncn-s002
+    Password:
+    ncn-s002: nameserver 10.92.100.225
+    + Updating ncn-s003
+    Password:
+    ncn-s003: nameserver 10.92.100.225
+    + Updating ncn-w001
+    Password:
+    ncn-w001: nameserver 10.92.100.225
+    + Updating ncn-w002
+    Password:
+    ncn-w002: nameserver 10.92.100.225
+    + Updating ncn-w003
+    Password:
+    ncn-w003: nameserver 10.92.100.225
+    ```
 
 ## 7. Apply pod priorities
 
@@ -344,6 +343,11 @@ This will give these services a higher priority than others to ensure they get s
 
 ```bash
 pit# /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/add_pod_priority.sh
+```
+
+Example output:
+
+```text
 Creating csm-high-priority-service pod priority class
 priorityclass.scheduling.k8s.io/csm-high-priority-service configured
 

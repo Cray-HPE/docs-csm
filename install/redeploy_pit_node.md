@@ -490,13 +490,6 @@ The steps in this section load hand-off data before a later procedure reboots th
     ncn-m002# exit
     ```
 
-<a name="enable-ncn-disk-wiping-safeguard"></a>
-
-## 5. Enable NCN disk wiping safeguard
-
-The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because
-it is used for Cray installation and bootstrap.
-
 1. SSH back into `ncn-m001` or restart a local console.
 
 1. Resume the typescript.
@@ -505,6 +498,13 @@ it is used for Cray installation and bootstrap.
     ncn-m001# script -af /metal/bootstrap/prep/admin/csm-verify.$(date +%Y-%m-%d).txt
     ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
+
+<a name="enable-ncn-disk-wiping-safeguard"></a>
+
+## 5. Enable NCN disk wiping safeguard
+
+The next steps require `csi` from the installation media. `csi` will not be provided on an NCN otherwise because
+it is used for Cray installation and bootstrap.
 
 1. Obtain access to CSI.
 
@@ -622,7 +622,7 @@ Perform the following steps **on `ncn-m001`**.
     ncn-m001# ssh ncn-m001 date
     ```
 
-1. Run the script to ensure the local `BOOTRAID` has a valid kernel and initrd.
+1. Run the script to ensure the local `BOOTRAID` has a valid kernel and `initrd`.
 
     This script will perform the check on all NCNs, including `ncn-m001`.
 

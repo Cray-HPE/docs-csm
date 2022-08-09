@@ -22,9 +22,9 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
 
       ```bash
-      ncn-m001# sdu --scenario triage --start_time '-4 hours' \
-      --reason "saving state before powerdown/up"
+      ncn-m001# sdu --scenario triage --start_time '-4 hours' --reason "saving state before powerdown/up"
       ```
+
       Refer to the HPE Cray EX System Dump Utility (SDU) Administration Guide for more information and troubleshooting steps.
 
    1. Check Ceph status.
@@ -47,35 +47,37 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ncn-m001# egrep -v "Run|Completed" k8s.pods | tee k8s.pods.errors
       ```
 
-1. Check for running sessions.
+1. Check for BOS, CFS, CRUS, FAS, or NMD sessions.
 
-    Ensure that these services do not have any sessions in progress: BOS, CFS, CRUS, FAS, or NMD.
-    > This SAT command has `shutdown` as one of the command line options, but it will not start a shutdown process on the system.
+    1. Ensure that these services do not have any sessions in progress.
 
-    ```bash
-    ncn-m001# sat bootsys shutdown --stage session-checks
-    ```
+        > This SAT command has `shutdown` as one of the command line options, but it will not start a shutdown process on the system.
 
-    Example output:
-    ```text
-    Checking for active BOS sessions.
-    Found no active BOS sessions.
-    Checking for active CFS sessions.
-    Found no active CFS sessions.
-    Checking for active CRUS upgrades.
-    Found no active CRUS upgrades.
-    Checking for active FAS actions.
-    Found no active FAS actions.
-    Checking for active NMD dumps.
-    Found no active NMD dumps.
-    No active sessions exist. It is safe to proceed with the shutdown procedure.
-    ```
+        ```bash
+        ncn-m001# sat bootsys shutdown --stage session-checks
+        ```
 
-    If active sessions are running, either wait for them to complete or shut down/cancel/delete the session.
+        Example output:
 
-1. Coordinate with the site to prevent new sessions from starting in the services listed (BOS, CFS, CRUS, FAS, NMD).
+        ```text
+        Checking for active BOS sessions.
+        Found no active BOS sessions.
+        Checking for active CFS sessions.
+        Found no active CFS sessions.
+        Checking for active CRUS upgrades.
+        Found no active CRUS upgrades.
+        Checking for active FAS actions.
+        Found no active FAS actions.
+        Checking for active NMD dumps.
+        Found no active NMD dumps.
+        No active sessions exist. It is safe to proceed with the shutdown procedure.
+        ```
 
-    There is currently no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
+        If active sessions are running, then either wait for them to complete or shut down, cancel, or delete them.
+
+    1. Coordinate with the site to prevent new sessions from starting in these services.
+
+        There is currently no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
 1. Validate CSM Health
 
@@ -86,18 +88,20 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
    application workloads. However, **it is recommended to do this test if possible**, because it validates that boot services
    are still working properly.
 
-   * If upgrading **from CSM 1.0 (Shasta 1.5)**, follow the [Validate CSM Health](../operations/validate_csm_health.md) procedures.
+   * If upgrading **from CSM 1.0 (Shasta 1.5)**, then follow the [Validate CSM Health](../operations/validate_csm_health.md) procedures.
 
-   * If upgrading **from CSM 0.9 (Shasta 1.4)**, see the [CSM Install Validation and Health Checks](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/008-CSM-VALIDATION.md) procedures **`in the CSM 0.9 documentation`**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
+   * If upgrading **from CSM 0.9 (Shasta 1.4)**, then see the
+     [CSM Install Validation and Health Checks](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/008-CSM-VALIDATION.md) procedures
+     **`in the CSM 0.9 documentation`**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
 
 1. Validate Lustre Health
 
    If a Lustre file system is being used, see the ClusterStor documentation for details on how to check
    for Lustre health. Here are a few commands which could be used to validate Lustre health. This example
-   is for a ClusterStor providing the cls01234 filesystem.
+   is for a ClusterStor providing the `cls01234` filesystem.
 
    1. SSH to the primary management node.
-      For example, on system cls01234.
+      For example, on system `cls01234`.
 
       ```bash
       remote$ ssh -l admin cls01234n000.systemname.com
@@ -110,6 +114,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```
 
       Example output:
+
       ```text
       ----------------
       cls01234n000
@@ -148,6 +153,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
       ```
 
       Example output:
+
       ```text
       cls01234n000: Thu Aug 7 01:29:28 PDT 2014
       cls01234n003: Thu Aug 7 01:29:28 PDT 2014
