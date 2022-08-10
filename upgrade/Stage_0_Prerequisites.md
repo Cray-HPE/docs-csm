@@ -50,7 +50,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
     procedure. Therefore, **if using an `rbd` device to store the CSM tarball**, then copy the tarball to a different location and point to that location
     when running the `prepare-assets.sh` script.
 
-2. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
+1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
    - If there is a URL for the CSM `tar` file that is accessible from `ncn-m001`, then the [Direct download](#direct-download) procedure may be used.
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m001`.
