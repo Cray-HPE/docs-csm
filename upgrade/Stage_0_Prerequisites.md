@@ -27,19 +27,17 @@ Stage 0 has several critical procedures which prepare the environment and verify
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
+1. Use `csm_rbd_tool.py` to create the pool, device, and mount the device.
 
-    1. Use csm_rbd_tool.py to create the pool, device, and mount the device.
-
-       ```bash
-       source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-       /usr/share/doc/csm/scripts --pool_action create --rbd_action create --target_host ncn-m001
-       deactivate
-       ```
+    ```bash
+    source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
+    /usr/share/doc/csm/scripts --pool_action create --rbd_action create --target_host ncn-m001
+    deactivate
+    ```
 
     **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
 
-    example:
+    Example:
 
     ```bash
    source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
