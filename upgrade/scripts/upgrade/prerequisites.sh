@@ -327,6 +327,70 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPGRADE_KYVERNO"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    manifest_folder='/tmp'
+    kyverno_version=$(ls ${CSM_ARTI_DIR}/helm |grep cray-kyverno|sed -e 's/\.[^./]*$//'|cut -d '-' -f3)
+    if [ -z "$kyverno_version" ]; then
+      echo "ERROR: null value found.  See the variable"
+      echo "kyverno_version is $kyverno_version."
+      exit 1
+    fi
+    cat > $manifest_folder/kyverno.yaml <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: cray-kyverno
+spec:
+  charts:
+  - name: cray-kyverno
+    namespace: kyverno
+    source: csm
+    version: $kyverno_version
+EOF
+    echo "$manifest_folder/kyverno.yaml"
+    cat $manifest_folder/kyverno.yaml
+    loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path $manifest_folder/kyverno.yaml
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPGRADE_KYVERNO_POLICY"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    manifest_folder='/tmp'
+    kyverno_policy_version=$(ls ${CSM_ARTI_DIR}/helm |grep kyverno-policy|sed -e 's/\.[^./]*$//'|cut -d '-' -f3)
+    if [ -z "$kyverno_policy_version" ]; then
+      echo "ERROR: null value found.  See the variable"
+      echo "kyverno_policy_version is $kyverno_policy_version."
+      exit 1
+    fi
+    cat > $manifest_folder/kyverno-policy.yaml <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: kyverno-policy
+spec:
+  charts:
+  - name: kyverno-policy
+    namespace: kyverno
+    source: csm
+    version: $kyverno_policy_version
+EOF
+    echo "$manifest_folder/kyverno-policy.yaml"
+    cat $manifest_folder/kyverno-policy.yaml
+    loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path $manifest_folder/kyverno-policy.yaml
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
