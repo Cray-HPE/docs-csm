@@ -267,9 +267,6 @@ if [[ ${state_recorded} == "0" ]]; then
             done
         else
             target_ncn_mgmt_host="${target_ncn}-mgmt"
-            if [[ ${target_ncn} == "ncn-m001" ]]; then
-                target_ncn_mgmt_host=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ncn-m001 "ipmitool lan print | grep 'IP Address' | grep -v 'Source'"  | awk -F ": " '{print $2}')
-            fi
             echo "mgmt IP/Host: ${target_ncn_mgmt_host}"
 
             # retrieve IPMI username/password from vault
