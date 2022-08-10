@@ -227,23 +227,12 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# export SW_ADMIN_PASSWORD
    ```
 
-1. Prevent the use of the `rpcrdma` modules **only if needed**.
+1. Prevent the use of the `rpcrdma` module.
 
-   This step is required if the Kubernetes worker nodes on the system contain Mellanox ConnectX-4
-   network cards.
+   This step is required. The `rpcrdma` kernel module needs to be ignored so that it does not interfere
+   with Slingshot Host Software.
 
-   1. Determine if Mellanox ConnectX-4 network cards are in use.
-
-       ```bash
-       ncn-m001# ssh ncn-w001 lspci | grep ConnectX-4
-       ```
-
-   If no output is emitted, then skip the following sub-step and continue to the next step.
-
-   1. Run the following script to add the necessary parameters to the kernel command line on the worker nodes.
-
-       On worker nodes containing ConnectX-4 network interface cards, the `rpcrdma` kernel module needs
-       to be ignored so that it does not interfere with Slingshot Host Software.
+   Run the following script to add the necessary parameters to the kernel command line on the worker nodes.
 
    ```bash
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/blacklist-kernel-modules.sh
