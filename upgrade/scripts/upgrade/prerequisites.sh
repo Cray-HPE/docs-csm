@@ -304,6 +304,17 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
+    set +e
+    nexus-cred-check () {
+        pod=$(kubectl get pods -n nexus --selector app=nexus -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep -v nexus-init);
+        kubectl -n nexus exec -it $pod -c nexus -- curl -i -sfk -u "admin:${NEXUS_PASSWORD:=$(kubectl get secret -n nexus nexus-admin-credential --template '{{.data.password}}' | base64 -d)}" \
+         -H "accept: application/json" -X GET http://nexus/service/rest/beta/security/user-sources >/dev/null 2>&1; 
+    } 
+    if ! nexus-cred-check; then
+        echo "Nexus password is incorrect. Please set NEXUS_PASSWORD and try again."
+        exit 1
+    fi
+    set -e
     ${CSM_ARTI_DIR}/lib/setup-nexus.sh
 
     } >> ${LOG_FILE} 2>&1

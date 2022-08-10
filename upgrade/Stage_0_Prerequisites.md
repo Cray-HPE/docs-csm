@@ -149,9 +149,9 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
 1. (`ncn-m001#`) Set the `NEXUS_PASSWORD` variable **only if needed**.
 
-   > **IMPORTANT:** If the password for the local Nexus `admin` account has
-   > been changed from the default `admin123` (not typical), then set the
-   > `NEXUS_PASSWORD` environment variable to the correct `admin` password
+   > **IMPORTANT:** If the password for the local Nexus `admin` account has been
+   > changed from the password set in the `nexus-admin-credential` secret (not typical),
+   > then set the `NEXUS_PASSWORD` environment variable to the correct `admin` password
    > and export it, before running `prerequisites.sh`.
    >
    > For example:
@@ -163,8 +163,8 @@ Stage 0 has several critical procedures which prepare the environment and verify
    > export NEXUS_PASSWORD
    > ```
    >
-   > Otherwise, a random 32-character base-64-encoded string will be generated
-   > and updated as the default `admin` password when Nexus is upgraded.
+   > Otherwise, the upgrade will try to use the password in the `nexus-admin-credential`
+   > secret and fail to upgrade Nexus.
 
 1. (`ncn-m001#`) Run the script.
 
