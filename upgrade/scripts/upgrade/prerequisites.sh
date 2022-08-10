@@ -338,6 +338,20 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPGRADE_SPIRE"
+#shellcheck disable=SC2046
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+        "${locOfScript}"/util/upgrade-spire.sh
+    } >> ${LOG_FILE} 2>&1
+    #shellcheck disable=SC2046
+    record_state ${state_name} $(hostname)
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPGRADE_KYVERNO"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
