@@ -444,10 +444,6 @@ def main():
                         required=False,
                         default='',
                         help='The CSM version being installed or upgraded to.  This is used for the rbd device name.')
-    parser.add_argument('--scope',
-                        required=False,
-                        default=['all'],
-                        help='The scope used for deleting a csm tarball rbd device.  This is useful if testing multiple csm minor release upgrades.')
 
     args = parser.parse_args()
 
@@ -463,7 +459,6 @@ def main():
     """
     rbd_name = "csm_scratch_img"
     rbd_devices = [rbd_name]
-    scope = "all"
     managers = ['ncn-s001', 'ncn-s002', 'ncn-s003']
     mnt_path = "/etc/cray/upgrade/csm"
     pool = "csm_admin_pool"
