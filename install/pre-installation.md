@@ -642,6 +642,12 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
 1. (`pit#`) Setup boot links to the artifacts extracted from the CSM tarball.
 
+   1. Patch the `set-sqfs-links.sh` script to include the blacklisting of an undesired kernel module.
+
+        ```bash
+        sed -i -E 's:rd.luks=0 /:rd.luks=0 module_blacklist=rpcrdma \/:g' /root/bin/set-sqfs-links.sh
+        ```
+
    > ***NOTES***
    >
    > - This will also set all the BMCs to DHCP.

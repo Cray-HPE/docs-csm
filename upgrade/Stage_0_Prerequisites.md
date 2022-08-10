@@ -147,6 +147,16 @@ Stage 0 has several critical procedures which prepare the environment and verify
    export SW_ADMIN_PASSWORD
    ```
 
+1. (`ncn-m001#`) Prevent the use of the `rpcrdma` modules.
+
+   This step is required. The `rpcrdma` kernel module needs to be ignored so that it does not interfere with Slingshot Host Software.
+
+   Run the following script to add the necessary parameters to the kernel command line on the worker nodes.
+
+   ```bash
+   /usr/share/doc/csm/upgrade/scripts/k8s/blacklist-kernel-modules.sh
+   ```
+
 1. (`ncn-m001#`) Set the `NEXUS_PASSWORD` variable **only if needed**.
 
    > **IMPORTANT:** If the password for the local Nexus `admin` account has
