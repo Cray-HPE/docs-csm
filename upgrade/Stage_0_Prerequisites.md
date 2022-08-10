@@ -8,14 +8,15 @@
 
 Stage 0 has several critical procedures which prepare the environment and verify if the environment is ready for the upgrade.
 
-- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
-  - [Direct download](#direct-download)
-  - [Manual copy](#manual-copy)
-- [Stage 0.2 - Upgrade management network](#stage-02---upgrade-management-network)
-  - [Verify that switches have 1.2 configuration in place](#verify-that-switches-have-12-configuration-in-place)
-- [Stage 0.3 - Prerequisites check](#stage-03---prerequisites-check)
-- [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
-- [Stage completed](#stage-completed)
+- [Stage 0 - Prerequisites and Preflight Checks](#stage-0---prerequisites-and-preflight-checks)
+  - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+    - [Direct download](#direct-download)
+    - [Manual copy](#manual-copy)
+  - [Stage 0.2 - Upgrade management network](#stage-02---upgrade-management-network)
+    - [Verify that switches have 1.2 configuration in place](#verify-that-switches-have-12-configuration-in-place)
+  - [Stage 0.3 - Prerequisites check](#stage-03---prerequisites-check)
+  - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+  - [Stage completed](#stage-completed)
 
 ## Stage 0.1 - Prepare assets
 
@@ -28,19 +29,30 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
 1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
 
-    1. [Create a storage pool](../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool).
+    1. Use csm_rbd_tool.py to create the pool, device, and mount the device.
 
-    1. [Create and map an `rbd` device](../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
-
-    1. [Mount an `rbd` device](../operations/utility_storage/Alternate_Storage_Pools.md#mount-an-rbd-device).
+       ```bash
+       source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
+       /usr/share/doc/csm/scripts --pool_action create --rbd_action create --target_host ncn-m001
+       deactivate
+       ```
 
     **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
+
+    example:
+
+    ```bash
+   source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
+   /usr/share/doc/csm/scripts --rbd_action move --target_host ncn-m002
+   deactivate
+    ```
+
     However, the `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
     If using an `rbd` device, this is not necessary or desirable, as it will require the CSM tarball to be downloaded again later in the
     procedure. Therefore, **if using an `rbd` device to store the CSM tarball**, then copy the tarball to a different location and point to that location
     when running the `prepare-assets.sh` script.
 
-1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
+2. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
    - If there is a URL for the CSM `tar` file that is accessible from `ncn-m001`, then the [Direct download](#direct-download) procedure may be used.
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m001`.
