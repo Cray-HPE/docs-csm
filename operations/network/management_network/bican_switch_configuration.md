@@ -79,7 +79,7 @@ sw-spine-002: |
 
 Generate switch configurations with custom configurations.  (Arista Only)
 
-This is an example only.  More details on how to generate configurations with CANU can be found [Generate Switch Configurations](generate_switch_configs.md)
+This is an example only. More details on how to generate configurations with CANU can be found in the [Generate Switch Configurations](generate_switch_configs.md) procedure.
 
 ```bash
     canu generate network config --ccj ./ccj.json --sls-file ./sls_input_file.json --csm 1.3 --folder ./1.3 --custom-config ./custom_switch_config.yaml
