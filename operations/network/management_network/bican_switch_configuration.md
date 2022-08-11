@@ -7,7 +7,7 @@ Validate cabling and generate switch configurations for BICAN.
 - Customer edge router is cabled to the HSN as described in slingshot docs.
 - Customer edge router is cabled to the management network.
 - Below is an SHCD example of how the edge switches should be cabled to the management network.
-- Note: the last line with the mgmt ports will need to be excluded from CANU validate/generate.  CANU currently does not support mgmt ports.
+- Note: the last line with the management ports will need to be excluded from CANU validate/generate.  CANU currently does not support management ports.
 
 ![CHN](../../../img/network/edge_shcd.png "CHN Cabling")
 
