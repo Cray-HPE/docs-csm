@@ -12,7 +12,7 @@
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. Move the RBD device containing the csm tarball.
+1. Move the RBD device containing the CSM tarball.
 
     ```bash
    /usr/share/doc/csm/scripts/csm_rbd_tool/csm_rbd_tool.py --rbd_action move --target_host ncn-m002

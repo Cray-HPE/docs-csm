@@ -45,7 +45,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
     **IMPORTANT:** This will mount the `rbd` device at `/etc/cray/upgrade/csm` on the desired node.
 
-2. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
+1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
    - If there is a URL for the CSM `tar` file that is accessible from `ncn-m001`, then the [Direct download](#direct-download) procedure may be used.
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m001`.
