@@ -47,7 +47,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
       Example output:
 
-      ```
+      ```text
       +----------------+-----------+-------------+---------+--------------------+
       | xname          | Aliases   | Role        | SubRole | Desired Config     |
       +----------------+-----------+-------------+---------+--------------------+
@@ -67,7 +67,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
       Example output:
 
-      ```
+      ```text
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
@@ -79,7 +79,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
       Example output:
 
-      ```
+      ```text
       templateName = "cos-2.3.101"
       ```
 
@@ -91,7 +91,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
       Example output:
 
-      ```
+      ```text
       node_roles_groups = [ "Compute",]
       ```
 
@@ -183,7 +183,7 @@ An authentication token is required to access the API gateway and to use the `sa
       ```
 
    1. Check management switches to verify they are reachable.
- 
+
       > *Note:* The switch host names depend on the system configuration.
 
       1. Look in `/etc/hosts` for the management network switches on this system. The names of
@@ -257,34 +257,34 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1. Cancel the running BOS sessions.
 
-    1. Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
+   1. Identify the BOS Sessions and associated BOA Kubernetes jobs to delete.
 
-       Determine which BOS session(s) to cancel. To cancel a BOS session, kill
-       its associated Boot Orchestration Agent (BOA) Kubernetes job.
+      Determine which BOS session(s) to cancel. To cancel a BOS session, kill
+      its associated Boot Orchestration Agent (BOA) Kubernetes job.
 
-       To find a list of BOA jobs that are still running:
+      To find a list of BOA jobs that are still running:
 
-       ```bash
-       ncn# kubectl -n services get jobs|egrep -i "boa|Name"
-       ```
+      ```bash
+      ncn# kubectl -n services get jobs|egrep -i "boa|Name"
+      ```
 
-       Output similar to the following will be returned:
+      Output similar to the following will be returned:
 
-       ```text
-       NAME                                       COMPLETIONS   DURATION   AGE
-       boa-0216d2d9-b2bc-41b0-960d-165d2af7a742   0/1           36m        36m
-       boa-0dbd7adb-fe53-4cda-bf0b-c47b0c111c9f   1/1           36m        3d5h
-       boa-4274b117-826a-4d8b-ac20-800fcac9afcc   1/1           36m        3d7h
-       boa-504dd626-d566-4f58-9974-3c50573146d6   1/1           8m47s      3d5h
-       boa-bae3fc19-7d91-44fc-a1ad-999e03f1daef   1/1           36m        3d7h
-       boa-bd95dc0b-8cb2-4ad4-8673-bb4cc8cae9b0   1/1           36m        3d7h
-       boa-ccdd1c29-cbd2-45df-8e7f-540d0c9cf453   1/1           35m        3d5h
-       boa-e0543eb5-3445-4ee0-93ec-c53e3d1832ce   1/1           36m        3d5h
-       boa-e0fca5e3-b671-4184-aa21-84feba50e85f   1/1           36m        3d5h
-       ```
+      ```text
+      NAME                                       COMPLETIONS   DURATION   AGE
+      boa-0216d2d9-b2bc-41b0-960d-165d2af7a742   0/1           36m        36m
+      boa-0dbd7adb-fe53-4cda-bf0b-c47b0c111c9f   1/1           36m        3d5h
+      boa-4274b117-826a-4d8b-ac20-800fcac9afcc   1/1           36m        3d7h
+      boa-504dd626-d566-4f58-9974-3c50573146d6   1/1           8m47s      3d5h
+      boa-bae3fc19-7d91-44fc-a1ad-999e03f1daef   1/1           36m        3d7h
+      boa-bd95dc0b-8cb2-4ad4-8673-bb4cc8cae9b0   1/1           36m        3d7h
+      boa-ccdd1c29-cbd2-45df-8e7f-540d0c9cf453   1/1           35m        3d5h
+      boa-e0543eb5-3445-4ee0-93ec-c53e3d1832ce   1/1           36m        3d5h
+      boa-e0fca5e3-b671-4184-aa21-84feba50e85f   1/1           36m        3d5h
+      ```
 
-       Any job with a `0/1` `COMPLETIONS` column is still running and is a candidate to be forcibly deleted.
-       The BOA Job ID appears in the NAME column.
+      Any job with a `0/1` `COMPLETIONS` column is still running and is a candidate to be forcibly deleted.
+      The BOA Job ID appears in the NAME column.
 
    1. Clean up prior to BOA job deletion.
 
