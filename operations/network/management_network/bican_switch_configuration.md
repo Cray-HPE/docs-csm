@@ -1,6 +1,6 @@
 # BICAN Switch Configuration
 
-Validate cabling and generate switch configs for BICAN.
+Validate cabling and generate switch configurations for BICAN.
 
 ## Cabling Requirements
 
@@ -17,7 +17,7 @@ Topology Example
 
 ## Switch Configuration
 
-### Prerequesites
+### Prerequisites
 
 - SLS Updated
 - CANU 1.6.14
@@ -77,9 +77,9 @@ sw-spine-002: |
 
 ### Generate
 
-Generate switch configurations with custom configs.  (Arista Only)
+Generate switch configurations with custom configurations.  (Arista Only)
 
-This is an example only.  More details on how to generate configs with CANU can be found [Generate Switch Configs](generate_switch_configs.md)
+This is an example only.  More details on how to generate configurations with CANU can be found [Generate Switch Configurations](generate_switch_configs.md)
 
 ```bash
     canu generate network config --ccj ./ccj.json --sls-file ./sls_input_file.json --csm 1.3 --folder ./1.3 --custom-config ./custom_switch_config.yaml
@@ -90,8 +90,8 @@ This is an example only.  More details on how to generate configs with CANU can 
     sw-leaf-bmc-001 Config Generated
 ```
 
-1. Validate and apply switch configs to management network switches.  EXCLUDING the edge switches.  [Validate Switch Configs](validate_switch_configs.md)
-2. Apply the generated edge switch configs.  This is NOT a full config, the configuration generated is only what is needed for CHN.  This switch should already be setup from the slingshot docs.
+1. Validate and apply switch configurations to management network switches.  EXCLUDING the edge switches.  [Validate Switch Configurations](validate_switch_configs.md)
+2. Apply the generated edge switch configurations.  This is NOT a full config, the configuration generated is only what is needed for CHN.  This switch should already be setup from the slingshot docs.
 
 EXAMPLE of a full running configuration of two spines and two edge switches, This config should be not be copied and should be used as a general reference only. [BI-CAN Aruba/Arista Configuration
 ](../customer_accessible_networks/bi-can_arista_aruba_config.md)
