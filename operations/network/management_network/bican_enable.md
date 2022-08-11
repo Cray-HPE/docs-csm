@@ -37,7 +37,6 @@
 ### Configure SLS
 
 Configuration for the default route of a BICAN enabled system is contained in the System Layout Service (SLS) BICAN data structure in the `SystemDefaultRoute` attribute value.
-This structure was created and its value set during [Prerequisites Stage 0.2](../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-02---update-sls), and can be either `CAN` or `CHN`.
 
 > The commands in this section can be run on any master or worker NCN with the CSM documentation RPM installed. See
 > [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).

@@ -22,9 +22,9 @@ Topology Example
 - SLS Updated
 - CANU 1.6.14
 - Update CCJ
-- Custom switch config
+- Custom switch configuration
 
-### Custom Switch Config
+### Custom Switch Configuration
 
 - Custom switch configuration is injected into the management network switch configuration when it's generated from CANU.
 - Most sites require custom configuration for the site connection.
@@ -91,7 +91,7 @@ This is an example only.  More details on how to generate configurations with CA
 ```
 
 1. Validate and apply switch configurations to management network switches.  EXCLUDING the edge switches.  [Validate Switch Configurations](validate_switch_configs.md)
-2. Apply the generated edge switch configurations.  This is NOT a full config, the configuration generated is only what is needed for CHN.  This switch should already be setup from the slingshot docs.
+2. Apply the generated edge switch configurations.  This is NOT a full configuration, the configuration generated is only what is needed for CHN.  This switch should already be setup from the slingshot docs.
 
-EXAMPLE of a full running configuration of two spines and two edge switches, This config should be not be copied and should be used as a general reference only. [BI-CAN Aruba/Arista Configuration
+EXAMPLE of a full running configuration of two spines and two edge switches, This configuration should be not be copied and should be used as a general reference only. [BI-CAN Aruba/Arista Configuration
 ](../customer_accessible_networks/bi-can_arista_aruba_config.md)
