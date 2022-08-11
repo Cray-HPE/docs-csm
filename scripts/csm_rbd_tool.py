@@ -121,9 +121,14 @@ def dir_exists(local_host, mnt_path, manager):
             if is_dir == '0':
                 return is_dir
             else:
-                Connection(manager,
+                mkdir_results = Connection(manager,
                      connect_kwargs={"key_filename":"/root/.ssh/id_rsa"}).run('mkdir -pv %s' % mnt_path)
+                is_dir = mkdir_results.stdout
+                if is_dir == '0':
+                     return is_dir
+
         except:
+            is_dir = 1
             return is_dir
 
 def fs_exists(local_host, device, watcher_name):
@@ -482,8 +487,11 @@ def main():
 
     if args.status:
         print('Pool %s exists: %s ' % (pool, pool_exists))
-        if is_mounted(local_host, mnt_path, watcher_name[0]):
-            print('RBD device mounted at - %s:%s' % (watcher_name[0], mnt_path))
+        print('RBD device exists %s ' % dev_exists)
+        if dev_exists:
+            if is_mounted(local_host, mnt_path, watcher_name[0]):
+                print('RBD device mounted at - %s:%s' % (watcher_name[0], mnt_path))
+        exit(0)
 
     if args.pool_action == 'delete' or args.rbd_action == "delete":
         if args.rbd_action == "delete" and dev_exists:
