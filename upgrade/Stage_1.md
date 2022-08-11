@@ -12,7 +12,7 @@
     ```
 
 > **`NOTE`**
->> It is possible to upgrade a single storage node at a time using the following command. 
+> It is possible to upgrade a single storage node at a time using the following command.
 >
 >```bash
 > /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001
