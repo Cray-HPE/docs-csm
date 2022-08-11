@@ -120,6 +120,7 @@ def dir_exists(local_host, mnt_path, manager):
             is_dir = cmd_results.stdout
             if is_dir == '0':
                 return is_dir
+
         except:
             mkdir_results = Connection(manager,
                  connect_kwargs={"key_filename":"/root/.ssh/id_rsa"}).run('mkdir -pv %s' % mnt_path)
@@ -495,12 +496,17 @@ def main():
             if watcher == 'N':
                 device_remove(pool, rbd_name)
             else:
+                test, watcher_ip, watcher_name = is_watched(pool, rbd_name)
                 if mounted:
                     device_unmount(local_host, mnt_path, watcher_name[0])
-                if is_watched(pool, rbd_name):
+                    time.sleep(5)
+                    test, watcher_ip, watcher_name = is_watched(pool, rbd_name)
+                if test:
                     device_unmap(local_host, pool, rbd_name, watcher_name[0])
+                    time.sleep(5)
+                    test, watcher_ip, watcher_name = is_watched(pool, rbd_name)
                 device_remove(pool, rbd_name)
-                while dev_exists:
+                while dev_exists and not test:
                   time.sleep(5)
                   dev_exists = rbd_exists(pool, rbd_name)
 
@@ -516,7 +522,10 @@ def main():
                         watcher = 'None'
                     if watcher != 'None' and watcher in managers:
                         device_unmount(local_host, mnt_path, watcher_name[0])
-                        device_unmap(local_host, pool, rbd_name, watcher_name[0])
+                        time.sleep(5)
+                        test, watcher_ip, watcher_name = is_watched(pool, rbd_name)
+                        if test:
+                            device_unmap(local_host, pool, rbd_name, watcher_name[0])
                     device_remove(pool, rbd_name)
                 pool_maint(args.pool_action, pool)
             elif not pool_status:
