@@ -97,7 +97,6 @@ The following diagram illustrates the UAN timeline before, during, and after the
 
 Concretely, users on a running UAN may be transitioned from the CMN to the new CAN between the two following upgrade points:
 
-1. Before [UANs are booted with new images](../../boot_orchestration/Boot_UANs.md).
 
 ### Configure UAI
 
