@@ -115,33 +115,18 @@ def dir_exists(local_host, mnt_path, manager):
 
     else:
         try:
-            print('in try')
             cmd_results = Connection(manager,
                 connect_kwargs={"key_filename":"/root/.ssh/id_rsa"}).run('test -d %s' % mnt_path)
             is_dir = cmd_results.stdout
-            print('is_dir = %s' % is_dir)
             if is_dir == '0':
                 return is_dir
-            #else:
-            #    print('in try else')
-            #    mkdir_results = Connection(manager,
-            #         connect_kwargs={"key_filename":"/root/.ssh/id_rsa"}).run('mkdir -pv %s' % mnt_path)
-            #    is_dir = mkdir_results.stdout
-            #    if is_dir == '0':
-            #         return is_dir
-
         except:
-            print('in try else')
             mkdir_results = Connection(manager,
                  connect_kwargs={"key_filename":"/root/.ssh/id_rsa"}).run('mkdir -pv %s' % mnt_path)
             is_dir = mkdir_results.stdout
             if is_dir == '0':
                  return is_dir
                  
-            #print('in except')
-            #is_dir = 1
-            #return is_dir
-
 def fs_exists(local_host, device, watcher_name):
     if local_host == watcher_name:
         results = subprocess.getoutput("file -s %s" % device)
