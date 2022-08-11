@@ -94,4 +94,4 @@ This is an example only. More details on how to generate configurations with CAN
 2. Apply the generated edge switch configurations. This is NOT a full configuration, the configuration generated is only what is needed for CHN. This switch should already be setup from the Slingshot documentation.
 
 The following is an example of a full running configuration of two spines and two edge switches. This configuration should be not be copied and should be used as a general reference only. Refer to [BI-CAN Aruba/Arista Configuration
-](../customer_accessible_networks/bi-can_arista_aruba_config.md)
+](../customer_accessible_networks/bi-can_arista_aruba_config.md) for more information.
