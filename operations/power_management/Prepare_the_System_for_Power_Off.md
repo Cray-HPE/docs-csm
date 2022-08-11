@@ -187,7 +187,7 @@ An authentication token is required to access the API gateway and to use the `sa
       > *Note:* The switch host names depend on the system configuration.
 
       1. Look in `/etc/hosts` for the management network switches on this system. The names of
-      all spine switches, leaf switches, leaf BMC switches, and CDU switches need ot be used in
+      all spine switches, leaf switches, leaf BMC switches, and CDU switches need to be used in
       the next step.
 
       ```bash

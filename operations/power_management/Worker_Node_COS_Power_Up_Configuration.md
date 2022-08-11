@@ -89,7 +89,7 @@ the COS 2.3 layer to address this problem.
 
        Otherwise, do not continue in this procedure.
 
-1. Check out cos-config-management from VCS.
+1. Check out `cos-config-management` from VCS.
 
    **Important:** The rest of this procedure is only needed when the Lustre filesystems failed to mount as checked in the previous step.
 
@@ -165,7 +165,7 @@ the COS 2.3 layer to address this problem.
 
 1. Create a new `ncn-powerup.yml` playbook
 
-   Copy the ncn-upgrade.yml playbook to ncn-powerup.yml.
+   Copy the `ncn-upgrade.yml` playbook to `ncn-powerup.yml`.
    Edit the file with two changes.
    * Change serial parameter from `1` node to `100%`
    * Comment all roles after the ones with names ending in uninstall, unmount, and unload. See the example below.

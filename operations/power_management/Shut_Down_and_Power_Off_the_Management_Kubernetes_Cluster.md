@@ -231,13 +231,14 @@ An authentication token is required to access the API gateway and to use the `sa
    26444.SAT-console-ncn-w001-mgmt (Detached)
    ```
 
+   Attache to one of the screen sessions.
    ```
    ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
    ```
 
 1. Use `ipmitool` to check the power off status of management nodes.
 
-    > NOTE: `read -s` is used to read the password in order to prevent it from being
+    > NOTE: The `read -s` command is used to read the password in order to prevent it from being
     > echoed to the screen or preserved in the shell history.
 
     ```bash

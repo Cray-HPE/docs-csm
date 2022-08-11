@@ -1,6 +1,6 @@
 # Save Management Network Switch Configuration Settings
 
-This procedure should be used for the management network switches as well as eny edge routers and storage switches.
+This procedure should be used for the management network switches as well as any edge routers and storage switches.
 Switches must be powered on and operating. This procedure is optional if switch configurations have not changed.
 
 **Optional Task:** Save management network switch configurations before removing power from cabinets or the CDU. Management switch names are listed in the `/etc/hosts` file.

@@ -27,7 +27,7 @@ The appropriate token must be retrieved from the gateway to access services on t
 
         In the example below, replace `myuser`, `mypass`, and `shasta` in the cURL command with site-specific values. The `shasta` client is created during the SMS install process.
 
-        In the following example, the python -mjson.tool is not required, it is simply used to format the output for readability.
+        In the following example, the python `-mjson.tool` is not required, it is simply used to format the output for readability.
 
         ```bash
         ncn-w001# curl -s \
