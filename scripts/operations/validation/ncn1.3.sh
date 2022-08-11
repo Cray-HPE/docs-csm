@@ -19,13 +19,11 @@ sleep 2s
 echo "--------------------------------"
 
 #Download Goss yaml configuration file
-wget -O goss.yaml-q https://raw.githubusercontent.com/Cray-HPE/csm-testing/main/goss-testing/tests/ncn/goss-check-system-management-tools.yaml
+mkdir -p /tmp/goss
+cd /tmp/goss
+wget -q https://raw.githubusercontent.com/Cray-HPE/csm-testing/CASMINST-v1.3/goss-testing/suites/ncn-csm-health-validation.yaml
 
 #Execute goss checks
-echo "Autmated tests of components..."
-goss validate 
+echo "Automated tests of components..."
+goss -g ncn-csm-health-validation.yaml validate 
 echo "--------------------------------"
-sleep 10s
-
- #Information
- echo "Plerase go to https://github.com/Cray-HPE/docs-csm/blob/CASMINST-5067/troubleshooting/known_issues/check_system_management_monitoring_tools.md for remediation steps on failed items above"
