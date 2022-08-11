@@ -11,7 +11,7 @@ Validate cabling and generate switch configurations for BICAN.
 
 ![CHN](../../../img/network/edge_shcd.png "CHN Cabling")
 
-Topology Example
+Topology example:
 
 ![Topology](../../../img/network/bican_cable.png)
 
