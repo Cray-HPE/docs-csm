@@ -219,7 +219,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
    Example output:
 
-   ```
+   ```text
    There are screens on:
    26745.SAT-console-ncn-m003-mgmt (Detached)
    26706.SAT-console-ncn-m002-mgmt (Detached)
@@ -231,8 +231,8 @@ An authentication token is required to access the API gateway and to use the `sa
    26444.SAT-console-ncn-w001-mgmt (Detached)
    ```
 
-   Attache to one of the screen sessions.
-   ```
+   Attach to one of the screen sessions.
+   ```bash
    ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
    ```
 
