@@ -43,6 +43,11 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         egrep -v "Run|Completed" k8s.pods | tee k8s.pods.errors
         ```
 
+1. Recommended backup/export of some services
+
+    1. Backup Nexus data. Refer to [Nexus Export and Restore](../operations/package_repository_management/Nexus_Export_and_Restore.md) to export Nexus data.
+       This will take around 1 hour for every 60 GiB of data in the `nexus-data` PVC. This is recommended to take prior to running any upgrade steps.
+
 1. Check for BOS, CFS, CRUS, FAS, or NMD sessions.
 
     1. (`ncn-m001#`) Ensure that these services do not have any sessions in progress.
