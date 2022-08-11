@@ -1,4 +1,4 @@
-# BICAN Switch Configuration
+# BICAN switch configuration
 
 Validate cabling and generate switch configurations for BICAN.
 
