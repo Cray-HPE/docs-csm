@@ -9,10 +9,6 @@ will obtain an API token from Keycloak and then use that token to attempt to acc
 more networks, as defined in the gateway test definition file (`gateway-test-defn.yaml`). The test will check the
 return code to make sure it gets the expected response.
 
-When the `nmnlb` network is tested, the test will use `api-gw-service-nmn.local` as an override for
-`nmnlb.<system-domain>` in CSM v1.2. Optionally, setting `use-api-gw-override: false` in `gateway-test-defn.yaml`
-disables that override, and the test will use `nmnlb.<system-domain>`.
-
 ## Topics
 
 - [Running Gateway Tests on an NCN Management Node](#running-gateway-tests-on-an-ncn-management-node)
