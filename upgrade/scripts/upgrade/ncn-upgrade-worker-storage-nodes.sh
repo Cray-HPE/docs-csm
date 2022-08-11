@@ -40,7 +40,7 @@ function usage() {
     echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run]"
     echo "options:"
     echo "--no-retry     Do not automatically retry  (default: false)"
-    echo "-f|--force     Remove failed worker rebuild/upgrade workflow and create a new one  (default: ${force})"
+    echo "-f|--force     Remove failed worker or storage rebuild/upgrade workflow and create a new one  (default: ${force})"
     echo "--base-url     Specify base url (default: ${baseUrl})"
     echo "--dry-run      Print out steps of workflow instead of running steps (default: ${dryRun})"
     echo
@@ -203,7 +203,7 @@ unsucceededWorkflows=($(getUnsucceededRebuildWorkflows))
 numOfUnsucceededWorkflows="${#unsucceededWorkflows[*]}"
 
 if [[ ${numOfUnsucceededWorkflows} -gt 1 ]]; then
-    echo "ERROR: There are multiple unsucceeded worker rebuild workflows"
+    echo "ERROR: There are multiple unsucceeded ${nodeType} rebuild workflows"
     exit 1
 fi
 
