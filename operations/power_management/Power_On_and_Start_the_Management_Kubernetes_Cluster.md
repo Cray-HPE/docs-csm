@@ -72,9 +72,8 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    to boot from its local storage and repeats in a boot loop never finding the local storage as a viable
    boot option, it may be necessary to clear CMOS. This problem has been seen with BIOS C27 and earlier.
 
-   * See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
+   * See [Clear Gigabyte CMOS](../../install/clear_gigabyte_cmos.md).
    * Then power the node on again and watch its console.
-
 
 1. Log in to `ncn-m001` as `root`.
 
@@ -154,7 +153,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    storage as a viable boot option, it may be necessary to clear CMOS. This problem has been seen with
    BIOS C27 and earlier.
 
-   * See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
+   * See [Clear Gigabyte CMOS](../../install/clear_gigabyte_cmos.md).
    * Then power the node on again to have it boot to local storage.
 
 ### Verify access to Lustre file system
@@ -590,7 +589,7 @@ Verify that the Lustre file system is available from the management cluster.
     +----------------+----------+-------+------+------------+---------+
     ```
 
-1. Check whether CFS has run ncn-personalization on the management nodes.
+1. Check whether CFS has run NCN personalization on the management nodes.
 
     When the "Configuration Status" is set to "configured" that node has completed all configuration layers for post-boot CFS.
 
@@ -623,47 +622,47 @@ Verify that the Lustre file system is available from the management cluster.
     +----------------+----------+------------+---------+---------------------+----------------------+-------------+
     ```
 
-       1. If some nodes are not fully "configured", find any CFS sessions in progress.
+    1. If some nodes are not fully "configured", find any CFS sessions in progress.
 
-       ```bash
-       kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
-       ```
+    ```bash
+    kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+    ```
 
-       Example output:
+    Example output:
 
-       ```text
-       cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk                    7/9     Error       0          21m
-       cfs-157af6d5-b63d-48ba-9eb9-b33af9a8325d-tfj8x                    3/9     Not Ready   0          11m
-       ```
+    ```text
+    cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk                    7/9     Error       0          21m
+    cfs-157af6d5-b63d-48ba-9eb9-b33af9a8325d-tfj8x                    3/9     Not Ready   0          11m
+    ```
 
-       CFS sessions which are in "Not Ready" status are still in progress. CFS sessions with status "Error" had a failure in one of the layers.
+    CFS sessions which are in "Not Ready" status are still in progress. CFS sessions with status "Error" had a failure in one of the layers.
 
-       1. Inspect all layers of Ansible configuration to find a failed layer.
+    1. Inspect all layers of Ansible configuration to find a failed layer.
 
-       ```bash
-       ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
-       ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
-       ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
-       ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
-       ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
-       ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
-       ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
-       ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
-       ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
-       ```
+    ```bash
+    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
+    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
+    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
+    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
+    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
+    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
+    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
+    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
+    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
+    ```
 
-       **Important:** Some systems may have a failure to mount Lustre on the worker nodes during the COS 2.3
-       layer of configuration if their connection to the ClusterStor is via cables to Slingshot switches
-       in the liquid-cooled cabinets which have not been powered up at this point in the power on procedure.
-       This affects worker nodes which have Mellanox NICs. Worker nodes with Cassini NICs are unaffected.
-       This may include systems which have Arista switches.
+    **Important:** Some systems may have a failure to mount Lustre on the worker nodes during the COS 2.3
+    layer of configuration if their connection to the ClusterStor is via cables to Slingshot switches
+    in the liquid-cooled cabinets which have not been powered up at this point in the power on procedure.
+    This affects worker nodes which have Mellanox NICs. Worker nodes with Cassini NICs are unaffected.
+    This may include systems which have Arista switches.
 
-       Normally, CFS could be restarted for these worker nodes after the Slingshot switches in the 
-       liquid-cooled cabinets have been powered up. however there is a known problem with Slingshot 1.7.3a
-       and earlier versions of the Slingshot Host Software (SHS) which require a special procedure in
-       the COS 2.3 layer to address this problem.
+    Normally, CFS could be restarted for these worker nodes after the Slingshot switches in the 
+    liquid-cooled cabinets have been powered up. however there is a known problem with Slingshot 1.7.3a
+    and earlier versions of the Slingshot Host Software (SHS) which require a special procedure in
+    the COS 2.3 layer to address this problem.
 
-       See [Worker Node COS Power Up Configuration](Worker_Node_COS_Power_Up_Configuration.md).
+    See [Worker Node COS Power Up Configuration](Worker_Node_COS_Power_Up_Configuration.md).
 
 1. To check the health and status of the management cluster after a power cycle, refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 

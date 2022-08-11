@@ -3,7 +3,6 @@
 This procedure should be used for the management network switches as well as eny edge routers and storage switches.
 Switches must be powered on and operating. This procedure is optional if switch configurations have not changed.
 
-
 **Optional Task:** Save management network switch configurations before removing power from cabinets or the CDU. Management switch names are listed in the `/etc/hosts` file.
 
 ## Obtain the list of switches
@@ -16,14 +15,14 @@ ncn# grep 'sw-' /etc/hosts
 
 Example output:
 
-```
+```text
 10.252.0.2 sw-spine-001
 10.252.0.3 sw-spine-002
 10.252.0.4 sw-leaf-001
 ncn-m001:~ #
 ```
 
-## Save switch configs
+## Save switch configurations
 
 ### Aruba Switch and HPE Server Systems
 
@@ -45,7 +44,7 @@ Example:
 
 ### Dell and Mellanox Switch and Gigabyte/Intel Server Systems
 
-On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-bmc and cdu switches will be Dell. The overall procedure is the same but the specifics of execution are slightly different.
+On Dell and Mellanox based systems, all spine and any leaf switches will be Mellanox. Any leaf-BMC and CDU switches will be Dell. The overall procedure is the same but the specifics of execution are slightly different.
 
 1. `ssh` to the switch
 1. Enter `enable` mode (Mellanox only)

@@ -1,6 +1,6 @@
 # Worker Node COS Power Up Configuration
 
-This procedure is only to be used as part of a full sysetm power up procedure when there are no DVS
+This procedure is only to be used as part of a full system power up procedure when there are no DVS
 clients using CPS/DVS from the worker nodes.
 
 **Important:** Some systems may have a failure to mount Lustre on the worker nodes during the COS 2.3
@@ -9,7 +9,7 @@ in the liquid-cooled cabinets which have not been powered up at this point in th
 This affects worker nodes which have Mellanox HSN NICs. Worker nodes with Cassini HSN NICs are unaffected.
 This may include systems which have Arista switches.
 
-Normally, CFS could be restarted for these worker nodes after the Slingshot switches in the 
+Normally, CFS could be restarted for these worker nodes after the Slingshot switches in the
 liquid-cooled cabinets have been powered up. however there is a known problem with Slingshot 1.7.3a
 and earlier versions of the Slingshot Host Software (SHS) which require a special procedure in
 the COS 2.3 layer to address this problem.
@@ -20,12 +20,11 @@ the COS 2.3 layer to address this problem.
 * All Slingshot switches in liquid-cooled cabinets are powered on
 * No worker node has any DVS mounts to CPS or other dedicated DVS server.
 * No worker node has any Lustre filesystems mounted.
-* CFS has failed post-boot configuration, `ncn-personalization`, on the worker nodes.
+* CFS has failed post-boot configuration, NCN personalization, on the worker nodes.
 
 ## Procedure
 
-
-1. Check whether CFS has failed ncn-personalization on the worker nodes.
+1. Check whether CFS has failed NCN personalization on the worker nodes.
 
     When the "Configuration Status" is set to "configured" that node has completed all configuration layers for post-boot CFS.
 
@@ -81,9 +80,10 @@ the COS 2.3 layer to address this problem.
        ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
        ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
        ```
+
     1. If the slingshot-host-software has completed and the COS layer has run, but fails to mount Lustre
        filesystems, then several roles have already been run to load DVS, Lnet, and Lustre kernel modules.
-       These need to be unloaded before ncn-personalization can be run again.  This is due to a flaw
+       These need to be unloaded before NCN personalization can be run again.  This is due to a flaw
        in the slingshot-host-software which restarts the openibd service for worker nodes which have
        Mellanox NICs.
 
@@ -95,13 +95,13 @@ the COS 2.3 layer to address this problem.
 
    Create a branch using the imported branch from the installation to customize COS.
 
-   The imported branch will be reported in the cray-product-catalog and can be used as a base branch. The imported branch from
+   The imported branch will be reported in the `cray-product-catalog` and can be used as a base branch. The imported branch from
    the installation should not be modified. It is recommended that a branch is created from the imported branch to customize COS
    configuration content as necessary. The following steps create an integration branch to accomplish this.
 
-   1. Obtain import_branch from the cray-product-catalog.
+   1. Obtain the `import_branch` from the `cray-product-catalog`.
 
-      Set the COS_RELEASE to the version of COS 2.3 which has been installed.
+      Set the `COS_RELEASE` to the version of COS 2.3 which has been installed.
 
       ```bash
       ncn# export COS_RELEASE=2.3.101
@@ -124,12 +124,14 @@ the COS 2.3 layer to address this problem.
           cray-shasta-compute-sles15sp3.x86_64-1.4.64:
             id: 5149788d-4e5d-493d-b259-f56156a58b0d
       ```
+
    1. Store the import branch for later use.
 
       ```bash
       ncn# export IMPORT_BRANCH=cray/cos/${COS_RELEASE}
       ```
-   1. Obtain the credentials for the crayvcs user from a Kubernetes secret. The credentials are required for cloning a branch from
+
+   1. Obtain the credentials for the `crayvcs` user from a Kubernetes secret. The credentials are required for cloning a branch from
       VCS. Use git to clone the COS configuration content.
 
       ```bash
@@ -146,6 +148,7 @@ the COS 2.3 layer to address this problem.
       Branch 'cray/cos/<X>.<Y>.<Z>' set up to track remote branch 'cray/cos/<X>.<Y>.<Z>' from 'origin'.
       Switched to a new branch 'cray/cos/<X>.<Y>.<Z>'
       ```
+
    1. If the integration branch exists, run the following command:
 
       ```bash
@@ -153,6 +156,7 @@ the COS 2.3 layer to address this problem.
       Branch 'integration' set up to track remote branch 'integration' from 'origin'.
       Switched to a new branch 'integration'
       ```
+
    1. Merge import branch into integration branch:
 
       ```bash
@@ -164,7 +168,7 @@ the COS 2.3 layer to address this problem.
    Copy the ncn-upgrade.yml playbook to ncn-powerup.yml.
    Edit the file with two changes.
    * Change serial parameter from `1` node to `100%`
-   * Comment all roles sfter the ones with names ending in uninstall, unmount, and unload. See the example below.
+   * Comment all roles after the ones with names ending in uninstall, unmount, and unload. See the example below.
 
    ```bash
    ncn# cp -p ncn-upgrade.yml ncn-powerup.yml
@@ -200,7 +204,7 @@ the COS 2.3 layer to address this problem.
    #    - configure_fs
    ```
 
-1. Commit the new `ncn-powerup.yml` to cos-config-management VCS repo 
+1. Commit the new `ncn-powerup.yml` to `cos-config-management` VCS repo.
 
    ```bash
    ncn# git add ncn-powerup.yml
@@ -248,13 +252,13 @@ the COS 2.3 layer to address this problem.
 
    Continue only when there are no errors in the Ansible log.
 
-1. Clear the error counts on all nodes so that CFS batcher can run ncn-personalization on all worker nodes. This will have the SHS openibd restart, then will see all of the COS stuff as never been done and should load lnet, dvs, and Lustre just fine.
+1. Clear the error counts on all nodes so that CFS batcher can run NCN personalization on all worker nodes. This will have the SHS openibd restart, then will see all of the COS stuff as never been done and should load lnet, dvs, and Lustre just fine.
 
    ```bash
    ncn# cray cfs components update --enabled true --state '[]' --error-count 0 --format json $XNAME
    ```
 
-1. Watch the CFS ncn-personaliation run on the worker nodes to ensure that the configuration completes with no further errors.
+1. Watch the CFS NCN personaliation run on the worker nodes to ensure that the configuration completes with no further errors.
 
    ```bash
    ncn# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs

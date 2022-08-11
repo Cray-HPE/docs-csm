@@ -11,7 +11,7 @@ The API gateways use OAuth2 for authentication. A token is required to authentic
 
 There are multiple API gateways that are used to access services from the different networks.
 
-- services-gateway accessible at api.nmnlb.SYSETM_DOMAIN_NAME or api-gw-service-nmn.local
+- services-gateway accessible at api.nmnlb.SYSTEM_DOMAIN_NAME or api-gw-service-nmn.local
 - customer-admin-gateway accessible at api.cmn.SYSTEM_DOMAIN_NAME
 - customer-user-gateway accessible at api.can.SYSTEM_DOMAIN_NAME or api.chn.SYSTEM_DOMAIN_NAME
 

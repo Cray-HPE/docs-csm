@@ -24,7 +24,7 @@ The following procedures can be run from any master or worker node.
    If `ncn-s001`, `ncn-s002`, or `ncn-s003` has been temporarily removed, `HEALTH_WARN` may be seen until the storage node is added back to the cluster.
    - the `ncnHealthChecks` may report `FAIL: Ceph's health status is not "HEALTH_OK"`. If Ceph health is `HEALTH_WARN`, this failure can be ignored.
 
-1. Restart the Goss server on all the management nodes. 
+1. Restart the Goss server on all the management nodes.
 
    ```bash
    ncn-mw# pdsh -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
