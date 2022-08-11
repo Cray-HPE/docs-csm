@@ -629,8 +629,7 @@ Prepare the `site-init` directory by performing the [Prepare `Site Init`](prepar
 1. Install Goss Tests and Server
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "goss-servers*.rpm" | sort -V | tail -1) \
-                         $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
 <a name="next-topic"></a>

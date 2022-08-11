@@ -38,7 +38,7 @@ set -eu
 # cray-shared-kafka-kafka-2   2/2     Running   0          3h55m
 podsready() {
     [ "1/1" = "$(kubectl get pods --no-headers=true --namespace services --selector strimzi.io/name=cray-shared-kafka-kafka --field-selector=status.phase=Running | awk '!/READY/ {print $2}' | sort -u)" ] &&
-	[ "Running" = "$(kubectl get pods --no-headers=true --namespace services --selector strimzi.io/name=cray-shared-kafka-kafka --field-selector="status.phase=Running" | awk '{print $3}' | sort -u)" ]
+	[ "Running" = "$(kubectl get pods --no-headers=true --namespace services --selector strimzi.io/name=cray-shared-kafka-kafka | awk '{print $3}' | sort -u)" ]
 }
 
 kafkaok() {
@@ -54,7 +54,14 @@ fi
 
 # Logic loop is loop/retrying things in order until ok, tries for 300 seconds
 # total and after that gives up, can be re-run.
+start=$(date +%s)
 until kafkaok && podsready; do
+    now=$(date +%s)
+    if [ $((now - start)) -ge 300 ]; then
+	printf "Giving up trying to restart kafka pods after 5 minutes\n" >&2
+	exit 1
+    fi
+
     if ! kafkaok; then
 	printf "Patching kafka cluster resource to include listeners\n" >&2
 	kubectl patch kafka cluster --namespace sma --type merge --patch-file "${cwd}/patch-listeners.yaml"
@@ -63,9 +70,9 @@ until kafkaok && podsready; do
 
     if ! podsready; then
 	printf "Found pods not at Ready = 1/1, deleting to force an update\n" >&2
-	for pod in $(kubectl get pods --no-headers=true --namespaces services --selector strimzi.io/name=cray-shared-kafka-kafka --field-selector="status.phase=Running" | grep -Ev '1/1'); do
+	for pod in $(kubectl get pods --no-headers=true --namespace services --selector strimzi.io/name=cray-shared-kafka-kafka --field-selector="status.phase=Running" | awk '!/1\/1/ {print $1}'); do
 	    printf "Deleting %s\n" "${pod}" >&2
-	    kubectl delete -n services "$pod"
+	    kubectl delete --namespace services pod "$pod"
 	    sleep 10
 	done
     fi

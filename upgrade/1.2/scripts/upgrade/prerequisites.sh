@@ -64,6 +64,7 @@ fi
 
 state_name="CHECK_WEAVE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+# shellcheck disable=SC2046
 TOKEN=$(curl -s -S -d grant_type=client_credentials \
                    -d client_id=admin-client \
                    -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
@@ -109,7 +110,12 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
 
-    test -f /root/.ssh/config && mv /root/.ssh/config /root/.ssh/config.bak
+    if [ -f /root/.ssh/config ]; then
+        # shellcheck disable=SC2034 # it is referenced in upgrade-state.sh, which is sourced at the
+        # top of this file.
+        RESTORE_SSH_CONFIG=1
+        mv /root/.ssh/config /root/.ssh/config.bak
+    fi
     cat <<EOF> /root/.ssh/config
 Host *
     StrictHostKeyChecking no
@@ -127,6 +133,7 @@ fi
 
 state_name="REPAIR_AND_VERIFY_CHRONY_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+# shellcheck disable=SC2046
 TOKEN=$(curl -s -S -d grant_type=client_credentials \
                    -d client_id=admin-client \
                    -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
@@ -289,6 +296,16 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
+    set +e
+    nexus-cred-check () {
+        pod=$(kubectl get pods -n nexus --selector app=nexus -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep -v nexus-init);
+        kubectl -n nexus exec -it $pod -c nexus -- curl -i -sfk -u "admin:${NEXUS_PASSWORD:=admin123}" -H "accept: application/json" -X GET http://nexus/service/rest/beta/security/user-sources >/dev/null 2>&1; 
+    } 
+    if ! nexus-cred-check; then
+        echo "Nexus password is incorrect. Please set NEXUS_PASSWORD and try again."
+        exit 1
+    fi
+    set -e
     ${CSM_ARTI_DIR}/lib/setup-nexus.sh
 
     } >> ${LOG_FILE} 2>&1
@@ -324,6 +341,7 @@ if [[ $state_recorded == "0" ]]; then
         # turn until one of them has the IPMI credentials.
         USERNAME=""
         IPMI_PASSWORD=""
+        # shellcheck disable=SC1083
         VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
         for VAULT_POD in $(kubectl get pods -n vault --field-selector status.phase=Running --no-headers \
                             -o custom-columns=:.metadata.name | grep -E "^cray-vault-(0|[1-9][0-9]*)$") ; do
@@ -333,6 +351,7 @@ if [[ $state_recorded == "0" ]]; then
                 jq -r '.data.Username')
             # If we are not able to get the username, no need to try and get the password.
             [[ -n ${USERNAME} ]] || continue
+            # shellcheck disable=SC2155
             export IPMI_PASSWORD=$(kubectl exec -it -n vault -c vault ${VAULT_POD} -- sh -c \
                 "export VAULT_ADDR=http://localhost:8200; export VAULT_TOKEN=`echo $VAULT_TOKEN`; \
                 vault kv get -format=json secret/hms-creds/$TARGET_MGMT_XNAME" |
@@ -356,7 +375,9 @@ if [[ $state_recorded == "0" ]]; then
                 bmc_duplicate_error=1
             fi
         done
+        # shellcheck disable=SC2155
         if [ $bmc_duplicate_error = 1 ]; then
+           # shellcheck disable=SC2046
             export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                               -d client_id=admin-client \
                               -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
@@ -364,6 +385,29 @@ if [[ $state_recorded == "0" ]]; then
             /usr/share/doc/csm/scripts/CASMINST-1309.sh
         fi
         set -e
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="RECONFIGURE_CONTAINERD_WORKERS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    workers=$(grep -oP 'ncn-w\d+' /etc/hosts | sort -u)
+    for worker in $workers
+    do
+      echo "Reconfiguring containerd on $worker:"
+      scp /usr/share/doc/csm/scripts/reconfigure_containerd.sh $worker:/tmp/reconfigure_containerd.sh
+      pdsh -b -S -w $worker '/tmp/reconfigure_containerd.sh'
+    done
+    echo "Restarting sonar-jobs-watcher pods"
+    kubectl -n services rollout restart daemonset.apps/sonar-jobs-watcher
+    kubectl -n services rollout status daemonset.apps/sonar-jobs-watcher
+
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} "$(hostname)"
 else
@@ -402,6 +446,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     manifest_folder='/tmp'
     dns_forwarder=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.netstaticips.system_to_site_lookups)
     system_name=$(kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d|yq r - spec.network.dns.external)
+    # shellcheck disable=SC2010
     unbound_version=$(ls ${CSM_ARTI_DIR}/helm |grep cray-dns-unbound|sed -e 's/\.[^./]*$//'|cut -d '-' -f4)
 
 
@@ -454,8 +499,12 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     temp_file=$(mktemp)
     artdir=${CSM_ARTI_DIR}/images
 
+    # shellcheck disable=SC2155
     export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
-    DEBUG=1 ${CSM_ARTI_DIR}/ncn-image-modification.sh \
+    set -o pipefail
+    NCN_IMAGE_MOD_SCRIPT="$(rpm -ql docs-csm | grep ncn-image-modification.sh)"
+    set +o pipefail
+    DEBUG=1 ${NCN_IMAGE_MOD_SCRIPT} \
         -d /root/.ssh \
         -k $artdir/kubernetes/kubernetes*.squashfs \
         -s $artdir/storage-ceph/storage-ceph*.squashfs \
@@ -573,6 +622,7 @@ spec:
 EOF
 
     yq r "${CSM_ARTI_DIR}/manifests/platform.yaml" 'spec.charts.(name==cray-precache-images)' | sed 's/^/    /' >> $tmp_manifest
+    yq w -i $tmp_manifest 'spec.charts[*].timeout' 20m0s
     loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path $tmp_manifest
 
     #
@@ -979,9 +1029,11 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     # install the hpe-csm-scripts rpm early to get lock_management_nodes.py
+    # shellcheck disable=SC2046
     rpm --force -Uvh $(find $CSM_ARTI_DIR/rpm/cray/csm/ -name \*hpe-csm-scripts\*.rpm | sort -V | tail -1)
 
     # mark the NCN BMCs with the Management role in HSM
+    # shellcheck disable=SC2046
     cray hsm state components bulkRole update --role Management --component-ids \
                             $(cray hsm state components list --role management --type node --format json | \
                                 jq -r .Components[].ID | sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//')

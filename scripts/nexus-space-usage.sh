@@ -23,11 +23,18 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -exo pipefail
+set -eo pipefail
 
-PYSCRIPT='
+PYSCRIPT_BLOBS='
 import os, requests
 resp=requests.get("https://packages.local/service/rest/v1/blobstores", 
+                  auth=(os.environ["NEXUS_USERNAME"], os.environ["NEXUS_PASSWORD"]))
+print(resp.text)
+'
+
+PYSCRIPT_REPOS='
+import os, requests
+resp=requests.get("https://packages.local/service/rest/beta/repositories", 
                   auth=(os.environ["NEXUS_USERNAME"], os.environ["NEXUS_PASSWORD"]))
 print(resp.text)
 '
@@ -40,36 +47,20 @@ nexus-get-blob-usage(){
     echo "Nexus blob usage by size in descending order."
     echo "Blob Size (GiB), Blob Name"
     echo ""
-    python3 -c "${PYSCRIPT}" | jq -r '.[] | {"bsize":(.totalSizeInBytes/1024/1024/1024), "bname":.name} | join(", ")' | sort -g -r
+    python3 -c "${PYSCRIPT_BLOBS}" | jq -r '.[] | {"bsize":(.totalSizeInBytes/1024/1024/1024), "bname":.name} | join(", ")' | sort -g -r
 
     echo ""
     echo "Remaining free storage (GiB):"
-    python3 -c "${PYSCRIPT}" | jq -r '.[0].availableSpaceInBytes/1024/1024/1024'
+    python3 -c "${PYSCRIPT_BLOBS}" | jq -r '.[0].availableSpaceInBytes/1024/1024/1024'
 }
 
-nexus-get-repo-usage(){
-  script_dir=$(dirname "${BASH_SOURCE[0]}")
-  if [[ ! -f ${script_dir}/orient-console.jar ]]; then
-    echo "Getting orient-console.jar now"
-    wget https://sonatype.zendesk.com/hc/article_attachments/4412115223955/orient-console.jar
-  fi
+nexus-get-repo(){
 
-  odata_dir=${ORIENT_DIR:-${script_dir}/orient_$(date +%s)}
-  if [[ ! -d ${odata_dir} ]]; then
-    mkdir "${odata_dir}"
-  fi
-
-  pod=$(kubectl get pods -n nexus --selector app=nexus -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep -v nexus-init);
-
-  echo "Getting the Nexus DB contents now. Writing to ${odata_dir}"
-  kubectl -n nexus cp "${pod}:/opt/sonatype/sonatype-work/nexus3/db" "${odata_dir}"
-
-  # Join the asset (all assets) table to the bucket (all repositories) table (implied join - where asset.bucket=bucket.rid).
-  # Get the sum of all assets by bucket and print in descending order of size.
-  echo "Running repository usage report now."
-  echo "select bucket.repository_name as repository,eval('sum(size) / ( 1024 * 1024 * 1024.0 )') as gbytes from asset group by bucket.repository_name order by gbytes desc;" | java -XX:MaxDirectMemorySize=32768m -jar orient-console.jar "${odata_dir}/component"
+  echo "Repositories by Blobstore."
+  python3 -c "${PYSCRIPT_REPOS}" | jq -r 'group_by(.storage | .blobStoreName) | map({ blobStore: (.[0].storage.blobStoreName), repositoryName: [.[] | .name] })'
+  # To select one Blobstores list of repositories append "| jq -r '.[] | select(.blobStore=="csm") | .repositoryName | .[]'"
 
 }
 
 nexus-get-blob-usage
-nexus-get-repo-usage
+nexus-get-repo

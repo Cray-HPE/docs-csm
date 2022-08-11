@@ -23,7 +23,7 @@ Non-compute nodes can boot from two sources:
 Under normal operations, the NCNs use the following boot order:
 
 1. PXE (to ensure that the NCN is booting with desired images and configuration)
-2. Disk (fallback in the event that PXE services are unavailable)
+1. Disk (fallback in the event that PXE services are unavailable)
 
 <a name="reasons-to-change-the-bootorder"></a>
 
@@ -101,10 +101,10 @@ artifacts each node needs to boot. So if the BMCs are set to static, those artif
 
 ```bash
 ncn# USERNAME=root
-ncn# read -s IPMI_PASSWORD
+ncn# read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
 ncn# export IPMI_PASSWORD
 ncn# for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' ); do
-         ipmitool -U $USERNAME -I lanplus -H $h -E lan set 1 ipsrc dhcp
+         ipmitool -U "${USERNAME}" -I lanplus -H "${h}" -E lan set 1 ipsrc dhcp
      done
 ```
 
@@ -112,7 +112,7 @@ Some BMCs need a cold reset in order to pick up this change fully:
 
 ```bash
 ncn# for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' ); do
-         ipmitool -U $USERNAME -I lanplus -H $h -E mc reset cold
+         ipmitool -U "${USERNAME}" -I lanplus -H "${h}" -E mc reset cold
      done
 ```
 
@@ -293,9 +293,9 @@ Reset the BIOS. Refer to vendor documentation for resetting the BIOS or attempt 
 >
 > ```bash
 > linux# USERNAME=root
-> linux# read -s IPMI_PASSWORD
+> linux# read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
 > linux# export IPMI_PASSWORD
-> linux# ipmitool -I lanplus -U $USERNAME -E -H <bmc-hostname>
+> linux# ipmitool -I lanplus -U "${USERNAME}" -E -H <bmc-hostname>
 > ```
 
 1. Reset BIOS with `ipmitool`.

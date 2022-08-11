@@ -22,21 +22,15 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-set -eo pipefail
 
-# update podman config
-SITE_INIT_DIR=/etc/cray/upgrade/csm/${CSM_RELEASE_VERSION}/site-init
-mkdir -p "${SITE_INIT_DIR}"
-DATETIME=$(date +%Y-%m-%d_%H-%M-%S)
-CUSTOMIZATIONS_YAML=$(mktemp -p "${SITE_INIT_DIR}" "customizations-${DATETIME}-XXX.yaml")
-kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > "${CUSTOMIZATIONS_YAML}"
-cp "${CUSTOMIZATIONS_YAML}" "${CUSTOMIZATIONS_YAML}.bak"
-yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.kubernetes.services.cray-nls.externalHostname 'cmn.{{ network.dns.external }}'
-yq w -i --style=single "${CUSTOMIZATIONS_YAML}" spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
-
-# rename customazations file so k8s secret name stays the same
-pushd "${SITE_INIT_DIR}"
-cp "${CUSTOMIZATIONS_YAML}" customizations.yaml
-kubectl delete secret -n loftsman site-init
-kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-popd
+if ! grep -q "plugins.*artifactory.algol60.net" /etc/containerd/config.toml; then
+  echo "Adding artifactory.algol60.net to containerd config"
+tee -a /etc/containerd/config.toml 1>/dev/null << END
+      [plugins."io.containerd.grpc.v1.cri".registry.mirrors."artifactory.algol60.net"]
+        endpoint = ["http://pit.nmn:5000/v2/artifactory.algol60.net", "http://pit.nmn:5000","https://registry.local/v2/artifactory.algol60.net", "https://registry.local", "dummy://artifactory.algol60.net"]
+END
+  echo "Restarting containerd"
+  systemctl restart containerd
+else
+  echo "artifactory.algol60.net already in config.toml -- no reconfig needed"
+fi

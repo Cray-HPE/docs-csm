@@ -26,7 +26,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
         this state.
 
         ```bash
-        ncn# ps aux |grep [k]worker|grep -e " D"| awk '{ print $2 }'
+        ncn-mw# ps aux |grep [k]worker|grep -e " D"| awk '{ print $2 }'
         ```
 
     1. Show the stack for all `kworker`s in the `D` state.
@@ -34,17 +34,17 @@ In the following procedures, unless otherwise directed, run the commands on the 
         Note which `kworker`s clear and which ones remain stuck in this state over a period of time.
 
         ```bash
-        ncn# for i in `ps aux | grep [k]worker | grep -e " D" | awk '{print $2}'` ; do
-                cat /proc/$i/stack; echo
-             done
+        ncn-mw# for i in `ps aux | grep [k]worker | grep -e " D" | awk '{print $2}'` ; do
+                    cat "/proc/${i}/stack"; echo
+                done
         ```
 
-1. Check to see what the load is on the node and gather data for any `PID`s consuming a lot of CPU.
+1. Check the load on the node and gather data for any `PID`s consuming a lot of CPU.
 
     1. Monitor the processes and system resource usage.
 
         ```bash
-        ncn# top
+        ncn-mw# top
         ```
 
         Example output (some trailing lines omitted):
@@ -75,7 +75,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
         In the following command, replace the `PID` value with the actual `PID` number.
 
         ```bash
-        ncn# perf top -g -p PID
+        ncn-mw# perf top -g -p PID
         ```
 
         Example output (some trailing lines omitted):
@@ -93,13 +93,13 @@ In the following procedures, unless otherwise directed, run the commands on the 
     1. Verify that `ps -ef` completes.
 
         ```bash
-        ncn# ps -ef
+        ncn-mw# ps -ef
         ```
 
 1. Check the `/var/log/messages` file on the node to see if there are any errors.
 
     ```bash
-    ncn# grep -i error /var/log/messages
+    ncn-mw# grep -i error /var/log/messages
     ```
 
     Example output (some trailing lines omitted):
@@ -125,18 +125,18 @@ In the following procedures, unless otherwise directed, run the commands on the 
 1. Restart the `kubelet` on the node with the issue.
 
     ```bash
-    ncn# systemctl restart kubelet
+    ncn-mw# systemctl restart kubelet
     ```
 
-    If restarting the `kubelet` did not resolve the issue, then proceed to the next step to restart the container runtime environment.
+    If restarting the `kubelet` did not resolve the issue, then proceed to the next step.
 
 1. Restart the container runtime environment on the node with the issue.
 
-    This will likely hang or fail to complete without a timeout. If that is the case, cancel the command with control-C and proceed to
+    This will likely hang or fail to complete without a timeout. If that is the case, then cancel the command with control-C and proceed to
     the next step.
 
     ```bash
-    ncn# systemctl restart containerd
+    ncn-mw# systemctl restart containerd
     ```
 
 1. Reboot the node with the issue.
@@ -152,12 +152,12 @@ In the following procedures, unless otherwise directed, run the commands on the 
     ```bash
     ncn# NCN_NAME=ncn-w999
     ncn# USERNAME=root
-    ncn# read -s IPMI_PASSWORD
+    ncn# read -r -s -p "${NCN_NAME} BMC ${USERNAME} password: " IPMI_PASSWORD
     ncn# export IPMI_PASSWORD    
-    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power off; sleep 5;
-    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power show; echo
-    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt power on; sleep 5;
-    ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME} power show; echo
+    ncn# ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power off; sleep 5;
+    ncn# ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power show; echo
+    ncn# ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power on; sleep 5;
+    ncn# ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power show; echo
     ```
 
 1. Watch the console of the node being rebooted.
@@ -169,10 +169,10 @@ In the following procedures, unless otherwise directed, run the commands on the 
     * Alternatively, the console can be accessed by using `ipmitool`.
 
         ```bash
-        ncn# ipmitool -U $USERNAME -E -I lanplus -H ${NCN_NAME}-mgmt sol activate
+        ncn# ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" sol activate
         ```
 
        This command will not return anything, but will show the `ttyS0` console of the node. Use `~.` to disconnect.
        **NOTE:** The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
 
-Try running a `kubectl` command on the node where it was previously unresponsive.
+1. Try running a `kubectl` command on the node where it was previously unresponsive.

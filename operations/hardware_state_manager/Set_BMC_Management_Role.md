@@ -8,18 +8,25 @@ the Hardware State Manager (HSM), just like their associated nodes.
 This section only covers marking BMCs of management nodes with the `Management` role using HSM.
 For more information on locking or ignoring nodes, refer to the following sections:
 
-* Hardware State Manager (HSM): See [Lock and Unlock Nodes](Lock_and_Unlock_Management_Nodes.md)
-* Firmware Action Service (FAS): See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore)
-* Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md)
+* Hardware State Manager (HSM)
+  * See [Lock and Unlock Nodes](Lock_and_Unlock_Management_Nodes.md).
+* Firmware Action Service (FAS)
+  * See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore).
+* Cray Advanced Platform Monitoring and Control (CAPMC)
+  * See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md).
 
 ## Topics
 
-* [When To Set BMC Management Role](#when-to-set-bmc-management-role)
-* [How To Set BMC Management Role](#how-to-set-bmc-management-role)
+* [Prerequisites](#prerequisites)
+* [When to set BMC management role](#when-to-set-bmc-management-role)
+* [How to set BMC management role](#how-to-set-bmc-management-role)
 
-<a name="when-to-set-bmc-management-role"></a>
+## Prerequisites
 
-## When To Set BMC Management Role
+The Cray Command Line Interface must be configured on the NCN where this procedure is being performed.
+See [Configure the Cray CLI](../configure_cray_cli.md).
+
+## When to set BMC management role
 
 The BMCs of NCNs should be marked with the `Management` role as early as possible in the install/upgrade cycle to prevent unintentionally taking down a critical node.
 The `Management` role on the BMCs cannot be set until after Kubernetes is running and the HSM service is operational.
@@ -27,7 +34,7 @@ The `Management` role on the BMCs cannot be set until after Kubernetes is runnin
 Check whether HSM is running with the following command:
 
 ```bash
-ncn# kubectl -n services get pods | grep smd
+ncn-mw# kubectl -n services get pods | grep smd
 ```
 
 Example output:
@@ -46,38 +53,40 @@ cray-smd-wait-for-postgres-4-7c78j  0/3     Completed  0          9d
 The `cray-smd` pods need to be in the `Running` state, except for `cray-smd-init` and
 `cray-smd-wait-for-postgres` which should be in `Completed` state.
 
-<a name="how-to-set-bmc-management-role"></a>
-
-## How To Set BMC Management Role
+## How to set BMC management role
 
 Use the `cray hsm state components bulkRole update` command to perform setting roles on the BMC.
 
-### How To Set BMC Management Roles on all BMCs of Management Nodes
+### How to set BMC management roles on all BMCs of management nodes
 
 1. Get the list of BMCs of management nodes.
 
    ```bash
-   ncn# BMCList=$(cray hsm state components list --role management --type node --format json | jq -r .Components[].ID | \
+   ncn-mw# BMCList=$(cray hsm state components list --role Management --type Node --format json | jq -r .Components[].ID | \
                 sed 's/n[0-9]*//' | tr '\n' ',' | sed 's/.$//')
-   ncn# echo ${BMCList}
+   ncn-mw# echo ${BMCList}
    ```
 
    Example output:
 
-   ```bash
+   ```text
    x3000c0s5b0,x3000c0s4b0,x3000c0s7b0,x3000c0s6b0,x3000c0s3b0,x3000c0s2b0,x3000c0s9b0,x3000c0s8b0
    ```
 
 1. Set the `Management` role for those BMCs.
 
    ```bash
-   ncn# cray hsm state components bulkRole update --role Management --component-ids ${BMCList}
+   ncn-mw# cray hsm state components bulkRole update --role Management --component-ids "${BMCList}"
    ```
 
-### How To Set BMC Management Roles on specific BMCs of Management Nodes
+   This command gives no output when it completes successfully.
+
+### How to set BMC management roles on specific BMCs of management nodes
 
 1. Set the `Management` role for specific BMCs.
 
    ```bash
-   ncn# cray hsm state components bulkRole update --role Management --component-ids x3000c0s8b0
+   ncn-mw# cray hsm state components bulkRole update --role Management --component-ids x3000c0s8b0
    ```
+
+   This command gives no output when it completes successfully.

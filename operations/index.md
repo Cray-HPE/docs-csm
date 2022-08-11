@@ -41,6 +41,7 @@ The following administrative topics can be found in this guide:
 ## CSM product management
 
 - [Validate CSM Health](validate_csm_health.md)
+- [Apply Security Hardening](CSM_product_management/Apply_Security_Hardening.md)
 - [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
 - [Configure the Cray Command Line Interface (Cray CLI)](configure_cray_cli.md)
 - [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
@@ -259,6 +260,7 @@ As a result, the system's micro-services are modular, resilient, and can be upda
   - [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
   - [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
 - [Troubleshoot Intermittent HTTP 503 Code Failures](kubernetes/Troubleshoot_Intermittent_503s.md)
+- [Configure API Audit Log Retention](kubernetes/Limit_Kubernetes_API_Audit_Log_Maxbackups.md)
 
 ## Package repository management
 
@@ -332,6 +334,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
   - [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
 - [API Authorization](security_and_authentication/API_Authorization.md)
 - [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
+- [Restrict Network Access to the `ncn-images` S3 Bucket](security_and_authentication/Restrict_Access_to_NCN_Images_S3_Bucket.md)
 
 ## Resiliency
 
@@ -527,6 +530,8 @@ Overview of the several different networks supported by the HPE Cray EX system.
 - [Access to System Management Services](network/Access_to_System_Management_Services.md)
 - [Default IP Address Ranges](network/Default_IP_Address_Ranges.md)
 - [Connect to the HPE Cray EX Environment](network/Connect_to_the_HPE_Cray_EX_Environment.md)
+- [Create a CSM Configuration Upgrade Plan](network/Create_a_CSM_Configuration_Upgrade_Plan.md)
+- [Gateway Testing](network/gateway_testing.md)
 
 ### Management network
 
@@ -546,6 +551,8 @@ The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the
 - [Customer Accessible Networks](network/customer_accessible_networks/Customer_Accessible_Networks.md)
 - [Externally Exposed Services](network/customer_accessible_networks/Externally_Exposed_Services.md)
 - [Connect to the CMN and CAN](network/customer_accessible_networks/Connect_to_the_CMN_CAN.md)
+- [BI-CAN Aruba/Arista Configuration](network/customer_accessible_networks/bi-can_arista_aruba_config.md)
+- [MetalLB Peering with Arista Edge Router](network/customer_accessible_networks/bi-can_arista_metallb_peering.md)
 - [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)
 - [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 
@@ -563,6 +570,8 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 - [DNS](network/dns/DNS.md)
 - [Manage the DNS Unbound Resolver](network/dns/Manage_the_DNS_Unbound_Resolver.md)
 - [Enable `ncsd` on UANs](network/dns/Enable_ncsd_on_UANs.md)
+- [PowerDNS Configuration](network/dns/PowerDNS_Configuration.md)
+- [PowerDNS Migration Guide](network/dns/PowerDNS_migration.md)
 - [Troubleshoot Common DNS Issues](network/dns/Troubleshoot_Common_DNS_Issues.md)
 - [Troubleshoot PowerDNS](network/dns/Troubleshoot_PowerDNS.md)
 
@@ -600,6 +609,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 - [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
 - [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 - [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
+- [Restore Missing Spire Meta-Data](spire/Restore_Missing_Spire_Metadata.md)
 
 ## Update firmware with FAS
 

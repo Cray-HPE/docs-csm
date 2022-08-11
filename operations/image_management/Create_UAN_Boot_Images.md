@@ -36,7 +36,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     ConfigMap. This information is required for this procedure.
 
     ```bash
-    ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r .data.uan
+    ncn-mw# kubectl get cm -n services cray-product-catalog -o json | jq -r .data.uan
     ```
 
     Example output:
@@ -57,16 +57,19 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
           id: cbd5cdf6-eac3-47e6-ace4-aa1aecb1359a                         # <--- IMS recipe id
     ```
 
-1. Generate the password hash for the `root` user. Replace `PASSWORD` with the desired `root` password.
+1. Generate the password hash for the `root` user.
+
+    > Replace `PASSWORD` with the desired `root` password.
+    > Do not omit the `-n` from the echo command. It is necessary to generate a valid hash.
 
     ```bash
-    ncn# openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) PASSWORD
+    ncn# echo -n PASSWORD | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin
     ```
 
 1. Obtain the HashiCorp Vault `root` token.
 
     ```bash
-    ncn# kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
+    ncn-mw# kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
     ```
 
 1. Write the password hash obtained from the `openssl` command to the HashiCorp Vault.
@@ -75,7 +78,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     - The `vault read secret/uan` command verifies that the hash was stored correctly. This password hash will be written to the UAN for the `root` user by CFS.
 
     ```bash
-    ncn# kubectl exec -itn vault cray-vault-0 -- sh
+    ncn-mw# kubectl exec -itn vault cray-vault-0 -- sh
     cray-vault-0# export VAULT_ADDR=http://cray-vault:8200
     cray-vault-0# vault login
     cray-vault-0# vault write secret/uan root_password='HASH'
@@ -85,7 +88,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 1. Obtain the password for the `crayvcs` user from the Kubernetes secret for use in the next command.
 
     ```bash
-    ncn# kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
+    ncn-mw# kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
     ```
 
 1. Clone the UAN configuration management repository.
@@ -396,7 +399,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     1. Create a new IMS image registration and save the `id` field in an environment variable.
 
         ```bash
-        ncn# cray ims images create --name UAN-1.4.0-day-zero
+        ncn# cray ims images create --name UAN-1.4.0-day-zero --format toml
         ```
 
         Example output:
@@ -413,7 +416,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         1. Upload the image.
 
             ```bash
-            ncn# cray artifacts create boot-images ${NEW_IMAGE_ID}/rootfs UAN-1.4.0-day-zero.squashfs
+            ncn# cray artifacts create boot-images ${NEW_IMAGE_ID}/rootfs UAN-1.4.0-day-zero.squashfs --format toml
             ```
 
             Example output:
@@ -426,7 +429,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         1. Upload the `initrd`.
 
             ```bash
-            ncn# cray artifacts create boot-images ${NEW_IMAGE_ID}/initrd initrd
+            ncn# cray artifacts create boot-images ${NEW_IMAGE_ID}/initrd initrd --format toml
             ```
 
             Example output:
@@ -439,7 +442,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         1. Upload the kernel.
 
             ```bash
-            ncn# cray artifacts create boot-images ${NEW_IMAGE_ID}/kernel vmlinuz
+            ncn# cray artifacts create boot-images ${NEW_IMAGE_ID}/kernel vmlinuz --format toml
             ```
 
             Example output:
@@ -454,7 +457,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         1. Display S3 values for uploaded image.
 
             ```bash
-            ncn# cray artifacts describe boot-images ${NEW_IMAGE_ID}/rootfs
+            ncn# cray artifacts describe boot-images ${NEW_IMAGE_ID}/rootfs --format toml
             ```
 
             Example output:
@@ -506,7 +509,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         Use the IMS image ID from [Obtain UAN artifact IDs and other information](#get-uan-info).
 
         ```bash
-        ncn# cray ims images describe c880251d-b275-463f-8279-e6033f61578b
+        ncn# cray ims images describe c880251d-b275-463f-8279-e6033f61578b --format toml
         ```
 
         Example output:
@@ -594,7 +597,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         ```bash
         ncn# cray ims images update ${NEW_IMAGE_ID} \
                 --link-type s3 --link-path s3://boot-images/${NEW_IMAGE_ID}/manifest.json \
-                --link-etag 6d04c3a4546888ee740d7149eaecea68
+                --link-etag 6d04c3a4546888ee740d7149eaecea68 --format toml
         ```
 
         Example output:

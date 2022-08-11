@@ -10,24 +10,27 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 
 1. Prepare for the procedure.
 
-    ```bash
-    ncn-mw# cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
-    ncn-mw# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
-                -o jsonpath='{.data.client-secret}' | base64 -d` \
-                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
-                | jq -r '.access_token')
-    ```
+    1. Obtain an API token.
 
-    Set the IPMI password for the BMC for the NCN. This step is required for every NCN except `ncn-m001`.
-    The default username is `root`.
-    Set and export `IPMI_USERNAME` if this needs to be different for the given BMC.
-    > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
+        ```bash
+        ncn-mw# cd /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs
+        ncn-mw# export TOKEN=$(curl -s -S -d grant_type=client_credentials -d client_id=admin-client \
+                                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+                                | jq -r '.access_token')
+        ```
 
-    ```bash
-    ncn-mw# read -s IPMI_PASSWORD
-    ncn-mw# export IPMI_PASSWORD
-    ```
+    1. Set BMC credentials for the NCN (unless doing this for `ncn-m001`).
+
+        The default username is `root`.
+        Set `IPMI_USERNAME` if this needs to be different for the given BMC.
+
+        > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
+
+        ```bash
+        ncn-mw# read -r -s -p "BMC ${IPMI_USERNAME-root} password: " IPMI_PASSWORD
+        ncn-mw# export IPMI_PASSWORD
+        ```
 
 1. Fetch the status of the nodes.
 
@@ -56,7 +59,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 1. Fetch the status of the node to be removed.
 
     ```bash
-    ncn-mw# ./ncn_status.py --xname $XNAME
+    ncn-mw# ./ncn_status.py --xname "${XNAME}"
     ```
 
     Example output:
@@ -78,7 +81,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
         bmc_mac: a4:bf:01:38:f4:54
     ```
 
-    **Important**: Save the `ifnames` and `bmc_mac` information if you plan to add this NCN back at some time in the future.
+    **Important**: Save the `ifnames` and `bmc_mac` information if planning to add this NCN back at some time in the future.
 
 1. Shutdown `cray-reds`.
 
@@ -89,7 +92,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 1. Remove the node from SLS, HSM, and BSS.
 
     ```bash
-    ncn-mw# ./remove_management_ncn.py --xname $XNAME
+    ncn-mw# ./remove_management_ncn.py --xname "${XNAME}"
     ```
 
     Example output:
@@ -113,7 +116,8 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     ```
 
     **NOTE:**
-    If workers have been removed and the worker count is currently at two, a timeout restarting `cray-bss` can be ignored. For example, the following failure output from `remove_management_ncn.py` can be ignored.
+    If workers have been removed and the worker count is currently at two, then a timeout restarting `cray-bss` can be ignored.
+    For example, the following failure output from `remove_management_ncn.py` can be ignored.
 
     ```text
     Waiting for cray-bss to start.
@@ -158,10 +162,10 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
         ncn-s003 x3000c0s17b0n0 storage
     ```
 
-1. Fetch the status of the node that was removed:
+1. Fetch the status of the node that was removed.
 
     ```bash
-    ncn-mw# ./ncn_status.py --xname $XNAME
+    ncn-mw# ./ncn_status.py --xname "${XNAME}"
     ```
 
     Example output:
@@ -170,4 +174,5 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     Not found: x3000c0s26b0n0
     ```
 
-Proceed to the next step to [Remove Switch Configuration](Remove_Switch_Config.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+Proceed to [Remove Switch Configuration](Remove_Switch_Config.md) or return to the main
+[Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.

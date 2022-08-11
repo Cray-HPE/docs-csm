@@ -21,7 +21,7 @@
    the `commit` field.
 
    ```bash
-   ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+   ncn-m002# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
    ```
 
    The output will contain a section resembling the following:
@@ -41,15 +41,15 @@
 1. View the current `ncn-personalization` configuration and write it to a JSON file.
 
    ```bash
-   ncn# cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json
+   ncn-m002# cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json
    ```
 
 1. Run the `apply_csm_configuration.sh` script. This script will update the CSM
    layer in the `ncn-personalization` configuration, enable configuration of
    the NCNs, and monitor the progress of the NCN personalization process.
 
-   **IMPORTANT:**
-
+   > **IMPORTANT:**
+   >
    > * If using a different branch than the default to include custom
        changes, use the `--git-commit` argument to specify the desired commit on
        the branch including the customizations. Otherwise this argument is not needed.
@@ -64,8 +64,8 @@
        `ncn-personalization` configuration.
 
    ```bash
-   ncn# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            [--csm-release 1.2.0] [--git-commit COMMIT] [--ncn-config-file  /path/to/ncn-personalization.json]
+   ncn-m002# /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+                [--csm-release 1.2.0] [--git-commit COMMIT] [--ncn-config-file  /path/to/ncn-personalization.json]
    ```
 
    For more information on this script, see [Automatically Apply CSM Configuration to NCNs](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#auto_apply_csm_config).
@@ -73,7 +73,7 @@
 1. Review the new `ncn-personalization` configuration and write it to a JSON file.
 
    ```bash
-   ncn# cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json.new
+   ncn-m002# cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json.new
    ```
 
 ## Stage completed

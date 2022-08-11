@@ -32,8 +32,11 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
 
-    See [Create a storage pool](../../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool)
-    and [Create and map an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
+    1. [Create a storage pool](../../operations/utility_storage/Alternate_Storage_Pools.md#create-a-storage-pool).
+
+    1. [Create and map an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#create-and-map-an-rbd-device).
+
+    1. [Mount an `rbd` device](../../operations/utility_storage/Alternate_Storage_Pools.md#mount-an-rbd-device).
 
     **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
     However, the `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
@@ -224,23 +227,12 @@ If the following command does not complete successfully, check if the `TOKEN` en
    ncn-m001# export SW_ADMIN_PASSWORD
    ```
 
-1. Prevent the use of the `rpcrdma` modules **only if needed**.
+1. Prevent the use of the `rpcrdma` module.
 
-   This step is required if the Kubernetes worker nodes on the system contain Mellanox ConnectX-4
-   network cards.
+   This step is required. The `rpcrdma` kernel module needs to be ignored so that it does not interfere
+   with Slingshot Host Software.
 
-   1. Determine if Mellanox ConnectX-4 network cards are in use.
-
-       ```bash
-       ncn-m001# ssh ncn-w001 lspci | grep ConnectX-4
-       ```
-
-   If no output is emitted, then skip the following sub-step and continue to the next step.
-
-   1. Run the following script to add the necessary parameters to the kernel command line on the worker nodes.
-
-       On worker nodes containing ConnectX-4 network interface cards, the `rpcrdma` kernel module needs
-       to be ignored so that it does not interfere with Slingshot Host Software.
+   Run the following script to add the necessary parameters to the kernel command line on the worker nodes.
 
    ```bash
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/blacklist-kernel-modules.sh
