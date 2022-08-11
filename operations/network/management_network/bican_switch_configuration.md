@@ -24,7 +24,7 @@ Topology example:
 - Update CCJ
 - Custom switch configuration
 
-### Custom Switch Configuration
+### Custom switch configuration
 
 - Custom switch configuration is injected into the management network switch configuration when it's generated from CANU.
 - Most sites require custom configuration for the site connection.
