@@ -93,5 +93,5 @@ This is an example only. More details on how to generate configurations with CAN
 1. Validate and apply switch configurations to management network switches, EXCLUDING the edge switches.  [Validate Switch Configurations](validate_switch_configs.md).
 2. Apply the generated edge switch configurations. This is NOT a full configuration, the configuration generated is only what is needed for CHN. This switch should already be setup from the Slingshot documentation.
 
-EXAMPLE of a full running configuration of two spines and two edge switches, This configuration should be not be copied and should be used as a general reference only. [BI-CAN Aruba/Arista Configuration
+The following is an example of a full running configuration of two spines and two edge switches. This configuration should be not be copied and should be used as a general reference only. Refer to [BI-CAN Aruba/Arista Configuration
 ](../customer_accessible_networks/bi-can_arista_aruba_config.md)
