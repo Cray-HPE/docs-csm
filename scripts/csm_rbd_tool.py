@@ -1,4 +1,4 @@
-#! ./bin/python
+#! /opt/cray/csm/scripts/csm_rbd_tool/bin/python
 #
 # MIT License
 #
