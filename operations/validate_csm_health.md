@@ -122,9 +122,7 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 
 #### 1.1.1 Known issues with NCN health checks
 
-
-To validate any issue with NCN, run [`ncn111.sh`](../scripts/operations/validation/ncn111.sh) script 
-
+To validate any issue with NCN, run [`ncn111.sh`](../scripts/operations/validation/ncn111.sh) script
 
 ### 1.2 NCN resource checks (optional)
 
@@ -142,7 +140,7 @@ Please run [this script](../scripts/operations/validation/ncn121.sh) to validate
 
 ### 1.3 Check of system management monitoring tools
 
-In order to validate any issue with NCN please run [this](../scripts/operations/validation/ncn1.3.sh) script 
+In order to validate any issue with NCN please run [this](../scripts/operations/validation/ncn1.3.sh) script
 
 ## 2. Hardware Management Services health checks
 
