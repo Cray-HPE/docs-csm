@@ -52,7 +52,7 @@ the PCI buses and sort network interfaces into 3 buckets:
 * `hsn`: high-speed connection
 * `lan`: external/site-connection
 
-The source code for the rule generation is in [`metal-ipxe`][1], but for technical information on the PCI configuration/reading please read on.
+The source code for the rule generation is in [`metal-ipxe`][1]. Continue reading for technical information on the PCI configuration/reading.
 
 ### Vendor and Bus ID Identification
 

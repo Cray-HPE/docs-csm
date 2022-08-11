@@ -2,7 +2,7 @@
 
 The management nodes boot from NCN images which are created from layers on top of a common base image.
 The common image is customized with a `kubernetes` layer for the master nodes and worker nodes.
-The common image is customized with a `storage-ceph` layer for the utility storage nodes..
+The common image is customized with a `storage-ceph` layer for the utility storage nodes.
 
 ## Topics
 
@@ -18,10 +18,10 @@ stable (Release) and unstable (pre-release/dev) images.
 
 > For details on how these images behave and inherit from the base and common images, see [node-image-docs][1].
 
-In short, each image (i.e. `kubernetes` and `storage-ceph`) inherit from the non-compute-common layer. Operationally these are all
+In short, each image (for instance, `kubernetes` and `storage-ceph`) inherit from the non-compute-common layer. Operationally, these are all
 that matter; the common layer, Kubernetes layer, Ceph layer, and any other new images.
 
-To boot an NCN, you need 3 artifacts for each node-type (`kubernetes-master/worker`, `storage-ceph`):
+To boot an NCN, you need three artifacts for each node-type (`kubernetes-master/worker`, `storage-ceph`):
 
 1. The Kubernetes SquashFS ([stable][4] or [unstable][5])
 
@@ -98,7 +98,7 @@ To boot an NCN, you need 3 artifacts for each node-type (`kubernetes-master/work
    /var/www is ready.
    ```
 
-1. (`pit#`) View the currently set links
+1. (`pit#`) View the currently set links.
 
    ```bash
    ls -l /var/www/ncn-*

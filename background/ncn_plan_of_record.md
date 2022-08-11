@@ -75,4 +75,4 @@ The number of OS disks can be modified by the [`metal.disks` kernel parameter](h
 
 > **`NOTE:`** The 2nd port on each card is filled but not configured (reserved for future use).
 
-* *Management Network:* `2x` PCIe cards, each with 2 heads/ports for a total of 4 ports split between two PCIe cards
+* *Management Network:* `2x` PCIe cards, each with two heads/ports for a total of four ports split between two PCIe cards
