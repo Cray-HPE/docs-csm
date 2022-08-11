@@ -90,7 +90,7 @@ This is an example only.  More details on how to generate configurations with CA
     sw-leaf-bmc-001 Config Generated
 ```
 
-1. Validate and apply switch configurations to management network switches.  EXCLUDING the edge switches.  [Validate Switch Configurations](validate_switch_configs.md)
+1. Validate and apply switch configurations to management network switches, EXCLUDING the edge switches.  [Validate Switch Configurations](validate_switch_configs.md).
 2. Apply the generated edge switch configurations.  This is NOT a full configuration, the configuration generated is only what is needed for CHN.  This switch should already be setup from the slingshot docs.
 
 EXAMPLE of a full running configuration of two spines and two edge switches, This configuration should be not be copied and should be used as a general reference only. [BI-CAN Aruba/Arista Configuration
