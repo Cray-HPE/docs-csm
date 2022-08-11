@@ -146,6 +146,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 * Fixed: CFS can leave sessions `pending` after a power outage
 * Fixed: `sonar-jobs-watcher` not stopping orphaned CFS pods
 * Fixed: PXE boot failures during installs, upgrades, and NCN rebuilds
+* Fixed: `cray-powerdns-manager` not correctly creating CAN reverse DNS records.
 
 ## Deprecations
 
