@@ -8,34 +8,19 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 
 ## Important Notes
 
-### Bifurcated CAN
+### Service request adjustments are needed for small systems
 
-A major feature of CSM 1.2 is the Bifurcated CAN (BICAN). The BICAN is designed to separate administrative network traffic from user network traffic. For more information, see the [BICAN Summary](../operations/network/management_network/bican_technical_summary.md). Review the BICAN Summary before continuing with the CSM 1.2 upgrade.
+- For systems with only three worker nodes (typically Testing and Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be
+  lowered on several services in order for this upgrade to succeed. This step is
+  executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#stage-04---prerequisites-check) of the upgrade.
+  See [TDS Lower CPU Requests](../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more information.
 
-For detailed BICAN documentation, see the [BICAN Technical Details](../operations/network/management_network/bican_technical_details.md) page.
+- Independently, for three-worker systems the `customizations.yaml` file is edited automatically during the upgrade, prior to deploying new CSM services. These
+  settings are contained in `/usr/share/doc/csm/upgrade/scripts/upgrade/tds_cpu_requests.yaml`. This file can be modified (prior to proceeding with this
+  upgrade), if other settings are desired in the `customizations.yaml` file for this system.
 
-### The SMA Grafana service is temporarily inaccessible during the upgrade.
-
-  During stage 3 of the CSM 1.2 upgrade, the SMA Grafana service will become inaccessible at its previous DNS location. It will
-  remain inaccessible until the upgrade to SMA 1.6.x is applied. This is because of a change in DNS names for the service.
-
-### Service request adjustments are needed for small systems.
-
-  - For systems with only three worker nodes (typically Testing and  Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be
-    lowered on several services in order for this upgrade to succeed. This step is
-    executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#stage-04---prerequisites-check) of the upgrade.
-    See [TDS Lower CPU Requests](../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more information.
-
-  - Independently, for three-worker systems the `customizations.yaml` file is edited automatically during the upgrade, prior to deploying new CSM services. These
-    settings are contained in `/usr/share/doc/csm/upgrade/scripts/upgrade/tds_cpu_requests.yaml`. This file can be modified (prior to proceeding with this
-    upgrade), if other settings are desired in the `customizations.yaml` file for this system.
-
-    For more information about modifying `customizations.yaml` and tuning for specific systems, see
-    [Post Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
-
-## Known issues
-
-- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release).
+  For more information about modifying `customizations.yaml` and tuning for specific systems, see
+  [Post Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
 
 ## Upgrade stages
 

@@ -6,10 +6,10 @@ installation, there is no supported method to rotate or change the platform CA i
 
 ## Topics
 
-- [Overview](#overview)
-- [Use default platform-generated CA](#use-default-platform-generated-ca)
-- [Customize platform-generated CA](#customize-platform-generated-ca)
-- [Use external CA](#use-external-ca)
+* [Overview](#overview)
+* [Use default platform-generated CA](#use-default-platform-generated-ca)
+* [Customize platform-generated CA](#customize-platform-generated-ca)
+* [Use external CA](#use-external-ca)
 
 ## Overview
 
@@ -29,8 +29,8 @@ The resulting CA will be used to sign multiple workloads on the platform (such a
 In `shasta-cfg`, there is a Sealed Secret generator named `platform_ca`. By default, the `customizations.yaml` file will contain a generation template to use this generator, and will create a Sealed
 Secret named `generated-platform-ca-1`. The `cray-vault` overrides in `customizations.yaml` contain both of the following:
 
-- A templated reference to expand the `generated-platform-ca-1` Sealed Secret.
-- Directives instructing Vault to load the CA material on start-up -- ultimately initializing a HashiCorp Vault PKI Engine instance with the material.
+* A templated reference to expand the `generated-platform-ca-1` Sealed Secret.
+* Directives instructing Vault to load the CA material on start-up -- ultimately initializing a HashiCorp Vault PKI Engine instance with the material.
 
 > Note: The intermediate CA gets installed into Vault, not the root CA (as generated). Use of a root CA is not recommended.
 

@@ -9,7 +9,7 @@
   * Run `canu --version` to see version.
   * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see this procedure: [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md)
 
-## Compare CSM 1.2 switch configurations with running configurations
+## Compare CSM 1.3 switch configurations with running configurations
 
 Compare the current running configuration with the generated configuration.
 
@@ -19,6 +19,7 @@ can also pull the configuration from the switch by using the `--ip`, `--username
 Example of CANU pulling configuration.
 
 (`ncn#` or `pit#`)
+
 ```bash
 canu validate switch config --ip 192.168.1.1 --username USERNAME --password PASSWORD --generated ./generated/sw-spine-001.cfg
 ```
@@ -28,6 +29,7 @@ Doing file comparisons on your local machine:
 * Comparing configuration file for single switch:
 
 (`ncn#` or `pit#`)
+
 ```bash
 canu validate switch config --running ./running/sw-spine-001.cfg --generated sw-spine-001.cfg
 ```
@@ -37,8 +39,9 @@ Please enter the vendor (Aruba, Dell, Mellanox): Aruba
 * Comparing configuration files for full system:
 
 (`ncn#` or `pit#`)
+
 ```bash
-canu validate network config --csm 1.2 --running ./running/ --generated ./generated/
+canu validate network config --csm 1.3 --running ./running/ --generated ./generated/
 ```
 
 CANU-generated switch configurations will not include any ports or devices not defined in the model. These were previously discussed in the
@@ -59,7 +62,7 @@ custom to every site and must be distributed with the analysis and configuration
 
 Note: A roadmap item for CANU is the ability to "inject" customer configurations into CANU and provide solid, repeatable configuration customization.
 
-## Analyze CSM 1.2 configuration upgrade
+## Analyze CSM 1.3 configuration upgrade
 
 Configuration updates depending on the current version of network configuration may be as easy as adding few lines or be a complete "rip and replace"
 operation which may lead you to choosing to wipe the existing configuration or just simply adding few lines in the configuration.

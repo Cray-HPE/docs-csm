@@ -31,7 +31,7 @@ Generating a configuration file can be done for a single switch, or for the full
 
 **Important:** Modify the following items in your command:
 
-* `--csm` : Which CSM version configuration do you want to use? For example, `1.2` or `1.0`
+* `--csm` : Which CSM version configuration do you want to use? For example, `1.3`, `1.2` or `1.0`
 * `--a`   : What is the system architecture? (See above)
 * `--ccj` : Match the `ccj.json` file to the one you created for your system.
 * `--sls` : Match the `sls_file.json` to the one you created for your system.
@@ -40,11 +40,11 @@ Generating a configuration file can be done for a single switch, or for the full
 * Generate a configuration file for single switch:
 
     ```console
-    canu generate switch configuration--csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --name sw-spine-001
+    canu generate switch config --csm 1.3 -a full --ccj system-ccj.json  --sls-file sls_file.json --name sw-spine-001
     ```
 
 * Generate configuration files for full system:
 
     ```console
-    canu generate network configuration--csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
+    canu generate network config --csm 1.3 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
     ```
