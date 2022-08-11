@@ -1,5 +1,4 @@
-#### Known issues with NCN health checks
-
+# Known issues with NCN health checks
 
 - The first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes. In the case of failure, wait for five minutes and rerun the tests.
  
@@ -16,7 +15,6 @@
     upon the deployment of a backup schedule (for example, Vault). It may be necessary to delete backups from a Kubernetes node to
     clear this situation. For more information on how to clean up backups that have failed due to a known interruption, see the output of the test. 
     For example:
-
 
      1. (`ncn#` or `pit#`) Find the failed backup.
 
@@ -87,7 +85,6 @@
         ```bash
         /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
         ```
-
 
      1. Rerun the check to see if the problem is resolved.
 

@@ -43,8 +43,6 @@ sleep 2s
 echo "--------------------------------"
 
 #Download Goss yaml configuration file
-mkdir -p /tmp/goss
-cd /tmp/goss
 wget -q https://raw.githubusercontent.com/Cray-HPE/csm-testing/CASMINST-v1.3/goss-testing/suites/ncn-csm-health-validation.yaml
 
 #Execute goss checks
