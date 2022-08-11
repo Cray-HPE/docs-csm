@@ -10,7 +10,7 @@ Summary:
 - The Aruba Spine switches are connected to the Arista switches with point-to-point OSPF links.
 - The Arista Edge switches are redistributing the default route to the Aruba switches via OSPF.  This allows the Shasta cluster to have external access.
 
-This is an example only, it should only be used as a reference only.  DO NOT copy any configuration from these examples.
+This is an example only, it should only be used as a reference only. DO NOT copy any configuration from the examples in this section.
 
 ## Topology
 
