@@ -73,7 +73,7 @@ Setting SystemDefaultRoute to CHN
 
 ### Configure Management Network
 
-If the system is moving from the CAN to CHN the management network will need configuration changes to allow connectivity.
+If the system is moving from the CAN to CHN, then the management network will need configuration changes to allow connectivity.
 
 1. Configure management network switches and customer edge switches. [BICAN switch configuration](bican_switch_configuration.md)
 
