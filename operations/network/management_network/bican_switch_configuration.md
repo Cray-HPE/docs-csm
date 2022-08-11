@@ -77,7 +77,7 @@ sw-spine-002: |
 
 ### Generate
 
-Generate switch configurations with custom configurations.  (Arista Only)
+Generate switch configurations with custom configurations (Arista only).
 
 This is an example only. More details on how to generate configurations with CANU can be found in the [Generate Switch Configurations](generate_switch_configs.md) procedure.
 
