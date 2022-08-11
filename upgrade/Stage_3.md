@@ -3,7 +3,7 @@
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-## Prepare assets on `ncn-m002`
+## Move assets to `ncn-m002`
 
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
@@ -12,53 +12,11 @@
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
+1. Move the RBD device containing the CSM tarball.
 
-   - If there is a URL for the CSM `tar` file that is accessible from `ncn-m002`, then the [Direct download](#direct-download) procedure may be used.
-   - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m002`.
-
-### Direct download
-
-1. Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
-
-   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}${CSM_REL_NAME}.tar.gz`
-
-   > **`NOTE`** This step is optional for Cray/HPE internal installs, if `ncn-m002` can reach the internet.
-
-   ```bash
-   ENDPOINT=https://put.the/url/here/
-   ```
-
-1. Run the script.
-
-   > **`NOTE`** For Cray/HPE internal installs, if `ncn-m002` can reach the internet, then the `--endpoint` argument may be omitted.
-
-   ```bash
-   /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
-   ```
-
-1. Skip the `Manual copy` subsection and proceed to [Perform upgrade](#perform-upgrade).
-
-### Manual copy
-
-1. Copy the CSM release `tar` file to `ncn-m002`.
-
-   See [Update Product Stream](../update_product_stream/README.md).
-
-1. Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m002`.
-
-   ```bash
-   CSM_TAR_PATH=/path/to/${CSM_REL_NAME}.tar.gz
-   ```
-
-1. Run the script.
-
-   > By default, the script will delete the CSM tarball file. If not wanting the tarball file to be deleted, then
-   > append the `--no-delete-tarball-file` argument when running the script.
-
-   ```bash
-   /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
-   ```
+    ```bash
+   /usr/share/doc/csm/scripts/csm_rbd_tool/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
+    ```
 
 ## Perform upgrade
 
