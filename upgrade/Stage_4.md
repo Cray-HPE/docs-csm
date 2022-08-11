@@ -1,9 +1,9 @@
 # Stage 4 - Ceph Upgrade
 
-**Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
+**Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, then see
 [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-## Addresses Bugs and CVEs
+## Ceph upgrade contents
 
 The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph version index](https://docs.ceph.com/en/latest/releases/pacific/) for details.
 
@@ -11,13 +11,14 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
 
 * This upgrade is performed using the `cubs_tool`.
 * The `cubs_tool.py` can be found on `ncn-s00[1-3]` in `/srv/cray/script/common/`
-* Unless otherwise noted, all `ceph` commands that may need to be used in this stage may be run on any master node or any of the first three storage nodes (`ncn-s00[1-3]`).
+* Unless otherwise noted, all `ceph` commands that may need to be used in this stage may be run on any master node or any of the first three storage
+  nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
 ### Initiate upgrade
 
-1. Check to ensure that the upgrade is possible.
+1. (`ncn-s001#`) Check to ensure that the upgrade is possible.
 
-   On `ncn-s001`:
+   On :
 
    ```bash
    /srv/cray/scripts/common/cubs_tool.py --version 16.2.9 --registry localhost
@@ -29,15 +30,10 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
    Upgrade Available!!  The specified version v16.2.9 has been found in the registry
    ```
 
-   **Notes:**
+   **Note:** If the output does not match what is expected, then this can indicate that a previous step has failed.
+   Review the output from [Stage 1](Stage_1.md) for errors or contact support.
 
-   * This upgrade is targeting the Ceph processes running `15.2.15` only.
-   * The monitoring services may be listed but those are patched internally and may not be upgraded with this upgrade.
-     * This includes `alertmanager`, `prometheus`, `node-exporter`, and `grafana`.
-   * If the output does not match what is expected, then this can indicate that a previous step has failed.
-     Review output from [Stage 1](Stage_1.md) for errors or contact support.
-
-1. Start the upgrade.
+1. (`ncn-s001#`) Start the upgrade.
 
    ```bash
    /srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry localhost --upgrade
@@ -50,9 +46,12 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
    Initiating Ceph upgrade from v16.2.7 to v16.2.9
    ```
 
+   The source version in the output may vary, but the target version should match what is shown above.
+
 1. Monitor the upgrade.
 
-   The `cubs_tool` will automatically watch the upgrade.  As services are upgraded they will move from the ***Current*** column to the ***Upgraded*** column.
+   The `cubs_tool` will automatically watch the upgrade.
+   As services are upgraded, they will move from the `Total Current` column to the `Total Upgraded` column.
 
    ```text
    +---------+---------------+----------------+
@@ -67,7 +66,7 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
    +---------+---------------+----------------+
    ```
 
-   This will progress to the end result of:
+   The final result should have `0` for every service in the `Total Current` column.
 
    ```text
    +---------+---------------+----------------+
@@ -82,9 +81,7 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
    +---------+---------------+----------------+
    ```
 
-1. Verify completed upgrade
-
-   On `ncn-s001`:
+1. (`ncn-s001#`) Verify that the upgrade completed successfully.
 
    ```bash
    /srv/cray/scripts/common/cubs_tool.py --report
@@ -92,7 +89,7 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
 
    Expected output:
 
-   ```bash
+   ```text
    +----------+-------------+-----------------+---------+---------+
    |   Host   | Daemon Type |        ID       | Version |  Status |
    +----------+-------------+-----------------+---------+---------+
@@ -143,12 +140,12 @@ The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph 
    +----------+-------------+-----------------------+---------+---------+
    ```
 
-   **NOTE:** This is an example only and is showing only the core Ceph components.  
+   **NOTE:** This is an example only and is showing only the core Ceph components.
 
 ### Diagnose a stalled upgrade
 
-The processes running the Ceph container image will go through the upgrade process. This involves stopping the old process running the version `15.2.15`
-container and restarting the process with the new version `16.2.9` container image.
+The processes running the Ceph container image will go through the upgrade process. This involves stopping the old process
+and restarting the process with the new version `16.2.9` container image.
 
 **IMPORTANT:** Only processes running the `15.2.15` image will be upgraded. This includes `crash`, `mds`, `mgr`, `mon`, `osd`, and `rgw` processes only.
 
@@ -157,7 +154,7 @@ container and restarting the process with the new version `16.2.9` container ima
 If `ceph -s` shows a warning with `UPGRADE_FAILED_PULL: Upgrade: failed to pull target image` as the description, then perform the following procedure
 on any of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
-1. Check the upgrade status.
+1. (`ncn-s#`) Check the upgrade status.
 
     ```bash
     ceph orch upgrade status
@@ -174,22 +171,22 @@ on any of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
      }
      ```
 
-1. Pause and resume the upgrade.
+1. (`ncn-s#`) Pause and resume the upgrade.
 
     ```bash
     ceph orch upgrade pause
     ceph orch upgrade resume
     ```
 
-1. Watch `cephadm`.
+1. (`ncn-s#`) Watch `cephadm`.
 
-    This command watches the `cephadm` logs. If the issue occurs again, it will give more details about which node may be having an issue.
+    This command watches the `cephadm` logs. If the issue occurs again, then it will give more details about which node may be having an issue.
 
     ```bash
     ceph -W cephadm
     ```
 
-1. If the issue occurs again, then log into each of the storage nodes and perform a `podman` pull of the image.
+1. (`ncn-s#`) If the issue occurs again, then log into each of the storage nodes and perform a `podman` pull of the image.
 
     ```bash
     podman pull localhost/quay.io/ceph/ceph:v16.2.9
@@ -197,40 +194,12 @@ on any of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
 If these steps do not resolve the issue, then contact support for further assistance.
 
-   1. Troubleshoot the failed upgrade.
+### Troubleshoot a failed upgrade
 
-      The upgrade is not complete. See
-      See [Ceph Orchestrator Usage](../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
-
-   1. Verify that no processes are running the old version `15.2.15`.
-
-   The following command will count the number of processes which are running version `15.2.15`.
-
-   ```bash
-   ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.15")] | length'
-   ```
-
-   If the command outputs any number other than zero, then this means there are processes still running `15.2.15`. In that case, do the following:
-
-   1. List the processes which are not at the expected version.
-
-      ```bash
-      ceph orch ps -f json-pretty|jq -r '[.[]|select(.version=="15.2.15")]'
-      ```
-
-   2. Make sure the upgrade has stopped.
-
-      ```bash
-      ceph orch upgrade stop
-      ```
-
-   3. Troubleshoot the failed upgrade.
-
-      The upgrade is not complete. See
-      [Ceph Orchestrator Usage](../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
-
-**DO NOT** proceed past this point if the upgrade has not completed and been verified. Contact support for in-depth troubleshooting.
+See [Ceph Orchestrator Usage](../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
 
 ## Stage completed
+
+**DO NOT** proceed past this point if the upgrade has not completed and been verified. Contact support for in-depth troubleshooting.
 
 This stage is completed. Continue to [Stage 5](Stage_5.md).

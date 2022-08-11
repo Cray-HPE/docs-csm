@@ -158,14 +158,14 @@ function ssh_keygen_keyscan() {
     [ $? -ne 0 ] && return 1
     ssh-keygen -R "${ncn_ip}" -f "${known_hosts}" > /dev/null 2>&1
     [ $? -ne 0 ] && return 1
-    ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"  > /dev/null 2>&1
+    ssh-keyscan -H "${target_ncn},${ncn_ip}" > /dev/null 2>&1 >> "${known_hosts}"
     res=$?
 
     # remove the old authorized_hosts entry for the target NCN cluster-wide
     {
         NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
         HOSTS=$(echo $NCNS | tr -t ' ' ',')
-        pdsh -w $HOSTS ssh-keygen -R ${target-ncn}
+        pdsh -w $HOSTS ssh-keygen -R ${target_ncn}
         pdsh -w $HOSTS ssh-keygen -R ${ncn_ip}
     } >& /dev/null
 

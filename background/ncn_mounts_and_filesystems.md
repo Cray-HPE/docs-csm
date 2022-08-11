@@ -1,27 +1,27 @@
-# NCN Mounts and File Systems
+# NCN Mounts and Filesystems
 
 The management nodes use drive storage for persistence and block storage. This page outlines
 reference information for these disks, their partition tables, and their management.
 
-- [Disk layout quick-reference tables](#disk-layout-quick-reference-tables)
-- [OverlayFS and persistence](#overlayfs-and-persistence)
-  - [`SQFSRAID` and `ROOTRAID` overlays](#sqfsraid-and-rootraid-overlays)
-  - [Helpful commands](#helpful-commands)
-  - [OverlayFS example](#overlayfs-example)
-    - [`mount` command](#mount-command)
-    - [`losetup` command](#losetup-command)
-    - [`lsblk` command](#lsblk-command)
-  - [Persistent directories](#persistent-directories)
-    - [Layering: Upper and lower directory](#layering-upper-and-lower-directory)
-    - [Layering: Real world example](#layering-real-world-example)
-  - [OverlayFS control](#overlayfs-control)
-    - [Reset toggles](#reset-toggles)
-    - [Reset on next boot](#reset-on-next-boot)
-    - [Reset on every boot](#reset-on-every-boot)
-    - [Re-sizing the persistent overlay](#re-sizing-the-persistent-overlay)
-    - [Thin overlay feature](#thin-overlay-feature)
-- [`metalfs`](#metalfs)
-- [Old/retired FS labels](#oldretired-fs-labels)
+* [Disk layout quick-reference tables](#disk-layout-quick-reference-tables)
+* [OverlayFS and persistence](#overlayfs-and-persistence)
+  * [`SQFSRAID` and `ROOTRAID` overlays](#sqfsraid-and-rootraid-overlays)
+  * [Helpful commands](#helpful-commands)
+  * [OverlayFS example](#overlayfs-examples)
+    * [`mount` command](#mount-command)
+    * [`losetup` command](#losetup-command)
+    * [`lsblk` command](#lsblk-command)
+  * [Persistent directories](#persistent-directories)
+    * [Layering: Upper and lower directory](#layering-upper-and-lower-directory)
+    * [Layering: Real world example](#layering-real-world-example)
+  * [OverlayFS control](#overlayfs-control)
+    * [Reset toggles](#reset-toggles)
+    * [Reset on next boot](#reset-on-next-boot)
+    * [Reset on every boot](#reset-on-every-boot)
+    * [Re-sizing the persistent overlay](#re-sizing-the-persistent-overlay)
+    * [Thin overlay feature](#thin-overlay-feature)
+* [`metalfs`](#metalfs)
+* [Old/retired FS labels](#oldretired-fs-labels)
 
 ## Disk layout quick-reference tables
 
@@ -59,21 +59,21 @@ The above table's rows with OverlayFS map their `Mount Paths` to the `Upper Dire
 
 The overlays used on NCNs enable two critical functions:
 
-- Changes to data and new data will persist between reboots.
-- RAM (memory) is freed because the data is stored on block devices (SATA/PCIe).
+* Changes to data and new data will persist between reboots.
+* RAM (memory) is freed because the data is stored on block devices (SATA/PCIe).
 
 There are a few overlays used for NCN image boots:
 
-- `ROOTRAID` is the persistent root OverlayFS. It commits and saves all changes made to the running OS.
-- `CONLIB` is a persistent OverlayFS for `containerd`. It commits and saves all new changes while allowing read-through to pre-existing data from the SquashFS.
-- `ETCDK8S` is a persistent OverlayFS for etcd. It works like the `CONLIB` OverlayFS, but it exists in an encrypted LUKS2 partition.
+* `ROOTRAID` is the persistent root OverlayFS. It commits and saves all changes made to the running OS.
+* `CONLIB` is a persistent OverlayFS for `containerd`. It commits and saves all new changes while allowing read-through to pre-existing data from the SquashFS.
+* `ETCDK8S` is a persistent OverlayFS for etcd. It works like the `CONLIB` OverlayFS, but it exists in an encrypted LUKS2 partition.
 
 ### `SQFSRAID` and `ROOTRAID` overlays
 
-- `/run/rootfsbase` is the SquashFS image itself.
-- `/run/initramfs/live` is the SquashFS's storage array, where one or more SquashFS can be stored.
-- `/run/initramfs/overlayfs` is the OverlayFS storage array, where the persistent directories are stored.
-- `/run/overlayfs` and `/run/ovlwork` are symbolic links to `/run/initramfs/overlayfs/overlayfs-SQFSRAID-$(blkid -s UUID -o value /dev/disk/by-label/SQFSRAID)` and the neighboring "work" directory[^2].
+* `/run/rootfsbase` is the SquashFS image itself.
+* `/run/initramfs/live` is the SquashFS's storage array, where one or more SquashFS can be stored.
+* `/run/initramfs/overlayfs` is the OverlayFS storage array, where the persistent directories are stored.
+* `/run/overlayfs` and `/run/ovlwork` are symbolic links to `/run/initramfs/overlayfs/overlayfs-SQFSRAID-$(blkid -s UUID -o value /dev/disk/by-label/SQFSRAID)` and the neighboring "work" directory[^2].
 
 [^2]: The "work" directory is where the operating system processes data. It is the interim where data passes between RAM and persistent storage.
 
@@ -167,16 +167,16 @@ not assume). For more information, see [OverlayFS control](#overlayfs-control).
 
 Only the following directories are persistent _by default_:
 
-- `/etc`
-- `/home`
-- `/root`
-- `/run/containerd`
-- `/run/lib-containerd`
-- `/run/lib-etcd`
-- `/run/lib/kubelet`
-- `/srv`
-- `/tmp`
-- `/var`
+* `/etc`
+* `/home`
+* `/root`
+* `/run/containerd`
+* `/run/lib-containerd`
+* `/run/lib-etcd`
+* `/run/lib/kubelet`
+* `/srv`
+* `/tmp`
+* `/var`
 
 This initial set is managed by dracut. When using a reset toggle, the above list is reset to the above default value. While more directories can be added to the list,
 they will be eradicated when enabling a reset toggle. For more information, see [OverlayFS control](#overlayfs-control).
@@ -205,13 +205,13 @@ drwxr-xr-x 8 root root  76 Oct 13 16:52 var
 
 The file system the user is working on is really two layered file systems (overlays).
 
-- The lower layer (also called the lower directory) is the SquashFS image itself. It is read-only and provides all that is needed to run.
-- The upper layer (also called the upper directory) is the OverlayFS. It is read-write, and does a bit-wise `xor` with the lower layer.
-- Anything in the upper layer takes precedence by default.
+* The lower layer (also called the lower directory) is the SquashFS image itself. It is read-only and provides all that is needed to run.
+* The upper layer (also called the upper directory) is the OverlayFS. It is read-write, and does a bit-wise `xor` with the lower layer.
+* Anything in the upper layer takes precedence by default.
 
 > There are fancier options for overlays, such as multiple lower layers, copy-up (lower layer precedence),
 > and opaque (removing a directory in the upper layer hides it in the lower layer). For details, see
-> [Overlay Filesystem: Inode properties](https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html#inode-properties).
+> [Overlay Filesystem: `inode` properties](https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html#inode-properties).
 
 #### Layering: Real world example
 
@@ -255,8 +255,8 @@ drwx------ 2 root root  70 Oct 21 21:57 .ssh
 
 Notice the following:
 
-- The `.bash_history` file in the lower directory is 0 bytes, but it is 252 bytes in the upper directory.
-- The `.kube` directory exists in the upper directory, but not the lower directory.
+* The `.bash_history` file in the lower directory is 0 bytes, but it is 252 bytes in the upper directory.
+* The `.kube` directory exists in the upper directory, but not the lower directory.
 
 (`ncn#`) Keeping the above in mind, look at the contents of `/root` itself:
 
@@ -282,8 +282,8 @@ drwx------ 1 root root  29 Oct 21 21:57 .ssh
 
 Notice the following:
 
-- `.bash_history` matches the upper directory.
-- The `.kube` directory exists here.
+* `.bash_history` matches the upper directory.
+* The `.kube` directory exists here.
 
 The take-away here is that any change done to `/root/` will persist through `/run/overlayfs/root` and will take precedence to the SquashFS image root.
 
@@ -338,8 +338,8 @@ metal.no-wipe=0 rd.live.overlay.reset=1
 
 #### Re-sizing the persistent overlay
 
-- Default size: 300 GiB
-- File system: XFS
+* Default size: 300 GiB
+* File system: XFS
 
 The overlay can be resized to fit a variety of needs or use cases. The size is provided directly
 on the command line. Any value can be provided, but it must be in **megabytes**.

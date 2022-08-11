@@ -615,6 +615,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 - [Troubleshoot Spire Failing to Start on NCNs](spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
 - [Update Spire Intermediate CA Certificate](spire/Update_Spire_Intermediate_CA_Certificate.md)
 - [Xname Validation](spire/xname_validation.md)
+- [Restore Missing Spire Meta-Data](spire/Restore_Missing_Spire_Metadata.md)
 
 ## Update firmware with FAS
 

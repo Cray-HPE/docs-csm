@@ -285,8 +285,8 @@ These variables will need to be set for many procedures within the CSM installat
 1. (`pit#`) Create the `admin` directory for the typescripts and administrative scratch work.
 
    ```bash
-   mkdir -pv "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
-   ls -l "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/admin"
+   mkdir -pv "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/prep/admin"
+   ls -l "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/prep/admin"
    ```
 
 1. (`pit#`) Exit the typescript and log out.
@@ -319,8 +319,8 @@ These variables will need to be set for many procedures within the CSM installat
 1. (`pit#`) Copy the previous typescript and start a new one.
 
    ```bash
-   cp -pv /tmp/boot.livecd.*.txt "${PITDATA}/admin"
-   script -af "${PITDATA}/admin/csm-install.$(date +%Y-%m-%d).txt"
+   cp -pv /tmp/boot.livecd.*.txt "${PITDATA}/prep/admin"
+   script -af "${PITDATA}/prep/admin/csm-install.$(date +%Y-%m-%d).txt"
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
@@ -416,16 +416,16 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
            update -y cray-site-init
        ```
 
-   1. Install `csm-testing` and `goss-servers`.
+   1. Install `csm-testing` RPM.
 
-       > ***NOTE*** These packages provide the necessary tests and their dependencies for validating the pre-installation, installation, and more.
+       > ***NOTE*** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
 
        ```bash
        zypper \
            --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
            --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
            --no-gpg-checks \
-           install -y csm-testing goss-servers
+           install -y csm-testing
       ```
 
 1. (`pit#`) Get the artifact versions.

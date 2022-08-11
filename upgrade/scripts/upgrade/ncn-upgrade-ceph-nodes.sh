@@ -106,10 +106,8 @@ state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
-    if [[ $ssh_keys_done == "0" ]]; then
-        ssh_keygen_keyscan "${target_ncn}"
-        ssh_keys_done=1
-    fi
+    ssh_keygen_keyscan "${target_ncn}"
+    ssh_keys_done=1
     scp ./${target_ncn}-ceph.tgz $target_ncn:/
     ssh ${target_ncn} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
     ssh ${target_ncn} '/srv/cray/scripts/common/pre-load-images.sh'
@@ -164,13 +162,12 @@ fi
 wait_for_health_ok ${target_ncn}
 
 # Wait for rgw to start before executing goss tests
-target_ncn=ncn-s001
 rgw_counter=0
 until [[ $(ceph orch ps --daemon_type rgw ${target_ncn} --format json-pretty|jq -r '.[].status_desc') == "running" ]]
 do
   sleep 30
   let rgw_counter+=1
-  if rgw_counter -gt 10
+  if [[ $rgw_counter -gt 10 ]]
   then
     exit 1
   fi
