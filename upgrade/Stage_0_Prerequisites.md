@@ -31,7 +31,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
     ```bash
     source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-    /usr/share/doc/csm/scripts --pool_action create --rbd_action create --target_host ncn-m001
+    /usr/share/doc/csm/scripts/csm_rbd_tool/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
     deactivate
     ```
 
@@ -40,17 +40,12 @@ Stage 0 has several critical procedures which prepare the environment and verify
     Example:
 
     ```bash
-   source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-   /usr/share/doc/csm/scripts --rbd_action move --target_host ncn-m002
-   deactivate
+    /usr/share/doc/csm/scripts/csm_rbd_tool/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
     ```
 
-    However, the `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
-    If using an `rbd` device, this is not necessary or desirable, as it will require the CSM tarball to be downloaded again later in the
-    procedure. Therefore, **if using an `rbd` device to store the CSM tarball**, then copy the tarball to a different location and point to that location
-    when running the `prepare-assets.sh` script.
+    **IMPORTANT:** This will mount the `rbd` device at `/etc/cray/upgrade/csm` on the desired node.
 
-1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
+2. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
    - If there is a URL for the CSM `tar` file that is accessible from `ncn-m001`, then the [Direct download](#direct-download) procedure may be used.
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m001`.
