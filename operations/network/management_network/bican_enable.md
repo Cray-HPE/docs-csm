@@ -1,25 +1,27 @@
 # Enabling Customer High Speed Network Routing
 
-- [Prerequisites](#prerequisites)
-- [Configuration tasks](#configuration-tasks)
-  - [Configure SLS](#configure-sls)
-  - [Configure UAN](#configure-uan)
-  - [Minimize UAN downtime](#minimize-uan-downtime)
-  - [Configure UAI](#configure-uai)
-  - [Configure compute nodes](#configure-compute-nodes)
-    - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
-    - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
-    - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
-    - [Enable CFS layer](#enable-cfs-layer)
-  - [Configure NCNs](#configure-ncns)
-  - [Configure the API gateways](#configure-the-api-gateways)
-- [Validation tasks](#validation-tasks)
-  - [Validating SLS](#validating-sls)
-  - [Validating UAN](#validating-uan)
-  - [Validating UAI](#validating-uai)
-  - [Validate compute nodes](#validate-compute-nodes)
-  - [Validate NCNs](#validate-ncns)
-  - [Validate the API gateways](#validate-the-api-gateways)
+- [Enabling Customer High Speed Network Routing](#enabling-customer-high-speed-network-routing)
+  - [Prerequisites](#prerequisites)
+  - [Configuration tasks](#configuration-tasks)
+    - [Configure SLS](#configure-sls)
+    - [Configure Management Network](#configure-management-network)
+    - [Configure UAN](#configure-uan)
+    - [Minimize UAN downtime](#minimize-uan-downtime)
+    - [Configure UAI](#configure-uai)
+    - [Configure compute nodes](#configure-compute-nodes)
+      - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
+      - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
+      - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
+      - [Enable CFS layer](#enable-cfs-layer)
+    - [Configure NCNs](#configure-ncns)
+    - [Configure the API gateways](#configure-the-api-gateways)
+  - [Validation tasks](#validation-tasks)
+    - [Validating SLS](#validating-sls)
+    - [Validating UAN](#validating-uan)
+    - [Validating UAI](#validating-uai)
+    - [Validate compute nodes](#validate-compute-nodes)
+    - [Validate NCNs](#validate-ncns)
+    - [Validate the API gateways](#validate-the-api-gateways)
 
 ## Prerequisites
 
@@ -69,6 +71,12 @@ Example output:
 ```text
 Setting SystemDefaultRoute to CHN
 ```
+
+### Configure Management Network
+
+If the system is moving from the CAN to CHN the management network will need configuration changes to allow connectivity.
+
+1. Configure management network switches and customer edge switches. [BICAN switch configuration](bican_switch_configuration.md)
 
 ### Configure UAN
 
