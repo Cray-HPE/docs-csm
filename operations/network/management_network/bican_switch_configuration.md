@@ -15,7 +15,7 @@ Topology example:
 
 ![Topology](../../../img/network/bican_cable.png)
 
-## Switch Configuration
+## Switch configuration
 
 ### Prerequisites
 
