@@ -39,17 +39,22 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the xname with `sat status`.
 
        ```bash
-       ncn# sat status | grep "Compute\|Application"
+       ncn# sat status --filter role!=management --filter enabled=true \
+       --fields xname,aliases,role,subrole,"desired config"
        ```
 
        Example output:
 
        ```
-       | x3000c0s19b1n0 | Node | 1        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s19b2n0 | Node | 2        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s19b3n0 | Node | 3        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s19b4n0 | Node | 4        | On    | OK   | True    | X86  | River | Compute     | Sling    |
-       | x3000c0s27b0n0 | Node | 49169248 | On    | OK   | True    | X86  | River | Application | Sling    |
+       +----------------+-----------+-------------+---------+--------------------+
+       | xname          | Aliases   | Role        | SubRole | Desired Config     |
+       +----------------+-----------+-------------+---------+--------------------+
+       | x1000c0s0b0n0  | nid001000 | Compute     | None    | cos-config-2.3.101 |
+       | x1000c0s0b0n1  | nid001001 | Compute     | None    | cos-config-2.3.101 |
+       | x1000c0s0b1n0  | nid001002 | Compute     | None    | cos-config-2.3.101 |
+       | x1000c0s0b1n1  | nid001003 | Compute     | None    | cos-config-2.3.101 |
+       | x3000c0s23b0n0 | uan01     | Application | UAN     | uan-config-2.4.3   |
+       +----------------+-----------+-------------+---------+--------------------+
        ```
 
     1. Find the `bos_session` value via the Configuration Framework Service (CFS).
@@ -67,25 +72,25 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Find the required `templateUuid` value with BOS.
 
        ```bash
-       ncn# cray bos session describe BOS_SESSION | grep templateUuid
+       ncn# cray bos session describe BOS_SESSION | grep templateName
        ```
 
        Example output:
 
        ```
-       templateUuid = "compute-nid1-4-sessiontemplate"
+       templateName = "cos-2.3.101"
        ```
 
-    1. Determine the list of xnames associated with the desired boot session template.
+    1. Determine the list of xnames or role groups or HSM groups associated with the desired boot session template.
 
        ```bash
-       ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+       ncn# cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
        ```
 
        Example output:
 
        ```
-       node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
+       node_roles_groups = [ "Compute",]
        ```
 
 1.  Use sat to capture state of the system before the shutdown.
@@ -96,19 +101,27 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1.  Optional system health checks.
 
+    **Important:** Running the System Diagnostic Utility (SDU) may take 20 to 60 minutes to run so
+    start this command in one terminal session and then start another session for the other optional
+    system health checks to be run while SDU is in progress.
+
     1.  Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
-        **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
-
         ```bash
-        ncn# sdu --scenario triage --start_time '-4 hours' \
+        ncnm# sdu --scenario triage --start_time '-4 hours' \
                  --reason "saving state before powerdown"
         ```
+        ***Important:** If the master node where you attempt to run `sdu` does not have SDU installed or
+        configured, it might be installed on another master node. If it is not installed and configured
+        on any master nodes, then see the SDU documentation about how to install the cray-sdu-rda rpm, start
+        the cray-sdu-rda serivce, wait for the cray-sdu-rda service to become ready, and configure it using
+        the `sdu setup` command. See these topics about Install and Configure in the the HPE Cray EX with
+        CSM System Diagnostic Utility (SDU) Installation Guide (S-8034).
 
     1.  Capture the state of all nodes.
 
         ```bash
-        ncn# sat status | tee sat.status.off
+        ncn# sat status | tee sat.status
         ```
 
     1.  Capture the list of disabled nodes.
@@ -150,37 +163,44 @@ An authentication token is required to access the API gateway and to use the `sa
         Additional Kubernetes status check examples:
 
         ```bash
-        ncn# kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" > k8s.pods.CLBO
-        ncn# kubectl get pods -o wide -A | egrep  "ContainerCreating" > k8s.pods.CC
-        ncn# kubectl get pods -o wide -A | egrep -v "Run|Completed" > k8s.pods.errors
+        ncn# kubectl get pods -o wide -A | egrep  "CrashLoopBackOff" | tee k8s.pods.CLBO
+        ncn# kubectl get pods -o wide -A | egrep  "ContainerCreating" | tee k8s.pods.CC
+        ncn# kubectl get pods -o wide -A | egrep -v "Run|Completed" | tee k8s.pods.errors
         ```
 
     1.  Check HSN status.
 
-        Determine the name of the `slingshot-fabric-manager` pod:
-
-        ```bash
-        ncn# kubectl get pods -l app.kubernetes.io/name=slingshot-fabric-manager -n services
-        ```
-
-        Example output:
-
-        ```
-        NAME                                        READY   STATUS    RESTARTS   AGE
-        slingshot-fabric-manager-5dc448779c-d8n6q   2/2     Running   0          4d21h
-        ```
-
         Run `fmn_status` in the `slingshot-fabric-manager` pod and save the output to a file:
 
         ```bash
-        ncn# kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
-                     -c slingshot-fabric-manager -- fmn_status --details | tee fabric.status
+        ncn# kubectl exec -it -n services $(kubectl get pods \
+        -l app.kubernetes.io/name=slingshot-fabric-manager -n services | tail -1 \
+        | cut -f1 -d" ") -c slingshot-fabric-manager -- fmn_status --details \
+        | tee fabric.status.details
         ```
 
-    1. Check management switches to verify they are reachable \(switch host names depend on system configuration\).
+    1.  Check management switches to verify they are reachable.
+ 
+        > *Note:* The switch host names depend on the system configuration.
+
+        1. Look in `/etc/hosts` for the management network switches on this system. The names of
+        all spine switches, leaf switches, leaf BMC switches, and CDU switches need ot be used in
+        the next step.
 
         ```bash
-        ncn# for switch in sw-leaf-00{1,2}.mtl sw-spine-00{1,2}.mtl sw-cdu-00{1,2}.mtl; do
+        ncn# grep sw- /etc/hosts
+        10.254.0.2      sw-spine-001
+        10.254.0.3      sw-spine-002
+        10.254.0.4      sw-leaf-bmc-001
+        10.254.0.5      sw-leaf-bmc-002
+        10.100.0.2      sw-cdu-001
+        10.100.0.3      sw-cdu-002
+        ```
+
+        1. Ping all switches using the proper list of hostnames in the index of the for loop.
+
+        ```bash
+        ncn# for switch in sw-leaf-00{1,2} sw-leaf-bmc-00{1-2} sw-spine-00{1,2} sw-cdu-00{1,2}l; do
                  while true; do
                      ping -c 1 $switch > /dev/null && break
                      echo "switch $switch is not yet up"
@@ -194,7 +214,9 @@ An authentication token is required to access the API gateway and to use the `sa
 
         ```bash
         ncn# ssh admin@cls01234n00.us.cray.com
+        admin@cls01234n00# cscli csinfo
         admin@cls01234n00# cscli show_nodes
+        admin@cls01234n00# cscli fs_info
         ```
 
     1. From a node which has the Lustre file system mounted.

@@ -112,6 +112,12 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     [...]
     ```
 
+   **Important:** For Gigabyte nodes only: If the console for any application nodes shows that the node fails
+   to PXE boot over the expected interface, it may be necessary to reapply BIOS settings for the node.
+   Gigabyte BIOS C27 and earlier may have this issue. To ensure that the first LAN port is configured
+   in BIOS for PXE boot, see "Configure the BIOS of a Gigabyte UAN" in the HPE Cray User Access Node
+   (UAN) Installation Guide (S-8032).
+
 1. Make nodes available to customers and refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
 
 ## Next Step

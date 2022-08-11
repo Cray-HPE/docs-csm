@@ -34,10 +34,10 @@ error state. Once any remaining testing or validation work is complete, these po
                 jsonpath='{.spec.volumes[*].persistentVolumeClaim.claimName}{"\n"}'
         ```
 
-1. Verify that the time is synced across all NCNs.
+1. Verify that the time is synced across all management nodes.
 
     ```bash
-    ncn# pdsh -w ncn-s00[1-3],ncn-m00[1-3],ncn-w00[1-3] date
+    ncn# pdsh -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') date
     ```
 
     Example output:

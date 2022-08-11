@@ -170,6 +170,12 @@ An authentication token is required to access the API gateway and to use the `sa
 
 1. Shut down and power off all management NCNs except `ncn-m001`.
 
+   **Important:** The default timeout for the next command is 300 seconds. If it is known that
+   the nodes take longer than this amount of time for a graceful shutdown, then a different value
+   can be set using the `--ncn-shutdown-timeout NCN_SHUTDOWN_TIMEOUT" with a value other than 300
+   for NCN_SHUTDOWN_TIMEOUT. Once this timeout has been exceeded, the node will be forcefully
+   powered down.
+
    ```bash
    ncn-m001# sat bootsys shutdown --stage ncn-power
    ```
