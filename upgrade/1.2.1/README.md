@@ -14,6 +14,14 @@ Earlier version of CSM must first be upgraded to at least `v1.2.0`. For informat
 1. [Verification](#verification)
 1. [Complete upgrade](#complete-upgrade)
 
+## Upgrade CSM network configuration
+
+Before proceeding with the patch installation. Upgrade the CSM management network configuration.
+
+Detailed information on the fixes and configuration updates can be found from [CANU release notes](../../operations/network/management_network/canu_install_update.md)
+
+ 1. [Upgrade CSM network configuration](upgrade_network.md)
+
 ## Preparation
 
 1. Start a typescript on `ncn-m001` to capture the commands and output from this procedure.
