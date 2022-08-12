@@ -33,12 +33,10 @@ error state. Once any remaining testing or validation work is complete, these po
         ncn-mw# kubectl get pod POD_NAME -o jsonpath='{.spec.volumes[*].persistentVolumeClaim.claimName}{"\n"}'
         ```
 
-1. Verify that the time is synced across all NCNs.
-
-    > Adjust the ranges in the example command to reflect the actual NCNs on the system.
+1. Verify that the time is synced across all management nodes.
 
     ```bash
-    ncn# pdsh -w ncn-s00[1-3],ncn-m00[1-3],ncn-w00[1-3] date
+    ncn-mw# pdsh -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') date
     ```
 
     Example output:
