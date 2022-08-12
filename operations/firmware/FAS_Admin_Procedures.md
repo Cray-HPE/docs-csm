@@ -5,6 +5,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 ## Topics
 
 * [Warning for Non-Compute Nodes (NCNs)](#warning-for-non-compute-nodes-ncns)
+* [Declarative vs Imperative FAS Updates](#declarative-vs-imperative-fas-updates)
 * [Ignore Nodes within FAS](#ignore-nodes-within-fas)
 * [Override an Image for an Update](#override-an-image-for-an-update)
 * [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
@@ -22,6 +23,16 @@ Failure to lock the NCNs could result in unintentional update of the NCNs if FAS
 **NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
 These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
 This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
+
+---
+
+## Declarative vs Imperative FAS Updates
+
+In most cases, FAS will update firmware on each node to the required version.
+This version is determined by comparing the `semantic versions` for all valid images for each node and selecting the highest value.
+Sometimes however, a different version is required for updating a node.
+FAS can update a node to any uploaded version using the [Override an Image for an Update](#override-an-image-for-an-update) procedure.
+If the required image is not installed, obtain the RPM or ZIP file and use the [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file) procedure.
 
 ---
 
