@@ -18,7 +18,7 @@ Earlier version of CSM must first be upgraded to at least `v1.2.0`. For informat
 
 Before proceeding with the patch installation. Upgrade the CSM management network configuration.
 
-Detailed information on the fixes and configuration updates can be found from [CANU release notes](../../operations/network/management_network/canu_install_update.md)
+Detailed information on the fixes and configuration updates after CANU release 1.6.5 can be found from [CANU release notes](../../operations/network/management_network/canu_install_update.md)
 
  1. [Upgrade CSM network configuration](upgrade_network.md)
 
