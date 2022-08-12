@@ -8,6 +8,8 @@ This page provides information about using the Argo UI with Shasta. The Argo UI 
 ## Access the Argo UI
 
 The Argo UI is accessed through a URL. The URL for a system can be found by the following command.
+
+(`ncn#`) Get Argo UI URL
 ```bash
 kubectl get virtualservice -n argo | grep "argo" | awk '{print $3}' 
 ```
