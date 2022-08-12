@@ -31,15 +31,11 @@ Generating a configuration file can be done for a single switch, or for the full
 * `--sls` : Match the `sls_file.json` to the one you created for your system.
 * `--custom-config` : Pass in a switch configuration file that CANU will inject into the generated configuration. For more information, see the [CANU documentation](https://github.com/Cray-HPE/canu#generate-switch-configs-including-custom-configurations).
 
-
-
 * Generate configuration files for full system:
 
     ```console
     ncn# canu generate network config --csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
     ```
-
-
 ## Compare the generated CSM 1.2 switch configurations with running configurations
 
 Compare the current running configuration with the generated configuration.
@@ -59,7 +55,6 @@ Doing file comparisons on your local machine:
 ```bash
 ncn# canu validate switch config --running ./running/sw-spine-001.cfg --generated sw-spine-001.cfg
 ```
-
 
 CANU-generated switch configurations will not include any ports or devices not defined in the model. These were previously discussed in the
 "Validate the SHCD section" but include edge uplinks (CAN/CMN) and custom configurations applied by the customer. When looking at the generated
@@ -102,6 +97,5 @@ Understanding the switch configuration changes is critical. The following config
 - Changes to VRFs.
 - Changes to default route.
 - Changes to MLAG/LACP.
-  
 
 [Return to CSM 1.2.1 Patch Installation Instructions](README.md)
