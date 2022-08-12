@@ -7,6 +7,7 @@ Earlier version of CSM must first be upgraded to at least `v1.2.0`. For informat
 
 ## Steps
 
+1. [Upgrade CSM network configuration](upgrade_network.md)
 1. [Preparation](#preparation)
 1. [Setup Nexus](#setup-nexus)
 1. [Upgrade services](#upgrade-services)
