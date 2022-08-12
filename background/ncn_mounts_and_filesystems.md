@@ -79,11 +79,11 @@ There are a few overlays used for NCN image boots:
 
 ### Helpful commands
 
-| Commands             | Details                                         |
-| -------------------- | ----------------------------------------------- |
-| `lsblk`, `lsblk -f`  | Shows how the RAIDs and disks are mounted       |
-| `losetup -a`         | Shows where the SquashFS is mounted from        |
-| `mount | grep ' / '` | Shows the overlay being layered on the SquashFS |
+| Commands              | Details                                         |
+| --------------------  | ----------------------------------------------- |
+| `lsblk`, `lsblk -f`   | Shows how the RAIDs and disks are mounted       |
+| `losetup -a`          | Shows where the SquashFS is mounted from        |
+| `mount \| grep ' / '` | Shows the overlay being layered on the SquashFS |
 
 ### OverlayFS examples
 
@@ -289,7 +289,7 @@ The take-away here is that any change done to `/root/` will persist through `/ru
 
 ### OverlayFS control
 
-These features or toggles are passable on the kernel command line, and change the behavior of the OverlayFS.
+These features or toggles can be passed on the kernel command line to change the behavior of the OverlayFS.
 
 #### Reset toggles
 

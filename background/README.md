@@ -200,7 +200,6 @@ This parameter hard codes the DHCP request to go over `mgmt0` during boot. The I
 
 This parameter also sets `auto6` for any other interface, this is a workaround to ensure the initramFS
 acknowledges the given interface. In CSM 0.9 and 1.0 despite having `ifname` set, `udev` rules were
-
 not created for devices unless they had a corresponding `ip` parameter set. The `auto6` value was the
 safest value to set here that did not disrupt the state of the NCN.
 
