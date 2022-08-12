@@ -19,6 +19,8 @@
 
 ## Stage 2.2
 
+Before starting Stage 2.2, access the Argo UI to view the progress of this stage. For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md).
+
 ### Option 1
 
 1. (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for `ncn-w001`.
