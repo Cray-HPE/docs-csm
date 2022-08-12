@@ -3,11 +3,11 @@
 ## Prerequisites
 
 * SSH access to the switches or the running configuration file
-* Upgrade CANU: [Install/Upgrade CANU](../operations/network/management_network/canu_install_update.md)
+* Upgrade CANU: [Install/Upgrade CANU](../../operations/network/management_network/canu_install_update.md)
   * Run `canu --version` to see version
   * CANU installed with version 1.6.13 or greater.
-* Use the paddle file (CCJ) or validate SHCD [Validate SHCD](../operations/network/management_network/validate_shcd.md)
-* System Layout Service (SLS) input file. [Collect Data](../operations/network/management_network/collect_data.md)
+* Use the paddle file (CCJ) or validate SHCD [Validate SHCD](../../operations/network/management_network/validate_shcd.md)
+* System Layout Service (SLS) input file. [Collect Data](../../operations/network/management_network/collect_data.md)
 
 > **CAUTION:** All of these steps should be done using an out-of-band connection. This process is disruptive and will require downtime.
 
@@ -36,6 +36,7 @@ Generating a configuration file can be done for a single switch, or for the full
     ```console
     ncn# canu generate network config --csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
     ```
+
 ## Compare the generated CSM 1.2 switch configurations with running configurations
 
 Compare the current running configuration with the generated configuration.
@@ -90,12 +91,12 @@ Always before making configuration changes, analyze the changes shown in the abo
 
 Understanding the switch configuration changes is critical. The following configurations risk a network outage, if not applied correctly:
 
-- Generating switch configuration without preserving site-specific values (by using the `--custom-configuration` flag).
-- Changes to ISL (MAGP, VSX, etc.) configurations.
-- Changes to Spanning Tree.
-- Changes to ACLs or ACL ordering.
-- Changes to VRFs.
-- Changes to default route.
-- Changes to MLAG/LACP.
+* Generating switch configuration without preserving site-specific values (by using the `--custom-configuration` flag).
+* Changes to ISL (MAGP, VSX, etc.) configurations.
+* Changes to Spanning Tree.
+* Changes to ACLs or ACL ordering.
+* Changes to VRF.
+* Changes to default route.
+* Changes to MLAG/LACP.
 
 [Return to CSM 1.2.1 Patch Installation Instructions](README.md)
