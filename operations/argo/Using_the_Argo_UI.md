@@ -10,6 +10,7 @@ This page provides information about using the Argo UI with Shasta. The Argo UI 
 The Argo UI is accessed through a URL. The URL for a system can be found by the following command.
 
 (`ncn#`) Get Argo UI URL
+
 ```bash
 kubectl get virtualservice -n argo | grep "argo" | awk '{print $3}' 
 ```
@@ -23,9 +24,7 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](../security_and
 Logs in the Argo UI show output from individual stages of a workflow and are useful for debugging.
 
 To view the logs:
-- go to the workflows page and click on the desired workflow
-- click on desired stage within the workflow
-- in the panel describing that stage, click the 'main logs' button
 
-
-
+1. go to the workflows page and click on the desired workflow
+1. click on desired stage within the workflow
+1. in the panel describing that stage, click the 'main logs' button
