@@ -666,7 +666,7 @@ Verify that the Lustre file system is available from the management cluster.
     This affects worker nodes which have Mellanox NICs. Worker nodes with Cassini NICs are unaffected.
     This may include systems which have Arista switches.
 
-    Normally, CFS could be restarted for these worker nodes after the Slingshot switches in the 
+    Normally, CFS could be restarted for these worker nodes after the Slingshot switches in the
     liquid-cooled cabinets have been powered up. however there is a known problem with Slingshot 1.7.3a
     and earlier versions of the Slingshot Host Software (SHS) which require a special procedure in
     the COS 2.3 layer to address this problem.

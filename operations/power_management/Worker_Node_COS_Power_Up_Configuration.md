@@ -139,7 +139,7 @@ the COS 2.3 layer to address this problem.
       base64 --decode && echo
       <==password output==>
 
-      ncn-m001# git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
+      ncn# git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
       Username for 'https://api-gw-service-nmn.local': crayvcs
       Password for 'https://crayvcs@api-gw-service-nmn.local': <password from preceding output>
 
@@ -214,14 +214,14 @@ the COS 2.3 layer to address this problem.
 1. Identify the commit hash for this branch. This will be used later when creating the CFS configuration layer.
 
    ```bash
-   ncn-m001# git rev-parse --verify HEAD
+   ncn# git rev-parse --verify HEAD
    <== commit hash output ==>
    ```
 
 1. Store the commit hash for later use.
 
    ```bash
-   ncn-m001# export COS_CONFIG_COMMIT_HASH=<commit hash output>
+   ncn# export COS_CONFIG_COMMIT_HASH=<commit hash output>
    ```
 
 1. Create a CFS configuration which has only a COS layer with this ncn-powerup.yml playbook in it and then run a CFS session with that.

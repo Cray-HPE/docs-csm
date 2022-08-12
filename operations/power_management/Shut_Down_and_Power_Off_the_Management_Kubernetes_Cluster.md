@@ -12,9 +12,19 @@ Shut down management services and power off the HPE Cray EX management Kubernete
 
 Understand the following concepts before powering off the management non-compute nodes \(NCNs\) for the Kubernetes cluster and storage:
 
-- The etcd cluster provides storage for the state of the management Kubernetes cluster. The three node etcd cluster runs on the same nodes that are configured as Kubernetes Master nodes. The management cluster state must be frozen when powering off the Kubernetes cluster. When one member is unavailable, the two other members continue to provide full access to the data. When two members are down, the remaining member will switch to only providing read-only access to the data.
-- **Avoid Unnecessary Data Movement with Ceph** - The Ceph cluster runs not only on the dedicated storage nodes, but also on the nodes configured as Kubernetes Master nodes. Specifically, the `mon` processes. If one of the storage nodes goes down, Ceph can rebalance the data onto the remaining nodes and object storage daemons \(OSDs\) to regain full protection.
-- **Avoid Spinning up Replacement Pods on Worker Nodes** - Kubernetes keeps all pods running on the management cluster. The `kubelet` process on each node retrieves information from the `etcd` cluster about what pods must be running. If a node becomes unavailable for more than five minutes, Kubernetes creates replacement pods on other management nodes.
+- The etcd cluster provides storage for the state of the management Kubernetes cluster. The three node etcd
+cluster runs on the same nodes that are configured as Kubernetes Master nodes. The management cluster state
+ must be frozen when powering off the Kubernetes cluster. When one member is unavailable, the two other
+members continue to provide full access to the data. When two members are down, the remaining member will
+switch to only providing read-only access to the data.
+- **Avoid Unnecessary Data Movement with Ceph** - The Ceph cluster runs not only on the dedicated storage
+nodes, but also on the nodes configured as Kubernetes Master nodes. Specifically, the `mon` processes. If
+one of the storage nodes goes down, Ceph can rebalance the data onto the remaining nodes and object storage
+daemons \(OSDs\) to regain full protection.
+- **Avoid Spinning up Replacement Pods on Worker Nodes** - Kubernetes keeps all pods running on the management
+cluster. The `kubelet` process on each node retrieves information from the `etcd` cluster about what pods must
+be running. If a node becomes unavailable for more than five minutes, Kubernetes creates replacement pods on
+other management nodes.
 - **High-Speed Network \(HSN\)** - When the management cluster is shut down the HSN is also shut down.
 
 The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes management cluster and performs these tasks:
@@ -28,7 +38,7 @@ The `sat bootsys` command automates the shutdown of Ceph and the Kubernetes mana
 ## Prerequisites
 
 An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication"
-section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to
+section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to
 acquire a SAT authentication token.
 
 ## Check health of the management cluster
@@ -44,7 +54,7 @@ acquire a SAT authentication token.
 1. Check the status of NCN no wipe settings.
 
    Make sure `metal.no-wipe=1`. If a management NCN is set to `metal.no-wipe==wipe`, review
-   [Check and Set the metal.no-wipe Setting on NCNs](../node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md) before proceeding.
+   [Check and Set the `metal.no-wipe` Setting on NCNs](../node_management/Check_and_Set_the_metalno-wipe_Setting_on_NCNs.md) before proceeding.
 
    ```bash
    ncn-m001# /opt/cray/platform-utils/ncnGetXnames.sh
@@ -246,13 +256,14 @@ acquire a SAT authentication token.
    ```
 
    Attach to one of the screen sessions.
+
    ```bash
    ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
    ```
 
 1. Check the power off status of management nodes.
 
-    > NOTE: The `read -s` command is used to read the password in order to prevent it from being
+    > NOTE: The `read -s` command silently reads the password in order to prevent it from being
     > echoed to the screen or preserved in the shell history.
 
     ```bash
@@ -297,7 +308,7 @@ acquire a SAT authentication token.
     cabinet PDUs. If the system includes an EX2000 cabinet, **do not power off** the management cabinet PDUs, Powering off the MDCU will cause an emergency power off \(EPO\) of the cabinet and
     may result in data loss or equipment damage.
 
-1. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout/tagout procedures for the site.
+1. (Optional) If a liquid-cooled EX2000 cabinet is not receiving MCDU power from this management cabinet, power off the PDU circuit breakers or disconnect the PDUs from facility power and follow lockout and tagout procedures for the site.
 
 ## Next step
 
