@@ -223,13 +223,12 @@ This assumes that a dump of the database exists.
     ncn-w001# kubectl rollout status deployment spire-jwks -n ${NAMESPACE}
     ```
 
-12. Restart the `spire-agent` on all the nodes.
+12. Restart the `spire-agent` on all the management nodes.
 
     ```bash
-    ncn-w001# pdsh -w ncn-m00[1-3] 'systemctl restart spire-agent'
-    ncn-w001# pdsh -w ncn-w00[1-3] 'systemctl restart spire-agent'
-    ncn-w001# pdsh -w ncn-s00[1-3] 'systemctl restart spire-agent'
-    ```
+    ncn-w001# pdsh -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+    systemctl restart spire-agent'
+   ```
 
 13. Verify the service is working. The following should return a token.
 
