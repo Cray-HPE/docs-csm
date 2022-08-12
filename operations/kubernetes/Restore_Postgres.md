@@ -227,8 +227,8 @@ This assumes that a dump of the database exists.
 
     ```bash
     ncn-w001# pdsh -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
-    systemctl restart spire-agent'
-   ```
+    'systemctl restart spire-agent'
+    ```
 
 13. Verify the service is working. The following should return a token.
 
