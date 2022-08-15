@@ -3,21 +3,6 @@
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-## Move assets to `ncn-m002`
-
-1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
-
-   ```bash
-   CSM_RELEASE=1.3.0
-   CSM_REL_NAME=csm-${CSM_RELEASE}
-   ```
-
-1. Move the RBD device containing the CSM tarball.
-
-    ```bash
-   /usr/share/doc/csm/scripts/csm_rbd_tool/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
-    ```
-
 ## Perform upgrade
 
 During this stage there will be a brief (approximately five minutes) window where pods with Persistent Volumes (`PV`s) will not be able to migrate between nodes.

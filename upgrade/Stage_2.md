@@ -64,20 +64,30 @@ By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrad
 has been the "stable node" -- that is, the node from which the other nodes were upgraded. At this point, the
 upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to allow the upgrade of `ncn-m001`.
 
-1. If the CSM tarball is located on an `rbd` device, then remap that device to `ncn-m002`.
+1. (`ncn-m001#`) Remap the CSM release `rbd` device to `ncn-m002`.
 
-    See [Move an `rbd` device to another node](../operations/utility_storage/Alternate_Storage_Pools.md#move-an-rbd-device-to-another-node).
+    ```bash
+    source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
+    python /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
+    deactivate
+    ```
 
-1. Log in to `ncn-m002` from outside the cluster.
+    **IMPORTANT:** This will mount the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m002`.
 
-    > **`NOTE`** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
-    > not recognized on a SLES SP3 NCN. If password login fails, then log in to `ncn-m002` from
-    > `ncn-m001` and use the `passwd` command to reset the password. Then log in using the CMN IP address as directed
-    > below. Once `ncn-m001` has been upgraded, log in from `ncn-m002` and use the `passwd` command to reset
-    > the password. The other NCNs will have their passwords updated when NCN personalization is run in a
-    > subsequent step.
+1. Move to `ncn-m002`.
 
-   `ssh` to the `bond0.cmn0`/CMN IP address of `ncn-m002`.
+    1. Log out of `ncn-m001`.
+
+    1. Log in to `ncn-m002` from outside the cluster.
+
+        > **`NOTE`** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
+        > not recognized on a SLES SP3 NCN. If password login fails, then log in to `ncn-m002` from
+        > `ncn-m001` and use the `passwd` command to reset the password. Then log in using the CMN IP address as directed
+        > below. Once `ncn-m001` has been upgraded, log in from `ncn-m002` and use the `passwd` command to reset
+        > the password. The other NCNs will have their passwords updated when NCN personalization is run in a
+        > subsequent step.
+
+        `ssh` to the `bond0.cmn0`/CMN IP address of `ncn-m002`.
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
 
