@@ -45,11 +45,11 @@ Multiple workers can be upgraded simultaneously by passing them as a comma-separ
 In some cases, it is not possible to upgrade all workers in one request. It is system administrator's responsibility to
 make sure that the following conditions are met:
 
-* If the system has more than five workers, then they cannot all be rebuilt with a single request.
+- If the system has more than five workers, then they cannot all be rebuilt with a single request.
 
     In this case, the rebuild should be split into multiple requests, with each request specifying no more than five workers.
 
-* No single rebuild request should include all of the worker nodes that have DVS running on them.
+- No single rebuild request should include all of the worker nodes that have DVS running on them.
 
 ##### Example
 

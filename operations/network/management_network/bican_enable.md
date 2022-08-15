@@ -97,7 +97,6 @@ The following diagram illustrates the UAN timeline before, during, and after the
 
 Concretely, users on a running UAN may be transitioned from the CMN to the new CAN before [UANs are booted with new images](../../boot_orchestration/Boot_UANs.md).
 
-
 ### Configure UAI
 
 Newly created User Access Instances (UAI) will use the network configured as the `SystemDefaultRoute` in the SLS BICAN network.
