@@ -1,6 +1,7 @@
 # Change NCN Image Root Password and SSH Keys on PIT Node
 
-Customize the NCN images by changing the root password or adding different SSH keys for the root account.
+The default SSH keys in the NCN image must be removed. The default password for the root user must be changed.
+Customize the NCN images by changing the root password and adding different SSH keys for the root account.
 This procedure shows this process being done on the PIT node during a first time installation of the CSM
 software.
 
@@ -39,11 +40,19 @@ The Kubernetes image is used by the master and worker nodes.
    pit# unsquashfs kubernetes-0.1.69.squashfs
    ```
 
+1. Remove default SSH keys
+
+   ```bash
+   pit# rm -rf squashfs-root/root/.ssh
+   pit# rm -f /etc/ssh/*key*
+   ```
+
 1. Copy the generated public and private SSH keys for the root account into the image.
 
    This example assumes that an RSA key was generated.
 
    ```bash
+   pit# mkdir -m 0700 squashfs-root/root/.ssh
    pit# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub squashfs-root/root/.ssh
    ```
 
