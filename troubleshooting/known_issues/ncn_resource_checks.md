@@ -28,7 +28,7 @@
 
   - The `cray-crus-` pod is expected to be in the `Init` state until Slurm and MUNGE
     are installed. In particular, this will be the case if executing this as part of the validation after completing the
-    [Install CSM Services](../install/install_csm_services.md).
+    [Install CSM Services](../../install/install_csm_services.md).
 
     If in doubt, validate the CRUS service using the [CMS Validation Tool](../../operations/validate_csm_health.md#3-software-management-services-health-checks).
     If the CRUS check passes using that tool, then do not worry about the `cray-crus-` pod state.
