@@ -16,7 +16,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ## Warning for Non-Compute Nodes (NCNs)
 
-NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.
+NCNs and their BMCs must be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.
 Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
