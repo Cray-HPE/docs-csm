@@ -41,7 +41,7 @@ Failure to lock the NCNs could result in unintentional update of the NCNs if FAS
 If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
 This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
 
-Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS Recipes](FAS_Recipes.md) to update each supported type.
+Follow the process outlined in [FAS CLI](/operations/firmware/FAS_CLI.md) to update the system. Use the recipes listed in [FAS Recipes](/operations/firmware/FAS_Recipes.md) to update each supported type.
 
 > **`NOTE`** Each system is different and may not have all hardware options.
 
