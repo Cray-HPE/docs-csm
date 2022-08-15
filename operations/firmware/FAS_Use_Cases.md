@@ -4,8 +4,8 @@ Use the Firmware Action Service (FAS) to update the firmware on supported hardwa
 
 When updating an entire system, walk down the device hierarchy component type by component type, starting first with Routers (switches), proceeding to Chassis, and then finally to Nodes. While this is not strictly necessary, it does help eliminate confusion.
 
-**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
-These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+**NOTE**: Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
 This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
@@ -152,7 +152,7 @@ It is also recommended that the nodes be powered back on after the updates are c
         The `overrideDryrun = false` value indicates that the command will do a dry run.
 
         ```bash
-        cray fas actions create nodeBMC.json
+        ncn# cray fas actions create nodeBMC.json
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
@@ -162,7 +162,7 @@ It is also recommended that the nodes be powered back on after the updates are c
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        cray fas actions describe {actionID}
+        ncn# cray fas actions describe {actionID}
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -183,25 +183,25 @@ It is also recommended that the nodes be powered back on after the updates are c
 
         * Lists the nodes that have a valid image for updating:
 
-            ```text
+            ```toml
             [operationSummary.succeeded]
             ```
 
         * Lists the nodes that will not be updated because they are already at the correct version:
 
-            ```text
+            ```toml
             [operationSummary.noOperation]
             ```
 
         * Lists the nodes that had an error when attempting to update:
 
-            ```text
+            ```toml
             [operationSummary.failed]
             ```
 
         * Lists the nodes that do not have a valid image for updating:
 
-            ```text
+            ```toml
             [operationSummary.noSolution]
             ```
 
@@ -221,7 +221,7 @@ It is also recommended that the nodes be powered back on after the updates are c
         The output `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be displayed.
 
         ```bash
-        cray fas actions create nodeBMC.json
+        ncn# cray fas actions create nodeBMC.json
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
         ```
@@ -233,7 +233,7 @@ It is also recommended that the nodes be powered back on after the updates are c
 1. Retrieve the `operationID` and verify that the update is complete.
 
     ```bash
-    cray fas actions describe {actionID}
+    ncn# cray fas actions describe {actionID}
     [operationSummary.failed]
     [[operationSummary.failed.operationKeys]]
     stateHelper = "unexpected change detected in firmware version. Expected nc.1.3.10-shasta-release.arm.2020-07-21T23:58:22+00:00.d479f59 got: nc.cronomatic-dev.arm.2019-09-24T13:20:24+00:00.9d0f8280"
@@ -248,13 +248,13 @@ It is also recommended that the nodes be powered back on after the updates are c
     Check the list of nodes for the `failed` or `completed` state.
 
     ```bash
-    cray fas operations describe {operationID}
+    ncn# cray fas operations describe {operationID}
     ```
 
     For example:
 
     ```bash
-    cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f"
+    ncn# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f"
     fromFirmwareVersion = "nc.cronomatic-dev.arm.2019-09-24T13:20:24+00:00.9d0f8280"
     fromTag = ""
     fromImageURL = ""
@@ -324,13 +324,13 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     1. Disable the `hms-discovery` Kubernetes cronjob:
 
         ```bash
-        kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
+        ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
         ```
 
     1. Power off all the components. For example, in chassis 0-7, cabinets 1000-1003:
 
         ```bash
-        cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
+        ncn# cray capmc xname_off create --xnames x[1000-1003]c[0-7] --recursive true --continue true
         ```
 
         This command powers off all the node cards, then all the compute blades, then all the Slingshot switch ASICS, then all the Slingshot switch enclosures, and finally all the chassis enclosures in cabinets 1000-1003.
@@ -346,7 +346,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         The `overrideDryrun = false` value indicates that the command will do a dry-run.
 
         ```bash
-        cray fas actions create chassisBMC.json
+        ncn# cray fas actions create chassisBMC.json
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
@@ -356,10 +356,10 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        cray fas actions describe {actionID}
+        ncn# cray fas actions describe {actionID}
         ```
 
-        ```text
+        ```toml
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -380,25 +380,25 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         * Lists the nodes that have a valid image for updating:
 
-            ```text
+            ```toml
             [operationSummary.succeeded]
             ```
 
         * Lists the nodes that will not be updated because they are already at the correct version:
 
-            ```text
+            ```toml
             [operationSummary.noOperation]
             ```
 
         * Lists the nodes that had an error when attempting to update:
 
-            ```text
+            ```toml
             [operationSummary.failed]
             ```
 
         * Lists the nodes that do not have a valid image for updating:
 
-            ```text
+            ```toml
             [operationSummary.noSolution]
             ```
 
@@ -408,7 +408,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         The following example is for the `chassisBMC.json` file. Update the following values:
 
-        ```text
+        ```toml
         "overrideDryrun":true,
         "description":"Update Cray Chassis Management Module controllers"
         ```
@@ -418,10 +418,10 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         The output `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be displayed.
 
         ```bash
-        cray fas actions create chassisBMC.json
+        ncn# cray fas actions create chassisBMC.json
         ```
 
-        ```text
+        ```toml
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
         ```
@@ -431,13 +431,13 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 1. Restart the `hms-discovery` cronjob.
 
     ```bash
-    kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+    ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
     The `hms-discovery` cronjob will run within 5 minutes of being unsuspended and start powering on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually:
 
     ```bash
-    cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
+    ncn# cray capmc xname_on create --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
     ```
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
@@ -502,7 +502,7 @@ This procedure updates node controller \(nC\) firmware.
 
 A node may fail to update with the output:
 
-```text
+```toml
 stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"
 ```
 
@@ -630,10 +630,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
         The `overrideDryrun = false` value indicates that the command will do a dry run.
 
         ```bash
-        cray fas actions create nodeBMC.json
+        ncn# cray fas actions create nodeBMC.json
         ```
 
-        ```text
+        ```toml
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
@@ -643,10 +643,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        cray fas actions describe {actionID}
+        ncn# cray fas actions describe {actionID}
         ```
 
-        ```text
+        ```toml
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -667,25 +667,25 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
         * Lists the nodes that have a valid image for updating:
 
-            ```text
+            ```toml
             [operationSummary.succeeded]
             ```
 
         * Lists the nodes that will not be updated because they are already at the correct version:
 
-            ```text
+            ```toml
             [operationSummary.noOperation]
             ```
 
         * Lists the nodes that had an error when attempting to update:
 
-            ```text
+            ```toml
             [operationSummary.failed]
             ```
 
         * Lists the nodes that do not have a valid image for updating:
 
-            ```text
+            ```toml
             [operationSummary.noSolution]
             ```
 
@@ -695,7 +695,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
         The following example is for the `nodeBMC.json` file. Update the following values:
 
-        ```text
+        ```toml
         "overrideDryrun":true,
         "description":"Update of HPE node iLO 5"
         ```
@@ -705,10 +705,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
         The returned `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be returned.
 
         ```bash
-        cray fas actions create nodeBMC.json
+        ncn# cray fas actions create nodeBMC.json
         ```
 
-        ```json
+        ```toml
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
         ```
@@ -723,7 +723,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
     cray fas actions describe {actionID}
     ```
 
-    ```json
+    ```toml
     [operationSummary.failed]
     [[operationSummary.failed.operationKeys]]
     stateHelper = "unexpected change detected in firmware version. Expected 2.46 May 11 2021 got: 2.32 Apr 27 2020"
@@ -738,16 +738,16 @@ Make sure to wait for the current firmware to be updated before starting a new F
     Check the list of nodes for the `failed` or `completed` state.
 
     ```bash
-    cray fas operations describe {operationID}
+    ncn# cray fas operations describe {operationID}
     ```
 
     For example:
 
     ```bash
-    cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f"
+    ncn# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f"
     ```
 
-    ```json
+    ```toml
     fromFirmwareVersion = "2.32 Apr 27 2020"
     fromTag = ""
     fromImageURL = ""
@@ -777,7 +777,7 @@ Gigabyte and HPE non-compute nodes \(NCNs\) firmware can be updated with FAS. Th
 After creating the JSON file for the device being upgraded, use the following command to run the FAS job:
 
 ```bash
-cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
+ncn# cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
 ```
 
 All of the example JSON files below are set to run a dry-run. Update the `overrideDryrun` value to `True` to update the firmware.
@@ -978,7 +978,7 @@ Prerequisites:
   If the Redfish model is different \(ignoring casing\) and the blades in question are not `Windom`, contact customer support. To find the model reported by Redfish, run the following:
 
   ```bash
-  cray fas operations describe {operationID} --format json
+  ncn# cray fas operations describe {operationID} --format json
   ```
 
   ```json
@@ -1020,7 +1020,7 @@ Prerequisites:
 1. Search for a FAS image record with `cray` as the manufacturer, `Node1.BIOS` as the target, and `HPE CRAY EX425` as the model.
 
    ```bash
-   cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") \
+   ncn# cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") \
    | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
    ```
 
@@ -1087,7 +1087,7 @@ Prerequisites:
 1. Run a firmware upgrade using the updated parameters defined in the new JSON file.
 
    ```bash
-   cray fas actions create UPDATED_COMMAND.json
+   ncn# cray fas actions create UPDATED_COMMAND.json
    ```
 
 1. Get a high-level summary of the job to verify the changes corrected the issue.
@@ -1095,5 +1095,5 @@ Prerequisites:
    Use the returned `actionID` from the `cray fas actions create` command.
 
    ```bash
-   cray fas actions create UPDATED_COMMAND.json
+   ncn# cray fas actions create UPDATED_COMMAND.json
    ```
