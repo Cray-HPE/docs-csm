@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -22,7 +22,6 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 import argparse
-import http
 import sys
 import requests
 import json
@@ -45,19 +44,15 @@ args = parser.parse_args()
 session = requests.Session()
 session.verify = False
 
-# Get TOKEN
-# grant_type=password \
-#     --data-urlencode client_id="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.client-id}' -n services | base64 -d)" \
-#     --data-urlencode username="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.user}' -n services | base64 -d)" \
-#     --data-urlencode password="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.password}' -n services | base64 -d)" \
-#     https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token
-data = {
-        "grant_type":"password", 
-        "client_id": args.kc_client_id, 
-        "username": args.kc_username,
-        "password": args.kc_password
-        }
+
 try:
+    # Get TOKEN
+    data = {
+            "grant_type":"password", 
+            "client_id": args.kc_client_id, 
+            "username": args.kc_username,
+            "password": args.kc_password
+            }
     token_response = session.post('https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token', data=data)
     token_json = token_response.json()
     token = token_json['access_token']
@@ -66,7 +61,7 @@ try:
     session.headers["Authorization"] = 'Bearer {}'.format(token)
     session.headers["Content-Type"]="application/json"
 
-    # Get keycloak clients
+    # Get keycloak clients and find oauth2-proxy-customer-management client
     clients_response = session.get('https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients')
     clients_json = clients_response.json()
     customerManagementClient = None
