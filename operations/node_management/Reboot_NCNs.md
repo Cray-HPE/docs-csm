@@ -281,6 +281,10 @@ Before rebooting NCNs:
          "errorCount": 0,
          "id": "x3000c0s7b0n0",
          "retryPolicy": 3,
+
+         "lines omitted": "..."
+
+       }
        ```
 
        * If the `configurationStatus` is `pending`, then wait for the job to finish before continuing.
