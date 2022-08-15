@@ -180,7 +180,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
             done
             ```
 
-            **NOTE**: After five minutes, the previous credential should stop working as the existing sessions time out.
+            **`NOTE`**: After five minutes, the previous credential should stop working as the existing sessions time out.
 
 1. (`ncn-mw#`) Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials.
 
