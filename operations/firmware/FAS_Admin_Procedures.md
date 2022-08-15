@@ -21,7 +21,7 @@ Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_U
 Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
 **NOTE**: Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
-These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
 This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
 
 ---
