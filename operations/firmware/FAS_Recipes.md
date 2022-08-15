@@ -9,7 +9,7 @@ When updating an entire system, walk down the device hierarchy component type by
 While this is not strictly necessary, it does help eliminate confusion.
 
 **NOTE**: Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
-These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
 This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
