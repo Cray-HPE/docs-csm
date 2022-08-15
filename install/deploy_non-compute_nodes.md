@@ -334,54 +334,17 @@ If the check fails after doing the rebuild, contact support.
 1. (`pit#`) Check the storage nodes.
 
    ```bash
-   csi pit validate --ceph | tee csi-pit-validate-ceph.log
+   csi pit validate --ceph
    ```
 
-   Once that command has finished, the following will extract the test totals reported for each node:
-
-   ```bash
-   grep "Total Test" csi-pit-validate-ceph.log
-   ```
-
-   Example output for a system with three storage nodes:
-
-   ```text
-   Total Tests: 8, Total Passed: 8, Total Failed: 0, Total Execution Time: 74.3782 seconds
-   Total Tests: 3, Total Passed: 3, Total Failed: 0, Total Execution Time: 0.6091 seconds
-   Total Tests: 3, Total Passed: 3, Total Failed: 0, Total Execution Time: 0.6260 seconds
-   ```
-
-   If these total lines report any failed tests, then look through the full output of the test in `csi-pit-validate-ceph.log` to see which node had the failed test and what the details are for that test.
-
-   > **NOTE:** See [Utility Storage](../operations/utility_storage/Utility_Storage.md) and [Ceph CSI Troubleshooting](troubleshooting_ceph_csi.md) in order to help resolve any
-   failed tests.
+   > **NOTE:** See [Utility Storage](../operations/utility_storage/Utility_Storage.md) and [Ceph CSI Troubleshooting](troubleshooting_ceph_csi.md) in
+   order to help resolve any failed tests.
 
 1. (`pit#`) Check the master and worker nodes.
 
-   > **NOTE:** Throughout the output of the `csi pit validate` command are test totals for each node where the tests run. **Be sure to check
-   all of them and not just the final one.** A `grep` command is provided to help with this.
-
    ```bash
-   csi pit validate --k8s | tee csi-pit-validate-k8s.log
+   csi pit validate --k8s
    ```
-
-   Once that command has finished, the following will extract the test totals reported for each node:
-
-   ```bash
-   grep "Total Test" csi-pit-validate-k8s.log
-   ```
-
-   Example output for a system with five master and worker nodes (excluding the PIT node):
-
-   ```text
-   Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.3072 seconds
-   Total Tests: 16, Total Passed: 16, Total Failed: 0, Total Execution Time: 0.2727 seconds
-   Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2841 seconds
-   Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.3622 seconds
-   Total Tests: 12, Total Passed: 12, Total Failed: 0, Total Execution Time: 0.2353 seconds
-   ```
-
-   If these total lines report any failed tests, then look through the full output of the test in `csi-pit-validate-k8s.log` to see which node had the failed test and what the details are for that test.
 
 ## Next topic
 

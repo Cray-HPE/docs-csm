@@ -23,16 +23,20 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -exo pipefail
+set -eo pipefail
 
 usedRGW=$(ceph df -f json | jq '.pools[] | select(.name | contains("rgw.buckets.data")) | .stats.bytes_used' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
-availRGW=$(ceph df -f json | jq '.pools[] | select(.name | contains("rgw.buckets.data")) | .stats.max_avail' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
-usedNexus=$(kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{printf "%.0f", ($3/1024/1024)}')
-availNexus=$(kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{printf "%.0f", ($4/1024/1024)}')
 echo  "Gibibytes used in rgw.buckets.data: $usedRGW"
+
+availRGW=$(ceph df -f json | jq '.pools[] | select(.name | contains("rgw.buckets.data")) | .stats.max_avail' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
 echo  "Gibibytes available in rgw.buckets.data: $availRGW"
+
+usedNexus=$(kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{printf "%.0f", ($3/1024/1024)}')
 echo  "Gibibytes used in nexus-data: $usedNexus"
+
+availNexus=$(kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{printf "%.0f", ($4/1024/1024)}')
 echo  "Gibibytes available in nexus-data: $availNexus"
+
 echo $usedNexus | awk '{print "Space to be used from backup: ", ($1 * 3)}'
 
 if (( $usedNexus*3 > $availRGW-$usedRGW )); then
@@ -40,6 +44,7 @@ if (( $usedNexus*3 > $availRGW-$usedRGW )); then
   exit 1
 fi
 
+echo "Creating PVC for Nexus backup, if needed"
 if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phase}') ]]; then
 cat << EOF | kubectl -n nexus create -f -
 apiVersion: v1
@@ -56,8 +61,10 @@ spec:
 EOF
 fi
 
-kubectl -n nexus scale deployment nexus --replicas=0;
+echo "Scaling Nexus deployment to 0"
+kubectl -n nexus scale deployment nexus --replicas=0
 
+echo "Starting backup"
 cat << EOF | kubectl -n nexus apply -f -
 apiVersion: batch/v1
 kind: Job
@@ -94,4 +101,7 @@ while [[ -z $(kubectl get job nexus-backup -n nexus -o jsonpath='{.status.succee
     sleep 10
 done
 
-kubectl -n nexus scale deployment nexus --replicas=1;
+echo "Scaling Nexus back up to 1"
+kubectl -n nexus scale deployment nexus --replicas=1
+
+echo "Done"
