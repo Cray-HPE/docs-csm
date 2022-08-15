@@ -1,4 +1,4 @@
-#!/opt/cray/csm/scripts/csm_rbd_tool/bin/python
+#! /usr/bin/env python3
 #
 # MIT License
 #
