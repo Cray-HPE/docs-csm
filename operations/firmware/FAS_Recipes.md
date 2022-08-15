@@ -22,8 +22,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 >
 > - Make sure all slot and rectifier power is off.
 > - The `hms-discovery` job must also be stopped before updates and restarted after updates are complete.
->   - (`ncn-mw#`) Stop `hms-discovery` job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'`
->   - (`ncn-mw#`) Start `hms-discovery` job: `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'`
+>   - Stop `hms-discovery` job: `ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'`
+>   - Start `hms-discovery` job: ncn-mw# `kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'`
 
 ```json
 {

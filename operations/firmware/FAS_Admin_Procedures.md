@@ -478,7 +478,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 3. Check the results of the loader run.
 
     ```bash
-    ncn# cray fas loader describe ${loaderRunID} --format json
+    ncn# cray fas loader describe {loaderRunID} --format json
     ```
 
     > **`NOTE`** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
