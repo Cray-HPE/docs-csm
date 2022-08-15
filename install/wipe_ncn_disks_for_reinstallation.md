@@ -6,14 +6,14 @@ This page details how to wipe NCN disks.
 
 After following these procedures, an NCN can be rebooted and redeployed.
 
-All types of disk wipe can be run from Linux or from an initramFS/initrd emergency shell.
+All types of disk wipe can be run from Linux or from an `initramFS`/`initrd` emergency shell.
 
 <a name="use-cases"></a>
 The following are potential use cases for wiping disks:
 
-   * Adding a node that is not bare.
-   * Adopting new disks that are not bare.
-   * Doing a fresh install.
+* Adding a node that is not bare.
+* Adopting new disks that are not bare.
+* Doing a fresh install.
 
 ## Topics
 
@@ -40,7 +40,7 @@ executed on **any type of management node** (master, storage, or worker).
 
     If any disks had labels present, then the output looks similar to the following:
 
-    ```
+    ```text
     /dev/sda: 8 bytes were erased at offset 0x00000200 (gpt): 45 46 49 20 50 41 52 54
     /dev/sda: 8 bytes were erased at offset 0x6fc86d5e00 (gpt): 45 46 49 20 50 41 52 54
     /dev/sda: 2 bytes were erased at offset 0x000001fe (PMBR): 55 aa
@@ -57,7 +57,7 @@ executed on **any type of management node** (master, storage, or worker).
 
 ## Advanced wipe
 
-**This section is specific to utility storage nodes**. An advanced wipe includes stopping Ceph, 
+**This section is specific to utility storage nodes**. An advanced wipe includes stopping Ceph,
 deleting the Ceph volumes, and then wiping the disks and RAIDs.
 
 1. Stop Ceph.
@@ -108,9 +108,10 @@ wiping a different type of node than what a step specifies, then skip that step.
 
 1. Reset Kubernetes **on worker nodes ONLY**.
 
-   This will stop kubelet, underlying containers, and remove the contents of `/var/lib/kubelet`.
+   This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
    1. Reset Kubernetes.
+
         ```bash
         ncn-w# kubeadm reset --force
         ```
@@ -140,7 +141,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
 1. Reset Kubernetes **on master nodes ONLY**.
 
-    This will stop kubelet, underlying containers, and remove the contents of `/var/lib/kubelet`.
+    This will stop `kubelet`, underlying containers, and remove the contents of `/var/lib/kubelet`.
 
     1. Reset Kubernetes.
 
@@ -148,7 +149,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         ncn-m# kubeadm reset --force
         ```
 
-   1. List any containers running in `containerd`.
+    1. List any containers running in `containerd`.
 
         ```bash
         ncn-m# crictl ps
@@ -281,7 +282,7 @@ wiping a different type of node than what a step specifies, then skip that step.
 
         Expected output when the `etcd` volume is present will show `ETCDLVM`, but the numbers might be different.
 
-        ```
+        ```text
         ETCDLVM (254:1)
         ```
 
@@ -310,11 +311,13 @@ wiping a different type of node than what a step specifies, then skip that step.
     ncn# vgremove -f -v --select 'vg_name=~metal*'
     ```
 
-    > **NOTE:** Optionally, run the `pvs` command. If any drives are still listed, then remove them with `pvremove`, but this is rarely needed. Also, if the above command fails or returns a warning about the filesystem being in use, ignore the error and proceed to the next step. This will not inhibit the wipe process.
+    > **NOTE:** Optionally, run the `pvs` command. If any drives are still listed, then remove them with `pvremove`, but this is rarely needed. Also, if the
+    > above command fails or returns a warning about the filesystem being in use, ignore the error and proceed to the next step. This will not inhibit
+    > the wipe process.
 
 1. Wipe the disks and RAIDs on **all node types** (master, storage, or worker).
 
-    If wiping multiple nodes, this group of commands should be done in succession on one node before moving to do the same set of commands on the next node. 
+    If wiping multiple nodes, this group of commands should be done in succession on one node before moving to do the same set of commands on the next node.
     The nodes should be addressed in descending order for each type of node. Start with the utility storage nodes, then the worker nodes, then `ncn-m003`, and finally `ncn-m002`.
 
     > **WARNING:** Do not run these commands on `ncn-m001`
