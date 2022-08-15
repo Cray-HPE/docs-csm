@@ -29,7 +29,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     Server: ServerTech-AWS/v8.0v
     ```
 
-    *NOTE*: The firmware version is listed after the '/'. In this case, the firmware version is `8.0v`.
+    **`NOTE`**: The firmware version is listed after the '/'. In this case, the firmware version is `8.0v`.
 
 ## Procedure
 
