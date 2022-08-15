@@ -186,7 +186,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
    If the script does not end with this output, then try rerunning it. If it still fails, see
    [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
    If the failure persists, then open a support ticket for guidance before proceeding.
-   
+
 1. (`ncn-m001#`) Assign a new CFS configuration to the worker nodes.
 
    The content of the new CFS configuration is described in HPE Cray EX System Software Getting Started Guide S-8000, section

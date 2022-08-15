@@ -1,7 +1,7 @@
 # Known issues with NCN health checks
 
 - The first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes. In the case of failure, wait for five minutes and rerun the tests.
- 
+
 - For any failures related to SSL certificates, see the [SSL Certificate Validation Issues](ssl_certificate_validation_issues.md) troubleshooting guide.
 
 - `Kubernetes Query BSS Cloud-init for ca-certs`
@@ -13,7 +13,7 @@
 
   - Because of a [known issue  with Velero](https://github.com/vmware-tanzu/velero/issues/1980), a backup may be attempted immediately
     upon the deployment of a backup schedule (for example, Vault). It may be necessary to delete backups from a Kubernetes node to
-    clear this situation. For more information on how to clean up backups that have failed due to a known interruption, see the output of the test. 
+    clear this situation. For more information on how to clean up backups that have failed due to a known interruption, see the output of the test.
     For example:
 
      1. (`ncn-mw#` or `pit#`) Find the failed backup.
