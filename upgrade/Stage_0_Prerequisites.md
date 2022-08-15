@@ -27,23 +27,21 @@ Stage 0 has several critical procedures which prepare the environment and verify
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. Use `csm_rbd_tool.py` to create the pool, device, and mount the device.
+1. Create and mount an `rbd` device on `ncn-m001` where the CSM release tarball can be stored.
 
-    ```bash
-    source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-    /usr/share/doc/csm/scripts/csm_rbd_tool/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
-    deactivate
-    ```
+    1. Initialize the Python virtual environment.
 
-    **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
+        Instructions needed
 
-    Example:
+    1. Create and map the `rbd` device.
 
-    ```bash
-    /usr/share/doc/csm/scripts/csm_rbd_tool/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
-    ```
+        ```bash
+        source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
+        python /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
+        deactivate
+        ```
 
-    **IMPORTANT:** This will mount the `rbd` device at `/etc/cray/upgrade/csm` on the desired node.
+    **IMPORTANT:** This will mount the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`.
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
