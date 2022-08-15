@@ -16,9 +16,9 @@ For wiping Linux on an NCN with a previously installed OS, the [basic wipe](#bas
 
 ## Topics
 
-* [Basic wipe](#basic-wipe)
-* [Advanced wipe](#advanced-wipe)
-* [Full wipe](#full-wipe)
+- [Basic wipe](#basic-wipe)
+- [Advanced wipe](#advanced-wipe)
+- [Full wipe](#full-wipe)
 
 ## Basic wipe
 
