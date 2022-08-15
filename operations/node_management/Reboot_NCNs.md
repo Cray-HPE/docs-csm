@@ -349,7 +349,7 @@ Before rebooting NCNs:
        See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
        ```bash
-       /usr/share/doc/csm/upgrade/1.2/scripts/k8s/failover-leader.sh <node to be rebooted>
+       /usr/share/doc/csm/upgrade/scripts/k8s/failover-leader.sh <node to be rebooted>
        ```
 
     1. (`ncn-mw#`) Cordon and drain the node.

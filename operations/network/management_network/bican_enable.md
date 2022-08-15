@@ -143,7 +143,7 @@ Prerequisites for this task:
 (`ncn-mw#`) Process the SLS file:
 
    ```bash
-   DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   DOCDIR=/usr/share/doc/csm/upgrade/scripts/sls
    ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
    ```
 
