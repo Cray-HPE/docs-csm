@@ -36,26 +36,24 @@ Only follow the steps in the section for the node type that is being rebuilt.
 
    > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
 
-1. Repeat the previous steps for each other worker node, one at a time.
-
 #### Option 2 (Tech preview)
 
-Multiple workers can be upgraded simultaneously by passing them as a comma-separated list into the upgrade script.
+Multiple workers can be upgraded simultaneously by passing them as a comma-separated list into the rebuild script.
 
 ##### Restrictions
 
 In some cases, it is not possible to upgrade all workers in one request. It is system administrator's responsibility to
 make sure that the following conditions are met:
 
-* If the system has more than five workers, then they cannot all be upgraded with a single request.
+* If the system has more than five workers, then they cannot all be rebuilt with a single request.
 
-    In this case, the upgrade should be split into multiple requests, with each request specifying no more than five workers.
+    In this case, the rebuild should be split into multiple requests, with each request specifying no more than five workers.
 
-* No single upgrade request should include all of the worker nodes that have DVS running on them.
+* No single rebuild request should include all of the worker nodes that have DVS running on them.
 
 ##### Example
 
-(`ncn-m001#`) An example of a single request to upgrade multiple worker nodes simultaneously:
+(`ncn-m001#`) An example of a single request to rebuild multiple worker nodes simultaneously:
 
 ```bash
 /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w002,ncn-w003,ncn-w004
