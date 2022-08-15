@@ -187,9 +187,10 @@ Stage 0 has several critical procedures which prepare the environment and verify
    [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
    If the failure persists, then open a support ticket for guidance before proceeding.
    
-1. (`ncn-m001#`) Assign a new CFS configuration to the worker node.
+1. (`ncn-m001#`) Assign a new CFS configuration to the worker nodes.
 
-The content of the new CFS configuration is described in HPE Cray EX System Software Getting Started Guide S-8000, section "HPE Cray EX Software Upgrade Workflow" subsection "Cray System Management (CSM)". Replace ${NEW_NCN_CONFIGURATION} with the name of the new CFS configuration and ${XNAME} with the component name (xname) of the worker node that was upgraded.
+   The content of the new CFS configuration is described in HPE Cray EX System Software Getting Started Guide S-8000, section
+   "HPE Cray EX Software Upgrade Workflow" subsection "Cray System Management (CSM)".
 
 1. (`ncn-m001#`) Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
 
