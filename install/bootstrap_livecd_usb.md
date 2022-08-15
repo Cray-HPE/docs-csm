@@ -150,7 +150,6 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
     If reinstalling the system and **using `ncn-m001` to prepare the USB image**, then remove the prior CNI configuration.
 
-
     1. Remove the configuration files.
 
         ```bash
