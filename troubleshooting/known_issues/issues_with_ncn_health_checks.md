@@ -1,5 +1,4 @@
-#### Known issues with NCN health checks
-
+# Known issues with NCN health checks
 
 - The first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes. In the case of failure, wait for five minutes and rerun the tests.
  
@@ -17,13 +16,13 @@
     clear this situation. For more information on how to clean up backups that have failed due to a known interruption, see the output of the test. 
     For example:
 
-     1. (`ncn#` or `pit#`) Find the failed backup.
+     1. (`ncn-mw#` or `pit#`) Find the failed backup.
 
         ```bash
         kubectl get backups -A -o json | jq -e '.items[] | select(.status.phase == "PartiallyFailed") | .metadata.name'
         ```
 
-     1. (`ncn#` or `pit#`) Delete the backup.
+     1. (`ncn-mw#`) Delete the backup.
 
         > In the following command, replace `<backup>` with a backup returned in the previous step.
         >
@@ -42,7 +41,7 @@
     restart cleanly, the user may have to log in to the impacted nodes and restart the service. The following recovery procedure can
     be run from any Kubernetes node in the cluster.
 
-     1. (`ncn#` or `pit#`) Define the following function
+     1. (`ncn-mw#` or `pit#`) Define the following function
 
         ```bash
         function renewncnjoin() {
@@ -55,7 +54,7 @@
         }
         ```
 
-     1. (`ncn#` or `pit#`) Run the function as follows (substituting the name of the impacted NCN):
+     1. (`ncn-mw#` or `pit#`) Run the function as follows (substituting the name of the impacted NCN):
 
         ```bash
         renewncnjoin ncn-xxxx

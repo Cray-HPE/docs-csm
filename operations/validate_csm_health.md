@@ -17,9 +17,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
 - [0. Cray command line interface](#0-cray-command-line-interface)
 - [1. Platform health checks](#1-platform-health-checks)
   - [1.1 NCN health checks](#11-ncn-health-checks)
-    - [1.1.1 Known issues with NCN health checks](#111-known-issues-with-ncn-health-checks)
   - [1.2 NCN resource checks (optional)](#12-ncn-resource-checks-optional)
-    - [1.2.1 Known issues with NCN resource checks](#121-known-issues-with-ncn-resource-checks)
   - [1.3 Check of system management monitoring tools](#13-check-of-system-management-monitoring-tools)
 - [2. Hardware Management Services health checks](#2-hardware-management-services-health-checks)
   - [2.1 HMS CT test execution](#21-hms-ct-test-execution)
@@ -67,62 +65,42 @@ All platform health checks are expected to pass. Each check has been implemented
 Available platform health checks:
 
 1. [NCN health checks](#11-ncn-health-checks)
-    1. [Known issues with NCN health checks](#111-known-issues-with-ncn-health-checks)
 1. [OPTIONAL Check of `ncnHealthChecks` resources](#12-ncn-resource-checks-optional)
-    1. [Known issues with NCN resource checks](#121-known-issues-with-ncn-resource-checks)
 1. [Check of system management monitoring tools](#13-check-of-system-management-monitoring-tools)
 
 ### 1.1 NCN health checks
 
 These checks require that the [Cray CLI is configured](#0-cray-command-line-interface) on all worker NCNs.
 
-If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise run them from any NCN.
+If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise run them from any master NCN.
 
-1. (`ncn#` or `pit#`) Specify the `admin` user password for the management switches in the system.
+1. (`ncn-m#` or `pit#`) Run the automated tests.
 
-    This is required for the `ncn-healthcheck` tests.
+    1. Specify the `admin` user password for the management switches in the system.
 
-    > `read -s` is used to prevent the password from being written to the screen or the shell history.
+        This is required for some of the tests to execute.
 
-    ```bash
-    read -s SW_ADMIN_PASSWORD
-    ```
+        > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
-    ```bash
-    export SW_ADMIN_PASSWORD
-    ```
+        ```bash
+        read -r -s -p "Switch admin password: " SW_ADMIN_PASSWORD
+        ```
 
-1. (`ncn#` or `pit#`) Run the NCN health checks.
+        ```bash
+        export SW_ADMIN_PASSWORD
+        ```
 
-    ```bash
-    /opt/cray/tests/install/ncn/automated/ncn-healthcheck | tee ncn-healthcheck.log
-    ```
+    1. Run the NCN and Kubernetes health checks.
 
-    The following command will extract the test totals for the various nodes:
+        ```bash
+        /opt/cray/tests/install/ncn/automated/ncn-k8s-combined-healthcheck
+        ```
 
-    ```bash
-    grep "Total Test" ncn-healthcheck.log
-    ```
+1. Review results.
 
-1. (`ncn#` or `pit#`) Run the Kubernetes checks.
-
-    ```bash
-    /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks | tee ncn-kubernetes-checks.log
-    ```
-
-    The following command will extract the test totals for the various nodes:
-
-    ```bash
-    grep "Total Test" ncn-kubernetes-checks.log
-    ```
-
-1. (`ncn#` or `pit#`) Review results.
-
-    Review the output for `Result: FAIL` and follow the instructions provided to resolve any such test failures. With the exception of the [Known Test Issues](#111-known-issues-with-ncn-health-checks), all health checks are expected to pass.
-
-#### 1.1.1 Known issues with NCN health checks
-
-To validate any issue with NCN, run [`ncn111.sh`](../scripts/operations/validation/ncn111.sh) script 
+    Review the output and follow the instructions provided to resolve any test failures. With the exception of
+    [Known issues with NCN health checks](../troubleshooting/known_issues/issues_with_ncn_health_checks.md),
+    all health checks are expected to pass.
 
 ### 1.2 NCN resource checks (optional)
 
@@ -134,9 +112,7 @@ To dump the NCN uptimes, the node resource consumptions, and/or the list of pods
 /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 ```
 
-#### 1.2.1 Known issues with NCN resource checks
-
-Please run [this script](../scripts/operations/validation/ncn121.sh) to validate all resources
+See [Known issues with NCN resource checks](../troubleshooting/known_issues/ncn_resource_checks.md).
 
 ### 1.3 Check of system management monitoring tools
 
@@ -372,7 +348,17 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 
 ## 3 Software Management Services health checks
 
-To validate all resources, run [`ncn3.sh`](../scripts/operations/validation/ncn3.sh) script.
+(`ncn-mw#`) To validate all SMS services, run the following:
+
+```bash
+/usr/local/bin/cmsdev test -q all
+```
+
+Successful output end with a line similar to the following:
+
+```text
+SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs
+```
 
 ## 4. Gateway health and SSH access checks
 
