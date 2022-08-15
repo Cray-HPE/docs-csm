@@ -47,7 +47,7 @@ Repopulate clusters for CPS.
     1. List the existing CRUS sessions to find the `upgrade_id` for the desired session.
 
         ```bash
-        cray crus session list
+        ncn# cray crus session list
         ```
 
         Example output:
@@ -73,7 +73,7 @@ Repopulate clusters for CPS.
         If the session continued and appears to be in a healthy state, proceed to the [BSS](#bss) section.
 
         ```bash
-        cray crus session describe CRUS_UPGRADE_ID
+        ncn# cray crus session describe CRUS_UPGRADE_ID
         ```
 
         Example output:
@@ -110,7 +110,7 @@ Repopulate clusters for CPS.
     Deleting the pod will restart CRUS and start the discovery process for any data recovered in etcd.
 
     ```bash
-    kubectl delete pods -n services POD_NAME
+    ncn# kubectl delete pods -n services POD_NAME
     ```
 
 ## BSS
@@ -120,20 +120,20 @@ Data is repopulated in BSS when the REDS `init` job is run.
 1. Get the current REDS job.
 
     ```bash
-    kubectl get -o json -n services job/cray-reds-init |
+    ncn# kubectl get -o json -n services job/cray-reds-init |
             jq 'del(.spec.template.metadata.labels["controller-uid"], .spec.selector)' > cray-reds-init.json
     ```
 
 1. Delete the `reds-client-init` job.
 
     ```bash
-    kubectl delete -n services -f cray-reds-init.json
+    ncn# kubectl delete -n services -f cray-reds-init.json
     ```
 
 1. Restart the `reds-client-init` job.
 
     ```bash
-    kubectl apply -n services -f cray-reds-init.json
+    ncn# kubectl apply -n services -f cray-reds-init.json
     ```
 
 ## REDS
@@ -141,7 +141,7 @@ Data is repopulated in BSS when the REDS `init` job is run.
 1. Restart REDS.
 
     ```bash
-    kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-reds'
+    ncn# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-reds'
     ```
 
 ## MEDS
@@ -149,7 +149,7 @@ Data is repopulated in BSS when the REDS `init` job is run.
 1. Restart MEDS.
 
     ```bash
-    kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
+    ncn# kubectl -n services delete pods --selector='app.kubernetes.io/name=cray-meds'
     ```
 
 ## FAS
@@ -167,20 +167,20 @@ Data is repopulated in BSS when the REDS `init` job is run.
 
 1. Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their State Change Notifications \(SCN\).
 
-    1. (`ncn-m#`) Resubscribe all compute nodes.
+    1. Resubscribe all compute nodes.
 
         ```bash
-        TMPFILE=$(mktemp)
-        sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$4);}' > $TMPFILE
-        pdsh -w ^${TMPFILE} "systemctl restart cray-orca"
-        rm -rf $TMPFILE
+        ncn-m# TMPFILE=$(mktemp)
+        ncn-m# sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$4);}' > $TMPFILE
+        ncn-m# pdsh -w ^${TMPFILE} "systemctl restart cray-orca"
+        ncn-m# rm -rf $TMPFILE
         ```
 
-    1. (`ncn-m#`) Resubscribe the NCNs.
+    1. Resubscribe the NCNs.
 
         **`NOTE`** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
 
         ```bash
-        pdsh -w ncn-w00[1-4]-can.local "systemctl restart cray-orca"
-        pdsh -w ncn-s00[1-4]-can.local "systemctl restart cray-orca"
+        ncn-m# pdsh -w ncn-w00[1-4]-can.local "systemctl restart cray-orca"
+        ncn-m# pdsh -w ncn-s00[1-4]-can.local "systemctl restart cray-orca"
         ```
