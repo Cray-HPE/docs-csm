@@ -53,7 +53,25 @@ tasks:
               echo "The following components failed: $(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed"  | jq -r '. | map(.id) | join(",")')"
               exit 1
             fi
-            
+  - name: clear-cfs-state
+    dependencies:
+      - wait-for-cfs
+    templateRef:
+      name: kubectl-and-curl-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+
+            curl -s -k -H "Authorization: Bearer ${TOKEN}" -X PATCH "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" \
+              -H 'Content-Type: application/json' \
+              -d '{"enabled": false, "state": []}'
   - name: ensure-etcd-pods-are-healthy
     templateRef:
       name: ssh-template
@@ -143,7 +161,7 @@ tasks:
             done
   - name: drain
     dependencies:
-      - wait-for-cfs
+      - clear-cfs-state
       - ensure-etcd-pods-are-healthy
       - ensure-pg-pods-are-healthy
       - ensure-critical-pods-are-running
@@ -163,7 +181,7 @@ tasks:
             fi
   - name: update-bss
     dependencies:
-      - wait-for-cfs
+      - clear-cfs-state
       - ensure-etcd-pods-are-healthy
       - ensure-pg-pods-are-healthy
       - ensure-critical-pods-are-running
