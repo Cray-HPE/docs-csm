@@ -26,8 +26,8 @@
 
 #Store password
 echo " Please enter Switch Password"
-read -s SW_ADMIN_PASSWORD
-export SW_ADMIN_PASSWORD
+read -s SSHPASS
+export SSHPASS
 
 #Update CANU
 echo "Updating CANU for network management"
