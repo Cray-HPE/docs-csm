@@ -450,7 +450,7 @@ information for this system has not yet been prepared.
       > **`NOTE`** This step is needed only for fresh installs where `system_config.yaml` is missing from the `prep/` directory.
 
       ```bash
-      pit# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
+      linux# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
       ```
 
    1. Continue to the next step to apply the `csi-config` workarounds.
