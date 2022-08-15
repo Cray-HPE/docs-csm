@@ -134,7 +134,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
     - Update all ServerTech PDUs in the system to the same password.
 
-        **NOTE**: To change the password on all PDUs, that PDUs must be successfully discovered by HSM.
+        **`NOTE`**: To change the password on all PDUs, PDUs must be successfully discovered by HSM.
 
         1. (`ncn-mw#`) Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
 
