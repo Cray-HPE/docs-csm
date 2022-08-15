@@ -46,7 +46,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     x3000m0
     ```
 
-    If some or all of the PDUs have NOT been discovered by HSM, you must obtain the component name (xname) for each of the ServerTech PDUs on the system.
+    If some or all of the PDUs are not discovered by HSM, you must obtain the component name (`xname`) for each of the ServerTech PDUs on the system.
 
 1. (`ncn-mw#`) Set up Vault password variable and command alias.
 
