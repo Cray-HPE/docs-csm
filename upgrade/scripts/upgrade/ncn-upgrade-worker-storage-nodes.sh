@@ -168,9 +168,7 @@ function getUnsucceededRebuildWorkflows() {
 
 function createRebuildWorkflow() {
     res_file=$(mktemp)
-    set -x
     http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPOST -H "Authorization: Bearer $(getToken)" -H 'Content-Type: application/json' -d "$(createWorkflowPayload)" "${baseUrl}/apis/nls/v1/ncns/rebuild")
-    set +x
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
