@@ -69,7 +69,7 @@ Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_U
 In order to update to a firmware image other than the latest image found by FAS, the image for the update can be overridden.
 This is also useful if an update fails because of `"No Image available"`, which happens when FAS is unable to match the data on the node to an image in the image list.
 
-> **WARNING:** Make sure to select the correct image as FAS will force a flash of the device -- using incorrect firmware may make it inoperable.
+> **WARNING:** Make sure to select the correct image because FAS will force a flash of the device -- using incorrect firmware may make it inoperable.
 
 It is strongly recommended to do a dryrun first and check the output.
 
