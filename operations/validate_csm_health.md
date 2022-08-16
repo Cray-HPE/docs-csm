@@ -346,7 +346,7 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 
 - [HMS Discovery job not creating Redfish Endpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
-## 3 Software Management Services health checks
+## 3 Software Management Services (SMS) health checks
 
 (`ncn-mw#`) To validate all SMS services, run the following:
 
@@ -354,7 +354,7 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 /usr/local/bin/cmsdev test -q all
 ```
 
-Successful output end with a line similar to the following:
+Successful output ends with a line similar to the following:
 
 ```text
 SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs

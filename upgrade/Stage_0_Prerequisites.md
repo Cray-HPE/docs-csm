@@ -189,7 +189,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
 1. (`ncn-m001#`) Assign a new CFS configuration to the worker nodes.
 
-   The content of the new CFS configuration is described in HPE Cray EX System Software Getting Started Guide S-8000, section
+   The content of the new CFS configuration is described in *HPE Cray EX System Software Getting Started Guide S-8000*, section
    "HPE Cray EX Software Upgrade Workflow" subsection "Cray System Management (CSM)".
 
 1. (`ncn-m001#`) Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
