@@ -211,6 +211,6 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
         kubectl delete etcdbackup -n services \
         cray-bos-etcd-cluster-periodic-backup
         ```
-Check if rebuilt cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
+Check if rebuilt cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md).
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
 
