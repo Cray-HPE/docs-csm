@@ -36,6 +36,17 @@ fi
 if ! grep -A3 '    scheduler:' /tmp/kubeadm-config.yaml | grep -q bind-address; then
   sed -i 's/    scheduler: {}/    scheduler:\n      extraArgs:\n        bind-address: 0.0.0.0/' /tmp/kubeadm-config.yaml
 fi
+
+grep -q '/var/log/audit' /etc/kubernetes/manifests/kube-apiserver.yaml
+manifest_auditing_enabled=$?
+grep -q '^    audit-log-path:' /tmp/kubeadm-config.yaml
+cm_auditing_enabled=$?
+
+if [ $manifest_auditing_enabled -eq 0 ] &&  [ $cm_auditing_enabled -ne 0 ]; then
+  echo "Updating kubeadm-config configmap with audit configuraton"
+  sed -i '/      runtime-config/a\        audit-log-maxbackup: "100"\n        audit-log-path: /var/log/audit/kl8s/apiserver/audit.log\n        audit-policy-file: /etc/kubernetes/audit/audit-policy.yaml' /tmp/kubeadm-config.yaml
+  sed -i '/    apiServer:/a\      extraVolumes:\n      - hostPath: /var/log/audit/kl8s/apiserver\n        mountPath: /var/log/audit/kl8s/apiserver\n        name: k8s-audit-log\n        pathType: DirectoryOrCreate\n        readOnly: false\n      - hostPath: /etc/kubernetes/audit\n        mountPath: /etc/kubernetes/audit\n        name: k8s-audit\n        pathType: DirectoryOrCreate\n        readOnly: true' /tmp/kubeadm-config.yaml
+
 kubectl -n kube-system apply -f /tmp/kubeadm-config.yaml
 
 export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
