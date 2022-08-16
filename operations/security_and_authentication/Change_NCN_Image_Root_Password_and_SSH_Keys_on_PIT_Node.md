@@ -1,6 +1,7 @@
 # Change NCN Image Root Password and SSH Keys on PIT Node
 
-Customize the NCN images by changing the root password or adding different SSH keys for the root account.
+The default SSH keys in the NCN image must be removed. The default password for the root user must be changed.
+Customize the NCN images by changing the root password and adding different SSH keys for the root account.
 This procedure shows this process being done on the PIT node during a first time installation of the CSM
 software.
 
@@ -10,9 +11,13 @@ There is some common preparation before making the Kubernetes image for master n
 
 ## Common Preparation
 
-1. Prepare new SSH keys on the PIT node for the root account in advance. The same key information will be added to both k8s-image and ceph-image.
+1. Prepare new SSH keys on the PIT node for the root account in advance. The same key information will be added to both `k8s-image` and `ceph-image`.
 
-   Either replace the root public and private SSH keys with your own previously generated keys or generate a new pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different filenames would need to be substituted in later steps.
+   Either replace the root public and private SSH keys with your own previously generated keys or generate a new pair
+   with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and different
+   filenames would need to be substituted in later steps.
+
+   ***Note:*** CSM only supports key pairs with empty passphrases (`ssh-keygen -N""`, or enter an empty passphrase when prompted).
 
    ```bash
    pit# mkdir /root/.ssh
@@ -33,10 +38,17 @@ The Kubernetes image is used by the master and worker nodes.
 
 1. Open the image.
 
-   The Kubernetes image will be of the form "kubernetes-0.1.69.squashfs" in /var/www/ephemeral/data/k8s, but the version number may be different.
+   The Kubernetes image will be of the form `kubernetes-0.1.69.squashfs` in `/var/www/ephemeral/data/k8s`, but the version number may be different.
 
    ```bash
    pit# unsquashfs kubernetes-0.1.69.squashfs
+   ```
+
+1. Remove default SSH keys
+
+   ```bash
+   pit# rm -rf squashfs-root/root/.ssh
+   pit# rm -f /etc/ssh/*key*
    ```
 
 1. Copy the generated public and private SSH keys for the root account into the image.
@@ -44,15 +56,17 @@ The Kubernetes image is used by the master and worker nodes.
    This example assumes that an RSA key was generated.
 
    ```bash
+   pit# mkdir -m 0700 squashfs-root/root/.ssh
    pit# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub squashfs-root/root/.ssh
    ```
 
 1. Add the public SSH key for the root account to `authorized_keys`.
 
-   This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
+   This example assumes that an RSA key was generated so it adds the `id_rsa.pub` file to `authorized_keys`. Note
+   that `authorized_keys` is being overwritten, not appended.
 
    ```bash
-   pit# cat /root/.ssh/id_rsa.pub >> squashfs-root/root/.ssh/authorized_keys
+   pit# cat /root/.ssh/id_rsa.pub > squashfs-root/root/.ssh/authorized_keys
    pit# chmod 640 squashfs-root/root/.ssh/authorized_keys
    ```
 
@@ -104,7 +118,7 @@ The Kubernetes image is used by the master and worker nodes.
    chroot-pit# /srv/cray/scripts/common/create-kis-artifacts.sh
    ```
 
-1. Exit the chroot environment.
+1. Exit the `chroot` environment.
 
    ```bash
    chroot-pit# exit
@@ -112,27 +126,29 @@ The Kubernetes image is used by the master and worker nodes.
 
 1. Clean up the SquashFS creation.
 
-   The Kubernetes image directory is /var/www/ephemeral/data/k8s.
+   The Kubernetes image directory is `/var/www/ephemeral/data/k8s`.
 
    ```bash
    pit# umount -v /var/www/ephemeral/data/k8s/squashfs-root/mnt/squashfs
    ```
 
-1. Move new SquashFS image, kernel, and initrd into place.
+1. Move new SquashFS image, kernel, and `initrd` into place.
 
    ```bash
    pit# mv -v squashfs-root/squashfs/* .
    ```
 
-1. Update file permissions on initrd.
+1. Update file permissions on `initrd`.
 
    ```bash
    pit# chmod -v 644 initrd.img.xz
    ```
 
-1. Rename the new squashfs, kernel, and initrd to include a new version string.
+1. Rename the new SquashFS, kernel, and `initrd` to include a new version string.
 
-   If the old name of the squashfs was kubernetes-0.1.69.squashfs, then its version was '0.1.69', so the newly created version should be renamed to include a version of '0.1.69-1' with an additional dash and a build iteration number of 1. This will help to track what base version was used.
+   If the old name of the SquashFS was `kubernetes-0.1.69.squashfs`, then its version was '0.1.69',
+   so the newly created version should be renamed to include a version of '0.1.69-1' with an
+   additional dash and a build iteration number of 1. This will help to track what base version was used.
 
    ```bash
    pit# ls -l old/*squashfs
@@ -181,13 +197,13 @@ The Ceph image is used by the utility storage nodes.
 
 1. Open the image.
 
-   The Ceph image will be of the form "storage-ceph-0.1.69.squashfs" in /var/www/ephemeral/data/ceph, but the version number may be different.
+   The Ceph image will be of the form `storage-ceph-0.1.69.squashfs` in `/var/www/ephemeral/data/ceph`, but the version number may be different.
 
    ```bash
    pit# unsquashfs storage-ceph-0.1.69.squashfs
    ```
 
-1. Save the old SquashFS image, kernel, and initrd.
+1. Save the old SquashFS image, kernel, and `initrd`.
 
    ```bash
    pit# mkdir -v old
@@ -204,10 +220,12 @@ The Ceph image is used by the utility storage nodes.
 
 1. Add the public SSH key for the root account to `authorized_keys`.
 
-   This example assumes that an RSA key was generated so it adds the id_rsa.pub file to authorized_keys.
+   This example assumes that an RSA key was generated so it adds the `id_rsa.pub` file to `authorized_keys`.
+
+   Note that `authorized_keys` is being overwritten, not appended.
 
    ```bash
-   pit# cat /root/.ssh/id_rsa.pub >> squashfs-root/root/.ssh/authorized_keys
+   pit# cat /root/.ssh/id_rsa.pub > squashfs-root/root/.ssh/authorized_keys
    pit# chmod 640 squashfs-root/root/.ssh/authorized_keys
    ```
 
@@ -259,7 +277,7 @@ The Ceph image is used by the utility storage nodes.
    chroot-pit# /srv/cray/scripts/common/create-kis-artifacts.sh
    ```
 
-1. Exit the chroot environment.
+1. Exit the `chroot` environment.
 
    ```bash
    chroot-pit# exit
@@ -267,7 +285,7 @@ The Ceph image is used by the utility storage nodes.
 
 1. Clean up the SquashFS creation.
 
-   The Ceph image directory is /var/www/ephemeral/data/ceph.
+   The Ceph image directory is `/var/www/ephemeral/data/ceph`.
 
    ```bash
    pit# umount -v /var/www/ephemeral/data/ceph/squashfs-root/mnt/squashfs
@@ -280,21 +298,23 @@ The Ceph image is used by the utility storage nodes.
    pit# mv -v *squashfs old
    ```
 
-1. Move new SquashFS image, kernel, and initrd into place.
+1. Move new SquashFS image, kernel, and `initrd` into place.
 
    ```bash
    pit# mv -v squashfs-root/squashfs/* .
    ```
 
-1. Update file permissions on initrd.
+1. Update file permissions on `initrd`.
 
    ```bash
    pit# chmod -v 644 initrd.img.xz
    ```
 
-1. Rename the new squashfs, kernel, and initrd to include a new version string.
+1. Rename the new SquashFS, kernel, and `initrd` to include a new version string.
 
-   If the old name of the squashfs was storage-ceph-0.1.69.squashfs, then its version was '0.1.69', so the newly created version should be renamed to include a version of '0.1.69-1' with an additional dash and a build iteration number of 1. This will help to track what base version was used.
+   If the old name of the SquashFS was `storage-ceph-0.1.69.squashfs`, then its version was '0.1.69',
+   so the newly created version should be renamed to include a version of '0.1.69-1' with an
+   additional dash and a build iteration number of 1. This will help to track what base version was used.
 
    ```bash
    pit# ls -l old/*squashfs
