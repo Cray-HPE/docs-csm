@@ -34,53 +34,54 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_reb
 ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -a
 ```
 
-An example using the automation script is below.
+An example using the automation script is below for ncn-w001. Can also
+be executed on any master NCN.
 
-```
-ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-uas-mgr-etcd
+```bash
+ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-bss-etcd
 ```
 
 Example output:
 
-```
+```bash
 The following etcd clusters will be restored/rebuilt:
-cray-uas-mgr-etcd
+cray-bss-etcd
 You will be accepting responsibility for any missing data if there is a restore/rebuild over a running etcd k/v. HPE assumes no responsibility.
 Proceed restoring/rebuilding? (yes/no)
 yes
 Proceeding: restoring/rebuilding etcd clusters.
 The following etcd clusters did not have backups so they will need to be rebuilt:
-cray-uas-mgr-etcd
+cray-bss-etcd
 Would you like to proceed rebuilding all of these etcd clusters? (yes/no)
 yes
 
- ----- Rebuilding cray-uas-mgr-etcd -----
+ ----- Rebuilding cray-bss-etcd -----
 Deployment and etcd cluster objects captured in yaml file
 yaml files edited
-deployment.apps "cray-uas-mgr" deleted
-etcdcluster.etcd.database.coreos.com "cray-uas-mgr-etcd" deleted
+deployment.apps "cray-bss" deleted
+etcdcluster.etcd.database.coreos.com "cray-bss-etcd" deleted
 Waiting for pods to terminate.
-etcdcluster.etcd.database.coreos.com/cray-uas-mgr-etcd created
+etcdcluster.etcd.database.coreos.com/cray-bss-etcd created
 Waiting for pods to be 'Running'.
+- Waiting for 3 cray-bss-etcd pods to be running:
+No resources found in services namespace.
 - 0/3  Running
 - 1/3  Running
 - 2/3  Running
 - 3/3  Running
-error: unable to upgrade connection: container not found ("etcd")
-cray-uas-mgr-etcd-42qj56htp5 - Could not reach endpoint. 1/5 Attempts.   Will try again in 15 seconds.
-error: unable to upgrade connection: container not found ("etcd")
-cray-uas-mgr-etcd-42qj56htp5 - Could not reach endpoint. 2/5 Attempts.   Will try again in 15 seconds.
-cray-uas-mgr-etcd-42qj56htp5 - Endpoint reached successfully
-cray-uas-mgr-etcd-6rpprkwbpp - Endpoint reached successfully
-cray-uas-mgr-etcd-nzbzl7k6gm - Endpoint reached successfully
-deployment.apps/cray-uas-mgr created
+Checking endpoint health.
+cray-bss-etcd-qj4ds8j9k6 - Endpoint reached successfully
+cray-bss-etcd-s8ck74hf96 - Endpoint reached successfully
+cray-bss-etcd-vc2xznnbpj - Endpoint reached successfully
+deployment.apps/cray-bss created
+2022-07-31-05:04:27
+SUCCESSFUL REBUILD of the cray-bss-etcd cluster completed.
 
-SUCCESSFUL REBUILD cray-uas-mgr-etcd.
+etcdbackup.etcd.database.coreos.com "cray-bss-etcd-cluster-periodic-backup" deleted
 
-Could not find existing backup definition. If one exists, it should be deleted so a new one can be created that points to the new cluster IP.
-Example delete command: groot-ncn-w001:~ # kubectl delete etcdbackup -n services cray-bos-etcd-cluster-periodic-backup
+ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 ```
-
+Check if restored cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
 
 ### Manual Procedure for Clusters in the Services Namespace
@@ -210,6 +211,6 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
         kubectl delete etcdbackup -n services \
         cray-bos-etcd-cluster-periodic-backup
         ```
-
+Check if restored cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
 
