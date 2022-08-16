@@ -21,7 +21,7 @@ For detailed BICAN documentation, see the [BICAN Technical Details](../../operat
 
 - Service request adjustments are needed for small systems.
 
-  - For systems with only three worker nodes (typically Testing and  Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be
+  - For systems with only three worker nodes (typically Testing and Development Systems (TDS)), prior to proceeding with this upgrade, CPU limits **MUST** be
     lowered on several services in order for this upgrade to succeed. This step is
     executed automatically as part of [Stage 0.4](Stage_0_Prerequisites.md#prerequisites-check) of the upgrade.
     See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for more information.

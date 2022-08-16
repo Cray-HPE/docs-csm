@@ -20,20 +20,20 @@ For wiping Linux on an NCN with a previously installed OS, the [basic wipe](#bas
 
 ## Topics
 
-* [Basic Wipe](#basic-wipe)
-* [Advanced Wipe](#advanced-wipe)
-* [Full Wipe](#full-wipe)
+* [Basic wipe](#basic-wipe)
+* [Advanced wipe](#advanced-wipe)
+* [Full wipe](#full-wipe)
 
-<a name="basic-wipe"></a>
-
-## Basic Wipe
+## Basic wipe
 
 This wipe erases the magic bits on the disk to prevent them from being recognized and making them ready for deployment, as well as removing the common volume groups.
 
 1. List the disks for verification.
 
     ```bash
-    ncn# disks_to_wipe="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(raid|'"$metal_transports"')' | sort -u | awk '{print "/dev/"$2}' | tr '\n' ' ' | sed 's/ *$//')"
+    ncn# disks_to_wipe=$(lsblk -l -o NAME,TYPE,TRAN | grep -E '[[:space:]].*(sata|nvme|sas|raid)' |
+                         awk '{ print "/dev/"$1 }' | sort -u | tr '\n' ' ')
+    ncn# echo "${disks_to_wipe}"
     ```
 
 1. Wipe the disks and the RAIDs.
@@ -73,11 +73,9 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
          done
     ```
 
-<a name="advanced-wipe"></a>
+## Advanced wipe
 
-## Advanced Wipe
-
-An advanced wipe includes handling storage node specific items before running the [basic wipe](#basic-wipe).
+An advanced wipe includes handling storage node specific items before running the [Basic wipe](#basic-wipe).
 
 1. Stop Ceph on all of the storage nodes.
 
@@ -109,11 +107,9 @@ An advanced wipe includes handling storage node specific items before running th
 
     Examine the output. There should be no running `ceph-osd` processes or containers.
 
-1. Perform the [Basic Wipe](#basic-wipe) procedure.
+1. Perform the [Basic wipe](#basic-wipe) procedure.
 
-<a name="full-wipe"></a>
-
-## Full-Wipe
+## Full wipe
 
 This section walks a user through cleanly stopping all running services that require partitions, as well
 removing the node from the Ceph or Kubernetes cluster (as appropriate for the node type).
@@ -137,6 +133,11 @@ wiping a different type of node than what a step specifies, then skip that step.
 
         ```bash
         ncn-w# crictl ps
+        ```
+
+        Example output:
+
+        ```text
         CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
         66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
         7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
@@ -145,7 +146,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         c3d4811fc3cd0       0215a709bdd9b       3 days ago           Running             weave-npc                                    0                   f5e25c12e617e
         ```
 
-   1. If there are any running containers from the output of the `crictl ps` command, stop them.
+   1. If there are any running containers from the output of the `crictl ps` command, then stop them.
 
         ```bash
         ncn-w# crictl stop <container id from the CONTAINER column>
@@ -165,6 +166,11 @@ wiping a different type of node than what a step specifies, then skip that step.
 
         ```bash
         ncn-m# crictl ps
+        ```
+
+        Example output:
+
+        ```text
         CONTAINER           IMAGE               CREATED              STATE               NAME                                                ATTEMPT             POD ID
         66a78adf6b4c2       18b6035f5a9ce       About a minute ago   Running             spire-bundle                                        1212                6d89f7dee8ab6
         7680e4050386d       c8344c866fa55       24 hours ago         Running             speaker                                             0                   5460d2bffb4d7
@@ -173,13 +179,13 @@ wiping a different type of node than what a step specifies, then skip that step.
         c3d4811fc3cd0       0215a709bdd9b       3 days ago           Running             weave-npc                                    0                   f5e25c12e617e
         ```
 
-    1. If there are any running containers from the output of the `crictl ps` command, stop them.
+    1. If there are any running containers from the output of the `crictl ps` command, then stop them.
 
        ```bash
        ncn-m# crictl stop <container id from the CONTAINER column>
        ```
 
-1. Stop Storage-Ceph, run the [advanced wipe](#advanced-wipe), but stop when it mentions the "basic wipe". Then return here.
+1. Run the [Advanced wipe](#advanced-wipe), but stop when it mentions the "basic wipe". Then return here.
 
 1. Unmount volumes.
 
@@ -205,12 +211,17 @@ wiping a different type of node than what a step specifies, then skip that step.
         ncn-s# umount -vf /var/lib/ceph /var/lib/containers /etc/ceph /var/opt/cray/sdu/collection-mount /var/lib/admin-tools /var/lib/s3fs_cache /var/lib/containerd
         ```
 
-        If the `umount` command is responding with `target is busy` on the storage node, then try the following:
+        If the `umount` command outputs `target is busy` on the storage node, then try the following:
 
         1. Look for `containers` mounts:
 
             ```bash
-            ncn-s# mount | grep "containers"
+            ncn-s# mount | grep containers
+            ```
+
+            Example output:
+
+            ```text
             /dev/mapper/metalvg0-CONTAIN on /var/lib/containers type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize=131072k,logbufs=8,logbsize=32k,noquota)
             /dev/mapper/metalvg0-CONTAIN on /var/lib/containers/storage/overlay type xfs (rw,noatime,swalloc,attr2,largeio,inode64,allocsize=131072k,logbufs=8,logbsize=32k,noquota)
             ```
@@ -219,6 +230,11 @@ wiping a different type of node than what a step specifies, then skip that step.
 
             ```bash
             ncn-s# umount -v /var/lib/containers/storage/overlay
+            ```
+
+            Example output:
+
+            ```text
             umount: /var/lib/containers/storage/overlay unmounted
             ```
 
@@ -226,6 +242,11 @@ wiping a different type of node than what a step specifies, then skip that step.
 
             ```bash
             ncn-s# umount -v /var/lib/containers
+            ```
+
+            Example output:
+
+            ```text
             umount: /var/lib/containers unmounted
             ```
 
@@ -241,6 +262,11 @@ wiping a different type of node than what a step specifies, then skip that step.
 
         ```bash
         ncn# podman ps
+        ```
+
+        Example output:
+
+        ```text
         CONTAINER ID  IMAGE                                                      COMMAND               CREATED      STATUS          PORTS   NAMES
         7741d5096625  registry.local/sdu-docker-stable-local/cray-sdu-rda:1.1.1  /bin/sh -c /usr/s...  6 weeks ago  Up 6 weeks ago          cray-sdu-rda
         ```
@@ -249,6 +275,11 @@ wiping a different type of node than what a step specifies, then skip that step.
 
         ```bash
         ncn# podman stop 7741d5096625
+        ```
+
+        Example output:
+
+        ```text
         7741d50966259410298bb4c3210e6665cdbd57a82e34e467d239f519ae3f17d4
         ```
 
@@ -272,7 +303,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         ncn-m# dmsetup remove $(dmsetup ls | grep -i etcd | awk '{print $1}')
         ```
 
-        > **NOTE:** The following output means the `etcd` volume mapper is not present. This is okay.
+        > **NOTE:** The following output means that the `etcd` volume mapper is not present. This is okay.
 
         ```text
         No device specified.
@@ -285,4 +316,4 @@ wiping a different type of node than what a step specifies, then skip that step.
     ncn-m# vgremove etcdvg0
     ```
 
-1. Perform the [basic wipe](#basic-wipe) procedure.
+1. Perform the [Basic wipe](#basic-wipe) procedure.

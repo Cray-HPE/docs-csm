@@ -29,7 +29,7 @@ Add SSH keys and the `root` password to the NCN SquashFS images. Optionally set 
 (the default) is desired. This is all done by running the `ncn-image-modification.sh` script, which is located in the `scripts/operations/node_management` directory of the CSM documentation. Set the path to the script:
 
 ```bash
-pit# NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification[.]sh)
+pit# NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification[.]sh) ; echo "${NCN_MOD_SCRIPT}"
 ```
 
 This document provides common ways of using the script to accomplish this. However, specific environments may require
