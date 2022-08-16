@@ -101,7 +101,6 @@ fi
 
 function uploadWorkflowTemplates() {
     "${basedir}"/../../../workflows/scripts/upload-worker-rebuild-templates.sh
-    
 }
 
 function createWorkflowPayload() {
