@@ -170,6 +170,8 @@ It is also recommended that the nodes be powered back on after the updates are c
         ncn# cray fas actions describe {actionID} --format toml
         ```
 
+        Example output:
+
         ```toml
         blockedBy = []
         state = "completed"
