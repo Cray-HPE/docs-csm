@@ -34,6 +34,7 @@ if ( isStable ) {
     (major, minor, patch) = env.TAG_NAME.tokenize('.')
     major = major.replaceAll("^v","")
 }
+def ADDITIONAL_VERSIONS = ["latest"]
 
 pipeline {
     agent {
@@ -50,10 +51,11 @@ pipeline {
     environment {
         GIT_REPO_NAME = getRepoName()
         VERSION = sh(returnStdout: true, script: "git describe --tags | tr -s '-' '~' | tr -d '^v'").trim()
+        SLACK_CHANNEL_ALERTS = "csm-release-alerts"
     }
     
     stages {
-        stage("Prepare") {
+      stage("Prepare") {
             agent {
                 docker {
                     image "artifactory.algol60.net/csm-docker/stable/csm-docker-sle:${sleVersion}"
@@ -70,9 +72,7 @@ pipeline {
                     }
                 }
             }
-        }
-
-      
+      }
       stage("Build RPM") {
           agent {
               docker {
@@ -84,27 +84,37 @@ pipeline {
               script {
                   withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
                       sh "make rpm"
-                    }
+                  }
                 }
             }
-        }
-
+      }
       stage('Publish') {
           steps {
             script {
                 if( isStable ){
                     RELEASE_FOLDER = "/${major}.${minor}"
-                    sh "find dist/rpmbuild/RPMS/noarch/ -name *.rpm -exec cp {} dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-latest.noarch.rpm \\;"
-                    sh "find dist/rpmbuild/SRPMS/ -name *.rpm -exec cp {}  dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-latest.src.rpm \\;"
                 } else {
                     RELEASE_FOLDER = ""
                 }
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", os: 'sle-15sp2', arch: "noarch", isStable: isStable)
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/*.rpm", os: 'sle-15sp3', arch: "noarch", isStable: isStable)
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", os: 'sle-15sp2', arch: "src", isStable: isStable)
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/*.rpm", os: 'sle-15sp3', arch: "src", isStable: isStable)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp2', arch: "noarch", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp3', arch: "noarch", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp2', arch: "src", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp3', arch: "src", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
+            }
+        }
+      }
+    }
+    post {
+        failure {
+            script {
+                slackSend(channel: env.SLACK_CHANNEL_ALERTS, color: "danger", message: "<${env.BUILD_URL}|DOCS-CSM ${env.VERSION}> - :x: Build did not complete successfully")
+            }
+        }
+        aborted {
+            script {
+                slackSend(channel: env.SLACK_CHANNEL_ALERTS, color: "warning", message: "<${env.BUILD_URL}|DOCS-CSM ${env.VERSION}> - :warning: Job was aborted")
             }
         }
     }
   }
-}
+
