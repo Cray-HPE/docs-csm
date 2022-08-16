@@ -43,16 +43,17 @@ function deployNLS() {
 }
 
 function patchKeycloak() {
-    argoUrl=$(kubectl get VirtualService/cray-argo -n argo -o json | jq -r '.spec.hosts[0]')
-    kcClientId=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.client-id}' -n services | base64 -d)
-    kcUsername=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.user}' -n services | base64 -d)
-    kcPassword=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.password}' -n services | base64 -d)
+    ARGO_URL=$(kubectl get VirtualService/cray-argo -n argo -o json | jq -r '.spec.hosts[0]')
+    KC_CLIENT_ID=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.client-id}' -n services | base64 -d)
+    KC_USERNAME=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.user}' -n services | base64 -d)
+    KC_PASSWORD=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.password}' -n services | base64 -d)
 
-    python /usr/share/doc/csm/upgrade/scripts/upgrade/util/nls-keycloak-configure.py \
-        --kc-client-id "${kcClientId}" \
-        --kc-username "${kcUsername}" \
-        --kc-password "${kcPassword}" \
-        --argo-url "${argoUrl}"
+    export ARGO_URL="${ARGO_URL}"
+    export KC_CLIENT_ID="${KC_CLIENT_ID}"
+    export KC_USERNAME="${KC_USERNAME}"
+    export KC_PASSWORD="${KC_PASSWORD}"
+    
+    python /usr/share/doc/csm/upgrade/scripts/upgrade/util/nls-keycloak-configure.py
 }
 
 deployNLS

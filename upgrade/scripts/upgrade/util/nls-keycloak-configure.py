@@ -22,6 +22,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 import argparse
+import os
 import sys
 import requests
 import json
@@ -34,24 +35,21 @@ def globalErrorHandler(error):
 urllib3.disable_warnings()
 
 parser = argparse.ArgumentParser(description='utility script to configure keycloak for cray-nls')
-parser.add_argument('--kc-client-id',required=True, help='keycloak admin client id')
-parser.add_argument('--kc-username',required=True, help='keycloak admin username')
-parser.add_argument('--kc-password',required=True, help='keycloak admin password')
-parser.add_argument('--argo-url',required=True, help='Public URL of argo')
-
-args = parser.parse_args()
 
 session = requests.Session()
 session.verify = False
 
-
+argo_url=os.environ.get('ARGO_URL')
+kc_client_id=os.environ.get('KC_CLIENT_ID')
+kc_username=os.environ.get('KC_USERNAME')
+kc_password=os.environ.get('KC_PASSWORD')
 try:
     # Get TOKEN
     data = {
             "grant_type":"password", 
-            "client_id": args.kc_client_id, 
-            "username": args.kc_username,
-            "password": args.kc_password
+            "client_id": kc_client_id, 
+            "username": kc_username,
+            "password": kc_password
             }
     token_response = session.post('https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token', data=data)
     token_json = token_response.json()
@@ -75,12 +73,12 @@ try:
     
     needConfigure=False
     # Configure webOrigins
-    argoWebOrigin="https://"+args.argo_url
+    argoWebOrigin="https://"+argo_url
     if not argoWebOrigin in customerManagementClient['webOrigins']:
         customerManagementClient['webOrigins'].append(argoWebOrigin)
         needConfigure=True
     # Configure redirectUris
-    argoRedirectUri="https://"+args.argo_url+"/oauth/callback"
+    argoRedirectUri="https://"+argo_url+"/oauth/callback"
     if not argoRedirectUri in customerManagementClient['redirectUris']:
         customerManagementClient['redirectUris'].append(argoRedirectUri)
         needConfigure=True
