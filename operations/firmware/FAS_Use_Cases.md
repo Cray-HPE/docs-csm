@@ -153,6 +153,9 @@ It is also recommended that the nodes be powered back on after the updates are c
 
         ```bash
         ncn# cray fas actions create nodeBMC.json
+        ```
+
+        ```toml
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
@@ -163,6 +166,9 @@ It is also recommended that the nodes be powered back on after the updates are c
 
         ```bash
         ncn# cray fas actions describe {actionID}
+        ```
+
+        ```toml
         blockedBy = []
         state = "completed"
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -211,7 +217,7 @@ It is also recommended that the nodes be powered back on after the updates are c
 
         The following example is for the `nodeBMC.json` file. Update the following values:
 
-        ```bash
+        ```json
         "overrideDryrun":true,
         "description":"Update Cray Node BMCs"
         ```
@@ -222,6 +228,9 @@ It is also recommended that the nodes be powered back on after the updates are c
 
         ```bash
         ncn# cray fas actions create nodeBMC.json
+        ```
+
+        ```toml
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
         ```
@@ -234,6 +243,9 @@ It is also recommended that the nodes be powered back on after the updates are c
 
     ```bash
     ncn# cray fas actions describe {actionID}
+    ```
+
+    ```toml
     [operationSummary.failed]
     [[operationSummary.failed.operationKeys]]
     stateHelper = "unexpected change detected in firmware version. Expected nc.1.3.10-shasta-release.arm.2020-07-21T23:58:22+00:00.d479f59 got: nc.cronomatic-dev.arm.2019-09-24T13:20:24+00:00.9d0f8280"
@@ -255,6 +267,9 @@ It is also recommended that the nodes be powered back on after the updates are c
 
     ```bash
     ncn# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f"
+    ```
+
+    ```toml
     fromFirmwareVersion = "nc.cronomatic-dev.arm.2019-09-24T13:20:24+00:00.9d0f8280"
     fromTag = ""
     fromImageURL = ""
@@ -347,6 +362,9 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         ```bash
         ncn# cray fas actions create chassisBMC.json
+        ```
+
+        ```toml
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
@@ -408,7 +426,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
         The following example is for the `chassisBMC.json` file. Update the following values:
 
-        ```toml
+        ```json
         "overrideDryrun":true,
         "description":"Update Cray Chassis Management Module controllers"
         ```
@@ -695,7 +713,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
         The following example is for the `nodeBMC.json` file. Update the following values:
 
-        ```toml
+        ```json
         "overrideDryrun":true,
         "description":"Update of HPE node iLO 5"
         ```
