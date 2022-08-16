@@ -35,3 +35,6 @@ function upload_worker_rebuild_template {
 }
 
 main
+# shellcheck disable=SC2046
+kubectl -n argo annotate --overwrite pods \
+    $(kubectl get pods -l app.kubernetes.io/name=cray-nls -n argo -o json | jq -r '.items[] | .metadata.name') updated="$(date +%s)"
