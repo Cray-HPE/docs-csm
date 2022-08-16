@@ -28,7 +28,7 @@ The following procedures can be run from any master or worker node.
 
    ```bash
    ncn-mw# pdsh -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
-   systemctl restart goss-servers
+               systemctl restart goss-servers
    ```
 
 1. Specify the `admin` user password for the management switches in the system.

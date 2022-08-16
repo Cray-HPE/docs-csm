@@ -725,7 +725,7 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 
    ```bash
    ncn# pdsh -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
-   'ip ad show hsn0 | grep inet\ ' | dshbak -c
+            'ip ad show hsn0 | grep inet\ ' | dshbak -c
    ```
 
    Example output:

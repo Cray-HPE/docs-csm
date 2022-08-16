@@ -421,7 +421,9 @@ Verify that the Lustre file system is available from the management cluster.
     pdsh@ncn-m001: ncn-w001: ssh exited with exit code 3
     ```
 
-    1. On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service. For example:
+    1. On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service.
+
+        For example:
 
         ```bash
         ncn# systemctl restart cfs-state-reporter
@@ -433,7 +435,7 @@ Verify that the Lustre file system is available from the management cluster.
         ncn-m001# pdsh -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') systemctl status cfs-state-reporter
         ```
 
-    1. If there are still issues with `cfe-state-reporter` on the storage nodes, then it might be due to a spire issue which can be addressed with this script.
+    1. If there are still issues with `cfe-state-reporter` on the storage nodes, then it might be because of a Spire issue which can be addressed with this script.
 
         ```bash
         ncn-m001# /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
@@ -541,8 +543,7 @@ Verify that the Lustre file system is available from the management cluster.
 
     ```bash
     ncn-m001# sat status --filter role=management --filter enabled=true \
-    --filter=state=off --fields xname,aliases,state,flag,role,subrole
-
+                  --filter=state=off --fields xname,aliases,state,flag,role,subrole
     ```
 
     Example output:
@@ -571,11 +572,11 @@ Verify that the Lustre file system is available from the management cluster.
     URI = "/hsm/v2/Inventory/DiscoveryStatus/0"
     ```
 
-1. Check for NCN state.
+1. Check the NCN state.
 
     ```bash
     ncn-m001# sat status --filter role=management --filter enabled=true \
-    --filter=state=off --fields xname,aliases,state,flag,role,subrole
+                  --filter=state=off --fields xname,aliases,state,flag,role,subrole
     ```
 
     Example output:
@@ -600,15 +601,15 @@ Verify that the Lustre file system is available from the management cluster.
 
 1. Check whether CFS has run NCN personalization on the management nodes.
 
-    When the "Configuration Status" is set to "configured" that node has completed all configuration layers for post-boot CFS.
+    If a node has its `Configuration Status` set to `configured`, then that node has completed all configuration layers for post-boot CFS.
 
-    If any nodes have "Configuration Status" set to "pending", there should be a CFS session in progress which includes that node.
+    If any nodes have `Configuration Status` set to `pending`, then there should be a CFS session in progress which includes that node.
 
-    If any nodes have "Configuration Status" set to "failed" with "Error Count" set to 3, then the node was unable complete a layer of configuration.  
+    If any nodes have `Configuration Status` set to `failed` with `Error Count` set to `3`, then the node was unable complete a layer of configuration.
 
     ```bash
     ncn-m001# sat status --filter role=management --filter enabled=true --fields \
-    xname,aliases,role,subrole,"desired config","configuration status","error count"
+                  xname,aliases,role,subrole,"desired config","configuration status","error count"
     ```
 
     Example output:
@@ -631,34 +632,34 @@ Verify that the Lustre file system is available from the management cluster.
     +----------------+----------+------------+---------+---------------------+----------------------+-------------+
     ```
 
-    1. If some nodes are not fully "configured", find any CFS sessions in progress.
+    1. If some nodes are not fully configured, then find any CFS sessions in progress.
 
-    ```bash
-    kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
-    ```
+        ```bash
+        ncn-m001# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+        ```
 
-    Example output:
+        Example output:
 
-    ```text
-    cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk                    7/9     Error       0          21m
-    cfs-157af6d5-b63d-48ba-9eb9-b33af9a8325d-tfj8x                    3/9     Not Ready   0          11m
-    ```
+        ```text
+        cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk                    7/9     Error       0          21m
+        cfs-157af6d5-b63d-48ba-9eb9-b33af9a8325d-tfj8x                    3/9     Not Ready   0          11m
+        ```
 
-    CFS sessions which are in "Not Ready" status are still in progress. CFS sessions with status "Error" had a failure in one of the layers.
+        CFS sessions which are in `Not Ready` status are still in progress. CFS sessions with status `Error` had a failure in one of the layers.
 
     1. Inspect all layers of Ansible configuration to find a failed layer.
 
-    ```bash
-    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
-    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
-    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
-    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
-    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
-    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
-    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
-    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
-    ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
-    ```
+        ```bash
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
+        ```
 
     **Important:** Some systems may have a failure to mount Lustre on the worker nodes during the COS 2.3
     layer of configuration if their connection to the ClusterStor is via cables to Slingshot switches

@@ -26,15 +26,15 @@ the COS 2.3 layer to address this problem.
 
 1. Check whether CFS has failed NCN personalization on the worker nodes.
 
-    When the "Configuration Status" is set to "configured" that node has completed all configuration layers for post-boot CFS.
+    If a node has its `Configuration Status` set to `configured`, then that node has completed all configuration layers for post-boot CFS.
 
-    If any nodes have "Configuration Status" set to "pending", there should be a CFS session in progress which includes that node.
+    If any nodes have `Configuration Status` set to `pending`, then there should be a CFS session in progress which includes that node.
 
-    If any nodes have "Configuration Status" set to "failed" with "Error Count" set to 3, then the node was unable complete a layer of configuration.  
+    If any nodes have `Configuration Status` set to `failed` with `Error Count` set to `3`, then the node was unable complete a layer of configuration.
 
     ```bash
     ncn-m# sat status --filter role=management --filter enabled=true --fields \
-    xname,aliases,role,subrole,"desired config","configuration status","error count"
+               xname,aliases,role,subrole,"desired config","configuration status","error count"
     ```
 
     Example output:
@@ -53,10 +53,10 @@ the COS 2.3 layer to address this problem.
 
     This example shows three worker nodes which have failed with an error count of 3 and two which are pending, but have already failed twice.
 
-    1. If some nodes are not fully "configured", find any CFS sessions in progress.
+    1. If some nodes are not fully configured, then find any CFS sessions in progress.
 
        ```bash
-       ncn# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+       ncn-mw# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
        ```
 
        Example output:
@@ -66,25 +66,26 @@ the COS 2.3 layer to address this problem.
        cfs-157af6d5-b63d-48ba-9eb9-b33af9a8325d-tfj8x                    3/9     Not Ready   0          11m
        ```
 
-       CFS sessions which are in "Not Ready" status are still in progress. CFS sessions with status "Error" had a failure in one of the layers.
+       CFS sessions which are in `Not Ready` status are still in progress. CFS sessions with status `Error` had a failure in one of the layers.
+
     1. Inspect all layers of Ansible configuration to find a failed layer.
 
        ```bash
-       ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
-       ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
-       ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
-       ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
-       ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
-       ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
-       ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
-       ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
-       ncn# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
+       ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
+       ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
+       ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
+       ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
+       ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
+       ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
+       ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
+       ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
+       ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
        ```
 
-    1. If the slingshot-host-software has completed and the COS layer has run, but fails to mount Lustre
+    1. If the `slingshot-host-software` has completed and the COS layer has run, but fails to mount Lustre
        filesystems, then several roles have already been run to load DVS, Lnet, and Lustre kernel modules.
-       These need to be unloaded before NCN personalization can be run again.  This is due to a flaw
-       in the slingshot-host-software which restarts the openibd service for worker nodes which have
+       These need to be unloaded before NCN personalization can be run again. This is due to a flaw
+       in the `slingshot-host-software` which restarts the `openibd` service for worker nodes which have
        Mellanox NICs.
 
        Otherwise, do not continue in this procedure.
@@ -104,14 +105,14 @@ the COS 2.3 layer to address this problem.
       Set the `COS_RELEASE` to the version of COS 2.3 which has been installed.
 
       ```bash
-      ncn# export COS_RELEASE=2.3.101
-      ncn# kubectl get cm cray-product-catalog -n services -o yaml \
-      | yq r - 'data.cos' | yq r - \"${COS_RELEASE}\"
+      ncn-mw# COS_RELEASE=2.3.101
+      ncn-mw# kubectl get cm cray-product-catalog -n services -o yaml \
+                  | yq r - 'data.cos' | yq r - \"${COS_RELEASE}\"
       ```
 
       Example output:
 
-      ```text
+      ```yaml
       2.3.XX:
         configuration:
           clone_url: https://vcs.DOMAIN_NAME.dev.cray.com/vcs/cray/cos-config-management.git
@@ -128,52 +129,82 @@ the COS 2.3 layer to address this problem.
    1. Store the import branch for later use.
 
       ```bash
-      ncn# export IMPORT_BRANCH=cray/cos/${COS_RELEASE}
+      ncn-mw# IMPORT_BRANCH=cray/cos/${COS_RELEASE}
       ```
 
-   1. Obtain the credentials for the `crayvcs` user from a Kubernetes secret. The credentials are required for cloning a branch from
-      VCS. Use git to clone the COS configuration content.
+   1. Obtain VCS credentials from a Kubernetes secret.
+
+      The credentials are required for cloning a branch from VCS.
+
+      1. Obtain the username.
+
+         The output of the following command is the username:
+
+         ```bash
+         ncn-mw# kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode && echo
+         ```
+
+      1. Obtain the password.
+
+         The output of the following command is the password:
+
+         ```bash
+         ncn-mw# kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode && echo
+         ```
+
+   1. Clone the COS configuration repository.
+
+      When prompted for the username and password, enter the values obtained in the previous steps.
 
       ```bash
-      ncn# kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | \
-      base64 --decode && echo
-      <==password output==>
+      ncn-mw# git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
+      ```
 
-      ncn# git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
-      Username for 'https://api-gw-service-nmn.local': crayvcs
-      Password for 'https://crayvcs@api-gw-service-nmn.local': <password from preceding output>
+   1. Change directory and create a new branch.
 
-      ncn# cd cos-config-management/
-      ncn# git checkout -b $IMPORT_BRANCH origin/$IMPORT_BRANCH
+      ```bash
+      ncn-mw# cd cos-config-management/
+      ncn-mw# git checkout -b $IMPORT_BRANCH origin/$IMPORT_BRANCH
+      ```
+
+      Example output:
+
+      ```text
       Branch 'cray/cos/<X>.<Y>.<Z>' set up to track remote branch 'cray/cos/<X>.<Y>.<Z>' from 'origin'.
       Switched to a new branch 'cray/cos/<X>.<Y>.<Z>'
       ```
 
-   1. If the integration branch exists, run the following command:
+   1. If the integration branch exists, then run the following command:
 
       ```bash
-      ncn# git checkout -b integration origin/integration
+      ncn-mw# git checkout -b integration origin/integration
+      ```
+
+      Example output:
+
+      ```text
       Branch 'integration' set up to track remote branch 'integration' from 'origin'.
       Switched to a new branch 'integration'
       ```
 
-   1. Merge import branch into integration branch:
+   1. Merge the import branch into the integration branch.
 
       ```bash
-      ncn# git merge $IMPORT_BRANCH
+      ncn-mw# git merge $IMPORT_BRANCH
       ```
 
-1. Create a new `ncn-powerup.yml` playbook
+1. Create a new `ncn-powerup.yml` playbook.
 
    Copy the `ncn-upgrade.yml` playbook to `ncn-powerup.yml`.
    Edit the file with two changes.
+
    * Change serial parameter from `1` node to `100%`
-   * Comment all roles after the ones with names ending in uninstall, unmount, and unload. See the example below.
+   * Comment all roles after the ones with names ending in `uninstall`, `unmount`, and `unload`. See the example below.
 
    ```bash
-   ncn# cp -p ncn-upgrade.yml ncn-powerup.yml
-   ncn# vi ncn-powerup.yml
-   ncn# cat ncn-powerup.yml
+   ncn-mw# cp -pv ncn-upgrade.yml ncn-powerup.yml
+   ncn-mw# vi ncn-powerup.yml
+   ncn-mw# cat ncn-powerup.yml
    ```
 
    Example output
@@ -204,63 +235,84 @@ the COS 2.3 layer to address this problem.
    #    - configure_fs
    ```
 
-1. Commit the new `ncn-powerup.yml` to `cos-config-management` VCS repo.
+1. Commit the new `ncn-powerup.yml` to the `cos-config-management` VCS repository.
 
    ```bash
-   ncn# git add ncn-powerup.yml
-   ncn# git commit -m "Patched with ncn-powerup.yml playbook"
-   ncn# git push origin integration
+   ncn-mw# git add ncn-powerup.yml
+   ncn-mw# git commit -m "Patched with ncn-powerup.yml playbook"
+   ncn-mw# git push origin integration
+   ```
 
-1. Identify the commit hash for this branch. This will be used later when creating the CFS configuration layer.
+1. Identify the commit hash for this branch.
+
+   This will be used later when creating the CFS configuration layer. The following command will display the commit hash.
 
    ```bash
-   ncn# git rev-parse --verify HEAD
-   <== commit hash output ==>
+   ncn-mw# git rev-parse --verify HEAD
    ```
 
 1. Store the commit hash for later use.
 
    ```bash
-   ncn# export COS_CONFIG_COMMIT_HASH=<commit hash output>
+   ncn-mw# COS_CONFIG_COMMIT_HASH=<commit hash output>
    ```
 
-1. Create a CFS configuration which has only a COS layer with this ncn-powerup.yml playbook in it and then run a CFS session with that.
+1. Create and run a CFS configuration which has only a COS layer with this `ncn-powerup.yml` playbook in it.
 
-   ```bash
-   ncn# vi ncn-powerup.json
-   ncn# cat ncn-powerup.json
-   {
-     "layers": [
-       {
-         "cloneUrl":"https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
-         "commit":"<COS_CONFIG_COMMIT_HASH>",
-         "name": "cos-integration-2.3.101",
-         "playbook":"ncn-powerup.yml"
-       }
-     ]
-   }
-   ncn# cray cfs configurations update ncn-powerup --file ncn-powerup.json --format json
-   ncn# cray cfs sessions create --name ncn-powerup --configuration-name ncn-powerup
-   ```
+   1. Create a JSON file with the configuration contents.
+
+      ```bash
+      ncn-mw# vi ncn-powerup.json
+      ncn-mw# cat ncn-powerup.json
+      ```
+
+      Example output:
+
+      ```json
+      {
+        "layers": [
+          {
+            "cloneUrl":"https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git",
+            "commit":"<COS_CONFIG_COMMIT_HASH>",
+            "name": "cos-integration-2.3.101",
+            "playbook":"ncn-powerup.yml"
+          }
+        ]
+      }
+      ```
+
+   1. Create a CFS configuration from this file.
+
+      ```bash
+      ncn-mw# cray cfs configurations update ncn-powerup --file ncn-powerup.json --format json
+      ```
+
+   1. Run a CFS session with the new configuration.
+
+      ```bash
+      ncn-mw# cray cfs sessions create --name ncn-powerup --configuration-name ncn-powerup
+      ```
 
 1. Watch the CFS session run on the worker nodes.
 
    ```bash
-   ncn# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
-   ncn# kubectl logs -f -n services POD ansible-0
+   ncn-mw# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+   ncn-mw# kubectl logs -f -n services POD ansible-0
    ```
 
    Continue only when there are no errors in the Ansible log.
 
-1. Clear the error counts on all nodes so that CFS batcher can run NCN personalization on all worker nodes. This will have the SHS openibd restart, then will see all of the COS stuff as never been done and should load lnet, dvs, and Lustre just fine.
+1. Clear the error counts on all nodes so that CFS batcher can run NCN personalization on all worker nodes.
+
+   This will have the SHS `openibd` restart, see that all of the COS steps have never been done, and then load Lnet, DVS, and Lustre.
 
    ```bash
-   ncn# cray cfs components update --enabled true --state '[]' --error-count 0 --format json $XNAME
+   ncn-mw# cray cfs components update --enabled true --state '[]' --error-count 0 --format json $XNAME
    ```
 
-1. Watch the CFS NCN personaliation run on the worker nodes to ensure that the configuration completes with no further errors.
+1. Watch the CFS NCN personalization run on the worker nodes to ensure that the configuration completes with no further errors.
 
    ```bash
-   ncn# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
-   ncn# kubectl logs -f -n services POD ansible-0
+   ncn-mw# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+   ncn-mw# kubectl logs -f -n services POD ansible-0
    ```

@@ -109,7 +109,7 @@ Client (master and worker nodes):
 
     ```bash
     ncn-m# pdsh -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
-    tar cvf /root/cert_backup.tar /var/lib/kubelet/pki/
+               tar cvf /root/cert_backup.tar /var/lib/kubelet/pki/
     ```
 
     Example output:
@@ -295,8 +295,8 @@ Run the following steps on each master node.
 
    ```bash
    ncn-m# pdsh -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
-   -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
-   systemctl restart kubelet.service
+                  -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+                  systemctl restart kubelet.service
    ```
 
 1. Fix `kubectl` command access.
@@ -360,8 +360,8 @@ Run the following steps on each master node.
 
    ```bash
    ncn-m# pdsh -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
-   -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') tar cvf \
-   /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
+                  -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') tar cvf \
+                  /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
    ```
 
 2. Log into the master node where the other certificates were updated.

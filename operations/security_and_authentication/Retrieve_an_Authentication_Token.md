@@ -4,19 +4,19 @@ Retrieve a token for authenticating to one of the API gateways.
 
 The following are important properties of authentication tokens:
 
-- Keycloak access tokens remain valid for 365 days
-- Secrets do not expire; they are persistent in Keycloak
-- Tokens and/or secrets can be revoked at anytime by an admin
+- Keycloak access tokens remain valid for 365 days.
+- Secrets do not expire; they are persistent in Keycloak.
+- Tokens and secrets can be revoked at any time by an administrator.
 
 The API gateways use OAuth2 for authentication. A token is required to authenticate with one of the gateways.
 
 There are multiple API gateways that are used to access services from the different networks.
 
-- services-gateway accessible at api.nmnlb.SYSTEM_DOMAIN_NAME or api-gw-service-nmn.local
-- customer-admin-gateway accessible at api.cmn.SYSTEM_DOMAIN_NAME
-- customer-user-gateway accessible at api.can.SYSTEM_DOMAIN_NAME or api.chn.SYSTEM_DOMAIN_NAME
+- `services-gateway` accessible at `api.nmnlb.SYSTEM_DOMAIN_NAME` or `api-gw-service-nmn.local`
+- `customer-admin-gateway` accessible at `api.cmn.SYSTEM_DOMAIN_NAME`
+- `customer-user-gateway accessible` at `api.can.SYSTEM_DOMAIN_NAME` or `api.chn.SYSTEM_DOMAIN_NAME`
 
-The appropriate token must be retrieved from the gateway to access services on that gateway.
+The appropriate token must be retrieved from the gateway in order to access services on that gateway.
 
 ## Procedure
 
@@ -32,17 +32,17 @@ The appropriate token must be retrieved from the gateway to access services on t
 
        ```bash
        ncn-w001# curl -s \
-        -d grant_type=password \
-        -d client_id=shasta \
-        -d username=myuser \
-        -d password=mypass \
-        https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/realms/shasta/protocol/openid-connect/token |
-        python -mjson.tool
+                     -d grant_type=password \
+                     -d client_id=shasta \
+                     -d username=myuser \
+                     -d password=mypass \
+                     https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/realms/shasta/protocol/openid-connect/token |
+                     python -mjson.tool
        ```
 
        Expected output:
 
-       ```bash
+       ```text
        {
            "access_token": "ey...IA", <<-- Note this value
            "expires_in": 300,
@@ -68,12 +68,18 @@ The appropriate token must be retrieved from the gateway to access services on t
         follows:
 
             ```bash
-            ncn-w001# echo "$(kubectl get secrets admin-client-auth \
-            -ojsonpath='{.data.client-secret}' | base64 -d)"
+            ncn-w001# echo "$(kubectl get secrets admin-client-auth -ojsonpath='{.data.client-secret}' | base64 -d)"
+            ```
+
+            Example output:
+
+            ```text
             2b0d6df0-183b-40e6-93be-51c7854388a1
             ```
 
-        - Given the client ID and secret, the user can retrieve a token by requesting one from Keycloak. In the example below, replace the string being assigned to client\_secret with the actual client secret from the previous step.
+        - Given the client ID and secret, the user can retrieve a token by requesting one from Keycloak.
+
+            In the example below, replace the string being assigned to `client_secret` with the actual client secret from the previous step.
 
             In the following example, the python -mjson.tool is not required, it formats the output for readability.
 
@@ -103,7 +109,7 @@ The appropriate token must be retrieved from the gateway to access services on t
 
             Use the value of `access_token` to make requests.
 
-2. Present the token.
+1. Present the token.
 
    To present the access token on the request, put it in the `Authorization` header on the request as a `Bearer` token.
 
@@ -111,8 +117,12 @@ The appropriate token must be retrieved from the gateway to access services on t
 
    ```bash
    ncn-w001# TOKEN=access_token
-   ncn-w001# curl -H "Authorization: Bearer $TOKEN" \
-   https://api.cmn.SYSTEM_DOMAIN_NAME/apis/capmc/capmc/get_node_rules
+   ncn-w001# curl -H "Authorization: Bearer $TOKEN" https://api.cmn.SYSTEM_DOMAIN_NAME/apis/capmc/capmc/get_node_rules
+   ```
+
+   Example output:
+
+   ```json
    {
        "e":0,
        "err_msg":"",
