@@ -40,7 +40,7 @@ Generating a configuration file can be done for a single switch, or for the full
 * `--sls` : Match the `sls_file.json` to the one you created for your system.
 * `--custom-config` : Pass in a switch configuration file that CANU will inject into the generated configuration. For more information, see the [CANU documentation](https://github.com/Cray-HPE/canu#generate-switch-configs-including-custom-configurations).
 
-    ```console
+```console
     ncn# canu generate network config --csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --custom-config system-custom-config.yaml --folder generated
     ```
-    ```
+```
