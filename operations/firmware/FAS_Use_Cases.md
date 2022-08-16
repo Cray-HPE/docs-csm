@@ -371,7 +371,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         The `overrideDryrun = false` value indicates that the command will do a dry-run.
 
         ```bash
-        ncn# cray fas actions create chassisBMC.json
+        ncn# cray fas actions create chassisBMC.json --format toml
         ```
 
         ```toml
