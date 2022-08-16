@@ -46,6 +46,7 @@ if [[ ${manifest_auditing_enabled} -eq 0 && ${cm_auditing_enabled} -ne 0 ]]; the
   echo "Updating kubeadm-config configmap with audit configuraton"
   sed -i '/      runtime-config/a\        audit-log-maxbackup: "100"\n        audit-log-path: /var/log/audit/kl8s/apiserver/audit.log\n        audit-policy-file: /etc/kubernetes/audit/audit-policy.yaml' /tmp/kubeadm-config.yaml
   sed -i '/    apiServer:/a\      extraVolumes:\n      - hostPath: /var/log/audit/kl8s/apiserver\n        mountPath: /var/log/audit/kl8s/apiserver\n        name: k8s-audit-log\n        pathType: DirectoryOrCreate\n        readOnly: false\n      - hostPath: /etc/kubernetes/audit\n        mountPath: /etc/kubernetes/audit\n        name: k8s-audit\n        pathType: DirectoryOrCreate\n        readOnly: true' /tmp/kubeadm-config.yaml
+fi
 
 kubectl -n kube-system apply -f /tmp/kubeadm-config.yaml
 
