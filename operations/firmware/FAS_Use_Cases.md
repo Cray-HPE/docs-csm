@@ -152,7 +152,7 @@ It is also recommended that the nodes be powered back on after the updates are c
         The `overrideDryrun = false` value indicates that the command will do a dry run.
 
         ```bash
-        ncn# cray fas actions create nodeBMC.json
+        ncn# cray fas actions create nodeBMC.json --format toml
         ```
 
         ```toml
