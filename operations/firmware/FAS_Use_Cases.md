@@ -374,6 +374,8 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         ncn# cray fas actions create chassisBMC.json --format toml
         ```
 
+        Example output:
+
         ```toml
         overrideDryrun = false
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
@@ -384,8 +386,10 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        ncn# cray fas actions describe {actionID}
+        ncn# cray fas actions describe {actionID} --format toml
         ```
+
+        Example output:
 
         ```toml
         blockedBy = []
@@ -446,8 +450,10 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
         The output `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be displayed.
 
         ```bash
-        ncn# cray fas actions create chassisBMC.json
+        ncn# cray fas actions create chassisBMC.json --format toml
         ```
+
+        Example output:
 
         ```toml
         overrideDryrun = true
@@ -459,7 +465,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 1. Restart the `hms-discovery` cronjob.
 
     ```bash
-    ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
+    ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
     The `hms-discovery` cronjob will run within 5 minutes of being unsuspended and start powering on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually:
@@ -658,8 +664,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
         The `overrideDryrun = false` value indicates that the command will do a dry run.
 
         ```bash
-        ncn# cray fas actions create nodeBMC.json
+        ncn# cray fas actions create nodeBMC.json --format toml
         ```
+
+        Example output:
 
         ```toml
         overrideDryrun = false
@@ -671,8 +679,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        ncn# cray fas actions describe {actionID}
+        ncn# cray fas actions describe {actionID} --format toml
         ```
+
+        Example output:
 
         ```toml
         blockedBy = []
@@ -733,8 +743,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
         The returned `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be returned.
 
         ```bash
-        ncn# cray fas actions create nodeBMC.json
+        ncn# cray fas actions create nodeBMC.json --format toml
         ```
+
+        Example output:
 
         ```toml
         overrideDryrun = true
@@ -748,8 +760,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
 1. Retrieve the `operationID` and verify that the update is complete.
 
     ```bash
-    cray fas actions describe {actionID}
+    ncn# cray fas actions describe {actionID} --format toml
     ```
+
+    Example output:
 
     ```toml
     [operationSummary.failed]
@@ -772,8 +786,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
     For example:
 
     ```bash
-    ncn# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f"
+    ncn# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f" --format toml
     ```
+
+    Example output:
 
     ```toml
     fromFirmwareVersion = "2.32 Apr 27 2020"
@@ -1009,6 +1025,8 @@ Prerequisites:
   ncn# cray fas operations describe {operationID} --format json
   ```
 
+  Example output:
+
   ```json
   {
     "operationID":"102c949f-e662-4019-bc04-9e4b433ab45e",
@@ -1051,6 +1069,8 @@ Prerequisites:
    ncn# cray fas images list --format json | jq '.images[] | select(.manufacturer=="cray") \
    | select(.target=="Node1.BIOS") | select(any(.models[]; contains("EX425")))'
    ```
+
+   Example output:
 
    ```json
    {
