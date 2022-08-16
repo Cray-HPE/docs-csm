@@ -19,7 +19,7 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 1. (`ncn#`) List the disks for verification.
 
     1. Set a variable by loading a helper library.
-    
+
         - From the Linux command line, run the following command:
 
             ```bash
