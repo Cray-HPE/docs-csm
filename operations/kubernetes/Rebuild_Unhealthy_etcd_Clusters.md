@@ -9,7 +9,7 @@ A special use case is also included for the Content Projection Service \(CPS\) a
 ---
 > **`NOTE`**
 
-Etcd Clusters can be rebuilt using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure. If the automation script fails at any step, continue rebuilding the cluster using the manual procedure.
+Etcd Clusters other than the Content Projection Service \(CPS\) can be rebuilt using the automation script or the manual procedure below. The automation script follows the same steps as the manual procedure. If the automation script fails at any step, continue rebuilding the cluster using the manual procedure.
 
 ---
 
@@ -81,7 +81,7 @@ etcdbackup.etcd.database.coreos.com "cray-bss-etcd-cluster-periodic-backup" dele
 
 ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 ```
-Check if rebuilt cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
+Check if rebuilt cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md).
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
 
 ### Manual Procedure for Clusters in the Services Namespace
