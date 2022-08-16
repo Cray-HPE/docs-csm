@@ -94,8 +94,8 @@ create_manifest() {
 # site-init secret
 update_customizations() {
 	CUSTOMIZATIONS="$(base64 <"${TMPDIR}/customizations.yaml" | tr -d '\n')"
-	kubectl get secrets -n loftsman site-init -o json \
-		| jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" | kubectl apply -f -
+	kubectl get secrets -n loftsman site-init -o json |
+		jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" | kubectl apply -f -
 }
 
 # run_loftsman runs loftsman against our trimmed down manifest file to enable
@@ -192,7 +192,7 @@ function sshnh() {
 }
 
 disable_spire_on_NCNs() {
-        echo "Stopping spire on NCNs"
+	echo "Stopping spire on NCNs"
 	storageNodes=$(ceph node ls | jq -r '.[] | keys[]' | sort -u)
 	ncnNodes=$(kubectl get nodes -o name | cut -d'/' -f2)
 
@@ -204,7 +204,7 @@ disable_spire_on_NCNs() {
 }
 
 enable_spire_on_NCNs() {
-        echo "Enabling spire on NCNs"
+	echo "Enabling spire on NCNs"
 	ncnNodes=$(kubectl get nodes -o name | cut -d'/' -f2)
 
 	for node in $ncnNodes; do
@@ -215,7 +215,7 @@ enable_spire_on_NCNs() {
 }
 
 uninstall_spire() {
-        echo "Uninstalling spire"
+	echo "Uninstalling spire"
 	helm uninstall -n spire spire
 	while ! [ "$(kubectl get pods -n spire --no-headers | wc -l)" -eq 0 ]; do
 		echo "Waiting for all spire pods to be terminated."
