@@ -66,6 +66,8 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 1. (`ncn-m001#`) Remap the CSM release `rbd` device to `ncn-m002`.
 
+    This device was created in [Stage 0.1 - Prepare assets](Stage_0_Prerequisites.md#stage-01---prepare-assets).
+
     ```bash
     source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
     python /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
