@@ -51,10 +51,11 @@ pipeline {
     environment {
         GIT_REPO_NAME = getRepoName()
         VERSION = sh(returnStdout: true, script: "git describe --tags | tr -s '-' '~' | tr -d '^v'").trim()
+        SLACK_CHANNEL_ALERTS = "csm-release-alerts"
     }
     
     stages {
-        stage("Prepare") {
+      stage("Prepare") {
             agent {
                 docker {
                     image "artifactory.algol60.net/csm-docker/stable/csm-docker-sle:${sleVersion}"
@@ -71,8 +72,7 @@ pipeline {
                     }
                 }
             }
-        }
-
+      }
       stage("Build RPM") {
           agent {
               docker {
@@ -87,8 +87,7 @@ pipeline {
                   }
                 }
             }
-        }
-
+      }
       stage('Publish') {
           steps {
             script {
@@ -104,6 +103,18 @@ pipeline {
             }
         }
       }
+    }
+    post {
+        failure {
+            script {
+                slackSend(channel: env.SLACK_CHANNEL_ALERTS, color: "danger", message: "<${env.BUILD_URL}|DOCS-CSM ${env.VERSION}> - :x: Build did not complete successfully")
+            }
+        }
+        aborted {
+            script {
+                slackSend(channel: env.SLACK_CHANNEL_ALERTS, color: "warning", message: "<${env.BUILD_URL}|DOCS-CSM ${env.VERSION}> - :warning: Job was aborted")
+            }
+        }
     }
   }
 
