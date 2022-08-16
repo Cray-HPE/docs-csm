@@ -34,21 +34,36 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_reb
 ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -a
 ```
 
-An example using the automation script is below.
+An example using the automation script is below for ncn-w001. Can also
+be executed on any master NCN.
+
+```bash
+ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-bss-etcd
 ```
-ncn-m001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_rebuild.sh -s cray-externaldns-etcd
+
+Example output:
+
+```bash
 The following etcd clusters will be restored/rebuilt:
-cray-externaldns-etcd
+cray-bss-etcd
 You will be accepting responsibility for any missing data if there is a restore/rebuild over a running etcd k/v. HPE assumes no responsibility.
 Proceed restoring/rebuilding? (yes/no)
 yes
 Proceeding: restoring/rebuilding etcd clusters.
 
- ----- Restoring from cray-externaldns/etcd.backup_v8362_2021-08-18-20:00:09
-etcdrestore.etcd.database.coreos.com/cray-externaldns-etcd created
+ ----- Restoring from cray-bss/etcd.backup_v5702_2022-07-30-19:00:02 -----
+etcdrestore.etcd.database.coreos.com/cray-bss-etcd created
+- Any existing cray-bss-etcd pods no longer in "Running" state.
+- Waiting for 3 cray-bss-etcd pods to be running:
+- 0/3  Running
+- 1/3  Running
+- 2/3  Running
 - 3/3  Running
-Successfully restored cray-externaldns-etcd
-etcdrestore.etcd.database.coreos.com "cray-externaldns-etcd" deleted
+etcdrestore.etcd.database.coreos.com "cray-bss-etcd" deleted
+2022-07-31-04:23:23
+The cray-bss-etcd cluster has successfully been restored from cray-bss/etcd.backup_v5702_2022-07-30-19:00:02.
+
+ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 ```
 
 ### Restore with Manual Procedure
