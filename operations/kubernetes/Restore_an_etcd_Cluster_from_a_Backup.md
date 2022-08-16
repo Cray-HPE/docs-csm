@@ -21,7 +21,7 @@ A backup of a healthy etcd cluster has been created.
 The automated script will restore the cluster from the most recent backup if it finds a backup created within the last 7 days.
 If it does not discover a backup within the last 7 days, it will ask the user if they would like to rebuild the cluster.
 
-```
+```text
 cd /opt/cray/platform-utils/etcd_restore_rebuild_util
 
 # rebuild/restore a single cluster
@@ -43,7 +43,7 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_reb
 
 Example output:
 
-```bash
+```text
 The following etcd clusters will be restored/rebuilt:
 cray-bss-etcd
 You will be accepting responsibility for any missing data if there is a restore/rebuild over a running etcd k/v. HPE assumes no responsibility.
@@ -80,7 +80,7 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 
     Example output:
 
-    ```
+    ```text
     cray-bos/etcd.backup_v108497_2020-03-20-23:42:37
     cray-bos/etcd.backup_v125815_2020-03-21-23:42:37
     cray-bos/etcd.backup_v143095_2020-03-22-23:42:38
@@ -102,7 +102,7 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 
     Example output:
 
-    ```
+    ```text
     etcdrestore.etcd.database.coreos.com/cray-bos-etcd created
     ```
 
@@ -118,7 +118,7 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 
         Example output:
 
-        ```
+        ```text
         cray-bos-etcd-498jn7th6p             1/1     Running              0          4h1m
         cray-bos-etcd-dj7d894227             1/1     Running              0          3h59m
         cray-bos-etcd-tk4pr4kgqk             1/1     Running              0          4
@@ -134,7 +134,7 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 
         Example output:
 
-        ```
+        ```text
         etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
 

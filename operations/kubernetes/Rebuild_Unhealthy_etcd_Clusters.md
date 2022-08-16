@@ -21,7 +21,7 @@ An etcd cluster has pods that are not healthy, or the etcd cluster has no pods. 
 
 The automated script will restore the cluster from a backup if it finds a backup created within the last 7 days. If it does not discover a backup within the last 7 days, it will ask the user if they would like to rebuild the cluster.
 
-```
+```text
 ncn-w001 # cd /opt/cray/platform-utils/etcd_restore_rebuild_util
 
 # rebuild/restore a single cluster
@@ -43,7 +43,7 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util # ./etcd_restore_reb
 
 Example output:
 
-```bash
+```text
 The following etcd clusters will be restored/rebuilt:
 cray-bss-etcd
 You will be accepting responsibility for any missing data if there is a restore/rebuild over a running etcd k/v. HPE assumes no responsibility.
@@ -81,7 +81,7 @@ etcdbackup.etcd.database.coreos.com "cray-bss-etcd-cluster-periodic-backup" dele
 
 ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 ```
-Check if restored cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
+Check if rebuilt cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
 
 ### Manual Procedure for Clusters in the Services Namespace
@@ -107,7 +107,7 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
 
     For example:
 
-    ```
+    ```text
     creationTimestamp: "2019-11-26T16:54:23Z"
     generation: 1
 
@@ -166,7 +166,7 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
 
     Example output:
 
-    ```
+    ```text
     cray-bos-etcd-hwcw4429b9                  1/1     Running         1          7d18h
     cray-bos-etcd-mdnl28vq9c                  1/1     Running         0          36h
     cray-bos-etcd-w5vv7j4ghh                  1/1     Running         0          18h
@@ -211,6 +211,6 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
         kubectl delete etcdbackup -n services \
         cray-bos-etcd-cluster-periodic-backup
         ```
-Check if restored cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
+Check if rebuilt cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.
 
