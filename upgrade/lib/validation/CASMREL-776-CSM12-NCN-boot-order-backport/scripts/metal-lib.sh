@@ -55,7 +55,7 @@ install_grub2() {
     for disk in $(mdadm --detail $(blkid -L $fslabel) | grep /dev/sd | awk '{print $NF}'); do
         # Add '--suse-enable-tpm' to grub2-install once we need TPM.
         grub2-install --no-rs-codes --suse-force-signed --root-directory $working_path --removable "$disk"
-        efibootmgr -c -D -d "$disk" -p 1 -L "CRAY UEFI OS $index" -l '\efi\boot\bootx64.efi' | grep CRAY
+        efibootmgr -c -D -d "$disk" -p 1 -L "CRAY UEFI OS $index" -l '\efi\boot\bootx64.efi' | grep -i cray
         index=$(($index + 1))
     done
 
@@ -342,17 +342,17 @@ EOM
             case $hostname in
                 ncn-m*)
                     efibootmgr | grep -iP '(pxe ipv?(4|6).*adapter)' | tee /tmp/bbs1
-                    efibootmgr | grep cray | tee /tmp/bbs2
+                    efibootmgr | grep -i cray | tee /tmp/bbs2
                     efibootmgr | grep 'UEFI OS' | tee /tmp/bbs3
                     ;;
                 ncn-s*)
                     efibootmgr | grep -iP '(pxe ipv?(4|6).*adapter)' | tee /tmp/bbs1
-                    efibootmgr | grep cray | tee /tmp/bbs2
+                    efibootmgr | grep -i cray | tee /tmp/bbs2
                     efibootmgr | grep 'UEFI OS' | tee /tmp/bbs3
                     ;;
                 ncn-w*)
                     efibootmgr | grep -iP '(pxe ipv?(4|6).*adapter)' | tee /tmp/bbs1
-                    efibootmgr | grep cray | tee /tmp/bbs2
+                    efibootmgr | grep -i cray | tee /tmp/bbs2
                     efibootmgr | grep 'UEFI OS' | tee /tmp/bbs3
                     ;;
                 *)
@@ -371,15 +371,15 @@ EOM
             case $hostname in
                 ncn-m*)
                     efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
-                    efibootmgr | grep cray | tee /tmp/bbs2
+                    efibootmgr | grep -i cray | tee /tmp/bbs2
                     ;;
                 ncn-s*)
                     efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
-                    efibootmgr | grep cray | tee /tmp/bbs2
+                    efibootmgr | grep -i cray | tee /tmp/bbs2
                     ;;
                 ncn-w*)
                     efibootmgr | grep -i 'port 1' | grep -i 'pxe ipv4' | tee /tmp/bbs1
-                    efibootmgr | grep cray | tee /tmp/bbs2
+                    efibootmgr | grep -i cray | tee /tmp/bbs2
                     ;;
                 *)
                     efi_fail_host
