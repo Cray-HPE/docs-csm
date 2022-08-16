@@ -232,6 +232,8 @@ It is also recommended that the nodes be powered back on after the updates are c
         ncn# cray fas actions create nodeBMC.json --format toml
         ```
 
+        Example output:
+
         ```toml
         overrideDryrun = true
         actionID = "bc40f10a-e50c-4178-9288-8234b336077b"
