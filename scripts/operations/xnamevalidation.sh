@@ -59,6 +59,7 @@ enable_xname_in_charts() {
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.cfs' 'true'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.ckdump' 'true'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.dvs' 'true'
+	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.heartbeat' 'true'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.enabled' 'true'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.spire.server.tokenService.enableXNameWorkloads' 'true'
 }
@@ -70,6 +71,7 @@ disable_xname_in_charts() {
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.cfs' 'false'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.ckdump' 'false'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.dvs' 'false'
+	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.heartbeat' 'false'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.enabled' 'false'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.spire.server.tokenService.enableXNameWorkloads' 'false'
 }
@@ -92,8 +94,8 @@ create_manifest() {
 # site-init secret
 update_customizations() {
 	CUSTOMIZATIONS="$(base64 <"${TMPDIR}/customizations.yaml" | tr -d '\n')"
-	kubectl get secrets -n loftsman site-init -o json \
-		| jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" | kubectl apply -f -
+	kubectl get secrets -n loftsman site-init -o json |
+		jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" | kubectl apply -f -
 }
 
 # run_loftsman runs loftsman against our trimmed down manifest file to enable
@@ -190,7 +192,7 @@ function sshnh() {
 }
 
 disable_spire_on_NCNs() {
-        echo "Stopping spire on NCNs"
+	echo "Stopping spire on NCNs"
 	storageNodes=$(ceph node ls | jq -r '.[] | keys[]' | sort -u)
 	ncnNodes=$(kubectl get nodes -o name | cut -d'/' -f2)
 
@@ -202,7 +204,7 @@ disable_spire_on_NCNs() {
 }
 
 enable_spire_on_NCNs() {
-        echo "Enabling spire on NCNs"
+	echo "Enabling spire on NCNs"
 	ncnNodes=$(kubectl get nodes -o name | cut -d'/' -f2)
 
 	for node in $ncnNodes; do
@@ -213,7 +215,7 @@ enable_spire_on_NCNs() {
 }
 
 uninstall_spire() {
-        echo "Uninstalling spire"
+	echo "Uninstalling spire"
 	helm uninstall -n spire spire
 	while ! [ "$(kubectl get pods -n spire --no-headers | wc -l)" -eq 0 ]; do
 		echo "Waiting for all spire pods to be terminated."
