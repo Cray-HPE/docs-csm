@@ -165,7 +165,7 @@ It is also recommended that the nodes be powered back on after the updates are c
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
         ```bash
-        ncn# cray fas actions describe {actionID}
+        ncn# cray fas actions describe {actionID} --format toml
         ```
 
         ```toml
