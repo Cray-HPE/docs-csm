@@ -349,7 +349,7 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
     1. Disable the `hms-discovery` Kubernetes cronjob:
 
         ```bash
-        ncn# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
+        ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
         ```
 
     1. Power off all the components. For example, in chassis 0-7, cabinets 1000-1003:
