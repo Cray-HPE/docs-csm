@@ -9,9 +9,7 @@ For example, if there is a suspected configuration issue on single switch, a con
 * CANU installed with version 1.1.11 or greater.
   * Run `canu --version` to see version.
   * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, refer to the [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md) procedure.
-* Alternatively: Upgrade or install latest version of CANU [Install/Upgrade CANU](canu_install_update.md)
-  * Run `canu --version` to see version
-  * CANU installed with version 1.6.13 or greater.
+* Alternatively: Upgrade or install latest version of CANU from Github [Install/Upgrade CANU](canu_install_update.md))
 * Validated SHCD.
   * See [Validate SHCD](validate_shcd.md).
 * JSON output from validated SHCD.
