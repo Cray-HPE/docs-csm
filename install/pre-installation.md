@@ -176,12 +176,7 @@ On first login, the LiveCD will prompt the administrator to change the password.
       > **NOTES:**
       >
       > - All of the `/root/bin/csi-*` scripts can be run without parameters to display usage statements.
-      > - The hostname is auto-resolved based on reverse DNS, if it is unresolvable then the user can set the hostname with:
-      >
-      >    ```bash
-      >    hostname=eniac-ncn-m001
-      >    hostamectl set-hostname "${hostname}-pit" 
-      >    ```
+      > - The hostname is auto-resolved based on reverse DNS.
 
       ```bash
       /root/bin/csi-setup-lan0.sh "${site_ip}" "${site_gw}" "${site_dns}" "${site_nics}"
