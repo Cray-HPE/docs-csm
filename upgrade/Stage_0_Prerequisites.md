@@ -31,7 +31,9 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
     1. Initialize the Python virtual environment.
 
-        Instructions needed
+        ```bash
+        tar xvf /opt/cray/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/
+        ```
 
     1. Create and map the `rbd` device.
 
