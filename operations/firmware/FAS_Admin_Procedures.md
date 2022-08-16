@@ -272,7 +272,7 @@ as well as how to target specific manufacturers, component names (xnames), and t
       ncn# cray fas actions status list {actionID}
       ```
 
-      ```text
+      ```toml
       actionID = "e6dc14cd-5e12-4d36-a97b-0dd372b0930f"
       snapshotID = "00000000-0000-0000-0000-000000000000"
       startTime = "2021-09-07 16:43:04.294233199 +0000 UTC"
@@ -313,7 +313,7 @@ as well as how to target specific manufacturers, component names (xnames), and t
        A common cause for an operation failing is due to a missing firmware image file.
 
        ```bash
-       cray fas actions describe {actionID} --format json
+       ncn# cray fas actions describe {actionID} --format json
        ```
 
        ```json
