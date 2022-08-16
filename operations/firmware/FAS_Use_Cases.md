@@ -227,7 +227,7 @@ It is also recommended that the nodes be powered back on after the updates are c
         The output `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be displayed.
 
         ```bash
-        ncn# cray fas actions create nodeBMC.json
+        ncn# cray fas actions create nodeBMC.json --format toml
         ```
 
         ```toml
