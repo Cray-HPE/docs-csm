@@ -276,6 +276,8 @@ as well as how to target specific manufacturers, component names (xnames), and t
       ncn# cray fas actions status list {actionID} --format toml
       ```
 
+      Example output:
+
       ```toml
       actionID = "e6dc14cd-5e12-4d36-a97b-0dd372b0930f"
       snapshotID = "00000000-0000-0000-0000-000000000000"
@@ -319,6 +321,8 @@ as well as how to target specific manufacturers, component names (xnames), and t
        ```bash
        ncn# cray fas actions describe {actionID} --format json
        ```
+
+      Example output:
 
        ```json
        {
@@ -419,6 +423,8 @@ as well as how to target specific manufacturers, component names (xnames), and t
    ncn# cray fas operations describe {operationID} --format json
    ```
 
+   Example output:
+
    ```json
    {
       "fromFirmwareVersion": "", "fromTag": "",
@@ -487,6 +493,8 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
     > **`NOTE`** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
     Use the `--format json` to make it easier to read.
+
+    Example output:
 
     ```json
     {
@@ -567,6 +575,8 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
     > **`NOTE`** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
     Use the `--format json` to make it easier to read.
+
+    Example output:
 
     ```json
     {

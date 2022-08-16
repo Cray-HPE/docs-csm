@@ -20,7 +20,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
     ```bash
     ncn-mw# PDU=x3000m0
-    ncn-mw# curl -k -s --compressed  https://$PDU -i | grep Server:
+    ncn-mw# curl -k -s --compressed  https://${PDU} -i | grep Server:
     ```
 
     Expected output for a ServerTech PDU:
@@ -46,7 +46,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     x3000m0
     ```
 
-    If some or all of the PDUs are not discovered by HSM, you must obtain the component name (`xname`) for each of the ServerTech PDUs on the system.
+    If any of the PDUs are not discovered by HSM, then the component name (`xname`) for each of the ServerTech PDUs on the system must be obtained.
 
 1. Set up Vault password variable and command alias.
 
@@ -108,8 +108,8 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
         1. Change password for the `admn` user on the ServerTech PDU.
 
             ```bash
-            ncn-mw# curl -i -k -u "admn:$OLD_PDU_PASSWORD" -X PATCH https://$PDU/jaws/config/users/local/admn \
-                 -d $(jq --arg PASSWORD "$NEW_PDU_PASSWORD" -nc '{password: $PASSWORD}')
+            ncn-mw# curl -i -k -u "admn:${OLD_PDU_PASSWORD}" -X PATCH https://${PDU}/jaws/config/users/local/admn \
+                 -d $(jq --arg PASSWORD "${NEW_PDU_PASSWORD}" -nc '{password: $PASSWORD}')
             ```
 
             Expected output upon a successful password change:
@@ -134,16 +134,16 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
     - Update all ServerTech PDUs in the system to the same password.
 
-        **`NOTE`**: To change the password on all PDUs, PDUs must be successfully discovered by HSM.
+        **`NOTE`**: In order to change the password on all PDUs, the PDUs must be successfully discovered by HSM.
 
         1. Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
 
             ```bash
             ncn-mw# for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
             jq -r '.RedfishEndpoints[] | select(.FQDN | contains("rts")).ID'); do
-                echo "Updating password on $PDU"
-                curl -i -k -u "admn:$OLD_PDU_PASSWORD" -X PATCH https://$PDU/jaws/config/users/local/admn \
-                    -d $(jq --arg PASSWORD "$NEW_PDU_PASSWORD" -nc '{password: $PASSWORD}')
+                echo "Updating password on ${PDU}"
+                curl -i -k -u "admn:${OLD_PDU_PASSWORD}" -X PATCH https://${PDU}/jaws/config/users/local/admn \
+                    -d $(jq --arg PASSWORD "${NEW_PDU_PASSWORD}" -nc '{password: $PASSWORD}')
             done
             ```
 
@@ -173,14 +173,14 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
             ```bash
             ncn-mw# for PDU in $(cray hsm inventory redfishEndpoints list --type CabinetPDUController --format json |
               jq -r '.RedfishEndpoints[] | select(.FQDN | contains("rts")).ID'); do
-                echo "Updating password on $PDU"
-                vault kv get secret/pdu-creds/$PDU |
-                    jq --arg PASSWORD "$NEW_PDU_PASSWORD" '.data | .Password=$PASSWORD' |
-                    vault kv put secret/pdu-creds/$PDU -
+                echo "Updating password on ${PDU}"
+                vault kv get secret/pdu-creds/${PDU} |
+                    jq --arg PASSWORD "${NEW_PDU_PASSWORD}" '.data | .Password=$PASSWORD' |
+                    vault kv put secret/pdu-creds/${PDU} -
             done
             ```
 
-            **`NOTE`**: After five minutes, the previous credential should stop working as the existing sessions time out.
+            **NOTE**: After five minutes, the previous credential should stop working as the existing sessions time out.
 
 1. Restart the Redfish Translation Service (RTS) to pickup the new PDU credentials.
 

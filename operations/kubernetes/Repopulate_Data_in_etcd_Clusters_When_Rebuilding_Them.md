@@ -39,7 +39,7 @@ Repopulate clusters for CPS.
 
 ## CRUS
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
 [Deprecated features](../../introduction/differences.md#deprecated_features).
 
 1. View the progress of existing CRUS sessions.
@@ -171,14 +171,14 @@ Data is repopulated in BSS when the REDS `init` job is run.
 
         ```bash
         ncn-m# TMPFILE=$(mktemp)
-        ncn-m# sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$4);}' > $TMPFILE
-        ncn-m# pdsh -w ^${TMPFILE} "systemctl restart cray-orca"
-        ncn-m# rm -rf $TMPFILE
+        ncn-m# sat status --no-borders --no-headings | grep Ready | grep Compute | awk '{printf("nid%06d-nmn\n",$4);}' > "${TMPFILE}"
+        ncn-m# pdsh -w ^"${TMPFILE}" "systemctl restart cray-orca"
+        ncn-m# rm -rf "${TMPFILE}"
         ```
 
     1. Resubscribe the NCNs.
 
-        **`NOTE`** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
+        **NOTE:** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
 
         ```bash
         ncn-m# pdsh -w ncn-w00[1-4]-can.local "systemctl restart cray-orca"
