@@ -27,7 +27,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. (`ncn-m001#`) Create and mount an `rbd` device on `ncn-m001` where the CSM release tarball can be stored.
+1. (`ncn-m001#`) Create and mount an `rbd` device where the CSM release tarball can be stored.
 
     1. Initialize the Python virtual environment.
 
