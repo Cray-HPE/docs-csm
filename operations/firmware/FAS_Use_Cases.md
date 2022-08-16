@@ -273,6 +273,8 @@ It is also recommended that the nodes be powered back on after the updates are c
     ncn# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f"
     ```
 
+    Example output:
+
     ```toml
     fromFirmwareVersion = "nc.cronomatic-dev.arm.2019-09-24T13:20:24+00:00.9d0f8280"
     fromTag = ""
