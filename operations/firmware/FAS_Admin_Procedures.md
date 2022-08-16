@@ -273,7 +273,7 @@ as well as how to target specific manufacturers, component names (xnames), and t
       In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
 
       ```bash
-      ncn# cray fas actions status list {actionID}
+      ncn# cray fas actions status list {actionID} --format toml
       ```
 
       ```toml
