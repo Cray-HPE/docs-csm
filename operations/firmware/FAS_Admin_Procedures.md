@@ -455,7 +455,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
     This will return a `ready` or `busy` status.
 
-    ```bash
+    ```toml
     loaderStatus = "ready"
     ```
 
@@ -469,7 +469,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
     This will return an ID which will be used to check the status of the run.
 
-    ```bash
+    ```toml
     loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
     ```
 
@@ -535,7 +535,7 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
     This will return a `ready` or `busy` status.
 
-    ```bash
+    ```toml
     loaderStatus = "ready"
     ```
 
@@ -551,7 +551,7 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
     This will return an ID which will be used to check the status of the run.
 
-    ```bash
+    ```toml
     loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
     ```
 
