@@ -1,18 +1,10 @@
 # Manual Wipe Procedures
 
-This page details how to wipe NCN disks. This page uses the same wipe commands that the automatic
-wipe uses. However, this page accounts for running services that are present on a running CSM NCN.
+This page details how to wipe disks on NCNs installed with the current version of CSM.
 
 **Everything in this section should be considered DESTRUCTIVE**.
 
 > ***NOTE*** All types of disk wipe can be run from Linux or from an emergency shell.
-
-The following are potential use cases for wiping disks:
-
-- Clean slating an NCN
-- Forcing a node to net-boot that may or may not have a working or desired operating system installed (e.g. a node that might have a non-CSM Linux distro installed)
-
-For wiping Linux on an NCN with a previously installed OS, the [basic wipe](#basic-wipe) is sufficient.
 
 ## Topics
 
@@ -22,15 +14,31 @@ For wiping Linux on an NCN with a previously installed OS, the [basic wipe](#bas
 
 ## Basic wipe
 
-This wipe erases the magic bits on the disk to prevent them from being recognized and making them ready for deployment, as well as removing the common volume groups.
+This wipe erases the magic bits on the disk to prevent them from being recognized, as well as removing the common volume groups.
 
 1. (`ncn#`) List the disks for verification.
 
-    ```bash
-    disks_to_wipe=$(lsblk -l -o NAME,TYPE,TRAN | grep -E '[[:space:]].*(sata|nvme|sas|raid)' |
-                    awk '{ print "/dev/"$1 }' | sort -u | tr '\n' ' ')
-    echo "${disks_to_wipe}"
-    ```
+    1. Set a variable by loading a helper library.
+    
+        - From the Linux command line, run the following command:
+
+            ```bash
+            source /usr/lib/dracut/modules.d/90metalmdsquash/metal-lib.sh
+            ```
+
+        - From the emergency shell, run the following command:
+
+            ```bash
+            . /lib/metal-lib.sh
+            ```
+
+    1. List the disks.
+
+        ```bash
+        disks_to_wipe=$(lsblk -l -o NAME,TYPE,TRAN | grep -E "[[:space:]].*(raid|${metal_transports})" |
+                        awk '{ print "/dev/"$1 }' | sort -u | tr '\n' ' ')
+        echo "${disks_to_wipe}"
+        ```
 
 1. (`ncn#`) Wipe the disks and the RAIDs.
 
@@ -107,7 +115,7 @@ An advanced wipe includes handling storage node specific items before running th
 
 ## Full wipe
 
-This section walks a user through cleanly stopping all running services that require partitions, as well as
+A full wipe cleanly stops all running services that require partitions, as well as
 removing the node from the Ceph or Kubernetes cluster (as appropriate for the node type).
 
 This does not zero disks; this will ensure that all disks look raw on the next reboot.
