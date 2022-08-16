@@ -274,7 +274,7 @@ It is also recommended that the nodes be powered back on after the updates are c
     For example:
 
     ```bash
-    ncn# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f"
+    ncn# cray fas operations describe "e910c6ad-db98-44fc-bdc5-90477b23386f" --format toml
     ```
 
     Example output:
