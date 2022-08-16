@@ -1,5 +1,6 @@
 # Change NCN Image Root Password and SSH Keys
 
+The default SSH keys in the NCN image must be removed. The default password for the root user must be changed.
 Customize the NCN images by changing the root password or adding different SSH keys for the root account.
 This procedure shows this process being done any time after the first time installation of the CSM
 software has been completed and the PIT node is booted as a regular master node. To change the NCN image
@@ -9,6 +10,7 @@ see [Change NCN Image Root Password and SSH Keys PIT](#Change_NCN_Image_Root_Pas
 There is some common preparation before making the Kubernetes image for master nodes and worker nodes, making the Ceph image for utility storage nodes, and then some common cleanup afterwards.
 
 ***Note:*** This procedure can only be done after the PIT node is rebuilt to become a normal master node.
+***Note:*** The NCNs must be rebuilt for the changes to take effect. This is covered in the last step.
 
 ## Common Preparation
 
@@ -17,6 +19,8 @@ There is some common preparation before making the Kubernetes image for master n
    Either replace the root public and private SSH keys with your own previously generated keys or generate a new
    pair with `ssh-keygen(1)`. By default `ssh-keygen` will create an RSA key, but other types could be chosen and
    different filenames would need to be substituted in later steps.
+
+   ***Note:*** CSM only supports key pairs with empty passphrases (`ssh-keygen -N""`, or enter an empty passphrase when prompted).
 
    ```bash
    ncn-m# mkdir /root/.ssh
@@ -72,11 +76,21 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
    ncn-m# unsquashfs -d k8s/${K8SVERSION}/filesystem.squashfs k8s/${K8SVERSION}/filesystem.squashfs.orig
    ```
 
+1. If the image being modified contains the default SSH keys for the root user and/or the default
+   SSH host keys, remove them now. If the defaults were removed during initial system install or in
+   a subsequent rotation, this step can be safely skipped.
+
+   ```bash
+   ncn-m# rm -rf k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh
+   ncn-m# rm -f k8s/${K8SVERSION}/filesystem.squashfs/etc/ssh/*key*
+   ```
+
 1. Copy the generated public and private SSH keys for the root account into the image.
 
    This example assumes that an RSA key was generated.
 
    ```bash
+   ncn-m# mkdir -m 0700 k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh
    ncn-m# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub k8s/${K8SVERSION}/filesystem.squashfs/root/.ssh
    ```
 
@@ -366,6 +380,8 @@ The Ceph image Ceph image is used by the utility storage nodes.
    ```bash
    ncn-m# rm -rf /run/initramfs/overlayfs/workingarea
    ```
+
+## Deploy Changes
 
 1. Rebuild nodes.
 
