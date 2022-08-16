@@ -59,6 +59,7 @@ enable_xname_in_charts() {
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.cfs' 'true'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.ckdump' 'true'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.dvs' 'true'
+	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.heartbeat' 'true'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.enabled' 'true'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.spire.server.tokenService.enableXNameWorkloads' 'true'
 }
@@ -70,6 +71,7 @@ disable_xname_in_charts() {
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.cfs' 'false'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.ckdump' 'false'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.dvs' 'false'
+	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.heartbeat' 'false'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.cray-opa.opa.xnamePolicy.enabled' 'false'
 	yq w -i "${TMPDIR}/customizations.yaml" -- 'spec.kubernetes.services.spire.server.tokenService.enableXNameWorkloads' 'false'
 }
