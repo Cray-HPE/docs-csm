@@ -251,6 +251,8 @@ It is also recommended that the nodes be powered back on after the updates are c
     ncn# cray fas actions describe {actionID}
     ```
 
+    Example output:
+
     ```toml
     [operationSummary.failed]
     [[operationSummary.failed.operationKeys]]
