@@ -66,8 +66,8 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     - To extract the credentials from Vault for a single PDU:
 
         ```bash
-        PDU=x3000m0
-        vault kv get secret/pdu-creds/$PDU
+        ncn-mw# PDU=x3000m0
+        ncn-mw# vault kv get secret/pdu-creds/$PDU
         ```
 
 1. Store the existing password for the `admn` user.
@@ -84,7 +84,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     - At least 1 number character
 
     ```bash
-    read -s NEW_PDU_PASSWORD
+    ncn-mw# read -s NEW_PDU_PASSWORD
     ```
 
 1. Change and update the password for ServerTech PDUs.

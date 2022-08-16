@@ -96,7 +96,7 @@ Repopulate clusters for CPS.
 1. Find the name of the running CRUS pod.
 
     ```bash
-    kubectl get pods -n services | grep cray-crus
+    ncn# kubectl get pods -n services | grep cray-crus
     ```
 
     Example output:
