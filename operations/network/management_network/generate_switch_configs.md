@@ -9,6 +9,9 @@ For example, if there is a suspected configuration issue on single switch, a con
 * CANU installed with version 1.1.11 or greater.
   * Run `canu --version` to see version.
   * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, refer to the [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md) procedure.
+* Alternatively: Upgrade or install latest version of CANU [Install/Upgrade CANU](../../operations/network/management_network/canu_install_update.md)
+  * Run `canu --version` to see version
+  * CANU installed with version 1.6.13 or greater.
 * Validated SHCD.
   * See [Validate SHCD](validate_shcd.md).
 * JSON output from validated SHCD.
@@ -25,7 +28,7 @@ The following are the different architectures that can be specified:
 
 * `Tds` – Aruba-based Test and Development System. These are small systems characterized by Kubernetes NCNs cabled directly to the spine.
 * `Full` – Aruba-based Leaf-Spine systems. These are usually customer production systems.
-* `V1` – Dell and Mellanox based systems of either a TDS or Full layout.
+* `V1` – Any Dell and Mellanox based systems.
 
 Generating a configuration file can be done for a single switch, or for the full system. Below are example commands for both scenarios:
 
@@ -37,14 +40,7 @@ Generating a configuration file can be done for a single switch, or for the full
 * `--sls` : Match the `sls_file.json` to the one you created for your system.
 * `--custom-config` : Pass in a switch configuration file that CANU will inject into the generated configuration. For more information, see the [CANU documentation](https://github.com/Cray-HPE/canu#generate-switch-configs-including-custom-configurations).
 
-* Generate a configuration file for single switch:
-
     ```console
-    ncn# canu generate switch config --csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --name sw-spine-001
+    ncn# canu generate network config --csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --custom-config system-custom-config.yaml --folder generated
     ```
-
-* Generate configuration files for full system:
-
-    ```console
-    ncn# canu generate network config --csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
     ```
