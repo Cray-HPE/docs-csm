@@ -18,6 +18,7 @@ which device will be used for it.
    SCRIPT_FILE="$(pwd)/csm-install-usb.$(date +%Y-%m-%d).txt"
    script -af "${SCRIPT_FILE}"
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   export OUT_DIR=$(pwd)/csm-temp
    ```
 
 1. (`external#`) Identify the USB device.
@@ -51,7 +52,7 @@ which device will be used for it.
     - Use the CSI application to do this:
 
         ```bash
-        csi pit format "${USB}" cray-pre-install-toolkit-*.iso 50000
+        csi pit format "${USB}" "${OUT_DIR}/"cray-pre-install-toolkit-*.iso 50000
         ```
 
     - If CSI is unavailable, then fetch and use the `write-livecd.sh` script:
@@ -62,21 +63,21 @@ which device will be used for it.
         > is also available on GitHub:
         >
         >    ```curl
-        >    curl -f -O https://raw.githubusercontent.com/Cray-HPE/cray-site-init/main/scripts/write-livecd.sh && chmod +x write-livecd.sh
+        >    curl -f -o "${OUT_DIR}/write-livecd.sh" https://raw.githubusercontent.com/Cray-HPE/cray-site-init/main/scripts/write-livecd.sh && chmod +x "${OUT_DIR}/write-livecd.sh"
         >    ```
         >
         > Alternatively if the RPM is available but the LiveCD is being created on a non-RPM based distro,
         > then the script can be extracted from the RPM file:
         >
         >    ```bash
-        >    bsdtar xvf cray-site-init-*.rpm --include *write-livecd.sh -C ./
-        >    mv -v ./usr/local/bin/write-livecd.sh ./
-        >    rmdir -pv ./usr/local/bin/
+        >    bsdtar xvf cray-site-init-*.rpm --include *write-livecd.sh -C "./${OUT_DIR}"
+        >    mv -v "${OUT_DIR}/usr/local/bin/write-livecd.sh" ./
+        >    rmdir -pv "${OUT_DIR}/usr/local/bin/"
         >    ```
         >
 
         ```bash
-        write-livecd.sh "${USB}" cray-pre-install-toolkit-*.iso 50000
+        write-livecd.sh "${USB}" "${OUT_DIR}/"cray-pre-install-toolkit-*.iso 50000
         ```
 
 ## Boot the LiveCD
