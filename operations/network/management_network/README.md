@@ -155,7 +155,9 @@ The following are known open issues with this branch of the software.
 
 The Symptom statement describes what a user might experience if this is seen on the network. The Scenario statement provides additional environment details and trigger summaries. When available, the Workaround statement provides a workaround to the issue.
 
-> No currently known issues.
+> Known and fixed issue can be found from CANU release notes.
+
+[CANU releases](https://github.com/Cray-HPE/canu/releases)
 
 ### Security Bulletin Subscription Service
 

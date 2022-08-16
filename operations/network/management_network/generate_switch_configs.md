@@ -9,6 +9,7 @@ For example, if there is a suspected configuration issue on single switch, a con
 * CANU installed with version 1.1.11 or greater.
   * Run `canu --version` to see version.
   * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, refer to the [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md) procedure.
+  * Alternatively: Upgrade or install latest version of CANU from Github [Install/Upgrade CANU](canu_install_update.md)
 * Validated SHCD.
   * See [Validate SHCD](validate_shcd.md).
 * JSON output from validated SHCD.
@@ -16,6 +17,7 @@ For example, if there is a suspected configuration issue on single switch, a con
 * System Layout Service (SLS) input file.
   * If generating CSM 1.2 configurations, the SLS file will need to be updated prior to generating configurations.
   * See [Collect Data](collect_data.md).
+* Generate custom switch configuration [CANU custom configuration](https://github.com/Cray-HPE/canu/blob/develop/docs/network_configuration_and_upgrade/custom_config.md)
 
 ## Generate Configuration Files
 
@@ -25,13 +27,14 @@ The following are the different architectures that can be specified:
 
 * `Tds` – Aruba-based Test and Development System. These are small systems characterized by Kubernetes NCNs cabled directly to the spine.
 * `Full` – Aruba-based Leaf-Spine systems. These are usually customer production systems.
-* `V1` – Dell and Mellanox based systems of either a TDS or Full layout.
+* `V1` – Any Dell and Mellanox based systems.
 
 Generating a configuration file can be done for a single switch, or for the full system. Below are example commands for both scenarios:
 
 **Important:** Modify the following items in your command:
 
 * `--csm` : Which CSM version configuration do you want to use? For example, `1.3`, `1.2` or `1.0`
+NOTE: Only major and minor versions of CSM are tracked at this time. CANU bug fixes are captured in the latest CANU version and do not align with CSM bug fix versions.
 * `--a`   : What is the system architecture? (See above)
 * `--ccj` : Match the `ccj.json` file to the one you created for your system.
 * `--sls` : Match the `sls_file.json` to the one you created for your system.
@@ -39,12 +42,6 @@ Generating a configuration file can be done for a single switch, or for the full
 
 * Generate a configuration file for single switch:
 
-    ```console
-    canu generate switch config --csm 1.3 -a full --ccj system-ccj.json  --sls-file sls_file.json --name sw-spine-001
-    ```
-
-* Generate configuration files for full system:
-
-    ```console
-    canu generate network config --csm 1.3 -a full --ccj system-ccj.json  --sls-file sls_file.json --folder generated
-    ```
+```console
+    ncn# canu generate network config --csm 1.2 -a full --ccj system-ccj.json  --sls-file sls_file.json --custom-config system-custom-config.yaml --folder generated
+```
