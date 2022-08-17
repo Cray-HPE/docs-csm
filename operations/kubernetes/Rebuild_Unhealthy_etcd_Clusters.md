@@ -6,7 +6,9 @@ This procedure must be used for each unhealthy cluster, and not just those used 
 
 This process also applies when etcd is not visible when running the `kubectl get pods` command.
 
-A special use case is also included for the Content Projection Service \(CPS\) as the process for rebuilding the cluster is slightly different.
+The commands in this procedure can be run on any Kubernetes master or worker node on the system.
+
+A special procedure is also included for the Content Projection Service \(CPS\), because the process for rebuilding its cluster is slightly different.
 
 1. [Prerequisites](#prerequisites)
 1. [Rebuild procedure](#rebuild-procedure)
