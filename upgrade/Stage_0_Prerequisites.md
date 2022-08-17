@@ -96,6 +96,10 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
    **NOTE** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
 
+   > The `prepare-assets.sh` script will delete the CSM tarball (after expanding it) in order to free up space.
+   > This behavior can be overridden by appending the `--no-delete-tarball-file` argument to the `prepare-assets.sh`
+   > command below.
+
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
@@ -110,15 +114,15 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
 1. (`ncn-m001#`) Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m001`.
 
-   > The `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
-   > If using an `rbd` device to store the CSM tarball (or if not wanting the tarball file deleted for other reasons), then be sure to
-   > copy the tarball file to a different location, and set the `CSM_TAR_PATH` to point to this new location.
-
    ```bash
    CSM_TAR_PATH=/path/to/${CSM_REL_NAME}.tar.gz
    ```
 
 1. (`ncn-m001#`) Run the script.
+
+   > The `prepare-assets.sh` script will delete the CSM tarball (after expanding it) in order to free up space.
+   > This behavior can be overridden by appending the `--no-delete-tarball-file` argument to the `prepare-assets.sh`
+   > command below.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
