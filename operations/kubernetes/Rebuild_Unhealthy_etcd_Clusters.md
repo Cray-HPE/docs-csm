@@ -1,8 +1,8 @@
 # Rebuild Unhealthy etcd Clusters
 
-In order to rebuild a healthy cluster, delete and redeploy the unhealthy pods.
+Rebuild any cluster that does not have healthy pods by deleting and redeploying unhealthy pods.
 This procedure includes examples for rebuilding etcd clusters in the `services` namespace.
-This procedure must be used for each unhealthy cluster, and not just the services used in the following examples.
+This procedure must be used for each unhealthy cluster, not just those in the `services` namespace used in the following examples.
 
 This process also applies when etcd is not visible when running the `kubectl get pods` command.
 
@@ -11,9 +11,10 @@ A special use case is also included for the Content Projection Service \(CPS\) a
 ---
 > **`NOTE`**
 
-Etcd clusters other than the Content Projection Service \(CPS\) are rebuilt using the following manual procedure or automation script.
+Etcd Clusters can be rebuilt using the automation script or the manual procedure below.
 The automation script follows the same steps as the manual procedure.
 If the automation script fails at any step, then continue rebuilding the cluster using the manual procedure.
+Note that the Content Projection Service \(CPS\) cluster can only be rebuilt using the manual procedure.
 
 ## Prerequisites
 
@@ -193,7 +194,7 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
 
 ## Post-Rebuild
 
-1. Update the IP address needed to interact with the rebuilt cluster.
+1. Update the IP address that interacts with the rebuilt cluster.
 
     After recreating the etcd cluster, the IP address needed to interact with the cluster changes, which requires recreating the etcd backup. The IP address is created automatically via a cronjob that runs at the top of each hour.
 
