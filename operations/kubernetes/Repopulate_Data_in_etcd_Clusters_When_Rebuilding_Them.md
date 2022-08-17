@@ -9,7 +9,6 @@ The following services need their data repopulated in the etcd cluster:
 - Boot Script Service \(BSS\)
 - Content Projection Service \(CPS\)
 - Compute Rolling Upgrade Service \(CRUS\)
-- External DNS
 - Firmware Action Service \(FAS\)
 - HMS Notification Fanout Daemon \(HMNFD\)
 - Mountain Endpoint Discovery Service \(MEDS\)
