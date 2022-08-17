@@ -74,7 +74,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
     deactivate
     ```
 
-    **IMPORTANT:** This will mount the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m002`.
+    **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m002`.
 
 1. Move to `ncn-m002`.
 
