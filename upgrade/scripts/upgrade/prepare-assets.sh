@@ -93,7 +93,7 @@ if [[ -z ${TARBALL_FILE} ]]; then
 
     # Ensure we have enough disk space
     reqSpace=80000000 # ~80GB
-    availSpace=$(df "$HOME" | awk 'NR==2 { print $4 }')
+    availSpace=$(df "/etc/cray/upgrade/" | awk 'NR==2 { print $4 }')
     # Validate that we received a nonnegative integer for the amount of available space
     if ! [[ $availSpace =~ ^(0|[1-9][0-9]*)$ ]]; then
         echo "ERROR: Invalid free space reported by df command: $availSpace"
@@ -115,9 +115,9 @@ if [[ -z ${TARBALL_FILE} ]]; then
         touch /etc/cray/upgrade/csm/myenv
         echo "====> ${state_name} ..."
         {
-        wget --progress=dot:giga ${ENDPOINT}/${CSM_REL_NAME}.tar.gz
+        wget --progress=dot:giga ${ENDPOINT}/${CSM_REL_NAME}.tar.gz -P /etc/cray/upgrade/
         # set TARBALL_FILE to newly downloaded file
-        TARBALL_FILE=${CSM_REL_NAME}.tar.gz
+        TARBALL_FILE=/etc/cray/upgrade/${CSM_REL_NAME}.tar.gz
         } >> ${LOG_FILE} 2>&1
         #shellcheck disable=SC2046
         record_state ${state_name} $(hostname)
