@@ -6,7 +6,7 @@ For example, if there is a suspected configuration issue on single switch, a con
 
 ## Prerequisites
 
-* CANU installed with 1.6.13 or later versions.
+* CANU installed with 1.1.11 or later versions.
   * Run `canu --version` to see version.
   * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball.
     * See [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md).
