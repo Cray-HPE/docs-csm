@@ -132,6 +132,10 @@ For the steps below, the following returned messages will help determine if a fi
   - If `dryrun`: There is something that FAS could do, but it likely would fail; most likely because the file is missing.
   - If `live update`: The operation failed; the identified version could not be put on the component name (xname) + target.
 
+**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
+
 Data can be viewed at several levels of information:
 
 #### Describe an action: Procedure
@@ -280,7 +284,7 @@ Example output:
     "blocked": {
       "OperationsKeys": []
     }
-  } 
+  }
 }
 ```
 
