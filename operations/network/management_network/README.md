@@ -63,7 +63,7 @@ summary of the network design used in the CSM management network.
 
 ## CANU
 
-See [CSM Automatic Network Utility (CANU)](canu/README.md)
+See [CSM Automatic Network Utility (CANU)](canu/README.md).
 
 ## Useful pages
 
