@@ -93,7 +93,7 @@ Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd 
 
 The following examples use the `cray-bos` etcd cluster, but these steps must be repeated for every unhealthy service.
 
-1.  Retrieve the `.yaml` file for the deployment and the etcd cluster objects.
+1. Retrieve the `.yaml` file for the deployment and the etcd cluster objects.
 
     ```bash
     kubectl -n services get deployment cray-bos -o yaml > /root/etcd/cray-bos.yaml
@@ -108,7 +108,7 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     kubectl -n services get etcd cray-cps-etcd -o yaml > /root/etcd/cray-cps-etcd.yaml
     ```
 
-2.  Edit each `.yaml` file to remove the entire line for `creationTimestamp`, generation, `resourceVersion`, `uid`, and everything after status \(including status\).
+2. Edit each `.yaml` file to remove the entire line for `creationTimestamp`, generation, `resourceVersion`, `uid`, and everything after status \(including status\).
 
     For example:
 
@@ -140,7 +140,7 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
       updatedReplicas: 1
     ```
 
-3.  Delete the deployment and the etcd cluster objects.
+3. Delete the deployment and the etcd cluster objects.
 
     Wait for the pods to terminate before proceeding to the next step.
 
@@ -157,7 +157,7 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     kubectl delete -f /root/etcd/cray-cps-etcd.yaml
     ```
 
-4.  Apply the etcd cluster file.
+4. Apply the etcd cluster file.
 
     ```bash
     kubectl apply -f /root/etcd/cray-bos-etcd.yaml
@@ -177,7 +177,7 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     cray-bos-etcd-w5vv7j4ghh                  1/1     Running         0          18h
     ```
 
-5.  Apply the deployment file.
+5. Apply the deployment file.
 
     ```bash
     kubectl apply -f /root/etcd/cray-bos.yaml
@@ -195,27 +195,27 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
 
 ## Post-Rebuild
 
-1.  Update the IP address needed to interact with the rebuilt cluster.
+1. Update the IP address needed to interact with the rebuilt cluster.
 
     After recreating the etcd cluster, the IP address needed to interact with the cluster changes, which requires recreating the etcd backup. The IP address is created automatically via a cronjob that runs at the top of each hour.
 
-1.  Determine the periodic backup name for the cluster.
+1. Determine the periodic backup name for the cluster.
 
-        The following example is for the `bos` cluster:
+    The following example is for the `bos` cluster:
 
-        ```bash
-        kubectl get etcdbackup -n services | grep bos.*periodic
-        cray-bos-etcd-cluster-periodic-backup
-        ```
+    ```bash
+    kubectl get etcdbackup -n services | grep bos.*periodic
+    cray-bos-etcd-cluster-periodic-backup
+    ```
 
-2.  Delete the etcd backup definition.
+2. Delete the etcd backup definition.
 
-        A new backup will be created that points to the new IP address. Use the value returned in the previous substep.
+    A new backup will be created that points to the new IP address. Use the value returned in the previous substep.
 
-        ```bash
-        kubectl delete etcdbackup -n services \
-        cray-bos-etcd-cluster-periodic-backup
-        ```
+    ```bash
+    kubectl delete etcdbackup -n services \
+    cray-bos-etcd-cluster-periodic-backup
+    ```
 
 Check if rebuilt cluster's data needs to be repopulated [Repopulate Data in etcd Clusters When Rebuilding Them](Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md).
 Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md)\) after recovering one or more clusters. Ensure that the clusters are healthy and have the correct number of pods.

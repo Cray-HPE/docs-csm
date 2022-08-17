@@ -68,7 +68,7 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 
 ## Restore with Manual Procedure
 
-1.  List the backups for the desired etcd cluster.
+1. List the backups for the desired etcd cluster.
 
     The example below uses the Boot Orchestration Service \(BOS\).
 
@@ -90,7 +90,7 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
     cray-bos/etcd.backup_v86767_2020-03-19-18:00:05
     ```
 
-2.  Restore the cluster using a backup.
+2. Restore the cluster using a backup.
 
     Replace `etcd.backup\_v277935\_2020-03-30-23:52:54` in the command below with the name of the backup being used.
 
@@ -106,9 +106,9 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
     etcdrestore.etcd.database.coreos.com/cray-bos-etcd created
     ```
 
-3.  Restart the pods for the etcd cluster.
+3. Restart the pods for the etcd cluster.
 
-    1.  Watch the pods come back online.
+    1. Watch the pods come back online.
 
         This may take a couple minutes.
 
@@ -117,14 +117,14 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
         ```
 
         Example output:
-        
+
         ```text
         cray-bos-etcd-498jn7th6p             1/1     Running              0          4h1m
         cray-bos-etcd-dj7d894227             1/1     Running              0          3h59m
         cray-bos-etcd-tk4pr4kgqk             1/1     Running              0          4
         ```
 
-    2.  Delete the EtcdRestore custom resource.
+    2. Delete the EtcdRestore custom resource.
 
         This step will make it possible for future restores to occur. Replace the etcdrestore.etcd.database.coreos.com/cray-bos-etcd value with the name returned in step 2.
 
