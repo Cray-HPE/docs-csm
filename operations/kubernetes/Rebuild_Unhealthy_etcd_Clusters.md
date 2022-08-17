@@ -35,11 +35,10 @@ Regardless of which method is chosen, after completing the rebuild, the last ste
 
 ### Automated script for clusters in the `services` namespace
 
-> The automated script follows the same steps as the manual procedure.
-> If the automated script fails at any step, then continue rebuilding the cluster using the manual procedure.
-
-
 The automated script will restore the cluster from a backup if it finds a backup created within the last 7 days. If it does not discover a backup within the last 7 days, it will ask the user if they would like to rebuild the cluster.
+
+The automated script follows the same steps as the manual procedure.
+If the automated script fails at any step, then continue rebuilding the cluster using the manual procedure.
 
 * (`ncn-mw#`) Rebuild/restore a single cluster
 
@@ -102,8 +101,6 @@ deployment.apps/cray-bss created
 SUCCESSFUL REBUILD of the cray-bss-etcd cluster completed.
 
 etcdbackup.etcd.database.coreos.com "cray-bss-etcd-cluster-periodic-backup" deleted
-
-ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 ```
 
 #### Next step
