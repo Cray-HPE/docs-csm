@@ -6,10 +6,10 @@ For example, if there is a suspected configuration issue on single switch, a con
 
 ## Prerequisites
 
-* CANU installed with version 1.6.13 or greater.
+* CANU installed with 1.6.13 or later versions.
   * Run `canu --version` to see version.
   * If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, refer to the [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md) procedure.
-  * Alternatively: Upgrade or install latest version of CANU from GitHub [Install/Upgrade CANU](canu_install_update.md)
+  * Alternatively, upgrade or install the latest version of CANU from GitHub. See [Install/Upgrade CANU](canu_install_update.md).
 * Validated SHCD.
   * See [Validate SHCD](validate_shcd.md).
 * JSON output from validated SHCD.
@@ -17,7 +17,8 @@ For example, if there is a suspected configuration issue on single switch, a con
 * System Layout Service (SLS) input file.
   * If generating CSM 1.2 configurations, the SLS file will need to be updated prior to generating configurations.
   * See [Collect Data](collect_data.md).
-* Generate custom switch configuration [CANU custom configuration](https://github.com/Cray-HPE/canu/blob/develop/docs/network_configuration_and_upgrade/custom_config.md)
+* Generate custom switch configuration.
+  * See [CANU custom configuration](https://github.com/Cray-HPE/canu/blob/develop/docs/network_configuration_and_upgrade/custom_config.md).
 
 ## Generate Configuration Files
 
