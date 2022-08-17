@@ -208,7 +208,7 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     cray-bos-etcd-cluster-periodic-backup
     ```
 
-2. Delete the etcd backup definition.
+1. Delete the etcd backup definition.
 
     A new backup will be created that points to the new IP address. Use the value returned in the previous substep.
 
