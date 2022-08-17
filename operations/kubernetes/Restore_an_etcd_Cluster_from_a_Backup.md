@@ -101,7 +101,7 @@ The cray-bss-etcd cluster has successfully been restored from cray-bss/etcd.back
 
 1. (`ncn-mw#`) Restore the cluster using a backup.
 
-    Replace `etcd.backup\_v277935\_2020-03-30-23:52:54` in the command below with the name of the chosen backup from the previous step.
+    Replace `etcd.backup_v277935_2020-03-30-23:52:54` in the command below with the name of the chosen backup from the previous step.
 
     ```bash
     kubectl exec -it -n operators \
