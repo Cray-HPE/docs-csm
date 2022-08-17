@@ -34,7 +34,7 @@ The following are the different architectures that can be specified:
 
 Generating a configuration file can be done for a single switch, or for the full system. Below are example commands for both scenarios:
 
-**Important:** Modify the following items in your command:
+**Important:** Modify the following items in the command:
 
 * `--csm` : Which CSM version configuration do you want to use? For example, `1.3`, `1.2` or `1.0`
 NOTE: Only major and minor versions of CSM are tracked at this time. CANU bug fixes are captured in the latest CANU version and do not align with CSM bug fix versions.
