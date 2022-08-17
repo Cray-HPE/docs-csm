@@ -1,4 +1,3 @@
-#! /usr/bin/env python3
 #
 # MIT License
 #
@@ -22,6 +21,9 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+
+virt_file = "/opt/cray/csm/scripts/csm_rbd_tool/bin/activate_this.py"
+exec(compile(open(virt_file, "rb").read(), virt_file, 'exec'), dict(__file__=virt_file))
 
 import subprocess
 import socket
@@ -461,7 +463,7 @@ def main():
     """
     rbd_name = "csm_scratch_img"
     rbd_devices = [rbd_name]
-    managers = ['ncn-s001', 'ncn-s002', 'ncn-s003']
+    managers = ['ncn-m001', 'ncn-m002', 'ncn-m003']
     mnt_path = "/etc/cray/upgrade/csm"
     pool = "csm_admin_pool"
     dir = '/etc/cray/upgrade/csm'
