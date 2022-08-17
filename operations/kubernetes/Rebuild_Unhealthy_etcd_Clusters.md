@@ -94,7 +94,6 @@ Rerun the etcd cluster health check \(see [Check the Health and Balance of etcd 
 The following examples use the `cray-bos` etcd cluster, but these steps must be repeated for every unhealthy service.
 
 1.  Retrieve the `.yaml` file for the deployment and the etcd cluster objects.
-
     ```bash
     kubectl -n services get deployment cray-bos -o yaml > /root/etcd/cray-bos.yaml
     kubectl -n services get etcd cray-bos-etcd -o yaml > /root/etcd/cray-bos-etcd.yaml
@@ -109,7 +108,6 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     ```
 
 2.  Edit each `.yaml` file to remove the entire line for `creationTimestamp`, generation, `resourceVersion`, `uid`, and everything after status \(including status\).
-
     For example:
 
     ```text
@@ -141,7 +139,6 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     ```
 
 3.  Delete the deployment and the etcd cluster objects.
-
     Wait for the pods to terminate before proceeding to the next step.
 
     ```bash
@@ -158,7 +155,6 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     ```
 
 4.  Apply the etcd cluster file.
-
     ```bash
     kubectl apply -f /root/etcd/cray-bos-etcd.yaml
     ```
@@ -178,7 +174,6 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
     ```
 
 5.  Apply the deployment file.
-
     ```bash
     kubectl apply -f /root/etcd/cray-bos.yaml
     ```
@@ -196,11 +191,9 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
 ## Post-Rebuild
 
 1.  Update the IP address needed to interact with the rebuilt cluster.
-
     After recreating the etcd cluster, the IP address needed to interact with the cluster changes, which requires recreating the etcd backup. The IP address is created automatically via a cronjob that runs at the top of each hour.
 
     1.  Determine the periodic backup name for the cluster.
-
         The following example is for the `bos` cluster:
 
         ```bash
@@ -209,9 +202,7 @@ The following examples use the `cray-bos` etcd cluster, but these steps must be 
         ```
 
     2.  Delete the etcd backup definition.
-
         A new backup will be created that points to the new IP address. Use the value returned in the previous substep.
-        
         ```bash
         kubectl delete etcdbackup -n services \
         cray-bos-etcd-cluster-periodic-backup
