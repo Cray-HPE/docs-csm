@@ -140,7 +140,7 @@ Please run [this script](../scripts/operations/validation/ncn121.sh) to validate
 
 ### 1.3 Check of system management monitoring tools
 
-In order to validate any issue with NCN please run [this](../scripts/operations/validation/ncn1.3.sh) script
+In order to validate any issue with NCN please run [ncn-csm-monitoring-validation](https://github.com/Cray-HPE/csm-testing/blob/40619bcee8bdedb113341b9c8ad7817fb8cbf8b1/goss-testing/automated/ncn-csm-monitoring-validation) script from csm-testing repo
 
 ## 2. Hardware Management Services health checks
 
