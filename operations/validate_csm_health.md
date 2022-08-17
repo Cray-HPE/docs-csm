@@ -52,8 +52,7 @@ descriptions below. These tests may be skipped but **this is not recommended**.
 
 The Cray CLI must be configured on all NCNs and the PIT node. The following procedures explain how to do this:
 
-1. [Configure Keycloak Account](../install/configure_administrative_access.md#1-configure-keycloak-account)
-1. [Configure the Cray Command Line Interface (CLI)](../install/configure_administrative_access.md#2-configure-the-cray-command-line-interface)
+1. [Configure the Cray command line interface](../install/configure_administrative_access.md#1-configure-the-cray-command-line-interface)
 
 ## 1. Platform health checks
 

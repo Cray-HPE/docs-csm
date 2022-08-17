@@ -21,16 +21,7 @@ BMC/controller passwords.
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
 
-## 1. Configure Keycloak account
-
-Upcoming steps in the installation workflow require an account to be configured in Keycloak for
-authentication. This can be either a local Keycloak account or an external Identity Provider (IdP),
-such as LDAP. Having an account in Keycloak with administrative credentials enables the use of many
-management services via the `cray` command.
-
-See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md).
-
-## 2. Configure the Cray command line interface
+## 1. Configure the Cray command line interface
 
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST
 APIs into easily usable commands.
@@ -39,9 +30,27 @@ Later procedures in the installation workflow use the `cray` command to interact
 The `cray` CLI configuration needs to be initialized for the Linux account. The Keycloak user who initializes the
 CLI configuration needs to be authorized for administrative actions.
 
-See [Configure the Cray command line interface](../operations/configure_cray_cli.md).
+There are two options to proceed with `cray` CLI authentication:
 
-## 3. Set `Management` role on the BMCs of management nodes
+1. Manually configure the `cray` CLI with a valid Keycloak account.
+
+    1. Configure Keycloak account
+        Upcoming steps in the installation workflow require an account to be configured in Keycloak for
+        authentication. This can be either a local Keycloak account or an external Identity Provider (IdP),
+        such as LDAP. Having an account in Keycloak with administrative credentials enables the use of many
+        management services via the `cray` command.
+
+        See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md).
+
+    1. Initialize and Authorize the `cray` CLI on each NCN being used.
+
+        See [Single User Already Configured in Keycloak](../operations/configure_cray_cli.md#single-user-already-configured-in-keycloak)
+
+1. Configure all NCN's with a temporary Keycloak account for the duration of the install.
+
+    See [Configure All NCNs With Temporary Keycloak User](../operations/configure_cray_cli.md#configure-all-ncns-with-temporary-keycloak-user)
+
+## 2. Set `Management` role on the BMCs of management nodes
 
 The BMCs that control management nodes will not have been marked with the `Management` role in HSM. It is important
 to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
@@ -51,7 +60,7 @@ as protections for FAS and CAPMC actions.
 
 See [Set BMC `Management` Role](../operations/hardware_state_manager/Set_BMC_Management_Role.md).
 
-## 4. Lock management nodes
+## 3. Lock management nodes
 
 The management nodes are unlocked at this point in the installation. Locking the management nodes and their BMCs will
 prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by
@@ -74,7 +83,7 @@ The return value of the script is 0 if locking was successful. Otherwise, a non-
 
 For more information about locking and unlocking nodes, see [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
 
-## 5. Configure BMC and controller parameters with SCSD
+## 4. Configure BMC and controller parameters with SCSD
 
 > **`NOTE`** If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
 
@@ -86,7 +95,7 @@ on the BMC for node power down or node power up.
 
 See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).
 
-## 6. Configure non-compute nodes with CFS
+## 5. Configure non-compute nodes with CFS
 
 Non-compute Nodes (NCN) need to be configured after booting for administrative access, security, and other
 purposes. The [Configuration Framework Service (CFS)](../operations/configuration_management/Configuration_Management.md)
@@ -95,7 +104,7 @@ CSM provide one or more layers of configuration in a process called "NCN persona
 
 See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).
 
-## 7. Upload Olympus BMC recovery firmware into TFTP server
+## 6. Upload Olympus BMC recovery firmware into TFTP server
 
 > **`NOTE`** This step requires the CSM software, Cray CLI, and HPC Firmware Pack (HFP) to be installed.
 > If these are not currently installed, then skip this step and perform it later.
@@ -106,7 +115,7 @@ This procedure does not modify any BMC firmware, but only stages the firmware on
 
 See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).
 
-## 8. Proceed to next topic
+## 7. Proceed to next topic
 
 After completing the operational procedures above which configure administrative access, the next step is to validate the health of management nodes and CSM services.
 
