@@ -29,7 +29,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
 1. (`ncn-m001#`) Install the latest `docs-csm` RPM.
 
-   * If `ncn-m001` has internet access, then use the following commands to download and install the latest documentation.
+   - If `ncn-m001` has internet access, then use the following commands to download and install the latest documentation.
 
       > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why these commands copy it there.
 
@@ -39,7 +39,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
       ```
 
-   * Otherwise, use the following procedure to download and install the latest documentation.
+   - Otherwise, use the following procedure to download and install the latest documentation.
 
       1. Download the latest `docs-csm` RPM to an external system and copy it to `ncn-m001`.
 
