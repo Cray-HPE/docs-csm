@@ -69,17 +69,17 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
 ## Restore with Manual Procedure
 
 1.  List the backups for the desired etcd cluster.
-     
+
     The example below uses the Boot Orchestration Service \(BOS\).
-    
+
     ```bash
     kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c boto3 -- list_backups cray-bos
     ```
-    
+
     Example output:
-    
+
     ```text
     cray-bos/etcd.backup_v108497_2020-03-20-23:42:37
     cray-bos/etcd.backup_v125815_2020-03-21-23:42:37
@@ -89,33 +89,33 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
     cray-bos/etcd.backup_v277935_2020-03-30-23:52:54
     cray-bos/etcd.backup_v86767_2020-03-19-18:00:05
     ```
-    
+
 2.  Restore the cluster using a backup.
-    
+
     Replace `etcd.backup\_v277935\_2020-03-30-23:52:54` in the command below with the name of the backup being used.
-    
+
     ```bash
     kubectl exec -it -n operators \
     $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
     -c util -- restore_from_backup cray-bos etcd.backup_v277935_2020-03-30-23:52:54
     ```
-    
+
     Example output:
-    
+
     ```text
     etcdrestore.etcd.database.coreos.com/cray-bos-etcd created
     ```
-    
+
 3.  Restart the pods for the etcd cluster.
-    
+
     1.  Watch the pods come back online.
-        
+
         This may take a couple minutes.
-        
+
         ```bash
         kubectl -n services get pod | grep SERVICE_NAME
         ```
-        
+
         Example output:
         
         ```text
@@ -123,17 +123,17 @@ ncn-w001:/opt/cray/platform-utils/etcd_restore_rebuild_util #
         cray-bos-etcd-dj7d894227             1/1     Running              0          3h59m
         cray-bos-etcd-tk4pr4kgqk             1/1     Running              0          4
         ```
-        
+
     2.  Delete the EtcdRestore custom resource.
-        
+
         This step will make it possible for future restores to occur. Replace the etcdrestore.etcd.database.coreos.com/cray-bos-etcd value with the name returned in step 2.
-        
+
         ```bash
         kubectl -n services delete etcdrestore.etcd.database.coreos.com/cray-bos-etcd
         ```
-        
+
         Example output:
-        
+
         ```text
         etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
         ```
