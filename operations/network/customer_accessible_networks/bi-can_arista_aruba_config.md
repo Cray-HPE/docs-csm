@@ -1,6 +1,6 @@
 # BI-CAN Aruba/Arista Configuration
 
-This is an example configuration of how to connect two Aruba spine switches to two Arista switches. This example is from a running system utilizing the bifurcated CAN feature offered in CSM 1.2.
+This is an example configuration of how to connect two Aruba spine switches to two Arista switches. This example is from a running system utilizing the bifurcated CAN feature.
 
 Summary:
 
@@ -9,7 +9,8 @@ Summary:
 - The Arista switches are connected to the Slingshot/HSN network via static MLAG.
 - The Aruba Spine switches are connected to the Arista switches with point-to-point OSPF links.
 - The Arista Edge switches are redistributing the default route to the Aruba switches via OSPF.  This allows the Shasta cluster to have external access.
-- The Arista switches are utilizing a static default route.
+
+This is an example only, it should only be used as a reference only. DO NOT copy any configuration from the examples in this section.
 
 ## Topology
 

@@ -23,7 +23,7 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -eu
+set -euo pipefail
 
 function deployNLS() {
     BUILDDIR="/tmp/build"
@@ -43,45 +43,17 @@ function deployNLS() {
 }
 
 function patchKeycloak() {
-    argoUrl=$(kubectl get VirtualService/cray-argo -n argo -o json | jq -r '.spec.hosts[0]')
+    ARGO_URL=$(kubectl get VirtualService/cray-argo -n argo -o json | jq -r '.spec.hosts[0]')
+    KC_CLIENT_ID=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.client-id}' -n services | base64 -d)
+    KC_USERNAME=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.user}' -n services | base64 -d)
+    KC_PASSWORD=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.password}' -n services | base64 -d)
 
-    TOKEN=$(curl -ks -d grant_type=password \
-    --data-urlencode client_id="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.client-id}' -n services | base64 -d)" \
-    --data-urlencode username="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.user}' -n services | base64 -d)" \
-    --data-urlencode password="$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.password}' -n services | base64 -d)" \
-    https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token | jq -r '.access_token')
-    #shellcheck disable=SC2126
-    foundArgoInRedirectUris=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients" | jq '.[] | select(.clientId=="oauth2-proxy-customer-management") | .redirectUris' | grep "https://argo.cmn" | wc -l)
-    redirectUris=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients" | jq -r '.[] | select(.clientId=="oauth2-proxy-customer-management") | .redirectUris')
-    #shellcheck disable=SC2126
-    foundArgoInWebOrigins=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients" | jq '.[] | select(.clientId=="oauth2-proxy-customer-management") | .webOrigins' | grep "https://argo.cmn" | wc -l)
-    webOrigins=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients" | jq -r '.[] | select(.clientId=="oauth2-proxy-customer-management") | .webOrigins')
-
-    id=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients" | jq -r '.[] | select(.clientId=="oauth2-proxy-customer-management") | .id')
-
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients/${id}" > client.json
-    if [[ ${foundArgoInRedirectUris} -ge 1 ]];then
-        echo "Argo URL is set in RedirectUris"
-        echo "${redirectUris}"
-    else
-        echo
-        cat client.json | jq ".redirectUris[.redirectUris | length] |= . + \"https://$argoUrl/oauth/callback\""  | tee client.json
-    fi
-
-    if [[ ${foundArgoInWebOrigins} -ge 1 ]];then
-        echo "Argo URL is set in WebOrigins"
-        echo "${webOrigins}"
-    else
-        echo
-        #shellcheck disable=SC2002
-        cat client.json | jq ".webOrigins[.webOrigins | length] |= . + \"https://$argoUrl\"" | tee client.json
-    fi
-
-    curl -k -XPUT \
-        -H "Authorization: Bearer ${TOKEN}" \
-        -H "Content-Type: application/json" \
-        -d @client.json \
-        "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients/${id}" > /dev/null
+    export ARGO_URL="${ARGO_URL}"
+    export KC_CLIENT_ID="${KC_CLIENT_ID}"
+    export KC_USERNAME="${KC_USERNAME}"
+    export KC_PASSWORD="${KC_PASSWORD}"
+    
+    python /usr/share/doc/csm/upgrade/scripts/upgrade/util/nls-keycloak-configure.py
 }
 
 deployNLS

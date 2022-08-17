@@ -1,25 +1,27 @@
 # Enabling Customer High Speed Network Routing
 
-- [Prerequisites](#prerequisites)
-- [Configuration tasks](#configuration-tasks)
-  - [Configure SLS](#configure-sls)
-  - [Configure UAN](#configure-uan)
-  - [Minimize UAN downtime](#minimize-uan-downtime)
-  - [Configure UAI](#configure-uai)
-  - [Configure compute nodes](#configure-compute-nodes)
-    - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
-    - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
-    - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
-    - [Enable CFS layer](#enable-cfs-layer)
-  - [Configure NCNs](#configure-ncns)
-  - [Configure the API gateways](#configure-the-api-gateways)
-- [Validation tasks](#validation-tasks)
-  - [Validating SLS](#validating-sls)
-  - [Validating UAN](#validating-uan)
-  - [Validating UAI](#validating-uai)
-  - [Validate compute nodes](#validate-compute-nodes)
-  - [Validate NCNs](#validate-ncns)
-  - [Validate the API gateways](#validate-the-api-gateways)
+- [Enabling Customer High Speed Network Routing](#enabling-customer-high-speed-network-routing)
+  - [Prerequisites](#prerequisites)
+  - [Configuration tasks](#configuration-tasks)
+    - [Configure SLS](#configure-sls)
+    - [Configure Management Network](#configure-management-network)
+    - [Configure UAN](#configure-uan)
+    - [Minimize UAN downtime](#minimize-uan-downtime)
+    - [Configure UAI](#configure-uai)
+    - [Configure compute nodes](#configure-compute-nodes)
+      - [Retrieve SLS data as JSON](#retrieve-sls-data-as-json)
+      - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
+      - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
+      - [Enable CFS layer](#enable-cfs-layer)
+    - [Configure NCNs](#configure-ncns)
+    - [Configure the API gateways](#configure-the-api-gateways)
+  - [Validation tasks](#validation-tasks)
+    - [Validating SLS](#validating-sls)
+    - [Validating UAN](#validating-uan)
+    - [Validating UAI](#validating-uai)
+    - [Validate compute nodes](#validate-compute-nodes)
+    - [Validate NCNs](#validate-ncns)
+    - [Validate the API gateways](#validate-the-api-gateways)
 
 ## Prerequisites
 
@@ -35,7 +37,6 @@
 ### Configure SLS
 
 Configuration for the default route of a BICAN enabled system is contained in the System Layout Service (SLS) BICAN data structure in the `SystemDefaultRoute` attribute value.
-This structure was created and its value set during [Prerequisites Stage 0.2](../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-02---update-sls), and can be either `CAN` or `CHN`.
 
 > The commands in this section can be run on any master or worker NCN with the CSM documentation RPM installed. See
 > [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
@@ -70,6 +71,12 @@ Example output:
 Setting SystemDefaultRoute to CHN
 ```
 
+### Configure Management Network
+
+If the system is moving from the CAN to CHN, then the management network will need configuration changes to allow connectivity.
+
+Refer to [BICAN switch configuration](bican_switch_configuration.md) to configure management network switches and customer edge switches.
+
 ### Configure UAN
 
 During the next CFS run, the UANs will be configured to the network set in the SLS BICAN `SystemDefaultRoute` attribute, if the following Ansible variable is set.
@@ -88,10 +95,7 @@ The following diagram illustrates the UAN timeline before, during, and after the
 
 ![UAN Upgrade Transitions](../../../img/UAN_transition_CSM_1.2.png)
 
-Concretely, users on a running UAN may be transitioned from the CMN to the new CAN between the two following upgrade points:
-
-1. After [SLS Upgrade](../../../upgrade/1.2/Stage_0_Prerequisites.md#stage-03---upgrade-management-network) has been completed.
-2. Before [UANs are booted with new images](../../boot_orchestration/Boot_UANs.md).
+Concretely, users on a running UAN may be transitioned from the CMN to the new CAN before [UANs are booted with new images](../../boot_orchestration/Boot_UANs.md).
 
 ### Configure UAI
 
@@ -138,7 +142,7 @@ Prerequisites for this task:
 (`ncn-mw#`) Process the SLS file:
 
    ```bash
-   DOCDIR=/usr/share/doc/csm/upgrade/1.2/scripts/sls
+   DOCDIR=/usr/share/doc/csm/upgrade/scripts/sls
    ${DOCDIR}/add_computes_to_chn.py --sls-input-file sls_input_file.json
    ```
 

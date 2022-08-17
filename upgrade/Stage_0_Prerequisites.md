@@ -27,23 +27,53 @@ Stage 0 has several critical procedures which prepare the environment and verify
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. Use `csm_rbd_tool.py` to create the pool, device, and mount the device.
+1. (`ncn-m001#`) Install the latest `docs-csm` RPM.
 
-    ```bash
-    source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-    /usr/share/doc/csm/scripts/csm_rbd_tool/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
-    deactivate
-    ```
+   - If `ncn-m001` has internet access, then use the following commands to download and install the latest documentation.
 
-    **Note:** This same `rbd` device can be remapped to `ncn-m002` later in the upgrade procedure, when the CSM tarball is needed on that node.
+      > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why these commands copy it there.
 
-    Example:
+      ```bash
+      wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.3/noarch/docs-csm-latest.noarch.rpm \
+          -O /root/docs-csm-latest.noarch.rpm &&
+      rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+      ```
 
-    ```bash
-    /usr/share/doc/csm/scripts/csm_rbd_tool/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
-    ```
+   - Otherwise, use the following procedure to download and install the latest documentation.
 
-    **IMPORTANT:** This will mount the `rbd` device at `/etc/cray/upgrade/csm` on the desired node.
+      1. Download the latest `docs-csm` RPM to an external system and copy it to `ncn-m001`.
+
+         See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
+
+      1. (`ncn-m001#`) Copy the documentation RPM to `/root` and install it.
+
+         > **Important:**
+         >
+         > - Replace the `PATH_TO_DOCS_RPM` below with the location of the RPM on `ncn-m001`.
+         > - The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
+
+         ```bash
+         cp PATH_TO_DOCS_RPM /root/docs-csm-latest.noarch.rpm &&
+         rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+         ```
+
+1. (`ncn-m001#`) Create and mount an `rbd` device where the CSM release tarball can be stored.
+
+   1. Initialize the Python virtual environment.
+
+      ```bash
+      tar xvf /usr/share/doc/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/
+      ```
+
+   1. Create and map the `rbd` device.
+
+      **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`.
+
+      ```bash
+      source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
+      python /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
+      deactivate
+      ```
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
@@ -51,16 +81,6 @@ Stage 0 has several critical procedures which prepare the environment and verify
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m001`.
 
 ### Direct download
-
-1. (`ncn-m001#`) Download and install the latest documentation RPM.
-
-   > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
-
-   ```bash
-   wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.3/noarch/docs-csm-latest.noarch.rpm \
-        -O /root/docs-csm-latest.noarch.rpm &&
-   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-   ```
 
 1. (`ncn-m001#`) Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
 
@@ -76,6 +96,10 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
    **NOTE** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
 
+   > The `prepare-assets.sh` script will delete the CSM tarball (after expanding it) in order to free up space.
+   > This behavior can be overridden by appending the `--no-delete-tarball-file` argument to the `prepare-assets.sh`
+   > command below.
+
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
@@ -84,33 +108,21 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
 ### Manual copy
 
-1. Copy the `docs-csm` RPM package and CSM release `tar` file to `ncn-m001`.
+1. Copy the CSM release `tar` file to `ncn-m001`.
 
    See [Update Product Stream](../update_product_stream/README.md).
 
-1. (`ncn-m001#`) Copy the documentation RPM to `/root` and install it.
-
-   > **Important:**
-   >
-   > - Replace the `PATH_TO_DOCS_RPM` below with the location of the RPM on `ncn-m001`.
-   > - The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
-
-   ```bash
-   cp PATH_TO_DOCS_RPM /root/docs-csm-latest.noarch.rpm &&
-   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-   ```
-
 1. (`ncn-m001#`) Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m001`.
-
-   > The `prepare-assets.sh` script will delete the CSM tarball in order to free space on the node.
-   > If using an `rbd` device to store the CSM tarball (or if not wanting the tarball file deleted for other reasons), then be sure to
-   > copy the tarball file to a different location, and set the `CSM_TAR_PATH` to point to this new location.
 
    ```bash
    CSM_TAR_PATH=/path/to/${CSM_REL_NAME}.tar.gz
    ```
 
 1. (`ncn-m001#`) Run the script.
+
+   > The `prepare-assets.sh` script will delete the CSM tarball (after expanding it) in order to free up space.
+   > This behavior can be overridden by appending the `--no-delete-tarball-file` argument to the `prepare-assets.sh`
+   > command below.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
@@ -186,6 +198,11 @@ Stage 0 has several critical procedures which prepare the environment and verify
    If the script does not end with this output, then try rerunning it. If it still fails, see
    [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
    If the failure persists, then open a support ticket for guidance before proceeding.
+
+1. (`ncn-m001#`) Assign a new CFS configuration to the worker nodes.
+
+   The content of the new CFS configuration is described in *HPE Cray EX System Software Getting Started Guide S-8000*, section
+   "HPE Cray EX Software Upgrade Workflow" subsection "Cray System Management (CSM)".
 
 1. (`ncn-m001#`) Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
 

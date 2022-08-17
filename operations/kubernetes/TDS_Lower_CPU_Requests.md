@@ -6,7 +6,7 @@ Systems with only three worker nodes (typically Test and Development Systems (TD
 successfully scheduled on only two worker nodes:
 
 ```bash
-/usr/share/doc/csm/upgrade/1.2/scripts/k8s/tds_lower_cpu_requests.sh
+/usr/share/doc/csm/upgrade/scripts/k8s/tds_lower_cpu_requests.sh
 ```
 
 Note that some services with these lower CPU request may encounter CPU throttling (see [Determine if Pods are Hitting Resource Limits](Determine_if_Pods_are_Hitting_Resource_Limits.md)).

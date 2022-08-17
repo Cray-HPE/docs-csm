@@ -24,21 +24,45 @@ Only follow the steps in the section for the node type that is being rebuilt.
 
 ### Worker node
 
-1. Make sure that not all pods of `ingressgateway-hmn` or `spire-server` are running on the same worker node.
+#### Option 1
 
-    For either of those two deployments, if all pods are running on a single worker node, then use the
-    `/opt/cray/platform-utils/move_pod.sh` script to move at least one pod to a different worker node.
+1. (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for `ncn-w001`.
 
-1. Rebuild the node.
+   Follow output of the script carefully. The script will pause for manual interaction.
 
-    ```bash
-    /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-worker-nodes.sh ncn-w001
-    ```
+   ```bash
+   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w001
+   ```
+
+   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
+
+#### Option 2 (Tech preview)
+
+Multiple workers can be upgraded simultaneously by passing them as a comma-separated list into the rebuild script.
+
+##### Restrictions
+
+In some cases, it is not possible to upgrade all workers in one request. It is system administrator's responsibility to
+make sure that the following conditions are met:
+
+- If the system has more than five workers, then they cannot all be rebuilt with a single request.
+
+    In this case, the rebuild should be split into multiple requests, with each request specifying no more than five workers.
+
+- No single rebuild request should include all of the worker nodes that have DVS running on them.
+
+##### Example
+
+(`ncn-m001#`) An example of a single request to rebuild multiple worker nodes simultaneously:
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w002,ncn-w003,ncn-w004
+```
 
 ### Master node
 
 ```bash
-/usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
+/usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
 ```
 
 ### Storage node

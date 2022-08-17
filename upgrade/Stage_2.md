@@ -19,6 +19,8 @@
 
 ## Stage 2.2
 
+Before starting Stage 2.2, access the Argo UI to view the progress of this stage. For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md).
+
 ### Option 1
 
 1. (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for `ncn-w001`.
@@ -62,30 +64,42 @@ By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrad
 has been the "stable node" -- that is, the node from which the other nodes were upgraded. At this point, the
 upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to allow the upgrade of `ncn-m001`.
 
-1. If the CSM tarball is located on an `rbd` device, then remap that device to `ncn-m002`.
+1. (`ncn-m001#`) Remap the CSM release `rbd` device to `ncn-m002`.
 
-    See [Move an `rbd` device to another node](../operations/utility_storage/Alternate_Storage_Pools.md#move-an-rbd-device-to-another-node).
+    This device was created in [Stage 0.1 - Prepare assets](Stage_0_Prerequisites.md#stage-01---prepare-assets).
 
-1. Log in to `ncn-m002` from outside the cluster.
+    ```bash
+    source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
+    python /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
+    deactivate
+    ```
 
-    > **`NOTE`** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
-    > not recognized on a SLES SP3 NCN. If password login fails, then log in to `ncn-m002` from
-    > `ncn-m001` and use the `passwd` command to reset the password. Then log in using the CMN IP address as directed
-    > below. Once `ncn-m001` has been upgraded, log in from `ncn-m002` and use the `passwd` command to reset
-    > the password. The other NCNs will have their passwords updated when NCN personalization is run in a
-    > subsequent step.
+    **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m002`.
 
-   `ssh` to the `bond0.cmn0`/CMN IP address of `ncn-m002`.
+1. Move to `ncn-m002`.
+
+    1. Log out of `ncn-m001`.
+
+    1. Log in to `ncn-m002` from outside the cluster.
+
+        > **`NOTE`** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
+        > not recognized on a SLES SP3 NCN. If password login fails, then log in to `ncn-m002` from
+        > `ncn-m001` and use the `passwd` command to reset the password. Then log in using the CMN IP address as directed
+        > below. Once `ncn-m001` has been upgraded, log in from `ncn-m002` and use the `passwd` command to reset
+        > the password. The other NCNs will have their passwords updated when NCN personalization is run in a
+        > subsequent step.
+
+        `ssh` to the `bond0.cmn0`/CMN IP address of `ncn-m002`.
 
 1. Authenticate with the Cray CLI on `ncn-m002`.
 
    See [Configure the Cray Command Line Interface](../operations/configure_cray_cli.md) for details on how to do this.
 
-1. (`ncn-m002#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
+1. (`ncn-m002#`) Set upgrade variables.
 
    ```bash
-   CSM_RELEASE=1.3.0
-   CSM_REL_NAME=csm-${CSM_RELEASE}
+   source /etc/cray/upgrade/csm/myenv
+   echo "${CSM_REL_NAME}"
    ```
 
 1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
@@ -93,9 +107,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
    A later stage of the upgrade expects the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm` on `ncn-m002`; that is why this command copies it there.
 
    ```bash
-   mkdir -pv /etc/cray/upgrade/csm/${CSM_REL_NAME} &&
-             scp ncn-m001:/etc/cray/upgrade/csm/myenv /etc/cray/upgrade/csm/myenv &&
-             scp ncn-m001:/root/output.log /root/pre-m001-reboot-upgrade.log &&
+   scp ncn-m001:/root/output.log /root/pre-m001-reboot-upgrade.log &&
              cray artifacts create config-data pre-m001-reboot-upgrade.log /root/pre-m001-reboot-upgrade.log
    csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/ -name 'cray-site-init*.rpm'") &&
              scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm &&

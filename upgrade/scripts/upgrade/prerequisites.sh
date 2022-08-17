@@ -352,6 +352,38 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPGRADE_CSM_CONFIG"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    manifest_folder='/tmp'
+    csm_config_version=$(ls ${CSM_ARTI_DIR}/helm |grep csm-config|sed -e 's/\.[^./]*$//'|sed -e 's/^csm-config-//')
+    if [ -z "$csm_config_version" ]; then
+      echo "ERROR: null value found.  See the variable"
+      echo "csm_config_version is $csm_config_version."
+      exit 1
+    fi
+    cat > $manifest_folder/csm_config.yaml <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: cray-csm-config
+spec:
+  charts:
+  - name: csm-config
+    namespace: services
+    source: csm
+    version: $csm_config_version
+EOF
+    echo "$manifest_folder/csm_config.yaml"
+    cat $manifest_folder/csm_config.yaml
+    loftsman ship --charts-path ${CSM_ARTI_DIR}/helm/ --manifest-path $manifest_folder/csm_config.yaml
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPGRADE_KYVERNO"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
