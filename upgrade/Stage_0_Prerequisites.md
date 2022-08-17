@@ -27,23 +27,53 @@ Stage 0 has several critical procedures which prepare the environment and verify
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
+1. (`ncn-m001#`) Install the latest `docs-csm` RPM.
+
+   * If `ncn-m001` has internet access, then use the following commands to download and install the latest documentation.
+
+      > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why these commands copy it there.
+
+      ```bash
+      wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.3/noarch/docs-csm-latest.noarch.rpm \
+          -O /root/docs-csm-latest.noarch.rpm &&
+      rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+      ```
+
+   * Otherwise, use the following procedure to download and install the latest documentation.
+
+      1. Download the latest `docs-csm` RPM to an external system and copy it to `ncn-m001`.
+
+         See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
+
+      1. (`ncn-m001#`) Copy the documentation RPM to `/root` and install it.
+
+         > **Important:**
+         >
+         > - Replace the `PATH_TO_DOCS_RPM` below with the location of the RPM on `ncn-m001`.
+         > - The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
+
+         ```bash
+         cp PATH_TO_DOCS_RPM /root/docs-csm-latest.noarch.rpm &&
+         rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+         ```
+
 1. (`ncn-m001#`) Create and mount an `rbd` device where the CSM release tarball can be stored.
 
-    1. Initialize the Python virtual environment.
+   1. Initialize the Python virtual environment.
 
-        ```bash
-        tar xvf /opt/cray/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/
-        ```
+      ```bash
+      tar xvf /usr/share/doc/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/
+      ```
 
-    1. Create and map the `rbd` device.
+   1. Create and map the `rbd` device.
 
-        ```bash
-        source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-        python /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
-        deactivate
-        ```
+      **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`.
 
-    **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`.
+      ```bash
+      source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
+      python /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
+      deactivate
+      ```
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
@@ -51,16 +81,6 @@ Stage 0 has several critical procedures which prepare the environment and verify
    - Alternatively, the [Manual copy](#manual-copy) procedure may be used, which includes manually copying the CSM `tar` file to `ncn-m001`.
 
 ### Direct download
-
-1. (`ncn-m001#`) Download and install the latest documentation RPM.
-
-   > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
-
-   ```bash
-   wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.3/noarch/docs-csm-latest.noarch.rpm \
-        -O /root/docs-csm-latest.noarch.rpm &&
-   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-   ```
 
 1. (`ncn-m001#`) Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
 
@@ -84,21 +104,9 @@ Stage 0 has several critical procedures which prepare the environment and verify
 
 ### Manual copy
 
-1. Copy the `docs-csm` RPM package and CSM release `tar` file to `ncn-m001`.
+1. Copy the CSM release `tar` file to `ncn-m001`.
 
    See [Update Product Stream](../update_product_stream/README.md).
-
-1. (`ncn-m001#`) Copy the documentation RPM to `/root` and install it.
-
-   > **Important:**
-   >
-   > - Replace the `PATH_TO_DOCS_RPM` below with the location of the RPM on `ncn-m001`.
-   > - The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
-
-   ```bash
-   cp PATH_TO_DOCS_RPM /root/docs-csm-latest.noarch.rpm &&
-   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-   ```
 
 1. (`ncn-m001#`) Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m001`.
 
