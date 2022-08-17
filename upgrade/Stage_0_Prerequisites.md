@@ -43,7 +43,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
         deactivate
         ```
 
-    **IMPORTANT:** This will mount the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`.
+    **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`.
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
