@@ -32,10 +32,23 @@ echo "Verify role-mapping configuration"
 RESULT=$(curl -s http://$IP:8080/keycloak/admin/realms/shasta/users/$USER_ID/role-mappings/clients/$CLIENT_ID -H "Authorization: bearer $TOKEN" | jq -r '.[] | select(.name=="monitor-ro") | .name')
 if [ -z "$RESULT" ]
 then
-    echo "FAIL"
+    echo "ERROR: could not find expected role-mapping"
     exit 2
-else
+fi
+
+###################
+#Test Case: Telemetry access test
+echo "Verify access to Telemetry API"
+DN=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:" | awk '{print $2}')
+USER_TOKEN=$(curl -s -d 'client_id=shasta' -d 'username=ro-test-user' -d 'password=ro-test-pass' -d 'grant_type=password' https://auth.cmn.$DN/keycloak/realms/shasta/protocol/openid-connect/token)
+ACCESS_TOKEN=$(echo ${USER_TOKEN}|jq -r .access_token)
+TELEMETRY_API_URL="https://api-gw-service-nmn.local/apis/sma-telemetry-api"
+STREAMS=$(curl -k -s ${TELEMETRY_API_URL} -H "Authorization: Bearer ${ACCESS_TOKEN}" ${TELEMETRY_API_URL}/v1|jq | grep api_endpoints)
+if [[ "$STREAMS" =~ "api_endpoints" ]]; then
     echo "SUCCESS"
+else
+    echo "FAIL: $USER_NAME is unable to access Telemetry API. Is SMA installed on the system?"
+    exit 3
 fi
 
 echo "Delete user $USER_NAME"
