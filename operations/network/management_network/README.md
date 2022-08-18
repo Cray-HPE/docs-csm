@@ -18,49 +18,43 @@ accessory drawings in this document are for illustration only, and may not exact
 
 ## Contents
 
-* [Switch Configuration States](#switch-config-states)
-* [Starting Points](#starting)
-* [User Guides](#userguides)
+* [Switch configuration states](#switch-configuration-states)
+* [Starting points](#starting-points)
+* [User guides](#user-guides)
 * [CANU](#canu)
-* [Useful Pages](#useful)
-* [Products Supported](#products)
-* [Architecture and Naming Conventions](#architecture)
-* [Minimum Software Version Requirements](#minimums)
-* [Changes](#ch-ch-ch-changes)
+* [Useful pages](#useful-pages)
+* [Products supported](#products-supported)
+* [Architecture and naming conventions](#architecture-and-naming-conventions)
+* [Minimum software version requirements](#minimum-software-version-requirements)
+* [Changes](#changes)
   * [Enhancements](#enhancements)
   * [Fixes](#fixes)
-  * [Issues and Workarounds](#issues)
-  * [Security Bulletin Subscription Service](#bulletin)
+  * [Issues and workarounds](#issues-and-workarounds)
+  * [Security Bulletin subscription service](#Security-bulletin-subscription-service)
 
-## Switch Configuration States
+## Switch configuration states
 
-To check the current state of the switches, see the [upgrade](upgrade.md) page.
+To check the current state of the switches, see [Upgrade](upgrade.md).
 
 * `1.0 Config`: Non-generated switch configurations
-* `1.2 Preconfig`: CANU-generated configurations for 1.0
-* `1.2 Config`: CANU-generated configurations for 1.2
+* `1.2 Preconfig`: CANU-generated configurations for CSM 1.0
+* `1.2 Config`: CANU-generated configurations for CSM 1.2
 
-## Starting Points
+## Starting points
 
-* Upgrade CANU to the latest version:  
-  * [Install/Upgrade CANU](canu_install_update.md)
-* Current switch configurations are not generated and need to upgrade to generated configurations.
-  * This can either be 1.0 generated or 1.2 generated.
-  * [upgrade](upgrade.md)
-* Current switch configurations are generated and need to go to 1.3.
-  * [`1.3 (Preconfig)` to 1.3](1.2_to_1.3_upgrade.md)
-* Switches have no configuration on them.
-  * [Fresh Install](fresh_install.md)
-* Reinstalling the same CSM version.
-  * [Re-install](reinstall.md)
-* New hardware was added to the system.
-  * [Added Hardware](added_hardware.md)
-* Switch failed and needs to be replaced.
-  * [Replace Switch](replace_switch.md)
+| Situation                                                                       | Link                                              |
+| ------------------------------------------------------------------------------- | ------------------------------------------------- |
+| Upgrade CANU to the latest version                                              | [Install/Upgrade CANU](canu_install_update.md)    |
+| Upgrade to CANU-generated configurations from non-CANU-generated configurations | [Upgrade](upgrade.md)                             |
+| Current switch configurations are CANU-generated and need to go to 1.3          | [`1.3 (Preconfig)` to 1.3](1.2_to_1.3_upgrade.md) |
+| Switches have no configuration on them                                          | [Fresh Install](fresh_install.md)                 |
+| Reinstalling the same CSM version                                               | [Re-install](reinstall.md)                        |
+| New hardware was added to the system                                            | [Added Hardware](added_hardware.md)               |
+| Switch failed and needs to be replaced                                          | [Replace Switch](replace_switch.md)               |
 
-## User Guides
+## User guides
 
-The user guides contain information such as are generic configuration examples, explanation of currently used technologies, topology maps, and a
+The user guides contain information such as generic configuration examples, explanation of currently used technologies, topology maps, and a
 summary of the network design used in the CSM management network.
 
 * [Aruba](aruba/README.md)
@@ -69,53 +63,44 @@ summary of the network design used in the CSM management network.
 
 ## CANU
 
-See [CSM Automatic Network Utility (CANU)](canu/README.md)
+See [CSM Automatic Network Utility (CANU)](canu/README.md).
 
-## Useful Pages
+## Useful pages
 
-* [Collect data](collect_data.md)
-  * Input data needed to generate switch configurations.
-* [Cable Management Network Servers](cable_management_network_servers.md)
-  * Shows how servers in CSM should be cabled.
-* [SHCD HMN Tab/HMN Connections Rules](../../../install/shcd_hmn_connections_rules.md)
-  * Shows how the HMN tab on the SHCD should be formatted.
-* [SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)
-  * Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
-* [Backup Custom Configuration](backup_custom_configurations.md)
-  * Shows users how to backup configuration that is custom to their system; this includes site connections and credentials.
-* [Configuration Management](config_management.md)
-  * Shows users how to save a running configuration to the switch for backup purposes or to switch between different switch configurations.
-* [Validate Switch Configuration](validate_switch_configs.md)
-  * Compares the configuration on a running system to what is generated.
-* [Wipe Management Switches](wipe_mgmt_switches.md)
-  * Erase the switch configuration, this is useful for fresh installs.
-* [Generate Switch Configurations](generate_switch_configs.md)
-  * Generate configurations for all management switches.
-* [Manual Switch Configurations](manual_switch_config.md)
-  * Some configuration needs to be done manually (authentication/SNMP).
-* [Validate SHCD](validate_shcd.md)
-  * Validate the SHCD against the CSM network architecture.
+| Page                                                                                 | Description                                                               |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| [Collect data](collect_data.md)                                                      | Input data needed to generate switch configurations                       |
+| [Cable Management Network Servers](cable_management_network_servers.md)              | Shows how servers in CSM should be cabled                                 |
+| [SHCD HMN Tab/HMN Connections Rules](../../../install/shcd_hmn_connections_rules.md) | Shows how the HMN tab on the SHCD should be formatted                     |
+| [SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)              | Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab |
+| [Backup Custom Configuration](backup_custom_configurations.md)                       | Shows users how to backup configuration that is custom to their system; this includes site connections and credentials |
+| [Configuration Management](config_management.md)                                     | Shows users how to save a running configuration to the switch for backup purposes or to switch between different switch configurations |
+| [Validate Switch Configuration](validate_switch_configs.md)                          | Compares the configuration on a running system to what is generated       |
+| [Wipe Management Switches](wipe_mgmt_switches.md)                                    | Erase the switch configuration; this is useful for fresh installs         |
+| [Generate Switch Configurations](generate_switch_configs.md)                         | Generate configurations for all management switches                       |
+| [Manual Switch Configurations](manual_switch_config.md)                              | Some configuration needs to be done manually (authentication/SNMP)        |
+| [Validate SHCD](validate_shcd.md)                                                    | Validate the SHCD against the CSM network architecture                    |
 
-## Products Supported
+## Products supported
 
 This release applies to the following product models:
 
-* Aruba `8320` Switch Series
-* Aruba `8325` Switch Series
-* Aruba `8360` Switch Series
-* Aruba `6300` Switch Series
-* Mellanox `SN2100` Switch Series
-* Mellanox `SN2700` Switch Series
-* Dell `S3048-ON` Switch Series
-* Dell `S4148T-ON` Switch Series
-* Dell `S4148F-ON` Switch Series
+* Aruba `8320` switch series
+* Aruba `8325` switch series
+* Aruba `8360` switch series
+* Aruba `6300` switch series
+* Mellanox `SN2100` switch series
+* Mellanox `SN2700` switch series
+* Dell `S3048-ON` switch series
+* Dell `S4148T-ON` switch series
+* Dell `S4148F-ON` switch series
 
-## Architecture and Naming Conventions
+## Architecture and naming conventions
 
 For architecture and naming convention information, see
 [Cray Network Architecture model](https://github.com/Cray-HPE/canu/blob/main/network_modeling/models/cray-network-architecture.yaml).
 
-## Minimum Software Version Requirements
+## Minimum software version requirements
 
 * [Network Firmware](firmware/update_management_network_firmware.md)
 
@@ -125,8 +110,8 @@ These sections list enhancements, fixes, and known issues for this version of th
 
 * [Enhancements](#enhancements)
 * [Fixes](#fixes)
-* [Issues and Workarounds](#issues)
-* [Security Bulletin Subscription Service](#bulletin)
+* [Issues and workarounds](#issues-and-workarounds)
+* [Security Bulletin subscription service](#Security-bulletin-subscription-service)
 
 ### Enhancements
 
@@ -149,15 +134,16 @@ new default configuration is as follows:
 
 ### Fixes
 
-### Issues and Workarounds
+### Issues and workarounds
 
 The following are known open issues with this branch of the software.
 
 The Symptom statement describes what a user might experience if this is seen on the network. The Scenario statement provides additional environment details and trigger summaries. When available, the Workaround statement provides a workaround to the issue.
 
-> No currently known issues.
+> Known and fixed issue are listed in the CANU release notes.
+See [CANU releases](https://github.com/Cray-HPE/canu/releases).
 
-### Security Bulletin Subscription Service
+### Security Bulletin subscription service
 
 To initiate a subscription to receive future HPE Security Bulletin alerts via email,
 see the [`HPE Support Center`](https://support.hpe.com/connect/s/?language=en_US).
