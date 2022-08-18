@@ -63,7 +63,9 @@ Any steps run on an `external` server require that server to have the following 
 1. (`external#`) Extract the LiveCD from the tarball.
 
    ```bash
-   tar --wildcards --no-anchored -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-pre-install-toolkit-*.iso'
+   OUT_DIR="$(pwd)/csm-temp"
+   mkdir -pv "${OUT_DIR}"
+   tar -C "${OUT_DIR}" --wildcards --no-anchored --transform='s/.*\///' -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-pre-install-toolkit-*.iso'
    ```
 
 ### 1.2 Boot the LiveCD
@@ -91,7 +93,9 @@ Any steps run on an `external` server require that server to have the following 
       1. (`external#`) Get `cray-site-init` from the tarball.
 
          ```bash
-         tar --wildcards --no-anchored -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-site-init-*.rpm'
+         OUT_DIR="$(pwd)/csm-temp"
+         mkdir -pv "${OUT_DIR}"
+         tar -C "${OUT_DIR}" --wildcards --no-anchored --transform='s/.*\///' -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-site-init-*.rpm'
          ```
 
       1. (`external#`) Install the `write-livecd.sh` script:
@@ -99,22 +103,22 @@ Any steps run on an `external` server require that server to have the following 
          - RPM-based systems:
 
             ```bash
-            rpm -Uvh --force cray-site-init*.rpm
+            rpm -Uvh --force ${OUT_DIR}/cray-site-init*.rpm
             ```
 
          - Non-RPM-based systems (requires `bsdtar`):
 
             ```bash
-            bsdtar xvf cray-site-init-*.rpm --include *write-livecd.sh -C ./
-            mv -v ./usr/local/bin/write-livecd.sh ./
-            rmdir -pv ./usr/local/bin/
+            bsdtar xvf "${OUT_DIR}"/cray-site-init-*.rpm --include *write-livecd.sh -C "${OUT_DIR}"
+            mv -v "${OUT_DIR}"/usr/local/bin/write-livecd.sh "./${OUT_DIR}"
+            rmdir -pv "${OUT_DIR}/usr/local/bin/"
             ```
 
          - Non-RPM Based Distros (requires `rpm2cpio`):
 
             ```bash
             rpm2cpio cray-site-init-*.rpm | cpio -idmv
-            mv -v ./usr/local/bin/write-livecd.sh ./
+            mv -v ./usr/local/bin/write-livecd.sh "./${OUT_DIR}"
             rm -vrf ./usr
             ```
 
