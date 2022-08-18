@@ -5,7 +5,11 @@
 
 Before starting Stage 1, access the Argo UI to view the progress of this stage. For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md).
 
+***
+
 ## Procedure
+
+### Storage node image upgrade
 
 1. (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for all storage nodes to be upgraded. Provide the storage nodes in a comma-separated list, such as `ncn-s001,ncn-s002,ncn-s003`. This upgrades the storage nodes sequentially.
 
@@ -20,6 +24,17 @@ Before starting Stage 1, access the Argo UI to view the progress of this stage. 
 > /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001
 >```
 
+***
+
+### Ensure `rbd` stats monitoring is enabled
+
+1. (ncn-m001#) Run the below commands to enable the `rbd` stats collection on the pools.
+
+```bash
+ceph config set mgr mgr/prometheus/rbd_stats_pools "kube,smf"
+ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600
+```
+***
 ## Stage completed
 
 All the Ceph nodes have been rebooted into the new image.
