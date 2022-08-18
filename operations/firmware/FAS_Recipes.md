@@ -1,12 +1,16 @@
 # FAS Recipes
 
-> **NOTE:** This is a collection of various FAS recipes for performing updates.
+> **`NOTE`** This is a collection of various FAS recipes for performing updates.
 > For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update.
 
 When updating an entire system, walk down the device hierarchy component type by component type, starting first with routers (switches), proceeding to chassis, and then finally to nodes.
 While this is not strictly necessary, it does help eliminate confusion.
+
+**NOTE**: Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
+This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
@@ -112,7 +116,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-> **NOTE:** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#cn-workaround) procedure.
+> **`NOTE`** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#compute-node-bios-workaround-for-hpe-cray-ex425) procedure.
 
 ### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA
 
@@ -214,7 +218,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-> **NOTE:** Update of System ROM may report as an error when it actually succeeded because of an incorrect string in the image metadata in FAS. Manually check the update version to get around this error.
+> **`NOTE`** Update of System ROM may report as an error when it actually succeeded because of an incorrect string in the image metadata in FAS. Manually check the update version to get around this error.
 
 ## Manufacturer: Gigabyte
 
@@ -247,7 +251,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 }
 ```
 
-> **NOTE:** The `timeLimit` is `4000` because the Gigabytes can take a lot longer to update.
+> **`NOTE`** The `timeLimit` is `4000` because the Gigabytes can take a lot longer to update.
 
 #### Troubleshooting
 
@@ -298,4 +302,4 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 ## Update Non-Compute Nodes (NCNs)
 
-See [Uploading BIOS and BMC Firmware for NCNs in FAS Use Cases](FAS_Use_Cases.md#ncn-bios-bmc).
+See [Uploading BIOS and BMC Firmware for NCNs in FAS Use Cases](FAS_Use_Cases.md#update-non-compute-node-ncn-bios-and-bmc-firmware).
