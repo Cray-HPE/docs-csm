@@ -1,5 +1,36 @@
 #!/bin/bash
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# This is a fairly straightforward process for testing the barebones boot image.
+# The steps are run from main and if the boot succeeds will return '0', any other
+# return code indicates failure of the boot test. Any problem encountered will be
+# logged with as much information as possible.
 
+# This is a test script to validate that a read-only monitoring role "monitor-ro" exists,
+# and a test user "ro-test-user" automatically created with this role has access to Telemetry API.
+# If successful, a "SUCCESS" message will be printed and the test user will be automatically deleted;
+# If unsuccessful, an ERROR message will be printed and an error code will be returned.
 ADMIN_SECRET=$(kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | base64 -d)
 IP=$(kubectl get service/keycloak -n services -o json | jq -r '.spec.clusterIP')
 TOKEN=$(curl -s http://$IP:8080/keycloak/realms/master/protocol/openid-connect/token -d grant_type=password -d client_id=admin-cli -d username=admin --data-urlencode password="$ADMIN_SECRET" | sed 's/.*access_token":"//g' | sed 's/".*//g')
