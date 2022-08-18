@@ -5,7 +5,7 @@ When a BOS session is created, there are a number of items created on the system
 When a session is launched, the items below are created:
 
 -   **Boot Orchestration Agent \(BOA\) job:** The Kubernetes job that runs and handles the BOS session.
--   **ConfigMap for BOA:** This ConfigMap contains the configuration information that the BOA job uses. The BOA pod mounts a ConfigMap named `boot-session` at /mnt/boot\_session inside the pod. This ConfigMap has a random UUID name, such as e786def5-37a6-40db-b36b-6b67ebe174ee. This name does not obviously connect it to the BOA job.
+-   **ConfigMap for BOA:** This ConfigMap contains the configuration information that the BOA job uses. The BOA pod mounts a ConfigMap named `boot-session` at /mnt/boot\_session inside the pod. The name of the configmap has a 1-1 relation to the name of the BOS session created, however, the name of the BOS session can be different from the name of the session template used to create it. For created sessions that do not specify a name, this is most commonly a UUID value.
 -   **etcd entries:** BOS makes an entry for the session in its etcd key/value store. If the BOA job has run for long enough, it will also have written a status entry into etcd for this session.
 -   **Configuration Framework Service \(CFS\) session:** If configuration is enabled, and the session is doing a boot, reboot, or configure operation, then BOA will have instructed CFS to configure the nodes once they boot. There is not an easy way to link a BOA session to the CFS sessions that are spawned.
 
