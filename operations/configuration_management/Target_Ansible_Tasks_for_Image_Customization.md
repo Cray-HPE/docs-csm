@@ -19,7 +19,7 @@ See [Write Ansible Code for CFS: Reduce wasted time](Write_Ansible_Code_for_CFS.
 
 It is also best practice to include a default in Ansible roles for playbook and role portability because CFS injects this variable at runtime. This can be done in the defaults section of the role, or where the variable is called. For example:
 
-```bash
+```yaml
 when: "{{ cray_cfs_image | default(false) }}"
 ```
 
