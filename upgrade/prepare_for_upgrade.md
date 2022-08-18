@@ -11,38 +11,6 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
    maintained by the remaining two nodes. If one of those two nodes has a fault before the third node completes its upgrade,
    then quorum would be lost.
 
-1. Optional system health checks.
-
-    1. (`ncn-m001#`) Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
-
-        **Important:** SDU takes about 15 minutes to run on a small system \(longer for large systems\).
-
-        ```bash
-        sdu --scenario triage --start_time '-4 hours' --reason "saving state before powerdown/up"
-        ```
-
-        Refer to the HPE Cray EX System Diagnostic Utility (SDU) Administration Guide for more information and troubleshooting steps.
-
-    1. (`ncn-m001#`) Check Ceph status.
-
-        ```bash
-        ceph -s | tee ceph.status
-        ```
-
-    1. (`ncn-m001#`) Check Kubernetes pod status for all pods.
-
-        ```bash
-        kubectl get pods -o wide -A | tee k8s.pods
-        ```
-
-        Additional Kubernetes status check examples :
-
-        ```bash
-        egrep "CrashLoopBackOff" k8s.pods | tee k8s.pods.CLBO
-        egrep "ContainerCreating" k8s.pods | tee k8s.pods.CC
-        egrep -v "Run|Completed" k8s.pods | tee k8s.pods.errors
-        ```
-
 1. Recommended backup/export of some services
 
     1. Backup Nexus data. Refer to [Nexus Export and Restore](../operations/package_repository_management/Nexus_Export_and_Restore.md) to export Nexus data.
