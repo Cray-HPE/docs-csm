@@ -5,6 +5,7 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 ## Topics
 
 * [Warning for Non-Compute Nodes (NCNs)](#warning-for-non-compute-nodes-ncns)
+* [Declarative vs Imperative FAS Updates](#declarative-vs-imperative-fas-updates)
 * [Ignore Nodes within FAS](#ignore-nodes-within-fas)
 * [Override an Image for an Update](#override-an-image-for-an-update)
 * [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
@@ -15,13 +16,23 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 ## Warning for Non-Compute Nodes (NCNs)
 
-NCNs and their BMCs should be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.
+NCNs and their BMCs must be locked with the HSM locking API to ensure they are not unintentionally updated by FAS.
 Research [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 Failure to lock the NCNs could result in unintentional update of the NCNs if FAS is not used correctly; this will lead to system instability problems.
 
-**NOTE**: Any node which is locked will remain in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
-These nodes will report as `failed` with the `stateHelper` message of `"time expired; could not complete update"` if action times out.
+**NOTE**: Any node that is locked remains in the state `inProgress` with the `stateHelper` message of `"failed to lock"` until the action times out, or the lock is released.
+If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
 This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
+
+---
+
+## Declarative vs Imperative FAS Updates
+
+In most cases, FAS will update firmware on each node to the required version.
+This version is determined by comparing the `semantic versions` for all valid images for each node and selecting the highest value.
+Sometimes however, a different version is required for updating a node.
+FAS can update a node to any uploaded version using the [Override an Image for an Update](#override-an-image-for-an-update) procedure.
+If the required image is not installed, obtain the RPM or ZIP file and use the [Load Firmware from RPM or ZIP file](#load-firmware-from-rpm-or-zip-file) procedure.
 
 ---
 
@@ -35,13 +46,13 @@ Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_U
 
 ### Procedure to Ignore Nodes
 
-1. Check that there are no FAS actions running.
+1. (`ncn#`) Check that there are no FAS actions running.
 
     ```bash
     cray fas actions list
     ```
 
-2. Edit the `cray-fas` deployment.
+2. (`ncn#`) Edit the `cray-fas` deployment.
 
     ```bash
     kubectl -n services edit deployment cray-fas
@@ -55,12 +66,16 @@ Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_U
 
 ## Override an Image for an Update
 
-If an update fails because of `"No Image available"`, it may be caused by FAS unable to
-match the data on the node to find an image in the image list.
+In order to update to a firmware image other than the latest image found by FAS, the image for the update can be overridden.
+This is also useful if an update fails because of `"No Image available"`, which happens when FAS is unable to match the data on the node to an image in the image list.
+
+> **WARNING:** Make sure to select the correct image because FAS will force a flash of the device -- using incorrect firmware may make it inoperable.
+
+It is strongly recommended to do a dryrun first and check the output.
 
 ### Procedure to Override an Image
 
-1. Find the available image in FAS.
+1. (`ncn#`) Find the available image in FAS.
 
    Change *TARGETNAME* to the actual target being searched.
 
@@ -138,7 +153,7 @@ match the data on the node to find an image in the image list.
        }
    ```
 
-3. Verify the correct image ID was found.
+3. (`ncn#`) Verify the correct image ID was found.
 
    ```bash
    cray fas images describe {imageID}
@@ -195,7 +210,7 @@ as well as how to target specific manufacturers, component names (xnames), and t
         }
         ```
 
-    2. Run the dry-run for the full system.
+    2. (`ncn#`) Run the dry-run for the full system.
 
         ```bash
         cray fas actions create COMMAND.json
@@ -234,7 +249,7 @@ as well as how to target specific manufacturers, component names (xnames), and t
        }
        ```
 
-    2. Run a dry-run on the targeted devices.
+    2. (`ncn#`) Run a dry-run on the targeted devices.
 
        ```bash
        cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
@@ -251,17 +266,19 @@ as well as how to target specific manufacturers, component names (xnames), and t
    * `succeeded`: A firmware version that FAS can update the firmware to is available and it should work when actually updating the firmware.
    * `failed`: There is something that FAS could do, but it likely would fail (most likely because the file is missing).
 
-   1. Get a high-level summary of the FAS job to determine if there are any upgradable firmware images available.
+   1. (`ncn#`) Get a high-level summary of the FAS job to determine if there are any upgradable firmware images available.
 
       Use the returned `actionID` from the `cray fas actions create` command.
 
       In the example below, there are two operations in the `succeeded` state, indicating there is an available firmware version that FAS can use to update firmware.
 
       ```bash
-      cray fas actions status list {actionID}
+      cray fas actions status list {actionID} --format toml
       ```
 
-      ```text
+      Example output:
+
+      ```toml
       actionID = "e6dc14cd-5e12-4d36-a97b-0dd372b0930f"
       snapshotID = "00000000-0000-0000-0000-000000000000"
       startTime = "2021-09-07 16:43:04.294233199 +0000 UTC"
@@ -296,7 +313,7 @@ as well as how to target specific manufacturers, component names (xnames), and t
 
       The action is still in progress if the state field is not completed or aborted.
 
-   2. View the details of an action to get more information on each operation in the FAS action.
+   2. (`ncn#`) View the details of an action to get more information on each operation in the FAS action.
 
        In the example below, there is an operation for a component name (xname) in the failed state, indicating there is something that FAS could do, but it likely would fail.
        A common cause for an operation failing is due to a missing firmware image file.
@@ -304,6 +321,8 @@ as well as how to target specific manufacturers, component names (xnames), and t
        ```bash
        cray fas actions describe {actionID} --format json
        ```
+
+      Example output:
 
        ```json
        {
@@ -396,13 +415,15 @@ as well as how to target specific manufacturers, component names (xnames), and t
            }
        ```
 
-3. View the details for a specific operation.
+3. (`ncn#`) View the details for a specific operation.
 
    In this example, there is a device that is available for a firmware upgrade because the operation being viewed is a succeeded operation.
 
    ```bash
    cray fas operations describe {operationID} --format json
    ```
+
+   Example output:
 
    ```json
    {
@@ -436,7 +457,7 @@ Update the firmware on any devices indicating a new version is needed.
 
 This procedure will read all RPMs in the Nexus repository and upload firmware images to S3 and create image records for firmware not already in FAS.
 
-1. Check the loader status.
+1. (`ncn#`) Check the loader status.
 
     ```bash
     cray fas loader list | grep loaderStatus
@@ -444,13 +465,13 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
     This will return a `ready` or `busy` status.
 
-    ```bash
+    ```toml
     loaderStatus = "ready"
     ```
 
     The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
 
-2. Run the loader Nexus command.
+2. (`ncn#`) Run the loader Nexus command.
 
     ```bash
     cray fas loader nexus create
@@ -458,20 +479,22 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
     This will return an ID which will be used to check the status of the run.
 
-    ```bash
+    ```toml
     loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
     ```
 
     > **`NOTE`** Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
 
-3. Check the results of the loader run.
+3. (`ncn#`) Check the results of the loader run.
 
     ```bash
-    cray fas loader describe ${loaderRunID} --format json
+    cray fas loader describe {loaderRunID} --format json
     ```
 
     > **`NOTE`** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
     Use the `--format json` to make it easier to read.
+
+    Example output:
 
     ```json
     {
@@ -516,7 +539,7 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
 1. Copy the file to `ncn-m001` or one of the other NCNs.
 
-2. Check the loader status:
+2. (`ncn#`) Check the loader status:
 
     ```bash
     cray fas loader list | grep loaderStatus
@@ -524,13 +547,13 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
     This will return a `ready` or `busy` status.
 
-    ```bash
+    ```toml
     loaderStatus = "ready"
     ```
 
     The loader can only run one job at a time, if the loader is `busy`, it will return an error on any attempt to create an additional job.
 
-3. Run the `loader` command.
+3. (`ncn#`) Run the `loader` command.
 
     `firmware.rpm` is the name of the RPM. If the file is not in the current directory, add the path to the filename.
 
@@ -540,11 +563,11 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
     This will return an ID which will be used to check the status of the run.
 
-    ```bash
+    ```toml
     loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
     ```
 
-4. Check the results of the loader run.
+4. (`ncn#`) Check the results of the loader run.
 
     ```bash
     cray fas loader describe {loaderRunID} --format json
@@ -552,6 +575,8 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
     > **`NOTE`** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
     Use the `--format json` to make it easier to read.
+
+    Example output:
 
     ```json
     {
