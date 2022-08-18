@@ -1,14 +1,18 @@
 # Alternate Storage Pools
 
-* [Description](#description)
-* [Use cases](#use-cases)
-* [Best practices](#best-practices)
-* [Procedures](#procedures)
-  * [Create a storage pool](#create-a-storage-pool)
-  * [Create and map an `rbd` device](#create-and-map-an-rbd-device)
-  * [Move an `rbd` device to another node](#move-an-rbd-device-to-another-node)
-  * [Unmount, unmap, and delete an `rbd` device](#unmount-unmap-and-delete-an-rbd-device)
-  * [Remove a storage pool](#remove-a-storage-pool)
+- [Alternate Storage Pools](#alternate-storage-pools)
+  - [Description](#description)
+  - [Use cases](#use-cases)
+  - [Best practices](#best-practices)
+  - [Procedures](#procedures)
+    - [Create a storage pool](#create-a-storage-pool)
+    - [Create and map an `rbd` device](#create-and-map-an-rbd-device)
+    - [Mount an `rbd` device](#mount-an-rbd-device)
+    - [Move an `rbd` device to another node](#move-an-rbd-device-to-another-node)
+    - [Unmount, unmap, and delete an `rbd` device](#unmount-unmap-and-delete-an-rbd-device)
+    - [Remove a storage pool](#remove-a-storage-pool)
+
+***
 
 ## Description
 
@@ -31,12 +35,14 @@ Creating, maintaining, and removing Ceph storage pools.
 
 ## Procedures
 
+***
 This example shows the creation and mounting of an `rbd` device on `ncn-m001`.
 
 **NOTE:** The commands to create and delete pools or `rbd` devices must be run from a master node or one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
 ### Create a storage pool
 
+***
 The below example will create a storage pool name `csm-release`. The pool name can be changed to better reflect any use cases outside of support for upgrades.
 The `3 3` arguments can be left unchanged. For more information on their meaning and possible alternative values, see the Ceph product documentation.
 
@@ -72,6 +78,8 @@ quotas for pool 'csm-release':
   * This space counts against the total space provided by the cluster; Use cautiously.
   * If this pool or any pool reaches 95-100% utilization, then all volumes for the fully utilized pool will go into read-only mode.
 
+***
+
 ### Create and map an `rbd` device
 
 **IMPORTANT:**
@@ -103,6 +111,8 @@ id  pool         namespace  image            snap  device
 * Master nodes normally do not have `rbd` devices mapped via Ceph provisioner.
   * If mapping to a worker node where there are mapped PVCs, then ensure the proper `rbd` device is being captured for the following steps.
   * Failure to do this most likely will result in data corruption or loss.
+
+***
 
 ### Mount an `rbd` device
 
@@ -143,6 +153,8 @@ ncn-m001:~ # mount /dev/rbd0 /etc/cray/csm/csm-release/
 ncn-m001:~ # mountpoint /etc/cray/csm/csm-release/
 /etc/cray/csm/csm-release/ is a mountpoint
 ```
+
+***
 
 ### Move an `rbd` device to another node
 
@@ -187,6 +199,8 @@ id  pool         namespace  image            snap  device
 ncn-m002:~ # mount /dev/rbd0 /etc/cray/csm/csm-release/
 ```
 
+***
+
 ### Unmount, unmap, and delete an `rbd` device
 
 ```bash
@@ -205,6 +219,8 @@ ncn-m001:~ # rbd showmapped
 ncn-m001:~ # rbd remove csm-release/release_version
 Removing image: 100% complete...done.
 ```
+
+***
 
 ### Remove a storage pool
 
