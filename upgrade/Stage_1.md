@@ -17,14 +17,12 @@ Before starting Stage 1, access the Argo UI to view the progress of this stage. 
     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001,ncn-s002,ncn-s003
     ```
 
-> **`NOTE`**
-> It is possible to upgrade a single storage node at a time using the following command.
->
->```bash
-> /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001
->```
+**`NOTE`**
+It is possible to upgrade a single storage node at a time using the following command.
 
-***
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001
+```
 
 ### Ensure `rbd` stats monitoring is enabled
 
