@@ -7,6 +7,12 @@ Before starting Stage 1, access the Argo UI to view the progress of this stage. 
 
 ## Procedure
 
+1. (`ncn-m001#`) Apply a workaround for the boot order:
+
+```bash
+/usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
+```
+
 1. (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for all storage nodes to be upgraded. Provide the storage nodes in a comma-separated list, such as `ncn-s001,ncn-s002,ncn-s003`. This upgrades the storage nodes sequentially.
 
     ```bash

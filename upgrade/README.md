@@ -14,6 +14,10 @@ product streams for the HPE Cray EX system can be installed or upgraded.
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
 
+## Known Issues
+
+- The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
+
 ## 1. Prepare for upgrade
 
 See [Prepare for Upgrade](prepare_for_upgrade.md).
