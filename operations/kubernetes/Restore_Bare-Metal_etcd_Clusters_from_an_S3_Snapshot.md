@@ -7,7 +7,6 @@ This procedure shows how to restore the bare-metal etcd cluster from an `Simple 
 
 The etcd cluster needs to be restored from a backup when the Kubernetes cluster and master nodes are being rebuilt.
 
-
 ## Prerequisites
 
 The Kubernetes cluster on master nodes is being rebuilt.
@@ -257,7 +256,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
 
     Example output:
 
-    ```
+    ```text
     448a8d056377359a, started, ncn-m001, https://10.252.1.7:2380, https://10.252.1.7:2379,https://127.0.0.1:2379, false
     986f6ff2a30b01cb, started, ncn-m002, https://10.252.1.8:2380, https://10.252.1.8:2379,https://127.0.0.1:2379, false
     d5a8e497e2788510, started, ncn-m003, https://10.252.1.9:2380, https://10.252.1.9:2379,https://127.0.0.1:2379, false
