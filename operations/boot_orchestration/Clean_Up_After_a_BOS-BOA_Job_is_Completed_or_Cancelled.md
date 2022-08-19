@@ -116,7 +116,8 @@ When a session is launched, the following items are created:
             1. Prevent the configuration from running.
 
                 ```bash
-                ncn-mw# cray cfs components update XNAME --desired-state-commit
+                ncn-mw# cray cfs components update XNAME --desired-config ""
+)
                 ```
 
             This needs to be done for each component. It is enough to prevent configuration from running, and it does not revert to the previous desired state. The previous desired state has
@@ -136,7 +137,7 @@ When a session is launched, the following items are created:
             1. Prevent the configuration from running.
 
                 ```bash
-                ncn-mw# cray cfs components update XNAME --desired-state-commit
+                ncn-mw# cray cfs components update XNAME --desired-config ""
                 ```
 
             This needs to be done for each component. It is enough to prevent configuration from running, and it does not revert to the previous desired state. The previous desired state has
