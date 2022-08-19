@@ -207,7 +207,7 @@ The `3 3` arguments can be left unchanged. For more information on their meaning
 
 1. (`ncn#`) Unmap the device on the node where it is currently mapped.
 
-    1. Umount the `rbd` device.
+    1. Unmount the `rbd` device.
 
         ```bash
         umount /etc/cray/csm/csm-release
@@ -284,7 +284,7 @@ The `3 3` arguments can be left unchanged. For more information on their meaning
 
 ### Unmount, unmap, and delete an `rbd` device
 
-1. (`ncn#`) Umount the `rbd` device.
+1. (`ncn#`) Unmount the `rbd` device.
 
     ```bash
     umount /etc/cray/csm/csm-release
