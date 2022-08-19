@@ -5,6 +5,12 @@
 
 ## Procedure
 
+1. Apply a workaround for the boot order:
+
+```bash
+ncn-m002# /usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
+```
+
 1. Run `ncn-upgrade-ceph-nodes.sh` for `ncn-s001`. Follow output of the script carefully. The script will pause for manual interaction.
 
     ```bash

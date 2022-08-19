@@ -5,6 +5,11 @@
 This document guides an administrator through the upgrade to Cray Systems Management `v1.2.1` from `v1.2.0`.
 Earlier version of CSM must first be upgraded to at least `v1.2.0`. For information on how to do that, see [Upgrade CSM](../index.md).
 
+## Known Issues
+
+- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release). During the upgrade, a workaround is applied to fix this.
+- The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
+
 ## Steps
 
 1. [Upgrade CSM network configuration](upgrade_network.md)

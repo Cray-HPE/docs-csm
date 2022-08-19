@@ -35,7 +35,8 @@ For detailed BICAN documentation, see the [BICAN Technical Details](../../operat
 
 ## Known issues
 
-- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release). During the upgrade, a hotfix is applied to fix this.
+- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release). During the upgrade, a workaround is applied to fix this.
+- The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
 
 ## Plan and coordinate network upgrade
 
