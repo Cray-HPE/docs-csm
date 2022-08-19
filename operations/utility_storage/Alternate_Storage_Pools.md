@@ -20,18 +20,18 @@ Creating, maintaining, and removing Ceph storage pools.
 
 ## Use cases
 
-* A landing space for the CSM tarball used for upgrades.
-* Temporary space needed for maintenance or pre/post upgrade activities.
+- A landing space for the CSM tarball used for upgrades.
+- Temporary space needed for maintenance or pre/post upgrade activities.
 
 ## Best practices
 
-* Apply a proper quota to any pools created.
-  * This will use storage from the default crush rule which is utilizing every OSD.
-  * Improper use of this procedure can have a negative impact on the cluster and space available to running services.
-    * Failure to set a quota and not policing space usage can result in the Ceph cluster going into read-only mode.
-      * This will cause running services to crash if the space issue is not resolved quickly.
-* Cleanup after the criteria for the pool creation has been met.
-  * This can be as simple as removing volumes but leaving the pool for future use.
+- Apply a proper quota to any pools created.
+  - This will use storage from the default crush rule which is utilizing every OSD.
+  - Improper use of this procedure can have a negative impact on the cluster and space available to running services.
+    - Failure to set a quota and not policing space usage can result in the Ceph cluster going into read-only mode.
+      - This will cause running services to crash if the space issue is not resolved quickly.
+- Cleanup after the criteria for the pool creation has been met.
+  - This can be as simple as removing volumes but leaving the pool for future use.
 
 ## Procedures
 
@@ -73,10 +73,10 @@ quotas for pool 'csm-release':
 
 **NOTES:**
 
-* The above example sets the quota to 500 GiB.
-  * If this pool is fully utilized it will be using 1.5 TiB of raw space.
-  * This space counts against the total space provided by the cluster; Use cautiously.
-  * If this pool or any pool reaches 95-100% utilization, then all volumes for the fully utilized pool will go into read-only mode.
+- The above example sets the quota to 500 GiB.
+  - If this pool is fully utilized it will be using 1.5 TiB of raw space.
+  - This space counts against the total space provided by the cluster; Use cautiously.
+  - If this pool or any pool reaches 95-100% utilization, then all volumes for the fully utilized pool will go into read-only mode.
 
 ***
 
@@ -84,8 +84,8 @@ quotas for pool 'csm-release':
 
 **IMPORTANT:**
 
-* Creating an `rbd` device requires proper access and must be run from a master node or one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
-* Mounting a device will occur on the node where the storage needs to be present.
+- Creating an `rbd` device requires proper access and must be run from a master node or one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
+- Mounting a device will occur on the node where the storage needs to be present.
 
 ```bash
 rbd create -p csm-release release_version --size 100G
@@ -108,9 +108,9 @@ id  pool         namespace  image            snap  device
 
 **IMPORTANT NOTE:**
 
-* Master nodes normally do not have `rbd` devices mapped via Ceph provisioner.
-  * If mapping to a worker node where there are mapped PVCs, then ensure the proper `rbd` device is being captured for the following steps.
-  * Failure to do this most likely will result in data corruption or loss.
+- Master nodes normally do not have `rbd` devices mapped via Ceph provisioner.
+  - If mapping to a worker node where there are mapped PVCs, then ensure the proper `rbd` device is being captured for the following steps.
+  - Failure to do this most likely will result in data corruption or loss.
 
 ***
 
