@@ -19,6 +19,7 @@ This procedure can be performed on any master node.
     ```bash
     helm uninstall cray-kiali -n operators --keep-history
     ```
+
 1. Remove `cray-kiali` chart from `loftsman-platform` ConfigMap.
 
     ```bash
