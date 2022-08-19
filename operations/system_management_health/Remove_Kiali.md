@@ -7,10 +7,16 @@ If not planning to use Kiali, then Kiali may be removed for CVE (Common Vulnerab
 
 This procedure can be performed on any master node.
 
-1. Delete `kiali` deployment and `cray-kiali` chart.
+1. Delete `kiali` and `kiali-operator` deployments.
 
     ```bash
     kubectl delete deployment kiali -n istio-system
+    kubectl delete deployment cray-kiali-kiali-operator -n operators
+    ```
+
+1. Uninstall `cray-kiali` chart.
+
+    ```bash
     helm uninstall cray-kiali -n operators --keep-history
     ```
 
