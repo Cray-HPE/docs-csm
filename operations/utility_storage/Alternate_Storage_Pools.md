@@ -41,30 +41,55 @@ This example shows the creation and mounting of an `rbd` device on `ncn-m001`.
 The below example will create a storage pool name `csm-release`. The pool name can be changed to better reflect any use cases outside of support for upgrades.
 The `3 3` arguments can be left unchanged. For more information on their meaning and possible alternative values, see the Ceph product documentation.
 
-```bash
-ceph osd pool create csm-release 3 3
-ceph osd pool application enable csm-release rbd
-ceph osd pool set-quota csm-release max_bytes 500G
-ceph osd pool get-quota csm-release
-```
+1. (`ncn-ms#`) Create the storage pool.
 
-Output:
+    ```bash
+    ceph osd pool create csm-release 3 3
+    ```
 
-```text
-ncn-s001:~ # ceph osd pool create csm-release 3 3
-pool 'csm-release' created
+    Output:
 
-ncn-s001:~ # ceph osd pool application enable csm-release rbd
-enabled application 'rbd' on pool 'csm-release'
+    ```text
+    pool 'csm-release' created
+    ```
 
-ncn-s001:~ # ceph osd pool set-quota csm-release max_bytes 500G
-set-quota max_bytes = 536870912000 for pool csm-release
+1. (`ncn-ms#`) Enable `rbd` on the new pool.
 
-ncn-s001:~ # ceph osd pool get-quota csm-release
-quotas for pool 'csm-release':
-  max objects: N/A
-  max bytes  : 500 GiB  (current num bytes: 0 bytes)
-```
+    ```bash
+    ceph osd pool application enable csm-release rbd
+    ```
+
+    Example output:
+
+    ```text
+    enabled application 'rbd' on pool 'csm-release'
+    ```
+
+1. (`ncn-ms#`) Set a quota on the new pool.
+
+    ```bash
+    ceph osd pool set-quota csm-release max_bytes 500G
+    ```
+
+    Example output:
+
+    ```text
+    set-quota max_bytes = 536870912000 for pool csm-release
+    ```
+
+1. (`ncn-ms#`) View the quotas on the new pool.
+
+    ```bash
+    ceph osd pool get-quota csm-release
+    ```
+
+    Example output:
+
+    ```text
+    quotas for pool 'csm-release':
+      max objects: N/A
+      max bytes  : 500 GiB  (current num bytes: 0 bytes)
+    ```
 
 **NOTES:**
 
@@ -80,24 +105,38 @@ quotas for pool 'csm-release':
 - Creating an `rbd` device requires proper access and must be run from a master node or one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 - Mounting a device will occur on the node where the storage needs to be present.
 
-```bash
-rbd create -p csm-release release_version --size 100G
-rbd map -p csm-release release_version
-rbd showmapped
-```
+1. (`ncn-ms#`) Create the `rbd` device.
 
-Output:
+    ```bash
+    rbd create -p csm-release release_version --size 100G
+    ```
 
-```text
-ncn-m001:~ # rbd create -p csm-release release_version --size 100G
+    This command gives no output when successful.
 
-ncn-m001:~ # rbd map -p csm-release release_version
-/dev/rbd0
+1. (`ncn-ms#`) Map the device.
 
-ncn-m001:~ # rbd showmapped
-id  pool         namespace  image            snap  device
-0   csm-release             release_version  -     /dev/rbd0
-```
+    ```bash
+    rbd map -p csm-release release_version
+    ```
+
+    Example output:
+
+    ```text
+    /dev/rbd0
+    ```
+
+1. (`ncn-ms#`) Show mapped `rbd` devices.
+
+    ```bash
+    rbd showmapped
+    ```
+
+    Example output:
+
+    ```text
+    id  pool         namespace  image            snap  device
+    0   csm-release             release_version  -     /dev/rbd0
+    ```
 
 **IMPORTANT NOTE:**
 
@@ -107,138 +146,206 @@ id  pool         namespace  image            snap  device
 
 ### Mount an `rbd` device
 
-```bash
-mkfs.ext4 /dev/rbd0
-mkdir -pv /etc/cray/csm/csm-release
-mount /dev/rbd0 /etc/cray/csm/csm-release/
-mountpoint /etc/cray/csm/csm-release/
-```
+1. (`ncn#`) Format the device with a file system.
 
-Output:
+    ```bash
+    mkfs.ext4 /dev/rbd0
+    ```
 
-```text
-ncn-m001:~ # mkfs.ext4 /dev/rbd0
-mke2fs 1.43.8 (1-Jan-2018)
-Discarding device blocks: done
-Creating filesystem with 26214400 4k blocks and 6553600 inodes
-Filesystem UUID: d5fe6df4-a0ab-49bc-8d49-9cc62700915d
-Superblock backups stored on blocks:
- 32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
- 4096000, 7962624, 11239424, 20480000, 23887872
+    Example output:
 
-Allocating group tables: done
-Writing inode tables: done
-Creating journal (131072 blocks): done
-Writing superblocks and filesystem accounting information: mkdir done
+    ```text
+    mke2fs 1.43.8 (1-Jan-2018)
+    Discarding device blocks: done
+    Creating filesystem with 26214400 4k blocks and 6553600 inodes
+    Filesystem UUID: d5fe6df4-a0ab-49bc-8d49-9cc62700915d
+    Superblock backups stored on blocks:
+     32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+     4096000, 7962624, 11239424, 20480000, 23887872
 
-ncn-m001:~ # mkdir -pv /etc/cray/csm/csm-release
-mkdir: created directory '/etc/cray/csm'
-mkdir: created directory '/etc/cray/csm/csm-release'
-```
+    Allocating group tables: done
+    Writing inode tables: done
+    Creating journal (131072 blocks): done
+    Writing superblocks and filesystem accounting information: mkdir done
+    ```
 
-Note that the below command does not return output on success:
+1. (`ncn#`) Create a directory for the mount point.
 
-```text
-ncn-m001:~ # mount /dev/rbd0 /etc/cray/csm/csm-release/
+    ```bash
+    mkdir -pv /etc/cray/csm/csm-release
+    ```
 
-ncn-m001:~ # mountpoint /etc/cray/csm/csm-release/
-/etc/cray/csm/csm-release/ is a mountpoint
-```
+    The output from this command will vary depending on whether or not the directory already exists.
+    Example output:
+
+    ```text
+    mkdir: created directory '/etc/cray/csm'
+    mkdir: created directory '/etc/cray/csm/csm-release'
+    ```
+
+1. (`ncn#`) Mount the `rbd` device.
+
+    ```bash
+    mount /dev/rbd0 /etc/cray/csm/csm-release/
+    ```
+
+    This command gives no output when successful.
+
+1. (`ncn#`) Validate the mount.
+
+    ```bash
+    mountpoint /etc/cray/csm/csm-release/
+    ```
+
+    Example output:
+
+    ```text
+    /etc/cray/csm/csm-release/ is a mountpoint
+    ```
 
 ### Move an `rbd` device to another node
 
-On node where the `rbd` device is mapped:
+1. (`ncn#`) Unmap the device on the node where it is currently mapped.
 
-```bash
-umount /etc/cray/csm/csm-release
-rbd unmap  -p csm-release release_version
-rbd showmapped
-```
+    1. Umount the `rbd` device.
 
-**NOTE:** There should be no output from the above unless other `rbd` devices are mapped on the node. In this case, it is a master node, which typically will not have mapped `rbd` devices.
+        ```bash
+        umount /etc/cray/csm/csm-release
+        ```
 
-Then run the following commands on the destination node (that is, the node where the `rbd` device is being remapped to).
+    1. Unmap the `rbd` device.
 
-```bash
-rbd map -p csm-release release_version
-rbd showmapped
-mkdir -pv /etc/cray/csm/csm-release 
-mount /dev/rbd0 /etc/cray/csm/csm-release
-```
+        ```bash
+        rbd unmap  -p csm-release release_version
+        ```
 
-Output:
+    1. Show the `rbd` mappings to verify that it has been removed.
 
-```text
-ncn-m002:~ # rbd map -p csm-release release_version
-/dev/rbd0
-```
+        ```bash
+        rbd showmapped
+        ```
 
-The following output will vary based on the existence of the directories.
+        **NOTE:** There should be no output from the above unless other `rbd` devices are mapped on the node.
 
-```text
-ncn-m002:~ # mkdir -pv /etc/cray/csm/csm-release
-mkdir: created directory '/etc/cray'
-mkdir: created directory '/etc/cray/csm'
-mkdir: created directory '/etc/cray/csm/csm-release'
+1. (`ncn#`) Map and mount the device on the destination node ((that is, the node where the `rbd` device is being remapped to).
 
-ncn-m002:~ # rbd showmapped
-id  pool         namespace  image            snap  device
-0   csm-release             release_version  -     /dev/rbd0
+    1. Map the `rbd` device.
 
-ncn-m002:~ # mount /dev/rbd0 /etc/cray/csm/csm-release/
-```
+        ```bash
+        rbd map -p csm-release release_version
+        ```
+
+        Example output:
+
+        ```text
+        /dev/rbd0
+        ```
+
+    1. Show the `rbd` mappings.
+
+        ```bash
+        rbd showmapped
+        ```
+
+        Example output:
+
+        ```text
+        id  pool         namespace  image            snap  device
+        0   csm-release             release_version  -     /dev/rbd0
+        ```
+
+    1. Create the mount point directory, if it does not already exist.
+
+        ```bash
+        mkdir -pv /etc/cray/csm/csm-release 
+        ```
+
+        The output from this command will vary depending on whether or not the directory already exists.
+
+    1. Mount the `rbd` device over the mount point.
+
+        ```bash
+        mount /dev/rbd0 /etc/cray/csm/csm-release
+        ```
+
+        This command gives no output when successful.
+
+    1. Validate the mount.
+
+        ```bash
+        mountpoint /etc/cray/csm/csm-release/
+        ```
+
+        Example output:
+
+        ```text
+        /etc/cray/csm/csm-release/ is a mountpoint
+        ```
 
 ### Unmount, unmap, and delete an `rbd` device
 
-```bash
-umount /etc/cray/csm/csm-release
-rbd unmap /dev/rbd0
-rbd showmapped
-rbd remove csm-release/release_version
-```
+1. (`ncn#`) Umount the `rbd` device.
 
-Output:
+    ```bash
+    umount /etc/cray/csm/csm-release
+    ```
 
-```text
-ncn-m001:~ # umount /etc/cray/csm/csm-release
-ncn-m001:~ # rbd unmap /dev/rbd0
-ncn-m001:~ # rbd showmapped
-ncn-m001:~ # rbd remove csm-release/release_version
-Removing image: 100% complete...done.
-```
+1. (`ncn#`) Unmap the `rbd` device.
+
+    ```bash
+    rbd unmap  -p csm-release release_version
+    ```
+
+1. (`ncn#`) Show the `rbd` mappings to verify that it has been removed.
+
+    ```bash
+    rbd showmapped
+    ```
+
+    **NOTE:** There should be no output from the above unless other `rbd` devices are mapped on the node.
+
+1. (`ncn#`) Remove the `rbd` device.
+
+    ```bash
+    rbd remove csm-release/release_version
+    ```
+
+    Output:
+
+    ```text
+    Removing image: 100% complete...done.
+    ```
 
 ### Remove a storage pool
 
 **CRITICAL NOTE:** This will permanently delete data.
 
-1. Check to see if the cluster is allowing pool deletion.
+1. (`ncn-ms#`) Check to see if the cluster is allowing pool deletion.
 
-   ```bash
-   ceph config get mon mon_allow_pool_delete
-   ```
+    ```bash
+    ceph config get mon mon_allow_pool_delete
+    ```
 
-   Output:
+    Example output:
 
-   ```text
-   ncn-s001:~ # ceph config get mon mon_allow_pool_delete
-   true
-   ```
+    ```text
+    true
+    ```
 
-   If the above command shows `false`, then enable it using the following command:
+    If the above command shows `false`, then enable it using the following command:
 
-   ```bash
-   ceph config set mon mon_allow_pool_delete true
-   ```
+    ```bash
+    ceph config set mon mon_allow_pool_delete true
+    ```
 
-1. Remove the pool.
+1. (`ncn-sm#`) Remove the pool.
 
-   ```bash
-   ceph osd pool rm csm-release csm-release --yes-i-really-really-mean-it
-   ```
+    ```bash
+    ceph osd pool rm csm-release csm-release --yes-i-really-really-mean-it
+    ```
 
-   Output:
+    Example output:
 
-   ```text
-   ncn-s001:~ # ceph osd pool rm csm-release csm-release --yes-i-really-really-mean-it
-   pool 'csm-release' removed
-   ```
+    ```text
+    pool 'csm-release' removed
+    ```
