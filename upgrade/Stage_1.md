@@ -28,13 +28,15 @@ Before starting Stage 1, access the Argo UI to view the progress of this stage. 
 
 ### Ensure `rbd` stats monitoring is enabled
 
-1. (ncn-m001#) Run the below commands to enable the `rbd` stats collection on the pools.
+1. (`ncn-m001#`) Run the below commands to enable the `rbd` stats collection on the pools.
 
 ```bash
 ceph config set mgr mgr/prometheus/rbd_stats_pools "kube,smf"
 ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600
 ```
+
 ***
+
 ## Stage completed
 
 All the Ceph nodes have been rebooted into the new image.
