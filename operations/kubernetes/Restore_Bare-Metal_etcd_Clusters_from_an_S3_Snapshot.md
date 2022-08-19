@@ -2,7 +2,8 @@
 
 The etcd cluster that serves Kubernetes on master nodes is backed up every 10 minutes. These backups are pushed to `Ceph Rados Gateway` \(S3\).
 
-Restoring the etcd cluster from backup is only meant to be used in a catastrophic scenario, whereby the Kubernetes cluster and master nodes are being rebuilt. This procedure shows how to restore the bare-metal etcd cluster from a `Simple Storage Service` \(S3\) snapshot.
+Restoring the etcd cluster from backup is only meant to be used in a catastrophic scenario, whereby the Kubernetes cluster and master nodes are being rebuilt.
+This procedure shows how to restore the bare-metal etcd cluster from a `Simple Storage Service` \(S3\) snapshot.
 
 The etcd cluster needs to be restored from a backup when the Kubernetes cluster and master nodes are being rebuilt.
 
@@ -50,7 +51,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         mv etcd-backup-2020-02-04-18-50-03/etcd-dump.bin /tmp
         ```
 
-    2. Push the file to the other NCN master nodes. 
+    2. Push the file to the other NCN master nodes.
 
         ```bash
         scp /tmp/etcd-dump.bin ncn-m002:/tmp
@@ -67,7 +68,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
         mkdir /tmp/etcd_restore
         ```
 
-    3. Change to the /tmp/etcd_restore directory.
+    3. Change to the `/tmp/etcd_restore` directory.
 
         ```bash
         cd /tmp/etcd_restore
@@ -106,7 +107,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
 
     1. Log in as root to `ncn-m002`.
 
-    2. Create a new temporary /tmp/etcd\_restore directory.
+    2. Create a new temporary `/tmp/etcd_restore` directory.
 
         ```bash
         mkdir /tmp/etcd_restore
@@ -151,7 +152,7 @@ The Kubernetes cluster on master nodes is being rebuilt.
 
     1. Log in as root to `ncn-m003`.
 
-    2. Create a new temporary /tmp/etcd\_restore directory.
+    2. Create a new temporary `/tmp/etcd_restore` directory.
 
         ```bash
         mkdir /tmp/etcd_restore
@@ -260,4 +261,3 @@ The Kubernetes cluster on master nodes is being rebuilt.
     986f6ff2a30b01cb, started, ncn-m002, https://10.252.1.8:2380, https://10.252.1.8:2379,https://127.0.0.1:2379, false
     d5a8e497e2788510, started, ncn-m003, https://10.252.1.9:2380, https://10.252.1.9:2379,https://127.0.0.1:2379, false
     ```
-
