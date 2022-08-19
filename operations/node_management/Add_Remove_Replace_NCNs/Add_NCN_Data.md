@@ -6,9 +6,9 @@
 * [Prerequisites](#prerequisites)
 * [Procedure](#procedure)
   * [Collect information from the NCN](#collect-information-from-the-ncn)
-    * [Saving/Reloading](#savingreloading)
-  * [Collect MAC Addresses from the NCN](#collect-mac-addresses-from-the-ncn)
-    * [Swapping/Moving an NCN](#swappingmoving-an-ncn)
+    * [Saving/reloading](#savingreloading)
+  * [Collect MAC addresses from the NCN](#collect-mac-addresses-from-the-ncn)
+    * [Swapping/moving an NCN](#swappingmoving-an-ncn)
     * [Adding a new NCN](#adding-a-new-ncn)
 * [Next step](#next-step)
 
