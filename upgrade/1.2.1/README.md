@@ -7,7 +7,7 @@ Earlier version of CSM must first be upgraded to at least `v1.2.0`. For informat
 
 ## Bug Fixes
 
-* Fixes two issues in CFS, restoring the AdditionalInventory field functionality.
+* Fixes two issues in CFS, restoring the additional inventory field functionality.
 * Fixes an issue restoring console services functionality on "Hill" cabinets.
 * Fixes a few issues in PowerDNS where various records were missing in the AXFR transfer.
 * Fixes a rare issue where the Istio container is not available during the upgrade to CSM 1.3.0.
