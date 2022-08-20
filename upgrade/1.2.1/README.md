@@ -7,18 +7,18 @@ Earlier version of CSM must first be upgraded to at least `v1.2.0`. For informat
 
 ## Bug Fixes
 
-* Fixes CFS so the AdditionalInventory field can be modified as expected.
+* Fixes two issues in CFS, restoring the AdditionalInventory field functionality.
 * Fixes an issue restoring console services functionality on "Hill" cabinets.
-* Fixes a few issues in PowerDNS where various records where missing in the AXFR transfer.
+* Fixes a few issues in PowerDNS where various records were missing in the AXFR transfer.
 * Fixes a rare issue where the Istio container is not available during the upgrade to CSM 1.3.0.
-* Fixes an issue where a modified NCN image can no longer boot to disk when specified.
-* Fixes a rare issue where NCNs booted with a modified image had NO-CARRIER on all network interfaces.
-* Fixes an issue where CANU generates incorrect VLANs for switch ports connected to UANs when the CHN is configured.
+* Fixes an issue where a modified NCN image can no longer boot to disk when specified instead of the default PXE boot.
+* Fixes a rare issue where NCNs booted with a modified image containing Slingshot Host Software had NO-CARRIER on all network interfaces.
+* Fixes an issue where CANU generates incorrect VLANs for switch ports connected to UANs over the CHN.
 
 ## Known Issues
 
-- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release). During the upgrade, a workaround is applied to fix this.
-- The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
+* `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release). During the upgrade, a workaround is applied to fix this.
+* The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
 
 ## Steps
 
