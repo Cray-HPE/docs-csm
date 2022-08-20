@@ -5,10 +5,20 @@
 This document guides an administrator through the upgrade to Cray Systems Management `v1.2.1` from `v1.2.0`.
 Earlier version of CSM must first be upgraded to at least `v1.2.0`. For information on how to do that, see [Upgrade CSM](../index.md).
 
+## Bug Fixes
+
+* Fixes two issues in CFS, restoring the additional inventory field functionality.
+* Fixes an issue restoring console services functionality on "Hill" cabinets.
+* Fixes a few issues in PowerDNS where various records were missing in the AXFR transfer.
+* Fixes a rare issue where the Istio container is not available during the upgrade to CSM 1.3.0.
+* Fixes an issue where a modified NCN image can no longer boot to disk when specified instead of the default PXE boot.
+* Fixes a rare issue where NCNs booted with a modified image containing Slingshot Host Software had NO-CARRIER on all network interfaces.
+* Fixes an issue where CANU generates incorrect VLANs for switch ports connected to UANs over the CHN.
+
 ## Known Issues
 
-- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release). During the upgrade, a workaround is applied to fix this.
-- The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
+* `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release). During the upgrade, a workaround is applied to fix this.
+* The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
 
 ## Steps
 
@@ -19,9 +29,9 @@ Earlier version of CSM must first be upgraded to at least `v1.2.0`. For informat
 1. [Verification](#verification)
 1. [Complete upgrade](#complete-upgrade)
 
-## Upgrade CSM network configuration
+## Optional: Upgrade CSM network configuration
 
-Before proceeding with the patch installation. Upgrade the CSM management network configuration.
+If you are using the CHN network tech preview, upgrade the CSM management network configuration before proceeding with the patch installation.
 
 Detailed information on the fixes and configuration updates after CANU release 1.6.5 can be found from [CANU release notes](../../operations/network/management_network/canu_install_update.md)
 
