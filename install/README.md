@@ -31,7 +31,6 @@ shown here with numbered topics.
     1. [Import CSM tarball](#3-import-csm-tarball)
     1. [Create system configuration](#4-create-system-configuration)
     1. [Configure management network switches](#5-configure-management-network-switches)
-    1. [Identify inventory](#6-identify-inventory)
 1. [Installation](#installation)
     1. [Deploy management nodes](#1-deploy-management-nodes)
     1. [Install CSM services](#2-install-csm-services)
@@ -88,23 +87,6 @@ At this point external connectivity has been established, and either bare-metal 
 be installed or new/updated configurations can be applied.
 
 See [Management Network User Guide](../operations/network/management_network/README.md).
-
-### 6. Identify inventory
-
-At this point inventory can be identified. This is important for validating the SHCD. Specifically
-BMCs will be located, interrogated, and their node types identified.
-
-**This section is not yet complete and exists as a placeholder. Move onto [Installation](#installation).**
-
-**`TODO: Add page for identification.`**
-
-### Find expected BMCs
-
-**`TODO: Add page for detailing identification.`**
-
-### Boot identified BMCs
-
-**`TODO: Add page for detailing boot directions with the ephemeral discovery ROM.`**
 
 ## Installation
 
