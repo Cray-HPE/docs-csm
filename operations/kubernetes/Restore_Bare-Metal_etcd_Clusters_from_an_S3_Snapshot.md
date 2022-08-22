@@ -13,245 +13,175 @@ The Kubernetes cluster on master nodes is being rebuilt.
 
 ## Procedure
 
+1. [Preparation](#1-preparation)
+1. [Restore member directory](#2-restore-member-directory)
+1. [Restart the cluster](#3-restart-the-cluster)
+
+### 1. Preparation
+
+This procedure can be run on any master NCN.
+
 1. Select a snapshot to restore a backup.
 
-    The following command lists the available backups. It must be run from the `/opt/cray/platform-utils/s3` directory on a master NCN.
-    Shown here for `ncn-m001`, but could be executed on any of the master nodes.
+    1. List the available backups.
+    
+        ```bash
+        ncn-m# cd /opt/cray/platform-utils/s3 && ./list-objects.py --bucket-name etcd-backup
+        ```
 
-    ```bash
-    ncn-m001# ./list-objects.py --bucket-name etcd-backup
-    ```
+        Example output:
 
-    Example output:
+        ```text
+        bare-metal/etcd-backup-2020-02-04-18-00-10.tar.gz
+        bare-metal/etcd-backup-2020-02-04-18-10-06.tar.gz
+        bare-metal/etcd-backup-2020-02-04-18-20-02.tar.gz
+        bare-metal/etcd-backup-2020-02-04-18-30-10.tar.gz
+        bare-metal/etcd-backup-2020-02-04-18-40-06.tar.gz
+        bare-metal/etcd-backup-2020-02-04-18-50-03.tar.gz
+        ```
 
-    ```text
-    bare-metal/etcd-backup-2020-02-04-18-00-10.tar.gz
-    bare-metal/etcd-backup-2020-02-04-18-10-06.tar.gz
-    bare-metal/etcd-backup-2020-02-04-18-20-02.tar.gz
-    bare-metal/etcd-backup-2020-02-04-18-30-10.tar.gz
-    bare-metal/etcd-backup-2020-02-04-18-40-06.tar.gz
-    bare-metal/etcd-backup-2020-02-04-18-50-03.tar.gz
-    ```
+    1. Set the `BACKUP_NAME` variable to the file name of the desired backup from the list.
 
-    Note the file name for the desired snapshot/backup.
+        Omit the `bare-metal/` prefix shown in the output of the previous command, as well as the `.tar.gz` suffix.
+
+        For example:
+
+        ```bash
+        ncn-m# BACKUP_NAME=etcd-backup-2020-02-04-18-50-03
+        ```
 
 1. Download the snapshot and copy it to all NCN master nodes.
 
     1. Retrieve the backup from S3 and uncompress it.
 
         ```bash
-        ncn-m001# mkdir /tmp/etcd_restore
-        ncn-m001# cd /opt/cray/platform-utils/s3
-        ncn-m001# ./download-file.py --bucket-name etcd-backup \
-        --key-name bare-metal/etcd-backup-2020-02-04-18-50-03.tar.gz \
-        --file-name /tmp/etcd_restore/etcd-backup-2020-02-04-18-50-03.tar.gz
-        ncn-m001# cd /tmp/etcd_restore
-        ncn-m001# gunzip etcd-backup-2020-02-04-18-50-03.tar.gz
-        ncn-m001# tar -xvf etcd-backup-2020-02-04-18-50-03.tar
-        ncn-m001# mv etcd-backup-2020-02-04-18-50-03/etcd-dump.bin /tmp
+        ncn-m# mkdir /tmp/etcd_restore
+        ncn-m# cd /opt/cray/platform-utils/s3
+        ncn-m# ./download-file.py --bucket-name etcd-backup \
+                    --key-name "bare-metal/${BACKUP_NAME}.tar.gz" \
+                    --file-name "/tmp/etcd_restore/${BACKUP_NAME}.tar.gz"
+        ncn-m# cd /tmp/etcd_restore
+        ncn-m# gunzip "${BACKUP_NAME}.tar.gz"
+        ncn-m# tar -xvf "${BACKUP_NAME}.tar"
+        ncn-m# mv -v "${BACKUP_NAME}/etcd-dump.bin" /tmp
         ```
 
-    2. Push the file to the other NCN master nodes.
+    1. Push the file to the other NCN master nodes.
+
+        If not running these steps on `ncn-m001`, adjust the NCN names in the following command accordingly.
 
         ```bash
-        ncn-m001# scp /tmp/etcd-dump.bin ncn-m002:/tmp
-        ncn-m001# scp /tmp/etcd-dump.bin ncn-m003:/tmp
+        ncn-m# scp /tmp/etcd-dump.bin ncn-m002:/tmp
+        ncn-m# scp /tmp/etcd-dump.bin ncn-m003:/tmp
         ```
 
-1. Prepare to restore the member directory for `ncn-m001`.
+### 2. Restore member directory
 
-    1. Log in as root to `ncn-m001`.
+The following procedure must be performed on all master nodes, one at a time. The order does not matter.
 
-    2. Create a new temporary `/tmp/etcd_restore` directory. If step 2.1 was executed on `ncn-m001`, the `/tmp/etcd_restore` directory already exists.
+1. Create a new temporary `/tmp/etcd_restore` directory, if it does not already exist.
+
+    ```bash
+    ncn-m# mkdir -pv /tmp/etcd_restore
+    ```
+
+1. Change to the `/tmp/etcd_restore` directory.
+
+    ```bash
+    ncn-m# cd /tmp/etcd_restore
+    ```
+
+1. Retrieve values from the `kubeadmcfg.yaml` file.
+
+    These values will be saved in variables and used in the following step.
+
+    1. Retrieve the node name.
+
+        The value should be the name of the master node where this command is being run (for example, `ncn-m002`).
 
         ```bash
-        ncn-m001# mkdir /tmp/etcd_restore
+        ncn-m# NODE_NAME=$(yq r /etc/kubernetes/kubeadmcfg.yaml 'etcd.local.extraArgs.name') ; echo "${NODE_NAME}"
         ```
 
-    3. Change to the `/tmp/etcd_restore` directory.
+
+    1. Retrieve the initial cluster.
 
         ```bash
-        ncn-m001# cd /tmp/etcd_restore
-        ```
-
-    4. Retrieve the `initial-cluster` and `initial-advertise-peer-urls` values from the `kubeadmcfg.yaml` file.
-
-        The returned values will be used in the next step.
-
-        ```bash
-        ncn-m001# grep -e initial-cluster: -e initial-advertise-peer-urls: \
-        /etc/kubernetes/kubeadmcfg.yaml
+        ncn-m# INIT_CLUSTER=$(yq r /etc/kubernetes/kubeadmcfg.yaml 'etcd.local.extraArgs.initial-cluster'); echo "${INIT_CLUSTER}"
         ```
 
         Example output:
 
         ```text
-        initial-cluster: ncn-m001=https://10.252.1.7:2380,ncn-m002=https://10.252.1.8:2380,ncn-m003=https://10.252.1.9:2380
-        initial-advertise-peer-urls: https://10.252.1.7:2380
+        ncn-m001=https://10.252.1.10:2380,ncn-m002=https://10.252.1.9:2380,ncn-m003=https://10.252.1.8:2380
         ```
 
-    5. Restore the member directory.
+    1. Retrieve the initial advertise peer URLs.
 
         ```bash
-        ncn-m001# ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \
-          --cert /etc/kubernetes/pki/etcd/server.crt \
-          --key /etc/kubernetes/pki/etcd/server.key \
-          --name ncn-m001 \
-          --initial-cluster ncn-m001=https://10.252.1.7:2380,ncn-m002=https://10.252.1.8:2380,ncn-m003=https://10.252.1.9:2380 \
-          --initial-cluster-token tkn \
-          --initial-advertise-peer-urls https://10.252.1.7:2380 \
-          snapshot restore /tmp/etcd-dump.bin
-        ```
-
-1. Prepare to restore the member directory for `ncn-m002`.
-
-    1. Log in as root to `ncn-m002`.
-
-    2. Create a new temporary `/tmp/etcd_restore` directory.
-
-        ```bash
-        ncn-m002# mkdir /tmp/etcd_restore
-        ```
-
-    3. Change to the `/tmp/etcd_restore` directory.
-
-        ```bash
-        ncn-m002# cd /tmp/etcd_restore
-        ```
-
-    4. Retrieve the `initial-cluster` and `initial-advertise-peer-urls` values from the `kubeadmcfg.yaml` file.
-
-        The returned values will be used in the next step.
-
-        ```bash
-        ncn-m002# grep -e initial-cluster: -e initial-advertise-peer-urls: \
-        /etc/kubernetes/kubeadmcfg.yaml
+        ncn-m# INIT_URLS=$(yq r /etc/kubernetes/kubeadmcfg.yaml 'etcd.local.extraArgs.initial-advertise-peer-urls'); echo "${INIT_URLS}"
         ```
 
         Example output:
 
         ```text
-        initial-cluster: ncn-m001=https://10.252.1.7:2380,ncn-m002=https://10.252.1.8:2380,ncn-m003=https://10.252.1.9:2380
-        initial-advertise-peer-urls: https://10.252.1.8:2380
+        https://10.252.1.10:2380
         ```
 
-    5. Restore the member directory.
+1. Restore the member directory.
+
+    ```bash
+    ncn-m# ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \
+                --cert /etc/kubernetes/pki/etcd/server.crt \
+                --key /etc/kubernetes/pki/etcd/server.key \
+                --name "${NODE_NAME}" \
+                --initial-cluster "${INIT_CLUSTER}" \
+                --initial-cluster-token tkn \
+                --initial-advertise-peer-urls "${INIT_URLS}" \
+                snapshot restore /tmp/etcd-dump.bin
+    ```
+
+Repeat the steps in this section on the next master node, until they have been performed on every master node.
+
+### 3. Restart the cluster
+
+1. Stop the cluster.
+
+    Run the following command on **each master node**.
+
+    > If the etcd cluster is not currently running, this step can be skipped.
+
+    ```bash
+    ncn-m# systemctl stop etcd
+    ```
+
+1. Start the restored etcd cluster on **every** master node.
+
+    Do the following steps on **each master node**.
+
+    1. Set a variable with the node name of the current master node.
 
         ```bash
-        ncn-m002# ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \
-        --cert /etc/kubernetes/pki/etcd/server.crt \
-        --key /etc/kubernetes/pki/etcd/server.key \
-        --name ncn-m002 \
-        --initial-cluster ncn-m001=https://10.252.1.7:2380,ncn-m002=https://10.252.1.8:2380,ncn-m003=https://10.252.1.9:2380 \
-        --initial-cluster-token tkn \
-        --initial-advertise-peer-urls https://10.252.1.8:2380 \
-        snapshot restore /tmp/etcd-dump.bin
+        ncn-m# NODE_NAME=ncn-mxxx
         ```
 
-1. Prepare to restore the member directory for `ncn-m003`.
-
-    1. Log in as root to `ncn-m003`.
-
-    2. Create a new temporary `/tmp/etcd_restore` directory.
+    1. Run the following commands.
 
         ```bash
-        ncn-m003# mkdir /tmp/etcd_restore
-        ```
-
-    3. Change to the `/tmp/etcd_restore` directory.
-
-        ```bash
-        ncn-m003# cd /tmp/etcd_restore
-        ```
-
-    4. Retrieve the `initial-cluster` and `initial-advertise-peer-urls` values from the `kubeadmcfg.yaml` file.
-
-        The returned values will be used in the next step.
-
-        ```bash
-        ncn-m003# grep -e initial-cluster: -e initial-advertise-peer-urls: \
-        /etc/kubernetes/kubeadmcfg.yaml
-        ```
-
-        Example output:
-
-        ```text
-        initial-cluster: ncn-m001=https://10.252.1.7:2380,ncn-m002=https://10.252.1.8:2380,ncn-m003=https://10.252.1.9:2380
-        initial-advertise-peer-urls: https://10.252.1.9:2380
-        ```
-
-    5. Restore the member directory.
-
-        ```bash
-        ncn-m003# ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \
-        --cert /etc/kubernetes/pki/etcd/server.crt \
-        --key /etc/kubernetes/pki/etcd/server.key \
-        --name ncn-m003 \
-        --initial-cluster ncn-m001=https://10.252.1.7:2380,ncn-m002=https://10.252.1.8:2380,ncn-m003=https://10.252.1.9:2380 \
-        --initial-cluster-token tkn \
-        --initial-advertise-peer-urls https://10.252.1.9:2380 \
-        snapshot restore /tmp/etcd-dump.bin
-        ```
-
-1. Stop the current running cluster.
-
-    If the cluster is currently running, run the following command on all three master nodes \(`ncn-m001`, `ncn-m002`, `ncn-m003`\).
-
-    1. Stop the cluster on `ncn-m001`.
-
-        ```bash
-        ncn-m001# systemctl stop etcd
-        ```
-
-    2. Stop the cluster on `ncn-m002`.
-
-        ```bash
-        ncn-m002# systemctl stop etcd
-        ```
-
-    3. Stop the cluster on `ncn-m003`.
-
-        ```bash
-        ncn-m003# systemctl stop etcd
-        ```
-
-1. Start the restored cluster on each master node.
-
-    Run the following commands on all three master nodes \(`ncn-m001`, `ncn-m002`, `ncn-m003`\) to start the restored cluster.
-
-    1. Start the cluster on `ncn-m001`.
-
-        ```bash
-        ncn-m001# rm -rf /var/lib/etcd/member
-        ncn-m001# cd /tmp/etcd_restore
-        ncn-m001# mv ncn-m001.etcd/member/ /var/lib/etcd/
-        ncn-m001# systemctl start etcd
-        ```
-
-    2. Start the cluster on `ncn-m002`.
-
-        ```bash
-        ncn-m002# rm -rf /var/lib/etcd/member
-        ncn-m002# cd /tmp/etcd_restore
-        ncn-m002# mv ncn-m002.etcd/member/ /var/lib/etcd/
-        ncn-m002# systemctl start etcd
-        ```
-
-    3. Start the cluster on `ncn-m003`.
-
-        ```bash
-        ncn-m003# rm -rf /var/lib/etcd/member
-        ncn-m003# cd /tmp/etcd_restore
-        ncn-m003# mv ncn-m003.etcd/member/ /var/lib/etcd/
-        ncn-m003# systemctl start etcd
+        ncn-m# rm -rvf /var/lib/etcd/member &&
+               cd /tmp/etcd_restore &&
+               mv -v ${NODE_NAME}.etcd/member/ /var/lib/etcd/ &&
+               systemctl start etcd
         ```
 
 1. Confirm the membership of the cluster.
 
+    This command can be run on any master node.
+
     ```bash
-    ncn-m001# ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \
-    --cert /etc/kubernetes/pki/etcd/server.crt \
-    --key /etc/kubernetes/pki/etcd/server.key member list
+    ncn-m# ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \
+        --cert /etc/kubernetes/pki/etcd/server.crt \
+        --key /etc/kubernetes/pki/etcd/server.key member list
     ```
 
     Example output:
