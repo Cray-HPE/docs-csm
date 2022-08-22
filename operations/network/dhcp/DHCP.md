@@ -6,7 +6,6 @@ For more information: [`https://www.isc.org/kea/`](https://www.isc.org/kea/).
 
 The following improvements to the DHCP service are included:
 
-- Persistent and resilient data store for DHCP leases in Postgres
 - API access to manage DHCP
 - Scalable pod that uses MetalLB instead of host networking
 - Options for updates to HPE Cray EX management system IP addresses
