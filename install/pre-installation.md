@@ -39,8 +39,6 @@ Any steps run on an `external` server require that server to have the following 
 
 ### 1.1 Prepare installation environment server
 
-**`TODO: Manually validate the m001 firmware, UEFI settings, and cabling`**
-
 1. (`external#`) Download the CSM software release from the public Artifactory instance.
 
    > **NOTES:**
