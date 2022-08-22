@@ -38,12 +38,6 @@ Example output:
 
 ```
 cray-dhcp-kea-api              ClusterIP     10.26.142.204  <none>         8000/TCP      5d23h
-cray-dhcp-kea-postgres         ClusterIP     10.19.97.142   <none>         5432/TCP      5d23h
-cray-dhcp-kea-postgres-0       ClusterIP     10.30.214.27   <none>         5432/TCP      5d23h
-cray-dhcp-kea-postgres-1       ClusterIP     10.27.232.156  <none>         5432/TCP      5d23h
-cray-dhcp-kea-postgres-2       ClusterIP     10.22.242.251  <none>         5432/TCP      5d23h
-cray-dhcp-kea-postgres-config  ClusterIP     None           <none>         <none>        5d23h
-cray-dhcp-kea-postgres-repl    ClusterIP     10.17.107.16   <none>         5432/TCP      5d23h
 cray-dhcp-kea-tcp-hmn          LoadBalancer  10.24.79.120   10.94.100.222  67:32120/TCP  5d23h
 cray-dhcp-kea-tcp-nmn          LoadBalancer  10.19.139.179  10.92.100.222  67:31652/TCP  5d23h
 cray-dhcp-kea-udp-hmn          LoadBalancer  10.25.203.31   10.94.100.222  67:30840/UDP  5d23h
@@ -60,9 +54,6 @@ Example output:
 
 ```
 cray-dhcp-kea-788b4c899b-x6ltd 3/3 Running 0 36h 10.40.3.183 ncn-w002 <none> <none>
-cray-dhcp-kea-postgres-0 2/2 Running 0 5d23h 10.40.3.121 ncn-w002 <none> <none>
-cray-dhcp-kea-postgres-1 2/2 Running 0 5d23h 10.42.2.181 ncn-w003 <none> <none>
-cray-dhcp-kea-postgres-2 2/2 Running 0 5d23h 10.39.0.208 ncn-w001 <none> <none>
 ```
 
 The pods should be in a `Running` state. The output above will also indicate which worker node the `kea-dhcp` pod is currently running on.
