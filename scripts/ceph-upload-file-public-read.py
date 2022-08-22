@@ -34,7 +34,7 @@ import boto3
 import botocore
 from botocore.config import Config
 S3_CONNECT_TIMEOUT=60
-S3_READ_TIMEOUT=1
+S3_READ_TIMEOUT=60
 
 
 
