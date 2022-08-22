@@ -2,11 +2,11 @@
 
 There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol \(DHCP\) servers.
 
-## Incorrect DHCP IP Addresses
+## Incorrect DHCP IP addresses
 
 One of the most common issues is when the DHCP IP addresses are not matching in the Domain Name Service \(DNS\).
 
-Check to make sure `cray-dhcp` is not running in Kubernetes:
+(`ncn-mw#`) Check to make sure `cray-dhcp` is not running in Kubernetes:
 
 ```bash
 kubectl get pods -A | grep cray-dhcp
@@ -18,17 +18,17 @@ Example output:
 services  cray-dhcp-5f8c8767db-hg6ch       1/1     Running   0          35d
 ```
 
-If the `cray-dhcp` pod is running, use the following command to shut down the pod:
+(`ncn-mw#`) If the `cray-dhcp` pod is running, use the following command to shut down the pod:
 
 ```bash
 kubectl scale deploy cray-dhcp --replicas=0
 ```
 
-If the IP addresses are still not lining up with DNS and `cray-dhcp` is confirmed not running, wait 800 seconds for DHCP leases to expire and renew.
+If the IP addresses are still not lining up with DNS and `cray-dhcp` is confirmed not running, then wait 800 seconds for DHCP leases to expire and renew.
 
-## Verify the Status of the `cray-dhcp-kea` Pods and Services
+## Verify the status of the `cray-dhcp-kea` pods and services
 
-Check to see if the Kea DHCP services are running:
+(`ncn-mw#`) Check to see if the Kea DHCP services are running:
 
 ```bash
 kubectl get services -n services | grep kea
@@ -44,7 +44,9 @@ cray-dhcp-kea-udp-hmn          LoadBalancer  10.25.203.31   10.94.100.222  67:30
 cray-dhcp-kea-udp-nmn          LoadBalancer  10.19.187.168  10.92.100.222  67:31904/UDP  5d23h
 ```
 
-If the services shown in the output above are not present, it could be an indication that something is not working correctly. To check to see if the Kea pods are running:
+If the services shown in the output above are not present, then it could be an indication that something is not working correctly.
+
+(`ncn-mw#`) To check to see if the Kea pods are running:
 
 ```bash
 kubectl get pods -n services -o wide | grep kea
@@ -58,7 +60,7 @@ cray-dhcp-kea-788b4c899b-x6ltd 3/3 Running 0 36h 10.40.3.183 ncn-w002 <none> <no
 
 The pods should be in a `Running` state. The output above will also indicate which worker node the `kea-dhcp` pod is currently running on.
 
-To restart the pods:
+(`ncn-mw#`) To restart the pods:
 
 ```bash
 kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
@@ -66,88 +68,88 @@ kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
 
 Use the command mentioned above to verify the pods are running again after restarting the pods.
 
-## Check the Current DHCP Leases
+## Check the current DHCP leases
 
-Use the Kea API to retrieve data from the DHCP lease database. An authentication token will be needed to access the Kea API. To retrieve a token, run the following command from an NCN worker or manager:
+Use the Kea API to retrieve data from the DHCP lease database. An authentication token will be needed to access the Kea API.
+
+(`ncn#`) To retrieve a token:
 
 ```bash
-export TOKEN=$(curl -s -k -S -d grant_type=client_credentials \
--d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
--o jsonpath='{.data.client-secret}' | base64 -d` \
-https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
-| jq -r '.access_token')
+export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
+                 -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
+               | jq -r '.access_token')
 ```
 
 Once a token has been generated, the DHCP lease database can be viewed. The commands below are the most effective way to check the current DHCP leases:
 
-- View all leases:
+- (`ncn#`) View all leases:
 
   ```bash
   curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
-  -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
-  https://api-gw-service-nmn.local/apis/dhcp-kea | jq
+    -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq
   ```
 
-- View the total amount of leases:
+- (`ncn#`) View the total number of leases:
 
   ```bash
   curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
-  -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
-  https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].text'
+    -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].text'
   ```
 
-- Use an IP address to search for a hostname or MAC address:
+- (`ncn#`) Use an IP address to search for a hostname or MAC address:
 
   ```bash
   curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
-  -d '{ "command": "lease4-get", "service": [ "dhcp4" ], "arguments": { "ip-address": "x.x.x.x" } }' \
-  https://api-gw-service-nmn.local/apis/dhcp-kea | jq
+    -d '{ "command": "lease4-get", "service": [ "dhcp4" ], "arguments": { "ip-address": "x.x.x.x" } }' \
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq
   ```
 
-- Use a MAC address to find a hostname or IP address:
+- (`ncn#`) Use a MAC address to find a hostname or IP address:
 
   ```bash
   curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
-  -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
-  https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].arguments.leases[] | \
-  select(."hw-address"=="XX:XX:XX:XX:XX:5d")'
+    -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].arguments.leases[] | \
+    select(."hw-address"=="XX:XX:XX:XX:XX:5d")'
   ```
 
-- Use a hostname to find a MAC address or IP address:
+- (`ncn#`) Use a hostname to find a MAC address or IP address:
 
   ```bash
   curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
-  -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
-  https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].arguments.leases[] | \
-  select(."hostname"=="xNAME")'
+    -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' \
+    https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].arguments.leases[] | \
+    select(."hostname"=="xNAME")'
   ```
 
-## Check the Hardware State Manager \(HSM\) for Issues
+## Check the Hardware State Manager \(HSM\) for issues
 
 The HSM includes two important components:
 
 - Systems Layout Service \(SLS\): This is the expected state of the system.
 - State Manager Daemon \(SMD\): This is the discovered or active state of the system during runtime.
 
-To view the information stored in SLS for a specific component name (xname):
+(`ncn-mw#`) To view the information stored in SLS for a specific component name (xname):
 
 ```bash
 cray sls hardware describe XNAME
 ```
 
-To view the information in SMD:
+(`ncn-mw#`) To view the information in SMD:
 
 ```bash
 cray hsm inventory ethernetInterfaces describe XNAME
 ```
 
-## View the `cray-dhcp-kea` Logs
+## View the `cray-dhcp-kea` logs
 
-The specific pod name is needed in order to check the logs for a pod. Run the command below to see the pod name:
+(`ncn-mw#`) To view the Kea logs:
 
 ```bash
-kubectl logs -n services -l \
-app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea
+kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea
 ```
 
 Example output:
@@ -165,24 +167,17 @@ waiting 10 seconds for any leases to be given out...
 2020-08-03 21:48:22.734 INFO  [kea-dhcp4.commands/10] COMMAND_RECEIVED Received command 'config-get'
 ```
 
-To view the Kea logs:
+## `tcpdump`
 
-```bash
-kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea \
--c cray-dhcp-kea | grep -i error
-```
-
-## TCPDUMP
-
-If a host is not getting an IP address, run a packet capture to see if DHCP traffic is being transmitted.
+(`ncn#`) If a host is not getting an IP address, then run a packet capture to see if DHCP traffic is being transmitted.
 
 ```bash
 tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68
 ```
 
-This will create a file named `dhcp.pcap` in the current directory. It will collect all DHCP traffic on the specified port. In this example. it would be the DHCP traffic on interface `bond0.nmn0` \(10.252.0.0/17\).
+This will create a file named `dhcp.pcap` in the current directory. It will collect all DHCP traffic on the specified port. In this example. it would be the DHCP traffic on interface `bond0.nmn0` \(`10.252.0.0/17`\).
 
-To view the DHCP traffic:
+(`ncn#`) To view the DHCP traffic:
 
 ```bash
 tcpdump -r dhcp.pcap -v -n
@@ -190,7 +185,7 @@ tcpdump -r dhcp.pcap -v -n
 
 The output may be very long, so use any desired filters to narrow the results.
 
-To do a `tcpdump` for a certain MAC address:
+(`ncn#`) To do a `tcpdump` for a certain MAC address:
 
 ```bash
 tcpdump -i eth0 -vvv -s 1500 '((port 67 or port 68) and (udp[38:4] = 0x993b7030))'
@@ -198,14 +193,14 @@ tcpdump -i eth0 -vvv -s 1500 '((port 67 or port 68) and (udp[38:4] = 0x993b7030)
 
 This example is using the MAC of `b4:2e:99:3b:70:30`. It will show the output on the terminal and will not save to a file.
 
-## Verify that MetalLB/BGP Peering and Routes are Correct
+## Verify that MetalLB/BGP peering and routes are correct
 
 Log in to the spine switches and check that MetalLB is peering to the spines via BGP.
 
-Check both spines if they are available and powered up. All worker nodes should be peered with the spine BGP.
+(`sw-spine#`) Check both spines if they are available and powered up. All worker nodes should be peered with the spine BGP.
 
-```bash
-sw-spine-001 [standalone: master] # show ip bgp neighbors
+```text
+show ip bgp neighbors
 ```
 
 Example output:
@@ -232,10 +227,10 @@ BGP neighbor: 10.252.0.4, remote AS: 65533, link: internal:
   Minimum holdtime from neighbor in seconds            : 90
 ```
 
-Confirm that routes to Kea \(10.92.100.222\) via all the NCN worker nodes are available:
+(`sw-spine#`) Confirm that routes to Kea \(`10.92.100.222`\) via all the NCN worker nodes are available:
 
-```bash
-sw-spine-001 [standalone: master] # show ip route 10.92.100.222
+```text
+show ip route 10.92.100.222
 ```
 
 Example output:
