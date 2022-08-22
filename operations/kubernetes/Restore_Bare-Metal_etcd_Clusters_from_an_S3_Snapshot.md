@@ -24,7 +24,7 @@ This procedure can be run on any master NCN.
 1. (`ncn-m#`) Select a snapshot to restore a backup.
 
     1. List the available backups.
-    
+
         ```bash
         cd /opt/cray/platform-utils/s3 && ./list-objects.py --bucket-name etcd-backup
         ```
@@ -102,7 +102,6 @@ The following procedure must be performed on all master nodes, one at a time. Th
         ```bash
         NODE_NAME=$(yq r /etc/kubernetes/kubeadmcfg.yaml 'etcd.local.extraArgs.name') ; echo "${NODE_NAME}"
         ```
-
 
     1. Retrieve the initial cluster.
 
