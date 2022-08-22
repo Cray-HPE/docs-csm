@@ -52,9 +52,9 @@ kubectl get pods -n services -o wide | grep kea
 
 Example output:
 
-```
-cray-dhcp-kea-788b4c899b-x6ltd 3/3 Running 0 36h 10.40.3.183 ncn-w002 <none> <none>
 ```text
+cray-dhcp-kea-788b4c899b-x6ltd 3/3 Running 0 36h 10.40.3.183 ncn-w002 <none> <none>
+```
 
 The pods should be in a `Running` state. The output above will also indicate which worker node the `kea-dhcp` pod is currently running on.
 
