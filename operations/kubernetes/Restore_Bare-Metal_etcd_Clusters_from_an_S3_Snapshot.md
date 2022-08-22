@@ -2,8 +2,8 @@
 
 The etcd cluster that serves Kubernetes on master nodes is backed up every 10 minutes. These backups are pushed to `Ceph Rados Gateway` \(S3\).
 
-Restoring the etcd cluster from backup is only meant to be used in a catastrophic scenario, whereby the Kubernetes cluster and master nodes are being rebuilt.
-This procedure shows how to restore the bare-metal etcd cluster from an `Simple Storage Service` \(S3\) snapshot.
+Restoring the etcd cluster from backup is only meant to be used in a catastrophic scenario, in which the Kubernetes cluster and master nodes are being rebuilt.
+This procedure shows how to restore the bare-metal etcd cluster from a `Simple Storage Service` \(S3\) snapshot.
 
 The etcd cluster needs to be restored from a backup when the Kubernetes cluster and master nodes are being rebuilt.
 
