@@ -85,3 +85,31 @@ If the old export is not deleted, then the new job will overwrite the old export
 ```bash
 kubectl delete pvc -n nexus nexus-bak
 ```
+
+### Cleanup failed or stopped export
+
+If an export is stopped prematurely or fails to complete, there are a few steps that need to be taken to bring Nexus back into a working state.
+
+1. Delete the failed or stopped job.
+
+    See [Cleanup export job](#cleanup-export-job).
+
+1. Delete the partially filled export PVC.
+
+    See [Cleanup previous export](#cleanup-previous-export).
+
+1. Restart Nexus if it is still stopped.
+
+    Depending on where the job failed the Nexus pods may still be down.
+
+    1. (`ncn-mw#`) Check if the Nexus pods are down.
+
+        ```bash
+        kubectl get pods -n nexus | grep nexus
+        ```
+
+    1. (`ncn-mw#`) If the Nexus pod is not found, then scale it back up.
+
+        ```bash
+        kubectl -n nexus scale deployment nexus --replicas=1
+        ```
