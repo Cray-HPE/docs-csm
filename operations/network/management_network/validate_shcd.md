@@ -6,24 +6,25 @@ Once the validation is complete, a machine readable JSON file should be produced
 
 ## Topics
 
-- [Validate the SHCD & Create JSON topology file](#validate-the-shcd--create-json-topology-file)
-  - [Topics](#topics)
-  - [Prerequisites](#prerequisites)
-  - [Validation steps](#validation-steps)
-  - [Retrieve JSON paddle file](#retrieve-json-paddle-file)
-  - [Under the hood](#under-the-hood)
-    - [Check warnings](#check-warnings)
-    - [Check SHCD port usage](#check-shcd-port-usage)
-  - [Logging and updates](#logging-and-updates)
+- [Prerequisites](#prerequisites)
+- [Validation steps](#validation-steps)
+- [Retrieve JSON paddle file](#retrieve-json-paddle-file)
+- [Under the hood](#under-the-hood)
+  - [Check warnings](#check-warnings)
+  - [Check SHCD port usage](#check-shcd-port-usage)
+- [Logging and updates](#logging-and-updates)
 
 ## Prerequisites
 
 - Up-to-date SHCD.
+- CANU must be installed.
   - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md).
 
 ## Validation steps
 
-1. Validate the `10G_25G_40G_100G` tab and select the upper left corner and lower right corner of the spreadsheet with the `Source Rack Location Slot Port Destination Rack Location Port` information.
+1. Validate the `10G_25G_40G_100G` tab.
+
+   Select the upper left corner and lower right corner of the spreadsheet with the `Source Rack Location Slot Port Destination Rack Location Port` information.
 
    This is a block of data on the right hand of the worksheet and is not the calculated values used for cable labels on the left-hand side.
 
@@ -32,7 +33,7 @@ Once the validation is complete, a machine readable JSON file should be produced
    In this example above, the `10G_25G_40G_100G` worksheet has the upper left and lower right corners of `I37` and `T107` respectively.
    Note, the above screenshot is trimmed and only the first full 68 rows are shown.
 
-1. (`pit#`) Generate the HMN paddle file (by default this runs in interactive mode to select the tabs and corners).
+1. (`pit#`) Generate the HMN paddle file.
 
    > **`NOTE`**
    > `-a` defines the architecture, this will be:
@@ -54,7 +55,7 @@ Once the validation is complete, a machine readable JSON file should be produced
 
 ## Retrieve JSON paddle file
 
-1. (`pit#`) Generate the full paddle file (by default the command below will run in interactive mode.)
+1. (`pit#`) Generate the full paddle file.
 
    > **`NOTE`** The `canu` command below will start interactive mode for defining `--corners`. If
    > the `--corners` are already known, then append `--corners` with the desired corners to bypass interactive mode.
@@ -128,8 +129,8 @@ Cell: P16      Name: SITE
 ### Check SHCD port usage
 
 Today CANU validates many things, but a future feature is full cable specification checking of nodes (e.g. which NCN ports go to
-which switches to properly form bonds). There are several CANU roadmap items, but today a manual review of the `SHCD Port Usage`
-connections list is vital. Specifically, check:
+which switches to properly form bonds). A manual review of the `SHCD Port Usage` connections list is vital.
+Specifically, verify the following things:
 
 - Both Management NCNs (manager, worker, storage) and UAN NCNs (UAN, viz, and other Application Nodes) follow Plan of Record (PoR)
   cabling. See [Cable Management Network Servers](cable_management_network_servers.md).
