@@ -25,13 +25,13 @@ To boot an NCN, you need three artifacts for each node-type (`kubernetes-master/
 
 1. The Kubernetes SquashFS ([stable][4] or [unstable][5])
 
-   * `initrd-img-[RELEASE].xz`
+   * `initrd.img-[RELEASE].xz`
    * `$version-[RELEASE].kernel`
    * `kubernetes-[RELEASE].squashfs`
 
 1. The CEPH SquashFS ([stable][6] or [unstable][7])
 
-   * `initrd-img-[RELEASE].xz`
+   * `initrd.img-[RELEASE].xz`
    * `$version-[RELEASE].kernel`
    * `storage-ceph-[RELEASE].squashfs`
 

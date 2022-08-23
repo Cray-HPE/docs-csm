@@ -467,22 +467,19 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         -s $artdir/storage-ceph/storage-ceph*.squashfs \
         -p
 
-    radosgw-admin bucket link --uid=STS --bucket=ncn-images
-    set -o pipefail
-    csi handoff ncn-images \
-          --kubeconfig /etc/kubernetes/admin.conf \
-          --k8s-kernel-path $artdir/kubernetes/*.kernel \
-          --k8s-initrd-path $artdir/kubernetes/initrd*.xz \
-          --k8s-squashfs-path $artdir/kubernetes/secure-kubernetes*.squashfs \
-          --ceph-kernel-path $artdir/storage-ceph/*.kernel \
-          --ceph-initrd-path $artdir/storage-ceph/initrd*.xz \
-          --ceph-squashfs-path $artdir/storage-ceph/secure-storage-ceph*.squashfs | tee $temp_file
-    set +o pipefail
-
-    KUBERNETES_VERSION=`cat $temp_file | grep "export KUBERNETES_VERSION=" | awk -F'=' '{print $2}'`
-    CEPH_VERSION=`cat $temp_file | grep "export CEPH_VERSION=" | awk -F'=' '{print $2}'`
+    KUBERNETES_VERSION="$(find $artdir/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+    CEPH_VERSION="$(find $artdir/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
     echo "export CEPH_VERSION=${CEPH_VERSION}" >> /etc/cray/upgrade/csm/myenv
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
+
+    set -o pipefail
+    cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/rootfs" "$artdir/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
+    cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/initrd" "$artdir/kubernetes/initrd.img-${KUBERNETES_VERSION}.xz"
+    cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/kernel" "$artdir"/kubernetes/*.kernel
+    cray artifacts create boot-images "ceph/${CEPH_VERSION}/rootfs" "$artdir/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs" 
+    cray artifacts create boot-images "ceph/${CEPH_VERSION}/initrd" "$artdir/storage-ceph/initrd.img-${CEPH_VERSION}.xz" 
+    cray artifacts create boot-images "ceph/${CEPH_VERSION}/kernel" "$artdir"/storage-ceph/*.kernel
+    set +o pipefail
 
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
@@ -552,8 +549,8 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
     # As boot parameters are added or removed, update these arrays.
     # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
-    bootparameters_to_set=( "psi=1" )
-    bootparameters_to_delete=()
+    bootparameters_to_set=( "psi=1" "rd.live.squashimg=rootfs" )
+    bootparameters_to_delete=( "rd.live.squashimg" )
 
     for bootparameter in "${bootparameters_to_delete[@]}"; do
         csi handoff bss-update-param --delete ${bootparameter}
