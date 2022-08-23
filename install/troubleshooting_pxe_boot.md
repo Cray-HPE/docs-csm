@@ -342,16 +342,12 @@ In that case, then use the following recovery procedure.
 
 1. (`pit#`) Set variables for the system name, the CAN IP address for `ncn-m002`, the Kubernetes version, and the Ceph version.
 
-    The Kubernetes and Ceph versions are from the output of the [`csi handoff ncn-images` command in the Deploy Final NCN procedure](deploy_final_non-compute_node.md#31-handoff-data).
-
     If needed, the typescript file from that procedure should be on `ncn-m002` and `ncn-m003` in the `/metal/bootstrap/prep/admin` directory.
 
     Substitute the correct values for the system in use in the following commands:
 
     ```bash
     CAN_IP_NCN_M002=$(ssh ncn-m002 ip -4 a show bond0.can0 | grep inet | awk '{print $2}' | cut -d / -f1)
-    export KUBERNETES_VERSION=m.n.o
-    export CEPH_VERSION=x.y.z
     ```
 
 1. (`pit#`) **If using a remote ISO PIT**, then run the following commands to finish configuring the network and copy files.
