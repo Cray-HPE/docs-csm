@@ -19,8 +19,8 @@ All of the commands in this procedure are intended to be run on a single master 
 ## Procedure
 
 1. [Preparation](#1-preparation)
-2. [Get NCN artifacts](#2-get-ncn-artifacts)
-3. [Customize the images](#3-customize-the-images)
+1. [Get NCN artifacts](#2-get-ncn-artifacts)
+1. [Customize the images](#3-customize-the-images)
 
     - [SSH keys](#ssh-keys)
       - [Script-generated keys](#script-generated-keys)
@@ -34,10 +34,10 @@ All of the commands in this procedure are intended to be run on a single master 
       - [Example 2: Provide keys, prompt for password, change timezone](#example-2-provide-keys-prompt-for-password-change-timezone)
       - [Example 3: New keys, no password change, keep UTC, no prompting](#example-3-new-keys-no-password-change-keep-utc-no-prompting)
 
-4. [Upload artifacts into S3](#4-upload-artifacts-into-s3)
-5. [Update BSS](#update-bss)
-6. [Cleanup](#6-cleanup)
-7. [Rebuild NCNs](#7-rebuild-ncns)
+1. [Upload artifacts into S3](#4-upload-artifacts-into-s3)
+1. [Update BSS](#update-bss)
+1. [Cleanup](#6-cleanup)
+1. [Rebuild NCNs](#7-rebuild-ncns)
 
 ### 1. Preparation
 
@@ -314,7 +314,7 @@ The Kubernetes and storage images now have the image changes.
 
 ### 5. Update BSS
 
-**WARNING:** If doing a CSM software upgrade, skip this section and proceed to [Cleanup](#6-cleanup).
+**WARNING:** If doing a CSM software upgrade, then skip this section and proceed to [Cleanup](#6-cleanup).
 
 This step updates the entries in BSS for the NCNs to use the new images.
 
@@ -364,6 +364,6 @@ ncn-mw# rm -rvf /run/initramfs/overlayfs/workingarea
 
 ### 7. Rebuild NCNs
 
-**WARNING:** If doing a CSM software upgrade, skip this step since the upgrade process does a rolling rebuild with some additional steps.
+**WARNING:** If doing a CSM software upgrade, then skip this step because the upgrade process does a rolling rebuild with some additional steps.
 
 Do a rolling rebuild of all NCNs. See [Rebuild NCNs](../node_management/Rebuild_NCNs/Rebuild_NCNs.md).
