@@ -1,28 +1,30 @@
-# Validate the SHCD
+# Validate the SHCD & Create JSON topology file
 
-Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated. This is an iterative process to create a model of the entire network topology connection by connection.
+Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated.
+This is an iterative process to create a model of the entire network topology connection by connection.
+Once the validation is complete, a machine readable JSON file should be produced.
 
 ## Topics
 
-- [Validate the SHCD](#validate-the-shcd)
-  - [Topics](#topics)
-  - [Prerequisites](#prerequisites)
-  - [Validation steps](#validation-steps)
-  - [Under the hood](#under-the-hood)
-    - [Check warnings](#check-warnings)
-    - [Check SHCD port usage](#check-shcd-port-usage)
-  - [Logging and updates](#logging-and-updates)
+- [Prerequisites](#prerequisites)
+- [Validation steps](#validation-steps)
+- [Retrieve JSON paddle file](#retrieve-json-paddle-file)
+- [Under the hood](#under-the-hood)
+  - [Check warnings](#check-warnings)
+  - [Check SHCD port usage](#check-shcd-port-usage)
+- [Logging and updates](#logging-and-updates)
 
 ## Prerequisites
 
 - Up-to-date SHCD.
-- CANU installed with version 1.1.11 or greater.
-  - Run `canu --version` to see version.
+- CANU must be installed.
   - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md).
 
 ## Validation steps
 
-1. Validate the `10G_25G_40G_100G` tab and select the upper left corner and lower right corner of the spreadsheet with the `Source Rack Location Slot Port Destination Rack Location Port` information.
+1. Validate the `10G_25G_40G_100G` tab.
+
+   Select the upper left corner and lower right corner of the spreadsheet with the `Source Rack Location Slot Port Destination Rack Location Port` information.
 
    This is a block of data on the right hand of the worksheet and is not the calculated values used for cable labels on the left-hand side.
 
@@ -31,7 +33,7 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    In this example above, the `10G_25G_40G_100G` worksheet has the upper left and lower right corners of `I37` and `T107` respectively.
    Note, the above screenshot is trimmed and only the first full 68 rows are shown.
 
-1. (`pit#`) Generate the HMN paddle file (by default this runs in interactive mode to select the tabs and corners).
+1. (`pit#`) Generate the HMN paddle file.
 
    > **`NOTE`**
    > `-a` defines the architecture, this will be:
@@ -51,7 +53,9 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    canu validate shcd --json --out "${SYSTEM_NAME}-hmn-paddle.json" --tabs HMN -a "${ARCH}" --shcd <shcd_file.xlsx>
    ```
 
-1. (`pit#`) Generate the full paddle file (by default the command below will run in interactive mode.)
+## Retrieve JSON paddle file
+
+1. (`pit#`) Generate the full paddle file.
 
    > **`NOTE`** The `canu` command below will start interactive mode for defining `--corners`. If
    > the `--corners` are already known, then append `--corners` with the desired corners to bypass interactive mode.
@@ -63,8 +67,6 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    > **`NOTE`** CANU will ensure that each cell has valid data and that the connections between devices are allowed. Errors will stop processing and must be fixed in
    > the spreadsheet before moving on. A "clean run" through a worksheet will include the model, a port-map of each node and may include warnings. See a
    > list of typical errors at the end of this document to help in fixing the worksheet data.
-
-1. Proceed to [generate topology files](../../../install/pre-installation.md#generate-topology-files).
 
 ## Under the hood
 
@@ -127,8 +129,8 @@ Cell: P16      Name: SITE
 ### Check SHCD port usage
 
 Today CANU validates many things, but a future feature is full cable specification checking of nodes (e.g. which NCN ports go to
-which switches to properly form bonds). There are several CANU roadmap items, but today a manual review of the `SHCD Port Usage`
-connections list is vital. Specifically, check:
+which switches to properly form bonds). A manual review of the `SHCD Port Usage` connections list is vital.
+Specifically, verify the following things:
 
 - Both Management NCNs (manager, worker, storage) and UAN NCNs (UAN, viz, and other Application Nodes) follow Plan of Record (PoR)
   cabling. See [Cable Management Network Servers](cable_management_network_servers.md).
