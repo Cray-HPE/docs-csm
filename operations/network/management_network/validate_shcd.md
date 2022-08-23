@@ -1,13 +1,16 @@
-# Validate the SHCD
+# Validate the SHCD & Create JSON topology file
 
-Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated. This is an iterative process to create a model of the entire network topology connection by connection.
+Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validation is required to ensure Plan-of-Record network configurations are generated.
+This is an iterative process to create a model of the entire network topology connection by connection.
+Once the validation is complete, a machine readable JSON file should be produced.
 
 ## Topics
 
-- [Validate the SHCD](#validate-the-shcd)
+- [Validate the SHCD & Create JSON topology file](#validate-the-shcd--create-json-topology-file)
   - [Topics](#topics)
   - [Prerequisites](#prerequisites)
   - [Validation steps](#validation-steps)
+  - [Retrieve JSON paddle file](#retrieve-json-paddle-file)
   - [Under the hood](#under-the-hood)
     - [Check warnings](#check-warnings)
     - [Check SHCD port usage](#check-shcd-port-usage)
@@ -16,8 +19,6 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
 ## Prerequisites
 
 - Up-to-date SHCD.
-- CANU installed with version 1.1.11 or greater.
-  - Run `canu --version` to see version.
   - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md).
 
 ## Validation steps
@@ -51,6 +52,8 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    canu validate shcd --json --out "${SYSTEM_NAME}-hmn-paddle.json" --tabs HMN -a "${ARCH}" --shcd <shcd_file.xlsx>
    ```
 
+## Retrieve JSON paddle file
+
 1. (`pit#`) Generate the full paddle file (by default the command below will run in interactive mode.)
 
    > **`NOTE`** The `canu` command below will start interactive mode for defining `--corners`. If
@@ -63,8 +66,6 @@ Use the CSM Automated Network Utility (CANU) to validate the SHCD. SHCD validati
    > **`NOTE`** CANU will ensure that each cell has valid data and that the connections between devices are allowed. Errors will stop processing and must be fixed in
    > the spreadsheet before moving on. A "clean run" through a worksheet will include the model, a port-map of each node and may include warnings. See a
    > list of typical errors at the end of this document to help in fixing the worksheet data.
-
-1. Proceed to [generate topology files](../../../install/pre-installation.md#generate-topology-files).
 
 ## Under the hood
 

@@ -14,8 +14,6 @@ For example, if there is a suspected configuration issue on single switch, a con
     * See [Install/Upgrade CANU](canu_install_update.md).
 * Validated SHCD.
   * See [Validate SHCD](validate_shcd.md).
-* JSON output from validated SHCD.
-  * See [Validate SHCD](validate_shcd.md).
 * System Layout Service (SLS) input file.
   * If generating CSM 1.2 configurations, the SLS file must be updated prior to generating configurations.
   * See [Collect Data](collect_data.md).
