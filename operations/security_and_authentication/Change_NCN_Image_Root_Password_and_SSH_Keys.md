@@ -328,7 +328,7 @@ This step updates the entries in BSS for the NCNs to use the new images.
         xname=$(ssh $node cat /etc/cray/xname)
         echo $xname
         cray bss bootparameters list --name $xname --format json > bss_$xname.json
-        sed -i.old "s@k8s/${K8SVERSION}@k8s/${K8SNEW}@g" bss_$xname.json
+        sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/k8s/${K8SVERSION}\([\"/[:space:]]\)@/k8s/${K8SNEW}\1@g" bss_$xname.json
         kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
         initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
         params=$(cat bss_$xname.json | jq '.[]  .params')
@@ -346,7 +346,7 @@ This step updates the entries in BSS for the NCNs to use the new images.
         xname=$(ssh $node cat /etc/cray/xname)
         echo $xname
         cray bss bootparameters list --name $xname --format json > bss_$xname.json
-        sed -i.old "s@ceph/${CEPHVERSION}@ceph/${CEPHNEW}@g" bss_$xname.json
+        sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/ceph/${CEPHVERSION}\([\"/[:space:]]\)@/ceph/${CEPHNEW}\1@g" bss_$xname.json
         kernel=$(cat bss_$xname.json | jq '.[]  .kernel')
         initrd=$(cat bss_$xname.json | jq '.[]  .initrd')
         params=$(cat bss_$xname.json | jq '.[]  .params')
