@@ -41,7 +41,7 @@ All of the commands in this procedure are intended to be run on a single master 
 
 ### 1. Preparation
 
-Change to a working directory with enough space to hold the images once they have been expanded.
+(`ncn-mw#`) Change to a working directory with enough space to hold the images once they have been expanded.
 
 ```bash
 mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/workingarea
@@ -49,7 +49,7 @@ mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/wo
 
 ### 2. Get NCN artifacts
 
-1. List available Kubernetes NCN images.
+1. (`ncn-mw#`) List available Kubernetes NCN images.
 
     The Kubernetes image is used by the master and worker nodes.
 
@@ -66,7 +66,7 @@ mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/wo
     "k8s/0.1.48/filesystem.squashfs"
     ```
 
-1. Set Kubernetes image version variables.
+1. (`ncn-mw#`) Set Kubernetes image version variables.
 
     - Set `K8SVERSION` to the version of the image to be modified.
     - Set `K8SNEW` to the version label to use for the modified image.
@@ -78,13 +78,13 @@ mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/wo
     K8SNEW=${K8SVERSION}-2
     ```
 
-1. Make a temporary directory for the Kubernetes artifacts using the current version string.
+1. (`ncn-mw#`) Make a temporary directory for the Kubernetes artifacts using the current version string.
 
     ```bash
     mkdir -pv k8s/${K8SVERSION}
     ```
 
-1. Download the Kubernetes NCN artifacts.
+1. (`ncn-mw#`) Download the Kubernetes NCN artifacts.
 
     ```bash
     for art in filesystem.squashfs initrd kernel ; do
@@ -92,7 +92,7 @@ mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/wo
     done
     ```
 
-1. List available Ceph images.
+1. (`ncn-mw#`) List available Ceph images.
 
     The Ceph image is used by the utility storage nodes.
 
@@ -109,7 +109,7 @@ mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/wo
     "ceph/0.1.48/filesystem.squashfs"
     ```
 
-1. Set Ceph image version variables.
+1. (`ncn-mw#`) Set Ceph image version variables.
 
     - Set `CEPHVERSION` to the version of the image to be modified.
     - Set `CEPHNEW` to the version label to use for the modified image.
@@ -121,13 +121,13 @@ mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/wo
     CEPHNEW=${CEPHVERSION}-2
     ```
 
-1. Make a temporary directory for the Ceph artifacts using the current version string.
+1. (`ncn-mw#`) Make a temporary directory for the Ceph artifacts using the current version string.
 
     ```bash
     mkdir -pv ceph/${CEPHVERSION}
     ```
 
-1. Download the storage NCN artifacts.
+1. (`ncn-mw#`) Download the storage NCN artifacts.
 
     ```bash
     for art in filesystem.squashfs initrd kernel ; do
@@ -135,10 +135,12 @@ mkdir -pv /run/initramfs/overlayfs/workingarea && cd /run/initramfs/overlayfs/wo
     done
     ```
 
-### 3. (`ncn#`) Customize the images
+### 3. Customize the images
 
 Add SSH keys and the `root` password to the NCN SquashFS images. Optionally set their timezone, if a timezone other than UTC
-(the default) is desired. This is all done by running the `ncn-image-modification.sh` script. Set the path to the script:
+(the default) is desired. This is all done by running the `ncn-image-modification.sh` script.
+
+(`ncn-mw#`) Set the path to the script:
 
 ```bash
 NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification[.]sh)
@@ -192,7 +194,7 @@ Otherwise, the script will prompt for the password to be entered during its exec
 
 ##### Use node password
 
-If wanting to use the same `root` user password that is being used on the node where this procedure is being run, then
+(`ncn-mw#`) If wanting to use the same `root` user password that is being used on the node where this procedure is being run, then
 the following command can be used to set the `SQUASHFS_ROOT_PW_HASH` variable.
 
 ```bash
@@ -201,7 +203,7 @@ export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
 
 ##### Enter password and generate hash
 
-The following script can be used to manually enter a new password, and then generate its hash.
+(`ncn-mw#`) The following script can be used to manually enter a new password, and then generate its hash.
 
 > This script uses `read -s` to prevent the password from being echoed to the screen or saved
 > in the shell history. It unsets the plaintext password variables at the end, so that only
@@ -231,7 +233,7 @@ script. Valid timezone options can be listed by running `timedatectl list-timezo
 
 ##### Example 1: New keys, copy password, keep UTC
 
-This example has the script generate new SSH keys (prompting the administrator for the SSH key passphrase) and
+(`ncn-mw#`) This example has the script generate new SSH keys (prompting the administrator for the SSH key passphrase) and
 copies the `root` user password from the current node. It does not change the timezone from the UTC default.
 
 ```bash
@@ -244,7 +246,7 @@ $NCN_MOD_SCRIPT -p \
 
 ##### Example 2: Provide keys, prompt for password, change timezone
 
-This example uses existing SSH keys located in the `/my/pre-existing/keys` directory. The script prompts the
+(`ncn-mw#`) This example uses existing SSH keys located in the `/my/pre-existing/keys` directory. The script prompts the
 administrator for the `root` user password during execution. It changes the timezone to `America/Chicago`.
 
 ```bash
@@ -257,7 +259,7 @@ $NCN_MOD_SCRIPT -p \
 
 ##### Example 3: New keys, no password change, keep UTC, no prompting
 
-This example has the script generate new SSH keys. It does not change the `root` password, nor does it
+(`ncn-mw#`) This example has the script generate new SSH keys. It does not change the `root` password, nor does it
 change the timezone from the UTC default. A blank passphrase is provided, so that the script requires
 no input from the administrator while it is running.
 
@@ -270,7 +272,7 @@ $NCN_MOD_SCRIPT -t rsa \
 
 ### 4. Upload artifacts into S3
 
-1. Upload the new Kubernetes image into S3.
+1. (`ncn-mw#`) Upload the new Kubernetes image into S3.
 
     ```bash
     /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
@@ -279,7 +281,7 @@ $NCN_MOD_SCRIPT -t rsa \
         --file-name k8s/${K8SVERSION}/secure-filesystem.squashfs
     ```
 
-1. Upload the Kubernetes kernel and `initrd` into S3 under the new version string.
+1. (`ncn-mw#`) Upload the Kubernetes kernel and `initrd` into S3 under the new version string.
 
     ```bash
     for art in initrd kernel ; do
@@ -290,7 +292,7 @@ $NCN_MOD_SCRIPT -t rsa \
     done
     ```
 
-1. Upload the new Ceph image into S3.
+1. (`ncn-mw#`) Upload the new Ceph image into S3.
 
     ```bash
     /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
@@ -299,7 +301,7 @@ $NCN_MOD_SCRIPT -t rsa \
         --file-name ceph/${CEPHVERSION}/secure-filesystem.squashfs
     ```
 
-1. Upload the Ceph kernel and `initrd` into S3 under the new version string.
+1. (`ncn-mw#`) Upload the Ceph kernel and `initrd` into S3 under the new version string.
 
     ```bash
     for art in initrd kernel ; do
@@ -318,7 +320,7 @@ The Kubernetes and storage images now have the image changes.
 
 This step updates the entries in BSS for the NCNs to use the new images.
 
-1. Update BSS for master and worker nodes.
+1. (`ncn-mw#`) Update BSS for master and worker nodes.
 
     > This uses the `K8SVERSION` and `K8SNEW` variables defined earlier.
 
@@ -336,7 +338,7 @@ This step updates the entries in BSS for the NCNs to use the new images.
     done
     ```
 
-1. Update BSS for utility storage nodes.
+1. (`ncn-mw#`) Update BSS for utility storage nodes.
 
     > This uses the `CEPHVERSION` and `CEPHNEW` variables defined earlier.
 
@@ -356,7 +358,7 @@ This step updates the entries in BSS for the NCNs to use the new images.
 
 ### 6. Cleanup
 
-Remove the temporary working area in order to reclaim the space.
+(`ncn-mw#`) Remove the temporary working area in order to reclaim the space.
 
 ```bash
 rm -rvf /run/initramfs/overlayfs/workingarea
