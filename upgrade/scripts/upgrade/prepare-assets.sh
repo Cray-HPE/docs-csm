@@ -163,8 +163,6 @@ if [[ $state_recorded == "0" ]]; then
     #shellcheck disable=SC2046
     rpm --force -Uvh $(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name "cray-site-init*.rpm") 
 
-    # upload csi to s3
-    csi handoff upload-utils --kubeconfig /etc/kubernetes/admin.conf
     } >> ${LOG_FILE} 2>&1
     #shellcheck disable=SC2046
     record_state ${state_name} $(hostname)
