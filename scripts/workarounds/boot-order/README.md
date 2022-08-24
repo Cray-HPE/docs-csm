@@ -39,6 +39,6 @@ This directory includes the script and the library necessary for applying the wo
 
 ## Origin
 
-This script originated from the [metal-provision repository](https://github.com/Cray-HPE/metal-provision/tree/v1.2.2):
+This script originated from the [metal-provision repository](https://github.com/Cray-HPE/metal-provision/tree/v1.3.4):
 
-- [`metal-lib.sh`](https://github.com/Cray-HPE/metal-provision/blob/v1.2.2/roles/ncn-common/files/scripts/metal/metal-lib.sh)
+- [`metal-lib.sh`](https://github.com/Cray-HPE/metal-provision/blob/v1.3.4/roles/ncn-common/files/scripts/metal/metal-lib.sh)
