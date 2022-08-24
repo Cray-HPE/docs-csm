@@ -105,6 +105,17 @@ spec:
                     ceph auth get client.ro >/dev/null 2>/dev/null || ceph-authtool -C /etc/ceph/ceph.client.ro.keyring -n client.ro --cap mon 'allow r' --cap mds 'allow r' --cap osd 'allow r' --cap mgr 'allow r' --gen-key
                     ceph auth import -i /etc/ceph/ceph.client.ro.keyring
                     for node in $(ceph orch host ls --format=json|jq -r '.[].hostname'); do scp /etc/ceph/ceph.client.ro.keyring $node:/etc/ceph/ceph.client.ro.keyring; done
+          - name: pre-upgrade-ceph-health-check
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    /opt/cray/platform-utils/ceph-service-status.sh -v true || /opt/cray/platform-utils/ceph-service-status.sh -A true -v true
           {{- range $index,$value := .TargetNcns}}
           - name: upgrade-{{$value}}
             templateRef:
@@ -112,8 +123,8 @@ spec:
               template: shell-script
             dependencies: 
               - check-ceph-ro-key
+              - pre-upgrade-ceph-health-check
               # each upgrade depends on previous upgrade action and success
-              # so we make sure only one node is drained at a time
               {{ if ne $index 0 }}
               - check-ceph-health-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
@@ -137,18 +148,8 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: scriptContent
                   value: |
-                    RESULT=$(/opt/cray/platform-utils/ceph-service-status.sh)
-                    if [[ $RESULT -ne 0 ]]
-                    then
-                      echo "ceph serice status check failed"
-                      exit 1
-                    fi
-                    RESULT=$(/opt/cray/platform-utils/ceph-service-status.sh -n {{$value}} -a true)
-                    if [[ $RESULT -ne 0 ]]
-                    then
-                      echo "ceph serice status check failed for node {{$value}}"
-                      exit 1
-                    fi
+                    /opt/cray/platform-utils/ceph-service-status.sh -v true
+                    /opt/cray/platform-utils/ceph-service-status.sh -n {{$value}} -a true -v true
           {{- end }}
           - name: rescan-ssh-keys
             templateRef:
