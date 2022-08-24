@@ -280,8 +280,8 @@ This parameter's value tells the initramFS where to download the kernel, initrd,
 | NCN Type | Default Value(s) |
 | :------: | :------------ |
 | All | `http://pit/<hostname>` |
-| All | `http://rgw-vip.nmn/ncn-images/k8s/<version>` |
-| All | `http://rgw-vip.nmn/ncn-images/ceph/<version>` |
+| All | `http://rgw-vip.nmn/boot-images/k8s/<version>` |
+| All | `http://rgw-vip.nmn/boot-images/ceph/<version>` |
 
 For more information, see [`dracut-metal-mdsquash`'s usage on `metal.server`][2].
 
