@@ -461,16 +461,33 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     set -o pipefail
     NCN_IMAGE_MOD_SCRIPT="$(rpm -ql docs-csm | grep ncn-image-modification.sh)"
     set +o pipefail
-    DEBUG=1 $NCN_IMAGE_MOD_SCRIPT \
-        -d /root/.ssh \
-        -k $artdir/kubernetes/kubernetes*.squashfs \
-        -s $artdir/storage-ceph/storage-ceph*.squashfs \
-        -p
 
-    KUBERNETES_VERSION="$(find $artdir/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
-    CEPH_VERSION="$(find $artdir/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+    # clean up any previous set values just in case.
+    sed -i 's/^export CEPH_VERSION.*//' /etc/cray/upgrade/csm/myenv
+    sed -i 's/^export KUBERNETES_VERSION.*//' /etc/cray/upgrade/csm/myenv
+    KUBERNETES_VERSION="$(find $artdir/kubernetes -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+    CEPH_VERSION="$(find $artdir/storage-ceph -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
     echo "export CEPH_VERSION=${CEPH_VERSION}" >> /etc/cray/upgrade/csm/myenv
     echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
+    k8s_done=0
+    ceph_done=0
+    if [ -f "$artdir/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs" ]; then
+        k8s_done=1
+    fi
+    if [ -f "$artdir/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs" ]; then
+        ceph_done=1
+    fi
+    
+    if [ ${k8s_done} = 1 ] && [ ${ceph_done} = 1 ]; then
+        echo "Already ran $NCN_IMAGE_MOD_SCRIPT, skipping re-run."
+    else
+        rm -f "$artidir/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs" "$artdir/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
+        DEBUG=1 $NCN_IMAGE_MOD_SCRIPT \
+            -d /root/.ssh \
+            -k "$artdir/kubernetes/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+            -s "$artdir/storage-ceph/storage-ceph-${CEPH_VERSION}.squashfs" \
+            -p
+    fi
 
     set -o pipefail
     cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/rootfs" "$artdir/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
