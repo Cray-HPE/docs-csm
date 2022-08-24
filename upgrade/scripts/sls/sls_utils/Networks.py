@@ -400,6 +400,8 @@ class Subnet(Network):
         Returns:
             ipv4_dhcp_start_address (ipaddress.IPv4Address): Start DHCP address for getter
         """
+        if subnet_dhcp_start_address is None:
+            self.__ipv4_dhcp_start_address = None
         if subnet_dhcp_start_address is not None:
             self.__ipv4_dhcp_start_address = ipaddress.IPv4Address(
                 subnet_dhcp_start_address,
@@ -415,6 +417,8 @@ class Subnet(Network):
         Returns:
             ipv4_dhcp_end_address (ipaddress.IPv4Address): End DHCP address for getter
         """
+        if subnet_dhcp_end_address is None:
+            self.__ipv4_dhcp_end_address = None
         if subnet_dhcp_end_address is not None:
             self.__ipv4_dhcp_end_address = ipaddress.IPv4Address(
                 subnet_dhcp_end_address,

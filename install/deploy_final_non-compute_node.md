@@ -84,6 +84,25 @@ The steps in this section load hand-off data before a later procedure reboots th
     2021/02/02 14:05:15 Successfully uploaded SLS Input File.
     ```
 
+1. (`pit#`) Upload NCN boot artifacts into S3.
+
+    ```bash
+    kubernetes_rootfs="$(readlink -f /var/www/ncn-m002/rootfs)"
+    kubernetes_initrd="$(readlink -f /var/www/ncn-m002/initrd.img.xz)"
+    kubernetes_kernel="$(readlink -f /var/www/ncn-m002/kernel)"
+    kubernetes_version="$(basename ${kubernetes_rootfs} .squashfs | awk -F '-' '{print $NF}')"
+    ceph_rootfs="$(readlink -f /var/www/ncn-s001/rootfs)"
+    ceph_initrd="$(readlink -f /var/www/ncn-s001/initrd.img.xz)"
+    ceph_kernel="$(readlink -f /var/www/ncn-s001/kernel)"
+    ceph_version="$(basename ${ceph_rootfs} .squashfs | awk -F '-' '{print $NF}')"
+    cray artifacts create boot-images "k8s/${kubernetes_version}/rootfs" "${kubernetes_rootfs}"
+    cray artifacts create boot-images "k8s/${kubernetes_version}/initrd" "${kubernetes_initrd}"
+    cray artifacts create boot-images "k8s/${kubernetes_version}/kernel" "${kubernetes_kernel}"
+    cray artifacts create boot-images "ceph/${ceph_version}/rootfs" "${ceph_rootfs}" 
+    cray artifacts create boot-images "ceph/${ceph_version}/initrd" "${ceph_initrd}" 
+    cray artifacts create boot-images "ceph/${ceph_version}/kernel" "${ceph_kernel}" 
+    ```
+
 1. (`pit#`) Get a token to use for authenticated communication with the gateway.
 
     > **`NOTE`** `api-gw-service-nmn.local` is legacy, and will be replaced with `api-gw-service.nmn`.
@@ -92,20 +111,6 @@ The steps in this section load hand-off data before a later procedure reboots th
     export TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client \
                     -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-    ```
-
-1. (`pit#`) Upload NCN boot artifacts into S3.
-
-    ```bash
-    k8sdir="$(dirname $(readlink -f /var/www/ncn-m002/filesystem.squashfs))" &&
-    cephdir="$(dirname $(readlink -f /var/www/ncn-s001/filesystem.squashfs))" &&
-    csi handoff ncn-images \
-        --k8s-kernel-path "${k8sdir}"/*.kernel \
-        --k8s-initrd-path "${k8sdir}"/initrd.img*.xz \
-        --k8s-squashfs-path "${k8sdir}"/secure-*.squashfs \
-        --ceph-kernel-path "${cephdir}"/*.kernel \
-        --ceph-initrd-path "${cephdir}"/initrd.img*.xz \
-        --ceph-squashfs-path "${cephdir}"/secure-*.squashfs
     ```
 
 1. (`pit#`) Upload the `data.json` file to BSS, the `cloud-init` data source.
