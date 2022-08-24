@@ -14,6 +14,7 @@ Earlier version of CSM must first be upgraded to at least `v1.2.0`. For informat
 * Fixes an issue where a modified NCN image can no longer boot to disk when specified instead of the default PXE boot.
 * Fixes a rare issue where NCNs booted with a modified image containing Slingshot Host Software had NO-CARRIER on all network interfaces.
 * Fixes an issue where CANU generates incorrect VLANs for switch ports connected to UANs over the CHN.
+* Fixes an issue where dhcp-manager could apply NIC data to the wrong reservation in Kea
 
 ## Known Issues
 
