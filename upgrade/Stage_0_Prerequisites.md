@@ -126,7 +126,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
-## Stage 0.3 - Prerequisites check
+## Stage 0.2 - Prerequisites check
 
 1. (`ncn-m001#`) Set the `SW_ADMIN_PASSWORD` environment variable.
 
@@ -202,7 +202,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
    git push
    ```
 
-## Stage 0.4 - Backup workload manager data
+## Stage 0.3 - Backup workload manager data
 
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
