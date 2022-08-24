@@ -105,23 +105,23 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
 
 ## Use SAT to remove the blade from hardware management
 
-1. Clear out the existing Redfish event subscriptions from the BMCs on the blade.
+1. (`ncn#`) Clear out the existing Redfish event subscriptions from the BMCs on the blade.
 
-    1. (`ncn#`) Set the environment variable `SLOT` corresponding to the blades location:
+    1. Set the environment variable `SLOT` to the blade's location.
 
         ```bash
         SLOT=x9000c3s0
         ```
 
-    1. (`ncn#`) Clear the Redfish event subscriptions:
+    1. Clear the Redfish event subscriptions.
 
         ```bash
-        for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep $SLOT); do
-            PASSWD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
-            SUBS=$(curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
-            for SUB in $SUBS; do
+        for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
+            PASSWD=$(cray scsd bmc creds list --targets ${BMC} --format json | jq .Targets[].Password -r)
+            SUBS=$(curl -sk -u root:"${PASSWD}" https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
+            for SUB in ${SUBS}; do
                 echo "Deleting event subscription: https://${BMC}${SUB}" 
-                curl -i -sk -u root:$PASSWD -X DELETE https://${BMC}${SUB}
+                curl -i -sk -u root:"${PASSWD}" -X DELETE https://${BMC}${SUB}
             done
         done
         ```

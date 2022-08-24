@@ -106,21 +106,21 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
    ```
 
-### Source: Clear out the existing Redfish event subscriptions from the BMCs on the blade
+### Source: Clear Redfish event subscriptions from BMCs on the blade
 
-1. (`ncn#`) Set the environment variable `SLOT` corresponding to the blades location:
+1. (`ncn#`) Set the environment variable `SLOT` to the blade's location.
 
      ```bash
-     ncn# SLOT="x9000c3s0"
+     SLOT="x9000c3s0"
      ```
 
-1. (`ncn#`) Clear the Redfish event subscriptions:
+1. (`ncn#`) Clear the Redfish event subscriptions.
 
     ```bash
-    ncn# for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep $SLOT); do
-        PASSWD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
-        SUBS=$(curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
-        for SUB in $SUBS; do
+    for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
+        PASSWD=$(cray scsd bmc creds list --targets ${BMC} --format json | jq .Targets[].Password -r)
+        SUBS=$(curl -sk -u root:"${PASSWD}" https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
+        for SUB in ${SUBS}; do
             echo "Deleting event subscription: https://${BMC}${SUB}" 
             curl -i -sk -u root:$PASSWD -X DELETE https://${BMC}${SUB}
         done
@@ -295,23 +295,23 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
     cray hsm inventory redfishEndpoints update --enabled false x1005c3s0b1
     ```
 
-### Destination: Clear out the existing Redfish event subscriptions from the BMCs on the blade
+### Destination: Clear Redfish event subscriptions from BMCs on the blade
 
-1. Set the environment variable `SLOT` corresponding to the blades location:
+1. (`ncn#`) Set the environment variable `SLOT` to the blade's location.
 
      ```bash
-     ncn# SLOT="x1005c3s0"
+     SLOT="x1005c3s0"
      ```
 
-1. Clear the Redfish event subscriptions:
+1. (`ncn#`) Clear the Redfish event subscriptions.
 
     ```bash
-    ncn# for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep $SLOT); do
-        PASSWD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
-        SUBS=$(curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
-        for SUB in $SUBS; do
+    for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
+        PASSWD=$(cray scsd bmc creds list --targets ${BMC} --format json | jq .Targets[].Password -r)
+        SUBS=$(curl -sk -u root:"${PASSWD}" https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
+        for SUB in ${SUBS}; do
             echo "Deleting event subscription: https://${BMC}${SUB}" 
-            curl -i -sk -u root:$PASSWD -X DELETE https://${BMC}${SUB}
+            curl -i -sk -u root:"${PASSWD}" -X DELETE https://${BMC}${SUB}
         done
     done
     ```
