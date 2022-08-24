@@ -12,10 +12,8 @@ Stage 0 has several critical procedures which prepare the environment and verify
   - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
     - [Direct download](#direct-download)
     - [Manual copy](#manual-copy)
-  - [Stage 0.2 - Upgrade management network](#stage-02---upgrade-management-network)
-    - [Verify that switches have 1.3 configuration in place](#verify-that-switches-have-13-configuration-in-place)
-  - [Stage 0.3 - Prerequisites check](#stage-03---prerequisites-check)
-  - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+  - [Stage 0.2 - Prerequisites check](#stage-03---prerequisites-check)
+  - [Stage 0.3 - Backup workload manager data](#stage-04---backup-workload-manager-data)
   - [Stage completed](#stage-completed)
 
 ## Stage 0.1 - Prepare assets
@@ -127,29 +125,6 @@ Stage 0 has several critical procedures which prepare the environment and verify
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
-
-## Stage 0.2 - Upgrade management network
-
-### Verify that switches have 1.3 configuration in place
-
-1. Log in to each management switch.
-
-1. Examine the text displayed when logging in to the switch.
-
-   Specifically, look for output similar to the following:
-
-   ```text
-   ##################################################################################
-   # CSM version:  1.3
-   # CANU version: 1.6.14
-   ##################################################################################
-   ```
-
-   - Output like the above text means that the switches have a CANU-generated configuration for CSM 1.2 in place. In this case, follow the steps in
-     [Management Network 1.2 to 1.3](../operations/network/management_network/1.2_to_1.3_upgrade.md).
-   - If the banner does NOT contain the appropriate CSM version, then apply the CSM 1.3 switch configuration or contact support.
-   - See the [Management Network User Guide](../operations/network/management_network/README.md) for more information on the management network.
-   - With CSM >= 1.2 switch configurations in place, users will only be able to SSH into the switches over the HMN and CMN.
 
 ## Stage 0.3 - Prerequisites check
 

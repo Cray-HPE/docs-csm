@@ -6,10 +6,13 @@ After the upgrade of CSM software, the CSM health checks will validate the syste
 tasks like the check and update of firmware on system components. Once the CSM upgrade has completed, other
 product streams for the HPE Cray EX system can be installed or upgraded.
 
-1. [Prepare for upgrade](#1-prepare-for-upgrade)
-1. [Upgrade management nodes and CSM services](#2-upgrade-management-nodes-and-csm-services)
-1. [Validate CSM health](#3-validate-csm-health)
-1. [Next topic](#4-next-topic)
+- [Upgrade CSM](#upgrade-csm)
+  - [Known Issues](#known-issues)
+  - [1. Prepare for upgrade](#1-prepare-for-upgrade)
+  - [2. (Optional) Enable Customer High Speed Network Routing](#2-optional-enable-customer-high-speed-network-routing)
+  - [3. Upgrade management nodes and CSM services](#3-upgrade-management-nodes-and-csm-services)
+  - [4. Validate CSM health](#4-validate-csm-health)
+  - [5. Next topic](#5-next-topic)
 
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
@@ -22,13 +25,24 @@ sections, but there is also a general troubleshooting topic.
 
 See [Prepare for Upgrade](prepare_for_upgrade.md).
 
-## 2. Upgrade management nodes and CSM services
+## 2. (Optional) Enable Customer High Speed Network Routing
+
+If the CHN is the desired network for customer access, see [Enable Customer High Speed Network Routing](../operations/network/management_network/bican_enable.md).
+This should be completed before the management nodes are upgraded so that the correct HSN IP addresses are allocated and applied during the upgrade.
+
+This feature has additional requirements which include.
+
+- Customer edge switches
+- Cabling from HSN to edge switches
+- Additional IP address space
+
+## 3. Upgrade management nodes and CSM services
 
 The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
 The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](upgrade_ncn_nodes.md).
 
-## 3. Validate CSM health
+## 4. Validate CSM health
 
 - Before performing the health validation, be sure that at least 15 minutes have elapsed
   since the CSM services were upgraded. This allows the various Kubernetes resources to
@@ -44,7 +58,7 @@ The upgrade is a guided process starting with [Upgrade Management Nodes and CSM 
 
 See [Validate CSM Health](../operations/validate_csm_health.md).
 
-## 4. Next topic
+## 5. Next topic
 
 After completion of the validation of CSM health, the CSM product stream has been fully upgraded and
 configured. Refer to the `1.5 HPE Cray EX System Software Getting Started Guide S-8000`
