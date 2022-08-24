@@ -639,7 +639,7 @@ class State:
         self.log_directory = log_directory
         self.perform_changes = perform_changes
 
-    def retrive_existing_ncn_ips(self, action: dict):
+    def retrieve_existing_ncn_ips(self, action: dict):
         #
         # Reuse existing IPs from SLS if this is ncn-[mws]-00[1-3]
         # Do not allocate a new BMC IP for ncn-[mws]-00[1-3]
@@ -1152,7 +1152,7 @@ def allocate_ips_command(session: requests.Session, args, state: State):
         # Reuse existing IPs from SLS if this is ncn-[mws]-00[1-3]
         # Do not allocate a new BMC IP for ncn-[mws]-00[1-3]
         #
-        state.retrive_existing_ncn_ips(action)
+        state.retrieve_existing_ncn_ips(action)
     else:
         #
         # Allocate new NCN BMC
@@ -1482,7 +1482,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
         # Reuse existing IPs from SLS if this is ncn-[mws]-00[1-3]
         # Do not allocate a new BMC IP for ncn-[mws]-00[1-3]
         #
-        state.retrive_existing_ncn_ips(action)
+        state.retrieve_existing_ncn_ips(action)
     else:
         #
         # Allocate new NCN BMC
