@@ -50,7 +50,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="SNAPSHOOT_CPS_DEPLOYMENT"
+state_name="SNAPSHOT_CPS_DEPLOYMENT"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" ]]; then

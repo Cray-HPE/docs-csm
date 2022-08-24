@@ -49,7 +49,7 @@ In this case, an example minimal usable input while using CAN could be:
 ./sls_updater_csm_1.2.py \
     --sls-input-file sls_input_file.json \
     --bican-user-network-name CAN \
-    --customer-access-network <CAN VLAN ID> <CAN NETORK CIDR>
+    --customer-access-network <CAN VLAN ID> <CAN NETWORK CIDR>
 ```
 
 For CHN, the corresponding minimal usable input would be:

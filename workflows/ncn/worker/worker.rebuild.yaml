@@ -232,14 +232,14 @@ spec:
         {{- include "worker.drain" . | indent 8 }}
     - name: wipe-and-reboot
       inputs:
-        # import ./worker.common.paramenters.yaml
+        # import ./worker.common.parameters.yaml
         {{- include "worker.common.parameters" . | indent 8 }}
       dag:
         # import ./worker.wipe-and-reboot.yaml
         {{- include "worker.wipe-and-reboot" . | indent 8 }}
     - name: post-rebuild
       inputs:
-        # import ./worker.common.paramenters.yaml
+        # import ./worker.common.parameters.yaml
         {{- include "worker.common.parameters" . | indent 8 }}
       dag:
         # import ./worker.post-rebuild.yaml

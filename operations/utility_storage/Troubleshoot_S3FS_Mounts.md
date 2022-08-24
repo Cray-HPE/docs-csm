@@ -61,7 +61,7 @@ admin-tools /var/lib/admin-tools fuse.s3fs _netdev,allow_other,passwd_file=/root
 config-data /var/opt/cray/config-data fuse.s3fs _netdev,allow_other,passwd_file=/root/.config-data.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_xattr 0 0
 ```
 
-If the three entries above aren't present in `/etc/fstab`, add the above content and proceed to Step 3.
+If the three entries above are not present in `/etc/fstab`, add the above content and proceed to Step 3.
 
 ### Worker Nodes `/etc/fstab` Entry
 
@@ -72,7 +72,7 @@ ncn-w: # grep fuse.s3fs /etc/fstab
 boot-images /var/lib/cps-local/boot-images fuse.s3fs _netdev,allow_other,passwd_file=/root/.ims.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_cache=/var/lib/s3fs_cache,check_cache_dir_exist,use_xattr 0 0
 ```
 
-If the above line isn't present in `/etc/fstab`, add the above content and proceed to Step 3.
+If the above line is not present in `/etc/fstab`, add the above content and proceed to Step 3.
 
 ## Step 3: Attempt to Remount the Mount Point
 

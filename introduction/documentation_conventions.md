@@ -1,18 +1,25 @@
 # Documentation Conventions
 
-Several conventions have been used in the preparation of this documentation.
+This outlines conventions and standards that are used in this documentation.
 
-- [Markdown Format](#markdown-format)
-- [File Formats](#file-formats)
-- [Typographic Conventions](#typographic-conventions)
-- [Command Prompt Conventions](#command-prompt-conventions)
-    - [Host Name and Account in Command Prompts](#host-name-and-account-in-command-prompts)
-    - [Node Abbreviations](#node-abbreviations)
-    - [Using Prompts](#using-prompts-inside-of-directions)
-    - [Context Badges](#context-badges-table-reference)
-    - [Step Examples](#step-examples)
+- [Markdown format](#markdown-format)
+- [File formats](#file-formats)
+- [Typographic conventions](#typographic-conventions)
+- [Command prompt conventions](#command-prompt-conventions)
+  - [Host and user name in command prompts](#host-and-user-name-in-command-prompts)
+  - [Node abbreviations](#node-abbreviations)
+  - [Command prompt reference](#command-prompt-reference)
+  - [Command prompt location](#command-prompt-location)
+  - [Command prompts inside new shells](#command-prompts-inside-new-shells)
+    - [`chroot` example](#chroot-example)
+    - [`kubectl exec` example](#kubectl-exec-example)
+    - [Combined `ssh` and `chroot` example](#combined-ssh-and-chroot-example)
+  - [Directory path in command prompt](#directory-path-in-command-prompt)
+- [Ability to pause and resume procedures](#ability-to-pause-and-resume-procedures)
+  - [Bad example](#bad-example)
+  - [Good example](#good-example)
 
-## Markdown Format
+## Markdown format
 
 This documentation is in Markdown format. Although much of it can be viewed with any text editor,
 a richer experience will come from using a tool which can render the Markdown to show different font
@@ -23,11 +30,13 @@ There are many tools which render the Markdown format and provide these advantag
 for Markdown tools will provide a long list of these tools. Some of the tools are better than others
 at displaying the images and allowing you to follow the navigational links.
 
-## File Formats
+## File formats
 
-Some of the installation instructions require updating files in JSON, YAML, or TOML format. These files should be updated with care because some file formats do not accept tab characters for indentation of lines. Only space characters are supported. Refer to online documentation to learn more about the syntax of JSON, YAML, and TOML files. YAML does not support tab characters. The JSON *convention* is to use four spaces rather than a tab character.
+Some of the installation instructions require updating files in JSON, YAML, or TOML format. These files should be updated with care because some file formats do not accept tab
+characters for indentation of lines. Refer to online documentation to learn more about the syntax of JSON, YAML, and TOML files. YAML does not support tab characters. The convention
+for JSON is to use four spaces rather than a tab character.
 
-## Typographic Conventions
+## Typographic conventions
 
 `This style` indicates program code, reserved words, library functions, command-line prompts,
 screen output, file/path names, and other software constructs.
@@ -35,231 +44,225 @@ screen output, file/path names, and other software constructs.
 \ (backslash) At the end of a command line, indicates the Linux shell line continuation character
 (lines joined by a backslash are parsed as a single line).
 
-## Command Prompt Conventions
+## Command prompt conventions
 
-### Host name and account in command prompts
+### Host and user name in command prompts
 
-The host name in a command prompt indicates where the command must be run. The account that must run the command is also indicated in the prompt.
-- The root or super-user account always has the # character at the end of the prompt
+The host name in a command prompt indicates where the command must be run. The user account that must run the command is also indicated in the prompt.
+
+- The `root` or super-user account always has the # character at the end of the prompt.
 - Any non-root account is indicated with `account@hostname`. A non-privileged account is referred to as user.
 
 ### Node abbreviations
 
 The following list contains abbreviations for nodes used below
 
-* CN - compute Node
-* NCN - Non-Compute Node
-* AN - Application Node (special type of NCN)
-* UAN - User Access Node (special type of AN)
-* PIT - Pre-Install Toolkit (initial node used as the inception node during software installation booted from the LiveCD)
+- CN - Compute Node
+- NCN - Non-Compute Node
+  - `ncn-m` - Master NCN
+  - `ncn-s` - Storage NCN
+  - `ncn-w` - Worker NCN
+  - These can also be used in combination. For example, `ncn-mw` in a command prompt indicates that the command may be run on a master or worker NCN.
+- AN - Application Node (special type of NCN)
+- UAN - User Access Node (special type of AN)
+- PIT - Pre-Install Toolkit (initial node used as the inception node during software installation, booted from the LiveCD)
 
-### Using Prompts inside of Directions
+### Command prompt reference
 
-These prompts should be inserted _into_ the step as such:
-
-> 1. (`ncn#`) Lorem ipsom
-> 
->     ```bash
->     yes >/dev/null
->     ```
-> 
-> 2. (`ncn#`) Lorem ipsom
-
-##### Context Badges Table Reference
-
-This list of tags denote the common, accepted tags to denote context.
+This lists the common command prompts and their meanings.
 
 | Prompt | Description |
 |:------|:------------|
-| (` ncn# `) | Run the command as root on any NCN, except an NCN which is functioning as an Application Node (AN), such as a UAN. |
-| (` ncn-m# `) | Run the command as root on any NCN-M (NCN which is a Kubernetes master node).|
-| (` ncn-m002# `) | Run the command as root on the specific NCN-M (NCN which is a Kubernetes master node) which has this hostname (ncn-m002). |
-| (` ncn-w# `) | Run the command as root on any NCN-W (NCN which is a Kubernetes worker node).|
-| (` ncn-w001# `) | Run the command as root on the specific NCN-W (NCN which is a Kubernetes master node) which has this hostname (ncn-w001). |
-| (` ncn-s# `) | Run the command as root on any NCN-S (NCN which is a Utility Storage node).|
-| (` ncn-s003# `) | Run the command as root on the specific NCN-S (NCN which is a Utility Storage node) which has this hostname (ncn-s003).  |
-| (` pit# `) | Run the command as root on the PIT node. |
-| (` external# `) | Run the command as root on a Linux host external to the supercomputer. |
-| (` uan# `) | Run the command as root on any UAN. |
-| (` uan01# `) | Run the command as root on hostname uan01. |
-| (`user@uan>`) | Run the command as any non-root user on any UAN. |
-| (` cn# `) | Run the command as root on any CN. Note that a CN will have a hostname of the form nid124356, that is "nid" and a six digit, zero padded number. |
-| (` hostname# `) | Run the command as root on the specified hostname. |
-| (`user@hostname>`) | Run the command as any non-root user on the specified hostname. |
+| `ncn#` | Run the command as `root` on any NCN, except an NCN which is functioning as an Application Node, such as a UAN. |
+| `ncn-m#` | Run the command as `root` on any Kubernetes master NCN. |
+| `ncn-m002#` | Run the command as `root` on the specific Kubernetes master NCN which has this hostname (`ncn-m002` in this example). |
+| `ncn-s#` | Run the command as `root` on any utility storage NCN.|
+| `ncn-s003#` | Run the command as `root` on the specific utility storage NCN which has this hostname (`ncn-s003` in this example).  |
+| `ncn-w#` | Run the command as `root` on any Kubernetes worker NCN. |
+| `ncn-w001#` | Run the command as `root` on the specific Kubernetes worker NCN which has this hostname (`ncn-w001` in this example). |
+| `ncn-mw#` | Run the command as `root` on any Kubernetes master or worker NCN. |
+| `ncn-ms#` | Run the command as `root` on any Kubernetes master or utility storage NCN. |
+| `pit#` | Run the command as `root` on the PIT node. |
+| `external#` | Run the command as `root` on a Linux host external to the supercomputer. |
+| `uan#` | Run the command as `root` on any UAN. |
+| `uan01#` | Run the command as `root` on hostname `uan01`. |
+| `user@uan>` | Run the command as any non-`root` user on any UAN. |
+| `cn#` | Run the command as `root` on any CN. Note that a CN will have a hostname of the form `nid124356`. That is, `nid` followed by a six digit, zero padded number. |
+| `hostname#` | Run the command as `root` on the specified hostname. |
+| `user@hostname>` | Run the command as any non-`root` user on the specified hostname. |
 
-### Step Examples
+### Command prompt location
 
-#### Command prompt inside chroot
+These prompts should be inserted into text **before** the fenced code block, rather than inside of it. This is a change from
+the documentation of CSM 1.2 and earlier.
 
-If the chroot command is used, the prompt changes to indicate
-that it is inside a chroot environment on the system.
+- An example of proper use of the command prompt:
 
-1. (`hostname#`) Lorem ipsom
+    1. (`ncn#`) Lorem ipsum.
+
+         ```bash
+         yes >/dev/null
+         ```
+
+- An example of improper use of the command prompt:
+
+    1. Lorem ipsum.
+
+         ```bash
+         ncn# yes >/dev/null
+         ```
+
+### Command prompts inside new shells
+
+Some commands open new shells when they are executed (for example, `chroot`, `kubectl exec`, and `ssh`). When these commands are used,
+the prompt changes to indicate that subsequent commands are to be run inside the new shell.
+
+#### `chroot` example
+
+1. (`hostname#`) Lorem ipsum.
 
     ```bash
     chroot /path/to/chroot
     ```
 
-1. (`chroot-hostname#`) Lorem ipsom 
+1. (`chroot-hostname#`) Lorem ipsum.
 
     ```bash
     whoami
     ```
 
-1. (`chroot-hostname#`) Lorem ipsom
+1. (`chroot-hostname#`) Lorem ipsum.
 
     ```bash
     exit 
     ```
 
-1. (`hostname#`) Lorem ipsom!
+1. (`hostname#`) Lorem ipsum!
 
-#### Command prompt inside Kubernetes pod
+#### `kubectl exec` example
 
-If executing a shell inside a container of a Kubernetes pod where
-the pod name is $podName, the prompt changes to indicate that it
-is inside the pod. Not all shells are available within every pod, this
-is an example using a commonly available shell.
+If executing a shell inside a container of a Kubernetes pod where the pod name is `$podName`:
 
-
-1. (`ncn#`) Enter pod `$podName`
+1. (`ncn#`) Enter pod `$podName`.
 
     ```bash
     kubectl exec -it $podName /bin/sh
     ```
 
-1. (`pod#`) Run foo in the pod
+1. (`pod#`) Run foo in the pod.
 
     ```bash
     . /srv/foo && echo $bar
     ```
 
-#### Command prompt inside image customization session
+#### Combined `ssh` and `chroot` example
 
-If using SSH to access the image customization environment (pod)
-during an image customization session, the prompt
-changes to indicate that it is inside this environment.
-This example uses $PORT and $HOST as
-environment variables with specific settings. When using chroot in
-this context, the prompt will be different than the above chroot
-example.
+If using SSH to access the image customization environment (a Kubernetes pod) during an image customization session, then the prompt
+changes to indicate that it is inside this environment. This example uses `$PORT` and `$HOST` as environment variables with specific settings.
 
-
-1. (`hostname#`) Login to the image pod ...
+1. (`hostname#`) Login to the image pod.
 
     ```bash
     ssh -p $PORT root@$HOST
     ```
 
-1. (`root@POD#`) Chroot into the image ...
+1. (`pod#`) `chroot` into the image.
 
     ```bash
     chroot /mnt/image/image-root
     ```
 
-1. (`:/#`) Checkout the beard on this emoji ...
+1. (`chroot-pod#`) Checkout the beard on this emoji.
 
     ```bash
     echo $PS1
     ```
 
-#### Directory path in command prompt
+### Directory path in command prompt
 
-Example prompts do not include the directory path, because long
-paths can reduce the clarity of examples. Most of the time, the
-command can be executed from any directory. When it matters
-which directory the command is invoked within, the **cd** command
-is used to change into the directory, and the directory is referenced
-with a period (.) to indicate the current directory. **It is important** 
-to format steps in a manner such that one always changes into the right
-directory. This means, for example, if a user is resuming a procedure 
-on a page that page should have resume/pickup spots that ensure a user
-changes directory.
+Example prompts do not include the directory path, because long paths can reduce the clarity of examples. Most of the time, the
+command can be executed from any directory. When it matters which directory the command is invoked within, the `cd` command
+is used to change into the directory, and the directory is referenced with a period (.) to indicate the current directory.
 
+## Ability to pause and resume procedures
 
-Here is an example that lends a user to make mistakes if they are resuming from a short or long break.
+In procedures which take a long time, which involve a large number of steps, or which span different pages, the documentation
+should take care to help avoid errors caused by a user pausing the procedure and resuming it at a later time. In the intervening
+time they may have opened a new shell, or run other commands in the same shell.
 
-```markdown
-# Bad Example
+For commands that need specific environment variables to be set, or to be run in a specific directory, it is important to do one
+of the following things:
 
-This is a bad example where the context switches and a user can't resume half-way without running
-commands in the wrong directory.
+1. Ensure that the directory change or variable assignment happens within the step itself, or in the immediately previous step.
+1. Provide a ***bold warning statement*** stating the required directory or variables.
 
-1. Change into a directory
+### Bad example
 
-1. Do more things
+Here is an example that makes it easy for a user to make mistakes if they are resuming from a short or long break.
+The context switches and a user cannot resume halfway without running commands in the wrong directory.
 
-1. Do more things
+1. Change into a directory.
 
-1. Do more things
+1. Do more things.
 
-1. Do even more things
+1. Do more things.
 
-1. Change into another directory
+1. Do more things.
 
-1. Do more things
+1. Do even more things.
 
-1. Do more things
+1. Change into another directory.
 
-1. Do even more things
+1. Do more things.
 
-1. Return to the original directory
+1. Do more things.
 
-1. Do more things
+1. Do even more things.
 
-1. Do more things
+1. Return to the original directory.
 
-1. Do even more things
-```
+1. Do more things.
 
-Here is an example that combats the above example's problems by offering shorter, resumable stretches of steps.
+1. Do more things.
 
-```markdown
-# Good Example
+1. Do even more things.
 
-This is a good example where every context switch is under a header, allowing users to resume via a 
-URL without loosing context for their step's code-snippets.
+### Good example
 
-### Do A Few Things
+Here is an example that addresses the problems in the previous example by using shorter stretches of steps that are
+more easily paused and resumed. Note that every context switch is under a header, offering users a good place to pause
+without losing context.
 
-1. Change into a directory
+#### Do a few things
 
-1. Do more things
+1. Change into a directory.
 
-1. Do more things
+1. Do more things.
 
-1. Do more things
+1. Do more things.
 
-1. Do even more things
+1. Do more things.
 
-### Do Some Other Cool Things
+1. Do even more things.
 
-1. Change into another directory
+#### Other cool things
 
-1. Do more things
+1. Change into another directory.
 
-1. Do more things
+1. Do more things.
 
-1. Do even more things
+1. Do more things.
 
-### After Doing a Few Things and Other Cool Things Then Start The Final Things
+1. Do even more things.
 
-If the user has not completed some other cool things, they should see 
-[do some other cool things](#do-some-other-cool-things) before proceeding with these steps.
+#### Final things
 
-1. Return to the original directory
+The steps in this section require that the [Other cool things](#other-cool-things) section has been completed successfully.
 
-1. Do more things
+1. Return to the original directory.
 
-1. Do more things
+1. Do more things.
 
-1. Do even more things
-```
+1. Do more things.
 
-The "good" example not only breaks the numerous steps into smaller sections, but a user may return
-or start at any subsection without running commands in the wrong directory. Additionally one may
-add notices if a section depends on another (e.g. steps 9-12 are in directory Y but require a user
-to at least have completed steps 5-8 in directory X).
-
-> **`NOTE`** Shorter headers are recommended than the long ones in the examples.
-
+1. Do even more things.

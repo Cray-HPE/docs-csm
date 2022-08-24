@@ -66,7 +66,6 @@ artifact's
 Artifactory
 artifacts
 ArubaOS-CX
-ASes
 ASICs
 backdoor
 backend
@@ -637,6 +636,10 @@ Alerta
 - install/livecd/Boot_LiveCD_USB.md
 Init
 
+- introduction/documentation_conventions.md
+ipsum
+Lorem
+
 - introduction/site_survey.md
 # To allow Site Init
 Init
@@ -646,6 +649,12 @@ LoadBalancer
 
 - operations/network/management_network/1.2_to_1.3_upgrade.md
 VRFs
+
+- operations/network/management_network/aruba/bgp_basic.md
+ASes
+
+- operations/network/management_network/mellanox/bgp_basic.md
+ASes
 
 - operations/network/management_network/upgrade.md
 Preconfig
@@ -675,3 +684,8 @@ Alerta
 
 - operations/network/dns/DNS.md
 ExternalDNS
+
+- RELEASE_NOTES.md
+5.x
+Antero
+Expat-15
