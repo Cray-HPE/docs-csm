@@ -11,7 +11,7 @@
 
 - [ ] If I added any command snippets, the steps they belong to follow the prompt conventions (see [example][1]).
 - [ ] If I added a new directory, I also updated `.github/CODEOWNERS` with the corresponding team in [Cray-HPE][2].
-- [ ] My commits or Pull-Request Title contain my JIRA information, or I don't have a JIRA.
+- [ ] My commits or Pull-Request Title contain my JIRA information, or I do not have a JIRA.
 
 [1]: https://github.com/Cray-HPE/docs-csm/blob/main/introduction/documentation_conventions.md#using-prompts
 [2]: https://github.com/Cray-HPE/teams

@@ -389,7 +389,7 @@ For more information, see [dracut command line's booting live images definitions
 | All | `1` |
 
 This parameter skips the filesystem check when it exists (or is set to `1`). This is skipped because
-it takes extra time during boot and isn't always necessary.
+it takes extra time during boot and is not always necessary.
 
 For more information, see [dracut command line's standard parameter definition][7].
 
@@ -659,7 +659,7 @@ Deprecated/not-used.
 | :------: | :------------: |
 | All | `exists` |
 
-Disables splash screens, if they're present anywhere.
+Disables splash screens, if they are present anywhere.
 
 ##### `quiet`
 
