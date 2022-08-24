@@ -61,7 +61,7 @@ install_grub2() {
     local index
     local init_cmdline
     local disk_cmdline
-    mount -v -L ${boot_authority} -t /etc/fstab.metal 2>/dev/null || echo 'already mounted continuing ...'
+    mount -v -L ${boot_authority} -T /etc/fstab.metal 2>/dev/null || echo 'already mounted continuing ...'
     working_path="$(lsblk -o MOUNTPOINT -nr /dev/disk/by-${boot_scheme,,}/${boot_authority})"
 
     # Remove all existing entries; anything with CRAY (lower or uppercase). We
@@ -125,7 +125,7 @@ menuentry "$name" --class sles --class gnu-linux --class gnu {
     echo    'Loading kernel ...'
     linuxefi \$prefix/../$disk_cmdline
     echo    'Loading initial ramdisk ...'
-    initrdefi \$prefix/../$INITRD
+    initrdefi \$prefix/../initrd.img.xz
 }
 EOF
 }
@@ -141,13 +141,11 @@ function update_auxiliary_fstab {
     fi
 }
 
+# Gets the boot artifacts and puts them into the bootloader partition.
 function get_boot_artifacts {
-    local squashfs_storage
-    # TODO: Test using the initrd from /boot, knowing it won't match what was in S3/apache2.
-    local base_dir=/squashfs # This must copy from /squashfs and not /boot, the initrd at /squashfs is non-hostonly
-    local live_dir
-    local working_path
     local artifact_error=0
+    local base_dir=/squashfs # This must copy from /squashfs and not /boot, the initrd at /squashfs is non-hostonly
+    local working_path
 
     mount -L ${boot_authority} -T /etc/fstab.metal && echo 'continuing ...'
     working_path="$(lsblk -o MOUNTPOINT -nr /dev/disk/by-${boot_scheme,,}/${boot_authority})"
@@ -163,8 +161,8 @@ function get_boot_artifacts {
         echo >&2 "Kernel file NOT found in $base_dir!"
         artifact_error=1
     fi
-    if ! cp -pv ${base_dir}/${INITRD} "$working_path/boot/${INITRD}" ; then
-        echo >&2 "${INITRD} file NOT found in $base_dir!"
+    if ! cp -pv ${base_dir}/initrd.img.xz "$working_path/boot/initrd.img.xz" ; then
+        echo >&2 "initrd.img.xz file NOT found in $base_dir!"
         artifact_error=1
     fi
 
