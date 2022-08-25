@@ -32,7 +32,7 @@ See [Check for latest documentation](../../../update_product_stream/index.md#che
         ncn-mw# kubectl -n services delete cm cray-ipxe-bss-ipxe
         ```
 
-    1. Put the MAC address collection iPXE booscript into place:
+    1. Put the MAC address collection iPXE boot script into place.
 
         ```bash
         ncn-mw# kubectl -n services create cm cray-ipxe-bss-ipxe --from-file=bss.ipxe=/usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/mac_collection_script.ipxe
