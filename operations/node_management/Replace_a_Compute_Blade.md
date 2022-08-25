@@ -2,6 +2,23 @@
 
 Replace an HPE Cray EX liquid-cooled compute blade.
 
+## Prerequisites
+
+- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
+
+- The Slingshot fabric must be configured with the desired topology.
+
+- The System Layout Service (SLS) must have the desired HSN configuration.
+
+- Check the status of the high-speed network (HSN) and record link status before the procedure.
+
+- The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
+
+  - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
+  - Review the *HPE Cray EX Hand Pump User Guide H-6200*
+
+- The System Admin Toolkit \(SAT\) is installed and configured on the system.
+
 ## Shutdown software and power off the blade
 
 1. Temporarily disable endpoint discovery service (MEDS) for the compute nodes(s) being replaced.
@@ -71,7 +88,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    blade is replaced. Their entries must be deleted from the HSM Ethernet interfaces table and be rediscovered. The BMC NIC MAC addresses for liquid-cooled blades are assigned algorithmically
    and should not be deleted from the HSM.
 
-   1. Delete the Node NIC MAC addresses from the HSM Ethernet interfaces table.
+   1. **For each** node delete the Node's NIC MAC addresses from the HSM Ethernet interfaces table.
 
       Query HSM to determine the Node NIC MAC addresses associated with the blade in cabinet 1000, chassis 3, slot 0, node card 0, node 0.
 
@@ -205,16 +222,16 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
 1. Enable each node individually in the HSM database (in this example, the nodes are `x1000c3s0b0n0-n3`).
 
-1. Optional: To force rediscovery of the components in the chassis (the example shows cabinet 1000, chassis 3).
+1. Rediscover the components in the chassis (the example shows cabinet 1000, chassis 3).
 
     ```bash
-    cray hsm inventory discover create --xnames x1000c3
+    cray hsm inventory discover create --xnames x1000c3b0
     ```
 
-1. Optional: Verify that discovery has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
+1. Verify that discovery has completed (`LastDiscoveryStatus` = "`DiscoverOK`").
 
     ```bash
-    cray hsm inventory redfishEndpoints describe x1000c3
+    cray hsm inventory redfishEndpoints describe x1000c3b0
     ```
 
     Example output:
@@ -244,21 +261,6 @@ Replace an HPE Cray EX liquid-cooled compute blade.
     ```bash
     cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
     ```
-
-1. Update the System Layout Service (SLS).
-
-    1. Dump the existing SLS configuration.
-
-       ```bash
-       cray sls networks describe HSN --format=json > existingHSN.json
-       ```
-
-    1. Copy `existingHSN.json` to a `newHSN.json`, edit `newHSN.json` with the changes, then run
-
-       ```bash
-       curl -s -k -H "Authorization: Bearer ${TOKEN}" https://API_SYSTEM/apis/sls/v1/networks/HSN \
-       -X PUT -d @newHSN.json
-       ```
 
 1. Optional: If necessary, reload DVS on NCNs.
 
