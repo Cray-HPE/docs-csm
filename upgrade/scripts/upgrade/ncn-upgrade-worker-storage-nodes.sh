@@ -201,7 +201,7 @@ unsucceededWorkflows=($(getUnsucceededRebuildWorkflows))
 numOfUnsucceededWorkflows="${#unsucceededWorkflows[*]}"
 
 if [[ ${numOfUnsucceededWorkflows} -gt 1 ]]; then
-    echo "ERROR: There are multiple unsucceeded ${nodeType} rebuild workflows"
+    echo "ERROR: There are multiple unsuccessful ${nodeType} rebuild workflows"
     exit 1
 fi
 

@@ -47,7 +47,7 @@ spec:
       JSONPath: .spec.replicas
       type: integer
     - name: Bootstrap Servers
-      description: The boostrap servers
+      description: The bootstrap servers
       JSONPath: .spec.bootstrapServers
       type: string
       priority: 1

@@ -158,7 +158,7 @@ class SshHost:
         """
         Normalizes the hostname of a target host to connect to by:
 
-        1. When using a switch and targetting another switch via the cmn network, uses the IP instead of the target switch instead of its hostname
+        1. When using a switch and targeting another switch via the CMN network, uses the IP instead of the target switch instead of its hostname
 
         It is so we can get around the bug https://jira-pro.its.hpecorp.net:8443/browse/CASMNET-1599. When we resolve that bug, then remove this workaround.
 
