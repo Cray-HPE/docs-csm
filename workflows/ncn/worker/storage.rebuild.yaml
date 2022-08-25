@@ -115,7 +115,7 @@ spec:
                   value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
-                    /opt/cray/platform-utils/ceph-service-status.sh -v true || /opt/cray/platform-utils/ceph-service-status.sh -A true -v true
+                    /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true || /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -A true -v true
           {{- range $index,$value := .TargetNcns}}
           - name: upgrade-{{$value}}
             templateRef:
@@ -148,8 +148,8 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: scriptContent
                   value: |
-                    /opt/cray/platform-utils/ceph-service-status.sh -v true
-                    /opt/cray/platform-utils/ceph-service-status.sh -n {{$value}} -a true -v true
+                    /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+                    /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n {{$value}} -a true -v true
           {{- end }}
           - name: rescan-ssh-keys
             templateRef:
