@@ -208,6 +208,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [View Configuration Session Logs](configuration_management/View_Configuration_Session_Logs.md)
   - [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
   - [Troubleshoot CFS Session Failing to Complete](configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+  - [Troubleshoot CFS SessionS Failing to Start](configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
 - [Configuration Management with the CFS Batcher](configuration_management/Configuration_Management_with_the_CFS_Batcher.md)
 - [CFS Flow Diagrams](configuration_management/CFS_Flow_Diagrams.md)
 - [Configuration Management of System Components](configuration_management/Configuration_Management_of_System_Components.md)
