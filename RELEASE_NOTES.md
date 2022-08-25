@@ -1,7 +1,5 @@
 # Cray System Management (CSM) - Release Notes
 
-## CSM 1.2.0
-
 CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
 
 ## New
@@ -98,32 +96,35 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
 
 ### Base platform component upgrades
 
-  | Platform Component           | Version        |
-  |------------------------------|----------------|
-  | Ceph                         | `15.2.15`      |
-  | `containerd`                 | `1.5.7`        |
-  | CoreDNS                      | `1.7.0`        |
-  | Etcd for Kubernetes          | `3.5.0`        |
-  | Etcd cluster                 | `3.3.22`       |
-  | Helm                         | `3.2.4`        |
-  | Istio                        | `1.8`          |
-  | Keepalived                   | `2.0.19`       |
-  | Kiali                        | `1.28.1`       |
-  | Kubernetes                   | `1.20.13`      |
-  | Loftsman                     | `1.2.0-1`      |
-  | MetalLB                      | `0.11.0`       |
-  | Multus                       | `3.7`          |
-  | PostgreSQL                   | `12.11`        |
-  | Strimzi Operator             | `0.27.1`       |
-  | Vault                        | `1.5.5`        |
-  | Vault Operator               | `1.8.0`        |
-  | Zookeeper                    | `3.5.9`        |
+| Platform Component           | Version        |
+|------------------------------|----------------|
+| Ceph                         | `15.2.15`      |
+| `containerd`                 | `1.5.7`        |
+| CoreDNS                      | `1.7.0`        |
+| Etcd for Kubernetes          | `3.5.0`        |
+| Etcd cluster                 | `3.3.22`       |
+| Helm                         | `3.2.4`        |
+| Istio                        | `1.8`          |
+| Keepalived                   | `2.0.19`       |
+| Kiali                        | `1.28.1`       |
+| Kubernetes                   | `1.20.13`      |
+| Loftsman                     | `1.2.0-1`      |
+| MetalLB                      | `0.11.0`       |
+| Multus                       | `3.7`          |
+| PostgreSQL                   | `12.11`        |
+| Strimzi Operator             | `0.27.1`       |
+| Vault                        | `1.5.5`        |
+| Vault Operator               | `1.8.0`        |
+| Zookeeper                    | `3.5.9`        |
 
 ### Security improvements
 
-* Switch to non-root containers - A significant number of `root` user container images have been removed. The remainder have been identified for removal in a future release
+* Switch to non-root containers
+  * A significant number of `root` user container images have been removed
+  * The remainder have been identified for removal in a future release
 * Verification of signed RPMs
-* CVE remediation - A significant number of CVEs have been addressed, including a majority of the critical and high CVEs, like `polkit` and `log4j`
+* CVE remediation
+  * A significant number of CVEs have been addressed, including a majority of the critical and high CVEs, like `polkit` and `log4j`
 * Updates to Nexus require authentication
 * Removal of code injection vulnerability in `commit` and `cloneURL` fields of CFS configuration API
 * Further restrictions on allowed HTTP verbs in API requests coming from Compute Nodes
@@ -168,7 +169,7 @@ See [Deprecated features](introduction/differences.md#deprecated_features).
 
 ## Known issues
 
-### Security vulnerability exceptions in CSM 1.2
+### Security vulnerability exceptions
 
 A great deal of emphasis was placed on elimination or reduction of critical or high security vulnerabilities of container images included in the CSM 1.2 release.
 There remain, however, a small number of exceptions that are listed below. General reasons for carrying exceptions include needing to version pin certain core components,

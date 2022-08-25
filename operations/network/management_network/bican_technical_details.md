@@ -1,35 +1,35 @@
 # Bifurcating the CAN - CSM 1.2 Feature Details
 
 1. [CAN new features overview](#1-can-new-features-overview)
-2. [High Speed CAN (CHN)](#2-customer-high-speed-network-chn)
-    1. [CHN system ingress endpoints accessible in CSM 1.2](#21-chn-system-ingress-endpoints-accessible-in-CSM-12)
-    2. [CHN system egress endpoints accessible in CSM 1.2](#22-chn-system-egress-endpoints-accessible-in-CSM-12)
-    3. [Endpoint Naming](#23-endpoint-naming)
+1. [Customer High Speed Network (CHN)](#2-customer-high-speed-network-chn)
+    1. [CHN system ingress endpoints accessible in CSM 1.2](#21-chn-system-ingress-endpoints-accessible-in-csm-12)
+    1. [CHN system egress endpoints accessible in CSM 1.2](#22-chn-system-egress-endpoints-accessible-in-csm-12)
+    1. [Endpoint naming](#23-endpoint-naming)
         1. [Touchpoints: effects and changes](#231-touchpoints-effects-and-changes)
-        2. [When naming occurs](#232-when-naming-occurs)
-        3. [Ability to change post-install](#233-ability-to-change-post-install)
-    4. [Endpoint addressing](#24-endpoint-addressing)
+        1. [When naming occurs](#232-when-naming-occurs)
+        1. [Ability to change post-install](#233-ability-to-change-post-install)
+    1. [Endpoint addressing](#24-endpoint-addressing)
         1. [Touchpoints: effects and changes](#241-touchpoints-effects-and-changes)
-        2. [When addressing occurs](#242-when-addressing-occurs)
-        3. [Ability to change post-install](#243-ability-to-change-post-install)
-    5. [Traffic separation and routing](#25-traffic-separation-and-routing)
+        1. [When addressing occurs](#242-when-addressing-occurs)
+        1. [Ability to change post-install](#243-ability-to-change-post-install)
+    1. [Traffic separation and routing](#25-traffic-separation-and-routing)
         1. [Touchpoints: effects and changes](#251-touchpoints-effects-and-changes)
-        2. [When configuration occurs](#252-when-configuration-occurs)
-        3. [Ability to change post-install](#253-ability-to-change-post-install)
-3. [Management CAN (CMN)](#3-custeomer-management-network-cmn)
+        1. [When configuration occurs](#252-when-configuration-occurs)
+        1. [Ability to change post-install](#253-ability-to-change-post-install)
+1. [Customer Management Management Network (CMN)](#3-customer-management-network-cmn)
     1. [Traffic separation and routing](#31-traffic-separation-and-routing)
-    2. [Endpoint naming](#32-endpoint-naming)
-    3. [Endpoint addressing](#33-endpoint-addressing)
-    4. [Changes](#34-changes)
+    1. [Endpoint naming](#32-endpoint-naming)
+    1. [Endpoint addressing](#33-endpoint-addressing)
+    1. [Changes](#34-changes)
         1. [Touchpoints: effects and changes](#341-touchpoints-effects-and-changes)
-        2. [When configuration occurs](#342-when-configuration-occurs)
-        3. [Ability to change post install](#343-ability-to-change-post-install)
-4. [CAN external/site access (site DNS, LDAP, etc.)](#4-can-externalsite-access-site-dns-ldap-etc)
+        1. [When configuration occurs](#342-when-configuration-occurs)
+        1. [Ability to change post-install](#343-ability-to-change-post-install)
+1. [Customer Access - external/site access](#4-customer-access---externalsite-access)
     1. [Traffic separation and routing](#41-traffic-separation-and-routing)
-    2. [Changes](#42-changes)
+    1. [Changes](#42-changes)
         1. [Touchpoints: effects and changes](#421-touchpoints-effects-and-changes)
-        2. [When configuration occurs](#422-when-configuration-occurs)
-        3. [Ability to change post-install](#423-ability-to-change-post-install)
+        1. [When configuration occurs](#422-when-configuration-occurs)
+        1. [Ability to change post-install](#423-ability-to-change-post-install)
 
 ## 1 CAN new features overview
 
@@ -222,7 +222,7 @@ For the CSM 1.2 release, the CMN is only available via customer-supplied IPv4 ad
 
 - Not recommended, and would be manual.
 
-## 4 Customer Access - external/site access (site DNS, LDAP, etc.)
+## 4 Customer Access - external/site access
 
 System access to site or external resources (such as the Internet, site DNS servers, and site LDAP servers) was previously provided over the CAN.
 By default this CAN access path remains, but for the CSM 1.2 release it is possible during installation to select system-to-site access over the CHN or CMN.

@@ -26,14 +26,15 @@
 set -e
 basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${basedir}/../common/upgrade-state.sh
-. ${basedir}/../common/ncn-common.sh $(hostname)
+. ${basedir}/../common/ncn-common.sh "$(hostname)"
 trap 'err_report' ERR
 # array for paths to unmount after chrooting images
+#shellcheck disable=SC2034
 declare -a UNMOUNTS=()
 
 
 state_name="CHECK_DOC_RPM"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
@@ -41,18 +42,18 @@ if [[ $state_recorded == "0" ]]; then
         exit 1
     fi
     rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-    record_state ${state_name} $(hostname)
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="SNAPSHOOT_CPS_DEPLOYMENT"
-state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+state_name="SNAPSHOT_CPS_DEPLOYMENT"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     ${basedir}/../cps/snapshot-cps-deployment.sh
 
-    record_state ${state_name} $(hostname)
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
