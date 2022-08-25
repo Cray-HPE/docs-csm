@@ -29,71 +29,71 @@ If these two things are true, then it is likely that CFS is creating new session
 
 The primary method of handling this problem is the `batcherMaxBackoff` option. This will slow automatic session creation in these situations and give the `cfs-operator` a chance to catch up.
 
-(`ncn-mw#`) If this value has been changed from its default value of 3600 (1 hour), then it should be set back to that value:
+If this value has been changed from its default value of 3600 (1 hour), then it should be set back to that value:
 
  ```bash
-cray cfs options update --batcher-max-backoff 3600
+ncn-mw# cray cfs options update --batcher-max-backoff 3600
 ```
 
 The issue should eventually resolve automatically.
 
 If there is a reason that users cannot wait for the back-off to resolve this automatically, then the following procedure can be used to purge the event queue. This will disrupt CFS operation and may disrupt existing sessions, so caution should be used.
 
-1. (`ncn-mw#`) Slow down session creation.
+1. Slow down session creation.
 
     If any others users or scripts are creating sessions, make sure that they have stopped. CFS-batcher should be slowed by setting its check interval to an arbitrary high number.
 
     ```bash
-    cray cfs options update --batcher-check-interval 99999
+    ncn-mw# cray cfs options update --batcher-check-interval 99999
     ```
 
 1. Start a new consumer on the Kafka event queue.
 
-    1. (`ncn-mw#`) Open a shell in a Kafka pod.
+    1. Open a shell in a Kafka pod.
 
         ```bash
-        kubectl -n services  exec -it  cray-shared-kafka-kafka-0 -c kafka -- /bin/bash
+        ncn-mw# kubectl -n services  exec -it  cray-shared-kafka-kafka-0 -c kafka -- /bin/bash
         ```
 
-    1. (`pod#`) Start a console consumer on the CFS event topic using the `cfs-operator` consumer group.
+    1. Start a console consumer on the CFS event topic using the `cfs-operator` consumer group.
 
         ```bash
-        bin/kafka-console-consumer.sh --bootstrap-server cray-shared-kafka-kafka-0.cray-shared-kafka-kafka-brokers.services.svc.cluster.local:9092 \
-            --topic cfs-session-events --group cfs-operator
+        pod# bin/kafka-console-consumer.sh --bootstrap-server cray-shared-kafka-kafka-0.cray-shared-kafka-kafka-brokers.services.svc.cluster.local:9092 \
+                --topic cfs-session-events --group cfs-operator
         ```
 
        This command will likely produce not output at first, while Kafka re-balances the consumer group. Leave this command running.
 
-1. (`ncn-mw#`) In a new window, scale down the `cfs-operator`.
+1. In a new window, scale down the `cfs-operator`.
 
     This forces the console consumer to handle the entire event queue.
 
     ```bash
-    kubectl -n services scale --replicas=0 deployment/cray-cfs-operator
+    ncn-mw# kubectl -n services scale --replicas=0 deployment/cray-cfs-operator
     ```
 
-1. (`ncn-mw#`) Wait until the output from the console consumer stops.
+1. Wait until the output from the console consumer stops.
 
     Once the `cfs-operator` is scaled down, there should be a final burst of output from the console consumer. Wait until all output has stopped for at least a minute before continuing.
 
-1. (`pod#`) Cancel the console consumer command and exit the pod shell.
+1. Cancel the console consumer command and exit the pod shell.
 
-1. (`ncn-mw#`) Restore `cfs-operator`.
+1. Restore `cfs-operator`.
 
     ```bash
-    kubectl -n services scale --replicas=1 deployment/cray-cfs-operator
+    ncn-mw# kubectl -n services scale --replicas=1 deployment/cray-cfs-operator
     ```
 
-1. (`ncn-mw#`) Restore `cfs-batcher`.
+1. Restore `cfs-batcher`.
 
     1. Restore the batcher check interval.
 
         ```bash
-        cray cfs options update --batcher-check-interval 10
+        ncn-mw# cray cfs options update --batcher-check-interval 10
         ```
 
     1. Initiate a rolling restart of the batcher.
 
         ```bash
-        kubectl -n services rollout restart deployment/cray-cfs-batcher
+        ncn-mw# kubectl -n services rollout restart deployment/cray-cfs-batcher
         ```
