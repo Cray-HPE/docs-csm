@@ -72,7 +72,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
     ```bash
     while read PAYLOAD ; do
-        curl -H "Authorization: Bearer $MY_TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces' \
+        curl -H "Authorization: Bearer $TOKEN" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces' \
             -H 'Content-Type: application/json' \
             --data-raw "$(echo $PAYLOAD | jq -c '{ComponentID: .xname,Description: .Desc,MACAddress: .MAC,IPAddresses: [{IPAddress: .IP}]}')"
         sleep 5
@@ -110,38 +110,27 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 1. (`ncn#`) Set the environment variable `SLOT` to the blade's location.
 
-     ```bash
-     SLOT="x9000c3s0"
-     ```
+    ```bash
+    SLOT="x9000c3s0"
+    ```
 
 1. (`ncn#`) Clear the Redfish event subscriptions.
 
-    ```bash
-    for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
-        PASSWD=$(cray scsd bmc creds list --targets ${BMC} --format json | jq .Targets[].Password -r)
-        SUBS=$(curl -sk -u root:"${PASSWD}" https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
-        for SUB in ${SUBS}; do
-            echo "Deleting event subscription: https://${BMC}${SUB}" 
-            curl -i -sk -u root:$PASSWD -X DELETE https://${BMC}${SUB}
-        done
-    done
-    ```
+   ```bash
+   for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
+       /usr/share/doc/csm/scripts/operations/node_management/delete_bmc_subscriptions.py $BMC
+   done
+   ```
 
-    Each event subscription deleted that was deleted will have output like the following:
+   Each BMC on the blade will have output like the following:
 
-    ```text
-    Deleting event subscription: https://x9000c3s2b0/redfish/v1/EventService/Subscriptions/1
-    HTTP/2 204
-    access-control-allow-credentials: true
-    access-control-allow-headers: X-Auth-Token
-    access-control-allow-origin: *
-    access-control-expose-headers: X-Auth-Token
-    cache-control: no-cache, must-revalidate
-    content-type: text/html; charset=UTF-8
-    date: Tue, 19 Jan 2038 03:14:07 GMT
-    odata-version: 4.0
-    server: Cray Embedded Software Redfish Service
-    ```
+   ```text
+   Clearing subscriptions from NodeBMC x3000c0s9b0
+   Retrieving BMC credentials from SCSD
+   Retrieving Redfish Event subscriptions from the BMC: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions
+   Deleting event subscription: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+   Successfully deleted https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+   ```
 
 ### Source: Clear the node controller settings
 
@@ -299,38 +288,32 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
 1. (`ncn#`) Set the environment variable `SLOT` to the blade's location.
 
-     ```bash
-     SLOT="x1005c3s0"
-     ```
+    ```bash
+    SLOT="x9000c3s0"
+    ```
 
 1. (`ncn#`) Clear the Redfish event subscriptions.
 
-    ```bash
-    for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
-        PASSWD=$(cray scsd bmc creds list --targets ${BMC} --format json | jq .Targets[].Password -r)
-        SUBS=$(curl -sk -u root:"${PASSWD}" https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
-        for SUB in ${SUBS}; do
-            echo "Deleting event subscription: https://${BMC}${SUB}" 
-            curl -i -sk -u root:"${PASSWD}" -X DELETE https://${BMC}${SUB}
-        done
-    done
-    ```
+   ```bash
+   export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+           -d client_id=admin-client \
+           -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 
-    Each event subscription deleted that was deleted will have output like the following:
+   for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
+       /usr/share/doc/csm/scripts/operations/node_management/delete_bmc_subscriptions.py $BMC
+   done
+   ```
 
-    ```text
-    Deleting event subscription: https://x9000c3s2b0/redfish/v1/EventService/Subscriptions/1
-    HTTP/2 204
-    access-control-allow-credentials: true
-    access-control-allow-headers: X-Auth-Token
-    access-control-allow-origin: *
-    access-control-expose-headers: X-Auth-Token
-    cache-control: no-cache, must-revalidate
-    content-type: text/html; charset=UTF-8
-    date: Tue, 19 Jan 2038 03:14:07 GMT
-    odata-version: 4.0
-    server: Cray Embedded Software Redfish Service
-    ```
+   Each BMC on the blade will have output like the following:
+
+   ```text
+   Clearing subscriptions from NodeBMC x3000c0s9b0
+   Retrieving BMC credentials from SCSD
+   Retrieving Redfish Event subscriptions from the BMC: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions
+   Deleting event subscription: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+   Successfully deleted https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+   ```
 
 ### Destination: Clear the node controller settings
 
@@ -460,13 +443,13 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
    In the example below, replace `myuser`, `mypass`, and `shasta` in the `curl` command with site-specific values. Note
    the value of `access_token`. Review [Retrieve an Authentication Token](../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information. The example is a
-   script to secure a token and set it to the variable `MY_TOKEN`.
+   script to secure a token and set it to the variable `TOKEN`.
 
     ```bash
-    MY_TOKEN=$(curl -s -d grant_type=password -d client_id=shasta -d \
+    export TOKEN=$(curl -s -d grant_type=password -d client_id=shasta -d \
             username=USERNAME -d password=PASSWORD \
             https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-    echo $MY_TOKEN
+    echo $TOKEN
     ```
 
 1. (`ncn-mw#`) Stop Kea from automatically adding MAC address entries to the HSM `ethernetInterfaces` table.
@@ -518,7 +501,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
     ```
 
     ```bash
-    curl -H "Authorization: Bearer ${MY_TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces' \
+    curl -H "Authorization: Bearer ${TOKEN}" -L -X POST 'https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces' \
             -H 'Content-Type: application/json' --data-raw "{
                 \"Description\": \"Node Maintenance Network\",
                 \"MACAddress\": \"$MAC\",
@@ -866,7 +849,7 @@ one on `ncn-w002`, and one on `ncn-w003` or another worker node.
     > This requires an API token. See [Retrieve an Authentication Token](../security_and_authentication/Retrieve_an_Authentication_Token.md) for more information.
 
     ```bash
-    curl -H "Authorization: Bearer ${MY_TOKEN}" -X POST -H "Content-Type: application/json" \
+    curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
         -d '{ "command": "lease4-get-all", "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
     ```
 
