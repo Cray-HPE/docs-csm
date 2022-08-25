@@ -45,7 +45,38 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
     ```
 
-### Step 3: Clear the node controller settings
+### Step 3: Clear Redfish event subscriptions from BMCs on the blade
+
+1. (`ncn#`) Set the environment variable `SLOT` to the blade's location.
+
+    ```bash
+    SLOT="x9000c3s0"
+    ```
+
+1. (`ncn#`) Clear the Redfish event subscriptions.
+
+    ```bash
+    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client \
+            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+    for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
+        /usr/share/doc/csm/scripts/operations/node_management/delete_bmc_subscriptions.py $BMC
+    done
+    ```
+
+    Each BMC on the blade will have output like the following:
+
+    ```text
+    Clearing subscriptions from NodeBMC x3000c0s9b0
+    Retrieving BMC credentials from SCSD
+    Retrieving Redfish Event subscriptions from the BMC: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions
+    Deleting event subscription: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+    Successfully deleted https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+    ```
+
+### Step 4: Clear the node controller settings
 
 1. (`ncn#`) Remove the system-specific settings from each node controller on the blade.
 
@@ -61,7 +92,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
 
    Use Ctrl-C to return to the prompt if command does not return.
 
-### Step 4: Power off the chassis slot
+### Step 5: Power off the chassis slot
 
 1. (`ncn-mw#`) Suspend the `hms-discovery` cron job.
 
@@ -90,7 +121,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     cray capmc xname_off create --xnames x9000c3s0 --recursive true
     ```
 
-### Step 5: Disable the chassis slot
+### Step 6: Disable the chassis slot
 
 1. (`ncn#`) Disable the chassis slot.
 
@@ -100,7 +131,7 @@ This procedure will remove a liquid-cooled blades from an HPE Cray EX system.
     cray hsm state components enabled update --enabled false x9000c3s0
     ```
 
-### Step 6: Record MAC and IP addresses for nodes
+### Step 7: Record MAC and IP addresses for nodes
 
 **IMPORTANT**: Record the NMN MAC and IP addresses for each node in the blade (labeled `Node Maintenance Network`). To prevent disruption in DVS when over operating the NMN, these addresses must
 be maintained in the HSM when the blade is swapped and discovered.
@@ -145,7 +176,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
 
 1. Repeat the command to record the `ComponentID`, MAC addresses, and IP addresses for the `Node Maintenance Network` for the other nodes in the blade.
 
-### Step 7: Cleanup Hardware State Manager
+### Step 8: Cleanup Hardware State Manager
 
 1. (`ncn#`) Set an environment variable that corresponds to the chassis slot of the blade.
 
@@ -197,7 +228,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
     ncn-mw# kubectl delete pods -n services -l app.kubernetes.io/name=cray-dhcp-kea
     ```
 
-### Step 8: Remove the blade
+### Step 9: Remove the blade
 
 1. Remove the blade from the source location.
 
@@ -209,7 +240,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
 
 1. Install the blade from the source system in a storage rack or leave it on the cart.
 
-### Step 9: Rediscover the Chassis BMC of the chassis the blade was removed from
+### Step 10: Rediscover the Chassis BMC of the chassis the blade was removed from
 
 1. (`ncn-mw#`) Determine the name of the Chassis BMC.
 
@@ -230,7 +261,7 @@ The `NodeBMC` MAC and IP addresses are assigned algorithmically and *must not be
     cray hsm inventory discover create --xnames $CHASSIS_BMC
     ```
 
-### Step 10: Re-enable the `hms-discovery` cronjob
+### Step 11: Re-enable the `hms-discovery` cronjob
 
 1. (`ncn-mw#`) Un-suspend the `hms-discovery` cron job if no more liquid-cooled blades are planned to be removed from the system.
 

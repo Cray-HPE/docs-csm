@@ -131,6 +131,37 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    sat swap blade --action enable x9000c3s0
    ```
 
+## Clear Redfish event subscriptions from BMCs on the blade
+
+1. (`ncn#`) Set the environment variable `SLOT` to the blade's location.
+
+    ```bash
+    SLOT="x9000c3s0"
+    ```
+
+1. (`ncn#`) Clear the Redfish event subscriptions.
+
+   ```bash
+   export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+           -d client_id=admin-client \
+           -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+   for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
+       /usr/share/doc/csm/scripts/operations/node_management/delete_bmc_subscriptions.py $BMC
+   done
+   ```
+
+   Each BMC on the blade will have output like the following:
+
+   ```text
+   Clearing subscriptions from NodeBMC x3000c0s9b0
+   Retrieving BMC credentials from SCSD
+   Retrieving Redfish Event subscriptions from the BMC: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions
+   Deleting event subscription: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+   Successfully deleted https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+   ```
+
 ## Perform updates and boot the nodes
 
 1. Optional: If necessary, update the firmware. Review the [Firmware Action Service (FAS)](../firmware/FAS_Admin_Procedures.md) documentation.
@@ -138,21 +169,6 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    ```bash
    cray fas actions create CUSTOM_DEVICE_PARAMETERS.json
    ```
-
-1. Update the System Layout Service (SLS).
-
-   1. Dump the existing SLS configuration.
-
-      ```bash
-      cray sls networks describe HSN --format=json > existingHSN.json
-      ```
-
-   1. Copy `existingHSN.json` to `newHSN.json`, edit `newHSN.json` with the changes, then run the following command:
-
-      ```bash
-      curl -s -k -H "Authorization: Bearer ${TOKEN}" https://API_SYSTEM/apis/sls/v1/networks/HSN \
-                -X PUT -d @newHSN.json
-      ```
 
 1. Power on and boot the nodes.
 

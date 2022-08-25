@@ -139,7 +139,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 1. (`ncn#`) Obtain an authentication token to access the API gateway.
 
     ```bash
-    TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
                 -d client_id=admin-client \
                 -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
@@ -375,6 +375,32 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
             ```bash
             curl -k -u root:password https://x1005c3s0b0/redfish/v1/Managers
             ```
+
+1. (`ncn#`) Clear out the existing Redfish event subscriptions from the BMCs on the blade.
+
+    1. Set the environment variable `SLOT` to the blade's location.
+
+        ```bash
+        SLOT="x1005c3s0"
+        ```
+
+    1. Clear the Redfish event subscriptions.
+
+        ```bash
+        for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
+            /usr/share/doc/csm/scripts/operations/node_management/delete_bmc_subscriptions.py $BMC
+        done
+        ```
+
+        Each BMC on the blade will have output like the following:
+
+        ```text
+        Clearing subscriptions from NodeBMC x3000c0s9b0
+        Retrieving BMC credentials from SCSD
+        Retrieving Redfish Event subscriptions from the BMC: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions
+        Deleting event subscription: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+        Successfully deleted https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+        ```
 
 1. (`ncn#`) Enable the nodes in the HSM database.
 
