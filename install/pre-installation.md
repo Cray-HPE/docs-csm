@@ -442,7 +442,10 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${CEPH_VERSION}"
    ```
 
-1. (`pit#`) Generate SSH keys and invoke `ncn-image-modification.sh`:
+1. (`pit#`) Modify the NCN images with SSH keys and `root` passwords.
+
+   The following substeps provide the most commonly used defaults for this process. For more advanced options, see
+   [Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
 
    1. Generate SSH keys.
 
@@ -452,17 +455,20 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        ssh-keygen -N "" -t rsa
        ```
 
-   1. Export the password hash for `root` that is needed for the `ncn-image-modification.sh` script:
+   1. Export the password hash for `root` that is needed for the `ncn-image-modification.sh` script.
+
+       This will set the NCN `root` user password to be the same as the `root` user password on the PIT.
 
        ```bash
        export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
        ```
 
-   1. Run `ncn-image-modification.sh` from the CSM documentation RPM:
+   1. Inject these into the NCN images by running `ncn-image-modification.sh` from the CSM documentation RPM.
 
        ```bash
        NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
-       $NCN_MOD_SCRIPT -p \
+       echo "${NCN_MOD_SCRIPT}"
+       "${NCN_MOD_SCRIPT}" -p \
           -d /root/.ssh \
           -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
           -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
