@@ -105,41 +105,35 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
 
 ## Use SAT to remove the blade from hardware management
 
-1. Clear out the existing Redfish event subscriptions from the BMCs on the blade.
+1. (`ncn#`) Clear out the existing Redfish event subscriptions from the BMCs on the blade.
 
-    1. (`ncn#`) Set the environment variable `SLOT` corresponding to the blades location:
+    1. Set the environment variable `SLOT` to the blade's location.
 
         ```bash
         SLOT=x9000c3s0
         ```
 
-    1. (`ncn#`) Clear the Redfish event subscriptions:
+    1. Clear the Redfish event subscriptions.
 
         ```bash
-        for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep $SLOT); do
-            PASSWD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
-            SUBS=$(curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -r '.Members[]."@odata.id"')
-            for SUB in $SUBS; do
-                echo "Deleting event subscription: https://${BMC}${SUB}" 
-                curl -i -sk -u root:$PASSWD -X DELETE https://${BMC}${SUB}
-            done
+        export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+                -d client_id=admin-client \
+                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+        for BMC in $(cray hsm inventory  redfishEndpoints list --type NodeBMC --format json | jq .RedfishEndpoints[].ID -r | grep ${SLOT}); do
+            /usr/share/doc/csm/scripts/operations/node_management/delete_bmc_subscriptions.py $BMC
         done
         ```
 
-        Each event subscription deleted that was deleted will have output like the following:
+        Each BMC on the blade will have output like the following:
 
         ```text
-        Deleting event subscription: https://x1005c3s0b0/redfish/v1/EventService/Subscriptions/1
-        HTTP/2 204
-        access-control-allow-credentials: true
-        access-control-allow-headers: X-Auth-Token
-        access-control-allow-origin: *
-        access-control-expose-headers: X-Auth-Token
-        cache-control: no-cache, must-revalidate
-        content-type: text/html; charset=UTF-8
-        date: Tue, 19 Jan 2038 03:14:07 GMT
-        odata-version: 4.0
-        server: Cray Embedded Software Redfish Service
+        Clearing subscriptions from NodeBMC x3000c0s9b0
+        Retrieving BMC credentials from SCSD
+        Retrieving Redfish Event subscriptions from the BMC: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions
+        Deleting event subscription: https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
+        Successfully deleted https://x3000c0s9b0/redfish/v1/EventService/Subscriptions/1
         ```
 
 1. Power off the slot and delete blade information from HSM.
