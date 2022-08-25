@@ -405,7 +405,7 @@ The NCN MAC addresses need to be collected using the [Collect NCN MAC Addresses]
     >
     > If the following text is present at the end of the `add_management_ncn.py` script output,
     > then the BMC is not using the assigned IP address. This happens because the BMC requests an IP
-    > prior to the NCN data being added, and now that we've added data we need to align the BMC.
+    > prior to the NCN data being added, and now that we have added data we need to align the BMC.
     >
     > * Sample output when the BMC has an unexpected IP address.
     >

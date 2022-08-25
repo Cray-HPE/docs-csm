@@ -47,12 +47,12 @@ spec:
       JSONPath: .spec.replicas
       type: integer
     - name: Consumer Bootstrap Servers
-      description: The boostrap servers for the consumer
+      description: The bootstrap servers for the consumer
       JSONPath: .spec.consumer.bootstrapServers
       type: string
       priority: 1
     - name: Producer Bootstrap Servers
-      description: The boostrap servers for the producer
+      description: The bootstrap servers for the producer
       JSONPath: .spec.producer.bootstrapServers
       type: string
       priority: 1
