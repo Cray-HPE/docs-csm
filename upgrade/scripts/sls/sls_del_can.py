@@ -32,6 +32,7 @@ from sls_utils.Managers import NetworkManager
 
 help = "Delete CAN entries from SLS."
 
+
 @click.command(help=help)
 @click.option(
     "--sls-input-file",
@@ -45,7 +46,6 @@ help = "Delete CAN entries from SLS."
     type=click.File("w"),
     default="migrated_sls_file.json",
 )
-
 @click.pass_context
 def main(
     ctx,
@@ -59,7 +59,10 @@ def main(
         sls_input_file (str): Name of the SLS input file
         sls_output_file (str): Name of the updated SLS output file
     """
-    click.confirm('You are deleting the CAN network data structure, Do you want to continue?', abort=True)
+    click.confirm(
+        "You are deleting the CAN network data structure, Do you want to continue?",
+        abort=True,
+    )
     click.secho("Loading SLS JSON file.", fg="bright_white")
     try:
         sls_json = json.load(sls_input_file)
@@ -78,7 +81,6 @@ def main(
     #
 
     delete_can_network(networks)
-
 
     if sls_output_file:
         sls_json.pop("Networks")

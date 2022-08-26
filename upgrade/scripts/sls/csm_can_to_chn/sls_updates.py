@@ -33,7 +33,6 @@ from sls_utils.ipam import (
     next_free_ipv4_address,
     prefixlength,
     prefixlength_from_hosts,
-    temp_is_subnet_of,
 )
 from sls_utils.Networks import BicanNetwork
 from sls_utils.Networks import Network
@@ -59,13 +58,19 @@ def sls_and_input_data_checks(
     )
     can_subnet = networks.get("CAN").ipv4_network()
     cmn_subnet = networks.get("CMN").ipv4_network()
-    
+
     if can_subnet.overlaps(chn_subnet[1]):
-        click.secho(f"CAN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}", fg="red")
+        click.secho(
+            f"CAN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}",
+            fg="red",
+        )
         sys.exit(1)
 
     if cmn_subnet.overlaps(chn_subnet[1]):
-        click.secho(f"CMN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}", fg="red")
+        click.secho(
+            f"CMN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}",
+            fg="red",
+        )
         sys.exit(1)
     chn = networks.get("CHN")
     if chn is not None:
@@ -98,6 +103,7 @@ def create_bican_network(networks, default_route_network_name):
         bican = BicanNetwork(default_route_network_name=default_route_network_name)
         networks.update({bican.name(): bican})
 
+
 def delete_can_network(networks):
     """Delete SLS CAN network data structure."""
 
@@ -108,12 +114,16 @@ def delete_can_network(networks):
     if networks.get("BICAN") is not None:
         default_route = networks.get("BICAN").system_default_route()
         if default_route != "CHN":
-            click.secho(f"The current system default route is set to {default_route}!! \nThis script should only be used when the default route is set to CHN", fg="red")
+            click.secho(
+                f"The current system default route is set to {default_route}!! \nThis script should only be used when the default route is set to CHN",
+                fg="red",
+            )
             sys.exit(1)
 
     if networks.get("CAN") is not None:
         click.secho("Removing CAN network data structure from SLS", fg="bright_white")
         networks.pop("CAN", None)
+
 
 def create_chn_network(
     networks,
