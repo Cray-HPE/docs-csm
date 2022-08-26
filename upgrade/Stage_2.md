@@ -109,10 +109,9 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
    ```bash
    scp ncn-m001:/root/output.log /root/pre-m001-reboot-upgrade.log &&
              cray artifacts create config-data pre-m001-reboot-upgrade.log /root/pre-m001-reboot-upgrade.log
-   csi_rpm=$(ssh ncn-m001 "find /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/ -name 'cray-site-init*.rpm'") &&
-             scp ncn-m001:${csi_rpm} /tmp/cray-site-init.rpm &&
+   csi_rpm=$(find /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/ -name 'cray-site-init*.rpm') &&
              scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm &&
-             rpm -Uvh --force /tmp/cray-site-init.rpm /root/docs-csm-latest.noarch.rpm
+             rpm -Uvh --force ${csi_rpm} /root/docs-csm-latest.noarch.rpm
    ```
 
 1. Upgrade `ncn-m001`.
