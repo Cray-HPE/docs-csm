@@ -22,6 +22,7 @@
 """Functions used to update SLS."""
 from collections import defaultdict
 import ipaddress
+import sys
 
 import click
 from sls_utils.ipam import (
@@ -32,6 +33,7 @@ from sls_utils.ipam import (
     next_free_ipv4_address,
     prefixlength,
     prefixlength_from_hosts,
+    temp_is_subnet_of,
 )
 from sls_utils.Networks import BicanNetwork
 from sls_utils.Networks import Network
@@ -42,7 +44,7 @@ from sls_utils.Reservations import Reservation
 def sls_and_input_data_checks(
     networks,
     bican_name,
-    chn_data,
+    chn_subnet,
 ):
     """Check input values and SLS data for proper logic.
 
@@ -55,7 +57,16 @@ def sls_and_input_data_checks(
         "Checking input values and SLS data for proper logic.",
         fg="bright_white",
     )
+    can_subnet = networks.get("CAN").ipv4_network()
+    cmn_subnet = networks.get("CMN").ipv4_network()
+    
+    if can_subnet.overlaps(chn_subnet[1]):
+        click.secho(f"CAN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}", fg="red")
+        sys.exit(1)
 
+    if cmn_subnet.overlaps(chn_subnet[1]):
+        click.secho(f"CMN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}", fg="red")
+        sys.exit(1)
     chn = networks.get("CHN")
     if chn is not None:
         click.secho(
@@ -63,7 +74,7 @@ def sls_and_input_data_checks(
             fg="white",
         )
     if bican_name == "CHN":
-        if chn_data[1] == ipaddress.IPv4Network("10.104.7.0/24"):
+        if chn_subnet[1] == ipaddress.IPv4Network("10.104.7.0/24"):
             click.secho(
                 "    WARNING: Command line --customer-highspeed-network values not found. "
                 "Using [default: 5, 10.104.7.0/24]",
@@ -87,6 +98,22 @@ def create_bican_network(networks, default_route_network_name):
         bican = BicanNetwork(default_route_network_name=default_route_network_name)
         networks.update({bican.name(): bican})
 
+def delete_can_network(networks):
+    """Delete SLS CAN network data structure."""
+
+    if networks.get("CHN") is None:
+        click.secho("CHN subnet not found in SLS", fg="red")
+        sys.exit(1)
+
+    if networks.get("BICAN") is not None:
+        default_route = networks.get("BICAN").system_default_route()
+        if default_route != "CHN":
+            click.secho(f"The current system default route is set to {default_route}!! \nThis script should only be used when the default route is set to CHN", fg="red")
+            sys.exit(1)
+
+    if networks.get("CAN") is not None:
+        click.secho("Removing CAN network data structure from SLS", fg="bright_white")
+        networks.pop("CAN", None)
 
 def create_chn_network(
     networks,
