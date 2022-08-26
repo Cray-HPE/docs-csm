@@ -1,3 +1,4 @@
+#! /usr/bin/env python3
 #
 # MIT License
 #
@@ -21,9 +22,10 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-
 virt_file = "/opt/cray/csm/scripts/csm_rbd_tool/bin/activate_this.py"
 exec(compile(open(virt_file, "rb").read(), virt_file, 'exec'), dict(__file__=virt_file))
+
+#execfile(virt_env, dict(__file__=virt_env))
 
 import subprocess
 import socket
@@ -39,6 +41,7 @@ from fabric import *
 import paramiko
 from psutil import disk_partitions
 import shutil
+
 
 
 """
@@ -475,6 +478,10 @@ def main():
     device = ''
     local_host = local_hostname()
 
+    for manager in managers:
+        dir_exists(local_host, mnt_path, manager)
+
+
     if dev_exists:
         test, watcher_ip, watcher_name = is_watched(pool, rbd_name)
         mounted = is_mounted(local_host, mnt_path, watcher_name[0])
@@ -535,8 +542,6 @@ def main():
                 exit(1)
 
     if args.pool_action == 'create' or args.rbd_action == "create":
-        for manager in managers:
-            dir_exists(local_host, mnt_path, manager)
         if not pool_exists:
             watcher_name = ['None']
             if not args.pool_action:
