@@ -8,7 +8,7 @@ This procedure preserves the information stored in SLS when backing up or reinst
 
 ## Prerequisites
 
-- The Cray Command Line Interface is configured. See [Configure the Cray CLI](../configure_cray_cli.md)
+- The Cray Command Line Interface is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 - This procedure requires administrative privileges.
 
 ## Procedure
