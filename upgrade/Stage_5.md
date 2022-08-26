@@ -3,6 +3,25 @@
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
+- [Start typescript](#start-typescript)
+- [Procedure](#procedure)
+- [Stop typescript](#stop-typescript)
+- [Stage completed](#stage-completed)
+
+## Start typescript
+
+1. (`ncn-m002#`) If a typescript session is already running in the shell, then first stop it with the `exit` command.
+
+1. (`ncn-m002#`) Start a typescript.
+
+    ```bash
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_5.txt
+    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    ```
+
+If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
+after a break, always be sure that a typescript is running before proceeding.
+
 ## Procedure
 
 1. If custom configuration content was merged with content from a previous CSM
@@ -45,14 +64,14 @@
 
    > **IMPORTANT:**
    >
-   > * If using a different branch than the default to include custom
+   > - If using a different branch than the default to include custom
        changes, use the `--git-commit` argument to specify the desired commit on
        the branch including the customizations. Otherwise this argument is not needed.
-   > * By default the latest available CSM release will be applied. Otherwise, the
+   > - By default the latest available CSM release will be applied. Otherwise, the
        release may be specified explicitly using the `--csm-release` argument.
        This argument is not needed if using the default CSM configuration found in the
        product catalog in the earlier step.
-   > * If the existing `ncn-personalization` configuration contains layers other than
+   > - If the existing `ncn-personalization` configuration contains layers other than
        the CSM layer from the `csm-config-management` repository, then the arguments
        to the script should include `--ncn-config-file`. If this argument is not specified,
        then any existing non-`csm` layers will not be preserved in the new
@@ -70,6 +89,10 @@
    ```bash
    cray cfs configurations describe ncn-personalization --format json | tee ncn-personalization.json.new
    ```
+
+## Stop typescript
+
+Stop any typescripts that were started during this stage.
 
 ## Stage completed
 

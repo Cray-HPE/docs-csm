@@ -8,13 +8,28 @@
 
 Stage 0 has several critical procedures which prepare the environment and verify if the environment is ready for the upgrade.
 
-- [Stage 0 - Prerequisites and Preflight Checks](#stage-0---prerequisites-and-preflight-checks)
-  - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
-    - [Direct download](#direct-download)
-    - [Manual copy](#manual-copy)
-  - [Stage 0.2 - Prerequisites check](#stage-03---prerequisites-check)
-  - [Stage 0.3 - Backup workload manager data](#stage-04---backup-workload-manager-data)
-  - [Stage completed](#stage-completed)
+- [Start typescript](#start-typescript)
+- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+  - [Direct download](#direct-download)
+  - [Manual copy](#manual-copy)
+- [Stage 0.2 - Prerequisites check](#stage-03---prerequisites-check)
+- [Stage 0.3 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+- [Stop typescript](#stop-typescript)
+- [Stage completed](#stage-completed)
+
+## Start typescript
+
+1. (`ncn-m001#`) If a typescript session is already running in the shell, then first stop it with the `exit` command.
+
+1. (`ncn-m001#`) Start a typescript.
+
+    ```bash
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_0.txt
+    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    ```
+
+If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
+after a break, always be sure that a typescript is running before proceeding.
 
 ## Stage 0.1 - Prepare assets
 
@@ -207,6 +222,10 @@ Stage 0 has several critical procedures which prepare the environment and verify
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
+
+## Stop typescript
+
+Stop any typescripts that were started during this stage.
 
 ## Stage completed
 

@@ -56,7 +56,48 @@ The upgrade is a guided process starting with [Upgrade Management Nodes and CSM 
 - Although it is not recommended, the [Booting CSM `barebones` image](../operations/validate_csm_health.md#5-booting-csm-barebones-image)
   test may be skipped if all compute nodes are active running application workloads.
 
-See [Validate CSM Health](../operations/validate_csm_health.md).
+1. (`ncn-m002#`) If a typescript session is already running in the shell, then first stop it with the `exit` command.
+
+1. (`ncn-m002#`) Start a typescript.
+
+    ```bash
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).post_upgrade_health_validation.txt
+    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    ```
+
+    If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
+    after a break, always be sure that a typescript is running before proceeding.
+
+1. Validate CSM health.
+
+    See [Validate CSM Health](../operations/validate_csm_health.md).
+
+1. (`ncn-m002#`) Stop typescripts.
+
+    Stop any typescripts that were started during the health validation procedure.
+
+1. (`ncn-m002#`) Backup upgrade logs and typescript files to a safe location.
+
+    1. If any typescript files are on different NCNs, then copy them to `/root` on `ncn-m002`.
+
+    1. Create tar file containing the logs and typescript files.
+
+        > If any typescript file names are not of the form `csm_upgrade.*.txt`, then append their names
+        > to the following `tar` command in order to include them.
+
+        ```bash
+        TARFILE="csm_upgrade.$(date +%Y%m%d_%H%M%S).logs.tgz"
+        tar -czvf "/root/${TARFILE}" /root/csm_upgrade.*.txt /root/output.log /root/pre-m001-reboot-upgrade.log
+        ```
+
+    1. Upload the tar file into S3.
+
+        This step requires that the Cray Command Line Interface is configured on the node. This should have already
+        been done on `ncn-m002` during the upgrade process. If needed, see [Configure the Cray CLI](../operations/configure_cray_cli.md).
+
+        ```bash
+        cray artifacts create config-data "${TARFILE}" "/root/${TARFILE}"
+        ```
 
 ## 5. Next topic
 
