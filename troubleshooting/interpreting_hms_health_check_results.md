@@ -15,7 +15,7 @@
   - [Warning flags incorrectly set in HSM for Mountain BMCs](#warning-flags-incorrectly-set-in-hsm-for-mountain-bmcs)
   - [BMCs set to `On` state in HSM](#bmcs-set-to-on-state-in-hsm)
   - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#componentendpoints-of-redfish-subtype-auxiliarycontroller-in-hsm)
-  - [`ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM](#componentendpoints-of-ethernetinterfaces-named-de-in-hsm)
+  - [`ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM](#componentendpoints-with-ethernetinterfaces-named-de-in-hsm)
   - [Custom Roles and SubRoles for Components in HSM](#custom-roles-and-subroles-for-components-in-hsm)
 
 ## Introduction
@@ -315,7 +315,7 @@ This section outlines known issues that cause HMS health check failures. Some of
 - [Warning flags incorrectly set in HSM for Mountain BMCs](#warning-flags-incorrectly-set-in-hsm-for-mountain-bmcs)
 - [BMCs set to `On` state in HSM](#bmcs-set-to-on-state-in-hsm)
 - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#componentendpoints-of-redfish-subtype-auxiliarycontroller-in-hsm)
-- [`ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM](#componentendpoints-of-ethernetinterfaces-named-de-in-hsm)
+- [`ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM](#componentendpoints-with-ethernetinterfaces-named-de-in-hsm)
 - [Custom Roles and SubRoles for Components in HSM](#custom-roles-and-subroles-for-components-in-hsm)
 
 ### Warning flags incorrectly set in HSM for Mountain BMCs
