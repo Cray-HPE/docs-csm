@@ -4,7 +4,7 @@ By default, HPE BMC controllers have the `Administrator` user account. In order 
 
 When is this procedure applicable:
 
-1. Root password is known & does not match the destination system default air-cooled BMC credentials. ie a node has been moved between systems and each system gas different default global credentials.
+1. Root password is known & does not match the destination system default air-cooled BMC credentials. For example, a node has been moved between systems and each system gas different default global credentials.
 2. Root user does not exist.
 3. Root user exists with an unknown password.
 
@@ -39,7 +39,7 @@ When is this procedure applicable:
             vault kv get secret/reds-creds/defaults | jq .data.Cray.password -r)
         ```
 
-1. (`ncn#`) Verify the contents of EXPECTED_ROOT_PASSWORD:
+1. (`ncn#`) Verify the contents of `EXPECTED_ROOT_PASSWORD`:
 
     ```bash
     echo $EXPECTED_ROOT_PASSWORD

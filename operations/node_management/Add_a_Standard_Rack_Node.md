@@ -239,7 +239,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 1. Update workload manager configuration to include any new added compute nodes to the system.
 
-   1. **If Slurm is the installed workload manager**, then see section *10.3.1 Add a New or Configure an Existing Slurm Template* in the *HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)* to regenerate the Slurm
+   1. **If Slurm is the installed workload manager**, then see section *10.3.1 Add a New or Configure an Existing Slurm Template* in the *`HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)`* to regenerate the Slurm
       configuration to include any new compute nodes added to the system.
    1. **If PBS Pro is the installed workload manager**: *Coming soon*
 

@@ -90,7 +90,7 @@ The `root` account is not configured in the example shown above. If `root` is al
             vault kv get secret/reds-creds/defaults | jq .data.Cray.password -r)
         ```
 
-1. (`ncn#`) Verify the contents of EXPECTED_ROOT_PASSWORD:
+1. (`ncn#`) Verify the contents of `EXPECTED_ROOT_PASSWORD`:
 
     ```bash
     echo $EXPECTED_ROOT_PASSWORD
