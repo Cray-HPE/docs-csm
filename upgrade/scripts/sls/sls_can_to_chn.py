@@ -145,15 +145,6 @@ def main(
     # remove the UAI NMN DHCP ranges
     remove_uai_nmn_dhcp_ranges(networks)
     #
-    # Remove superfluous user network if requested
-    #   (ORDER DEPENDENT!!! - Must be run at end)
-    #   NEVER REMOVE THE HSN!!!
-    # if bican_user_network_name == "CHN":
-    #     click.secho("Removing unused CAN", fg="bright_white")
-    #     networks.pop("CAN", None)
-    #
-    # Create BICAN network
-    #   (not order dependent)
     bican = networks.get("BICAN")
     bican.system_default_route(bican_user_network_name)
     click.secho(

@@ -60,7 +60,7 @@ def main(
         sls_output_file (str): Name of the updated SLS output file
     """
     click.confirm(
-        "You are deleting the CAN network data structure, Do you want to continue?",
+        "\n  You are deleting the CAN network data structure from SLS.\n  This script should only be used when upgrading from the CAN to the CHN.\n  Do you want to continue?",
         abort=True,
     )
     click.secho("Loading SLS JSON file.", fg="bright_white")

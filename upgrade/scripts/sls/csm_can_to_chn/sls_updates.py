@@ -108,14 +108,17 @@ def delete_can_network(networks):
     """Delete SLS CAN network data structure."""
 
     if networks.get("CHN") is None:
-        click.secho("CHN subnet not found in SLS", fg="red")
+        click.secho(
+            "CHN subnet not found in SLS, to remove the CAN, first create a CHN.",
+            fg="red",
+        )
         sys.exit(1)
 
     if networks.get("BICAN") is not None:
         default_route = networks.get("BICAN").system_default_route()
         if default_route != "CHN":
             click.secho(
-                f"The current system default route is set to {default_route}!! \nThis script should only be used when the default route is set to CHN",
+                f"The current user network is set to {default_route}\nTo remove the CAN this value must be set to CHN first",
                 fg="red",
             )
             sys.exit(1)
