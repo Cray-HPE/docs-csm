@@ -1,6 +1,6 @@
 # Change SNMP Credentials on Leaf-BMC Switches
 
-This procedure changes the SNMP credentials on management leaf-BMC switches in the system. All SNMP credentials need to be the same as those found in the customizations.yaml sealed secret cray_reds_credentials.
+This procedure changes the SNMP credentials on management leaf-BMC switches in the system. All SNMP credentials need to be the same as those found in the `customizations.yaml` sealed secret `cray_reds_credentials`.
 
 **`NOTE`** This procedure will not update the default SNMP credentials used when new leaf BMC switches are added to the system. To update the default SNMP credentials for new hardware, follow
 the [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md) procedure.
@@ -57,13 +57,13 @@ the [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](Update_
 
 ## Procedure
 
-There are three steps involved. The first two steps involve running the *leaf_switch_snmp_creds.sh* script. This script can be used to check for undesirable SNMP user IDs/creds, and also to set new ones. The default behavior is to check first and then set
-new creds. The script can be run either interactively (no env vars or command line options) or non-interactively (using env vars on the command line). The following examples use the env var method.
+There are three steps involved. The first two steps involve running the `leaf_switch_snmp_creds.sh` script. This script can be used to check for undesirable SNMP user IDs and credentials, and also to set new ones. The default behavior is to check first
+and then set new credentials. The script can be run either interactively (no environment variables or command line options) or non-interactively (using environment variables on the command line). The following examples use the environment variable method.
 
 1. (`ncn#`) Set environment variables containing the new SNMP credentials:
     > `read -s` is used to prevent the password from appearing in the command history.
 
-    1. Set the SNMP auth password environment variable:
+    1. Set the SNMP authentication password environment variable:
 
         ```bash
         read -s SNMP_AUTH_PASS
@@ -76,7 +76,7 @@ new creds. The script can be run either interactively (no env vars or command li
         foobar01
         ```
 
-    1. Set the SNMP priv password environment variable:
+    1. Set the SNMP privacy password environment variable:
 
         ```bash
         read -s SNMP_PRIV_PASS
@@ -102,7 +102,7 @@ new creds. The script can be run either interactively (no env vars or command li
     secret
     ```
 
-3. (`ncn#`) Update SNMP credentials (desired SNMP userID and auth/priv passwords) on leaf-BMC switches. The SNMP user IDs and passwords are not shown.
+3. (`ncn#`) Update SNMP credentials (desired SNMP user ID and authentication and privacy passwords) on leaf-BMC switches. The SNMP user IDs and passwords are not shown.
 
    Also note that this will change the SNMP credentials in Vault. See below for details on how to do that.
 
@@ -206,8 +206,8 @@ new creds. The script can be run either interactively (no env vars or command li
 
 ## Troubleshooting
 
-If the creds are not working, check the Vault creds as shown above.
+If the credentials are not working, check the Vault credentials as shown above.
 
-If the *leaf_switch_snmp_creds.sh* script fails for whatever reason on any
-leaf-BMC switch, the creds can be looked at and changed manually using the
+If the `leaf_switch_snmp_creds.sh` script fails for whatever reason on any
+leaf-BMC switch, the credentials can be looked at and changed manually using the
 procedures found in [Aruba SNMP Users Guide](../../operations/network/management_network/aruba/snmpv3_users.md) or [Dell SNMP Users Guide](../../operations/network/management_network/dell/snmpv3_users.md).

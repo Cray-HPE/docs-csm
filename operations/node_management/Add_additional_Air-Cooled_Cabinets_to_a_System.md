@@ -67,7 +67,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     - Backups of the following before any changes are applied
        - BSS boot parameters for each existing management NCN.
        - Management NCN Global BSS boot parameters.
-       - Dumpstate of SLS before any changes were applied.
+       - Dump state of SLS before any changes were applied.
 
     > **Reminder** new management NCNs are not handled by this tool. They will be handled by a different procedure referenced in the last step of this procedure.
 
@@ -172,7 +172,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     After the management network has been reconfigured, it may take up to 10 minutes for the hardware in the new cabinets to become discovered.
 
-    To help troubleshoot why new hardware may be in `HTTPsGetFailed` the following script can check for some common problems against all of the RedfishEndpoints that are currently in `HTTPsGetFailed`. These common problems include:
+    To help troubleshoot why new hardware may be in `HTTPsGetFailed` the following script can check for some common problems against all of the Redfish Endpoints that are currently in `HTTPsGetFailed`. These common problems include:
        - The hostname of the BMC resolves in DNS.
        - The BMC is configured with the expected root user credentials. Here are some common causes of this issue:
        - Root user is not configured on the BMC.
@@ -219,7 +219,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
 1. Update workload manager configuration to include any new added compute nodes to the system.
 
-   1. **If Slurm is the installed workload manager**, then see section *10.3.1 Add a New or Configure an Existing Slurm Template* in the *HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)* to regenerate the Slurm
+   1. **If Slurm is the installed workload manager**, then see section *10.3.1 Add a New or Configure an Existing Slurm Template* in the *`HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)`* to regenerate the Slurm
       configuration to include any new compute nodes added to the system.
    1. **If PBS Pro is the installed workload manager**: *Coming soon*
 
