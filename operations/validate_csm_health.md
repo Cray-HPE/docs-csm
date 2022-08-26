@@ -617,7 +617,7 @@ Overall status: PASSED (Passed: 40, Failed: 0)
   Before running this procedure, the static IP address reservation data has not yet been loaded into the
   Hardware State Manager (HSM), so DNS records may be missing.
 
-- After deploying the final NCN, this test may fail with an `UnresolvedHostname` error.
+- After deploying the final NCN, this test may fail with an `UnresolvedHostname` error or a `CannotLoginException`.
 
   To work around this issue, perform the following procedure:
 
