@@ -18,4 +18,3 @@ This will upload and overwrite the current SLS database with the contents of the
 ```bash
 cray sls loadstate create sls_dump.json
 ```
-
