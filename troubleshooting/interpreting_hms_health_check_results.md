@@ -15,6 +15,7 @@
   - [Warning flags incorrectly set in HSM for Mountain BMCs](#warning-flags-incorrectly-set-in-hsm-for-mountain-bmcs)
   - [BMCs set to `On` state in HSM](#bmcs-set-to-on-state-in-hsm)
   - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#componentendpoints-of-redfish-subtype-auxiliarycontroller-in-hsm)
+  - [`ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM](#componentendpoints-of-ethernetinterfaces-named-de-in-hsm)
   - [Custom Roles and SubRoles for Components in HSM](#custom-roles-and-subroles-for-components-in-hsm)
 
 ## Introduction
@@ -303,17 +304,18 @@ The following types of HMS test failures should be considered blocking for syste
 
 The following types of HMS test failures should **not** be considered blocking for system installations:
 
-- Failures due to hardware issues on individual compute nodes (alerts or warning flags set in HSM)
+- Failures due to hardware issues on individual nodes (alerts or warning flags set in HSM)
 
 It is typically safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation or upgrade has completed.
 
 ## Known issues
 
-This section outlines known issues that cause HMS health check failures. These issues have been fixed in `CSM-1.2` but may still be encountered on `CSM-1.2` systems that have been upgraded from a previous release.
+This section outlines known issues that cause HMS health check failures. Some of these issues have been fixed in `CSM-1.2` but may still be encountered on `CSM-1.2` systems that have been upgraded from a previous release.
 
 - [Warning flags incorrectly set in HSM for Mountain BMCs](#warning-flags-incorrectly-set-in-hsm-for-mountain-bmcs)
 - [BMCs set to `On` state in HSM](#bmcs-set-to-on-state-in-hsm)
 - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#componentendpoints-of-redfish-subtype-auxiliarycontroller-in-hsm)
+- [`ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM](#componentendpoints-of-ethernetinterfaces-named-de-in-hsm)
 - [Custom Roles and SubRoles for Components in HSM](#custom-roles-and-subroles-for-components-in-hsm)
 
 ### Warning flags incorrectly set in HSM for Mountain BMCs
@@ -428,6 +430,33 @@ This issue looks similar to the following in the test output:
 ```
 
 Failures of this test caused by `AuxiliaryController` endpoints for Cassini mezzanine cards can be safely ignored.
+
+### `ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM
+
+The following HMS functional test may fail due to a known issue because of `ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM:
+
+- `test_smd_component_endpoints_ncn-functional_remote-functional.tavern.yaml`
+
+This issue looks similar to the following in the test output:
+
+```text
+        Traceback (most recent call last):
+          File "/usr/lib/python3.8/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.8/site-packages/pykwalify/core.py", line 166, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Value 'DE07A000' does not match pattern '^$|[0-9]+|HPCNet[0-9]+|ManagementEthernet'. Path: '/ComponentEndpoints/34/RedfishSystemInfo/EthernetNICInfo/0/RedfishId'.
+         - Value 'DE07A001' does not match pattern '^$|[0-9]+|HPCNet[0-9]+|ManagementEthernet'. Path: '/ComponentEndpoints/34/RedfishSystemInfo/EthernetNICInfo/1/RedfishId'.: Path: '/'>
+```
+
+Failures of this test caused by `EthernetInterface` IDs of the form `DE*` can be safely ignored.
+
+This issue may be remediated by rediscovering the BMCs with `EthernetInterfaces` named `DE*`.
+
+```bash
+ncn-mw# cray hsm inventory discover create --xnames <xname>
+```
 
 ### Custom Roles and SubRoles for Components in HSM
 
