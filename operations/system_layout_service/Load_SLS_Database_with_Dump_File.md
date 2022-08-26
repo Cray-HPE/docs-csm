@@ -7,25 +7,15 @@ Use this procedure to restore SLS data after a system re-install.
 ## Prerequisites
 
 - The System Layout Service \(SLS\) database has been dumped. See [Dump SLS Information](Dump_SLS_Information.md) for more information.
+- The Cray Command Line Interface is configured. See [Configure the Cray CLI](../configure_cray_cli.md)
 - This procedure requires administrative privileges.
 
 ## Procedure
 
-1. (`ncn-mw#`) Use the `get_token` function to retrieve a token to validate requests to the API gateway.
+(`ncn-mw#`) Load the dump file into SLS.
+This will upload and overwrite the current SLS database with the contents of the posted file.
 
-    ```bash
-    function get_token () {
-        curl -s -S -d grant_type=client_credentials -d client_id=admin-client \
-            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'
-    }
-    ```
+```bash
+cray sls loadstate create sls_dump.json
+```
 
-1. (`ncn-mw#`) Load the dump file into SLS.
-
-    This will upload and overwrite the current SLS database with the contents of the posted file.
-
-    ```bash
-    curl -X POST https://api-gw-service-nmn.local/apis/sls/v1/loadstate \
-        -H "Authorization: Bearer $(get_token)" -F sls_dump=@sls_dump.json
-    ```
