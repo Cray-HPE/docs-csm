@@ -36,7 +36,7 @@ This top level procedure outlines the process for adding additional liquid-coole
 
 1. Verify that new hardware has been discovered.
 
-    Perform the [Hardware State Manager Discovery Validation](../validate_csm_health.md#hms-smd-discovery-validation) procedure.
+    Perform the [Hardware State Manager Discovery Validation](../validate_csm_health.md#22-hardware-state-manager-discovery-validation) procedure.
 
     After the management network has been reconfigured, it may take up to 10 minutes for the hardware in the new cabinets to become discovered.
 
