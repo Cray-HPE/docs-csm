@@ -13,7 +13,7 @@ This procedure preserves the information stored in SLS when backing up or reinst
 
 ## Procedure
 
-`ncn-mw#`) Perform the SLS dump.
+(`ncn-mw#`) Perform the SLS dump.
 The SLS dump will be stored in the `sls_dump.json` file. The `sls_dump.json` file is required to perform the SLS load state operation.
 
 ```bash
