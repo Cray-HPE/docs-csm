@@ -27,11 +27,17 @@ basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 function main() {
     upload_worker_rebuild_template
+    upload_storage_rebuild_template
 }
 
 function upload_worker_rebuild_template {
     kubectl -n argo delete configmap worker-rebuild-workflow-files || true
     kubectl -n argo create configmap worker-rebuild-workflow-files --from-file="${basedir}/../ncn/worker"
+}
+
+function upload_storage_rebuild_template {
+    kubectl -n argo delete configmap storage-rebuild-workflow-files || true
+    kubectl -n argo create configmap storage-rebuild-workflow-files --from-file="${basedir}/../ncn/storage"
 }
 
 main
