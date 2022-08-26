@@ -45,6 +45,7 @@ help = "Delete CAN entries from SLS."
     type=click.File("w"),
     default="migrated_sls_file.json",
 )
+
 @click.pass_context
 def main(
     ctx,
@@ -58,7 +59,7 @@ def main(
         sls_input_file (str): Name of the SLS input file
         sls_output_file (str): Name of the updated SLS output file
     """
-
+    click.confirm('You are deleting the CAN network data structure, Do you want to continue?', abort=True)
     click.secho("Loading SLS JSON file.", fg="bright_white")
     try:
         sls_json = json.load(sls_input_file)
