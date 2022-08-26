@@ -28,8 +28,6 @@ This procedure requires administrative privileges.
     The SLS dump will be stored in the `sls_dump.json` file. The `sls_dump.json` file is required to perform the SLS load state operation.
 
     ```bash
-    curl -X GET \
-    https://api-gw-service-nmn.local/apis/sls/v1/dumpstate \
-    -H "Authorization: Bearer $(get_token)" \
-    > sls_dump.json
+    curl -X GET https://api-gw-service-nmn.local/apis/sls/v1/dumpstate \
+        -H "Authorization: Bearer $(get_token)" > sls_dump.json
     ```

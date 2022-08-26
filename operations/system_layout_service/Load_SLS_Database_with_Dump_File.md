@@ -26,8 +26,6 @@ The System Layout Service \(SLS\) database has been dumped. See [Dump SLS Inform
     This will upload and overwrite the current SLS database with the contents of the posted file.
 
     ```bash
-    curl -X POST \
-    https://api-gw-service-nmn.local/apis/sls/v1/loadstate \
-    -H "Authorization: Bearer $(get_token)" \
-    -F sls_dump=@sls_dump.json
+    curl -X POST https://api-gw-service-nmn.local/apis/sls/v1/loadstate \
+        -H "Authorization: Bearer $(get_token)" -F sls_dump=@sls_dump.json
     ```
