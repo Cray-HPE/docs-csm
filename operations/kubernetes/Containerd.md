@@ -1,26 +1,27 @@
-# `Containerd`
+# `containerd`
 
-`Containerd` is a `daemonset` that runs on the host. It is used to run containers on the Kubernetes platform.
+`containerd` is a `daemonset` that runs on the host. It is used to run containers on the Kubernetes platform.
 
 ## `/var/lib/containerd` filling up
 
 In older versions of `containerd`, there are cases where the `/var/lib/containerd` directory fills up. In the event that this occurs, the following steps can be used to remediate the issue.
 
-1. Restart `containerd` on the NCN:
+1. Restart `containerd` on the NCN.
 
    ```bash
-   ncn-w001 # systemctl restart containerd
+   ncn# systemctl restart containerd
    ```
 
-   Many times this will free up space in `/var/lib/containerd` -- if not proceed to Step 2.  See notes below for subsequent steps that must be taken after `containerd` is restarted (independent of disk space issues).
+   Many times this will free up space in `/var/lib/containerd` -- if not, then proceed to the next step.
+   In either case, see the notes in the [Restart `containerd`](#restart-containerd) section for subsequent steps that must be taken after `containerd` is restarted (independent of disk space issues).
 
-1. Restart `kubelet` on the NCN:
+1. Restart `kubelet` on the NCN.
 
    ```bash
-   ncn-w001 # systemctl restart kubelet
+   ncn# systemctl restart kubelet
    ```
 
-   If restarting `kubelet` fails to free up space in `/var/lib/containerd`, proceed to Step 3.
+   If restarting `kubelet` fails to free up space in `/var/lib/containerd`, then proceed to the next step.
 
 1. Prune unused container images on the NCN:
 
