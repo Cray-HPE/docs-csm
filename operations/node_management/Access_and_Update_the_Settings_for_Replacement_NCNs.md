@@ -12,7 +12,7 @@ A new non-compute node \(NCN\) has been added to the system as a hardware replac
 
 ## Procedure
 
-1. Ensure the the root user is configured on the NCN's BMC.
+1. Ensure that the root user is configured on the NCN's BMC.
    - **For HPE NCNs**, follow [Configure root user on HPE iLO BMCs](../security_and_authentication/Configure_root_user_on_HPE_iLO_BMCs.md).
    - **For Gigabyte NCNs**, follow [Add Root Service Account for Gigabyte Controllers](../security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
 
