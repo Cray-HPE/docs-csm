@@ -304,7 +304,7 @@ The following types of HMS test failures should be considered blocking for syste
 
 The following types of HMS test failures should **not** be considered blocking for system installations:
 
-- Failures due to hardware issues on individual nodes (alerts or warning flags set in HSM)
+- Failures because of hardware issues on individual nodes (alerts or warning flags set in HSM)
 
 It is typically safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation or upgrade has completed.
 
