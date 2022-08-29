@@ -174,7 +174,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
    [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
    If the failure persists, then open a support ticket for guidance before proceeding.
 
-1. (`ncn-m001#`) Before creating a new CFS session for the upgraded content, clear any existing enabled CFS sessions for each Management Node that might still exist for content from the previous version of CSM.
+1. (`ncn-m001#`) Before creating a new CFS session for the upgraded content, clear any existing enabled CFS sessions for each management node that might still exist for content from the previous version of CSM.
 
    ```bash
    for TARGET_XNAME in $(cray hsm state components list --role Management --type Node | grep ^ID  | awk -F\" '{print $2}'); do echo $TARGET_XNAME;curl -s -k -H "Authorization: Bearer ${TOKEN}" -X PATCH "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" -H 'Content-Type: application/json' -d '{"enabled": true, "state": []}';done
