@@ -60,6 +60,7 @@ Instructing `containerd` to remove shims when `containerd` is being shutdown wil
 1. Edit the `/srv/cray/resources/common/containerd/containerd.service` file.
 
     Add the following `ExecStopPost` line to the file:
+
     ```text
     ExecStopPost=/usr/bin/find /run/containerd/io.containerd.runtime.v2.task -name address -type f -delete
     ```
