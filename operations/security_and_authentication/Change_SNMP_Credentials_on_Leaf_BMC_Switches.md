@@ -37,6 +37,8 @@ the [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](Update_
 
         Example output:
 
+        Example output:
+
         ```json
         {
             "request_id": "62070a95-8bbb-6834-d707-c17ca9b565e3",

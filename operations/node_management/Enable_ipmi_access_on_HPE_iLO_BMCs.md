@@ -105,7 +105,7 @@ New HPE nodes ship with with IPMI access disabled by default. In order for CSM t
         }
         ```
 
-    1. (`ncn#`) Wait for the BMC to restart:
+    1. Wait for the BMC to restart. This may take a couple of minutes.
 
         ```bash
         sleep 120

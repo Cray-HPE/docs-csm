@@ -122,6 +122,7 @@ This procedure is applicable in the following situations:
 
     1. Follow [this HPE support article](https://techlibrary.hpe.com/docs/iss/proliant-gen10-uefi/s_reset_ilo_defaults.html) to boot the node into its BIOS and perform a factory reset on the BMC.
 
+
         > **NOTE**: If this is a Apollo 6500 XL 645D Gen10 Plus node, then the BMC will need to be reconfigured with the expected network settings.
         > See [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-xl645d-gen10-plus-compute-nodes) for more information.
 
