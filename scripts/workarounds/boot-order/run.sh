@@ -59,11 +59,21 @@ for ncn in "${NCNS[@]}"; do
 done
 
 printf "Refreshing the bootorder on [${#NCNS[@]}] NCNs ... "
-pdsh -S -b -w "$(printf '%s,' "${NCNS[@]}")" '
+if ! pdsh -S -b -w "$(printf '%s,' "${NCNS[@]}")" '
 . /srv/cray/scripts/metal/metal-lib.sh
 install_grub2 > /var/log/metal-boot-order-workarounds.log 2>/var/log/metal-boot-order-workarounds.error.log
+'; then
+    # This failure is not important.
+    :
+fi
+
+if ! pdsh -S -b -w "$(printf '%s,' "${NCNS[@]}")" '
+. /srv/cray/scripts/metal/metal-lib.sh
 setup_uefi_bootorder >> /var/log/metal-boot-order-workarounds.log 2>>/var/log/metal-boot-order-workarounds.error.log
-'
+'; then
+    echo >&2 'Failed to fix boot order on one or more nodes. Check /var/log/metal-boot-order-workarounds*.log on each node for more information.'
+    exit 1
+fi
 echo "Done"
 
 echo "The following NCNs contain the boot-order patch:"
