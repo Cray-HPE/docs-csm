@@ -224,7 +224,7 @@ EOF
         if [[ -f ${basedir}/standdown.sh ]]; then
             chmod +x "${basedir}/standdown.sh"
             scp "${basedir}/standdown.sh" "${target_ncn}:/tmp/standdown.sh"
-            # Disable errors, the standdown.sh scripts do not run with set -e and this SSH call shouldn't care either.
+            # Disable errors. The standdown.sh scripts do not run with set -e and this SSH call shouldn't care either.
             set +e
             ssh "${target_ncn}" '/tmp/standdown.sh'
             set -e
