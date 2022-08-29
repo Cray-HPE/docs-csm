@@ -25,8 +25,6 @@
 virt_file = "/opt/cray/csm/scripts/csm_rbd_tool/bin/activate_this.py"
 exec(compile(open(virt_file, "rb").read(), virt_file, 'exec'), dict(__file__=virt_file))
 
-#execfile(virt_env, dict(__file__=virt_env))
-
 import subprocess
 import socket
 import json
