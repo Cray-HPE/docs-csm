@@ -2,11 +2,12 @@
 
 By default, HPE BMC controllers have the `Administrator` user account. In order to discover this type of hardware, the `root` service account needs to be configured.
 
-When is this procedure applicable:
+This procedure is applicable in the following situations:
 
-1. Root password is known & does not match the destination system default air-cooled BMC credentials. For example, a node has been moved between systems and each system gas different default global credentials.
-2. Root user does not exist.
-3. Root user exists with an unknown password.
+- The root password is known and does not match the destination system default air-cooled BMC credentials.
+  - For example, a node has been moved between systems and each system has different default global credentials.
+- The root user does not exist.
+- The root user exists with an unknown password.
 
 ## Prerequisites
 
@@ -14,92 +15,92 @@ When is this procedure applicable:
 
 ## Procedure
 
-1. (`ncn#`) Retrieve the root user password for this BMC.
+1. (`ncn-mw#`) Retrieve the root user password for this BMC.
 
-    1. **If configuring a BMC already present in the system**, retrieve the the device specific root user password from Vault:
+    - **If configuring a BMC already present in the system**, then retrieve the device-specific root user password from Vault.
 
         ```bash
         BMC=x3000c0s3b0
         EXPECTED_ROOT_PASSWORD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
         ```
 
-        If the following output indicates that Vault does not contain a device specific root user password for the specified BMC. Please use the system default air-cooled BMC root password described in the step below.
+        The following output indicates that Vault does not contain a device-specific root user password for the specified BMC. In this case, use the system default air-cooled BMC root password described in the step below.
 
         ```text
         jq: error (at <stdin>:3): Cannot iterate over null (null)
         ```
 
-    1. **If configuring a new BMC being added to the system**, retrieve the system's default air-cooled BMC root user password from Vault:
+    - **If configuring a new BMC being added to the system**, then retrieve the system's default air-cooled BMC root user password from Vault.
 
         ```bash
         VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json |
                             jq -r '.data["vault-root"]' |  base64 -d)
         EXPECTED_ROOT_PASSWORD=$(kubectl -n vault exec -it cray-vault-0 -c vault -- env \
-            VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json \
+            VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json \
             vault kv get secret/reds-creds/defaults | jq .data.Cray.password -r)
         ```
 
-1. (`ncn#`) Verify the contents of `EXPECTED_ROOT_PASSWORD`:
+1. (`ncn-mw#`) If desired, verify the contents of `EXPECTED_ROOT_PASSWORD`.
 
     ```bash
     echo $EXPECTED_ROOT_PASSWORD
     ```
 
-1. (`ncn#`) Set an environment variable containing the hostname or current IP Address of the BMC. If coming from the [Add Worker, Storage or Master NCNs](../node_management/Add_Remove_Replace_NCNs.md#add-worker-storage-master)
-    procedure, then the IP address of should stored in the `BMC_IP` environment variable.
+1. (`ncn-mw#`) Set an environment variable containing the hostname or current IP address of the BMC. If coming from the [Add Worker, Storage, or Master NCNs](../node_management/Add_Remove_Replace_NCNs.md#add-worker-storage-master)
+    procedure, then the IP address should already be stored in the `BMC_IP` environment variable.
 
-    Via hostname:
+    - Via hostname:
 
-    ```bash
-    export BMC=x3000c0s3b0
-    ```
+        ```bash
+        export BMC=x3000c0s3b0
+        ```
 
-    Via IP address:
+    - Via IP address:
 
-    ```bash
-    export BMC=10.254.1.9
-    ```
+        ```bash
+        export BMC=10.254.1.9
+        ```
 
-1. (`ncn#`) Determine if the root user account is functional:
+1. (`ncn-mw#`) Determine if the root user account is functional.
 
     ```bash
     curl -k -u "root:$EXPECTED_ROOT_PASSWORD" https://$BMC/redfish/v1/Managers -i  | head -1
     ```
 
-    Expected output of a functional root user account, **if this is observed no further action is required to enable the root user account. The rest of the procedure can be skipped**.
+    Expected output of a functional root user account:
 
     ```text
     HTTP/1.1 200 OK
     ```
 
-    If the following is observed this indicates the root user either does not exist or is configured with a different password. **Continue this procedure to correct the root user credentials.**
+    **If the above output is observed, then no further action is required to enable the root user account. In this case, skip the rest of this procedure.**
+
+    If the following output is observed, then this indicates that the root user either does not exist or is configured with a different password. **In this case, continue this procedure to correct the root user credentials.**
 
     ```text
     HTTP/1.1 401 Unauthorized
     ```
 
-1. (`ncn#`) Determine the default user credentials:
+1. (`ncn-mw#`) Determine the default user credentials.
 
     > `read -s` is used to read the password in order to prevent it from being echoed to the screen or saved in the shell history.
     > Note that the subsequent `curl` commands **will** do both of these things. If this is not desired, the call should be made in
     > another way.
 
-    1. The default user name is `Administrator`. Default credentials for the Administrator user on HPE nodes can be found on the serial label pull out tab attached to the server. See [this page for more information](https://support.hpe.com/hpesc/public/docDisplay?docId=sf000046874en_us&docLocale=en_US).
+    1. The default user name is `Administrator`. Default credentials for the Administrator user on HPE nodes can be found on the serial label pull out tab attached to the server. See [HPE server support documentation](https://support.hpe.com/hpesc/public/docDisplay?docId=sf000046874en_us&docLocale=en_US).
 
         ```bash
-        export DEFAULT_USERNAME=Administrator
+        DEFAULT_USERNAME=Administrator
         read -s DEFAULT_PASSWORD
-        export DEFAULT_PASSWORD
         ```
 
-    1. Verify contents of DEFAULT_USERNAME and DEFAULT_PASSWORD:
+    1. Verify the contents of `DEFAULT_USERNAME` and `DEFAULT_PASSWORD`.
 
         ```bash
         echo $DEFAULT_USERNAME
-        echo $DEFAULT_PASSWORD
         ```
 
-1. (`ncn#`) Try to access the BMC with the default user credentials:
+1. (`ncn-mw#`) Try to access the BMC with the default user credentials.
 
     ```bash
     curl -k -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" https://$BMC/redfish/v1/Managers -i | head -1
@@ -111,19 +112,20 @@ When is this procedure applicable:
     HTTP/1.1 200 OK
     ```
 
-    If a `401 Unauthorized` status code is returned, the the default user is not configured correctly. The BMC needs to be factory reset to restore the default user credentials.
+    If a `401 Unauthorized` status code is returned, then the default user is not configured correctly. The BMC needs to be factory reset to restore the default user credentials.
 
     ```text
     HTTP/1.1 401 Unauthorized
     ```
 
-1. (`ncn#`) **Do only if a `401 Unauthorized` was observed in the previous step**, factory reset BMCs back to factory defaults:
+1. (`ncn-mw#`) **Only if a `401 Unauthorized` was observed in the previous step**, then reset BMCs back to factory defaults.
 
     1. Follow [this HPE support article](https://techlibrary.hpe.com/docs/iss/proliant-gen10-uefi/s_reset_ilo_defaults.html) to boot the node into its BIOS and perform a factory reset on the BMC.
-        > **NOTE**: If this is a Apollo 6500 XL 645D Gen10 Plus node the BMC will need to be reconfigured with the expected network settings.
+
+        > **NOTE**: If this is a Apollo 6500 XL 645D Gen10 Plus node, then the BMC will need to be reconfigured with the expected network settings.
         > See [Configure HPE Apollo 6500 XL645d Gen10 Plus Compute Nodes](../../install/prepare_compute_nodes.md#configure-hpe-apollo-6500-xl645d-gen10-plus-compute-nodes) for more information.
 
-    1. Verify the the BMC can be accessed with the default credentials after the factory reset has been performed.
+    1. Verify that the BMC can be accessed with the default credentials after the factory reset has been performed.
 
         ```bash
         curl -k -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" https://$BMC/redfish/v1/Managers -i  | head -1
@@ -135,21 +137,20 @@ When is this procedure applicable:
         HTTP/1.1 200 OK
         ```
 
-1. (`ncn#`) Configure the root user account:
+1. (`ncn-mw#`) Configure the root user account.
 
-    1. Determine if the root user account already exists:
+    1. Determine if the root user account already exists.
 
         ```bash
-        for account in $(curl -s -u $DEFAULT_USERNAME:$DEFAULT_PASSWORD -k https://$BMC/redfish/v1/AccountService/Accounts | jq '.Members[]."@odata.id"' -r); do 
-            echo "Checking $account"; 
-
-            curl -k -s -u $DEFAULT_USERNAME:$DEFAULT_PASSWORD -k https://${BMC}${account} | jq '. | {Id: .Id, UserName: .UserName, RoleId: .RoleId}' -c
+        for account in $(curl -s -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" -k https://${BMC}/redfish/v1/AccountService/Accounts | jq '.Members[]."@odata.id"' -r); do 
+            echo "Checking $account"
+            curl -k -s -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" -k https://${BMC}${account} | jq '. | {Id: .Id, UserName: .UserName, RoleId: .RoleId}' -c
         done
         ```
 
         Example output if the root user exists:
 
-        ```json
+        ```text
         Checking /redfish/v1/AccountService/Accounts/1
         {"Id":"1","UserName":"Administrator","RoleId":"Administrator"}
         Checking /redfish/v1/AccountService/Accounts/2
@@ -158,12 +159,12 @@ When is this procedure applicable:
 
         Example output if the root user does not exist:
 
-        ```json
+        ```text
         Checking /redfish/v1/AccountService/Accounts/1
         {"Id":"1","UserName":"Administrator","RoleId":"Administrator"}
         ```
 
-    1. **If the user does not exist**, then create the root user account:
+    1. **If the user does not exist**, then create the root user account.
 
         ```bash
         curl -k -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" -X POST \
@@ -215,15 +216,15 @@ When is this procedure applicable:
         }
         ```
 
-    1. **If the user exists**, then change the root password:
+    1. **If the user exists**, then change the root password.
 
-        1. Determine the ID associated with the root account. In the example output above the root user ID is `2`.
+        1. Determine the ID associated with the root account. In the example output above, the root user ID is `2`.
 
              ```bash
-             export ROOT_USER_ACCOUNT_ID=2
+             ROOT_USER_ACCOUNT_ID=2
              ```
 
-        1. Using the default administrator credentials change the root account password:
+        1. Using the default administrator credentials, change the root account password.
 
             ```bash
             curl -k -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" -X PATCH \
@@ -248,7 +249,7 @@ When is this procedure applicable:
             }
             ```
 
-1. (`ncn#`) Confirm the new credentials can be used with Redfish:
+1. (`ncn-mw#`) Confirm that the new credentials can be used with Redfish.
 
     ```bash
     curl -k -u "root:$EXPECTED_ROOT_PASSWORD" https://$BMC/redfish/v1/Managers -i  | head -1

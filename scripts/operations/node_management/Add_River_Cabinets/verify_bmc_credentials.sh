@@ -29,7 +29,6 @@ for endpoint in $(cray hsm inventory redfishEndpoints list --laststatus HTTPsGet
     echo "------------------------------------------------------------"
     echo "Redfish Endpoint $endpoint has discovery state HTTPsGetFailed"
     # Ignore the failure if it is a master node    
-    # cray sls search hardware list --parent $BMC --format json | jq '.[].ExtraProperties.Role' -r
     mgmtSwitchConnectorCount=$(cray sls search hardware list --node-nics "$endpoint" --format json  | jq -s 'if . == [] then null else .[0] end | length')
     if [[ "$mgmtSwitchConnectorCount" == "0" ]]; then
         echo "Has no connection to HMN, ignoring"

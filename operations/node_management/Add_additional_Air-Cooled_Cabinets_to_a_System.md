@@ -10,14 +10,14 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
 - The system's SHCD file has been updated with the new cabinets and cabling changes.
 - The new cabinets have been cabled to the system, and the system's cabling has been validated to be correct.
-- Follow the procedure [Create a Backup of the SLS Postgres Database](../system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md).
-- Follow the procedure [Create a Backup of the HSM Postgres Database](../hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md).
+- The following procedure has been completed: [Create a Backup of the SLS Postgres Database](../system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md).
+- The following procedure has been completed: [Create a Backup of the HSM Postgres Database](../hardware_state_manager/Create_a_Backup_of_the_HSM_Postgres_Database.md).
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 - The latest CSM documentation is installed on the system. See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Procedure
 
-1. (`ncn-mw`) Set the systems name:
+1. (`ncn-mw`) Set a variable with the system's name.
 
     ```bash
     SYSTEM_NAME=eniac
@@ -25,9 +25,9 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
 1. (`ncn-mw`) [Validate the systems SHCD](../../operations/network/management_network/validate_shcd.md) using CANU to generate an updated CCJ file.
 
-   **Note do not** perform the step `Proceed to generate topology files` as it is not required.
+   **Note do not** perform the step `Proceed to generate topology files` because it is not required.
 
-1. (`ncn-mw`) Once the validation is completed ensure the systems CCJ file is present in the current directory, and set the `CCJ_FILE` environment variable to the name of the file:
+1. (`ncn-mw`) Once the validation is completed, ensure that the systems CCJ file is present in the current directory, and set the `CCJ_FILE` environment variable to the name of the file.
 
     ```bash
     CCJ_FILE=${SYSTEM_NAME}-full-paddle.json
@@ -43,33 +43,33 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     ```
 
-1. Determine the version of the latest hardware-topology-assistant:
+1. Determine the version of the latest hardware-topology-assistant.
 
     ```bash
     HTA_VERSION=$(curl https://registry.local/v2/artifactory.algol60.net/csm-docker/stable/hardware-topology-assistant/tags/list | jq -r .tags[] | sort -V | tail -n 1)
-    echo $HTA_VERSION
+    echo ${HTA_VERSION}
     ```
 
     Example output:
 
-    ```bash
+    ```text
     0.1.0
     ```
 
 1. Perform a dry run of the hardware-topology-assistant.
 
-    Each invocation of the hardware-topology-assistant creates a new folder in the current directory  named similarly to `hardware-topology-assistant_TIMESTAMP` containing files with the following data:
+    Each invocation of the hardware-topology-assistant creates a new folder in the current directory named similarly to `hardware-topology-assistant_TIMESTAMP`. This directory contains files with the following data:
     - Log output from the hardware-topology-assistant run.
-       - `topology_changes.json` which enumerates the changes made to SLS:
-    - Added river hardware, except for management NCNs
-       - Modified networks.
+       - `topology_changes.json` which enumerates the changes made to SLS.
+    - Added River hardware, except for management NCNs
+     - Modified networks.
        - Added IP address reservations.
     - Backups of the following before any changes are applied
        - BSS boot parameters for each existing management NCN.
-       - Management NCN Global BSS boot parameters.
-       - Dump state of SLS before any changes were applied.
+       - Management NCN global BSS boot parameters.
+       - Dump state of SLS before any changes are applied.
 
-    > **Reminder** new management NCNs are not handled by this tool. They will be handled by a different procedure referenced in the last step of this procedure.
+    > **Reminder:** New management NCNs are not handled by this tool. They will be handled by a different procedure referenced in the last step of this procedure.
 
     ```bash
     podman run --rm -it --name hardware-topology-assistant -v "$(realpath .)":/work -e TOKEN \
@@ -78,7 +78,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     ```
 
     If prompted to fill in the generated application node metadata nodes having `~~FIXME~~` values, then follow the directions in the command output to update the application node metadata file. This is an optional file that is only required if
-    application nodes are being added to the system. If no new application nodes are being added to the system, then this fill is not required
+    application nodes are being added to the system. If no new application nodes are being added to the system, then this is not required.
 
     ```console
     2022/08/11 12:33:54 Application node x3001c0s16b0n0 has SubRole of ~~FIXME~~
@@ -123,7 +123,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     Add the `--application-node-metadata=application_node_metadata.yaml` to the list of CLI arguments, and attempt the dry run again.
 
-1. (`ncn-mw`) Perform changes on the system, by removing the `--dry-run` flag:
+1. (`ncn-mw`) Perform changes on the system by running the same command without the `--dry-run` flag.
 
     ```bash
     podman run --rm -it --name hardware-topology-assistant -v "$(realpath .)":/work -e TOKEN \
@@ -135,7 +135,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     ```bash
     TOPOLOGY_CHANGES_JSON="$(find . -name 'hardware-topology-assistant_*' | sort -V | tail -n 1)/topology_changes.json"
-    echo $TOPOLOGY_CHANGES_JSON
+    echo ${TOPOLOGY_CHANGES_JSON}
     ```
 
     Example output:
@@ -144,13 +144,13 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     ./hardware-topology-assistant_2022-08-19T19-09-27Z/topology_changes.json
     ```
 
-1. (`ncn-mw`) Update `/etc/hosts` on the management NCNs for any newly added management switches:
+1. (`ncn-mw`) Update `/etc/hosts` on the management NCNs with any newly added management switches.
 
     ```bash
     /usr/share/doc/csm/scripts/operations/node_management/Add_River_Cabinets/update_ncn_etc_hosts.py $TOPOLOGY_CHANGES_JSON
     ```
 
-1. (`ncn-mw`) Update cabinet routes on management NCNs:
+1. (`ncn-mw`) Update cabinet routes on management NCNs.
 
     ```bash
     /usr/share/doc/csm/scripts/operations/node_management/update-ncn-cabinet-routes.sh
@@ -172,18 +172,19 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     After the management network has been reconfigured, it may take up to 10 minutes for the hardware in the new cabinets to become discovered.
 
-    To help troubleshoot why new hardware may be in `HTTPsGetFailed` the following script can check for some common problems against all of the Redfish Endpoints that are currently in `HTTPsGetFailed`. These common problems include:
-       - The hostname of the BMC resolves in DNS.
-       - The BMC is configured with the expected root user credentials. Here are some common causes of this issue:
-       - Root user is not configured on the BMC.
-       - Root user is exists on the BMC, but with an unexpected password.
+    To help troubleshoot why new hardware may be in `HTTPsGetFailed`, the following script can check for some common problems against all of the Redfish Endpoints that are currently in `HTTPsGetFailed`. These common problems include:
+       - The hostname of the BMC does not resolve in DNS.
+       - The BMC is not configured with the expected root user credentials. Here are some common causes of this issue:
+         - Root user is not configured on the BMC.
+         - Root user exists on the BMC, but with an unexpected password.
 
     ```bash
     /usr/share/doc/csm/scripts/operations/node_management/Add_River_Cabinets/verify_bmc_credentials.sh 
     ```
 
     Potential scenarios:
-     1. The BMC has no connection to the HMN network. This is typically expected seen with the BMC of `ncn-m001`, as its BMC is connected to the customers site network.
+
+    1. The BMC has no connection to the HMN network. This is typically seen with the BMC of `ncn-m001`, because its BMC is connected to the site network.
 
           ```text
           ------------------------------------------------------------
@@ -191,7 +192,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
           Has no connection to HMN, ignoring
           ```
 
-     1. The BMC credentials present in Vault do not match the `root` user credentials on the BMC.
+    1. The BMC credentials present in Vault do not match the root user credentials on the BMC.
 
         ```text
         ------------------------------------------------------------
@@ -204,10 +205,11 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
         ```
 
         If the root user credentials do not work then following procedures:
-         1. For HPE iLO BMCs follow [Configure root user on HPE iLO BMCs](../security_and_authentication/Configure_root_user_on_HPE_iLO_BMCs.md)
-         1. For Gigabit BMCs and CMCs follow [Add Root Service Account for Gigabyte Controllers](../security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md)
-         1. For HPE PDUs follow [HPE PDU Admin procedures](../hpe_pdu/hpe_pdu_admin_procedures.md).
-         1. For ServerTech PDUs follow [Change Credentials on ServerTech PDUs](../security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
+
+        - For HPE iLO BMCs, follow [Configure root user on HPE iLO BMCs](../security_and_authentication/Configure_root_user_on_HPE_iLO_BMCs.md).
+        - For Gigabit BMCs and CMCs, follow [Add Root Service Account for Gigabyte Controllers](../security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
+        - For HPE PDUs, follow [HPE PDU Admin procedures](../hpe_pdu/hpe_pdu_admin_procedures.md).
+        - For ServerTech PDUs, follow [Change Credentials on ServerTech PDUs](../security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
 
 1. Validate BIOS and BMC firmware levels in the new nodes.
 
@@ -217,10 +219,10 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
 1. Continue on to the *HPE Slingshot Operations Guide* to bring up the additional cabinets in the fabric.
 
-1. Update workload manager configuration to include any new added compute nodes to the system.
+1. Update workload manager configuration to include any newly added compute nodes to the system.
 
-   1. **If Slurm is the installed workload manager**, then see section *10.3.1 Add a New or Configure an Existing Slurm Template* in the *`HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)`* to regenerate the Slurm
+   - **If Slurm is the installed workload manager**, then see section *10.3.1 Add a New or Configure an Existing Slurm Template* in the *`HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)`* to regenerate the Slurm
       configuration to include any new compute nodes added to the system.
-   1. **If PBS Pro is the installed workload manager**: *Coming soon*
+   - **If PBS Pro is the installed workload manager**: *Coming soon*
 
-1. **For each** management NCN being added to the system please follow [Add Remove Replace NCNs](../node_management/Add_Remove_Replace_NCNs.md) to add these additional management NCNs one at a time.
+1. **One at a time, add each** new management NCN using the [Add Remove Replace NCNs](../node_management/Add_Remove_Replace_NCNs.md) procedure.

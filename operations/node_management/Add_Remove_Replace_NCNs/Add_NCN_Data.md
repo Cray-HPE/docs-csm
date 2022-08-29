@@ -206,7 +206,7 @@ Scenarios where this procedure is applicable:
     BMC_IP=10.0.0.10
     ```
 
-1. (`ncn-mw#`) **Perform this step if adding `ncn-m001`, otherwise skip:** Add this point the BMC is reachable at a known IP addresses. If adding an NCN that was not previously in the system, then follow the
+1. (`ncn-mw#`) **Perform this step if adding `ncn-m001`, otherwise skip:** At this point the BMC is reachable at a known IP addresses. If adding an NCN that was not previously in the system, then follow the
   [Access and Update the Settings for Replacement NCNs](../Access_and_Update_the_Settings_for_Replacement_NCNs.md) procedure.
 
 #### Saving/Reloading
