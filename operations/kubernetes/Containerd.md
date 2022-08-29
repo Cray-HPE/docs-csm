@@ -45,7 +45,7 @@ In older versions of `containerd`, there are cases where the `/var/lib/container
 ## Restarting `containerd` on a worker NCN
 
 If the `containerd` service is restarted on a worker node, then this may cause the `sonar-jobs-watcher` pod running on that worker node to fail when attempting
-to cleanup unneeded containers. Use the following procedure to determine if this is the case and how to remediate it.
+to cleanup unneeded containers. The following procedure determines if this is the case and remediates it, if necessary.
 
 1. (`ncn-mw#`) Retrieve the name of the `sonar-jobs-watcher` pod that is running on this worker node.
 
@@ -117,4 +117,4 @@ to cleanup unneeded containers. Use the following procedure to determine if this
 
 Once the `sonar-jobs-watcher` pods restart, any pods that were in a `NotReady` state should complete within about a minute.
 
-To learn more in general about `containerd`, refer to [https://containerd.io/](https://containerd.io/).
+To learn more in general about `containerd`, refer to [the `containerd` documentation](https://containerd.io/).
