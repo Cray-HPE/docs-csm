@@ -116,9 +116,9 @@ and then set new credentials. The script can be run either interactively (no env
 1. (`ncn-mw#`) Set the Vault alias, if it is not already set.
 
     ```bash
-        VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-        alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
-        ```
+    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    ```
 
 1. (`ncn-mw#`) Update Vault with new SNMP credentials.
 
@@ -153,7 +153,7 @@ and then set new credentials. The script can be run either interactively (no env
     kubectl -n services rollout status deployment cray-reds
     ```
 
-6. (`ncn#`) Wait for REDS to initialize itself:
+1. (`ncn#`) Wait for REDS to initialize itself:
 
     ```bash
     sleep 2m
@@ -163,9 +163,9 @@ and then set new credentials. The script can be run either interactively (no env
 
     1. Determine the name of the REDS pods.
 
-    ```bash
-    kubectl -n services get pods -l app.kubernetes.io/name=cray-reds
-    ```
+        ```bash
+        kubectl -n services get pods -l app.kubernetes.io/name=cray-reds
+        ```
 
         Example output:
 
@@ -174,13 +174,13 @@ and then set new credentials. The script can be run either interactively (no env
         cray-reds-6b99b9d5dc-c5g2t   2/2     Running   0          3m21s
         ```
 
-    Check the logs of the REDS pod for SNMP communication issues. Replace `CRAY_REDS_POD_NAME` with the currently running pod for REDS:
+    1. Check the logs of the REDS pod for SNMP communication issues. Replace `CRAY_REDS_POD_NAME` with the currently running pod for REDS:
 
-    ```bash
-    kubectl -n services logs CRAY_REDS_POD_NAME cray-reds | grep "Failed to get ifIndex<->name map"
-    ```
+        ```bash
+        kubectl -n services logs CRAY_REDS_POD_NAME cray-reds | grep "Failed to get ifIndex<->name map"
+        ```
 
-    If nothing is returned, then REDS is able to successfully communicate to the leaf-BMC switches in the system via SNMP.
+        If nothing is returned, then REDS is able to successfully communicate to the leaf-BMC switches in the system via SNMP.
 
         Errors like the following occur when SNMP credentials in Vault to not match what is configured on the leaf-BMC switch.
 
