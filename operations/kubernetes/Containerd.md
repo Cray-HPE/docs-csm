@@ -60,12 +60,12 @@ Instructing `containerd` to remove shims when `containerd` is being shutdown wil
 1. Edit the `/srv/cray/resources/common/containerd/containerd.service` file.
 
     Add the following `ExecStopPost` line to the file:
-    
     ```text
     ExecStopPost=/usr/bin/find /run/containerd/io.containerd.runtime.v2.task -name address -type f -delete
     ```
 
     After the edit, the relevant section of the file should look similar to the following:
+
     ```text
     [Service]
     ExecStartPre=/sbin/modprobe overlay && /sbin/modprobe br_netfilter
@@ -89,7 +89,8 @@ Instructing `containerd` to remove shims when `containerd` is being shutdown wil
 
 ## Restarting `containerd` on a worker NCN
 
-If the `containerd` service is restarted on a worker node, then this may cause the `sonar-jobs-watcher` pod running on that worker node to fail when attempting to cleanup unneeded containers. Use the following procedure to determine if this is the case and how to remediate it.
+If the `containerd` service is restarted on a worker node, then this may cause the `sonar-jobs-watcher` pod running on that worker node to fail when attempting
+to cleanup unneeded containers. Use the following procedure to determine if this is the case and how to remediate it.
 
 1. Retrieve the name of the `sonar-jobs-watcher` pod that is running on this worker node.
 
