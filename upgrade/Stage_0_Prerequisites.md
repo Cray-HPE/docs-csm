@@ -8,15 +8,28 @@
 
 Stage 0 has several critical procedures which prepare the environment and verify if the environment is ready for the upgrade.
 
-- [Stage 0 - Prerequisites and Preflight Checks](#stage-0---prerequisites-and-preflight-checks)
-  - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
-    - [Direct download](#direct-download)
-    - [Manual copy](#manual-copy)
-  - [Stage 0.2 - Upgrade management network](#stage-02---upgrade-management-network)
-    - [Verify that switches have 1.2 configuration in place](#verify-that-switches-have-12-configuration-in-place)
-  - [Stage 0.3 - Prerequisites check](#stage-03---prerequisites-check)
-  - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
-  - [Stage completed](#stage-completed)
+- [Start typescript](#start-typescript)
+- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+  - [Direct download](#direct-download)
+  - [Manual copy](#manual-copy)
+- [Stage 0.2 - Prerequisites check](#stage-03---prerequisites-check)
+- [Stage 0.3 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+- [Stop typescript](#stop-typescript)
+- [Stage completed](#stage-completed)
+
+## Start typescript
+
+1. (`ncn-m001#`) If a typescript session is already running in the shell, then first stop it with the `exit` command.
+
+1. (`ncn-m001#`) Start a typescript.
+
+    ```bash
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_0.txt
+    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    ```
+
+If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
+after a break, always be sure that a typescript is running before proceeding.
 
 ## Stage 0.1 - Prepare assets
 
@@ -128,30 +141,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
-## Stage 0.2 - Upgrade management network
-
-### Verify that switches have 1.2 configuration in place
-
-1. Log in to each management switch.
-
-1. Examine the text displayed when logging in to the switch.
-
-   Specifically, look for output similar to the following:
-
-   ```text
-   ##################################################################################
-   # CSM version:  1.2
-   # CANU version: 1.6.5
-   ##################################################################################
-   ```
-
-   - Output like the above text means that the switches have a CANU-generated configuration for CSM 1.2 in place. In this case, follow the steps in
-     [Management Network 1.2 to 1.3](../operations/network/management_network/1.2_to_1.3_upgrade.md).
-   - If the banner does NOT contain text like the above, then contact support in order to get `CSM 1.2 switch configuration` applied to the system.
-   - See the [Management Network User Guide](../operations/network/management_network/README.md) for more information on the management network.
-   - With CSM >= 1.2 switch configurations in place, users will only be able to SSH into the switches over the HMN and CMN.
-
-## Stage 0.3 - Prerequisites check
+## Stage 0.2 - Prerequisites check
 
 1. (`ncn-m001#`) Set the `SW_ADMIN_PASSWORD` environment variable.
 
@@ -227,11 +217,15 @@ Stage 0 has several critical procedures which prepare the environment and verify
    git push
    ```
 
-## Stage 0.4 - Backup workload manager data
+## Stage 0.3 - Backup workload manager data
 
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
+
+## Stop typescript
+
+Stop any typescripts that were started during this stage.
 
 ## Stage completed
 

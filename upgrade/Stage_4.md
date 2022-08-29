@@ -3,15 +3,39 @@
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, then see
 [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
+- [Ceph upgrade contents](#ceph-upgrade-contents)
+- [Start typescript](#start-typescript)
+- [Procedure](#procedure)
+  - [Initiate upgrade](#initiate-upgrade)
+  - [Diagnose a stalled upgrade](#diagnose-a-stalled-upgrade)
+    - [`UPGRADE_FAILED_PULL: Upgrade: failed to pull target image`](#upgrade_failed_pull-upgrade-failed-to-pull-target-image)
+  - [Troubleshoot a failed upgrade](#troubleshoot-a-failed-upgrade)
+- [Stop typescript](#stop-typescript)
+- [Stage completed](#stage-completed)
+
 ## Ceph upgrade contents
 
 The upgrade includes all fixes from `v15.2.15` through `v16.2.9`. See the [Ceph version index](https://docs.ceph.com/en/latest/releases/pacific/) for details.
 
+## Start typescript
+
+1. (`ncn-m002#`) If a typescript session is already running in the shell, then first stop it with the `exit` command.
+
+1. (`ncn-m002#`) Start a typescript.
+
+    ```bash
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_4.txt
+    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    ```
+
+If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
+after a break, always be sure that a typescript is running before proceeding.
+
 ## Procedure
 
-* This upgrade is performed using the `cubs_tool`.
-* The `cubs_tool.py` can be found on `ncn-s00[1-3]` in `/srv/cray/script/common/`
-* Unless otherwise noted, all `ceph` commands that may need to be used in this stage may be run on any master node or any of the first three storage
+- This upgrade is performed using the `cubs_tool`.
+- The `cubs_tool.py` can be found on `ncn-s00[1-3]` in `/srv/cray/script/common/`
+- Unless otherwise noted, all `ceph` commands that may need to be used in this stage may be run on any master node or any of the first three storage
   nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
 ### Initiate upgrade
@@ -197,6 +221,10 @@ If these steps do not resolve the issue, then contact support for further assist
 ### Troubleshoot a failed upgrade
 
 See [Ceph Orchestrator Usage](../operations/utility_storage/Ceph_Orchestrator_Usage.md) for additional usage and troubleshooting.
+
+## Stop typescript
+
+Stop any typescripts that were started during this stage.
 
 ## Stage completed
 
