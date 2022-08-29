@@ -152,7 +152,7 @@ to cleanup unneeded containers. Use the following procedure to determine if this
 1. Verify that the restart completed successfully.
 
     ```bash
-    kubectl rollout status -n services daemonset sonar-jobs-watcher
+    ncn-mw# kubectl rollout status -n services daemonset sonar-jobs-watcher
     ```
 
     Expected output:
