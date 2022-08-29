@@ -174,11 +174,25 @@ Stage 0 has several critical procedures which prepare the environment and verify
    [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
    If the failure persists, then open a support ticket for guidance before proceeding.
 
-1. (`ncn-m001#`) Before creating a new CFS session for the upgraded content, clear any existing enabled CFS sessions for each management node that might still exist for content from the previous version of CSM.
+1. (`ncn-m001#`) Prevent unexpected CFS sessions from being started on the NCNs during the upgrade.
 
    ```bash
-   for TARGET_XNAME in $(cray hsm state components list --role Management --type Node | grep ^ID  | awk -F\" '{print $2}'); do echo $TARGET_XNAME;curl -s -k -H "Authorization: Bearer ${TOKEN}" -X PATCH "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" -H 'Content-Type: application/json' -d '{"enabled": true, "state": []}';done
-   ```
+   set -o pipefail
+   if ! XNAMES=$(cray hsm state components list --role Management --type Node --format json |
+                 jq -r '.Components | .[].ID')
+   then
+       echo "ERROR: Unable to generate list of NCN xnames" 1>&2
+   else
+       echo "`echo ${XNAMES} | wc -w` NCN xnames found"
+       ERRORS=0
+       for TARGET_XNAME in ${XNAMES}; do
+           cray cfs components update --state '[]' --enabled true --desired-config '' \
+               "${TARGET_XNAME}" >/dev/null && continue
+           echo "ERROR updating CFS configuration of ${TARGET_XNAME}" 1>&2
+           ERRORS=1
+       done
+       [[ $ERRORS -eq 0 ]] && echo "SUCCESS" || echo "FAILURE" 1>&2
+   fi
 
 1. (`ncn-m001#`) Assign a new CFS configuration to the worker nodes.
 
