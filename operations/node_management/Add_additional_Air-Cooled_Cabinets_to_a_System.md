@@ -61,9 +61,10 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     Each invocation of the hardware-topology-assistant creates a new folder in the current directory named similarly to `hardware-topology-assistant_TIMESTAMP`. This directory contains files with the following data:
     - Log output from the hardware-topology-assistant run.
        - `topology_changes.json` which enumerates the changes made to SLS.
-    - Added River hardware, except for management NCNs
-     - Modified networks.
-       - Added IP address reservations.
+         - Added River hardware, except for management NCNs
+         - Modified networks.
+           - Added IP address reservations.
+           - Cabinet VLAN assignment.
     - Backups of the following before any changes are applied
        - BSS boot parameters for each existing management NCN.
        - Management NCN global BSS boot parameters.
