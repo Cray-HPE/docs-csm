@@ -185,7 +185,7 @@ XNAME=<xname>
 **IMPORTANT:** Ensure that the node being added to the system has been properly configured. If the node being added to the system has not been previously in the system, several settings need to be verified.
 
 * Ensure that the NCN device to be added has been racked and cabled per the SHCD.
-* Ensure that the NCN BMC is configured with the expected root user credentials. If the BMC does not have the root user credentials set or if its is unknown they will be configured later in this procedure.
+* Ensure that the NCN BMC is configured with the expected root user credentials. If the BMC does not have the root user credentials set or if its is unknown, then they will be configured later in this procedure.
 
    (`ncn-m#`) The NCN BMC credentials need to match the current global air-cooled BMC default credentials. These can be viewed with the following commands:
 

@@ -1,6 +1,6 @@
 # Enable IPMI access on HPE iLO BMCs
 
-New HPE nodes ship with with IPMI access disabled by default. For CSM to fully manage HPE nodes IPMI access must enabled on HPE node BMCs.
+New HPE nodes ship with with IPMI access disabled by default. In order for CSM to fully manage HPE nodes, IPMI access must be enabled on HPE node BMCs.
 
 ## Prerequisites
 
@@ -8,22 +8,22 @@ New HPE nodes ship with with IPMI access disabled by default. For CSM to fully m
 
 ## Procedure
 
-1. (`ncn#`) Setup environment variable of the BMC hostname or IP to verify and enable IPMI on. If coming from the [Add Worker, Storage or Master NCNs](Add_Remove_Replace_NCNs.md#add-worker-storage-master)
-  procedure, then the IP address of should stored in the `BMC_IP` environment variable.
+1. (`ncn#`) Set up an environment variable with the hostname or IP address of the BMC where IPMI needs to be enabled. If coming from the [Add Worker, Storage, or Master NCNs](Add_Remove_Replace_NCNs.md#add-worker-storage-master)
+  procedure, then the IP address should already be stored in the `BMC_IP` environment variable.
 
-    Via hostname:
+    - Hostname:
 
-    ```bash
-    BMC=x3000c0s3b0
-    ```
+        ```bash
+        BMC=x3000c0s3b0
+        ```
 
-    Via IP address:
+    - IP address:
 
-    ```bash
-    BMC=10.254.1.9
-    ```
+        ```bash
+        BMC=10.254.1.9
+        ```
 
-1. (`ncn#`) Check to see if IPMI is enabled:
+1. (`ncn#`) Check to see if IPMI is enabled.
 
     > `read -s` is used to read the password in order to prevent it from being echoed to the screen or saved in the shell history.
     > Note that the subsequent `curl` commands **will** do both of these things. If this is not desired, the call should be made in
@@ -35,7 +35,7 @@ New HPE nodes ship with with IPMI access disabled by default. For CSM to fully m
     curl -k -u root:$ROOT_PASSWORD https://$BMC/redfish/v1/Managers/1/NetworkProtocol | jq .IPMI
     ```
 
-    Expected output showing IPMI is enabled. **if this is observed no further action is required to enable IPMI Access. The rest of the procedure can be skipped**.
+    Expected output showing that IPMI is enabled. **If this is observed, then no further action is required to enable IPMI access; skip the rest of the procedure**.
 
     ```json
     {
@@ -44,7 +44,7 @@ New HPE nodes ship with with IPMI access disabled by default. For CSM to fully m
     }
     ```
 
-    If the following is observed this indicates IPMI access is not configured password. **Continue this procedure to enable IPMI access.**
+    If the following is observed, then this indicates that IPMI access is not configured. **Continue this procedure to enable IPMI access.**
 
     ```json
     {
@@ -55,7 +55,7 @@ New HPE nodes ship with with IPMI access disabled by default. For CSM to fully m
 
 1. **If IPMI is disabled**, then enable IPMI.
 
-    1. (`ncn#`) Enable IPMI access:
+    1. (`ncn#`) Enable IPMI access.
 
         ```bash
         curl -k -u root:$ROOT_PASSWORD -X PATCH \
@@ -80,7 +80,7 @@ New HPE nodes ship with with IPMI access disabled by default. For CSM to fully m
         }
         ```
 
-    1. (`ncn#`) **If IPMI was disabled**, then restart the BMC:
+    1. (`ncn#`) Restart the BMC.
 
         ```bash
         curl -k -u root:$ROOT_PASSWORD -X POST \
@@ -111,13 +111,13 @@ New HPE nodes ship with with IPMI access disabled by default. For CSM to fully m
         sleep 120
         ```
 
-    1. (`ncn#`) Verify IPMI is enabled:
+    1. (`ncn#`) Verify that IPMI is enabled.
 
         ```bash
         curl -k -u root:$ROOT_PASSWORD https://$BMC/redfish/v1/Managers/1/NetworkProtocol | jq .IPMI
         ```
 
-        Expected output showing IPMI is enabled:
+        Expected output showing that IPMI is enabled:
 
         ```json
         {

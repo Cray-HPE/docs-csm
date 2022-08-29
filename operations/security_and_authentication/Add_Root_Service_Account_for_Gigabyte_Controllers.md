@@ -8,8 +8,8 @@ account configured. In order to discover this type of hardware, the
 
 The `root` service account is not already configured for the controller.
 
-1. (`ncn#`) Set an environment variable containing the hostname or current IP Address of the BMC. If coming from the [Add Worker, Storage or Master NCNs](../node_management/Add_Remove_Replace_NCNs.md#add-worker-storage-master)
-    procedure, then the IP address of should stored in the `BMC_IP` environment variable.
+1. (`ncn#`) Set an environment variable containing the hostname or current IP address of the BMC. If coming from the [Add Worker, Storage, or Master NCNs](../node_management/Add_Remove_Replace_NCNs.md#add-worker-storage-master)
+    procedure, then the IP address should already be stored in the `BMC_IP` environment variable.
 
     Via hostname:
 
@@ -23,7 +23,9 @@ The `root` service account is not already configured for the controller.
     export BMC=10.254.1.9
     ```
 
-1. (`ncn#`) Set and export the `admin` password of the BMC. Contact HPE Cray service in order to obtain the default password.
+1. (`ncn#`) Set and export the `admin` password of the BMC.
+
+     Contact HPE Cray service in order to obtain the default password.
 
      > NOTE: `read -s` is used to prevent the password from echoing to the screen or
      > being saved in the shell history.
@@ -61,42 +63,42 @@ The `root` service account is not already configured for the controller.
     }
     ```
 
-The `root` account is not configured in the example shown above. If `root` is already configured, do not proceed with the following steps.
+The `root` account is not configured in the example shown above. If `root` is already configured, then do not proceed with the following steps.
 
-### Procedure
+## Procedure
 
 1. (`ncn#`) Retrieve the root user password for this BMC.
 
-    1. **If configuring a BMC already present in the system**, retrieve the the device specific root user password from Vault:
+    - **If configuring a BMC already present in the system**, then retrieve the device-specific root user password from Vault.
 
         ```bash
         BMC=x3000c0s3b0
         EXPECTED_ROOT_PASSWORD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
         ```
 
-        If the following output indicates that Vault does not contain a device specific root user password for the specified BMC. Please use the system default air-cooled BMC root password described in the step below.
+        The following output indicates that Vault does not contain a device-specific root user password for the specified BMC. In that case, use the system default air-cooled BMC root password described in the step below.
 
         ```text
         jq: error (at <stdin>:3): Cannot iterate over null (null)
         ```
 
-    1. **If configuring a new BMC being added to the system**, retrieve the system's default air-cooled BMC root user password from Vault:
+    - **If configuring a new BMC being added to the system**, then retrieve the system's default air-cooled BMC root user password from Vault.
 
         ```bash
         VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json |
                             jq -r '.data["vault-root"]' |  base64 -d)
         EXPECTED_ROOT_PASSWORD=$(kubectl -n vault exec -it cray-vault-0 -c vault -- env \
-            VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json \
+            VAULT_TOKEN="${VAULT_PASSWD}" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json \
             vault kv get secret/reds-creds/defaults | jq .data.Cray.password -r)
         ```
 
-1. (`ncn#`) Verify the contents of `EXPECTED_ROOT_PASSWORD`:
+1. (`ncn#`) If desired, verify the contents of `EXPECTED_ROOT_PASSWORD`.
 
     ```bash
     echo $EXPECTED_ROOT_PASSWORD
     ```
 
-1. (`ncn#`) Run the following commands to configure the `root` service account for the controller:
+1. (`ncn#`) Configure the `root` service account for the controller.
 
     ```bash
     ipmitool -U admin -E -I lanplus -H $BMC user set name 4 root
@@ -114,7 +116,7 @@ The `root` account is not configured in the example shown above. If `root` is al
     Set User Access (channel 1 id 4) successful.
     ```
 
-1. (`ncn#`) Additionally, if the target controller is a BMC and not a CMC, run the following command:
+1. (`ncn#`) If the target controller is a BMC and not a CMC, then configure Serial Over LAN (SOL).
 
     ```bash
     ipmitool -U admin -E -I lanplus -H $BMC sol payload enable 1 4
@@ -122,7 +124,7 @@ The `root` account is not configured in the example shown above. If `root` is al
 
 1. (`ncn#`) Verify that the `root` service account is now configured.
 
-    1. List the current accounts on the BMC:
+    1. List the current accounts on the BMC.
 
         ```bash
         curl -s -k -u admin:"$IPMI_PASSWORD" https://$BMC/redfish/v1/AccountService/Accounts | jq ".Members"
@@ -141,7 +143,7 @@ The `root` account is not configured in the example shown above. If `root` is al
         ]
         ```
 
-    1. View the `root` user account account on the BMC:
+    1. View the `root` user account account on the BMC.
 
         ```bash
         curl -s -k -u admin:"$IPMI_PASSWORD" https://$BMC/redfish/v1/AccountService/Accounts/4 | jq '. | { Name: .Name, UserName: .UserName, RoleId: .RoleId }'
@@ -157,7 +159,7 @@ The `root` account is not configured in the example shown above. If `root` is al
         }
         ```
 
-1. (`ncn#`) Confirm the new credentials can be used with Redfish:
+1. (`ncn#`) Confirm that the new credentials can be used with Redfish.
 
     ```bash
     curl -k -u "root:$EXPECTED_ROOT_PASSWORD" https://$BMC/redfish/v1/Managers -i  | head -1

@@ -42,14 +42,11 @@ SLS_URL = None
 def print_action(action):
     if action['error'] is not None:
         print(f"Failed:  {action['method'].upper()} {action['url']}. {action['error']}")
-        # print(json.dumps(action["response"], indent=2))
     elif action['status'] is not None:
         print(f"Called:  {action['method'].upper()} {action['url']} with params {action['params']}")
     else:
         print(f"Planned: {action['method'].upper()} {action['url']}")
 
-    # if action.get('body'):
-    #     print(json.dumps(action.get('body'), indent=2))
     for log in action.get('logs'):
         print('         ' + log)
 
@@ -186,7 +183,7 @@ def create_update_etc_hosts_actions(management_ncns, log_dir, switch_ip_reservat
         # Build the line for /etc/hosts file line
         line = f'{ip_address:15} {switch_name}.{network_name}'
 
-        # The the pdsh command
+        # The pdsh command
         sed_action = CommandAction(['pdsh', '-w', hosts,
                                     'sed', '-i', f"'$a{line}'", '/etc/hosts'])
         command_actions.append(sed_action)
