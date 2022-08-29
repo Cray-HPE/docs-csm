@@ -433,7 +433,7 @@ Failures of this test caused by `AuxiliaryController` endpoints for Cassini mezz
 
 ### `ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM
 
-The following HMS functional test may fail due to a known issue because of `ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM:
+There is a known issue that causes the HMS functional test to fail when HSM `ComponentEndpoints` have `EthernetInterfaces` with names of the format `DE*`.
 
 - `test_smd_component_endpoints_ncn-functional_remote-functional.tavern.yaml`
 
@@ -452,7 +452,7 @@ This issue looks similar to the following in the test output:
 
 Failures of this test caused by `EthernetInterface` IDs of the form `DE*` can be safely ignored.
 
-This issue may be remediated by rediscovering the BMCs with `EthernetInterfaces` named `DE*`.
+This issue may be remediated by rediscovering the BMCs associated with these `EthernetInterfaces`.
 
 ```bash
 ncn-mw# cray hsm inventory discover create --xnames <xname>
