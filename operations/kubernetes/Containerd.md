@@ -1,6 +1,6 @@
 # `containerd`
 
-`containerd` is a `daemonset` that runs on the host. It is used to run containers on the Kubernetes platform.
+`containerd` is a container runtime (`systemd` service) that runs on the host. It is used to run containers on the Kubernetes platform.
 
 - [`/var/lib/containerd` filling up](#varlibcontainerd-filling-up)
 - [Restarting `containerd` on a worker NCN](#restarting-containerd-on-a-worker-ncn)
