@@ -1,4 +1,4 @@
-# Creating a tenant
+# Creating a Tenant
 
 This page provides information about how to create a tenant.  This procedure involves creating a custom resource for both `tapms` as well as the `slurm operator`.
 
