@@ -106,12 +106,15 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
       uuid: 074b6db1-f504-4e9c-8245-259e9b22d2e6
     ```
 
-The `cray` command can now be used to display the HSM group:
-
-- (`ncn-mw#`)
+- (`ncn-mw#`) The `cray` command can now be used to display the HSM group:
 
     ```bash
-    cray hsm groups describe blue
+    cray hsm groups describe blue --format toml
+    ```
+
+    Example output:
+
+    ```toml
     label = "blue"
     description = ""
     exclusiveGroup = "tapms-exclusive-group-label"
