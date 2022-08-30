@@ -94,7 +94,7 @@ This procedure is applicable in the following situations:
         read -s DEFAULT_PASSWORD
         ```
 
-    1. Verify the contents of `DEFAULT_USERNAME` and `DEFAULT_PASSWORD`.
+    1. Verify the contents of `DEFAULT_USERNAME`.
 
         ```bash
         echo $DEFAULT_USERNAME
