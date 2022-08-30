@@ -32,7 +32,7 @@ This prefix is configurable, and can be modified when deploying the `cray-hnc-ma
 validTenantNamePrefix: vcluster
 ```
 
-## `Kubectl` HNS Plugin
+## `kubectl` HNS plugin
 
 In order to simplify HNC management CSM NCNs are installed with the `kubectl-hns` plugin (see the `Installing` section at [HNC Releases](https://github.com/kubernetes-sigs/hierarchical-namespaces/releases) for more information on how to install).
 Below is an example of how to view a tree structure:
