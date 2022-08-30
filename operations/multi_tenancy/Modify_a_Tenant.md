@@ -49,12 +49,15 @@ This page provides information about how to modify a tenant.  Modifications that
     tenant.tapms.hpe.com/vcluster-blue configured
     ```
 
-It can take up to a minute for `tapms` to reconcile the change.  The following command can be used to monitor the status of the tenant:
-
-- (`ncn-mw#`)
+- (`ncn-mw#`) It can take up to a minute for `tapms` to reconcile the change. The following command can be used to monitor the status of the tenant:
 
     ```bash
     kubectl get tenant -n tenants vcluster-blue -o yaml
+    ```
+
+    Example output:
+
+    ```yaml
     apiVersion: tapms.hpe.com/v1alpha1
     kind: Tenant
     metadata:
