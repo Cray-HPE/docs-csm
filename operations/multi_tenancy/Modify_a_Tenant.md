@@ -117,6 +117,6 @@ The `cray` command can now be used to display changes to the HSM group:
 
 _placeholder for `slurm` content_
 
-## Apply the Slurm Operator Custom Resource (CR)
+## Apply the `slurm` operator CR
 
 _placeholder for `slurm` content_
