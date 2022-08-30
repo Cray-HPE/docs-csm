@@ -1,6 +1,6 @@
 # Creating a Tenant
 
-This page provides information about how to create a tenant.  This procedure involves creating a custom resource for both `tapms` as well as the `slurm operator`.
+This page provides information about how to create a tenant. This procedure involves creating a Custom Resource Definition (CRD) and then applying the Custom Resource (CR), for both `tapms` and the `slurm` operator,
 
 ## Table of contents
 
