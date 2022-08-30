@@ -54,12 +54,15 @@ In order to simplify HNC management CSM NCNs are installed with the `kubectl-hns
             └── [s] vcluster-blue-user
     ```
 
-This plugin can be used to perform administrator type functions, for more information run:
-
-* (`ncn-mw#`)
+* (`ncn-mw#`) This plugin can be used to perform administrator type functions. For more information, run the following command:
 
     ```bash
     kubectl hns --help
+    ```
+
+    Example output:
+
+    ```text
     Manipulates hierarchical namespaces provided by HNC
     
     Usage:
