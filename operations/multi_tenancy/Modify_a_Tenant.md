@@ -2,8 +2,8 @@
 
 This page provides information about how to modify a tenant. Modifications that are supported are limited to:
 
- - Updating the list of component names (xnames) assigned to this tenant.
- - Adding/deleting `childNamespaces`.
+- Updating the list of component names (xnames) assigned to this tenant.
+- Adding/deleting `childNamespaces`.
 
 ## Table of contents
 
@@ -12,7 +12,7 @@ This page provides information about how to modify a tenant. Modifications that 
 - [Modify the `slurm` operator CR](#modify-the-slurm-operator-cr)
 - [Apply the `slurm` operator CR](#apply-the-slurm-operator-cr)
 
-## Modify the existing TAPMS Custom Resource (CR)
+## Modify the existing TAPMS CR
 
 - An example of a change to add an xname to a tenant:
 
