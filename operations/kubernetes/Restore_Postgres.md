@@ -589,7 +589,7 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
             verify=False)
 
         backup_bucket = s3.Bucket('postgres-backup')
-        for file in backup_bucket.objects.filter(Prefix='vcs-postgres'):
+        for file in backup_bucket.objects.filter(Prefix='gitea-vcs-postgres'):
             print(file.key)
         ```
 
@@ -669,7 +669,7 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
     ```bash
     ncn-mw# DUMPFILE=gitea-vcs-postgres-2021-07-21T19:03:18.sql
 
-    ncn-mw# kubectl cp ./${DUMPFILE} "${SERVICE}-0":/home/postgres/${DUMPFILE} -c postgres -n services
+    ncn-mw# kubectl cp ./${DUMPFILE} "${POSTGRESQL}-0":/home/postgres/${DUMPFILE} -c postgres -n services
     ```
 
 1. Restore the data.
@@ -688,7 +688,7 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
 
         ```bash
         ncn-mw# for secret in postgres.gitea-vcs-postgres.credentials service-account.gitea-vcs-postgres.credentials \
-                    gitea.gitea-vcs-postgres.credentials standby.gitea-vcs-postgres.credentials
+                    standby.gitea-vcs-postgres.credentials
                 do
                     echo -n "secret ${secret} username & password: "
                     echo -n "`kubectl get secret ${secret} -n ${NAMESPACE} -ojsonpath='{.data.username}' | base64 -d` "
@@ -701,7 +701,6 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
         ```text
         secret postgres.gitea-vcs-postgres.credentials username & password: postgres ABCXYZ
         secret service-account.gitea-vcs-postgres.credentials username & password: service_account ABC123
-        secret gitea.gitea-vcs-postgres.credentials username & password: gitea XYZ123
         secret standby.gitea-vcs-postgres.credentials username & password: standby 123456
         ```
 
@@ -711,8 +710,6 @@ This assumes that a dump of the database exists, as well as a backup of the VCS 
         postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
         ALTER ROLE
         postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
-        ALTER ROLE
-        postgres=#ALTER USER gitea WITH PASSWORD 'XYZ123';
         ALTER ROLE
         postgres=#ALTER USER standby WITH PASSWORD '123456';
         ALTER ROLE
