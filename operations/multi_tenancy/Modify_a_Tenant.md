@@ -120,7 +120,7 @@ This page provides information about how to modify a tenant. Modifications that 
     ids = [ "x0c3s5b0n0", "x0c3s6b0n0", "x0c3s7b0n0"]
     ```
 
-## Modify the Slurm Operator Custom Resource (CR)
+## Modify the `slurm` operator CR
 
 _placeholder for `slurm` content_
 
