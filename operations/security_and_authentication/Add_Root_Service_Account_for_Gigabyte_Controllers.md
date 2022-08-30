@@ -6,64 +6,7 @@ account configured. In order to discover this type of hardware, the
 
 ## Prerequisites
 
-The `root` service account is not already configured for the controller.
-
-1. (`ncn#`) Set an environment variable containing the hostname or current IP address of the BMC. If coming from the [Add Worker, Storage, or Master NCNs](../node_management/Add_Remove_Replace_NCNs.md#add-worker-storage-master)
-    procedure, then the IP address should already be stored in the `BMC_IP` environment variable.
-
-    Via hostname:
-
-    ```bash
-    export BMC=x3000c0s3b0
-    ```
-
-    Via IP address:
-
-    ```bash
-    export BMC=10.254.1.9
-    ```
-
-1. (`ncn#`) Set and export the `admin` password of the BMC.
-
-     Contact HPE Cray service in order to obtain the default password.
-
-     > NOTE: `read -s` is used to prevent the password from echoing to the screen or
-     > being saved in the shell history.
-
-     ```bash
-     read -r -s -p "${BMC} admin password: " IPMI_PASSWORD
-     export IPMI_PASSWORD
-     ```
-
-1. (`ncn#`) Check which service accounts are currently configured.
-
-    ```bash
-    curl -s -k -u admin:"$IPMI_PASSWORD" https://<xname>/redfish/v1/AccountService/Accounts | jq ".Members"
-    ```
-
-    ```json
-    [
-      {
-        "@odata.id": "/redfish/v1/AccountService/Accounts/1"
-      }
-    ]
-    ```
-
-1. (`ncn#`) Verify that none of the accounts listed are for `root`.
-
-    ```bash
-    curl -s -k -u admin:"$IPMI_PASSWORD" https://<xname>/redfish/v1/AccountService/Accounts/1 | jq '. | { Name: .Name, UserName: .UserName, RoleId: .RoleId }'
-    ```
-
-    ```json
-    {
-      "Name": "admin",
-      "UserName": "admin",
-      "RoleId": "Administrator"
-    }
-    ```
-
-The `root` account is not configured in the example shown above. If `root` is already configured, then do not proceed with the following steps.
+- The BMC is accessible over the network via hostname or IP address.
 
 ## Procedure
 
@@ -96,6 +39,51 @@ The `root` account is not configured in the example shown above. If `root` is al
 
     ```bash
     echo $EXPECTED_ROOT_PASSWORD
+    ```
+
+1. (`ncn#`) Set an environment variable containing the hostname or current IP address of the BMC. If coming from the [Add Worker, Storage, or Master NCNs](../node_management/Add_Remove_Replace_NCNs.md#add-worker-storage-master)
+    procedure, then the IP address should already be stored in the `BMC_IP` environment variable.
+
+    Via hostname:
+
+    ```bash
+    export BMC=x3000c0s3b0
+    ```
+
+    Via IP address:
+
+    ```bash
+    export BMC=10.254.1.9
+    ```
+
+1. (`ncn#`) Set and export the `admin` password of the BMC.
+
+     Contact HPE Cray service in order to obtain the default password.
+
+     > NOTE: `read -s` is used to prevent the password from echoing to the screen or
+     > being saved in the shell history.
+
+     ```bash
+     read -r -s -p "${BMC} admin password: " IPMI_PASSWORD
+     export IPMI_PASSWORD
+     ```
+
+1. (`ncn-mw#`) Try to access the BMC with the default user credentials.
+
+    ```bash
+    curl -k -u admin:"$IPMI_PASSWORD" https://$BMC/redfish/v1/Managers -i | head -1
+    ```
+
+    If a `200 OK` status code is returned, then the default user account is configured correctly.
+
+    ```text
+    HTTP/1.1 200 OK
+    ```
+
+    If a `401 Unauthorized` status code is returned, then the default user is not configured correctly. The BMC needs to be factory reset to restore the default user credentials.
+
+    ```text
+    HTTP/1.1 401 Unauthorized
     ```
 
 1. (`ncn#`) Configure the `root` service account for the controller.
