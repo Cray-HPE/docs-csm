@@ -36,7 +36,7 @@ This page provides information about how to modify a tenant. Modifications that 
             - x0c3s7b0n0 <-- Adding this xname
     ```
 
-## Apply the modified TAPMS Custom Resource (CR)
+## Apply the modified TAPMS CR
 
 - (`ncn-mw#`) When a tenant CRD is applied, `tapms` will determine any changes to the tenant, and reconcile any changes to `childNamespaces` and `xnames`.
 
