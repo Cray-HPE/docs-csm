@@ -6,11 +6,9 @@ This document will give an overview of its functionality.
 
 ## Table of Contents
 
-* [TAPMS (Tenant and Partition Management System) Overview](#tapms-tenant-and-partition-management-system-overview)
-  * [Table of Contents](#table-of-contents)
-  * [Tenant Schema](#tenant-schema)
-  * [Reconcile Operations](#reconcile-operations)
-  * [Tenant States](#tenant-states)
+* [Tenant Schema](#tenant-schema)
+* [Reconcile Operations](#reconcile-operations)
+* [Tenant States](#tenant-states)
 
 ## Tenant Schema
 

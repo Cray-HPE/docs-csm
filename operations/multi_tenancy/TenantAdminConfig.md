@@ -4,13 +4,11 @@ This page will describe how to configure a user as a `Tenant Administrator`, all
 
 ## Table of Contents
 
-- [Tenant Administrator Configuration](#tenant-administrator-configuration)
-  - [Table of Contents](#table-of-contents)
-  - [Kubernetes OIDC API Integration](#kubernetes-oidc-api-integration)
-  - [Tenant Specific Keycloak Groups](#tenant-specific-keycloak-groups)
-  - [`Roles` and `Rolebindings`](#roles-and-rolebindings)
-  - [Retrieve an OIDC Token](#retrieve-an-oidc-token)
-  - [Using `kubelogin`](#using-kubelogin)
+* [Kubernetes OIDC API Integration](#kubernetes-oidc-api-integration)
+* [Tenant Specific Keycloak Groups](#tenant-specific-keycloak-groups)
+* [`Roles` and `Rolebindings`](#roles-and-rolebindings)
+* [Retrieve an OIDC Token](#retrieve-an-oidc-token)
+* [Using `kubelogin`](#using-kubelogin)
 
 ## Kubernetes OIDC API Integration
 
@@ -106,7 +104,7 @@ Decoding this token will illustrate the `groups` and `name` claims added by Keyc
 
 This token can now be used by a the tenant administrator to interact with Kubernetes. The following is an example of listing pods in the `vcluster-blue` namespace (which was specified in the `ClusterRole` above as allowed):
 
-- (`ncn-mw#`)
+* (`ncn-mw#`)
 
   ```bash
   curl -k -H "Authorization: Bearer $TOKEN"  https://kubernetes-api.vshasta.io:6443/api/v1/namespaces/vcluster-blue/pods
@@ -121,7 +119,7 @@ This token can now be used by a the tenant administrator to interact with Kubern
 
   Note that this token could not be used to list pods in a different namespace (`services` for example):
 
-- (`ncn-mw#`)
+* (`ncn-mw#`)
 
     ```bash
     curl -k -H "Authorization: Bearer $TOKEN"  https://kubernetes-api.vshasta.io:643/api/v1/namespaces/services/pods
@@ -146,7 +144,7 @@ CSM deploys a [`kubelogin`](https://github.com/int128/kubelogin) plugin on NCNs 
 file, which will allow tenant administrators to login and perform operations using `kubectl`.
 Below is an example of using `kubectl` and this configuration file to perform tenant administrator actions:
 
-- (`ncn-mw#`)
+* (`ncn-mw#`)
 
     ```bash
     KUBECONFIG=/etc/kubernetes/tenant-admin.conf kubectl get pod -n vcluster-blue

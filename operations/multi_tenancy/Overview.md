@@ -4,18 +4,16 @@ This page will provide an overview of the multi-tenancy feature.
 
 ## Table of Contents
 
-- [Multi-Tenancy Support](#multi-tenancy-support)
-  - [Table of Contents](#table-of-contents)
-  - [Disclaimer](#disclaimer)
-  - [Components](#components)
-    - [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
-    - [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
-    - [Slurm Operator](#slurm-operator)
-  - [Getting Started](#getting-started)
-    - [Create a Tenant](#create-a-tenant)
-    - [Modify a Tenant](#modify-a-tenant)
-    - [Remove a Tenant](#remove-a-tenant)
-    - [Tenant Administrator Configuration](#tenant-administrator-configuration)
+- [Disclaimer](#disclaimer)
+- [Components](#components)
+  - [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
+  - [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
+  - [Slurm Operator](#slurm-operator)
+- [Getting Started](#getting-started)
+  - [Create a Tenant](#create-a-tenant)
+  - [Modify a Tenant](#modify-a-tenant)
+  - [Remove a Tenant](#remove-a-tenant)
+  - [Tenant Administrator Configuration](#tenant-administrator-configuration)
 
 ## Disclaimer
 

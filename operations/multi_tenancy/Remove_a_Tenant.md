@@ -6,16 +6,14 @@ This page provides describes how an infrastructure administrator (not a tenant a
 
 ## Table of Contents
 
-- [Removing a tenant](#removing-a-tenant)
-  - [Table of Contents](#table-of-contents)
-  - [Delete the tenant's custom resource (CR)](#delete-the-tenants-custom-resource-cr)
-  - [Remove the Slurm Operator Custom Resource (CR)](#remove-the-slurm-operator-custom-resource-cr)
+* [Delete the tenant's custom resource (CR)](#delete-the-tenants-custom-resource-cr)
+* [Remove the Slurm Operator Custom Resource (CR)](#remove-the-slurm-operator-custom-resource-cr)
 
 ## Delete the tenant's custom resource (CR)
 
 Below is an example of a `kubectl` command to remove the tenant by specifying its name:
 
-- (`ncn-mw#`)
+* (`ncn-mw#`)
 
     ```bash
     kubectl -n tenants delete tenants vcluster-blue
