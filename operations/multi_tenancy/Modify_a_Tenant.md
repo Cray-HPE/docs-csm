@@ -13,12 +13,9 @@ This page provides information about how to modify a tenant.  Modifications that
 
 ## Modify the existing TAPMS Custom Resource (CR)
 
-Below is an example of a change to add an xname to a tenant:
+- An example of a change to add an xname to a tenant:
 
-- (`ncn-mw#`)
-
-    ```bash
-    cat tenant.yaml
+    ```yaml
     apiVersion: tapms.hpe.com/v1alpha1
     kind: Tenant
     metadata:
