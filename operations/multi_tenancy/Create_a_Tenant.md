@@ -42,12 +42,17 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
 
 ## Apply the TAPMS CR
 
-Once the CR has been crafted for the tenant, the following command will begin the provisioning of the tenant (note that all tenants should be applied in the `tenants` namespace):
+- (`ncn-mw#`) Once the CR has been crafted for the tenant, the following command will begin the provisioning of the tenant:
 
-- (`ncn-mw#`)
+    > All tenants should be applied in the `tenants` namespace.
 
     ```bash
     kubectl apply -n tenants -f <tenant.yaml>
+    ```
+
+    Example output:
+
+    ```text
     tenant.tapms.hpe.com/vcluster-blue created
     ```
 
