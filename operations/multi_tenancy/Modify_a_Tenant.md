@@ -5,14 +5,12 @@ This page provides information about how to modify a tenant. Modifications that 
  - Updating the list of component names (xnames) assigned to this tenant.
  - Adding/deleting `childNamespaces`.
 
-## Table of Contents
+## Table of contents
 
-- [Modifying a tenant](#modifying-a-tenant)
-  - [Table of Contents](#table-of-contents)
-  - [Modify the existing TAPMS Custom Resource (CR)](#modify-the-existing-tapms-custom-resource-cr)
-  - [Apply the modified TAPMS Custom Resource (CR)](#apply-the-modified-tapms-custom-resource-cr)
-  - [Modify the Slurm Operator Custom Resource (CR)](#modify-the-slurm-operator-custom-resource-cr)
-  - [Apply the Slurm Operator Custom Resource (CR)](#apply-the-slurm-operator-custom-resource-cr)
+- [Modify the existing TAPMS CR](#modify-the-existing-tapms-cr)
+- [Apply the modified TAPMS CR](#apply-the-modified-tapms-cr)
+- [Modify the `slurm` operator CR](#modify-the-slurm-operator-cr)
+- [Apply the `slurm` operator CR](#apply-the-slurm-operator-cr)
 
 ## Modify the existing TAPMS Custom Resource (CR)
 
