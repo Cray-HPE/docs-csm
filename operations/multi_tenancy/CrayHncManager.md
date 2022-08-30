@@ -13,10 +13,8 @@ Generally, operations for managing tenants don't require interacting explicitly 
 
 ## Table of Contents
 
-* [Cray HNC Manager](#cray-hnc-manager)
-  * [Table of Contents](#table-of-contents)
-  * [Tenant Naming Requirements](#tenant-naming-requirements)
-  * [`Kubectl` HNS Plugin](#kubectl-hns-plugin)
+* [Tenant naming requirements](#tenant-naming-requirements)
+* [`kubectl` HNS plugin](#kubectl-hns-plugin)
 
 ## Tenant Naming Requirements
 
