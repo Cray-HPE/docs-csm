@@ -206,7 +206,7 @@ On first login, the LiveCD will prompt the administrator to change the password.
       Use a local disk for `PITDATA`:
 
       ```bash
-      disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN -e7 -d -n | sort -h | awk '{print $2}' | xargs -I {} bash -c "if ! grep -Fq {} /proc/mdstat; then echo {}; fi")"
+      disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN -e7 -e11 -d -n | grep -v usb | sort -h | awk '{print $2}' | xargs -I {} bash -c "if ! grep -Fq {} /proc/mdstat; then echo {}; fi" | head -n 1)"
       echo "Using ${disk}"
       parted --wipesignatures -m --align=opt --ignore-busy -s "/dev/${disk}" -- mklabel gpt mkpart primary ext4 2048s 100%
       partprobe "/dev/${disk}"
