@@ -37,12 +37,15 @@ This page provides information about how to modify a tenant.  Modifications that
 
 ## Apply the modified TAPMS Custom Resource (CR)
 
-When a tenant CRD is applied, `tapms` will determine any changes to the tenant, and reconcile any changes to `childNamespaces` and `xnames`.
-
-- (`ncn-mw#`)
+- (`ncn-mw#`) When a tenant CRD is applied, `tapms` will determine any changes to the tenant, and reconcile any changes to `childNamespaces` and `xnames`.
 
     ```bash
     kubectl apply -n tenants -f <tenant.yaml>
+    ```
+
+    Example output:
+
+    ```text
     tenant.tapms.hpe.com/vcluster-blue configured
     ```
 
