@@ -20,7 +20,7 @@ This is because `tapms` interacts with the HNC controller programmatically to co
 ## Tenant Naming Requirements
 
 In order to ensure that the HNC controller does not manage more namespaces than desired, CSM deploys this controller configured such that only the namespaces listed above are valid namespace names,
-along with tenant specific namespaces, which are required to have a predictable prefix.
+along with tenant-specific namespaces, which are required to have a predictable prefix.
 This prefix is configurable, and can be modified when deploying the `cray-hnc-manager` Helm chart, by changing the following value via customizations:
 
 ```bash
