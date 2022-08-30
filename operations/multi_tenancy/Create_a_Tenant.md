@@ -124,12 +124,15 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     ids = [ "x0c3s5b0n0", "x0c3s6b0n0",]
     ```
 
-The following command can now be used to display the namespace tree structure for the tenant:
-
-- (`ncn-mw#`)
+- (`ncn-mw#`) The following command can now be used to display the namespace tree structure for the tenant:
 
     ```bash
     kubectl hns tree tenants
+    ```
+
+    Example output:
+
+    ```text
     tenants
     └── [s] vcluster-blue
         ├── [s] vcluster-blue-slurm
