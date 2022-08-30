@@ -100,9 +100,9 @@ The steps in this section load hand-off data before a later procedure reboots th
     cray artifacts create boot-images "k8s/${kubernetes_version}/rootfs" "${kubernetes_rootfs}" &&
     cray artifacts create boot-images "k8s/${kubernetes_version}/initrd" "${kubernetes_initrd}" &&
     cray artifacts create boot-images "k8s/${kubernetes_version}/kernel" "${kubernetes_kernel}" &&
-    cray artifacts create boot-images "ceph/${ceph_version}/rootfs" "${ceph_rootfs}"  &&
-    cray artifacts create boot-images "ceph/${ceph_version}/initrd" "${ceph_initrd}"  &&
-    cray artifacts create boot-images "ceph/${ceph_version}/kernel" "${ceph_kernel}"  && echo SUCCESS
+    cray artifacts create boot-images "ceph/${ceph_version}/rootfs" "${ceph_rootfs}" &&
+    cray artifacts create boot-images "ceph/${ceph_version}/initrd" "${ceph_initrd}" &&
+    cray artifacts create boot-images "ceph/${ceph_version}/kernel" "${ceph_kernel}" && echo SUCCESS
     ```
 
     Ensure that the output from the above command chain ends with `SUCCESS`.
@@ -122,7 +122,12 @@ The steps in this section load hand-off data before a later procedure reboots th
     > **`NOTE`** This step will prompt for the root password of the NCNs.
 
     ```bash
-    csi handoff bss-metadata --data-file "${PITDATA}/configs/data.json" || echo "ERROR: csi handoff bss-metadata failed"
+    kubernetes_rootfs="$(readlink -f /var/www/ncn-m002/rootfs)" &&
+    ceph_rootfs="$(readlink -f /var/www/ncn-s001/rootfs)" &&
+    csi handoff bss-metadata \
+        --data-file "${PITDATA}/configs/data.json" \
+        --kubernetes-file "${kubernetes_rootfs}" \
+        --storage-ceph-file "${ceph_rootfs}" && echo SUCCESS
     ```
 
 1. (`pit#`) Patch the metadata for the Ceph nodes to have the correct run commands.
