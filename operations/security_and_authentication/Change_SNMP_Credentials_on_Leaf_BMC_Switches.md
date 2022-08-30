@@ -105,11 +105,7 @@ and then set new credentials. The script can be run either interactively (no env
     kubectl -n services rollout status deployment cray-reds
     ```
 
-1. (`ncn#`) Wait for REDS to initialize itself:
-
-    ```bash
-    sleep 2m
-    ```
+1. Wait two minutes for REDS to initialize itself.
 
 1. (`ncn-mw#`) Verify that REDS was able to communicate with the leaf-BMC switches with the updated credentials.
 
