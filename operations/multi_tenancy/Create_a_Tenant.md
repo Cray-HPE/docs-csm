@@ -19,12 +19,9 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     kubectl get customresourcedefinitions.apiextensions.k8s.io tenants.tapms.hpe.com  -o yaml
     ```
 
-Below is an example of a tenant custom resource (CR):
+- An example of a tenant custom resource (CR):
 
-- (`ncn-mw#`)
-
-    ```bash
-    cat tenant.yaml
+    ```yaml
     apiVersion: tapms.hpe.com/v1alpha1
     kind: Tenant
     metadata:
