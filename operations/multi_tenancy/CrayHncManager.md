@@ -9,7 +9,8 @@ This controller is deployed in CSM with the `cray-hnc-manager` Helm chart. This 
 * `tenants`
 * Any namespaces created for a given tenant
 
-Generally, operations for managing tenants don't require interacting explicitly with the HNC controller, aside from the initial configuration, as `tapms` interacts with the HNC controller programmatically to construct HNC specific namespaces.
+Generally, operations for managing tenants do not require interacting explicitly with the HNC controller, aside from the initial configuration.
+This is because `tapms` interacts with the HNC controller programmatically to construct HNC-specific namespaces.
 
 ## Table of contents
 
