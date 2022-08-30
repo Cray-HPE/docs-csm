@@ -1,4 +1,4 @@
-# Modifying a tenant
+# Modifying a Tenant
 
 This page provides information about how to modify a tenant.  Modifications that are supported are limited to updating the list of `xnames` assigned to this tenant, as well as adding/deleting `childNamespaces`.
 
