@@ -8,52 +8,6 @@ the [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](Update_
 ## Prerequisites
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
-- **If desired** view the existing SNMP credentials stored in Vault for a `leaf-bmc` switch.
-    1. (`ncn-mw#`) Set up the `vault` alias.
-
-        ```bah
-        VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-        alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
-        ```
-
-    1. (`ncn-mw#`) List the switches in the system.
-
-        ```bash
-        cray sls search hardware list --type comptype_mgmt_switch --format json | 
-            jq '.[] | { Xname: .Xname, Aliases: .ExtraProperties.Aliases, Brand: .ExtraProperties.Brand}' -c
-        ```
-
-        Example output:
-
-        ```json
-        {"Xname":"x3000c0w37","Aliases":["sw-leaf-bmc-001"],"Brand":"Aruba"}
-        ```
-
-    1. (`ncn-mw#`) Query Vault for the expected `sw-leaf-bmc` credentials.
-
-        ```bash
-        vault kv get secret/hms-creds/x3000c0w37
-        ```
-
-        Example output:
-
-        ```json
-        {
-            "request_id": "62070a95-8bbb-6834-d707-c17ca9b565e3",
-            "lease_id": "",
-            "lease_duration": 2764800,
-            "renewable": false,
-            "data": {
-                "Password": "",
-                "SNMPAuthPass": "SNMP_AUTH_PASSWORD",
-                "SNMPPrivPass": "SNMP_PRIV_PASSWORD",
-                "URL": "",
-                "Username": "testuser",
-                "Xname": "x3000c0w37"
-            },
-            "warnings": null
-        }
-        ```
 
 ## Procedure
 
@@ -193,3 +147,53 @@ If the credentials are not working, then check the Vault credentials as shown ab
 If the `leaf_switch_snmp_creds.sh` script fails for whatever reason on any
 leaf-BMC switch, then validate and change the credentials manually using the
 procedures found in [Aruba SNMP Users Guide](../network/management_network/aruba/snmpv3_users.md) or [Dell SNMP Users Guide](../network/management_network/dell/snmpv3_users.md).
+
+### Viewing SNMP credentials stored in Vault
+
+**If desired** view the existing SNMP credentials stored in Vault for a `leaf-bmc` switch.
+
+1. (`ncn-mw#`) Set up the `vault` alias.
+
+    ```bash
+    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    ```
+
+1. (`ncn-mw#`) List the switches in the system.
+
+    ```bash
+    cray sls search hardware list --type comptype_mgmt_switch --format json | 
+        jq '.[] | { Xname: .Xname, Aliases: .ExtraProperties.Aliases, Brand: .ExtraProperties.Brand}' -c
+    ```
+
+    Example output:
+
+    ```json
+    {"Xname":"x3000c0w37","Aliases":["sw-leaf-bmc-001"],"Brand":"Aruba"}
+    ```
+
+1. (`ncn-mw#`) Query Vault for the expected `sw-leaf-bmc` credentials.
+
+    ```bash
+    vault kv get secret/hms-creds/x3000c0w37
+    ```
+
+    Example output:
+
+    ```json
+    {
+        "request_id": "62070a95-8bbb-6834-d707-c17ca9b565e3",
+        "lease_id": "",
+        "lease_duration": 2764800,
+        "renewable": false,
+        "data": {
+            "Password": "",
+            "SNMPAuthPass": "SNMP_AUTH_PASSWORD",
+            "SNMPPrivPass": "SNMP_PRIV_PASSWORD",
+            "URL": "",
+            "Username": "testuser",
+            "Xname": "x3000c0w37"
+        },
+        "warnings": null
+    }
+    ```
