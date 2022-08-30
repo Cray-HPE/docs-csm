@@ -33,9 +33,6 @@ import urllib3
 
 SLS_URL = None
 
-# TODO need to create a common library between this script and the add_management_ncn.py script
-# as a lot of these helper functions were taking from it
-
 #
 # HTTP Action stuff
 #
