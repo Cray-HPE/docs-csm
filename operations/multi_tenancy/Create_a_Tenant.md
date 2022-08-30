@@ -9,7 +9,7 @@ This page provides information about how to create a tenant.  This procedure inv
 - [`slurm` operator CRD](#slurm-operator-crd)
 - [Apply the `slurm` operator CR](#apply-the-slurm-operator-cr)
 
-## TAPMS Custom Resource Definition (CRD)
+## TAPMS CRD
 
 Tenant provisioning is handled in a declarative fashion, by creating a CR with the specification for the tenant.
 The full schema is available by executing the following command on either a master or worker node:
