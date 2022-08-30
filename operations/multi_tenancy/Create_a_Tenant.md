@@ -56,12 +56,15 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     tenant.tapms.hpe.com/vcluster-blue created
     ```
 
-It can take up to a minute for `tapms` to fully create the tenant.  The following command can be used to monitor the status of the tenant:
-
-- (`ncn-mw#`)
+- (`ncn-mw#`) It can take up to a minute for `tapms` to fully create the tenant.  The following command can be used to monitor the status of the tenant:
 
     ```bash
     kubectl get tenant -n tenants vcluster-blue -o yaml
+    ```
+
+    Example output:
+
+    ```yaml
     apiVersion: tapms.hpe.com/v1alpha1
     kind: Tenant
     metadata:
