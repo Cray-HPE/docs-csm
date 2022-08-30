@@ -133,6 +133,6 @@ The following command can now be used to display the namespace tree structure fo
 
 _placeholder for `slurm` content_
 
-## Apply the Slurm Operator Custom Resource (CR)
+## Apply the `slurm` operator CR
 
 _placeholder for `slurm` content_
