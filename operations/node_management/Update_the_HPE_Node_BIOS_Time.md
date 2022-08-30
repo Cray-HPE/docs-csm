@@ -33,7 +33,7 @@ If the time between the rest of the system and the node is off by several hours,
 1. (`ncn#`) Boot the node into its BIOS via the serial console.
 
     When `ipmitool` is used to boot a HPE node into its BIOS menu, it will not be available on the node's serial console, because of the node booting into a graphical BIOS menu. In order to access the serial version of the BIOS setup, perform the
-    `ipmitool` steps above to boot the node. Then, on the serial console, enter the BIOS by pressing the `ESC+9` key combination when the following messages are shown on the console:
+    `ipmitool` steps below to boot the node. Then, on the serial console, enter the BIOS by pressing the `ESC+9` key combination when the following messages are shown on the console:
 
     ```text
     For access via BIOS Serial Console:
@@ -42,6 +42,8 @@ If the time between the rest of the system and the node is off by several hours,
     Press 'ESC+!' for One-Time Boot Menu
     Press 'ESC+@' for Network Boot
     ```
+
+    Boot the node into its BIOS.
 
     ```bash
     ipmitool -I lanplus -U root -E -H $BMC chassis power off
