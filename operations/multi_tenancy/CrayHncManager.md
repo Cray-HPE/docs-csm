@@ -35,12 +35,16 @@ validTenantNamePrefix: vcluster
 ## `kubectl` HNS plugin
 
 In order to simplify HNC management CSM NCNs are installed with the `kubectl-hns` plugin (see the `Installing` section at [HNC Releases](https://github.com/kubernetes-sigs/hierarchical-namespaces/releases) for more information on how to install).
-Below is an example of how to view a tree structure:
 
-* (`ncn-mw#`)
+* (`ncn-mw#`) An example command of how to view a tree structure:
 
     ```bash
     kubectl hns tree multi-tenancy
+    ```
+
+    Example output:
+
+    ```text
     multi-tenancy
     ├── slurm-operator
     ├── tapms-operator
