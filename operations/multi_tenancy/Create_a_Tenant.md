@@ -129,7 +129,7 @@ The following command can now be used to display the namespace tree structure fo
         └── [s] vcluster-blue-user
     ```
 
-## Slurm Operator Custom Resource Definition (CRD)
+## `slurm` operator CRD
 
 _placeholder for `slurm` content_
 
