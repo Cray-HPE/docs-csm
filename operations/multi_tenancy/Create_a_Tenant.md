@@ -44,7 +44,7 @@ Below is an example of a tenant custom resource (CR):
             - x0c3s6b0n0
     ```
 
-## Apply the TAPMS Custom Resource (CR)
+## Apply the TAPMS CR
 
 Once the CR has been crafted for the tenant, the following command will begin the provisioning of the tenant (note that all tenants should be applied in the `tenants` namespace):
 
