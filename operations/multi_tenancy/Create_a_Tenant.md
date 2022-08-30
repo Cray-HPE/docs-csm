@@ -12,9 +12,8 @@ This page provides information about how to create a tenant.  This procedure inv
 ## TAPMS CRD
 
 Tenant provisioning is handled in a declarative fashion, by creating a CR with the specification for the tenant.
-The full schema is available by executing the following command on either a master or worker node:
 
-- (`ncn-mw#`)
+- (`ncn-mw#`) The full schema is available by executing the following command:
 
     ```bash
     kubectl get customresourcedefinitions.apiextensions.k8s.io tenants.tapms.hpe.com  -o yaml
