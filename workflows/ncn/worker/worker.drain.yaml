@@ -211,6 +211,29 @@ tasks:
             if [[ $res -eq 0 ]]; then
               /host_usr_bin/csi automate ncn kubernetes --action delete-ncn --ncn {{ `{{inputs.parameters.targetNcn}}` }} --kubeconfig mykubeconfig/admin.conf
             fi
+  - name: wait-for-postgres-operator
+    dependencies:
+      - drain
+    templateRef:
+      name: kubectl-and-curl-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            while true; do
+              numOfRunningPgOperatorPod=$(kubectl get pods -n services -l app.kubernetes.io/name=postgres-operator | grep "Running" | wc -l)
+              if [[ $numOfRunningPgOperatorPod -ne 1 ]];then
+                echo "ERROR - Postgres Operator is not running yet"
+                sleep 5
+                continue
+              else
+                echo "Postgres Operator is running"
+                break
+              fi
+            done
   - name: update-bss
     dependencies:
       - clear-cfs-state
