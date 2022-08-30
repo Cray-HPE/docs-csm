@@ -2,14 +2,12 @@
 
 This page provides information about how to create a tenant.  This procedure involves creating a custom resource for both `tapms` as well as the `slurm operator`.
 
-## Table of Contents
+## Table of contents
 
-- [Creating a tenant](#creating-a-tenant)
-  - [Table of Contents](#table-of-contents)
-  - [TAPMS Custom Resource Definition (CRD)](#tapms-custom-resource-definition-crd)
-  - [Apply the TAPMS Custom Resource (CR)](#apply-the-tapms-custom-resource-cr)
-  - [Slurm Operator Custom Resource Definition (CRD)](#slurm-operator-custom-resource-definition-crd)
-  - [Apply the Slurm Operator Custom Resource (CR)](#apply-the-slurm-operator-custom-resource-cr)
+- [TAPMS CRD](#tapms-crd)
+- [Apply the TAPMS CR](#apply-the-tapms-cr)
+- [`slurm` operator CRD](#slurm-operator-crd)
+- [Apply the `slurm` operator CR](#apply-the-slurm-operator-cr)
 
 ## TAPMS Custom Resource Definition (CRD)
 
