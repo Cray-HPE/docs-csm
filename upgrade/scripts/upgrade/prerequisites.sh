@@ -735,7 +735,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     pgLeaderPod=$(kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list | grep Leader | awk -F'|' '{print $2}')
     kubectl exec -it "${pgLeaderPod}" -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
 
-    SECRETS = ( "postgres" "service-account" "standby" )
+    SECRETS=( "postgres" "service-account" "standby" )
     echo "---" > gitea-vcs-postgres.manifest
     for secret in "${SECRETS[@]}"; do
         kubectl get secret "${secret}.gitea-vcs-postgres.credentials" -n services -o yaml >> gitea-vcs-postgres.manifest
