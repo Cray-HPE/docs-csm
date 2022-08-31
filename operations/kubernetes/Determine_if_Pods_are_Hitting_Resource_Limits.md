@@ -103,4 +103,4 @@ Identify pods that are hitting resource limits in order to increase the resource
 
 1. Increase the resource limits for the pods identified in this procedure.
 
-       See [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md) for how to increase these limits.
+    See [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md) for how to increase these limits.
