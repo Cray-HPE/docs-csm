@@ -123,7 +123,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 ### Stop typescript on `ncn-m001`
 
-Stop any typescripts that were started earlier on `ncn-m001`.
+For any typescripts that were started earlier on `ncn-m001`, stop them with the `exit` command.
 
 ### Backup artifacts on `ncn-m001`
 
@@ -229,7 +229,7 @@ Complete the Kubernetes upgrade. This script will restart several pods on each m
 
 ### Stop typescript on `ncn-m002`
 
-Stop any typescripts that were started during this stage on `ncn-m002`.
+For any typescripts that were started during this stage on `ncn-m002`, stop them with the `exit` command.
 
 ## Stage completed
 

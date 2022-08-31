@@ -253,7 +253,7 @@ the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Wor
 
 ## Stop typescript
 
-Stop any typescripts that were started during this stage.
+For any typescripts that were started during this stage, stop them with the `exit` command.
 
 ## Stage completed
 

@@ -66,7 +66,7 @@ ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600
 
 ## Stop typescript
 
-Stop any typescripts that were started during this stage.
+For any typescripts that were started during this stage, stop them with the `exit` command.
 
 ## Stage completed
 
