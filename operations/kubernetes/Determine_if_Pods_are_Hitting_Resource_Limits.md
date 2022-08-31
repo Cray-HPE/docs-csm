@@ -70,11 +70,12 @@ Identify pods that are hitting resource limits in order to increase the resource
        [...]
        ```
 
-    1. Interpreting script results (see [cgroup documentation](https://kernel.googlesource.com/pub/scm/linux/kernel/git/glommer/memcg/+/cpu_stat/Documentation/cgroups/cpu.txt) for more details):
+    1. Interpret the script results.
 
        * `nr_periods`: How many full periods have been elapsed.
-       * `nr_throttled`: The number of times we exausted the full allowed bandwidth.
-       * `throttled_time`: The total time the tasks were not run due to being overquota.
+       * `nr_throttled`: The number of times the full allowed bandwidth was exhausted.
+       * `throttled_time`: The total time the tasks were not run because of being over quota.
+       * See [cgroup documentation](https://kernel.googlesource.com/pub/scm/linux/kernel/git/glommer/memcg/+/cpu_stat/Documentation/cgroups/cpu.txt) for more details.
 
 1. Check if a pod was killed/restarted because it reached its memory limit.
 
@@ -91,10 +92,15 @@ Identify pods that are hitting resource limits in order to increase the resource
        default   44m    Warning   OOMKilling  node/ncn-w003  Memory cgroup out of memory: Kill process 1372634 (prometheus) score 1966 or sacrifice child
        ```
 
-    1. (`ncn-mw#`) Determine which pod was killed using the output above. Use `grep` on the string returned in the previous step to find the pod name. In this example, prometheus is used:
+    1. (`ncn-mw#`) Determine which pod was killed using the output of the previous command.
+
+       Search the pods in Kubernetes for the string returned in the previous step to find the exact pod name.
+       Based on the previous example command output, `prometheus` is used in this example:
 
        ```bash
        kubectl get pod -A | grep prometheus
        ```
 
-Follow the procedure to increase the resource limits for the pods identified in this procedure. See [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md) for how to increase these limits.
+1. Increase the resource limits for the pods identified in this procedure.
+
+       See [Increase Pod Resource Limits](Increase_Pod_Resource_Limits.md) for how to increase these limits.
