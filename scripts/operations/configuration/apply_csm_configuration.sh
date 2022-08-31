@@ -54,12 +54,13 @@ run_mktemp()
 usage()
 {
    # Display Help
-   echo "Runs CFS to setup passwordless ssh"
+   echo "Updates CFS configurations"
    echo "All parameters are optional and the values will be determined automatically if not set."
    echo
    echo "Usage: deploy_ssh_keys.sh [ --csm-release version ] [ --git-commit hash ]"
-   echo "                            [ --git-clone-url url ] [ --ncn-config-file file ]"
-   echo "                            [ --xnames xname1,xname2... ] [ --clear-state ]"
+   echo "                          [ --git-clone-url url ] [ --ncn-config-file file ]"
+   echo "                          [ --clear-state ] [ --no-enable ]"
+   echo "                          [ --xnames xname1,xname2... ]"
    echo
    echo "Options:"
    echo "csm-release          The version of the CSM release to use. (e.g. 1.6.11)"
@@ -68,6 +69,8 @@ usage()
    echo "ncn-config-file      A file containing the NCN CFS configuration."
    echo "xnames               A comma-separated list of component names (xnames) to deploy to. All management nodes will be included if not set."
    echo "clear-state          Clears existing state from components to ensure CFS runs."
+   echo "no-enable            By default, the script enables all of the NCNs and waits for them to complete configuration. If this flag is set,"
+   echo "                     however, it updates their desired configurations but leaves them disabled."
    echo
 }
 
@@ -130,6 +133,10 @@ while [[ $# -gt 0 ]]; do
       CLEAR_STATE="true"
       shift # past argument
       ;;
+    --no-enable)
+      NO_ENABLE="true"
+      shift # past argument
+      ;;
     -h|--help) # help option
       usage
       exit 0
@@ -157,11 +164,25 @@ if [[ -z "${VERSION}" ]]; then
     echo "Using CSM configuration version ${VERSION}"
 fi
 
-run_mktemp "csm-config-$VERSION-XXXXXX.json"
+# The script will keep all relevant files in a temporary directory. During
+# CSM upgrades, this directory will be backed up, in case it is needed for
+# future reference.
+run_mktemp -d "${HOME}/apply_csm_configuration.$(date +%Y%m%d_%H%M%S).XXXXXX"
+TMPDIR=${tmpfile}
+
+# If a file is passed in as input, keep a copy in the temporary directory
+if [[ -n ${OLD_NCN_CONFIG_FILE} && -f ${OLD_NCN_CONFIG_FILE} ]]; then
+    run_cmd cp "${OLD_NCN_CONFIG_FILE}" "${TMPDIR}"
+fi
+
+run_mktemp --tmpdir="${TMPDIR}" "csm-config-$VERSION-XXXXXX.json"
 CSM_CONFIG_FILE=${tmpfile}
 
-run_mktemp "new-ncn-personalization-XXXXXX.json"
+run_mktemp --tmpdir="${TMPDIR}" "new-ncn-personalization-XXXXXX.json"
 NCN_CONFIG_FILE=${tmpfile}
+
+run_mktemp --tmpdir="${TMPDIR}" "backup-ncn-personalization-XXXXXX.json"
+BACKUP_NCN_CONFIG_FILE=${tmpfile}
 
 if [[ -z "${CLONE_URL}" ]]; then
     CLONE_URL="https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
@@ -216,7 +237,6 @@ else
     run_cmd cp -p "${CSM_CONFIG_FILE}" "${NCN_CONFIG_FILE}"
 fi
 
-## RUNNING CFS ##
 if [[ -z ${XNAMES} ]]; then
     echo "Retrieving a list of all management node component names (xnames)"
     XNAMES=$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
@@ -224,10 +244,17 @@ if [[ -z ${XNAMES} ]]; then
 fi
 XNAME_LIST=${XNAMES//,/ }
 
+## UPDATING CFS ##
+
 echo "Disabling configuration for all listed components"
 for xname in ${XNAME_LIST}; do
     run_cmd cray cfs components update ${xname} --enabled false
 done
+
+# Before updating the configuration, make a backup of the existing configuration (if it exists)
+echo "Backing up existing ncn-personalization configuration (if any) to ${BACKUP_NCN_CONFIG_FILE}"
+# Do not use run_cmd for this call because if it fails, that's okay -- it most likely means that the CFS configuration does not exist.
+cray cfs configurations describe ncn-personalization --format json > "${BACKUP_NCN_CONFIG_FILE}" 2>&1
 
 echo "Updating ncn-personalization configuration"
 run_cmd cray cfs configurations update ncn-personalization --file "${NCN_CONFIG_FILE}"
@@ -239,10 +266,19 @@ if [[ -n ${CLEAR_STATE} ]]; then
     done
 fi
 
-echo "Setting desired configuration and enabling all listed components"
-for xname in ${XNAME_LIST}; do
-    run_cmd cray cfs components update ${xname} --enabled true --error-count 0 --desired-config ncn-personalization
-done
+if [[ -z ${NO_ENABLE} ]]; then
+    echo "Setting desired configuration, clearing error count, and enabling all listed components"
+    for xname in ${XNAME_LIST}; do
+        run_cmd cray cfs components update ${xname} --enabled true --error-count 0 --desired-config ncn-personalization
+    done
+else
+    echo "Setting desired configuration and clearing error count for all listed components"
+    for xname in ${XNAME_LIST}; do
+        run_cmd cray cfs components update ${xname} --enabled false --error-count 0 --desired-config ncn-personalization
+    done
+    echo "All components updated successfully."
+    exit 0
+fi
 
 while true; do
   RESULT=$(cray cfs components list --status pending --ids ${XNAMES} --format json | jq length)

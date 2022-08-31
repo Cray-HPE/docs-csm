@@ -12,8 +12,11 @@ Stage 0 has several critical procedures which prepare the environment and verify
 - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
   - [Direct download](#direct-download)
   - [Manual copy](#manual-copy)
-- [Stage 0.2 - Prerequisites check](#stage-03---prerequisites-check)
-- [Stage 0.3 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+- [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
+- [Stage 0.3 - Update NCN CFS configuration](#stage-03---update-ncn-cfs-configuration)
+  - [Standard upgrade](#standard-upgrade)
+  - [CSM-only system upgrade](#csm-only-system-upgrade)
+- [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
 - [Stop typescript](#stop-typescript)
 - [Stage completed](#stage-completed)
 
@@ -141,7 +144,7 @@ after a break, always be sure that a typescript is running before proceeding.
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
-## Stage 0.2 - Prerequisites check
+## Stage 0.2 - Prerequisites
 
 1. (`ncn-m001#`) Set the `SW_ADMIN_PASSWORD` environment variable.
 
@@ -189,11 +192,6 @@ after a break, always be sure that a typescript is running before proceeding.
    [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
    If the failure persists, then open a support ticket for guidance before proceeding.
 
-1. (`ncn-m001#`) Assign a new CFS configuration to the worker nodes.
-
-   The content of the new CFS configuration is described in *HPE Cray EX System Software Getting Started Guide S-8000*, section
-   "HPE Cray EX Software Upgrade Workflow" subsection "Cray System Management (CSM)".
-
 1. (`ncn-m001#`) Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.
 
    ```bash
@@ -217,7 +215,37 @@ after a break, always be sure that a typescript is running before proceeding.
    git push
    ```
 
-## Stage 0.3 - Backup workload manager data
+## Stage 0.3 - Update NCN CFS configuration
+
+There are two possible scenarios. Follow the procedure for the scenario that is applicable to the upgrade being performed.
+
+- [Standard upgrade](#standard-upgrade) - Upgrading CSM on a system that has products installed other than CSM.
+- [CSM-only system upgrade](#csm-only-system-upgrade) - Upgrading CSM on a system that has CSM installed and **no other products installed**.
+
+### Standard upgrade
+
+This procedure is found in the *HPE Cray EX System Software Getting Started Guide S-8000*, section
+"HPE Cray EX Software Upgrade Workflow", subsection "Cray System Management (CSM)".
+
+### CSM-only system upgrade
+
+This upgrade scenario is extremely uncommon in production environments.
+
+1. (`ncn-m001#`) Generate new CFS configuration for the NCNs.
+
+    This script will also leave CFS disabled for the NCNs. CFS will automatically be re-enabled on them as they are rebooted during the upgrade.
+
+    ```bash
+    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh --no-enable
+    ```
+
+    Successful output should end with the following line:
+
+    ```text
+    All components updated successfully.
+    ```
+
+## Stage 0.4 - Backup workload manager data
 
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
@@ -225,7 +253,7 @@ the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Wor
 
 ## Stop typescript
 
-Stop any typescripts that were started during this stage.
+For any typescripts that were started during this stage, stop them with the `exit` command.
 
 ## Stage completed
 

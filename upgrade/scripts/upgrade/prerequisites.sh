@@ -67,14 +67,48 @@ if [[ -z ${CSM_ARTI_DIR} ]]; then
     exit 1
 fi
 
-state_name="CHECK_WEAVE"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 TOKEN=$(curl -s -S -d grant_type=client_credentials \
                    -d client_id=admin-client \
                    -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 export TOKEN
 
+# Make a backup copy of select pre-upgrade information, just in case it is needed for later reference.
+# This is only run on ncn-m001 (not when it is run from ncn-m002 during the upgrade)
+state_name="BACKUP_SNAPSHOT"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+
+    DATESTRING=$(date +%Y-%m-%d_%H-%M-%S)
+    SNAPSHOT_DIR=$(mktemp -d --tmpdir=/root csm_upgrade.pre_upgrade_snapshot.${DATESTRING}.XXXXXX)
+    echo "Pre-upgrade snapshot directory: ${SNAPSHOT_DIR}"
+
+    # Record CFS components and configurations, since these are modified during the upgrade process
+    CFS_CONFIG_SNAPSHOT="${SNAPSHOT_DIR}/cfs_configurations.json"
+    echo "Backing up CFS configurations to ${CFS_CONFIG_SNAPSHOT}"
+    curl -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/cfs/v2/configurations > "${CFS_CONFIG_SNAPSHOT}"
+
+    CFS_COMP_SNAPSHOT="${SNAPSHOT_DIR}/cfs_components.json"
+    echo "Backing up CFS components to ${CFS_COMP_SNAPSHOT}"
+    curl -k -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/cfs/v2/components > "${CFS_COMP_SNAPSHOT}"
+
+    # Record state of Kubernetes pods. If a pod is later seen in an unexpected state, this can provide a reference to
+    # determine whether or not the issue existed prior to the upgrade.
+    K8S_PODS_SNAPSHOT="${SNAPSHOT_DIR}/k8s_pods.txt"
+    echo "Taking snapshot of current Kubernetes pod states to ${K8S_PODS_SNAPSHOT}"
+    kubectl get pods -A -o wide --show-labels > "${K8S_PODS_SNAPSHOT}"
+
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+    echo
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="CHECK_WEAVE"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
@@ -358,6 +392,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     manifest_folder='/tmp'
+    #shellcheck disable=SC2010
     csm_config_version=$(ls ${CSM_ARTI_DIR}/helm |grep csm-config|sed -e 's/\.[^./]*$//'|sed -e 's/^csm-config-//')
     if [ -z "$csm_config_version" ]; then
       echo "ERROR: null value found.  See the variable"
@@ -390,6 +425,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     manifest_folder='/tmp'
+    #shellcheck disable=SC2010
     kyverno_version=$(ls ${CSM_ARTI_DIR}/helm |grep cray-kyverno|sed -e 's/\.[^./]*$//'|cut -d '-' -f3)
     if [ -z "$kyverno_version" ]; then
       echo "ERROR: null value found.  See the variable"
@@ -422,6 +458,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     manifest_folder='/tmp'
+    #shellcheck disable=SC2010
     kyverno_policy_version=$(ls ${CSM_ARTI_DIR}/helm |grep kyverno-policy|sed -e 's/\.[^./]*$//'|cut -d '-' -f3)
     if [ -z "$kyverno_policy_version" ]; then
       echo "ERROR: null value found.  See the variable"
@@ -466,7 +503,6 @@ state_recorded=$(is_state_recorded "${state_name}" $(hostname))
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
-    temp_file=$(mktemp)
     artdir=${CSM_ARTI_DIR}/images
     #shellcheck disable=SC2155
     export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
@@ -493,7 +529,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     if [ ${k8s_done} = 1 ] && [ ${ceph_done} = 1 ]; then
         echo "Already ran $NCN_IMAGE_MOD_SCRIPT, skipping re-run."
     else
-        rm -f "$artidir/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs" "$artdir/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
+        rm -f "$artdir/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs" "$artdir/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
         DEBUG=1 $NCN_IMAGE_MOD_SCRIPT \
             -d /root/.ssh \
             -k "$artdir/kubernetes/kubernetes-${KUBERNETES_VERSION}.squashfs" \
