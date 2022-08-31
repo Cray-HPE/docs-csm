@@ -115,7 +115,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
 
     # Record state of Kubernetes pods. If a pod is later seen in an unexpected state, this can provide a reference to
     # determine whether or not the issue existed prior to the upgrade.
-    K8S_PODS_SNAPSHOT=${SNAPSHOT_DIR}/k8s_pods.json
+    K8S_PODS_SNAPSHOT=${SNAPSHOT_DIR}/k8s_pods.txt
     echo "Taking snapshot of current Kubernetes pod states to ${K8S_PODS_SNAPSHOT}"
     kubectl get pods -A -o wide --show-labels > "${K8S_PODS_SNAPSHOT}"
 
