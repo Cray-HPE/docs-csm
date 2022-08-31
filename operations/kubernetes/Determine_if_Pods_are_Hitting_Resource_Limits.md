@@ -16,12 +16,12 @@ Identify pods that are hitting resource limits in order to increase the resource
 
 1. Use the `/opt/cray/platform-utils/detect_cpu_throttling.sh` script to determine if any pods are being CPU throttled _(this script is installed on master and worker NCNs)_.  The script can be used in two different ways:
 
-    1. (`ncn-mw#`) Pass in a substring of the desired pod names.
+    1. Pass in a substring of the desired pod names.
 
        In this example, the `externaldns` pods are being used:
 
        ```bash
-       /opt/cray/platform-utils/detect_cpu_throttling.sh externaldns
+       ncn-mw# /opt/cray/platform-utils/detect_cpu_throttling.sh externaldns
        ```
 
        Example output:
@@ -44,12 +44,12 @@ Identify pods that are hitting resource limits in order to increase the resource
        throttled_time 71962850825439
        ```
 
-    1. (`ncn-mw#`) Call the script without a parameter to evaluate all pods.
+    1. Call the script without a parameter to evaluate all pods.
 
        This can take two minutes or more to run when evaluating all pods:
 
        ```bash
-       /opt/cray/platform-utils/detect_cpu_throttling.sh
+       ncn-mw# /opt/cray/platform-utils/detect_cpu_throttling.sh
        ```
 
        Example output:
@@ -81,10 +81,10 @@ Identify pods that are hitting resource limits in order to increase the resource
 
 1. Check if a pod was killed/restarted because it reached its memory limit.
 
-    1. (`ncn-mw#`) Look for a Kubernetes event associated with the pod being killed/restarted.
+    1. Look for a Kubernetes event associated with the pod being killed/restarted.
 
        ```bash
-       kubectl get events -A | grep -C3 OOM
+       ncn-mw# kubectl get events -A | grep -C3 OOM
        ```
 
        Example output:
@@ -94,13 +94,13 @@ Identify pods that are hitting resource limits in order to increase the resource
        default   44m    Warning   OOMKilling  node/ncn-w003  Memory cgroup out of memory: Kill process 1372634 (prometheus) score 1966 or sacrifice child
        ```
 
-    1. (`ncn-mw#`) Determine which pod was killed using the output of the previous command.
+    1. Determine which pod was killed using the output of the previous command.
 
        Search the pods in Kubernetes for the string returned in the previous step to find the exact pod name.
        Based on the previous example command output, `prometheus` is used in this example:
 
        ```bash
-       kubectl get pod -A | grep prometheus
+       ncn-mw# kubectl get pod -A | grep prometheus
        ```
 
 1. Increase the resource limits for the pods identified in this procedure.
