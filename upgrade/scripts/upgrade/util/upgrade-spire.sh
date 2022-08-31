@@ -22,25 +22,60 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+set -euo pipefail
 
-set -eu
+prefix=/var/lib/spire
+conf="${prefix}/conf"
+datadir="${prefix}/data"
+svidkey="${datadir}/svid.key"
+bundleder="${datadir}/bundle.der"
+agentsvidder="${datadir}/agent_svid.der"
+jointoken="${conf}/join_token"
 
-function deploySpire() {
-    BUILDDIR="/tmp/build"
-    mkdir -p "$BUILDDIR"
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${BUILDDIR}/customizations.yaml"
-    manifestgen -i "${CSM_ARTI_DIR}/manifests/sysmgmt.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/spireupgrade.yaml"
-    charts="$(yq r $BUILDDIR/spireupgrade.yaml 'spec.charts[*].name')"
-    for chart in $charts; do
-        if [[ $chart != "spire" ]]; then 
-            yq d -i $BUILDDIR/spireupgrade.yaml "spec.charts.(name==$chart)"
-        fi
-    done
-
-    yq w -i $BUILDDIR/spireupgrade.yaml "metadata.name" "spireupgrade"
-    yq d -i $BUILDDIR/spireupgrade.yaml "spec.sources"
-
-    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path $BUILDDIR/spireupgrade.yaml
+function sshnh() {
+	/usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$@"
 }
 
-deploySpire
+function scpnh() {
+	/usr/bin/scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$@"
+}
+
+for node in $(kubectl get nodes -o name | cut -d"/" -f2) $(ceph node ls | jq -r '.[] | keys[]' | sort -u); do
+	echo "$node: Stopping spire-agent"
+	sshnh "$node" systemctl stop spire-agent
+	sshnh "$node" rm "${svidkey}" "${bundleder}" "${agentsvidder}" "${jointoken}"
+
+	sshnh "$node" zypper install -y spire-agent
+
+	echo "$node: Starting spire-agent"
+	sshnh "$node" systemctl start spire-agent
+done
+
+echo "Uninstalling spire helm chart"
+helm uninstall -n spire spire
+echo "Uninstalling spire PVCs"
+kubectl delete -n spire pvc spire-data-spire-server-0 spire-data-spire-server-1 spire-data-spire-server-2
+
+# WAIT HERE FOR SPIRE PODS TO BE REMOVED
+
+echo "Installing new spire helm chart"
+BUILDDIR="/tmp/build"
+mkdir -p "$BUILDDIR"
+kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d >"${BUILDDIR}/customizations.yaml"
+manifestgen -i "${CSM_ARTI_DIR}/manifests/sysmgmt.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/spireupgrade.yaml"
+charts="$(yq r $BUILDDIR/spireupgrade.yaml 'spec.charts[*].name')"
+for chart in $charts; do
+	if [[ $chart != "spire" ]]; then
+		yq d -i $BUILDDIR/spireupgrade.yaml "spec.charts.(name==$chart)"
+	fi
+done
+
+yq w -i $BUILDDIR/spireupgrade.yaml "metadata.name" "spireupgrade"
+yq d -i $BUILDDIR/spireupgrade.yaml "spec.sources"
+
+loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path $BUILDDIR/spireupgrade.yaml
+
+# WAIT HERE FOR SPIRE TO BE HEALTHY
+
+echo "Joining storage nodes to spire"
+/opt/cray/platform-utils/spire/fix-spire-on-storage.sh
