@@ -157,4 +157,4 @@ If for any reason you wish to force a rewrite of secret data, you may do so by o
     kubectl annotate secret --namespace kube-system cray-k8s-encryption current=rewrite --overwrite
     ```
 
-    This command gives no output on succes.
+    This command gives no output on success.
