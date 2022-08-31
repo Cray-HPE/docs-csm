@@ -81,7 +81,7 @@ if [ -z "${TOKEN}" -o "${TOKEN}" == "" -o "${TOKEN}" == "null" ]; then
     exit 1
 fi
 
-Get Networks from SLS
+# Get Networks from SLS
 NETWORKSJSON=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks)
 
 if [ -z "${NETWORKSJSON}" -o "${NETWORKSJSON}" == "" -o "${NETWORKSJSON}" == "null" ]; then
