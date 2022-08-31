@@ -230,4 +230,4 @@ Stop any typescripts that were started during this stage.
 
 **DO NOT** proceed past this point if the upgrade has not completed and been verified. Contact support for in-depth troubleshooting.
 
-This stage is completed. Continue to [Stage 5](Stage_5.md).
+This stage is completed. Proceed to [Validate CSM health](README.md#3-validate-csm-health) on the main upgrade page.
