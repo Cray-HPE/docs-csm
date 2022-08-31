@@ -77,13 +77,13 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the PIT node, if reinsta
 1. (`ncn#` or `pit#`) Power off NCNs.
 
     ```bash
-    printf "%s\n" "${BMCS[@]}" | xargs -t -i ipmitool -I lanplus -U "${username}" -E -H {} power off
+    printf "%s\n" ${BMCS[@]} | xargs -t -i ipmitool -I lanplus -U "${username}" -E -H {} power off
     ```
 
 1. (`ncn#` or `pit#`) Check the power status to confirm that the nodes have powered off.
 
     ```bash
-    printf "%s\n" "${BMCS[@]}" | xargs -t -i ipmitool -I lanplus -U "${username}" -E -H {} power status
+    printf "%s\n" ${BMCS[@]} | xargs -t -i ipmitool -I lanplus -U "${username}" -E -H {} power status
     ```
 
 ## Set node BMCs to DHCP
@@ -112,7 +112,7 @@ BMCs to be set back to DHCP before proceeding.
    ```bash
    function bmcs_set_dhcp {
       local lan=1
-      for bmc in "${BMCS[@]}"; do
+      for bmc in ${BMCS[@]}; do
          # by default the LAN for the BMC is lan channel 1, except on Intel systems.
          if ipmitool -I lanplus -U "${username}" -E -H "${bmc}" lan print 3 2>/dev/null; then
             lan=3
@@ -132,7 +132,7 @@ BMCs to be set back to DHCP before proceeding.
 
     ```bash
    function bmcs_cold_reset {
-      for bmc in "${BMCS[@]}"; do
+      for bmc in ${BMCS[@]}; do
          printf "Setting %s to DHCP ... " "${bmc}"
          if ipmitool -I lanplus -U "${username}" -E -H "${bmc}" mc reset cold; then
             echo "Done"
