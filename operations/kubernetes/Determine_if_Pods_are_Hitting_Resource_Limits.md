@@ -44,7 +44,9 @@ Identify pods that are hitting resource limits in order to increase the resource
        throttled_time 71962850825439
        ```
 
-    1. (`ncn-mw#`) Call the script without a parameter to evaluate all pods.  It can take two minutes or more to run when evaluating all pods:
+    1. (`ncn-mw#`) Call the script without a parameter to evaluate all pods.
+
+       This can take two minutes or more to run when evaluating all pods:
 
        ```bash
        /opt/cray/platform-utils/detect_cpu_throttling.sh
