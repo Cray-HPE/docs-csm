@@ -32,7 +32,9 @@ To enable encryption you will need to provide and retain a 16, 24, or 32 byte st
 
 Note that all control plane nodes must be updated. Also note that once a node is updated any new secret data writes performed by `kubeapi` for that node will be encrypted. All control plane nodes should be updated as soon as possible to each other.
 
-There are two allowed encryption methods for encryption that may be chosen, `aescbc` and `aesgcm`. Both accept the same input strings noted above. Note that while you may specify multiple encryption keys, only the first key will be used for encryption of any newly written Kubernetes secret.
+There are two allowed encryption methods for encryption that may be chosen, `aescbc` and `aesgcm`.
+
+Both ciphers allow same input string type. Note that while you may specify multiple encryption keys, only the first key will be used for encryption of any newly written Kubernetes secret.
 
 A warning on the `encryption.sh` script. To ensure that you do not leave an entry in `.bash_history`, always run `encryption.sh` with a leading space so `bash` does not record the command in the `.bash_history` file.
 
@@ -122,7 +124,10 @@ This example is similar to what you would see on a new or upgraded installation 
     }
     ```
 
-From this example, we can see that the goal is an `aescbc` cipher, the string corresponds to the name in the `/etc/cray/kubernetes/encryption/current.yaml` file on all control plane nodes after the `encryption.sh` script is ran. We will only see a goal that all control plane nodes agree on.
+From this example we can see that the goal is an `aescbc` cipher.
+
+The `goal` string corresponds to the name in the `/etc/cray/kubernetes/encryption/current.yaml` file on all control plane nodes after the `encryption.sh` script is ran.
+We will only see a goal that all control plane nodes agree on.
 
 * (`ncn-mw#`) Command output after secrets are rewritten:
 
