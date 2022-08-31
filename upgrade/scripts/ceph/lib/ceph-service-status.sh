@@ -49,8 +49,6 @@ do
 done
 
 function check_service(){
-  #shellcheck disable=SC2034
-  (( counter=0 ))
   if [[ $service =~ "osd" ]]
     then
       if [[ -n "$osd" ]]
@@ -59,16 +57,13 @@ function check_service(){
       else
         osd_id=$(echo "$service"|cut -d '.' -f2)
       fi
-      started_time=$(ceph orch ps --daemon_type osd --hostname "$host" -f json-pretty |jq --arg osd_id "$osd_id" -r '.[]|select(.daemon_id==$osd_id)|.started')
-      started_epoch=$(date -d "$started_time" +%s)
-      target_service=$(ceph orch ps --daemon_type osd --hostname "$host" -f json-pretty |jq --arg osd_id "$osd_id" -r '.[]|select(.daemon_id==$osd_id)|.daemon_id')
+      current_start_time=$(ceph orch ps --daemon_type osd --hostname "$host" -f json-pretty |jq --arg osd_id "$osd_id" -r '.[]|select(.daemon_id==$osd_id)|.started')
       current_epoch=$(date +%s)
-      diff=$((current_epoch-started_epoch))
       if [[ -n "$current_start_time" ]]
       then
-        current_start_epoch=$(date -d "$started_time" +%s 2>/dev/null)
+        current_start_epoch=$(date -d "$current_start_time" +%s 2>/dev/null)
         diff=$((current_epoch-current_start_epoch))
-      elif [[ -z "$started_time" ]]
+      elif [[ -z "$current_start_time" ]]
       then
         if [[ $verbose == "true" ]]
         then
@@ -84,20 +79,6 @@ function check_service(){
         read -r -d "\n" up in < <(ceph osd info "$service" -f json-pretty|jq '.up, .in')
       fi
 
-      if [[ $up != "$in" ]]
-      then
-        echo "OSD: $osd is reporting down"
-        read -r -p "Press 'y' to attempt to fix it, press 'w' to pause the install so it can be manually fixed, press 'x' to exit the install."
-        case "${REPLY}"  in
-        y)
-          ceph orch system start "$osd";;
-        w)
-          read -r -p "Pausing until enter/return is pressed";;
-        x)
-          exit 1;;
-        esac
-      fi
-
       if [[ $verbose == "true" ]]
       then
         echo "Service $service on $host is reporting up for $diff seconds"
@@ -105,18 +86,16 @@ function check_service(){
       fi
       if [[ -n "$osd_id" ]] || [[ -n "$osd" ]]
       then
-        read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1 |grep -v "Permanently added"|jq --arg osd "osd.$osd_id" -r '.[]|select(.Names[]|contains($osd))|.Names[], .State, .StartedAt')
+        read -r -d "\n" service_unit status < <(pdsh -N -w "$host" podman ps --format json 2>&1 |grep -v "Permanently added"|jq --arg osd "$osd_prefix$osd_id" -r '.[]|select(.Names[]|contains($osd))|.Names[], .State')
         (( tests++ ))
-        #shellcheck disable=SC2076
-        if [[ "$service_unit" =~ "$FSID_STR-osd.$osd_id" ]]
+        if [[ "$service_unit" =~ $FSID_STR-$osd_prefix$osd_id ]]
         then
           (( passed++ ))
         fi
       else
-        read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1|grep -v "Permanently added"|jq --arg service "$service" -r '.[]|select(.Names[]|contains($service))|.Names[], .State, .StartedAt')
+        read -r -d "\n" service_unit status < <(pdsh -N -w "$host" podman ps --format json 2>&1|grep -v "Permanently added"|jq --arg service "$service" -r '.[]|select(.Names[]|contains($service))|.Names[], .State')
         (( tests++ ))
-        #shellcheck disable=SC2076
-        if [[ "$service_unit" =~ "$FSID_STR-$service" ]]
+        if [[ "$service_unit" =~ $FSID_STR-$service ]]
         then
           (( passed++ ))
         fi
@@ -133,17 +112,13 @@ function check_service(){
      for mds in $(ceph orch ps --daemon_type mds --hostname "$host" -f json-pretty |jq -r '.[]|(.daemon_type+"."+.daemon_id)')
      do
        mds_id=$(echo "$mds"|cut -d '.' -f2,3,4)
-       started_time=$(ceph orch ps --daemon_type mds --hostname "$host" -f json-pretty |jq --arg mds_id "$mds_id" -r '.[]|select(.daemon_id==$mds_id)|.started')
-       started_epoch=$(date -d "$started_time" +%s)
-       #shellcheck disable=SC2034
-       target_service=$(ceph orch ps --daemon_type mds --hostname "$host" -f json-pretty |jq --arg mds_id "$mds_id" -r '.[]|select(.daemon_id==$mds_id)|.daemon_id')
+       current_start_time=$(ceph orch ps --daemon_type mds --hostname "$host" -f json-pretty |jq --arg mds_id "$mds_id" -r '.[]|select(.daemon_id==$mds_id)|.started')
        current_epoch=$(date +%s)
-       diff=$((current_epoch-started_epoch))
        if [[ -n "$current_start_time" ]]
        then
-         current_start_epoch=$(date -d "$started_time" +%s 2>/dev/null)
+         current_start_epoch=$(date -d "$current_start_time" +%s 2>/dev/null)
          diff=$((current_epoch-current_start_epoch))
-       elif [[ -z "$started_time" ]]
+       elif [[ -z "$current_start_time" ]]
        then
          exit 1
        fi
@@ -158,10 +133,9 @@ function check_service(){
        then
          (( active_test++ ))
        fi
-       read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1|grep -v "Permanently added"|jq --arg service "$service" -r '.[]|select(.Names[]|contains($service))|.Names[], .State, .StartedAt')
+       read -r -d "\n" service_unit status < <(pdsh -N -w "$host" podman ps --format json 2>&1|grep -v "Permanently added"|jq --arg service "$service" -r '.[]|select(.Names[]|contains($service))|.Names[], .State')
        (( tests++ ))
-       #shellcheck disable=SC2076
-       if [[ "$service_unit" =~ "$FSID_STR-$mds" ]]
+       if [[ "$service_unit" =~ $FSID_STR-$mds ]]
        then
          (( passed++ ))
        fi
@@ -182,11 +156,9 @@ function check_service(){
         echo "Service $service on $node has been restarted and up for $diff seconds"
         echo "$service's status is: $(ceph orch ps --daemon_type mds --hostname "$host" -f json-pretty|jq -r '.[].status_desc')"
       fi
-      #shellcheck disable=SC2034
-      read -r -d "\n" service_unit status epoch < <(pdsh -N -w "$host" podman ps --format json 2>&1|grep -v "Permanently added"|jq --arg service "$service_name" -r '.[]|select(.Names[]|contains($service))|.Names[], .State, .StartedAt')
+      read -r -d "\n" service_unit status  < <(pdsh -N -w "$host" podman ps --format json 2>&1|grep -v "Permanently added"|jq --arg service "$service_name" -r '.[]|select(.Names[]|contains($service))|.Names[], .State')
       (( tests++ ))
-      #shellcheck disable=SC2076
-      if [[ "$service_unit" =~ "$FSID_STR-$service_name" ]]
+      if [[ "$service_unit" =~ $FSID_STR-$service_name ]]
       then
         (( passed++ ))
       fi
@@ -228,12 +200,20 @@ tests=0
 passed=0
 active_test=0
 num_storage_nodes=$(craysys metadata get num-storage-nodes)
+version=$(ceph version --format json|jq -r '.["version"]'|awk '{print $3}'|awk -F "." '{print $1}')
+
+
+if [[ $version -lt 16 ]]; then
+  osd_prefix="osd."
+else 
+  osd_prefix="osd-"
+fi
 
 check_ceph_health_basic
 
 if [[ $verbose == "true" ]]
 then
-  echo "Updating SSH keys.."
+  echo "Updating ssh keys.."
 fi
 
 truncate --size=0 ~/.ssh/known_hosts  2>&1
@@ -320,6 +300,7 @@ then
   if [[ $verbose == "true" ]]
   then
     echo "Tests run: $tests  Tests Passed: $passed"
+    ceph health detail
   fi
   exit 1
 else
@@ -329,4 +310,3 @@ else
   fi
   exit 0
 fi
-#
