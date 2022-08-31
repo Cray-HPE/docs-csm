@@ -29,7 +29,6 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 - [Stage 2 - Kubernetes Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
 - [Stage 4 - Ceph Upgrade](Stage_4.md)
-- [Stage 5 - Perform NCN Personalization](Stage_5.md)
 - [Validate CSM health](../README.md#3-validate-csm-health)
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.

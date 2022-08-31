@@ -22,7 +22,7 @@ See [Prepare for Upgrade](prepare_for_upgrade.md).
 
 The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
-The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](upgrade_ncn_nodes.md).
+The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](Upgrade_Management_Nodes_and_CSM_Services.md).
 
 ## 3. Validate CSM health
 
@@ -56,7 +56,7 @@ The upgrade is a guided process starting with [Upgrade Management Nodes and CSM 
 
 1. (`ncn-m002#`) Stop typescripts.
 
-    Stop any typescripts that were started during the health validation procedure.
+    For any typescripts that were started during the health validation procedure, stop them with the `exit` command.
 
 1. (`ncn-m002#`) Backup upgrade logs and typescript files to a safe location.
 
@@ -69,7 +69,7 @@ The upgrade is a guided process starting with [Upgrade Management Nodes and CSM 
 
         ```bash
         TARFILE="csm_upgrade.$(date +%Y%m%d_%H%M%S).logs.tgz"
-        tar -czvf "/root/${TARFILE}" /root/csm_upgrade.*.txt /root/output.log /root/pre-m001-reboot-upgrade.log
+        tar -czvf "/root/${TARFILE}" /root/csm_upgrade.*.txt /root/output.log
         ```
 
     1. Upload the tar file into S3.

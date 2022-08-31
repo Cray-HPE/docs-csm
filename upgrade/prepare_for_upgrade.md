@@ -83,7 +83,7 @@ BOS, CFS, CRUS, FAS, and NMD sessions should not be started or underway during t
 
 ## Stop typescript
 
-Stop any typescripts that were started during this stage.
+For any typescripts that were started during this preparation stage, stop them with the `exit` command.
 
 ## Preparation completed
 
