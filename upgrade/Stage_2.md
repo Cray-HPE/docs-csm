@@ -14,6 +14,7 @@
 - [Stage 2.3 - `ncn-m001` upgrade](#stage-23---ncn-m001-upgrade)
   - [Remap `rbd` device from `ncn-m001` to `ncn-m002`](#remap-rbd-device-from-ncn-m001-to-ncn-m002)
   - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
+  - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
   - [Move to `ncn-m002`](#move-to-ncn-m002)
   - [Start typescript on `ncn-m002`](#start-typescript-on-ncn-m002)
   - [Prepare `ncn-m002`](#prepare-ncn-m002)
@@ -124,6 +125,26 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
 Stop any typescripts that were started earlier on `ncn-m001`.
 
+### Backup artifacts on `ncn-m001`
+
+1. (`ncn-m001#`) Create an archive of the artifacts.
+
+    ```bash
+    BACKUP_TARFILE="csm_upgrade.pre_m001_reboot_artifacts.$(date +%Y%m%d_%H%M%S).tgz"
+    ls -d \
+        /root/apply_csm_configuration.* \
+        /root/csm_upgrade.* \
+        /root/output.log 2>/dev/null |
+    sed 's_^/__' |
+    xargs tar -C / -czvf "/root/${BACKUP_TARFILE}"
+    ```
+
+1. (`ncn-m001#`) Upload the archive to S3 in the cluster.
+
+    ```bash
+    cray artifacts create config-data "${BACKUP_TARFILE}" "/root/${BACKUP_TARFILE}"
+    ```
+
 ### Move to `ncn-m002`
 
 1. Log out of `ncn-m001`.
@@ -166,9 +187,7 @@ Stop any typescripts that were started earlier on `ncn-m001`.
    A later stage of the upgrade expects the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm` on `ncn-m002`; that is why this command copies it there.
 
    ```bash
-   scp ncn-m001:/root/csm_upgrade.*.txt /root &&
-       scp ncn-m001:/root/output.log /root/pre-m001-reboot-upgrade.log &&
-       cray artifacts create config-data pre-m001-reboot-upgrade.log /root/pre-m001-reboot-upgrade.log
+   scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
    csi_rpm=$(find "/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/" -name 'cray-site-init*.rpm') &&
        scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm &&
        rpm -Uvh --force "${csi_rpm}" /root/docs-csm-latest.noarch.rpm
