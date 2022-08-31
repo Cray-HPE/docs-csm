@@ -55,17 +55,19 @@ Identify pods that are hitting resource limits in order to increase the resource
        Example output:
 
        ```text
-       Checking benji-k8s-fsfreeze-9zlfk
+       Checking cray-ceph-csi-cephfs-nodeplugin-zqqvv
 
-       Checking benji-k8s-fsfreeze-fgqmd
+       Checking cray-ceph-csi-cephfs-provisioner-6458879894-cbhlx
 
-       Checking benji-k8s-fsfreeze-qgbcp
+       Checking cray-ceph-csi-cephfs-provisioner-6458879894-wlg86
 
-       Checking benji-k8s-maint-796b444bfc-qcrhx
+       Checking cray-ceph-csi-cephfs-provisioner-6458879894-z85vj
 
-       Checking benji-k8s-postgresql-0
-
-       Checking benji-k8s-pushgateway-777fd86545-qrmbr
+       Checking cray-ceph-csi-rbd-nodeplugin-62478
+       *** CPU throttling for containerid 0f52122395dcf209d851eed7a1125b5af8a7a6ea1d8500287cbddc0335e434a0: ***
+       nr_periods 14338
+       nr_throttled 2
+       throttled_time 590491866
 
        [...]
        ```
