@@ -74,7 +74,7 @@ The upgrade is a guided process starting with [Upgrade Management Nodes and CSM 
 
 1. (`ncn-m002#`) Stop typescripts.
 
-    Stop any typescripts that were started during the health validation procedure.
+    For any typescripts that were started during the health validation procedure, stop them with the `exit` command.
 
 1. (`ncn-m002#`) Backup upgrade logs and typescript files to a safe location.
 
