@@ -29,6 +29,7 @@ locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . "${locOfScript}"/../common/ncn-common.sh "$(hostname)"
 trap 'err_report' ERR INT TERM HUP EXIT
 # array for paths to unmount after chrooting images
+# shellcheck disable=SC2034
 declare -a UNMOUNTS=()
 
 while [[ $# -gt 0 ]]
@@ -254,7 +255,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         ssh_keygen_keyscan "${host}"
         until ssh "${host}" test -f /run/cloud-init/instance-data.json
         do
-            ssh "${host}" cloud-init init 2>&1 >/dev/null
+            ssh "${host}" cloud-init init >/dev/null 2>&1
             counter=$((counter+1))
             sleep 10
             if [[ ${counter} -gt 5 ]]
@@ -273,7 +274,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         ssh_keygen_keyscan "${host}"
         until ssh "${host}" test -f /run/cloud-init/instance-data.json
         do
-            ssh "${host}" cloud-init init 2>&1 >/dev/null
+            ssh "${host}" cloud-init init >/dev/null 2>&1
             counter=$((counter+1))
             sleep 10
             if [[ ${counter} -gt 5 ]]
@@ -496,7 +497,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
     artdir=${CSM_ARTI_DIR}/images
-    export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
+    SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
+    export SQUASHFS_ROOT_PW_HASH
     set -o pipefail
     NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
     set +o pipefail
@@ -561,7 +563,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     # check if record already exists and create the script to be idempotent
     for ((i=0;i<${entry_number}; i++)); do
         record=$(jq '."cloud-init"."meta-data".host_records['${i}']' cloud-init-global.json)
-        if [[ ${record} =~ "packages.local" || ${record} =~ "registry.local" ]]; then
+        if [[ ${record} == "packages.local" || ${record} == "registry.local" ]]; then
                 echo "packages.local and registry.local already in BSS cloud-init host_records"
         fi
     done
