@@ -28,6 +28,7 @@ This document provides links to troubleshooting information for services and fun
 * [Console logs filling up available storage](known_issues/console_log_storage_filling.md)
 * [Common Platform CA Issues](known_issues/platform_ca_issues.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
+* [Multiple Console Node Pods on the Same Worker](known_issues/console_node_affinity.md)
 
 ## Kubernetes
 
