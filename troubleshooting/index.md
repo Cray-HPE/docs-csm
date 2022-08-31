@@ -28,6 +28,7 @@ This document provides links to troubleshooting information for services and fun
 * [Platform CA Issues](known_issues/platform_ca_issues.md)
 * [Kafka Failure after CSM 1.2 Upgrade](known_issues/kafka_upgrade_failure.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
+* [Multiple Console Node Pods on the Same Worker](known_issues/console_node_affinity.md)
 
 ## Kubernetes
 
