@@ -4,7 +4,7 @@ Beginning in CSM 1.3, support is enabled for data encryption in `etcd` for Kuber
 
 This controller is deployed by default in CSM with the `cray-kubernetes-encryption` Helm chart.
 
-By default encryption is not enabled and must be enabled after install.
+By default, encryption is not enabled and must be enabled after install.
 
 ## Table of contents
 
