@@ -193,10 +193,7 @@ def create_chn_network(
     bootstrap.ipv4_gateway(list(chn_ipv4.hosts())[0])
     bootstrap.vlan(chn_vlan)
 
-    pool_subnets = list(bootstrap.ipv4_network().subnets())[
-        1
-    ]  # Last half of bootstrap.
-    pool_subnets = list(pool_subnets.subnets())  # Split it in two.
+    pool_subnets = [list(bootstrap.ipv4_network().subnets())[1]]  # Last half of bootstrap.
 
     click.echo(f"    Updating reservation IPv4 addresses for {bootstrap.name()}")
     for reservation in bootstrap.reservations().values():
