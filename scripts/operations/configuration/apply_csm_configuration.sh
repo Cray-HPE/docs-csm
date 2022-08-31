@@ -272,7 +272,7 @@ if [[ -z ${NO_ENABLE} ]]; then
         run_cmd cray cfs components update ${xname} --enabled true --error-count 0 --desired-config ncn-personalization
     done
 else
-    echo "Setting desired configuration and clearing erorr count for all listed components"
+    echo "Setting desired configuration and clearing error count for all listed components"
     for xname in ${XNAME_LIST}; do
         run_cmd cray cfs components update ${xname} --enabled false --error-count 0 --desired-config ncn-personalization
     done
