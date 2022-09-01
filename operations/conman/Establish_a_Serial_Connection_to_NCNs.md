@@ -5,7 +5,7 @@ The ConMan pod can be used to establish a serial console connection with each no
 In the scenario of a power down or reboot of an NCN worker, one must first determine if any `cray-console` pods
 are running on that NCN. It is important to move `cray-console` pods to other worker nodes before rebooting or
 powering off a worker node to minimize disruption in console logging. If a brief interruption in console logging
-and interactive access is acceptable while the NCN worker is being drained, the evacuation may be skipped.
+and interactive access is acceptable while the NCN worker is being drained, then the evacuation may be skipped.
 
 If a `cray-console-node` pod is running on a worker node when it is powered off or rebooted, then access to its
 associated consoles will be unavailable until one of the following things happens:
@@ -60,12 +60,12 @@ The user performing these procedures needs to have access permission to the `cra
     cray-console-node-1   3/3  Running  0  3h55m   10.42.0.12  ncn-w010   <none>   <none>
     ```
 
-    If the pod is running on the node that is going to be rebooted, the interactive session
+    If the pod is running on the node that is going to be rebooted, then the interactive session
     and logging will be interrupted while the NCN worker is drained and the pods are all
     migrated to different NCN workers. To maintain an interactive console session, the
     `cray-console-node` pod must be moved:
 
-    1. Cordon the NCN worker node to suspend scheduling and delete the pod
+    1. Cordon the NCN worker node to suspend scheduling, then delete the pod.
 
         ```bash
         ncn-mw# WNODE=ncn-wxxx
@@ -73,12 +73,12 @@ The user performing these procedures needs to have access permission to the `cra
         ncn-mw# kubectl -n services delete pod $NODE_POD
         ```
 
-    1. Wait for the pod to restart on another NCN worker
+    1. Wait for the pod to restart on another NCN worker.
 
     1. Repeat the previous step to find if this node is now being monitored by a different `cray-console-node` pod.
 
-    **NOTE:** To insure the minimum disruption to console logging and interaction, you may
-    optionally follow the [Evacuation procedure](#evacuation-procedure) to remove all console
+    **NOTE:** If desiring to minimize the disruption to console logging and interaction, 
+    then follow the [Evacuation procedure](#evacuation-procedure) to remove all console
     logging services prior to draining this node.
 
 1. Establish a serial console session with the desired NCN.
@@ -143,7 +143,7 @@ in [Console Node Affinity](../../troubleshooting/known_issues/console_node_affin
             done
         ```
 
-    1. Wait for the `console-operator` and `console-data` pods to be re-scheduled on other nodes.
+    1. (`ncn-mw#`) Wait for the `console-operator` and `console-data` pods to be re-scheduled on other nodes.
 
         Run the following command until both deployments show `2/2` pods are ready.
 
