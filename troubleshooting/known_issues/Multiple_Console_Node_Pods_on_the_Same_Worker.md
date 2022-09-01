@@ -7,10 +7,9 @@ worker reboot operations and can reduce service reliability.
 - [Manually edit deployment](#manually-edit-deployment)
 - [Pod scheduling behavior](#pod-scheduling-behavior)
 
-
 ## Manually edit deployment
 
-This procedure implements anti-affinity Kubernetes scheduling in versions prior to CSM v1.3.0 by 
+This procedure implements anti-affinity Kubernetes scheduling in versions prior to CSM v1.3.0 by
 manually editing the `cray-console-node` deployment. This will remain in effect until the service is reinstalled, downgraded,
 or upgraded. In CSM v1.3.0, the `cray-console-node` deployment already includes anti-affinity, so after an upgrade to that CSM
 version, no manual editing is required in order to implement pod anti-affinity for this deployment.
