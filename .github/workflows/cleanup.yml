@@ -21,4 +21,25 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-disable=SC2155,SC2046
+# This workflow deletes branches that're assoicated with closed or merged pull-requests.
+#
+# You can adjust the behavior by modifying this file.
+# For more information, see:
+# https://github.com/SvanBoxel/delete-merged-branch
+name: Cleanup Closed & Merged Branches
+
+# Run on cron as to give backports a chance since they need their original branch open for a short time.
+on:
+  schedule:
+  - cron: '38 10 * * *'
+
+jobs:
+  cleanup:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Delete merged branch
+      uses: SvanBoxel/delete-merged-branch@1.4.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

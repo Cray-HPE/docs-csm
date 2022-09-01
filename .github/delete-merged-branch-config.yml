@@ -21,4 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-disable=SC2155,SC2046
+exclude: 
+  - main
+  - release/*
+delete_closed_pr: true
