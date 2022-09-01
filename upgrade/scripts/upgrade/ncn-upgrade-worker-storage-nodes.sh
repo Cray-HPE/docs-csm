@@ -100,7 +100,7 @@ if $retry && $force; then
 fi
 
 function uploadWorkflowTemplates() {
-    "${basedir}"/../../../workflows/scripts/upload-worker-rebuild-templates.sh
+    "${basedir}"/../../../workflows/scripts/upload-rebuild-templates.sh
 }
 
 function createWorkflowPayload() {
