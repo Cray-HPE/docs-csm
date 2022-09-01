@@ -4,7 +4,8 @@ The ConMan pod can be used to establish a serial console connection with each no
 
 In the scenario of a power down or reboot of an NCN worker, one must first determine if any `cray-console` pods
 are running on that NCN. It is important to move `cray-console` pods to other worker nodes before rebooting or
-powering off a worker node to minimize disruption in console logging.
+powering off a worker node to minimize disruption in console logging. If a brief interruption in console logging
+and interactive access is acceptable while the NCN worker is being drained, then the evacuation may be skipped.
 
 If a `cray-console-node` pod is running on a worker node when it is powered off or rebooted, then access to its
 associated consoles will be unavailable until one of the following things happens:
@@ -18,9 +19,6 @@ associated consoles will be unavailable until one of the following things happen
 The user performing these procedures needs to have access permission to the `cray-console-operator` and `cray-console-node` pods.
 
 ## Connection procedure
-
-1. When trying to monitor a worker node that will be rebooted or powered down, first follow the
-   [Evacuation procedure](#evacuation-procedure).
 
 1. (`ncn-mw#`) Find the `cray-console-operator` pod.
 
@@ -50,19 +48,47 @@ The user performing these procedures needs to have access permission to the `cra
     cray-console-node-1
     ```
 
+1. (`ncn-mw#`) Check which NCN worker node the `cray-console-node` pod is running on.
+
+    ```bash
+    kubectl -n services get pods -o wide | grep $NODE_POD
+    ```
+
+    Example output:
+
+    ```text
+    cray-console-node-1   3/3  Running  0  3h55m   10.42.0.12  ncn-w010   <none>   <none>
+    ```
+
+    If the pod is running on the node that is going to be rebooted, then the interactive session
+    and logging will be interrupted while the NCN worker is drained and the pods are all
+    migrated to different NCN workers. To maintain an interactive console session, the
+    `cray-console-node` pod must be moved:
+
+    1. Cordon the NCN worker node to suspend scheduling, then delete the pod.
+
+        ```bash
+        WNODE=ncn-wxxx
+        kubectl cordon $WNODE
+        kubectl -n services delete pod $NODE_POD
+        ```
+
+    1. Wait for the pod to restart on another NCN worker.
+
+    1. Repeat the previous step to find if this node is now being monitored by a different `cray-console-node` pod.
+
+    **NOTE:** If desiring to minimize the disruption to console logging and interaction,
+    then follow the [Evacuation procedure](#evacuation-procedure) to remove all console
+    logging services prior to draining this node.
+
 1. (`ncn-mw#`) Establish a serial console session with the desired NCN.
 
     ```bash
     kubectl -n services exec -it $NODE_POD -- conman -j $XNAME
     ```
 
-    The console session log files for each NCN are located in a shared volume in the  `cray-console-node` pods.
+    The console session log files for each NCN are located in a shared volume in the `cray-console-node` pods.
     In those pods, the log files are in the `/var/log/conman/` directory and are named `console.<xname>`.
-
-    **IMPORTANT:** If the `cray-console-node` pod the user is connected through is running on the same NCN that the console session is connected to,
-    and a reboot of that same NCN is initiated, then expect the connection to terminate and there to be a gap in the console log file.
-    The gap will last until the console connection is reestablished through a different `cray-console-node` pod or until the existing pod is restarted on a different NCN.
-    If the `cray-console-node` pod was running on a different NCN or was moved prior to the reboot, then the console log and session should persist through the operation.
 
 1. Exit the connection to the console by entering `&.`.
 
@@ -113,9 +139,9 @@ first follow this procedure to evacuate the target worker node of its pods.
         done
         ```
 
-    1. Wait for the `console-operator` and `console-data` pods to be re-scheduled on other nodes.
+    1. (`ncn-mw#`) Wait for the `console-operator` and `console-data` pods to be re-scheduled on other nodes.
 
-        Run the following command until both deployments show `1/1` pods are ready.
+        Run the following command until both deployments show `2/2` pods are ready.
 
         ```bash
         kubectl -n services get deployment | grep cray-console
@@ -124,8 +150,8 @@ first follow this procedure to evacuate the target worker node of its pods.
         Example output:
 
         ```text
-        cray-console-data           1/1     1          1     1m
-        cray-console-operator       1/1     1          1     1m
+        cray-console-data           2/2     1          1     1m
+        cray-console-operator       2/2     1          1     1m
         ```
 
 1. (`ncn-mw#`) Delete any `cray-console-node` pods listed in the earlier step.
@@ -152,7 +178,7 @@ first follow this procedure to evacuate the target worker node of its pods.
 
         ```text
         NAME                READY   AGE
-        cray-console-node   2/2     1m
+        cray-console-node   3/3     1m
         ```
 
 1. (`ncn-mw#`) After the node has been rebooted and can accept `cray-console` pods again, remove the node cordon.
