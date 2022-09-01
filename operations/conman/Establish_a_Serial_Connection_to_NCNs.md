@@ -99,7 +99,7 @@ first follow this procedure to evacuate the target worker node of its pods.
 
 **NOTE:** If multiple `cray-console-node` pods are present on the worker being evacuated, the
 deployment may be edited to add anti-affinity to the Kubernetes scheduling. Follow the directions
-in [Console Node Affinity](../../troubleshooting/known_issues/console_node_affinity.md).
+in [Multiple Console Node Pods on the Same Worker](../../troubleshooting/known_issues/Multiple_Console_Node_Pods_on_the_Same_Worker.md).
 
 1. Set the `WNODE` variable to the name of the worker node being evacuated.
 
