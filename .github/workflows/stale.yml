@@ -3,6 +3,7 @@
 # You can adjust the behavior by modifying this file.
 # For more information, see:
 # https://github.com/actions/stale
+---
 name: Mark stale issues and pull requests
 
 on:
@@ -18,12 +19,10 @@ jobs:
       pull-requests: write
 
     steps:
-    - uses: actions/stale@v5
-      env:
-        expiration: 30
+    - uses: actions/stale@v5.1.1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         days-before-close: -1
-        days-before-stale: 30
-        stale-issue-message: 'This issue has not had activity in over ${expiration} days and is being marked as stale.'
-        stale-pr-message: 'This pull-request has not had activity in over ${expiration} days and is being marked as stale.'
+        days-before-stale: 20
+        stale-issue-message: 'This issue has not had activity in over 20 days and is being marked as stale.'
+        stale-pr-message: 'This pull-request has not had activity in over 20 days and is being marked as stale.'
