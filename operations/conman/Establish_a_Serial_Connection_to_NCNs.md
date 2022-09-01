@@ -77,7 +77,7 @@ The user performing these procedures needs to have access permission to the `cra
 
     1. Repeat the previous step to find if this node is now being monitored by a different `cray-console-node` pod.
 
-    **NOTE:** If desiring to minimize the disruption to console logging and interaction, 
+    **NOTE:** If desiring to minimize the disruption to console logging and interaction,
     then follow the [Evacuation procedure](#evacuation-procedure) to remove all console
     logging services prior to draining this node.
 
