@@ -48,7 +48,7 @@ The user performing these procedures needs to have access permission to the `cra
     cray-console-node-1
     ```
 
-1. (`ncn-mw`) Check which NCN worker node the `cray-console-node` pod is running on.
+1. (`ncn-mw#`) Check which NCN worker node the `cray-console-node` pod is running on.
 
     ```bash
     kubectl -n services get pods -o wide | grep $NODE_POD
