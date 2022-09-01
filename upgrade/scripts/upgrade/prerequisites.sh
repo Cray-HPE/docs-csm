@@ -87,6 +87,21 @@ elif [[ ! -d ${CSM_MANIFESTS_DIR} ]]; then
     exit 1
 fi
 
+EXTRACT_CHART_MANIFEST="${locOfScript}/util/extract_chart_manifest.py"
+if [[ ! -e ${EXTRACT_CHART_MANIFEST} ]]; then
+    echo "Tool does not exist: ${EXTRACT_CHART_MANIFEST}"
+    echo "make sure you have run: prepare-assets.sh"
+    exit 1
+elif [[ ! -f ${EXTRACT_CHART_MANIFEST} ]]; then
+    echo "Tool exists but is not a regular file: ${EXTRACT_CHART_MANIFEST}"
+    echo "make sure you have run: prepare-assets.sh"
+    exit 1
+elif [[ ! -x ${EXTRACT_CHART_MANIFEST} ]]; then
+    echo "Tool exists but is not executable: ${EXTRACT_CHART_MANIFEST}"
+    echo "make sure you have run: prepare-assets.sh"
+    exit 1
+fi
+
 TOKEN=$(curl -s -S -d grant_type=client_credentials \
                    -d client_id=admin-client \
                    -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
@@ -403,28 +418,31 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
+
     manifest_folder='/tmp'
-    csm_config_version=$(yq r "${CSM_MANIFESTS_DIR}/sysmgmt.yaml" 'spec.charts.(name==csm-config).version')
-    if [[ -z ${csm_config_version} ]]; then
-      echo "ERROR: null value found for csm-config version in CSM manifest."
-      exit 1
-    fi
-    cat > "${manifest_folder}/csm_config.yaml" <<EOF
-apiVersion: manifests/v1beta1
-metadata:
-  name: cray-csm-config
-spec:
-  charts:
-  - name: csm-config
-    namespace: services
-    source: csm
-    version: ${csm_config_version}
-EOF
-    echo "${manifest_folder}/csm_config.yaml"
-    cat "${manifest_folder}/csm_config.yaml"
-    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path "${manifest_folder}/csm_config.yaml"
-    } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    
+    # Get customizations.yaml
+    TMP_CUST_YAML=$(mktemp --tmpdir="${manifest_folder}" customizations.XXXXXX.yaml)
+    set -o pipefail
+    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${TMP_CUST_YAML}"
+    set +o pipefail
+
+    # Create the base of the new manifest
+    TMP_MANIFEST=$(mktemp --tmpdir="${manifest_folder}" csm-config.XXXXXX.yaml)
+    echo "${TMP_MANIFEST}"
+    "${EXTRACT_CHART_MANIFEST}" csm-config "${CSM_MANIFESTS_DIR}/sysmgmt.yaml" > "${TMP_MANIFEST}"
+    cat "${TMP_MANIFEST}"
+
+    # Customize it
+    TMP_MANIFEST_CUSTOMIZED=$(mktemp --tmpdir="${manifest_folder}" csm-config.customized.XXXXXX.yaml)
+    echo "${TMP_MANIFEST_CUSTOMIZED}"
+    manifestgen -i "${TMP_MANIFEST}" -c "${TMP_CUST_YAML}" -o "${TMP_MANIFEST_CUSTOMIZED}"
+    cat "${TMP_MANIFEST_CUSTOMIZED}"
+
+    loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
+
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
@@ -434,28 +452,31 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
+
     manifest_folder='/tmp'
-    kyverno_version=$(yq r "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-kyverno).version')
-    if [[ -z ${kyverno_version} ]]; then
-      echo "ERROR: null value found for cray-kyverno version in CSM manifest."
-      exit 1
-    fi
-    cat > "${manifest_folder}/kyverno.yaml" <<EOF
-apiVersion: manifests/v1beta1
-metadata:
-  name: cray-kyverno
-spec:
-  charts:
-  - name: cray-kyverno
-    namespace: kyverno
-    source: csm
-    version: ${kyverno_version}
-EOF
-    echo "${manifest_folder}/kyverno.yaml"
-    cat "${manifest_folder}/kyverno.yaml"
-    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path "${manifest_folder}/kyverno.yaml"
-    } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    
+    # Get customizations.yaml
+    TMP_CUST_YAML=$(mktemp --tmpdir="${manifest_folder}" customizations.XXXXXX.yaml)
+    set -o pipefail
+    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${TMP_CUST_YAML}"
+    set +o pipefail
+
+    # Create the base of the new manifest
+    TMP_MANIFEST=$(mktemp --tmpdir="${manifest_folder}" cray-kyverno.XXXXXX.yaml)
+    echo "${TMP_MANIFEST}"
+    "${EXTRACT_CHART_MANIFEST}" cray-kyverno "${CSM_MANIFESTS_DIR}/platform.yaml" > "${TMP_MANIFEST}"
+    cat "${TMP_MANIFEST}"
+
+    # Customize it
+    TMP_MANIFEST_CUSTOMIZED=$(mktemp --tmpdir="${manifest_folder}" cray-kyverno.customized.XXXXXX.yaml)
+    echo "${TMP_MANIFEST_CUSTOMIZED}"
+    manifestgen -i "${TMP_MANIFEST}" -c "${TMP_CUST_YAML}" -o "${TMP_MANIFEST_CUSTOMIZED}"
+    cat "${TMP_MANIFEST_CUSTOMIZED}"
+
+    loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
+
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
@@ -465,28 +486,43 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..."
     {
+
     manifest_folder='/tmp'
-    kyverno_policy_version=$(yq r "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==kyverno-policy).version')
-    if [[ -z ${kyverno_policy_version} ]]; then
-      echo "ERROR: null value found for kyverno-policy version in CSM manifest."
-      exit 1
-    fi
-    cat > "${manifest_folder}/kyverno-policy.yaml" <<EOF
-apiVersion: manifests/v1beta1
-metadata:
-  name: kyverno-policy
-spec:
-  charts:
-  - name: kyverno-policy
-    namespace: kyverno
-    source: csm
-    version: ${kyverno_policy_version}
-EOF
-    echo "${manifest_folder}/kyverno-policy.yaml"
-    cat "${manifest_folder}/kyverno-policy.yaml"
-    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path "${manifest_folder}/kyverno-policy.yaml"
-    } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    
+    # Get customizations.yaml
+    TMP_CUST_YAML=$(mktemp --tmpdir="${manifest_folder}" customizations.XXXXXX.yaml)
+    set -o pipefail
+    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${TMP_CUST_YAML}"
+    set +o pipefail
+
+    # Create the base of the new manifest
+    TMP_MANIFEST=$(mktemp --tmpdir="${manifest_folder}" kyverno-policy.XXXXXX.yaml)
+    echo "${TMP_MANIFEST}"
+    "${EXTRACT_CHART_MANIFEST}" kyverno-policy "${CSM_MANIFESTS_DIR}/platform.yaml" > "${TMP_MANIFEST}"
+    cat "${TMP_MANIFEST}"
+
+    # Customize it
+    TMP_MANIFEST_CUSTOMIZED=$(mktemp --tmpdir="${manifest_folder}" kyverno-policy.customized.XXXXXX.yaml)
+    echo "${TMP_MANIFEST_CUSTOMIZED}"
+    manifestgen -i "${TMP_MANIFEST}" -c "${TMP_CUST_YAML}" -o "${TMP_MANIFEST_CUSTOMIZED}"
+    cat "${TMP_MANIFEST_CUSTOMIZED}"
+
+    loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
+
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="UPGRADE_BSS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    helm -n services upgrade cray-hms-bss ${CSM_ARTI_DIR}/helm/cray-hms-bss-*.tgz
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
 else
     echo "====> ${state_name} has been completed"
 fi
