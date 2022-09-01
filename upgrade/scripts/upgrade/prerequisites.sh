@@ -232,7 +232,7 @@ if [[ $state_recorded == "0" ]]; then
 
         # shellcheck disable=SC2029 # it is intentional that ${TOKEN} expands on the client side
         # run the script
-        if ! ssh "$target_ncn" "TOKEN=${TOKEN} /srv/cray/scripts/common/chrony/csm_ntp.py"; then
+        if ! ssh "${target_ncn}" "TOKEN=${TOKEN} /srv/cray/scripts/common/chrony/csm_ntp.py"; then
             echo "${target_ncn} csm_ntp failed"
             exit 1
         fi
@@ -449,6 +449,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     cat "${TMP_MANIFEST_CUSTOMIZED}"
 
     loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
+
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} "$(hostname)"
 else
