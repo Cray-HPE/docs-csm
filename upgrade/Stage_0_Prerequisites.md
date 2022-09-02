@@ -222,7 +222,7 @@ There are two possible scenarios. Follow the procedure for the scenario that is 
 - [Standard upgrade](#standard-upgrade) - Upgrading CSM on a system that has products installed other than CSM.
 - [CSM-only system upgrade](#csm-only-system-upgrade) - Upgrading CSM only on a CSM-only system **no other products installed or being upgraded**.
 
-Note: You will not be able to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
+**NOTE:** You will not be able to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
 
 ### Standard upgrade
 
