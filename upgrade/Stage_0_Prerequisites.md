@@ -222,16 +222,17 @@ There are two possible scenarios. Follow the procedure for the scenario that is 
 - [Standard upgrade](#standard-upgrade) - Upgrading CSM on a system that has products installed other than CSM.
 - [CSM-only system upgrade](#csm-only-system-upgrade) - Upgrading CSM only on a CSM-only system **no other products installed or being upgraded**.
 
-**NOTE:** It will not be possible to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
-
 ### Standard upgrade
+
+**NOTE:** It will not be possible to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
 
 The procedures for customizing the NCN image and updating NCN personalization configurations are found in the *HPE Cray EX System Software Getting Started Guide S-8000*, section
 "HPE Cray EX Software Upgrade Workflow", subsection "Cray System Management (CSM)".
 
 ### CSM-only system upgrade
 
-This upgrade scenario is extremely uncommon in production environments.
+This upgrade scenario is extremely uncommon in production environments. In this case, no NCN image customization needs to be performed at this point.
+Instead, only a new CFS configuration needs to be generated and applied to the NCNs.
 
 1. (`ncn-m001#`) Generate new CFS configuration for the NCNs.
 
