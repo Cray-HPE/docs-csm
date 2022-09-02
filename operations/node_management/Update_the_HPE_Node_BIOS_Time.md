@@ -57,7 +57,7 @@ If the time between the rest of the system and the node is off by several hours,
     >
     > ```bash
     > bmc=x3000c0s3b0 # Change this to be each node in turn.
-    > ssh -L 9443:$bmc:443 -N root@eniac-ncn-m001
+    > ssh -L "9443:${bmc}:443" -N root@eniac-ncn-m001
     > ```
     >
     > Opening a web browser to `https://localhost:9443` will give access to the BMC's web interface.
@@ -69,5 +69,5 @@ If the time between the rest of the system and the node is off by several hours,
 1. (`ncn#`) After verifying the correct time, power off the NCN.
 
     ```bash
-    ipmitool -I lanplus -U root -E -H $BMC chassis power off
+    ipmitool -I lanplus -U root -E -H "${BMC}" chassis power off
     ```

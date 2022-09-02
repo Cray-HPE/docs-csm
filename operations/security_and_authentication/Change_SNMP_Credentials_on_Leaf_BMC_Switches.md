@@ -122,7 +122,9 @@ and then set new credentials. The script can be run either interactively (no env
         cray-reds-6b99b9d5dc-c5g2t   2/2     Running   0          3m21s
         ```
 
-    1. Check the logs of the REDS pod for SNMP communication issues. Replace `CRAY_REDS_POD_NAME` with the currently running pod for REDS:
+    1. Check the logs of the REDS pod for SNMP communication issues.
+
+        In the following command, replace `CRAY_REDS_POD_NAME` with the currently running pod for REDS:
 
         ```bash
         kubectl -n services logs CRAY_REDS_POD_NAME cray-reds | grep "Failed to get ifIndex<->name map"

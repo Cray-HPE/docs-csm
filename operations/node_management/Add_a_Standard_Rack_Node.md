@@ -38,7 +38,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
         > (`ncn#`) Valid HSM SubRoles can be viewed with the following command. To add additional sub roles to HSM refer to [Add Custom Roles and Subroles](../hardware_state_manager/HSM_Roles_and_Subroles.md#add-custom-roles-and-subroles).
         >
         > ```bash
-        > cray hsm service values subrole list
+        > cray hsm service values subrole list --format toml
         > ```
         >
         > Example output:
