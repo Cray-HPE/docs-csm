@@ -6,7 +6,7 @@
 - [Ceph upgrade contents](#ceph-upgrade-contents)
 - [Start typescript](#start-typescript)
 - [Procedure](#procedure)
-  - [Initiate upgrade](#initiate-upgrade)
+  - [Perform upgrade](#perform-upgrade)
   - [Diagnose a stalled upgrade](#diagnose-a-stalled-upgrade)
     - [`UPGRADE_FAILED_PULL: Upgrade: failed to pull target image`](#upgrade_failed_pull-upgrade-failed-to-pull-target-image)
   - [Troubleshoot a failed upgrade](#troubleshoot-a-failed-upgrade)
@@ -38,29 +38,12 @@ after a break, always be sure that a typescript is running before proceeding.
 - Unless otherwise noted, all `ceph` commands that may need to be used in this stage may be run on any master node or any of the first three storage
   nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`).
 
-### Initiate upgrade
+### Perform upgrade
 
-1. (`ncn-s001#`) Check to ensure that the upgrade is possible.
-
-   On :
+1. (`ncn-s001#`) Initiate the upgrade.
 
    ```bash
-   /srv/cray/scripts/common/cubs_tool.py --version 16.2.9 --registry localhost
-   ```
-
-   Example output:
-
-   ```text
-   Upgrade Available!!  The specified version v16.2.9 has been found in the registry
-   ```
-
-   **Note:** If the output does not match what is expected, then this can indicate that a previous step has failed.
-   Review the output from [Stage 1](Stage_1.md) for errors or contact support.
-
-1. (`ncn-s001#`) Start the upgrade.
-
-   ```bash
-   /srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry localhost --upgrade
+   /srv/cray/scripts/common/cubs_tool.py --version 16.2.9 --registry localhost --upgrade
    ```
 
    Example output:
@@ -70,7 +53,9 @@ after a break, always be sure that a typescript is running before proceeding.
    Initiating Ceph upgrade from v16.2.7 to v16.2.9
    ```
 
-   The source version in the output may vary, but the target version should match what is shown above.
+   **Note:** The source version in the output may vary, but the target version should match what is shown above. If the output does not match what is expected, then this can indicate that a previous step has failed.
+   Review the output from [Stage 1](Stage_1.md) for errors or contact support.
+
 
 1. Monitor the upgrade.
 
@@ -105,11 +90,7 @@ after a break, always be sure that a typescript is running before proceeding.
    +---------+---------------+----------------+
    ```
 
-1. (`ncn-s001#`) Verify that the upgrade completed successfully.
-
-   ```bash
-   /srv/cray/scripts/common/cubs_tool.py --report
-   ```
+1. If the upgrade has completed successfully, a report will automatically be printed and the output will state successful completion. If the upgrade is unsuccessful, the output will state the problem.
 
    Expected output:
 
@@ -162,9 +143,17 @@ after a break, always be sure that a typescript is running before proceeding.
    | ncn-s002 |     rgw     | site1.ncn-s002.axqnca |  16.2.9 | running |
    | ncn-s003 |     rgw     | site1.ncn-s003.pxhahp |  16.2.9 | running |
    +----------+-------------+-----------------------+---------+---------+
+
+   The upgrade has completed successfully.
    ```
 
-   **NOTE:** This is an example only and is showing only the core Ceph components.
+   **NOTE:** This is an example only and is showing only the core Ceph components. This report can be printed manually with the following command.
+
+   (`ncn-s001#`) Get a report of Ceph componenets.
+
+   ```bash
+   /srv/cray/scripts/common/cubs_tool.py --report
+   ```
 
 ### Diagnose a stalled upgrade
 
