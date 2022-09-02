@@ -29,7 +29,7 @@ a Ceph image.
 1. [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md).
 
     This document will instruct the administrator to set several environment variables, including the three set in
-    the previous step.
+    the previous step. The variables are being set to the same values, so the duplicate steps can be skipped.
 
 1. Clone the `csm-config-management` repository.
 
@@ -39,10 +39,9 @@ a Ceph image.
 
 1. [Create a CFS Configuration](Create_a_CFS_Configuration.md).
 
-   **NOTE:** A new `initrd` must be generated at the end of the CFS session. Add the following Ansible
-   playbook to the root of the `csm-config-management` repository:
-
-   `ncn-initrd.yml`:
+   **NOTE:** A new `initrd` must be generated at the end of the CFS session. Create a new Ansible
+   playbook named `ncn-initrd.yml` at the root of the `csm-config-management` repository. The new
+   playbook should have the following contents:
 
    ```yaml
    - hosts: Management_Worker
@@ -115,8 +114,8 @@ a Ceph image.
         ```console
         ncn# XNAME=<your-xname>
         ncn# METAL_SERVER=$(cray bss bootparameters list --hosts $XNAME --format json | jq '.[] |."params"' \
-             | awk -F 'metal.server=' '{print $2}' \
-             | awk -F ' ' '{print $1}')
+                 | awk -F 'metal.server=' '{print $2}' \
+                 | awk -F ' ' '{print $1}')
         ```
 
     1. Verify that the variable was set correctly.
@@ -132,9 +131,9 @@ a Ceph image.
         ncn# NEW_METAL_SERVER=http://rgw-vip.nmn/$S3_ARTIFACT_PATH
 
         ncn# PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
-             sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-             sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
-             tr -d \")
+                 sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+                 sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
+                 tr -d \")
         ```
 
     1. Verify that the value of `$NEW_METAL_SERVER` was set correctly within the boot parameters
@@ -147,20 +146,20 @@ a Ceph image.
 
         ```console
         ncn# cray bss bootparameters update --hosts $XNAME   \
-             --kernel "s3://$S3_ARTIFACT_PATH/kernel" \
-             --initrd "s3://$S3_ARTIFACT_PATH/initrd" \
-             --params "$PARAMS"
+                 --kernel "s3://$S3_ARTIFACT_PATH/kernel" \
+                 --initrd "s3://$S3_ARTIFACT_PATH/initrd" \
+                 --params "$PARAMS"
         ```
 
 1. Prepare for reboot.
 
-   1. Failover any Postgres leader that is running on the worker node being rebooted:
+   1. Failover any Postgres leader that is running on the worker node being rebooted.
 
       ```bash
       ncn-mw# /usr/share/doc/csm/upgrade/1.2/scripts/k8s/failover-leader.sh <node to be rebooted>
       ```
 
-   1. Cordon and drain the node:
+   1. Cordon and drain the node.
 
       ```bash
       ncn-mw# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
@@ -187,7 +186,7 @@ a Ceph image.
       ncn-mw# kubectl drain --ignore-daemonsets=true --delete-local-data=true <node to be rebooted>
       ```
 
-   1. SSH to the node and wipe the disks:
+   1. SSH to the node and wipe the disks.
 
       ```console
       ncn-w# vgremove -f --select 'vg_name=~ceph*'
@@ -196,7 +195,7 @@ a Ceph image.
       ncn-w# wipefs --all --force /dev/sd* /dev/disk/by-label/*
       ```
 
-1. Reboot the NCN
+1. Reboot the NCN.
 
    **NOTE**: If the worker node image is being customized as part of a Cray EX initial install or upgrade involving multiple products,
    then refer to the /HPE Cray EX System Software Getting Started Guide/ (S-8000) for details on when to reboot the worker nodes to the new image.
