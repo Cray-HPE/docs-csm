@@ -56,7 +56,6 @@ after a break, always be sure that a typescript is running before proceeding.
    **Note:** The source version in the output may vary, but the target version should match what is shown above. If the output does not match what is expected, then this can indicate that a previous step has failed.
    Review the output from [Stage 1](Stage_1.md) for errors or contact support.
 
-
 1. Monitor the upgrade.
 
    The `cubs_tool` will automatically watch the upgrade.
@@ -90,7 +89,7 @@ after a break, always be sure that a typescript is running before proceeding.
    +---------+---------------+----------------+
    ```
 
-1. If the upgrade has completed successfully, a report will automatically be printed and the output will state successful completion. If the upgrade is unsuccessful, the output will state the problem.
+1. If the upgrade has completed successfully, a report will automatically be printed and the output will state successful completion. If the upgrade is unsuccessful, the output will state the error.
 
    Expected output:
 
@@ -149,7 +148,7 @@ after a break, always be sure that a typescript is running before proceeding.
 
    **NOTE:** This is an example only and is showing only the core Ceph components. This report can be printed manually with the following command.
 
-   (`ncn-s001#`) Get a report of Ceph componenets.
+   (`ncn-s001#`) Get a report of Ceph components.
 
    ```bash
    /srv/cray/scripts/common/cubs_tool.py --report
