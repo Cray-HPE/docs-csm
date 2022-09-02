@@ -215,16 +215,18 @@ after a break, always be sure that a typescript is running before proceeding.
    git push
    ```
 
-## Stage 0.3 - Update NCN CFS configuration
+## Stage 0.3 - Customize the new NCN image and update NCN personalization configurations
 
 There are two possible scenarios. Follow the procedure for the scenario that is applicable to the upgrade being performed.
 
 - [Standard upgrade](#standard-upgrade) - Upgrading CSM on a system that has products installed other than CSM.
-- [CSM-only system upgrade](#csm-only-system-upgrade) - Upgrading CSM on a system that has CSM installed and **no other products installed**.
+- [CSM-only system upgrade](#csm-only-system-upgrade) - Upgrading CSM only on a CSM-only system **no other products installed or being upgraded**.
+
+**NOTE:** You will not be able to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
 
 ### Standard upgrade
 
-This procedure is found in the *HPE Cray EX System Software Getting Started Guide S-8000*, section
+The procedures for customizing the NCN image and updating NCN personalization configurations are found in the *HPE Cray EX System Software Getting Started Guide S-8000*, section
 "HPE Cray EX Software Upgrade Workflow", subsection "Cray System Management (CSM)".
 
 ### CSM-only system upgrade
