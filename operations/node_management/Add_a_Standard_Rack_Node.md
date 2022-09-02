@@ -29,12 +29,23 @@ For this procedure, a new object must be created in the SLS and modifications wi
 1. Create a new node object in SLS.
 
     New node objects require the following information:
-    - `Parent`: component name (xname) of the new node's BMC
-    - `Xname`: xname of the new node
-    - `Role`: `Compute` or `Application`
-    - `Aliases`: Array of aliases for the node. For compute nodes, this is in the form of `nid0000`
-    - NID: The Node ID integer for the node. This applies only to compute nodes
-    - SubRole: Such as `UAN`, `Gateway`, or other valid HSM SubRoles
+    - `Parent`: component name (xname) of the new node's BMC.
+    - `Xname`: xname of the new node.
+    - `Role`: `Compute` or `Application`.
+    - `Aliases`: Array of aliases for the node. For compute nodes, this is in the form of `nid000000`
+    - NID: The Node ID integer for the node. This applies only to compute nodes.
+    - SubRole: Such as `UAN`, `Gateway`, or other valid HSM SubRoles.
+        > (`ncn#`) Valid HSM SubRoles can be viewed with the following command. To add additional sub roles to HSM refer to [Add Custom Roles and Subroles](../hardware_state_manager/HSM_Roles_and_Subroles.md#add-custom-roles-and-subroles).
+        >
+        > ```bash
+        > cray hsm service values subrole list --format toml
+        > ```
+        >
+        > Example output:
+        >
+        > ```toml
+        > SubRole = [ "Visualization", "UserDefined", "Master", "Worker", "Storage", "UAN", "Gateway", "LNETRouter",]
+        > ```
 
     - (`ncn#`) If adding a compute node:
 
@@ -225,6 +236,12 @@ For this procedure, a new object must be created in the SLS and modifications wi
     ```
 
     See [Update Firmware with FAS](../firmware/Update_Firmware_with_FAS.md).
+
+1. Update workload manager configuration to include any newly added compute nodes to the system.
+
+   - **If Slurm is the installed workload manager**, then see section *10.3.1 Add a New or Configure an Existing Slurm Template* in the *`HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)`* to regenerate the Slurm
+      configuration to include any new compute nodes added to the system.
+   - **If PBS Pro is the installed workload manager**: *Coming soon*
 
 1. (`ncn#`) Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
 
