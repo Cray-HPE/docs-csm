@@ -26,11 +26,11 @@ the COS 2.3 layer to address this problem.
 
 1. Check whether CFS has failed NCN personalization on the worker nodes.
 
-    If a node has its ```Configuration Status``` set to ```configured```, then that node has completed all configuration layers for post-boot CFS.
+    If a node has its `Configuration Status` set to `configured`, then that node has completed all configuration layers for post-boot CFS.
 
-    If any nodes have ```Configuration Status``` set to ```pending```, then there should be a CFS session in progress which includes that node.
+    If any nodes have `Configuration Status` set to `pending`, then there should be a CFS session in progress which includes that node.
 
-    If any nodes have ```Configuration Status``` set to ```failed``` with ```Error Count``` set to ```3```, then the node was unable complete a layer of configuration.
+    If any nodes have `Configuration Status` set to `failed` with `Error Count` set to `3`, then the node was unable complete a layer of configuration.
 
     ```bash
     ncn-m# sat status --filter role=management --filter enabled=true --fields \
@@ -66,7 +66,7 @@ the COS 2.3 layer to address this problem.
        cfs-157af6d5-b63d-48ba-9eb9-b33af9a8325d-tfj8x                    3/9     Not Ready   0          11m
        ```
 
-       CFS sessions which are in ```Not Ready``` status are still in progress. CFS sessions with status ```Error``` had a failure in one of the layers.
+       CFS sessions which are in `Not Ready` status are still in progress. CFS sessions with status `Error` had a failure in one of the layers.
 
     1. Inspect all layers of Ansible configuration to find a failed layer.
 
@@ -82,27 +82,27 @@ the COS 2.3 layer to address this problem.
        ncn-mw# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
        ```
 
-    1. If the ```slingshot-host-software``` has completed and the COS layer has run, but fails to mount Lustre
+    1. If the `slingshot-host-software` has completed and the COS layer has run, but fails to mount Lustre
        filesystems, then several roles have already been run to load DVS, Lnet, and Lustre kernel modules.
        These need to be unloaded before NCN personalization can be run again. This is due to a flaw
-       in the ```slingshot-host-software``` which restarts the ```openibd``` service for worker nodes which have
+       in the `slingshot-host-software` which restarts the `openibd` service for worker nodes which have
        Mellanox NICs.
 
        Otherwise, do not continue in this procedure.
 
-1. Check out ```cos-config-management``` from VCS.
+1. Check out `cos-config-management` from VCS.
 
    **Important:** The rest of this procedure is only needed when the Lustre filesystems failed to mount as checked in the previous step.
 
    Create a branch using the imported branch from the installation to customize COS.
 
-   The imported branch will be reported in the ```cray-product-catalog``` and can be used as a base branch. The imported branch from
+   The imported branch will be reported in the `cray-product-catalog` and can be used as a base branch. The imported branch from
    the installation should not be modified. It is recommended that a branch is created from the imported branch to customize COS
    configuration content as necessary. The following steps create an integration branch to accomplish this.
 
-   1. Obtain the ```import_branch``` from the ```cray-product-catalog```.
+   1. Obtain the `import_branch` from the `cray-product-catalog`.
 
-      Set the ```COS_RELEASE``` to the version of COS 2.3 which has been installed.
+      Set the `COS_RELEASE` to the version of COS 2.3 which has been installed.
 
       ```bash
       ncn-mw# COS_RELEASE=2.3.101
@@ -193,13 +193,13 @@ the COS 2.3 layer to address this problem.
       ncn-mw# git merge $IMPORT_BRANCH
       ```
 
-1. Create a new ```ncn-powerup.yml``` playbook.
+1. Create a new `ncn-powerup.yml` playbook.
 
-   Copy the ```ncn-upgrade.yml``` playbook to ```ncn-powerup.yml```.
+   Copy the `ncn-upgrade.yml` playbook to `ncn-powerup.yml`.
    Edit the file with two changes.
 
-   * Change serial parameter from ```1``` node to ```100%```
-   * Comment all roles after the ones with names ending in ```uninstall```, ```unmount```, and ```unload```. See the example below.
+   * Change serial parameter from `1` node to `100%`
+   * Comment all roles after the ones with names ending in `uninstall`, `unmount`, and `unload`. See the example below.
 
    ```bash
    ncn-mw# cp -pv ncn-upgrade.yml ncn-powerup.yml
@@ -235,7 +235,7 @@ the COS 2.3 layer to address this problem.
    #    - configure_fs
    ```
 
-1. Commit the new ```ncn-powerup.yml``` to the ```cos-config-management``` VCS repository.
+1. Commit the new `ncn-powerup.yml` to the `cos-config-management` VCS repository.
 
    ```bash
    ncn-mw# git add ncn-powerup.yml
@@ -257,7 +257,7 @@ the COS 2.3 layer to address this problem.
    ncn-mw# COS_CONFIG_COMMIT_HASH=<commit hash output>
    ```
 
-1. Create and run a CFS configuration which has only a COS layer with this ```ncn-powerup.yml``` playbook in it.
+1. Create and run a CFS configuration which has only a COS layer with this `ncn-powerup.yml` playbook in it.
 
    1. Create a JSON file with the configuration contents.
 
@@ -304,10 +304,10 @@ the COS 2.3 layer to address this problem.
 
 1. Clear the error counts on all nodes so that CFS batcher can run NCN personalization on all worker nodes.
 
-   This will have the SHS ```openibd``` restart, see that all of the COS steps have never been done, and then load Lnet, DVS, and Lustre.
+   This will have the SHS `openibd` restart, see that all of the COS steps have never been done, and then load Lnet, DVS, and Lustre.
 
    ```bash
-   ncn-mw# cray cfs components update --enabled true --state '[]' --error-count 0 --format json "${XNAME}"
+   ncn-mw# cray cfs components update --enabled true --state '[]' --error-count 0 --format json $XNAME
    ```
 
 1. Watch the CFS NCN personalization run on the worker nodes to ensure that the configuration completes with no further errors.
