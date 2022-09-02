@@ -92,7 +92,7 @@ function usage() {
     echo -e "       provided, the script will continue to completion without interruption.\n"
     echo    "       The process can be fully automated by using the SQUASHFS_ROOT_PW_HASH"
     echo -e "       environment variable (see below) along with either -d or -N\n"
-    echo    "       -a             Do *not* modifify the authorized_keys file in the squashfs."
+    echo    "       -a             Do *not* modify the authorized_keys file in the squashfs."
     echo    "                      If modifying a previously modified image, or an"
     echo    "                      authorized_keys file that contains the public key is already"
     echo    "                      included in the directory used with the -d option, you may"
@@ -120,7 +120,7 @@ function usage() {
     echo -e "                                interpreted.\n"
     echo -e "       DEBUG                    If set, the script will be run with 'set -x'\n"
     echo    "NOTES"
-    echo    "       If it is desired to not have any ssh in the image, specifiy -d with an empty"
+    echo    "       If it is desired to not have any ssh in the image, specify -d with an empty"
     echo    "       directory along with -a"
 
 }

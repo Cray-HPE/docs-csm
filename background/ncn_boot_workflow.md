@@ -170,6 +170,12 @@ The commands are the same for all hardware vendors, except where noted.
     ncn/pit# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
     ```
 
+1. Set next boot entry.
+
+    ```bash
+    ncn/pit# efibootmgr -n <desired_next_boot_device>
+    ```
+
 1. Set all of the desired boot options to be active.
 
     ```bash

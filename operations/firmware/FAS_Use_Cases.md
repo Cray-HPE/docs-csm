@@ -141,7 +141,7 @@ It is also recommended that the nodes be powered back on after the updates are c
 }
 ```
 
-##### Cray Node BOIS Update Procedure
+##### Cray Node BIOS Update Procedure
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 

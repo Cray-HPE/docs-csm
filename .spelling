@@ -66,7 +66,6 @@ artifact's
 Artifactory
 artifacts
 ArubaOS-CX
-ASes
 ASICs
 backdoor
 backend
@@ -554,6 +553,7 @@ V1.20.13
 v1.3
 v1.3.x
 v1.30.16
+v1.3.0
 V1.3.0
 v1.4
 v1.4.
@@ -631,6 +631,12 @@ Init
 
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
+
+- operations/network/management_network/aruba/bgp_basic.md
+ASes
+
+- operations/network/management_network/mellanox/bgp_basic.md
+ASes
 
 - operations/network/management_network/upgrade.md
 Preconfig
