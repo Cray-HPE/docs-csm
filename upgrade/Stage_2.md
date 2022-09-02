@@ -5,7 +5,7 @@
 
 - [Start typescript on `ncn-m001`](#start-typescript-on-ncn-m001)
 - [Stage 2.1 - Master node image upgrade](#stage-21---master-node-image-upgrade)
-- [Argo web UI](#argo-web-ui)
+- [Argo workflows](#argo-workflows)
 - [Stage 2.2 - Worker node image upgrade](#stage-22---worker-node-image-upgrade)
   - [Option 1 - Serial upgrade](#option-1---serial-upgrade)
   - [Option 2 - Parallel upgrade (Tech preview)](#option-2---parallel-upgrade-tech-preview)
@@ -53,7 +53,7 @@ after a break, always be sure that a typescript is running before proceeding.
 
 1. Repeat the previous step for each other master node **excluding `ncn-m001`**, one at a time.
 
-## Argo Workflows
+## Argo workflows
 
 Before starting [Stage 2.2 - Worker node image upgrade](#stage-22---worker-node-image-upgrade), access the Argo UI to view the progress of this stage.
 Note that the progress for the current stage will not show up in Argo before the worker node image upgrade script has been started.
