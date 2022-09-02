@@ -5,7 +5,7 @@
 
 - [Start typescript](#start-typescript)
 - [Apply boot order workaround](#apply-boot-order-workaround)
-- [Argo web UI](#argo-web-ui)
+- [Argo workflows](#argo-workflows)
 - [Storage node image upgrade](#storage-node-image-upgrade)
 - [Ensure that `rbd` stats monitoring is enabled](#ensure-that-rbd-stats-monitoring-is-enabled)
 - [Stop typescript](#stop-typescript)
@@ -33,7 +33,7 @@ after a break, always be sure that a typescript is running before proceeding.
 /usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
 ```
 
-## Argo Workflows
+## Argo workflows
 
 Before starting [Storage node image upgrade](#storage-node-image-upgrade), access the Argo UI to view the progress of this stage.
 Note that the progress for the current stage will not show up in Argo before the storage node image upgrade script has been started.
