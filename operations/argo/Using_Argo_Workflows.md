@@ -17,7 +17,7 @@ There are two ways to make Argo not continuously retry a failed step.
 
         ```bash
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001 --no-retry
-        ``` 
+        ```
 
         > Note: ```--no-retry``` will not work if the ```--force``` flag is also used.
 
@@ -33,10 +33,6 @@ Generally, any workflow that is partially complete has the right of way. A parti
 
     ```bash
     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001 --force
-    ``` 
+    ```
 
-* If there is a partially complete workflow and ```--force``` is not used when starting a new workflow of the same type, the initial workflow will be picked up where it left off. No new workflow will be created. 
-
-
-
-
+* If there is a partially complete workflow and ```--force``` is not used when starting a new workflow of the same type, the initial workflow will be picked up where it left off. No new workflow will be created.
