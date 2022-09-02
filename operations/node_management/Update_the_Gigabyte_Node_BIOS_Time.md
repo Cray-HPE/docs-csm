@@ -1,6 +1,6 @@
 # Update the Gigabyte Node BIOS Time
 
-Check and set the time for Gigabyte compute nodes.
+Check and set the time for Gigabyte nodes.
 
 If the console log indicates the time between the rest of the system and the compute nodes is off by several hours, then it prevents the `spire-agent` from getting a valid certificate,
 which causes the node boot to drop into the `dracut` emergency shell.
@@ -24,7 +24,7 @@ The following steps should be repeated for each Gigabyte node which needs to hav
 1. (`ncn-mw#`) Set the `XNAME` variable to the component name (xname) of the node whose console you wish to open.
 
     ```bash
-    XNAME=x1001c0s24b1n0
+    XNAME=x3001c0s24b1n0
     ```
 
 1. (`ncn-mw#`) Find the `cray-console-node` pod that is connected to that node.
@@ -49,7 +49,7 @@ The following steps should be repeated for each Gigabyte node which needs to hav
     Example output:
 
     ```text
-    <ConMan> Connection to console [x1001c0s24b1] opened.
+    <ConMan> Connection to console [x3001c0s24b1] opened.
     ```
 
 1. (`ncn-mw#`) In another terminal, boot the node to BIOS.
@@ -59,7 +59,7 @@ The following steps should be repeated for each Gigabyte node which needs to hav
         This value will be different for each node.
 
         ```bash
-        BMC=x1001c0s24b1
+        BMC=x3001c0s24b1
         ```
 
     1. Boot the node to BIOS.
