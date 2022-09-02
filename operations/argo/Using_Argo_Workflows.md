@@ -21,18 +21,18 @@ There are two ways to make Argo not continuously retry a failed step.
 
         > Note: ```--no-retry``` will not work if the ```--force``` flag is also used.
 
-    1. If a workflow has already started, the current running process can be exited with ```control-c```. The workflow will continue until all steps succeed or a step fails. If a step fails, the workflow will stop and will not retry.
+    1. If a workflow has already started, then the current running process can be exited with ```control-c```. The workflow will continue until all steps succeed or a step fails. If a step fails, then the workflow will stop and will not retry.
 
 ## Starting a new workflow after a failed workflow
 
 Generally, any workflow that is partially complete has the right of way. A partially complete workflow is any workflow that is currently running or any workflow that has a failed step that prevented it from completing successfully.
 
-* To start an entirely new workflow of the same type (worker or storage) as a workflow that is partially complete, the ```--force``` flag must be used. This deletes the partially complete workflow, of the same type, and creates a new workflow.
+* To start an entirely new workflow of the same type (worker or storage) as a workflow that is partially complete, the ```--force``` flag must be used. This deletes the partially complete workflow of the same type, and creates a new workflow.
 
-    (`ncn-m001#`) Example of starting a new workflow with ```--force``` flag
+    (`ncn-m001#`) Example of starting a new workflow with ```--force``` flag:
 
     ```bash
     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001 --force
     ```
 
-* If there is a partially complete workflow and ```--force``` is not used when starting a new workflow of the same type, the initial workflow will be picked up where it left off. No new workflow will be created.
+* If there is a partially complete workflow and ```--force``` is not used when starting a new workflow of the same type, then the initial workflow will be picked up where it left off. No new workflow will be created.
