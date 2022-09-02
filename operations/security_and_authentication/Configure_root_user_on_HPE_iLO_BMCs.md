@@ -21,7 +21,7 @@ This procedure is applicable in the following situations:
 
         ```bash
         BMC=x3000c0s3b0
-        EXPECTED_ROOT_PASSWORD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
+        EXPECTED_ROOT_PASSWORD=$(cray scsd bmc creds list --targets "${BMC}" --format json | jq .Targets[].Password -r)
         ```
 
         The following output indicates that Vault does not contain a device-specific root user password for the specified BMC. In this case, use the system default air-cooled BMC root password described in the step below.
@@ -52,19 +52,19 @@ This procedure is applicable in the following situations:
     - Via hostname:
 
         ```bash
-        export BMC=x3000c0s3b0
+        BMC=x3000c0s3b0
         ```
 
     - Via IP address:
 
         ```bash
-        export BMC=10.254.1.9
+        BMC=10.254.1.9
         ```
 
 1. (`ncn-mw#`) Determine if the root user account is functional.
 
     ```bash
-    curl -k -u "root:$EXPECTED_ROOT_PASSWORD" https://$BMC/redfish/v1/Managers -i  | head -1
+    curl -k -u "root:${EXPECTED_ROOT_PASSWORD}" "https://${BMC}/redfish/v1/Managers" -i  | head -1
     ```
 
     Expected output of a functional root user account:
@@ -103,7 +103,7 @@ This procedure is applicable in the following situations:
 1. (`ncn-mw#`) Try to access the BMC with the default user credentials.
 
     ```bash
-    curl -k -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" https://$BMC/redfish/v1/Managers -i | head -1
+    curl -k -u "${DEFAULT_USERNAME}:${DEFAULT_PASSWORD}" "https://${BMC}/redfish/v1/Managers" -i | head -1
     ```
 
     If a `200 OK` status code is returned, then the default user account is configured correctly.
@@ -128,7 +128,7 @@ This procedure is applicable in the following situations:
     1. Verify that the BMC can be accessed with the default credentials after the factory reset has been performed.
 
         ```bash
-        curl -k -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" https://$BMC/redfish/v1/Managers -i  | head -1
+        curl -k -u "${DEFAULT_USERNAME}:${DEFAULT_PASSWORD}" "https://${BMC}/redfish/v1/Managers" -i  | head -1
         ```
 
         Expected output:
@@ -142,9 +142,9 @@ This procedure is applicable in the following situations:
     1. Determine if the root user account already exists.
 
         ```bash
-        for account in $(curl -s -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" -k https://${BMC}/redfish/v1/AccountService/Accounts | jq '.Members[]."@odata.id"' -r); do 
+        for account in $(curl -s -u "${DEFAULT_USERNAME}:${DEFAULT_PASSWORD}" -k "https://${BMC}/redfish/v1/AccountService/Accounts" | jq '.Members[]."@odata.id"' -r); do 
             echo "Checking $account"
-            curl -k -s -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" -k https://${BMC}${account} | jq '. | {Id: .Id, UserName: .UserName, RoleId: .RoleId}' -c
+            curl -k -s -u "${DEFAULT_USERNAME}:${DEFAULT_PASSWORD}" -k "https://${BMC}${account}" | jq '. | {Id: .Id, UserName: .UserName, RoleId: .RoleId}' -c
         done
         ```
 
@@ -167,10 +167,10 @@ This procedure is applicable in the following situations:
     1. **If the user does not exist**, then create the root user account.
 
         ```bash
-        curl -k -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" -X POST \
+        curl -k -u "${DEFAULT_USERNAME}:${DEFAULT_PASSWORD}" -X POST \
                 -H 'Content-Type: application/json' \
-                -d $(jq --arg PASSWORD "$EXPECTED_ROOT_PASSWORD" -nc '{RoleId: "Administrator", UserName: "root", Password: $PASSWORD}') \
-                https://$BMC/redfish/v1/AccountService/Accounts | jq
+                -d $(jq --arg PASSWORD "${EXPECTED_ROOT_PASSWORD}" -nc '{RoleId: "Administrator", UserName: "root", Password: $PASSWORD}') \
+                "https://${BMC}/redfish/v1/AccountService/Accounts" | jq
         ```
 
         Expected output:
@@ -227,10 +227,10 @@ This procedure is applicable in the following situations:
         1. Using the default administrator credentials, change the root account password.
 
             ```bash
-            curl -k -u "$DEFAULT_USERNAME:$DEFAULT_PASSWORD" -X PATCH \
+            curl -k -u "${DEFAULT_USERNAME}:${DEFAULT_PASSWORD}" -X PATCH \
                 -H 'Content-Type: application/json' \
-                -d $(jq --arg PASSWORD "$EXPECTED_ROOT_PASSWORD" -nc '{Password: $PASSWORD}') \
-                https://$BMC/redfish/v1/AccountService/Accounts/$ROOT_USER_ACCOUNT_ID | jq
+                -d $(jq --arg PASSWORD "${EXPECTED_ROOT_PASSWORD}" -nc '{Password: $PASSWORD}') \
+                "https://${BMC}/redfish/v1/AccountService/Accounts/${ROOT_USER_ACCOUNT_ID}" | jq
             ```
 
             Expected output:
@@ -252,7 +252,7 @@ This procedure is applicable in the following situations:
 1. (`ncn-mw#`) Confirm that the new credentials can be used with Redfish.
 
     ```bash
-    curl -k -u "root:$EXPECTED_ROOT_PASSWORD" https://$BMC/redfish/v1/Managers -i  | head -1
+    curl -k -u "root:${EXPECTED_ROOT_PASSWORD}" "https://${BMC}/redfish/v1/Managers" -i  | head -1
     ```
 
     Expected output:

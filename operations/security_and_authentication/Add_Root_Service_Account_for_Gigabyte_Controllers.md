@@ -16,7 +16,7 @@ account configured. In order to discover this type of hardware, the
 
         ```bash
         BMC=x3000c0s3b0
-        EXPECTED_ROOT_PASSWORD=$(cray scsd bmc creds list --targets $BMC --format json | jq .Targets[].Password -r)
+        EXPECTED_ROOT_PASSWORD=$(cray scsd bmc creds list --targets "${BMC}" --format json | jq .Targets[].Password -r)
         ```
 
         The following output indicates that Vault does not contain a device-specific root user password for the specified BMC. In that case, use the system default air-cooled BMC root password described in the step below.
@@ -47,13 +47,13 @@ account configured. In order to discover this type of hardware, the
     Via hostname:
 
     ```bash
-    export BMC=x3000c0s3b0
+    BMC=x3000c0s3b0
     ```
 
     Via IP address:
 
     ```bash
-    export BMC=10.254.1.9
+    BMC=10.254.1.9
     ```
 
 1. (`ncn#`) Set and export the `admin` password of the BMC.
@@ -71,7 +71,7 @@ account configured. In order to discover this type of hardware, the
 1. (`ncn-mw#`) Try to access the BMC with the default user credentials.
 
     ```bash
-    curl -k -u admin:"$IPMI_PASSWORD" https://$BMC/redfish/v1/Managers -i | head -1
+    curl -k -u admin:"${IPMI_PASSWORD}" "https://${BMC}/redfish/v1/Managers" -i | head -1
     ```
 
     If a `200 OK` status code is returned, then the default user account is configured correctly.
@@ -89,11 +89,11 @@ account configured. In order to discover this type of hardware, the
 1. (`ncn#`) Configure the `root` service account for the controller.
 
     ```bash
-    ipmitool -U admin -E -I lanplus -H $BMC user set name 4 root
-    ipmitool -U admin -E -I lanplus -H $BMC user set password 4 "$EXPECTED_ROOT_PASSWORD"
-    ipmitool -U admin -E -I lanplus -H $BMC user priv 4 4 1
-    ipmitool -U admin -E -I lanplus -H $BMC user enable 4
-    ipmitool -U admin -E -I lanplus -H $BMC channel setaccess 1 4 callin=on ipmi=on link=on
+    ipmitool -U admin -E -I lanplus -H "${BMC}" user set name 4 root
+    ipmitool -U admin -E -I lanplus -H "${BMC}" user set password 4 "${EXPECTED_ROOT_PASSWORD}"
+    ipmitool -U admin -E -I lanplus -H "${BMC}" user priv 4 4 1
+    ipmitool -U admin -E -I lanplus -H "${BMC}" user enable 4
+    ipmitool -U admin -E -I lanplus -H "${BMC channel setaccess 1 4 callin=on ipmi=on link=on
     ```
 
     Example output:
@@ -107,7 +107,7 @@ account configured. In order to discover this type of hardware, the
 1. (`ncn#`) If the target controller is a BMC and not a CMC, then configure Serial Over LAN (SOL).
 
     ```bash
-    ipmitool -U admin -E -I lanplus -H $BMC sol payload enable 1 4
+    ipmitool -U admin -E -I lanplus -H "${BMC}" sol payload enable 1 4
     ```
 
 1. (`ncn#`) Verify that the `root` service account is now configured.
@@ -115,7 +115,7 @@ account configured. In order to discover this type of hardware, the
     1. List the current accounts on the BMC.
 
         ```bash
-        curl -s -k -u admin:"$IPMI_PASSWORD" https://$BMC/redfish/v1/AccountService/Accounts | jq ".Members"
+        curl -s -k -u admin:"${IPMI_PASSWORD}" "https://${BMC}/redfish/v1/AccountService/Accounts" | jq ".Members"
         ```
 
         Expected output:
@@ -134,7 +134,7 @@ account configured. In order to discover this type of hardware, the
     1. View the `root` user account account on the BMC.
 
         ```bash
-        curl -s -k -u admin:"$IPMI_PASSWORD" https://$BMC/redfish/v1/AccountService/Accounts/4 | jq '. | { Name: .Name, UserName: .UserName, RoleId: .RoleId }'
+        curl -s -k -u admin:"${IPMI_PASSWORD}" "https://${BMC}/redfish/v1/AccountService/Accounts/4" | jq '. | { Name: .Name, UserName: .UserName, RoleId: .RoleId }'
         ```
 
         Expected output:
@@ -150,7 +150,7 @@ account configured. In order to discover this type of hardware, the
 1. (`ncn#`) Confirm that the new credentials can be used with Redfish.
 
     ```bash
-    curl -k -u "root:$EXPECTED_ROOT_PASSWORD" https://$BMC/redfish/v1/Managers -i  | head -1
+    curl -k -u "root:${EXPECTED_ROOT_PASSWORD}" "https://${BMC}/redfish/v1/Managers" -i  | head -1
     ```
 
     Expected output:

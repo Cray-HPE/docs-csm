@@ -32,7 +32,7 @@ New HPE nodes ship with with IPMI access disabled by default. In order for CSM t
     ```bash
     read -s ROOT_PASSWORD
     export ROOT_PASSWORD
-    curl -k -u root:$ROOT_PASSWORD https://$BMC/redfish/v1/Managers/1/NetworkProtocol | jq .IPMI
+    curl -k -u "root:${ROOT_PASSWORD}" "https://${BMC}/redfish/v1/Managers/1/NetworkProtocol" | jq .IPMI
     ```
 
     Expected output showing that IPMI is enabled. **If this is observed, then no further action is required to enable IPMI access; skip the rest of the procedure**.
@@ -58,10 +58,10 @@ New HPE nodes ship with with IPMI access disabled by default. In order for CSM t
     1. (`ncn#`) Enable IPMI access.
 
         ```bash
-        curl -k -u root:$ROOT_PASSWORD -X PATCH \
+        curl -k -u "root:${ROOT_PASSWORD}" -X PATCH \
             -H 'Content-Type: application/json' \
             -d '{"IPMI": {"Port": 623, "ProtocolEnabled": true}}' \
-            https://$BMC/redfish/v1/Managers/1/NetworkProtocol | jq
+            "https://${BMC}/redfish/v1/Managers/1/NetworkProtocol" | jq
         ```
 
         Expected output:
@@ -83,10 +83,10 @@ New HPE nodes ship with with IPMI access disabled by default. In order for CSM t
     1. (`ncn#`) Restart the BMC.
 
         ```bash
-        curl -k -u root:$ROOT_PASSWORD -X POST \
+        curl -k -u "root:${ROOT_PASSWORD}" -X POST \
             -H 'Content-Type: application/json' \
             -d '{"ResetType": "GracefulRestart"}' \
-            https://$BMC/redfish/v1/Managers/1/Actions/Manager.Reset | jq
+            "https://${BMC}/redfish/v1/Managers/1/Actions/Manager.Reset" | jq
         ```
 
         Expected output:
@@ -110,7 +110,7 @@ New HPE nodes ship with with IPMI access disabled by default. In order for CSM t
     1. (`ncn#`) Verify that IPMI is enabled.
 
         ```bash
-        curl -k -u root:$ROOT_PASSWORD https://$BMC/redfish/v1/Managers/1/NetworkProtocol | jq .IPMI
+        curl -k -u "root:${ROOT_PASSWORD}" "https://${BMC}/redfish/v1/Managers/1/NetworkProtocol" | jq .IPMI
         ```
 
         Expected output showing that IPMI is enabled:
