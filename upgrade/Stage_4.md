@@ -89,7 +89,7 @@ after a break, always be sure that a typescript is running before proceeding.
    +---------+---------------+----------------+
    ```
 
-1. If the upgrade has completed successfully, a report will automatically be printed and the output will state successful completion. If the upgrade is unsuccessful, the output will state the error.
+1. If the upgrade has completed successfully, then a report will automatically be printed and the output will state successful completion. If the upgrade is unsuccessful, then the output will state the error.
 
    Expected output:
 
