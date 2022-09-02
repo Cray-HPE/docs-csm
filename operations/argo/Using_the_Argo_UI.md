@@ -1,6 +1,6 @@
 # Using the Argo UI
 
-This page provides information about using the Argo UI with Shasta. The Argo UI is useful for watching the progress of an install or upgrade and debugging. The UI is read-only and will not accept write operations.
+This page provides information about using the Argo UI with CSM. The Argo UI is useful for watching the progress of an install or upgrade and debugging. The UI is read-only and will not accept write operations.
 
 * [Access the Argo UI](#access-the-argo-ui)
 * [View Logs](#view-logs)
