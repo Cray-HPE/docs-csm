@@ -39,6 +39,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        # Make sure the actual branch is checked out when running on pull requests
+        ref: ${{ github.head_ref }} 
     - name: Delete merged branch
       uses: SvanBoxel/delete-merged-branch@1.4.2
       env:
