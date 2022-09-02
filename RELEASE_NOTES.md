@@ -1,6 +1,6 @@
 # Cray System Management (CSM) - Release Notes
 
-CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
+CSM 1.4 contains approximately 500 changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
 
 ## New
 
@@ -86,6 +86,6 @@ See [Deprecated features](introduction/differences.md#deprecated_features).
 
 ## Known issues
 
-### Security vulnerability exceptions in CSM 1.3
+### Security vulnerability exceptions in CSM 1.4
 
 * TBD

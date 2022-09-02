@@ -48,9 +48,9 @@ Any steps run on an `external` server require that server to have the following 
    >   directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [Download CSM tarball](#21-download-csm-tarball) step.
 
    ```bash
-   # e.g. an alpha : CSM_RELEASE=1.3.0-alpha.99
-   # e.g. an RC    : CSM_RELEASE=1.3.0-rc.1
-   # e.g. a stable : CSM_RELEASE=1.3.0  
+   # e.g. an alpha : CSM_RELEASE=1.4.0-alpha.99
+   # e.g. an RC    : CSM_RELEASE=1.4.0-rc.1
+   # e.g. a stable : CSM_RELEASE=1.4.0  
    CSM_RELEASE=1.3.0-alpha.9
    ```
 
@@ -241,9 +241,9 @@ These variables will need to be set for many procedures within the CSM installat
       The value is based on the version of the CSM release being installed.
 
       ```bash
-      # e.g. an alpha : CSM_RELEASE=1.3.0-alpha.99
-      # e.g. an RC    : CSM_RELEASE=1.3.0-rc.1
-      # e.g. a stable : CSM_RELEASE=1.3.0  
+      # e.g. an alpha : CSM_RELEASE=1.4.0-alpha.99
+      # e.g. an RC    : CSM_RELEASE=1.4.0-rc.1
+      # e.g. a stable : CSM_RELEASE=1.4.0  
       export CSM_RELEASE=<value>
       ```
 
