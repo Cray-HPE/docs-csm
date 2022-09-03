@@ -1,7 +1,7 @@
 # Stage 1 - Ceph image upgrade
 
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
-[Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+[Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
 - [Start typescript](#start-typescript)
 - [Apply boot order workaround](#apply-boot-order-workaround)

@@ -4,7 +4,7 @@
 >
 > - CSM 1.2.0 or higher is required in order to upgrade to CSM 1.3.0.
 > - If any problems are encountered and the procedure or command output does not provide relevant guidance, see
->   [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+>   [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
 Stage 0 has several critical procedures which prepare the environment and verify if the environment is ready for the upgrade.
 
@@ -120,7 +120,7 @@ after a break, always be sure that a typescript is running before proceeding.
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
-1. Skip the `Manual copy` subsection and proceed to [Stage 0.2 - Update SLS](#stage-02---update-sls)
+1. Skip the `Manual copy` subsection and proceed to [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
 
 ### Manual copy
 
@@ -189,7 +189,7 @@ after a break, always be sure that a typescript is running before proceeding.
    ```
 
    If the script does not end with this output, then try rerunning it. If it still fails, see
-   [Upgrade Troubleshooting](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
+   [Upgrade Troubleshooting](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
    If the failure persists, then open a support ticket for guidance before proceeding.
 
 1. (`ncn-m001#`) Unset the `NEXUS_PASSWORD` variable, if it was set in the earlier step.

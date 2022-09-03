@@ -7,7 +7,7 @@ Until an upstream NTP server is configured, the time on the NCNs may not match t
 ## Topics
 
 * [Fix BSS metadata](#fix-bss-metadata)
-* [Fix broken configurations](#fix-broken-configurations)
+* [Fix broken configurations](#fix-broken-configuration)
 
 ## Fix BSS metadata
 
@@ -15,7 +15,7 @@ If nodes are missing metadata for NTP, then the data must be generated using `cs
 
 The `csi` tool is not available on `ncn-m001` after the CSM install is completed. However, if the install recovery data is still available on `ncn-m001` or `ncn-m003`,
 then the `csi` tool can be retrieved from the saved PIT ISO file. To do this, see the step used to obtain access to CSI in the
-[Enable NCN Disk Wiping Safeguard](../../install/deploy_final_non-compute_node.md#enable-ncn-disk-wiping-safeguard) procedure.
+[Enable NCN Disk Wiping Safeguard](../../install/deploy_final_non-compute_node.md#5-enable-ncn-disk-wiping-safeguard) procedure.
 
 If the seed data from `system_config.yaml` is not available, then open a support ticket to help generate the NTP data.
 

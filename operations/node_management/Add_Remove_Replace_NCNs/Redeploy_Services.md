@@ -24,7 +24,7 @@ Update the `nmn_ncn_storage` list to include the IP addresses for any added or r
 
 Before redeploying the desired charts, update the `customizations.yaml` file in the `site-init` secret in the `loftsman` namespace.
 
-1. If the `site-init` repository is available as a remote repository [as described here](../../../install/prepare_site_init.md#push-to-a-remote-repository), then clone it to `ncn-m001`. Otherwise, ensure that the `site-init` repository is available on `ncn-m001`.
+1. If the `site-init` repository is available as a remote repository, then clone it to `ncn-m001`. Otherwise, ensure that the `site-init` repository is available on `ncn-m001`.
 
    ```bash
    git clone "$SITE_INIT_REPO_URL" site-init

@@ -18,8 +18,8 @@ This page is broken into different sections, based on the errors found in the lo
 
 - [`UF,URX` with TLS error](#ufurx-with-tls-error)
   - [Symptom](#symptom-ufurx-with-tls-error)
-  - [Description](#description-ufurx-with-tls-error)
-  - [Remediation](#remediation-ufurx-with-tls-error)
+  - [Description](#description-ufurx-with-a-tls-error)
+  - [Remediation](#remediation-ufurx-with-a-tls-error)
 - [`UAEX`](#uaex)
   - [Symptom](#symptom-uaex)
   - [Description](#description-uaex)

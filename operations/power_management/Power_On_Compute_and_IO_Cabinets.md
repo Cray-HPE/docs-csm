@@ -13,14 +13,15 @@ power-on command from Cray System Management \(CSM\) software.
 ## Prerequisites
 
 * The cabinet PDUs and coolant distribution units are connected to facility power and are healthy.
-* An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for
-instructions on how to acquire a SAT authentication token.
+* An authentication token is required to access the API gateway and to use the `sat` command. See
+  the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for
+  instructions on how to acquire a SAT authentication token.
 
 ## Procedure
 
 1. Verify with site management that it is safe to power on the system.
 
-1. If the system does not have Cray EX liquid-cooled cabinets, proceed to [Power On Standard Rack PDU Circuit Breakers](#power-on-standard).
+1. If the system does not have Cray EX liquid-cooled cabinets, proceed to [Power On Standard Rack PDU Circuit Breakers](#power-on-standard-rack-pdu-circuit-breakers).
 
 ### Power On Cray Ex Liquid-Cooled Cabinet Circuit Breakers
 
