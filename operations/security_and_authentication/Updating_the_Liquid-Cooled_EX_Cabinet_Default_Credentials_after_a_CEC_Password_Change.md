@@ -29,8 +29,7 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
 1. Ensure that the `site-init` repository is available on `ncn-m001`.
 
-    If the `site-init` repository is available as a remote repository as described in [Prepare Site Init](../../install/prepare_site_init.md#push-to-a-remote-repository),
-    then clone it to `ncn-m001`.
+    If the `site-init` repository is available as a remote repository, then clone it to `ncn-m001`.
 
     ```bash
     git clone "$SITE_INIT_REPO_URL" site-init

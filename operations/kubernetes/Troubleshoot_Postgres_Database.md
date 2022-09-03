@@ -648,7 +648,7 @@ resize-postgresql-pvc cray-smd-postgres pgdata-cray-smd-postgres services 100Gi
 ```
 
 In order to persist any Postgres PVC storage volume size changes, it is necessary that this change also be made to the customer-managed `customizations.yaml` file.
-See the Postgres PVC Resize information in the [Post Install Customizations](../CSM_product_management/Post_Install_Customizations.md#postgres_pvc_resize) document.
+See the Postgres PVC Resize information in the [Post Install Customizations](../CSM_product_management/Post_Install_Customizations.md#postgres-pvc-resize) document.
 
 #### Case 2: `could not init db connection`
 
@@ -976,7 +976,7 @@ If a Postgres cluster no longer has a leader, the database will need to be recov
     +-------------------+---------------------+------------+------+--------------+----+-----------+
     ```
 
-    If the output does not list a leader, then proceed to [Recover from a missing Postgres leader](#recover-missing-leader).
+    If the output does not list a leader, then proceed to [Recover from a missing Postgres leader](#recover-from-a-missing-postgres-leader).
 
 1. Check if there is conflicting leader information.
 

@@ -265,7 +265,7 @@ this is below.
     ```
 
 * If you run into this, the only solution that we have found so far is restarting KEA and making sure that it gets moved to a different
-worker. We believe this has something to do with conntrack.
+worker. We believe this has something to do with `conntrack`.
 
 ## 2.7. Verify the switches are forwarding DHCP traffic
 
@@ -279,12 +279,12 @@ worker. We believe this has something to do with conntrack.
 ## 3. Compute Nodes/UANs/Application Nodes
 
 * The following are required for compute node PXE booting.
-  * [Verify BGP](#ncns-on-install)
-  * [Verify route to TFTP](#verify-route-to-tftp)
-  * [Test TFTP traffic](#test-tftp-traffic)
-  * [Check DHCP lease is getting allocated](#check-dhcp-lease)
-  * [Verify the DHCP traffic on the Workers](#verify-the-dhcp-traffic)
-  * [Verify the switches are forwarding DHCP traffic](#verify-the-switches)
+  * [Verify BGP](#1-ncns-on-install)
+  * [Verify route to TFTP](#23-verify-route-to-tftp)
+  * [Test TFTP traffic](#24-test-tftp-traffic-aruba-only)
+  * [Check DHCP lease is getting allocated](#25-check-dhcp-lease-is-getting-allocated)
+  * [Verify the DHCP traffic on the Workers](#26-verify-the-dhcp-traffic-on-the-workers)
+  * [Verify the switches are forwarding DHCP traffic](#27-verify-the-switches-are-forwarding-dhcp-traffic)
 * Verify the IP-Helpers on the VLAN the computes nodes are booting over. This is typically `VLAN 2` or `VLAN 2xxx` (MTN Computes).
 * If the compute nodes make it past PXE and go into the PXE shell you can verify DNS and connectivity.
 

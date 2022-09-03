@@ -7,7 +7,7 @@ Enable Trusted Platform Module (TPM) in the BIOS on the new NCN if TPM is being 
 
 Using TPM involves both enabling the hardware and configuring TPM.
 This document only details how to enable TPM on the hardware.
-The state of the other NCNs in the system can be checked using steps [1](#step1) and [2](#step2) of this document.
+The state of the other NCNs in the system can be checked using steps 1 and 2 of the [procedure](#procedure) in this document.
 
 Disabling TPM is not required when not using it. Many types of hardware come with TPM enabled by default.
 

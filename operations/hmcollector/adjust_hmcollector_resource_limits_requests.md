@@ -113,8 +113,7 @@ about `300Mi` of memory.
 
 ## Customize `cray-hms-hmcollector` in `customizations.yaml`
 
-1. (`ncn-mw#`) If the [`site-init` repository is available as a remote repository](../../install/prepare_site_init.md#push-to-a-remote-repository),
-   then clone it on the host orchestrating the upgrade.
+1. (`ncn-mw#`) If the `site-init` repository is available as a remote repository, then clone it on the host orchestrating the upgrade.
 
    ```bash
    git clone "$SITE_INIT_REPO_URL" site-init
@@ -226,7 +225,7 @@ about `300Mi` of memory.
 
 1. (`ncn-mw#`) Review the changes to `customizations.yaml`.
 
-   Verify that [baseline system customizations](../../install/prepare_site_init.md#create-baseline-system-customizations)
+   Verify that [baseline system customizations](../../install/prepare_site_init.md#3-create-baseline-system-customizations)
    and any customer-specific settings are correct.
 
    ```bash

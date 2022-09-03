@@ -215,7 +215,7 @@ For more information on how to configure and run NCN personalization, see the
 The automated default method uses the `write_root_secrets_to_vault.py` script to read in the current
 `root` user password and SSH keys from the NCN where it is run, and write those to Vault. All of the NCNs are
 booted from images which already had their `root` passwords and SSH keys customized during the
-[Deploy Management Nodes](../../install/deploy_non-compute_nodes.md#32-deploy)
+[Deploy Management Nodes](../../install/deploy_non-compute_nodes.md#2-deploy-management-nodes)
 procedure of the CSM install. In most cases, these are the same password and keys that should be
 written to Vault, and this script provides an easy way to do that.
 

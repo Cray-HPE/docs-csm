@@ -7,7 +7,7 @@ The Version Control Service \(VCS\) includes a web interface for repository mana
 ## Cloning a VCS repository
 
 On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required before cloning a repository \(see
-[VCS administrative user](#vcs_administrative_user) below\).
+[VCS administrative user](#vcs-administrative-user) below\).
 
 To clone a repository in the `cray` organization, use the following command:
 

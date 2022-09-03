@@ -16,7 +16,7 @@
         1. [Touchpoints: effects and changes](#251-touchpoints-effects-and-changes)
         1. [When configuration occurs](#252-when-configuration-occurs)
         1. [Ability to change post-install](#253-ability-to-change-post-install)
-1. [Customer Management Management Network (CMN)](#3-customer-management-network-cmn)
+1. [Customer Management Management Network (CMN)](#3-customer-management-management-network-cmn)
     1. [Traffic separation and routing](#31-traffic-separation-and-routing)
     1. [Endpoint naming](#32-endpoint-naming)
     1. [Endpoint addressing](#33-endpoint-addressing)

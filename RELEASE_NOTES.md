@@ -78,7 +78,7 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
 * CAPMC v1 partial deprecation
 * HSM v1 interface
 
-See [Deprecated features](introduction/differences.md#deprecated_features).
+See [Deprecated features](introduction/differences.md#deprecated-features).
 
 ## Removals
 

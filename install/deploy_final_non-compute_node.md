@@ -319,7 +319,7 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
 1. (`ncn-m001#`) Restore and verify the site link.
 
     Restore networking files from the manual backup taken during the
-    [Backup](#32-backup) step.
+    [Backup](#33-backup) step.
 
     ```bash
     SYSTEM_NAME=eniac
