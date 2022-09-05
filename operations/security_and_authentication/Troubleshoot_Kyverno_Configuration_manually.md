@@ -22,4 +22,4 @@ This is used to check the Kyverno policy report for any Failures, Warnings, Erro
 
 ### For more information check:
 
-* [Kyverno](../operations/kubernetes/Kyverno.md)
+* [Kyverno](../kubernetes/Kyverno.md)
