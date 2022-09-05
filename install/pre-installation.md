@@ -381,7 +381,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 1. (`pit#`) Extract the tarball.
 
    ```bash
-   tar -C "${PITDATA}" -zxvf "csm-${CSM_RELEASE}.tar.gz"
+   tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
    ```
 
 1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
