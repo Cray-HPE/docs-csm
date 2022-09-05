@@ -19,3 +19,7 @@ Run the script with -p option.
 ```
 
 This is used to check the Kyverno policy report for any Failures, Warnings, Errors and Skipped policies count.
+
+### For more information check:
+
+* [Kyverno](../operations/kubernetes/Kyverno.md)
