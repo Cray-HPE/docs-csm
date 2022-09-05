@@ -8,7 +8,7 @@ Run the script with -p option.
 ./k8s_kyverno_pods_running.sh -p
 ```
 
-This test case will list the expected Kyverno pods in running state.
+This will list the expected Kyverno pods in running state.
 
 ## Check if Kyverno policy report doesn’t have Failures, Warnings, Errors and Skipped policies count.
 
@@ -18,4 +18,4 @@ Run the script with -p option.
 ./k8s_kyverno_polr_list.sh -p
 ```
 
-This test case is used to check the Kyverno policy report for any Failures, Warnings, Errors and Skipped policies count.
+This is used to check the Kyverno policy report for any Failures, Warnings, Errors and Skipped policies count.
