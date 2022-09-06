@@ -30,6 +30,27 @@ trap 'err_report' ERR
 touch /etc/cray/upgrade/csm/myenv
 . /etc/cray/upgrade/csm/myenv
 
+rc=0
+
+if [[ -z ${CSM_RELEASE} ]]; then
+    echo "ERROR: CSM_RELEASE environment variable is not set and must be present in /etc/cray/upgrade/csm/myenv."
+    rc=$((rc+1))
+fi
+
+if [[ -z ${CSM_ARTI_DIR} ]]; then
+    echo "ERROR: CSM_ARTI_DIR environment variable is not set and must be present in /etc/cray/upgrade/csm/myenv."
+    rc=$((rc+1))
+fi
+
+if [[ -z ${CSM_REL_NAME} ]]; then
+    echo "ERROR: CSM_REL_NAME environment variable is not set and must be present in /etc/cray/upgrade/csm/myenv."
+    rc=$((rc+1))
+fi
+
+if [ "${rc}" -gt 0 ]; then
+  return $rc
+fi
+
 if [[ -z ${LOG_FILE} ]]; then
     #shellcheck disable=SC2155
     export LOG_FILE="/root/output.log"
