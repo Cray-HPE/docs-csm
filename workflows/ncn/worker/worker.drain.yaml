@@ -37,6 +37,45 @@ tasks:
             TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                 jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
 
+            set -o pipefail
+
+            # Retry CFS command if needed
+            COUNT=0
+            while true; do
+                ENABLED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/component/${TARGET_XNAME}" | jq -r '.enabled') && break
+                let COUNT+=1
+                if [[ ${COUNT} -gt 12 ]]; then
+                    echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
+                    exit 1
+                fi
+                echo "WARNING: Command pipeline failed querying CFS component '${TARGET_XNAME}'. Retrying after 5 seconds."
+                sleep 5
+            done
+            if [[ ${ENABLED} == false ]]; then
+              exit 0
+            elif [[ ${ENABLED} != true ]]; then
+              echo "ERROR: Unexpected contents of 'enabled' field for CFS component '${TARGET_XNAME}': '${ENABLED}'"
+              exit 1
+            fi
+            echo "CFS component '${TARGET_XNAME}' is enabled"
+
+            # Retry CFS command if needed
+            COUNT=0
+            while true; do
+                DESIRED_CONFIG=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/component/${TARGET_XNAME}" | jq -r '.desiredConfig') && break
+                let COUNT+=1
+                if [[ ${COUNT} -gt 12 ]]; then
+                    echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
+                    exit 1
+                fi
+                echo "WARNING: Command pipeline failed querying CFS component '${TARGET_XNAME}'. Retrying after 5 seconds."
+                sleep 5
+            done
+            if [[ -z ${DESIRED_CONFIG} ]]; then
+              exit 0
+            fi
+            echo "Desired configuration for CFS component '${TARGET_XNAME}' is '${DESIRED_CONFIG}'"
+
             while true; do
               RESULT=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=pending" | jq length)
               if [[ "$RESULT" -eq 0 ]]; then
