@@ -1694,8 +1694,10 @@ def ncn_data_command(session: requests.Session, args, state: State):
     bootparams["cloud-init"]["user-data"]["local_hostname"] = state.ncn_alias
     if "ntp" in bootparams["cloud-init"]["user-data"]:
         bootparams["cloud-init"]["user-data"]["ntp"]["allow"] = []
-        for network_name, ip_cidr in ncn_cidrs.items():
-            bootparams["cloud-init"]["user-data"]["ntp"]["allow"].append(ip_cidr)
+        for network_name in ["HMN", "NMN", "HMN_RVR", "NMN_RVR", "NMN_MTN", "HMN_MTN"]:
+            if  network_name in sls_networks:
+                subnet_cidr = str(sls_networks[network_name].ipv4_address())
+                bootparams["cloud-init"]["user-data"]["ntp"]["allow"].append(subnet_cidr)
     bootparams["cloud-init"]["meta-data"]["availability-zone"] = cabinet_xname
     bootparams["cloud-init"]["meta-data"]["instance-id"] = generate_instance_id()
     bootparams["cloud-init"]["meta-data"]["local-hostname"] = state.ncn_alias
@@ -1853,8 +1855,9 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
         if interface == "mgmt0":
             ei["Description"] = "- kea"
-            for network in ["NMN", "CAN", "MTL", "HMN"]:
-                ei["IPAddresses"].append({"IPAddress": str(state.ncn_ips[network])})
+            for network in ["NMN", "CAN", "CMN", "MTL", "HMN"]:
+                if network in state.ncn_ips:
+                    ei["IPAddresses"].append({"IPAddress": str(state.ncn_ips[network])})
 
         print(f"Adding MAC Addresses {mac} to HSM Inventory EthernetInterfaces")
         print(json.dumps(ei, indent=2))
