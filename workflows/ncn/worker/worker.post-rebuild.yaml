@@ -58,7 +58,7 @@ tasks:
                 # Retry CFS command if needed
                 COUNT=0
                 while true; do
-                    ENABLED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/component/${TARGET_XNAME}" | jq -r '.enabled') && break
+                    ENABLED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.enabled') && break
                     let COUNT+=1
                     if [[ ${COUNT} -gt 12 ]]; then
                         echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
@@ -82,7 +82,7 @@ tasks:
             # Retry CFS command if needed
             COUNT=0
             while true; do
-                DESIRED_CONFIG=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/component/${TARGET_XNAME}" | jq -r '.desiredConfig') && break
+                DESIRED_CONFIG=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.desiredConfig') && break
                 let COUNT+=1
                 if [[ ${COUNT} -gt 12 ]]; then
                     echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
