@@ -3,7 +3,7 @@
 * [List DNS zone contents](#list-dns-zone-contents)
 * [PowerDNS logging](#powerdns-logging)
 * [Verify DNSSEC operation](#verify-dnssec-operation)
-  * [Verify zones are being signed with the zone signing key](#verify-zones-being-signed)
+  * [Verify zones are being signed with the zone signing key](#verify-zones-are-being-signed-with-the-zone-signing-key)
   * [Verify TSIG operation](#verify-tsig-operation)
 
 ## List DNS zone contents

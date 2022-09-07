@@ -30,7 +30,7 @@
     are installed. In particular, this will be the case if executing this as part of the validation after completing the
     [Install CSM Services](../../install/install_csm_services.md).
 
-    If in doubt, validate the CRUS service using the [CMS Validation Tool](../../operations/validate_csm_health.md#3-software-management-services-health-checks).
+    If in doubt, validate the CRUS service using the [CMS Validation Tool](../../operations/validate_csm_health.md#3-software-management-services-sms-health-checks).
     If the CRUS check passes using that tool, then do not worry about the `cray-crus-` pod state.
 
   - The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a `NotReady` state. This is expected because these pods are periodically started

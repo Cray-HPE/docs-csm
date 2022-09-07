@@ -74,7 +74,7 @@ for it to be applied to the NCNs.
    > **WARNING**: The CSM instance of [HashiCorp Vault](HashiCorp_Vault.md) does
    > not support the `patch` operation, only `write`. Ensure that if the `password`
    > field in the `secret/csm/users/root` secret is being updated that the other
-   > fields, for example the user's [SSH keys](SSH_Keys.md#configure_root_keys_in_vault),
+   > fields, for example the user's [SSH keys](SSH_Keys.md#procedure-configure-root-ssh-keys-in-vault),
    > are also updated. Updating the password without including values for the
    > other fields will result in loss of data of the other fields.
 
@@ -89,7 +89,7 @@ for it to be applied to the NCNs.
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
 **only** change the root password on NCNs. This is a quick alternative to
-running a [full NCN personalization](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password),
+running a [full NCN personalization](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#2-configure-the-root-password-and-ssh-keys-in-vault),
 where passwords are also applied using the password stored in Vault set in the
 procedure above.
 

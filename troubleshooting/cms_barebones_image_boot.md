@@ -120,7 +120,7 @@ cray ims images list --format json
 
 For help configuring the Cray CLI, see [Configure the Cray CLI](../operations/configure_cray_cli.md).
 
-### Control test script output level
+### Controlling test script output level
 
 Output is directed to both the console calling the script as well as a log file that will hold
 more detailed information on the run and any potential problems found. The log file is written
@@ -203,10 +203,7 @@ As noted below, make sure the S3 path for the manifest matches the S3 path shown
        "compute": {
          "boot_ordinal": 2,
          "etag": "etag_value_from_cray_ims_command",
-         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off 
-         intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic 
-         pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 
-         spire_join_token=${SPIRE_JOIN_TOKEN}",
+         "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
          "network": "nmn",
          "node_roles_groups": [
            "Compute"

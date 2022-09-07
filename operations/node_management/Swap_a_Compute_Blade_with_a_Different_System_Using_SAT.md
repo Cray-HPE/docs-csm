@@ -160,7 +160,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    Use the `sat bootsys` command to shut down the nodes on the target blade. Specify the appropriate component
    name (xname) for the slot and a comma-separated list of the appropriate BOS session templates for the nodes on the blade.
 
-   The appropriate BOS session templates should be determined using the same procedure as was used to [determine the appropriate BOS session templates on the source system](#determine-bos-session-template).
+   The appropriate BOS session templates should be determined using the same procedure as was used to [determine the appropriate BOS session templates on the source system](#source-prepare-the-blade-for-removal).
 
    ```bash
    BOS_TEMPLATES=cos-2.0.30-slurm-healthy-compute
@@ -494,4 +494,4 @@ one on `ncn-w002` and one on another worker node.
 
 1. Power on the nodes in the source system by repeating the steps starting in the
    [Bring up the blade in the destination system](#bring-up-the-blade-in-the-destination-system) section, and going up through
-   the [Check DNS](#check-dns) section.
+   the [Check DNS](#destination-check-dns) section.

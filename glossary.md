@@ -2,69 +2,69 @@
 
 Glossary of terms used in CSM documentation.
 
-* [Application Node (AN)](#application-node)
-* [Baseboard Management Controller (BMC)](#baseboard-management-controller)
-* [Blade Switch Controller (sC)](#blade-switch-controller)
-* [Boot Script Service (BSS)](#boot-script-service)
-* [Boot Orchestration Service (BOS)](#boot-orchestration-service)
+* [Application Node (AN)](#application-node-an)
+* [Baseboard Management Controller (BMC)](#baseboard-management-controller-bmc)
+* [Blade Switch Controller (sC)](#blade-switch-controller-sc)
+* [Boot Script Service (BSS)](#boot-script-service-bss)
+* [Boot Orchestration Service (BOS)](#boot-orchestration-service-bos)
 * [Cabinet Cooling Group](#cabinet-cooling-group)
-* [Cabinet Environmental Controller (CEC)](#cabinet-environmental-controller)
-* [CEC microcontroller (eC)](#cec-microcontroller)
-* [Compute Rolling Upgrade Service (CRUS)](#compute-rolling-upgrade-service)
-* [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control)
+* [Cabinet Environmental Controller (CEC)](#cabinet-environmental-controller-cec)
+* [CEC microcontroller (eC)](#cec-microcontroller-ec)
+* [Compute Rolling Upgrade Service (CRUS)](#compute-rolling-upgrade-service-crus)
+* [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
 * [Customer Access Network](#customer-access-network)
-* [Chassis Management Module (CMM)](#chassis-management-module)
-* [Compute Node (CN)](#compute-node)
-* [Configuration Framework Service (CFS)](#configuration-framework-service)
-* [Content Projection Service (CPS)](#content-projection-service)
-* [Cray CLI (`cray`)](#cray-cli)
-* [Cray Site Init (CSI)](#cray-site-init)
-* [Cray System Management (CSM)](#cray-system-management)
-* [Data Virtualization Service (DVS)](#data-virtualization-service)
+* [Chassis Management Module (CMM)](#chassis-management-module-cmm)
+* [Compute Node (CN)](#compute-node-cn)
+* [Configuration Framework Service (CFS)](#configuration-framework-service-cfs)
+* [Content Projection Service (CPS)](#content-projection-service-cps)
+* [Cray CLI (`cray`)](#cray-cli-cray)
+* [Cray Site Init (CSI)](#cray-site-init-csi)
+* [Cray System Management (CSM)](#cray-system-management-csm)
+* [Data Virtualization Service (DVS)](#data-virtualization-service-dvs)
 * [EX Compute Cabinet](#ex-compute-cabinet)
 * [EX TDS Cabinet](#ex-tds-cabinet)
 * [Fabric](#fabric)
 * [Floor Standing CDU](#floor-standing-cdu)
-* [Hardware Management Network (HMN)](#hardware-management-network)
-* [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon)
-* [Hardware State Manager (HSM)](#hardware-state-manager)
-* [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon)
-* [High Speed Network (HSN)](#high-speed-network)
-* [Image Management Service (IMS)](#image-management-service)
+* [Hardware Management Network (HMN)](#hardware-management-network-hmn)
+* [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon-hmnfd)
+* [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+* [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon-hbtd)
+* [High Speed Network (HSN)](#high-speed-network-hsn)
+* [Image Management Service (IMS)](#image-management-service-ims)
 * [Kubernetes NCNs](#kubernetes-ncns)
 * [LiveCD](#livecd)
 * [Management Cabinet](#management-cabinet)
 * [Management Nodes](#management-nodes)
-* [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service)
-* [NIC Mezzanine Card (NMC)](#nic-mezzanine-card)
-* [Node Controller (nC)](#node-controller)
+* [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service-meds)
+* [NIC Mezzanine Card (NMC)](#nic-mezzanine-card-nmc)
+* [Node Controller (nC)](#node-controller-nc)
 * [Node Management Network](#node-management-network)
-* [Non-Compute Node (NCN)](#non-compute-node)
+* [Non-Compute Node (NCN)](#non-compute-node-ncn)
 * [Olympus Cabinet](#olympus-cabinet)
-* [Power Distribution Unit (PDU)](#power-distribution-unit)
-* [Pre-Install Toolkit (PIT) node](#pre-install-toolkit-node)
+* [Power Distribution Unit (PDU)](#power-distribution-unit-pdu)
+* [Pre-Install Toolkit (PIT) node](#pre-install-toolkit-pit)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
-* [Redfish Translation Service (RTS)](#redfish-translation-service)
+* [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
 * [River Cabinet](#river-cabinet)
-* [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service)
+* [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
 * [Rosetta ASIC](#rosetta-asic)
-* [Service/IO Cabinet](#service-io-cabinet)
+* [Service/IO Cabinet](#serviceio-cabinet)
 * [Slingshot](#slingshot)
 * [Slingshot Blade Switch](#slingshot-blade-switch)
-* [Slingshot Top of Rack (ToR) Switch](#slingshot-top-of-rack-switch)
-* [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram)
-* [Supply/Return Cutoff Valves](#supply-return-cutoff-valves)
-* [System Admin Toolkit (SAT)](#system-admin-toolkit)
-* [System Layout Service (SLS)](#system-layout-service)
-* [System Management Network (SMNet)](#system-management-network)
+* [Slingshot Top of Rack (ToR) Switch](#slingshot-top-of-rack-tor-switch)
+* [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram-shcd)
+* [Supply/Return Cutoff Valves](#supplyreturn-cutoff-valves)
+* [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
+* [System Layout Service (SLS)](#system-layout-service-sls)
+* [System Management Network (SMNet)](#system-management-network-smnet)
 * [System Management Services (SMS)](#system-management-services-sms)
-* [System Management Services (SMS) nodes](#system-management-services-nodes)
-* [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller)
-* [User Access Instance (UAI)](#user-access-instance)
-* [User Access Node (UAN)](#user-access-node)
-* [User Access Service (UAS)](#user-access-service)
-* [Version Control Service (VCS)](#version-control-service)
+* [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
+* [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
+* [User Access Instance (UAI)](#user-access-instance-uai)
+* [User Access Node (UAN)](#user-access-node-uan)
+* [User Access Service (UAS)](#user-access-service-uas)
+* [Version Control Service (VCS)](#version-control-service-vcs)
 * [xname](#xname)
 
 ## Application Node (AN)
@@ -139,7 +139,7 @@ management status of nodes, handling each of the steps required to upgrade compu
 See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
 
 > **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
-[Deprecated features](introduction/differences.md#deprecated_features).
+[Deprecated features](introduction/differences.md#deprecated-features).
 
 ## Cray Advanced Platform Monitoring and Control (CAPMC)
 
@@ -309,7 +309,7 @@ excluded from this is the utility storage node (`ncn-sXXX`).
 The LiveCD has a complete bootable Linux operating system that can be run from a read-only CD or
 DVD, a writable USB flash drive, or a hard disk. It is used to bootstrap the installation
 process for CSM software. It contains the Pre-Install Toolkit (PIT). The node which boots
-from it during the install is known as the [PIT node](#pre-install-toolkit-node).
+from it during the install is known as the [PIT node](#pre-install-toolkit-pit).
 
 ## Management Cabinet
 
@@ -381,7 +381,7 @@ provides circuit breaker, fuse protection, and EMI filtered power to the rectifi
 supplies that distribute ±190VDC (HVDC) to a chassis. PDUs are passive devices that do
 not connect to the SMNet.
 
-## Pre-Install Toolkit (PIT) node
+## Pre-Install Toolkit (PIT)
 
 The Pre-Install Toolkit is installed onto the initial node used as the inception node during software
 installation which is booted from a [LiveCD](#livecd). This is the node that will eventually become `ncn-m001`.
@@ -392,7 +392,12 @@ Early in the install process, before the Pre-Install Toolkit has been installed 
 documents may still refer to the PIT node. In this case, they are referring to the node which
 will eventually become the PIT node.
 
-In this documentation, PIT node and LiveCD are sometimes used interchangeably.
+In this documentation, PIT node, RemoteISO, and LiveCD are sometimes used interchangeably to refer to various contexts:
+
+* The pre-install-toolkit (PIT) refers to the running environment used for CSM installations and recovery. Example: "Once in the PIT, proceed with the pre-installation,"
+  means once the user is in the environment provided by the LiveCD they can proceed with their procedure.
+* The LiveCD refers to the artifact (e.g. the `.iso` file) providing the PIT. Example: "A new LiveCD is needed," means a new artifact is needed.
+* The term RemoteISO is used to refer to the LiveCD (e.g the `.iso`) when it is remotely mounted on a server's BMC). Example: "The RemoteISO failed," means that the remotely connected LiveCD is having an issue.
 
 ## Rack-Mounted CDU
 

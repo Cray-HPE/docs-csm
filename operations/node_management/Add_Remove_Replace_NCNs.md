@@ -11,13 +11,13 @@ Add, remove, replace, or move non-compute nodes (NCNs). This applies to worker, 
 The following workflows are available:
 
 * [Prerequisites](#prerequisites)
-* [Add worker, storage, or master NCNs](#add-worker-storage-master-ncns)
+* [Add worker, storage, or master NCNs](#add-worker-storage-or-master-ncns)
   * [Add NCN prerequisites](#add-ncn-prerequisites)
   * [Add NCN procedure](#add-ncn-procedure)
-* [Remove worker, storage, or master NCNs](#remove-worker-storage-master-ncns)
+* [Remove worker, storage, or master NCNs](#remove-worker-storage-or-master-ncns)
   * [Remove NCN prerequisites](#remove-ncn-prerequisites)
   * [Remove NCN procedure](#remove-ncn-procedure)
-* [Replace or move worker, storage, or master NCNs](#replace-worker-storage-master-ncns)
+* [Replace or move worker, storage, or master NCNs](#replace-or-move-worker-storage-or-master-ncns)
   * [Replace NCN procedure](#replace-ncn-procedure)
 
 ## Prerequisites
@@ -266,5 +266,5 @@ In general, scaling master nodes is not recommended because it can cause Etcd la
 
 The following is a high-level overview of the replace NCN workflow:
 
-1. [Remove Worker, Storage, or Master NCNs](#remove-worker-storage-master-ncns)
-1. [Add Worker, Storage, or Master NCNs](#add-worker-storage-master-ncns)
+1. [Remove Worker, Storage, or Master NCNs](#remove-worker-storage-or-master-ncns)
+1. [Add Worker, Storage, or Master NCNs](#add-worker-storage-or-master-ncns)

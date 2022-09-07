@@ -1,17 +1,17 @@
-# Upgrade Switches From 1.0 to 1.2 Preconfig
+# Upgrade Switches From 1.2 to 1.3 Preconfig
 
-Use the following procedure to upgrade switches from 1.0 to 1.2 preconfig.
+Use the following procedure to upgrade switches from 1.2 to 1.3 preconfig.
 
 To check if the management network is using generated switch configurations, log onto a management switch and check for a banner with a `CANU version`. This indicates the switch configuration has been generated.
 
 ```text
 ###############################################################################
-# CSM version:  1.0
-# CANU version: 1.1.10
+# CSM version:  1.2
+# CANU version: 1.6.13
 ###############################################################################
 ```
 
-To upgrade from CSM 1.2 preconfig (switch configurations generated) to CSM 1.2, use the [Management Network 1.0 (1.2 Preconfig) to 1.2](1.0_to_1.2_upgrade.md) procedure.
+To upgrade from CSM 1.3 preconfig (switch configurations generated) to CSM 1.3, use the [Management Network 1.2 (1.3 Preconfig) to 1.3](1.2_to_1.3_upgrade.md) procedure.
 
 If the configurations have not been generated, follow the procedure below.
 

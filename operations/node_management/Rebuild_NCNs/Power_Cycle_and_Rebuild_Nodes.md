@@ -83,7 +83,7 @@ This section applies to all node types. The commands in this section assume the 
    **Troubleshooting:**
 
    * If the `NBP file...` output never appears, or something else goes wrong, then go back to the steps for modifying the `XNAME.json` file (see the step to
-     [inspect and modify the JSON file](Identify_Nodes_and_Update_Metadata.md#Inspect-and-modify-the-JSON-file) and make sure these instructions were completed correctly.
+     [inspect and modify the JSON file](Identify_Nodes_and_Update_Metadata.md#procedure) and make sure these instructions were completed correctly.
 
    * **Master nodes only:** If `cloud-init` did not complete, then the newly rebuilt node will need to have its `etcd` service definition manually updated. Reconfigure the `etcd` service and
      restart `cloud-init` on the newly rebuilt master:

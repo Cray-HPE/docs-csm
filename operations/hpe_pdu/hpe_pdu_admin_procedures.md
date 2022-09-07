@@ -7,7 +7,6 @@ The following procedures are used to manage the HPE Power Distribution Unit (PDU
 * [HPE PDU initial set-up](#hpe-pdu-initial-set-up)
 * [Update HPE PDU firmware](#update-hpe-pdu-firmware)
 * [Change HPE PDU user passwords](#change-hpe-pdu-user-passwords)
-* [Update Vault credentials](#update-vault-credentials)
 * [Discover HPE PDU after upgrading CSM](#discover-hpe-pdu-after-upgrading-csm)
 
 > **IMPORTANT:** Because of the polling method used to process sensor data from the HPE PDU, telemetry data may take up to six minutes to refresh; this includes the outlet status reported by the Hardware State Manager (HSM).

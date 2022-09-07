@@ -14,7 +14,7 @@ All of the commands in this procedure are intended to be run on a single master 
 
 - This procedure can only be done after the PIT node is rebuilt to become a normal master node.
 - The Cray CLI must be configured on the node where the procedure is being done. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
-- The CSM documentation RPM must be installed on the node where the procedure is being run. See [Check for Latest Documentation](../../update_product_stream/README.md#documentation).
+- The CSM documentation RPM must be installed on the node where the procedure is being run. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Procedure
 
@@ -35,7 +35,7 @@ All of the commands in this procedure are intended to be run on a single master 
       - [Example 3: New keys, no password change, keep UTC, no prompting](#example-3-new-keys-no-password-change-keep-utc-no-prompting)
 
 1. [Upload artifacts into S3](#4-upload-artifacts-into-s3)
-1. [Update BSS](#update-bss)
+1. [Update BSS](#5-update-bss)
 1. [Cleanup](#6-cleanup)
 1. [Rebuild NCNs](#7-rebuild-ncns)
 
@@ -172,7 +172,7 @@ To have the script generate the SSH keys automatically, it must be provided with
 - To view the complete list of supported `ssh-keygen` options, view the script usage statement by running it with the `-h` argument.
 - If the `-N` option is not used to specify the passphrase, then the script will prompt for the passphrase when it generates the keys.
   - Even specifying an empty passphrase will prevent being prompted to enter the passphrase during script execution.
-    See [Example 3](#example-3-new-keys-copy-password-keep-utc-no-prompting).
+    See [Example 3](#example-3-new-keys-no-password-change-keep-utc-no-prompting).
 
 ##### Administrator-provided keys
 
