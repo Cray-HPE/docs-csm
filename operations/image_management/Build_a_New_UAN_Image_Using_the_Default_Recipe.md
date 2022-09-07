@@ -5,9 +5,9 @@ product stream installer.
 
 * [Prerequisites](#prerequisites)
 * [Overview](#overview)
-* [Remove Slingshot Diagnostics RPM From Default UAN Recipe](#remove-slingshot-diags-from-uan-recipe)
-* [Build the UAN Image Automatically Using IMS](#build-uan-image-automatically)
-* [Build the UAN Image By Customizing It Manually](#build-uan-image-manually)
+* [Remove Slingshot Diagnostics RPM From Default UAN Recipe](#remove-slingshot-diagnostics-rpm-from-default-uan-recipe)
+* [Build the UAN Image Automatically Using IMS](#build-the-uan-image-automatically-using-ims)
+* [Build the UAN Image By Customizing It Manually](#build-the-uan-image-by-customizing-it-manually)
 
 ## Prerequisites
 

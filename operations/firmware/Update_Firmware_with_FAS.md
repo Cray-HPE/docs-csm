@@ -106,17 +106,17 @@ After identifying which hardware is in the system, start with the top item on th
 > **`NOTE`** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
 1. [Cray](FAS_Recipes.md#manufacturer--cray)
-   1. [`ChassisBMC`](FAS_Recipes.md#device-type-chassisbmc--target-bmc)
+   1. [`ChassisBMC`](FAS_Recipes.md#cray-device-type-chassisbmc--target-bmc)
    1. `NodeBMC`
-      1. [BMC](FAS_Recipes.md#device-type-nodebmc--target-bmc)
-      1. [`NodeBIOS`](FAS_Recipes.md#device-type-nodebmc--target-nodebios)
-      1. [Redstone FPGA](FAS_Recipes.md#device-type-nodebmc--target-redstone-fpga)
+      1. [BMC](FAS_Recipes.md#cray-device-type-nodebmc--target-bmc)
+      1. [`NodeBIOS`](FAS_Recipes.md#cray-device-type-nodebmc--target-nodebios)
+      1. [Redstone FPGA](FAS_Recipes.md#cray-device-type-nodebmc--target-redstone-fpga)
 1. [Gigabyte](FAS_Recipes.md#manufacturer-gigabyte)
-   1. [BMC](FAS_Recipes.md#device-type-nodebmc--target-bmc)
-   1. [BIOS](FAS_Recipes.md#device-type-nodebmc--target-bios)
+   1. [BMC](FAS_Recipes.md#cray-device-type-nodebmc--target-bmc)
+   1. [BIOS](FAS_Recipes.md#gigabyte-device-type-nodebmc--target-bios)
 1. [HPE](FAS_Recipes.md#manufacturer-hpe)
-   1. [BMC (`iLO5`)](FAS_Recipes.md#device-type-nodebmc--target-ilo-5-aka-bmc)
-   1. [BIOS (System ROM)](FAS_Recipes.md#device-type-nodebmc--target-system-rom-aka-bios)
+   1. [BMC (`iLO5`)](FAS_Recipes.md#hpe-device-type-nodebmc--target-ilo-5-bmc)
+   1. [BIOS (System ROM)](FAS_Recipes.md#hpe-device-type-nodebmc--target-system-rom-bios)
 
 ## FAS administrative procedures
 

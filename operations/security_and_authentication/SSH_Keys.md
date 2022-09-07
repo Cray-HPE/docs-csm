@@ -53,7 +53,7 @@ skip any updates.
    > not support the `patch` operation. Ensure that if you are updating the
    > `ssh_private_key` and `ssh_public_key` field in the `secret/csm/users/root`
    > secret that you are also update the other fields, for example the user's
-   > [password](Update_NCN_Passwords.md#configure_root_password_in_vault).
+   > [password](Update_NCN_Passwords.md#procedure-configure-root-password-in-vault).
 
    The path to the secret and the SSH key fields are configurable locations in
    the CSM `csm.ssh_keys` Ansible role located in the CSM configuration
@@ -66,7 +66,7 @@ skip any updates.
 
 Use the following procedure with the `rotate-ssh-keys-mgmt-nodes.yml` playbook to
 **only** change the root SSH keys on NCNs. This is a quick alternative to
-running a [full NCN personalization](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password),
+running a [full NCN personalization](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#2-configure-the-root-password-and-ssh-keys-in-vault),
 where keys are also applied using the secrets stored in Vault set in the
 procedure above.
 

@@ -169,7 +169,7 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
     /usr/share/doc/csm/scripts/operations/system_layout_service/restore_sls_postgres_from_backup.sh
     ```
 
-7. Verify the health of the SLS Postgres cluster by running the `ncnPostgresHealthChecks.sh` script. Follow the [`ncnPostgresHealthChecks` topic in Validate CSM Health document](../validate_csm_health.md#pet-ncnpostgreshealthchecks).
+7. Verify the health of the SLS Postgres cluster by running the `ncnPostgresHealthChecks.sh` script. Follow the [`ncnPostgresHealthChecks` topic in Validate CSM Health document](../validate_csm_health.md#1-platform-health-checks).
 
 8. Verify that the service is functional:
 

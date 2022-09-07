@@ -594,7 +594,7 @@ Refer to the note at the end of this section for more details.
    ```
 
 1. If the status on the above command is `SyncFailed` instead of `Running`, refer to *Case 1* in the
-   `SyncFailed` section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#syncfailed).
+   `SyncFailed` section of [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md#postgres-status-syncfailed).
 
    At this point the Postgres cluster is healthy, but additional steps are required to complete the resize of the Postgres PVCs.
 
