@@ -10,6 +10,9 @@ a Ceph image.
 
     This example assumes the administrator wants to modify the Kubernetes image that is currently in use by NCNs. However, the steps are the same for any NCN SquashFS image.
 
+    If the image to be modified is the image currently booted on an NCN, the value for `ARTIFACT_VERSION` can be found by looking
+    at the boot parameters for the NCNs, or from `/proc/cmdline` on a booted NCN. The version has the form of `X.Y.Z`.
+
     ```console
     ncn# ARTIFACT_VERSION=<your-version>
 
