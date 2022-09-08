@@ -275,40 +275,28 @@ $NCN_MOD_SCRIPT -t rsa \
 1. (`ncn-mw#`) Upload the new Kubernetes image into S3.
 
     ```bash
-    /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
-        --bucket-name ncn-images \
-        --key-name "k8s/${K8SNEW}/filesystem.squashfs" \
-        --file-name k8s/${K8SVERSION}/secure-filesystem.squashfs
+    cray artifacts create boot-images k8s/${K8SNEW}/filesystem.squashfs k8s/${K8SVERSION}/secure-filesystem.squashfs
     ```
 
 1. (`ncn-mw#`) Upload the Kubernetes kernel and `initrd` into S3 under the new version string.
 
     ```bash
     for art in initrd kernel ; do
-        /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
-            --bucket-name ncn-images \
-            --key-name "k8s/${K8SNEW}/${art}" \
-            --file-name k8s/${K8SVERSION}/${art}
+        cray artifacts create boot-images k8s/${K8SNEW}/${art} k8s/${K8SVERSION}/${art}
     done
     ```
 
 1. (`ncn-mw#`) Upload the new Ceph image into S3.
 
     ```bash
-    /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
-        --bucket-name ncn-images \
-        --key-name "ceph/${CEPHNEW}/filesystem.squashfs" \
-        --file-name ceph/${CEPHVERSION}/secure-filesystem.squashfs
+    cray artifacts create boot-images ceph/${CEPHNEW}/filesystem.squashfs ceph/${CEPHVERSION}/secure-filesystem.squashfs
     ```
 
 1. (`ncn-mw#`) Upload the Ceph kernel and `initrd` into S3 under the new version string.
 
     ```bash
     for art in initrd kernel ; do
-        /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py \
-            --bucket-name ncn-images \
-            --key-name "ceph/${CEPHNEW}/${art}" \
-            --file-name ceph/${CEPHVERSION}/${art}
+        cray artifacts create boot-images ceph/${CEPHNEW}/${art} ceph/${CEPHVERSION}/${art}
     done
     ```
 
