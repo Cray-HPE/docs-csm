@@ -58,11 +58,6 @@ validprovider() {
   return 0
 }
 
-# Validate a secret type; identity is a special case
-validate() {
-  return 1
-}
-
 # Note identity is a "special" secret allowing a caller to control where/when
 # the identity provider shows up in the list
 #
@@ -176,7 +171,7 @@ writeconfig() {
     return 1
   fi
 
-  tmpfile=$(mktemp sha25sum.XXXXXXXX)
+  tmpfile=$(mktemp sha256sum.XXXXXXXX)
 
   tmpfiles="${tmpfiles} ${tmpfile}"
 

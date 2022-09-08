@@ -21,7 +21,7 @@ In order to better understand current limitations to the implementation, it is i
 There are two aspects to encryption. The first aspect is the aforementioned `cray-kubernetes-encryption` Helm chart, which runs within Kubernetes and determines
 when existing secret data can be rewritten. The second aspect is control plane configuration of the `kubeapi` process.
 
-For Control Plane nodes encryption, configuration is written to `/etc/cray/kubernetes/encryption` and `kubeapi` containers are restarted.
+For control plane nodes encryption, configuration is written to `/etc/cray/kubernetes/encryption` and `kubeapi` containers are restarted.
 
 For Kubernetes secret encryption, once all control plane nodes agree on encryption ciphers and their keys, `cray-kubernetes-encryption` will rewrite all secret data.
 
@@ -38,7 +38,7 @@ There are two allowed encryption methods that may be chosen: `aescbc` and `aesgc
 
 Both ciphers allow the same input string type. Note that while it is possible to specify multiple encryption keys, only the first key will be used for encryption of any newly written Kubernetes secret.
 
-* (`ncn-m#`) The `encryption.sh` script can be used to enable encryption on all control-plane nodes.
+* (`ncn-m#`) The `encryption.sh` script can be used to enable encryption on all control plane nodes.
 
     As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
 
@@ -61,7 +61,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
     This ensures that if a node is rebooted, or if Kubernetes is restarted, then Kubernetes can still read
     existing encrypted secret data.
 
-    The following command disables encryption on all control-plane nodes.
+    The following command disables encryption on all control plane nodes.
 
     ```bash
      /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --disable --aescbc KEYVALUE

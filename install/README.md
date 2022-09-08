@@ -208,4 +208,4 @@ See [Troubleshooting Installation Problems](troubleshooting_installation.md).
 As an optional post installation task, encryption of Kubernetes secrets may be enabled. This enables
 at rest encryption of data in the `etcd` database used by Kubernetes.
 
-See [Kubernetes Encryption](../operations/encryption/Overview.md).
+See [Kubernetes Encryption](../operations/kubernetes/encryption/README.md).
