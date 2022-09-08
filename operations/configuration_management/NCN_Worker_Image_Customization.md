@@ -156,6 +156,9 @@ a Ceph image.
 
 1. Prepare for reboot.
 
+   **NOTE**: If the worker node image is being customized as part of a Cray EX initial install or upgrade involving multiple products,
+   then refer to the /HPE Cray EX System Software Getting Started Guide/ (S-8000) for details on when to reboot the worker nodes to the new image.
+
    1. Failover any Postgres leader that is running on the worker node being rebooted.
 
       ```bash
@@ -199,9 +202,6 @@ a Ceph image.
       ```
 
 1. Reboot the NCN.
-
-   **NOTE**: If the worker node image is being customized as part of a Cray EX initial install or upgrade involving multiple products,
-   then refer to the /HPE Cray EX System Software Getting Started Guide/ (S-8000) for details on when to reboot the worker nodes to the new image.
 
    ```bash
    ncn-w# shutdown -r now
