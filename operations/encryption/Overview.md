@@ -8,40 +8,42 @@ By default, encryption is not enabled and must be enabled after install.
 
 ## Table of contents
 
-* [Implementation Details](#implementation-details)
-* [Enabling Encryption](#enabling-encrypion)
-* [Disabling Encryption](#disabling-encryption)
-* [Encryption Status](#encryption-status)
-* [Force Rewrite](#force-rewrite)
+* [Implementation details](#implementation-details)
+* [Enabling encryption](#enabling-encrypion)
+* [Disabling encryption](#disabling-encryption)
+* [Encryption status](#encryption-status)
+* [Force rewrite](#force-rewrite)
 
-## Implementation Details
+## Implementation details
 
 In order to better understand current limitations to the implementation, it is important to understand how encryption is enabled.
 
-There are two aspects to encryption. The aforementioned `cray-kubernetes-encryption` helm chart, which runs within Kubernetes and determines when existing secret data can be rewritten. The second aspect is control plane configuration of the `kubeapi` process.
+There are two aspects to encryption. The first aspect is the aforementioned `cray-kubernetes-encryption` Helm chart, which runs within Kubernetes and determines
+when existing secret data can be rewritten. The second aspect is control plane configuration of the `kubeapi` process.
 
-For Control Plane nodes encryption configuration is written to `/etc/cray/kubernetes/encryption` and `kubeapi` containers are restarted.
+For Control Plane nodes encryption, configuration is written to `/etc/cray/kubernetes/encryption` and `kubeapi` containers are restarted.
 
 For Kubernetes secret encryption, once all control plane nodes agree on encryption ciphers and their keys, `cray-kubernetes-encryption` will rewrite all secret data.
 
-For further information refer to the [official Kubernetes docs](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).
+For further information, refer to the [official Kubernetes documentation](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).
 
-## Enabling Encryption
+## Enabling encryption
 
-To enable encryption you will need to provide and retain a 16, 24, or 32 byte string. It is important you do not lose this key as once secrets are encrypted in `etcd` Kubernetes needs to be configured with this secret before it can start.
+In order to enable encryption, a 16, 24, or 32 byte string must be provided and retained. It is important not to lose this key, because once secrets
+are encrypted in `etcd`, Kubernetes must be configured with this secret before it can start.
 
-Note that all control plane nodes must be updated. Also note that once a node is updated any new secret data writes performed by `kubeapi` for that node will be encrypted. All control plane nodes should be updated as soon as possible to each other.
+Note that all control plane nodes must be updated. Also note that once a node is updated, any new secret data writes performed by `kubeapi` for that node will be encrypted. All control plane nodes should be updated as close to the same time as possible.
 
-There are two allowed encryption methods for encryption that may be chosen, `aescbc` and `aesgcm`.
+There are two allowed encryption methods that may be chosen: `aescbc` and `aesgcm`.
 
-Both ciphers allow same input string type. Note that while you may specify multiple encryption keys, only the first key will be used for encryption of any newly written Kubernetes secret.
+Both ciphers allow the same input string type. Note that while it is possible to specify multiple encryption keys, only the first key will be used for encryption of any newly written Kubernetes secret.
 
-A warning on the `encryption.sh` script. To ensure that you do not leave an entry in `.bash_history`, always run `encryption.sh` with a leading space so `bash` does not record the command in the `.bash_history` file.
+* (`ncn-m#`) The `encryption.sh` script can be used to enable encryption on all control-plane nodes.
 
-* (`ncn-m#`) The following command can be used to enable encryption on all control-plane nodes:
+    As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
 
     ```bash
-    /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --enable --aescbc KEYVALUE
+     /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --enable --aescbc KEYVALUE
     ```
 
     Example output:
@@ -50,16 +52,19 @@ A warning on the `encryption.sh` script. To ensure that you do not leave an entr
     encryption configuration updated
     ```
 
-## Disabling Encryption
+## Disabling encryption
 
-Safely disabling encryption requires two steps to ensure no access to Kubernetes secret data is lost.
+Safely disabling encryption requires two steps to ensure no access to Kubernetes secret data is lost:
 
-The first step is to disable encryption but retain the existing encryption key. This ensures if a node is rebooted, or Kubernetes restarted, that Kubernetes can still read existing encrypted secret data.
+1. (`ncn-m#`) Disable encryption but retain the existing encryption key.
 
-* (`ncn-m#`) The following command can be used to disable encryption on all control-plane nodes:
+    This ensures that if a node is rebooted, or if Kubernetes is restarted, then Kubernetes can still read
+    existing encrypted secret data.
+
+    The following command disables encryption on all control-plane nodes.
 
     ```bash
-    /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --disable --aescbc KEYVALUE
+     /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --disable --aescbc KEYVALUE
     ```
 
     Example output:
@@ -68,35 +73,41 @@ The first step is to disable encryption but retain the existing encryption key. 
     encryption configuration updated
     ```
 
-Once you see that the `current` encryption is `identity` you may then fully remove all keys from the control plane nodes.
+1. Fully disable all encryption by removing all keys from the control plane nodes.
 
-* (`ncn-m#`) The following command can be used to fully disable all encryption:
+    1. Verify that the `current` encryption is reported as `identity`.
 
-    ```bash
-    /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --disable
-    ```
+        See [Encryption status](#encryption-status) for details on how to check this.
 
-    Example output:
+    1. (`ncn-m#`) Fully disable all encryption.
 
-    ```text
-    encryption configuration updated
-    ```
+        ```bash
+         /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --disable
+        ```
 
-With this final encryption run encryption of etcd secrets will be as default.
+        Example output:
 
-## Encryption Status
+        ```text
+        encryption configuration updated
+        ```
+
+        At this point, encryption of `etcd` secrets will be back to default.
+
+## Encryption status
 
 Encryption status is recorded in a Kubernetes secret `cray-k8s-encryption` via annotations.
 
-* (`ncn-mw#`) The following command can be used to get the status of encryption:
+* (`ncn-mw#`) The following command reports the encryption status.
 
     ```bash
     kubectl get secret cray-k8s-encryption -o json -n kube-system | jq ".metadata.annotations | {changed, current, goal}"
     ```
 
-    Example output:
+    The command output will show the last time any change was performed, the goal encryption name, and the current encryption name.
 
-    ```text
+* Example output on a new or upgraded installation with the default of no encryption.
+
+    ```json
     {
       "changed": "1970-01-01 12:00:00+0000",
       "current": "identity",
@@ -104,19 +115,11 @@ Encryption status is recorded in a Kubernetes secret `cray-k8s-encryption` via a
     }
     ```
 
-From this we see the last time any change was performed, the goal encryption name, and the current encryption name.
+    The string `identity` indicates that the identity encryption provider is in use. This provider performs no encryption.
 
-This example is similar to what you would see on a new or upgraded installation with the default of no encryption. The string `identity` indicates that we are using the identity encryption provider. This provider performs no encryption.
+* Example command output when enabling encryption but secrets are not yet rewritten.
 
-* (`ncn-mw#`) Command output when enabling encryption but secrets are not yet rewritten:
-
-    ```bash
-    kubectl get secret cray-k8s-encryption -o json -n kube-system | jq ".metadata.annotations | {changed, current, goal}"
-    ```
-
-    Example output:
-
-    ```text
+    ```json
     {
       "changed": "1970-01-01 12:00:00+0000",
       "current": "identity",
@@ -124,20 +127,13 @@ This example is similar to what you would see on a new or upgraded installation 
     }
     ```
 
-From this example we can see that the goal is an `aescbc` cipher.
+    The goal is an `aescbc` cipher. The `goal` string corresponds to the name in the
+    `/etc/cray/kubernetes/encryption/current.yaml` file on all control plane nodes after the `encryption.sh` script has
+    been run. Only a goal that all control plane nodes agree on will be reported.
 
-The `goal` string corresponds to the name in the `/etc/cray/kubernetes/encryption/current.yaml` file on all control plane nodes after the `encryption.sh` script is ran.
-We will only see a goal that all control plane nodes agree on.
+* Example command output after secrets are rewritten.
 
-* (`ncn-mw#`) Command output after secrets are rewritten:
-
-    ```bash
-    kubectl get secret cray-k8s-encryption -o json -n kube-system | jq ".metadata.annotations | {changed, current, goal}"
-    ```
-
-    Example output:
-
-    ```text
+    ```json
     {
       "changed": "1970-01-01 12:00:00+0000",
       "current": "aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907",
@@ -145,11 +141,12 @@ We will only see a goal that all control plane nodes agree on.
     }
     ```
 
-From this example we can see that the `current` key and `goal` keys are in agreement. This indicates all secret data in etcd is now encrypted with this key providers name.
+    The output shows that the `current` key and `goal` keys are in agreement. This indicates that all secret data in `etcd`
+    is now encrypted with this key provider's name.
 
-## Forcing Encryption
+## Forcing encryption
 
-If for any reason you wish to force a rewrite of secret data, you may do so by overwriting the annotation used by `cray-k8s-encryption`
+If necessary, a forced rewrite of secret data can be done by overwriting the annotation used by `cray-k8s-encryption`.
 
 * (`ncn-mw#`) Force a rewrite of existing data:
 

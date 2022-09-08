@@ -36,8 +36,9 @@ cleanup() {
 
 trap cleanup EXIT
 
-# Secret data length must be 16,24, or 32 bytes long or its invalid A valid
-# secrets' data can only be 16, 24, or 32 bytes long according to the k8s docs and testing. If we provide data of any length that isn't these lengths k8s will *not* start.
+# Secret data length must be 16, 24, or 32 bytes long or it is invalid. A valid
+# secret's data can only be 16, 24, or 32 bytes long, according to the k8s documentation and testing.
+# If we provide data of any length that isn't these lengths, k8s will *not* start.
 validatelen() {
   len=$(echo "$@" | awk '{print length}')
   if [ 16 -eq "${len}" ] \
@@ -57,7 +58,7 @@ validprovider() {
   return 0
 }
 
-# Validate a secret type, identity is a special case
+# Validate a secret type; identity is a special case
 validate() {
   return 1
 }
