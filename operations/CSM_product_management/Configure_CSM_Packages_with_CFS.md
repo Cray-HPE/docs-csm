@@ -39,7 +39,7 @@ To setup the compute configuration layer, first gather the following information
        Part of the output will be a section resembling the following:
 
        ```yaml
-       1.2.0:
+       1.2.1:
           configuration:
              clone_url: https://vcs.cmn.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
              commit: 43ecfa8236bed625b54325ebb70916f55884b3a4
