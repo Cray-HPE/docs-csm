@@ -1,5 +1,7 @@
 # Install CSM
 
+Note: If you are beginning an install with CSM 1.2.0, please download and proceed to install 1.2.1 instead. This will save you time performing a patch update later.
+
 ## Abstract
 
 Installation of the CSM product stream has many steps in multiple procedures which should be done in a
@@ -16,10 +18,10 @@ like the checking and updating of firmware on system components or the preparati
 
 Once the CSM installation has completed, other product streams for the HPE Cray EX system can be installed.
 
-A major feature of CSM 1.2 is the Bifurcated CAN (BICAN).
+A major feature of CSM 1.2.x is the Bifurcated CAN (BICAN).
 The BICAN is designed to separate administrative network traffic from user network traffic.
 More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
-Review the BICAN summary before continuing with the CSM 1.2 install.
+Review the BICAN summary before continuing with the CSM 1.2.x install.
 
 Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) page.
 
