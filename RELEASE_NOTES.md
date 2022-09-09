@@ -7,7 +7,7 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
 ### Monitoring
 
 * Temperature hardware monitoring dashboard for NCNs
-* Support for export of SNMP data from multiple switches for population of SNMP Export grafana panel
+* Support for export of SNMP data from multiple switches for population of SNMP Export `grafana` panel
 * Space monitoring improvements - included volumes other than root file system
 
 ### Networking
@@ -33,11 +33,11 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
 
 ### Automation improvements
 
-* Support for Argo-driven upgrade of multiple Kubernetes Worker NCNs in parallel, using new ncn lifecycle service, cray-nls (Tech Preview)
-* Support for Argo-driven upgrade of Storage NCNs, serially, using cray-nls (Tech Preview)
+* Support for Argo-driven upgrade of multiple Kubernetes Worker NCNs in parallel, using `cray-nls` (Tech Preview)
+* Support for Argo-driven upgrade of Storage NCNs, serially, using `cray-nls` (Tech Preview)
 * Ceph upgrade is now driven using a utility called the  `cubs_tool`.
-* Re-organization of goss test execution during installs and upgrades to remove duplicated tests
-* Improvement of goss test suite output to display summary of failing tests
+* Re-organization of `goss` test execution during installs and upgrades to remove duplicated tests
+* Improvement of `goss` test suite output to display summary of failing tests
 * Removed manual prompts from upgrade of storage NCNs
 * Introduced weekly spire-intermediate cron-job to check CA to see when it needs automatic renewal
 
@@ -122,16 +122,14 @@ of container images spins up with each major CSM release.
 |-----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
 | `csm-dckr/stable/quay.io/ceph/ceph:v15.2.15`                                | This version of Ceph (Octopus) is needed in the upgrade procedure, but is not present after that. |
 | `csm-docker/stable/quay.io/ceph/ceph:v15.2.16`                              | This version of Ceph (Octopus) is needed in the upgrade procedure, but is not present after that. |
-| `csm-docker/stable/quay.io/ceph/ceph:v16.2.9`                               | This version of Ceph (Pacific) is pinned for the CSM 1.3 release.  The next CSM version released as a part of a recipe will support Ceph (Quincy). |
+| `csm-docker/stable/quay.io/ceph/ceph:v16.2.9`                               | This version of Ceph (Pacific) is pinned for the CSM 1.3 release.  The next CSM version released as a part of a recipe will support Ceph (`Quincy`). |
 | `csm-docker/stable/quay.io/cephcsi/cephcsi:v3.6.2`                          | Upstream fixes became available after CSM 1.3 release content was frozen. |
 | `csm-dckr/stable/dckr.io/bitnami/external-dns:0.10.2-debian-10-r23`         | Upstream fixes are needed and are not yet available. |
-| `csm-docker/stable/quay.io/kiali/kiali-operator:v1.36.7`                    | The updated RedHat base image is available but not pulled in by upstream.  See procedure to [Remove Kiali](operations/system_management_health/Remove_Kiali.md) if desired. |
+| `csm-docker/stable/quay.io/kiali/kiali-operator:v1.36.7`                    | The updated `RedHat` base image is available but not pulled in by upstream.  See procedure to [Remove Kiali](operations/system_management_health/Remove_Kiali.md) if desired. |
 | `csm-dckr/stable/k8s.gcr.io/kube-proxy:v1.20.13`                            | This version is needed for the upgrade procedure but will not be running after the upgrade has been completed. |
 | `csm-docker/stable/k8s.gcr.io/kube-proxy:v1.21.12`                          | Upstream fixes are needed and are not yet available for the `1.21.12` version of Kubernetes included in CSM 1.3. |
 | `csm-dckr/stable/dckr.io/nfvpe/multus:v3.7`                                 | Upstream fixes are needed and are not yet available, however we have engaged with the project to make a reduced-vulnerability version available.|
 | `csm-docker/stable/docker.io/sonatype/nexus3:3.38.0-1`                      | Upstream fixes are needed to the base image in order to address the remaining vulnerabilities. |
 | `csm-docker/stable/docker.io/velero/velero-plugin-for-aws:v1.3.1`           | New version with some fixes available but missed release content freeze in CSM 1.3, will incorporate in future release. |
-| `csm-docker/stable/velero/velero:v1.7.1`                                    | This version of velero, while in Nexus, is not running on the system.  We are planning on upgrading to it in a future version of CSM. |
+| `csm-docker/stable/velero/velero:v1.7.1`                                    | This image, while in Nexus, is not running on the system.  We are planning on upgrading to it in a future version of CSM. |
 | `csm-docker/stable/cray-uas-mgr:1.21.0`                                     | This will be addressed in a future version of CSM. |
-
-
