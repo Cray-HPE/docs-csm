@@ -65,7 +65,7 @@ echo "total: $total"
 
 i=0
 while [ $i -ne $total ]
-# while [ $i -ne 10 ]
+
 do
     echo "cat $data_file | jq '.['$i']' | curl -s -X PUT $url --data-binary @-"
     cat $data_file | jq '.['$i']' | curl -s -k -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" --request PUT $url --data-binary @-

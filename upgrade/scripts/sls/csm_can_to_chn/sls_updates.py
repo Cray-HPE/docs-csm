@@ -68,7 +68,7 @@ def sls_and_input_data_checks(
 
     if cmn_subnet.overlaps(chn_subnet[1]):
         click.secho(
-            f"CMN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}",
+            f"CAN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}",
             fg="red",
         )
         sys.exit(1)
@@ -78,13 +78,6 @@ def sls_and_input_data_checks(
             "    INFO: A CHN network already exists in SLS.",
             fg="white",
         )
-    if bican_name == "CHN":
-        if chn_subnet[1] == ipaddress.IPv4Network("10.104.7.0/24"):
-            click.secho(
-                "    WARNING: Command line --customer-highspeed-network values not found. "
-                "Using [default: 5, 10.104.7.0/24]",
-                fg="bright_yellow",
-            )
 
 
 def create_bican_network(networks, default_route_network_name):

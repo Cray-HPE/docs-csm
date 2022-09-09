@@ -25,14 +25,10 @@
 import json
 import sys
 import click
+import ipaddress
 
 
-help = """Upgrade a system BSS Boot Parameters file to use the CHN.
-
-    1. Create the CHN network.\n
-    2. Change the BICAN "toggle" network to CHN.\n
-
-"""
+help = """Remove CAN entries from BSS, this is used for CHN upgrade"""
 
 
 @click.command(help=help)
@@ -77,13 +73,14 @@ def main(
                 ipam = host["cloud-init"]["meta-data"]["ipam"]
                 for net in list(ipam.keys()):
                     if "can" in net:
-                        can_ip = ipam["can"]["ip"]
+                        can_ip = ipaddress.IPv4Interface(ipam["can"]["ip"])
                         del ipam[net]
                         # remove CAN NTP entry if it exists
-                        ntp_allow = host["cloud-init"]["user-data"]["ntp"]["allow"]
-                        for ip in ntp_allow:
-                            if ip == can_ip:
-                                ntp_allow.remove(ip)
+                        if host["cloud-init"]["user-data"]["ntp"]["allow"] is not None:
+                            ntp_allow = host["cloud-init"]["user-data"]["ntp"]["allow"]
+                            for ip in ntp_allow:
+                                if ip == str(can_ip) or ip == str(can_ip.network):
+                                    ntp_allow.remove(ip)
             except KeyError:
                 pass
             try:
