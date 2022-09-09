@@ -532,6 +532,10 @@ yq w -i "$c" 'spec.kubernetes.services.cray-slurmctld.macvlan.master' '{{ wlm.ma
 yq w -i "$c" 'spec.kubernetes.services.cray-slurmdbd.macvlan.master' '{{ wlm.macvlansetup.nmn_vlan }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-pbs.macvlan.master' '{{ wlm.macvlansetup.nmn_vlan }}'
 
+# cray-ims
+# Note to future developers: This is needed to address CASMTRIAGE-4098. It is only needed on upgrades to csm-1.2 and csm-1.3.
+yq w -i "$c" 'spec.kubernetes.services.cray-ims.customer_access.access_pool' 'customer-management'
+
 # lower cpu request for tds systems (3 workers)
 num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
 if [ $num_workers -le 3 ]; then
