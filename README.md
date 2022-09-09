@@ -1,4 +1,4 @@
-# Cray System Management (CSM) v1.2 change2 - README
+# Cray System Management (CSM) v1.2 (Gamora Installation) - README
 
 The documentation included here describes how to install or upgrade the Cray System Management (CSM)
 software and related supporting operational procedures. CSM software is the foundation upon which
