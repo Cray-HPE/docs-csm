@@ -33,10 +33,6 @@
 #### Added
 
 * Documentation: Added procedure to migrate from the customer access network (CAN) to the customer high-speed network (CHN), allowing user traffic over the HSN instead of the NMN (This is an extension of the bi-furcated CAN feature that shipped in CSM 1.2)
-* Documentation: Admins are now asked to updated CANU to the latest version when beginning a CSM upgrade
-* Documentation: Management network switch upgrade instructs are now separate from the CSM upgrade procedure
-* Documentation: Removed stale reference to Kea postgres from troubleshooting documentation
-* Documentation: Fixed invalid commands in generate_switch_configs.md
 * Documentation: Added various troubleshooting guides
 
 #### Changed
@@ -45,6 +41,10 @@
 * CANU: Other various bug fixes (see https://github.com/cray-hpe/canu for a full changelog)
 * CANU: Added an ACL on systems with Dell and Mellanox switches to prevent high-speed network (HSN) switches on the Hardware Management Network (HMN) from communicating with the Fabric Manager service on the Node Management Network (NMN) API gateway
 * CSI: Fixed bug where CSI could generate bad SLS chassis data
+* Documentation: Admins are now asked to updated CANU to the latest version when beginning a CSM upgrade
+* Documentation: Management network switch upgrade instructs are now separate from the CSM upgrade procedure
+* Documentation: Removed stale reference to Kea postgres from troubleshooting documentation
+* Documentation: Fixed invalid commands in generate_switch_configs.md
 
 ### Miscellaneous functionality
 
