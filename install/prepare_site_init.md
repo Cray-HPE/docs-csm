@@ -418,6 +418,12 @@ with system-specific customizations.
            ldapSearchBase: dc=dcldap,dc=dit
            ```
 
+1. Patch the IMS entry.
+
+    ```bash
+    linux# yq w -i "${SITE_INIT}/customizations.yaml" 'spec.kubernetes.services.cray-ims.customer_access.access_pool' 'customer-management'
+    ```
+
 1. Configure the Unbound DNS resolver (if needed).
 
     **Important:** If access to a site DNS server is required **and** this DNS server was specified to `csi` using the `site-dns` option (either on the command line or in the `system_config.yaml` file),

@@ -75,13 +75,17 @@ then
 fi
 
 c="$(mktemp)"
+# shellcheck disable=SC2064
 trap "rm -f '$c'" EXIT
 
 cp "$customizations" "$c"
 
 # Get token to access SLS data
-export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+# shellcheck disable=SC2046
+TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+export TOKEN
 
+# shellcheck disable=SC2166
 if [ -z "${TOKEN}" -o "${TOKEN}" == "" -o "${TOKEN}" == "null" ]; then
     echo >&2 "error: failed to obtain token from keycloak"
     exit 1
@@ -89,7 +93,7 @@ fi
 
 # Get Networks from SLS
 NETWORKSJSON=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/networks)
-
+# shellcheck disable=SC2166
 if [ -z "${NETWORKSJSON}" -o "${NETWORKSJSON}" == "" -o "${NETWORKSJSON}" == "null" ]; then
     echo >&2 "error: failed to get Networks from SLS"
     exit 1
@@ -117,11 +121,13 @@ numpeers=0
     peerASN=$(echo "${NETWORKSJSON}" | jq --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.PeerASN')
     myASN=$(echo "${NETWORKSJSON}" | jq --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.MyASN')
 
+    # shellcheck disable=SC2166
     if [ -z "${peerASN}" -o "${peerASN}" == "null" -o "${peerASN}" == "" ]; then
         echo >&2 "error:  PeerASN missing in SLS for network ${n}"
         errors=$((errors+1))
     fi
 
+    # shellcheck disable=SC2166
     if [ -z "${myASN}" -o "${myASN}" == "null" -o "${myASN}" == "" ]; then
         echo >&2 "error:  MyASN missing in SLS for network ${n}"
         errors=$((errors+1))
@@ -136,6 +142,7 @@ numpeers=0
                     numpeers=$((numpeers+1))
                     peerIP=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" --arg j "$j" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .IPReservations[] | select(.Name == $j) | .IPAddress')
 
+                    # shellcheck disable=SC2166
                     if [ -z "${peerIP}" -o "${peerIP}" == "null" -o "${peerIP}" == "" ]; then
                         echo >&2 "error:  IPAddress missing in SLS for ${j} in network ${n}"
                         errors=$((errors+1))
@@ -157,6 +164,7 @@ numpeers=0
                     numpeers=$((numpeers+1))
                     peerIP=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" --arg j "$j" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .IPReservations[] | select(.Name == $j) | .IPAddress')
 
+                    # shellcheck disable=SC2166
                     if [ -z "${peerIP}" -o "${peerIP}" == "null" -o "${peerIP}" == "" ]; then
                         echo >&2 "error:  IPAddress missing in SLS for ${j} in network ${n}"
                         errors=$((errors+1))
@@ -196,11 +204,13 @@ for n in ${networks}; do
             poolName=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .MetalLBPoolName')
             poolCIDR=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" --arg i "$i" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[] | select(.Name == $i) | .CIDR')
 
+            # shellcheck disable=SC2166
             if [ -z "${poolName}" -o "${poolName}" == "null" -o "${poolName}" == "" ]; then
                 echo >&2 "error:  MetalLBPoolName missing in SLS for subnet ${i} in network ${n}"
                 errors=$((errors+1))
             fi
 
+            # shellcheck disable=SC2166
             if [ -z "${poolCIDR}" -o "${poolCIDR}" == "null " -o "${poolCIDR}" == "" ]; then
                 echo >&2 "error:  CIDR missing in SLS for subnet ${i} in network ${n}"
                 errors=$((errors+1))
@@ -531,6 +541,10 @@ yq w -i "$c" 'spec.wlm.macvlansetup.nmn_vlan' 'bond0.nmn0'
 yq w -i "$c" 'spec.kubernetes.services.cray-slurmctld.macvlan.master' '{{ wlm.macvlansetup.nmn_vlan }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-slurmdbd.macvlan.master' '{{ wlm.macvlansetup.nmn_vlan }}'
 yq w -i "$c" 'spec.kubernetes.services.cray-pbs.macvlan.master' '{{ wlm.macvlansetup.nmn_vlan }}'
+
+# cray-ims
+# Note to future developers: This is needed to address CASMTRIAGE-4098. It is only needed on upgrades to csm-1.2 and csm-1.3.
+yq w -i "$c" 'spec.kubernetes.services.cray-ims.customer_access.access_pool' 'customer-management'
 
 # lower cpu request for tds systems (3 workers)
 num_workers=$(kubectl get nodes | grep ncn-w | wc -l)
