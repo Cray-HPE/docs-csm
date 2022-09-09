@@ -42,3 +42,6 @@ troubleshooting/kubernetes                               @Cray-HPE/platform-engi
 
 # Network Items
 /operations/network                                      @Cray-HPE/management-network
+
+# SAT Items
+/operations/sat                                          @Cray-HPE/system-admin-toolkit-admin
