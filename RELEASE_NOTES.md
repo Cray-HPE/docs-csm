@@ -10,7 +10,6 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
 * Support for export of SNMP data from multiple switches for population of SNMP Export grafana panel
 * Space monitoring improvements - included volumes other than root file system
 
-
 ### Networking
 
 * TBD
@@ -41,7 +40,6 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
 * Improvement of goss test suite output to display summary of failing tests
 * Removed manual prompts from upgrade of storage NCNs
 * Introduced weekly spire-intermediate cron-job to check CA to see when it needs automatic renewal
-
 
 ### Base platform component upgrades
 
@@ -114,6 +112,7 @@ See [Deprecated features](introduction/differences.md#deprecated-features).
 ## Known issues
 
 ### Security vulnerability exceptions in CSM 1.3
+
 Significant effort went into the tracking, elimination, and/or reduction of critical or high (and lower) security vulnerabilities of container images included in the CSM 1.3 release.
 There remain, however, a small number of exceptions that are listed below. General reasons for carrying exceptions include needing to version pin certain core components,
 upstream fixes not being available, or new vulnerability detection or fixes occurring after release content is frozen. A new effort to track and address security vulnerabilities
@@ -126,7 +125,7 @@ of container images spins up with each major CSM release.
 | `csm-docker/stable/quay.io/ceph/ceph:v16.2.9`                               | This version of Ceph (Pacific) is pinned for the CSM 1.3 release.  The next CSM version released as a part of a recipe will support Ceph (Quincy). |
 | `csm-docker/stable/quay.io/cephcsi/cephcsi:v3.6.2`                          | Upstream fixes became available after CSM 1.3 release content was frozen. |
 | `csm-dckr/stable/dckr.io/bitnami/external-dns:0.10.2-debian-10-r23`         | Upstream fixes are needed and are not yet available. |
-| `csm-docker/stable/quay.io/kiali/kiali-operator:v1.36.7`                    | There is an updated RedHat base image but there has been difficulty with migrating to it.  There is a procedure to [Remove Kiali](operations/system_management_health/Remove_Kiali.md) if desired. |
+| `csm-docker/stable/quay.io/kiali/kiali-operator:v1.36.7`                    | The updated RedHat base image is available but not pulled in by upstream.  See procedure to [Remove Kiali](operations/system_management_health/Remove_Kiali.md) if desired. |
 | `csm-dckr/stable/k8s.gcr.io/kube-proxy:v1.20.13`                            | This version is needed for the upgrade procedure but will not be running after the upgrade has been completed. |
 | `csm-docker/stable/k8s.gcr.io/kube-proxy:v1.21.12`                          | Upstream fixes are needed and are not yet available for the `1.21.12` version of Kubernetes included in CSM 1.3. |
 | `csm-dckr/stable/dckr.io/nfvpe/multus:v3.7`                                 | Upstream fixes are needed and are not yet available, however we have engaged with the project to make a reduced-vulnerability version available.|
@@ -136,5 +135,3 @@ of container images spins up with each major CSM release.
 | `csm-docker/stable/cray-uas-mgr:1.21.0`                                     | This will be addressed in a future version of CSM. |
 
 
-
-* TBD
