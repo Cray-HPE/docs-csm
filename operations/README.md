@@ -700,3 +700,12 @@ a User Access Instance \(UAI\) using the `cray` command. Users can also transfer
   - [Troubleshoot Missing or Incorrect UAI Images](UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
   - [Troubleshoot UAIs with Administrative Access](UAS_user_and_admin_topics/Troubleshoot_UAIs_with_Administrative_Access.md)
   - [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
+
+## System Admin Toolkit (SAT)
+
+The System Admin Toolkit (SAT) is a command-line interface that can assist administrators with common tasks, such as
+troubleshooting and querying information about the HPE Cray EX System, system boot and shutdown, and replacing hardware
+components. In CSM 1.3 and newer, the `sat` command is available on the Kubernetes NCNs without installing the SAT
+product stream.
+
+- [System Admin Toolkit in CSM](sat/sat_in_csm.md)

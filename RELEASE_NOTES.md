@@ -22,6 +22,7 @@ CSM 1.4 contains approximately 500 changes spanning bug fixes, new feature devel
 * Technology Preview: Tenant and Partition Management Service (TAPMS)
 * Support for setting of Bios Settings through SCSD
 * Ability to set power cap on multiple computes
+* Included SAT CLI in CSM (see [SAT in CSM](operations/sat/sat_in_csm.md))
 
 ### New hardware support
 
@@ -62,7 +63,8 @@ CSM 1.4 contains approximately 500 changes spanning bug fixes, new feature devel
 ### Documentation enhancements
 
 * Added documentation for:
-  * Add/Remove/Replace NCN procedures using `sat swap blade`
+  * Add/Remove/Replace NCN procedures
+  * Add/Remove/Replace compute nodes using `sat swap blade`
   * How to troubleshoot `ncn-m001` PXE loop
   * NCN image modification using IMS and CFS
   * Minimal space requirements for CSM V1.3.0
