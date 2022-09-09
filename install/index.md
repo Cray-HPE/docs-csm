@@ -25,7 +25,7 @@ Detailed BICAN documentation can be found on the [BICAN technical details](../op
 
 ## Topics
 
-1. [Validate SHCD](#validate_shcd)
+1
 1. [Prepare configuration payload](#prepare_configuration_payload)
 1. [Prepare management nodes](#prepare_management_nodes)
 1. [Bootstrap PIT node](#bootstrap_pit_node)
