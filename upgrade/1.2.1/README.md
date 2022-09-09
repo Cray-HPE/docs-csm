@@ -2,8 +2,8 @@
 
 ## Introduction
 
-This document guides an administrator through the upgrade to Cray Systems Management `v1.2.1` from `v1.2.0`.
-Earlier version of CSM must first be upgraded to at least `v1.2.0`. For information on how to do that, see [Upgrade CSM](../index.md).
+This document guides an administrator through the patch update to Cray Systems Management `v1.2.1` from `v1.2.0`.
+The previous version of CSM, 1.0.x, can be upgraded directly to `v1.2.1`. Following the procedures described in [Upgrade CSM](../1.2/README.md).
 
 ## Bug Fixes
 
