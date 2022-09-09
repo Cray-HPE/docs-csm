@@ -61,6 +61,7 @@ This page gives a high-level overview of the environment present on the Non-Comp
       * [`rd.retry`](#rdretry)
       * [`rd.shell`](#rdshell)
       * [`xname`](#xname)
+  * [Kernel Dumps](#kernel-dumps)
   * [Kubernetes](#kubernetes)
   * [Python](#python)
 
@@ -714,6 +715,10 @@ administrator to investigate and/or provide triage information.
 | All | `<varies>` |
 
 This value sets the `xname` for the node, detailing the geolocation of the node.
+
+### Kernel Dumps
+
+Information about kernel dumps can be found in [`kdump`](./ncn_kdump.md).
 
 ### Kubernetes
 
