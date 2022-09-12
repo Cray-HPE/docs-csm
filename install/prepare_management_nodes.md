@@ -3,18 +3,18 @@
 The procedures described on this page must be completed before any node is booted with the Cray Pre-Install Toolkit (PIT), which is performed in a later document. When the PIT
 node is referenced during these procedures, it means the node that will be booted as the PIT node.
 
-1. [Quiesce compute and application nodes](#quiesce-compute-and-application-nodes)
-1. [Disable DHCP service](#disable-dhcp-service)
+1. <s>[Quiesce compute and application nodes](#quiesce-compute-and-application-nodes)</s>
+1. <s>[Disable DHCP service](#disable-dhcp-service)</s>
 1. [Wipe disks on booted nodes](#wipe-disks-on-booted-nodes)
 1. [Set IPMI credentials](#set-ipmi-credentials)
 1. [Power off booted nodes](#power-off-booted-nodes)
 1. [Set node BMCs to DHCP](#set-node-bmcs-to-dhcp)
 1. [Wipe USB device on PIT node](#wipe-usb-device-on-pit-node)
-1. [Power off PIT node](#power-off-pit-node)
-1. [Configure DNS](#configure-dns)
+1. <s>[Power off PIT node](#power-off-pit-node)</s>
+1. <s>[Configure DNS](#configure-dns)</s>
 1. [Check disk space](#check-disk-space)
 
-## Quiesce compute nodes and application nodes
+## <s>Quiesce compute nodes and application nodes
 
 > **Skip this section if compute nodes and application nodes are not booted.**
 
@@ -28,8 +28,9 @@ The compute nodes and application nodes depend on the management nodes to provid
 While the reinstall process happens, these nodes would not be able to function normally. As part of the reinstall, they will be rebooted with new boot images and configuration.
 
 See [Shut Down and Power Off Compute and User Access Nodes](../operations/power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
+</s>
 
-## Disable DHCP service
+## <s>Disable DHCP service
 
 > **Skip this section if none of the management nodes are booted.**
 
@@ -42,6 +43,7 @@ Scale the deployment from either the LiveCD or any Kubernetes node:
 ```bash
 ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 ```
+</s>
 
 ## Wipe disks on booted nodes
 
@@ -85,7 +87,7 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the booted LiveCD, if re
     pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
     ```
 
-### Shut down from `ncn-m001`
+### <s>Shut down from `ncn-m001`
 
 1. Power off NCNs.
 
@@ -98,7 +100,7 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the booted LiveCD, if re
     ```bash
     ncn-m001# grep ncn /etc/hosts | grep mgmt | grep -v m001 | sort -u | awk '{print $2}' | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
     ```
-
+   </s>
 ## Set node BMCs to DHCP
 
 Set the BMCs on the management nodes to DHCP. During the install of the management nodes their BMCs get set to static IP addresses. The installation expects these
@@ -108,13 +110,13 @@ BMCs to be set back to DHCP before proceeding.
 
 1. Set the `LAN` variable based on NCN hardware type.
 
-    * If NCNs are Intel, set it to 3.
+    * <s>If NCNs are Intel, set it to 3.
 
         ```bash
         linux# LAN=3
         ```
-
-    * For non-Intel nodes, set it to 1.
+        </s>
+    * For non-Intel nodes (eg. Gamora system), set it to 1.
 
         ```bash
         linux# LAN=1
@@ -131,13 +133,14 @@ BMCs to be set back to DHCP before proceeding.
                        grep -Eo "([0-9]{1,3}[.]){3}[0-9]{1,3}" | sort -u  | tr '\n' ' ') ; echo $BMCS
         ```
 
-    * From **`ncn-m001`**:
+    * <s>From **`ncn-m001`**:
 
         Collect BMC hostnames from `/etc/hosts`:
 
         ```bash
         ncn-m001# BMCS=$(grep -wEo "ncn-[msw][0-9]{3}-mgmt" /etc/hosts | grep -v "m001" | sort -u | tr '\n' ' ') ; echo $BMCS
         ```
+        </s>
 
 1. Set the BMCs to DHCP.
 
@@ -147,6 +150,17 @@ BMCs to be set back to DHCP before proceeding.
                ipmitool -U $USERNAME -I lanplus -H $h -E lan set $LAN ipsrc dhcp
            done
     ```
+    Expected Output - 
+    ```text
+    Setting 10.254.1.11 to DHCP
+    Setting 10.254.1.13 to DHCP
+    Setting 10.254.1.15 to DHCP
+    Setting 10.254.1.17 to DHCP
+    Setting 10.254.1.3 to DHCP
+    Setting 10.254.1.5 to DHCP
+    Setting 10.254.1.7 to DHCP
+    Setting 10.254.1.9 to DHCP
+    ```
 
 1. Verify that the BMCs have been set to DHCP:
 
@@ -155,6 +169,17 @@ BMCs to be set back to DHCP before proceeding.
                printf "$h: "
                ipmitool -U $USERNAME -I lanplus -H $h -E lan print $LAN | grep Source
            done
+    ```
+    Expected Output - 
+    ```text
+    10.254.1.13: IP Address Source       : DHCP Address
+    10.254.1.15: IP Address Source       : DHCP Address
+    10.254.1.17: IP Address Source       : DHCP Address
+    ...
+    10.254.1.5: IP Address Source       : DHCP Address
+    10.254.1.7: IP Address Source       : DHCP Address
+    10.254.1.9: IP Address Source       : DHCP Address
+
     ```
 
 1. Perform a cold reset of any BMCs which are still reachable.
@@ -186,7 +211,7 @@ Wipe LiveCD disk labels with the following command:
 ncn-m001# wipefs --all --force /dev/disk/by-label/cow /dev/disk/by-label/PITDATA /dev/disk/by-label/BOOT /dev/disk/by-label/CRAYLIVE
 ```
 
-## Power off PIT node
+## <s>Power off PIT node
 
 > **Skip this step if planning to use this node as a staging area to create the USB LiveCD.**
 
@@ -195,11 +220,12 @@ Shut down the LiveCD or `ncn-m001` node.
 ```bash
 linux# poweroff
 ```
+</s>
 
-## Configure DNS
+## <s>Configure DNS
 
 If `ncn-m001` is being used to prepare the USB LiveCD, remove the Kubernetes IP addresses from `/etc/resolv.conf` and add a
-valid external DNS server.
+valid external DNS server.</s>
 
 ## Check disk space
 
