@@ -231,8 +231,8 @@ debug level log messages to be displayed. Alternatively, each failing node may b
    any of the NCNs, so if it fails on one node, copy it to any location on another node
    and try to run it from there.
 
-   In the following example the script fails on 'ncn' due to the missing Python module 'oauthlib'
-   so it is copied to 'ncn-m002' and successfully runs from that node:
+   In the following example the script fails on an NCN because of the missing Python module `oauthlib`.
+   To work around that, the script is copied to `ncn-m002`, where it is successfully run.
 
    ```bash
    python3 /usr/share/doc/csm/install/scripts/craycli_init.py --run
@@ -258,7 +258,7 @@ debug level log messages to be displayed. Alternatively, each failing node may b
    originally attempted on, because of the lack of critical Python modules on that node. However,
    it may complete successfully on the rest of the nodes.
 
-   Alternatively, the modules could be installed using 'pip' or 'pip3' if that is available on the node.
+   Alternatively, the modules could be installed using `pip` or `pip3` if that is available on the node.
 
 1. (`ncn-mws#`) Check for Kubernetes setup on the node
 
@@ -303,11 +303,11 @@ debug level log messages to be displayed. Alternatively, each failing node may b
 
     If initialization fails in the above step, then there are several common causes:
 
-    * DNS failure looking up `api-gw-service-nmn.local` may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
-    * Network connectivity issues with the NMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
-    * Certificate mismatch or trust issues may be preventing a secure connection to the API Gateway
-    * Istio failures may be preventing traffic from reaching Keycloak
-    * Keycloak may not yet be set up to authorize the user
+    - DNS failure looking up `api-gw-service-nmn.local` may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
+    - Network connectivity issues with the NMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
+    - Certificate mismatch or trust issues may be preventing a secure connection to the API Gateway
+    - Istio failures may be preventing traffic from reaching Keycloak
+    - Keycloak may not yet be set up to authorize the user
 
     If the initialization fails and the reason output is similar to the following example, then restart `radosgw` on the storage nodes.
 
