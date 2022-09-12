@@ -20,7 +20,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [1.1.1 Known issues with NCN health checks](#111-known-issues-with-ncn-health-checks)
   - [1.2 NCN resource checks (optional)](#12-ncn-resource-checks-optional)
     - [1.2.1 Known issues with NCN resource checks](#121-known-issues-with-ncn-resource-checks)
-  - [1.3 Check of system management monitoring tools](#13-check-of-system-management-monitoring-tools)
+  - [1.3 <s>Check of system management monitoring tools](#13-check-of-system-management-monitoring-tools)</s>
 - [2. Hardware Management Services health checks](#2-hardware-management-services-health-checks)
   - [2.1 HMS CT test execution](#21-hms-ct-test-execution)
   - [2.2 Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
@@ -37,7 +37,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
     - [4.1.3 Gateway health tests from outside the system](#413-gateway-health-tests-from-outside-the-system)
   - [4.2 Internal SSH access test execution](#42-internal-ssh-access-test-execution)
     - [4.2.1 Known issues with internal SSH access test execution](#421-known-issues-with-internal-ssh-access-test-execution)
-  - [4.3 External SSH access test execution](#43-external-ssh-access-test-execution)
+  - [4.3 <s>External SSH access test execution](#43-external-ssh-access-test-execution)</s>
 - [5. Booting CSM `barebones` image](#5-booting-csm-barebones-image)
   - [5.1 Run the test script](#51-run-the-test-script)
 - [6. UAS/UAI tests](#6-uasuai-tests)
@@ -101,23 +101,152 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
     ```bash
     ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-healthcheck | tee ncn-healthcheck.log
     ```
+    Expected Output - 
+    ```text
+    NCN Run-Time Checks
+    -------------------
+
+    Running tests against node ncn-s001
+    Server URL: http://ncn-s001.hmn:9001/ncn-healthcheck-storage
+
+    Result: PASS
+    Test Name: Interface 'bond0.can0' Has IP
+    Description: Validates that interface 'bond0.can0' has an IP address
+    Severity: 0
+    Test Summary: Command: check_interface_ip_bond0.can0: exit-status: matches expectation: [0]
+    Execution Time: 0.00690790 seconds
+    Node: ncn-s001
+
+    <…snip…>
+    Result: PASS
+    Test Name: Verify cray etcd is healthy
+    Description: Check the correct number of etcd nodes are running per cluster, check endpoint health, and check that no alarms are set. Upon failure, run '/opt/cray/tests/install/ncn/scripts/etcd_health_check.sh' for more details.
+    Severity: 0
+    Test Summary: Command: verify_etcd_health: exit-status: matches expectation: [0]
+    Execution Time: 14.99275922 seconds
+    Node: ncn-w003
+
+    Result: FAIL
+    Test Name: Kea has Active DHCP Leases
+    Description: Validates KEA has active DHCP leases. If the test fails, no leases were found. Check the DHCP Troubleshooting guide.
+    Severity: 0
+    Test Summary: Command: kea_has_active_dhcp_leases: exit-status:
+    Expected
+    <int>: 1
+    to equal
+    <int>: 0
+    Execution Time: 0.15795699 seconds
+    Node: ncn-w003
+
+    Result: FAIL
+    Test Name: Kea has Active DHCP Leases
+    Description: Validates KEA has active DHCP leases. If the test fails, no leases were found. Check the DHCP Troubleshooting guide.
+    Severity: 0
+    Test Summary: Command: kea_has_active_dhcp_leases: stdout: patterns not found: [PASS]
+    Execution Time: 0.00001331 seconds
+    Node: ncn-w003
+
+    Total Tests: 75, Total Passed: 73, Total Failed: 2, Total Execution Time: 20.6710 seconds
+
+    ---------------
+    Switch BGP Neighbors
+    Test Name: goss-switch-bgp-neighbor-aruba-or-mellanox.yaml
+    Description: Validates connection to the BGP neighbors of a switch. Check Admin Guide "Check BGP Status and Reset Sessions" for more details on how to fix this issue.
+    Title: Switch BGP Neighbors
+    Meta:
+        desc: Validates connection to the BGP neighbors of a switch.  If this test fails run 'canu validate network bgp --verbose' to see the status of all BGP neighbors.
+        sev: 0
+    bgp_neighbors_established: exit-status: Error: Command execution timed out (20s)
+    bgp_neighbors_established: stdout: Error: Command execution timed out (20s)
+
+
+    Failures/Skipped:
+
+    Title: Switch BGP Neighbors
+    Meta:
+        desc: Validates connection to the BGP neighbors of a switch.  If this test fails run 'canu validate network bgp --verbose' to see the status of all BGP neighbors.
+        sev: 0
+    bgp_neighbors_established: exit-status: Error: Command execution timed out (20s)
+    bgp_neighbors_established: stdout: Error: Command execution timed out (20s)
+
+    Total Duration: 20.001s
+    Count: 2, Failed: 2, Skipped: 0
+    ```
 
     The following command will extract the test totals for the various nodes:
 
     ```bash
     ncn/pit# grep "Total Test" ncn-healthcheck.log
     ```
+    Expected Output -
+    ```text
+    Total Tests: 33, Total Passed: 33, Total Failed: 0, Total Execution Time: 3.4648 seconds
+    Total Tests: 33, Total Passed: 33, Total Failed: 0, Total Execution Time: 2.0456 seconds
+    Total Tests: 33, Total Passed: 33, Total Failed: 0, Total Execution Time: 2.1074 seconds
+    Total Tests: 71, Total Passed: 69, Total Failed: 2, Total Execution Time: 5.3443 seconds
+    Total Tests: 71, Total Passed: 69, Total Failed: 2, Total Execution Time: 5.4488 seconds
+    Total Tests: 75, Total Passed: 73, Total Failed: 2, Total Execution Time: 17.0908 seconds
+    Total Tests: 75, Total Passed: 73, Total Failed: 2, Total Execution Time: 20.0943 seconds
+    Total Tests: 75, Total Passed: 73, Total Failed: 2, Total Execution Time: 20.6710 seconds
+    ``` 
+
 
 1. Run the Kubernetes checks.
 
     ```bash
     ncn/pit# /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks | tee ncn-kubernetes-checks.log
     ```
+    Expected Output - 
+    ```text
+    PIT Node Kubernetes Checks
+    --------------------------
+    Test Name: Kubernetes Nodes in Ready State
+    .....
+    Total Duration: 0.094s
+    Count: 5, Failed: 0, Skipped: 0
+    Test Name: Kubernetes Nodes Have Valid Age
+    .....
+    Total Duration: 0.088s
+    Count: 5, Failed: 0, Skipped: 0
+    Test Name: Ceph CSI Kubernetes Requirements Exist
+    ..........
+    Total Duration: 0.092s
+    Count: 10, Failed: 0, Skipped: 0
+    Master Node Kubernetes Checks
+    -----------------------------
+    Running tests against node ncn-m002
+    Server URL: http://ncn-m002.hmn:8996/ncn-kubernetes-tests-master
+    Result: PASS
+    Test Name: Worker Node ETCDLVM FS Label
+    Description: Validates the ETCDLVM FS label is set up correctly on master nodes. If this test fails, inspect the '/var/log/cloud-init-output.log' to determine why the lvm creation failed.
+    Severity: 0
+    Test Summary: Command: etcdlvm_label_master: exit-status: matches expectation: [0]
+    Execution Time: 0.01895538 seconds
+    Node: ncn-m002
+    <…snip….>
+    Result: PASS
+    Test Name: Kubernetes Pods
+    Description: Kubernetes kube-system namespace pods are running.
+    Severity: 0
+    Test Summary: Command: k8s_verify_cluster: stdout: matches expectation: [/^coredns-.*Running/ /^kube-apiserver-.*Running/ /^kube-controller-manager-.*Running/ /^kube-multus-ds-.*Running/ /^kube-proxy-.*Running/ /^kube-scheduler-.*Running/ /^weave-net-.*Running/]
+    Execution Time: 0.00016398 seconds
+    Node: ncn-w003
+    Total Tests: 28, Total Passed: 28, Total Failed: 0, Total Execution Time: 0.4689 seconds
+
+    ```
 
     The following command will extract the test totals for the various nodes:
 
     ```bash
     ncn/pit# grep "Total Test" ncn-kubernetes-checks.log
+    ```
+    Expected Output  -
+    ```text
+    Total Tests: 30, Total Passed: 30, Total Failed: 0, Total Execution Time: 0.3722 seconds
+    Total Tests: 30, Total Passed: 30, Total Failed: 0, Total Execution Time: 0.4013 seconds
+    Total Tests: 28, Total Passed: 28, Total Failed: 0, Total Execution Time: 0.3876 seconds
+    Total Tests: 28, Total Passed: 28, Total Failed: 0, Total Execution Time: 0.4299 seconds
+    Total Tests: 28, Total Passed: 28, Total Failed: 0, Total Execution Time: 0.4689 seconds
     ```
 
 1. Review results.
@@ -242,13 +371,27 @@ If `ncn-m001` is the PIT node, then run these checks on `ncn-m001`; otherwise ru
 ### 1.2 NCN resource checks (optional)
 
 To dump the NCN uptimes, the node resource consumptions, and/or the list of pods not in a running state, run the following:
+```bash
+ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
+```
+Expected Output -
+```text
+=== Pods yet to reach the running state: ===
+=== kubectl get pods -A -o wide | grep -v "Completed\|Running" ===
+Wed Sep  7 14:09:35 UTC 2022
+NAMESPACE    NAME                          READY   STATUS      RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+services     cray-crus-7c7554f7dd-zmcgq    0/4     Init:0/2    0          7h37m   <none>        ncn-w003   <none>           <none>
+--- WARNING --- not all pods are in a 'Running' or 'Completed' state.
 
+```
+
+<s> ,run the following:
 ```bash
 ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s ncn_uptimes
 ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s node_resource_consumption
 ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
 ```
-
+</s>
 <a name="pet-resource-checks-known-issues"></a>
 
 #### 1.2.1 Known issues with NCN resource checks
@@ -282,7 +425,7 @@ If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-heal
 
 <a name="check-of-system-management-monitoring-tools"></a>
 
-### 1.3 Check of system management monitoring tools
+### 1.3 <s>Check of system management monitoring tools
 
 If all designated prerequisites are met, the availability of system management health services may optionally be validated by accessing the URLs listed in
 [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).
@@ -298,7 +441,7 @@ Information to assist with troubleshooting some of the components mentioned in t
 - [Check BGP Status and Reset Sessions](network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md)
 - [Troubleshoot BGP not Accepting Routes from MetalLB](network/metallb_bgp/Troubleshoot_BGP_not_Accepting_Routes_from_MetalLB.md)
 - [Troubleshoot Services without an Allocated IP Address](network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
-- [Troubleshoot Prometheus Alerts](system_management_health/Troubleshoot_Prometheus_Alerts.md)
+- [Troubleshoot Prometheus Alerts](system_management_health/Troubleshoot_Prometheus_Alerts.md)</s>
 
 <a name="hms-health-checks"></a>
 
@@ -326,6 +469,49 @@ Run the HMS CT tests. This is done by running the `run_hms_ct_tests.sh` script:
 ```bash
 ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
 ```
+Expected Output - 
+```text
+=================================================================
+============  Running HMS CT Smoke Tests... =====================
+=================================================================
+
+=================================================================
+===========  Running HMS CT Functional Tests... =================
+=================================================================
+
+===> CT Functional Test Failed.  See output in /tmp/ct_func_log.txt.
+For troubleshooting and manual steps, see https://github.com/Cray-HPE/docs-csm/blob/main/troubleshooting/hms_ct_manual_run.md.
+
+```
+in ct_func_log - 
+```text
+
+<snip>
+Traceback (most recent call last):
+  File "/usr/lib/python3.8/site-packages/tavern/response/base.py", line 88, in recurse_check_key_match
+    check_keys_match_recursive(expected_block, block, [], strict)
+  File "/usr/lib/python3.8/site-packages/tavern/util/dict_util.py", line 451, in check_keys_match_recursive
+    raise exceptions.KeyMismatchError(full_msg) from e
+tavern.util.exceptions.KeyMismatchError: Structure of returned data was different than expected  - Extra keys in response: {'detail', 'type', 'status', 'title'} - Keys missing from response: {'Ordinal', 'HWInventoryByLocationType', 'NodeLocationInfo', 'Type', 'ID', 'PopulatedFRU', 'Status'} (expected = '{'HWInventoryByLocationType': 'HWInvByLocNode', 'ID': 'None', 'NodeLocationInfo': {'Description': <tavern.util.loader.StrSentinel object at 0x7f6cd754d700>, 'HostName': <tavern.util.loader.StrSentinel object at 0x7f6cd754d280>, 'Id': <tavern.util.loader.StrSentinel object at 0x7f6cd754d3d0>, 'MemorySummary': {'TotalSystemMemoryGiB': <tavern.util.loader.IntSentinel object at 0x7f6cd754d070>}, 'Name': <tavern.util.loader.StrSentinel object at 0x7f6cd754d0a0>, 'ProcessorSummary': {'Count': <tavern.util.loader.IntSentinel object at 0x7f6cd754d6d0>, 'Model': <tavern.util.loader.StrSentinel object at 0x7f6cd754d100>}}, 'Ordinal': <tavern.util.loader.IntSentinel object at 0x7f6cd754d130>, 'PopulatedFRU': {'FRUID': <tavern.util.loader.StrSentinel object at 0x7f6cd754d580>, 'HWInventoryByFRUType': 'HWInvByFRUNode', 'NodeFRUInfo': {'AssetTag': <tavern.util.loader.StrSentinel object at 0x7f6cd754d1f0>, 'BiosVersion': <tavern.util.loader.StrSentinel object at 0x7f6cd754d940>, 'Manufacturer': <tavern.util.loader.StrSentinel object at 0x7f6cd754db20>, 'Model': <tavern.util.loader.StrSentinel object at 0x7f6cd754d3a0>, 'PartNumber': <tavern.util.loader.StrSentinel object at 0x7f6cd754d8b0>, 'SKU': <tavern.util.loader.StrSentinel object at 0x7f6cd754dcd0>, 'SerialNumber': <tavern.util.loader.StrSentinel object at 0x7f6cd754daf0>, 'SystemType': <tavern.util.loader.StrSentinel object at 0x7f6cd754d460>, 'UUID': <tavern.util.loader.StrSentinel object at 0x7f6cd754d0d0>}, 'Subtype': <tavern.util.loader.StrSentinel object at 0x7f6cd754d910>, 'Type': 'Node'}, 'Status': <tavern.util.loader.StrSentinel object at 0x7f6cd754d850>, 'Type': 'Node'}' (type = <class 'dict'>), actual = '{'type': 'about:blank', 'title': 'Not Found', 'detail': 'no such xname.', 'status': 404}' (type = <class 'dict'>))
+
+=========================== short test summary info ============================
+FAILED opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a variety of queries on the Components collection
+FAILED opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_hardware_ncn-functional_remote-functional.tavern.yaml::Query the Hardware collection for Node information
+========================= 2 failed, 35 passed in 6.99s =========================
+FAIL: smd_tavern_api_test ran with failures
+cleaning up...
+'/opt/cray/tests/ncn-functional/hms/hms-smd/smd_tavern_api_test_ncn-functional.sh' exited with status code: 1
+
+##############################################
+
+HMS functional tests ran with 1/4 failures
+
+Additional information about interpreting these test results can be found on ncn-m001 at:
+/usr/share/doc/csm/troubleshooting/interpreting_hms_health_check_results.md
+
+exiting with status code: 1
+
+```
 
 The return value of the script is 0 if all CT tests ran successfully, non-zero
 if not. On CT test failures the script will instruct the admin to look at the
@@ -348,7 +534,31 @@ To perform this comparison execute the `verify_hsm_discovery.py` script on a Kub
 ```bash
 ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
 ```
+Expected Output -
+```text
+HSM Cabinet Summary
+===================
+x3000 (River)
+  Discovered Nodes:           9 (9 Mgmt, 0 Application, 0 Compute)
+  Discovered Node BMCs:       8
+  Discovered Router BMCs:     0
+  Discovered Chassis BMCs:    0
+  Discovered Cab PDU Ctlrs:   0
 
+River Cabinet Checks
+====================
+x3000
+  Nodes: PASS
+  NodeBMCs: WARNING
+    - x3000c0s1b0 - Not found in HSM Components; No mgmt port connection; BMC of mgmt node ncn-m001.
+  RouterBMCs: PASS
+  ChassisBMCs/CMCs: PASS
+  CabinetPDUControllers: PASS
+
+Mountain/Hill Cabinet Checks
+============================
+None Found.
+```
 The output will ideally appear as follows, if there are mismatches these will be displayed in the appropriate section of
 the output. Refer to [2.2.1 Interpreting results](#hms-smd-discovery-validation-interpreting-results) and
 [2.2.2 Known Issues](#hms-smd-discovery-validation-known-issues) below to troubleshoot any mismatched BMCs.
@@ -513,6 +723,27 @@ The following test can be run on any Kubernetes node (any master or worker node,
 ```bash
 ncn# /usr/local/bin/cmsdev test -q all
 ```
+Expected Output -
+```text
+Starting main run, version: 1.3.3, tag: KGoeM
+Starting sub-run, tag: KGoeM-bos
+Ended sub-run, tag: KGoeM-bos (duration: 7.055172319s)
+Starting sub-run, tag: KGoeM-cfs
+Ended sub-run, tag: KGoeM-cfs (duration: 5.009307589s)
+Starting sub-run, tag: KGoeM-conman
+Ended sub-run, tag: KGoeM-conman (duration: 448.448185ms)
+Starting sub-run, tag: KGoeM-crus
+Ended sub-run, tag: KGoeM-crus (duration: 310.540894ms)
+Starting sub-run, tag: KGoeM-ims
+Ended sub-run, tag: KGoeM-ims (duration: 8.466160842s)
+Starting sub-run, tag: KGoeM-tftp
+Ended sub-run, tag: KGoeM-tftp (duration: 2.976220936s)
+Starting sub-run, tag: KGoeM-vcs
+Ended sub-run, tag: KGoeM-vcs (duration: 1.700363873s)
+Ended run, tag: KGoeM (duration: 25.975755469s)
+SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs
+
+```
 
 - The `cmsdev` tool logs to `/opt/cray/tests/cmsdev.log`
 - The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
@@ -578,11 +809,56 @@ On NCNs, the API gateway is accessible on the same networks (CMN and CAN/CHN) an
 
 The gateway tests may be run on any NCN with the `docs-csm` RPM installed. For details on installing the `docs-csm` RPM, see [Check for Latest Documentation](../update_product_stream/index.md#check-for-latest-documentation).
 
+```bash
+ncn# wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
+ncn# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+```
+
 To execute the tests, see [Running Gateway Tests on an NCN Management Node](network/gateway_testing.md#running-gateway-tests-on-an-ncn-management-node).
 
 #### 4.1.3 Gateway health tests from outside the system
 
 To execute the tests, see [Running Gateway Tests on a Device Outside the System](network/gateway_testing.md#running-gateway-tests-on-a-device-outside-the-system).
+
+```bash
+ncn-m002# /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
+```
+Expected Output - 
+```bash
+System domain is gamora.dev.cray.com
+
+Running tests on the NCN
+auth.cmn.gamora.dev.cray.com is reachable
+Token successfully retrieved at https://auth.cmn.gamora.dev.cray.com/keycloak/realms/shasta/protocol/openid-connect/token
+
+Got 404 for https://api.cmn.gamora.dev.cray.com/apis/sls/v1/networks/CHN
+Reachable networks: ['can', 'nmnlb', 'cmn']
+
+Getting token for nmnlb
+api-gw-service-nmn.local is reachable
+Token successfully retrieved at https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token
+
+
+------------- api-gw-service-nmn.local -----------------
+
+<…. Snip…..<
+PASS - [cray-smd]: https://api.can.gamora.dev.cray.com/apis/smd/hsm/v1/service/ready - 404
+PASS - [cray-sts]: https://api.can.gamora.dev.cray.com/apis/sts/healthz - 404
+PASS - [cray-uas-mgr]: https://api.can.gamora.dev.cray.com/apis/uas-mgr/v1/images - 404
+SKIP - [nmdv2-service]: https://api.can.gamora.dev.cray.com/apis/v2/nmd/dumps - virtual service not found
+SKIP - [slingshot-fabric-manager]: https://api.can.gamora.dev.cray.com/apis/fabric-manager/fabric/port-policies - virtual service not found
+SKIP - [sma-telemetry]: https://api.can.gamora.dev.cray.com/apis/sma-telemetry-api/v1/ping - virtual service not found
+
+------------- api.chn.gamora.dev.cray.com -------------------
+api.chn.gamora.dev.cray.com is NOT resolvable
+chn is not reachable (expected)
+
+Getting token for chn
+auth.chn.gamora.dev.cray.com is NOT resolvable
+Could not retrieve token for chn (expected)
+
+Overall Gateway Test Status:  PASS
+```
 
 ### 4.2 Internal SSH access test execution
 
@@ -594,7 +870,65 @@ Execute the tests by running the following command:
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/pyscripts/start.py test_bican_internal
 ```
+Expected Output - 
+```bash
+Going to test from node types ('ncn_master',) to node types ('ncn_master', 'spine_switch') on networks ('can', 'chn', 'cmn', 'nmn', 'nmnlb', 'hmn', 'hmnlb').
+BICAN:CAN detected.
+ncn-m002 password (leave blank and hit Enter if not using password):
+ncn-m003 password (leave blank and hit Enter if not using password):
+sw-spine-001 password (leave blank and hit Enter if not using password):
 
+Testing SSH access:
+  From node type ncn_master, using ncn-m002
+  Over network can (can.gamora.dev.cray.com)
+  To node type ncn_master, using ncn-m003.can.gamora.dev.cray.com
+     Expected to work: False
+                ^^^^ PASSED ^^^^
+<……snip……>
+Testing SSH access:
+  From node type ncn_master, using ncn-m002
+  Over network nmn (nmn.gamora.dev.cray.com)
+  To node type ncn_master, using ncn-m003.nmn.gamora.dev.cray.com
+  Expected to work: True
+          ^^^^ FAILED: not accessible but SHOULD have been accessible ^^^^
+
+
+Traceback (most recent call last):
+  File "/usr/share/doc/csm/scripts/operations/pyscripts/pyscripts/commands/test_bican_internal/test_bican_internal.py", line 192, in test_from_node_type_to_node_type_over_network
+    toNodeSshConnection.connect()
+  File "/usr/share/doc/csm/scripts/operations/pyscripts/pyscripts/core/ssh/ssh_connection.py", line 109, in connect
+    self.__open_connection_dance()
+  File "/usr/share/doc/csm/scripts/operations/pyscripts/pyscripts/core/ssh/ssh_connection.py", line 212, in __open_connection_dance
+    raise CannotLoginException
+pyscripts.core.ssh.ssh_connection.CannotLoginException
+
+
+Testing SSH access:
+  From node type ncn_master, using ncn-m002
+  Over network nmn (nmn.gamora.dev.cray.com)
+  To node type spine_switch
+  Expected to work: False
+             ^^^^ SKIPPED: Please see CASMNET-787 ^^^^
+
+<………snip…………>
+Testing SSH access:
+  From node type ncn_master, using ncn-m002
+  Over network hmnlb (hmnlb.gamora.dev.cray.com)
+  To node type ncn_master, using ncn-m003.hmnlb.gamora.dev.cray.com
+  Expected to work: True
+             ^^^^ PASSED ^^^^
+
+Testing SSH access:
+  From node type ncn_master, using ncn-m002
+  Over network hmnlb (hmnlb.gamora.dev.cray.com)
+  To node type spine_switch, using sw-spine-001.hmnlb.gamora.dev.cray.com
+  Expected to work: False
+            ^^^^ PASSED ^^^^
+
+
+Ran 13 tests in 218.113s. Overall status: FAILED (Passed: 12, Failed: 1)
+
+```
 By default, SSH access will be tested on all relevant networks between master nodes and spine switches.
 It is possible to customize which nodes and networks will be tested. For example, it is possible to include UANs, to exclude
 master nodes, or to exclude the HMN. See the test usage statement for details. The test usage statement is displayed by calling the
@@ -660,7 +994,7 @@ Overall status: PASSED (Passed: 40, Failed: 0)
 
   The `cray-powerdns-manager` reconciliation loop runs every 30 seconds, and the next run will recreate the zone with the correct records.
 
-### 4.3 External SSH access test execution
+### 4.3 <s>External SSH access test execution
 
 The external SSH access tests may be run on any system external to the cluster.
 
@@ -723,6 +1057,7 @@ The external SSH access tests may be run on any system external to the cluster.
     ```text
     Overall status: PASSED (Passed: 20, Failed: 0)
     ```
+    </s>
 
 <a name="booting-csm-barebones-image"></a>
 
@@ -764,8 +1099,22 @@ non-zero on failure.
 ```bash
 ncn# /opt/cray/tests/integration/csm/barebonesImageTest
 ```
-
-A successful run would generate output like the following:
+Expected Output -
+```text
+cray.barebones-boot-test: INFO     Barebones image boot test starting
+cray.barebones-boot-test: INFO       For complete logs look in the file /tmp/cray.barebones-boot-test.log
+cray.barebones-boot-test: ERROR    An unanticipated exception occurred during during barebones image boot test : 'NoneType' object is not subscriptable;
+Traceback (most recent call last):
+  File "/opt/cray/tests/integration/csm/barebonesImageTest", line 495, in <module>
+    run(k8sClientApi)
+  File "/opt/cray/tests/integration/csm/barebonesImageTest", line 101, in run
+    bootImageName, imsEtag, imsPath = get_boot_image_name()
+  File "/opt/cray/tests/integration/csm/barebonesImageTest", line 296, in get_boot_image_name
+    return image['name'], image['link']['etag'],image['link']['path']
+TypeError: 'NoneType' object is not subscriptable
+cray.barebones-boot-test: INFO     For troubleshooting information and manual steps, see https://github.com/Cray-HPE/docs-csm/blob/main/troubleshooting/cms_barebones_image_boot.md
+```
+<s>A successful run would generate output like the following:
 
 ```text
 cray.barebones-boot-test: INFO     Barebones image boot test starting
@@ -775,7 +1124,7 @@ cray.barebones-boot-test: INFO     Starting boot on compute node: x3000c0s10b1n0
 cray.barebones-boot-test: INFO     Found dracut message in console output - success!!!
 cray.barebones-boot-test: INFO     Successfully completed barebones image boot test.
 ```
-
+</s>
 The script will choose an enabled compute node that is listed in the Hardware State Manager (HSM) for
 the test, unless the user passes in a specific node using the `--xname` argument. If a compute node is
 specified but unavailable, an available node will be used instead and a warning will be logged.
@@ -789,6 +1138,12 @@ ncn# /opt/cray/tests/integration/csm/barebonesImageTest --xname x3000c0s10b4n0
 ## 6. UAS/UAI tests
 
 The commands in this section require that the [Cray CLI is configured](#cray-command-line-interface) on nodes where the commands are being executed.
+```bash
+cray init --hostname api-gw-service-nmn.local
+```
+Incase of "Invalid Credentials" issue , Fix -
+
+https://github.com/Cray-HPE/docs-csm/blob/main/operations/security_and_authentication/Keycloak_User_Localization.md#keycloak-user-localization
 
 The procedures below use the CLI as an authorized user and run on two separate node types. The first part runs on the LiveCD node, while the second part runs on a non-LiveCD
 Kubernetes master or worker node.
@@ -816,15 +1171,19 @@ This section can be run on any NCN or the PIT node.
     ```bash
     ncn# cray uas mgr-info list --format toml
     ```
-
-    Expected output looks similar to the following:
+    Expected Output -
+    ```toml
+    service_name = "cray-uas-mgr"
+    version = "1.18.2"
+    ```
+    <s>Expected output looks similar to the following:
 
     ```toml
     service_name = "cray-uas-mgr"
     version = "1.11.5"
     ```
 
-    In this example output, it shows that UAS is installed and running the `1.11.5` version.
+    In this example output, it shows that UAS is installed and running the `1.11.5` version. </s>
 
 1. List UAIs on the system.
 
@@ -846,13 +1205,19 @@ This section can be run on any NCN or the PIT node.
    ```bash
    ncn# cray uas images list --format toml
    ```
+   Expected Output - 
+   ```toml
+   default_image = "artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.7.0"
+   image_list = [ "artifactory.algol60.net/csm-docker/stable/cray-uai-broker:1.7.0", "artifactory.algol60.net/csm-docker/stable/cray-uai-gateway-test:1.7.0", "artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.7.0",]
 
-   Expected output looks similar to the following:
+   ```
+   <s>Expected output looks similar to the following:
 
    ```toml
    default_image = "artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.6.0"
    image_list = [ "artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.6.0", "artifactory.algol60.net/csm-docker/stable/cray-uai-gateway-test:1.6.0", "artifactory.algol60.net/csm-docker/stable/cray-uai-broker:1.6.0",]
    ```
+   </s>
 
    This example output shows that the pre-made end-user UAI images (`artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.6.0`, `artifactory.algol60.net/csm-docker/stable/cray-uai-gateway-test:1.6.0`, and
    `artifactory.algol60.net/csm-docker/stable/cray-uai-broker:1.6.0`) are registered with UAS. This does not necessarily mean these images are installed in the container image registry, but they are configured for use.
@@ -877,8 +1242,25 @@ This procedure must run on a master or worker node (**not the PIT node**).
    ```bash
    ncn# cray uas create --publickey ~/.ssh/id_rsa.pub --format toml
    ```
+   [uai_portmap]
 
-   Expected output looks similar to the following:
+   Expected Output - 
+   ```toml
+   uai_age = "0m"
+   uai_connect_string = "ssh vers@10.102.5.194"
+   uai_host = "ncn-w002"
+   uai_img = "artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.7.0"
+   uai_ip = "10.102.5.194"
+   uai_msg = "ContainerCreating"
+   uai_name = "uai-vers-36e95cc7"
+   uai_status = "Waiting"
+   username = "vers"
+   ```
+
+
+
+   
+   <s>Expected output looks similar to the following:
 
    ```toml
    uai_connect_string = "ssh vers@10.16.234.10"
@@ -892,6 +1274,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
 
    [uai_portmap]
    ```
+   </s>
 
    This has created the UAI and the UAI is currently in the process of initializing and running. The `uai_status` in
    the output from this command may instead be `Waiting`, which is also acceptable.
@@ -907,8 +1290,21 @@ This procedure must run on a master or worker node (**not the PIT node**).
    ```bash
    ncn# cray uas list --format toml
    ```
+   Expected output -
+   ```toml
+   [[results]]
+   uai_age = "5m"
+   uai_connect_string = "ssh vers@10.102.5.194" 
+   uai_host = "ncn-w002"
+   uai_img = "artifactory.algol60.net/csm-docker/stable/cray-uai-sles15sp3:1.7.0"
+   uai_ip = "10.102.5.194"
+   uai_msg = ""
+   uai_name = "uai-vers-36e95cc7"
+   uai_status = "Running: Ready"
+   username = "vers"
+   ```
 
-   Expected output looks similar to the following:
+   <s> Expected output looks similar to the following:
 
    ```toml
    [[results]]
@@ -922,6 +1318,7 @@ This procedure must run on a master or worker node (**not the PIT node**).
    uai_status = "Running: Ready"
    username = "vers"
    ```
+   </s>
 
    If the `uai_status` field is `Running: Ready`, proceed to the next step. Otherwise, wait and repeat this command until that is the case. It normally should not take more than a minute or two.
 
@@ -989,6 +1386,33 @@ The UAI gateway tests are executed by running the following command.
 
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
+```
+Expected Output -
+```bash
+System domain is gamora.dev.cray.com
+User Network on gamora is can
+Got admin client secret
+Creating Gateway Test UAI with image artifactory.algol60.net/csm-docker/stable/cray-uai-gateway-test:1.7.0
+Waiting for uai-vers-6270b710 to be ready
+status = Waiting
+status = Waiting
+status = Waiting
+status = Running: Ready
+
+------------- api.chn.gamora.dev.cray.com -------------------
+
+<……….snip………>
+api.chn.gamora.dev.cray.com is NOT resolvable
+chn is not reachable (expected)
+
+Getting token for chn
+auth.chn.gamora.dev.cray.com is NOT resolvable
+Could not retrieve token for chn (expected)
+
+Overall Gateway Test Status:  PASS
+
+Deleting UAI uai-vers-6270b710
+results = [ "Successfully deleted uai-vers-6270b710",]
 ```
 
 The test will launch a UAI with the `gateway-test image`, execute the gateway tests, and then delete the UAI that was launched.
