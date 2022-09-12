@@ -10,6 +10,8 @@
   - [Functional test failure](#functional-test-failure)
 - [Tavern output](#tavern-output)
 - [Additional troubleshooting](#additional-troubleshooting)
+  - [`run_hms_ct_tests.sh`](#run_hms_ct_testssh)
+    - [`cray-hms-smd-test-functional`](#cray-hms-smd-test-functional)
   - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
     - [`HTTPsGetFailed`](#httpsgetfailed)
     - [`ChildVerificationFailed`](#childverificationfailed)
@@ -391,7 +393,7 @@ If the script fails, this indicates a discovery issue and further troubleshootin
 
 Otherwise, missing compute nodes in HSM with no discovery failures may indicate a problem with a leaf-bmc switch.
 
-(`ncn-mw#`) Verify the leaf-bmc switch is operating as expected.
+(`ncn-mw#`) Check to see if the leaf-bmc switch resolves using the `nslookup` command.
 
 ```bash
 nslookup <leaf-bmc-switch>
@@ -407,6 +409,8 @@ Name:   sw-leaf-bmc-001.nmn
 Address: 10.252.0.4
 ```
 
+(`ncn-mw#`) Verify connectivity to the leaf-bmc switch.
+
 ```bash
 ssh admin@<leaf-bmc-switch>
 ```
@@ -417,7 +421,7 @@ Example output:
 ssh: connect to host sw-leaf-bmc-001 port 22: Connection timed out
 ```
 
-Resolving the problems or configuration issues with the leaf-bmc switch should allow the compute hardware to be discovered successfully.
+Restoring connectivity or resolving configuration issues with the leaf-bmc switch should allow the compute hardware to be discovered successfully.
 
 ### `hsm_discovery_status_test.sh`
 
