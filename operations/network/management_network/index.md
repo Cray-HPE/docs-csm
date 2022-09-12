@@ -103,8 +103,8 @@ See [CSM Automatic Network Utility (CANU)](canu/index.md)
   * Generate configurations for all management switches.
 * [Manual Switch Configurations](manual_switch_config.md)
   * Some configuration needs to be done manually (authentication/SNMP).
-* [Validate SHCD](validate_shcd.md)
-  * Validate the SHCD against the CSM network architecture.
+* <s>[Validate SHCD](validate_shcd.md)
+  * Validate the SHCD against the CSM network architecture.</s>
 
 <a name="products"></a>
 
