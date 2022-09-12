@@ -167,7 +167,7 @@ The configuration payloads, created using HPCM commands and CVT, are used to boo
       yet been rebooted. In addition, rebooting the PIT node and deploying the final NCN successfully requires several CSM
       services to be working properly, so validating this is important.
 
-      See [Validate CSM Health](../operations/validate_csm_health.md).
+      See [Validate CSM Health](../operations/validate_csm_health_pitmode.md).
    <a name="deploy_final_ncn"></a>
 
    1. Deploy final NCN
