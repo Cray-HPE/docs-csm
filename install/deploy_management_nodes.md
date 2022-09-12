@@ -23,9 +23,9 @@ the number of storage and worker nodes.
 1. [Prepare for management node deployment](#1-prepare-for-management-node-deployment)
    1. [Tokens and IPMI password](#11-tokens-and-ipmi-password)
    1. [Ensure time is accurate before Deploying NCNs](#12-ensure-time-is-accurate-before-deploying-ncns)
-1. [Update management node firmware](#2-update-management-node-firmware)
+1. <s>[Update management node firmware](#2-update-management-node-firmware)</s>
 1. [Deploy management nodes](#3-deploy-management-nodes)
-   1. [Deploy workflow](#31-deploy-workflow)
+   1. <s>[Deploy workflow](#31-deploy-workflow)</s>
    1. [Deploy](#32-deploy)
    1. [Check for unused drives on utility storage nodes](#33-check-for-unused-drives-on-utility-storage-nodes)
 1. [Configure after management node deployment](#4-configure-after-management-node-deployment)
@@ -59,6 +59,7 @@ Preparation of the environment must be done before attempting to deploy the mana
       pit# read -s IPMI_PASSWORD
       pit# export IPMI_PASSWORD
       ```
+      password - initial0
 
    1. Set the remaining helper variables.
 
@@ -118,6 +119,16 @@ proceed to step 2.
    ```bash
    pit# /root/bin/configure-ntp.sh
    ```
+   Expected Output - 
+   ```text
+   rtc: 2022-09-06 10:58:25.327445+00:00
+   sys: 2022-09-06 10:58:26.184879+0000
+   200 OK
+   200 OK
+   NEW TIME SETTINGS
+   rtc: 2022-09-06 10:58:56.389962+00:00
+   sys: 2022-09-06 10:58:57.182115+0000
+   ```
 
    This ensures that the PIT is configured with an accurate date/time, which will be propagated to the NCNs during boot.
 
@@ -129,7 +140,7 @@ proceed to step 2.
 
    Then run the commands above to complete the process.
 
-1. Ensure that the current time is set in BIOS for all management NCNs.
+1. <s>Ensure that the current time is set in BIOS for all management NCNs.
 
    Each NCN is booted to the BIOS menu, the date and time are checked, and set to the current UTC time if needed.
 
@@ -197,11 +208,11 @@ proceed to step 2.
       pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off
       ```
 
-   Repeat the above process for each NCN.
+   Repeat the above process for each NCN. </s>
 
 <a name="update_management_node_firmware"></a>
 
-## 2. Update management node firmware
+## 2. <s>Update management node firmware
 
 > All firmware can be found in the HFP package provided with the Shasta release.
 
@@ -248,7 +259,7 @@ firmware requirement before starting.
    > fall through to the boot menu, despite being configure to PXE boot. This
    > behavior will persist until the failing node's CMOS is cleared.
 
-   * See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
+   * See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).</s>
 
 <a name="deploy_management_nodes"></a>
 
@@ -261,7 +272,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
 <a name="deploy-workflow"></a>
 
-### 3.1 Deploy workflow
+### 3.1 <s>Deploy workflow
 
 The configuration workflow described here is intended to help understand the expected path for booting and configuring. The actual steps to
 be performed are in the [Deploy](#deploy) section.
@@ -298,7 +309,7 @@ be performed are in the [Deploy](#deploy) section.
 > ncn-s001# /srv/cray/scripts/common/storage-ceph-cloudinit.sh
 > ```
 >
-> After this script finishes, the secrets will be created and the `cloud-init` script on the master node(s) should complete.
+> After this script finishes, the secrets will be created and the `cloud-init` script on the master node(s) should complete.</s>
 
 <a name="deploy"></a>
 
@@ -330,16 +341,36 @@ be performed are in the [Deploy](#deploy) section.
         ```bash
         pit# /root/bin/set-sqfs-links.sh
         ```
+        Expected Output -
+        ```text
+        Attempting to set all known BMCs (from /etc/conman.conf) to dhcp mode
+        current BMC count: 8
+        new BMC count: 8
+        /root/bin/set-sqfs-links.sh is creating boot directories for each NCN with a BMC that has a lease in /var/lib/misc/dnsmasq.leases
+        Nodes without boot directories will still boot the non-destructive iPXE binary.
+        mkdir: created directory 'ncn-m002'
+        /var/www/ephemeral/data/ncn-m002 /var/www/ephemeral/data
+        '/var/www/boot/script.ipxe' -> './script.ipxe'
+        <… snip …>
+        /var/www/ephemeral/data/ncn-s003 /var/www/ephemeral/data
+        '/var/www/boot/script.ipxe' -> './script.ipxe'
+        'kernel' -> '../ephemeral/data/ceph/5.3.18-150300.59.43-default-0.2.89.kernel'
+        'initrd.img.xz' -> '../ephemeral/data/ceph/initrd.img-0.2.89.xz'
+        'filesystem.squashfs' -> '../ephemeral/data/ceph/secure-storage-ceph-0.2.89.squashfs'
+        /var/www/ephemeral/data
+        done
+
+        ```
 
         > Every NCN except for `ncn-m001` should be included in the output from this script. If that is not the case,
         > then verify that all NCN BMCs are set to use DHCP. See
         > [Set node BMCs to DHCP](prepare_management_nodes.md#set_node_bmcs_to_dhcp). After that is done,
         > re-run the `set-sqfs-links.sh` script.
 
-1. Customize boot scripts for any out-of-baseline NCNs
+1. <s>Customize boot scripts for any out-of-baseline NCNs
 
     * **Worker nodes** with more than two small disks need to make adjustments to [prevent bare-metal `etcd` creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd).
-    * For a brief overview of what is expected, see [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline).
+    * For a brief overview of what is expected, see [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline).</s>
 
 1. Run the BIOS baseline script to apply configurations to BMCs.
 
@@ -351,7 +382,43 @@ be performed are in the [Deploy](#deploy) section.
     ```bash
     pit# /root/bin/bios-baseline.sh
     ```
+    Expected Output - 
+    ```text
+            mkdir: created directory '/var/log/metal/'
+        The running host [ncn-m001-mgmt] will have settings applied last.
+        Verifying 9 iLO/BMCs (non-compute nodes) match BIOS baseline spec.
+        ================================
+        Checking ncn-m002-mgmt ... No BIOS Baseline for (nothing to do): GIGABYTE
+        Skipping ... No baseline settings for ncn-m002-mgmt
+        ================================
+        Checking ncn-m003-mgmt ... No BIOS Baseline for (nothing to do): GIGABYTE
+        Skipping ... No baseline settings for ncn-m003-mgmt
+        ================================
+        Checking ncn-s001-mgmt ... No BIOS Baseline for (nothing to do): GIGABYTE
+        Skipping ... No baseline settings for ncn-s001-mgmt
+        ================================
+        Checking ncn-s002-mgmt ... No BIOS Baseline for (nothing to do): GIGABYTE
+        Skipping ... No baseline settings for ncn-s002-mgmt
+        ================================
+        Checking ncn-s003-mgmt ... No BIOS Baseline for (nothing to do): GIGABYTE
+        Skipping ... No baseline settings for ncn-s003-mgmt
+        ================================
+        Checking ncn-w001-mgmt ... No BIOS Baseline for (nothing to do): GIGABYTE
+        Skipping ... No baseline settings for ncn-w001-mgmt
+        ================================
+        Checking ncn-w002-mgmt ... No BIOS Baseline for (nothing to do): GIGABYTE
+        Skipping ... No baseline settings for ncn-w002-mgmt
+        ================================
+        Checking ncn-w003-mgmt ... No BIOS Baseline for (nothing to do): GIGABYTE
+        Skipping ... No baseline settings for ncn-w003-mgmt
+        ================================
+        Checking (self) ncn-m001-mgmt ... No BIOS Baseline for (nothing to do): GIGABYTE
+        Skipping ... No baseline settings for ncn-m001-mgmt
+        All NCNs are up-to-spec
+        Re-run this script with --check as the first and only argument to validate spec.
+        See logs for reconfigured nodes in /var/log/metal/
 
+    ```
 1. <a name="set-uefi-and-power-off"></a>Set each node to always UEFI Network Boot, and ensure they are powered off
 
     ```bash
@@ -360,7 +427,7 @@ be performed are in the [Deploy](#deploy) section.
     pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
-    > **NOTE:** The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
+    > **NOTE:** <s>The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).</s>
 
 1. Validate that the LiveCD is ready for installing NCNs.
 
@@ -374,11 +441,53 @@ be performed are in the [Deploy](#deploy) section.
       pit# read -s SW_ADMIN_PASSWORD
       pit# export SW_ADMIN_PASSWORD
       ```
-
+      password - !nitial0
    1. Run the LiveCD preflight checks.
 
       ```bash
       pit# csi pit validate --livecd-preflight
+      ```
+      Expected Output - 
+      ```text
+      Result: FAIL
+        Test Name: Firmware and BIOS versions and baseline
+        Description: Validates the correct versions of BIOS and firmware; Validates BIOS settings (when available; dependent on vendor). If this test fails, run "/opt/cray/tests/install/livecd/scripts/check_bios_firmware_versions.sh -b" for more information on the failure. On GigaByte NCNs, a value of "null" may indicate that the BIOS/Firmware needs to be reflashed or that a hard AC power cycle is needed.
+        Severity: 0
+        Test Summary: Command: firmware_bios_versions: exit-status:
+
+        Running LiveCD preflight checks (may take a few minutes to complete)...
+
+        Result: PASS
+        Test Name: Symlinks in Directories
+        Description: Validates the artifact symlinks in the directories in /var/www exist and are valid links to real files.
+        Severity: 0
+        Test Summary: File: /var/www/ncn-s002/filesystem.squashfs: exists: matches expectation: [true]
+        Execution Time: 0.00010511 seconds
+        Node: ncn-m001
+
+        Result: PASS
+
+                 <… snip….>
+        Expectedv
+        <int>: 1
+        to equal
+        <int>: 0
+        Execution Time: 38.85020872 seconds
+        Node: ncn-m001
+
+        Result: FAIL
+        Test Name: Firmware and BIOS versions and baseline
+        Description: Validates the correct versions of BIOS and firmware; Validates BIOS settings (when available; dependent on vendor). If this test fails, run "/opt/cray/tests/install/livecd/scripts/check_bios_firmware_versions.sh -b" for more information on the failure. On GigaByte NCNs, a value of "null" may indicate that the BIOS/Firmware needs to be reflashed or that a hard AC power cycle is needed.
+        Severity: 0
+        Test Summary: Command: firmware_bios_versions: stdout: patterns not found: [!Unsupported]
+        Execution Time: 0.00001254 seconds
+        Node: ncn-m001
+
+        Total Tests: 162, Total Passed: 160, Total Failed: 2, Total Execution Time: 38.8524 seconds
+
+        ERROR: Not all tests passed
+
+
       ```
 
       > Note: Ignore any errors about not being able resolve `arti.dev.cray.com`.
@@ -751,7 +860,7 @@ be performed are in the [Deploy](#deploy) section.
 
     * If it has an LVM volume like above, then it may be in use. In that case, do the option 2 check below to make sure that the drive can be wiped.
 
-#### Option 2
+#### <s>Option 2
 
 1. Log into **each** `ncn-s` node and check for unused drives.
 
@@ -798,7 +907,7 @@ be performed are in the [Deploy](#deploy) section.
     ncn-s# cephadm shell -- ceph-volume lvm create --data /dev/sd<drive to add> --bluestore
     ```
 
-More information can be found at [the `cephadm` reference page](../operations/utility_storage/Cephadm_Reference_Material.md).
+More information can be found at [the `cephadm` reference page](../operations/utility_storage/Cephadm_Reference_Material.md).</s>
 
 <a name="configure_after_management_node_deployment"></a>
 
@@ -837,8 +946,16 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
     ```bash
     pit# kubectl get nodes -o wide
     ```
-
-    Expected output looks similar to the following:
+    Expected Output looks like -
+    ```bash
+        NAME       STATUS   ROLES                  AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION                CONTAINER-RUNTIME
+        ncn-m002   Ready    control-plane,master   55m   v1.20.13   10.252.1.5    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-150300.59.43-default   containerd://1.5.7
+        ncn-m003   Ready    control-plane,master   55m   v1.20.13   10.252.1.6    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-150300.59.43-default   containerd://1.5.7
+        ncn-w001   Ready    <none>                 55m   v1.20.13   10.252.1.10   <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-150300.59.43-default   containerd://1.5.7
+        ncn-w002   Ready    <none>                 55m   v1.20.13   10.252.1.11   <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-150300.59.43-default   containerd://1.5.7
+        ncn-w003   Ready    <none>                 55m   v1.20.13   10.252.1.12   <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-150300.59.43-default   containerd://1.5.7
+    ``` 
+    <s>Expected output looks similar to the following:
 
     ```text
     NAME       STATUS   ROLES                  AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                                                  KERNEL-VERSION         CONTAINER-RUNTIME
@@ -848,6 +965,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
     ncn-w002   Ready    <none>                 2h    v1.20.13   10.252.1.8    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ncn-w003   Ready    <none>                 2h    v1.20.13   10.252.1.9    <none>        SUSE Linux Enterprise High Performance Computing 15 SP3   5.3.18-59.19-default   containerd://1.5.7
     ```
+    </s>
 
 <a name="install-tests"></a>
 
@@ -857,6 +975,60 @@ Run the following commands on the PIT node.
 
 ```bash
 pit# pushd /var/www/ephemeral && ${CSM_RELEASE}/lib/install-goss-tests.sh && popd
+```
+Expected Output looks like - 
+```bash
+        /var/www/ephemeral /var/www/ephemeral/prep/admin
+        canu-1.6.5-1.x86_64.rpm                                                          100%   29MB 142.7MB/s   00:00
+        csm-testing-1.12.36-1.noarch.rpm                                                 100%  115KB 166.2MB/s   00:00
+        goss-servers-1.12.36-1.noarch.rpm                                                100% 9136     6.7MB/s   00:00
+        platform-utils-1.2.10-1.noarch.rpm                                               100%   26KB  27.4MB/s   00:00
+        Preparing...                          ########################################
+        Updating / installing...
+        platform-utils-1.2.10-1               ########################################
+        goss-servers-1.12.36-1                ########################################
+        csm-testing-1.12.36-1                 ########################################
+        canu-1.6.5-1                          ########################################
+        Cleaning up / removing...
+        platform-utils-1.2.9-1                ########################################
+        Warning: The unit file, source configuration file or drop-ins of goss-servers.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+        canu-1.6.5-1.x86_64.rpm                                                          100%   29MB 426.9MB/s   00:00
+        <…snip…>
+
+        The following NEW package is going to be installed:
+          goss-servers
+
+        The following package has no support information from its vendor:
+          goss-servers
+
+        1 new package to install.
+        Overall download size: 8.9 KiB. Already cached: 0 B. After the operation, additional 8.8 KiB will be used.
+        Continue? [y/n/v/...? shows all options] (y): y
+        Retrieving package goss-servers-1.12.36-1.noarch                              (1/1),   8.9 KiB (  8.8 KiB unpacked)
+
+        Checking for file conflicts: ................................................................................[done]
+        (1/1) Installing: goss-servers-1.12.36-1.noarch .............................................................[done]
+        Created symlink /etc/systemd/system/multi-user.target.wants/goss-servers.service → /etc/systemd/system/goss-servers.service.
+        csm-testing-1.12.36-1.noarch
+        Loading repository data...
+        Reading installed packages...
+        Resolving package dependencies...
+
+        The following NEW package is going to be installed:
+          platform-utils
+
+        The following package has no support information from its vendor:
+          platform-utils
+
+        1 new package to install.
+        Overall download size: 26.4 KiB. Already cached: 0 B. After the operation, additional 76.2 KiB will be used.
+        Continue? [y/n/v/...? shows all options] (y): y
+        Retrieving package platform-utils-1.2.10-1.noarch                             (1/1),  26.4 KiB ( 76.2 KiB unpacked)
+
+        Checking for file conflicts: ................................................................................[done]
+        (1/1) Installing: platform-utils-1.2.10-1.noarch ............................................................[done]
+        /var/www/ephemeral/prep/admin
+
 ```
 
 <a name="clean-up-chrony-configurations"></a>
@@ -897,7 +1069,37 @@ Observe the output of the checks. If there are any failures, remediate them.
    ```bash
    pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
+   Expected Output - 
+   ```text
+   Storage Node Automated Tests
+        ----------------------------
+        List of storage NCNs: ncn-s001
+        ncn-s002
+        ncn-s003
 
+        Running tests against node ncn-s001
+        Server URL: http://ncn-s001.hmn:8997/ncn-storage-tests
+
+        Result: PASS
+        Test Name: ceph-common package
+        Description: Check that Ceph is installed
+        Severity: 0
+        Test Summary: Package: ceph-common: installed: matches expectation: [true]
+        Execution Time: 0.00911968 seconds
+        Node: ncn-s001
+        <… snip ..>
+
+        Result: PASS
+        Test Name: ceph -s
+        Description: Check that ceph -s successfully executes
+        Severity: 0
+        Test Summary: Command: ceph_installed: exit-status: matches expectation: [0]
+        Execution Time: 0.45356791 seconds
+        Node: ncn-s003
+
+        Total Tests: 3, Total Passed: 3, Total Failed: 0, Total Execution Time: 0.4538 seconds
+
+   ```
    Once that command has finished, the following will extract the test totals reported for each node:
 
    ```bash
@@ -924,6 +1126,47 @@ Observe the output of the checks. If there are any failures, remediate them.
 
    ```bash
    pit# csi pit validate --k8s | tee csi-pit-validate-k8s.log
+   ```
+   Expected Output-
+   ```text
+   PIT Node Kubernetes Checks
+    --------------------------
+
+    Test Name: Kubernetes Nodes in Ready State
+    .....
+
+    Total Duration: 4.734s
+    Count: 5, Failed: 0, Skipped: 0
+
+    Test Name: Kubernetes Nodes Have Valid Age
+    .....
+
+    Total Duration: 0.087s
+    Count: 5, Failed: 0, Skipped: 0
+
+    Test Name: Ceph CSI Kubernetes Requirements Exist
+    ..........
+
+    Total Duration: 0.094s
+    Count: 10, Failed: 0, Skipped: 0
+
+    Master Node Kubernetes Checks
+    -----------------------------
+
+    Running tests against node ncn-m002
+    Server URL: http://ncn-m002.hmn:8996/ncn-kubernetes-tests-master
+
+    Result: PASS
+    <.. snip..>
+    Result: PASS
+    Test Name: Kubernetes Pod IPs in NMN Pool
+    Description: Correct pods in kube-system namespace exist and are on the right network.
+    Severity: 0
+    Test Summary: Command: check_k8s_pods_ips_in_nmn_pool: stdout: matches expectation: [PASS]
+    Execution Time: 0.00001054 seconds
+    Node: ncn-w003
+
+    Total Tests: 28, Total Passed: 28, Total Failed: 0, Total Execution Time: 0.3874 seconds
    ```
 
    Once that command has finished, the following will extract the test totals reported for each node:
