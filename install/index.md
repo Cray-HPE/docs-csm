@@ -51,9 +51,9 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
 
 ## Details
 
-<s>
-   <a name="validate_shcd"></a>
 
+   <a name="validate_shcd"></a>
+<s>
    1. Validate SHCD
 
       The cabling should be validated between the nodes and the management network switches. The information in the
@@ -65,16 +65,19 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
 
       **Note**: If a reinstall or fresh install of this software release is being done on this system and the management
       network cabling has already been validated, then skip this step and move to
-      [Prepare configuration payload](#prepare_configuration_payload).
+      [Prepare configuration payload](#prepare_configuration_payload).</s>
    <a name="prepare_configuration_payload"></a>
-</s>
+
    1. Prepare configuration payload
 
-      Information gathered from a site survey is needed to feed into the CSM installation process, such as system name,
+      <s>Information gathered from a site survey is needed to feed into the CSM installation process, such as system name,
       system size, site network information for the CAN, site DNS configuration, site NTP configuration, network
       information for the node used to bootstrap the installation. Much of the information about the system hardware
       is encapsulated in the SHCD (Shasta Cabling Diagram), which is a spreadsheet prepared by HPE Cray Manufacturing
-      to assemble the components of the system and connect appropriately labeled cables.
+      to assemble the components of the system and connect appropriately labeled cables.</s>
+      
+      Once the HPCM installation is complete, information gathered from a site survey such as system name, system size, site network information for the CAN, network information for the node is used to prepare the configuration payload.
+The configuration payloads, created using HPCM commands and CVT, are used to bootstrap the CSM installation.
 
       See [Prepare Configuration Payload](prepare_configuration_payload.md)
    <a name="bootstrap_pit_node"></a>
