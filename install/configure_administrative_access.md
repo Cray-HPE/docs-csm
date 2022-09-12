@@ -43,11 +43,11 @@ There are two options to proceed with `cray` CLI authentication:
 
     1. Initialize and Authorize the `cray` CLI on each NCN being used.
 
-        See [Single User Already Configured in Keycloak](../operations/configure_cray_cli.md#single-user-already-configured-in-keycloak)
+        See [Single User Already Configured in Keycloak](../operations/configure_cray_cli.md#single-user-already-configured-in-keycloak).
 
-1. Configure all NCN's with a temporary Keycloak account for the duration of the install.
+1. Configure all NCNs with a temporary Keycloak account for the duration of the install.
 
-    See [Configure All NCNs With Temporary Keycloak User](../operations/configure_cray_cli.md#configure-all-ncns-with-temporary-keycloak-user)
+    See [Configure All NCNs With Temporary Keycloak User](../operations/configure_cray_cli.md#configure-all-ncns-with-temporary-keycloak-user).
 
 ## 2. Set `Management` role on the BMCs of management nodes
 

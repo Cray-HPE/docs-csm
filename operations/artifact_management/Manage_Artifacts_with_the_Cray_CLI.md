@@ -12,14 +12,14 @@ cray auth login
 
 Enter the appropriate credentials when prompted:
 
-```bash
+```text
 Username: adminuser
 Password:
 ```
 
 `Success!` will be returned if the user is successfully authenticated.
 
-For more information on how to initialize and authenticate the `cray` CLI see [Configure the Cray Command Line Interface](../configure_cray_cli.md)
+For more information on how to initialize and authenticate the `cray` CLI, see [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 
 ## View S3 Buckets
 
@@ -31,7 +31,7 @@ cray artifacts buckets list
 
 Example output:
 
-```bash
+```toml
 results = [ "alc", "badger", "benji-backups", "boot-images", "etcd-backup", "fw-update", "ims", "nmd", "sds", "ssm", "vbis", "wlm",]
 ```
 
@@ -39,15 +39,15 @@ results = [ "alc", "badger", "benji-backups", "boot-images", "etcd-backup", "fw-
 
 Use the `cray artifacts create` command to create an object and upload it to S3.
 
-In the example below, S3\_BUCKET is a placeholder for the bucket name, `site/repos/repo.tgz` is the object name, and `/path/to/repo.tgz` is the location of the file to be uploaded to S3 on the local file system.
+In the example below, `S3_BUCKET` is a placeholder for the bucket name, `site/repos/repo.tgz` is the object name, and `/path/to/repo.tgz` is the location of the file to be uploaded to S3 on the local file system.
 
 ```bash
-cray artifacts create S3_BUCKET site/repos/repo.tgz /path/to/repo.tgz
+cray artifacts create S3_BUCKET site/repos/repo.tgz /path/to/repo.tgz --format toml
 ```
 
 Example output:
 
-```bash
+```toml
 artifact = "5c5b6ae5-64da-4212-887a-301087a17099"
 Key = "site/repos/repo.tgz"
 ```
