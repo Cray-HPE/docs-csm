@@ -33,7 +33,7 @@ There are two ways to initialize the `cray` CLI:
 
     Expect the following prompts:
 
-    ```bash
+    ```text
     Overwrite configuration file at: MY_HOME_DIR/.config/cray/configurations/default ? [y/N]: y
     Cray Hostname: api-gw-service-nmn.local
     Username: MY_KEYCLOAK_USER_NAME
@@ -53,7 +53,7 @@ There are two ways to initialize the `cray` CLI:
 
     Expect the following prompts:
 
-    ```bash
+    ```text
     Username: MY_KEYCLOAK_USER_NAME
     Password: MY_PASSWORD
     Success!
