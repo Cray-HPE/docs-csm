@@ -353,8 +353,7 @@ with system-specific customizations.
             -----BEGIN CERTIFICATE-----
             <snip>
             NA==
-            -----END CERTIFICATE-----
-            ---
+            -----END CERTIFICATE--------
             Server certificate
             subject=C = US, ST = WI, L = Chippewa Falls, O = HPE, OU = HPC/MCS, CN = dcldap3.us.cray.com, emailAddress = dcops@hpe.com
 
