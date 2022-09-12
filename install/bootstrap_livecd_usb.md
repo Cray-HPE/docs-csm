@@ -50,7 +50,7 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
    ```bash
    linux# export CSM_RELEASE=csm-x.y.z
-   linux# export SYSTEM_NAME=eniac
+   linux# export SYSTEM_NAME=gamora
    linux# export PITDATA=/mnt/pitdata
    ```
 
@@ -779,7 +779,7 @@ boot order to have the USB device first.
    ```
    <s>bash
    ```bash
-   external# BMC=eniac-ncn-m001-mgmt
+   external# BMC=gamora-ncn-m001-mgmt
    external# read -s IPMI_PASSWORD
    external# export IPMI_PASSWORD ; ipmitool -I lanplus -U root -E -H ${BMC} chassis power status
    ```
@@ -840,7 +840,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 
    ```bash
    external# exit
-   external# PIT_NODE=eniac-ncn-m001
+   external# PIT_NODE=gamora-ncn-m001
    external# scp boot.livecd.*.txt root@${PIT_NODE}:/root
    ```
 
@@ -919,7 +919,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 
    > **Note:**
    >
-   > * The hostname should be similar to `eniac-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#`
+   > * The hostname should be similar to `gamora-ncn-m001-pit` when booted from the LiveCD, but it will be shown as `pit#`
    >   in the documentation command prompts from this point onward.
    > * If the hostname returned by the `hostnamectl` command is `pit`, then set the hostname manually with `hostnamectl`. In that case, do not confuse other administrators
    >   by using the hostname `ncn-m001`. Append the `-pit` suffix, indicating that the node is booted from the LiveCD.
