@@ -36,7 +36,7 @@ When the install is complete, this script can also remove the temporary
 user and uninitialize the cray CLI on all master and worker node in the
 cluster.  Call the script with the '--cleanup' option to do this.
 
-During the cleanup operation, it is possible to initialze the cray CLI with
+During the cleanup operation, it is possible to initialize the cray CLI with
 a different existing Keycloak user account.  To do this add a valid username
 and password to the cleanup call:
 python3 craycli_init.py --cleanup --username MY_USER --password MY_PASSWORD
@@ -738,7 +738,7 @@ def main():
     parser.add_argument("--cleanup", action="store_true", 
         help="Remove craycli initialization and clean up Keycloak user")
     parser.add_argument("--initnode", action="store_true", 
-        help="Initiailze craycli on this host")
+        help="Initialize cray CLI on this host")
     parser.add_argument("--cleanupnode", action="store_true", 
         help="Cleanup craycli on this host")
     parser.add_argument("--debug", action="store_true", 
