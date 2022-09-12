@@ -22,14 +22,14 @@ Use this procedure for either a first-time install or in the event a previous CS
 
    Refer to [Wipe Management Switch Configuration](wipe_mgmt_switches.md).
 
-1. Validate the SHCD.
+1. <s>Validate the SHCD.
 
    The SHCD defines the topology of a Shasta system, this is needed when generating switch configurations.
-   Refer to [Validate the SHCD](validate_shcd.md).
+   Refer to [Validate the SHCD](validate_shcd.md).</s>
 
-1. Validate cabling between SHCD generated data and actual switch configuration.
+1. <s>Validate cabling between SHCD generated data and actual switch configuration.
 
-   Refer to [Validate Cabling](validate_cabling.md).
+   Refer to [Validate Cabling](validate_cabling.md).</s>
 
 1. Generate the switch configuration file(s).
 
