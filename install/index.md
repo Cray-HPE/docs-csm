@@ -90,11 +90,10 @@ The configuration payloads, created using HPCM commands and CVT, are used to boo
       work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.
 
       Use one of these procedures to bootstrap the PIT node from the LiveCD:
-      <s>
-      * [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
+      
+      * <s> [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
          * **Gigabyte BMCs** should not use the RemoteISO method.
-         * **Intel BMCs** should not use the RemoteISO method.
-      </s>
+         * **Intel BMCs** should not use the RemoteISO method. </s>
       * [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
 
       Using the LiveCD USB method requires a USB 3.0 device with at least 1TB of space to create a bootable LiveCD.
