@@ -179,6 +179,7 @@ with system-specific customizations.
     ```bash
     linux# diff ${SITE_INIT}/customizations.yaml ${SITE_INIT}/customizations.yaml.prepassword
     ```
+    ![alt text](siteinit1.png)
 
 1. Validate that REDS/MEDS/RTS credentials.
 
