@@ -130,6 +130,4 @@ of container images spins up with each major CSM release.
 | `csm-docker/stable/k8s.gcr.io/kube-proxy:v1.21.12`                          | Upstream fixes are needed and are not yet available for the `1.21.12` version of Kubernetes included in CSM 1.3. |
 | `csm-dckr/stable/dckr.io/nfvpe/multus:v3.7`                                 | Upstream fixes are needed and are not yet available, however we have engaged with the project to make a reduced-vulnerability version available.|
 | `csm-docker/stable/docker.io/sonatype/nexus3:3.38.0-1`                      | Upstream fixes are needed to the base image in order to address the remaining vulnerabilities. |
-| `csm-docker/stable/docker.io/velero/velero-plugin-for-aws:v1.3.1`           | New version with some fixes available but missed release content freeze in CSM 1.3, will incorporate in future release. |
-| `csm-docker/stable/velero/velero:v1.7.1`                                    | This image, while in Nexus, is not running on the system.  We are planning on upgrading to it in a future version of CSM. |
 | `csm-docker/stable/cray-uas-mgr:1.21.0`                                     | This will be addressed in a future version of CSM. |
