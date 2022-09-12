@@ -26,25 +26,25 @@
 """
 This script will set up a new 'temporary' user in Keycloak and use that
 account to initialize the cray CLI on all master, worker, and storage
-nodes of the kubernetes cluster.  Call the script with the '--run'
+nodes of the Kubernetes cluster.  Call the script with the '--run'
 option to do this.
 
-If any of the nodes do not have the correct python modules installed,
-or do have have kubernetes configured, the script will fail on that node.
+If any of the nodes do not have the correct Python modules installed,
+or do have have Kubernetes configured, the script will fail on that node.
 
 When the install is complete, this script can also remove the temporary
-user and uninitialize the cray CLI on all master and worker node in the
+user and uninitialize the cray CLI on all master and worker nodes in the
 cluster.  Call the script with the '--cleanup' option to do this.
 
 During the cleanup operation, it is possible to initialize the cray CLI with
-a different existing Keycloak user account.  To do this add a valid username
+a different existing Keycloak user account.  To do this, add a valid username
 and password to the cleanup call:
 python3 craycli_init.py --cleanup --username MY_USER --password MY_PASSWORD
 
 The --nodeinit and --nodecleanup options are intended primarily to be called
 automatically during the 'run' or 'cleanup' operations, but may be used on
 individual nodes to replicate the initialization or cleanup operation on
-a specific individual node.  Just ssh to that node, then call it from there.
+that specific individual node.  Just ssh to that node, then call it from there.
 """
 
 import argparse
