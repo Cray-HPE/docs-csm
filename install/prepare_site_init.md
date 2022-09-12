@@ -24,6 +24,13 @@ set and exported. This is normally done as part of the [Bootstrap PIT Node](inde
 ```bash
 linux# echo -e "CSM_PATH=${CSM_PATH}\nCSM_RELEASE=${CSM_RELEASE}\nPITDATA=${PITDATA}\nSYSTEM_NAME=${SYSTEM_NAME}"
 ```
+Expected Output -
+```text
+CSM_PATH=/root/usb/csm-1.2.0
+CSM_RELEASE=csm-1.2.0
+PITDATA=/mnt/pitdata
+SYSTEM_NAME=gamora
+``` 
 
 <a name="background"></a>
 
@@ -54,11 +61,45 @@ installation-centric artifacts, such as:
     ```bash
     linux# mkdir -pv ${SITE_INIT} && pushd ${SITE_INIT}
     ```
+    Expected Output - 
+    ```text
+    mkdir: created directory '/mnt/pitdata/prep/site-init'
+    /mnt/pitdata/prep/site-init /mnt/pitdata/prep/gamora
 
+    ```
 1. Initialize `site-init` from CSM.
 
     ```bash
     linux# ${CSM_PATH}/shasta-cfg/meta/init.sh ${SITE_INIT}
+    ```
+    Expected Output -
+    ```text
+    Source Directory is: /root/usb/csm-1.2.0/shasta-cfg
+    Target Directory is: /mnt/pitdata/prep/site-init
+    Copying docs...
+    Copying scripts/utils...
+    Migrating customizations...
+    Creating sealed secret key-pair if needed...
+    Generating a RSA private key
+    .............................++++
+    .++++
+    writing new private key to '/mnt/pitdata/prep/site-init/certs/sealed_secrets.key'
+    -----
+    Creating git repo at target (if not already a repo)
+    Initializing git repository in /mnt/pitdata/prep/site-init
+    hint: Using 'master' as the name for the initial branch. This default branch name
+    hint: is subject to change. To configure the initial branch name to use in all
+    hint: of your new repositories, which will suppress this warning, call:
+    hint:
+    hint:   git config --global init.defaultBranch <name>
+    hint:
+    hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+    hint: 'development'. The just-created branch can be renamed via this command:
+    hint:
+    hint:   git branch -m <name>
+    Initialized empty Git repository in /mnt/pitdata/prep/site-init/.git/
+
+    **** IMPORTANT: Review and update /mnt/pitdata/prep/site-init/customizations.yaml and introduce custom edits (if applicable). ****
     ```
 
 1. Set an alias to the `yq` tool for use in these procedures.
@@ -154,6 +195,22 @@ with system-specific customizations.
         ```bash
         linux# yq read ${SITE_INIT}/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_reds_credentials.generate.data[*].args.value' | jq
         ```
+        Expected Output-
+        ```text
+        <snip>
+        {
+         "Cray": {
+         "Username": "root",
+         "Password": "initial0"
+          }
+        }
+        {
+         "SNMPUsername": "testuser",
+         "SNMPAuthPassword": "testpass1",
+         "SNMPPrivPassword": "testpass2"
+        }
+        <snip>
+        ```
 
     1. Validate MEDS credentials.
 
@@ -162,6 +219,16 @@ with system-specific customizations.
         ```bash
         linux# yq read ${SITE_INIT}/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_meds_credentials.generate.data[0].args.value' | jq
         ```
+        Extected Output - 
+        ```text
+        <snip>
+        {
+         "Username": "root",
+         "Password": "initial0"
+        }
+        <snip>
+        ```
+
 
     1. Validate RTS credentials.
 
@@ -169,6 +236,19 @@ with system-specific customizations.
 
         ```bash
         linux# yq read ${SITE_INIT}/customizations.yaml 'spec.kubernetes.sealed_secrets.cray_hms_rts_credentials.generate.data[*].args.value' | jq
+        ```
+        Expected Output - 
+        ```text
+        <snip>
+        {
+          "Username": "admn",
+          "Password": "admn"
+        }
+        {
+          "Username": "root",
+          "Password": "initial0"
+        }
+        <snip>
         ```
 
 1. To customize the PKI Certificate Authority (CA) used by the platform, see
@@ -183,9 +263,11 @@ with system-specific customizations.
        In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
 
        ```bash
-       linux# LDAP=dcldap2.us.cray.com
+       linux# LDAP=dcldap3.us.cray.com
        linux# PORT=636
        ```
+       NOTE: if system's IP address is even use dcldap2 else use dcldap3 
+
 
     1. Update the `cray-keycloak` sealed secret value if LDAP requires TLS.
 
@@ -208,6 +290,36 @@ with system-specific customizations.
            ```bash
            linux# ${CSM_PATH}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim
            ```
+           Expected Output:
+           ```text
+           + command -v podman
+            + for conf in graphRoot graphDriverName runRoot
+            ++ echo graphRoot
+            ++ tr '[:upper:]' '[:lower:]'
+            + conf_lc=graphroot
+            ++ podman info -f json
+            ++ jq -r .store.graphRoot
+            WARN[0000] Error validating CNI config file /etc/cni/net.d/00-multus.conf   : [failed to find plugin "multus" in path [/usr/lib/cni]]
+            + conf_val=/var/lib/containers/storage
+            + '[' /var/lib/containers/storage == null ']'
+            + declare graphroot=/var/lib/containers/storage
+            + for conf in graphRoot graphDriverName runRoot
+            <snip>
+            + podman run --rm --network none --privileged --ulimit=host -v /var/lib/containers/storage:/var/lib/containers/storage -v /root/usb/csm-1.2.0/docker:/image:ro docker.io/library/skopeo:csm-1.2.0 copy dir:/image/artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim containers-storage:artifactory.algol60.net/csmdocker/stable/docker.io/libr ary/openjdk:11-jre-slim
+            WARN[0000] Error validating CNI config file /etc/cni/net.d/00-multus.conf : [failed to find plugin "multus" in path [/usr/lib/cni]]
+            WARN[0000] Path "/etc/zypp/credentials.d/SCCcredentials" from "/etc/containers/mounts.conf" doesn't exist, skipping
+            Getting image source signatures
+            Copying blob sha256:d7bfe07ed8476565a440c2113cc64d7c0409dba8ef761fb3ec019d7e6b5952df
+            Copying blob sha256:ca882cef2bfe794b77617b50cb057523fa9822db75a6a3f8e69690c0da62182b
+            Copying blob sha256:8e3ea981993cebcb2cd41d79f593d8ec307e3faa3523f1f8698ef0d7fe125f1d
+            Copying blob sha256:4cbe6bf389345e3e77b72954b0280d2fecdf7ec0093a6d8bec5c3d4ea62afcc0
+            Copying blob sha256:91cb1de271d6f5c8881bddc559d9bf8f9827e0848bc62ef5451a4ac744ac23ae
+            Copying config sha256:6e6be590b0c104e58b4e95a37663045d90aa09f2d52cbc62f6ba09f47246722b
+            Writing manifest to image destination
+            Storing signatures
+
+           ```
+           
 
         1. Get the issuer certificate.
 
@@ -216,6 +328,57 @@ with system-specific customizations.
 
             ```bash
             linux# openssl s_client -showcerts -connect ${LDAP}:${PORT} </dev/null
+            ```
+            Expected Output - 
+            ```bash
+            CONNECTED(00000003)
+            depth=1 C = US, ST = WI, O = HPE, OU = HPC/MCS, CN = Data Center, emailAddress = dcops@hpe.com
+            verify error:num=19:self signed certificate in certificate chain
+            verify return:1
+            depth=1 C = US, ST = WI, O = HPE, OU = HPC/MCS, CN = Data Center, emailAddress = dcops@hpe.com
+            verify return:1
+            depth=0 C = US, ST = WI, L = Chippewa Falls, O = HPE, OU = HPC/MCS, CN = dcldap3.us.cray.com, emailAddress = dcops@hpe.com
+            verify return:1
+            ---
+            Certificate chain
+            0 s:C = US, ST = WI, L = Chippewa Falls, O = HPE, OU = HPC/MCS, CN = dcldap3.us.cray.com, emailAddress = dcops@hpe.com
+               i:C = US, ST = WI, O = HPE, OU = HPC/MCS, CN = Data Center, emailAddress = dcops@hpe.com
+            -----BEGIN CERTIFICATE-----
+            MIIEBzCCAu+gAwIBAgIUYxrG/PrMcmIzDuJ+U1Gh8hpsU9owDQYJKoZIhvcNAQEL
+            <snip>
+            LHdSHZhZtCuExCF3bCO+zJkvA6S1tazzYpEq
+            -----END CERTIFICATE-----
+            1 s:C = US, ST = WI, O = HPE, OU = HPC/MCS, CN = Data Center, emailAddress = dcops@hpe.com
+               i:C = US, ST = WI, O = HPE, OU = HPC/MCS, CN = Data Center, emailAddress = dcops@hpe.com
+            -----BEGIN CERTIFICATE-----
+            <snip>
+            NA==
+            -----END CERTIFICATE-----
+            ---
+            Server certificate
+            subject=C = US, ST = WI, L = Chippewa Falls, O = HPE, OU = HPC/MCS, CN = dcldap3.us.cray.com, emailAddress = dcops@hpe.com
+
+            issuer=C = US, ST = WI, O = HPE, OU = HPC/MCS, CN = Data Center, emailAddress = dcops@hpe.com
+
+            ---
+            No client certificate CA names sent
+            Peer signing digest: SHA256
+            Peer signature type: RSA-PSS
+            Server Temp Key: X25519, 253 bits
+            ---
+            SSL handshake has read 2557 bytes and written 401 bytes
+            Verification error: self signed certificate in certificate chain
+            ---
+            New, TLSv1.3, Cipher is TLS_AES_256_GCM_SHA384
+            Server public key is 2048 bit
+            Secure Renegotiation IS NOT supported
+            Compression: NONE
+            Expansion: NONE
+            No ALPN negotiated
+            Early data was not sent
+            Verify return code: 19 (self signed certificate in certificate chain)
+            ---
+            DONE
             ```
 
         1. Enter the issuer's certificate into `cacert.pem`.
@@ -303,7 +466,14 @@ with system-specific customizations.
                     -importcert -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca \
                     -keystore /data/certs.jks -storepass password -noprompt
             ```
+            Exected Output - 
+            ```text
+            WARN[0000] Error validating CNI config file /etc/cni/net.d/00-multus.conf                                                                                : [failed to find plugin "multus" in path [/usr/lib/cni]]
+            WARN[0000] Path "/etc/zypp/credentials.d/SCCcredentials" from "/etc/containers/mounts.conf" doesn't exist, skipping
 
+            Certificate was added to keystore
+
+            ```
         1. Create `certs.jks.b64` by base64 encoding `certs.jks`.
 
             ```bash
@@ -357,7 +527,7 @@ with system-specific customizations.
                - type: static
                    args:
                    name: ldap_connection_url
-                   value: ldaps://dcldap2.us.cray.com
+                   value: ldaps://dcldap3.us.cray.com
            ```
 
     1. Configure the `ldapSearchBase` and `localRoleAssignments` settings for
@@ -418,7 +588,7 @@ with system-specific customizations.
            ldapSearchBase: dc=dcldap,dc=dit
            ```
 
-1. Configure the Unbound DNS resolver (if needed).
+1. <s>Configure the Unbound DNS resolver (if needed).
 
     **Important:** If access to a site DNS server is required **and** this DNS server was specified to `csi` using the `site-dns` option (either on the command line or in the `system_config.yaml` file),
     **then no further action is required and this step should be skipped**.
@@ -462,24 +632,24 @@ with system-specific customizations.
         domain_name: '{{ network.dns.external }}'
         ```
 
-        > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
+        > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.</s>
 
-1. (Optional) Configure PowerDNS zone transfer and DNSSEC.
+1. <s>(Optional) Configure PowerDNS zone transfer and DNSSEC.
 
    * If zone transfer is to be configured review `customizations.yaml` and ensure the `primary_server`, `secondary_servers`, and `notify_zones` values are set correctly.
 
    * If DNSSEC is to be used then add the desired keys into the `dnssec` SealedSecret.
 
-   See the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
+   See the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.</s>
 
    <a name="configure-prometheus-snmp-exporter"></a>
 
-1. (Optional) Configure Prometheus SNMP Exporter.
+1. <s>(Optional) Configure Prometheus SNMP Exporter.
 
    The Prometheus SNMP exporter needs to be configured with a list of management network switches to scrape metrics from in
    order to populate the System Health Service Grafana dashboards.
 
-   See [Prometheus SNMP Exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.
+   See [Prometheus SNMP Exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.</s>
 
 <a name="generate-sealed-secrets"></a>
 
@@ -496,6 +666,44 @@ encrypted.
 
     ```bash
     linux# ${CSM_PATH}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5
+    ```
+    Expected Output-
+    ```text
+    /docker.io/zeromq/zeromq:v4.0.5
+        + command -v podman
+        + for conf in graphRoot graphDriverName runRoot
+        ++ echo graphRoot
+        ++ tr '[:upper:]' '[:lower:]'
+        + conf_lc=graphroot
+        ++ podman info -f json
+        ++ jq -r .store.graphRoot
+        WARN[0000] Error validating CNI config file /etc/cni/net.d/00-multus.conf: [failed to find plugin "multus" in path [/usr/lib/cni]]
+        + conf_val=/var/lib/containers/storage
+        + '[' /var/lib/containers/storage == null ']'
+        + declare graphroot=/var/lib/containers/storage
+        + for conf in graphRoot graphDriverName runRoot
+        ++ echo graphDriverName
+        ++ tr '[:upper:]' '[:lower:]'
+        + conf_lc=graphdrivername
+        ++ podman info -f json
+        ++ jq -r .store.graphDriverName
+        WARN[0000] Error validating CNI config file /etc/cni/net.d/00-multus.conf: [failed to find plugin "multus" in path [/usr/lib/cni]]
+        + conf_val=overlay
+        <………….snip……………..>
+
+
+        WARN[0000] Error validating CNI config file /etc/cni/net.d/00-multus.conf: [failed to find plugin "multus" in path [/usr/lib/cni]]
+        WARN[0000] Path "/etc/zypp/credentials.d/SCCcredentials" from "/etc/containers/mounts.conf" doesn't exist, skipping
+        Getting image source signatures
+        Copying blob sha256:d7bfe07ed8476565a440c2113cc64d7c0409dba8ef761fb3ec019d7e6b5952df
+        Copying blob sha256:cfcdf321d776e1b4ab82fe5e954d0e401a4fff42601f62f4041f858fd1ea71b5
+        Copying blob sha256:8dc2d8c3c5111994f128f0bcf24b56c312377eb3a5ed27410ebe0a9d95dd94ad
+        Copying blob sha256:358ce8021a9af29076af812381b717d97e5fe4afeee2c5448bc4dc60b403e202
+        Copying blob sha256:a35579dbc4b84339735e78f5d225f1f82c47319f43881e51083fb092a0c91567
+        Copying config sha256:8199c43b70659724411b10f6e431125a36d862e97c842c1ca098cdb02934a346
+        Writing manifest to image destination
+        Storing signatures
+
     ```
 
 1. Re-encrypt existing secrets.
@@ -550,7 +758,7 @@ encrypted.
 
 <a name="version-control-site-init-files"></a>
 
-## 5. Version Control `Site Init` Files
+## 5. <s>Version Control `Site Init` Files
 
 Setup `site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
@@ -600,7 +808,7 @@ It is **strongly recommended** that the `site-init` repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
 `master` branch to a corresponding remote branch.
 
-<a name="customer-specific-customizations"></a>
+<a name="customer-specific-customizations"></a></s>
 
 ## 6. Customer-Specific Customizations
 
