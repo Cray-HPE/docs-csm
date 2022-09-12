@@ -31,23 +31,31 @@ CLI configuration needs to be authorized for administrative actions.
 
 There are two options to proceed with `cray` CLI authentication:
 
-1. Manually configure the `cray` CLI with a valid Keycloak account.
+- [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-Keycloak-account)
+- [Manual configuration](#manual configuration)
 
-    1. Configure Keycloak account
-        Upcoming steps in the installation workflow require an account to be configured in Keycloak for
-        authentication. This can be either a local Keycloak account or an external Identity Provider (IdP),
-        such as LDAP. Having an account in Keycloak with administrative credentials enables the use of many
-        management services via the `cray` command.
+### Automatic configuration using temporary Keycloak account
 
-        See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md).
+Configure all NCNs with a temporary Keycloak account for the duration of the install.
 
-    1. Initialize and Authorize the `cray` CLI on each NCN being used.
+See [Configure All NCNs With Temporary Keycloak User](../operations/configure_cray_cli.md#configure-all-ncns-with-temporary-keycloak-user).
 
-        See [Single User Already Configured in Keycloak](../operations/configure_cray_cli.md#single-user-already-configured-in-keycloak).
+### Manual configuration
 
-1. Configure all NCNs with a temporary Keycloak account for the duration of the install.
+Manually configure the `cray` CLI with a valid Keycloak account using the following steps:
 
-    See [Configure All NCNs With Temporary Keycloak User](../operations/configure_cray_cli.md#configure-all-ncns-with-temporary-keycloak-user).
+1. Configure Keycloak account
+
+    Upcoming steps in the installation workflow require an account to be configured in Keycloak for
+    authentication. This can be either a local Keycloak account or an external Identity Provider (IdP),
+    such as LDAP. Having an account in Keycloak with administrative credentials enables the use of many
+    management services via the `cray` command.
+
+    See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md).
+
+1. Initialize and authorize the `cray` CLI on each NCN being used.
+
+    See [Single User Already Configured in Keycloak](../operations/configure_cray_cli.md#single-user-already-configured-in-keycloak).
 
 ## 2. Set `Management` role on the BMCs of management nodes
 
