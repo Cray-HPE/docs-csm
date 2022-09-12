@@ -7,27 +7,27 @@ Non-compute nodes can boot from two sources:
 
 ## Topics
 
-- [Determine the current boot order](#determine-the-current-boot-order)
+- <s>[Determine the current boot order](#determine-the-current-boot-order)
 - [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
 - [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
 - [Set BMCs to DHCP](#set-bmcs-to-dhcp)
-- [Boot order overview](#boot-order-overview)
+- [Boot order overview](#boot-order-overview)</s>
 - [Setting boot order](#setting-boot-order)
 - [Trimming boot order](#trimming-boot-order)
-- [Example boot orders](#example-boot-orders)
+- <s>[Example boot orders](#example-boot-orders)
 - [Reverting changes](#reverting-changes)
-- [Locating USB device](#locating-usb-device)
+- [Locating USB device](#locating-usb-device)</s>
 
-## Determine the current boot order
+## <s>Determine the current boot order
 
 Under normal operations, the NCNs use the following boot order:
 
 1. PXE (to ensure that the NCN is booting with desired images and configuration)
-1. Disk (fallback in the event that PXE services are unavailable)
+1. Disk (fallback in the event that PXE services are unavailable)</s>
 
 <a name="reasons-to-change-the-bootorder"></a>
 
-## Reasons to change the boot order after CSM install
+## <s>Reasons to change the boot order after CSM install
 
 After the CSM install is complete, it is usually not necessary to change the boot order. Having PXE first and disk as a fallback works in the majority of situations.
 
@@ -35,9 +35,9 @@ It may be desirable to change the boot order under these circumstances:
 
 - Testing disk-backed booting
 - Booting from a USB or remote ISO
-- Testing or deploying other customizations
+- Testing or deploying other customizations</s>
 
-## Determine if NCNs booted via disk or PXE
+## <s>Determine if NCNs booted via disk or PXE
 
 There are two different methods for determining whether a management node is booted using disk or
 PXE. The method to use will vary depending on the system environment.
@@ -91,8 +91,9 @@ PXE. The method to use will vary depending on the system environment.
     Boot0020* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
     Boot0021* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
     ```
+    </s>
 
-## Set BMCs to DHCP
+## <s>Set BMCs to DHCP
 
 When reinstalling a system, the BMCs for the NCNs may be set to static IP addressing. The `/var/lib/misc/dnsmasq.leases` file is checked when setting up the symlinks for the
 artifacts each node needs to boot. So if the BMCs are set to static, those artifacts will not get set up correctly. Set the BMCs back to DHCP by using a command such as:
@@ -115,16 +116,17 @@ ncn# for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' )
          ipmitool -U "${USERNAME}" -I lanplus -H "${h}" -E mc reset cold
      done
 ```
+</s>
 
 <a name="set-boot-order"></a>
 
-## Boot order overview
+## <s>Boot order overview
 
 - `ipmitool` can set and edit boot order; it works better for some vendors based on their BMC implementation
 - `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
 > **NOTE:** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
-> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-image-build/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).
+> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-image-build/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).</s>
 
 <a name="setting-order"></a>
 
@@ -145,6 +147,12 @@ The commands are the same for all hardware vendors, except where noted.
         ```bash
         ncn/pit# efibootmgr | grep -iP '(pxe ipv?4.*adapter)' | tee /tmp/bbs1
         ```
+        Expected Output -
+        ```text
+        Boot0007* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+        Boot0009* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+
+        ```
 
     - Hewlett-Packard Enterprise
 
@@ -163,18 +171,28 @@ The commands are the same for all hardware vendors, except where noted.
     ```bash
     ncn/pit# efibootmgr | grep -i cray | tee /tmp/bbs2
     ```
+    expected output - 
+    ```text
+    Boot0000  CRAY UEFI OS 0
+    Boot0002  CRAY UEFI OS 1
+    ```
 
 1. Set the boot order to first PXE boot, with disk boot as the fallback option.
 
     ```bash
     ncn/pit# efibootmgr -o $(cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | tr -t '\n' ',' | sed 's/,$//') | grep -i bootorder
     ```
+    Expected Output - 
+    ```text
+    BootOrder: 0007,0009,0000,0002
+    ```
 
-1. Set next boot entry.
+1. <s>Set next boot entry.
 
     ```bash
     ncn/pit# efibootmgr -n <desired_next_boot_device>
     ```
+    </s>
 
 1. Set all of the desired boot options to be active.
 
@@ -201,7 +219,27 @@ In this case, the instructions are the same regardless of node type (management,
 
         ```bash
         ncn/pit# efibootmgr | grep -ivP '(pxe ipv?4.*)' | grep -iP '(adapter|connection|nvme|sata)' | tee /tmp/rbbs1
+        ```
+        Expected Output - 
+        ```text
+        Boot000D* UEFI: HTTP IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+        Boot000E* UEFI: HTTP IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+        Boot000F* UEFI: HTTP IP4 Intel(R) I350 Gigabit Network Connection
+        Boot0011* UEFI: HTTP IP4 Intel(R) I350 Gigabit Network Connection
+        Boot0013* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+        Boot0014* UEFI: PXE IP6 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+        Boot0015* UEFI: PXE IP6 Intel(R) I350 Gigabit Network Connection
+        Boot0016* UEFI: PXE IP6 Intel(R) I350 Gigabit Network Connection
+        ```
+        second command - 
+        ```
         ncn/pit# efibootmgr | grep -iP '(pxe ipv?4.*)' | grep -i connection | tee /tmp/rbbs2
+        ```
+        Expected Output - 
+        ```text
+        Boot0010* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+        Boot0012* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+
         ```
 
     - Hewlett-Packard Enterprise

@@ -13,7 +13,7 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
 1. [Reboot](#4-reboot)
 1. [Enable NCN disk wiping safeguard](#5-enable-ncn-disk-wiping-safeguard)
 1. [Clean up `chrony` configurations](#6-clean-up-chrony-configurations)
-1. [Configure DNS and NTP on each BMC](#7-configure-dns-and-ntp-on-each-bmc)
+1. [<s>Configure DNS and NTP on each BMC](#7-configure-dns-and-ntp-on-each-bmc)</s>
 1. [Next topic](#8-next-topic)
 
 <a name="required-services"></a>
@@ -31,6 +31,19 @@ and ready for reboot of the LiveCD:
 * `cray-ipxe`
 * `cray-sls`
 * `cray-tftp`
+
+check all services listed above. Example - 
+```bash
+pit# kubectl get pods -A|grep cray-bss
+services            cray-bss-7f9f89fd98-jtghx                                         2/2     Running     0          22h
+services            cray-bss-7f9f89fd98-nsbhm                                         2/2     Running     0          22h
+services            cray-bss-7f9f89fd98-sf7xp                                         2/2     Running     0          22h
+services            cray-bss-etcd-2266jchlzq                                          1/1     Running     0          22h
+services            cray-bss-etcd-dnxnn8hpwb                                          1/1     Running     0          22h
+services            cray-bss-etcd-vvtkvkhhmv                                          1/1     Running     0          22h
+services            cray-bss-wait-for-etcd-1-fm7cn                                    0/1     Completed   0          22h
+
+```
 
 <a name="notice-of-danger"></a>
 
@@ -107,6 +120,11 @@ The steps in this section load hand-off data before a later procedure reboots th
     ```bash
     pit# echo "CSM_RELEASE=${CSM_RELEASE} CSM_PATH=${CSM_PATH}"
     ```
+    Expected Output - 
+    ```bash
+    CSM_RELEASE=csm-1.2.0 CSM_PATH=/var/www/ephemeral/csm-1.2.0
+    ```
+
 
 1. <a name="ncn-boot-artifacts-hand-off"></a>Upload NCN boot artifacts into S3.
 
@@ -123,6 +141,26 @@ The steps in this section load hand-off data before a later procedure reboots th
                 --ceph-kernel-path $cephdir/*.kernel \
                 --ceph-initrd-path $cephdir/initrd.img*.xz \
                 --ceph-squashfs-path $cephdir/secure-*.squashfs
+        ```
+        Expected Output - 
+        ```text
+        Uploading NCN images into S3.
+        Successfully created ncn-images bucket.
+        Uploading file /var/www/ephemeral/data/k8s/5.3.18-150300.59.43-default-0.2.89.kernel to S3 at s3://ncn-images/k8s/0.2.89/kernel...
+        Successfully uploaded K8s kernel.
+        Uploading file /var/www/ephemeral/data/k8s/initrd.img-0.2.89.xz to S3 at s3://ncn-images/k8s/0.2.89/initrd...
+        Successfully uploaded K8s initrd.
+        Uploading file /var/www/ephemeral/data/k8s/secure-kubernetes-0.2.89.squashfs to S3 at s3://ncn-images/k8s/0.2.89/filesystem.squashfs...
+        Successfully uploaded K8s squash FS.
+        Uploading file /var/www/ephemeral/data/ceph/5.3.18-150300.59.43-default-0.2.89.kernel to S3 at s3://ncn-images/ceph/0.2.89/kernel...
+        Successfully uploaded CEPH kernel.
+        Uploading file /var/www/ephemeral/data/ceph/initrd.img-0.2.89.xz to S3 at s3://ncn-images/ceph/0.2.89/initrd...
+        Successfully uploaded CEPH initrd.
+        Uploading file /var/www/ephemeral/data/ceph/secure-storage-ceph-0.2.89.squashfs to S3 at s3://ncn-images/ceph/0.2.89/filesystem.squashfs...
+        Successfully uploaded CEPH squash FS
+        Image versions uploaded:
+        Kubernetes:     0.2.89
+        CEPH:           0.2.89
         ```
 
         The end of the command output contains a block similar to this:
@@ -145,11 +183,55 @@ The steps in this section load hand-off data before a later procedure reboots th
     ```bash
     pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
     ```
+    Expected Output - 
+    ```text
+    2022/09/08 05:05:02 Getting management NCNs from SLS...
+    2022/09/08 05:05:02 Done getting management NCNs from SLS.
+    2022/09/08 05:05:02 Building BSS metadata for NCNs...
+    Enter root password for NCNs:
+    2022/09/08 05:05:09 Connecting to ncn-s002...
+    2022/09/08 05:05:09 Creating session to 10.252.1.8:22...
+    2022/09/08 05:05:09 Creating session to 10.252.1.8:22...
+    2022/09/08 05:05:09 Creating session to 10.252.1.8:22...
+    2022/09/08 05:05:09 Creating session to 10.252.1.8:22...
+    2022/09/08 05:05:09 Successfully POST EthernetInterfaces entry for x3000c0s15b0n0:
+    {
+            "ID": "b8599f1dd7f2",
+            "Description": "Bond0 - bond0.nmn0",
+            "MACAddress": "b8599f1dd7f2",
+            "IPAddress": "10.252.1.8",
+            "LastUpdate": "",
+            "ComponentID": "x3000c0s15b0n0",
+            "Type": "Node"
+    }
+    2022/09/08 05:05:19 Successfully PATCH EthernetInterfaces entry for x3000c0s7b0n0:
+    {
+            "ID": "98039bb42763",
+            "Description": "Ethernet Interface Lan3",
+            "MACAddress": "98:03:9b:b4:27:63",
+            "IPAddress": "",
+            "LastUpdate": "2022-09-07T06:29:57.092069Z",
+            "ComponentID": "x3000c0s7b0n0",
+            "Type": "Node"
+    }
+    <snip>
+    2022/09/08 05:05:19 Done building BSS metadata for NCNs.
+    2022/09/08 05:05:19 Transferring global cloud-init metadata to BSS...
+    2022/09/08 05:05:19 Successfully PUT BSS entry for Global
+    2022/09/08 05:05:19 Done transferring global cloud-init metadata to BSS.
+
+    ```
 
 1. Patch the metadata for the Ceph nodes to have the correct run commands.
 
     ```bash
     pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+    ```
+    Expected Output - 
+    ```text
+    BSS entry for x3000c0s13b0n0/ncn-s001 patched.
+    BSS entry for x3000c0s15b0n0/ncn-s002 patched.
+    BSS entry for x3000c0s17b0n0/ncn-s003 patched.
     ```
 
 1. Ensure that the DNS server value is correctly set to point toward Unbound at `10.92.100.225` (NMN) and `10.94.100.225` (HMN).
@@ -157,7 +239,15 @@ The steps in this section load hand-off data before a later procedure reboots th
     ```bash
     pit# csi handoff bss-update-cloud-init --set meta-data.dns-server="10.92.100.225 10.94.100.225" --limit Global
     ```
+    Expected Output - 
+    ```text
+    2022/09/08 05:07:52 Getting management NCNs from SLS...
+    2022/09/08 05:07:52 Done getting management NCNs from SLS.
+    2022/09/08 05:07:52 Updating NCN cloud-init parameters...
+    2022/09/08 05:07:52 Successfully PUT BSS entry for Global
+    2022/09/08 05:07:52 Done updating NCN cloud-init parameters.
 
+    ```
 1. Preserve logs and configuration files if desired (optional).
 
     After the PIT node is redeployed, **all files on its local drives will be lost**. It is recommended to retain some of the log files and
@@ -227,6 +317,17 @@ The steps in this section load hand-off data before a later procedure reboots th
         ```bash
         pit# efibootmgr | grep -Ei "ip(v4|4)"
         ```
+        Expected Output  - 
+        ```text
+        Boot0007* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+        Boot0009* UEFI: PXE IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+        Boot000D* UEFI: HTTP IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4E
+        Boot000E* UEFI: HTTP IP4 Mellanox Network Adapter - B8:59:9F:1D:D8:4F
+        Boot000F* UEFI: HTTP IP4 Intel(R) I350 Gigabit Network Connection
+        Boot0010* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+        Boot0011* UEFI: HTTP IP4 Intel(R) I350 Gigabit Network Connection
+        Boot0012* UEFI: PXE IP4 Intel(R) I350 Gigabit Network Connection
+        ```
 
     1. Set and trim the boot order on the PIT node.
 
@@ -242,6 +343,7 @@ The steps in this section load hand-off data before a later procedure reboots th
         pit# efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
         BootNext: 0014
         ```
+        BootNext: 0007
 
 1. <a name="collect-can-ip-ncn-m002"></a>Collect a backdoor login. Fetch the CMN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
@@ -363,7 +465,14 @@ The steps in this section load hand-off data before a later procedure reboots th
               cloud-init modules -m config ; cloud-init modules -m final
     ```
 
-1. Once `cloud-init` has completed successfully, log in and start a typescript (the IP address used here is the one noted for `ncn-m002` in an earlier step).
+1. Once `cloud-init` has completed successfully ( var/log/messages) -
+    ```bash 
+    2022-09-08T05:54:15.934854+00:00 ncn cloud-init[11265]: Cloud-init v. 21.4-1 running 'modules:final' at Thu, 08 Sep 2022 05:49:58 +0000. Up 100.60 seconds.
+    2022-09-08T05:54:15.934954+00:00 ncn cloud-init[11265]: The system is finally up, after 356.90 seconds cloud-init has come to completion.
+    ```
+
+
+    log in and start a typescript (the IP address used here is the one noted for `ncn-m002` in an earlier step).
 
     ```bash
     external# ssh root@10.102.11.13
@@ -403,8 +512,20 @@ The steps in this section load hand-off data before a later procedure reboots th
               wicked ifreload lan0 && \
               wicked ifstatus lan0
     ```
+    Expected Output - 
+    ```text
+     em1             enslaved
+     lan0            up
+     lan0            up
+      link:     #27, state up, mtu 1500
+      type:     bridge, hwaddr b4:2e:99:3b:70:6a
+      config:   compat:suse:/etc/sysconfig/network/ifcfg-lan0
+      leases:   ipv4 static granted
+      addr:     ipv4 172.30.52.177/20 [static]
 
-    Expected output looks similar to:
+    ```
+
+    <s>Expected output looks similar to:
 
     ```text
     lan0            up
@@ -414,6 +535,7 @@ The steps in this section load hand-off data before a later procedure reboots th
        leases:   ipv4 static granted
        addr:     ipv4 172.30.53.88/20 [static]
     ```
+    </s>
 
 1. Verify that the site link (`lan0`) and the VLANs have IP addresses.
 
@@ -424,11 +546,32 @@ The steps in this section load hand-off data before a later procedure reboots th
                 ip a show $INT || echo "ERROR: Command failed: ip a show $INT"
               done
     ```
+    Expected Output - 
+    ```
+    lan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether b4:2e:99:3b:70:6a brd ff:ff:ff:ff:ff:ff
+    inet 172.30.52.177/20 brd 172.30.63.255 scope global lan0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::b62e:99ff:fe3b:706a/64 scope link
+       valid_lft forever preferred_lft forever
+    <snip>
+    8: bond0.cmn0@bond0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc noqueue state UP group default qlen 1000
+    link/ether b8:59:9f:1d:d8:4e brd ff:ff:ff:ff:ff:ff
+    inet 10.102.5.19/25 brd 10.102.5.127 scope global bond0.cmn0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::ba59:9fff:fe1d:d84e/64 scope link
+       valid_lft forever preferred_lft forever
+
+    ```
 
 1. Verify that the default route is via the CMN.
 
     ```bash
     ncn-m001# ip r show default
+    ```
+    Expected Output - 
+    ```
+    default via 10.102.5.1 dev bond0.cmn0
     ```
 
 1. Verify that there **is not** a metal bootstrap IP address.
@@ -582,7 +725,7 @@ Restarted chronyd
 
 <a name="configure-dns-and-ntp-on-each-bmc"></a>
 
-## 7. Configure DNS and NTP on each BMC
+## 7. <s>Configure DNS and NTP on each BMC
 
  > **NOTE:** Only follow this section if the NCNs are HPE hardware. If the system uses
  > Gigabyte or Intel hardware, skip this section.
@@ -663,6 +806,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
                 echo
               done ; echo "Configuration completed on all NCN BMCs"
     ```
+    </s>
 
 <a name="next-topic"></a>
 
