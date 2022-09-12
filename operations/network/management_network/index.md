@@ -87,10 +87,10 @@ See [CSM Automatic Network Utility (CANU)](canu/index.md)
   * Input data needed to generate switch configurations.
 * [Cable Management Network Servers](../../../install/cable_management_network_servers.md)
   * Shows how servers in CSM should be cabled.
-* [SHCD HMN Tab/HMN Connections Rules](../../../install/shcd_hmn_connections_rules.md)
-  * Shows how the HMN tab on the SHCD should be formatted.
-* [SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)
-  * Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.
+* <s>[SHCD HMN Tab/HMN Connections Rules](../../../install/shcd_hmn_connections_rules.md)
+  * Shows how the HMN tab on the SHCD should be formatted.</s>
+* <s>[SHCD Connection Rules](../../../install/shcd_hmn_connections_rules.md)
+  * Shows how the all tabs on the SHCD should be formatted EXCEPT the HMN tab.</s>
 * [Backup Custom Configuration](backup_custom_configurations.md)
   * Shows users how to backup configuration that is custom to their system; this includes site connections and credentials.
 * [Configuration Management](config_management.md)
