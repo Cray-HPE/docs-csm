@@ -25,7 +25,7 @@ Detailed BICAN documentation can be found on the [BICAN technical details](../op
 
 ## Topics
 
-
+1. <s>[Validate SHCD](#validate_shcd)</s>
 1. [Prepare configuration payload](#prepare_configuration_payload)
 1. [Prepare management nodes](#prepare_management_nodes)
 1. [Bootstrap PIT node](#bootstrap_pit_node)
@@ -51,6 +51,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
 
 ## Details
 
+<s>
    <a name="validate_shcd"></a>
 
    1. Validate SHCD
@@ -66,7 +67,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       network cabling has already been validated, then skip this step and move to
       [Prepare configuration payload](#prepare_configuration_payload).
    <a name="prepare_configuration_payload"></a>
-
+</s>
    1. Prepare configuration payload
 
       Information gathered from a site survey is needed to feed into the CSM installation process, such as system name,
@@ -76,16 +77,6 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       to assemble the components of the system and connect appropriately labeled cables.
 
       See [Prepare Configuration Payload](prepare_configuration_payload.md)
-   <a name="prepare_management_nodes"></a>
-
-   1. Prepare management nodes
-
-      Some preparation of the management nodes might be needed before starting an install or reinstall.
-      The preparation includes checking and updating the firmware on the PIT node, quiescing the compute nodes
-      and application nodes, scaling back DHCP on the management nodes, wiping the storage on the management nodes,
-      powering off the management nodes, and possibly powering off the PIT node.
-
-      See [Prepare Management Nodes](prepare_management_nodes.md).
    <a name="bootstrap_pit_node"></a>
 
    1. Bootstrap PIT node
@@ -96,12 +87,24 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       work smoothly for nodes from all vendors. It is recommended to try the RemoteISO first.
 
       Use one of these procedures to bootstrap the PIT node from the LiveCD:
+      <s>
       * [Bootstrap PIT Node from LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) (recommended)
          * **Gigabyte BMCs** should not use the RemoteISO method.
          * **Intel BMCs** should not use the RemoteISO method.
+      </s>
       * [Bootstrap PIT Node from LiveCD USB](bootstrap_livecd_usb.md) (fallback)
 
       Using the LiveCD USB method requires a USB 3.0 device with at least 1TB of space to create a bootable LiveCD.
+   <a name="prepare_management_nodes"></a>
+
+   1. Prepare management nodes
+
+      Some preparation of the management nodes might be needed before starting an install or reinstall.
+      The preparation includes checking and updating the firmware on the PIT node, quiescing the compute nodes
+      and application nodes, scaling back DHCP on the management nodes, wiping the storage on the management nodes,
+      powering off the management nodes, and possibly powering off the PIT node.
+
+      See [Prepare Management Nodes](prepare_management_nodes.md).
    <a name="configure_management_network"></a>
 
    1. Configure management network switches
@@ -115,7 +118,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       have already been configured, then skip this step and move to
       [Collect MAC addresses for NCNs](#collect_mac_addresses_for_ncns).
    <a name="collect_mac_addresses_for_ncns"></a>
-
+<s>
    1. Collect MAC addresses for NCNs
 
       Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
@@ -133,7 +136,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then
       this topic could be skipped and instead move to [Deploy management nodes](#deploy_management_nodes).
    <a name="deploy_management_nodes"></a>
-
+</s>
    1. Deploy management nodes
 
       Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
@@ -198,7 +201,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
 
       See [Validate CSM Health](../operations/validate_csm_health.md).
    <a name="configure_prometheus_alert_notifications"></a>
-
+<s>
    1. Configure Prometheus alert notifications
 
       Now that CSM has been installed and health has been validated, if the system management health monitoring tools and specifically,
@@ -224,7 +227,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       available. Once FAS is aware that new firmware is available, then see
       [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
    <a name="prepare_compute_nodes"></a>
-
+</s>
    1. Prepare compute nodes
 
       After completion of the firmware update with FAS, compute nodes can be prepared. Some compute node
@@ -237,7 +240,7 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="apply_security_hardening"></a>
-
+<s>
    1. Apply security hardening
 
       After preparing compute nodes, and prior to the installation of other product streams, review the security hardening guide.
@@ -259,3 +262,4 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install
       for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
       See [Troubleshooting Installation Problems](troubleshooting_installation.md).
+</s>
