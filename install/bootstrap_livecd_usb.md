@@ -83,14 +83,32 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 1. Install the latest documentation RPM.
 
    See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
+   ```
+   linux# rpm -Uvh --force docs-csm-latest.noarch.rpm
+   Preparing...                          ################################# [100%]
+    Updating / installing...
+   1:docs-csm-1.2.24-1                ################################# [ 50%]
+    Cleaning up / removing...
+   2:docs-csm-1.13.15-1               ################################# [100%]
+
+   ```
 
 1. Show the version of CSI installed.
 
    ```bash
    linux# csi version
+   Expected output looks similar to the following:
+   CRAY-Site-Init build signature...
+   Build Commit   : a0bf7dbfd3b65f1a8a34c4c9399ad820f1c07564-heads-v1.16.20
+   Build Time     : 2022-06-29T21:40:00Z
+   Go Version     : go1.16
+   Git Version    : v1.16.20
+   Platform       : linux/amd64
+   App. Version   : ..
+
    ```
 
-   Expected output looks similar to the following:
+   <s> Expected output looks similar to the following:
 
    ```text
    CRAY-Site-Init build signature...
@@ -101,11 +119,15 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    Platform       : linux/amd64
    App. Version   : 1.5.18
    ```
+   </s>
 
 1. Configure `zypper` with the `embedded` repository from the CSM release.
 
    ```bash
    linux# zypper ar -fG "${CSM_PATH}/rpm/embedded" "${CSM_RELEASE}-embedded"
+   Adding repository 'csm-1.2.0-embedded' .....................................................................[error]
+   Repository named 'csm-1.2.0-embedded' already exists. Please use another alias.
+
    ```
 
 1. Install Podman or Docker to support container tools required to generate
@@ -118,15 +140,24 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
 
       ```bash
       linux# zypper in --repo ${CSM_RELEASE}-embedded -y podman podman-cni-config
+      Loading repository data...
+      Reading installed packages...
+      'podman' is already installed.
+      No update candidate for 'podman-3.4.4-150300.9.3.2.x86_64'. The highest available version is already installed.
+     'podman-cni-config' is already installed.
+     No update candidate for 'podman-cni-config-3.4.4-150300.9.3.2.noarch'. The highest available version is already installed.
+     Resolving package dependencies...
+     Nothing to do.
       ```
 
-   * Alternatively, one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+   * <s>Alternatively, one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
      from the `${CSM_PATH}/rpm/embedded` directory.
 
       ```bash
       linux# rpm -Uvh $(find ${CSM_PATH}/rpm/embedded -name "podman-*.x86_64.rpm" | sort -V | tail -1) \
                       $(find ${CSM_PATH}/rpm/embedded -name "podman-cni-config-*.noarch.rpm" | sort -V | tail -1)
       ```
+      </s>
 
 1. Install `lsscsi` to view attached storage devices.
 
@@ -136,15 +167,22 @@ Fetch the base installation CSM tarball, extract it, and install the contained C
    * Install `lsscsi` package:
 
       ```bash
-      linux# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi
+      linux# zypper in --repo ${CSM_RELEASE}-embedded -y lsscsi  
+      Loading repository data...
+      Reading installed packages...
+      'lsscsi' is already installed.
+      No update candidate for 'lsscsi-0.28-1.24.x86_64'. The highest available version is already installed.
+      Resolving package dependencies...
+      Nothing to do.
       ```
 
-   * Alternatively, one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
+   * <s>Alternatively, one may use `rpm -Uvh` to install RPMs (and their dependencies) manually
      from the `${CSM_PATH}/rpm/embedded` directory.
 
       ```bash
       linux# rpm -Uvh $(find ${CSM_PATH}/rpm/embedded -name "lsscsi-*.x86_64.rpm" | sort -V | tail -1)
       ```
+      </s>
 
 1. Remove CNI configuration from prior install
 
@@ -183,16 +221,24 @@ Before creating the the bootable LiveCD, identify which device will be used for 
     ```bash
     linux# lsscsi
     ```
-
     Expected output looks similar to the following:
-
+    ```text
+    ncn-m001:~/usb # lsscsi
+    root@ncn-m001 2022-09-05 05:58:32 ~/usb # lsscsi
+    [0:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 904Q  /dev/sda
+    [1:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 904Q  /dev/sdb
+    [2:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 904Q  /dev/sdc
+    [8:0:0:0]    disk    SanDisk  Ultra USB 3.0    1.00  /dev/sdd 
+    ```
+    <s> Expected output looks similar to the following:
     ```text
     [6:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sda
     [7:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdb
     [8:0:0:0]    disk    ATA      SAMSUNG MZ7LH480 404Q  /dev/sdc
     [14:0:0:0]   disk    SanDisk  Extreme SSD      1012  /dev/sdd
     [14:0:0:1]   enclosu SanDisk  SES Device       1012  -
-    ```
+    ``` 
+    </s>
 
     In the above example, internal disks are the `ATA` devices and USB drives are final two devices.
 
@@ -224,13 +270,14 @@ Before creating the the bootable LiveCD, identify which device will be used for 
         > linux# csi pit format ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
         > ```
 
-    * On MacOS, use the `write-livecd.sh` script to do this.
+    * <s>On MacOS, use the `write-livecd.sh` script to do this.
 
         This script is contained in the CSI tool RPM. See [install latest version of the CSI tool](#install-csi-rpm) step.
 
         ```bash
         macos# write-livecd.sh ${USB} ${CSM_PATH}/cray-pre-install-toolkit-*.iso 50000
         ```
+        </s>
 
     > **Note:** At this point, the USB device is usable in any server with a CPU with x86_64 architecture. The remaining steps help add the installation data and enable SSH on boot.
 
@@ -257,8 +304,8 @@ on to the [configuration payload](#configuration-payload).
 
 ## 3. Configuration payload
 
-The `SHASTA-CFG` structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload.
-This payload will be used for the rest of the CSM installation on the USB device.
+<s>The `SHASTA-CFG` structure and other configuration files will be prepared, then `csi` will generate a system-unique configuration payload.
+This payload will be used for the rest of the CSM installation on the USB device.</s>
 
 1. [Generate Installation Files](#generate-installation-files)
 1. [Verify and Backup `system_config.yaml`](#verify-csi-versions-match)
@@ -268,7 +315,7 @@ This payload will be used for the rest of the CSM installation on the USB device
 
 ### 3.1 Generate installation files
 
-Some files are needed for generating the configuration payload. See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if the
+Some files are needed for generating the configuration payload. <s>See these topics in [Prepare Configuration Payload](prepare_configuration_payload.md) if the
 information for this system has not yet been prepared.
 
 * [Command line configuration payload](prepare_configuration_payload.md#command_line_configuration_payload)
@@ -279,11 +326,11 @@ information for this system has not yet been prepared.
 
 1. At this time see [Create HMN Connections JSON](create_hmn_connections_json.md) for instructions about creating the `hmn_connections.json`.
 
-1. Create the configuration input files if needed and copy them into the preparation directory.
+1. Create the configuration input files if needed and copy them into the preparation directory.</s> Copy the seedfiles/configuration input files in the preparation directory
 
    The preparation directory is `${PITDATA}/prep`.
 
-   Copy these files into the preparation directory, or create them if this is an initial install of the system:
+   Copy these files into the preparation directory, <s>or create them if this is an initial install of the system</s>:
 
    * `application_node_config.yaml` (optional - see below)
    * `cabinets.yaml` (optional - see below)
@@ -302,17 +349,17 @@ information for this system has not yet been prepared.
 
 1. Proceed to the appropriate next step.
 
-   * If this is the initial install of the system, then proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
-   * If this is a reinstall of the system, then proceed to [Subsequent Installs (Re-Installs)](#subsequent-fresh-installs-re-installs).
+   * <s>If this is the initial install of the system, then proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
+   * If this is a reinstall of the system, then</s> proceed to [Subsequent Installs (Re-Installs)](#subsequent-fresh-installs-re-installs).
 
 <a name="subsequent-fresh-installs-re-installs"></a>
 
 #### 3.1.a Subsequent installs (reinstalls)
 
-1. **For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
+1. <s>**For subsequent fresh-installs (re-installs) where the `system_config.yaml` parameter file is available**, generate the updated system configuration
    (see [Cray `Site Init` Files](../background/index.md#cray_site_init_files)).
 
-   > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).
+   > **Warning:** If the `system_config.yaml` file is unavailable, then skip this step and proceed to [Initial Installs (bare-metal)](#first-timeinitial-installs-bare-metal).</s>
 
    1. Check for the configuration files. The needed files should be in the preparation directory.
 
@@ -338,6 +385,72 @@ information for this system has not yet been prepared.
 
       ```bash
       linux# cd ${PITDATA}/prep && csi config init
+
+      A new directory matching the system-name field in system_config.yaml will now exist in the working directory.
+      2022/09/05 07:29:25 Using config file: /mnt/pitdata/prep/system_config.yaml
+      2022/09/05 07:29:25 Using application node config: /mnt/pitdata/prep/application_node_config.yaml
+      2022/09/05 07:29:25     mountain: 0
+      2022/09/05 07:29:25     river: 1
+      2022/09/05 07:29:25     hill: 0
+      {"level":"info","ts":1662362965.488723,"msg":"Beginning SLS configuration generation."}
+      2022/09/05 07:29:25 WARNING (Not Fatal): Couldn't find switch port for NCN: x3000c0s17b0
+      2022/09/05 07:29:25 WARNING (Not Fatal): Couldn't find switch port for NCN: x3000c0s1b0
+      2022/09/05 07:29:25 WARNING (Not Fatal): Couldn't find switch port for NCN: x3000c0s5b0
+      2022/09/05 07:29:25 WARNING (Not Fatal): Couldn't find switch port for NCN: x3000c0s3b0
+      2022/09/05 07:29:25 WARNING (Not Fatal): Couldn't find switch port for NCN: x3000c0s15b0
+      2022/09/05 07:29:25 WARNING (Not Fatal): Couldn't find switch port for NCN: x3000c0s7b0
+      2022/09/05 07:29:25 WARNING (Not Fatal): Couldn't find switch port for NCN: x3000c0s13b0
+      2022/09/05 07:29:25 wrote 19644 bytes to /mnt/pitdata/prep/gamora/sls_input_file.json
+      2022/09/05 07:29:25 wrote 2262 bytes to /mnt/pitdata/prep/gamora/customizations.yaml
+      2022/09/05 07:29:25 Generating Installer Node (PIT) interface configurations for: ncn-m001
+      2022/09/05 07:29:25 wrote 519 bytes to /mnt/pitdata/prep/gamora/pit-files/ifcfg-bond0
+      2022/09/05 07:29:25 wrote 376 bytes to /mnt/pitdata/prep/gamora/pit-files/ifcfg-lan0
+      2022/09/05 07:29:25 wrote 1030 bytes to /mnt/pitdata/prep/gamora/pit-files/config
+      2022/09/05 07:29:25 wrote 24 bytes to /mnt/pitdata/prep/gamora/pit-files/ifroute-lan0
+      2022/09/05 07:29:25 wrote 334 bytes to /mnt/pitdata/prep/gamora/pit-files/ifcfg-bond0.nmn0
+      2022/09/05 07:29:25 wrote 39 bytes to /mnt/pitdata/prep/gamora/pit-files/ifroute-bond0.nmn0
+      2022/09/05 07:29:25 wrote 334 bytes to /mnt/pitdata/prep/gamora/pit-files/ifcfg-bond0.can0
+      2022/09/05 07:29:25 wrote 334 bytes to /mnt/pitdata/prep/gamora/pit-files/ifcfg-bond0.hmn0
+      2022/09/05 07:29:25 wrote 335 bytes to /mnt/pitdata/prep/gamora/pit-files/ifcfg-bond0.cmn0
+      2022/09/05 07:29:25 wrote 320 bytes to /mnt/pitdata/prep/gamora/dnsmasq.d/CMN.conf
+      2022/09/05 07:29:25 wrote 569 bytes to /mnt/pitdata/prep/gamora/dnsmasq.d/HMN.conf
+      2022/09/05 07:29:25 wrote 570 bytes to /mnt/pitdata/prep/gamora/dnsmasq.d/NMN.conf
+      2022/09/05 07:29:25 wrote 540 bytes to /mnt/pitdata/prep/gamora/dnsmasq.d/MTL.conf
+      2022/09/05 07:29:25 wrote 323 bytes to /mnt/pitdata/prep/gamora/dnsmasq.d/CAN.conf
+      2022/09/05 07:29:25 wrote 7665 bytes to /mnt/pitdata/prep/gamora/dnsmasq.d/statics.conf
+      2022/09/05 07:29:25 wrote 1226 bytes to /mnt/pitdata/prep/gamora/conman.conf
+      2022/09/05 07:29:25 wrote 894 bytes to /mnt/pitdata/prep/gamora/metallb.yaml
+      2022/09/05 07:29:25 wrote 32234 bytes to /mnt/pitdata/prep/gamora/basecamp/data.json
+
+       ===== gamora Installation Summary =====
+       Installation Node: ncn-m001
+       Customer Management: 10.102.5.0/25 GW: 10.102.5.1
+       Customer Access: 10.102.5.0/24 GW: 10.102.5.129
+        Upstream DNS: 172.30.84.40
+        MetalLB Peers: [spine]
+       Networking
+        BICAN user network toggle set to CAN
+        Supernet enabled!  Using the supernet gateway for some management subnets
+        * River Compute Node Management Network 10.106.0.0/17 with 1 subnets
+        * SystemDefaultRoute points the network name of the default route 0.0.0.0/0 with 0 subnets
+        * Customer Management Network 10.102.5.0/25 with 4 subnets
+        * High Speed Network 10.253.0.0/16 with 1 subnets
+        * Hardware Management Network LoadBalancers 10.94.100.0/24 with 1 subnets
+        * Node Management Network 10.252.0.0/17 with 3 subnets
+        * Customer Access Network 10.102.5.0/24 with 2 subnets
+        * Hardware Management Network 10.254.0.0/17 with 2 subnets
+        * Provisioning Network (untagged) 10.1.1.0/16 with 2 subnets
+        * River Compute Hardware Management Network 10.107.0.0/17 with 1 subnets
+        * Node Management Network LoadBalancers 10.92.100.0/24 with 1 subnets
+        System Information
+        NCNs: 9
+        Mountain Compute Cabinets: 0
+        Hill Compute Cabinets: 0
+        River Compute Cabinets: 1
+        CSI Version Information
+        a0bf7dbfd3b65f1a8a34c4c9399ad820f1c07564-heads-v1.16.20
+        v1.16.20
+
       ```
 
       A new directory matching the `system-name` field in `system_config.yaml` will now exist in the working directory.
@@ -370,7 +483,7 @@ information for this system has not yet been prepared.
 
 <a name="first-timeinitial-installs-bare-metal"></a>
 
-#### 3.1.b Initial installs (bare-metal)
+#### <s>3.1.b Initial installs (bare-metal)
 
 1. **For first-time/initial installs (without a `system_config.yaml`file)**, generate the system configuration. See below for an explanation of the command line parameters and
    some common settings.
@@ -459,7 +572,7 @@ information for this system has not yet been prepared.
       linux# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
       ```
 
-   1. Continue to the next step to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
+   1. Continue to the next step to [verify and backup `system_config.yaml`](#verify-csi-versions-match).</s>
 
 <a name="verify-csi-versions-match"></a>
 
@@ -570,28 +683,46 @@ Now that the configuration is generated, the LiveCD must be populated with the g
        ```bash
        linux# csi pit populate pitdata "${CSM_PATH}/images/kubernetes/" ${PITDATA}/data/k8s/ -kiK
        ```
+      Expected output looks similar to the following:
 
-       Expected output looks similar to the following:
+       ```text
+       5.3.18-150300.59.43-default-0.2.89.kernel---------> /mnt/pitdata/data/k8s/...OK
+       initrd.img-0.2.89.xz------------------------------> /mnt/pitdata/data/k8s/...OK
+       kubernetes-0.2.89.squashfs------------------------> /mnt/pitdata/data/k8s/...OK
+
+       ```
+
+       <s>Expected output looks similar to the following:
 
        ```text
        5.3.18-24.37-default-0.0.6.kernel-----------------> /mnt/pitdata/data/k8s/...OK
        initrd.img-0.0.6.xz-------------------------------> /mnt/pitdata/data/k8s/...OK
        kubernetes-0.0.6.squashfs-------------------------> /mnt/pitdata/data/k8s/...OK
        ```
+       </s>
 
    1. Copy Ceph/storage node artifacts:
 
        ```bash
        linux# csi pit populate pitdata "${CSM_PATH}/images/storage-ceph/" ${PITDATA}/data/ceph/ -kiC
        ```
-
        Expected output looks similar to the following:
+
+       ```text
+       5.3 5.3.18-150300.59.43-default-0.2.89.kernel---------> /mnt/pitdata/data/ceph/...OK
+       initrd.img-0.2.89.xz------------------------------> /mnt/pitdata/data/ceph/...OK
+       storage-ceph-0.2.89.squashfs----------------------> /mnt/pitdata/data/ceph/..OK
+       ``` 
+       
+
+       <s>Expected output looks similar to the following:
 
        ```text
        5.3.18-24.37-default-0.0.5.kernel-----------------> /mnt/pitdata/data/ceph/...OK
        initrd.img-0.0.5.xz-------------------------------> /mnt/pitdata/data/ceph/...OK
        storage-ceph-0.0.5.squashfs-----------------------> /mnt/pitdata/data/ceph/...OK
-       ```
+       ``` 
+       </s>
 
 1. Quit the typescript session with the `exit` command and copy the typescript file to the data partition on the USB drive.
 
