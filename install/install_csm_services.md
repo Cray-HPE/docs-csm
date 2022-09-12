@@ -35,7 +35,36 @@ This procedure will install CSM applications and services into the CSM Kubernete
         yapl -f install.yaml execute
    pit# popd
    ```
+   Expected Output -
+   ```
+   SUCCESS  Step: Initialize Bootstrap Registry --- Checking Precondition
+     SUCCESS  Step: Initialize Bootstrap Registry --- Executing Action
+     SUCCESS  Step: Initialize Bootstrap Registry --- Post action validation
+    Done: Initialize Bootstrap Registry [1/7] █████████                                     14% | 5m37s
+     SUCCESS  Step: Create Site-Init Secret --- Checking Precondition
+     SUCCESS  Step: Create Site-Init Secret --- Executing Action
+     SUCCESS  Step: Create Site-Init Secret --- Post action validation
+    Done: Create Site-Init Secret [2/7] ███████████████████                                 29% | 5m40s
+     SUCCESS  Step: Deploy Sealed Secret Decryption Key --- Checking Precondition
+     SUCCESS  Step: Deploy Sealed Secret Decryption Key --- Executing Action
+     SUCCESS  Step: Deploy Sealed Secret Decryption Key --- Post action validation
+    Done: Deploy Sealed Secret Decryption Key [3/7] ████████████████████████                43% | 5m41s
+     SUCCESS  Step: Deploy CSM Applications and Services --- Checking Precondition
+     SUCCESS  Step: Deploy CSM Applications and Services --- Executing Action
+     SUCCESS  Step: Deploy CSM Applications and Services --- Post action validation
+    Done: Deploy CSM Applications and Services [4/7] ███████████████████████████████        57% | 30m6s
+     SUCCESS  Step: Setup Nexus --- Checking Precondition
+     SUCCESS  Step: Setup Nexus --- Executing Action
+     SUCCESS  Step: Setup Nexus --- Post action validation
+    Done: Setup Nexus [5/7] ████████████████████████████████████████████████████████        71% | 37m32s
+     SUCCESS  Step: Set Management NCNs to use Unbound --- Checking Precondition
+     SUCCESS  Step: Set Management NCNs to use Unbound --- Executing Action
+     SUCCESS  Step: Set Management NCNs to use Unbound --- Post action validation
+    Done: Set Management NCNs to use Unbound [6/7] █████████████████████████████████████     86% | 7s
+    Done: CSM Services Install Pipeline [7/7] ██████████████████████████████████████████████ 100% | 7s
 
+   ```
+   This step failed as 1/16 interface and customer vrf was not configured
 > **NOTES:**
 >
 > * This command may take up to 90 minutes to complete.
@@ -76,10 +105,11 @@ This procedure will install CSM applications and services into the CSM Kubernete
    ```text
    HTTP/2 200
    content-type: application/json; charset=UTF-8
-   date: Mon, 27 Jun 2022 17:08:55 GMT
+   date: Wed, 07 Sep 2022 09:30:09 GMT
    content-length: 0
-   x-envoy-upstream-service-time: 7
+   x-envoy-upstream-service-time: 4
    server: istio-envoy
+
    ```
 
 1. Restart the `spire-update-bss` job.
@@ -90,7 +120,11 @@ This procedure will install CSM applications and services into the CSM Kubernete
             | jq 'del(.spec.template.metadata.labels."controller-uid")' \
             | kubectl replace --force -f -
    ```
-
+   Expected Output -
+   ```text
+   job.batch "spire-update-bss-1" deleted
+   job.batch/spire-update-bss-1 replaced
+   ```
 1. Wait for the `spire-update-bss` job to complete.
 
    ```bash
