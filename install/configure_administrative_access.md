@@ -9,14 +9,13 @@ BMC/controller passwords.
 
 ## Topics
 
-1. [Configure Keycloak account](#1-configure-keycloak-account)
-1. [Configure the Cray command line interface](#2-configure-the-cray-command-line-interface)
-1. [Set `Management` role on the BMCs of management nodes](#3-set-management-role-on-the-bmcs-of-management-nodes)
-1. [Lock management nodes](#4-lock-management-nodes)
-1. [Configure BMC and controller parameters with SCSD](#5-configure-bmc-and-controller-parameters-with-scsd)
-1. [Configure non-compute nodes with CFS](#6-configure-non-compute-nodes-with-cfs)
-1. [Upload Olympus BMC recovery firmware into TFTP server](#7-upload-olympus-bmc-recovery-firmware-into-tftp-server)
-1. [Proceed to next topic](#8-proceed-to-next-topic)
+1. [Configure the Cray command line interface](#1-configure-the-cray-command-line-interface)
+1. [Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
+1. [Lock management nodes](#3-lock-management-nodes)
+1. [Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
+1. [Configure non-compute nodes with CFS](#5-configure-non-compute-nodes-with-cfs)
+1. [Upload Olympus BMC recovery firmware into TFTP server](#6-upload-olympus-bmc-recovery-firmware-into-tftp-server)
+1. [Proceed to next topic](#7-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
