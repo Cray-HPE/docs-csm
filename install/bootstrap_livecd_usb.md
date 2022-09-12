@@ -772,12 +772,18 @@ boot order to have the USB device first.
    Set the `BMC` variable to the hostname or IP address of the BMC of the PIT node.
 
    > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
-
+   ```bash
+   external# BMC=gamora-ncn-m001-mgmt
+   external# read -s IPMI_PASSWORD
+   external# export IPMI_PASSWORD ; ipmitool -I lanplus -U root -E -H ${BMC} chassis power status
+   ```
+   <s>bash
    ```bash
    external# BMC=eniac-ncn-m001-mgmt
    external# read -s IPMI_PASSWORD
    external# export IPMI_PASSWORD ; ipmitool -I lanplus -U root -E -H ${BMC} chassis power status
    ```
+   </s>
 
 1. Connect to the IPMI console.
 
@@ -814,7 +820,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    You are required to change your password immediately (administrator enforced)
    Changing password for root.
    Current password:   <------- press Enter here, again, for a blank password
-   New password:       <------- type new password
+   New password:       <------- type new password ( initial0 )
    Retype new password:<------- retype new password
    Welcome to the CRAY Pre-Install Toolkit (LiveOS)
    ```
@@ -856,6 +862,10 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    ```bash
    pit# mount -vL PITDATA
    ```
+   Expected Output - 
+   ```bash 
+   mount: /dev/sdd4 mounted on /var/www/ephemeral.
+   ```
 
 1. Set and export new environment variables.
 
@@ -868,7 +878,12 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    PITDATA=${PITDATA}
    CSM_PATH=${CSM_PATH}" | tee -a /etc/environment
    ```
+   Expected Output-
+   ```bash
+   PITDATA=/var/www/ephemeral
+   CSM_PATH=/var/www/ephemeral/csm-1.2.0
 
+   ```
 1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
 
    ```bash
@@ -883,7 +898,13 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    ```bash
    pit# echo -e "CSM_PATH=${CSM_PATH}\nCSM_RELEASE=${CSM_RELEASE}\nPITDATA=${PITDATA}\nSYSTEM_NAME=${SYSTEM_NAME}"
    ```
-
+   Expected Output - 
+   ```bash
+   CSM_PATH=/var/www/ephemeral/csm-1.2.0
+   CSM_RELEASE=csm-1.2.0
+   PITDATA=/var/www/ephemeral
+   SYSTEM_NAME=gamora
+   ```
 1. Copy the typescript made on the external system into the `PITDATA` mount.
 
    ```bash
@@ -906,6 +927,14 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 1. Install the latest documentation RPM.
 
    See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
+   ```bash
+   # rpm -Uvh --force https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm
+   Retrieving https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.2/noarch/docs-csm-latest.noarch.rpm
+   Preparing...                          ################################# [100%]
+   Updating / installing...
+   1:docs-csm-1.2.24-1                ################################# [100%]
+   ```
+
 
 1. Print information about the booted PIT image.
 
@@ -918,6 +947,26 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    ```
 
    Expected output looks similar to the following:
+   ```text
+   = PIT Identification = COPY/CUT START =======================================
+   VERSION=1.5.9
+   TIMESTAMP=20220629214741
+   HASH=g941f5cd
+   CRAY-Site-Init build signature...
+   Build Commit   : a0bf7dbfd3b65f1a8a34c4c9399ad820f1c07564-heads-v1.16.20
+   Build Time     : 2022-06-29T21:40:00Z
+   Go Version     : go1.16
+   Git Version    : v1.16.20
+   Platform       : linux/amd64
+   App. Version   : ..
+   metal-ipxe-2.2.6-1.noarch
+   metal-net-scripts-0.0.2-1.noarch
+   metal-basecamp-1.1.9-1.x86_64
+   pit-init-1.2.21-1.noarch
+   pit-nexus-1.1.0-1.1.x86_64
+   = PIT Identification = COPY/CUT END =========================================
+   ```
+   <s>Expected output looks similar to the following:
 
    ```text
    = PIT Identification = COPY/CUT START =======================================
@@ -937,7 +986,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    pit-init-1.2.12-1.noarch
    = PIT Identification = COPY/CUT END =========================================
    ```
-
+   </s>
 <a name="configure-the-running-livecd"></a>
 
 ## 6. Configure the running LiveCD
@@ -959,6 +1008,89 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    ```bash
    pit# /root/bin/pit-init.sh
    ```
+   Expected Output - 
+   ```text
+   Initializing the Pre-Install Toolkit
+    Exporting tokens
+    + export 'mtoken=ncn-m(?!001)\w+-mgmt'
+    + mtoken='ncn-m(?!001)\w+-mgmt'
+    + export 'stoken=ncn-s\w+-mgmt'
+    + stoken='ncn-s\w+-mgmt'
+    + export 'wtoken=ncn-w\w+-mgmt'
+    + wtoken='ncn-w\w+-mgmt'
+    + set +x
+    = PIT Identification = COPY/CUT START =======================================
+    VERSION=1.5.9
+    TIMESTAMP=20220629214741
+    HASH=g941f5cd
+    CRAY-Site-Init build signature...
+    Build Commit   : a0bf7dbfd3b65f1a8a34c4c9399ad820f1c07564-heads-v1.16.20
+    Build Time     : 2022-06-29T21:40:00Z
+    Go Version     : go1.16
+    Git Version    : v1.16.20
+    Platform       : linux/amd64
+    App. Version   : ..
+    metal-ipxe-2.2.6-1.noarch
+    metal-net-scripts-0.0.2-1.noarch
+    metal-basecamp-1.1.9-1.x86_64
+    pit-init-1.2.21-1.noarch
+    pit-nexus-1.1.0-1.1.x86_64
+    = PIT Identification = COPY/CUT END =========================================
+    mount: /var/www/ephemeral: /dev/sdd4 already mounted on /var/www/ephemeral.
+    Generating Configuration ...
+    /var/www/ephemeral/prep ~
+    2022/09/05 11:21:30 Using config file: /var/www/ephemeral/prep/system_config.yaml
+    2022/09/05 11:21:30 Using application node config: /var/www/ephemeral/prep/application_node_config.yaml
+    2022/09/05 11:21:30     mountain: 0
+    2022/09/05 11:21:30     river: 1
+    2022/09/05 11:21:30     hill: 0
+    {"level":"info","ts":1662376890.571256,"msg":"Beginning SLS configuration generation."}
+    2022/09/05 11:21:30 WARNING (Not Fatal): Couldn't find switch port for NCN: x3000c0s1b0
+    2022/09/05 11:21:30 wrote 21301 bytes to /var/www/ephemeral/prep/gamora/sls_input_file.json
+    2022/09/05 11:21:30 wrote 2262 bytes to /var/www/ephemeral/prep/gamora/customizations.yaml
+    2022/09/05 11:21:30 Generating Installer Node (PIT) interface configurations for: ncn-m001
+    2022/09/05 11:21:30 wrote 509 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0
+    2022/09/05 11:21:30 wrote 376 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-lan0
+    2022/09/05 11:21:30 wrote 1030 bytes to /var/www/ephemeral/prep/gamora/pit-files/config
+    2022/09/05 11:21:30 wrote 24 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifroute-lan0
+    2022/09/05 11:21:30 wrote 335 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0.cmn0
+    2022/09/05 11:21:30 wrote 334 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0.nmn0
+    2022/09/05 11:21:30 wrote 39 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifroute-bond0.nmn0
+    2022/09/05 11:21:30 wrote 334 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0.hmn0
+    2022/09/05 11:21:30 wrote 336 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0.can0
+    2022/09/05 11:21:30 wrote 320 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/CMN.conf
+    2022/09/05 11:21:30 wrote 569 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/HMN.conf
+    2022/09/05 11:21:30 wrote 570 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/NMN.conf
+    2022/09/05 11:21:30 wrote 540 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/MTL.conf
+    2022/09/05 11:21:30 wrote 324 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/CAN.conf
+    2022/09/05 11:21:30 wrote 7693 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/statics.conf
+    2022/09/05 11:21:30 wrote 1226 bytes to /var/www/ephemeral/prep/gamora/conman.conf
+    2022/09/05 11:21:30 wrote 894 bytes to /var/www/ephemeral/prep/gamora/metallb.yaml
+    2022/09/05 11:21:30 wrote 32424 bytes to /var/www/ephemeral/prep/gamora/basecamp/data.json
+
+    ===== gamora Installation Summary =====
+    <…… snip ………>
+    Setting up NTP ...
+    CURRENT TIME SETTINGS
+    rtc: 2022-09-05 11:21:34.812063+00:00
+    sys: 2022-09-05 11:21:31.491418+0000
+    200 OK
+    200 OK
+    NEW TIME SETTINGS
+    rtc: 2022-09-05 11:22:00.608719+00:00
+    sys: 2022-09-05 11:22:00.951970+0000
+    Merging Generated IPs into customizations.yaml
+    Patching CA into data.json (cloud-init)
+    2022/09/05 11:22:01 Backup of cloud-init seed data at /var/www/ephemeral/configs/data.js                                                                                                on-1662376921
+    2022/09/05 11:22:01 Patched cloud-init seed data in place
+    Loading sysconfig (ifcfg files) ...
+    WARNING: SSH may disconnect if it was already setup
+    wicked: ifreload: no configuration changes to reload
+    Created symlink /etc/systemd/system/multi-user.target.wants/conman.service → /usr/lib/sy                                                                                                stemd/system/conman.service.
+    Restarting basecamp conman dnsmasq ...
+    Restarting nexus ...
+    Pre-Install Toolkit has been initialized ...
+   ```
 
 1. Install Goss tests.
 
@@ -966,6 +1098,13 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 
    ```bash
    pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+   ```
+   Expected Output - 
+   ```text
+   Preparing...                          ################################# [100%]
+   Updating / installing...
+   1:csm-testing-1.12.36-1            ################################# [100%]
+
    ```
 
 <a name="next-topic"></a>
