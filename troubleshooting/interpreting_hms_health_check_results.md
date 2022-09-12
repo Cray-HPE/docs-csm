@@ -215,7 +215,9 @@ These tests require compute nodes to be discovered in HSM.
 The following is an example of a failed test execution due to no discovered compute nodes in HSM:
 
 ```text
-Running functional tests...
+running '/opt/cray/tests/ncn-functional/hms/hms-smd/smd_tavern_api_test_ncn-functional.sh'...
+
+...
 
 ============================= test session starts ==============================
 platform linux -- Python 3.8.10, pytest-6.1.2, py-1.11.0, pluggy-0.13.1
@@ -309,6 +311,7 @@ Example output:
 ```text
 Server:     10.92.100.225
 Address:    10.92.100.225#53
+
 Name:   sw-leaf-bmc-001.nmn
 Address: 10.252.0.4
 ```
