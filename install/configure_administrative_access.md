@@ -9,13 +9,13 @@ BMC/controller passwords.
 
 ## Topics
 
-1. [Configure Keycloak account](#configure_keycloak_account)
+1. [<s>Configure Keycloak account](#configure_keycloak_account)</s>
 2. [Configure the Cray command line interface](#configure_cray_cli)
 3. [Set `Management` role on the BMCs of management nodes](#set_bmc_management_role)
 4. [Lock management nodes](#lock_management_nodes)
-5. [Configure BMC and controller parameters with SCSD](#configure_with_scsd)
+5. [<s>Configure BMC and controller parameters with SCSD](#configure_with_scsd)
 6. [Configure non-compute nodes with CFS](#configure-ncns)
-7. [Upload Olympus BMC recovery firmware into TFTP server](#cray_upload_recovery_images)
+7. [Upload Olympus BMC recovery firmware into TFTP server](#cray_upload_recovery_images)</s>
 8. [Proceed to next topic](#next-topic)
 
 **NOTE:** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
@@ -30,7 +30,9 @@ authentication. This can be either a local Keycloak account or an external Ident
 such as LDAP. Having an account in Keycloak with administrative credentials enables the use of many
 management services via the `cray` command.
 
-See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md).
+<s>See [Configure Keycloak Account](../operations/CSM_product_management/Configure_Keycloak_Account.md).</s>
+
+Not required as we are using Default Keycloak account
 
 <a name="configure_cray_cli"></a>
 
@@ -44,6 +46,9 @@ The `cray` CLI configuration needs to be initialized for the Linux account. The 
 CLI configuration needs to be authorized for administrative actions.
 
 See [Configure the Cray command line interface](../operations/configure_cray_cli.md).
+```bash
+cray init --hostname api-gw-service-nmn.local
+```
 
 <a name="set_bmc_management_role"></a>
 
@@ -56,6 +61,20 @@ as protections for FAS and CAPMC actions.
 **Set BMC `Management` roles now!**
 
 See [Set BMC `Management` Role](../operations/hardware_state_manager/Set_BMC_Management_Role.md).
+
+```bash
+kubectl -n services get pods | grep smd
+cray-smd-7bcddc4bd7-f7mkv                                         2/2     Running     0          24h
+cray-smd-7bcddc4bd7-j2jsz                                         2/2     Running     0          24h
+cray-smd-7bcddc4bd7-j64zv                                         2/2     Running     0          24h
+cray-smd-init-pv4lq                                               0/2     Completed   0          24h
+cray-smd-postgres-0                                               3/3     Running     0          24h
+cray-smd-postgres-1                                               3/3     Running     0          24h
+cray-smd-postgres-2                                               3/3     Running     0          24h
+cray-smd-postgresql-db-backup-1662595800-s9dzj                    0/1     Completed   0          6h55m
+cray-smd-wait-for-postgres-1-cwvmb                                0/3     Completed   0          24h
+
+```
 
 <a name="lock_management_nodes"></a>
 
@@ -77,14 +96,27 @@ Run the `lock_management_nodes.py` script to lock all management nodes and their
 ```bash
 ncn# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
 ```
+Expected Output - 
+```text
+Operation Summary
+=================
+Found 17 management nodes and BMCs:
+    x3000c0s5b0n0,x3000c0s3b0n0,x3000c0s1b0n0,x3000c0s13b0n0,x3000c0s15b0n0,x3000c0s17b0n0,x3000c0s11b0n0,x3000c0s9b0n0,x3000c0s7b0n0,x3000c0s7b0,x3000c0s3b0,x3000c0s17b0,x3000c0s15b0,x3000c0s9b0,x3000c0s5b0,x3000c0s11b0,x3000c0s13b0
+Found 17 management nodes and BMCs to lock:
+    x3000c0s5b0n0,x3000c0s3b0n0,x3000c0s1b0n0,x3000c0s13b0n0,x3000c0s15b0n0,x3000c0s17b0n0,x3000c0s11b0n0,x3000c0s9b0n0,x3000c0s7b0n0,x3000c0s7b0,x3000c0s3b0,x3000c0s17b0,x3000c0s15b0,x3000c0s9b0,x3000c0s5b0,x3000c0s11b0,x3000c0s13b0
+Successfully locked 17 management nodes and BMCs:
+    x3000c0s1b0n0,x3000c0s15b0n0,x3000c0s7b0n0,x3000c0s3b0n0,x3000c0s17b0n0,x3000c0s9b0n0,x3000c0s5b0n0,x3000c0s11b0n0,x3000c0s13b0n0,x3000c0s7b0,x3000c0s3b0,x3000c0s17b0,x3000c0s15b0,x3000c0s9b0,x3000c0s5b0,x3000c0s11b0,x3000c0s13b0
+The return value of the script is 0 if locking was successful. Otherwise, a non-zero return means that manual intervention may be needed to lock the nodes and their BMCs.
+For more information about locking and unlocking nodes, see Lock and Unlock Nodes
 
+```
 The return value of the script is 0 if locking was successful. Otherwise, a non-zero return means that manual intervention may be needed to lock the nodes and their BMCs.
 
 For more information about locking and unlocking nodes, see [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
 
 <a name="configure_with_scsd"></a>
 
-## 5. Configure BMC and controller parameters with SCSD
+## 5. <s>Configure BMC and controller parameters with SCSD
 
 **NOTE:** If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
 
@@ -94,22 +126,22 @@ SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the 
 down or power up as part of the compute node booting process, it may be necessary to look at the logs
 on the BMC for node power down or node power up.
 
-See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).
+See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).</s>
 
 <a name="configure-ncns"></a>
 
-## 6. Configure non-compute nodes with CFS
+## 6. <s>Configure non-compute nodes with CFS
 
 Non-compute Nodes (NCN) need to be configured after booting for administrative access, security, and other
 purposes. The [Configuration Framework Service (CFS)](../operations/configuration_management/Configuration_Management.md)
 is used to apply post-boot configuration in a decoupled, layered manner. Individual software products including
 CSM provide one or more layers of configuration in a process called "NCN personalization".
 
-See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).
+See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).</s>
 
 <a name="cray_upload_recovery_images"></a>
 
-## 7. Upload Olympus BMC recovery firmware into TFTP server
+## 7. <s>Upload Olympus BMC recovery firmware into TFTP server
 
 **NOTE:** This step requires the CSM software, Cray CLI, and HPC Firmware Pack (HFP) to be installed.
 If these are not currently installed, then skip this step and perform it later.
@@ -118,7 +150,7 @@ The Olympus hardware needs to have recovery firmware loaded to the `cray-tftp` s
 The BMCs are configured to load a recovery firmware from a TFTP server.
 This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
 
-See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).
+See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).</s>
 
 <a name="next-topic"></a>
 
