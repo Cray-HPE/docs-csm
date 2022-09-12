@@ -404,6 +404,7 @@ Example output:
 ```text
 Server:     10.92.100.225
 Address:    10.92.100.225#53
+
 Name:   sw-leaf-bmc-001.nmn
 Address: 10.252.0.4
 ```
