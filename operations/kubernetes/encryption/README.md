@@ -43,7 +43,7 @@ Both ciphers allow the same input string type. Note that while it is possible to
     As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
 
     ```bash
-     /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --enable --aescbc KEYVALUE
+     /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --enable --aescbc KEYVALUE
     ```
 
     Example output:
@@ -64,7 +64,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
     The following command disables encryption on all control plane nodes.
 
     ```bash
-     /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --disable --aescbc KEYVALUE
+     /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --disable --aescbc KEYVALUE
     ```
 
     Example output:
@@ -82,7 +82,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
     1. (`ncn-m#`) Fully disable all encryption.
 
         ```bash
-         /usr/share/doc/csm/scripts/operations/node_management/encryption.sh --disable
+         /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --disable
         ```
 
         Example output:
