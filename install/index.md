@@ -27,22 +27,22 @@ Detailed BICAN documentation can be found on the [BICAN technical details](../op
 
 1. <s>[Validate SHCD](#validate_shcd)</s>
 1. [Prepare configuration payload](#prepare_configuration_payload)
-1. [Prepare management nodes](#prepare_management_nodes)
 1. [Bootstrap PIT node](#bootstrap_pit_node)
+1. [Prepare management nodes](#prepare_management_nodes)
 1. [Configure management network switches](#configure_management_network)
-1. [Collect MAC addresses for NCNs](#collect_mac_addresses_for_ncns)
+1. <s>[Collect MAC addresses for NCNs](#collect_mac_addresses_for_ncns)</s>
 1. [Deploy management nodes](#deploy_management_nodes)
 1. [Install CSM services](#install_csm_services)
 1. [Validate CSM health](#validate_csm_health_before_final_ncn_deploy)
 1. [Deploy final NCN](#deploy_final_ncn)
 1. [Configure administrative access](#configure_administrative_access)
 1. [Validate CSM health](#validate_csm_health)
-1. [Configure Prometheus alert notifications](#configure_prometheus_alert_notifications)
-1. [Update firmware with FAS](#update_firmware_with_fas)
-1. [Prepare compute nodes](#prepare_compute_nodes)
-1. [Apply security hardening](#apply_security_hardening)
-1. [Next topic](#next_topic)
-1. [Troubleshooting installation problems](#troubleshooting_installation)
+1. <s>[Configure Prometheus alert notifications](#configure_prometheus_alert_notifications)</s>
+1. <s>[Update firmware with FAS](#update_firmware_with_fas)</s>
+1. <s>[Prepare compute nodes](#prepare_compute_nodes)</s>
+1. <s>[Apply security hardening](#apply_security_hardening)</s>
+1. <s>[Next topic](#next_topic)</s>
+1. <s>[Troubleshooting installation problems](#troubleshooting_installation)</s>
 
 The topics in this chapter need to be done as part of an ordered procedure so are shown here with numbered topics.
 
@@ -121,8 +121,8 @@ The configuration payloads, created using HPCM commands and CVT, are used to boo
       have already been configured, then skip this step and move to
       [Collect MAC addresses for NCNs](#collect_mac_addresses_for_ncns).
    <a name="collect_mac_addresses_for_ncns"></a>
-<s>
-   1. Collect MAC addresses for NCNs
+
+   1. <s>Collect MAC addresses for NCNs
 
       Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
       the actual MAC address for the management nodes can be collected. This process will include repetition of some
@@ -137,9 +137,9 @@ The configuration payloads, created using HPCM commands and CVT, are used to boo
 
       **Note**: If a first time install of this software release is being done on this system and the `ncn_metadata.csv`
       file already had valid MAC addresses for both BMC and node interfaces before `csi config init` was run, then
-      this topic could be skipped and instead move to [Deploy management nodes](#deploy_management_nodes).
+      this topic could be skipped and instead move to [Deploy management nodes](#deploy_management_nodes).</s>
    <a name="deploy_management_nodes"></a>
-</s>
+
    1. Deploy management nodes
 
       Now that the PIT node has been booted with the LiveCD and the management network switches have been configured,
@@ -204,8 +204,8 @@ The configuration payloads, created using HPCM commands and CVT, are used to boo
 
       See [Validate CSM Health](../operations/validate_csm_health.md).
    <a name="configure_prometheus_alert_notifications"></a>
-<s>
-   1. Configure Prometheus alert notifications
+
+   1. <s>Configure Prometheus alert notifications
 
       Now that CSM has been installed and health has been validated, if the system management health monitoring tools and specifically,
       Prometheus, are found to be useful, email notifications can be configured for specific alerts defined in Prometheus.
@@ -214,10 +214,10 @@ The configuration payloads, created using HPCM commands and CVT, are used to boo
       types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
 
       See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for an example
-      configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
+      configuration of an email alert notification for the Postgres replication alerts that are defined on the system.</s>
    <a name="update_firmware_with_fas"></a>
 
-   1. Update firmware with FAS
+   1. <s>Update firmware with FAS
 
       Now that all management nodes and CSM services have been validated as healthy, the firmware on other
       components in the system can be checked and updated. The Firmware Action Service (FAS) communicates
@@ -228,9 +228,9 @@ The configuration payloads, created using HPCM commands and CVT, are used to boo
       [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.07`](http://www.hpe.com/support/ex-gsg-042120221040) for more information about how to install
       the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
       available. Once FAS is aware that new firmware is available, then see
-      [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
+      [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).</s>
    <a name="prepare_compute_nodes"></a>
-</s>
+
    1. Prepare compute nodes
 
       After completion of the firmware update with FAS, compute nodes can be prepared. Some compute node
@@ -243,20 +243,20 @@ The configuration payloads, created using HPCM commands and CVT, are used to boo
 
       See [Prepare Compute Nodes](prepare_compute_nodes.md)
    <a name="apply_security_hardening"></a>
-<s>
-   1. Apply security hardening
+
+   1. <s>Apply security hardening
 
       After preparing compute nodes, and prior to the installation of other product streams, review the security hardening guide.
 
-      See [Security Hardening](../operations/CSM_product_management/Apply_Security_Hardening.md)
+      See [Security Hardening](../operations/CSM_product_management/Apply_Security_Hardening.md)</s>
    <a name="next_topic"></a>
 
-   1. Next topic
+   1. <s>Next topic
 
       After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
       been fully installed and configured.
       Refer to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.07`](http://www.hpe.com/support/ex-gsg-042120221040) on the HPE Customer Support Center
-      for more information on other product streams to be installed and configured after CSM.
+      for more information on other product streams to be installed and configured after CSM. </s>
    <a name="troubleshooting_installation"></a>
 
    1. Troubleshooting installation problems
@@ -265,4 +265,4 @@ The configuration payloads, created using HPCM commands and CVT, are used to boo
       switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install
       for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
       See [Troubleshooting Installation Problems](troubleshooting_installation.md).
-</s>
+
