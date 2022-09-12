@@ -318,27 +318,43 @@ cachedir: .pytest_cache
 rootdir: /src/app, configfile: pytest.ini
 plugins: tavern-1.23.1
 collecting ... collected 38 items
+
 ...
+
 test_components.tavern.yaml::Ensure that we can conduct a variety of queries on the Components collection FAILED [ 31%]
+
 ...
+
 test_hardware.tavern.yaml::Query the Hardware collection for Node information FAILED [ 50%]
+
 ...
+
 =================================== FAILURES ===================================
 _ /src/app/test_components.tavern.yaml::Ensure that we can conduct a variety of queries on the Components collection _
+
 ...
+
 ------------------------------ Captured log call -------------------------------
 WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+
 ...
+
 _ /src/app/test_hardware.tavern.yaml::Query the Hardware collection for Node information _
+
 ...
+
 Errors:
 E   tavern.util.exceptions.TestFailError: Test 'Retrieve the hardware information for a given node xname from the Hardware collection' failed:
     - Status code was 404, expected 200:
         {"type": "about:blank", "title": "Not Found", "detail": "no such xname.", "status": 404}
+
 ...
+
 ------------------------------ Captured log call -------------------------------
 WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'node_xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+
 ...
+
 =========================== short test summary info ============================
 FAILED test_components.tavern.yaml::Ensure that we can conduct a variety of queries on the Components collection
 FAILED test_hardware.tavern.yaml::Query the Hardware collection for Node information
