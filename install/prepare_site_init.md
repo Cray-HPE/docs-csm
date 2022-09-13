@@ -327,6 +327,11 @@ with system-specific customizations.
 
     ```bash
     yq r ${SITE_INIT}/customizations.yaml spec.network.netstaticips.system_to_site_lookups
+    ```
+
+    Possible output:
+
+    ```text
     172.30.84.40
     ```
 
