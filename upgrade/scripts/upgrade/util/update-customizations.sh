@@ -103,10 +103,11 @@ if [[ -z "$(yq r "$c" "spec.network.netstaticips.nmn_ncn_storage_mons")" ]]; the
   done
   yq w -i --style=single "$c" spec.kubernetes.services.cray-sysmgmt-health.cephExporter.endpoints '{{ network.netstaticips.nmn_ncn_storage_mons }}'
 fi
-
+if [[ "$(yq r "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.enabled")" ]]; then
+    yq d -i "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params.*.module"
+fi
 if [[ "$inplace" == "yes" ]]; then
     cp "$c" "$customizations"
 else
     cat "$c"
 fi
-
