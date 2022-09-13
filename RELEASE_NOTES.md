@@ -33,8 +33,9 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
 
 ### Automation improvements
 
-* Support for Argo-driven upgrade of multiple Kubernetes Worker NCNs in parallel, using `cray-nls` (Tech Preview)
-* Support for Argo-driven upgrade of Storage NCNs, serially, using `cray-nls` (Tech Preview)
+* Support for Argo-driven upgrade of multiple Kubernetes Worker NCNs in parallel (Tech Preview)
+* Support for Argo-driven rebuild of multiple Kubernetes Worker NCNs in parallel (Tech Preview)
+* Support for Argo-driven upgrade of Storage NCNs, serially
 * Ceph upgrade is now driven using a utility called the  `cubs_tool`.
 * Re-organization of `goss` test execution during installs and upgrades to remove duplicated tests
 * Improvement of `goss` test suite output to display summary of failing tests
