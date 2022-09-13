@@ -128,7 +128,7 @@ of container images spins up with each major CSM release.
 | `csm-docker/stable/quay.io/kiali/kiali-operator:v1.36.7`                    | The updated `RedHat` base image is available but not pulled in by upstream.  See procedure to [Remove Kiali](operations/system_management_health/Remove_Kiali.md) if desired. |
 | `csm-dckr/stable/k8s.gcr.io/kube-proxy:v1.20.13`                            | This version is needed for the upgrade procedure but will not be running after the upgrade has been completed. |
 | `csm-docker/stable/k8s.gcr.io/kube-proxy:v1.21.12`                          | Upstream fixes are needed and are not yet available for the `1.21.12` version of Kubernetes included in CSM 1.3. |
-| `csm-docker/stable/cray-postgres-db-backup:0.2.3`                           | To ensure success of `postgres` restore functionality, we needed to pin to `psql v12` in this image |
+| `csm-docker/stable/cray-postgres-db-backup:0.2.3`                           | To ensure success of `postgres` restore functionality, we needed to pin to `psql v12` in this image. |
 | `csm-dckr/stable/dckr.io/nfvpe/multus:v3.7`                                 | Upstream fixes are needed and are not yet available, however we have engaged with the project to make a reduced-vulnerability version available.|
 | `csm-docker/stable/docker.io/sonatype/nexus3:3.38.0-1`                      | Upstream fixes are needed to the base image in order to address the remaining vulnerabilities. |
 | `csm-docker/stable/cray-uas-mgr:1.21.0`                                     | This will be addressed in a future version of CSM. |
