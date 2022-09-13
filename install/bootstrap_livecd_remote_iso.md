@@ -620,13 +620,7 @@ Prepare the `site-init` directory by performing the [Prepare `Site Init`](prepar
    pit# export USERNAME IPMI_PASSWORD ; /root/bin/pit-init.sh
    ```
 
-1. Start and configure NTP on the LiveCD for a fallback/recovery server.
-
-   ```bash
-   pit# /root/bin/configure-ntp.sh
-   ```
-
-1. Install Goss Tests and Server
+1. Install `csm-testing`
 
    ```bash
    pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
