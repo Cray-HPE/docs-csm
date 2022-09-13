@@ -382,6 +382,8 @@ Verify that the Lustre file system is available from the management cluster.
     /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
     ```
 
+    Note that if the script errors out indicating that a file is missing, the script can be re-run to see if those additional attempts will allow it to run to completion.
+
 1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master, worker, and storage NCN while trying to contact CFS.
 
     PLEASE NOTE:  In the script below, modify the ranges of workers and storage nodes BASED ON THE NUMBER YOU HAVE IN YOUR ENVIRONMENT.
