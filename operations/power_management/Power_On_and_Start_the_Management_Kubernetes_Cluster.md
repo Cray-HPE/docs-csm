@@ -375,11 +375,20 @@ Verify that the Lustre file system is available from the management cluster.
         ```text
         cray-console-node-1      3/3     Running            0          2m
         ```
-
-1. Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
+1. Ensure that the storage nodes are already joined to spire.
 
     ```bash
-    ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+    /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+    ```
+
+    Note that if the script errors out indicating that a file is missing, subsequent re-runs may allow it to complete successfully.
+
+1. Determine whether the `cfs-state-reporter` service is failing to start on each manager/master, worker, and storage NCN while trying to contact CFS.
+
+    PLEASE NOTE:  In the command below, modify the range of the worker and storage nodes BASED ON THE NUMBER THAT EXIST ON THE SYSTEM.
+
+    ```bash
+    ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] systemctl status cfs-state-reporter
     ```
 
     Example output:
