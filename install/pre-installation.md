@@ -55,7 +55,7 @@ Any steps run on an `external` server require that server to have the following 
    ```
 
    ```bash
-   curl -C - -O "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
+   curl -C - -f -O "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
    ```
 
 1. (`external#`) Extract the LiveCD from the tarball.
@@ -363,7 +363,7 @@ These variables will need to be set for many procedures within the CSM installat
       > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
 
       ```bash
-      curl -C - -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
+      curl -C - -f -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
         "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
       ```
 
