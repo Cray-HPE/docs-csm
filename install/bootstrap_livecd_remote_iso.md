@@ -620,7 +620,7 @@ Prepare the `site-init` directory by performing the [Prepare `Site Init`](prepar
    pit# export USERNAME IPMI_PASSWORD ; /root/bin/pit-init.sh
    ```
 
-1. Install `csm-testing`
+1. Install `csm-testing`.
 
    ```bash
    pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
