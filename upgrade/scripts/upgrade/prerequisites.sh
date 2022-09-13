@@ -756,7 +756,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     backupBucket="config-data"
     cray artifacts list "${backupBucket}" || backupBucket="vbis"
 
-    cray artifacts create "${backupBucket}" "bss-backup-$(date +%Y-%m-%d).json bss-backup-$(date +%Y-%m-%d).json"
+    cray artifacts create "${backupBucket}" "bss-backup-$(date +%Y-%m-%d).json" "bss-backup-$(date +%Y-%m-%d).json"
 
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)"
