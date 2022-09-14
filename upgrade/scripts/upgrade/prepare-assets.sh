@@ -38,8 +38,7 @@ do
 
     case $key in
         --csm-version)
-        CSM_RELEASE="$2"
-        CSM_REL_NAME="csm-${CSM_RELEASE}"
+        CSM_RELEASE="$2"        
         shift # past argument
         shift # past value
         ;;
@@ -64,10 +63,6 @@ do
     esac
 done
 
-CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}
-. "${locOfScript}/../common/ncn-common.sh" "$(hostname)"
-trap 'err_report' ERR
-
 if [[ -z ${LOG_FILE} ]]; then
     LOG_FILE="/root/output.log"
     echo
@@ -83,6 +78,11 @@ if [[ -z ${CSM_RELEASE} ]]; then
     echo "CSM RELEASE is not specified"
     exit 1
 fi
+
+CSM_REL_NAME="csm-${CSM_RELEASE}"
+CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
+. "${locOfScript}/../common/ncn-common.sh" "$(hostname)"
+trap 'err_report' ERR
 
 if [[ -z ${TARBALL_FILE} ]]; then
     # Download tarball from internet
