@@ -43,6 +43,7 @@ This procedure requires administrative privileges.
         NCNS=$(curl -skH "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/hardware |
                  jq -r '.[] | select(.TypeString=="Node") | select(.ExtraProperties.Role=="Management") | .ExtraProperties.Aliases[] | .' | 
                  sort -u)
+        echo "${NCNS}"
         ```
 
     1. Sync NTP on all other nodes.
