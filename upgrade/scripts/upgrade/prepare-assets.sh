@@ -26,10 +26,7 @@
 set -e
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${locOfScript}/../common/upgrade-state.sh
-CSM_ARTI_DIR="not_set"
-#shellcheck disable=SC2046
-. ${locOfScript}/../common/ncn-common.sh $(hostname)
-trap 'err_report' ERR
+
 # array for paths to unmount after chrooting images
 #shellcheck disable=SC2034
 declare -a UNMOUNTS=()
@@ -66,6 +63,10 @@ do
         ;;
     esac
 done
+
+CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}
+. ${locOfScript}/../common/ncn-common.sh $(hostname)
+trap 'err_report' ERR
 
 if [[ -z ${LOG_FILE} ]]; then
     LOG_FILE="/root/output.log"
@@ -136,8 +137,7 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     mkdir -p /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball
-    tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball
-    CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}
+    tar -xzf ${TARBALL_FILE} -C /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball    
     if [[ "${DELETE_TARBALL_FILE}" != N ]]; then
         rm -rf "${TARBALL_FILE}"
     fi
@@ -145,7 +145,7 @@ if [[ $state_recorded == "0" ]]; then
     # if we have to untar a file, we assume this is a new upgrade
     # remove existing myenv file just in case
     rm -rf /etc/cray/upgrade/csm/myenv
-    echo "export CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}" >> /etc/cray/upgrade/csm/myenv
+    echo "export CSM_ARTI_DIR=${CSM_ARTI_DIR}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
     echo "export CSM_REL_NAME=${CSM_REL_NAME}" >> /etc/cray/upgrade/csm/myenv
     } >> ${LOG_FILE} 2>&1
