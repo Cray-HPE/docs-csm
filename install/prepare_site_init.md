@@ -395,7 +395,7 @@ with system-specific customizations.
            EOF
            ```
 
-        1. On success, review the `cray-keycloak-users-localize` values.
+        1. Review the `cray-keycloak-users-localize` values.
 
            ```bash
            linux# yq read ${SITE_INIT}/customizations.yaml spec.kubernetes.services.cray-keycloak-users-localize
@@ -510,6 +510,8 @@ encrypted.
     linux# ${SITE_INIT}/utils/secrets-reencrypt.sh ${SITE_INIT}/customizations.yaml \
                 ${SITE_INIT}/certs/sealed_secrets.key ${SITE_INIT}/certs/sealed_secrets.crt
     ```
+
+    It is not an error if this script gives no output.
 
 1. Generate secrets.
 
