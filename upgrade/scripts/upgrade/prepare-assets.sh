@@ -26,6 +26,7 @@
 set -e
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${locOfScript}/../common/upgrade-state.sh
+CSM_ARTI_DIR="not_set"
 #shellcheck disable=SC2046
 . ${locOfScript}/../common/ncn-common.sh $(hostname)
 trap 'err_report' ERR
