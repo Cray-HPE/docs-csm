@@ -16,13 +16,13 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
 
     Expected output looks similar to the following:
 
-       ```
-       10.252.0.2
-       10.252.0.3
-       10.252.0.4
-       10.252.0.5
-       4 IP addresses saved to <stdout>
-       ```
+    ```bash
+    10.252.0.2
+    10.252.0.3
+    10.252.0.4
+    10.252.0.5
+    4 IP addresses saved to <stdout>
+    ```
 
 1. (`pit#`) Update `customizations.yaml` with the list of switches.
 
@@ -34,16 +34,12 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
               serviceMonitor:
                 enabled: true
                 params:
-                  enabled: true
-                  conf:
-                    module:
-                    - if_mib
-                    target:
-                    - 127.0.0.1
-                    - 10.252.0.2
-                    - 10.252.0.3
-                    - 10.252.0.4
-                    - 10.252.0.5
+                - name: snmp1
+                  target: 10.252.0.2
+                - name: snmp2
+                  target: 10.252.0.3
+                - name: snmp3
+                  target: 10.252.0.4
     EOF
     ```
 
@@ -59,16 +55,12 @@ In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must 
     serviceMonitor:
       enabled: true
       params:
-        enabled: true
-        conf:
-          module:
-            - if_mib
-          target:
-            - 127.0.0.1
-            - 10.252.0.2
-            - 10.252.0.3
-            - 10.252.0.4
-            - 10.252.0.5
+      - name: snmp1
+        target: 10.252.0.2
+      - name: snmp2
+        target: 10.252.0.3
+      - name: snmp3
+        target: 10.252.0.4
     ```
 
 The most common configuration parameters are specified in the following table. They must be set in the `customizations.yaml` file under the `spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter` service definition.
@@ -76,8 +68,8 @@ The most common configuration parameters are specified in the following table. T
 |Customization|Default|Description|
 |-------------|-------|-----------|
 |`serviceMonitor.enabled`|`true`|Enables `serviceMonitor` for SNMP exporter \(default chart value is `true`\)|
-|`params.enabled`|`false`|Sets the snmp exporter params change to true \(default chart value is `false`\)|
+|`params.enabled`|`true`|Sets the SNMP exporter `params` change to true \(default chart value is `false`\)|
 |`params.conf.module`|`if_mib`| SNMP exporter to select which module \(default chart value is `if_mib`\)|
-|`params.conf.target`|`127.0.0.1`| Add list of switch targets to SNMP exporter to monitor \(default chart value is `127.0.0.1`\)|
+|`params.conf.target`|`10.252.0.2`| Add list of switch targets to SNMP exporter to monitor|
 
 For a complete set of available parameters, consult the `values.yaml` file for the `cray-sysmgmt-health` chart.
