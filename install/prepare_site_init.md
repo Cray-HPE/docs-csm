@@ -139,7 +139,7 @@ with system-specific customizations.
         > `Password` entries are correct.
 
     1. Validate MEDS credentials.
-    
+
         These credentials are used by the MEDS service, targeting Redfish BMC endpoints. Make sure that `Username` and `Password` entries are correct.
 
         ```bash
@@ -147,7 +147,7 @@ with system-specific customizations.
         ```
 
     1. Validate RTS credentials.
-    
+
         These credentials are used by the Redfish Translation Service, targeting River Redfish BMC endpoints and PDU controllers.
         Make sure that `Username` and `Password` entries are correct.
 
