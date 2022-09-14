@@ -300,7 +300,7 @@ with system-specific customizations.
        EOF
        ```
 
-    1. (`pit#`) n success, review the `cray-keycloak-users-localize` values.
+    1. (`pit#`) Review the `cray-keycloak-users-localize` values.
 
        ```bash
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
@@ -381,6 +381,8 @@ with system-specific customizations.
         "${SITE_INIT}/certs/sealed_secrets.key" \
         "${SITE_INIT}/certs/sealed_secrets.crt"
     ```
+
+    It is not an error if this script gives no output.
 
 1. (`pit#`) Generate secrets.
 
