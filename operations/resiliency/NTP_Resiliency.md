@@ -8,7 +8,7 @@ This procedure requires administrative privileges.
 
 ## Procedure
 
-1. Set the date manually, if the time on NCNs is off by more than a few hours.
+1. (`ncn#`) Set the date manually, if the time on NCNs is off by more than a few hours.
 
     For example:
 
@@ -16,7 +16,7 @@ This procedure requires administrative privileges.
     timedatectl set-time "2021-02-19 15:04:00"
     ```
 
-1. Configure NTP on the Pre-install Toolkit \(PIT\) node.
+1. (`pit#`) Configure NTP on the Pre-install Toolkit \(PIT\) node.
 
     > If the system no longer has a booted PIT node, then skip this step.
 
@@ -24,7 +24,7 @@ This procedure requires administrative privileges.
     /root/bin/configure-ntp.sh
     ```
 
-1. Sync NTP on all other nodes.
+1. (`pit#` or `ncn#`) Sync NTP on all other nodes.
 
     If the system still has a booted PIT node, then follow these substeps from it. Otherwise,
     they can be performed on any NCN.
