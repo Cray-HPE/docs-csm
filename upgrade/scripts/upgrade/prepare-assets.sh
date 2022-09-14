@@ -65,7 +65,7 @@ do
 done
 
 CSM_ARTI_DIR=/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}
-. ${locOfScript}/../common/ncn-common.sh $(hostname)
+. "${locOfScript}/../common/ncn-common.sh" "$(hostname)"
 trap 'err_report' ERR
 
 if [[ -z ${LOG_FILE} ]]; then
