@@ -13,14 +13,14 @@ The parameters which can be set are:
 * BMC/Controller passwords
 * SSH console key
 
-   IMPORTANT: If the `scsd` tool is used to update the SSHConsoleKey value outside of ConMan, it will
+   IMPORTANT: If the `scsd` tool is used to update the `SSHConsoleKey` value outside of ConMan, it will
    disrupt the ConMan connection to the console and collection of console logs. See [ConMan](../conman/ConMan.md)
    for more information about remote consoles and collecting console logs.
 
 However, this procedure only describes how to change the SSH key to enable passwordless SSH for
 troubleshooting of power down and power up logs on the node BMCs.
 
-See [Manage Parameters with the scsd Service](Manage_Parameters_with_the_scsd_Service.md)
+See [Manage Parameters with the SCSD Service](Manage_Parameters_with_the_scsd_Service.md)
 for more information about these topics for changing the other parameters.
 
 * Retrieve Current Information from Targets
@@ -66,8 +66,8 @@ After the script runs, verify that it worked:
 
 1. Test access to a node controller in the liquid-cooled cabinet.
 
-   SSH into the node controller for the host component name (xname). For example, if the host component name (xname) is x1000c1s0b0n0, the
-   node controller component name (xname) would be x1000c1s0b0.
+   SSH into the node controller for the host component name (xname). For example, if the host component name (xname) is `x1000c1s0b0n0`, the
+   node controller component name (xname) would be `x1000c1s0b0`.
 
    If the node controller is not powered up, this SSH attempt will fail.
 
