@@ -429,7 +429,9 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    ```bash
    KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   echo "${KUBERNETES_VERSION}"
    CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   echo "${CEPH_VERSION}"
    ```
 
 1. (`pit#`) Copy the NCN images from the expanded tarball.
@@ -643,7 +645,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
    export IPMI_PASSWORD
    ```
 
-1. (`pit#`) Setup boot links to the artifacts extracted from the CSM tarball.
+1. (`pit#`) Setup links to the boot artifacts extracted from the CSM tarball.
 
    > ***NOTES***
    >
