@@ -1,15 +1,17 @@
 # Runbook - DHCP Troubleshooting
 
-## 1. Confirm The Status Of The `cray-dhcp-kea` 
+## 1. Confirm The Status Of The `cray-dhcp-kea`
 
 Check if the kea DHCP services are running.
 
-Create API access token for the for 
+Create API access token for the for system:
+
 ```shell
 export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 ```
 
 ### 1.1 Check cray-dchp-kea Pods
+
 On ncn-w001 or a worker/manager with kubectl, run:
 
 ```shell
@@ -22,6 +24,7 @@ You should get a list of the following pods as output:
 ncn-w001:~ # kubectl get pods -n services -o wide | grep kea
 cray-dhcp-kea-6f7ddf65dc-kckq6                                    3/3     Running            0          45h     10.37.0.47     ncn-w001   <none>           <none>
 ```
+
 - Make sure pods listed are in `Running` state
 - If `cray-dhcp-kea` pod is not in `Running` state.  Proceed to do kubernetes troubleshooting.
 

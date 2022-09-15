@@ -60,13 +60,16 @@ The output will be in this format:
   }
 ]
 ```
+
 - If the out is `[]`.  Check `cray-dns-unbound-manager` cronjob for errors in the log and last scheduled time. 
 
 ## 2. Confirm Host Resolver Configuration
 
 ### 2.1 Confirm `/etc/resolv.conf`
-- For the Shasta v1.4/ CSM 0.9 and newer release(s) the /etc/resolv.conf should contain the following in-order: 
-  1. `/etc/resolv.conf` should only contain cray-dns-unbound service IP.
+
+- For the Shasta v1.4/ CSM 0.9 and newer release(s) the /etc/resolv.conf should contain the following in-order:
+
+1. `/etc/resolv.conf` should only contain cray-dns-unbound service IP.
      
 ```shell
 nameserver 10.92.100.225
@@ -86,17 +89,18 @@ ncn-m001:~ #
 ```
 
 - If the command does not return anything, that means dns-forwarding is not setup for a system.
-Verify DNS queries are working with dns-forwarder.
+
+- Verify DNS queries are working with dns-forwarder.
 
 ```shell
 ncn-m001:~ # nslookup google.com 172.30.84.40
-Server:		172.30.84.40
-Address:	172.30.84.40#53
+Server: 172.30.84.40
+Address: 172.30.84.40#53
  
 Non-authoritative answer:
-Name:	google.com
+Name: google.com
 Address: 172.217.1.238
-Name:	google.com
+Name: google.com
 Address: 2607:f8b0:4009:81a::200e
  
 ncn-m001:~ # 
@@ -127,6 +131,7 @@ to
 ```
 
 ## 3. Checking Hostname in DNS
+
 ### 3.1. Lookup Hostname By Querying DNS
 
 To verify Hostname is in DNS.  Query DNS with the hostname.
@@ -264,7 +269,7 @@ Comparing new and existing DNS records.
 
 Any log with ERROR or Exception are an indication that DNS is not healthy.
 
-## 5. Continue Troubleshooting By Following 
+## 5. Continue Troubleshooting By Following
 
 `dhcp_runbook.md` `cray-dhcp-kea`, `cray-sls` and `cray-smd` are data sources for `cray-dns-unbound`.
 
