@@ -1,16 +1,28 @@
 # Check the Progress of BOS Session Operations
 
-Describes how to view the logs of BOS operations with Kubernetes.
+> **`NOTE`** This section is for BOS v1 only. For similar functionality in BOS v2, refer to [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md).
 
-When a Boot Orchestration Service \(BOS\) session is created, it will return a job ID. This ID can be used to locate the Boot Orchestration Agent \(BOA\) Kubernetes job that executes the session. For example:
+This page describes how to view the logs of BOS operations with Kubernetes.
+
+- [Overview](#overview)
+- [Find the BOA Kubernetes pod and job](#find-the-boa-kubernetes-pod-and-job)
+- [View the BOA log](#view-the-boa-log)
+- [View the CFS log](#view-the-cfs-log)
+- [View the BOS log](#view-the-bos-log)
+
+## Overview
+
+When a Boot Orchestration Service \(BOS\) session is created, it will return a job ID. This ID can be used to locate the Boot Orchestration Agent \(BOA\) Kubernetes job that executes the session.
+
+(`ncn-mw#`) For example:
 
 ```bash
-cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot
+cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot --format toml
 ```
 
 Example output:
 
-```
+```toml
 operation = "Boot"
 templateUuid = "TEMPLATE_UUID"
 [[links]]
@@ -20,154 +32,158 @@ rel = "session"
 type = "GET"
 ```
 
-All BOS Kubernetes pods operate in the services namespace.
+All BOS Kubernetes pods operate in the `services` namespace.
 
-### Find the BOA Kubernetes Job
+## Find the BOA Kubernetes pod and job
 
-Use the following command to locate the Kubernetes BOA pod.
+1. (`ncn-mw#`) Locate the Kubernetes BOA pod.
 
-```bash
-kubectl get pods -n services | grep -E "NAME | BOS_SESSION_JOB_ID"
-```
+    > In the following command, replace `BOS_SESSION_JOB_ID` with the actual BOS session `jobId` from the output
+    > of the session creation command.
 
-For example:
+    ```bash
+    kubectl get pods -n services | grep -E "^(NAME|BOS_SESSION_JOB_ID)"
+    ```
 
-```bash
-kubectl get pods -n services | grep -E "NAME | boa-a939bd32-9d27-433f-afc2-735e77ec8e58"
-NAME                                                              READY   STATUS      RESTARTS   AGE
-boa-a939bd32-9d27-433f-afc2-735e77ec8e58-ztscd                    0/2     Completed   0          16m
-```
+    Example output:
 
-Use the following command to locate the Kubernetes BOA job.
+    ```text
+    NAME                                                              READY   STATUS      RESTARTS   AGE
+    boa-a939bd32-9d27-433f-afc2-735e77ec8e58-ztscd                    0/2     Completed   0          16m
+    ```
 
-```screen
-kubectl get jobs -n services BOS_SESSION_JOB_ID
-```
+1. (`ncn-mw#`) Locate the Kubernetes BOA job.
 
-For example:
+    > In the following command, replace `BOS_SESSION_JOB_ID` with the actual BOS session `jobId` from the output
+    > of the session creation command.
 
-```bash
-# kubectl get jobs -n services boa-a939bd32-9d27-433f-afc2-735e77ec8e58
-NAME                                       COMPLETIONS   DURATION   AGE
-boa-a939bd32-9d27-433f-afc2-735e77ec8e58   1/1           13m        15m
-```
+    ```bash
+    kubectl get jobs -n services BOS_SESSION_JOB_ID
+    ```
 
-The Kubernetes BOA pod name is not a one-to-one match with the BOA job name. The pod name has -XXXX appended to it, where 'X' is a hexadecimal digit.
+    Example output:
 
-### View the BOA Log
+    ```text
+    NAME                                       COMPLETIONS   DURATION   AGE
+    boa-a939bd32-9d27-433f-afc2-735e77ec8e58   1/1           13m        15m
+    ```
 
-Use the following command to look at the BOA pod's logs.
+    The Kubernetes BOA pod name is not a one-to-one match with the BOA job name. The pod name is the job name, with an additional
+    hexadecimal suffix separated by a `-` character.
+
+## View the BOA log
+
+(`ncn-mw#`) Look at the BOA pod's logs.
+
+> In the following command, replace `KUBERNETES_BOA_POD_ID` with the actual BOA pod name identified
+> in the previous section.
 
 ```bash
 kubectl logs -n services KUBERNETES_BOA_POD_ID -c boa
 ```
 
-For example:
+## View the CFS log
 
-```bash
-kubectl logs -n services boa-a939bd32-9d27-433f-afc2-735e77ec8e58 -c boa
-```
+If a session template has the Configuration Framework Service (CFS) enabled, then BOA will attempt to configure the nodes during a boot, reboot, or configure operation.
 
-### View the Configuration Framework Service \(CFS\) Log
+1. (`ncn-mw#`) Use the BOA job ID to find the CFS job that BOA launched to configure the nodes.
 
-If a session template has CFS enabled, then BOA will attempt to configure the nodes during a boot, reboot, or configure operation. Use the BOA job ID to find the CFS job that BOA launched to configure the nodes.
+    > In the following command, replace `BOA_JOB_ID` with the actual BOA job name identified earlier.
 
-```bash
-cray cfs sessions describe BOA_JOB_ID
-```
+    ```bash
+    cray cfs sessions describe BOA_JOB_ID --format json
+    ```
 
-For example:
+    Example output:
 
-```bash
-cray cfs sessions describe boa-86b78489-1d76-4957-9c0e-a7b1d6665c35 --format json
-```
-
-Potential output:
-
-```json
-{
-    "ansible": {
-        "limit": "x3000c0s19b4n0,x3000c0s19b3n0,x3000c0s19b2n0,x3000c0s19b1n0",
-        "playbook": "site.yml"
-    },
-    "id": "ffdda2c6-2277-11ea-8db8-b42e993b706a",
-    "links": [
-        {
-            "href": "/apis/cfs/sessions/boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
-            "rel": "self"
+    ```json
+    {
+        "ansible": {
+            "limit": "x3000c0s19b4n0,x3000c0s19b3n0,x3000c0s19b2n0,x3000c0s19b1n0",
+            "playbook": "site.yml"
         },
-        {
-            "href": "/apis/cms.cray.com/v1/namespaces/services/cfsessions/boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
-            "rel": "k8s"
-        }
-    ],
-    "name": "boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
-    "repo": {
-        "branch": "master",
-        "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
-    },
-    "status": {
-        "artifacts": [],
-        "session": {
-            "completionTime": "2019-12-19T16:05:11+00:00",
-            "job": "cfs-85e3e48f-6795-4570-b379-347b05b39dbe", <<-- Kubernetes CFS job ID
-            "startTime": "2019-12-19T15:55:37+00:00",
-            "status": "complete",
-            "succeeded": "true"
+        "id": "ffdda2c6-2277-11ea-8db8-b42e993b706a",
+        "links": [
+            {
+                "href": "/apis/cfs/sessions/boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
+                "rel": "self"
+            },
+            {
+                "href": "/apis/cms.cray.com/v1/namespaces/services/cfsessions/boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
+                "rel": "k8s"
+            }
+        ],
+        "name": "boa-86b78489-1d76-4957-9c0e-a7b1d6665c35",
+        "repo": {
+            "branch": "master",
+            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
         },
-        "targets": {
-            "failed": 0,
-            "running": 0,
-            "success": 0
+        "status": {
+            "artifacts": [],
+            "session": {
+                "completionTime": "2019-12-19T16:05:11+00:00",
+                "job": "cfs-85e3e48f-6795-4570-b379-347b05b39dbe",
+                "startTime": "2019-12-19T15:55:37+00:00",
+                "status": "complete",
+                "succeeded": "true"
+            },
+            "targets": {
+                "failed": 0,
+                "running": 0,
+                "success": 0
+            }
+        },
+        "target": {
+            "definition": "dynamic",
+            "groups": []
         }
-    },
-    "target": {
-        "definition": "dynamic",
-        "groups": []
     }
-}
-```
+    ```
 
-Use the Kubernetes CFS job ID in the returned output above to find the CFS pod ID. It is the pod with three containers listed, not two.
+1. (`ncn-mw#`) Find the CFS pod ID.
 
-```bash
-kubectl -n services get pods|grep KUBERNETES_CFS_JOB_ID
-```
+    > In the following command, replace `KUBERNETES_CFS_JOB_ID` with the contents of the `job` field in the command output
+    > from the previous step.
 
-Example output:
+    In the output of the following command, look for the pod with three containers listed, not two.
 
-```
-cfs-85e3e48f-6795-4570-b379-347b05b39dbe-59645667b-ffznt     2/2   Running     0   3h57m
-cfs-85e3e48f-6795-4570-b379-347b05b39dbe-cvr54               0/3   Completed   0   3h57m
-```
+    ```bash
+    kubectl -n services get pods|grep KUBERNETES_CFS_JOB_ID
+    ```
 
-View the pod's logs for the Ansible container:
+    Example output:
 
-```bash
-kubectl -n services logs -f -c ansible KUBERNETES_CFS_POD_ID
-```
+    ```text
+    cfs-85e3e48f-6795-4570-b379-347b05b39dbe-59645667b-ffznt     2/2   Running     0   3h57m
+    cfs-85e3e48f-6795-4570-b379-347b05b39dbe-cvr54               0/3   Completed   0   3h57m
+    ```
 
-### View the BOS log
+1. (`ncn-mw#`) View the pod's logs for the Ansible container.
+
+    > In the following command, replace `KUBERNETES_CFS_POD_ID` with the name of the CFS pod identified
+    > in the previous step.
+
+    ```bash
+    kubectl -n services logs -f -c ansible KUBERNETES_CFS_POD_ID
+    ```
+
+## View the BOS log
 
 The BOS log shows when a session was launched. It also logs any errors encountered while attempting to launch a session.
 
-The BOS Kubernetes pod ID can be found with the following command:
+1. (`ncn-mw#`) Find the BOS Kubernetes pod ID.
 
-```bash
-kubectl get pods -n services | grep bos | grep -v etcd
-```
+    > BOS uses an etcd database. Looking at the etcd logs is typically not necessary, which is why the following
+    > command excludes them from the output.
 
-Example output:
+    ```bash
+    kubectl get pods -n services | grep cray-bos | grep -v etcd
+    ```
 
-```
-cray-bos-d97cf465c-klcrw                             2/2     Running     0          90s
-```
+1. (`ncn-mw#`) Examine the BOS pod logs.
 
-Examine the logs:
+    > In the following command, replace `BOS_POD_ID` with the name of the pod identified in the previous step.
 
-```bash
-kubectl logs BOS_POD_ID
-```
-
-BOS uses an etcd database. Looking at the etcd logs is typically not necessary.
-
+    ```bash
+    kubectl logs -n services BOS_POD_ID -c cray-bos
+    ```

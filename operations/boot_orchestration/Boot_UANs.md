@@ -8,12 +8,10 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 
 ## Procedure
 
-The commands in this procedure are to be run on a master or worker NCN, except where noted otherwise.
-
-1. Create a BOS session to boot the UAN nodes.
+1. (`ncn-mw#`) Create a BOS session to boot the UAN nodes.
 
     ```bash
-    cray bos session create --template-uuid uan-sessiontemplate-PRODUCT_VERSION \
+    cray bos v2 sessions create --template-name uan-sessiontemplate-PRODUCT_VERSION \
             --operation reboot --format json | tee session.json
     ```
 
@@ -21,21 +19,18 @@ The commands in this procedure are to be run on a master or worker NCN, except w
 
     ```json
     {
-     "links": [
-       {
-         "href": "/v1/session/89680d0a-3a6b-4569-a1a1-e275b71fce7d",
-         "jobId": "boa-89680d0a-3a6b-4569-a1a1-e275b71fce7d",
-         "rel": "session",
-         "type": "GET"
-       },
-       {
-         "href": "/v1/session/89680d0a-3a6b-4569-a1a1-e275b71fce7d/status",
-         "rel": "status",
-         "type": "GET"
-       }
-     ],
-     "operation": "reboot",
-     "templateUuid": "uan-sessiontemplate-PRODUCT_VERSION"
+      "components": "",
+      "limit": "",
+      "name": "9fea7f3f-0a77-40b9-892d-37712de51d65",
+      "operation": "boot",
+      "stage": false,
+      "status": {
+        "end_time": null,
+        "error": null,
+        "start_time": "2022-08-22T14:44:27",
+        "status": "pending"
+      },
+      "template_name": "cle-1.1.0"
     }
     ```
 
@@ -62,41 +57,17 @@ The commands in this procedure are to be run on a master or worker NCN, except w
 
     If this occurs, repeat the BOS command.
 
-1. Retrieve the BOS session ID from the output of the `cray bos session create` command in the previous step.
+1. (`ncn-mw#`) Retrieve the BOS session name from the output of the `cray bos v2 session create` command in the previous step.
 
     ```bash
-    BOS_SESSION=$(jq -r '.links[] | select(.rel=="session") | .href' session.json | cut -d '/' -f4) ; echo $BOS_SESSION
+    BOS_SESSION=9fea7f3f-0a77-40b9-892d-37712de51d65
     ```
 
-    Example output:
-
-    ```text
-    89680d0a-3a6b-4569-a1a1-e275b71fce7d
-    ```
-
-1. Retrieve the Boot Orchestration Agent \(BOA\) Kubernetes job name for the BOS session.
-
-    ```bash
-    BOA_JOB_NAME=$(cray bos session describe $BOS_SESSION --format json | jq -r .boa_job_name)
-    ```
-
-1. Retrieve the Kubernetes pod name for the BOA assigned to run this session.
-
-    ```bash
-    BOA_POD=$(kubectl get pods -n services -l job-name=$BOA_JOB_NAME --no-headers -o custom-columns=":metadata.name")
-    ```
-
-1. View the logs for the BOA to track session progress.
-
-    ```bash
-    kubectl logs -f -n services $BOA_POD -c boa
-    ```
-
-1. List the CFS sessions started by the BOA.
+1. (`ncn-mw#`) List the CFS sessions.
 
     > **`NOTE`** Skip this step if CFS was not enabled in the boot session template used to boot the UANs.
 
-    If CFS was enabled in the boot session template, the BOA will initiate a CFS session.
+    If CFS was enabled in the boot session template, then BOS will set configuration in CFS that will trigger a CFS session.
 
     In the following command, `pending` and `complete` are also valid statuses to filter on.
 
@@ -108,7 +79,7 @@ The commands in this procedure are to be run on a master or worker NCN, except w
 
     > Skip this step if the patch has already been verified.
 
-    1. SSH into a newly booted UAN.
+    1. (`ncn-mw#`) SSH into a newly booted UAN.
 
         ```bash
         ssh uan01-nmn
