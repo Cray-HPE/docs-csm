@@ -140,7 +140,8 @@ If you see similar output where there are no system specific data like 'MACs', `
 - `cray-dhcp-kea` using the base config indicates issues generating the configuration data from cray-smd, cray-sls and cray-bss.
 Verify those services are healthy.
 
-### 1.5 Verify `cray-dhcp-kea` has active DHCP Leases 
+### 1.5 Verify cray-dhcp-kea has active DHCP Leases
+
 Verify `cray-dhcp-kea` is managing DHCP leases.
 
 ```shell
@@ -156,14 +157,15 @@ Expected output will be similar to:
 - The expectation is to have more than 0 `IPv4 lease(s) Found`.
 - If you see `"0 IPv4 lease(s) found."`, that indicates base config is being loaded or a network issue.
 
-###  1.6 Check `dhcp-helper.py` output
+### 1.6 Check dhcp-helper.py output
 
 ```shell
 kubectl exec -n services $(kubectl get pods -A|grep kea| awk '{ print $2 }') -c cray-dhcp-kea -- /srv/kea/dhcp-helper.py
 ```
 
 If there are no error, `dhcp-helper.py` will not return any messages or logs.
-- If there is output from running the above command.  The out will confirm and describe the data issue(s).
+
+- If there is output from running the above command. The out will confirm and describe the data issue(s).
 
 ### 1.7 Check `cray-dhcp-kea` logs
 
@@ -207,7 +209,7 @@ We'll use the Kea API to retrieve data from the DHCP lease database.
 export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 ```
 
-2. Once you generate the auth token you can run these commands on a a worker or manager node.
+1. Once you generate the auth token you can run these commands on a a worker or manager node.
    If you want to retrieve all the Leases, (warning this may cause your terminal to crash based on the size of the output.)
 
 Get all leases:
@@ -244,8 +246,12 @@ curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/j
 ### 2.2 Check HSM
 
 Hardware State Manager has two important parts:
-- SLS - Systems Layout Service: This is the "expected" state of the system (as populated by networks.yaml and other sources).
-- SMD - State Manager Daemon:  This is the "discovered" or active state of the system during runtime.
+
+- SLS Systems Layout Service:
+This is the "expected" state of the system (as populated by networks.yaml and other sources).
+
+- SMD State Manager Daemon:
+This is the "discovered" or active state of the system during runtime.
 
 SLS
 
@@ -420,13 +426,14 @@ curl -X DELETE -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.
 
 - Wait 5 minutes for HMS discovery to recreate the SMD Ethernet Table entry.
 - Reboot the node and let the node get an IP from DHCP
-- the standard discovery/DHCP/DNS process complete in about 5 minutes
+- The standard discovery/DHCP/DNS process complete in about 5 minutes
 - This will get the node to boot up till DVS is needed.
-- The next step is follow the DVS node map update in the section “Troubleshoot Node Map IP Change Issues” in Section 7 in “Cray Shasta DVS Administration Guide”. Shasta (V1.3) Software Documentation
+- The next step is follow the DVS node map update in the section “Troubleshoot Node Map IP Change Issues” in Section 7 in “Cray Shasta DVS Administration Guide”. Shasta (V1.3) Software Documentation.
 
-## 3. Network Troubleshooting
+## 3.Network Troubleshooting
 
 ### 3.1 Check BGP/MetalLB
+
 Log in to the spine switches and check that MetalLB is peering to the spines via BGP.
 
 For **Mellanox** Spine Switches 
