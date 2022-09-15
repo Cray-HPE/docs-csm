@@ -23,12 +23,12 @@ troubleshooting of power down and power up logs on the node BMCs.
 See [Manage Parameters with the scsd Service](Manage_Parameters_with_the_scsd_Service.md)
 for more information about these topics for changing the other parameters.
 
-   * Retrieve Current Information from Targets
-   * Retrieve Information from a Single target
-   * Set Parameters for Targets
-   * Set Parameters for a Single BMC or Controller
-   * Set Redfish Credentials for Multiple Targets
-   * Set Redfish Credentials for a Single Target
+* Retrieve Current Information from Targets
+* Retrieve Information from a Single target
+* Set Parameters for Targets
+* Set Parameters for a Single BMC or Controller
+* Set Redfish Credentials for Multiple Targets
+* Set Redfish Credentials for a Single Target
 
 The NTP server and syslog server for BMCs in the liquid-cooled cabinet are typically set by MEDS.
 
@@ -36,7 +36,7 @@ The NTP server and syslog server for BMCs in the liquid-cooled cabinet are typic
 
 Setting the SSH keys for mountain controllers is done by running the `/opt/cray/csm/scripts/admin_access/set_ssh_keys.py` script:
 
-```
+```text
 Usage: set_ssh_keys.py [options]
 
    --debug=level    Set debug level
@@ -101,3 +101,4 @@ If this script does not achieve the goal of setting SSH keys, check the followin
 * If `--exclude=` or `--include=` was used with the script, ensure the correct component names (xnames) were specified.
 * Re-run the script with `--debug=3` for verbose debugging output. Look for things like missing BMCs, bad authentication token, or bad communications with BMCs.
 
+If for whatever reason this script fails, SSH keys can be set manually using the following procedure [Manual SSH Key Setting Process](../../troubleshooting/BMC_SSH_key_manual_fixup.md).
