@@ -36,8 +36,12 @@ This document describes the configuration of a Kubernetes NCN image. The same st
 1. Clone the `csm-config-management` repository.
 
    ```bash
-   git clone https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git
+   VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+   VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+   git clone https://$VCS_USER:$VCS_PASS@api-gw-service-nmn.local/vcs/cray/csm-config-management.git
    ```
+
+   You will need a Git commit hash from this repo in the following step.
 
 1. [Create a CFS Configuration](Create_a_CFS_Configuration.md).
 
@@ -62,7 +66,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
      "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
      "playbook": "ncn-initrd.yml",
      "commit": "<git commit hash>"
-   },
+   }
    ```
 
 1. (`ncn-mw#`) Update NCN boot parameters.
