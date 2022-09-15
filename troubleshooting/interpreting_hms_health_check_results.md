@@ -270,7 +270,7 @@ FAILED opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_hardware_ncn-functiona
 (`ncn-mw#`) If these failures occur, confirm that there are no discovered compute nodes in HSM.
 
 ```bash
-cray hsm state components list --type=node --role=compute --format=json
+cray hsm state components list --type=Node --role=compute --format=json
 ```
 
 Example output:
