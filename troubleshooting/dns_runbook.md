@@ -61,7 +61,7 @@ The output will be in this format:
   }
 ]
 ```
-- If the out is `[]`.  Check `cray-dns-unbound-manager` cronjob for errors in the log and last scheduled time. 
+- If the out is `[]`.  Check `cray-dns-unbound-manager` cronjob for errors in the log and last scheduled time.
 
 ## 2. Confirm Host Resolver Configuration
 
@@ -91,6 +91,7 @@ ncn-m001:~ #
 - If the command does not return anything, that means dns-forwarding is not setup for a system.
 
 - Verify DNS queries are working with dns-forwarder.
+
 ```shell
 ncn-m001:~ # nslookup google.com 172.30.84.40
 Server: 172.30.84.40
@@ -274,4 +275,4 @@ Any log with ERROR or Exception are an indication that DNS is not healthy.
 
 Follow the `dhcp_runbook.md` for steps to confirming `cray-dhcp-kea` health, discovery state and network troubleshooting. 
 
-[dhcp_runbook.md](../troubleshooting/dhcp_runbook.md)
+[dhcp runbook](../troubleshooting/dhcp_runbook.md)
