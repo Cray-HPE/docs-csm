@@ -1,30 +1,89 @@
 # View the Status of a BOS Session
 
-The Boot Orchestration Service \(BOS\) supports a status endpoint that reports the status for individual BOS sessions. The status can be retrieved for each boot set within the session, as well as the individual items within a boot set.
+The Boot Orchestration Service \(BOS\) supports a status endpoint that reports detailed status information for individual BOS sessions.
 
-BOS sessions contain one or more boot sets. Each boot set contains one or more phases, depending upon the operation for that session. For example, a reboot operation would have a shutdown, boot, and possibly configuration phase, but a shutdown operation would only have a shutdown phase. Each phase contains the following categories not\_started, in\_progress, succeeded, failed, and excluded.
+## BOS V2 session status
+
+BOS V2 session status offers an overall status, as well as information about the percentage of components in each state, and any errors being experienced.
+Status will be current as long as the session is running, and will cache itself when the session ends for future reference.
+
+### View the Status of a V2 Session
+
+(`ncn-mw#`) To view detailed session status, run:
+
+```bash
+cray bos v2 sessions status list 3d2e86d1-8909-46fc-8a22-f42f1a140264 --format json
+```
+
+Example output:
+
+```json
+{
+  "error_summary": {
+    "Sample error message": {"count":  1, "list":  "x3000c0s13b0n0"}
+  },
+  "managed_components_count": 1,
+  "percent_failed": 100.0,
+  "percent_staged": 0,
+  "percent_successful": 0,
+  "phases": {
+    "percent_complete": 100.0,
+    "percent_configuring": 0,
+    "percent_powering_off": 0,
+    "percent_powering_on": 0
+  },
+  "status": "complete",
+  "timing": {
+    "duration": "0:00:20",
+    "end_time": "2022-08-22T16:51:10",
+    "start_time": "2022-08-22T16:50:50"
+  }
+}
+```
+
+### Session status details
+
+* `error_summary`: Contains any error messages currently reported by nodes whether those are transient failures that will be retried or nodes that have reached a retry limit.
+    Nodes are grouped by error message, and each message includes a total count of nodes reporting that error as well as a comma separated list of nodes.
+    For errors on many nodes, the list of nodes will be truncated to the first few for readability.
+* `managed_components_count`: The number of components this session is responsible for.  
+    While the session is running, this is the current count and may decrease if other newer sessions take over responsibility for components.
+    For completed sessions this is the number of components that were tracked by the session until the session was complete.
+* `status`: Status can be either pending, running, or complete. Sessions are considered pending until the desired state of all associated components has been set.
+* `percent_*`: The percent of the `managed_components` that are in the specified state.
+* `start_time`: This timestamp is set when the session is created.
+* `end_time`: This timestamp will initially be `null` and will be set when the session ends.
+* `duration`: This lists the duration of the session in `h:mm:ss`.  While the session is running, this will be the current duration, and the value is locked-in when the session completes.
+
+## BOS V1 session status
+
+In BOS V1, the status can be retrieved for each boot set within the session, as well as the individual items within a boot set.
+
+BOS sessions contain one or more boot sets. Each boot set contains one or more phases, depending upon the operation for that session.
+For example, a reboot operation would have a shutdown, boot, and possibly configuration phase, but a shutdown operation would only have a shutdown phase.
+Each phase contains the following categories not\_started, in\_progress, succeeded, failed, and excluded.
 
 ### Metadata
 
 Each session, boot set, and phase contains similar metadata. The following is a list of useful attributes to look for in the metadata:
 
--   **start\_time**
+* `start_time`
 
     The time a session, boot set, or phase started work.
 
--   **in\_progress**
+* `in_progress`
 
     This flag means that the session, boot set, or phase has started and still has work going on.
 
--   **complete**
+* `complete`
 
     The complete flag means the session, boot set, or phase has finished.
 
--   **error\_count**
+* `error_count`
 
     The number of errors encountered in the boot sets or phases.
 
--   **stop\_time**
+* `stop_time`
 
     The time a session, boot set, or phase ended work.
 
@@ -39,23 +98,25 @@ The following table summarizes how to interpret the various combinations of valu
 
 The in\_progress flags, complete flags, and error\_count flags are cumulative, meaning that they summarize the state of the sub-items.
 
-**Phase:** The in\_progress flag indicates that there are nodes in the in\_progress category. The complete flag means there are no nodes in the in\_progress or not\_started categories.
+`Phase`: The in\_progress flag indicates that there are nodes in the in\_progress category. The complete flag means there are no nodes in the in\_progress or not\_started categories.
 
-**Boot set:** The in\_progress flag means there is one or more phases that are in\_progress. The complete flag means all phases in the boot set are complete.
+`Boot set`: The in\_progress flag means there is one or more phases that are in\_progress. The complete flag means all phases in the boot set are complete.
 
-**Session:** The in\_progress flag means one or more of the boot sets are in\_progress. The complete flag means all boot sets are complete.
+`Session`: The in\_progress flag means one or more of the boot sets are in\_progress. The complete flag means all boot sets are complete.
 
-### View the Status of a Session
+### View the Status of a V1 Session
 
 The BOS session ID is required to view the status of a session. To list the available sessions, use the following command:
 
+(`ncn-mw#`)
+
 ```bash
-cray bos session list --format json
+cray bos v1 session list --format json
 ```
 
 Example output:
 
-```
+```json
 [
   "99a192c2-050e-41bc-a576-548610851742",
   "4374f3e6-e8ed-4e66-bf63-3ebe0e618db2",
@@ -76,12 +137,12 @@ Example output:
 It is recommended to describe the session using the session ID above to verify the desired selection was selected:
 
 ```bash
-cray bos session describe SESSION_ID
+cray bos v1 session describe SESSION_ID
 ```
 
 Example output:
 
-```
+```text
 status_link = "/v1/session/f4eebe51-a217-46d0-8733-b9499a092042/status"
 complete = false
 start_time = "2020-07-22 13:39:07.706774"
@@ -92,17 +153,19 @@ in_progress = false
 operation = "reboot"
 ```
 
-The status for the session will show the session ID, the boot sets in the session, the metadata, and some links. In the following example, there is only one boot set named computes, and the session ID being used is *f4eebe51-a217-46d0-8733-b9499a092042*.
+The status for the session will show the session ID, the boot sets in the session, the metadata, and some links. In the following example, there is only one boot set named computes, and the session ID being used is `f4eebe51-a217-46d0-8733-b9499a092042`.
 
 To display the status for the session:
 
+(`ncn-mw#`)
+
 ```bash
-cray bos session status list SESSION_ID -–format json
+cray bos v1 session status list SESSION_ID -–format json
 ```
 
 Example output:
 
-```
+```json
 {
   "boot_sets": [
     "computes"
@@ -129,9 +192,10 @@ Example output:
 
 ### View the Status of a Boot Set
 
-Run the following command to view the status for a specific boot set in a session. For more information about retrieving the session ID and boot set name, refer to the "View the Status of a Session" section above. Descriptions of the different status sections are described below.
+Run the following command to view the status for a specific boot set in a session.
+For more information about retrieving the session ID and boot set name, refer to the "View the Status of a Session" section above. Descriptions of the different status sections are described below.
 
--   **Boot set**
+* `Boot set`
 
     The id parameter identifies which session this status belongs to.
 
@@ -141,7 +205,7 @@ Run the following command to view the status for a specific boot set in a sessio
 
     There is metadata section for the boot set as a whole.
 
--   **Phases**
+* `Phases`
 
     The name parameter is the name of the phase.
 
@@ -149,13 +213,15 @@ Run the following command to view the status for a specific boot set in a sessio
 
     Each phase contains the following categories: not\_started, in\_progress, succeeded, failed, and excluded. The nodes are listed in the category they are currently occupying.
 
+(`ncn-mw#`)
+
 ```bash
-cray bos session status describe BOOT_SET_NAME SESSION_ID --format json
+cray bos v1 session status describe BOOT_SET_NAME SESSION_ID --format json
 ```
 
 Example output:
 
-```
+```json
 {
   "phases": [
     {
@@ -302,12 +368,16 @@ Example output:
 
 Direct calls to the API are needed to retrieve the status for an individual phase. Support for the Cray CLI is not currently available. The following command is used to view the status of a phase:
 
+(`ncn-mw#`)
+
 ```bash
 curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
 https://api-gw-service-nmn.local/apis/bos/v1/session/SESSION_ID/status/BOOT_SET_NAME/PHASE
 ```
 
-In the following example, the session ID is *f89eb554-c733-4197-b2f2-4e1e5ba0c0ec*, the boot set name is computes, and the individual phase is shutdown.
+In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is computes, and the individual phase is shutdown.
+
+(`ncn-mw#`)
 
 ```bash
 curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
@@ -366,12 +436,16 @@ https://api-gw-service-nmn.local/apis/bos/v1/session/f89eb554-c733-4197-b2f2-4e1
 
 Direct calls to the API are needed to retrieve the status for an individual category. Support for the Cray CLI is not currently available. The following command is used to view the status of a phase:
 
+(`ncn-mw#`)
+
 ```bash
 curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
 https://api-gw-service-nmn.local/apis/bos/v1/session/SESSION_ID/status/BOOT_SET_NAME/PHASE/CATEGORY
 ```
 
-In the following example, the session ID is f89eb554-c733-4197-b2f2-4e1e5ba0c0ec, the boot set name is computes, the phase is shutdown, and the category is in\_progress.
+In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is computes, the phase is shutdown, and the category is in\_progress.
+
+(`ncn-mw#`)
 
 ```bash
 curl -H "Authorization: Bearer BEARER_TOKEN" -X GET \
@@ -398,4 +472,3 @@ https://api-gw-service-nmn.local/apis/bos/v1/session/f89eb554-c733-4197-b2f2-4e1
   ]
 }
 ```
-
