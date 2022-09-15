@@ -8,6 +8,7 @@ On a worker/manager with kubectl, run:
 ```bash
 kubectl get -n services pods | grep unbound |grep -v unbound-manager 
 ```
+
 You should see the following services as output:
 
 ```bash
@@ -23,7 +24,7 @@ ncn-m001:~ #
 
 ### 1.3 Confirm `cray-dnspunbound-coredns` Job
 
-```
+```shell
 ncn-m001:~ # kubectl get job -n services -l app.kubernetes.io/instance=cray-dns-unbound
 NAME                       COMPLETIONS   DURATION   AGE
 cray-dns-unbound-coredns   1/1           65s        64d
@@ -59,24 +60,21 @@ The output will be in this format:
   }
 ]
 ```
-
 - If the out is `[]`.  Check `cray-dns-unbound-manager` cronjob for errors in the log and last scheduled time. 
 
-## 2. Confirm Host Resolver Configuration:
+## 2. Confirm Host Resolver Configuration
 
 ### 2.1 Confirm `/etc/resolv.conf`
-
 - For the Shasta v1.4/ CSM 0.9 and newer release(s) the /etc/resolv.conf should contain the following in-order: 
   1. `/etc/resolv.conf` should only contain cray-dns-unbound service IP.
      
-     ```shell
-     nameserver 10.92.100.225
-     ```
+```shell
+nameserver 10.92.100.225
+```
      
 ### 2.2 Confirm `cray-dns-unbound` Forwarding Information Is Correct And Accessible
 
 kubectl get cm -n services cray-dns-unbound -o yaml|grep forward-addr
-
 
 The output should look like:
 
@@ -94,13 +92,13 @@ Verify DNS queries are working with dns-forwarder.
 ncn-m001:~ # nslookup google.com 172.30.84.40
 Server:		172.30.84.40
 Address:	172.30.84.40#53
-
+ 
 Non-authoritative answer:
 Name:	google.com
 Address: 172.217.1.238
 Name:	google.com
 Address: 2607:f8b0:4009:81a::200e
-
+ 
 ncn-m001:~ # 
 ```
 
@@ -130,6 +128,7 @@ to
 
 ## 3. Checking Hostname in DNS
 ### 3.1. Lookup Hostname By Querying DNS
+
 To verify Hostname is in DNS.  Query DNS with the hostname.
 
 ```shell
@@ -140,18 +139,19 @@ Output should be:
 
 ```shell
 ncn-m001:~ # nslookup api-gw-service-nmn.local
-Server:		10.92.100.225
-Address:	10.92.100.225#53
+Server: 10.92.100.225
+Address: 10.92.100.225#53
 
-Name:	api-gw-service-nmn.local
+Name: api-gw-service-nmn.local
 Address: 10.92.100.71
 
-ncn-m001:~ # 
+ncn-m001:~ #
 ```
 
 - If you get `** server can't find $HOSTNAME: NXDOMAIN`.  That is a failed DNS query.
 
 ### 3.2 Lookup Hostname In Unbound ConfigMap
+
 Verify the hostname is being generated and loaded into `cray-dns-unbound` ConfigMap
 
 ```shell
@@ -179,6 +179,7 @@ ncn-m001:~ #
 - If hostname is not showing up in the ConfigMap.  `cray-dns-unbound` will not have a DNS record for the host.
 
 ### 3.3 Reset `cray-dns-unbound` ConfigMap
+
 Reset DNS record data for `cray-dns-unbound` to force a complete DNS record generation with `cray-dns-unbound-manager`
 Verify which version of `cray-dns-unbound` is running the system by running this command:
 
@@ -210,6 +211,7 @@ ncn-m001:~ #
 
 - Wait for `cray-dns-unbound-manager` to run and repopulate DNS records in `cray-dns-unbound` ConfigMap
 - Check hostname with sections 3.1 and 3.2
+
 ### 3. Check cray-dns-unbound logs
 
 ```shell
@@ -262,6 +264,8 @@ Comparing new and existing DNS records.
 
 Any log with ERROR or Exception are an indication that DNS is not healthy.
 
-## 5. Continue Troubleshooting By Following `dhcp_runbook.md`
-`cray-dhcp-kea`, `cray-sls` and `cray-smd` are data sources for `cray-dns-unbound`.
+## 5. Continue Troubleshooting By Following 
+
+`dhcp_runbook.md` `cray-dhcp-kea`, `cray-sls` and `cray-smd` are data sources for `cray-dns-unbound`.
+
 Follow the `dhcp_runbook.md` for steps to confirming `cray-dhcp-kea` health, discovery state and network troubleshooting. [dhcp_runbook.md](dhcp_runbook.md)
