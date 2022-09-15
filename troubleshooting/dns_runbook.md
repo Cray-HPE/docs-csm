@@ -61,6 +61,7 @@ The output will be in this format:
   }
 ]
 ```
+
 - If the out is `[]`.  Check `cray-dns-unbound-manager` cronjob for errors in the log and last scheduled time.
 
 ## 2. Confirm Host Resolver Configuration
@@ -273,6 +274,4 @@ Any log with ERROR or Exception are an indication that DNS is not healthy.
 
 `dhcp_runbook.md` `cray-dhcp-kea`, `cray-sls` and `cray-smd` are data sources for `cray-dns-unbound`.
 
-Follow the `dhcp_runbook.md` for steps to confirming `cray-dhcp-kea` health, discovery state and network troubleshooting. 
-
-[dhcp runbook](../troubleshooting/dhcp_runbook.md)
+Follow the `dhcp_runbook.md` for steps to confirming `cray-dhcp-kea` health, discovery state and network troubleshooting. [dhcp runbook](../troubleshooting/dhcp_runbook.md)
