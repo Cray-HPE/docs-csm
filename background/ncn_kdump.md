@@ -82,7 +82,7 @@ to be installed, the `crash` command can not thoroughly analyze a dump without t
     ```bash
     zypper ar https://packages.local/repository/csm-${CSM_RELEASE}-embedded csm-embedded
     . /srv/cray/scripts/metal/dracut-lib.sh
-    zypper in -y kernel-default-debug=${KVER}
+    zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
     ```
 
     * Install from Artifactory if credentials are available.
@@ -101,7 +101,7 @@ to be installed, the `crash` command can not thoroughly analyze a dump without t
 
         ```bash
         . /srv/cray/scripts/metal/dracut-lib.sh
-        zypper in -y kernel-default-debug=${KVER}
+        zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
         ```
 
 1. On the node with the dump, go to the crash directory and choose a crash dump to load.
