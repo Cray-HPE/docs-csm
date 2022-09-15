@@ -1,4 +1,4 @@
-# NCN Worker Image Customization
+# Management Node Image Customization
 
 **NOTE:** Some of the documentation linked from this page mentions use of the Boot Orchestration Service (BOS). The use of BOS
 is only relevant for booting compute nodes and can be ignored when working with NCN images.
