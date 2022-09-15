@@ -274,4 +274,4 @@ Any log with ERROR or Exception are an indication that DNS is not healthy.
 
 `dhcp_runbook.md` `cray-dhcp-kea`, `cray-sls` and `cray-smd` are data sources for `cray-dns-unbound`.
 
-Follow the `dhcp_runbook.md` for steps to confirming `cray-dhcp-kea` health, discovery state and network troubleshooting. [dhcp runbook](../troubleshooting/dhcp_runbook.md)
+Follow the `dhcp_runbook.md` for steps to confirming `cray-dhcp-kea` health, discovery state and network troubleshooting [DHCP run book](../troubleshooting/dhcp_runbook.md).
