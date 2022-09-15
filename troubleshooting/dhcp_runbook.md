@@ -54,7 +54,7 @@ cray-dhcp-kea-udp-nmn                         LoadBalancer   10.24.246.19    10.
 
 ### 1.3 Check `cray-dhcp-kea` Generated Configuration Is Valid
 
-Check to make sure cray-dhcp-kea is running with a valid config by initiated a warm config-reload on `cray-dhcp-kea`.
+Check to make sure cray-dhcp-kea is running with a valid configuration by initiated a warm configuration-reload on `cray-dhcp-kea`.
 
 ```shell
 curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-reload",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
@@ -75,7 +75,7 @@ The expected output is:
 
 ### 1.4 Review `cray-dhcp-kea` Running Configuration
 
-Confirm config being used is not the base config.
+Confirm configuration being used is not the base configuration.
 
 ```shell
 curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-get",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq 
@@ -137,7 +137,7 @@ If you see similar output where there are no system specific data like 'MACs', `
 }
 ```
 
-- `cray-dhcp-kea` using the base config indicates issues generating the configuration data from cray-smd, cray-sls and cray-bss.
+- `cray-dhcp-kea` using the base configuration indicates issues generating the configuration data from cray-smd, cray-sls and cray-bss.
 Verify those services are healthy.
 
 ### 1.5 Verify cray-dhcp-kea has active DHCP Leases
@@ -155,7 +155,7 @@ Expected output will be similar to:
 ```
 
 - The expectation is to have more than 0 `IPv4 lease(s) Found`.
-- If you see `"0 IPv4 lease(s) found."`, that indicates base config is being loaded or a network issue.
+- If you see `"0 IPv4 lease(s) found."`, that indicates base configuration is being loaded or a network issue.
 
 ### 1.6 Check dhcp-helper.py output
 
@@ -430,7 +430,7 @@ curl -X DELETE -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.
 - This will get the node to boot up till DVS is needed.
 - The next step is follow the DVS node map update in the section “Troubleshoot Node Map IP Change Issues” in Section 7 in “Cray Shasta DVS Administration Guide”. Shasta (V1.3) Software Documentation.
 
-## 3.Network Troubleshooting
+## 3. Network Troubleshooting
 
 ### 3.1 Check BGP/MetalLB
 
