@@ -54,6 +54,6 @@ This top level procedure outlines the process for adding additional liquid-coole
     down or power up as part of the compute node booting process, it may be necessary to look at the logs
     on the BMC for node power down or node power up.
 
-    See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).
+    See [Configure BMC and Controller Parameters with SCSD](../system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).
 
 1. Continue on to the *Slingshot Operations Guide* to bring up the additional cabinets.
