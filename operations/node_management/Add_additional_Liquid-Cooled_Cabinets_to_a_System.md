@@ -49,7 +49,7 @@ This top level procedure outlines the process for adding additional liquid-coole
 1. Configure BMC and controller parameters with SCSD
 
     The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for
-    components in liquid-cooled cabinets. At this point in the install, SCSD should be used to set the
+    components in liquid-cooled cabinets. At this point SCSD should be used to set the
     SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
     down or power up as part of the compute node booting process, it may be necessary to look at the logs
     on the BMC for node power down or node power up.
