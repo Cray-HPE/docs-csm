@@ -316,7 +316,7 @@ Your output from SMD should look like this.
   }
 ```
 
-### 2.3 Getting Wrong IP.  Duplicate IP check.
+### 2.3 Duplicate IP
 
 A sign of a duplicate IP is seeing a DECLINE message from the client to the server.
 
@@ -436,7 +436,8 @@ curl -X DELETE -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.
 
 Log in to the spine switches and check that MetalLB is peering to the spines via BGP.
 
-For **Mellanox** Spine Switches 
+For **Mellanox** Spine Switches
+
 ```shell
 show ip bgp summary
 ```
