@@ -104,7 +104,15 @@ if [[ -z "$(yq r "$c" "spec.network.netstaticips.nmn_ncn_storage_mons")" ]]; the
   yq w -i --style=single "$c" spec.kubernetes.services.cray-sysmgmt-health.cephExporter.endpoints '{{ network.netstaticips.nmn_ncn_storage_mons }}'
 fi
 if [[ "$(yq r "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.enabled")" ]]; then
-    yq d -i "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params.*.module"
+    idx=0
+    temp=1
+    mon_node=$(yq r "$c" 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params.conf.target' | awk '{print $2}')
+    for node in ${mon_node}; do
+      yq w -i "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params[${idx}].name" "snmp$temp"
+      yq w -i "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params[${idx}].target" "${node}"
+      idx=$(( idx+1 ))
+      temp=$(( temp+1 ))
+    done
 fi
 if [[ "$inplace" == "yes" ]]; then
     cp "$c" "$customizations"
