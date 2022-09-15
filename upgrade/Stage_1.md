@@ -40,6 +40,20 @@ Note that the progress for the current stage will not show up in Argo before the
 
 For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md) and [Using Argo Workflows](../operations/argo/Using_Argo_Workflows.md).
 
+## CSM Upgrade requirement for upgrades staying within a CSM release version
+
+**IMPORTANT:**
+
+> If the upgrade is staying with a CSM release, e.g. `CSM-1.3.0-rc1` to `CSM-1.3.0-rc2`, then you will need to run the following to point the Ceph cluster to use the Ceph container image stored in Nexus.
+> The issue stems from slightly different `sha` values for the Ceph containers for in-family CSM storage node images which will prevent the Ceph containers from starting.
+> This will utilize the upgrade procedure to accomplish this as it has built in checks and health monitoring to better manage this rolling restart of the Ceph containers with the image stored in Nexus.
+
+(`ncn-s001#`)
+
+```bash
+/srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ --upgrade --in_family_override
+```  
+
 ## Storage node image upgrade
 
 (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for all storage nodes to be upgraded. Provide the storage nodes in a comma-separated list, such as `ncn-s001,ncn-s002,ncn-s003`. This upgrades the storage nodes sequentially.
