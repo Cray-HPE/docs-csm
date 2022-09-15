@@ -90,7 +90,7 @@ See [Deprecated features](../introduction/differences.md#deprecated-features).
 * [Troubleshoot BGP services without an allocated IP address](../operations/network/metallb_bgp/Troubleshoot_Services_without_an_Allocated_IP_Address.md)
 * [Troubleshoot PXE boot](../install/troubleshooting_pxe_boot.md)
 * [DHCP runbook](dhcp-runbook.md)
-* [DNS runbook(dns_runbook.md) 
+* [DNS runbook](dns_runbook.md) 
 
 ## Grafana dashboards
 
