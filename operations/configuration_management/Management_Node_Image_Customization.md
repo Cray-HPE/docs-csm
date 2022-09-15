@@ -101,7 +101,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
         echo "${PARAMS}"
         ```
 
-        In the output of the final echo command, verify that the value of `${NEW_METAL_SERVER}` was set correctly.
+        In the output of the final echo command, verify that the value of `metal.server` was correctly set to `${NEW_METAL_SERVER}`.
 
     1. Update BSS with the new boot parameters.
 
