@@ -1,6 +1,6 @@
 # Cray System Management (CSM) - Release Notes
 
-CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
+[CSM](glossary.md#cray-system-management-csm) 1.3 contains approximately 500 changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
 
 ## New
 
@@ -17,19 +17,28 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
 ### Miscellaneous functionality
 
 * Integrated Kyverno Native Policy Management engine
-* Ansible has been added to NCNs
-* Added support for the Replace/Remove/Add NCN procedures
-* Integrated Argo Server workflow engine for Kubernetes
-* Technology Preview: BOS V2 (Boot Orchestration) Asynchronous boot state handling and CRUS replacement for rolling upgrade
+* Ansible has been added to [NCN](glossary.md#non-compute-node-ncn)s
+* Added support for procedures:
+  * Replace/Remove/Add NCNs
+  * Add River cabinets
+* Integrated Argo server workflow engine for Kubernetes
+* Technology Preview: [BOS](glossary.md#boot-orchestration-service-bos) V2
+  * Asynchronous boot state handling and [CRUS](glossary.md#compute-rolling-upgrade-service-crus) replacement for rolling upgrades
 * Technology Preview: Tenant and Partition Management Service (TAPMS)
-* Support for setting of Bios Settings through SCSD
-* Ability to set power cap on n number of computes
-* Included SAT CLI in CSM (see [SAT in CSM](operations/sat/sat_in_csm.md))
+* Added support for using SCSD to enable or disable TPM BIOS setting on Gigabyte and HPE hardware
+* Boot NCNs using private S3 bucket
+* Enable [IMS](glossary.md#image-management-service-ims) recipe templating to allow for dynamic repository selection
+* CSM health check performance improvements
+  * HMS tests now execute in parallel using Helm Test
+  * NCN and Kubernetes health checks now execute in parallel and eliminate lengthy output for tests that pass
+* Included [SAT](glossary.md#system-admin-toolkit-sat) CLI in CSM (see [SAT in CSM](operations/sat/sat_in_csm.md))
 
 ### New hardware support
 
-* Olympus Antero Blade (AMD Genoa) with Slingshot 11
 * Aruba JL705C, JL706C, JL707C management network switches
+* Milan-based DL325 as a Compute Node
+* Olympus Antero Blade (AMD Genoa) with Slingshot 11
+  * No power capping support
 
 ### Automation improvements
 
@@ -76,11 +85,11 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
 * CVE remediation near zero - high/critical (container images)
 * Replaced High/Critical CVE container use in Spire
 * Addressed CVE remediation for `postgres-operator`
-* Addressed Expat-15: High/Critical CVE container use in UAS/UAI
+* Addressed Expat-15: High/Critical CVE container use in [UAS](glossary.md#user-access-service-uas)/[UAI](glossary.md#user-access-instance-uai)
 
 ### Customer-requested enhancements
 
-* Added the ability to list all lock conditions with `cray hsm locks` API
+* Added the ability to list all lock conditions with Cray [HSM](glossary.md#hardware-state-manager-hsm) locks API
 * Enabled pressure stats on all nodes with Linux 5.x kernel
 * Added initial (Tech Preview) support for API-driven NCN lifecycle operations driven via Argo workflows (for worker and storage NCN upgrades)
 
@@ -90,10 +99,10 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
   * Add/Remove/Replace NCN procedures
   * Add/Remove/Replace compute nodes using `sat swap blade`
   * How to troubleshoot `ncn-m001` PXE loop
-  * NCN image modification using IMS and CFS
+  * NCN image modification using [IMS](glossary.md#image-management-service-ims) and [CFS](glossary.md#configuration-framework-service-cfs)
   * Minimal space requirements for CSM V1.3.0
   * The new `cray-externaldns-manager` service
-* CAN documentation updated to reflect BICAN
+* [CAN](glossary.md#customer-access-network) documentation updated to reflect BICAN
 
 ## Bug fixes
 
@@ -101,10 +110,15 @@ CSM 1.3 contains approximately 500 changes spanning bug fixes, new feature devel
 
 ## Deprecations
 
-* CAPMC v1 partial deprecation
-* HSM v1 interface
+The following features are now deprecated and will be removed from CSM in a future release.
 
-See [Deprecated features](introduction/differences.md#deprecated-features).
+* [BOS](glossary.md#boot-orchestration-service-bos) v1 is now deprecated, in favor of BOS v2. BOS v1 will be removed from CSM in a future release.
+  * It is likely that even prior to BOS v1 being removed from CSM, the [Cray CLI](glossary.md#cray-cli-cray) will change its behavior when no
+    version is explicitly specified in BOS commands. Currently it defaults to BOS v1, but it may change to default to BOS v2 even before BOS v1
+    is removed from CSM.
+
+For a list of all deprecated CSM features, including those that were deprecated in previous CSM releases but have not yet been removed,
+see [Deprecated Features](introduction/deprecated_features/README.md).
 
 ## Removals
 

@@ -60,6 +60,7 @@ Glossary of terms used in CSM documentation.
 * [System Management Network (SMNet)](#system-management-network-smnet)
 * [System Management Services (SMS)](#system-management-services-sms)
 * [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
+* Tenant and Partition Management Service (TAPMS)
 * [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
 * [User Access Instance (UAI)](#user-access-instance-uai)
 * [User Access Node (UAN)](#user-access-node-uan)
@@ -139,7 +140,7 @@ management status of nodes, handling each of the steps required to upgrade compu
 See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
 
 > **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
-[Deprecated features](introduction/differences.md#deprecated-features).
+[Deprecated Features](introduction/deprecated_features/README.md).
 
 ## Cray Advanced Platform Monitoring and Control (CAPMC)
 

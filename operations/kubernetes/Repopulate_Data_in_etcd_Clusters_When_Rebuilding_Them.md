@@ -39,7 +39,7 @@ Repopulate clusters for CPS.
 ## CRUS
 
 > **NOTE** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
-[Deprecated features](../../introduction/differences.md#deprecated-features).
+[Deprecated Features](../../introduction/deprecated_features/README.md).
 
 1. View the progress of existing CRUS sessions.
 
