@@ -3,6 +3,7 @@
 ## 1. Confirm the status of the cray-dns-unbound pods/services
 
 ### 1.1 Confirm `cray-dns-unbound` pods
+
 On a worker/manager with kubectl, run:
 
 ```bash
@@ -60,7 +61,6 @@ The output will be in this format:
   }
 ]
 ```
-
 - If the out is `[]`.  Check `cray-dns-unbound-manager` cronjob for errors in the log and last scheduled time. 
 
 ## 2. Confirm Host Resolver Configuration
@@ -70,11 +70,11 @@ The output will be in this format:
 - For the Shasta v1.4/ CSM 0.9 and newer release(s) the /etc/resolv.conf should contain the following in-order:
 
 1. `/etc/resolv.conf` should only contain cray-dns-unbound service IP.
-     
+
 ```shell
 nameserver 10.92.100.225
 ```
-     
+
 ### 2.2 Confirm `cray-dns-unbound` Forwarding Information Is Correct And Accessible
 
 kubectl get cm -n services cray-dns-unbound -o yaml|grep forward-addr
@@ -91,7 +91,6 @@ ncn-m001:~ #
 - If the command does not return anything, that means dns-forwarding is not setup for a system.
 
 - Verify DNS queries are working with dns-forwarder.
-
 ```shell
 ncn-m001:~ # nslookup google.com 172.30.84.40
 Server: 172.30.84.40
@@ -192,7 +191,7 @@ Verify which version of `cray-dns-unbound` is running the system by running this
 kubectl get cm -n services cray-dns-unbound -o yaml | yq r - binaryData
 ```
 
-The output should looke like this:
+The output should look like this:
 
 ```shell
 ncn-m001:~ # kubectl get cm -n services cray-dns-unbound -o yaml|yq r - binaryData
@@ -273,4 +272,6 @@ Any log with ERROR or Exception are an indication that DNS is not healthy.
 
 `dhcp_runbook.md` `cray-dhcp-kea`, `cray-sls` and `cray-smd` are data sources for `cray-dns-unbound`.
 
-Follow the `dhcp_runbook.md` for steps to confirming `cray-dhcp-kea` health, discovery state and network troubleshooting. [dhcp_runbook.md](dhcp_runbook.md)
+Follow the `dhcp_runbook.md` for steps to confirming `cray-dhcp-kea` health, discovery state and network troubleshooting. 
+
+[dhcp_runbook.md](../troubleshooting/dhcp_runbook.md)
