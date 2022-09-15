@@ -48,16 +48,20 @@ cray-dhcp-kea-tcp-nmn                         LoadBalancer   10.21.240.208   10.
 cray-dhcp-kea-udp-hmn                         LoadBalancer   10.20.37.60     10.94.100.222   67:30357/UDP                 3h36m
 cray-dhcp-kea-udp-nmn                         LoadBalancer   10.24.246.19    10.92.100.222   67:32188/UDP                 3h36m
 ```
+
 - Verify all `cray-dhcp-kea` services have no `Pending` status
 - If `cray-dhcp-kea` services is showing `Pending` state.  Proceed to do kubernetes troubleshooting.
 
 ### 1.3 Check `cray-dhcp-kea` Generated Configuration Is Valid
 
 Check to make sure cray-dhcp-kea is running with a valid config by initiated a warm config-reload on `cray-dhcp-kea`.
+
 ```shell
 curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-reload",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
 ```
+
 The expected output is:
+
 ```json
 [
   {
@@ -66,15 +70,19 @@ The expected output is:
   }
 ]
 ```
+
 - There is a configuration data issue if you do not see the output above.
 
 ### 1.4 Review `cray-dhcp-kea` Running Configuration
 
 Confirm config being used is not the base config.
+
 ```shell
 curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-get",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq 
 ```
+
 If you see similar output where there are no system specific data like 'MACs', `IPs` or `Subnets`:
+
 ```json
 {
   "Dhcp4": {
@@ -128,25 +136,32 @@ If you see similar output where there are no system specific data like 'MACs', `
   }
 }
 ```
+
 - `cray-dhcp-kea` using the base config indicates issues generating the configuration data from cray-smd, cray-sls and cray-bss.
 Verify those services are healthy.
 
 ### 1.5 Verify `cray-dhcp-kea` has active DHCP Leases 
 Verify `cray-dhcp-kea` is managing DHCP leases.
+
 ```shell
 curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq .[].text
 ```
+
 Expected output will be similar to:
+
 ```shell
 "118 IPv4 lease(s) found."
 ```
+
 - The expectation is to have more than 0 `IPv4 lease(s) Found`.
 - If you see `"0 IPv4 lease(s) found."`, that indicates base config is being loaded or a network issue.
 
 ###  1.6 Check `dhcp-helper.py` output
+
 ```shell
 kubectl exec -n services $(kubectl get pods -A|grep kea| awk '{ print $2 }') -c cray-dhcp-kea -- /srv/kea/dhcp-helper.py
 ```
+
 If there are no error, `dhcp-helper.py` will not return any messages or logs.
 - If there is output from running the above command.  The out will confirm and describe the data issue(s).
 
@@ -175,9 +190,11 @@ waiting 10 seconds for any leases to be given out...
 ```
 
 This command will output kea logs, if there are any errors see Is there an Error.
+
 ```shell
 kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea | grep -i error
 ```
+
 ## 2 Troubleshooting DHCP For A Specific Node
 
 ### 2.1 Check Current DHCP leases
@@ -262,16 +279,19 @@ curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/
 ```
 
 If you know the `MAC` address you are looking for:
+
 ```shell
 curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/$MAC | jq 
 ```
 
 If you know the `XNAME/ComponentID` address you are looking for:
+
 ```shell
 curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=$XNAME | jq 
 ```
 
 If you know the `IP` address you are looking for:
+
 ```shell
 curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?IPAddress=$IP | jq 
 ```
@@ -289,6 +309,7 @@ Your output from SMD should look like this.
     "Type": "Node"
   }
 ```
+
 ### 2.3 Getting Wrong IP.  Duplicate IP check.
 
 A sign of a duplicate IP is seeing a DECLINE message from the client to the server.
@@ -442,6 +463,7 @@ sw-spine01 [standalone: master] # clear ip bgp all
 ```
 
 Routes to Kea (10.92.100.222) via all workers (in the above 10.252.0.4,5,6) should be available.
+
 ```shell
 show ip route 10.92.100.222
 Routes:All worker nodes (in the above example 3) should be peered with the spine BGP.
@@ -466,6 +488,7 @@ VRF Name default:
 ```
 
 For Aruba Spine Switches
+
 ```shell
 sw-spine-002# show bgp ipv4 u s
 VRF : default
@@ -520,4 +543,3 @@ Example of tcpdump for dhcp traffic for int 1/1/4
 ```shell
 sw-leaf05# system "sudo tcpdump -enli e101-004-0 port 67 or port 68"
 ```
-
