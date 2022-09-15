@@ -9,7 +9,7 @@ By default, encryption is not enabled and must be enabled after install.
 ## Table of contents
 
 * [Implementation details](#implementation-details)
-* [Enabling encryption](#enabling-encrypion)
+* [Enabling encryption](#enabling-encryption)
 * [Disabling encryption](#disabling-encryption)
 * [Encryption status](#encryption-status)
 * [Force rewrite](#force-rewrite)
