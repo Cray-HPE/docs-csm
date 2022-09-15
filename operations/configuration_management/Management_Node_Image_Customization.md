@@ -57,7 +57,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
    },
    ```
 
-  The last layer in the CFS session should be similar to this:
+   The last layer in the CFS session should be similar to this:
 
    ```json
    "layers": [
