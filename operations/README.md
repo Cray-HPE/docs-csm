@@ -504,6 +504,8 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   - [Adding a Liquid-cooled blade to a System](node_management/Adding_a_Liquid-cooled_blade_to_a_System.md)
   - [Adding a Liquid-cooled blade to a System Using SAT](node_management/Adding_a_Liquid-cooled_blade_to_a_System_Using_SAT.md)
 - [Add a Standard Rack Node](node_management/Add_a_Standard_Rack_Node.md)
+  - [Removing a Standard rack node from a System](node_management/Removing_a_Standard_Node_from_a_System.md)
+  - [Replace a Standard rack node from a System](node_management/Replace_a_Standard_Rack_Node.md)
   - [Move a Standard Rack Node](node_management/Move_a_Standard_Rack_Node.md)
   - [Move a Standard Rack Node (Same Rack/Same HSN Ports)](node_management/Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
   - [Verify Node Removal](node_management/Verify_Node_Removal.md)

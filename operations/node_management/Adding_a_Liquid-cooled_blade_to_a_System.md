@@ -548,6 +548,92 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
     [Tue Jul 21 13:09:54 2020] DVS: merge_one#358:   Ignoring.
     ```
 
+1. (`ncn-mw#`) **If the `"DVS: merge_one"` error messages is shown**, then the IP address of the node needs to be corrected. This will prevent the need to reload DVS.
+
+    1. Set the following environment variables based on the output collected in the previous step.
+
+        ```bash
+        NODE_XNAME=x3000c0s19b1n0
+        CURRENT_IP_ADDRESS=10.252.0.33
+        DESIRED_IP_ADDRESS=10.252.0.26
+        ```
+
+    1. Determine the HSM EthenretInterface entry holding onto the desired IP address.
+
+        ```bash
+        cray hsm inventory ethernetInterfaces list --ip-address "${DESIRED_IP_ADDRESS}" --output toml
+        ```
+
+        * **If no EthernetInterfaces are found**, then continue on to the next step.
+
+            Example output:
+
+            ```bash
+            results = []
+            ```
+
+        * **If an EthernetInterface is found**, then it needs to be removed from HSM.
+
+            Example output:
+
+            ```toml
+            [[results]]
+            ID = "b42e99dfecf0"
+            Description = "Ethernet Interface Lan2"
+            MACAddress = "b4:2e:99:df:ec:f0"
+            LastUpdate = "2022-08-08T10:10:57.527819Z"
+            ComponentID = "x3000c0s17b2n0"
+            Type = "Node"
+            [[results.IPAddresses]]
+            IPAddress = "10.252.1.26"
+            ```
+
+            1. Record the returned `ID` value into the `EI_ID` environment variable.
+
+                ```bash
+                OLD_EI_ID=b42e99dfecf0
+                ```
+
+            1. Delete the EthernetInterfaces from HSM.
+
+                ```bash
+                cray hsm inventory ethernetInterfaces delete ${OLD_EI_ID}
+                ```
+
+    1. Determine the HSM EthernetInterface entry holding onto the current IP address.
+
+        ```bash
+        cray hsm inventory ethernetInterfaces list --component-id "${NODE_XNAME}" --ip-address "${CURRENT_IP_ADDRESS}" --output toml
+        ```
+
+        Example output:
+
+        ```toml
+        [[results]]
+        ID = "b42e99dff35f"
+        Description = "Ethernet Interface Lan1"
+        MACAddress = "b4:2e:99:df:f3:5f"
+        LastUpdate = "2022-08-18T16:38:21.13173Z"
+        ComponentID = "x3000c0s17b1n0"
+        Type = "Node"
+        [[results.IPAddresses]]
+        IPAddress = "10.252.1.69"
+        ```
+
+        Record the returned `ID` value into the `EI_ID` environment variable.
+
+        ```bash
+        CURRENT_EI_ID=b42e99dff35f
+        ```
+
+    1. Update the EthernetInterface to have the desired IP address:
+
+        ```bash
+        cray hsm inventory ethernetInterfaces update "$CURRENT_EI_ID" --component-id "${NODE_XNAME}" --ip-addresses--ip-address "${DESIRED_IP_ADDRESS}"
+        ```
+
+1. Reboot the node.
+
 1. (`nid#`) SSH to the node and check each DVS mount.
 
     ```bash
