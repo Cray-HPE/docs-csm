@@ -1,10 +1,10 @@
-# Prepare Site Init
+# Prepare `site init`
 
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
 1. [Background](#1-background)
-1. [Create and Initialize Site-Init Directory](#2-create-and-initialize-site-init-directory)
+1. [Create and Initialize `site-init` Directory](#2-create-and-initialize-site-init-directory)
 1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
 1. [Customer-Specific Customizations](#4-customer-specific-customizations)
 
@@ -18,7 +18,7 @@ installation-centric artifacts, such as:
 - Sealed Secret Generate Blocks -- a form of plain-text input that renders to a Sealed Secret
 - Helm chart value overrides that are merged into Loftsman manifests by product stream installers
 
-## 2. Create and initialize Site-Init directory
+## 2. Create and initialize `site-init` directory
 
 > **`NOTE`** If the pre-installation is resuming here, ensure the environment variables have been properly set
 > by following [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
@@ -358,7 +358,7 @@ with system-specific customizations.
 
    - If DNSSEC is to be used, then add the desired keys into the `dnssec` SealedSecret.
 
-1. (Optional) Configure Prometheus SNMP Exporter.
+1. Configure Prometheus SNMP Exporter.
 
    The Prometheus SNMP exporter needs to be configured with a list of management network switches to scrape metrics from in
    order to populate the System Health Service Grafana dashboards.
