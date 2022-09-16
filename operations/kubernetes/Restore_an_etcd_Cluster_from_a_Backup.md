@@ -146,3 +146,18 @@ The cray-bss-etcd cluster has successfully been restored from cray-bss/etcd.back
     ```text
     etcdrestore.etcd.database.coreos.com "cray-bos-etcd" deleted
     ```
+
+1. (`ncn-mw#`) Verify that the `cray-bos-etcd-client` service was created.
+
+    ```bash
+    ncn# kubectl get service -n services cray-bos-etcd-client
+    ```
+
+    Example of output showing that the service was created:
+
+    ```text
+    NAME                   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+    cray-bos-etcd-client   ClusterIP   10.28.248.232   <none>        2379/TCP   2m
+    ```
+
+    If the `etcd-client` service was not created, then repeat the procedure to restore the cluster again.
