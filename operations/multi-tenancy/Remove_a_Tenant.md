@@ -11,16 +11,17 @@ This page provides describes how an infrastructure administrator (not a tenant a
 
 ## Remove the Slurm Operator Custom Resource (CR)
 
-To remove a Slurm tenant instance, delete the custom resource with kubectl:
+* (`ncn-mw#`) To remove a Slurm tenant instance, delete the custom resource with
+    kubectl:
 
-```sh
-kubectl delete slurmcluster -n <namespace> <name>
-```
+    ```sh
+    kubectl delete slurmcluster -n <namespace> <name>
+    ```
 
 This will remove the Slurm pods from the tenant namespace, but leave the
 persistent volumes (to avoid data loss if the cluster is recreated).
 
-In addition, remove any tenant-specific ansible vars files in the `group_vars`
+In addition, remove any tenant-specific Ansible vars files in the `group_vars`
 directory of the `slurm-config-management` VCS repository.
 
 ## Delete the tenant's custom resource (CR)

@@ -132,11 +132,11 @@ changes:
 
 ## Apply the `slurm` operator CR
 
-To update the Slurm custom resource, apply the changed yaml file:
+- (`ncn-mw#`) To update the Slurm custom resource, apply the changed yaml file:
 
-```sh
-kubectl apply -f <cluster>.yaml
-```
+    ```sh
+    kubectl apply -f <cluster>.yaml
+    ```
 
 Once the custom resource has been updated, the Slurm operator will attempt to
 update the relevant Kubernetes resources to reflect the changes.

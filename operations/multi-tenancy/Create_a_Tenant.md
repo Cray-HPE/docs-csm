@@ -141,12 +141,14 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
 
 ## `slurm` operator CRD
 
-Slurm provisioning is similar to tenant creation, using a CR. To see all
-possible configuration settings for the custom resource, run this command:
+Slurm provisioning is similar to tenant creation, using a CR.
 
-```sh
-kubectl get crd slurmclusters.wlm.hpe.com -o yaml
-```
+- (`ncn-mw#`) To see all possible configuration settings for the custom
+    resource, run this command:
+
+    ```sh
+    kubectl get crd slurmclusters.wlm.hpe.com -o yaml
+    ```
 
 Next, create a custom resource describing the Slurm tenant. For example, the
 following `mycluster.yaml` file describes a Slurm tenant named `mycluster`
@@ -245,14 +247,14 @@ spec:
 
 ## Apply the `slurm` operator CR
 
-To create the tenant and deploy Slurm resources, apply the tenant file with
-kubectl:
+- (`ncn-mw#`) To create the tenant and deploy Slurm resources, apply the tenant
+    file with kubectl:
 
-```sh
-kubectl apply -f <cluster>.yaml
-```
+    ```sh
+    kubectl apply -f <cluster>.yaml
+    ```
 
-Once the tenant has been created, the ansible configuration for compute and
+Once the tenant has been created, the Ansible configuration for compute and
 application nodes must be updated to use the tenant-specific configuration. To
 do this, create a `group_vars/<hsmgroup>/slurm.yaml` file in the
 `slurm-config-management` VCS repository with the following content:

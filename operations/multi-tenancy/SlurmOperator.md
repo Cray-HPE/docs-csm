@@ -10,46 +10,49 @@ can have a separate instance of Slurm.
 
 ## Install the Slurm Operator
 
-To create Slurm tenants, the Slurm operator must be installed. The Slurm Operator runs in a Kubernetes pod and watches for SlurmCluster custom resources. To install the Slurm operator, run this command in the unpacked CPE Slurm
-release tarball:
+To create Slurm tenants, the Slurm operator must be installed. The Slurm Operator runs in a Kubernetes pod and watches for SlurmCluster custom resources.
 
-```sh
-helm upgrade --install -n slurm-operator cray-slurm-operator \
-    ./helm/cray-slurm-operator-*.tgz
-```
+* (`ncn-mw#`) To install the Slurm operator, run this command in the unpacked
+    CPE Slurm release tarball:
+
+    ```sh
+    helm upgrade --install -n slurm-operator cray-slurm-operator \
+        ./helm/cray-slurm-operator-*.tgz
+    ```
 
 ## Troubleshooting
 
-To check the Slurm operator logs:
+* (`ncn-mw#`) To check the Slurm operator logs:
 
-```sh
-kubectl logs -n slurm-operator --timestamps --tail=-1 -c slurm-operator -lapp=slurm-operator
-```
+    ```sh
+    kubectl logs -n slurm-operator --timestamps --tail=-1 -c slurm-operator \
+        -lapp=slurm-operator
+    ```
 
-To check the status of a Slurm custom resource:
+* (`ncn-mw#`) To check the status of a Slurm custom resource:
 
-```sh
-kubectl describe slurmcluster -n <namespace> <name>
-```
+    ```sh
+    kubectl describe slurmcluster -n <namespace> <name>
+    ```
 
-To check the slurmctld logs for a tenant:
+* (`ncn-mw#`) To check the slurmctld logs for a tenant:
 
-```sh
-kubectl logs -n <namespace> --timestamps --tail=-1 -c slurmctld \
-    -lapp.kubernetes.io/name=slurmctld
-```
+    ```sh
+    kubectl logs -n <namespace> --timestamps --tail=-1 -c slurmctld \
+        -lapp.kubernetes.io/name=slurmctld
+    ```
 
-To check the slurmdbd logs for a tenant:
+* (`ncn-mw#`) To check the slurmdbd logs for a tenant:
 
-```sh
-kubectl logs -n <namespace> --timestamps --tail=-1 -c slurmdbd \
-    -lapp.kubernetes.io/name=slurmdbd
-```
+    ```sh
+    kubectl logs -n <namespace> --timestamps --tail=-1 -c slurmdbd \
+        -lapp.kubernetes.io/name=slurmdbd
+    ```
 
-To check the accounting database logs for a tenant:
+* (`ncn-mw#`) To check the accounting database logs for a tenant:
 
-```sh
-kubectl logs -n <namespace> <name>-slurmdb-pxc-0
-kubectl logs -n <namespace> <name>-slurmdb-pxc-1
-kubectl logs -n <namespace> <name>-slurmdb-pxc-2
-```
+    ```sh
+    kubectl logs -n <namespace> <name>-slurmdb-pxc-0
+    kubectl logs -n <namespace> <name>-slurmdb-pxc-1
+    kubectl logs -n <namespace> <name>-slurmdb-pxc-2
+    ```
