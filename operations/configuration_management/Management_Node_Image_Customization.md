@@ -11,6 +11,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
 
     If the image to be modified is the image currently booted on a Kubernetes NCN, the value for `ARTIFACT_VERSION` can be found by looking
     at the boot parameters for the NCNs, or from `/proc/cmdline` on a booted Kubernetes NCN. The version has the form of `X.Y.Z`.
+    See: [boot parameters](../../background#metalserver)
 
     ```bash
     ARTIFACT_VERSION=<artifact-version>
