@@ -64,7 +64,7 @@
 * **All**: `metal.no-wipe=0` is now more reliable when running during a net boot
 * **All**: SSH keys must now be injected into images
 * **All**: Time synchronization is now more reliable on initial configuration
-* **All**: Pressure Stall Information (PSI) is now enabled by default
+* **All**: Pressure Stall Information (PSI) is now enabled by default ([see related CSM 1.3 docs](https://github.com/Cray-HPE/docs-csm/tree/release/1.3/background#psi))
 * **Documentation**: Various updates to installation guides
 
 ### User Application Service (UAS) and User Application Instances (UAI)
