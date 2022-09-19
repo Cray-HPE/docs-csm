@@ -61,7 +61,7 @@
 * **All**: Various package updates to apply latest security patches
 * **All**: `kdump` is now more reliable and remains functional after IMS image customization
 * **All**: S3 now requires authentication to retrieve Management Node OS images
-* **All**: `metal.no-wipe=1` is now more reliable when running during a net boot
+* **All**: `metal.no-wipe=0` is now more reliable when running during a net boot
 * **All**: SSH keys must now be injected into images
 * **All**: Time synchronization is now more reliable on initial configuration
 * **All**: Pressure Stall Information (PSI) is now enabled by default
