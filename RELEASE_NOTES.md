@@ -26,7 +26,7 @@
 * **PowerDNS**: Fixed a bug that could cause `powerdns-manager` to intermittently crash when performing a lookup for an existing TSIG key
 * **PowerDNS**: `powerdns-manager` will now retry attempts to add a TSIG key
 * **PowerDNS**: `powerdns-manager` will now create PTR records that are not created by `external-dns`
-* **Unbound**: Changed `cray-dns-unbound` `MaxUnavailable` default to 1 to avoid issues when evicting pods from NCNs
+* **Unbound**: Changed `cray-dns-unbound` `MaxUnavailable` default from 0 to 1 to avoid issues when evicting pods from NCNs
 
 ### Management Network
 
