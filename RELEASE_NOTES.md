@@ -53,7 +53,7 @@
 
 #### Added
 
-* **ALL**: Initial support for NVME drives (note: there are some limitations in the Dracut modules that handle drive discovery)
+* **ALL**: Initial support for NVME drives
 
 #### Changed
 
