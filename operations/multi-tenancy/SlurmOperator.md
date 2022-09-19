@@ -10,7 +10,9 @@ can have a separate instance of Slurm.
 
 ## Install the Slurm Operator
 
-To create Slurm tenants, the Slurm operator must be installed. The Slurm Operator runs in a Kubernetes pod and watches for SlurmCluster custom resources.
+To create Slurm tenants, the Slurm operator must be installed. The Slurm
+Operator runs in a Kubernetes pod and watches for `SlurmCluster` custom
+resources.
 
 * (`ncn-mw#`) To install the Slurm operator, run this command in the unpacked
     CPE Slurm release tarball:
@@ -35,14 +37,14 @@ To create Slurm tenants, the Slurm operator must be installed. The Slurm Operato
     kubectl describe slurmcluster -n <namespace> <name>
     ```
 
-* (`ncn-mw#`) To check the slurmctld logs for a tenant:
+* (`ncn-mw#`) To check the `slurmctld` logs for a tenant:
 
     ```sh
     kubectl logs -n <namespace> --timestamps --tail=-1 -c slurmctld \
         -lapp.kubernetes.io/name=slurmctld
     ```
 
-* (`ncn-mw#`) To check the slurmdbd logs for a tenant:
+* (`ncn-mw#`) To check the `slurmdbd` logs for a tenant:
 
     ```sh
     kubectl logs -n <namespace> --timestamps --tail=-1 -c slurmdbd \

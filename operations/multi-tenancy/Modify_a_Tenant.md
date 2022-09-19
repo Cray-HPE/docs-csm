@@ -123,16 +123,16 @@ This page provides information about how to modify a tenant. Modifications that 
 ## Modify the `slurm` operator CR
 
 To make changes to a Slurm tenant deployment, first update the Slurm custom
-resource yaml file. The Slurm operator will attempt to reconcile the following
+resource file. The Slurm operator will attempt to reconcile the following
 changes:
 
 - Changing the munge key length
-- Changing the slurmctld PVC
-- Changing the Percona XtraDB, slurmctld, or slurmdbd deployments
+- Changing the `slurmctld` PVC
+- Changing the Percona XtraDB, `slurmctld`, or `slurmdbd` deployments
 
 ## Apply the `slurm` operator CR
 
-- (`ncn-mw#`) To update the Slurm custom resource, apply the changed yaml file:
+- (`ncn-mw#`) To update the Slurm custom resource, apply the changed file:
 
     ```sh
     kubectl apply -f <cluster>.yaml

@@ -248,7 +248,7 @@ spec:
 ## Apply the `slurm` operator CR
 
 - (`ncn-mw#`) To create the tenant and deploy Slurm resources, apply the tenant
-    file with kubectl:
+    file with `kubectl`:
 
     ```sh
     kubectl apply -f <cluster>.yaml

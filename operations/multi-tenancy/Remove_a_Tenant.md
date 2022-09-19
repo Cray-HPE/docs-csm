@@ -12,7 +12,7 @@ This page provides describes how an infrastructure administrator (not a tenant a
 ## Remove the Slurm Operator Custom Resource (CR)
 
 * (`ncn-mw#`) To remove a Slurm tenant instance, delete the custom resource with
-    kubectl:
+    `kubectl`:
 
     ```sh
     kubectl delete slurmcluster -n <namespace> <name>
