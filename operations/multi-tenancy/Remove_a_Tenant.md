@@ -21,7 +21,7 @@ This page provides describes how an infrastructure administrator (not a tenant a
 This will remove the Slurm pods from the tenant namespace, but leave the
 persistent volumes (to avoid data loss if the cluster is recreated).
 
-In addition, remove any tenant-specific Ansible vars files in the `group_vars`
+In addition, remove any tenant-specific Ansible variables in the `group_vars`
 directory of the `slurm-config-management` VCS repository.
 
 ## Delete the tenant's custom resource (CR)
