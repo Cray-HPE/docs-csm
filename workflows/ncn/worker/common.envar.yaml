@@ -23,22 +23,25 @@
 #
 
 {{define "common.envar"}}
+set -x
 
-TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-   -d client_id=admin-client \
-   -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+{{- include "common.helper-functions" . }}
 
-TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
-TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-     jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-  jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
+# Set and export TOKEN variable
+set_api_token
 
-TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
+# Set TARGET_NCN variable
+set_target_ncn
 
+# Set TARGET_XNAME variable
+set_target_xname
 
-export IPMI_USERNAME=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
-export IPMI_PASSWORD=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+# Set TARGET_MGMT_XNAME variable
+set_target_mgmt_xname
 
+# Set TARGET_NCN_mgmt_host variable
+set_target_ncn_mgmt_host
+
+# Set and export IPMI_USERNAME and IPMI_PASSWORD variables
+set_bmc_credentials
 {{end}}
