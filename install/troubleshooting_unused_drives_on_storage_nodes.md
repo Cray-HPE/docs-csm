@@ -92,9 +92,10 @@ If the number of OSDs does not match what is expected, then proceed to [Manual c
 
 ## Manual checks and remediation
 
-### Option 1
+If there are OSDs on each node (`ceph osd tree` can show this), then all the nodes are in Ceph. That means the orchestrator can be used to look for the devices. In that case, begin
+by following [Option 1](#option-1). Otherwise, proceed to [Option 2](#option-2).
 
-If there are OSDs on each node (`ceph osd tree` can show this), then all the nodes are in Ceph. That means the orchestrator can be used to look for the devices.
+### Option 1
 
 1. Get the number of OSDs in the cluster.
 
@@ -196,19 +197,22 @@ If there are OSDs on each node (`ceph osd tree` can show this), then all the nod
      └─ceph--0a476f53--8b38--450d--8779--4e587402f8a8-osd--data--b620b7ef--184a--46d7--9a99--771239e7a323 254:7    0   1.8T  0 lvm
     ```
 
-    If a device has an LVM volume like above, then it may be in use. In that case, do the [Option 2](#option-2) check below to make sure that the drive can be wiped.
+    If a device has an LVM volume like above, then it may be in use. In that case, perform the [Option 2](#option-2) check below to make sure that the drive can be wiped.
+    Otherwise, proceed to the [Wipe and add drives](#wipe-and-add-drives) procedure.
 
 ### Option 2
 
-1. Log into **each** storage NCN and check for unused drives.
+Log into **each** storage NCN and check for unused drives. There are two ways to do this:
+
+- List all drives on the node.
 
     ```bash
     cephadm shell -- ceph-volume inventory
     ```
 
-    **IMPORTANT:** The `cephadm` command may output this warning `WARNING: The same type, major and minor should not be used for multiple devices.`. Ignore this warning.
+    > Note: The following warning message from the `cephadm` command should be ignored if it is seen: `WARNING: The same type, major and minor should not be used for multiple devices.`
 
-    The field `available` would be `True` if Ceph sees the drive as empty and can be used. For example:
+    In the output of the command, the `available` field will be `True` if Ceph sees the drive as empty (and therefore available for use). For example:
 
     ```text
     Device Path               Size         rotates available Model name
@@ -222,11 +226,13 @@ If there are OSDs on each node (`ceph osd tree` can show this), then all the nod
     /dev/sdh                  3.49 TB      False   False     SAMSUNG MZ7LH3T8
     ```
 
-    Alternatively, dump the paths of available drives on the node:
+- List only the paths of available drives on the node.
 
     ```bash
     cephadm shell -- ceph-volume inventory --format json-pretty | jq -r '.[]|select(.available==true)|.path'
     ```
+
+    > Note: The following warning message from the `cephadm` command should be ignored if it is seen: `WARNING: The same type, major and minor should not be used for multiple devices.`
 
 ### Wipe and add drives
 
