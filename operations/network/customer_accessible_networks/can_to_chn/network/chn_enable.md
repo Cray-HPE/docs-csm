@@ -184,7 +184,7 @@ However, during the migration phase, ample time and flexibility exists to contac
 2. (`ncn-m001#`) Set the directory location for the `SLS` `CHN` script
 
    ```bash
-   export SLS_CHN_DIR=/usr/share/doc/csm/upgrade/scripts/sls
+   export SLS_CHN_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/sls
    ```
 
 3. (`ncn-m001#`) Add `CHN` to `SLS` data.
@@ -219,13 +219,13 @@ However, during the migration phase, ample time and flexibility exists to contac
 2. (`ncn-m001#`) Set the directory location for the customizations script to add `CHN`.
 
    ```bash
-   export CUSTOMIZATIONS_SCRIPT_DIR=/usr/share/doc/csm/upgrade/scripts/upgrade/util
+   export CUSTOMIZATIONS_SCRIPT_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/util
    ```
 
 3. (`ncn-m001#`) Create updated `customizations.yaml` against updated `SLS`.
 
    ```bash
-   ${CUSTOMIZATIONS_SCRIPT_DIR}/update-customizations.sh ${BACKUPDIR}/customizations.yaml > ${UPDATEDIR}/customizations.yaml
+   ${CUSTOMIZATIONS_SCRIPT_DIR}/update-customizations-network.sh ${BACKUPDIR}/customizations.yaml > ${UPDATEDIR}/customizations.yaml
    yq validate ${UPDATEDIR}/customizations.yaml
    ```
 
@@ -506,7 +506,7 @@ Existing UAIs will continue to use the network that was set when it was created.
 2. (`ncn-m001#`) Process the SLS file:
 
    ```bash
-   DOCDIR=/usr/share/doc/csm/upgrade/scripts/sls
+   DOCDIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/sls
    ${DOCDIR}/add_computes_to_chn.py --sls-input-file ${UPDATEDIR}/sls_file_with_chn.json 
       --sls-output-file ${UPDATEDIR}/sls_file_with_chn_and_computes.json
    ```
@@ -731,7 +731,7 @@ For more information on managing node with CFS, see the [Configuration Managemen
 2. (`ncn-m001#`) Set the directory location for the `SLS` `CHN` script and `SLS` file.
 
    ```bash
-   export SLS_CHN_DIR=/usr/share/doc/csm/upgrade/scripts/sls
+   export SLS_CHN_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/sls
    [[ -f ${UPDATEDIR}/sls_file_with_chn_and_computes.json ]] &&
       export SLS_CHN_FILE=${UPDATEDIR}/sls_file_with_chn_and_computes.json ||
       export SLS_CHN_FILE=${UPDATEDIR}/sls_file_with_chn.json
@@ -762,7 +762,7 @@ For more information on managing node with CFS, see the [Configuration Managemen
 2. (`ncn-m001#`) Set the directory location for the customizations script to remove `CAN`.
 
    ```bash
-   export CUSTOMIZATIONS_SCRIPT_DIR=/usr/share/doc/csm/upgrade/scripts/upgrade/util
+   export CUSTOMIZATIONS_SCRIPT_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/util
    ```
 
 3. (`ncn-m001#`) Remove `CAN` from `customizations.yaml`.
@@ -792,7 +792,7 @@ For more information on managing node with CFS, see the [Configuration Managemen
 2. (`ncn-m001#`) Set the directory location for the `BSS` `CHN` script.
 
    ```bash
-      export BSS_CAN_DIR=/usr/share/doc/csm/upgrade/scripts/bss
+      export BSS_CAN_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/bss
    ```
 
 3. (`ncn-m001#`) Remove `CAN` from `BSS` data.
