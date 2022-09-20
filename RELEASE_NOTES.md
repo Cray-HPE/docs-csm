@@ -12,7 +12,7 @@
 
 ### DHCP
 
-<!-- markdownlint-disable-next-line MD024 --> 
+<!-- markdownlint-disable-next-line  --> 
 #### Changed
 
 * **Kea**: Fixed a bug that could cause the auto-repair logic to fail due to an incorrect index
@@ -227,4 +227,3 @@ of container images spins up with each major CSM release.
 | `csm-dckr/stable/dckr.io/nfvpe/multus:v3.7`                                 | Upstream fixes are needed and are not yet available, however we have engaged with the project to make a reduced-vulnerability version available.|
 | `csm-docker/stable/docker.io/sonatype/nexus3:3.38.0-1`                      | Upstream fixes are needed to the base image in order to address the remaining vulnerabilities. |
 | `csm-docker/stable/cray-uas-mgr:1.21.0`                                     | This will be addressed in a future version of CSM. |
-
