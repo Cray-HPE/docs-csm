@@ -253,25 +253,25 @@ The Ceph image is used by the utility storage nodes.
    ncn-mw# export CEPHNEW=0.1.113-2
    ```
 
-2. Make a temporary directory for the Ceph image using the current version string.
+1. Make a temporary directory for the Ceph image using the current version string.
 
    ```bash
    ncn-mw# mkdir -p ceph/${CEPHVERSION}
    ```
 
-3. Get the image.
+1. Get the image.
 
    ```bash
    ncn-mw# cray artifacts get ncn-images ceph/${CEPHVERSION}/filesystem.squashfs ceph/${CEPHVERSION}/filesystem.squashfs.orig
    ```
 
-4. Open the image.
+1. Open the image.
 
    ```bash
    ncn-mw# unsquashfs -d ceph/${CEPHVERSION}/filesystem.squashfs ceph/${CEPHVERSION}/filesystem.squashfs.orig
    ```
 
-5. Copy the generated public and private SSH keys for the `root` account into the image.
+1. Copy the generated public and private SSH keys for the `root` account into the image.
 
    This example assumes that an RSA key was generated.
 
@@ -279,7 +279,7 @@ The Ceph image is used by the utility storage nodes.
    ncn-mw# cp -p /root/.ssh/id_rsa /root/.ssh/id_rsa.pub ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh
    ```
 
-6. Replace the public SSH key for the `root` account in `authorized_keys`.
+1. Replace the public SSH key for the `root` account in `authorized_keys`.
 
    This example assumes that an RSA key was generated so it adds the `id_rsa.pub` file to `authorized_keys`. It also removes any previously authorized keys. Feel free to manage this differently to retain additional keys if desired.
 
@@ -288,19 +288,19 @@ The Ceph image is used by the utility storage nodes.
    ncn-mw# chmod 640 ceph/${CEPHVERSION}/filesystem.squashfs/root/.ssh/authorized_keys
    ```
 
-7. Change into the image root.
+1. Change into the image root.
 
    ```bash
    ncn-mw# chroot ceph/${CEPHVERSION}/filesystem.squashfs
    ```
 
-8. Change the password.
+1. Change the password.
 
    ```bash
    chroot-ncn-mw# passwd
    ```
 
-9. (Optional) If there are any other things to be changed in the image, then they could also be done at this point.
+1. (Optional) If there are any other things to be changed in the image, then they could also be done at this point.
 
    1. (Optional) Set default timezone on management nodes.
 
@@ -330,38 +330,38 @@ The Ceph image is used by the utility storage nodes.
          chroot-ncn-mw# sed -i 's/--utc/--localtime/' /srv/cray/scripts/metal/ntp-upgrade-config.sh
          ```
 
-10. Create the new SquashFS artifact.
+1. Create the new SquashFS artifact.
 
    ```bash
    chroot-ncn-mw# /srv/cray/scripts/common/create-kis-artifacts.sh
    ```
 
-11. Exit the `chroot` environment.
+1. Exit the `chroot` environment.
 
    ```bash
    chroot-ncn-mw# exit
    ```
 
-12. Clean up the SquashFS creation.
+1. Clean up the SquashFS creation.
 
    ```bash
    ncn-mw# umount -v ceph/${CEPHVERSION}/filesystem.squashfs/mnt/squashfs
    ```
 
-13. Move the new SquashFS image, kernel, and initrd into place.
+1. Move the new SquashFS image, kernel, and initrd into place.
 
    ```bash
    ncn-mw# mkdir ceph/$CEPHNEW
    ncn-mw# mv -v ceph/$CEPHVERSION/filesystem.squashfs/squashfs/* ceph/$CEPHNEW
    ```
 
-14. Update file permissions on `initrd`.
+1. Update file permissions on `initrd`.
 
    ```bash
    ncn-mw# chmod -v 644 ceph/${CEPHNEW}/initrd.img.xz
    ```
 
-15. Put the new `initrd.img.xz`, `kernel`, and SquashFS into S3
+1. Put the new `initrd.img.xz`, `kernel`, and SquashFS into S3.
 
    ***Note:*** The version string for the kernel file may be different.
 
@@ -373,9 +373,9 @@ The Ceph image is used by the utility storage nodes.
    ncn-mw# cd ../..
    ```
 
-16. The Ceph image now has the image changes.
+1. The Ceph image now has the image changes.
 
-17. Update BSS with the new image for utility storage nodes.
+1. Update BSS with the new image for utility storage nodes.
 
    **WARNING:** If doing a CSM software upgrade, then skip this section and proceed to [Common cleanup](#common-cleanup).
 
