@@ -70,7 +70,7 @@ spec:
   affinity:
     nodeAffinity:
       # avoid putting workflow jobs onto workers that will be rebuilt
-      # this label is set onto each workers at beginning of workflow
+      # this label is set onto each worker at beginning of workflow
       requiredDuringSchedulingIgnoredDuringExecution:
         nodeSelectorTerms:
         - matchExpressions:
@@ -116,6 +116,7 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: scriptContent
                   value: |
+                    set -x
                     targetNcns="{{.TargetNcns}}"
                     # remove '[' and ']'
                     targetNcns=${targetNcns:1:-1}
@@ -134,26 +135,47 @@ spec:
                       fi
                     done
 
+                    echo "nodeMoveTo=${nodeMoveTo}"                    
                     echo
 
                     pods=( "nexus" "ipxe" "kea" "cray-cfs-api-db" )
-                    for pod in ${pods[@]};do
-                      podName=$(kubectl get pods --all-namespaces | awk '{print $2}' | grep $pod)
-                      if [[ -z $podName ]];then
-                        echo "Couldn't not find pod: $pod"
-                        echo "something is wrong"
-                        exit 1
-                      fi                 
-                      
-                      currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
-                      if [[ "$nodeMoveTo" != "$currentNode" ]]; then
-                        echo "Move Pod: $podName to Node: $nodeMoveTo"
-                        /opt/cray/platform-utils/move_pod.sh $podName $nodeMoveTo > /dev/null
-                      fi
+                    for pod in ${pods[@]};do                        
+                        currentNode=""
+                        podName=$(kubectl get pods --all-namespaces | awk '{print $2}' | grep $pod)
+                        if [[ -z $podName ]];then
+                            echo "Something is wrong. Could not find pod: $pod"
+                            exit 1
+                        fi
+                        echo "pod=$pod podName=$podName"                        
+                        while [[ $currentNode != $nodeMoveTo ]]; do                    
+                            currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
+                            if [[ -z $currentNode ]]; then
+                                echo "Unable to determine current node for pod $podName"
+                                exit 1
+                            fi
 
-                      podName=$(kubectl get pods --all-namespaces | awk '{print $2}' | grep $pod)
-                      ns=$(kubectl get po -A | grep $podName | awk '{print $1}')
-                      kubectl wait --for=condition=ready pod $podName -n $ns --timeout=5m
+                            echo "pod=$pod podName=$podName currentNode=$currentNode"
+                            if [[ "$nodeMoveTo" != "$currentNode" ]]; then
+                                echo "Move Pod: $podName to Node: $nodeMoveTo"
+                                /opt/cray/platform-utils/move_pod.sh $podName $nodeMoveTo
+                            fi
+
+                            podName=$(kubectl get pods --all-namespaces | awk '{print $2}' | grep $pod)
+                            if [[ -z $podName ]];then
+                                echo "Something is wrong. Could not find pod: $pod"
+                                exit 1
+                            fi
+                            ns=$(kubectl get po -A | grep $podName | awk '{print $1}')
+                            if [[ -z $ns ]];then
+                                echo "Something is wrong. Could not find namespace for pod: $podName"
+                                exit 1
+                            fi
+                            kubectl wait --for=condition=ready pod $podName -n $ns --timeout=5m
+
+                            # Verify that pod is now on the expected node
+                            currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
+                            echo "pod=$pod podName=$podName currentNode=$currentNode"
+                        done
                     done
           {{- range $index,$value := .TargetNcns }}
           - name: add-labels-{{$value}}
@@ -184,7 +206,7 @@ spec:
           # wipe and reboot: parallel
           #     once a worker node is drained from k8s
           #     we can safely wipe and reboot this node
-          #     regardless of what state other nodes are
+          #     regardless of what state other nodes are in
           - name: wipe-and-reboot-{{$value}}
             dependencies: 
               - drain-{{$value}}

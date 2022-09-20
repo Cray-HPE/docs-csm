@@ -33,64 +33,50 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
-            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
-            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-
+            set -x
             set -o pipefail
+            {{- include "common.helper-functions" . | indent 12 }}
 
-            # Retry CFS command if needed
-            COUNT=0
-            while true; do
-                ENABLED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.enabled') && break
-                let COUNT+=1
-                if [[ ${COUNT} -gt 12 ]]; then
-                    echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
-                    exit 1
-                fi
-                echo "WARNING: Command pipeline failed querying CFS component '${TARGET_XNAME}'. Retrying after 5 seconds."
-                sleep 5
-            done
+            # These function are defined in the above include statement. 
+            set_target_xname
+            
+            # set_cfs_status_file will retry the API request multiple times if needed.
+            # The result will be stored in the $CFS_STATUS_FILE file
+            set_cfs_status_file
+
+            ENABLED=$(cat "${CFS_STATUS_FILE}" | jq -r '.enabled')
+            dtecho "ENABLED=$ENABLED"
             if [[ ${ENABLED} == false ]]; then
-              exit 0
+                exit 0
             elif [[ ${ENABLED} != true ]]; then
-              echo "ERROR: Unexpected contents of 'enabled' field for CFS component '${TARGET_XNAME}': '${ENABLED}'"
-              exit 1
+                dtecho "ERROR: Unexpected contents of 'enabled' field for CFS component '${TARGET_XNAME}': '${ENABLED}'"
+                exit 1
             fi
-            echo "CFS component '${TARGET_XNAME}' is enabled"
+            dtecho "CFS component '${TARGET_XNAME}' is enabled"
 
-            # Retry CFS command if needed
-            COUNT=0
-            while true; do
-                DESIRED_CONFIG=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.desiredConfig') && break
-                let COUNT+=1
-                if [[ ${COUNT} -gt 12 ]]; then
-                    echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
-                    exit 1
-                fi
-                echo "WARNING: Command pipeline failed querying CFS component '${TARGET_XNAME}'. Retrying after 5 seconds."
-                sleep 5
-            done
+            DESIRED_CONFIG=$(cat "${CFS_STATUS_FILE}" | jq -r '.desiredConfig')
             if [[ -z ${DESIRED_CONFIG} ]]; then
-              exit 0
+                dtecho "CFS component '${TARGET_XNAME}' has no desired configuration"
+                exit 0
             fi
-            echo "Desired configuration for CFS component '${TARGET_XNAME}' is '${DESIRED_CONFIG}'"
+            dtecho "Desired configuration for CFS component '${TARGET_XNAME}' is '${DESIRED_CONFIG}'"
 
-            while true; do
-              RESULT=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=pending" | jq length)
-              if [[ "$RESULT" -eq 0 ]]; then
-                break
-              fi
-              echo "Waiting for configuration to complete.  ${RESULT} components remaining."
-              sleep 30
+            CONFIG_STATUS=$(cat "${CFS_STATUS_FILE}" | jq -r '.configurationStatus')
+            dtecho "CONFIG_STATUS=$CONFIG_STATUS"
+            while [[ $CONFIG_STATUS == pending ]]; do
+                dtecho "Waiting for CFS configuration to complete on ${TARGET_XNAME}"
+                sleep 30
+                set_cfs_status_file
+                CONFIG_STATUS=$(cat "${CFS_STATUS_FILE}" | jq -r '.configurationStatus')
+                dtecho "CFS configuration status of $(target_xname_and_name) is $CONFIG_STATUS"
             done
 
-            CONFIGURED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=configured" | jq length)
-            FAILED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed" | jq length)
-            echo "Configuration complete. $CONFIGURED component(s) completed successfully.  $FAILED component(s) failed."
-            if [ "$FAILED" -ne "0" ]; then
-              echo "The following components failed: $(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed"  | jq -r '. | map(.id) | join(",")')"
-              exit 1
+            if [[ $CONFIG_STATUS == failed ]]; then
+                dtecho "$(target_xname_and_name) failed to successfully complete its CFS configuration"
+                exit 1
+            elif [[ $CONFIG_STATUS != configured ]]; then
+                dtecho "$(target_xname_and_name) has unexpected CFS status: $CONFIG_STATUS"
+                exit 1
             fi
   - name: clear-cfs-state
     dependencies:
@@ -104,13 +90,44 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
-            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
-            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+            set -x
+            {{- include "common.helper-functions" . | indent 12 }}
 
+            # These function are defined in the above include statement. 
+            set_api_token
+            set_target_xname
+
+            set_cfs_status_file
+            ENABLED=$(cat "${CFS_STATUS_FILE}" | jq -r '.enabled')
+            dtecho "ENABLED=$ENABLED"
+            if [[ ${ENABLED} == false ]]; then
+                # If it is already disabled, then we don't need to disable it
+                exit 0
+            elif [[ ${ENABLED} != true ]]; then
+                dtecho "ERROR: Unexpected contents of 'enabled' field for CFS component '${TARGET_XNAME}': '${ENABLED}'"
+                exit 1
+            fi
+            dtecho "CFS component '${TARGET_XNAME}' is enabled"
+
+            # Disable component in CFS
             curl -s -k -H "Authorization: Bearer ${TOKEN}" -X PATCH "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" \
               -H 'Content-Type: application/json' \
-              -d '{"enabled": false, "state": []}'
+              -d '{"enabled": false}'
+
+            # Verify that it was disabled
+            set_cfs_status_file
+            ENABLED=$(cat "${CFS_STATUS_FILE}" | jq -r '.enabled')
+            dtecho "ENABLED=$ENABLED"
+            if [[ ${ENABLED} == false ]]; then
+                # If it is already disabled, then we don't need to disable it
+                exit 0
+            elif [[ ${ENABLED} != true ]]; then
+                dtecho "ERROR: Unexpected contents of 'enabled' field for CFS component '${TARGET_XNAME}': '${ENABLED}'"
+                exit 1
+            else
+                dtecho "ERROR: CFS component '${TARGET_XNAME}' is still enabled, even after attempting to disable it"
+                exit 1
+            fi
   - name: ensure-etcd-pods-are-healthy
     templateRef:
       name: ssh-template
@@ -149,7 +166,7 @@ tasks:
                     echo "ERROR - Etcd cluster: $cluster should have 3 pods running but only $numOfPods are running"
                     continue
                   else
-                    echo "Etcd cluster: $cluster have 3 pods running"
+                    echo "Etcd cluster: $cluster has 3 pods running"
                     break
                   fi
                 done
@@ -194,7 +211,7 @@ tasks:
                   echo "$label has met with the minimum requirement"
                   break;
                 fi
-                echo "$label hasn't met with the minimum requirement(2): $numOfRunningPods"
+                echo "$label hasn't met with the minimum requirement (2): $numOfRunningPods"
                 sleep 5
               done
             done
@@ -289,9 +306,18 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
-            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
-            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+            set -x
+            set -o pipefail
+            {{- include "common.helper-functions" . | indent 12 }}
+
+            set_target_xname
             /host_usr_bin/csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
-            /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+
+            TRIES=0
+            ACTION="set metal.no-wipe=0 in BSS for $TARGET_XNAME"
+            echo "Trying to: $ACTION"
+            while ! /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME ; do
+              sleep_or_exit
+            done
+            echo "Completed: $ACTION"
 {{end}}
