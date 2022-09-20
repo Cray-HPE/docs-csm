@@ -167,7 +167,6 @@ If there are OSDs on each node (`ceph osd tree` can show this), then all the nod
 
     If the numbers are equal, but less than the `total_osds` calculated, then the `ceph-mgr` daemon may need to be failed in order to get a fresh inventory.
 
-
     1. Fail the `ceph-mgr` daemon.
 
         ```bash
@@ -197,7 +196,7 @@ If there are OSDs on each node (`ceph osd tree` can show this), then all the nod
      └─ceph--0a476f53--8b38--450d--8779--4e587402f8a8-osd--data--b620b7ef--184a--46d7--9a99--771239e7a323 254:7    0   1.8T  0 lvm
     ```
 
-    * If a device has an LVM volume like above, then it may be in use. In that case, do the [Option 2](#option-2) check below to make sure that the drive can be wiped.
+    If a device has an LVM volume like above, then it may be in use. In that case, do the [Option 2](#option-2) check below to make sure that the drive can be wiped.
 
 ### Option 2
 
