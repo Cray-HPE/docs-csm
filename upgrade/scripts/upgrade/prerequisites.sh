@@ -109,6 +109,54 @@ TOKEN=$(curl -s -S -d grant_type=client_credentials \
                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 export TOKEN
 
+# Several CSM charts are upgraded "early" during the execution of prerequisites.sh
+function upgrade_csm_chart
+{
+    # Usage: upgrade_csm_chart <chart name> <manifest_file>
+    #
+    # <manifest_file> is the name of the manifest file within the $CSM_MANIFESTS_DIR
+    local manifest_folder TMP_CUST_YAML TMP_MANIFEST TMP_MANIFEST_CUSTOMIZED chart_name manifest_file
+
+    if [[ $# -ne 2 ]]; then
+        echo "ERROR: upgrade_csm_chart function requires exactly 2 arguments but received $#. Invalid argument(s): $*"
+        return 1
+    elif [[ -z $1 ]]; then
+        echo "ERROR: upgrade_csm_chart: chart name may not be blank"
+        return 1
+    elif [[ -z $2 ]]; then
+        echo "ERROR: upgrade_csm_chart: manifest file name may not be blank"
+        return 1
+    fi
+
+    chart_name="$1"
+    manifest_file="${CSM_MANIFESTS_DIR}/$2"
+    if [[ ! -f ${manifest_file} ]]; then
+        echo "ERROR: upgrade_csm_chart: manifest file does not exist or is not a regular file: ${manifest_file}"
+        return 1
+    fi
+    manifest_folder='/tmp'
+
+    # Get customizations.yaml
+    TMP_CUST_YAML=$(mktemp --tmpdir="${manifest_folder}" customizations.XXXXXX.yaml)
+    set -o pipefail
+    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${TMP_CUST_YAML}"
+    set +o pipefail
+
+    # Create the base of the new manifest
+    TMP_MANIFEST=$(mktemp --tmpdir="${manifest_folder}" "${chart_name}.XXXXXX.yaml")
+    echo "${TMP_MANIFEST}"
+    "${EXTRACT_CHART_MANIFEST}" "${chart_name}" "${manifest_file}" > "${TMP_MANIFEST}"
+    cat "${TMP_MANIFEST}"
+
+    # Customize it
+    TMP_MANIFEST_CUSTOMIZED=$(mktemp --tmpdir="${manifest_folder}" "${chart_name}.customized.XXXXXX.yaml")
+    echo "${TMP_MANIFEST_CUSTOMIZED}"
+    manifestgen -i "${TMP_MANIFEST}" -c "${TMP_CUST_YAML}" -o "${TMP_MANIFEST_CUSTOMIZED}"
+    cat "${TMP_MANIFEST_CUSTOMIZED}"
+
+    loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
+}
+
 # Make a backup copy of select pre-upgrade information, just in case it is needed for later reference.
 # This is only run on ncn-m001 (not when it is run from ncn-m002 during the upgrade)
 state_name="BACKUP_SNAPSHOT"
@@ -428,27 +476,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
-    manifest_folder='/tmp'
-    
-    # Get customizations.yaml
-    TMP_CUST_YAML=$(mktemp --tmpdir="${manifest_folder}" customizations.XXXXXX.yaml)
-    set -o pipefail
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${TMP_CUST_YAML}"
-    set +o pipefail
-
-    # Create the base of the new manifest
-    TMP_MANIFEST=$(mktemp --tmpdir="${manifest_folder}" csm-config.XXXXXX.yaml)
-    echo "${TMP_MANIFEST}"
-    "${EXTRACT_CHART_MANIFEST}" csm-config "${CSM_MANIFESTS_DIR}/sysmgmt.yaml" > "${TMP_MANIFEST}"
-    cat "${TMP_MANIFEST}"
-
-    # Customize it
-    TMP_MANIFEST_CUSTOMIZED=$(mktemp --tmpdir="${manifest_folder}" csm-config.customized.XXXXXX.yaml)
-    echo "${TMP_MANIFEST_CUSTOMIZED}"
-    manifestgen -i "${TMP_MANIFEST}" -c "${TMP_CUST_YAML}" -o "${TMP_MANIFEST_CUSTOMIZED}"
-    cat "${TMP_MANIFEST_CUSTOMIZED}"
-
-    loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
+    upgrade_csm_chart csm-config sysmgmt.yaml
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} "$(hostname)"
@@ -462,27 +490,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
-    manifest_folder='/tmp'
-    
-    # Get customizations.yaml
-    TMP_CUST_YAML=$(mktemp --tmpdir="${manifest_folder}" customizations.XXXXXX.yaml)
-    set -o pipefail
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${TMP_CUST_YAML}"
-    set +o pipefail
-
-    # Create the base of the new manifest
-    TMP_MANIFEST=$(mktemp --tmpdir="${manifest_folder}" cray-kyverno.XXXXXX.yaml)
-    echo "${TMP_MANIFEST}"
-    "${EXTRACT_CHART_MANIFEST}" cray-kyverno "${CSM_MANIFESTS_DIR}/platform.yaml" > "${TMP_MANIFEST}"
-    cat "${TMP_MANIFEST}"
-
-    # Customize it
-    TMP_MANIFEST_CUSTOMIZED=$(mktemp --tmpdir="${manifest_folder}" cray-kyverno.customized.XXXXXX.yaml)
-    echo "${TMP_MANIFEST_CUSTOMIZED}"
-    manifestgen -i "${TMP_MANIFEST}" -c "${TMP_CUST_YAML}" -o "${TMP_MANIFEST_CUSTOMIZED}"
-    cat "${TMP_MANIFEST_CUSTOMIZED}"
-
-    loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
+    upgrade_csm_chart cray-kyverno platform.yaml
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} "$(hostname)"
@@ -496,27 +504,23 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
-    manifest_folder='/tmp'
-    
-    # Get customizations.yaml
-    TMP_CUST_YAML=$(mktemp --tmpdir="${manifest_folder}" customizations.XXXXXX.yaml)
-    set -o pipefail
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${TMP_CUST_YAML}"
-    set +o pipefail
+    upgrade_csm_chart kyverno-policy platform.yaml
 
-    # Create the base of the new manifest
-    TMP_MANIFEST=$(mktemp --tmpdir="${manifest_folder}" kyverno-policy.XXXXXX.yaml)
-    echo "${TMP_MANIFEST}"
-    "${EXTRACT_CHART_MANIFEST}" kyverno-policy "${CSM_MANIFESTS_DIR}/platform.yaml" > "${TMP_MANIFEST}"
-    cat "${TMP_MANIFEST}"
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
 
-    # Customize it
-    TMP_MANIFEST_CUSTOMIZED=$(mktemp --tmpdir="${manifest_folder}" kyverno-policy.customized.XXXXXX.yaml)
-    echo "${TMP_MANIFEST_CUSTOMIZED}"
-    manifestgen -i "${TMP_MANIFEST}" -c "${TMP_CUST_YAML}" -o "${TMP_MANIFEST_CUSTOMIZED}"
-    cat "${TMP_MANIFEST_CUSTOMIZED}"
+# Upgrade cfs-operator early to avoid known issues that can cause hangs during worker
+# NCN upgrades (developer reference: CASMTRIAGE-4197).
+state_name="UPGRADE_CFS_OPERATOR"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
 
-    loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
+    upgrade_csm_chart cray-cfs-operator sysmgmt.yaml
 
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} "$(hostname)"
@@ -529,7 +533,9 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    helm -n services upgrade cray-hms-bss ${CSM_ARTI_DIR}/helm/cray-hms-bss-*.tgz
+    
+    upgrade_csm_chart cray-hms-bss sysmgmt.yaml
+
     } >> ${LOG_FILE} 2>&1
     record_state ${state_name} "$(hostname)"
 else
