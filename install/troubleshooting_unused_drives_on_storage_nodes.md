@@ -173,7 +173,7 @@ If there are OSDs on each node (`ceph osd tree` can show this), then all the nod
         ceph mgr fail $(ceph mgr dump | jq -r .active_name)
         ```
 
-    1. Wait 5 minutes and then re-check `ceph orch device ls`.
+    1. Wait five minutes and then re-check `ceph orch device ls`.
 
         See if the drives are still showing as `Available`. If so, then proceed to the next step.
 
