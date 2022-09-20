@@ -12,12 +12,14 @@
 
 ### DHCP
 
+<!-- markdownlint-disable-next-line MD024 --> 
 #### Changed
 
 * **Kea**: Fixed a bug that could cause the auto-repair logic to fail due to an incorrect index
 
 ### DNS
 
+<!-- markdownlint-disable-next-line MD024 --> 
 #### Changed
 
 * **`ExternalDNS`**: Fixed a bug where `cray-externaldns-manager` could panic if it couldn't connect to PowerDNS on startup
@@ -30,6 +32,7 @@
 
 ### Management Network
 
+<!-- markdownlint-disable-next-line MD024 --> 
 #### Added
 
 * **Documentation**: Added procedure to migrate from the customer access network (CAN) to the customer high-speed network (CHN), allowing user traffic over
@@ -37,6 +40,7 @@
 * **Documentation**: Added various troubleshooting guides
 * **Hardware**: Validated the Aruba 8360 (JL705C) switch for the management network
 
+<!-- markdownlint-disable-next-line MD024 --> 
 #### Changed
 
 * **CANU**: Fixed bug where UAN VLANs in generated switch configurations were wrong when using the CHN
@@ -51,10 +55,12 @@
 
 ### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
 
+<!-- markdownlint-disable-next-line MD024 --> 
 #### Added
 
 * **ALL**: Initial support for NVME drives
 
+<!-- markdownlint-disable-next-line MD024 --> 
 #### Changed
 
 * **All**: Updated kernel to `kernel-default-5.3.18-150300.59.87.1`
@@ -73,12 +79,14 @@
 
 ### User Application Nodes (UAN)
 
+<!-- markdownlint-disable-next-line MD024 --> 
 #### Added
 
 * **UAN**: Initial release of UAN images based on kernels without modifications (technical preview)
 * **Documentation**: Added procedure for re-purposing compute nodes as UAN's (only applicable in specific scenarios)
 * **Documentation**: Added instructions to set/trim the boot order on UANs
 
+<!-- markdownlint-disable-next-line MD024 --> 
 #### Changed
 
 * **UAN**: Pressure Stall Information (PSI) is now enabled by default on COS-based images
