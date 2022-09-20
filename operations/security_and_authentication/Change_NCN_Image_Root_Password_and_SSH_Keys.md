@@ -317,7 +317,7 @@ The Ceph image is used by the utility storage nodes.
          chroot-ncn-mw# echo TZ=${NEWTZ} >> /etc/environment
          ```
 
-      2. Check for `utc` setting.
+      1. Check for `utc` setting.
 
          ```bash
          chroot-ncn-mw# grep -i utc /srv/cray/scripts/metal/ntp-upgrade-config.sh
@@ -348,7 +348,7 @@ The Ceph image is used by the utility storage nodes.
    ncn-mw# umount -v ceph/${CEPHVERSION}/filesystem.squashfs/mnt/squashfs
    ```
 
-1. Move the new SquashFS image, kernel, and initrd into place.
+1. Move the new SquashFS image, kernel, and `initrd` into place.
 
    ```bash
    ncn-mw# mkdir ceph/$CEPHNEW
