@@ -8,7 +8,7 @@ CFS configures nodes and images via a gitops methodology. All configuration cont
 
 CFS is available for the following use cases on systems:
 
-* Image customization: Pre-configure bootable images available via IMS. This use case enables partitioning a full configuration of a target node. Non-node-specific settings are applied pre-boot, which reduces the amount of configuration required after a node boots, and therefore reduces the bring-up time for nodes.
+* Image customization: Pre-configure bootable images available via IMS. This use case enables provisioning a full configuration of a target node. Non-node-specific settings are applied pre-boot, which reduces the amount of configuration required after a node boots, and therefore reduces the bring-up time for nodes.
 * Post-boot configuration: Fully configure or reconfigure booted nodes in a scalable, performant way to add the required settings.
 * "Push-based" deployment: When using post-boot configuration with only node-specific configuration data, the target undergoes node personalization. The two-step process of pre-boot image customization and post-boot node personalization results in a fully configured node, optimized for minimal bring-up times.
 * "Pull-based" deployment: Provide configuration management to nodes by prescribing a desired configuration state and ensuring the current node configuration state matches the desired state automatically. This is achieved via the CFS Hardware Synchronization Agent and the CFS Batcher implementation.

@@ -38,15 +38,74 @@ CFS will handle scaling up Ansible to run on many hosts, but there are still pla
 ### Using image customization
 
 * Use image customization when possible; doing so will improve boot times by limiting how many times a task is run. Configuration that is the same for all nodes of the same type will benefit from image customization.
-* Use different playbooks for image customization and node personalization.
-Moving image customizations tasks to their own playbook can remove the need to evaluate conditionals in a shared playbook, as well as ensuring that tasks are not accidentally running in both modes needlessly.
+* Use the `cfs_image` host group to distinguish between image customization and node personalization.
+  This allows image customization to be identified in the `hosts` parameter, removing the need to evaluate conditionals, and ensuring that tasks are not accidentally running in both modes needlessly.
 * See [Target Ansible Tasks for Image Customization](Target_Ansible_Tasks_for_Image_Customization.md) for more information on writing for image customization.
 
 ### Disable fact gathering
 
 * Turn off facts that are not needed in a playbook by setting `gather_facts: false`. If only a few facts are required, it is also possible to limit fact gathering by setting `gather_subset`.
 For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/latest/modules/setup_module.html) documentation.
-* Avoid importing playbooks in other playbooks.  This will trigger fact gathering for each imported playbook, potentially collecting the same information multiple times.
+* Reducing fact gathering time is especially important when importing multiple playbooks from a top level playbook.
+  Fact gathering will trigger for each imported playbook, potentially collecting the same information multiple times.
+  
+### `group_by` and `add_host`
+
+The `group_by` and `add_host` modules can both be used to dynamically generate new hosts groups for the Ansible inventory.
+These modules prove when hosts can be group according to a common property. Then, plays can be designed to only target that particular group.
+Examples of this might include grouping by operating system, hardware type, or a hardware property such as the presence of a GPU.
+
+`group_by` should by used when there are multiple named groups that hosts can be grouped by.
+For more information on using this module see See Ansible's [playbooks best practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#handling-os-and-distro-differences) guide.
+
+Example of `group_by`:
+
+```yaml
+- name: group by OS
+  hosts: all
+  tasks:
+    - name: Classify hosts by OS
+      group_by:
+        key: os_{{ ansible_facts['distribution'] }}
+
+- name: centOS playbook
+  hosts: os_CentOS
+  roles:
+    ...
+
+```
+
+`add_host` is useful for cases where the property is true or false.  It allows users to create a new group consisting of only the hosts where the property is true.  See Ansible's documentation on [](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/add_host_module.html) for more information.
+
+Example of `add_host`:
+
+```yaml
+- name: group by a sample variable
+  hosts: all
+  tasks:
+    - name: Add all hosts where sample_var is true to the new Sample group
+      add_host:
+        name: '{{ inventory_hostname }}'
+        groups: sample_group
+      when: sample_var
+
+- name: Sample playbook
+  hosts: sample_group
+  roles:
+    ...
+```
+
+To target only a subset of a set of nodes, plays should use the following syntax.  In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `sample_group` groups.
+
+```yaml
+hosts: Compute:&sample_group
+```
+
+To target a set of nodes except the ones in the new group, plays should use the following syntax.  In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `sample_group` group, so that only Compute nodes that are not an image are targeted.
+
+```yaml
+hosts: Compute:!sample_group
+```
 
 ### Reduce wasted time
 
@@ -57,7 +116,13 @@ This includes when the conditional is applied to a block, or a role imported wit
   Instead use dynamic imports with the `include_*` tasks. Because these are evaluated at runtime, a conditional can skip the import of the role or tasks entirely, and is only evaluated once.
   See the Ansible documentation on [Conditionals with re-use](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html#conditionals-with-re-use)
   and [Re-using files and roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html#re-using-files-and-roles) for more information.
-* Avoid using the same CFS configuration/playbook for all nodes and relying on the `hosts` keyword to determine what tasks will run against each node. Ansible will skip sections of the playbook that have a `hosts` target that does
+  (Dynamic re-use is not possible when importing playbooks, so instead consider using `group_by` rather than a conditional static import.)
+* For different hardware types or differences that are frequently used for conditionals, instead use `group_by` to turn the variable into a host group.
+    This way, Ansible can more efficiently avoid running tasks on certain hosts by using the `hosts` keyword.
+    This is also an effective way of separating out tasks for image customization.
+    See [Target Ansible Tasks for Image Customization](Target_Ansible_Tasks_for_Image_Customization.md) for examples of image customization using `group_by`.
+    See Ansible's [playbooks best practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#handling-os-and-distro-differences) guide for more information on `group_by`.
+* Avoid using the same CFS configuration/playbook for diverse node types. Ansible will skip sections of the playbook that have a `hosts` target that does
   not match any nodes in the current inventory/limit, but when multiple types of nodes are configured at the same time with the same configuration, they may end up in the same batch and Ansible run. This would mean that Ansible
   has to run through the sections for both types of nodes, taking more time than if the nodes were in separate batches and could skip past the unneeded code.
 
@@ -70,6 +135,16 @@ Some Ansible modules will optimize the command, such as grouping package install
   then let the node fail and CFS will separate it out from the successful nodes when new sessions are started.
 * Avoid `any_errors_fatal`. In addition to not working with all Ansible strategies, this can cause an Ansible run to exit early, and the nodes that did not have the error will have to start from the beginning of the playbook in the next session.
 * Design playbooks to be run with the `free` Ansible strategy. This means avoiding situations where all nodes in a batch need to complete a task before moving onto the next, and can save time by allowing nodes to proceed through a playbook at their own pace.
+
+### Summary of the key tips
+
+For users just starting to write plays, or who just want to focus on the biggest improvements, here is a summary of the key tips:
+
+* Disable fact gathering if the play doesn't use Ansible facts: `gather_facts: false`
+* Use image customization where possible to avoid running tasks every time nodes boot.
+* Use the `cfs_image` host group to specify whether a play is intended for image customization or node personalization.
+* Use `group_by`, `add_host` and `include_*` to avoid repeating conditionals.
+* Use existing Ansible modules rather than calling shell commands or scripts.
 
 ## Ansible limitations with CFS
 
