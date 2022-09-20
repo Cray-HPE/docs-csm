@@ -33,12 +33,20 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
-            {{- include "common.envar" . | indent 12 }}
+            set -x
+            set -o pipefail
+            {{- include "common.helper-functions" . | indent 12 }}
 
-            if ! cray bss bootparameters list --hosts $TARGET_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
-              echo "${TARGET_NCN} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
-              exit 1
-            fi
+            set_target_ncn
+            set_target_xname
+
+            TRIES=0
+            ACTION="validate NTP data in BSS for ${TARGET_NCN}"
+            echo "Trying to: $ACTION"
+            while ! cray bss bootparameters list --hosts $TARGET_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; do
+              sleep_or_exit "${TARGET_NCN} is missing NTP data in BSS. See the 'Fix BSS Metadata' section on the 'Configure NTP on NCNs' page of the CSM documentation."
+            done
+            echo "Completed: $ACTION"
   - name: "get-bootscript-last-access-timestamp"
     dependencies:
       - validate-bss-ntp
@@ -51,22 +59,31 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
-            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
-            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-            /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+            set -x
+            set -o pipefail
+            {{- include "common.helper-functions" . | indent 12 }}
 
-            bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${TOKEN}" \
-            "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
-            | jq '.[]| select(.endpoint=="bootscript")|.last_epoch' 2> /dev/null)
-            
+            set_api_token
+            set_target_ncn
+            set_target_xname
+
+            TRIES=0
+            ACTION="set metal.no-wipe=0 in BSS for $TARGET_XNAME"
+            echo "Trying to: $ACTION"
+            while ! /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME ; do
+              sleep_or_exit
+            done
+            echo "Completed: $ACTION"
+
+            bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
+                                        "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
+                                        | jq '.[]| select(.endpoint=="bootscript")|.last_epoch' 2> /dev/null)            
             if [[ $bootscript_last_epoch -gt 0 ]]; then
               echo $bootscript_last_epoch
             else
-              # sometimes we don't have endpoint history
-              # because a node might never pxe booted in the past
-              # we set it to zero as default value
+              # Sometimes we don't have endpoint history
+              # because a node might never have pxe booted in the past.
+              # We set it to zero as default value
               bootscript_last_epoch=0
               echo $bootscript_last_epoch
             fi
@@ -80,6 +97,7 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
+            set -x
             {{- include "common.envar" . | indent 12 }}
             
             cat <<'EOF' > set-next-boot-to-pxe.sh
@@ -108,18 +126,63 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
+            set -x
             {{- include "common.envar" . | indent 12 }}
+
+            # Get sleep_or_exit function definition. This is also included by envar, but best not to rely on that
+            {{- include "common.helper-functions" . | indent 12 }}
+
+            TRIES=0
+            ACTION="set $TARGET_NCN to PXE boot"
+            echo "Trying to: $ACTION"
+            while ! ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis bootdev pxe options=efiboot ; do
+                sleep_or_exit
+            done
+            echo "Completed: $ACTION"
+
+            TRIES=0
+            ACTION="get power status of $TARGET_NCN"
+            echo "Trying to: $ACTION"
+            while ! powerStatus=$(ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power status) ; do
+                sleep_or_exit
+            done
+            echo "powerStatus=$powerStatus"
+
+            # Loop until we have successfully power cycled the node
+            while true ; do
+                if [[ "$powerStatus" == *"is on"* ]]; then
+                    TRIES=0
+                    ACTION="power off $TARGET_NCN"
+                    echo "Trying to: $ACTION"
+                    while ! ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power off ; do
+                        sleep_or_exit
+                    done
+                    echo "Completed: $ACTION"
+                    sleep 20
+                fi
             
-            # Set ncn to pxe boot
-            ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis bootdev pxe options=efiboot
-            
-            powerStatus=$(ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power status)
-            if [[ "$powerStatus" == *"is on"* ]]; then
-              # power cycle node
-              ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power off
-              sleep 20
-            fi
-            ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power on
+                TRIES=0
+                ACTION="power on $TARGET_NCN"
+                echo "Trying to: $ACTION"
+                while ! ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power on ; do
+                    sleep_or_exit
+                done
+                echo "Completed: $ACTION"
+                sleep 20
+
+                # Verify that power is now on
+                TRIES=0
+                ACTION="get power status of $TARGET_NCN"
+                echo "Trying to: $ACTION"
+                while ! powerStatus=$(ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power status) ; do
+                    sleep_or_exit
+                done
+                echo "powerStatus=$powerStatus"
+
+                if [[ "$powerStatus" == *"is on"* ]]; then
+                    break
+                fi
+            done
   - name: "wait-for-boot"
     dependencies:
       - pxe-boot-node
