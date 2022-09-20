@@ -12,15 +12,13 @@
 
 ### DHCP
 
-<!-- markdownlint-disable-next-line  --> 
-#### Changed
+#### Changed <!-- markdownlint-disable-line MD024 -->
 
 * **Kea**: Fixed a bug that could cause the auto-repair logic to fail due to an incorrect index
 
 ### DNS
 
-<!-- markdownlint-disable-next-line MD024 --> 
-#### Changed
+#### Changed <!-- markdownlint-disable-line MD024 -->
 
 * **`ExternalDNS`**: Fixed a bug where `cray-externaldns-manager` could panic if it couldn't connect to PowerDNS on startup
 * **PowerDNS**: Changed `powerdns-manager` SLS error message to debug
@@ -32,19 +30,17 @@
 
 ### Management Network
 
-<!-- markdownlint-disable-next-line MD024 --> 
-#### Added
+#### Added <!-- markdownlint-disable-line MD024 -->
 
 * **Documentation**: Added procedure to migrate from the customer access network (CAN) to the customer high-speed network (CHN), allowing user traffic over
   the HSN instead of the NMN (This is an extension of the `bi-furcated` CAN feature that shipped in CSM 1.2)
 * **Documentation**: Added various troubleshooting guides
 * **Hardware**: Validated the Aruba 8360 (JL705C) switch for the management network
 
-<!-- markdownlint-disable-next-line MD024 --> 
-#### Changed
+#### Changed <!-- markdownlint-disable-line MD024 -->
 
 * **CANU**: Fixed bug where UAN VLANs in generated switch configurations were wrong when using the CHN
-* **CANU**: Other various bug fixes (see https://github.com/cray-hpe/canu for a full changelog)
+* **CANU**: Other various bug fixes (see [CANU changelog](https://github.com/cray-hpe/canu) for a full changelog)
 * **CANU**: Added an ACL on systems with Dell and Mellanox switches to prevent high-speed network (HSN) switches on the Hardware Management Network (HMN)
   from communicating with the Fabric Manager service on the Node Management Network (NMN) API gateway
 * **CSI**: Fixed bug where CSI could generate bad SLS chassis data
@@ -55,13 +51,11 @@
 
 ### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
 
-<!-- markdownlint-disable-next-line MD024 --> 
-#### Added
+#### Added <!-- markdownlint-disable-line MD024 -->
 
 * **ALL**: Initial support for NVME drives
 
-<!-- markdownlint-disable-next-line MD024 --> 
-#### Changed
+#### Changed <!-- markdownlint-disable-line MD024 -->
 
 * **All**: Updated kernel to `kernel-default-5.3.18-150300.59.87.1`
 * **All**: Various package updates to apply latest security patches
@@ -79,20 +73,17 @@
 
 ### User Application Nodes (UAN)
 
-<!-- markdownlint-disable-next-line MD024 --> 
-#### Added
+#### Added <!-- markdownlint-disable-line MD024 -->
 
 * **UAN**: Initial release of UAN images based on kernels without modifications (technical preview)
 * **Documentation**: Added procedure for re-purposing compute nodes as UAN's (only applicable in specific scenarios)
 * **Documentation**: Added instructions to set/trim the boot order on UANs
 
-<!-- markdownlint-disable-next-line MD024 --> 
-#### Changed
+#### Changed <!-- markdownlint-disable-line MD024 -->
 
 * **UAN**: Pressure Stall Information (PSI) is now enabled by default on COS-based images
 * **UAN**: Updated to the latest COS image
 * **UAN**: Network changes related to the CAN and CHN may impact VLAN tagging on management network ports connected to UANs to ensure proper network traffic segregation.
-
 
 ### Miscellaneous functionality
 
