@@ -132,16 +132,14 @@ The following table explains the different pieces in the preceding example.
 |`Etag`|`f040d70bd6fabaf91838fe4e484563cf-211`|The `Etag` (entity tag) is the identifier of the SquashFS image in S3.|
 |`rootfs` provider passthrough parameters|`dvs:api-gw-service-nmn.local:300:nmn0`|These are additional parameters that CPS uses to properly mount the file system|
 
-  The rootfs_provider_passthrough parameters are explained in the following table.
+The `rootfs_provider_passthrough` parameters are explained in the following table.
 
-  **Table:** Rootfs provider passthrough parameters
-
-  |Parameter|Example|Explanation|
-  |---|---|---|
-  |Transport|dvs|Use DVS to project the squashfs image down to the node|
-  |Gateway|api-gw-service-nmn.local|This is the URL that identifies the gateway where the DVS servers are located|
-  |Time-out|300|The number of seconds to wait to establish a contact|
-  |Interface|nmn0|The IP interface on the node to use to contact the DVS server; This interface must be up to continue booting.|
+|Parameter|Example|Explanation|
+|---|---|---|
+|Transport|`dvs`|Use DVS to project the SquashFS image down to the node|
+|Gateway|`api-gw-service-nmn.local`|This is the URL that identifies the gateway where the DVS servers are located|
+|Time-out|`300`|The number of seconds to wait to establish a contact|
+|Interface|`nmn0`|The IP interface on the node to use to contact the DVS server; This interface must be up to continue booting.|
 
   Note:
   Regarding the interface to use for contacting DVS, the possible values are
