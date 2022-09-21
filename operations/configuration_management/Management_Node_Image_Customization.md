@@ -22,7 +22,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
 
     cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/initrd" "./${ARTIFACT_VERSION}-initrd"
 
-    export IMS_ROOTFS_FILENAME="${ARTIFACT_VERSION}-filesystem.squashfs"
+    export IMS_ROOTFS_FILENAME="${ARTIFACT_VERSION}-rootfs"
 
     export IMS_KERNEL_FILENAME="${ARTIFACT_VERSION}-kernel"
 
