@@ -26,7 +26,7 @@ None.
 
 4. Update IMS Job Access Network.
 
-   Perform procedure(s) in [Update IMS Job Access Network](../../operations/image_management/Update_IMS_Job_Access_Network.md)
+   Perform procedure(s) in [Update IMS Job Access Network](../../operations/image_management/Update_IMS_Job_Access_Network.md).
 
 5. (Optional) Change Keycloak OAuth token lifetime.
 
