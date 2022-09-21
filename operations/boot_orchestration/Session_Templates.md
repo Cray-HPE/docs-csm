@@ -118,11 +118,11 @@ BOS constructs the kernel boot parameter `root` per the following syntax.
 
   `root` kernel parameter example:
 
-  ```bash
-  root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f040d70bd6fabaf91838fe4e484563cf-211:dvs:api-gw-service-nmn.local:300:nmn0 nmd_data=url=s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs,etag=f040d70bd6fabaf91838fe4e484563cf-211
-  ```
+```text
+root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f040d70bd6fabaf91838fe4e484563cf-211:dvs:api-gw-service-nmn.local:300:nmn0 nmd_data=url=s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs,etag=f040d70bd6fabaf91838fe4e484563cf-211
+```
 
-  The following table dissects and explains the different pieces in the preceding example.
+The following table explains the different pieces in the preceding example.
   
   **Table:** kernel boot parameter `root` syntax
   |Field|Example Value|Explanation|
