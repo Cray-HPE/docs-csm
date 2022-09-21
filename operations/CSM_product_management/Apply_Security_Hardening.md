@@ -24,10 +24,14 @@ None.
 
    Failure to apply the referenced configuration could result in NCN disk space exhaustion on Kubernetes Master Nodes.
 
-4. (Optional) Change Keycloak OAuth token lifetime.
+4. Update IMS Job Access Network.
+
+   Perform procedure(s) in [Update IMS Job Access Network](../../operations/image_management/Update_IMS_Job_Access_Network.md).
+
+5. (Optional) Change Keycloak OAuth token lifetime.
 
    Perform procedure(s) in [Change Keycloak token lifetime](../security_and_authentication/Change_Keycloak_Token_Lifetime.md).
 
-5. (Optional) Remove Kiali.
+6. (Optional) Remove Kiali.
 
    Perform procedure(s) in [Remove Kiali](../system_management_health/Remove_Kiali.md).
