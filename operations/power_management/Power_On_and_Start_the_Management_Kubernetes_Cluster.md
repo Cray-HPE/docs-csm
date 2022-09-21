@@ -203,16 +203,19 @@ Verify that the Lustre file system is available from the management cluster.
     2021-08-04 17:28:21,945 - INFO - sat.cli.bootsys.ceph - Ceph is not healthy: The following fatal Ceph health warnings were found: POOL_NO_REDUNDANCY
     ```
 
-    The particular Ceph health warning may vary. In this example, it is `POOL_NO_REDUNDANCY`. See
-    [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md) for Ceph troubleshooting
-    steps, which may include restarting Ceph services as described below for convenience.
+    The particular Ceph health warning may vary. In this example, it is `POOL_NO_REDUNDANCY`.
 
-    Verify that the Ceph services started.
+    If the warning is `PG_NOT_DEEP_SCRUBBED`, this alert should clear once Ceph deep scrubs of PGs
+    have completed. The time to complete this operation depends on the number of outstanding deep
+    scrub operations and the load on the Ceph cluster. See [Ceph Deep
+    Scrubs](../utility_storage/Ceph_Deep_Scrubs.md) for more information on deep scrubs. This alert
+    is more likely to occur if the system is powered off for an extended duration.
 
-    * If the Ceph services did not start, then see [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md)
-      for instruction on starting Ceph services.
+    See [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md) for Ceph troubleshooting
+    steps, which may include restarting Ceph services.
 
-    Once Ceph is healthy, repeat the `sat bootsys boot` to finish starting the Kubernetes cluster.
+    Once Ceph is healthy, repeat the `sat bootsys boot --stage platform-services` command to finish
+    starting the Kubernetes cluster.
 
 1. Check the space available on the Ceph cluster.
 
