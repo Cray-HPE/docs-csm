@@ -98,7 +98,7 @@ Each boot set also specifies a set of nodes to be applied to.  There are three d
 
   The 'rootfs' is the root file system.
   
-  `rootfs_provider` identifies the mechanism that providers the root file system for the node. 
+`rootfs_provider` identifies the mechanism that provides the root file system for the node. 
 
   In the case of the Cray Operating System (COS) image, the rootfs provider is HPE’s Content Projection Service (CPS), which uses HPE’s Data Virtualization Service (DVS) to deliver the content. CPS projects the root file system onto the nodes as a squashfs image. This is provided via an overlay file system which is set up in dracut. 
 
