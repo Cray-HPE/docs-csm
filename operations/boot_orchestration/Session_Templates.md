@@ -124,12 +124,13 @@ root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f04
 
 The following table explains the different pieces in the preceding example.
   
+
 |Field|Example Value|Explanation|
 |-----|-------------|-----------|
-|Protocol|`craycps-s3`|The protocol used to mount the root file system, using CPS|
+|Protocol|`craycps-s3`|The protocol used to mount the root file system, using CPS in this example|
 |`rootfs` Provider Location|`s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs`|The `rootfs` provider location is a SquashFS image stored in S3|
 |`Etag`|`f040d70bd6fabaf91838fe4e484563cf-211`|The `Etag` (entity tag) is the identifier of the SquashFS image in S3.|
-|`rootfs` provider passthrough parameters|`dvs:api-gw-service-nmn.local:300:nmn0`|These are additional parameters that CPS uses to properly mount the file system|
+|`rootfs` provider passthrough parameters|`dvs:api-gw-service-nmn.local:300:nmn0`|These are additional parameters passed through to CPS in this example, which it uses to properly mount the file system|
 
 The `rootfs_provider_passthrough` parameters are explained in the following table.
 
@@ -140,14 +141,14 @@ The `rootfs_provider_passthrough` parameters are explained in the following tabl
 |Time-out|`300`|The number of seconds to wait to establish a contact|
 |Interface|`nmn0`|The IP interface on the node to use to contact the DVS server; This interface must be up to continue booting.|
 
-  Note:
-  Regarding the interface to use for contacting DVS, the possible values are
+Note:
+Regarding the interface to use for contacting DVS, the possible values are
 
-  * `nmn0` -- Ensures the nmn0 interface is up
-  * `nmn0,hsn0` -- Ensures both the nmn0 and hsn0 interfaces are up. This is required for booting over the HSN.
-  * `hsn0` -- Ensures the hsn0 interface is up. 
+* `nmn0` -- Ensures the nmn0 interface is up
+* `nmn0,hsn0` -- Ensures both the nmn0 and hsn0 interfaces are up. This is required for booting over the HSN.
+* `hsn0` -- Ensures the hsn0 interface is up. 
   
-  The DVS configuration files determine what interface to use (NMN or HSN). However, the CPS dracut ensures the requested interfaces are up.
+The DVS configuration files determine what interface to use (NMN or HSN). However, the CPS dracut ensures the requested interfaces are up.
 
 #### Overriding configuration (V2 only)
 
