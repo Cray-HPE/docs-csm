@@ -62,6 +62,16 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 
 ## Stage 2.2 - Worker node image upgrade
 
+1. Follow the steps in the [Accessing Sat `Bootprep` Files](../operations/configuration_management/Accessing_Sat_Bootprep_Files.md) document to acquire a current copy of the SAT `Bootprep` files.
+
+1. Follow the steps in the [Worker Upgrade Image Customization](../operations/configuration_management/Worker_Upgrade_Image_Customization.md) document.
+ This will ensure the CFS configuration Layers are applied to perform Image Customization for the nodes which will be rebooted during the upgrade.
+
+1. Follow the steps in the [Worker Upgrade Node Personalization](../operations/configuration_management/Worker_Upgrade_Node_Personalization.md) document.
+ This will ensure the CFS configuration Layers are applied to perform Node Personalization during the post-boot of the Management NCNs.
+
+1. Now that you've updated CFS for Image Customization and Node personalization, follow the [Management Node Image Customization](../operations/configuration_management/Management_Node_Image_Customization.md) document to apply new CSM boot parameters.
+
 There are two options available for upgrading worker nodes.
 
 ### Option 1 - Serial upgrade
