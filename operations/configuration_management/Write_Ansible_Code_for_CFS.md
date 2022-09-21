@@ -51,9 +51,14 @@ For more information on `gather_subset`, see the external [Ansible module setup]
   
 ### `group_by` and `add_host`
 
-The `group_by` and `add_host` modules can both be used to dynamically generate new hosts groups for the Ansible inventory.  This is useful when for hosts that be grouped according to a common property, and when plays or large sections of plays are intended to only target a particular kind of host.  Examples of this might include grouping by operating system, hardware type, or a hardware property such as the presence of a GPU.
+The `group_by` and `add_host` modules can both be used to dynamically generate new hosts groups for the Ansible inventory.
+These modules prove useful when hosts can be grouped according to a common property. Then, plays can be designed to only target that particular group.
+Examples of this might include grouping by operating system, hardware type, or a hardware property such as the presence of a GPU.
 
-`group_by` should by used when there are multiple named groups that hosts can be grouped by.  For more instance on using this module see See Ansible's [playbooks best practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#handling-os-and-distro-differences) guide for more information.
+`group_by` should by used when there are multiple named groups that hosts can be grouped by.
+For more information on using this module see See Ansible's [playbooks best practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#handling-os-and-distro-differences) guide.
+
+Example of `group_by`:
 
 ```yaml
 - name: group by OS
@@ -72,11 +77,13 @@ The `group_by` and `add_host` modules can both be used to dynamically generate n
 
 `add_host` is useful for cases where the property is true or false.  It allows users to create a new group consisting of only the hosts where the property is true.  See Ansible's documentation on [](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/add_host_module.html) for more information.
 
+Example of `add_host`:
+
 ```yaml
 - name: group by a sample variable
   hosts: all
   tasks:
-    - name: Add all where sample_var is true to the new Sample group
+    - name: Add all hosts where sample_var is true to the new Sample group
       add_host:
         name: '{{ inventory_hostname }}'
         groups: sample_group
@@ -88,13 +95,13 @@ The `group_by` and `add_host` modules can both be used to dynamically generate n
     ...
 ```
 
-To target only a new group, plays should use the following syntax.  In this example the play is targeting only images for `Compute` nodes. `&` takes the intersection of the `Compute` and `sample_group` groups.
+To target only a subset of a set of nodes, plays should use the following syntax.  In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `sample_group` groups.
 
 ```yaml
 hosts: Compute:&sample_group
 ```
 
-To target everything except the new group, plays should use the following syntax.  In this example the play is targeting only running `Compute` nodes. `!` negates the `sample_group` group, so that only Compute nodes that are not an image are targeted.
+To target a set of nodes except the ones in the new group, plays should use the following syntax.  In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `sample_group` group, so that only Compute nodes that are not an image are targeted.
 
 ```yaml
 hosts: Compute:!sample_group
@@ -137,7 +144,7 @@ For users just starting to write plays, or who just want to focus on the biggest
 * Use image customization where possible to avoid running tasks every time nodes boot.
 * Use the `cfs_image` host group to specify whether a play is intended for image customization or node personalization.
 * Use `group_by`, `add_host` and `include_*` to avoid repeating conditionals.
-* Use Ansible existing Ansible modules rather than calling shell commands or scripts.
+* Use existing Ansible modules rather than calling shell commands or scripts.
 
 ## Ansible limitations with CFS
 
