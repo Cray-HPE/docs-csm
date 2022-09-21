@@ -40,7 +40,7 @@ Jenkinsfile.github                                       @Cray-HPE/ci
 /operations/conman                                       @Cray-HPE/cms-core-console-logging
 /operations/compute_rolling_upgrades                     @Cray-HPE/cms-core-crus
 /operations/configuration_management                     @Cray-HPE/cms-core-cfs @Cray-HPE/cms-core-vcs
-/operations/image_management                             @Cray-HPE/cms-core-ims @Cray-HPE/cms-core-images                             
+/operations/image_management                             @Cray-HPE/cms-core-ims @Cray-HPE/cms-core-images
 
 # User Access items
 /operations/UAS_user_and_admin_topics                    @Cray-HPE/user-access
