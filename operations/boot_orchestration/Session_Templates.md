@@ -96,7 +96,7 @@ Each boot set also specifies a set of nodes to be applied to.  There are three d
 
 #### Rootfs Providers
 
-  The 'rootfs' is the root file system.
+The `rootfs` is the root file system.
   
 `rootfs_provider` identifies the mechanism that provides the root file system for the node. 
 
