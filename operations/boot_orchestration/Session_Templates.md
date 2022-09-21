@@ -124,7 +124,6 @@ root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f04
 
 The following table explains the different pieces in the preceding example.
   
-  **Table:** kernel boot parameter `root` syntax
 |Field|Example Value|Explanation|
 |-----|-------------|-----------|
 |Protocol|`craycps-s3`|The protocol used to mount the root file system, using CPS|
