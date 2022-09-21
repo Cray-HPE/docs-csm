@@ -125,12 +125,12 @@ root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f04
 The following table explains the different pieces in the preceding example.
   
   **Table:** kernel boot parameter `root` syntax
-  |Field|Example Value|Explanation|
-  |-----|-------------|-----------|
-  |Protocol|craycps-s3|The protocol used to mount the root file system, using CPS|
-  |RootFS Provider Location|s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs|The rootfs provider location is a squashfs image stored in S3|
-  |Etag|f040d70bd6fabaf91838fe4e484563cf-211|The Etag (entity tag) is the identifier of the squashfs image in S3.|
-  |Rootfs provider passthrough parameters|dvs:api-gw-service-nmn.local:300:nmn0|These are additional parameters that CPS uses to properly mount the file system|
+|Field|Example Value|Explanation|
+|-----|-------------|-----------|
+|Protocol|`craycps-s3`|The protocol used to mount the root file system, using CPS|
+|`rootfs` Provider Location|`s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs`|The `rootfs` provider location is a SquashFS image stored in S3|
+|`Etag`|`f040d70bd6fabaf91838fe4e484563cf-211`|The `Etag` (entity tag) is the identifier of the SquashFS image in S3.|
+|`rootfs` provider passthrough parameters|`dvs:api-gw-service-nmn.local:300:nmn0`|These are additional parameters that CPS uses to properly mount the file system|
 
   The rootfs_provider_passthrough parameters are explained in the following table.
 
