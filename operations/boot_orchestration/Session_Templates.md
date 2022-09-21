@@ -103,7 +103,7 @@ The `rootfs` is the root file system.
 In the case of the Cray Operating System (COS) image, the rootfs provider is HPE’s Content Projection Service (CPS), which uses HPE’s Data Virtualization Service (DVS) to deliver the content. CPS projects the root file system onto the nodes as a squashfs image. This is provided via an overlay file system which is set up in dracut. 
 
 
-  `rootfs_provider_passthrough` is a string that is passed through to the provider of the rootfs. This string can contain additional information that the provider will act upon. 
+`rootfs_provider_passthrough` is a string that is passed through to the provider of the `rootfs`. This string can contain additional information that the provider will act upon. 
 
   Both the `rootfs_provider` and `rootfs_provider_passthrough` parameters are used to construct the value of the kernel boot parameter `root` that BOS sends to the node.
 
