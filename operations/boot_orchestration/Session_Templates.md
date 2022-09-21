@@ -145,6 +145,7 @@ In the case of the Cray Operating System (COS) image, the rootfs provider is HPE
 
   Note:
   Regarding the interface to use for contacting DVS, the possible values are
+
   * `nmn0` -- Ensures the nmn0 interface is up
   * `nmn0,hsn0` -- Ensures both the nmn0 and hsn0 interfaces are up. This is required for booting over the HSN.
   * `hsn0` -- Ensures the hsn0 interface is up. 
