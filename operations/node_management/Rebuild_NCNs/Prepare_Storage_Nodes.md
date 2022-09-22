@@ -28,8 +28,8 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
    "/srv/cray/scripts/common/update_ca_certs.py",
    "/srv/cray/scripts/metal/install.sh",
    "/srv/cray/scripts/common/pre-load-images.sh",
-   "touch /etc/cloud/cloud-init.disabled",
-   "/srv/cray/scripts/common/ceph-enable-services.sh"
+   "/srv/cray/scripts/common/ceph-enable-services.sh",
+   "touch /etc/cloud/cloud-init.disabled"
    ]
    ```
 
