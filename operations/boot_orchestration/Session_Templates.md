@@ -108,7 +108,7 @@ In the case of the Cray Operating System (COS) image, the rootfs provider is HPE
 Both the `rootfs_provider` and `rootfs_provider_passthrough` parameters are used to construct the value of the kernel boot parameter `root` that BOS sends to the node.
 
 BOS constructs the kernel boot parameter `root` per the following syntax.
-  ```bash
+```text
   root=<Protocol>:<Root FS location>:<Etag>:<RootFS-provider-passthrough parameters>
   ```
 
