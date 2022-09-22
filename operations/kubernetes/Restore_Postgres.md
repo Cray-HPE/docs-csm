@@ -57,7 +57,7 @@ This assumes that a dump of the database exists and the Cray command line interf
         TMP=$(echo "$DUMPFILE" | sed 's/:/-/g')
         mv $DUMPFILE $TMP
         DUMPFILE=$(echo $TMP)
-        unset $TMP
+        unset TMP
         ```
 
 1. Scale the Spire service to 0.
@@ -280,7 +280,7 @@ This assumes that a dump of the database exists and the Cray command line interf
         TMP=$(echo "$DUMPFILE" | sed 's/:/-/g')
         mv $DUMPFILE $TMP
         DUMPFILE=$(echo $TMP)
-        unset $TMP
+        unset TMP
         ```
 
 1. Scale the Keycloak service to 0.
@@ -552,7 +552,7 @@ the Cray command line interface \(CLI\) tool is initialized and configured on th
         TMP=$(echo "$DUMPFILE" | sed 's/:/-/g')
         mv $DUMPFILE $TMP
         DUMPFILE=$(echo $TMP)
-        unset $TMP
+        unset TMP
         ```
 
 1. Scale the VCS service to 0.
@@ -691,10 +691,10 @@ the Cray command line interface \(CLI\) tool is initialized and configured on th
 1. Scale the Gitea service back up.
 
     ```bash
-    ncn-mw# kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=3
+    ncn-mw# kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=1
 
     # Wait for the gitea pods to start
-    ncn-mw# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 3 ] ; do
+    ncn-mw# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 1 ] ; do
                 echo "  waiting for pods to start"; sleep 2
             done
     ```
