@@ -1,0 +1,184 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
+{{define "common.helper-functions"}}
+# Call to echo which prefixes a timestamp
+function dtecho
+{
+    echo "$(date +%Y%m%d_%H%M%S.%N): $*"
+}
+
+# Function assumes that ACTION and TRIES variables have been set
+function sleep_or_exit
+{
+    if [[ $TRIES -gt 60 ]]; then
+        dtecho "ERROR: Unable to $ACTION, even after retries"
+        # If any arguments are passed in, print those too in this case
+        while [[ $# -gt 0 ]]; do
+            echo "$1"
+            shift
+        done
+        exit 1
+    fi
+    dtecho "WARNING: Failed to $ACTION. Retrying after 10 seconds."
+    sleep 10
+    let TRIES+=1
+}
+
+function get_k8s_secret
+{
+    set -o pipefail
+    kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
+}
+
+# Sets and exports TOKEN variable
+function set_api_token
+{
+    local SECRET TRIES ACTION
+
+    SECRET=$(get_k8s_secret)
+
+    set -o pipefail
+    TRIES=0
+    ACTION="obtain API token"
+    dtecho "Trying to: $ACTION"
+    while ! TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                        -d client_id=admin-client \
+                        -d client_secret="${SECRET}" \
+                        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token') ; do
+        sleep_or_exit
+    done
+    export TOKEN
+    dtecho "Completed: $ACTION"
+}
+
+# Sets TARGET_NCN
+function set_target_ncn
+{
+    TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+    dtecho "TARGET_NCN=${TARGET_NCN}"
+}
+
+# Sets TARGET_XNAME
+function set_target_xname
+{
+    local TRIES ACTION
+    [[ -n $TOKEN ]] || set_api_token
+    [[ -n $TARGET_NCN ]] || set_target_ncn
+
+    set -o pipefail
+    TRIES=0
+    ACTION="determine xname of ${TARGET_NCN}"
+    dtecho "Trying to: $ACTION"
+    while ! TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                            jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname") ; do
+        sleep_or_exit
+    done
+    dtecho "TARGET_XNAME=${TARGET_XNAME}"
+}
+
+# Sets TARGET_MGMT_XNAME
+function set_target_mgmt_xname
+{
+    local TRIES ACTION
+    [[ -n $TOKEN ]] || set_api_token
+    [[ -n $TARGET_NCN ]] || set_target_ncn
+
+    set -o pipefail
+    TRIES=0
+    ACTION="determine xname of ${TARGET_NCN} BMC"
+    dtecho "Trying to: $ACTION"
+    while ! TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                                    jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent") ; do
+        sleep_or_exit
+    done
+    dtecho "TARGET_MGMT_XNAME=${TARGET_MGMT_XNAME}"
+}
+
+# Sets TARGET_NCN_mgmt_host
+function set_target_ncn_mgmt_host
+{
+    [[ -n $TARGET_NCN ]] || set_target_ncn
+
+    TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
+    dtecho "TARGET_NCN_mgmt_host=${TARGET_NCN_mgmt_host}"
+}
+
+# Sets and exports IPMI_USERNAME and IPMI_PASSWORD
+function set_bmc_credentials
+{
+    local TRIES ACTION
+    [[ -n $TOKEN ]] || set_api_token
+    [[ -n $TARGET_NCN ]] || set_target_ncn
+    [[ -n $TARGET_MGMT_XNAME ]] || set_target_mgmt_xname
+
+    set -o pipefail
+    TRIES=0
+    ACTION="obtain username for ${TARGET_NCN} BMC"
+    dtecho "Trying to: $ACTION"
+    while ! IPMI_USERNAME=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| \
+                                jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username"); do
+        sleep_or_exit
+    done
+    dtecho "Username obtained"
+    export IPMI_USERNAME
+
+    TRIES=0
+    ACTION="obtain password for ${TARGET_NCN} BMC"
+    dtecho "Trying to: $ACTION"
+    while ! IPMI_PASSWORD=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| \
+                                jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password"); do
+        sleep_or_exit
+    done
+    dtecho "Password obtained"
+    export IPMI_PASSWORD
+}
+
+# Sets CFS_STATUS_FILE variable with location of file containing response from API query
+function set_cfs_status_file
+{
+    local TRIES ACTION
+    set -o pipefail
+    [[ -n $TARGET_XNAME ]] || set_target_xname
+
+    CFS_STATUS_FILE=/tmp/cfs-status-${TARGET_XNAME}.$$
+
+    # Retry CFS command if needed
+    TRIES=0
+    ACTION="get CFS state of ${TARGET_XNAME}"
+    dtecho "Trying to: $ACTION"
+    while ! curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" > "${CFS_STATUS_FILE}" ; do
+        cat "${CFS_STATUS_FILE}"
+        sleep_or_exit
+    done
+    dtecho "Completed: $ACTION"
+}
+
+function target_xname_and_name
+{
+    [[ -n $TARGET_NCN ]] || set_target_ncn
+    [[ -n $TARGET_XNAME ]] || set_target_xname
+    echo "${TARGET_XNAME} (${TARGET_NCN})"
+}
+{{end}}

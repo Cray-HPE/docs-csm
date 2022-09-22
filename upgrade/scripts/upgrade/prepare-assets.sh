@@ -24,8 +24,6 @@
 #
 
 set -e
-locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-. ${locOfScript}/../common/upgrade-state.sh
 
 # array for paths to unmount after chrooting images
 #shellcheck disable=SC2034
@@ -81,6 +79,9 @@ fi
 
 CSM_REL_NAME="csm-${CSM_RELEASE}"
 CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
+
+locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+. "${locOfScript}/../common/upgrade-state.sh"
 . "${locOfScript}/../common/ncn-common.sh" "$(hostname)"
 trap 'err_report' ERR
 

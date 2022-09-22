@@ -22,26 +22,27 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-{{define "common.envar"}}
-set -x
+# shellcheck shell=sh
 
-{{- include "common.helper-functions" . }}
+# Defining variables and functions here will affect all specfiles.
+# Change shell options inside a function may cause different behavior,
+# so it is better to set them here.
+# set -eu
 
-# Set and export TOKEN variable
-set_api_token
+# This callback function will be invoked only once before loading specfiles.
+spec_helper_precheck() {
+  # Available functions: info, warn, error, abort, setenv, unsetenv
+  # Available variables: VERSION, SHELL_TYPE, SHELL_VERSION
+  : minimum_version "0.28.1"
+}
 
-# Set TARGET_NCN variable
-set_target_ncn
+# This callback function will be invoked after a specfile has been loaded.
+spec_helper_loaded() {
+  :
+}
 
-# Set TARGET_XNAME variable
-set_target_xname
-
-# Set TARGET_MGMT_XNAME variable
-set_target_mgmt_xname
-
-# Set TARGET_NCN_mgmt_host variable
-set_target_ncn_mgmt_host
-
-# Set and export IPMI_USERNAME and IPMI_PASSWORD variables
-set_bmc_credentials
-{{end}}
+# This callback function will be invoked after core modules has been loaded.
+spec_helper_configure() {
+  # Available functions: import, before_each, after_each, before_all, after_all
+  : import 'support/custom_matcher'
+}

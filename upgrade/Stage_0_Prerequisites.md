@@ -226,8 +226,8 @@ There are two possible scenarios. Follow the procedure for the scenario that is 
 
 ### Standard upgrade
 
-The procedures for customizing the NCN image and updating NCN personalization configurations are found in the *HPE Cray EX System Software Getting Started Guide S-8000*, section
-"HPE Cray EX Software Upgrade Workflow", subsection "Cray System Management (CSM)".
+In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade. The image customization and node personalization steps that should be used come in a later section Stage 2.2.
+Continue on to Stage 0.4, skipping the CSM-only system upgrade section below.
 
 ### CSM-only system upgrade
 
