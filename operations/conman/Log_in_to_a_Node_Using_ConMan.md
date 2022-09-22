@@ -49,7 +49,7 @@ The user performing this procedure needs to have access permission to the `cray-
 4. Connect to the node's console using ConMan on the `cray-console-node` pod you found.
 
     ```bash
-    kubectl exec -it -n services $NODEPOD -- conman -j $XNAME
+    kubectl exec -it -n services $NODEPOD -c cray-console-node -- conman -j $XNAME
     ```
 
     Example output:
