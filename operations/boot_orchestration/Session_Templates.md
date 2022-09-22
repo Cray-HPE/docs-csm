@@ -98,23 +98,24 @@ Each boot set also specifies a set of nodes to be applied to.  There are three d
 
 The `rootfs` is the root file system.
   
-`rootfs_provider` identifies the mechanism that provides the root file system for the node. 
+`rootfs_provider` identifies the mechanism that provides the root file system for the node.
 
-In the case of the Cray Operating System (COS) image, the rootfs provider is HPE’s Content Projection Service (CPS), which uses HPE’s Data Virtualization Service (DVS) to deliver the content. CPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut. 
+In the case of the Cray Operating System (COS) image, the rootfs provider is HPE’s Content Projection Service (CPS), which uses HPE’s Data Virtualization Service (DVS) to deliver the content. 
+CPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut.
 
-
-`rootfs_provider_passthrough` is a string that is passed through to the provider of the `rootfs`. This string can contain additional information that the provider will act upon. 
+`rootfs_provider_passthrough` is a string that is passed through to the provider of the `rootfs`. This string can contain additional information that the provider will act upon.
 
 Both the `rootfs_provider` and `rootfs_provider_passthrough` parameters are used to construct the value of the kernel boot parameter `root` that BOS sends to the node.
 
 BOS constructs the kernel boot parameter `root` per the following syntax.
+
 ```text
 root=<Protocol>:<Root FS location>:<Etag>:<RootFS-provider-passthrough parameters>
 ```
 
 BOS fills in the protocol based on the value provided in `rootfs_provider`. If BOS does not know the `rootfs_provider`, then it omits the protocol field. Currently, BOS only recognizes the `rootfs_provider` `cpss3`.
 BOS finds the `Root FS provider` and `Etag` values in the manifest file in the session template in the [boot set](#boot-artifacts-and-s3).
-The `rootfs_provider_passthrough` parameters are appended to the `root` parameter without modification. They are "passed through", as the name imples.
+The `rootfs_provider_passthrough` parameters are appended to the `root` parameter without modification. They are "passed through", as the name implies.
 
 ##### `root` kernel parameter example
 
@@ -123,7 +124,6 @@ root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f04
 ```
 
 The following table explains the different pieces in the preceding example.
-  
 
 |Field|Example Value|Explanation|
 |-----|-------------|-----------|
@@ -146,7 +146,7 @@ Regarding the interface to use for contacting DVS, the possible values are
 
 * `nmn0` -- Ensures the nmn0 interface is up
 * `nmn0,hsn0` -- Ensures both the nmn0 and hsn0 interfaces are up. This is required for booting over the HSN.
-* `hsn0` -- Ensures the hsn0 interface is up. 
+* `hsn0` -- Ensures the hsn0 interface is up.
   
 The DVS configuration files determine what interface to use (NMN or HSN). However, the CPS dracut ensures the requested interfaces are up.
 
