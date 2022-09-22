@@ -11,11 +11,11 @@ These procedures assume a healthy Bare-Metal etcd cluster.
 
 ## Table of contents
 
-* [Check health of Bare-Metal etcd cluster](#Check health of Bare-Metal etcd cluster)
-* [Bare-Metal etcd cluster backups overview](#Bare-Metal etcd cluster backups overview)
-* [Create new Bare-Metal etcd cluster backup](#Create new Bare-Metal etcd cluster backup)
-* [Save a copy of a Bare-Metal etcd cluster backup](#Save a copy of a Bare-Metal etcd cluster backup)
-* [Restore Bare-Metal etcd cluster from a saved backup file](#Restore Bare-Metal etcd clusters from a saved backup file)
+* [Check health of Bare-Metal etcd cluster](#Check-health-of-Bare-Metal-etcd-cluster)
+* [Bare-Metal etcd cluster backups overview](#Bare-Metal-etcd-cluster-backups-overview)
+* [Create new Bare-Metal etcd cluster backup](#Create-new-Bare-Metal-etcd-cluster-backup)
+* [Save a copy of a Bare-Metal etcd cluster backup](#Save-a-copy-of-a-Bare-Metal-etcd-cluster-backup)
+* [Restore Bare-Metal etcd cluster from a saved backup file](#Restore-Bare-Metal-etcd-clusters-from-a-saved-backup-file)
 
 ## Check health of Bare-Metal etcd cluster
 
