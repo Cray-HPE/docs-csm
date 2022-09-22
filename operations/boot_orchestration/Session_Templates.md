@@ -100,7 +100,7 @@ The `rootfs` is the root file system.
   
 `rootfs_provider` identifies the mechanism that provides the root file system for the node. 
 
-In the case of the Cray Operating System (COS) image, the rootfs provider is HPE’s Content Projection Service (CPS), which uses HPE’s Data Virtualization Service (DVS) to deliver the content. CPS projects the root file system onto the nodes as a squashfs image. This is provided via an overlay file system which is set up in dracut. 
+In the case of the Cray Operating System (COS) image, the rootfs provider is HPE’s Content Projection Service (CPS), which uses HPE’s Data Virtualization Service (DVS) to deliver the content. CPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut. 
 
 
 `rootfs_provider_passthrough` is a string that is passed through to the provider of the `rootfs`. This string can contain additional information that the provider will act upon. 
@@ -119,7 +119,7 @@ The `rootfs_provider_passthrough` parameters are appended to the `root` paramete
 ##### `root` kernel parameter example
 
 ```text
-root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f040d70bd6fabaf91838fe4e484563cf-211:dvs:api-gw-service-nmn.local:300:nmn0 nmd_data=url=s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs,etag=f040d70bd6fabaf91838fe4e484563cf-211
+root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f040d70bd6fabaf91838fe4e484563cf-211:dvs:api-gw-service-nmn.local:300:nmn0 
 ```
 
 The following table explains the different pieces in the preceding example.
