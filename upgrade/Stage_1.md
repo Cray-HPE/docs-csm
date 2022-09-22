@@ -51,7 +51,7 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 (`ncn-s001#`)
 
 ```bash
-/srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ --upgrade --in_family_override
+/srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io --upgrade --in_family_override
 ```
 
 ## Storage node image upgrade
