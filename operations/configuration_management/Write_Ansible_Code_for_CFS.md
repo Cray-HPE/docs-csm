@@ -27,7 +27,7 @@ For example, a playbook may contain a list of roles that are run on only the `Co
 For example, `hosts: Compute` would be used to target the compute nodes. Users can create additional sections that target other node types, or adjust the hosts that the included roles will run against as necessary.
 It is also possible to target multiple groups within a section of a playbook, or to specify complex targets, such as nodes that are in one group and not in another group.
 The syntax for this is available in the external [Ansible documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html#common-patterns).
-Hosts can also be in more than one group at a time. In this case, Ansible will run all sections where the node matches the node type.
+Hosts can also be in more than one group at a time. In this case, Ansible will run all sections where the node is in the targeted host group.
 
 See the [Ansible Inventory](Ansible_Inventory.md) section for more information about groups that are made automatically available through CFS dynamic inventory.
 
