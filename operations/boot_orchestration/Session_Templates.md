@@ -113,10 +113,10 @@ root=<Protocol>:<Root FS location>:<Etag>:<RootFS-provider-passthrough parameter
 ```
 
 BOS fills in the protocol based on the value provided in `rootfs_provider`. If BOS does not know the `rootfs_provider`, then it omits the protocol field. Currently, BOS only recognizes the `rootfs_provider` `cpss3`.
-  BOS finds the ‘Root FS provider’ and ‘Etag’ values in the manifest file in the session template in the [boot set](#boot-artifacts-and-s3).
-  The rootfs_provider_passthrough parameters are appended to the `root` parameter without modification. They are ‘passed through’ as the name imples.
+BOS finds the `Root FS provider` and `Etag` values in the manifest file in the session template in the [boot set](#boot-artifacts-and-s3).
+The `rootfs_provider_passthrough` parameters are appended to the `root` parameter without modification. They are "passed through", as the name imples.
 
-  `root` kernel parameter example:
+##### `root` kernel parameter example
 
 ```text
 root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f040d70bd6fabaf91838fe4e484563cf-211:dvs:api-gw-service-nmn.local:300:nmn0 nmd_data=url=s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs,etag=f040d70bd6fabaf91838fe4e484563cf-211
