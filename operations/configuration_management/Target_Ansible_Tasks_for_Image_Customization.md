@@ -3,24 +3,74 @@
 The Configuration Framework Service \(CFS\) enables Ansible playbooks to run against both running nodes \(node personalization\) and images prior to boot\(image customization\).
 See [Configuration Management Use Cases](Configuration_Management.md#use-cases) for more information about image customization and when it should be used.
 
-Ideally image customization playbooks should be separate from node personalization playbooks. This reduces the likelihood that Ansible content will run in both modes, and reduces the need for conditional checks in the playbooks.
+## Using a host group
 
-For situations when both image customization and node personalization need to be part of the same playbook, CFS provides the `cray_cfs_image` variable to distinguish between
-node personalization and image customization. When this variable is set to `true`, it indicates that the CFS session is an image customization and the playbook is targeting an image.
+Ansible is most efficient at skipping tasks when they don't apply to any nodes in the current `hosts` target.
+For this reason it's recommended that Ansible plays first setup a host group using the `add_host` module, and then use this group to target plays for image customization rather than using the `when` conditional.
 
-## Using `cray_cfs_image`
+```yaml
+- name: setup cfs_image host group
+  gather_facts: false
+  hosts: all
+  tasks:
+    - name: Add image customization hosts to the cfs_image host group.
+      add_host:
+        name: '{{ inventory_hostname }}'
+        groups: cfs_image
+      when: cray_cfs_image
+```
 
-`cray_cfs_image` can be set with [Ansible playbook conditionals](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html)
+For ease of use, future versions of CFS will set up this `cfs_image` group automatically during the inventory creation.
+In preparation for this, create a `cfs_image` group now to make that conversion simple in the future. In CFS' next release, this `add_host` task can simply be removed without changing any other parts of the playbook.
+
+To target only image customization, plays should use the following syntax.  In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `cfs_image` groups.
+
+```yaml
+hosts: Compute:&cfs_image
+```
+
+To target only node personalization, plays should use the following syntax.  In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `cfs_image` group, so that only Compute nodes that are not an image are targeted.
+
+```yaml
+hosts: Compute:!cfs_image
+```
+
+For more information on complex host targets, see the [Ansible Hosts Documentation](https://docs.ansible.com/ansible/latest/user_guide/intro_patterns.html).
+
+### Example: Using the `cfs_image` host group for image customization
+
+```yaml
+- name: Image customization play
+  hosts: Management_Worker:&cfs_image
+  tasks:
+    - include_role:
+        role: cos-services-install
+
+- name: Node personalization play  
+  hosts: Management_Worker:!cfs_image
+  tasks:
+    - include_role: 
+        role: cos-services-restart
+```
+
+## Using the `cray_cfs_image` variable
+
+`** NOTE **` This option is no longer recommended and should only be used in small playbooks and one-off cases
+ as it is more efficient for Ansible to determine this at the host level rather than checking the `cray_cfs_image` variable for multiple tasks.
+ The preferred method is to use the aforementioned `cfs_image` host group.
+
+CFS also provides the `cray_cfs_image` variable to distinguish between node personalization and image customization.
+`cray_cfs_image` can be used with [Ansible playbook conditionals](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html)
 to selectively run individual tasks with `when: cray_cfs_image`, or to ignore individual tasks with `when: not cray_cfs_image`.
 
-Conditionals can also be applied to entire roles if desired \(see the external [apply Ansible conditionals to roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html#applying-when-to-roles-imports-and-includes)\).
+Conditionals can also be applied to entire roles if desired \(see the external [apply Ansible conditionals to roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html#conditionals-with-includes).
 In instances where the same playbook may be run in both modes, it is best practice to include a conditional on all parts of the playbook. This is best done by placing the conditional on an `include_*` statement.
 See [Write Ansible Code for CFS: Reduce wasted time](Write_Ansible_Code_for_CFS.md#reduce-wasted-time) for more information on optimizing conditionals.
 
-It is also best practice to include a default in Ansible roles for playbook and role portability because CFS injects this variable at runtime. This can be done in the defaults section of the role, or where the variable is called. For example:
+It is best practice to include a default in Ansible roles for playbook and role portability because CFS injects this variable at runtime. This can be done in the defaults section of the role, or where the variable is called. For example:
 
-```yaml
-when: "{{ cray_cfs_image | default(false) }}"
+```text
+{{ cray_cfs_image | default(false) }}
 ```
 
 If a default is not provided, any playbooks or roles will not be runnable outside of the CFS Ansible Execution Environment \(AEE\) without the user specifying `cray_cfs_image` in the `vars` files or with the Ansible `extra-vars` options.
