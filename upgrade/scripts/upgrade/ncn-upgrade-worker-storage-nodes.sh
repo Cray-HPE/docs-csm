@@ -242,12 +242,8 @@ sleep 20
 while true; do
     labelSelector="node-type=${nodeType}"
     res_file="$(mktemp)"
-    # Retry the curl command if it fails
-    while ! http_status=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}") ; do
-        echo "WARNING: curl call to ${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector} failed. Retrying after 10 seconds"
-        sleep 10
-    done
-
+    http_status=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}")
+    
     if [ "${http_status}" -eq 200 ]; then
         phase=$(jq -r ".[] | select(.name==\"${workflow}\") | .status.phase" < "${res_file}")
         # skip null because workflow hasn't started yet
