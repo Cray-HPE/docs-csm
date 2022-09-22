@@ -110,7 +110,7 @@ Both the `rootfs_provider` and `rootfs_provider_passthrough` parameters are used
 BOS constructs the kernel boot parameter `root` per the following syntax.
 ```text
 root=<Protocol>:<Root FS location>:<Etag>:<RootFS-provider-passthrough parameters>
-  ```
+```
 
   BOS fills in the protocol based off of the value provided in `rootfs_provider`. If BOS does not know the rootfs_provider, it omits the Protocol field. Currently, BOS only recognizes the rootfs_provider ‘cpss3’.
   BOS finds the ‘Root FS provider’ and ‘Etag’ values in the manifest file in the session template in the [boot set](#boot-artifacts-and-s3).
