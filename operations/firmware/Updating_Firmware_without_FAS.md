@@ -50,7 +50,7 @@ This procedure can be followed on any Linux system with network connectivity to 
     - `filename` = Filename of the downloaded image
 
     ```bash
-    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
+    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' \
                   -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
     ```
 
@@ -62,7 +62,7 @@ This procedure can be followed on any Linux system with network connectivity to 
     - `filename` = Filename of the downloaded image
 
     ```bash
-    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate \
+    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' \
                   -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
     ```
 
