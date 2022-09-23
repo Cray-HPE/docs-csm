@@ -85,6 +85,12 @@ The following procedures may not resolve the problem after just one attempt. In 
         ssh admin@sw-spine-001.hmn
         ```
 
+    1. (`sw-spine#`) Enter enable mode.
+
+        ```text
+        enable
+        ```
+
     1. (`sw-spine#`) Verify that BGP is enabled.
 
         ```text
@@ -99,9 +105,18 @@ The following procedures may not resolve the problem after just one attempt. In 
 
     1. (`sw-spine#`) Clear the BGP sessions.
 
+        There are two VRF's that may need to be cleared. Clear the VRF that has the `Idle` session state.
+
+        Default VRF:
+
         ```text
-        enable
-        clear ip bgp all
+        clear ip bgp vrf default all
+        ```
+
+        Customer VRF:
+
+        ```text
+        clear ip bgp vrf Customer all
         ```
 
     1. (`sw-spine#`) Check the status of the BGP sessions to see if they are now `ESTABLISHED`.
@@ -228,8 +243,18 @@ The following procedures may not resolve the problem after just one attempt. In 
 
     1. (`sw-spine#`) Clear the BGP sessions.
 
+        There are two VRF's that may need to be cleared. Clear the VRF that has the `Idle` session state.
+
+        Default VRF:
+
         ```text
-        clear bgp *
+        clear bgp vrf default *
+        ```
+
+        Customer VRF:
+
+        ```text
+        clear bgp vrf Customer *
         ```
 
     1. (`sw-spine#`) Check the status of the BGP sessions.
