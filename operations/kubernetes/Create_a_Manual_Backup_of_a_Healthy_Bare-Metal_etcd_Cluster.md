@@ -48,7 +48,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     kube-etcdbackup   */10 * * * *   False     0        3m28s           7d10h
     ```
 
-1. View backup  job.
+1. View backup job.
     
     ```bash
     kubectl get jobs -n kube-system | grep -e NAME -e etcdbackup
