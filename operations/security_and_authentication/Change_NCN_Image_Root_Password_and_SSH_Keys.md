@@ -191,9 +191,9 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
 
    ```bash
    ncn-mw# cd k8s/${K8SNEW}
-   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/filesystem.squashfs' --file-name filesystem.squashfs
-   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/initrd' --file-name initrd.img.xz
-   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'k8s/${K8SNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name k8s/${K8SNEW}/filesystem.squashfs --file-name filesystem.squashfs
+   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name k8s/${K8SNEW}/initrd --file-name initrd.img.xz
+   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name k8s/${K8SNEW}/kernel --file-name 5.3.18-24.75-default.kernel
    ncn-mw# cd ../..
    ```
 
@@ -223,10 +223,13 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
    >                cray bss bootparameters update --initrd $initrd --kernel $kernel --params "$params" --hosts $xname --format json
    >             done
    >     ```
+   >
+   > BSS will be updated to use the new versions when `/etc/cray/upgrade/csm/myenv` is manually updated.
+   > See [Stage 0.9 - Modify NCN Images](../../upgrade/1.0.11/Stage_0_Prerequisites.md#stage-09---modify-ncn-images)for more information.
 
 ## Ceph image
 
-The Ceph image Ceph image is used by the utility storage nodes.
+The Ceph image is used by the utility storage nodes.
 
 1. Decide which Ceph image to modify.
 
@@ -345,21 +348,28 @@ The Ceph image Ceph image is used by the utility storage nodes.
    ncn-mw# umount -v ceph/${CEPHVERSION}/filesystem.squashfs/mnt/squashfs
    ```
 
+1. Move the new SquashFS image, kernel, and `initrd` into place.
+
+   ```bash
+   ncn-mw# mkdir ceph/$CEPHNEW
+   ncn-mw# mv -v ceph/$CEPHVERSION/filesystem.squashfs/squashfs/* ceph/$CEPHNEW
+   ```
+
 1. Update file permissions on `initrd`.
 
    ```bash
    ncn-mw# chmod -v 644 ceph/${CEPHNEW}/initrd.img.xz
    ```
 
-1. Put the new `initrd.img.xz`, `kernel`, and SquashFS into S3
+1. Put the new `initrd.img.xz`, `kernel`, and SquashFS into S3.
 
    ***Note:*** The version string for the kernel file may be different.
 
    ```bash
    ncn-mw# cd ceph/${CEPHNEW}
-   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/filesystem.squashfs' --file-name filesystem.squashfs
-   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/initrd' --file-name initrd.img.xz
-   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name 'ceph/${CEPHNEW}/kernel' --file-name 5.3.18-24.75-default.kernel
+   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name ceph/${CEPHNEW}/filesystem.squashfs --file-name filesystem.squashfs
+   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name ceph/${CEPHNEW}/initrd --file-name initrd.img.xz
+   ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name ceph/${CEPHNEW}/kernel --file-name 5.3.18-24.75-default.kernel
    ncn-mw# cd ../..
    ```
 
@@ -392,7 +402,7 @@ The Ceph image Ceph image is used by the utility storage nodes.
 
 ## Common cleanup
 
-1. Remove the workarea so the space can be reused.
+1. Remove the work area so the space can be reused.
 
    ```bash
    ncn-mw# rm -rf /run/initramfs/overlayfs/workingarea
