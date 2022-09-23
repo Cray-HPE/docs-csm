@@ -251,7 +251,7 @@ The following procedures may not resolve the problem after just one attempt. In 
         clear bgp vrf default *
         ```
 
-        Customer VRF
+        Customer VRF:
 
         ```text
         clear bgp vrf Customer *
