@@ -216,7 +216,7 @@ ncn-mw# read -r -s -p "Enter root password for NCN images: " PW1 ; echo ; if [[ 
             if [[ ${PW1} != ${PW2} ]]; then
                 echo "ERROR: Passwords do not match"
             else
-                export SQUASHFS_ROOT_PW_HASH=$(echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin)
+                export SQUASHFS_ROOT_PW_HASH=$(echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Za-z0-9 | head -c4) --stdin)
                 [[ -n ${SQUASHFS_ROOT_PW_HASH} ]] && echo "Password hash set and exported" || echo "ERROR: Problem generating hash"
             fi
         fi ; unset PW1 PW2

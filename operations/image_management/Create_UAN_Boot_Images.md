@@ -63,7 +63,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     > Do not omit the `-n` from the echo command. It is necessary to generate a valid hash.
 
     ```bash
-    ncn# echo -n PASSWORD | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin
+    ncn# echo -n PASSWORD | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Za-z0-9 | head -c4) --stdin
     ```
 
 1. Obtain the HashiCorp Vault `root` token.
