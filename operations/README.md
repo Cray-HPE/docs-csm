@@ -255,6 +255,7 @@ As a result, the system's micro-services are modular, resilient, and can be upda
   - [Check the Health and Balance of etcd Clusters](kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md)
   - [Rebuild Unhealthy etcd Clusters](kubernetes/Rebuild_Unhealthy_etcd_Clusters.md)
   - [Backups for etcd-operator Clusters](kubernetes/Backups_for_etcd-operator_Clusters.md)
+  - [Create a Manual Backup of a Healthy Bare-Metal etcd Cluster](kubernetes/Create_a_Manual_Backup_of_a_Healthy_Bare-Metal_etcd_Cluster.md)
   - [Create a Manual Backup of a Healthy etcd Cluster](kubernetes/Create_a_Manual_Backup_of_a_Healthy_etcd_Cluster.md)
   - [Restore an etcd Cluster from a Backup](kubernetes/Restore_an_etcd_Cluster_from_a_Backup.md)
   - [Repopulate Data in etcd Clusters When Rebuilding Them](kubernetes/Repopulate_Data_in_etcd_Clusters_When_Rebuilding_Them.md)
