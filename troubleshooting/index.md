@@ -19,6 +19,7 @@ This document provides links to troubleshooting information for services and fun
 * [Domain Name Service (DNS)](#domain-name-service-dns)
 * [MetalLB](#metallb)
 * [Spire](#spire)
+* [Etcd](#etcd)
 
 ## Known issues
 
@@ -134,3 +135,7 @@ See [Deprecated features](../introduction/differences.md#deprecated_features) fo
 * [Restore Spire Postgres without a Backup](../operations/spire/Restore_Spire_Postgres_without_a_Backup.md)
 * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
 * [Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md)
+
+## Etcd
+
+* [Etcd Cluster Backup Timeout](known_issues/etcd_cluster_backup_timeout.md)
