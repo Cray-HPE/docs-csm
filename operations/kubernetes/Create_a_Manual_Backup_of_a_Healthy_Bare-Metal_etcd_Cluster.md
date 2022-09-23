@@ -112,7 +112,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     ```
 
 1. Verify new Bare-Metal etcd cluster backup created.
-    In this example `bare-metal/etcd-backup-2022-09-15-20-34-13.tar.gz` created.
+    In this example, `bare-metal/etcd-backup-2022-09-15-20-34-13.tar.gz` is created.
     
     ```bash
     cd /opt/cray/platform-utils/s3 && ./list-objects.py \
