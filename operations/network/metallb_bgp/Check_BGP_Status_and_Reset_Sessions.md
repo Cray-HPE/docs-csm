@@ -113,7 +113,7 @@ The following procedures may not resolve the problem after just one attempt. In 
         clear ip bgp vrf default all
         ```
 
-        Customer VRF
+        Customer VRF:
 
         ```text
         clear ip bgp vrf Customer all
