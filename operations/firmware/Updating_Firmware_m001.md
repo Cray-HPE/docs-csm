@@ -12,9 +12,9 @@ Retrieve the model name and firmware image required to update an HPE or Gigabyte
 
 The following information is needed:
 
-* IP address of `ncn-m001` BMC
-* IP address of `ncn-m001`
-* Root password for `ncn-m001` BMC
+- IP address of `ncn-m001` BMC
+- IP address of `ncn-m001`
+- Root password for `ncn-m001` BMC
 
 ## Find the Model Name
 
