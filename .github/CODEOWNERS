@@ -29,6 +29,7 @@
 /install/*                                               @Cray-HPE/metal
 /install/livecd                                          @Cray-HPE/metal
 /operations/bare_metal                                   @Cray-HPE/metal
+/operations/system_configuration_service                 @Cray-HPE/metal
 
 # Continuous Integration Items
 Jenkinsfile.github                                       @Cray-HPE/ci
@@ -46,24 +47,29 @@ Jenkinsfile.github                                       @Cray-HPE/ci
 
 # PET Items
 /operations/artifact_management                          @Cray-HPE/platform-engineering
+/operations/argo                                         @Cray-HPE/platform-engineering
 /operations/kubernetes                                   @Cray-HPE/platform-engineering
+/operations/multi-tenancy                                @Cray-HPE/platform-engineering
+/operations/node_management/                             @Cray-HPE/platform-engineering
 /operations/package_repository_management                @Cray-HPE/platform-engineering
+/operations/resiliency                                   @Cray-HPE/platform-engineering
+/operations/security_and_authentication                  @Cray-HPE/platform-engineering
 /operations/spire                                        @Cray-HPE/platform-engineering
 /operations/system_management_health                     @Cray-HPE/platform-engineering
 /operations/utility_storage                              @Cray-HPE/platform-engineering
 troubleshooting/kubernetes                               @Cray-HPE/platform-engineering
-/workflows                                               @Cray-HPE/platform-engineering
+/workflows/                                              @Cray-HPE/platform-engineering
 
 # HMS Items
 /operations/firmware                                     @Cray-HPE/hardware-management
-/operations/hardware_state_manager                       @Cray-HPE/hardware-management
+/operations/hardware_state_manager/                      @Cray-HPE/hardware-management
 /operations/hmcollector                                  @Cray-HPE/hardware-management
 /operations/hpe_pdu                                      @Cray-HPE/hardware-management
 /operations/power_management                             @Cray-HPE/hardware-management
 /operations/system_layout_service                        @Cray-HPE/hardware-management
 
 # Network Items
-/operations/network                                      @Cray-HPE/management-network
+/operations/network/                                     @Cray-HPE/management-network
 
 # SAT Items
 /operations/sat                                          @Cray-HPE/system-admin-toolkit-admin
