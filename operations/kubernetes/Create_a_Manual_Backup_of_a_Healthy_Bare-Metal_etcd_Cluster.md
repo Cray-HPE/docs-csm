@@ -180,7 +180,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
 
 1. Copy the saved Bare-Metal etcd cluster backup file into the directory.
     Set the `BACKUP_NAME` variable to the file name, omitting the `bare-metal/` prefix and the `.tar.gz suffix`.
-    Shown in this example copying the backup file from `/tmp/etcd_backup`
+    In the following example, the backup file is copied from `/tmp/etcd_backup`
     where a copy of the backup file `etcd-backup-2022-09-15-20-34-13.tar.gz` was saved above.
     
     ```bash
