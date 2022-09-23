@@ -31,6 +31,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     
     ```text
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 20.697187ms
+    ```
 
 ## Bare-Metal etcd cluster backups overview
 
