@@ -233,7 +233,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
 - [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
   - [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
 - [CFS Key Management](configuration_management/CFS_Key_Management.md)
-- [Pre-Boot Configuration of NCN Images](configuration_management/Pre_Boot_Configuration_of_NCN_Images.md)
+- [Management Node Image Customization](configuration_management/Management_Node_Image_Customization.md)
 
 ## Kubernetes
 
@@ -381,6 +381,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Adjust Ceph Pool Quotas](utility_storage/Adjust_Ceph_Pool_Quotas.md)
 - [Add Ceph OSDs](utility_storage/Add_Ceph_OSDs.md)
 - [Ceph Health States](utility_storage/Ceph_Health_States.md)
+- [Ceph Deep Scrubs](utility_storage/Ceph_Deep_Scrubs.md)
 - [Ceph Daemon Memory Profiling](utility_storage/Ceph_Daemon_Memory_Profiling.md)
 - [Ceph Service Check Script Usage](utility_storage/Ceph_Service_Check_Script_Usage.md)
 - [Ceph Orchestrator Usage](utility_storage/Ceph_Orchestrator_Usage.md)
