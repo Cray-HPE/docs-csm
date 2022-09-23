@@ -85,7 +85,7 @@ The following procedures may not resolve the problem after just one attempt. In 
         ssh admin@sw-spine-001.hmn
         ```
 
-    1. (`sw-spine>`) Enter enable mode
+    1. (`sw-spine#`) Enter enable mode.
 
         ```text
         enable
