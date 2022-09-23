@@ -35,7 +35,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
 
 ## Bare-Metal etcd cluster backups overview
 
-1. Bare-Metal etcd cluster backups are initiated every 10 minutes.
+1. Verify that the Bare-Metal etcd cluster backups are initiated every ten minutes.
     
     ```bash
     kubectl get cronjob -n kube-system
