@@ -61,7 +61,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     kube-etcdbackup-27721380   1/1           8s         2m30s
     ```
 
-1. List available Bare-Metal etcd cluster backups. Note 10 minute interval.
+1. List the available Bare-Metal etcd cluster backups. Note the ten minute interval.
     
     ```bash
     cd /opt/cray/platform-utils/s3 && ./list-objects.py \
