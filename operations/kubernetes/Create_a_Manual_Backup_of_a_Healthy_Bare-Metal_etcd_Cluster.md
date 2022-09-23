@@ -152,7 +152,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     ```
 
 1. Retrieve the backup from S3.
-    In this example saving the `bare-metal/etcd-backup-2022-09-15-20-34-13.tar.gz` backup created earlier.
+    In this example, the `bare-metal/etcd-backup-2022-09-15-20-34-13.tar.gz` backup created earlier is saved.
     Set the `BACKUP_NAME` variable to the file name, omitting the `bare-metal/` prefix and the `.tar.gz suffix`.
     
     ```bash
