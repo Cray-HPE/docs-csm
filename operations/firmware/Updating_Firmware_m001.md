@@ -11,9 +11,9 @@ Retrieve the model name and firmware image required to update an HPE or Gigabyte
 
 The following information is needed:
 
-* IP Address of `ncn-m001` BMC
-* IP Address of `ncn-m001`
-* Root password for `ncn-m001` BMC
+- IP Address of `ncn-m001` BMC
+- IP Address of `ncn-m001`
+- Root password for `ncn-m001` BMC
 
 ## Find the Model Name
 
@@ -68,10 +68,10 @@ Use one of the following commands to find the model name for the node type in us
 
     1. Update BMC:
 
-       * `passwd` = Root password of BMC
-       * `ipaddressOfBMC` = IP address of BMC
-       * `ipaddressOfM001` = IP address of `ncn-m001` node
-       * `filename` = Filename of the downloaded image
+       - `passwd` = Root password of BMC
+       - `ipaddressOfBMC` = IP address of BMC
+       - `ipaddressOfM001` = IP address of `ncn-m001` node
+       - `filename` = Filename of the downloaded image
 
        ```bash
        curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
@@ -79,10 +79,10 @@ Use one of the following commands to find the model name for the node type in us
 
     2. Update BIOS:
 
-       * `passwd` = Root password of BMC
-       * `ipaddressOfBMC` = IP address of BMC
-       * `ipaddressOfM001` = IP address of `ncn-m001` node
-       * `filename` = Filename of the downloaded image
+       - `passwd` = Root password of BMC
+       - `ipaddressOfBMC` = IP address of BMC
+       - `ipaddressOfM001` = IP address of `ncn-m001` node
+       - `filename` = Filename of the downloaded image
 
        ```bash
        curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
