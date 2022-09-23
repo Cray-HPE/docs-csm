@@ -131,7 +131,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     Current: 2022-09-15-20-36-14
     ```
 
-1. Delete tmp-bare-metal-etcd-backup backup job.
+1. Delete the `tmp-bare-metal-etcd-backup` backup job.
     
     ```bash
     kubectl -n kube-system delete job tmp-bare-metal-etcd-backup
