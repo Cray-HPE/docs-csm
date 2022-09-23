@@ -373,6 +373,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Adjust Ceph Pool Quotas](utility_storage/Adjust_Ceph_Pool_Quotas.md)
 - [Add Ceph OSDs](utility_storage/Add_Ceph_OSDs.md)
 - [Ceph Health States](utility_storage/Ceph_Health_States.md)
+- [Ceph Deep Scrubs](utility_storage/Ceph_Deep_Scrubs.md)
 - [Ceph Daemon Memory Profiling](utility_storage/Ceph_Daemon_Memory_Profiling.md)
 - [Ceph Service Check Script Usage](utility_storage/Ceph_Service_Check_Script_Usage.md)
 - [Ceph Orchestrator Usage](utility_storage/Ceph_Orchestrator_Usage.md)
