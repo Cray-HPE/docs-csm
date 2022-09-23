@@ -85,7 +85,7 @@ The following procedures may not resolve the problem after just one attempt. In 
         ssh admin@sw-spine-001.hmn
         ```
 
-    1. (`sw-spine>`) Enter enable mode
+    1. (`sw-spine#`) Enter enable mode.
 
         ```text
         enable
@@ -107,13 +107,13 @@ The following procedures may not resolve the problem after just one attempt. In 
 
         There are two VRF's that may need to be cleared. Clear the VRF that has the `Idle` session state.
 
-        Default VRF
+        Default VRF:
 
         ```text
         clear ip bgp vrf default all
         ```
 
-        Customer VRF
+        Customer VRF:
 
         ```text
         clear ip bgp vrf Customer all
@@ -245,13 +245,13 @@ The following procedures may not resolve the problem after just one attempt. In 
 
         There are two VRF's that may need to be cleared. Clear the VRF that has the `Idle` session state.
 
-        Default VRF
+        Default VRF:
 
         ```text
         clear bgp vrf default *
         ```
 
-        Customer VRF
+        Customer VRF:
 
         ```text
         clear bgp vrf Customer *
