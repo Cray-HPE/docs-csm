@@ -215,7 +215,7 @@ for more information.
 
       ```bash
       ncn-m001# echo $CEPHNEW
-      ncn-m001# echo $K8sNEW
+      ncn-m001# echo $K8SNEW
       ```
 
     2. Check current versions in `/etc/cray/upgrade/csm/myenv`.
