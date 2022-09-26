@@ -100,7 +100,7 @@ The upgrade is a guided process starting with [Upgrade Management Nodes and CSM 
         cray artifacts create config-data "${TARFILE}" "/root/${TARFILE}"
         ```
 
-## 5. Apply Security Hardening
+## 5. Apply security hardening
 
 Review the security hardening guide, apply non-optional procedures, and review optional procedures.
 

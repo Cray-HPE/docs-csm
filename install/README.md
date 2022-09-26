@@ -205,7 +205,7 @@ See [Troubleshooting Installation Problems](troubleshooting_installation.md).
 
 ## Post-installation
 
-### 11. Apply Security Hardening
+### 11. Apply security hardening
 
 Review the security hardening guide, apply non-optional procedures, and review optional procedures.
 

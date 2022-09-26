@@ -14,21 +14,21 @@ None.
 
    Perform procedure(s) in [Change Passwords and Credentials](Change_Passwords_and_Credentials.md).
 
-2. Limit Kubernetes Audit Log Retention.
+2. Limit Kubernetes API audit log Retention.
 
    If Kubernetes API Auditing was enabled at install, perform procedure(s) in [Limit Kubernetes API Audit Log Maximum Backups](../kubernetes/Limit_Kubernetes_API_Audit_Log_Maxbackups.md).
 
    Failure to apply the referenced configuration could result in NCN disk space exhaustion on Kubernetes Master Nodes.
 
-3. Customize ("randomize") iPXE Binary Name.
+3. Customize ("randomize") iPXE binary name.
 
    Perform procedure(s) in [Customize iPXE Binary Names](../boot_orchestration/Customize_iPXE_Binary_Names.md).
 
-4. (Optional) Enable Spire and OPA Xname Validation.
+4. (Optional) Enable Spire and OPA xname validation.
 
-    Perform procedure(s) in [Xname Validation](../spire/xname_validation.md).
+    Perform procedure(s) in [xname validation](../spire/xname_validation.md).
 
-5. (Optional) Enable Kubernetes API Encryption
+5. (Optional) Enable Kubernetes API encryption.
 
     Perform procedure(s) in [Kubernetes Encryption](../kubernetes/encryption/README.md).
 
