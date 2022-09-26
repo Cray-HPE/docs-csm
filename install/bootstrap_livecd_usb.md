@@ -829,7 +829,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    pit# /root/bin/pit-init.sh
    ```
 
-1. Install Goss tests.
+1. Install `csm-testing`.
 
    The following assumes the `CSM_PATH` environment variable is set to the absolute path of the unpacked CSM release.
 
