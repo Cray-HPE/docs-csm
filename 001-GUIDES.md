@@ -152,6 +152,11 @@ The NCNs should be locked to prevent accidental firmware upgrades with FAS or po
 * [How To Lock Management NCNs](009-NCN-LOCKING.md#how-to-lock-management-ncns)
 * [How To Unlock Management NCNs](009-NCN-LOCKING.md#how-to-unlock-management-ncns)
 
+##### [Security Hardening](./operations/CSM_product_management/Apply_Security_Hardening.md)
+
+Review the security hardening guide, apply non-optional procedures, and review optional procedures. 
+
+* [Security Hardening Guide](./operations/CSM_product_management/Apply_Security_Hardening.md)
 
 ##### [Firmware Update the system with FAS](010-FIRMWARE-UPDATE-WITH-FAS.md)
 
