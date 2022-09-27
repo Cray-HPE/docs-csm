@@ -644,8 +644,8 @@ main() {
     exit $?
   fi
 
-  curr="$(secret_current | awk -F: '{print $2}')"
-  goal="$(secret_goal | awk -F: '{print $2}')"
+  curr="$(stripetcdprefix "$(secret_current)")"
+  goal="$(stripetcdprefix "$(secret_goal)")"
 
   if $status; then
     synced=false
