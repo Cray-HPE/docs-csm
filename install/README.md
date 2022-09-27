@@ -43,6 +43,8 @@ shown here with numbered topics.
     1. [Prepare compute nodes](#9-prepare-compute-nodes)
     1. [Next topic](#10-next-topic)
     - [Troubleshooting installation problems](#troubleshooting-installation-problems)
+1. [Post-installation](#post-installation)
+    1. [Kubernetes encryption](#11-encryption)
 
 > **`NOTE`** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#troubleshooting-installation-problems) and
@@ -200,3 +202,10 @@ switches for the HPE Cray EX system. The procedures in this section should be re
 for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
 
 See [Troubleshooting Installation Problems](troubleshooting_installation.md).
+
+### 11. Kubernetes encryption
+
+As an optional post installation task, encryption of Kubernetes secrets may be enabled. This enables
+at rest encryption of data in the `etcd` database used by Kubernetes.
+
+See [Kubernetes Encryption](../operations/kubernetes/encryption/README.md).
