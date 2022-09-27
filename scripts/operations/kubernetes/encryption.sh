@@ -254,8 +254,9 @@ updatek8sconfig() {
 # in a real boy system.
 restartk8s() {
   file="${1:-invalid}"
+  apiserver="kube-apiserver-$(uname -n)"
+
   if sutkubectldelete "${file}"; then
-    apiserver="kube-apiserver-$(uname -n)"
     # kubectl wait for the pod to come back for 60 seconds or bail
     if ! sutkubectlwait; then
       printf "fatal: kubectl wait on %s timed out\n" "${apiserver}" >&2
