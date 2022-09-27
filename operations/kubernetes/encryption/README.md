@@ -6,6 +6,8 @@ This controller is deployed by default in CSM with the `cray-kubernetes-encrypti
 
 By default, encryption is not enabled and must be enabled after install.
 
+Note that control plane is used in this document elsewhere master or management nodes may be used. Control plane is used to be consistent with upstream Kubernetes documentation.
+
 ## Table of contents
 
 * [Implementation details](#implementation-details)
@@ -95,50 +97,48 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
 
 ## Encryption status
 
-Encryption status is recorded in a Kubernetes secret `cray-k8s-encryption` via annotations.
+Encryption status is obtained through the `--status` switch of the `encryption.sh` command.
 
-* (`ncn-mw#`) The following command reports the encryption status.
+* (`ncn-m#`) The following command reports the encryption status.
 
     ```bash
-    kubectl get secret cray-k8s-encryption -o json -n kube-system | jq ".metadata.annotations | {changed, current, goal}"
+    /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --status
     ```
 
-    The command output will show the last time any change was performed, the goal encryption name, and the current encryption name.
+    The return code of this command determines if encryption is applied or not. A non zero status simply indicates that a new cipher is to be applied.
 
 * Example output on a new or upgraded installation with the default of no encryption.
 
-    ```json
-    {
-      "changed": "1970-01-01 12:00:00+0000",
-      "current": "identity",
-      "goal": "identity"
-    }
+    ```text
+    k8s encryption status
+    current: identity
+    goal: identity
+    etcd: identity
     ```
 
-    The string `identity` indicates that the identity encryption provider is in use. This provider performs no encryption.
+    The string `identity` indicates that the identity encryption provider is in use. This provider performs no encryption and is the default.
 
 * Example command output when enabling encryption but secrets are not yet rewritten.
 
-    ```json
-    {
-      "changed": "1970-01-01 12:00:00+0000",
-      "current": "identity",
-      "goal": "aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907"
-    }
+    ```text
+    k8s encryption status
+    current: identity
+    goal: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
+    etcd: identity
+    interim/invalid state all should be equal when in a steady state
     ```
 
     The goal is an `aescbc` cipher. The `goal` string corresponds to the name in the
     `/etc/cray/kubernetes/encryption/current.yaml` file on all control plane nodes after the `encryption.sh` script has
-    been run. Only a goal that all control plane nodes agree on will be reported.
+    been run. Only a goal that all control plane nodes agree on will be reported. The `etcd` string corresponds to the encryption names found in the etcd database itself.
 
 * Example command output after secrets are rewritten.
 
-    ```json
-    {
-      "changed": "1970-01-01 12:00:00+0000",
-      "current": "aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907",
-      "goal": "aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907"
-    }
+    ```text
+    k8s encryption status
+    current: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
+    goal: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
+    etcd: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
     ```
 
     The output shows that the `current` key and `goal` keys are in agreement. This indicates that all secret data in `etcd`
@@ -146,12 +146,29 @@ Encryption status is recorded in a Kubernetes secret `cray-k8s-encryption` via a
 
 ## Forcing encryption
 
-If necessary, a forced rewrite of secret data can be done by overwriting the annotation used by `cray-k8s-encryption`.
+If necessary, a forced rewrite of secret data can be performed.
 
 * (`ncn-mw#`) Force a rewrite of existing data:
 
     ```bash
-    kubectl annotate secret --namespace kube-system cray-k8s-encryption current=rewrite --overwrite
+    /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --restart
     ```
 
-    This command gives no output on success.
+* Example output:
+
+    ```text
+    secret/cray-k8s-encryption annotated
+    daemonset.apps/cray-k8s-encryption restarted
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 0 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 0 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 0 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 1 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 1 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 1 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 2 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 2 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 2 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 2 out of 3 new pods have been updated...
+    Waiting for daemon set "cray-k8s-encryption" rollout to finish: 2 of 3 updated pods are available...
+    daemon set "cray-k8s-encryption" successfully rolled out
+    ```
