@@ -463,7 +463,7 @@ sutexistingetcdencryption() {
   if [ -t 1 ]; then
     printf "\b\b\b" >&2
   fi
-  echo "${existing?}" | tr ' ' '\n' | sort -u
+  echo "${existing?}" | tr ' ' '\n' | sort -u | tr '\n' ' '
 }
 
 # Note lhs is the input (quote it if spaces!) as well as rhs Internally this
@@ -494,7 +494,7 @@ difference() {
   comm -3 "${lhsf}" "${rhsf}" | tr -d '\t'
 }
 
-# Everything in disjoint applies here too
+# Everything in complement applies here too
 subset() {
   subsetlhs="${1}"
   shift
@@ -505,6 +505,22 @@ subset() {
   echo "${subsetlhs}" | tr ' ' '\n' | sort -u > "${lhsf}"
   echo "${subsetrhs}" | tr ' ' '\n' | sort -u > "${rhsf}"
   comm -23 "${lhsf}" "${rhsf}" | grep -q '^'
+}
+
+# This is slightly unique compared to above
+#
+# For now instead of newline delimited its space delimited to make comparisons
+# simpler. If we need a more general set operation we can deal with that later.
+union() {
+  unionlhs="${1}"
+  shift
+  unionrhs="${1}"
+  mkrundir
+  lhsf=$(mktemp -p "${RUNDIR}" lhs-XXXXXXXX)
+  rhsf=$(mktemp -p "${RUNDIR}" rhs-XXXXXXXX)
+  echo "${unionlhs}" | tr ' ' '\n' | sort -u > "${lhsf}"
+  echo "${unionrhs}" | tr ' ' '\n' | sort -u > "${rhsf}"
+  sort -u "${lhsf}" "${rhsf}" | tr '\n' ' ' | sed -e 's/ $//g'
 }
 
 # Take the inputs the user has given, compare it to what we have found, and yea/nay it.
@@ -522,9 +538,6 @@ usergoalvalid() {
   rhs="${1}"
   shift
   curr="${1}"
-  # needed?
-  # shift
-  # goal="${1}"
 
   ok=0
   nok=0
@@ -565,6 +578,18 @@ usergoalvalid() {
     if [ "${diff}" != "${comp}" ]; then
       nok=$((nok + 1))
     fi
+  else
+    # If we can union both lhs and rhs and its the same as what we found this
+    # is ok this handles the case of removing something and midstream having
+    # the new value be used for writes. It may not be correct for every node
+    # technically to use the new value before but we're constrained by k8s
+    # using the first array element for any/all new writes.
+    union=$(union "${lhs}" "${rhs}")
+    ulhs=$(union "${union}" "${lhs}")
+    urhs=$(union "${union}" "${rhs}")
+    if [ "${ulhs}" = "${urhs}" ]; then
+      ok=$((ok + 1))
+    fi
   fi
 
   if [ "${ok}" -gt 0 ]; then
@@ -601,6 +626,11 @@ secret_goal() {
 # Current encryption configuration, or rather last known configuration based off last rewrite of data in k8s
 secret_current() {
   kubectl get secret -n kube-system cray-k8s-encryption -o jsonpath='{range.items[*]}{.metadata.annotations.current}'
+}
+
+# Glorified wrapper that removes aescbc: or aesgcm: from the above two "functions"
+stripetcdprefix() {
+  echo "$@" | sed -e "s|aescbc:||" -e "s|aesgcm:||"
 }
 
 # Logic is simply write out our new encryption config
@@ -643,7 +673,7 @@ main() {
   usergoal=$(validateinput "$@")
   #shellcheck disable=SC2181
   if [ "${?}" -ne 0 ]; then
-    return $?
+    exit 1
   fi
 
   # Grab the current configuration off of etcd, then we use the usergoal above
@@ -655,7 +685,7 @@ main() {
   usersgoal=$(tovalid ${usergoal})
   etcd="$(sutexistingetcdencryption)"
 
-  if ! usergoalvalid "${etcd}" "${usersgoal}" "${curr}" "${goal}"; then
+  if ! usergoalvalid "${etcd}" "${usersgoal}" "${curr}"; then
     printf "fatal: requested goal conflicts with existing etcd encryption\netcd: %s\nrequested: %s\n" "${etcd}" "${usersgoal}" >&2
     printf "To fix add the keys that correspond with that encryption secret to the end of this command. Failure to do so would mean k8s cannot read existing secrets.\n" >&2
     exit 1
@@ -702,7 +732,7 @@ ETCDCTL=${ETCDCTL:-$(command -v etcdctl)}
 
 usage() {
   cat << FIN
-usage: $0 [-h|--help] [--enable|--disable|--status] [--aescbc|aesgcm] VALUE ...
+usage: $0 [-h|--help] [--enable|--disable|--status|--restart] [--aescbc|aesgcm] VALUE ...
 FIN
 }
 
@@ -766,7 +796,6 @@ fi
 if (${enabled} && ${disabled}) || (${enabled} && ${status}) || (${enabled} && ${restart}) \
   || (${disabled} && ${status}) || (${disabled} && ${restart}) \
   || (${status} && ${restart}); then
-  printf "enabled: %s disabled: %s status: %s restart: %s\n" "${enabled}" "${disabled}" "${status}" "${restart}" >&2
   printf "fatal: --enable, --disable, --status, and --restart cannot be used together\n" >&2
   usage
   exit 1

@@ -28,6 +28,34 @@
 Describe 'encryption.sh logic'
   Include scripts/operations/kubernetes/encryption.sh
 
+  Context 'Utility functionality in stripetcdprefix'
+    It 'should strip aescbc: from a string passed'
+      When call stripetcdprefix "aescbc:sut"
+      The status should equal 0
+      The stdout should equal "sut"
+    End
+    It 'should strip aesgcm: from a string passed'
+      When call stripetcdprefix "aesgcm:sut"
+      The status should equal 0
+      The stdout should equal "sut"
+    End
+    It 'should strip do nothing when identity is passed'
+      When call stripetcdprefix "identity"
+      The status should equal 0
+      The stdout should equal "identity"
+    End
+    It 'should strip do nothing when rewrite is passed'
+      When call stripetcdprefix "rewrite"
+      The status should equal 0
+      The stdout should equal "rewrite"
+    End
+    It 'should strip do nothing when unknown is passed'
+      When call stripetcdprefix "unknown"
+      The status should equal 0
+      The stdout should equal "unknown"
+    End
+  End
+
   # Valid secret lengths, some caveats apply....
   secret16=0123456789abcdef
   secret24=0123456789abcdeffedcba98
@@ -36,7 +64,6 @@ Describe 'encryption.sh logic'
   # Control if an input is of correct input length, e.g. 16, 24, or 32 bytes
   # long
   Context 'Valid encryption key input lengths'
-
     It 'secret of length 16 is OK'
       When call validatelen "${secret16}"
       The status should equal 16
@@ -341,6 +368,9 @@ Describe 'encryption.sh logic'
     # Here to try to prevent users from shooting their own feet off when
     # updating encryption configurations.
     Describe 'etcd suite of functions'
+      goal=aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
+      new=aesgcm-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
+
       It 'sutetcdok can determine if etcd is working if it is'
         sutetcdok() {
           printf "etcdctl version: 3.5.0\nAPI version: 3.5\n"
@@ -427,7 +457,7 @@ API version: 3.5"
             return 0
         }
 
-        When call sutkeyencryption kube-system cray-k8s-encryption
+      When call sutkeyencryption kube-system cray-k8s-encryption
         The status should equal 0
         The stdout should equal "aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907"
       End
@@ -495,16 +525,6 @@ API version: 3.5"
         The stdout should equal "etcdtimeout"
       End
 
-      It 'works with disjoint set operations'
-        When call disjoint "a b c" "b"
-        The status should equal 1
-      End
-
-      It 'works with disjoint set operations'
-        When call disjoint "a b c" "d"
-        The status should equal 0
-      End
-
       It 'works with complement set operations'
         When call complement "a b c" "a b"
         The status should equal 0
@@ -543,6 +563,12 @@ API version: 3.5"
         The status should equal 1
       End
 
+      It 'works with union set operations'
+        When call union "a b" "b a"
+        The status should equal 0
+        The stdout should equal "a b"
+      End
+
       # Okie dokie, now the fun bits, this function will loop over every secret
       # and extract out each secret's encryption status of identity or its name.
       #
@@ -551,38 +577,42 @@ API version: 3.5"
       #
       # This covers any subfunctions used as well.
       It 'detects possible user input goals'
-        When call usergoalvalid "identity" "identity" "identity" "identity"
+        When call usergoalvalid "identity" "identity" "identity"
         The status should equal 0
       End
 
       It 'detects possible user input goals adding an end goal'
-        When call usergoalvalid "identity" "identity goal" "identity" "identity"
+        When call usergoalvalid "identity" "identity ${goal}" "identity"
         The status should equal 0
       End
 
       It 'detects possible user input goals adding an end goal'
-        When call usergoalvalid "identity" "goal identity" "identity" "identity"
+        When call usergoalvalid "identity" "${goal} identity" "identity"
         The status should equal 0
       End
-
 
       It 'detects possible user input goals adding an end goal in progress'
-        When call usergoalvalid "identity" "identity goal" "identity" "goal"
+        When call usergoalvalid "identity" "identity ${goal}" "identity"
         The status should equal 0
       End
 
       It 'detects possible user input goals removing a written end goal'
-        When call usergoalvalid "identity goal" "identity" "goal" "goal"
+        When call usergoalvalid "identity ${goal}" "identity" "${goal}"
         The status should equal 0
       End
 
       It 'detects possible user input goals removing an end goal in progress and not written to disk yet'
-        When call usergoalvalid "identity" "identity" "identity" "goal"
+        When call usergoalvalid "identity" "identity" "identity"
+        The status should equal 0
+      End
+
+      It 'detects possible user input goals of removing encryption and some etcd data has been written with identity encryption'
+        When call usergoalvalid "${goal} identity" "identity ${goal}" "${goal}"
         The status should equal 0
       End
 
       It 'fails if we have a new goal but are missing an existing goal'
-        When call usergoalvalid "identity goal" "identity new" "goal" "goal"
+        When call usergoalvalid "identity ${goal}" "identity ${new}" "${goal}"
         The status should equal 1
       End
 
