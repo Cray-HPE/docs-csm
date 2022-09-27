@@ -29,23 +29,23 @@ This page covers safe-guards for preventing destructive behaviors on management 
    }
    ```
    ```bash
-   pit# vi /var/www/ephemeral/configs/data.json
+    vi /var/www/ephemeral/configs/data.json
    ```
 
 1. Quickly toggle yes or no to the file:
 
    ```bash
    # set wipe-ceph-osds=no
-   pit# sed -i 's/wipe-ceph-osds": "yes"/wipe-ceph-osds": "no"/g' /var/www/ephemeral/configs/data.json
+    sed -i 's/wipe-ceph-osds": "yes"/wipe-ceph-osds": "no"/g' /var/www/ephemeral/configs/data.json
 
    # set wipe-ceph-osds=yes
-   pit# sed -i 's/wipe-ceph-osds": "no"/wipe-ceph-osds": "yes"/g' /var/www/ephemeral/configs/data.json
+    sed -i 's/wipe-ceph-osds": "no"/wipe-ceph-osds": "yes"/g' /var/www/ephemeral/configs/data.json
    ```
 
 1. Activate the new setting:
 
    ```bash
-   pit# systemctl restart basecamp
+    systemctl restart basecamp
    ```
 
 ### Safeguard RAIDS / BOOTLOADERS / SquashFS / OverlayFS
@@ -56,6 +56,6 @@ This page covers safe-guards for preventing destructive behaviors on management 
 - `metal.no-wipe=1` will guard against touching RAIDs, disks, and partitions.
 
    ```bash
-   pit# vi /var/www/boot/script.ipxe
+    vi /var/www/boot/script.ipxe
    ```
 

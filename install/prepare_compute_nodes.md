@@ -40,8 +40,8 @@ on. The node indicator is always a 0. For example, `x3000c0s30b1n0` or
    component name (xname):
 
    ```bash
-   ncn# XNAME=x3000c0s30b1n0
-   ncn# cray hsm inventory ethernetInterfaces list --component-id \
+    XNAME=x3000c0s30b1n0
+    cray hsm inventory ethernetInterfaces list --component-id \
          ${XNAME} --format json | jq '.[]|select((.IPAddresses|length)>0)'
    {
    "ID": "6805cabbc182",
@@ -77,9 +77,9 @@ on. The node indicator is always a 0. For example, `x3000c0s30b1n0` or
    Make a note of the ID, MACAddress, and IPAddress of the entry that has the
    10.254 address listed.
    ```bash
-   ncn# ID="9440c938f7b4"
-   ncn# MAC="94:40:c9:38:f7:b4"
-   ncn# IPADDR="10.254.1.38"
+    ID="9440c938f7b4"
+    MAC="94:40:c9:38:f7:b4"
+    IPADDR="10.254.1.38"
    ```
    These will be used later to clean up KEA and Hardware State Manager (HSM).
    There may not be a 10.254 address associated with the node, that is OK, it
@@ -102,11 +102,11 @@ on. The node indicator is always a 0. For example, `x3000c0s30b1n0` or
    2. Make a note of the **MAC Address** under the **Information** section,
         that will be needed later.
         ```bash
-        ncn# ILOMAC="<MAC Address>"
+         ILOMAC="<MAC Address>"
         ```
         For example
         ```bash
-        ncn# ILOMAC="94:40:c9:38:08:c7"
+         ILOMAC="94:40:c9:38:08:c7"
         ```
    3. Click on **General** on the top menu.
    4. Under **NIC Settings** move slider to **Enable VLAN**.
@@ -179,7 +179,7 @@ on. The node indicator is always a 0. For example, `x3000c0s30b1n0` or
 
    Retrieve a bearer token if you have not done so already.
    ```bash
-   ncn# export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
       -d client_id=admin-client \
       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
@@ -189,7 +189,7 @@ on. The node indicator is always a 0. For example, `x3000c0s30b1n0` or
    gathered in section 1.1.
 
    ```bash
-   ncn# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
+    curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H \
    "Content-Type: application/json" -d '{"command": "lease4-del", \
    "service": [ "dhcp4" ], "arguments": {"hw-address": "'${MAC}'", \
    "ip-address": "'${IPADDR}'"}}' https://api-gw-service-nmn.local/apis/dhcp-kea
@@ -207,7 +207,7 @@ on. The node indicator is always a 0. For example, `x3000c0s30b1n0` or
 
    Tell HSM to delete the bad ID out of the Ethernet Interfaces table.
    ```bash
-   ncn# cray hsm inventory ethernetInterfaces delete $ID
+    cray hsm inventory ethernetInterfaces delete $ID
    ```
    Expected results:
    ```json

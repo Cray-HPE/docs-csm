@@ -38,7 +38,7 @@ On any NCN (using 0.0.10 k8s, or 0.0.8 Ceph; anything built on ncn-0.0.21 or hig
 > **NOTE:** If recovering NCNs with an earlier image without the Mellanox tools, refer to the [Obtaining Mellanox Tools](#obtaining-mellanox-tools) section.
 
 ```bash
-ncn# mst start
+ mst start
 ```
 
 Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work, and devices required for these commands will be created in `/dev/mst`.
@@ -52,7 +52,7 @@ Now `mst status` and other commands like `mlxfwmanager` or `mlxconfig` will work
 Use the following snippet to display device name and current UEFI PXE state.
 
 ```bash
-ncn# mst status
+ mst status
 for MST in $(ls /dev/mst/*); do
     mlxconfig -d ${MST} q | egrep "(Device|EXP_ROM|SRIOV_EN)"
 done
@@ -82,7 +82,7 @@ disabled.
 1. Run `mlxfwmanager` to probe and dump the Mellanox PCIe cards.
 
     ```bash
-    ncn# mlxfwmanager
+     mlxfwmanager
     ```
 
 2. Find the device path for the HSN card, assuming it is a ConnectX-5 or other 100GB card, this should be easy to pick out.
@@ -92,12 +92,12 @@ disabled.
     ```bash
     # Set UEFI to YES
 
-    ncn# MST=/dev/mst/mt4119_pciconf1
-    ncn# mlxconfig -d ${MST} -y set EXP_ROM_UEFI_ARM_ENABLE=0
-    ncn# mlxconfig -d ${MST} -y set EXP_ROM_UEFI_x86_ENABLE=0
-    ncn# mlxconfig -d ${MST} -y set EXP_ROM_PXE_ENABLE=0
-    ncn# mlxconfig -d ${MST} -y set SRIOV_EN=0
-    ncn# mlxconfig -d ${MST} q | egrep "EXP_ROM"
+     MST=/dev/mst/mt4119_pciconf1
+     mlxconfig -d ${MST} -y set EXP_ROM_UEFI_ARM_ENABLE=0
+     mlxconfig -d ${MST} -y set EXP_ROM_UEFI_x86_ENABLE=0
+     mlxconfig -d ${MST} -y set EXP_ROM_PXE_ENABLE=0
+     mlxconfig -d ${MST} -y set SRIOV_EN=0
+     mlxconfig -d ${MST} q | egrep "EXP_ROM"
     ```
 
 The Mellanox HSN card is now neutralized, and will only be usable in a booted system.
@@ -149,14 +149,14 @@ If the connection must be disabled, log in to the respective leaf-bmc switch.
 
    ```bash
    # SSH over METAL MANAGEMENT
-   pit# ssh admin@10.1.0.4
+    ssh admin@10.1.0.4
    # SSH over NODE MANAGEMENT
-   pit# ssh admin@10.252.0.4
+    ssh admin@10.252.0.4
    # SSH over HARDWARE MANAGEMENT
-   pit# ssh admin@10.254.0.4
+    ssh admin@10.254.0.4
 
    # or.. serial (device name will vary).
-   pit# minicom -b 115200 -D /dev/tty.USB1
+    minicom -b 115200 -D /dev/tty.USB1
    ```
 
 2. Enter configuration mode.

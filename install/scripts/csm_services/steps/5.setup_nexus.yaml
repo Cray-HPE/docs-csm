@@ -31,14 +31,14 @@ metadata:
     container images, and Helm charts. This command may take 20 minutes or more to run.
 
     ```bash
-    pit# ./lib/setup-nexus.sh
+     ./lib/setup-nexus.sh
     ```
 
     On success, `setup-nexus.sh` will output to `OK` on stderr and exit with status
     code `0`, e.g.:
 
     ```bash
-    pit# ./lib/setup-nexus.sh
+     ./lib/setup-nexus.sh
     ...
     + Nexus setup complete
     setup-nexus.sh: OK

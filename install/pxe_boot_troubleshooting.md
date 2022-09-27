@@ -353,7 +353,7 @@ In that case, then use the following recovery procedure.
         1. Once booted, log in and mount the data partition.
 
            ```bash
-           pit# mount -vL PITDATA
+            mount -vL PITDATA
            ```
 
     - If using a remote ISO PIT, follow the [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md) procedure up through (**and including**) the [Set Up The Site Link](bootstrap_livecd_remote_iso.md#set-up-site-link) step.
@@ -368,10 +368,10 @@ In that case, then use the following recovery procedure.
     Substitute the correct values for the system in use in the following commands:
 
     ```bash
-    pit# SYSTEM_NAME=eniac
-    pit# CAN_IP_NCN_M002=a.b.c.d
-    pit# export KUBERNETES_VERSION=m.n.o
-    pit# export CEPH_VERSION=x.y.z
+     SYSTEM_NAME=eniac
+     CAN_IP_NCN_M002=a.b.c.d
+     export KUBERNETES_VERSION=m.n.o
+     export CEPH_VERSION=x.y.z
     ```
 
 1. **If using a remote ISO PIT**, run the following commands to finish configuring the network and copy files.
@@ -381,40 +381,40 @@ In that case, then use the following recovery procedure.
     1. Run the following command to copy files from `ncn-m002` to the PIT node.
 
         ```bash
-        pit# scp -p ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
+         scp -p ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/
         ```
 
     1. Apply the network changes.
 
         ```bash
-        pit# wicked ifreload all
-        pit# systemctl restart wickedd-nanny && sleep 5
+         wicked ifreload all
+         systemctl restart wickedd-nanny && sleep 5
         ```
 
     1. Copy `data.json` from `ncn-m002` to the PIT node.
 
         ```bash
-        pit# mkdir -p /var/www/ephemeral/configs
-        pit# scp ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/basecamp/data.json /var/www/ephemeral/configs
+         mkdir -p /var/www/ephemeral/configs
+         scp ${CAN_IP_NCN_M002}:/metal/bootstrap/prep/${SYSTEM_NAME}/basecamp/data.json /var/www/ephemeral/configs
         ```
 
 1. Copy Kubernetes configuration file from `ncn-m002`.
 
     ```bash
-    pit# mkdir -pv ~/.kube
-    pit# scp ${CAN_IP_NCN_M002}:/etc/kubernetes/admin.conf ~/.kube/config
+     mkdir -pv ~/.kube
+     scp ${CAN_IP_NCN_M002}:/etc/kubernetes/admin.conf ~/.kube/config
     ```
 
 1. Set DNS to use unbound.
 
     ```bash
-    pit# echo "nameserver 10.92.100.225" > /etc/resolv.conf
+     echo "nameserver 10.92.100.225" > /etc/resolv.conf
     ```
 
 1. Export an API token.
 
     ```bash
-    pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+     export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
             -d client_id=admin-client \
             -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
             https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
@@ -425,8 +425,8 @@ In that case, then use the following recovery procedure.
     **WARNING: These commands should never be run from a node other than the PIT node or `ncn-m001`**
 
     ```bash
-    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
-    pit# csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
+     csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
+     csi handoff bss-update-cloud-init --set meta-data.dns-server=10.92.100.225 --limit Global
     ```
 
 1. Perform the [Restart BSS](#restart-bss) and the [Restart Kea](#restart-kea) procedures.

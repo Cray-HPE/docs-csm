@@ -56,8 +56,8 @@ Preparation of the environment must be done before attempting to deploy the mana
       > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
       ```bash
-      pit# read -s IPMI_PASSWORD
-      pit# export IPMI_PASSWORD
+       read -s IPMI_PASSWORD
+       export IPMI_PASSWORD
       ```
 
    1. Set the remaining helper variables.
@@ -65,7 +65,7 @@ Preparation of the environment must be done before attempting to deploy the mana
       > These values do not need to be altered from what is shown.
 
       ```bash
-      pit# mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt' ; export USERNAME=root
+       mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt' ; export USERNAME=root
       ```
 
    Throughout the guide, simple one-liners can be used to query status of expected nodes. If the shell or environment is terminated, these
@@ -76,14 +76,14 @@ Preparation of the environment must be done before attempting to deploy the mana
    * Check power status of all NCNs.
 
       ```bash
-      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
+       grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
               xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
       ```
 
    * Power off all NCNs.
 
       ```bash
-      pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
+       grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u |
               xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
       ```
 
@@ -104,19 +104,19 @@ proceed to step 2.
    Check the time on the PIT node to see whether it matches the current time:
 
    ```bash
-   pit# date "+%Y-%m-%d %H:%M:%S.%6N%z"
+    date "+%Y-%m-%d %H:%M:%S.%6N%z"
    ```
 
    If the time is inaccurate, set the time manually.
 
    ```bash
-   pit# timedatectl set-time "2019-11-15 00:00:00"
+    timedatectl set-time "2019-11-15 00:00:00"
    ```
 
    Run the NTP script:
 
    ```bash
-   pit# /root/bin/configure-ntp.sh
+    /root/bin/configure-ntp.sh
    ```
 
    This ensures that the PIT is configured with an accurate date/time, which will be propagated to the NCNs during boot.
@@ -124,7 +124,7 @@ proceed to step 2.
    If the error `Failed to set time: NTP unit is active` is observed, then stop `chrony` first.
 
    ```bash
-   pit# systemctl stop chronyd
+    systemctl stop chronyd
    ```
 
    Then run the commands above to complete the process.
@@ -143,19 +143,19 @@ proceed to step 2.
       **Important:** Be sure to change the below example to the appropriate NCN.
 
       ```console
-      pit# bmc=ncn-w001-mgmt
+       bmc=ncn-w001-mgmt
       ```
 
    1. Start an IPMI console session to the NCN.
 
       ```console
-      pit# conman -j $bmc
+       conman -j $bmc
       ```
 
    1. Using another terminal to watch the console, boot the node to BIOS.
 
       ```console
-      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis bootdev bios &&
+       ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis bootdev bios &&
            ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off && sleep 10 &&
            ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power on
       ```
@@ -194,7 +194,7 @@ proceed to step 2.
    1. After the correct time has been verified, power off the NCN.
 
       ```bash
-      pit# ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off
+       ipmitool -I lanplus -U $USERNAME -E -H $bmc chassis power off
       ```
 
    Repeat the above process for each NCN.
@@ -322,13 +322,13 @@ be performed are in the [Deploy](#deploy) section.
     1. Patch the `set-sqfs-links.sh` script to include the blacklisting of an undesired kernel module.
 
         ```bash
-        pit# sed -i -E 's:rd.luks=0 /:rd.luks=0 module_blacklist=rpcrdma \/:g' /root/bin/set-sqfs-links.sh
+         sed -i -E 's:rd.luks=0 /:rd.luks=0 module_blacklist=rpcrdma \/:g' /root/bin/set-sqfs-links.sh
         ```
 
     1. Invoke the script.
 
         ```bash
-        pit# /root/bin/set-sqfs-links.sh
+         /root/bin/set-sqfs-links.sh
         ```
 
         > Every NCN except for `ncn-m001` should be included in the output from this script. If that is not the case,
@@ -349,15 +349,15 @@ be performed are in the [Deploy](#deploy) section.
     > **NOTE:** This script will enable DCMI/IPMI on Hewlett-Packard Enterprise servers equipped with ILO. If `ipmitool` is not working at this time, it will after running this script.
 
     ```bash
-    pit# /root/bin/bios-baseline.sh
+     /root/bin/bios-baseline.sh
     ```
 
 1. <a name="set-uefi-and-power-off"></a>Set each node to always UEFI Network Boot, and ensure they are powered off
 
     ```bash
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=persistent
+     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} chassis bootdev pxe options=efiboot
+     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
     > **NOTE:** The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
@@ -371,14 +371,14 @@ be performed are in the [Deploy](#deploy) section.
       > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
       ```bash
-      pit# read -s SW_ADMIN_PASSWORD
-      pit# export SW_ADMIN_PASSWORD
+       read -s SW_ADMIN_PASSWORD
+       export SW_ADMIN_PASSWORD
       ```
 
    1. Run the LiveCD preflight checks.
 
       ```bash
-      pit# csi pit validate --livecd-preflight
+       csi pit validate --livecd-preflight
       ```
 
       > Note: Ignore any errors about not being able resolve `arti.dev.cray.com`.
@@ -386,7 +386,7 @@ be performed are in the [Deploy](#deploy) section.
 1. Print the available consoles.
 
     ```bash
-    pit# conman -q
+     conman -q
     ```
 
     Expected output looks similar to the following:
@@ -410,7 +410,7 @@ be performed are in the [Deploy](#deploy) section.
     Boot all the storage nodes. `ncn-s001` will start 1 minute after the other storage nodes.
 
     ```bash
-    pit# grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u |
+     grep -oP $stoken /etc/dnsmasq.d/statics.conf | grep -v "ncn-s001-" | sort -u |
             xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on; \
          sleep 60; ipmitool -I lanplus -U $USERNAME -E -H ncn-s001-mgmt power on
     ```
@@ -418,7 +418,7 @@ be performed are in the [Deploy](#deploy) section.
 1. Observe the installation through the console of `ncn-s001-mgmt`.
 
     ```bash
-    pit# conman -j ncn-s001-mgmt
+     conman -j ncn-s001-mgmt
     ```
 
     From there an administrator can witness console output for the `cloud-init` scripts.
@@ -432,7 +432,7 @@ be performed are in the [Deploy](#deploy) section.
    **NOTE:** Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
 
     ```bash
-    pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
+     grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
     ```
 
 1. Stop watching the console from `ncn-s001`.
@@ -449,7 +449,7 @@ be performed are in the [Deploy](#deploy) section.
     Print the console name:
 
     ```bash
-    pit# conman -q | grep m002
+     conman -q | grep m002
     ```
 
     Expected output looks similar to the following:
@@ -461,7 +461,7 @@ be performed are in the [Deploy](#deploy) section.
     Then join the console:
 
     ```bash
-    pit# conman -j ncn-m002-mgmt
+     conman -j ncn-m002-mgmt
     ```
 
     **NOTE:** If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the ipxe.efi binary) see [PXE boot troubleshooting](pxe_boot_troubleshooting.md)
@@ -477,7 +477,7 @@ be performed are in the [Deploy](#deploy) section.
     > When the following command prompts for a password, enter the root password for `ncn-m002`.
 
     ```bash
-    pit# ssh ncn-m002 kubectl get nodes -o wide
+     ssh ncn-m002 kubectl get nodes -o wide
     ```
 
     Expected output looks similar to the following:
@@ -507,7 +507,7 @@ be performed are in the [Deploy](#deploy) section.
         > When the following command prompts for a password, enter the root password for `ncn-m002`.
 
         ```ShellSession
-        pit# rsync -av ncn-m002:.ssh/ /root/.ssh/
+         rsync -av ncn-m002:.ssh/ /root/.ssh/
         ```
 
         Expected output looks similar to the following:
@@ -528,7 +528,7 @@ be performed are in the [Deploy](#deploy) section.
     1. Make a list of all of the NCNs (including `ncn-m001`).
 
         ```ShellSession
-        pit# NCNS=$(grep -oP "ncn-[msw][0-9]{3}" /etc/dnsmasq.d/statics.conf | sort -u | tr '\n' ',') ; echo "${NCNS}"
+         NCNS=$(grep -oP "ncn-[msw][0-9]{3}" /etc/dnsmasq.d/statics.conf | sort -u | tr '\n' ',') ; echo "${NCNS}"
         ```
 
         Expected output looks similar to the following:
@@ -542,7 +542,7 @@ be performed are in the [Deploy](#deploy) section.
         The following command should not prompt for a password.
 
         ```ShellSession
-        pit# PDSH_SSH_ARGS_APPEND='-o StrictHostKeyChecking=no' pdsh -Sw "${NCNS}" date && echo SUCCESS || echo ERROR
+         PDSH_SSH_ARGS_APPEND='-o StrictHostKeyChecking=no' pdsh -Sw "${NCNS}" date && echo SUCCESS || echo ERROR
         ```
 
         Expected output looks similar to the following:
@@ -572,7 +572,7 @@ be performed are in the [Deploy](#deploy) section.
 1. <a name="check-lvm-on-masters-and-workers"></a>Validate that the expected LVM labels are present on disks on the master and worker nodes.
 
     ```bash
-    pit# /usr/share/doc/csm/install/scripts/check_lvm.sh
+     /usr/share/doc/csm/install/scripts/check_lvm.sh
     ```
 
     Expected output looks similar to the following:
@@ -612,7 +612,7 @@ be performed are in the [Deploy](#deploy) section.
     Running this script applies the workaround on all of the NCNs that were just deployed.
 
     ```bash
-    pit# /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
+     /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
     ```
 
     Example output:
@@ -819,8 +819,8 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
    Run the following commands on the PIT node to extract the value of the `first-master-hostname` field from the `/var/www/ephemeral/configs/data.json` file:
 
    ```bash
-   pit# FM=$(cat /var/www/ephemeral/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
-   pit# echo $FM
+    FM=$(cat /var/www/ephemeral/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
+    echo $FM
    ```
 
 1. Copy the Kubernetes configuration file from that node to the LiveCD to be able to use `kubectl` as cluster administrator.
@@ -828,14 +828,14 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
    Run the following commands on the PIT node:
 
    ```bash
-   pit# mkdir -v ~/.kube
-   pit# scp ${FM}.nmn:/etc/kubernetes/admin.conf ~/.kube/config
+    mkdir -v ~/.kube
+    scp ${FM}.nmn:/etc/kubernetes/admin.conf ~/.kube/config
    ```
 
 1. Validate that `kubectl` commands run successfully from the PIT node.
 
     ```bash
-    pit# kubectl get nodes -o wide
+     kubectl get nodes -o wide
     ```
 
     Expected output looks similar to the following:
@@ -856,7 +856,7 @@ The LiveCD needs to authenticate with the cluster to facilitate the rest of the 
 Run the following commands on the PIT node.
 
 ```bash
-pit# pushd /var/www/ephemeral && ${CSM_RELEASE}/lib/install-goss-tests.sh && popd
+ pushd /var/www/ephemeral && ${CSM_RELEASE}/lib/install-goss-tests.sh && popd
 ```
 
 <a name="clean-up-chrony-configurations"></a>
@@ -866,7 +866,7 @@ pit# pushd /var/www/ephemeral && ${CSM_RELEASE}/lib/install-goss-tests.sh && pop
 Run the following command without editing the value of the `TOKEN` variable.
 
 ```ShellSession
-pit# for i in $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | sort -u | grep -v ncn-m001); do 
+ for i in $(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | sort -u | grep -v ncn-m001); do 
        ssh $i "TOKEN=token /srv/cray/scripts/common/chrony/csm_ntp.py"; done
 ```
 
@@ -895,13 +895,13 @@ Observe the output of the checks. If there are any failures, remediate them.
 1. Check the storage nodes.
 
    ```bash
-   pit# csi pit validate --ceph | tee csi-pit-validate-ceph.log
+    csi pit validate --ceph | tee csi-pit-validate-ceph.log
    ```
 
    Once that command has finished, the following will extract the test totals reported for each node:
 
    ```bash
-   pit# grep "Total Test" csi-pit-validate-ceph.log
+    grep "Total Test" csi-pit-validate-ceph.log
    ```
 
    Example output for a system with three storage nodes:
@@ -923,13 +923,13 @@ Observe the output of the checks. If there are any failures, remediate them.
    all of them and not just the final one.** A `grep` command is provided to help with this.
 
    ```bash
-   pit# csi pit validate --k8s | tee csi-pit-validate-k8s.log
+    csi pit validate --k8s | tee csi-pit-validate-k8s.log
    ```
 
    Once that command has finished, the following will extract the test totals reported for each node:
 
    ```bash
-   pit# grep "Total Test" csi-pit-validate-k8s.log
+    grep "Total Test" csi-pit-validate-k8s.log
    ```
 
    Example output for a system with five master and worker nodes (excluding the PIT node):
@@ -960,7 +960,7 @@ Observe the output of the checks. If there are any failures, remediate them.
    Run the following command on any Kubernetes master or worker node, or the PIT node:
 
    ```bash
-   ncn-mw/pit# kubectl get pods -o wide -n kube-system | grep -Ev '(Running|Completed)'
+   ncn-mw/ kubectl get pods -o wide -n kube-system | grep -Ev '(Running|Completed)'
    ```
 
    If any pods are listed by this command, it means they are not in the `Running` or `Completed` state. Do not proceed before investigating this.

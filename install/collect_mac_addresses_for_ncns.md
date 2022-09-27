@@ -30,7 +30,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
 1. Change into the preparation directory.
 
    ```bash
-   pit# cd /var/www/ephemeral/prep
+    cd /var/www/ephemeral/prep
    ```
 
 1. Confirm that the `ncn_metadata.csv` file in this directory has the new information.
@@ -38,7 +38,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
    be present for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1` columns.
 
    ```bash
-   pit# cat ncn_metadata.csv
+    cat ncn_metadata.csv
    ```
 
 1. Rename the incorrectly generated configurations.
@@ -49,20 +49,20 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
    > **Warning:** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
 
    ```bash
-   pit# export SYSTEM_NAME=eniac
-   pit# echo $SYSTEM_NAME
+    export SYSTEM_NAME=eniac
+    echo $SYSTEM_NAME
    ```
 
    Rename the old directory.
 
    ```bash
-   pit# mv /var/www/ephemeral/prep/${SYSTEM_NAME} /var/www/ephemeral/prep/${SYSTEM_NAME}.oldBMC
+    mv /var/www/ephemeral/prep/${SYSTEM_NAME} /var/www/ephemeral/prep/${SYSTEM_NAME}.oldBMC
    ```
 
 1. Copy over the `system_config.yaml` file from the first attempt at generating the system configuration files.
 
    ```bash
-   pit# cp /var/www/ephemeral/prep/${SYSTEM_NAME}.oldBMC/system_config.yaml /var/www/ephemeral/prep/
+    cp /var/www/ephemeral/prep/${SYSTEM_NAME}.oldBMC/system_config.yaml /var/www/ephemeral/prep/
    ```
 
 1. Generate system configuration again.
@@ -70,7 +70,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
    The needed files should be in the current directory.
 
    ```bash
-   pit# ls -1
+    ls -1
    ```
 
    Expected output looks similar to the following:
@@ -88,7 +88,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
    from the command line arguments which were used initially for this command.
 
    ```bash
-   pit# csi config init
+    csi config init
    ```
 
    A new directory matching your `--system-name` argument will now exist in your working directory.
@@ -120,7 +120,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
 1. Copy the interface configuration files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
-   pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/ &&
+    cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/ &&
         wicked ifreload all && systemctl restart wickedd-nanny && sleep 5
    ```
 
@@ -129,7 +129,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
     > **Note:** The `bond0.can0` interface is optional in CSM 1.2+
 
     ```bash
-    pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
+     wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
     ```
 
     Example output:
@@ -171,7 +171,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
     1. Copy files (files only, `-r` is expressly not used).
 
         ```bash
-        pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/dnsmasq.d/* /etc/dnsmasq.d/ &&
+         cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/dnsmasq.d/* /etc/dnsmasq.d/ &&
              cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/conman.conf /etc/conman.conf &&
              cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
         ```
@@ -179,7 +179,7 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
     1. Restart all PIT services.
 
         ```bash
-        pit# systemctl restart basecamp nexus dnsmasq conman
+         systemctl restart basecamp nexus dnsmasq conman
         ```
 
 1. Verify that all BMCs can be pinged.
@@ -190,8 +190,8 @@ The previous step updated `ncn_metadata.csv` with the BMC MAC addresses, so seve
    not be booted by itself as the PIT node.
 
    ```bash
-   pit# export mtoken='ncn-m(?!001)\w+-mgmt' ; export stoken='ncn-s\w+-mgmt' ; export wtoken='ncn-w\w+-mgmt'
-   pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ping -c3 {}
+    export mtoken='ncn-m(?!001)\w+-mgmt' ; export stoken='ncn-s\w+-mgmt' ; export wtoken='ncn-w\w+-mgmt'
+    grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ping -c3 {}
    ```
 
 <a name="collect_the_ncn_mac_addresses"></a>
@@ -214,7 +214,7 @@ so several earlier steps need to be repeated.
 1. Change into the preparation directory.
 
    ```bash
-   pit# cd /var/www/ephemeral/prep
+    cd /var/www/ephemeral/prep
    ```
 
 1. Confirm that the `ncn_metadata.csv` file in this directory has the new information.
@@ -222,7 +222,7 @@ so several earlier steps need to be repeated.
    Every row should have uniquely different MAC addresses from the other rows.
 
    ```bash
-   pit# grep "de:ad:be:ef:00:00" ncn_metadata.csv
+    grep "de:ad:be:ef:00:00" ncn_metadata.csv
    ```
 
    Expected output looks similar to the following, that is, no lines that still have `"de:ad:be:ef:00:00"`:
@@ -234,7 +234,7 @@ so several earlier steps need to be repeated.
    Display the file and confirm the contents are unique between the different rows.
 
    ```bash
-   pit# cat ncn_metadata.csv
+    cat ncn_metadata.csv
    ```
 
 1. Remove the incorrectly generated configurations. Before deleting the incorrectly generated configurations, consider
@@ -243,20 +243,20 @@ making a backup of them, in case they need to be examined at a later time.
    > **`WARNING`** Ensure that the `SYSTEM_NAME` environment variable is correctly set.
 
    ```bash
-   pit# export SYSTEM_NAME=eniac
-   pit# echo $SYSTEM_NAME
+    export SYSTEM_NAME=eniac
+    echo $SYSTEM_NAME
    ```
 
    Rename the old directory.
 
    ```bash
-   pit# mv /var/www/ephemeral/prep/${SYSTEM_NAME} /var/www/ephemeral/prep/${SYSTEM_NAME}.oldNCN
+    mv /var/www/ephemeral/prep/${SYSTEM_NAME} /var/www/ephemeral/prep/${SYSTEM_NAME}.oldNCN
    ```
 
 1. Copy over the `system_config.yaml` file from the second attempt at generating the system configuration files.
 
    ```bash
-   pit# cp /var/www/ephemeral/prep/${SYSTEM_NAME}.oldNCN/system_config.yaml /var/www/ephemeral/prep/
+    cp /var/www/ephemeral/prep/${SYSTEM_NAME}.oldNCN/system_config.yaml /var/www/ephemeral/prep/
    ```
 
 1. Generate system configuration again.
@@ -264,7 +264,7 @@ making a backup of them, in case they need to be examined at a later time.
    Check for the expected files that should exist be in the current directory.
 
    ```bash
-   pit# ls -1
+    ls -1
    ```
 
    Expected output looks similar to the following:
@@ -281,7 +281,7 @@ making a backup of them, in case they need to be examined at a later time.
    Regenerate the system configuration. The `system_config.yaml` file contains all of the options that were used to generate the initial system configuration, and can be used in place of specifying CLI flags to CSI.
 
    ```bash
-   pit# csi config init
+    csi config init
    ```
 
    A new directory matching your `$SYSTEM_NAME` environment variable will now exist in your working directory.
@@ -313,7 +313,7 @@ making a backup of them, in case they need to be examined at a later time.
 1. Copy the interface configuration files generated earlier by `csi config init` into `/etc/sysconfig/network/`.
 
    ```bash
-   pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/ &&
+    cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/pit-files/* /etc/sysconfig/network/ &&
         wicked ifreload all && systemctl restart wickedd-nanny && sleep 5
    ```
 
@@ -322,7 +322,7 @@ making a backup of them, in case they need to be examined at a later time.
     > **Note:** The `bond0.can0` interface is optional in CSM 1.2+
 
     ```bash
-    pit# wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
+     wicked show bond0 bond0.nmn0 bond0.hmn0 bond0.can0
     ```
 
     Example output:
@@ -364,15 +364,15 @@ making a backup of them, in case they need to be examined at a later time.
     1. Copy files (files only, `-r` is expressly not used).
 
         ```bash
-        pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/dnsmasq.d/* /etc/dnsmasq.d/
-        pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/conman.conf /etc/conman.conf
-        pit# cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
+         cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/dnsmasq.d/* /etc/dnsmasq.d/
+         cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/conman.conf /etc/conman.conf
+         cp -pv /var/www/ephemeral/prep/${SYSTEM_NAME}/basecamp/* /var/www/ephemeral/configs/
         ```
 
     1. Update CA Cert on the copied `data.json` file for Basecamp with the generated certificate in `site-init`:
 
         ```bash
-        pit# csi patch ca \
+         csi patch ca \
         --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
         --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
         --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
@@ -381,7 +381,7 @@ making a backup of them, in case they need to be examined at a later time.
     1. Restart all PIT services.
 
         ```bash
-        pit# systemctl restart basecamp nexus dnsmasq conman
+         systemctl restart basecamp nexus dnsmasq conman
         ```
 
 1. Ensure system-specific settings generated by CSI are merged into `customizations.yaml`.
@@ -389,8 +389,8 @@ making a backup of them, in case they need to be examined at a later time.
     > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the `SHASTA-CFG` repository has been cloned.
 
     ```bash
-    pit# alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
-    pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
+     alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
+     yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
     ```
 
 ## Next topic

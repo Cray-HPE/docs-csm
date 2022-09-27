@@ -31,7 +31,7 @@ sorted by safest to touch relative to keeping an SSH connection up.
     This command restarts the `wickedd` service without reconfiguring the network interfaces.
 
     ```bash
-    ncn# systemctl restart wickedd
+     systemctl restart wickedd
     ```
 
 2. `wicked.service`: The overarching service for spawning daemons and manipulating interface configuration.
@@ -39,7 +39,7 @@ sorted by safest to touch relative to keeping an SSH connection up.
     This command restarts the `wicked` service which will respawns daemons and reconfigure the network.
 
     ```bash
-    ncn# systemctl restart wicked
+     systemctl restart wicked
     ```
 
 3. `network.service`: Responsible for network configuration per interface; This does not reload `wicked`.
@@ -50,7 +50,7 @@ sorted by safest to touch relative to keeping an SSH connection up.
 
     ```bash
     # Restart the network interface configuration, but leaves wicked daemons alone.
-    ncn# systemctl restart network
+     systemctl restart network
     ```
 
 <a name="command_reference"></a>
@@ -60,13 +60,13 @@ sorted by safest to touch relative to keeping an SSH connection up.
 * Check interface status (up/down/broken):
 
    ```bash
-   ncn# wicked ifstatus
+    wicked ifstatus
    ```
 
 * Show routing and status for all devices:
 
    ```bash
-   ncn# wicked ifstatus --verbose all
+    wicked ifstatus --verbose all
    lo              up
          link:     #1, state up
          type:     loopback
@@ -142,12 +142,12 @@ sorted by safest to touch relative to keeping an SSH connection up.
 * Print real devices (ignore no-device):
 
    ```bash
-   ncn# wicked show --verbose all
+    wicked show --verbose all
    ```
 
 * Show the currently enabled network service (Wicked or Network Manager):
 
    ```bash
-   ncn# systemctl show -p Id network.service
+    systemctl show -p Id network.service
    Id=wicked.service
    ```

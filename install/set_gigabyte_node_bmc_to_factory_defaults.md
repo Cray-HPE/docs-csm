@@ -43,19 +43,19 @@ If booted from the PIT node:
     - **Option 1:** If the BMC is running version `12.84.01` or later, then run:
 
         ```bash
-        ncn# sh do_Redfish_BMC_Factory.sh
+         sh do_Redfish_BMC_Factory.sh
         ```
 
     - **Option 2:** Use `ipmitool` to reset the BMC to factory defaults:
 
         ```bash
-        ncn# sh do_bmc_factory_default.sh
+         sh do_bmc_factory_default.sh
         ```
 
     - **Option 3:** Use the power control script:
 
         ```bash
-        ncn# sh do_bmc_power_control.sh raw 0x32 0x66
+         sh do_bmc_power_control.sh raw 0x32 0x66
         ```
 
         (`raw 0x32 0x66` are Gigabyte/AMI vendor-specific IPMI commands to reset to factory defaults.)
@@ -63,13 +63,13 @@ If booted from the PIT node:
 1. Wait five minutes (300 seconds) for the BMC and Redfish to initialize.
 
     ```bash
-    ncn# sleep 300
+     sleep 300
     ```
 
 1. Add the default login and password to the BMC.
 
     ```bash
-    ncn# sh do_bmc_root_account.sh
+     sh do_bmc_root_account.sh
     ```
 
 1. Add the default login and password to Redfish.
@@ -77,7 +77,7 @@ If booted from the PIT node:
     **IMPORTANT:** If the BMC is version `12.84.01` or later, then **skip this step**.
 
     ```bash
-    ncn# sh do_Redfish_credentials.sh
+     sh do_Redfish_credentials.sh
     ```
 
 1. Make sure the BMC is not in failover mode.
@@ -85,7 +85,7 @@ If booted from the PIT node:
     Run the script with the `read` option to check the BMC status:
 
     ```bash
-    ncn# sh do_bmc_change_mode_to_manual.sh read
+     sh do_bmc_change_mode_to_manual.sh read
     ---------------------------------------------------
     [ BMC: 172.30.48.33 ]
     => Manual mode (O)
@@ -101,7 +101,7 @@ If booted from the PIT node:
     If the BMC is in failover mode, then change the BMC back to manual mode:
 
     ```bash
-    ncn# sh do_bmc_change_mode_to_manual.sh change
+     sh do_bmc_change_mode_to_manual.sh change
     ```
 
 1. If the BMC is in a booted management NCN running Shasta v1.3 or later, then reapply the static IP address and clear the DHCP address from HSM/KEA.
@@ -113,11 +113,11 @@ If booted from the PIT node:
 1. After the BMC is reset to factory defaults, wait 300 seconds for BMC and Redfish initialization.
 
     ```bash
-    ncn# sleep 300
+     sleep 300
     ```
 
 1. Add the default login and password to the BMC:
 
     ```bash
-    ncn# sh do_bmc_root_account.sh
+     sh do_bmc_root_account.sh
     ```

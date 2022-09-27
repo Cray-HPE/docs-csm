@@ -31,15 +31,15 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 1. List the disks for verification.
 
     ```bash
-    ncn# disks_to_wipe=$(lsblk -l -o NAME,TYPE,TRAN | grep -E '[[:space:]].*(sata|nvme|sas|raid)' |
+     disks_to_wipe=$(lsblk -l -o NAME,TYPE,TRAN | grep -E '[[:space:]].*(sata|nvme|sas|raid)' |
                          awk '{ print "/dev/"$1 }' | sort -u | tr '\n' ' ')
-    ncn# echo "${disks_to_wipe}"
+     echo "${disks_to_wipe}"
     ```
 
 1. Wipe the disks and the RAIDs.
 
     ```bash
-    ncn# for disk in $disks_to_wipe; do
+     for disk in $disks_to_wipe; do
              wipefs --all --force ${disk}* 2> /dev/null
          done
     ```
@@ -66,9 +66,9 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
    > ***NOTE*** The Ceph volume group will only exist on storage nodes, but this code snippet will work on all NCNs.
 
     ```bash
-    ncn# ceph_vgs='vg_name=~ceph*'
-    ncn# metal_vgs='vg_name=~metal*'
-    ncn# for volume_group in ${ceph_vgs} ${metal_vgs}; do
+     ceph_vgs='vg_name=~ceph*'
+     metal_vgs='vg_name=~metal*'
+     for volume_group in ${ceph_vgs} ${metal_vgs}; do
              vgremove -f -v --select "${volume_group}" -y >/dev/null 2>&1
          done
     ```
@@ -261,7 +261,7 @@ wiping a different type of node than what a step specifies, then skip that step.
     1. See if any `cray-sdu-rda` containers are running.
 
         ```bash
-        ncn# podman ps
+         podman ps
         ```
 
         Example output:
@@ -274,7 +274,7 @@ wiping a different type of node than what a step specifies, then skip that step.
     1. If there is a running `cray-sdu-rda` container in the above output, then stop it using the container ID:
 
         ```bash
-        ncn# podman stop 7741d5096625
+         podman stop 7741d5096625
         ```
 
         Example output:

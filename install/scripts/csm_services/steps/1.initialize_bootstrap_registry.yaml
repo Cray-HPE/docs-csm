@@ -47,7 +47,7 @@ spec:
         
         troubleshooting: |-
           # Restart nexus service
-          `pit# systemctl start nexus`
+          ` systemctl start nexus`
       action:
         description: |-
           3.  Load the skopeo image installed by the cray-nexus RPM

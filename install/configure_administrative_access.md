@@ -75,7 +75,7 @@ completely restarted.
 Run the `lock_management_nodes.py` script to lock all management nodes and their BMCs that are not already locked:
 
 ```bash
-ncn# /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
+ /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
 ```
 
 The return value of the script is 0 if locking was successful. Otherwise, a non-zero return means that manual intervention may be needed to lock the nodes and their BMCs.

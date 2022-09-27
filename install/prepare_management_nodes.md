@@ -40,7 +40,7 @@ Runtime DHCP services interfere with the LiveCD's bootstrap nature to provide DH
 Scale the deployment from either the LiveCD or any Kubernetes node:
 
 ```bash
-ncn# kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
+ kubectl scale -n services --replicas=0 deployment cray-dhcp-kea
 ```
 
 ## Wipe disks on booted nodes
@@ -76,13 +76,13 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the booted LiveCD, if re
 1. Power off NCNs.
 
     ```bash
-    pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+     conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
 1. Check the power status to confirm that the nodes have powered off.
 
     ```bash
-    pit# conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
+     conman -q | grep mgmt | grep -v m001 | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power status
     ```
 
 ### Shut down from `ncn-m001`
@@ -127,7 +127,7 @@ BMCs to be set back to DHCP before proceeding.
         > This collects BMC IP addresses using the old `statics.conf` on the system, in case CSI changes IP addresses:
 
         ```bash
-        pit# BMCS=$(grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' |
+         BMCS=$(grep mgmt /etc/dnsmasq.d/statics.conf | grep -v m001 | awk -F ',' '{print $2}' |
                        grep -Eo "([0-9]{1,3}[.]){3}[0-9]{1,3}" | sort -u  | tr '\n' ' ') ; echo $BMCS
         ```
 

@@ -106,8 +106,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
 
    ```bash
-   pit# script -af ~/csm-install-remoteiso.$(date +%Y-%m-%d).txt
-   pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    script -af ~/csm-install-remoteiso.$(date +%Y-%m-%d).txt
+    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
 1. Print information about the booted PIT image.
@@ -117,7 +117,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    any bug reports or service queries for issues encountered on the PIT node.
 
    ```bash
-   pit# /root/bin/metalid.sh
+    /root/bin/metalid.sh
    ```
 
    Expected output looks similar to the following:
@@ -144,11 +144,11 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Find a local disk for storing product installers.
 
    ```bash
-   pit# disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
-   pit# echo $disk
-   pit# parted --wipesignatures -m --align=opt --ignore-busy -s /dev/$disk -- mklabel gpt mkpart primary ext4 2048s 100%
-   pit# mkfs.ext4 -L PITDATA "/dev/${disk}1"
-   pit# mount -vL PITDATA
+    disk="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print $2}' | head -n 1 | tr -d '\n')"
+    echo $disk
+    parted --wipesignatures -m --align=opt --ignore-busy -s /dev/$disk -- mklabel gpt mkpart primary ext4 2048s 100%
+    mkfs.ext4 -L PITDATA "/dev/${disk}1"
+    mount -vL PITDATA
    ```
 
    The `parted` command may give an error similar to the following:
@@ -164,10 +164,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    `parted` command failed.**
 
    ```bash
-   pit# RAIDS=$(grep "${disk}[0-9]" /proc/mdstat | awk '{ print "/dev/"$1 }') ; echo ${RAIDS}
-   pit# VGS=$(echo ${RAIDS} | xargs -r pvs --noheadings -o vg_name 2>/dev/null) ; echo ${VGS}
-   pit# echo ${VGS} | xargs -r -t -n 1 vgremove -f -v
-   pit# echo ${RAIDS} | xargs -r -t -n 1 mdadm -S -f -v
+    RAIDS=$(grep "${disk}[0-9]" /proc/mdstat | awk '{ print "/dev/"$1 }') ; echo ${RAIDS}
+    VGS=$(echo ${RAIDS} | xargs -r pvs --noheadings -o vg_name 2>/dev/null) ; echo ${VGS}
+    echo ${VGS} | xargs -r -t -n 1 vgremove -f -v
+    echo ${RAIDS} | xargs -r -t -n 1 mdadm -S -f -v
    ```
 
    After running the above procedure, retry the `parted` command which failed. If it succeeds, resume the install from that point.
@@ -194,10 +194,10 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       > specified, they must be separated by spaces (for example, `site_nics='p2p1 p2p2 p2p3'`).
 
       ```bash
-      pit# site_ip=172.30.XXX.YYY/20
-      pit# site_gw=172.30.48.1
-      pit# site_dns=172.30.84.40
-      pit# site_nics=em1
+       site_ip=172.30.XXX.YYY/20
+       site_gw=172.30.48.1
+       site_dns=172.30.84.40
+       site_nics=em1
       ```
 
    1. Run the `csi-setup-lan0.sh` script to set up the site link.
@@ -205,7 +205,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       > **Note:** All of the `/root/bin/csi-*` scripts are harmless to run without parameters; doing so will print usage statements.
 
       ```bash
-      pit# /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nics
+       /root/bin/csi-setup-lan0.sh $site_ip $site_gw $site_dns $site_nics
       ```
 
    1. Verify that `lan0` has an IP address and attempt to auto-set the hostname based on DNS.
@@ -213,8 +213,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       The script appends `-pit` to the end of the hostname as a means to reduce the chances of confusing the PIT node with an actual, deployed NCN.
 
       ```bash
-      pit# ip a show lan0
-      pit# /root/bin/csi-set-hostname.sh # this will attempt to set the hostname based on the site's own DNS records.
+       ip a show lan0
+       /root/bin/csi-set-hostname.sh # this will attempt to set the hostname based on the site's own DNS records.
       ```
 
    1. Add helper variables to PIT node environment.
@@ -225,9 +225,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       1. Set helper variables.
 
          ```bash
-         pit# CSM_RELEASE=csm-x.y.z
-         pit# SYSTEM_NAME=eniac
-         pit# PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
+          CSM_RELEASE=csm-x.y.z
+          SYSTEM_NAME=eniac
+          PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
          ```
 
       1. Add variables to the PIT environment.
@@ -239,7 +239,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
          > and not at the end of another line.
 
          ```bash
-         pit# echo "
+          echo "
          CSM_RELEASE=${CSM_RELEASE}
          PITDATA=${PITDATA}
          CSM_PATH=${PITDATA}/${CSM_RELEASE}
@@ -249,8 +249,8 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    1. Exit the typescript, exit the console session, and log in again using SSH.
 
       ```bash
-      pit# exit # exit the typescript started earlier
-      pit# exit # log out of the pit node
+       exit # exit the typescript started earlier
+       exit # log out of the pit node
       # Close the console session by entering &. or ~.
       # Then ssh back into the PIT node
       external# ssh root@${SYSTEM_NAME}-ncn-m001
@@ -259,20 +259,20 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    1. After reconnecting, resume the typescript (the `-a` appends to an existing script).
 
       ```bash
-      pit# script -af $(ls -tr ~/csm-install-remoteiso*.txt | head -n 1)
-      pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+       script -af $(ls -tr ~/csm-install-remoteiso*.txt | head -n 1)
+       export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
       ```
 
    1. Verify that expected environment variables are set in the new login shell.
 
       ```bash
-      pit# echo -e "CSM_PATH=${CSM_PATH}\nCSM_RELEASE=${CSM_RELEASE}\nPITDATA=${PITDATA}\nSYSTEM_NAME=${SYSTEM_NAME}"
+       echo -e "CSM_PATH=${CSM_PATH}\nCSM_RELEASE=${CSM_RELEASE}\nPITDATA=${PITDATA}\nSYSTEM_NAME=${SYSTEM_NAME}"
       ```
 
    1. Check hostname.
 
       ```bash
-      pit# hostnamectl
+       hostnamectl
       ```
 
       > **Note:**
@@ -286,7 +286,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Create necessary directories.
 
    ```bash
-   pit# mkdir -pv ${PITDATA}/{admin,configs} ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{k8s,ceph}
+    mkdir -pv ${PITDATA}/{admin,configs} ${PITDATA}/prep/{admin,logs} ${PITDATA}/data/{k8s,ceph}
    ```
 
 1. Relocate the typescript to the newly mounted `PITDATA` directory.
@@ -296,14 +296,14 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    1. Copy the typescript file to its new location.
 
       ```bash
-      pit# cp -v ~/csm-install-remoteiso.*.txt ${PITDATA}/prep/admin
+       cp -v ~/csm-install-remoteiso.*.txt ${PITDATA}/prep/admin
       ```
 
    1. Restart the typescript, appending to the previous file.
 
       ```bash
-      pit# script -af $(ls -tr ${PITDATA}/prep/admin/csm-install-remoteiso*.txt | head -n 1)
-      pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+       script -af $(ls -tr ${PITDATA}/prep/admin/csm-install-remoteiso*.txt | head -n 1)
+       export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
       ```
 
 1. Download the CSM software release to the PIT node.
@@ -311,13 +311,13 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    1. Set variable to URL of CSM tarball.
 
       ```bash
-      pit# URL=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/${CSM_RELEASE}.tar.gz
+       URL=https://arti.dev.cray.com/artifactory/shasta-distribution-stable-local/csm/${CSM_RELEASE}.tar.gz
       ```
 
    1. Fetch the release tarball.
 
       ```bash
-      pit# wget ${URL} -O ${CSM_PATH}.tar.gz
+       wget ${URL} -O ${CSM_PATH}.tar.gz
       ```
 
    1. Expand the tarball on the PIT node.
@@ -325,13 +325,13 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
       > **Note:** Expansion of the tarball may take more than 45 minutes.
 
       ```bash
-      pit# tar -C ${PITDATA} -zxvf ${CSM_PATH}.tar.gz && ls -l ${CSM_PATH}
+       tar -C ${PITDATA} -zxvf ${CSM_PATH}.tar.gz && ls -l ${CSM_PATH}
       ```
 
    1. Copy the artifacts into place.
 
       ```bash
-      pit# rsync -a -P --delete ${CSM_PATH}/images/kubernetes/   ${PITDATA}/data/k8s/ &&
+       rsync -a -P --delete ${CSM_PATH}/images/kubernetes/   ${PITDATA}/data/k8s/ &&
            rsync -a -P --delete ${CSM_PATH}/images/storage-ceph/ ${PITDATA}/data/ceph/
       ```
 
@@ -340,7 +340,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. <a name="install-csi-rpm"></a>Install the latest version of CSI tool.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
+    rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "cray-site-init-*.x86_64.rpm" | sort -V | tail -1)
    ```
 
 1. Install the latest documentation RPM.
@@ -350,7 +350,7 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
 1. Show the version of CSI installed.
 
    ```bash
-   pit# /root/bin/metalid.sh
+    /root/bin/metalid.sh
    ```
 
    Expected output looks similar to the following:
@@ -426,7 +426,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
    1. Check for the configuration files. The needed files should be in the preparation directory.
 
       ```bash
-      pit# ls -1 ${PITDATA}/prep
+       ls -1 ${PITDATA}/prep
       ```
 
       Expected output looks similar to the following:
@@ -446,7 +446,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       > cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
       ```bash
-      pit# cd ${PITDATA}/prep && csi config init
+       cd ${PITDATA}/prep && csi config init
       ```
 
       A new directory matching the `system-name` field in `system_config.yaml` will now exist in the working directory.
@@ -486,7 +486,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
    1. Check for the configuration files. The needed files should be in the preparation directory.
 
       ```bash
-      pit# ls -1 ${PITDATA}/prep
+       ls -1 ${PITDATA}/prep
       ```
 
       Expected output looks similar to the following:
@@ -509,7 +509,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       >   cause clock skew as `chrony` tries to continually reach out to a server it can never reach.
 
       ```bash
-      pit# cd ${PITDATA}/prep && csi config init <options>
+       cd ${PITDATA}/prep && csi config init <options>
       ```
 
       A new directory matching the `--system-name` argument will now exist in the working directory.
@@ -564,7 +564,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       > **`NOTE`** This step is needed only for fresh installs where `system_config.yaml` is missing from the `prep/` directory.
 
       ```bash
-      pit# cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
+       cd ${PITDATA}/prep && ln ${SYSTEM_NAME}/system_config.yaml
       ```
 
    1. Continue to the next step to [verify and backup `system_config.yaml`](#verify-csi-versions-match).
@@ -578,13 +578,13 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
    1. View the new `system_config.yaml` file and note the CSI version reported near the end of the file.
 
       ```bash
-      pit# cat ${PITDATA}/prep/${SYSTEM_NAME}/system_config.yaml
+       cat ${PITDATA}/prep/${SYSTEM_NAME}/system_config.yaml
       ```
 
    1. Note the version reported by the `csi` tool.
 
       ```bash
-      pit# csi version
+       csi version
       ```
 
    1. The two versions should match. If they do not, determine the cause and regenerate the file.
@@ -615,15 +615,15 @@ Prepare the `site-init` directory by performing the [Prepare `Site Init`](prepar
    > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    ```bash
-   pit# USERNAME=root
-   pit# read -s IPMI_PASSWORD
-   pit# export USERNAME IPMI_PASSWORD ; /root/bin/pit-init.sh
+    USERNAME=root
+    read -s IPMI_PASSWORD
+    export USERNAME IPMI_PASSWORD ; /root/bin/pit-init.sh
    ```
 
 1. Install `csm-testing`.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+    rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
 <a name="next-topic"></a>

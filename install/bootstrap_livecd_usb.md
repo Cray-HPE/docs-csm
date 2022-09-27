@@ -723,7 +723,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    > in the following `mount` command.
 
    ```bash
-   pit# mount -vL PITDATA
+    mount -vL PITDATA
    ```
 
 1. Set and export new environment variables.
@@ -731,9 +731,9 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    The commands below save them to `/etc/environment` as well, which makes them available in all new shell sessions on the PIT node.
 
    ```bash
-   pit# export PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
-   pit# export CSM_PATH=${PITDATA}/${CSM_RELEASE}
-   pit# echo "
+    export PITDATA=$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)
+    export CSM_PATH=${PITDATA}/${CSM_RELEASE}
+    echo "
    PITDATA=${PITDATA}
    CSM_PATH=${CSM_PATH}" | tee -a /etc/environment
    ```
@@ -741,8 +741,8 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
 1. Start a typescript to record this section of activities done on `ncn-m001` while booted from the LiveCD.
 
    ```bash
-   pit# script -af "${PITDATA}/prep/admin/booted-csm-livecd.$(date +%Y-%m-%d).txt"
-   pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+    script -af "${PITDATA}/prep/admin/booted-csm-livecd.$(date +%Y-%m-%d).txt"
+    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
 1. Verify that expected environment variables are set in the new login shell.
@@ -750,19 +750,19 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    These were written into `/etc/environment` on the USB PIT image earlier in this procedure, before it was booted.
 
    ```bash
-   pit# echo -e "CSM_PATH=${CSM_PATH}\nCSM_RELEASE=${CSM_RELEASE}\nPITDATA=${PITDATA}\nSYSTEM_NAME=${SYSTEM_NAME}"
+    echo -e "CSM_PATH=${CSM_PATH}\nCSM_RELEASE=${CSM_RELEASE}\nPITDATA=${PITDATA}\nSYSTEM_NAME=${SYSTEM_NAME}"
    ```
 
 1. Copy the typescript made on the external system into the `PITDATA` mount.
 
    ```bash
-   pit# cp -v /root/boot.livecd.*.txt ${PITDATA}/prep/admin
+    cp -v /root/boot.livecd.*.txt ${PITDATA}/prep/admin
    ```
 
 1. Check the hostname.
 
    ```bash
-   pit# hostnamectl
+    hostnamectl
    ```
 
    > **Note:**
@@ -783,7 +783,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    any bug reports or service queries for issues encountered on the PIT node.
 
    ```bash
-   pit# /root/bin/metalid.sh
+    /root/bin/metalid.sh
    ```
 
    Expected output looks similar to the following:
@@ -816,9 +816,9 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    ```bash
-   pit# read -s IPMI_PASSWORD
-   pit# USERNAME=root
-   pit# export IPMI_PASSWORD USERNAME
+    read -s IPMI_PASSWORD
+    USERNAME=root
+    export IPMI_PASSWORD USERNAME
    ```
 
 1. Initialize the PIT.
@@ -826,7 +826,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
 
    ```bash
-   pit# /root/bin/pit-init.sh
+    /root/bin/pit-init.sh
    ```
 
 1. Install `csm-testing`.
@@ -834,7 +834,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    The following assumes the `CSM_PATH` environment variable is set to the absolute path of the unpacked CSM release.
 
    ```bash
-   pit# rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
+    rpm -Uvh --force $(find ${CSM_PATH}/rpm/ -name "csm-testing*.rpm" | sort -V | tail -1)
    ```
 
 <a name="next-topic"></a>

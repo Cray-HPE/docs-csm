@@ -30,13 +30,13 @@ metadata:
     First, verify that SLS properly reports all management NCNs in the system:
 
     ```bash
-    pit# ./lib/list-ncns.sh
+     ./lib/list-ncns.sh
     ```
 
     On success, each management NCN will be output, e.g.:
 
     ```bash
-    pit# ./lib/list-ncns.sh
+     ./lib/list-ncns.sh
     + Getting admin-client-auth secret
     + Obtaining access token
     + Querying SLS
@@ -58,7 +58,7 @@ metadata:
     /etc/resolv.conf to use Unbound as the nameserver.
 
     ```bash
-    pit# ./lib/set-ncns-to-unbound.sh
+     ./lib/set-ncns-to-unbound.sh
     ```
 
     > **`NOTE`** If passwordless SSH is not configured, the administrator will have
@@ -69,7 +69,7 @@ metadata:
     for each management NCN, e.g.,:
 
     ```bash
-    pit# ./lib/set-ncns-to-unbound.sh
+     ./lib/set-ncns-to-unbound.sh
     + Getting admin-client-auth secret
     + Obtaining access token
     + Querying SLS
@@ -135,7 +135,7 @@ spec:
           for each management NCN, e.g.,:
 
           ```bash
-          pit# ./lib/set-ncns-to-unbound.sh
+           ./lib/set-ncns-to-unbound.sh
           + Getting admin-client-auth secret
           + Obtaining access token
           + Querying SLS

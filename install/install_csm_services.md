@@ -25,15 +25,15 @@ This procedure will install CSM applications and services into the CSM Kubernete
 1. Install YAPL.
 
    ```bash
-   pit# rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
+    rpm -Uvh /var/www/ephemeral/${CSM_RELEASE}/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
    ```
 
 1. Install CSM services using YAPL.
 
    ```bash
-   pit# pushd /usr/share/doc/csm/install/scripts/csm_services && \
+    pushd /usr/share/doc/csm/install/scripts/csm_services && \
         yapl -f install.yaml execute
-   pit# popd
+    popd
    ```
 
 > **NOTES:**
@@ -51,13 +51,13 @@ This procedure will install CSM applications and services into the CSM Kubernete
 1. Wait for BSS to be ready.
 
    ```bash
-   pit# kubectl -n services rollout status deployment cray-bss
+    kubectl -n services rollout status deployment cray-bss
    ```
 
 1. Retrieve an API token.
 
    ```bash
-   pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+    export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
                           -d client_id=admin-client \
                           -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
@@ -66,7 +66,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 1. Create empty boot parameters.
 
    ```bash
-   pit# curl -i -k -H "Authorization: Bearer ${TOKEN}" -X PUT \
+    curl -i -k -H "Authorization: Bearer ${TOKEN}" -X PUT \
             https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters \
             --data '{"hosts":["Global"]}'
    ```
@@ -85,8 +85,8 @@ This procedure will install CSM applications and services into the CSM Kubernete
 1. Restart the `spire-update-bss` job.
 
    ```bash
-   pit# SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=spire-update-bss -o name)
-   pit# kubectl -n spire get "${SPIRE_JOB}" -o json | jq 'del(.spec.selector)' \
+    SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=spire-update-bss -o name)
+    kubectl -n spire get "${SPIRE_JOB}" -o json | jq 'del(.spec.selector)' \
             | jq 'del(.spec.template.metadata.labels."controller-uid")' \
             | kubectl replace --force -f -
    ```
@@ -94,7 +94,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 1. Wait for the `spire-update-bss` job to complete.
 
    ```bash
-   pit# kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
+    kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
    ```
 
 ## 3. Wait for everything to settle
@@ -123,7 +123,7 @@ The following error may occur during the `Deploy CSM Applications and Services` 
 1. Verify that the `sls-s3-credentials` secret exists in the `default` namespace:
 
    ```bash
-   pit# kubectl get secret sls-s3-credentials
+    kubectl get secret sls-s3-credentials
    ```
 
    Example output:
@@ -137,7 +137,7 @@ The following error may occur during the `Deploy CSM Applications and Services` 
    for copying the `sls-s3-credentials` secret from the `default` namespace to the `services` namespace.
 
    ```bash
-   pit# kubectl -n services get pods -l cronjob-name=sonar-sync
+    kubectl -n services get pods -l cronjob-name=sonar-sync
    ```
 
    Example output:
@@ -151,7 +151,7 @@ The following error may occur during the `Deploy CSM Applications and Services` 
 1. Verify that the `sls-s3-credentials` secret now exists in the `services` namespace.
 
    ```bash
-   pit# kubectl -n services get secret sls-s3-credentials
+    kubectl -n services get secret sls-s3-credentials
    ```
 
    Example output:

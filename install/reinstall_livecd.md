@@ -5,13 +5,13 @@ Setup a re-install of LiveCD on a node using the previous configuration.
 1. Backup to the data partition:
 
     ```bash
-    pit# mkdir -pv /var/www/ephemeral/backup
-    pit# pushd /var/www/ephemeral/backup
-    pit# tar -czvf "dnsmasq-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /etc/dnsmasq.*
-    pit# tar -czvf "network-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /etc/sysconfig/network/*
-    pit# cp -pv /etc/hosts ./
-    pit# popd
-    pit# umount -v /var/www/ephemeral
+     mkdir -pv /var/www/ephemeral/backup
+     pushd /var/www/ephemeral/backup
+     tar -czvf "dnsmasq-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /etc/dnsmasq.*
+     tar -czvf "network-data-$(date  '+%Y-%m-%d_%H-%M-%S').tar.gz" /etc/sysconfig/network/*
+     cp -pv /etc/hosts ./
+     popd
+     umount -v /var/www/ephemeral
     ```
 
 1. Unplug the USB device.
@@ -58,11 +58,11 @@ Setup a re-install of LiveCD on a node using the previous configuration.
    > STOP AND INSPECT ANY FAILURE IN ANY OF THESE COMMANDS
 
    ```bash
-   pit# tar -xzvf /var/www/ephemeral/backup/dnsmasq*.tar.gz
-   pit# tar -xzvf /var/www/ephemeral/backup/network*.tar.gz
-   pit# systemctl restart wicked wickedd-nanny
-   pit# systemctl restart dnsmasq
-   pit# systemctl start basecamp nexus
+    tar -xzvf /var/www/ephemeral/backup/dnsmasq*.tar.gz
+    tar -xzvf /var/www/ephemeral/backup/network*.tar.gz
+    systemctl restart wicked wickedd-nanny
+    systemctl restart dnsmasq
+    systemctl start basecamp nexus
    ```
 
 The LiveCD is now re-installed with the previous configuration.

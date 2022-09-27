@@ -34,7 +34,7 @@ and the appropriate remediation steps to take if it is encountered.
     Look for a `keycloak-setup` pod still in the `Running` state:
 
     ```bash
-    pit# kubectl get pods -n services | grep keycloak-setup
+     kubectl get pods -n services | grep keycloak-setup
     ```
 
     Example output:

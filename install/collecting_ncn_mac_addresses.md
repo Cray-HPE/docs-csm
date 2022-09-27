@@ -52,7 +52,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     > nodes may still disk boot.
 
     ```bash
-    pit# mv /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
+     mv /var/www/boot/script.ipxe /var/www/boot/script.ipxe.bak
     ```
 
 1. Verify that consoles are active with `conman -q`.
@@ -60,7 +60,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     The following command lists all nodes that ConMan is configured to monitor.
 
     ```bash
-    pit# conman -q
+     conman -q
     ncn-m002-mgmt
     ncn-m003-mgmt
     ncn-s001-mgmt
@@ -76,7 +76,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     1. Record the username for the NCN BMCs.
 
         ```bash
-        pit# USERNAME=root
+         USERNAME=root
         ```
 
     1. Record the password for this user.
@@ -84,18 +84,18 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
         > `read -s` is used in order to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
         ```bash
-        pit# read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
+         read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
         ```
 
     1. Set the nodes to PXE boot and restart them.
 
         ```bash
-        pit# export IPMI_PASSWORD
-        pit# grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=persistent
-        pit# grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=efiboot
-        pit# grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
-        pit# sleep 10
-        pit# grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
+         export IPMI_PASSWORD
+         grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=persistent
+         grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=efiboot
+         grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
+         sleep 10
+         grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
         ```
 
 1. Wait for the nodes to network boot.
@@ -105,7 +105,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     speed depends on how quickly the nodes POST. To see a ConMan help screen for all supported escape sequences, use `&?`.
 
     ```bash
-    pit# conman -m ncn-m002-mgmt
+     conman -m ncn-m002-mgmt
     ```
 
 1. Exit ConMan.
@@ -117,7 +117,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     This snippet will omit duplicates from multiple boot attempts:
 
     ```bash
-    pit# for file in /var/log/conman/*; do
+     for file in /var/log/conman/*; do
             echo ${file}
             grep -Eoh '(net[0-9] MAC .*)' "${file}" | sort -u | grep PCI && echo -----
          done
@@ -135,9 +135,9 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     Worker nodes also have the high-speed network cards. If these cards are known, filter their device IDs out from the above output using this snippet:
 
     ```bash
-    pit# unset did # clear it if set
-    pit# did=1017 # ConnectX-5 example.
-    pit# for file in /var/log/conman/*; do
+     unset did # clear it if set
+     did=1017 # ConnectX-5 example.
+     for file in /var/log/conman/*; do
              echo ${file}
              grep -Eoh '(net[0-9] MAC .*)' "${file}" | sort -u | grep PCI | grep -Ev "${did}" && echo -----
          done
@@ -148,9 +148,9 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     **This snippet prints out only `mgmt` MAC addresses; the `did` is the HSN and onboard NICs that are being ignored.**
 
     ```bash
-    pit# unset did # clear it if set
-    pit# did='(1017|8086|ffff)'
-    pit# for file in /var/log/conman/*; do
+     unset did # clear it if set
+     did='(1017|8086|ffff)'
+     for file in /var/log/conman/*; do
             echo ${file}
             grep -Eoh '(net[0-9] MAC .*)' "${file}" | sort -u | grep PCI | grep -Ev "${did}" && echo -----
          done
@@ -191,7 +191,7 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
     This information will be used to populate the MAC addresses for `ncn-m001`.
 
     ```bash
-    pit# grep -i perm /proc/net/bonding/bond0
+     grep -i perm /proc/net/bonding/bond0
     ```
 
     For example:
@@ -222,13 +222,13 @@ For help with either of those, see [LiveCD Setup](bootstrap_livecd_remote_iso.md
 1. Power off the NCNs.
 
     ```bash
-    pit# grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
+     grep -oP "($mtoken|$stoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power off
     ```
 
 1. If the `script.ipxe` file was renamed in the first step of this procedure, then restore it to its original location.
 
     ```bash
-    pit# mv /var/www/boot/script.ipxe.bak /var/www/boot/script.ipxe
+     mv /var/www/boot/script.ipxe.bak /var/www/boot/script.ipxe
     ```
 
 ## Procedure: Serial consoles
@@ -258,11 +258,11 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
     > not set, then the command below could potentially remove the entire `prep` directory.
     >
     > ```bash
-    > pit# export SYSTEM_NAME=eniac
+    >  export SYSTEM_NAME=eniac
     > ```
 
     ```bash
-    pit# rm -rvf /var/www/ephemeral/prep/$SYSTEM_NAME
+     rm -rvf /var/www/ephemeral/prep/$SYSTEM_NAME
     ```
 
 1. Manually edit `ncn_metadata.csv`, replacing the bootstrap MAC address with `Bond0 MAC0` address for the afflicted nodes that failed to boot.
@@ -272,7 +272,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
 1. Copy all of the newly generated files into place.
 
     ```bash
-    pit# cp -pv /var/www/ephemeral/prep/$SYSTEM_NAME/dnsmasq.d/* /etc/dnsmasq.d/ &&
+     cp -pv /var/www/ephemeral/prep/$SYSTEM_NAME/dnsmasq.d/* /etc/dnsmasq.d/ &&
          cp -pv /var/www/ephemeral/prep/$SYSTEM_NAME/basecamp/* /var/www/ephemeral/configs/ &&
          cp -pv /var/www/ephemeral/prep/$SYSTEM_NAME/conman.conf /etc/ &&
          cp -pv /var/www/ephemeral/prep/$SYSTEM_NAME/pit-files/* /etc/sysconfig/network/
@@ -281,7 +281,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
 1. Update the CA certificates on the copied `data.json` file. Provide the path to the `data.json` file, the path to the `customizations.yaml` file, and the `sealed_secrets.key` file.
 
     ```bash
-    pit# csi patch ca \
+     csi patch ca \
             --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
             --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
             --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
@@ -290,7 +290,7 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
 1. Restart everything to apply the new configurations:
 
     ```bash
-    pit# wicked ifreload all &&
+     wicked ifreload all &&
          systemctl restart dnsmasq conman basecamp &&
          systemctl restart nexus
     ```
@@ -300,8 +300,8 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
     > The `yq` tool used in the following procedures is available under `/var/www/ephemeral/prep/site-init/utils/bin` once the `SHASTA-CFG` repo has been cloned.
 
     ```bash
-    pit# alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
-    pit# yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
+     alias yq="/var/www/ephemeral/prep/site-init/utils/bin/$(uname | awk '{print tolower($0)}')/yq"
+     yq merge -xP -i /var/www/ephemeral/prep/site-init/customizations.yaml <(yq prefix -P "/var/www/ephemeral/prep/${SYSTEM_NAME}/customizations.yaml" spec)
     ```
 
 1. Wipe the disks before relaunching the NCNs.

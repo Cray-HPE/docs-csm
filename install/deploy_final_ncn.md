@@ -60,16 +60,16 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. Exit the current typescript, if one is active.
 
         ```bash
-        pit# exit
+         exit
         ```
 
     1. Start a new typescript on the PIT node.
 
         ```bash
-        pit# mkdir -pv /var/www/ephemeral/prep/admin &&
+         mkdir -pv /var/www/ephemeral/prep/admin &&
              pushd /var/www/ephemeral/prep/admin &&
              script -af csm-livecd-reboot.$(date +%Y-%m-%d).txt
-        pit# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+         export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
         ```
 
 1. Upload SLS file.
@@ -77,7 +77,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     > **NOTE:** The environment variable `SYSTEM_NAME` must be set.
 
     ```bash
-    pit# csi upload-sls-file --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_file.json
+     csi upload-sls-file --sls-file /var/www/ephemeral/prep/${SYSTEM_NAME}/sls_input_file.json
     ```
 
     Expected output looks similar to the following:
@@ -93,7 +93,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     > **NOTE:** `api-gw-service-nmn.local` is legacy, and will be replaced with `api-gw-service.nmn`.
 
     ```bash
-    pit# export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+     export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
             -d client_id=admin-client \
             -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
             https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
@@ -105,7 +105,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     `CSM_PATH` should be the fully-qualified path to the expanded CSM release tarball on the PIT node.
 
     ```bash
-    pit# echo "CSM_RELEASE=${CSM_RELEASE} CSM_PATH=${CSM_PATH}"
+     echo "CSM_RELEASE=${CSM_RELEASE} CSM_PATH=${CSM_PATH}"
     ```
 
 1. <a name="ncn-boot-artifacts-hand-off"></a>Upload NCN boot artifacts into S3.
@@ -113,7 +113,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. Run the following command.
 
         ```bash
-        pit# artdir=/var/www/ephemeral/data && 
+         artdir=/var/www/ephemeral/data && 
              k8sdir=$artdir/k8s &&
              cephdir=$artdir/ceph &&
              csi handoff ncn-images \
@@ -143,19 +143,19 @@ The steps in this section load hand-off data before a later procedure reboots th
     > This step will prompt for the root password of the NCNs.
 
     ```bash
-    pit# csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
+     csi handoff bss-metadata --data-file /var/www/ephemeral/configs/data.json || echo "ERROR: csi handoff bss-metadata failed"
     ```
 
 1. Patch the metadata for the Ceph nodes to have the correct run commands.
 
     ```bash
-    pit# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+     python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
     ```
 
 1. Ensure that the DNS server value is correctly set to point toward Unbound at `10.92.100.225` (NMN) and `10.94.100.225` (HMN).
 
     ```bash
-    pit# csi handoff bss-update-cloud-init --set meta-data.dns-server="10.92.100.225 10.94.100.225" --limit Global
+     csi handoff bss-update-cloud-init --set meta-data.dns-server="10.92.100.225 10.94.100.225" --limit Global
     ```
 
 1. Preserve logs and configuration files if desired (optional).
@@ -166,7 +166,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     The following commands create a `tar` archive of these files, storing it in a directory that will be backed up in the next step.
 
     ```bash
-    pit# mkdir -pv /var/www/ephemeral/prep/logs &&
+     mkdir -pv /var/www/ephemeral/prep/logs &&
          ls -d \
                     /etc/dnsmasq.d \
                     /etc/os-release \
@@ -197,7 +197,7 @@ The steps in this section load hand-off data before a later procedure reboots th
         > The `ssh` commands below may prompt for the NCN root password.
 
         ```bash
-        pit# ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys &&
+         ssh ncn-m002 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys &&
              ssh ncn-m003 cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys &&
              chmod 600 /root/.ssh/authorized_keys
         ```
@@ -205,7 +205,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. Back up files from the PIT to `ncn-m002`.
 
         ```bash
-        pit# ssh ncn-m002 \
+         ssh ncn-m002 \
             "mkdir -pv /metal/bootstrap
             rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
             rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
@@ -214,7 +214,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. Back up files from the PIT to `ncn-m003`.
 
         ```bash
-        pit# ssh ncn-m003 \
+         ssh ncn-m003 \
             "mkdir -pv /metal/bootstrap
             rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:/var/www/ephemeral/prep /metal/bootstrap/
             rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:${CSM_PATH}/cray-pre-install-toolkit*.iso /metal/bootstrap/"
@@ -225,7 +225,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. List IPv4 boot options using `efibootmgr`.
 
         ```bash
-        pit# efibootmgr | grep -Ei "ip(v4|4)"
+         efibootmgr | grep -Ei "ip(v4|4)"
         ```
 
     1. Set and trim the boot order on the PIT node.
@@ -239,7 +239,7 @@ The steps in this section load hand-off data before a later procedure reboots th
         Use `efibootmgr` to set the next boot device to the first PXE boot option. This step assumes the boot order was set up in the previous step.
 
         ```bash
-        pit# efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
+         efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
         BootNext: 0014
         ```
 
@@ -248,7 +248,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. Get the IP address.
 
         ```bash
-        pit# ssh ncn-m002 'ip a show bond0.cmn0 | grep inet'
+         ssh ncn-m002 'ip a show bond0.cmn0 | grep inet'
         ```
 
         Expected output will look similar to the following (exact values may differ):
@@ -281,13 +281,13 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. Select disks to wipe (SATA/NVME/SAS).
 
         ```bash
-        pit# md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')"
+         md_disks="$(lsblk -l -o SIZE,NAME,TYPE,TRAN | grep -E '(sata|nvme|sas)' | sort -h | awk '{print "/dev/" $2}')"
         ```
 
     1. Run a sanity check by printing disks into typescript or console.
 
         ```bash
-        pit# echo $md_disks
+         echo $md_disks
         ```
 
         Expected output looks similar to the following:
@@ -299,7 +299,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. Wipe. **This is irreversible.**
 
         ```bash
-        pit# wipefs --all --force $md_disks
+         wipefs --all --force $md_disks
         ```
 
         If any disks had labels present, output looks similar to the following:
@@ -322,7 +322,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     1. Stop the typescript session:
 
         ```bash
-        pit# exit
+         exit
         ```
 
     1. Back up the completed typescript file by re-running the `rsync` commands in the [Backup Bootstrap Information](#backup-bootstrap-information) section.
@@ -346,7 +346,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 1. Reboot the LiveCD.
 
     ```bash
-    pit# reboot
+     reboot
     ```
 
 1. Wait for the node to boot, acquire its hostname (`ncn-m001`), and run `cloud-init`.

@@ -21,19 +21,19 @@ Results may vary if an unconfigured switch is being used.
         * over `METAL MANAGEMENT`
 
             ```bash
-            pit# ssh admin@10.1.0.4
+             ssh admin@10.1.0.4
             ```
 
         * over `NODE MANAGEMENT`
 
             ```bash
-            pit# ssh admin@10.252.0.4
+             ssh admin@10.252.0.4
             ```
 
         * SSH over `HARDWARE MANAGEMENT`
 
             ```bash
-            pit# ssh admin@10.254.0.4
+             ssh admin@10.254.0.4
             ```
 
     * Serial
@@ -199,13 +199,13 @@ Results may vary if an unconfigured switch is being used.
    * For HPE and Gigabyte nodes:
 
      ```bash
-     pit# ipmitool lan print 1 | grep "MAC Address"
+      ipmitool lan print 1 | grep "MAC Address"
      ```
 
    * For Intel nodes:
 
      ```bash
-     pit# ipmitool lan print 3 | grep "MAC Address"
+      ipmitool lan print 3 | grep "MAC Address"
      ```
 
    Example output:
