@@ -20,6 +20,7 @@ Git commit, a name, and the path in the repository to an Ansible playbook to exe
 
    ```json
    {
+    "description": "this is an optional field",
     "layers": [
       {
         "name": "configurations-layer-example-1",
@@ -54,4 +55,3 @@ Git commit, a name, and the path in the repository to an Ansible playbook to exe
      "name": "configurations-example"
    }
    ```
-
