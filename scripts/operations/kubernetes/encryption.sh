@@ -281,7 +281,7 @@ restartk8s() {
 
   if ! sutkubectlwait; then
     printf "fatal: local kubeapiserver process is not ready, refusing to do work\n" >&2
-    debugapiserverstatus
+    kubeapiblurb
     return 1
   fi
 
@@ -289,24 +289,25 @@ restartk8s() {
     # kubectl wait for the pod to come back for 60 seconds or bail
     if ! sutkubectlwait; then
       printf "fatal: kubectl wait on %s timed out\n" "${apiserver}" >&2
-      debugapiserverstatus
+      kubeapiblurb
       return 1
     fi
   else
     printf "fatal: kubectl delete on %s timed out\n" "${apiserver}" >&2
-    debugapiserverstatus
+    kubeapiblurb
     return 1
   fi
   if ! sutpgrep "${file}"; then
-    printf "fatal: kubeapi args do not contain expected arg %s\n" "%{file}" >&2
+    printf "fatal: kubeapi args do not contain expected arg %s\n" "${file}" >&2
+    kubeapiblurb
     return 1
   fi
 }
 
-# Need more data about what state the local kube-apiserver processes are in when
-# this fails before taking any action on a real fix.
-debugapiserverstatus() {
-  kubectl get pod --namespace kube-system "kube-apiserver-$(uname -n)"
+# I've been entirely unable to understand/debug why a 5 minute timeout fails,
+# but eventually works for this....
+kubeapiblurb() {
+  printf "check logs for details why via:\nkubectl logs -f --namespace kube-system %s\nkubectl get pod --namespace kube-system %s\nkubectl describe pod --namespace kube-system %s\nyou will need to re-run this command again\n" "${apiserver}" "${apiserver}" "${apiserver}" >&2
 }
 
 # Glorified wrapper functions for unit tests.
@@ -708,9 +709,11 @@ main() {
     done
 
     synced=false
-    etcd="$(sutexistingetcdencryption)"
+    etcd="$(sutexistingetcdencryption | newlinetospace)"
     printf "current: %s\ngoal: %s\netcd: %s\n" "${curr?}" "${goal?}" "${etcd?}"
 
+    # not really applicable here
+    #shellcheck disable=SC2086
     if [ "$(issynced ${curr} ${goal} ${etcd})" = 1 ]; then
       synced=true
     fi
