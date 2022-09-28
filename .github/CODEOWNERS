@@ -22,16 +22,16 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 # Default group
-*                                                       @Cray-HPE/docs-csm-reviewers
+*                                                        @Cray-HPE/docs-csm-reviewers @Cray-HPE/pubs
 
-# Metal team items.
+# Metal Items
 /background/ncn_*                                        @Cray-HPE/metal
-/install/*                                               @Cray-HPE/metal
 /install/livecd                                          @Cray-HPE/metal
 /operations/bare_metal                                   @Cray-HPE/metal
 /operations/system_configuration_service                 @Cray-HPE/metal
 
 # Continuous Integration Items
+.github/                                                 @Cray-HPE/ci
 Jenkinsfile.github                                       @Cray-HPE/ci
 
 # CMS Items
@@ -50,14 +50,14 @@ Jenkinsfile.github                                       @Cray-HPE/ci
 /operations/argo                                         @Cray-HPE/platform-engineering
 /operations/kubernetes                                   @Cray-HPE/platform-engineering
 /operations/multi-tenancy                                @Cray-HPE/platform-engineering
-/operations/node_management/                             @Cray-HPE/platform-engineering
+/operations/node_management/                             @Cray-HPE/platform-engineering @Cray-HPE/metal
 /operations/package_repository_management                @Cray-HPE/platform-engineering
 /operations/resiliency                                   @Cray-HPE/platform-engineering
 /operations/security_and_authentication                  @Cray-HPE/platform-engineering
 /operations/spire                                        @Cray-HPE/platform-engineering
 /operations/system_management_health                     @Cray-HPE/platform-engineering
 /operations/utility_storage                              @Cray-HPE/platform-engineering
-troubleshooting/kubernetes                               @Cray-HPE/platform-engineering
+/troubleshooting/kubernetes                              @Cray-HPE/platform-engineering
 /workflows/                                              @Cray-HPE/platform-engineering
 
 # HMS Items
@@ -73,3 +73,9 @@ troubleshooting/kubernetes                               @Cray-HPE/platform-engi
 
 # SAT Items
 /operations/sat                                          @Cray-HPE/system-admin-toolkit-admin
+
+# Include SSI on these CSM items.
+/install/                                                @Cray-HPE/metal @Cray-HPE/ssi-reviewers
+/operations/                                             @Cray-HPE/ssi-reviewers
+/upgrade/                                                @Cray-HPE/ssi-reviewers
+
