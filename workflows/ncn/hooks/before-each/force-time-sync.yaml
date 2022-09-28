@@ -1,0 +1,30 @@
+apiVersion: cray-nls.hpe.com/v1
+kind: Hook
+metadata:
+  name: force-time-sync
+  labels:
+    before-each: "true"
+spec:
+  scriptContent: |
+    {{- include "common.envar" . | indent 12 }}
+
+    SSH_OPT="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+    ssh $SSH_OPT "$TARGET_NCN" "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"
+    loop_idx=0
+    in_sync=$(ssh $SSH_OPT "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
+    if [[ "$in_sync" == "no" ]]; then
+        ssh $SSH_OPT "$TARGET_NCN" chronyc makestep
+        sleep 5
+        in_sync=$(ssh $SSH_OPT "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
+        # wait up to 90s for the node to be in sync
+        while [[ $loop_idx -lt 18 && "$in_sync" == "no" ]]; do
+            sleep 5
+            in_sync=$(ssh $SSH_OPT "${TARGET_NCN}" timedatectl | awk /synchronized:/'{print $NF}')
+            loop_idx=$(( loop_idx+1 ))
+        done
+        if [[ "$in_sync" != "yes" ]]; then
+            exit 1
+        fi
+    fi
+  templateRefName: ssh-template

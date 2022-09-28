@@ -1,0 +1,11 @@
+apiVersion: cray-nls.hpe.com/v1
+kind: Hook
+metadata:
+  name: ensure-csm-rpms-installed
+  labels:
+    after-each: "true"
+spec:
+  scriptContent: |
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ `{{inputs.parameters.targetNcn}}` }} \
+      'source /srv/cray/scripts/metal/metal-lib.sh;install_csm_rpms'
+  templateRefName: ssh-template

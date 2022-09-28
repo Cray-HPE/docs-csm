@@ -1,0 +1,21 @@
+apiVersion: cray-nls.hpe.com/v1
+kind: Hook
+metadata:
+  name: ensure-pg-pods-are-healthy
+  labels:
+    before-each: "true"
+spec:
+  scriptContent: |
+    export GOSS_BASE=/opt/cray/tests/install/ncn
+    GOSS_ARG="--vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate \
+      --retry-timeout 1h \
+      --sleep 1m"
+    
+    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-leader.yaml ${GOSS_ARG}
+
+    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-clusters-running.yaml ${GOSS_ARG}
+
+    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-pods-running.yaml ${GOSS_ARG}
+
+    goss -g /opt/cray/tests/install/ncn/tests/goss-k8s-postgres-replication-lag.yaml ${GOSS_ARG}
+  templateRefName: ssh-template
