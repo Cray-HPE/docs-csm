@@ -51,7 +51,7 @@ Both ciphers allow the same input string type. Note that while it is possible to
     Example output:
 
     ```text
-    encryption configuration updated
+    ncn-m001 configuration updated ensure all control plane nodes run this same command
     ```
 
 ## Disabling encryption
@@ -72,7 +72,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
     Example output:
 
     ```text
-    encryption configuration updated
+    ncn-m001 configuration updated ensure all control plane nodes run this same command
     ```
 
 1. Fully disable all encryption by removing all keys from the control plane nodes.
@@ -90,7 +90,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
         Example output:
 
         ```text
-        encryption configuration updated
+        ncn-m001 configuration updated ensure all control plane nodes run this same command
         ```
 
         At this point, encryption of `etcd` secrets will be back to default.
@@ -107,10 +107,13 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
     The return code of this command determines if encryption is applied or not. A non zero status simply indicates that a new cipher is to be applied.
 
-* Example output on a new or upgraded installation with the default of no encryption.
+* Example output on a new or upgraded installation with the default of no encryption. Note a return code of 0 indicates encryption is consistent across all nodes.
 
     ```text
     k8s encryption status
+    ncn-m001: identity
+    ncn-m002: identity
+    ncn-m003: identity
     current: identity
     goal: identity
     etcd: identity
@@ -118,14 +121,16 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
     The string `identity` indicates that the identity encryption provider is in use. This provider performs no encryption and is the default.
 
-* Example command output when enabling encryption but secrets are not yet rewritten.
+* Example command output when enabling encryption but secrets are not yet rewritten. Note the return code for status is non zero in this case.
 
     ```text
     k8s encryption status
+    ncn-m001: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
+    ncn-m002: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
+    ncn-m003: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
     current: identity
     goal: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
     etcd: identity
-    interim/invalid state all should be equal when in a steady state
     ```
 
     The goal is an `aescbc` cipher. The `goal` string corresponds to the name in the
@@ -136,6 +141,10 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
     ```text
     k8s encryption status
+    k8s encryption status
+    ncn-m001: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
+    ncn-m002: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
+    ncn-m003: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
     current: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
     goal: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
     etcd: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
@@ -146,7 +155,7 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
 ## Forcing encryption
 
-If necessary, a forced rewrite of secret data can be performed.
+If necessary, a forced rewrite of secret data can be performed. Generally unnecessary but can be used to reduce the time for nodes to synchronize status.
 
 * (`ncn-mw#`) Force a rewrite of existing data:
 

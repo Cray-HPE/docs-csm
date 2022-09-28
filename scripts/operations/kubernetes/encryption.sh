@@ -280,16 +280,24 @@ restartk8s() {
     # kubectl wait for the pod to come back for 60 seconds or bail
     if ! sutkubectlwait; then
       printf "fatal: kubectl wait on %s timed out\n" "${apiserver}" >&2
+      kubeapiblurb
       return 1
     fi
   else
     printf "fatal: kubectl delete on %s timed out\n" "${apiserver}" >&2
+    kubeapiblurb
     return 1
   fi
   if ! sutpgrep "${file}"; then
     printf "fatal: kubeapi args do not contain expected arg %s\n" "%{file}" >&2
     return 1
   fi
+}
+
+# I've been entirely unable to understand/debug why a 5 minute timeout fails,
+# but eventually works for this....
+kubeapiblurb() {
+  printf "check logs for details why via:\nkubectl logs -f --namespace kube-system %s\nkubectl get pod --namespace kube-system %s\nkubectl describe --namespace kube-system %s\nyou will need to re-run this command again\n" "${apiserver}" "${apiserver}" "${apiserver}" >&2
 }
 
 # Glorified wrapper functions for unit tests.
@@ -451,8 +459,11 @@ sutexistingetcdencryption() {
     name=$(echo "${secret?}" | awk -F/ '{print $5}')
 
     # Not great but if/since we're running in set -e the return 1 can bite us
-    if sutkeyencryption "${ns}" "${name}" > /dev/null 2>&1; then
-      val=$(sutkeyencryption "${ns}" "${name}")
+    val=$(sutkeyencryption "${ns}" "${name}")
+    # This is intentional shellcheck, no other way to avoid re-running this and
+    # saving its output and using/abusing $? too.
+    #shellcheck disable=SC2181
+    if [ "${?}" -eq 0 ]; then
       existing="${val}${existing:+ }${existing-}"
     else
       printf "\ndebug: key %s %s cannot be determined\n" "${ns}" "${name}" >&2
@@ -463,7 +474,7 @@ sutexistingetcdencryption() {
   if [ -t 1 ]; then
     printf "\b\b\b" >&2
   fi
-  echo "${existing?}" | tr ' ' '\n' | sort -u | tr '\n' ' '
+  echo "${existing?}" | spacetonewline | sort -u | tr '\n' ' '
 }
 
 # Note lhs is the input (quote it if spaces!) as well as rhs Internally this
@@ -476,8 +487,8 @@ complement() {
   mkrundir
   lhsf=$(mktemp -p "${RUNDIR}" lhs-XXXXXXXX)
   rhsf=$(mktemp -p "${RUNDIR}" rhs-XXXXXXXX)
-  echo "${dlhs}" | tr ' ' '\n' | sort -u > "${lhsf}"
-  echo "${drhs}" | tr ' ' '\n' | sort -u > "${rhsf}"
+  echo "${dlhs}" | spacetonewline | sort -u > "${lhsf}"
+  echo "${drhs}" | spacetonewline | sort -u > "${rhsf}"
   comm -23 "${lhsf}" "${rhsf}"
 }
 
@@ -489,8 +500,8 @@ difference() {
   mkrundir
   lhsf=$(mktemp -p "${RUNDIR}" lhs-XXXXXXXX)
   rhsf=$(mktemp -p "${RUNDIR}" rhs-XXXXXXXX)
-  echo "${elhs}" | tr ' ' '\n' | sort -u > "${lhsf}"
-  echo "${erhs}" | tr ' ' '\n' | sort -u > "${rhsf}"
+  echo "${elhs}" | spacetonewline | sort -u > "${lhsf}"
+  echo "${erhs}" | spacetonewline | sort -u > "${rhsf}"
   comm -3 "${lhsf}" "${rhsf}" | tr -d '\t'
 }
 
@@ -502,8 +513,8 @@ subset() {
   mkrundir
   lhsf=$(mktemp -p "${RUNDIR}" lhs-XXXXXXXX)
   rhsf=$(mktemp -p "${RUNDIR}" rhs-XXXXXXXX)
-  echo "${subsetlhs}" | tr ' ' '\n' | sort -u > "${lhsf}"
-  echo "${subsetrhs}" | tr ' ' '\n' | sort -u > "${rhsf}"
+  echo "${subsetlhs}" | spacetonewline | sort -u > "${lhsf}"
+  echo "${subsetrhs}" | spacetonewline | sort -u > "${rhsf}"
   comm -23 "${lhsf}" "${rhsf}" | grep -q '^'
 }
 
@@ -518,9 +529,9 @@ union() {
   mkrundir
   lhsf=$(mktemp -p "${RUNDIR}" lhs-XXXXXXXX)
   rhsf=$(mktemp -p "${RUNDIR}" rhs-XXXXXXXX)
-  echo "${unionlhs}" | tr ' ' '\n' | sort -u > "${lhsf}"
-  echo "${unionrhs}" | tr ' ' '\n' | sort -u > "${rhsf}"
-  sort -u "${lhsf}" "${rhsf}" | tr '\n' ' ' | sed -e 's/ $//g'
+  echo "${unionlhs}" | spacetonewline | sort -u > "${lhsf}"
+  echo "${unionrhs}" | spacetonewline | sort -u > "${rhsf}"
+  sort -u "${lhsf}" "${rhsf}" | newlinetospace | sed -e 's/ $//g'
 }
 
 # Take the inputs the user has given, compare it to what we have found, and yea/nay it.
@@ -630,7 +641,38 @@ secret_current() {
 
 # Glorified wrapper that removes aescbc: or aesgcm: from the above two "functions"
 stripetcdprefix() {
-  echo "$@" | sed -e "s|aescbc:||" -e "s|aesgcm:||"
+  echo "$@" | sed -e "s|aescbc:||g" -e 's|aesgcm:||g'
+}
+
+# Used to determine if a running system is synced.
+issynced() {
+  echo "$@" | spacetonewline | sort -u | wc -l
+}
+
+# Since code is read more than written...
+newlinetospace() {
+  tr '\n' ' '
+}
+
+spacetonewline() {
+  tr ' ' '\n '
+}
+
+commatospace() {
+  tr ',' ' '
+}
+# Prints out only control plane node names based on the node-role label. Only
+# controlplane nodes have the encryption file so no sense in annotating anything
+# that isn't a control-plane.
+kubectl_get_controlplane_nodes() {
+  kubectl get nodes --selector=node-role.kubernetes.io/master --no-headers=true -o custom-columns=NAME:.metadata.name
+}
+
+# Get the current node annotation values
+get_node_annotation() {
+  node="${1:-invalid}"
+
+  stripetcdprefix "$(kubectl get node "${node}" -o jsonpath='{range .items[*]}{.metadata.annotations.'"cray-k8s-encryption"'}{"\n"}' | commatospace)"
 }
 
 # Logic is simply write out our new encryption config
@@ -648,12 +690,20 @@ main() {
   goal="$(stripetcdprefix "$(secret_goal)")"
 
   if $status; then
+    printf "k8s encryption status\n"
+
+    for node in $(kubectl_get_controlplane_nodes); do
+      # not really applicable here
+      #shellcheck disable=SC2086
+      printf "%s: %s\n" "${node}" "$(get_node_annotation ${node})"
+    done
+
     synced=false
-    etcd="$(sutexistingetcdencryption)"
-    printf "k8s encryption status\ncurrent: %s\ngoal: %s\n" "${curr?}" "${goal?}"
+    etcd="$(sutexistingetcdencryption | newlinetospace)"
+    printf "current: %s\ngoal: %s\n" "${curr?}" "${goal?}"
     printf "etcd: %s\n" "${etcd}"
 
-    if [ "${curr}" = "${goal}" ] && [ "${curr}" = "${etcd}" ] && [ "${goal}" = "${etcd}" ]; then
+    if [ "$(issynced ${curr} ${goal} ${etcd})" = 1 ]; then
       synced=true
     fi
 
@@ -661,7 +711,7 @@ main() {
       exit 0
     else
       if [ -t 1 ]; then
-        printf "interim/invalid state all should be equal when in a steady state\n" >&2
+        printf "interim state detected, ensure all control plane nodes are in sync\n" >&2
       fi
       exit 1
     fi
@@ -683,11 +733,20 @@ main() {
   # We can't quote this call
   #shellcheck disable=SC2086
   usersgoal=$(tovalid ${usergoal})
+
+  # Bit of an edge case to detect, but see if someone is trying to go from
+  # "encrypted" straight to "not encrypted", the set logic below *will* catch it
+  # but lets try to spit out a better message in this instance.
+  if ${disabled} && [ "identity" = "$*" ] && [ "identity" != "${curr}" ]; then
+    printf "fatal: trying to disable encryption before etcd has rewritten secrets is not supported\nensure you run %s --disable (--aescbc|--aesgcm) KEYVALUE ...\non all control plane nodes before you run %s --disable\n" "$0" "$0" >&2
+    exit 1
+  fi
+
   etcd="$(sutexistingetcdencryption)"
 
   if ! usergoalvalid "${etcd}" "${usersgoal}" "${curr}"; then
     printf "fatal: requested goal conflicts with existing etcd encryption\netcd: %s\nrequested: %s\n" "${etcd}" "${usersgoal}" >&2
-    printf "To fix add the keys that correspond with that encryption secret to the end of this command. Failure to do so would mean k8s cannot read existing secrets.\n" >&2
+    printf "Ensure that you include all encryption secrets present in etcd or kubernetes will not be able to read those secrets or restart.\n" >&2
     exit 1
   fi
 
@@ -711,14 +770,14 @@ main() {
         exit 1
       fi
     else
-      printf "fatal: could not restart k8s to update encryption configuration\n" >&2
+      printf "fatal: could not restart kubeapi to update encryption configuration\n" >&2
       exit 1
     fi
   else
     printf "fatal: could not write config file\n" >&2
     exit 1
   fi
-  printf "encryption configuration updated\n" >&2
+  printf "%s configuration updated ensure all control plane nodes run this same command\n" "$(uname -n)" >&2
 }
 
 # Note: this line allows shellspec to source this script for unit testing functions above.
