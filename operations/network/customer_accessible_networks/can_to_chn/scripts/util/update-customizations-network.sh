@@ -23,12 +23,6 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -e
-basedirLoc=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-. ${basedirLoc}/../../common/upgrade-state.sh
-trap 'err_report' ERR
-set -o pipefail
-
 usage() {
     echo >&2 "usage: ${0##*/} [-i] [CUSTOMIZATIONS-YAML]"
     exit 1
