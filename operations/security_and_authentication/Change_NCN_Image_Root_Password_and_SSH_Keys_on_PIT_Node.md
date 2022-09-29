@@ -38,10 +38,10 @@ The Kubernetes image is used by the master and worker nodes.
 
 1. Open the image.
 
-   The Kubernetes image will be of the form `kubernetes-0.1.69.squashfs` in `/var/www/ephemeral/data/k8s`, but the version number may be different.
+   The Kubernetes image will be of the form `kubernetes-0.0.57.squashfs` in `/var/www/ephemeral/data/k8s`, but the version number may be different.
 
    ```bash
-   pit# unsquashfs kubernetes-0.1.69.squashfs
+   pit# unsquashfs kubernetes-0.0.57.squashfs
    ```
 
 1. Remove default SSH keys
@@ -146,19 +146,19 @@ The Kubernetes image is used by the master and worker nodes.
 
 1. Rename the new SquashFS, kernel, and `initrd` to include a new version string.
 
-   If the old name of the SquashFS was `kubernetes-0.1.69.squashfs`, then its version was '0.1.69',
-   so the newly created version should be renamed to include a version of '0.1.69-1' with an
+   If the old name of the SquashFS was `kubernetes-0.0.57.squashfs`, then its version was '0.0.57',
+   so the newly created version should be renamed to include a version of '0.0.57-1' with an
    additional dash and a build iteration number of 1. This will help to track what base version was used.
 
    ```bash
    pit# ls -l old/*squashfs
-   -rw-r--r--  1 root root 5135859712 Aug 19 19:10 kubernetes-0.1.69.squashfs
+   -rw-r--r--  1 root root 5135859712 Aug 19 19:10 kubernetes-0.0.57.squashfs
    ```
 
    Set the VERSION variable based on the version string displayed by the above command with an incremented suffix added to show a build iteration.
 
    ```bash
-   pit# export VERSION=0.1.69-1
+   pit# export VERSION=0.0.57-1
    pit# mv filesystem.squashfs kubernetes-${VERSION}.squashfs
    pit# mv initrd.img.xz initrd.img-${VERSION}.xz
    ```
@@ -197,10 +197,10 @@ The Ceph image is used by the utility storage nodes.
 
 1. Open the image.
 
-   The Ceph image will be of the form `storage-ceph-0.1.69.squashfs` in `/var/www/ephemeral/data/ceph`, but the version number may be different.
+   The Ceph image will be of the form `storage-ceph-0.0.47.squashfs` in `/var/www/ephemeral/data/ceph`, but the version number may be different.
 
    ```bash
-   pit# unsquashfs storage-ceph-0.1.69.squashfs
+   pit# unsquashfs storage-ceph-0.0.47.squashfs
    ```
 
 1. Save the old SquashFS image, kernel, and `initrd`.
@@ -312,19 +312,19 @@ The Ceph image is used by the utility storage nodes.
 
 1. Rename the new SquashFS, kernel, and `initrd` to include a new version string.
 
-   If the old name of the SquashFS was `storage-ceph-0.1.69.squashfs`, then its version was '0.1.69',
-   so the newly created version should be renamed to include a version of '0.1.69-1' with an
+   If the old name of the SquashFS was `storage-ceph-0.0.47.squashfs`, then its version was '0.0.47',
+   so the newly created version should be renamed to include a version of '0.0.47-1' with an
    additional dash and a build iteration number of 1. This will help to track what base version was used.
 
    ```bash
    pit# ls -l old/*squashfs
-   -rw-r--r--  1 root root 5135859712 Aug 19 19:10 storage-ceph-0.1.69.squashfs
+   -rw-r--r--  1 root root 5135859712 Aug 19 19:10 storage-ceph-0.0.47.squashfs
    ```
 
    Set the VERSION variable based on the version string displayed by the above command with an incremented suffix added to show a build iteration.
 
    ```bash
-   pit# VERSION=0.1.69-1
+   pit# VERSION=0.0.47-1
    pit# mv filesystem.squashfs storage-ceph-${VERSION}.squashfs
    pit# mv initrd.img.xz initrd.img-${VERSION}.xz
    ```

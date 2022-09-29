@@ -57,16 +57,16 @@ The Kubernetes image `k8s-image` is used by the master and worker nodes.
 
    ```text
    "k8s-filesystem.squashfs"
-   "k8s/0.1.107/filesystem.squashfs"
-   "k8s/0.1.109/filesystem.squashfs"
-   "k8s/0.1.48/filesystem.squashfs"
+   "k8s/0.0.47/filesystem.squashfs"
+   "k8s/0.0.46/filesystem.squashfs"
+   "k8s/0.0.38/filesystem.squashfs"
    ```
 
-   This example uses `k8s/0.1.109` for the current version and adds a suffix for the new version.
+   This example uses `k8s/0.0.47` for the current version and adds a suffix for the new version.
 
    ```bash
-   ncn-mw# export K8SVERSION=0.1.109
-   ncn-mw# export K8SNEW=0.1.109-2
+   ncn-mw# export K8SVERSION=0.0.47
+   ncn-mw# export K8SNEW=0.0.47-2
    ```
 
 1. Make a temporary directory for the `k8s-image` using the current version string.
@@ -241,9 +241,9 @@ The Ceph image is used by the utility storage nodes.
 
    ```text
    "ceph-filesystem.squashfs"
-   "ceph/0.1.107/filesystem.squashfs"
-   "ceph/0.1.113/filesystem.squashfs"
-   "ceph/0.1.48/filesystem.squashfs"
+   "ceph/0.0.47/filesystem.squashfs"
+   "ceph/0.0.46/filesystem.squashfs"
+   "ceph/0.0.38/filesystem.squashfs"
    ```
 
    This example uses `ceph/0.1.113` for the current version and adds a suffix for the new version.
