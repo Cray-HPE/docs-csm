@@ -25,8 +25,8 @@
 
 set -e
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-. "${locOfScript}"/../common/upgrade-state.sh
-. "${locOfScript}"/../common/ncn-common.sh "$(hostname)"
+. "${locOfScript}/../common/upgrade-state.sh"
+. "${locOfScript}/../common/ncn-common.sh" "$(hostname)"
 trap 'err_report' ERR INT TERM HUP EXIT
 # array for paths to unmount after chrooting images
 # shellcheck disable=SC2034
@@ -161,7 +161,7 @@ function upgrade_csm_chart
 state_name="BACKUP_SNAPSHOT"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     DATESTRING=$(date +%Y-%m-%d_%H-%M-%S)
@@ -184,16 +184,16 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     kubectl get pods -A -o wide --show-labels > "${K8S_PODS_SNAPSHOT}"
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
     echo
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="CHECK_WEAVE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     SLEEVE_MODE="yes"
     weave --local status connections | grep -q sleeve || SLEEVE_MODE="no"
@@ -219,16 +219,16 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
     echo
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPDATE_SSH_KEYS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     test -f /root/.ssh/config && mv /root/.ssh/config /root/.ssh/config.bak
@@ -242,9 +242,9 @@ EOF
     grep -oP "(ncn-\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="REPAIR_AND_VERIFY_CHRONY_CONFIG"
@@ -255,11 +255,11 @@ TOKEN=$(curl -s -S -d grant_type=client_credentials \
                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
 export TOKEN
 if [[ ${state_recorded} == "0" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     if [[ "$(hostname)" == "ncn-m002" ]]; then
         # we already did this from ncn-m001
-        echo "====> ${state_name} has been completed"
+        echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
     else
       for target_ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
 
@@ -296,17 +296,17 @@ if [[ ${state_recorded} == "0" ]]; then
             exit 1
         fi
       done
-      record_state "${state_name}" "$(hostname)"
+      record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
     fi
     } >> "${LOG_FILE}" 2>&1
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="CHECK_CLOUD_INIT_PREREQ"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     echo "Ensuring cloud-init is healthy"
     set +e
@@ -318,12 +318,14 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         ssh_keygen_keyscan "${host}"
         until ssh "${host}" test -f /run/cloud-init/instance-data.json
         do
-            ssh "${host}" cloud-init init >/dev/null 2>&1
+            # The intent appears to be to redirect stdout to /dev/null, and redirect stderr to stdout
+            # shellcheck disable=SC2069
+            ssh "${host}" cloud-init init 2>&1 >/dev/null
             counter=$((counter+1))
             sleep 10
             if [[ ${counter} -gt 5 ]]
             then
-                echo "Cloud init data is missing and cannot be recreated. Existing upgrade.."
+                echo "Cloud-init data is missing and cannot be recreated. Existing upgrade.."
             fi
         done
     done
@@ -337,27 +339,29 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         ssh_keygen_keyscan "${host}"
         until ssh "${host}" test -f /run/cloud-init/instance-data.json
         do
-            ssh "${host}" cloud-init init >/dev/null 2>&1
+            # The intent appears to be to redirect stdout to /dev/null, and redirect stderr to stdout
+            # shellcheck disable=SC2069
+            ssh "${host}" cloud-init init 2>&1 >/dev/null
             counter=$((counter+1))
             sleep 10
             if [[ ${counter} -gt 5 ]]
             then
-                echo "Cloud init data is missing and cannot be recreated. Existing upgrade.."
+                echo "Cloud-init data is missing and cannot be recreated. Existing upgrade.."
             fi
         done
     done
 
     set -e
-    } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    } >> "${LOG_FILE}" 2>&1    
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPDATE_DOC_RPM"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
@@ -367,15 +371,15 @@ if [[ ${state_recorded} == "0" ]]; then
     cp /root/docs-csm-latest.noarch.rpm "${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/"
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPDATE_CUSTOMIZATIONS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     # get existing customization.yaml file
@@ -402,15 +406,15 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     popd
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="SETUP_NEXUS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     set +e
@@ -428,99 +432,99 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     "${CSM_ARTI_DIR}/lib/setup-nexus.sh"
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPGRADE_NLS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     
         "${locOfScript}/util/upgrade-cray-nls.sh"
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPGRADE_SPIRE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
         "${locOfScript}/util/upgrade-spire.sh"
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPGRADE_CSM_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     upgrade_csm_chart csm-config sysmgmt.yaml
 
-    } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} "$(hostname)"
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPGRADE_KYVERNO"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     upgrade_csm_chart cray-kyverno platform.yaml
 
-    } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} "$(hostname)"
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPGRADE_KYVERNO_POLICY"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     upgrade_csm_chart kyverno-policy platform.yaml
 
-    } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} "$(hostname)"
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPGRADE_BSS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     
     upgrade_csm_chart cray-hms-bss sysmgmt.yaml
 
-    } >> ${LOG_FILE} 2>&1
-    record_state ${state_name} "$(hostname)"
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     artdir=${CSM_ARTI_DIR}/images
     SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
@@ -566,15 +570,15 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     set +o pipefail
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPDATE_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     # get BSS cloud-init data with host_records
@@ -608,16 +612,16 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         --storage-version "${CEPH_VERSION}"
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
     echo
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="UPDATE NCN KERNEL PARAMETERS"
+state_name="UPDATE_NCN_KERNEL_PARAMETERS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
         -d client_id=admin-client \
@@ -639,16 +643,16 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     done
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
     echo
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="PREFLIGHT_CHECK"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)"
@@ -669,15 +673,15 @@ if [[ ${state_recorded} == "0" ]]; then
         --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="UPGRADE_PRECACHE_CHART"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     tmp_current_configmap=/tmp/precache-current-configmap.yaml
     kubectl get configmap -n nexus cray-precache-images -o yaml > "${tmp_current_configmap}"
@@ -712,15 +716,15 @@ EOF
         kubectl replace --force -f -
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="CREATE_CEPH_RO_KEY"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     ceph-authtool -C /etc/ceph/ceph.client.ro.keyring -n client.ro --cap mon 'allow r' --cap mds 'allow r' --cap osd 'allow r' --cap mgr 'allow r' --gen-key
@@ -730,15 +734,15 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     done
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="BACKUP_BSS_DATA"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     cray bss bootparameters list --format json > "bss-backup-$(date +%Y-%m-%d).json"
@@ -749,15 +753,15 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     cray artifacts create "${backupBucket}" "bss-backup-$(date +%Y-%m-%d).json" "bss-backup-$(date +%Y-%m-%d).json"
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="BACKUP_VCS_DATA"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     pgLeaderPod=$(kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list | grep Leader | awk -F'|' '{print $2}')
@@ -791,15 +795,15 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     cray artifacts create "${backupBucket}" vcs.tar vcs.tar
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="TDS_LOWER_CPU_REQUEST"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
     numOfActiveWokers=$(kubectl get nodes | grep -E "^ncn-w[0-9]{3}[[:space:]]+Ready[[:space:]]" | wc -l)
@@ -811,15 +815,15 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     fi
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 state_name="CHECK_BMC_NCN_LOCKS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..."
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     # install the hpe-csm-scripts rpm early to get lock_management_nodes.py
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}/rpm/cray/csm/" -name \*hpe-csm-scripts\*.rpm | sort -V | tail -1)"
@@ -833,9 +837,9 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     python3 /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
 
     } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)"
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
-    echo "====> ${state_name} has been completed"
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
 # restore previous ssh config if there was one, remove ours
