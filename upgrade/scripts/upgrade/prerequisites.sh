@@ -842,6 +842,42 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Disable CFS on the NCNs, to prevent new sessions from being launched during the upgrade.
+# Note that it is possible CFS sessions are currently underway on the NCNs. Disabling them
+# will not prevent currently scheduled CFS sessions from executing -- it will just prevent
+# new sessions from being scheduled. It will also not prevent current sessions from updating
+# the status of the component when they complete. However, that update will not re-enable
+# the component.
+state_name="DISABLE_CFS_ON_NCNS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+        echo "Retrieving a list of all management node component names (xnames)"
+        set -o pipefail
+        XNAMES=$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+        set +o pipefail
+        [[ -n "${XNAMES}" ]]
+        XNAME_LIST=${XNAMES//,/ }
+
+        echo "Disabling CFS configuration for all NCNs"
+        for xname in ${XNAME_LIST}; do
+            echo "Disabling CFS on ${xname}"
+            cray cfs components update "${xname}" --enabled false --format json
+
+            # Make sure it is actually disabled
+            echo "Verifying that CFS is now disabled on ${xname}"
+            set -o pipefail            
+            cray cfs components describe "${xname}" --format json | jq '.enabled' | grep "^false$"
+            set +o pipefail
+        done
+
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # restore previous ssh config if there was one, remove ours
 rm -f /root/.ssh/config
 test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
