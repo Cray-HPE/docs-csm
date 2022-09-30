@@ -4,10 +4,6 @@ This is an overarching procedure to change all credentials managed by Cray Syste
 
 There are many passwords and credentials used in different contexts to manage the system. These can be changed as needed. Their initial settings are documented, so it is recommended to change them during or soon after a CSM software installation.
 
-## Prerequisites
-
-- Review procedures in [Manage System Passwords](../security_and_authentication/Manage_System_Passwords.md).
-
 ## Procedure
 
 ### 1. Change Hardware Credentials
