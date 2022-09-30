@@ -53,6 +53,7 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 (`ncn-s001#`)
 
 Normal upgrade to a new Ceph major release:
+
 ```bash
 /srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io --upgrade 
 ```
