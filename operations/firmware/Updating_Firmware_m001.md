@@ -2,17 +2,18 @@
 
 Retrieve the model name and firmware image required to update an HPE or Gigabyte `ncn-m001` node.
 
-> **`NOTE`** 
-> * On HPE nodes, the BMC Firmware is iLO 5 and BIOS is System ROM.
-> * The commands in the procedure must be run on `ncn-m001`.
+> **`NOTE`**
+>
+> - On HPE nodes, the BMC firmware is iLO 5 and BIOS is System ROM.
+> - The commands in the procedure must be run on `ncn-m001`.
 
 ## Prerequisites
 
 The following information is needed:
 
-* IP Address of `ncn-m001` BMC
-* IP Address of `ncn-m001`
-* Root password for `ncn-m001` BMC
+- IP Address of `ncn-m001` BMC
+- IP Address of `ncn-m001`
+- Root password for `ncn-m001` BMC
 
 ## Find the Model Name
 
@@ -67,24 +68,24 @@ Use one of the following commands to find the model name for the node type in us
 
     1. Update BMC:
 
-       * `passwd` = Root password of BMC
-       * `ipaddressOfBMC` = IP address of BMC
-       * `ipaddressOfM001` = IP address of `ncn-m001` node
-       * `filename` = Filename of the downloaded image
+       - `passwd` = Root password of BMC
+       - `ipaddressOfBMC` = IP address of BMC
+       - `ipaddressOfM001` = IP address of `ncn-m001` node
+       - `filename` = Filename of the downloaded image
 
        ```bash
-       curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
+       curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
        ```
 
     2. Update BIOS:
 
-       * `passwd` = Root password of BMC
-       * `ipaddressOfBMC` = IP address of BMC
-       * `ipaddressOfM001` = IP address of `ncn-m001` node
-       * `filename` = Filename of the downloaded image
+       - `passwd` = Root password of BMC
+       - `ipaddressOfBMC` = IP address of BMC
+       - `ipaddressOfM001` = IP address of `ncn-m001` node
+       - `filename` = Filename of the downloaded image
 
        ```bash
-       curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
+       curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
        ```
 
        > After updating BIOS, `ncn-m001` will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.

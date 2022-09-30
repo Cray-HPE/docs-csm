@@ -24,19 +24,12 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
 
    ```json
    [
-   "/srv/cray/scripts/metal/install-bootloader.sh",
-   "/srv/cray/scripts/metal/set-host-records.sh",
-   "/srv/cray/scripts/metal/set-dhcp-to-static.sh",
-   "/srv/cray/scripts/metal/set-dns-config.sh",
-   "/srv/cray/scripts/metal/set-ntp-config.sh",
-   "/srv/cray/scripts/metal/enable-lldp.sh",
-   "/srv/cray/scripts/metal/set-bmc-bbs.sh",
-   "/srv/cray/scripts/metal/set-efi-bbs.sh",
-   "/srv/cray/scripts/metal/disable-cloud-init.sh",
+   "/srv/cray/scripts/metal/net-init.sh",
    "/srv/cray/scripts/common/update_ca_certs.py",
-   "/srv/cray/scripts/metal/install-rpms.sh",
+   "/srv/cray/scripts/metal/install.sh",
    "/srv/cray/scripts/common/pre-load-images.sh",
-   "/srv/cray/scripts/common/ceph-enable-services.sh"
+   "/srv/cray/scripts/common/ceph-enable-services.sh",
+   "touch /etc/cloud/cloud-init.disabled"
    ]
    ```
 

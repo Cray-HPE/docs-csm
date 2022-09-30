@@ -333,12 +333,15 @@ If the check fails after doing the rebuild, contact support.
 
 1. (`pit#`) Check the storage nodes.
 
-   ```bash
-   csi pit validate --ceph
-   ```
+    ```bash
+    csi pit validate --ceph
+    ```
 
-   > **NOTE:** See [Utility Storage](../operations/utility_storage/Utility_Storage.md) and [Ceph CSI Troubleshooting](troubleshooting_ceph_csi.md) in
-   order to help resolve any failed tests.
+    For assistance resolving failed tests, see the following pages:
+
+    - [Ceph CSI Troubleshooting](troubleshooting_ceph_csi.md)
+    - [Troubleshooting Unused Drives on Storage Nodes](troubleshooting_unused_drives_on_storage_nodes.md)
+    - [Utility Storage](../operations/utility_storage/Utility_Storage.md)
 
 1. (`pit#`) Check the master and worker nodes.
 
