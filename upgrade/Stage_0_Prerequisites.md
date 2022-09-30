@@ -8,17 +8,18 @@
 
 Stage 0 has several critical procedures which prepare the environment and verify if the environment is ready for the upgrade.
 
-- [Start typescript](#start-typescript)
-- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
-  - [Direct download](#direct-download)
-  - [Manual copy](#manual-copy)
-- [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
-- [Stage 0.3 - Customize the new NCN image and update NCN personalization configurations](#stage-03---customize-the-new-ncn-image-and-update-ncn-personalization-configurations)
-  - [Standard upgrade](#standard-upgrade)
-  - [CSM-only system upgrade](#csm-only-system-upgrade)
-- [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
-- [Stop typescript](#stop-typescript)
-- [Stage completed](#stage-completed)
+- [Stage 0 - Prerequisites and Preflight Checks](#stage-0---prerequisites-and-preflight-checks)
+  - [Start typescript](#start-typescript)
+  - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+    - [Direct download](#direct-download)
+    - [Manual copy](#manual-copy)
+  - [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
+  - [Stage 0.3 - Customize the new NCN image and update NCN personalization configurations](#stage-03---customize-the-new-ncn-image-and-update-ncn-personalization-configurations)
+    - [Standard upgrade](#standard-upgrade)
+    - [CSM-only system upgrade](#csm-only-system-upgrade)
+  - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+  - [Stop typescript](#stop-typescript)
+  - [Stage completed](#stage-completed)
 
 ## Start typescript
 
@@ -90,6 +91,8 @@ after a break, always be sure that a typescript is running before proceeding.
       python /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
       deactivate
       ```
+
+      For more information or usage on the csm_rbd_tool utility please see [csm_rbd_tool Usage](../operations/utility_storage/CSM_rbd_tool_Usage.md)
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 

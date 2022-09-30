@@ -3,13 +3,15 @@
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-- [Start typescript](#start-typescript)
-- [Apply boot order workaround](#apply-boot-order-workaround)
-- [Argo workflows](#argo-workflows)
-- [Storage node image upgrade](#storage-node-image-upgrade)
-- [Ensure that `rbd` stats monitoring is enabled](#ensure-that-rbd-stats-monitoring-is-enabled)
-- [Stop typescript](#stop-typescript)
-- [Stage completed](#stage-completed)
+- [Stage 1 - Ceph image upgrade](#stage-1---ceph-image-upgrade)
+  - [Start typescript](#start-typescript)
+  - [Apply boot order workaround](#apply-boot-order-workaround)
+  - [Argo workflows](#argo-workflows)
+  - [CSM Upgrade requirement for upgrades staying within a CSM release version](#csm-upgrade-requirement-for-upgrades-staying-within-a-csm-release-version)
+  - [Storage node image upgrade](#storage-node-image-upgrade)
+  - [Ensure that `rbd` stats monitoring is enabled](#ensure-that-rbd-stats-monitoring-is-enabled)
+  - [Stop typescript](#stop-typescript)
+  - [Stage completed](#stage-completed)
 
 ## Start typescript
 
@@ -46,9 +48,16 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 
 > If the upgrade is staying with a CSM release, e.g. `CSM-1.3.0-rc1` to `CSM-1.3.0-rc2`, then you will need to run the following to point the Ceph cluster to use the Ceph container image stored in Nexus.
 > The issue stems from slightly different `sha` values for the Ceph containers for in-family CSM storage node images which will prevent the Ceph containers from starting.
-> This will utilize the upgrade procedure to accomplish this as it has built in checks and health monitoring to better manage this rolling restart of the Ceph containers with the image stored in Nexus.
+> This will utilize the upgrade procedure to accomplish this as it has built in checks and health monitoring to better manage this rolling restart of the Ceph containers with the image stored in Nexus.  Please see [cubs_tool usage for further information](../operations/utility_storage/Cubs_tool_Usage.md)
 
 (`ncn-s001#`)
+
+Normal upgrade to a new Ceph major release:
+```bash
+/srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io --upgrade 
+```
+
+In family upgrade to a new container with the same Ceph version:
 
 ```bash
 /srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io --upgrade --in_family_override
