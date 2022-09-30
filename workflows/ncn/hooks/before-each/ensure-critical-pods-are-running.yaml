@@ -24,13 +24,21 @@
 apiVersion: cray-nls.hpe.com/v1
 kind: Hook
 metadata:
-  name: install-csi
+  name: ensure-critical-pods-are-running
   labels:
-    before-all: "true"
+    before-each: "true"
 spec:
   scriptContent: |
-    source /srv/cray/scripts/metal/metal-lib.sh
-    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3" \
-      | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
-    pdsh -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
+    labels=( "cray-bss" "cray-scsd" )
+    for label in ${labels[@]};do
+      while true; do
+        numOfRunningPods=$( kubectl get po -A -l "app.kubernetes.io/name=$label" | grep "Running"| wc -l)
+        if [[ $numOfRunningPods -ge 2 ]]; then
+          echo "$label has met with the minimum requirement"
+          break;
+        fi
+        echo "$label hasn't met with the minimum requirement(2): $numOfRunningPods"
+        sleep 5
+      done
+    done
   templateRefName: ssh-template
