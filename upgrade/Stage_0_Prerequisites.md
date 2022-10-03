@@ -313,7 +313,7 @@ The current Postgres opt-in backups need to be re-generated to fix a known issue
              docker-archive:/mnt/cray-postgres-db-backup.tar docker://registry.local/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
          ```
 
-1. (`ncn-m001#`) Regenerate the postgres backups.
+1. (`ncn-m001#`) Regenerate the Postgres backups.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/k8s/create_new_postgres_backups.sh
