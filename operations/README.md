@@ -105,6 +105,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
   - [Troubleshoot UAN Boot Issues](boot_orchestration/Troubleshoot_UAN_Boot_Issues.md)
   - [Troubleshoot Booting Nodes with Hardware Issues](boot_orchestration/Troubleshoot_Booting_Nodes_with_Hardware_Issues.md)
 - [BOS Options](boot_orchestration/Options.md)
+- [Rolling Upgrades using BOS](boot_orchestration/Rolling_Upgrades.md)
 - [BOS Limitations for Gigabyte BMC Hardware](boot_orchestration/Limitations_for_Gigabyte_BMC_Hardware.md)
 - [Compute Node Boot Sequence](boot_orchestration/Compute_Node_Boot_Sequence.md)
   - [Healthy Compute Node Boot Process](boot_orchestration/Healthy_Compute_Node_Boot_Process.md)
