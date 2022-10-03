@@ -1,12 +1,12 @@
-# Cubs_tool Usage
+# `cubs_tool` Usage
 
 ## Introduction
 
-Cubs_tool is a python script developed as a second tier Ceph upgrade watching tool.  This was to better integrate the Ceph upgrade process with the upgrade workflow tooling.
+`cubs_tool` is a python script developed as a second tier Ceph upgrade watching tool.  This was to better integrate the Ceph upgrade process with the upgrade workflow tooling.
 
 ## Glossary
 
-* **in_family** - is referring to an upgrade staying within the same major version of Ceph.  E.g, Any upgrade within the same CSM release will contain the same Major version of Ceph, but could have minor version bumps or patched containers.
+* **`in_family`** - is referring to an upgrade staying within the same major version of Ceph.  E.g, Any upgrade within the same CSM release will contain the same Major version of Ceph, but could have minor version bumps or patched containers.
   
 ## Usage
 
