@@ -34,7 +34,8 @@ true
 
 ## Create CFS image customization session
 
-(`ncn-mw#`) To create a CFS session for image customization, provide a session name, the name of the configuration to apply, and the group/image ID mapping:
+(`ncn-mw#`) To create a CFS session for image customization, provide a session name, the name of the configuration to apply, and any Ansible groups along with the images they will be applied to.
+It is also possible to provide a mapping of the source image ids to the resulting image names, for users who want to control the naming of the resultant image.
 
 > **WARNING:** If a CFS session is created with an ID that is not known to IMS, then CFS will not fail and will instead wait for the image ID to become available in IMS.
 
@@ -42,7 +43,9 @@ true
 cray cfs sessions create --name example \
     --configuration-name configurations-example \
     --target-definition image --format json \
-    --target-group Compute IMS_IMAGE_ID
+    --target-group Application <IMS_IMAGE_ID> \
+    --target-group Application_UAN <IMS_IMAGE_ID> \
+    --image-map <IMS_IMAGE_ID> <RESULTING_IMAGE_NAME>
 ```
 
 Example output:
@@ -52,6 +55,7 @@ Example output:
   "ansible": {
     "config": "cfs-default-ansible-cfg",
     "limit": null,
+    "passthrough": null,
     "verbosity": 0
   },
   "configuration": {
@@ -62,6 +66,9 @@ Example output:
   "status": {
     "artifacts": [],
     "session": {
+      "completionTime": null,
+      "job": null,
+      "startTime": "2022-09-26T14:31:33",
       "status": "pending",
       "succeeded": "none"
     }
@@ -72,11 +79,21 @@ Example output:
     "groups": [
       {
         "members": [
-          "<IMS IMAGE ID>"
+          IMS_IMAGE_ID
         ],
-        "name": "Compute"
+        "name": "Application"
+      },
+      {
+        "members": [
+          IMS_IMAGE_ID
+        ],
+        "name": "Application_UAN"
       }
-    ]
+    ],
+    "imageMap": {
+      "source_id": IMS_IMAGE_ID,
+      "result_name": RESULTING_IMAGE_NAME
+    }
   }
 }
 ```
