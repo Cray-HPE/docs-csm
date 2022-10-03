@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #
 # MIT License
 #
@@ -22,30 +21,16 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-set -euo pipefail
-basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-
-function main() {
-    upload_worker_rebuild_template
-    upload_worker_rebuild_hooks
-    upload_storage_rebuild_template
-}
-
-function upload_worker_rebuild_template {
-    kubectl -n argo delete configmap worker-rebuild-workflow-files || true
-    kubectl -n argo create configmap worker-rebuild-workflow-files --from-file="${basedir}/../ncn/worker"
-}
-
-function upload_worker_rebuild_hooks {
-    kubectl -n argo apply -f "${basedir}/../ncn/hooks" --recursive
-}
-
-function upload_storage_rebuild_template {
-    kubectl -n argo delete configmap storage-rebuild-workflow-files || true
-    kubectl -n argo create configmap storage-rebuild-workflow-files --from-file="${basedir}/../ncn/storage"
-}
-
-main
-# shellcheck disable=SC2046
-kubectl -n argo annotate --overwrite pods \
-    $(kubectl get pods -l app.kubernetes.io/name=cray-nls -n argo -o json | jq -r '.items[] | .metadata.name') updated="$(date +%s)"
+apiVersion: cray-nls.hpe.com/v1
+kind: Hook
+metadata:
+  name: install-csi
+  labels:
+    before-all: "true"
+spec:
+  scriptContent: |
+    source /srv/cray/scripts/metal/metal-lib.sh
+    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3" \
+      | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
+    pdsh -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
+  templateRefName: ssh-template

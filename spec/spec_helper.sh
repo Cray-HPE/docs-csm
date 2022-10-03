@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 #
 # MIT License
 #
@@ -22,30 +21,28 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-set -euo pipefail
-basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-function main() {
-    upload_worker_rebuild_template
-    upload_worker_rebuild_hooks
-    upload_storage_rebuild_template
+# shellcheck shell=sh
+
+# Defining variables and functions here will affect all specfiles.
+# Change shell options inside a function may cause different behavior,
+# so it is better to set them here.
+# set -eu
+
+# This callback function will be invoked only once before loading specfiles.
+spec_helper_precheck() {
+  # Available functions: info, warn, error, abort, setenv, unsetenv
+  # Available variables: VERSION, SHELL_TYPE, SHELL_VERSION
+  : minimum_version "0.28.1"
 }
 
-function upload_worker_rebuild_template {
-    kubectl -n argo delete configmap worker-rebuild-workflow-files || true
-    kubectl -n argo create configmap worker-rebuild-workflow-files --from-file="${basedir}/../ncn/worker"
+# This callback function will be invoked after a specfile has been loaded.
+spec_helper_loaded() {
+  :
 }
 
-function upload_worker_rebuild_hooks {
-    kubectl -n argo apply -f "${basedir}/../ncn/hooks" --recursive
+# This callback function will be invoked after core modules has been loaded.
+spec_helper_configure() {
+  # Available functions: import, before_each, after_each, before_all, after_all
+  : import 'support/custom_matcher'
 }
-
-function upload_storage_rebuild_template {
-    kubectl -n argo delete configmap storage-rebuild-workflow-files || true
-    kubectl -n argo create configmap storage-rebuild-workflow-files --from-file="${basedir}/../ncn/storage"
-}
-
-main
-# shellcheck disable=SC2046
-kubectl -n argo annotate --overwrite pods \
-    $(kubectl get pods -l app.kubernetes.io/name=cray-nls -n argo -o json | jq -r '.items[] | .metadata.name') updated="$(date +%s)"
