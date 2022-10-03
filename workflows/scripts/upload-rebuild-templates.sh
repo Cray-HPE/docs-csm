@@ -25,9 +25,27 @@
 set -euo pipefail
 basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+. "${basedir}"/../../lib/lib.sh
+
+trap libcleanup EXIT
+
+JQFN=printjqoutputonok
+JQTESTFAILFN=exitonjqtestfailure
+
 function main() {
     upload_worker_rebuild_template
     upload_storage_rebuild_template
+
+    #shellcheck disable=SC2086
+    tmpfile=$(libtmpfile "$(basename $0)")
+    kubectl get pods -l app.kubernetes.io/name=cray-nls -n argo -o json > "${tmpfile}"
+
+    # More shellcheck nonsense about quotes for the variable that never go away
+    # with quotes and isn't valid anyway.
+    #shellcheck disable=SC2086
+    # REVIEW: I presume we bail here from jq not reading things if it isn't json
+    kubectl -n argo annotate --overwrite pods "$(jq -r '.items[] | .metadata.name' ${tmpfile})" \
+            updated="$(date +%s)"
 }
 
 function upload_worker_rebuild_template {
@@ -41,6 +59,3 @@ function upload_storage_rebuild_template {
 }
 
 main
-# shellcheck disable=SC2046
-kubectl -n argo annotate --overwrite pods \
-    $(kubectl get pods -l app.kubernetes.io/name=cray-nls -n argo -o json | jq -r '.items[] | .metadata.name') updated="$(date +%s)"

@@ -33,9 +33,19 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
+            {{- include "lib.sh" | indent 12 }}
+
+            trap libcleanup EXIT
+
+            tmpfile=$(libtmpfile update-bss-no-wipe)
+
             TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
-            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+
+            # REVIEW: Fatal if curl fails here?
+            curl --output "${tmpfile}" --header "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management"
+
+            # REVIEW: Fatal if jq fails?
+            TARGET_XNAME=$(jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname" "${tmpfile}")
             /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
   - name: wait-for-cfs-after-rebuild
     templateRef:
@@ -47,10 +57,21 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
-            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
-            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+            {{- include "lib.sh" | indent 12 }}
 
+            trap libcleanup EXIT
+
+            tmpfile=$(libtmpfile update-bss-no-wipe)
+
+            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+
+            # REVIEW: Default fatal
+            curl --output "${tmpfile}" --header "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management"
+
+            # REVIEW: Default fatal
+            TARGET_XNAME=$(jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname" "${tmpfile}")
+
+            # REVIEW: No longer needed, and likely shouldn't be used
             set -o pipefail
 
             # Wait for component to become enabled (this should happen whether or not there is a desired configuration)
@@ -58,7 +79,17 @@ tasks:
                 # Retry CFS command if needed
                 COUNT=0
                 while true; do
-                    ENABLED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.enabled') && break
+                    # REVIEW: In a retry loop so we'll use the non exit() version of hooks
+                    #shellcheck disable=SC2034
+                    CURLFN=curlretry
+
+                    curl --output "${tmpfile}" --header "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}"
+
+                    # REVIEW: In a retry loop so we'll use the non exit() version of hooks
+                    #shellcheck disable=SC2034
+                    JQTESTFAILFN=jqretry
+
+                    ENABLED=$(jq -r '.enabled' "${tmpfile}") && break
                     let COUNT+=1
                     if [[ ${COUNT} -gt 12 ]]; then
                         echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
@@ -82,7 +113,17 @@ tasks:
             # Retry CFS command if needed
             COUNT=0
             while true; do
-                DESIRED_CONFIG=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.desiredConfig') && break
+                # REVIEW: In a retry loop so we'll use the non exit() version of hooks
+                #shellcheck disable=SC2034
+                CURLFN=curlretry
+
+                curl --output "${tmpfile}" "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}"
+
+                # REVIEW: In a retry loop so we'll use the non exit() version of hooks
+                #shellcheck disable=SC2034
+                JQTESTFAILFN=jqretry
+
+                DESIRED_CONFIG=$(jq -r '.desiredConfig' "${tmpfile}") && break
                 let COUNT+=1
                 if [[ ${COUNT} -gt 12 ]]; then
                     echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
@@ -97,7 +138,16 @@ tasks:
             echo "Desired configuration for CFS component '${TARGET_XNAME}' is '${DESIRED_CONFIG}'"
 
             while true; do
-              RESULT=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=pending" | jq length)
+              # REVIEW: In a retry loop so we'll use the non exit() version of hooks
+              #shellcheck disable=SC2034
+              CURLFN=curlretry
+              curl --output "${tmpfile}" --header "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=pending")
+
+              # REVIEW: In a retry loop so we'll use the non exit() version of hooks
+              #shellcheck disable=SC2034
+              JQTESTFAILFN=jqretry
+
+              RESULT=$(jq length "${tmpfile}")
               if [[ "$RESULT" -eq 0 ]]; then
                 break
               fi
@@ -105,10 +155,26 @@ tasks:
               sleep 30
             done
 
-            CONFIGURED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=configured" | jq length)
-            FAILED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed" | jq length)
+            # Set hooks back to the exit versions.
+            CURLFN=curlfatal
+            JQTESTFAILFN=jqfatal
+
+            # REVIEW: Default fatal
+            curl --output "${tmpfile}" --header "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=configured"
+
+            # REVIEW: Default fatal
+            CONFIGURED=$(jq length "${tmpfile}")
+
+            # REVIEW: Default fatal
+            curl --output "${tmpfile}" --header  "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed"
+
+            # REVIEW: Default fatal
+            FAILED=$(jq length "${tmpfile}")
             echo "Configuration complete. $CONFIGURED component(s) completed successfully.  $FAILED component(s) failed."
             if [ "$FAILED" -ne "0" ]; then
+              # REVIEW: This should just reuse the tmpfile I think, we can save
+              # a call here, but if so even if jq fails it looks like we fail
+              # that before the implicit exit
               echo "The following components failed: $(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed"  | jq -r '. | map(.id) | join(",")')"
               exit 1
             fi

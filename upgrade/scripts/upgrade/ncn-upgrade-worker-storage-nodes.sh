@@ -25,8 +25,15 @@
 
 set -e
 basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-. ${basedir}/../common/upgrade-state.sh
+
+source "${basedir}"/../common/upgrade-state.sh
+
+# Relative source import
+source "${basedir}"/../../../lib/lib.sh
+
 trap 'argo_err_report' ERR
+
+trap libcleanup EXIT
 
 #global vars
 dryRun=false
@@ -86,8 +93,8 @@ while [[ $# -gt 0 ]]; do
         nodeType="storage"
         ;;
     *)
-        echo 
-        echo "Unknown option $1" 
+        echo
+        echo "Unknown option $1"
         usage
         exit 1
         ;;
@@ -105,7 +112,7 @@ function uploadWorkflowTemplates() {
 
 function createWorkflowPayload() {
     if [[ ${nodeType} == "worker" ]]
-    then    
+    then
         # ask for switch password if it's not set
         if [[ -z "${SW_ADMIN_PASSWORD}" ]]; then
         read -r -s -p "Switch password:" SW_ADMIN_PASSWORD
@@ -120,7 +127,7 @@ function createWorkflowPayload() {
 EOF
     fi
     if [[ ${nodeType} == "storage" ]]
-    then    
+    then
         echo
         cat << EOF
 {
@@ -132,11 +139,17 @@ EOF
 }
 
 function getToken() {
-    # shellcheck disable=SC2155,SC2046
-    curl -k -s -S -d grant_type=client_credentials \
-        -d client_id=admin-client \
-        -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-        "${baseUrl}"/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token'
+    # For all FUNCNAMES I *want* the first element which is function name
+    #shellcheck disable=SC2128
+    tmpfile=$(libtmpfile "${FUNCNAME}")
+
+    # REVIEW: Default fatal
+    curl --output "${tmpfile}" --show-error --data grant_type=client_credentials --data client_id=admin-client \
+        --data client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
+        "${baseUrl}"/keycloak/realms/shasta/protocol/openid-connect/token
+
+    # REVIEW: Default fatal
+    jq -r '.access_token' "${tmpfile}"
 }
 
 function printCmdArgs() {
@@ -151,47 +164,45 @@ function printCmdArgs() {
 }
 
 function getUnsucceededRebuildWorkflows() {
-    res_file=$(mktemp)
+    #shellcheck disable=SC2128
+    tmpfile=$(libtmpfile "$FUNCNAME")
+
     local labelSelector="node-type=${nodeType},workflows.argoproj.io/phase!=Succeeded"
-    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}")
-    if [[ ${http_code} -ne 200 ]]; then
-        echo "Request Failed, Response code: ${http_code}"
-        cat "${res_file}"
-        exit 1
-    fi
-    jq -r ".[]? | .name?" < "${res_file}"
+
+    # REVIEW: Default fatal
+
+    curl --output "${tmpfile}" --header "Authorization: Bearer $(getToken)" \
+         "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}"
+
+    # REVIEW: Default fatal
+    jq -r ".[]? | .name?" "${tmpfile}"
 }
 
 function createRebuildWorkflow() {
-    res_file=$(mktemp)
-    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPOST -H "Authorization: Bearer $(getToken)" -H 'Content-Type: application/json' -d "$(createWorkflowPayload)" "${baseUrl}/apis/nls/v1/ncns/rebuild")
-    if [[ ${http_code} -ne 200 ]]; then
-        echo "Request Failed, Response code: ${http_code}"
-        cat "${res_file}"
-        exit 1
-    fi
-    local workflow
-    workflow=$(grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*' < "${res_file}" )
-    echo "${workflow}"
+    #shellcheck disable=SC2128
+    tmpfile=$(libtmpfile "$FUNCNAME")
+
+    # REVIEW: Default fatal
+    curl --output "${tmpfile}" --request POST ---header "Authorization: Bearer $(getToken)" --header 'Content-Type: application/json' \
+         --data "$(createWorkflowPayload)" \
+         "${baseUrl}/apis/nls/v1/ncns/rebuild"
+
+    grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*' "${tmpfile}"
 }
 
 function deleteRebuildWorkflow() {
-    res_file=$(mktemp)
-    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XDELETE -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}")
-    if [[ ${http_code} -ne 200 ]]; then
-        echo "Request Failed, Response code: ${http_code}"
-        cat "${res_file}"
-        exit 1
-    fi
+    # REVIEW: Default fatal
+    curl --output "${tmpfile}" --request DELETE --header "Authorization: Bearer $(getToken)" \
+         "${baseUrl}/apis/nls/v1/workflows/${1}"
 }
 
 function retryRebuildWorkflow() {
-    res_file=$(mktemp)
-    http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}/retry" -d '{}')
-    if [[ ${http_code} -ne 200 ]]; then
-        echo "Request Failed, Response code: ${http_code}"
-        cat "${res_file}"
-    fi
+    #shellcheck disable=SC2128
+    tmpfile=$(libtmpfile "$FUNCNAME")
+
+    # REVIEW: Default fatal
+    curl --output "${resfile}" --request PUT --header "Authorization: Bearer $(getToken)" --data '{}' \
+         "${baseUrl}/apis/nls/v1/workflows/${1}/retry"
 }
 
 printCmdArgs
@@ -231,7 +242,7 @@ fi
 if [[ -z "${workflow}" ]]; then
     echo
     echo "No workflow to pull, something is wrong"
-else 
+else
     echo
     echo "Poll status of: ${workflow}"
 fi
@@ -241,11 +252,21 @@ sleep 20
 # poll
 while true; do
     labelSelector="node-type=${nodeType}"
-    res_file="$(mktemp)"
-    http_status=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}")
-    
-    if [ "${http_status}" -eq 200 ]; then
-        phase=$(jq -r ".[] | select(.name==\"${workflow}\") | .status.phase" < "${res_file}")
+    # Shellcheck refuses to accept quoting of $0 and the basename call and its
+    # wrong anyway.
+    #shellcheck disable=SC2086
+    tmpfile=$(libtmpfile "$(basename $0)")
+
+    # REVIEW: In a retry loop so we'll use the non exit() version of hooks
+    #shellcheck disable=SC2034
+    CURLFN=curlretry
+
+    if curl --output "${tmpfile}" --request GET --header "Authorization: Bearer $(getToken)" \ "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}"; then
+        # REVIEW: In a retry loop so we'll use the non exit() version of hooks
+        #shellcheck disable=SC2034
+        JQTESTFAILFN=jqretry
+
+        phase=$(jq -r ".[] | select(.name==\"${workflow}\") | .status.phase" "${tmpfile}")
         # skip null because workflow hasn't started yet
         if [[ "${phase}" == "null" ]]; then
             continue;
@@ -265,8 +286,8 @@ while true; do
             echo "Workflow in Error state, Retry ..."
             retryRebuildWorkflow "$workflow"
         fi
-        runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " < "${res_file}")
-        succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")
+        runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " "${tmpfile}")
+        succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " "${tmpfile}")
         clear
         printf "\n%s\n" "Succeeded:"
         echo "  ${succeededSteps}" | awk -F'.' '{print $2" -  "$3}'

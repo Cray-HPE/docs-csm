@@ -22,6 +22,9 @@ Jenkinsfile.github                                       @Cray-HPE/ci
 /operations/UAS_user_and_admin_topics                    @Cray-HPE/user-access
 
 # PET Items
+GNUMakefile                                              @Cray-HPE/platform-engineering
+/lib                                                     @Cray-HPE/platform-engineering
+/spec                                                    @Cray-HPE/platform-engineering
 /operations/artifact_management                          @Cray-HPE/platform-engineering
 /operations/kubernetes                                   @Cray-HPE/platform-engineering
 /operations/multi-tenancy                                @Cray-HPE/platform-engineering

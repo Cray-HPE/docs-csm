@@ -32,7 +32,7 @@ metadata:
 spec:
   podMetadata:
     annotations:
-      sidecar.istio.io/inject: "false"    
+      sidecar.istio.io/inject: "false"
   volumes:
     - name: ssh
       hostPath:
@@ -99,12 +99,20 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
+                    {{- include "lib.sh" . | indent 20 }}
+
                     source /srv/cray/scripts/metal/metal-lib.sh
-                    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3" \
-                      | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
+
+                    tmpfile=$(libtmpfile install-csi)
+
+                    # REVIEW: Not entirely sure this is right, this paginate command calls curl and jq implicitly
+                    paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3" > "${tmpfile}"
+
+                    # REVIEW: Should jq die here or not?
+                    csi_url=$(jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
                     pdsh -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
           - name: move-critical-singleton-pods
             templateRef:
@@ -113,7 +121,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
                     targetNcns="{{.TargetNcns}}"
@@ -143,8 +151,8 @@ spec:
                         echo "Couldn't not find pod: $pod"
                         echo "something is wrong"
                         exit 1
-                      fi                 
-                      
+                      fi
+
                       currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
                       if [[ "$nodeMoveTo" != "$currentNode" ]]; then
                         echo "Move Pod: $podName to Node: $nodeMoveTo"
@@ -158,7 +166,7 @@ spec:
           {{- range $index,$value := .TargetNcns }}
           - name: add-labels-{{$value}}
             template: add-labels
-            arguments: 
+            arguments:
               parameters:
               - name: targetNcn
                 value: {{$value}}
@@ -186,7 +194,7 @@ spec:
           #     we can safely wipe and reboot this node
           #     regardless of what state other nodes are
           - name: wipe-and-reboot-{{$value}}
-            dependencies: 
+            dependencies:
               - drain-{{$value}}
             template: wipe-and-reboot
             arguments:
@@ -198,7 +206,7 @@ spec:
           # post rebuild: parallel
           #     Post rebuild validation can be run in parallel
           - name: post-rebuild-{{$value}}
-            dependencies: 
+            dependencies:
               - wipe-and-reboot-{{$value}}
             template: post-rebuild
             arguments:

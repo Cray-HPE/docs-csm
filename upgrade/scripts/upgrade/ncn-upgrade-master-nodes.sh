@@ -28,6 +28,10 @@ basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
 
+# Import shared lib and use its cleanup trap.
+source "${basedir}"/../../../lib/lib.sh
+trap libcleanup EXIT
+
 target_ncn=$1
 
 . ${basedir}/../common/ncn-common.sh ${target_ncn}
@@ -80,8 +84,14 @@ if [[ ${target_ncn} == "ncn-m001" ]]; then
 fi
 
 {
-first_master_hostname=`curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global | \
-     jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"'`
+    # This is not the eventual location here for validation only!
+    #shellcheck disable=SC1091
+    . /var/tmp/lib.sh
+    tmpfile=$(libtmpfile "basename $0")
+
+    curl --output "${tmpfile}" --header "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=Global
+    first_master_hostname=$(jq -r '.[] | ."cloud-init"."meta-data"."first-master-hostname"' "${tmpfile}")
+
 #shellcheck disable=SC2053
 if [[ ${first_master_hostname} == ${target_ncn} ]]; then
    state_name="RECONFIGURE_FIRST_MASTER"
@@ -136,7 +146,7 @@ if [[ $state_recorded == "0" ]]; then
     ssh $target_ncn 'systemctl stop etcd.service'
 
     set +e
-    while true ; do    
+    while true ; do
         csi automate ncn etcd --action add-member --ncn $target_ncn --kubeconfig /etc/kubernetes/admin.conf
         if [[ $? -eq 0 ]]; then
             break
@@ -159,7 +169,7 @@ check_sls_health >> "${LOG_FILE}" 2>&1
 
 {
 set +e
-while true ; do    
+while true ; do
     csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
     if [[ $? -eq 0 ]]; then
         break
