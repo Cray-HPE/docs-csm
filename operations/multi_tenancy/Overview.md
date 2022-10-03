@@ -34,7 +34,8 @@ See [`TAPMS` Overview](Tapms.md) for details on this Kubernetes Operator.
 
 ### Slurm Operator
 
-_placeholder for `slurm` content_
+The Slurm operator can be used to deploy the Slurm workload manager within a
+tenant. See [Slurm Operator](SlurmOperator.md) for details.
 
 ## Getting Started
 

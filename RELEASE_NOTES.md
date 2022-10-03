@@ -10,9 +10,81 @@
 * Support for export of SNMP data from multiple switches for population of SNMP Export `grafana` panel
 * Space monitoring improvements - included volumes other than root file system
 
-### Networking
+### DHCP
 
-* TBD
+#### Changed
+
+* **Kea**: Fixed a bug that could cause the auto-repair logic to fail due to an incorrect index
+
+### DNS
+
+#### Changed
+
+* **`ExternalDNS`**: Fixed a bug where `cray-externaldns-manager` could panic if it couldn't connect to PowerDNS on startup
+* **PowerDNS**: Changed `powerdns-manager` SLS error message to debug
+* **PowerDNS**: Fixed bug that caused `powerdns-manager` and `externaldns-manager` to update the same record
+* **PowerDNS**: Fixed a bug that could cause `powerdns-manager` to intermittently crash when performing a lookup for an existing TSIG key
+* **PowerDNS**: `powerdns-manager` will now retry attempts to add a TSIG key
+* **PowerDNS**: `powerdns-manager` will now create PTR records that are not created by `external-dns`
+* **Unbound**: Changed `cray-dns-unbound` `MaxUnavailable` default from 0 to 1 to avoid issues when evicting pods from NCNs
+
+### Management Network
+
+#### Added
+
+* **Documentation**: Added procedure to migrate from the customer access network (CAN) to the customer high-speed network (CHN), allowing user traffic over
+  the HSN instead of the NMN (This is an extension of the `bi-furcated` CAN feature that shipped in CSM 1.2)
+* **Documentation**: Added various troubleshooting guides
+* **Hardware**: Validated the Aruba 8360 (JL705C) switch for the management network
+
+#### Changed
+
+* **CANU**: Fixed bug where UAN VLANs in generated switch configurations were wrong when using the CHN
+* **CANU**: Other various bug fixes (see https://github.com/cray-hpe/canu for a full changelog)
+* **CANU**: Added an ACL on systems with Dell and Mellanox switches to prevent high-speed network (HSN) switches on the Hardware Management Network (HMN)
+  from communicating with the Fabric Manager service on the Node Management Network (NMN) API gateway
+* **CSI**: Fixed bug where CSI could generate bad SLS chassis data
+* **Documentation**: Admins are now asked to updated CANU to the latest version when beginning a CSM upgrade
+* **Documentation**: Management network switch upgrade instructs are now separate from the CSM upgrade procedure
+* **Documentation**: Removed stale reference to Kea `postgres` from troubleshooting documentation
+* **Documentation**: Fixed invalid commands in `generate_switch_configs.md`
+
+### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
+
+#### Added
+
+* **ALL**: Initial support for NVME drives
+
+#### Changed
+
+* **All**: Updated kernel to `kernel-default-5.3.18-150300.59.87.1`
+* **All**: Various package updates to apply latest security patches
+* **All**: `kdump` is now more reliable and remains functional after IMS image customization
+* **All**: S3 now requires authentication to retrieve Management Node OS images
+* **All**: `metal.no-wipe=0` is now more reliable when running during a net boot
+* **All**: SSH keys must now be injected into images
+* **All**: Time synchronization is now more reliable on initial configuration
+* **All**: Pressure Stall Information (PSI) is now enabled by default ([see related CSM 1.3 docs](https://github.com/Cray-HPE/docs-csm/tree/release/1.3/background#psi))
+* **Documentation**: Various updates to installation guides
+
+### User Application Service (UAS) and User Application Instances (UAI)
+
+* No significant changes
+
+### User Application Nodes (UAN)
+
+#### Added
+
+* **UAN**: Initial release of UAN images based on kernels without modifications (technical preview)
+* **Documentation**: Added procedure for re-purposing compute nodes as UAN's (only applicable in specific scenarios)
+* **Documentation**: Added instructions to set/trim the boot order on UANs
+
+#### Changed
+
+* **UAN**: Pressure Stall Information (PSI) is now enabled by default on COS-based images
+* **UAN**: Updated to the latest COS image
+* **UAN**: Network changes related to the CAN and CHN may impact VLAN tagging on management network ports connected to UANs to ensure proper network traffic segregation.
+
 
 ### Miscellaneous functionality
 

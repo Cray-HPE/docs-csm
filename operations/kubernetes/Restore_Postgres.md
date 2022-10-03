@@ -25,7 +25,7 @@ This assumes that a dump of the database exists and the Cray command line interf
     1. List the available backups:
 
         ```bash
-        ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("spire"))'
+        cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("spire"))'
         ```
 
         Example output:
@@ -45,8 +45,8 @@ This assumes that a dump of the database exists and the Cray command line interf
     1. Download the backup files:
 
         ```bash
-        ncn# cray artifacts get postgres-backup "$DUMPFILE" "$DUMPFILE"
-        ncn# cray artifacts get postgres-backup "$MANIFEST" "$MANIFEST"
+        cray artifacts get postgres-backup "$DUMPFILE" "$DUMPFILE"
+        cray artifacts get postgres-backup "$MANIFEST" "$MANIFEST"
         ```
 
     1. Due to a `kubectl cp` bug, rename the DUMPFILE file, replacing any `:` characters with `-`:
@@ -55,7 +55,7 @@ This assumes that a dump of the database exists and the Cray command line interf
         TMP=$(echo "$DUMPFILE" | sed 's/:/-/g')
         mv $DUMPFILE $TMP
         DUMPFILE=$(echo $TMP)
-        unset $TMP
+        unset TMP
         ```
 
 1. (`ncn-mw#`) Scale the Spire service to 0.
@@ -243,10 +243,12 @@ This assumes that a dump of the database exists and the Cray command line interf
     These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
     The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets.
 
+    1. Setup the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations needed while restoring the Keycloak database. See [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md).
+
     1. List the available backups:
 
         ```bash
-        ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("keycloak"))'
+        cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("keycloak"))'
         ```
 
         Example output:
@@ -266,8 +268,15 @@ This assumes that a dump of the database exists and the Cray command line interf
     1. Download the backup files:
 
         ```bash
-        ncn# cray artifacts get postgres-backup "$DUMPFILE" "$DUMPFILE"
-        ncn# cray artifacts get postgres-backup "$MANIFEST" "$MANIFEST"
+        cray artifacts get postgres-backup "$DUMPFILE" "$DUMPFILE"
+        cray artifacts get postgres-backup "$MANIFEST" "$MANIFEST"
+        ```
+
+    1. Unset the `CRAY_CREDENTIALS` environment variable:
+
+        ```bash
+        unset CRAY_CREDENTIALS
+        rm /tmp/my-token.json
         ```
 
     1. Due to a `kubectl cp` bug, rename the DUMPFILE file, replacing any `:` characters with `-`:
@@ -276,7 +285,7 @@ This assumes that a dump of the database exists and the Cray command line interf
         TMP=$(echo "$DUMPFILE" | sed 's/:/-/g')
         mv $DUMPFILE $TMP
         DUMPFILE=$(echo $TMP)
-        unset $TMP
+        unset TMP
         ```
 
 1. (`ncn-mw#`) Scale the Keycloak service to 0.
@@ -515,7 +524,7 @@ the Cray command line interface \(CLI\) tool is initialized and configured on th
     1. List the available backups:
 
         ```bash
-        ncn# cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("vcs"))'
+        cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("vcs"))'
         ```
 
         Example output:
@@ -535,8 +544,8 @@ the Cray command line interface \(CLI\) tool is initialized and configured on th
     1. Download the backup files:
 
         ```bash
-        ncn# cray artifacts get postgres-backup "$DUMPFILE" "$DUMPFILE"
-        ncn# cray artifacts get postgres-backup "$MANIFEST" "$MANIFEST"
+        cray artifacts get postgres-backup "$DUMPFILE" "$DUMPFILE"
+        cray artifacts get postgres-backup "$MANIFEST" "$MANIFEST"
         ```
 
     1. Due to a `kubectl cp` bug, rename the DUMPFILE file, replacing any `:` characters with `-`:
@@ -545,7 +554,7 @@ the Cray command line interface \(CLI\) tool is initialized and configured on th
         TMP=$(echo "$DUMPFILE" | sed 's/:/-/g')
         mv $DUMPFILE $TMP
         DUMPFILE=$(echo $TMP)
-        unset $TMP
+        unset TMP
         ```
 
 1. (`ncn-mw#`) Scale the VCS service to 0.
@@ -684,10 +693,10 @@ the Cray command line interface \(CLI\) tool is initialized and configured on th
 1. (`ncn-mw#`) Scale the Gitea service back up.
 
     ```bash
-    kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=3
+    kubectl scale deployment ${SERVICE} -n ${NAMESPACE} --replicas=1
 
     # Wait for the gitea pods to start
-    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 3 ] ; do
+    while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/name="${SERVICELABEL}" | grep -v NAME | wc -l) != 1 ] ; do
         echo "  waiting for pods to start"; sleep 2
     done
     ```

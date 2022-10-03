@@ -32,7 +32,7 @@ The user performing this procedure needs to have access permission to the `cray-
     XNAME=x123456789s0c0n0
     ```
 
-3. Find the `cray-console-node` pod that is connected to that node.
+1. Find the `cray-console-node` pod that is connected to that node.
 
     ```bash
     NODEPOD=$(kubectl -n services exec $OP_POD -c cray-console-operator -- \
@@ -46,10 +46,10 @@ The user performing this procedure needs to have access permission to the `cray-
     cray-console-node-1
     ```
 
-4. Connect to the node's console using ConMan on the `cray-console-node` pod you found.
+1. Connect to the node's console using ConMan on the `cray-console-node` pod you found.
 
     ```bash
-    kubectl exec -it -n services $NODEPOD -- conman -j $XNAME
+    kubectl exec -it -n services $NODEPOD -c cray-console-node -- conman -j $XNAME
     ```
 
     Example output:
@@ -62,4 +62,4 @@ The user performing this procedure needs to have access permission to the `cray-
 
     Using the command above, a user can also attach to an already active SOL session that is being used by another user, so both can access the node's SOL simultaneously.
 
-5. Exit the connection to the console with the `&.` command.
+1. Exit the connection to the console with the `&.` command.

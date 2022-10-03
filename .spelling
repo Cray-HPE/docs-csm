@@ -397,6 +397,7 @@ PDU
 PDUs
 PECs
 PEM-encoded
+Percona
 permissioned
 PGs
 pickup
@@ -595,6 +596,7 @@ XL645d
 XL675d
 xname
 xnames
+XtraDB
 Yum
 zeroization
 zeroize

@@ -22,7 +22,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
 
     cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/initrd" "./${ARTIFACT_VERSION}-initrd"
 
-    export IMS_ROOTFS_FILENAME="${ARTIFACT_VERSION}-filesystem.squashfs"
+    export IMS_ROOTFS_FILENAME="${ARTIFACT_VERSION}-rootfs"
 
     export IMS_KERNEL_FILENAME="${ARTIFACT_VERSION}-kernel"
 
@@ -71,6 +71,14 @@ This document describes the configuration of a Kubernetes NCN image. The same st
    ```
 
 1. [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md).
+
+   In this section, use the following values for the target definition and target group for the
+   `cray cfs session create` command invocation:
+
+   ```text
+   --target-definition image
+   --target-group Management_Worker
+   ```
 
 1. (`ncn-mw#`) Update boot parameters for a Kubernetes NCN.
 

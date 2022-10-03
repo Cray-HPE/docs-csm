@@ -8,7 +8,7 @@ If there has been a failure to initialize all Ceph CSI components on `ncn-s001`,
 1. [Verify Ceph CSI](#1-verify-ceph-csi)
 1. [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init)
 
-### 1. Verify Ceph CSI
+## 1. Verify Ceph CSI
 
 Verify that the `ceph-csi` requirements are in place.
 
@@ -54,9 +54,9 @@ Verify that the `ceph-csi` requirements are in place.
 
       Check your results against the above examples.
 
-      If any components are missing, see [Rerun Storage Node `cloud-init`](#2-rerun-storage-node-cloud-init).
+      If any components are missing, see [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init).
 
-### 2. Rerun Storage Node `cloud-init`
+## 2. Rerun storage node `cloud-init`
 
    This procedure will restart the storage node `cloud-init` process to prepare Ceph for use by the utility storage nodes.
 
