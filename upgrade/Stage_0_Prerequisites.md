@@ -8,18 +8,18 @@
 
 Stage 0 has several critical procedures which prepare the environment and verify if the environment is ready for the upgrade.
 
-- [Stage 0 - Prerequisites and Preflight Checks](#stage-0---prerequisites-and-preflight-checks)
-  - [Start typescript](#start-typescript)
-  - [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
-    - [Direct download](#direct-download)
-    - [Manual copy](#manual-copy)
-  - [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
-  - [Stage 0.3 - Customize the new NCN image and update NCN personalization configurations](#stage-03---customize-the-new-ncn-image-and-update-ncn-personalization-configurations)
-    - [Standard upgrade](#standard-upgrade)
-    - [CSM-only system upgrade](#csm-only-system-upgrade)
-  - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
-  - [Stop typescript](#stop-typescript)
-  - [Stage completed](#stage-completed)
+- [Start typescript](#start-typescript)
+- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+  - [Direct download](#direct-download)
+  - [Manual copy](#manual-copy)
+- [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
+- [Stage 0.3 - Customize the new NCN image and update NCN personalization configurations](#stage-03---customize-the-new-ncn-image-and-update-ncn-personalization-configurations)
+  - [Standard upgrade](#standard-upgrade)
+  - [CSM-only system upgrade](#csm-only-system-upgrade)
+- [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+- [Stage 0.5 - Regenerate Postgres backups](#stage-05---regenerate-postgres-backups)
+- [Stop typescript](#stop-typescript)
+- [Stage completed](#stage-completed)
 
 ## Start typescript
 
@@ -279,6 +279,53 @@ This upgrade scenario is extremely uncommon in production environments.
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
+
+## Stage 0.5 - Regenerate Postgres backups
+
+The current Postgres opt-in backups need to be re-generated to fix a known issue. This requires a new image.
+
+1. (`ncn-m001#`) Load the updated `cray-postgres-db-backup` image into the nexus local registry.
+
+   - If `ncn-m001` has internet access, then use the following commands.
+
+     ```bash
+     NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
+     NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
+     podman run --rm --network host -v /root:/mnt quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" \
+         docker-archive:/mnt/cray-postgres-db-backup.tar docker://registry.local/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+     ```
+
+   - Otherwise, use the following procedure.
+
+      1. Save the image to a `tar` file from a system that does have access to the internet.
+
+         ```bash
+         podman pull docker://artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+         podman save -o cray-postgres-db-backup.tar docker.io/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+         ```
+
+      1. Copy the `cray-postgres-db-backup.tar` to the target system under `/root`.
+
+      1. Copy the `tar` file into the local registry on the target system:
+
+         ```bash
+         NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
+         NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
+         podman run --rm --network host -v /root:/mnt quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" \
+             docker-archive:/mnt/cray-postgres-db-backup.tar docker://registry.local/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+         ```
+
+1. (`ncn-m001#`) Regenerate the Postgres backups.
+
+   ```bash
+   /usr/share/doc/csm/upgrade/scripts/k8s/create_new_postgres_backups.sh
+   ```
+
+   Successful output should end with the following line:
+
+   ```text
+   Postgres backup(s) have been successfully re-genetated.
+   ```
 
 ## Stop typescript
 

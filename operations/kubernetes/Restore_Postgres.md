@@ -223,6 +223,12 @@ This assumes that a dump of the database exists and the Cray command line interf
     pdsh -w ncn-s00[1-3] 'systemctl restart spire-agent'
     ```
 
+1. (`ncn-mw#`) Run the following to fix any issues with the spire token on storage nodes.
+
+    ```bash
+    /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
+    ```
+
 1. (`ncn-mw#`) Verify that the service is working.
 
     The following should return a token.
@@ -340,13 +346,13 @@ This assumes that a dump of the database exists and the Cray command line interf
     kubectl cp ./${DUMPFILE} "${POSTGRESQL}-0":/home/postgres/${DUMPFILE} -c postgres -n ${NAMESPACE}
     ```
 
-    Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.
-
 1. (`ncn-mw#`) Restore the data.
 
     ```bash
     kubectl exec "${POSTGRESQL}-0" -c postgres -n ${NAMESPACE} -it -- psql -U postgres < ${DUMPFILE}
     ```
+
+    Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.
 
 1. (`ncn-mw#`) Either update or re-create the `keycloak-postgres` secrets.
 
@@ -444,7 +450,7 @@ This assumes that a dump of the database exists and the Cray command line interf
     cray-keycloak-2   2/2     Running   0          35s
     ```
 
-1. (`ncn-mw#`) Re-run the `keycloak-setup` and `keycloak-users-localize` jobs, and restart Keycloak gatekeeper.
+1. (`ncn-mw#`) Re-run the `keycloak-setup` and `keycloak-users-localize` jobs, and restart the ingress `oauth2-proxies`.
 
     * Run the `keycloak-setup` job to restore the Kubernetes client secrets:
 
@@ -610,13 +616,13 @@ the Cray command line interface \(CLI\) tool is initialized and configured on th
     kubectl cp ./${DUMPFILE} "${POSTGRESQL}-0":/home/postgres/${DUMPFILE} -c postgres -n services
     ```
 
-    Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.
-
 1. (`ncn-mw#`) Restore the data.
 
     ```bash
     kubectl exec "${SERVICE}-0" -c postgres -n services -it -- psql -U postgres < ${DUMPFILE}
     ```
+
+    Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.
 
 1. (`ncn-mw#`) Either update or re-create the `gitea-vcs-postgres` secrets.
 
