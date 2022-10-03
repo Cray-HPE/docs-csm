@@ -6,6 +6,7 @@
 - [Start typescript](#start-typescript)
 - [Perform upgrade](#perform-upgrade)
 - [Verify Keycloak users](#verify-keycloak-users)
+- [Take Etcd Manual Backup](#take-etcd-manual-backup)
 - [Stop typescript](#stop-typescript)
 - [Stage completed](#stage-completed)
 
@@ -56,6 +57,16 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
     After an upgrade, it is possible that all expected Keycloak users were not localized.
     See [Verification procedure](../operations/security_and_authentication/Keycloak_User_Localization.md#Verification-procedure)
     to confirm that Keycloak localization has completed as expected.
+
+## Take Etcd Manual Backup
+
+1. (`ncn-m002#`) Execute the following script to take a manual backup of the Etcd clusters.
+   These clusters are automatically backed up every 24 hours, but taking a manual backup
+   at this stage in the upgrade enables restoring from backup later in this process if needed.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/etcd/take-etcd-manual-backups.sh post_upgrade
+   ```
 
 ## Stop typescript
 
