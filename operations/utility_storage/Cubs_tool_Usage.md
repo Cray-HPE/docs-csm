@@ -6,14 +6,17 @@
 
 ## Glossary
 
-* **`in_family`** - is referring to an upgrade staying within the same major version of Ceph.  E.g, Any upgrade within the same CSM release will contain the same Major version of Ceph, but could have minor version bumps or patched containers.
+* **`in family`** - is referring to an upgrade staying within the same major version of Ceph.  E.g, Any upgrade within the same CSM release will contain the same Major version of Ceph, but could have minor version bumps or patched containers.
   
 ## Usage
 
 ***IMPORTANT:*** The cubs_tool.py utility at this time will only work on `ncn-s00[1-3]`.  Please ensure you are only attempting to run this tool from one of those servers.  
 
+```bash
+./cubs_tool.py --help
+```
+
 ```text
- # ./cubs_tool.py --help
 usage: cubs_tool.py [-h] [--report] [--version VERSION] [--registry REGISTRY]
                     [--upgrade] [--in_family_override] [--quiet]
 
@@ -28,14 +31,19 @@ optional arguments:
   --upgrade             Upgrade toggle. Defaults to False
   --in_family_override  Flag to allow for "in family" upgrades and testing.
   --quiet               Toggle to enable/disable visual output
-  ```
+```
 
 ## Use Cases
 
 1. Version and status report
 
    ```bash
-   # ./cubs_tool.py --report
+   ./cubs_tool.py --report
+   ```
+   
+   Potential output:
+
+   ```text
    +----------+-------------+-----------------+---------+---------+-------------------------------------------------------------------------------------------------------------------------------------+
    |   Host   | Daemon Type |        ID       | Version |  Status |                                                              Image Name                                                             |
    +----------+-------------+-----------------+---------+---------+-------------------------------------------------------------------------------------------------------------------------------------+
@@ -89,20 +97,25 @@ optional arguments:
 1. Upgrade check
 
    ```bash
-    # ./cubs_tool.py --version 16.2.10 --registry localhost
-      Upgrade Available!!  The specified version v16.2.10 has been found in the registry
+    ./cubs_tool.py --version 16.2.10 --registry localhost
     ```
+    
+   Potential output:
+
+   ```text
+   Upgrade Available!!  The specified version v16.2.10 has been found in the registry
+   ```
 
 1. Upgrade
 
    ```bash
-    # ./cubs_tool.py --version 16.2.10 --registry localhost --upgrade
+   ./cubs_tool.py --version 16.2.10 --registry localhost --upgrade
    ```
 
 1. In-family Upgrade
 
    ```bash
-    # ./cubs_tool.py --version 16.2.10 --registry localhost --upgrade
+   ./cubs_tool.py --version 16.2.10 --registry localhost --upgrade
    ```
 
 ## Troubleshooting

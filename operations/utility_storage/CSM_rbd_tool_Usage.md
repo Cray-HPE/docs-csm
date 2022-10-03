@@ -4,7 +4,7 @@
 
 ## Usage
 
-```bash
+```text
 usage: csm_rbd_tool.py [-h] [--status] [--rbd_action RBD_ACTION]
                        [--pool_action POOL_ACTION] [--target_host TARGET_HOST]
                        [--csm_version CSM_VERSION]
@@ -31,26 +31,22 @@ optional arguments:
 
 ## Examples
 
-1. Check the status of the `rbd` device.
-
-   (`ncn-m#`)
+1. (`ncn-m#`) Check the status of the `rbd` device.
 
    ```bash
-    /usr/share/doc/csm/scripts/csm_rbd_tool.py --status
+   /usr/share/doc/csm/scripts/csm_rbd_tool.py --status
    ```
 
    Output:
 
    ```text
-    [{"id":"0","pool":"csm_admin_pool","namespace":"","name":"csm_scratch_img","snap":"-","device":"/dev/rbd0"}]
-    Pool csm_admin_pool exists: True
-    RBD device exists True
-    RBD device mounted at - ncn-m001.nmn:/etc/cray/upgrade/csm
-    ```
+   [{"id":"0","pool":"csm_admin_pool","namespace":"","name":"csm_scratch_img","snap":"-","device":"/dev/rbd0"}]
+   Pool csm_admin_pool exists: True
+   RBD device exists True
+   RBD device mounted at - ncn-m001.nmn:/etc/cray/upgrade/csm
+   ```
 
-2. Move the `rbd` device.
-
-   (`ncn-s001`)
+2. (`ncn-s001`) Move the `rbd` device.
 
    ```bash
    /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
