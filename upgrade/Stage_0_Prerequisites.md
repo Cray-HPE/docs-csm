@@ -295,7 +295,7 @@ The current Postgres opt-in backups need to be re-generated to fix a known issue
 
    - Otherwise, use the following procedure.
 
-      1. From a system that does have access to the internet, save the image to a `tar` file.
+      1. Save the image to a `tar` file from a system that does have access to the internet.
 
          ```bash
          podman pull docker://artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
@@ -304,7 +304,7 @@ The current Postgres opt-in backups need to be re-generated to fix a known issue
 
       1. Copy the `cray-postgres-db-backup.tar` to the target system under `/root`.
 
-      1. Then copy the `tar` file into the local registry on the target system:
+      1. Copy the `tar` file into the local registry on the target system:
 
          ```bash
          NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
