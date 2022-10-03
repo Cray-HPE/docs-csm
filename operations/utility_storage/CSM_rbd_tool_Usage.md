@@ -33,7 +33,7 @@ optional arguments:
 
 1. Check the status of the `rbd` device.
 
-   (on ncn-m#)
+   (`ncn-m#`)
 
    ```bash
     /usr/share/doc/csm/scripts/csm_rbd_tool.py --status
@@ -50,7 +50,7 @@ optional arguments:
 
 2. Move the `rbd` device.
 
-   (on ncn-s001)
+   (`ncn-s001`)
 
    ```bash
    /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
