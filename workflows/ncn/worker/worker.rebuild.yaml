@@ -92,69 +92,12 @@ spec:
     - name: main
       dag:
         tasks:
-          - name: install-csi
-            templateRef:
-              name: ssh-template
-              template: shell-script
+          - name: before-all
+            template: before-all
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
-                - name: scriptContent
-                  value: |
-                    source /srv/cray/scripts/metal/metal-lib.sh
-                    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3" \
-                      | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
-                    pdsh -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
-          - name: move-critical-singleton-pods
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"  
-                - name: scriptContent
-                  value: |
-                    targetNcns="{{.TargetNcns}}"
-                    # remove '[' and ']'
-                    targetNcns=${targetNcns:1:-1}
-                    # convert to array
-                    targetNcnsArray=($targetNcns)
-                    # set last rebuilding worker to nodeMoveTo
-                    nodeMoveTo=${targetNcnsArray[-1]}
-                    # try to find a node that is not in targetNcns
-                    nodes=$(kubectl get nodes | grep "ncn-w" | awk '{print $1}')
-                    for node in $nodes;do
-                      if echo $targetNcns | grep $node; then
-                        echo "skip $node"
-                      else
-                        nodeMoveTo=${node}
-                        break
-                      fi
-                    done
-
-                    echo
-
-                    pods=( "nexus" "ipxe" "kea" "cray-cfs-api-db" )
-                    for pod in ${pods[@]};do
-                      podName=$(kubectl get pods --all-namespaces | awk '{print $2}' | grep $pod)
-                      if [[ -z $podName ]];then
-                        echo "Couldn't not find pod: $pod"
-                        echo "something is wrong"
-                        exit 1
-                      fi                 
-                      
-                      currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
-                      if [[ "$nodeMoveTo" != "$currentNode" ]]; then
-                        echo "Move Pod: $podName to Node: $nodeMoveTo"
-                        /opt/cray/platform-utils/move_pod.sh $podName $nodeMoveTo > /dev/null
-                      fi
-
-                      podName=$(kubectl get pods --all-namespaces | awk '{print $2}' | grep $pod)
-                      ns=$(kubectl get po -A | grep $podName | awk '{print $1}')
-                      kubectl wait --for=condition=ready pod $podName -n $ns --timeout=5m
-                    done
+                  value: "{{$.DryRun}}"
           {{- range $index,$value := .TargetNcns }}
           - name: add-labels-{{$value}}
             template: add-labels
@@ -162,19 +105,29 @@ spec:
               parameters:
               - name: targetNcn
                 value: {{$value}}
+          - name: before-each-{{$value}}
+            dependencies:
+              - before-all
+              # each drain depends on previous drain action
+              # so we make sure only one node is drained at a time
+              {{ if ne $index 0 }}
+              - drain-{{ index $.TargetNcns (add $index -1) }}
+              {{ end }}
+            template: before-each
+            arguments:
+              parameters:
+                - name: targetNcn
+                  value: {{$value}}
+                - name: dryRun
+                  value: "{{$.DryRun}}"
           # drain: sync
           #     Only one worker can be drained at a time
           - name: drain-{{$value}}
             template: drain
             dependencies:
               - add-labels-{{$value}}
-              - move-critical-singleton-pods
-              - install-csi
-              # each drain depends on previous drain action
-              # so we make sure only one node is drained at a time
-              {{ if ne $index 0 }}
-              - drain-{{ index $.TargetNcns (add $index -1) }}
-              {{ end }}
+              - before-all
+              - before-each-{{$value}}
             arguments:
               parameters:
               - name: targetNcn
@@ -195,11 +148,24 @@ spec:
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
+          # after each: parallel
+          #     once a worker node is rebooted
+          #     we need to run post boot hooks
+          - name: after-each-{{$value}}
+            dependencies:
+              - wipe-and-reboot-{{$value}}
+            template: after-each
+            arguments:
+              parameters:
+                - name: targetNcn
+                  value: {{$value}}
+                - name: dryRun
+                  value: "{{$.DryRun}}"
           # post rebuild: parallel
           #     Post rebuild validation can be run in parallel
           - name: post-rebuild-{{$value}}
             dependencies: 
-              - wipe-and-reboot-{{$value}}
+              - after-each-{{$value}}
             template: post-rebuild
             arguments:
               parameters:
@@ -208,7 +174,33 @@ spec:
               - name: dryRun
                 value: "{{$.DryRun}}"
           {{- end }}
+          - name: after-all
+            template: after-all
+            dependencies:
+              # each drain depends on previous drain action
+              # so we make sure only one node is drained at a time
+              {{- range $index,$value := .TargetNcns }}
+              - post-rebuild-{{$value}}
+              {{- end }}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
     # reference to individual tasks
+    - name: before-all
+      inputs:
+        parameters:
+          - name: dryRun
+      dag:
+        tasks:
+{{ getHooks "before-all" . | indent 8 }}
+    - name: before-each
+      inputs:
+        # import ./common.envar.yaml
+        {{- include "worker.common.parameters" . | indent 8 }}
+      dag:
+        tasks:
+{{ getHooks "before-each" . | indent 8 }}
     - name: add-labels
       inputs:
         parameters:
@@ -237,6 +229,13 @@ spec:
       dag:
         # import ./worker.wipe-and-reboot.yaml
         {{- include "worker.wipe-and-reboot" . | indent 8 }}
+    - name: after-each
+      inputs:
+        # import ./common.envar.yaml
+        {{- include "worker.common.parameters" . | indent 8 }}
+      dag:
+        tasks:
+{{ getHooks "after-each" . | indent 8 }}
     - name: post-rebuild
       inputs:
         # import ./worker.common.parameters.yaml
@@ -244,3 +243,10 @@ spec:
       dag:
         # import ./worker.post-rebuild.yaml
         {{- include "worker.post-rebuild" . | indent 8 }}
+    - name: after-all
+      inputs:
+        parameters:
+          - name: dryRun
+      dag:
+        tasks:
+{{ getHooks "after-all" . | indent 8 }}
