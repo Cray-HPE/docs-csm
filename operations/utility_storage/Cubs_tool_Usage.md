@@ -10,7 +10,7 @@
   
 ## Usage
 
-***IMPORTANT:*** The cubs_tool.py utility at this time will only work on `ncn-s00[1-3]`.  Please ensure you are only attempting to run this tool from one of those servers.  
+***IMPORTANT:*** The `cubs_tool.py` utility at this time will only work on `ncn-s00[1-3]`.  Please ensure you are only attempting to run this tool from one of those servers.  
 
 ```bash
 ./cubs_tool.py --help
