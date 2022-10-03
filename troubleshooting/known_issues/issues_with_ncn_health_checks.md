@@ -122,3 +122,13 @@
    =- ncn-w002.nmn                  3   5   377     8  -1910us[-1910us] +/-   27ms
    =- ncn-w003.nmn                  3   8   377   74m  -1122us[-1002us] +/-   31ms
    ```
+
+- `Etcd backups missing after system power up`
+
+   After system power up, automated Etcd backups will resume within about 24 hours of the cluster being back up.  When running the `ncnHealthChecks.sh` script within this time period, it may report a failure:
+
+   ```text
+   --- FAILED --- not all Etcd clusters had expected backups.
+   ```
+
+   This is normal, and backups should resume after 24 hours.
