@@ -40,7 +40,7 @@ optional arguments:
    ```bash
    ./cubs_tool.py --report
    ```
-   
+
    Potential output:
 
    ```text
@@ -99,7 +99,7 @@ optional arguments:
    ```bash
     ./cubs_tool.py --version 16.2.10 --registry localhost
     ```
-    
+
    Potential output:
 
    ```text
