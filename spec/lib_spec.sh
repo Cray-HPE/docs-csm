@@ -49,6 +49,35 @@ EOF
     rm -fr "${tmpdir}"
   }
 
+  Context 'curl wrapper handles curl with no args transparently'
+    curl() {
+      printf "curl: try 'curl --help' for more information\n"
+      return 2
+    }
+
+    It 'calls curl when no args are passed'
+      When call sutcurl
+      The status should equal 2
+      The stdout should equal "curl: try 'curl --help' for more information"
+    End
+  End
+
+  Context 'curl wrapper handles curl stdin if it is a pipe'
+    curl() {
+      cat /dev/stdin
+      return $?
+    }
+
+    It 'calls curl transparently when input is a pipe/stdin'
+      Data
+        #|stdin
+      End
+      When call sutcurl --header 'Content-Type: application/json' --request POST --data-binary '@-' uri://blah
+      The status should equal 0
+      The stdout should equal "stdin"
+    End
+  End
+
   Context 'curl wrapper basic success'
     curl() {
       %text
@@ -125,7 +154,37 @@ EOF
       The status should equal 42
       The stderr should equal "$(result)"
     End
+    End
+
+  Context 'jq wrapper handles jq with no args transparently'
+    jq() {
+      printf "the real jq output is huge\n"
+      return 2
+    }
+
+    It 'calls jq when no args are passed'
+      When call sutjq
+      The status should equal 2
+      The stdout should equal "the real jq output is huge"
+    End
   End
+
+  Context 'jq wrapper handles jq stdin if it is a pipe'
+    jq() {
+      cat /dev/stdin
+      return $?
+    }
+
+    It 'calls jq transparently when input is a pipe/stdin'
+      Data
+        #|{}
+      End
+      When call sutjq '.'
+      The status should equal 0
+      The stdout should equal "{}"
+    End
+  End
+
 
   Context 'jq wrapper basic success'
     It 'wraps jq'

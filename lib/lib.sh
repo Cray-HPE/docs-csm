@@ -230,6 +230,13 @@ printcurloutputonok() {
 # Probably an eval would fix it but thats a future problem.
 if [ "${__SOURCED__:+sut}" = "sut" ]; then
   sutcurl() {
+    if [ $# -eq 0 ]; then
+      curl
+    elif [ ! -t 0 ]; then
+      curl "$@" < /dev/stdin
+      return $?
+    fi
+
     hookcurlentry "curl" "$@"
     output=$(curl --write-out "%{http_code}" --silent --insecure "$@" 2>&1)
     rc=$?
@@ -242,6 +249,13 @@ else
   CURL=$(command -v "${CURL}")
 
   curl() {
+    if [ $# -eq 0 ]; then
+      ${CURL}
+    elif [ ! -t 0 ]; then
+      ${CURL} "$@" < /dev/stdin
+      return $?
+    fi
+
     hookcurlentry "curl" "$@"
     # Use long args here not short
     # TODO: env arg to control these default vars? Future work.
@@ -369,6 +383,13 @@ jqretry() {
 # acting upon that or not to decide if something should exit or not.
 if [ "${__SOURCED__:+sut}" = "sut" ]; then
   sutjq() {
+    if [ $# -eq 0 ]; then
+      jq
+    elif [ ! -t 0 ]; then
+      jq "$@" < /dev/stdin
+      return $?
+    fi
+
     hookjqentry "jq" "$@"
 
     # Portable way to get last arg to the fn which we expect to be a file
@@ -397,6 +418,13 @@ else
   JQ=$(command -v "${JQ}")
 
   jq() {
+    if [ $# -eq 0 ]; then
+      ${JQ}
+    elif [ ! -t 0 ]; then
+      ${JQ} "$@" < /dev/stdin
+      return $?
+    fi
+
     hookjqentry "jq" "$@"
 
     # Portable way to get last arg to the fn which we expect to be a file
