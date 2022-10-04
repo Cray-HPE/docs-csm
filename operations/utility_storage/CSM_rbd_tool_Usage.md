@@ -59,3 +59,28 @@ optional arguments:
    /dev/rbd0
    RBD device mounted at - ncn-m002.nmn:/etc/cray/upgrade/csm
    ```
+
+## Troubleshooting the RBD Tool
+
+### Issue
+
+Moving the `rbd` device can fail with the error message:
+
+ `mount: /etc/cray/upgrade/csm: mount(2) system call failed: Structure needs cleaning.`
+
+### Fix
+
+To clean the device, first get the `rbd` device name and location. This can be found in the information outputed by the status check shown above. The device name is likely `dev/rbd0` or similar and it should be located on `ncn-m001` or `ncn-m002`. Run the following command on the node that the device is located on.
+
+(`ncn-m#`) Clean the device.
+```bash
+   fsck.ext4 <device_name>
+```
+
+Example output:
+
+```text
+/dev/rbd0: clean, 11/65536000 files, 4396001/262144000 blocks
+```
+
+Once this is completed, retry moving the `rbd` device.
