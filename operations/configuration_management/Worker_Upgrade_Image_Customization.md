@@ -1,14 +1,14 @@
 # Worker Upgrade Image Customization
 
 When performing an upgrade, NCN image customization must be performed with the NCN worker node image to ensure the appropriate CFS layers are applied.
-This step involves configuring CFS to use the default SAT `bootprep` files from the `hpc-csm-software-recipe` repository, and rebuilding the NCN worker nodes so they boot the newly customized image.
+This step involves configuring CFS to use the default `sat bootprep` files from the `hpc-csm-software-recipe` repository and rebuilding the NCN worker nodes so they boot the newly customized image.
 
-The definition of the CFS configuration used for NCN worker node Image Customization is provided in the `hpc-csm-software-recipe` repository in VCS.
+The definition of the CFS configuration used for NCN worker node image customization is provided in the `hpc-csm-software-recipe` repository in VCS.
 The following procedure describes how to correctly edit the `bootprep` files to be able to use them to perform image customization.
 
-1. (`ncn-m#`) Perform the steps in the [Accessing SAT `Bootprep` Files](Accessing_Sat_Bootprep_Files.md) procedure to gather a copy of the SAT `Bootprep` files.
+1. (`ncn-m#`) Perform the steps in the [Accessing `sat bootprep` Files](Accessing_Sat_Bootprep_Files.md) procedure to gather a copy of the `sat bootprep` files.
 
-1. (`ncn-m#`) Create a local copy of the `management-bootprep-yaml` file and delete the `ncn-personalization` configuration. The `ncn-image-customization` configuration will be the only entry remaining in the file.
+1. (`ncn-m#`) Create a local copy of the `management-bootprep.yaml` file and delete the `ncn-personalization` configuration. The `ncn-image-customization` configuration will be the only entry remaining in the file.
 
     ```bash
     cp management-bootprep.yaml management-bootprep-image-customization.yaml
