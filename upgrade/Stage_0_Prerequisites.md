@@ -291,8 +291,9 @@ The current Postgres opt-in backups need to be re-generated to fix a known issue
      ```bash
      NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
      NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
-     podman run --rm --network host -v /root:/mnt quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" \
-         docker-archive:/mnt/cray-postgres-db-backup.tar docker://registry.local/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+     podman run --rm --network host quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" \
+         docker://artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3 \
+         docker://registry.local/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
      ```
 
    - Otherwise, use the following procedure.
