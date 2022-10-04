@@ -70,9 +70,12 @@ Moving the `rbd` device can fail with the error message:
 
 ### Fix
 
-To clean the device, first get the `rbd` device name and location. This can be found in the information outputed by the status check shown above. The device name is likely `dev/rbd0` or similar and it should be located on `ncn-m001` or `ncn-m002`. Run the following command on the node that the device is located on.
+To clean the device, first get the `rbd` device name and location. 
+This can be found in the information outputted by the status check shown above. The device name is likely `dev/rbd0` or similar and it should be located on `ncn-m001` or `ncn-m002`. 
+Run the following command on the node that the device is located on.
 
 (`ncn-m#`) Clean the device.
+
 ```bash
    fsck.ext4 <device_name>
 ```
