@@ -241,10 +241,6 @@ In most cases, administrators will be performing a standard upgrade and not a CS
     Read the `HPE Cray EX software upgrade workflow` section. Pay particular attention to the `HPC CSM Software Recipe` and `Cray System Management (CSM)` subsections,
     as well as any `NCN Personalization` subsections.
 
-1. Get a current copy of the SAT `Bootprep` files.
-
-    See [Accessing SAT `Bootprep` Files](../operations/configuration_management/Accessing_Sat_Bootprep_Files.md).
-
 1. Prepare the pre-boot worker NCN image customizations.
 
     This will ensure that the CFS configuration layers are applied to perform image customization for the worker NCNs.
