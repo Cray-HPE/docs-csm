@@ -56,7 +56,7 @@ configuration layer requires special placement in the layer list.
      configuring the NCNs. Use the [sample file with a single layer](../configuration_management/Configuration_Layers.md#example-configuration-single-layer)
      as a template.
    * If a CFS configuration exists with one or more layers, add (or replace)
-     the corresponding layer entry(ies) with the configuration layer
+     the corresponding layer entry or entries with the configuration layer
      information gathered for this specific product. For example:
 
         ```bash
