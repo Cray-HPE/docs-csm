@@ -244,12 +244,12 @@ In most cases, administrators will be performing a standard upgrade and not a CS
 1. Prepare the pre-boot worker NCN image customizations.
 
     This will ensure that the CFS configuration layers are applied to perform image customization for the worker NCNs.
-    See [Worker Upgrade Image Customization](../operations/configuration_management/Worker_Upgrade_Image_Customization.md).
+    See [Worker Image Customization](../operations/configuration_management/Worker_Image_Customization.md).
 
 1. Prepare the post-boot worker NCN personalizations.
 
     This will ensure that the appropriate CFS configuration layers are applied when performing post-boot node personalization of the worker NCNs.
-    See [Worker Upgrade Node Personalization](../operations/configuration_management/Worker_Upgrade_Node_Personalization.md).
+    See [Worker Node Personalization](../operations/configuration_management/Worker_Node_Personalization.md).
 
 Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data), skipping the [CSM-only system upgrade](#csm-only-system-upgrade) subsection below.
 

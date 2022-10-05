@@ -1,6 +1,6 @@
-# Worker Upgrade Node Personalization
+# Worker Node Personalization
 
-When performing an upgrade, NCN personalization must be performed on the NCN worker node to ensure the appropriate CFS layers are applied post-boot.
+When performing an upgrade or fresh install, NCN personalization must be performed on the NCN worker node to ensure the appropriate CFS layers are applied post-boot.
 This step involves configuring CFS to use the default `sat bootprep` files from the `hpc-csm-software-recipe` repository and applying the resulting configuration to the NCN worker nodes.
 
 The definition of the CFS configuration used for NCN worker node personalization is provided in the `hpc-csm-software-recipe` repository in VCS.
