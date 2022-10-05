@@ -31,7 +31,7 @@
             "pattern": "https?://[^/]+\\.\\\\{\\\\{network\\.dns\\.external\\\\}\\\\}(/.*)?"
         },
         {
-            "pattern": "^https://www\\.hpe\\.com/support/ex-gsg"
+            "pattern": "^https://www\\.hpe\\.com/support/ex-S-8000"
         },
         {
             "pattern": "https://jira-pro\\.its\\.hpecorp\\.net:8443(/.*)?"
