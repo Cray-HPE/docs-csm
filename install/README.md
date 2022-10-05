@@ -171,7 +171,7 @@ communicates with at once, or specific devices can be targeted for a firmware up
 
 > **IMPORTANT:**
 > Before FAS can be used to update firmware, refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
-> on the [HPE Customer Support Center](https://www.hpe.com/support/ex-gsg) for more information about how to install
+> on the [HPE Customer Support Center](https://www.hpe.com/support/ex-S-8000) for more information about how to install
 > the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
 > available. Once FAS is aware that new firmware is available, then see
 > [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
@@ -192,7 +192,7 @@ See [Prepare Compute Nodes](prepare_compute_nodes.md).
 
 After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
 been fully installed and configured. Refer to the _HPE Cray EX System Software Getting Started Guide S-8000_
-on the [HPE Customer Support Center](https://www.hpe.com/support/ex-gsg) for more information on other product streams
+on the [HPE Customer Support Center](https://www.hpe.com/support/ex-S-8000) for more information on other product streams
 to be installed and configured after CSM.
 
 ### Troubleshooting installation problems
