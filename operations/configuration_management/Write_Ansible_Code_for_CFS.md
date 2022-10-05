@@ -183,6 +183,8 @@ different times when they are rebooted, some keywords meant for coordinating the
 | `run_once` | This keyword is intended to limit a task to running on a single node. However this will only cause the task to be run once per batch. |
 | `serial` | This keyword is intended to limit runs to a small number of nodes at a time, such as during a rolling upgrade. |
 | | However, this will only function within the batch, so more nodes may be running the task than intended when multiple batches are running. |
+| `delegate_to` | This keyword is often used with `run_once` to run tasks on a specific node. |
+| | While delegating to `localhost` is usually safe, delegating to any specific system node is not recommended as that node may not be available, especially during install, upgrades, and rolling reboots. |
 
 ## Selecting an Ansible strategy
 

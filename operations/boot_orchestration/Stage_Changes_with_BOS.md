@@ -32,7 +32,7 @@ When using the API, components should be provided as a list of xnames.
 (`ncn-mw#`)
 
 ```bash
-curl -X POST -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json"  --data '{"xnames":["x3000c0s19b1n0","x3000c0s19b2n0"]}'  x3000c0s19b[1-4]n0 https://api-gw-service-nmn.local/apis/bos/v2/applystaged
+curl -X POST -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json"  --data '{"xnames":["x3000c0s19b1n0","x3000c0s19b2n0"]}' https://api-gw-service-nmn.local/apis/bos/v2/applystaged
 ```
 
 When called, any staged data for the given components will be moved to the desired state, clearing out the staged state data.
