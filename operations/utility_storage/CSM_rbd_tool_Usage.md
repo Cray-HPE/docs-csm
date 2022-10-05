@@ -74,7 +74,7 @@ To clean the device, first get the `rbd` device name and location.
 This can be found in the information outputted by the status check shown above. The device name is likely `/dev/rbd0` or similar and it should be located on `ncn-m001` or `ncn-m002`.
 Run the following command on the node that the device is located on.
 
-(`ncn-m#`) Clean the device.
+(`ncn-m#`) Clean the device. This may have multiple prompts. 
 
 ```bash
    fsck.ext4 <device_name>
@@ -83,6 +83,32 @@ Run the following command on the node that the device is located on.
 Example output:
 
 ```text
+e2fsck 1.43.8 (1-Jan-2018)
+One or more block group descriptor checksums are invalid.  Fix<y>?
+
+Group descriptor 7999 checksum is 0x6f65, should be 0x6971.  FIXED.
+Pass 1: Checking inodes, blocks, and sizes
+
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+Block bitmap differences:  +(32768--33917) +(98304--99453) + ...
+Fix<y>? yes
+Free blocks count wrong (246632145, counted=257747999).
+Fix<y>? yes
+Free inodes count wrong (65529942, counted=65535989).
+Fix<y>? yes
+Padding at end of inode bitmap is not set. Fix<y>? yes
+
+/dev/rbd0: ***** FILE SYSTEM WAS MODIFIED *****
+/dev/rbd0: 11/65536000 files (0.0% non-contiguous), 4396001/262144000 blocks
+```
+
+Example output if the `rbd` device is already clean:
+
+```text
+e2fsck 1.43.8 (1-Jan-2018)
 /dev/rbd0: clean, 11/65536000 files, 4396001/262144000 blocks
 ```
 
