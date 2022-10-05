@@ -34,41 +34,44 @@ This document describes the configuration of a Kubernetes NCN image. The same st
     This document will instruct the administrator to set several environment variables, including the three set in
     the previous step.
 
-1. Clone the `csm-config-management` repository.
+1. If `sat bootprep` was not used in [Worker Image Customization](Worker_Image_Customization.md) to create a CFS
+   configuration for management node image customization, then execute the following two substeps:
 
-   ```bash
-   VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-   VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-   git clone https://$VCS_USER:$VCS_PASS@api-gw-service-nmn.local/vcs/cray/csm-config-management.git
-   ```
+    1. Clone the `csm-config-management` repository.
 
-   You will need a Git commit hash from this repo in the following step.
+       ```bash
+       VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+       VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+       git clone https://$VCS_USER:$VCS_PASS@api-gw-service-nmn.local/vcs/cray/csm-config-management.git
+       ```
 
-1. [Create a CFS Configuration](Create_a_CFS_Configuration.md).
+       You will need a Git commit hash from this repo in the following step.
 
-   The first layer in the CFS session should be similar to this:
+    1. [Create a CFS Configuration](Create_a_CFS_Configuration.md).
 
-   ```json
-   "layers": [
-   {
-     "name": "csm-ncn-workers",
-     "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-     "playbook": "ncn-worker_nodes.yml",
-     "commit": "<git commit hash>"
-   },
-   ```
+       The first layer in the CFS configuration should be similar to this:
 
-   The last layer in the CFS session should be similar to this:
+       ```json
+       "layers": [
+       {
+         "name": "csm-ncn-workers",
+         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+         "playbook": "ncn-worker_nodes.yml",
+         "commit": "<git commit hash>"
+       },
+       ```
 
-   ```json
-   "layers": [
-   {
-     "name": "csm-ncn-initrd",
-     "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-     "playbook": "ncn-initrd.yml",
-     "commit": "<git commit hash>"
-   }
-   ```
+       The last layer in the CFS configuration should be similar to this:
+
+       ```json
+       "layers": [
+       {
+         "name": "csm-ncn-initrd",
+         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+         "playbook": "ncn-initrd.yml",
+         "commit": "<git commit hash>"
+       }
+       ```
 
 1. [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md).
 
