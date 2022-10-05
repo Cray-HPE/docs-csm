@@ -72,6 +72,12 @@ after a break, always be sure that a typescript is running before proceeding.
 
    The source version in the output may vary, but the target version should match what is shown above.
 
+   If this is an in family upgrade and the Ceph upgrade was completed during [Stage 1](Stage_1.md), then the upgrade will not run again. The expected output is stated below.
+
+   ```text
+   Your current version is the same as the proposed version 16.2.9
+   ```
+
 1. Monitor the upgrade.
 
    The `cubs_tool` will automatically watch the upgrade.

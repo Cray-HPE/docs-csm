@@ -17,6 +17,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
   - [Standard upgrade](#standard-upgrade)
   - [CSM-only system upgrade](#csm-only-system-upgrade)
 - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
+- [Stage 0.5 - Regenerate Postgres backups](#stage-05---regenerate-postgres-backups)
 - [Stop typescript](#stop-typescript)
 - [Stage completed](#stage-completed)
 
@@ -83,13 +84,15 @@ after a break, always be sure that a typescript is running before proceeding.
 
    1. Create and map the `rbd` device.
 
-      **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`.
+      **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`. This mount is available to stage content for the install/upgrade process.
 
       ```bash
       source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
       python /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
       deactivate
       ```
+
+      For more information or usage on the csm_rbd_tool utility please see [csm_rbd_tool Usage](../operations/utility_storage/CSM_rbd_tool_Usage.md)
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
@@ -226,8 +229,32 @@ There are two possible scenarios. Follow the procedure for the scenario that is 
 
 ### Standard upgrade
 
-In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade. The image customization and node personalization steps that should be used come in a later section Stage 2.2.
-Continue on to Stage 0.4, skipping the CSM-only system upgrade section below.
+In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade. In the standard upgrade, worker NCN image customization and node personalization steps are required.
+
+1. Consult the `HPE Cray EX System Software Getting Started Guide`.
+
+    Read the `HPE Cray EX software upgrade workflow` section. Pay particular attention to the `HPC CSM Software Recipe` and `Cray System Management (CSM)` subsections,
+    as well as any `NCN Personalization` subsections.
+
+1. Get a current copy of the SAT `Bootprep` files.
+
+    See [Accessing SAT `Bootprep` Files](../operations/configuration_management/Accessing_Sat_Bootprep_Files.md).
+
+1. Prepare the pre-boot worker NCN image customizations.
+
+    This will ensure that the CFS configuration layers are applied to perform image customization for the worker NCNs.
+    See [Worker Upgrade Image Customization](../operations/configuration_management/Worker_Upgrade_Image_Customization.md).
+
+1. Prepare the post-boot worker NCN image personalizations.
+
+    This will ensure that the CFS configuration layers are applied to perform node personalization during the post-boot of the worker NCNs.
+    See [Worker Upgrade Node Personalization](../operations/configuration_management/Worker_Upgrade_Node_Personalization.md).
+
+1. Customize the worker NCN images and apply their new boot parameters.
+
+    See [Management Node Image Customization](../operations/configuration_management/Management_Node_Image_Customization.md).
+
+Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data), skipping the [CSM-only system upgrade](#csm-only-system-upgrade) subsection below.
 
 ### CSM-only system upgrade
 
@@ -252,6 +279,53 @@ This upgrade scenario is extremely uncommon in production environments.
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
+
+## Stage 0.5 - Regenerate Postgres backups
+
+The current Postgres opt-in backups need to be re-generated to fix a known issue. This requires a new image.
+
+1. (`ncn-m001#`) Load the updated `cray-postgres-db-backup` image into the nexus local registry.
+
+   - If `ncn-m001` has internet access, then use the following commands.
+
+     ```bash
+     NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
+     NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
+     podman run --rm --network host -v /root:/mnt quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" \
+         docker-archive:/mnt/cray-postgres-db-backup.tar docker://registry.local/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+     ```
+
+   - Otherwise, use the following procedure.
+
+      1. Save the image to a `tar` file from a system that does have access to the internet.
+
+         ```bash
+         podman pull docker://artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+         podman save -o cray-postgres-db-backup.tar docker.io/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+         ```
+
+      1. Copy the `cray-postgres-db-backup.tar` to the target system under `/root`.
+
+      1. Copy the `tar` file into the local registry on the target system:
+
+         ```bash
+         NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
+         NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
+         podman run --rm --network host -v /root:/mnt quay.io/skopeo/stable copy --dest-tls-verify=false --dest-creds "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" \
+             docker-archive:/mnt/cray-postgres-db-backup.tar docker://registry.local/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+         ```
+
+1. (`ncn-m001#`) Regenerate the Postgres backups.
+
+   ```bash
+   /usr/share/doc/csm/upgrade/scripts/k8s/create_new_postgres_backups.sh
+   ```
+
+   Successful output should end with the following line:
+
+   ```text
+   Postgres backup(s) have been successfully re-genetated.
+   ```
 
 ## Stop typescript
 

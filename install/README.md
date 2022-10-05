@@ -44,7 +44,7 @@ shown here with numbered topics.
     1. [Next topic](#10-next-topic)
     - [Troubleshooting installation problems](#troubleshooting-installation-problems)
 1. [Post-installation](#post-installation)
-    1. [Kubernetes encryption](#11-encryption)
+    1. [Apply security hardening](#11-apply-security-hardening)
 
 > **`NOTE`** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#troubleshooting-installation-problems) and
@@ -203,9 +203,10 @@ for additional information on system hardware, troubleshooting, and administrati
 
 See [Troubleshooting Installation Problems](troubleshooting_installation.md).
 
-### 11. Kubernetes encryption
+## Post-installation
 
-As an optional post installation task, encryption of Kubernetes secrets may be enabled. This enables
-at rest encryption of data in the `etcd` database used by Kubernetes.
+### 11. Apply security hardening
 
-See [Kubernetes Encryption](../operations/kubernetes/encryption/README.md).
+Review the security hardening guide, apply non-optional procedures, and review optional procedures.
+
+See [Security Hardening](../operations/CSM_product_management/Apply_Security_Hardening.md).
