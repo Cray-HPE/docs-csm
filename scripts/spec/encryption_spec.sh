@@ -26,7 +26,7 @@
 # Note using function mocks for testing ref:
 # https://github.com/shellspec/shellspec#mocking
 Describe 'encryption.sh logic'
-  Include scripts/operations/kubernetes/encryption.sh
+  Include operations/kubernetes/encryption.sh
 
   Context 'Utility functionality in stripetcdprefix'
     It 'should strip aescbc: from a string passed'
