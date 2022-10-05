@@ -31,7 +31,13 @@ For further information, refer to the [official Kubernetes documentation](https:
 
 ## Enabling encryption
 
+Before encryption is enabled, it is recommend that a Bare-Metal etcd backup is taken only if the etcd cluster is healthy.
+
+See [Create a manual Backup of a Healthy Bare-Metal etcd Cluster](../Create_a_Manual_Backup_of_a_Healthy_Bare-Metal_etcd_Cluster.md) for details.
+
 When enabling encryption it is important to ensure all 3 nodes are enabled in short order. However that does not mean all control plane nodes should run the script in parallel.
+
+When encryption is enabled a Bare-Metal etcd cluster can not be restored from a backup taken before encryption is enabled. Such a backup can be used to restore etcd in the event that encryption is later disabled.
 
 It is recommended to enable encryption on one node first. If successful may enable encryption in parallel on the remaining nodes.
 
@@ -143,7 +149,7 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
     `/etc/cray/kubernetes/encryption/current.yaml` file on all control plane nodes after the `encryption.sh` script has
     been run. Only a goal that all control plane nodes agree on will be reported. The `etcd` string corresponds to the encryption names found in the etcd database itself.
 
-* Example command output after secrets are rewritten.
+* Example command output after secrets are rewritten. Note a return code of 0 indicates encryption is consistent across all nodes.
 
     ```text
     k8s encryption status
@@ -157,7 +163,7 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
     ```
 
     The output shows that the `current` key and `goal` keys are in agreement. This indicates that all secret data in `etcd`
-    is now encrypted with this key provider's name.
+    is now encrypted with this key provider's name. This indicates that all secret data in etcd is now encrypted with this key provider's name.
 
 ## Forcing encryption
 
