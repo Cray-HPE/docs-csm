@@ -45,7 +45,7 @@ for it to be applied to the NCNs.
             if [[ ${PW1} != ${PW2} ]]; then
                 echo "ERROR: Passwords do not match"        
             else
-                echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Za-z0-9 | head -c4) --stdin
+                echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc ./A-Za-z0-9 | head -c4) --stdin
             fi
         fi ; unset PW1 PW2
    ```
