@@ -47,8 +47,8 @@ kc_password=os.environ.get('KC_PASSWORD')
 try:
     # Get TOKEN
     data = {
-            "grant_type":"password", 
-            "client_id": kc_client_id, 
+            "grant_type":"password",
+            "client_id": kc_client_id,
             "username": kc_username,
             "password": kc_password
             }
@@ -71,7 +71,7 @@ try:
             break
     if customerManagementClient is None:
         raise ValueError("Failed to find customer management client")
-    
+
     needConfigure=False
     # Configure webOrigins
     argoWebOrigin="https://"+argo_url
