@@ -30,6 +30,9 @@ set "${SETOPTS:--eu}"
 # Where we store all our temp dirs/files
 RUNDIR="${TMPDIR:-/tmp}/encryption-tmp-$$"
 
+# Let us control how long we wait for deletes or other kubectl ... --timeout actions
+KUBETIMEOUT="${KUBETIMEOUT:-300s}"
+
 cleanup() {
   rm -fr "${RUNDIR}"
 }
@@ -276,16 +279,22 @@ restartk8s() {
   file="${1:-invalid}"
   apiserver="kube-apiserver-$(uname -n)"
 
+  if ! sutkubectlwait; then
+    printf "fatal: local kubeapiserver process is not ready, refusing to do work\n" >&2
+    debugapiserverstatus
+    return 1
+  fi
+
   if sutkubectldelete "${file}"; then
     # kubectl wait for the pod to come back for 60 seconds or bail
     if ! sutkubectlwait; then
       printf "fatal: kubectl wait on %s timed out\n" "${apiserver}" >&2
-      kubeapiblurb
+      debugapiserverstatus
       return 1
     fi
   else
     printf "fatal: kubectl delete on %s timed out\n" "${apiserver}" >&2
-    kubeapiblurb
+    debugapiserverstatus
     return 1
   fi
   if ! sutpgrep "${file}"; then
@@ -294,10 +303,10 @@ restartk8s() {
   fi
 }
 
-# I've been entirely unable to understand/debug why a 5 minute timeout fails,
-# but eventually works for this....
-kubeapiblurb() {
-  printf "check logs for details why via:\nkubectl logs -f --namespace kube-system %s\nkubectl get pod --namespace kube-system %s\nkubectl describe --namespace kube-system %s\nyou will need to re-run this command again\n" "${apiserver}" "${apiserver}" "${apiserver}" >&2
+# Need more data about what state the local kube-apiserver processes are in when
+# this fails before taking any action on a real fix.
+debugapiserverstatus() {
+  kubectl get pod --namespace kube-system "kube-apiserver-$(uname -n)"
 }
 
 # Glorified wrapper functions for unit tests.
@@ -312,20 +321,14 @@ sutpgrep() {
 # kubectl delete pod --namespace kube-system kube-apiserver-$(uname -n)
 # Note as we're expecting to be run on the node in question $(uname -n) should
 # be ok to use, not dealing with that being different in this instance.
-#
-# Additionally, just have kubectl wait for one minute to delete the pod if not give up and let caller decide on actions.
 sutkubectldelete() {
-  kubectl delete pod --namespace kube-system "kube-apiserver-$(uname -n)" --timeout=300s > /dev/null 2>&1
+  kubectl delete pod --namespace kube-system "kube-apiserver-$(uname -n)" --timeout="${KUBETIMEOUT}"
 }
 
 # Similarly just wrapping:
-# kubectl delete pod --namespace kube-system kube-apiserver-$(uname -n)
-# Note as we're expecting to be run on the node in question $(uname -n) should
-# be ok to use, not dealing with that being different in this instance.
-#
-# Additionally, just have kubectl wait for one minute to delete the pod if not give up and let caller decide on actions.
+# kubectl wait pod --namespace kube-system kube-apiserver-$(uname -n) ...
 sutkubectlwait() {
-  kubectl wait pod --namespace kube-system --for condition=ready "kube-apiserver-$(uname -n)" --timeout=300s > /dev/null 2>&1
+  kubectl wait pod --namespace kube-system --for condition=ready "kube-apiserver-$(uname -n)" --timeout="${KUBETIMEOUT}"
 }
 
 # Etcd related functions, here to let us peek into the etcd db directly to get
@@ -639,6 +642,11 @@ secret_current() {
   kubectl get secret -n kube-system cray-k8s-encryption -o jsonpath='{range.items[*]}{.metadata.annotations.current}'
 }
 
+# Last known time that secrets were rewritten
+secret_changed() {
+  kubectl get secret -n kube-system cray-k8s-encryption -o jsonpath='{range .items[*]}{.metadata.annotations.changed}'
+}
+
 # Glorified wrapper that removes aescbc: or aesgcm: from the above two "functions"
 stripetcdprefix() {
   echo "$@" | sed -e "s|aescbc:||g" -e 's|aesgcm:||g'
@@ -682,15 +690,16 @@ main() {
   if $restart; then
     kubectl annotate secret --namespace kube-system cray-k8s-encryption current=rewrite --overwrite
     kubectl rollout restart daemonset --namespace kube-system cray-k8s-encryption
-    kubectl rollout status --namespace kube-system ds/cray-k8s-encryption --timeout 300s
+    kubectl rollout status --namespace kube-system ds/cray-k8s-encryption --timeout="${KUBETIMEOUT}"
     exit $?
   fi
 
   curr="$(stripetcdprefix "$(secret_current)")"
   goal="$(stripetcdprefix "$(secret_goal)")"
+  changed="$(secret_changed)"
 
   if $status; then
-    printf "k8s encryption status\n"
+    printf "k8s encryption status\nchanged: %s\n" "${changed?}"
 
     for node in $(kubectl_get_controlplane_nodes); do
       # not really applicable here
@@ -699,9 +708,8 @@ main() {
     done
 
     synced=false
-    etcd="$(sutexistingetcdencryption | newlinetospace)"
-    printf "current: %s\ngoal: %s\n" "${curr?}" "${goal?}"
-    printf "etcd: %s\n" "${etcd}"
+    etcd="$(sutexistingetcdencryption)"
+    printf "current: %s\ngoal: %s\netcd: %s\n" "${curr?}" "${goal?}" "${etcd?}"
 
     if [ "$(issynced ${curr} ${goal} ${etcd})" = 1 ]; then
       synced=true

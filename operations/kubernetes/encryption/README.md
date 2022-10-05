@@ -31,6 +31,8 @@ For further information, refer to the [official Kubernetes documentation](https:
 
 ## Enabling encryption
 
+When enabling encryption it is important to ensure all 3 nodes are enabled in short order. However that does not mean all control plane nodes should run the script in parallel. It is recommended to enable encryption on one node first. If successful may enable encryption in parallel on the remaining nodes.
+
 In order to enable encryption, a 16, 24, or 32 byte string must be provided and retained. It is important not to lose this key, because once secrets
 are encrypted in `etcd`, Kubernetes must be configured with this secret before it can start.
 
@@ -111,6 +113,7 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
     ```text
     k8s encryption status
+    changed: 1970-01-01 00:00:00+0000
     ncn-m001: identity
     ncn-m002: identity
     ncn-m003: identity
@@ -125,6 +128,7 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
     ```text
     k8s encryption status
+    changed: 1970-01-01 00:10:00+0000
     ncn-m001: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
     ncn-m002: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
     ncn-m003: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
@@ -141,7 +145,7 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
     ```text
     k8s encryption status
-    k8s encryption status
+    changed: 1970-01-01 00:20:00+0000
     ncn-m001: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
     ncn-m002: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
     ncn-m003: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
