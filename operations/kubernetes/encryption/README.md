@@ -31,7 +31,9 @@ For further information, refer to the [official Kubernetes documentation](https:
 
 ## Enabling encryption
 
-When enabling encryption it is important to ensure all 3 nodes are enabled in short order. However that does not mean all control plane nodes should run the script in parallel. It is recommended to enable encryption on one node first. If successful may enable encryption in parallel on the remaining nodes.
+When enabling encryption it is important to ensure all 3 nodes are enabled in short order. However that does not mean all control plane nodes should run the script in parallel.
+
+It is recommended to enable encryption on one node first. If successful may enable encryption in parallel on the remaining nodes.
 
 In order to enable encryption, a 16, 24, or 32 byte string must be provided and retained. It is important not to lose this key, because once secrets
 are encrypted in `etcd`, Kubernetes must be configured with this secret before it can start.
