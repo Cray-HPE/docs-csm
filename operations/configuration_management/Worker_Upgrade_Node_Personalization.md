@@ -1,14 +1,14 @@
 # Worker Upgrade Node Personalization
 
-When performing an upgrade, NCN image customization must be performed with the NCN worker node image to ensure the appropriate CFS layers are applied.
-This step involves configuring CFS to use the default SAT `bootprep` files from the `hpc-csm-software-recipe` repository, and rebuilding the NCN worker nodes so they boot the newly customized image.
+When performing an upgrade, NCN personalization must be performed on the NCN worker node to ensure the appropriate CFS layers are applied post-boot.
+This step involves configuring CFS to use the default `sat bootprep` files from the `hpc-csm-software-recipe` repository and applying the resulting configuration to the NCN worker nodes.
 
 The definition of the CFS configuration used for NCN worker node personalization is provided in the `hpc-csm-software-recipe` repository in VCS.
-The following procedure describes how to correctly edit the SAT `bootprep` files to be able to use them to perform node personalization.
+The following procedure describes how to correctly edit the `sat bootprep` files to be able to use them to perform node personalization.
 
-1. (`ncn-m#`) Perform the steps in the [Accessing SAT `Bootprep` Files](Accessing_Sat_Bootprep_Files.md) procedure to gather a copy of the SAT `Bootprep` files.
+1. (`ncn-m#`) Perform the steps in the [Accessing `sat bootprep` Files](Accessing_Sat_Bootprep_Files.md) procedure to gather a copy of the `sat bootprep` files.
 
-1. (`ncn-m#`) Create a local copy of the `management-bootprep-yaml` file and delete the `ncn-image-customization` configuration. The `ncn-personalization` configuration should  be the only entry remaining in the file if completed correctly.
+1. (`ncn-m#`) Create a local copy of the `management-bootprep.yaml` file and delete the `ncn-image-customization` configuration. The `ncn-personalization` configuration should be the only entry remaining in the file if completed correctly.
 
     ```bash
     cp management-bootprep.yaml management-bootprep-node-personalization.yaml
@@ -27,10 +27,8 @@ The following procedure describes how to correctly edit the SAT `bootprep` files
     - name: ncn-personalization
     ```
 
-1. (`ncn-m#`) Use the `management-bootprep-node-personalization.yaml` file as input when customizing the new NCN worker node image with CFS in the CSM documentation.
-
 1. (`ncn-m#`) Acquire a copy of the current CPE and Analytics products CFS configuration values already in use.
- Obtain the values for the `cloneUrl`, `commit`, and `playbook` lines for each of those two layers in the next step to ensure that when the nodes boot later during upgrade, they come up with the desired configuration for CPE and Analytics.
+ Obtain the values for the `cloneUrl`, `commit`, and `playbook` lines for each of those two layers in the next step to ensure that they are personalized with the desired configuration for CPE and Analytics.
 
     ```bash
     cray cfs components describe <ncn-xname> --format json

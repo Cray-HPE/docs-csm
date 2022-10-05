@@ -1,7 +1,7 @@
-# Accessing SAT `Bootprep` Files
+# Accessing `sat bootprep` Files
 
 When performing an upgrade, NCN image customization and node personalization must be performed with the NCN worker node image to ensure the appropriate CFS layers are applied.
-This step involves configuring CFS to use the default SAT `bootprep` files from the `hpc-csm-software-recipe` repository, and rebuilding the NCN worker nodes so they boot the newly customized image.
+This step involves configuring CFS to use the default `sat bootprep` files from the `hpc-csm-software-recipe` repository and rebuilding the NCN worker nodes so they boot the newly customized image.
 
 The following procedure describes how to access the CFS configuration. This procedure is used for both image customization and node personalization of NCNs.
 
@@ -49,7 +49,7 @@ The following procedure describes how to access the CFS configuration. This proc
     git checkout cray/hpc-csm-software-recipe/22.11
     ```
 
-1. (`ncn-m#`) List the default SAT `bootprep` input files in this repository:
+1. (`ncn-m#`) List the default `sat bootprep` input files in this repository:
 
     ```bash
     ls bootrep
