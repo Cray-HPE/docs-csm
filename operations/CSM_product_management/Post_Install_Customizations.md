@@ -106,7 +106,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
 * [Scale `cray-bss` service](#scale-cray-bss-service)
 * [Postgres PVC resize](#postgres-pvc-resize)
-* [cray-hms-hmcollector pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
+* [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
 
 ### Prerequisites
 
@@ -625,11 +625,12 @@ Refer to the note at the end of this section for more details.
   * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
   * Resource path: `spec.kubernetes.services.spire.cray-service.sqlCluster.volumeSize`
 
-### cray-hms-hmcollector pods are `OOMKilled`
-Update resources associated with cray-hms-hmcollector in the `services` namespace.
+### `cray-hms-hmcollector` pods are `OOMKilled`
+
+Update resources associated with `cray-hms-hmcollector` in the `services` namespace.
 Trial and error may be needed to determine what is best for a given system at scale.
 
-   * [Adjust HM Collector Ingress Replicas and Resource Limits](../hmcollector/adjust_hmcollector_resource_limits_requests.md)
+* [Adjust HM Collector Ingress Replicas and Resource Limits](../hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
 ## References
 
