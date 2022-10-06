@@ -161,6 +161,7 @@ ConnectX-5
 ConnectX-5s
 CoreDNS
 Cray
+cray-hms-hmcollector
 Cray-HPE
 CrayPort
 CRDs
