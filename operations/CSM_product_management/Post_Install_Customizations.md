@@ -626,10 +626,11 @@ Refer to the note at the end of this section for more details.
   * Resource path: `spec.kubernetes.services.spire.cray-service.sqlCluster.volumeSize`
 
 ### cray-hms-hmcollector pods are `OOMKilled`
+
 Update resources associated with cray-hms-hmcollector in the `services` namespace.
 Trial and error may be needed to determine what is best for a given system at scale.
 
-   * [Adjust HM Collector Ingress Replicas and Resource Limits](../hmcollector/adjust_hmcollector_resource_limits_requests.md)
+* [Adjust HM Collector Ingress Replicas and Resource Limits](../hmcollector/adjust_hmcollector_resource_limits_requests.md)
 
 ## References
 
