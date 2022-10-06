@@ -328,7 +328,7 @@ Example output:
 ssh: connect to host sw-leaf-bmc-001 port 22: Connection timed out
 ```
 
-Restoring connectivity, resolving configuration issues, or restarting the relevant ports on the `leaf-bmc` switch should allow the compute hardware to issue DHCP requests again and be discovered successfully.
+Restoring connectivity, resolving configuration issues, or restarting the relevant ports on the `leaf-bmc` switch should allow the compute hardware to issue DHCP requests and be discovered successfully.
 
 ### `smd_discovery_status_test_ncn-smoke.sh`
 
