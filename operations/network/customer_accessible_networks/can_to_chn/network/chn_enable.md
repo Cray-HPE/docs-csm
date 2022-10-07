@@ -28,7 +28,6 @@
       - [Enable CFS layer](#enable-cfs-layer)
   - [Cleanup Phase](#cleanup-phase)
     - [Remove CAN from SLS](#remove-can-from-sls)
-    - [Remove CAN from customizations](#remove-can-from-customizations)
     - [Remove CAN from BSS](#remove-can-from-bss)
     - [Remove CAN from CSM services](#remove-can-from-csm-services)
     - [Remove CAN interfaces from NCNs](#remove-can-interfaces-from-ncns)
@@ -437,7 +436,7 @@ For more information on managing NCN personalization, see [Perform NCN Personali
 
 ### Migrate CSM Services (MetalLB)
 
-**Note** this will activate `CHN` service endpoints.
+**Note** this will activate `CHN` service endpoints and deactivate CAN endpoints.
 
 1. (`ncn-m001#`) Change to updates directory.
 
@@ -551,6 +550,12 @@ Existing UAIs will continue to use the network that was set when it was created.
 #### Enable CFS layer
 
 `CHN` network configuration of compute nodes is performed by the UAN CFS configuration layer. This procedure describes how to identify the UAN layer and add it to the compute node configuration.
+
+1. (`ncn-m001#`) Enable CFS changes on Computes.
+
+   ```bash
+   for xname in $(cray hsm state components list --role Compute --type Node --format json | jq -r .Components[].ID) ; do cray cfs components update --enabled true --state "[]" --format json $xname; done
+   ```
 
 1. Determine the CFS configuration in use on the compute nodes.
 
@@ -778,36 +783,6 @@ For more information on managing node with CFS, see the [Configuration Managemen
 
    ```bash
    curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F "sls_dump=@${CLEANUPDIR}/sls_file_without_can.json"
-   ```
-
-### Remove CAN from customizations
-
-1. (`ncn-m001#`) Move to the cleanup directory.
-
-   ```bash
-   cd ${CLEANUPDIR}
-   ```
-
-2. (`ncn-m001#`) Set the directory location for the customizations script to remove `CAN`.
-
-   ```bash
-   export CUSTOMIZATIONS_SCRIPT_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/util
-   ```
-
-3. (`ncn-m001#`) Remove `CAN` from `customizations.yaml`.
-
-   ```bash
-   ${CUSTOMIZATIONS_SCRIPT_DIR}/update-customizations.sh ${UPDATEDIR}/customizations.yaml > ${CLEANUPDIR}/customizations.yaml
-   yq validate ${CLEANUPDIR}/customizations.yaml
-   ```
-
-   **Important** If the updated `customizations.yaml` file is empty or not valid `YAML`, do not proceed.  Debug in place.
-
-4. (`ncn-m001#`) Upload new `customizations.yaml` to ensure changes persist across updates
-
-   ```bash
-   kubectl delete secret -n loftsman site-init
-   kubectl create secret -n loftsman generic site-init --from-file=${CLEANUPDIR}/customizations.yaml
    ```
 
 ### Remove CAN from BSS
