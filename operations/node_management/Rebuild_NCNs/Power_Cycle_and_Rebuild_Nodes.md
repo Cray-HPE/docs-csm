@@ -165,4 +165,4 @@ This section applies to all node types. The commands in this section assume the 
 
 ## Next step
 
-Proceed to the next step to [Validate Boot Loader](Validate_Boot_Loader.md).
+Proceed to the next step to [Validate Boot Raid](Validate_Boot_Raid.md).
