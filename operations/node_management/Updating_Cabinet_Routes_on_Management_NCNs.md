@@ -5,6 +5,10 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
 ## Prerequisites
 -   Passwordless SSH to all of the management NCNs is configured.
 -   Ensure Cray Site Init (CSI) is installed and available on ncn-m001.
+
+    > ***NOTE*** The `App. Version` will report incorrectly in CSM 1.2. Please refer to the `Git Version` field
+    > for this information.
+
     ```bash
     ncn-m001# csi version
     ```

@@ -116,6 +116,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    recorded in the typescript file, in case it is needed later. For example, this information is useful to include in
    any bug reports or service queries for issues encountered on the PIT node.
 
+   > ***NOTE*** The `App. Version` will report incorrectly in CSM 1.2. Please obtain the
+   > version information by running the step below and by invoking `rpm -q cray-site-init`.
+
    ```bash
    pit# /root/bin/metalid.sh
    ```
@@ -348,6 +351,9 @@ On first login (over SSH or at local console) the LiveCD will prompt the adminis
    See [Check for Latest Documentation](../update_product_stream/index.md#documentation)
 
 1. Show the version of CSI installed.
+
+   > ***NOTE*** The `App. Version` will report incorrectly in CSM 1.2.0 and CSM 1.2.1. Please obtain the
+   > version information by running the step below and by invoking `rpm -q cray-site-init`.
 
    ```bash
    pit# /root/bin/metalid.sh
@@ -582,6 +588,9 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
       ```
 
    1. Note the version reported by the `csi` tool.
+
+      > ***NOTE*** The `App. Version` will report incorrectly in CSM 1.2.0 and CSM 1.2.1. Please obtain the
+      > version information by running the step below and by invoking `rpm -q cray-site-init`.
 
       ```bash
       pit# csi version
