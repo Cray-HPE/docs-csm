@@ -22,6 +22,7 @@
 """Functions used to update SLS."""
 from collections import defaultdict
 import ipaddress
+import sys
 
 import click
 from sls_utils.ipam import (
@@ -42,10 +43,9 @@ from sls_utils.Reservations import Reservation
 def sls_and_input_data_checks(
     networks,
     bican_name,
-    chn_data,
+    chn_subnet,
 ):
     """Check input values and SLS data for proper logic.
-
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         bican_name (str): Name of the user network for bifurcated CAN
@@ -55,25 +55,32 @@ def sls_and_input_data_checks(
         "Checking input values and SLS data for proper logic.",
         fg="bright_white",
     )
+    can_subnet = networks.get("CAN").ipv4_network()
+    cmn_subnet = networks.get("CMN").ipv4_network()
 
+    if can_subnet.overlaps(chn_subnet[1]):
+        click.secho(
+            f"CAN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}",
+            fg="red",
+        )
+        sys.exit(1)
+
+    if cmn_subnet.overlaps(chn_subnet[1]):
+        click.secho(
+            f"CAN subnet {can_subnet} overlaps with CHN subnet {chn_subnet[1]}",
+            fg="red",
+        )
+        sys.exit(1)
     chn = networks.get("CHN")
     if chn is not None:
         click.secho(
             "    INFO: A CHN network already exists in SLS.",
             fg="white",
         )
-    if bican_name == "CHN":
-        if chn_data[1] == ipaddress.IPv4Network("10.104.7.0/24"):
-            click.secho(
-                "    WARNING: Command line --customer-highspeed-network values not found. "
-                "Using [default: 5, 10.104.7.0/24]",
-                fg="bright_yellow",
-            )
 
 
 def create_bican_network(networks, default_route_network_name):
     """Create a new SLS BICAN network data structure.
-
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         default_route_network_name (str): Name of the user network for bifurcated CAN
@@ -88,6 +95,30 @@ def create_bican_network(networks, default_route_network_name):
         networks.update({bican.name(): bican})
 
 
+def delete_can_network(networks):
+    """Delete SLS CAN network data structure."""
+
+    if networks.get("CHN") is None:
+        click.secho(
+            "CHN subnet not found in SLS, to remove the CAN, first create a CHN.",
+            fg="red",
+        )
+        sys.exit(1)
+
+    if networks.get("BICAN") is not None:
+        default_route = networks.get("BICAN").system_default_route()
+        if default_route != "CHN":
+            click.secho(
+                f"The current user network is set to {default_route}\nTo remove the CAN this value must be set to CHN first",
+                fg="red",
+            )
+            sys.exit(1)
+
+    if networks.get("CAN") is not None:
+        click.secho("Removing CAN network data structure from SLS", fg="bright_white")
+        networks.pop("CAN", None)
+
+
 def create_chn_network(
     networks,
     customer_highspeed_network,
@@ -96,7 +127,6 @@ def create_chn_network(
     bgp_chn_asn,
 ):
     """Create a new SLS CHN data structure.
-
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         chn_data (int, ipaddress.IPv4Network): VLAN and IPv4 CIDR for the CHN
@@ -153,10 +183,7 @@ def create_chn_network(
     bootstrap.ipv4_gateway(list(chn_ipv4.hosts())[0])
     bootstrap.vlan(chn_vlan)
 
-    pool_subnets = list(bootstrap.ipv4_network().subnets())[
-        1
-    ]  # Last half of bootstrap.
-    pool_subnets = list(pool_subnets.subnets())  # Split it in two.
+    pool_subnets = [list(bootstrap.ipv4_network().subnets())[1]]  # Last half of bootstrap.
 
     click.echo(f"    Updating reservation IPv4 addresses for {bootstrap.name()}")
     for reservation in bootstrap.reservations().values():
@@ -222,7 +249,6 @@ def clone_subnet_and_pivot(
     overrides=(),
 ):
     """Clone a network and swizzle some IPs with IPAM.
-
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         source_network_name (str): Name of the network to clone
@@ -505,12 +531,10 @@ def remove_uai_nmn_dhcp_ranges(networks):
 
 def create_metallb_pools_and_asns(networks, bgp_asn, bgp_chn_asn):
     """Create the BGP peering for the CHN.
-
     Args:
         networks (sls_utils.Managers.NetworkManager): Dictionary of SLS networks
         bgp_asn (int): Remote peer BGP ASN
         bgp_chn_asn (int): Local CHN BGP ASN
-
     """
     click.secho(
         "Creating BGP peering ASNs and MetalLBPool names",

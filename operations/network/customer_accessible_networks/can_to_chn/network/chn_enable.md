@@ -475,11 +475,41 @@ Administrators should enable CFS for UAN, ensure plays run successfully and then
    for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do cray cfs components update --enabled true --state "[]" --format json $xname; done
    ```
 
-2. (`ncn-m001#`) Ensure that CFS has run successfully on all UAN.  This may take several minutes.
+1. Reboot UANs.  When the UAN comes back up it should now have the CHN interface and updated default route configured.
 
-   ```bash
-   for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do cray cfs components describe --format json $xname; done
-   ```
+(`uan01#`) Verify default route configuration
+
+```bash
+ip r show default
+default via 10.103.11.193 dev hsn0
+```
+
+Example output
+
+```bash
+default via 10.103.11.193 dev hsn0
+```
+
+(`uan01#`) Verify hsn0 interface configuration
+
+```bash
+ip a show hsn0
+```
+
+Example output
+
+```bash
+6: hsn0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
+    link/ether 02:00:00:00:00:07 brd ff:ff:ff:ff:ff:ff permaddr ec:0d:9a:c1:b4:30
+    altname enp3s0np0
+    altname ens2np0
+    inet 10.253.0.9/16 scope global hsn0
+       valid_lft forever preferred_lft forever
+    inet 10.103.11.200/26 scope global hsn0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::ff:fe00:7/64 scope link 
+       valid_lft forever preferred_lft forever
+```
 
 #### Notify UAN users
 
@@ -507,8 +537,7 @@ Existing UAIs will continue to use the network that was set when it was created.
 
    ```bash
    DOCDIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/sls
-   ${DOCDIR}/add_computes_to_chn.py --sls-input-file ${UPDATEDIR}/sls_file_with_chn.json 
-      --sls-output-file ${UPDATEDIR}/sls_file_with_chn_and_computes.json
+   ${DOCDIR}/add_computes_to_chn.py --sls-input-file ${UPDATEDIR}/sls_file_with_chn.json --sls-output-file ${UPDATEDIR}/sls_file_with_chn_and_computes.json
    ```
 
 #### Upload migrated SLS file to SLS service
