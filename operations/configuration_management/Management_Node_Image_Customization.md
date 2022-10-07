@@ -73,14 +73,22 @@ This document describes the configuration of a Kubernetes NCN image. The same st
        }
        ```
 
-1. [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md).
+1. Ensure the environment variable `$IMS_IMAGE_ID` was set during
+   [Import an External Image to IMS](../image_management/Import_External_Image_to_IMS.md).
 
-   In this section, use the following values for the target definition and target group for the
-   `cray cfs session create` command invocation:
+   ```bash
+   echo $IMS_IMAGE_ID
+   ```
 
-   ```text
-   --target-definition image
-   --target-group Management_Worker
+1. Use the following command to create an image customization CFS session. See
+   [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional information
+   on creating an image customization CFS session.
+
+   ```bash
+   cray cfs sessions create --name ncn-image-customization-session \
+       --configuration-name ncn-image-customization \
+       --target-definition image --format json \
+       --target-group Management_Worker $IMS_IMAGE_ID
    ```
 
 1. (`ncn-mw#`) Update boot parameters for a Kubernetes NCN.
@@ -101,7 +109,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
         in the "Create an Image Customization CFS Session" procedure, repeated here for convenience:
 
         ```bash
-        cray cfs sessions describe example --format json | jq .status.artifacts
+        cray cfs sessions describe ncn-image-customization-session --format json | jq .status.artifacts
         ```
 
         ```bash
