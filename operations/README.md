@@ -493,7 +493,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
   - [Adding a Ceph Node to the Ceph Cluster](node_management/Rebuild_NCNs/Re-add_Storage_Node_to_Ceph.md)
   - [Customize PCIe Hardware](node_management/Customize_PCIe_Hardware.md)
   - [Customize Disk Hardware](node_management/Customize_Disk_Hardware.md)
-  - [Validate Boot Loader](node_management/Rebuild_NCNs/Validate_Boot_Loader.md)
+  - [Validate Boot Raid](node_management/Rebuild_NCNs/Validate_Boot_Raid.md)
   - [Validate Storage Node](node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md)
   - [Final Validation Steps](node_management/Rebuild_NCNs/Final_Validation_Steps.md)
 - [Reboot NCNs](node_management/Reboot_NCNs.md)
