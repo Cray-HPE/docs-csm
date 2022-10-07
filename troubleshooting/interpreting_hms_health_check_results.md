@@ -363,7 +363,7 @@ FAILED test_hardware.tavern.yaml::Query the Hardware collection for Node informa
 (`ncn-mw#`) If these failures occur, confirm that there are no discovered compute nodes in HSM.
 
 ```bash
-cray hsm state components list --type=node --role=compute --format=json
+cray hsm state components list --type=Node --role=compute --format=json
 ```
 
 Example output:
@@ -421,7 +421,7 @@ Example output:
 ssh: connect to host sw-leaf-bmc-001 port 22: Connection timed out
 ```
 
-Restoring connectivity or resolving configuration issues with the `leaf-bmc` switch should allow the compute hardware to be discovered successfully.
+Restoring connectivity, resolving configuration issues, or restarting the relevant ports on the `leaf-bmc` switch should allow the compute hardware to issue DHCP requests and be discovered successfully.
 
 ### `hsm_discovery_status_test.sh`
 
