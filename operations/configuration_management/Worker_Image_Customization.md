@@ -1,6 +1,6 @@
-# Worker Upgrade Image Customization
+# Worker Image Customization
 
-When performing an upgrade, NCN image customization must be performed with the NCN worker node image to ensure the appropriate CFS layers are applied.
+When performing an upgrade or fresh install, NCN image customization must be performed with the NCN worker node image to ensure the appropriate CFS layers are applied.
 This step involves configuring CFS to use the default `sat bootprep` files from the `hpc-csm-software-recipe` repository and rebuilding the NCN worker nodes so they boot the newly customized image.
 
 The definition of the CFS configuration used for NCN worker node image customization is provided in the `hpc-csm-software-recipe` repository in VCS.
