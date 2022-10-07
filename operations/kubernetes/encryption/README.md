@@ -31,6 +31,16 @@ For further information, refer to the [official Kubernetes documentation](https:
 
 ## Enabling encryption
 
+Before encryption is enabled, it is recommend that a Bare-Metal etcd backup is taken only if the etcd cluster is healthy.
+
+See [Create a manual Backup of a Healthy Bare-Metal etcd Cluster](../Create_a_Manual_Backup_of_a_Healthy_Bare-Metal_etcd_Cluster.md) for details.
+
+When enabling encryption it is important to ensure all 3 nodes are enabled in short order. However that does not mean all control plane nodes should run the script in parallel.
+
+When encryption is enabled a Bare-Metal etcd cluster can not be restored from a backup taken before encryption is enabled. Such a backup can be used to restore etcd in the event that encryption is later disabled.
+
+It is recommended to enable encryption on one node first. If successful may enable encryption in parallel on the remaining nodes.
+
 In order to enable encryption, a 16, 24, or 32 byte string must be provided and retained. It is important not to lose this key, because once secrets
 are encrypted in `etcd`, Kubernetes must be configured with this secret before it can start.
 
@@ -51,7 +61,7 @@ Both ciphers allow the same input string type. Note that while it is possible to
     Example output:
 
     ```text
-    encryption configuration updated
+    ncn-m001 configuration updated ensure all control plane nodes run this same command
     ```
 
 ## Disabling encryption
@@ -72,7 +82,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
     Example output:
 
     ```text
-    encryption configuration updated
+    ncn-m001 configuration updated ensure all control plane nodes run this same command
     ```
 
 1. Fully disable all encryption by removing all keys from the control plane nodes.
@@ -90,7 +100,7 @@ Safely disabling encryption requires two steps to ensure no access to Kubernetes
         Example output:
 
         ```text
-        encryption configuration updated
+        ncn-m001 configuration updated ensure all control plane nodes run this same command
         ```
 
         At this point, encryption of `etcd` secrets will be back to default.
@@ -107,10 +117,14 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
     The return code of this command determines if encryption is applied or not. A non zero status simply indicates that a new cipher is to be applied.
 
-* Example output on a new or upgraded installation with the default of no encryption.
+* Example output on a new or upgraded installation with the default of no encryption. Note a return code of 0 indicates encryption is consistent across all nodes.
 
     ```text
     k8s encryption status
+    changed: 1970-01-01 00:00:00+0000
+    ncn-m001: identity
+    ncn-m002: identity
+    ncn-m003: identity
     current: identity
     goal: identity
     etcd: identity
@@ -118,35 +132,42 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
     The string `identity` indicates that the identity encryption provider is in use. This provider performs no encryption and is the default.
 
-* Example command output when enabling encryption but secrets are not yet rewritten.
+* Example command output when enabling encryption but secrets are not yet rewritten. Note the return code for status is non zero in this case.
 
     ```text
     k8s encryption status
+    changed: 1970-01-01 00:10:00+0000
+    ncn-m001: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
+    ncn-m002: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
+    ncn-m003: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
     current: identity
     goal: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
     etcd: identity
-    interim/invalid state all should be equal when in a steady state
     ```
 
     The goal is an `aescbc` cipher. The `goal` string corresponds to the name in the
     `/etc/cray/kubernetes/encryption/current.yaml` file on all control plane nodes after the `encryption.sh` script has
     been run. Only a goal that all control plane nodes agree on will be reported. The `etcd` string corresponds to the encryption names found in the etcd database itself.
 
-* Example command output after secrets are rewritten.
+* Example command output after secrets are rewritten. Note a return code of 0 indicates encryption is consistent across all nodes.
 
     ```text
     k8s encryption status
+    changed: 1970-01-01 00:20:00+0000
+    ncn-m001: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
+    ncn-m002: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
+    ncn-m003: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907 identity
     current: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
     goal: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
     etcd: aescbc-46d5bd8c2001d07ded05687fe51b517033dc609e69fe4dddaa6e05656cf6e907
     ```
 
     The output shows that the `current` key and `goal` keys are in agreement. This indicates that all secret data in `etcd`
-    is now encrypted with this key provider's name.
+    is now encrypted with this key provider's name. This indicates that all secret data in etcd is now encrypted with this key provider's name.
 
 ## Forcing encryption
 
-If necessary, a forced rewrite of secret data can be performed.
+If necessary, a forced rewrite of secret data can be performed. Generally unnecessary but can be used to reduce the time for nodes to synchronize status.
 
 * (`ncn-mw#`) Force a rewrite of existing data:
 
