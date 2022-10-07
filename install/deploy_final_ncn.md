@@ -520,6 +520,9 @@ it is used for Cray installation and bootstrap.
 
 1. Obtain access to CSI.
 
+   > ***NOTE*** The `App. Version` will report incorrectly in CSM 1.2.0. Please refer to the `Git Version` field
+   > for this information.
+
     ```bash
     ncn-m001# mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs && \
               mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/ && \
