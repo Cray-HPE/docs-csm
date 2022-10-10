@@ -12,21 +12,15 @@ The following workflows are available:
   * [Nexus](#nexus)
 * [System recovery after fresh install](#system-recovery-after-fresh-install)
 
-<a name="prerequisites"></a>
-
 ## Prerequisites
 
 The system is fully installed and has transitioned off of the LiveCD.
 
 All activities required for site maintenance are complete.
 
-The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../update_product_stream/index.md#documentation).
-
-<a name="system-recovery-of-critical-service"></a>
+The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../update_product_stream/index.md#check-for-latest-documentation).
 
 ## System recovery of critical service
-
-<a name="vault"></a>
 
 ### Vault
 
@@ -153,7 +147,6 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
 
    See [Restore from a backup](security_and_authentication/Backup_and_Restore_Vault_Clusters.md#restore-from-a-backup)
 
-<a name="keycloak"></a>
 
 ### Keycloak
 
@@ -263,7 +256,6 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
 
    See [Restore Postgres for Keycloak](kubernetes/Restore_Postgres.md#restore-postgres-for-keycloak)
 
-<a name="spire"></a>
 
 ### Spire
 
@@ -411,7 +403,6 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
 
    See [Restore Postgres for Spire](kubernetes/Restore_Postgres.md#restore-postgres-for-spire)
 
-<a name="nexus"></a>
 
 ### Nexus
 
@@ -523,6 +514,5 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
 
    See [Nexus Export and Restore](package_repository_management/Nexus_Export_and_Restore.md)
 
-<a name="system-recovery-after-fresh-install"></a>
 
 ## System recovery after fresh install
