@@ -171,7 +171,7 @@ communicates with at once, or specific devices can be targeted for a firmware up
 
 > **IMPORTANT:**
 > Before FAS can be used to update firmware, refer to the
-> [HPE Cray EX System Software Getting Started Guide S-800](https://www.hpe.com/support/ex-S-8000)
+> [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
 > on the HPE Customer Support Center for more information about how to install
 > the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
 > available. Once FAS is aware that new firmware is available, then see
