@@ -15,9 +15,8 @@ to create a [configuration layer](../configuration_management/Configuration_Laye
 
 Products may supply multiple plays to run, in which case multiple configuration
 layers must be created. Consult the manual for each product to configure them on
-NCNs by referring to the _HPE Cray EX
-System Software Getting Started Guide S-8000_ on the
-[HPE Customer Support Center](https://www.hpe.com/support/ex-S-8000).
+NCNs by referring to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
+on the HPE Customer Support Center.
 
 ## Procedure: Perform NCN Personalization
 
