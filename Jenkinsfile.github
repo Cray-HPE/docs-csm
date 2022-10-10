@@ -34,7 +34,6 @@ if ( isStable ) {
     (major, minor, patch) = env.TAG_NAME.tokenize('.')
     major = major.replaceAll("^v","")
 }
-def ADDITIONAL_VERSIONS = ["latest"]
 
 pipeline {
     agent {
@@ -50,7 +49,10 @@ pipeline {
 
     environment {
         GIT_REPO_NAME = getRepoName()
+        ADDITIONAL_VERSIONS = []
         VERSION = sh(returnStdout: true, script: "git describe --tags | tr -s '-' '~' | tr -d '^v'").trim()
+        TAG_POINTS_AT_HEAD = sh(returnStdout: true, script: "git tag --points-at HEAD | tr -d '^v'").trim()
+        ADDITIONAL_VERSIONS = "${env.VERSION == env.TAG_POINTS_AT_HEAD ? 'latest' : ''}"
         SLACK_CHANNEL_ALERTS = "csm-release-alerts"
     }
     
@@ -96,10 +98,10 @@ pipeline {
                 } else {
                     RELEASE_FOLDER = ""
                 }
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp2', arch: "noarch", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp3', arch: "noarch", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp2', arch: "src", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp3', arch: "src", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp2', arch: "noarch", isStable: isStable, additionalVersions: [${env.ADDITIONAL_VERSIONS}])
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp3', arch: "noarch", isStable: isStable, additionalVersions: [${env.ADDITIONAL_VERSIONS}])
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp2', arch: "src", isStable: isStable, additionalVersions: [${env.ADDITIONAL_VERSIONS}])
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp3', arch: "src", isStable: isStable, additionalVersions: [${env.ADDITIONAL_VERSIONS}])
             }
         }
       }
