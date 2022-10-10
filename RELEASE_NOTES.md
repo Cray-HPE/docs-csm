@@ -184,7 +184,7 @@
 
 The following features are now deprecated and will be removed from CSM in a future release.
 
-* [BOS](glossary.md#boot-orchestration-service-bos) v1 is now deprecated, in favor of BOS v2. BOS v1 will be removed from CSM in a future release.
+* [BOS](glossary.md#boot-orchestration-service-bos) v1 is now deprecated, in favor of BOS v2. BOS v1 will be removed from CSM in the CSM-1.9 release.
   * It is likely that even prior to BOS v1 being removed from CSM, the [Cray CLI](glossary.md#cray-cli-cray) will change its behavior when no
     version is explicitly specified in BOS commands. Currently it defaults to BOS v1, but it may change to default to BOS v2 even before BOS v1
     is removed from CSM.

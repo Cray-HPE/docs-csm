@@ -334,11 +334,7 @@ if __name__ == '__main__':
                   continue
 
           if net['gateway'] not in svcgws:
-            # HMNLB behaves differently than other networks right now (CASMPET-5853)
-            if netname == "hmnlb":
-              svcexp = 403
-            else:
-              svcexp = 404
+            svcexp = 404
           # if the token we have does not match the network we are testing, we expect a 403
           # CMN tokens will work with NMN and vice versa, because they are using the same gateway in 1.2.
           elif tokname == "cmn" and netname != tokname and netname != "nmnlb":
