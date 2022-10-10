@@ -28,6 +28,7 @@
       - [Enable CFS layer](#enable-cfs-layer)
   - [Cleanup Phase](#cleanup-phase)
     - [Remove CAN from SLS](#remove-can-from-sls)
+    - [Remove CAN from customizations](#remove-can-from-customizations)
     - [Remove CAN from BSS](#remove-can-from-bss)
     - [Remove CAN from CSM services](#remove-can-from-csm-services)
     - [Remove CAN interfaces from NCNs](#remove-can-interfaces-from-ncns)
@@ -208,6 +209,8 @@ However, during the migration phase, ample time and flexibility exists to contac
    ```
 
 ### Update customizations
+
+Add CHN to `customizations.yaml`
 
 1. (`ncn-m001#`) Move to the update directory.
 
@@ -596,7 +599,7 @@ Existing UAIs will continue to use the network that was set when it was created.
       cray cfs configurations describe cos-config-full-2.3-integration --format json | jq 'del(.lastUpdated) | del(.name)' > ${UPDATEDIR}/cos-config-full-2.3-integration.json
       ```
 
-2. Identify the UAN CFS configuration.
+1. Identify the UAN CFS configuration.
 
    1. (`ncn-m001#`) Identify the UAN nodes.
 
@@ -651,9 +654,9 @@ Existing UAIs will continue to use the network that was set when it was created.
       }
       ```
 
-3. Edit the extracted compute node configuration and add the UAN layer to it.
+1. Edit the extracted compute node configuration and add the UAN layer to it.
 
-4. (`ncn-m001#`) Update the compute node CFS configuration.
+1. (`ncn-m001#`) Update the compute node CFS configuration.
 
    ```bash
    cray cfs configurations update cos-config-full-2.3-integration --file ${UPDATEDIR}/cos-config-full-2.3-integration.json --format toml
@@ -725,7 +728,7 @@ Existing UAIs will continue to use the network that was set when it was created.
    playbook = "site.yml"
    ```
 
-5. (`ncn-m001#`) Check that CFS configuration of the compute node completes successfully.
+1. (`ncn-m001#`) Check that CFS configuration of the compute node completes successfully.
 
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command to verify this has occurred.
 
@@ -783,6 +786,36 @@ For more information on managing node with CFS, see the [Configuration Managemen
 
    ```bash
    curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F "sls_dump=@${CLEANUPDIR}/sls_file_without_can.json"
+   ```
+
+### Remove CAN from customizations
+
+1. (`ncn-m001#`) Move to the cleanup directory.
+
+   ```bash
+   cd ${CLEANUPDIR}
+   ```
+
+2. (`ncn-m001#`) Set the directory location for the customizations script to remove `CAN`.
+
+   ```bash
+   export CUSTOMIZATIONS_SCRIPT_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/util
+   ```
+
+3. (`ncn-m001#`) Remove `CAN` from `customizations.yaml`.
+
+   ```bash
+   ${CUSTOMIZATIONS_SCRIPT_DIR}/update-customizations-network.sh ${UPDATEDIR}/customizations.yaml > ${CLEANUPDIR}/customizations.yaml
+   yq validate ${CLEANUPDIR}/customizations.yaml
+   ```
+
+   **Important** If the updated `customizations.yaml` file is empty or not valid `YAML`, do not proceed.  Debug in place.
+
+4. (`ncn-m001#`) Upload new `customizations.yaml` to ensure changes persist across updates
+
+   ```bash
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=${CLEANUPDIR}/customizations.yaml
    ```
 
 ### Remove CAN from BSS
