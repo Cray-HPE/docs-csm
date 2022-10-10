@@ -60,6 +60,14 @@
    ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
+## Fix the disk boot entries and boot order
+
+1. (`ncn-m002#`) Apply a workaround for the boot order and ensure disk boot entries appear in the BIOS boot selection menu:
+
+```bash
+/usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
+```
+
 ## Perform upgrade
 
 During this stage there will be a brief (approximately five minutes) window where pods with Persistent Volumes (`PV`s) will not be able to migrate between nodes.
