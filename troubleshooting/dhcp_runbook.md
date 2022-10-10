@@ -437,7 +437,7 @@ Example:
 - Reboot the node and let the node get an IP from DHCP
 - The standard discovery/DHCP/DNS process complete in about 5 minutes
 - This will get the node to boot up till DVS is needed.
-- The next step is follow the DVS node map update in the section “Troubleshoot Node Map IP Change Issues” in Section 7 in “Cray Shasta DVS Administration Guide”. Shasta (V1.3) Software Documentation.
+- The next step is follow the DVS node map update in the section "Troubleshoot Node Map IP Change Issues" in Section 7 in "Cray Shasta DVS Administration Guide". Shasta (V1.3) Software Documentation.
 
 ## 3. Network Troubleshooting
 
