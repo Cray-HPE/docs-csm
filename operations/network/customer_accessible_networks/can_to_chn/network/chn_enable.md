@@ -492,7 +492,7 @@ Example output
 default via 10.103.11.193 dev hsn0
 ```
 
-(`uan01#`) Verify hsn0 interface configuration
+(`uan01#`) Verify `hsn0` interface configuration
 
 ```bash
 ip a show hsn0
