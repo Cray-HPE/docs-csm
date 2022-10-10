@@ -97,10 +97,10 @@ pipeline {
                 } else {
                     RELEASE_FOLDER = ""
                 }
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp2', arch: "noarch", isStable: isStable, additionalVersions: [${env.ADDITIONAL_VERSIONS}])
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp3', arch: "noarch", isStable: isStable, additionalVersions: [${env.ADDITIONAL_VERSIONS}])
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp2', arch: "src", isStable: isStable, additionalVersions: [${env.ADDITIONAL_VERSIONS}])
-                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp3', arch: "src", isStable: isStable, additionalVersions: [${env.ADDITIONAL_VERSIONS}])
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp2', arch: "noarch", isStable: isStable, additionalVersions: ["${env.ADDITIONAL_VERSIONS}"])
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.GIT_REPO_NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp3', arch: "noarch", isStable: isStable, additionalVersions: ["${env.ADDITIONAL_VERSIONS}"])
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp2', arch: "src", isStable: isStable, additionalVersions: ["${env.ADDITIONAL_VERSIONS}"])
+                publishCsmRpms(component: env.GIT_REPO_NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.GIT_REPO_NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp3', arch: "src", isStable: isStable, additionalVersions: ["${env.ADDITIONAL_VERSIONS}"])
             }
         }
       }
