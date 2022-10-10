@@ -71,6 +71,11 @@ It is possible to upgrade a single storage node at a time using the following co
 /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001
 ```
 
+>**Storage node image upgrade troubleshooting**
+> - The best troubleshooting tool for this stage is the Argo UI. Information about accessing this UI and about using Argo Workflows is above.
+> - If the upgrade is 'waiting for ceph HEALTH_OK', the output from commands `ceph -s` and `ceph health detail` should provide information. 
+> - Refer to [storage troubleshooting documentation](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) for Ceph related issues.
+
 ## Ensure that `rbd` stats monitoring is enabled
 
 (`ncn-m001#`) Run the following commands to enable the `rbd` stats collection on the pools.
