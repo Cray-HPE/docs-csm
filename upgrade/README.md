@@ -109,9 +109,8 @@ See [Security Hardening](../operations/CSM_product_management/Apply_Security_Har
 ## 6. Next topic
 
 After completion of the validation of CSM health, the CSM product stream has been fully upgraded and
-configured. Refer to the `1.5 HPE Cray EX System Software Getting Started Guide S-8000`
-on the [HPE Customer Support Center](https://www.hpe.com/support/ex-S-8000)
-for more information on other product streams to be upgraded and configured after CSM.
+configured. Refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
+on the HPE Customer Support Center for more information on other product streams to be upgraded and configured after CSM.
 
 > **`NOTE`** If a newer version of the HPE Cray EX HPC Firmware Pack (HFP) is available, then the next step
 is to install HFP. This will inform the Firmware Action Services (FAS) of the newest firmware

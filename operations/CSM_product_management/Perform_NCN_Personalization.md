@@ -15,7 +15,7 @@ to create a [configuration layer](../configuration_management/Configuration_Laye
 
 Products may supply multiple plays to run, in which case multiple configuration
 layers must be created. Consult the manual for each product to configure them on
-NCNs by referring to the [1.5 HPE Cray EX System Software Getting Started Guide
+NCNs by referring to the [HPE Cray EX System Software Getting Started Guide
 S-8000](https://www.hpe.com/support/ex-S-8000) on the HPE Customer Support Center.
 
 ## Procedure: Perform NCN Personalization
@@ -40,9 +40,9 @@ error. This error can be ignored.
 
 ### Add Layer(s) to the CFS Configuration
 
-CFS executes configuration layers in order. Refer to the _1.5 HPE Cray EX
-System Software Getting Started Guide S-8000_ on the
-[HPE Customer Support Center](https://www.hpe.com/support/ex-S-8000) to determine if the
+CFS executes configuration layers in order. Refer to the
+[HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
+on the HPE Customer Support Center to determine if the
 configuration layer requires special placement in the layer list.
 
 > **`NOTE`** The CSM configuration layer _MUST_ be the first layer in the
