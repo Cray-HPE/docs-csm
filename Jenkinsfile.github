@@ -51,7 +51,7 @@ pipeline {
         GIT_REPO_NAME = getRepoName()
         VERSION = sh(returnStdout: true, script: "git describe --tags | tr -s '-' '~' | tr -d '^v'").trim()
         TAG_POINTS_AT_HEAD = sh(returnStdout: true, script: "git tag --points-at HEAD | tr -d '^v'").trim()
-        ADDITIONAL_VERSIONS = "${env.VERSION == env.TAG_POINTS_AT_HEAD ? 'latest' : 'pete'}"
+        ADDITIONAL_VERSIONS = "${env.VERSION == env.TAG_POINTS_AT_HEAD ? 'latest' : ''}"
         SLACK_CHANNEL_ALERTS = "csm-release-alerts"
     }
     
