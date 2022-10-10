@@ -10,7 +10,7 @@ The following example shows how to move the BGP control plane from the CHN to th
 
 CANU `1.6.21` can generate this confiuration for Arista Edge Routers.
 
-CANU install and docs can be found here https://github.com/Cray-HPE/canu
+CANU install and docs can be found [here](https://github.com/Cray-HPE/canu)
 
 Example CLI to generate switch configs for the entire management network.
 
