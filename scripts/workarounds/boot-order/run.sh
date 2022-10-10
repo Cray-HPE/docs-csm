@@ -48,7 +48,7 @@ for ncn in "${EXPECTED_NCNS[@]}"; do
     if ping -c 1 $ncn >/dev/null 2>&1 ; then
         NCNS+=( "$ncn" )
     else
-        echo >&2 "Failed to ping [$ncn]; skipping hotfix for [$ncn]"
+        echo >&2 "Failed to ping [$ncn]; skipping workaround for [$ncn]"
     fi
 done
 
