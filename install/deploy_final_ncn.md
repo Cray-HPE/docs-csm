@@ -470,7 +470,13 @@ The steps in this section load hand-off data before a later procedure reboots th
     ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
 
-1. Apply the `kdump` workaround.
+1. (`ncn-m001#`) Apply the boot-order workaround.
+
+   ```bash
+   /usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
+   ```
+
+1. (`ncn-m001#`) Apply the `kdump` workaround.
 
     `kdump` assists in taking a dump of the NCN if it encounters a kernel panic.
     `kdump` does not work properly in CSM 1.2. Until this workaround is applied, `kdump` may not produce a proper dump.
@@ -478,7 +484,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     node. Running it now applies the fix to `ncn-m001` as well.
 
     ```bash
-    ncn-m001# /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
+    /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
     ```
 
     Example output:
