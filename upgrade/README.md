@@ -26,24 +26,13 @@ sections, but there is also a general troubleshooting topic.
 
 See [Prepare for Upgrade](prepare_for_upgrade.md).
 
-## 2. (Optional) Enable Customer High Speed Network Routing
-
-If the CHN is the desired network for customer access, see [Enable Customer High Speed Network Routing](../operations/network/management_network/bican_enable.md).
-This should be completed before the management nodes are upgraded so that the correct HSN IP addresses are allocated and applied during the upgrade.
-
-This feature has additional requirements which include.
-
-- Customer edge switches
-- Cabling from HSN to edge switches
-- Additional IP address space
-
-## 3. Upgrade management nodes and CSM services
+## 2. Upgrade management nodes and CSM services
 
 The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
 The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](Upgrade_Management_Nodes_and_CSM_Services.md).
 
-## 4. Validate CSM health
+## 3. Validate CSM health
 
 - Before performing the health validation, be sure that at least 15 minutes have elapsed
   since the CSM services were upgraded. This allows the various Kubernetes resources to
