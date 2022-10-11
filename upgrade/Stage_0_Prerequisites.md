@@ -96,11 +96,11 @@ after a break, always be sure that a typescript is running before proceeding.
       ```bash
       python /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m001
       deactivate
-      ``` 
+      ```
 
       If the `rbd` device does not exists, create it.
 
-      ```
+      ```bash
       python /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
       deactivate
       ```
