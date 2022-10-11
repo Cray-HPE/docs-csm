@@ -198,6 +198,8 @@ see [Deprecated Features](introduction/deprecated_features/README.md).
 
 ## Known issues
 
+* UAIs use a default route that sends outbound packets over the CMN, this will be addressed in a future release so that the default route uses the CAN/CHN.
+
 ### Security vulnerability exceptions in CSM 1.3
 
 Significant effort went into the tracking, elimination, and/or reduction of critical or high (and lower) security vulnerabilities of container images included in the CSM 1.3 release.
