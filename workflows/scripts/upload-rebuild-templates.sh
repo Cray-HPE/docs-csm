@@ -29,6 +29,12 @@ function main() {
     upload_worker_rebuild_template
     upload_worker_rebuild_hooks
     upload_storage_rebuild_template
+    upload_iuf_install_template
+}
+
+function upload_iuf_install_template {
+    kubectl -n argo delete configmap iuf-install-workflow-files || true
+    kubectl -n argo create configmap iuf-install-workflow-files --from-file="${basedir}/../iuf"
 }
 
 function upload_worker_rebuild_template {
