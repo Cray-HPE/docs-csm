@@ -79,6 +79,8 @@ See [Deprecated features](../introduction/differences.md#deprecated-features).
 
 ## Customer Management Network (CMN)
 
+* [DHCP run book](dhcp_runbook.md)
+* [DNS run book](dns_runbook.md)
 * [General configuration and troubleshooting](../operations/network/management_network/README.md)
 * [Troubleshoot CMN Issues](../operations/network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 * [Troubleshoot DHCP Issues](../operations/network/dhcp/Troubleshoot_DHCP_Issues.md)

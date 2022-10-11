@@ -225,34 +225,31 @@ There are two possible scenarios. Follow the procedure for the scenario that is 
 - [Standard upgrade](#standard-upgrade) - Upgrading CSM on a system that has products installed other than CSM.
 - [CSM-only system upgrade](#csm-only-system-upgrade) - Upgrading CSM only on a CSM-only system **no other products installed or being upgraded**.
 
+While the names are similar, image customization is different than node personalization. Image customization is the
+process of using Ansible stored in VCS in conjunction with the CFS and IMS microservices to customize an image before
+it is booted. Node personalization is the process of using Ansible stored in VCS in conjunction with the CFS and IMS
+microservices to personalize a node after it has booted.
+
 **NOTE:** For the standard upgrade, it will not be possible to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
 
 ### Standard upgrade
 
 In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade. In the standard upgrade, worker NCN image customization and node personalization steps are required.
 
-1. Consult the `HPE Cray EX System Software Getting Started Guide`.
+1. If not already done, consult the `HPE Cray EX System Software Getting Started Guide`.
 
     Read the `HPE Cray EX software upgrade workflow` section. Pay particular attention to the `HPC CSM Software Recipe` and `Cray System Management (CSM)` subsections,
     as well as any `NCN Personalization` subsections.
 
-1. Get a current copy of the SAT `Bootprep` files.
-
-    See [Accessing SAT `Bootprep` Files](../operations/configuration_management/Accessing_Sat_Bootprep_Files.md).
-
 1. Prepare the pre-boot worker NCN image customizations.
 
     This will ensure that the CFS configuration layers are applied to perform image customization for the worker NCNs.
-    See [Worker Upgrade Image Customization](../operations/configuration_management/Worker_Upgrade_Image_Customization.md).
+    See [Worker Image Customization](../operations/configuration_management/Worker_Image_Customization.md).
 
-1. Prepare the post-boot worker NCN image personalizations.
+1. Prepare the post-boot worker NCN personalizations.
 
-    This will ensure that the CFS configuration layers are applied to perform node personalization during the post-boot of the worker NCNs.
-    See [Worker Upgrade Node Personalization](../operations/configuration_management/Worker_Upgrade_Node_Personalization.md).
-
-1. Customize the worker NCN images and apply their new boot parameters.
-
-    See [Management Node Image Customization](../operations/configuration_management/Management_Node_Image_Customization.md).
+    This will ensure that the appropriate CFS configuration layers are applied when performing post-boot node personalization of the worker NCNs.
+    See [NCN Node Personalization](../operations/configuration_management/NCN_Node_Personalization.md).
 
 Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data), skipping the [CSM-only system upgrade](#csm-only-system-upgrade) subsection below.
 

@@ -50,15 +50,7 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 > The issue stems from slightly different `sha` values for the Ceph containers for in-family CSM storage node images which will prevent the Ceph containers from starting.
 > This will utilize the upgrade procedure to accomplish this as it has built in checks and health monitoring to better manage this rolling restart of the Ceph containers with the image stored in Nexus.  Please see [cubs_tool usage for further information](../operations/utility_storage/Cubs_tool_Usage.md)
 
-(`ncn-s001#`)
-
-Normal upgrade to a new Ceph major release:
-
-```bash
-/srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io --upgrade 
-```
-
-In family upgrade to a new container with the same Ceph version:
+(`ncn-s001#`) In family upgrade to a new container with the same Ceph version:
 
 ```bash
 /srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io --upgrade --in_family_override

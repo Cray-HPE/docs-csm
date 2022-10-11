@@ -34,50 +34,61 @@ This document describes the configuration of a Kubernetes NCN image. The same st
     This document will instruct the administrator to set several environment variables, including the three set in
     the previous step.
 
-1. Clone the `csm-config-management` repository.
+1. If `sat bootprep` was not used in [Worker Image Customization](Worker_Image_Customization.md) to create a CFS
+   configuration for management node image customization, then execute the following two substeps:
+
+    1. Clone the `csm-config-management` repository.
+
+       ```bash
+       VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+       VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+       git clone https://$VCS_USER:$VCS_PASS@api-gw-service-nmn.local/vcs/cray/csm-config-management.git
+       ```
+
+       You will need a Git commit hash from this repo in the following step.
+
+    1. [Create a CFS Configuration](Create_a_CFS_Configuration.md).
+
+       The first layer in the CFS configuration should be similar to this:
+
+       ```json
+       "layers": [
+       {
+         "name": "csm-ncn-workers",
+         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+         "playbook": "ncn-worker_nodes.yml",
+         "commit": "<git commit hash>"
+       },
+       ```
+
+       The last layer in the CFS configuration should be similar to this:
+
+       ```json
+       "layers": [
+       {
+         "name": "csm-ncn-initrd",
+         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+         "playbook": "ncn-initrd.yml",
+         "commit": "<git commit hash>"
+       }
+       ```
+
+1. Ensure the environment variable `$IMS_IMAGE_ID` was set during
+   [Import an External Image to IMS](../image_management/Import_External_Image_to_IMS.md).
 
    ```bash
-   VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-   VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-   git clone https://$VCS_USER:$VCS_PASS@api-gw-service-nmn.local/vcs/cray/csm-config-management.git
+   echo $IMS_IMAGE_ID
    ```
 
-   You will need a Git commit hash from this repo in the following step.
+1. Use the following command to create an image customization CFS session. See
+   [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional information
+   on creating an image customization CFS session.
 
-1. [Create a CFS Configuration](Create_a_CFS_Configuration.md).
-
-   The first layer in the CFS session should be similar to this:
-
-   ```json
-   "layers": [
-   {
-     "name": "csm-ncn-workers",
-     "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-     "playbook": "ncn-worker_nodes.yml",
-     "commit": "<git commit hash>"
-   },
-   ```
-
-   The last layer in the CFS session should be similar to this:
-
-   ```json
-   "layers": [
-   {
-     "name": "csm-ncn-initrd",
-     "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-     "playbook": "ncn-initrd.yml",
-     "commit": "<git commit hash>"
-   }
-   ```
-
-1. [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md).
-
-   In this section, use the following values for the target definition and target group for the
-   `cray cfs session create` command invocation:
-
-   ```text
-   --target-definition image
-   --target-group Management_Worker
+   ```bash
+   cray cfs sessions create --name ncn-image-customization-session \
+       --configuration-name ncn-image-customization \
+       --target-definition image --format json \
+       --target-group Management_Worker $IMS_IMAGE_ID
    ```
 
 1. (`ncn-mw#`) Update boot parameters for a Kubernetes NCN.
@@ -98,7 +109,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
         in the "Create an Image Customization CFS Session" procedure, repeated here for convenience:
 
         ```bash
-        cray cfs sessions describe example --format json | jq .status.artifacts
+        cray cfs sessions describe ncn-image-customization-session --format json | jq .status.artifacts
         ```
 
         ```bash
