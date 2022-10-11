@@ -84,10 +84,23 @@ after a break, always be sure that a typescript is running before proceeding.
 
    1. Create and map the `rbd` device.
 
-      **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`. This mount is available to stage content for the install/upgrade process.
+      **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`. This mount is available to stage content for the install/upgrade process. First, check if this device already exists.
 
       ```bash
       source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
+      python /usr/share/doc/csm/scripts/csm_rbd_tool.py --status
+      ```
+
+      If the `rbd` device already exists and is mounted, it can be moved to the desired node, if not already mounted there.
+
+      ```bash
+      python /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m001
+      deactivate
+      ``` 
+
+      If the `rbd` device does not exists, create it.
+
+      ```
       python /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
       deactivate
       ```
