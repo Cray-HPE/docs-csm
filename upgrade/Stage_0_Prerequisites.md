@@ -90,6 +90,7 @@ after a break, always be sure that a typescript is running before proceeding.
       source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
       /usr/share/doc/csm/scripts/csm_rbd_tool.py --status
       ```
+      
       >Expected output if `rbd` device does not exist:
       >
       >```text
