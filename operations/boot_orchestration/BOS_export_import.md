@@ -1,20 +1,23 @@
 # BOS - Exporting and Importing for System Recovery or in the case of a fresh install
 
 ## BOS Session Templates
+
 The primary BOS data that should be saved is the BOS session template. BOS session templates can be exported and later imported.
 
 ### Automatically export/import BOS session templates
+
 Product specified session templates can be re-installed using their associated Helm charts. This recreates the session template data within BOS.
-Existing BOS session semplates can be backed up and restored using the automated scripts. See scripts/operations/system_recovery/export_bos_sessiontemplates.sh and scripts/operations/system_recovery/import_bos_sessiontemplates.sh
+Existing BOS session templates can be backed up and restored using the automated scripts. See scripts/operations/system_recovery/export_bos_sessiontemplates.sh and scripts/operations/system_recovery/import_bos_sessiontemplates.sh
 To export BOS session templates, simply run the script scripts/operations/system_recovery/export_bos_sessiontemplates.sh. Copy the archive file it outputs to a safe location.
 To import the BOS session templates, run the scripts/operations/system_recovery/import_bos_sessiontemplates.sh providing as input the archive file that was created by the export_bos_sessiontemplates.sh script.
 
 BOS session templates can also be manually exported and imported onto a given system using the Cray CLI tool. For each session template that you wish to export, use `cray bos sessiontemplate describe` cli. For example:
-     
+
 ### Manually export any session template as needed
+
 ```bash
-ncn# cray bos sessiontemplate describe uan-sessiontemplate-2.0.27 --format json > ~/uan-sessiontemplate-2.0.27.json
-ncn# cat ~/uan-sessiontemplate-2.0.27.json
+cray bos sessiontemplate describe uan-sessiontemplate-2.0.27 --format json > ~/uan-sessiontemplate-2.0.27.json
+cat ~/uan-sessiontemplate-2.0.27.json
 {
   "boot_sets": {
     "uan": {
@@ -53,9 +56,11 @@ ncn# cat ~/uan-sessiontemplate-2.0.27.json
 ```
 
 ### Import/restore any session template as needed
+
 ```bash
-ncn# cray bos sessiontemplate create --file ~/uan-sessiontemplate-2.0.27.json --name uan-sessiontemplate-2.0.27
+cray bos sessiontemplate create --file ~/uan-sessiontemplate-2.0.27.json --name uan-sessiontemplate-2.0.27
 ```
 
 ## BOS Database PVCs
+
 Since the release BOS V2, it is not recommended that the BOS redis database be saved and restored. This database contains the desired state of components. If a system is in recovery and all of the compute nodes shut down, restoring the database will restore BOS' desired state for the components. BOS will attempt to move these compute nodes into that desired state. This may mean attempting to boot compute nodes to the previous desired state, which may contain old, stale state, such as stale compute images. It is better to let BOS recreate the databases from scratch. Then, apply the desired state to the components with the latest up to date state.
