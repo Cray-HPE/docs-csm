@@ -1,0 +1,54 @@
+apiVersion: iuf.hpe.com/v1
+kind: IufSession
+metadata:
+  name: iufsessions-123123
+spec:
+  workflow_type: install
+  products:
+    - name: cos
+      version: 1.1.2
+      original_location: /rbd/whatever/cos-1.2.1
+      iuf_manifest_s3_location: /iuf/install/cos-1.2.1/iuf-manifest.yaml
+      before_hook_scripts:
+        pre_install_check: /iuf/install/cos-1.2.1/hooks/pre-install-check.sh
+        generate_loftsman_manifests: /iuf/install/cos-1.2.1/hooks/generate_loftsman_manifests.sh
+      after_hook_scripts:
+        pre_install_check: /iuf/install/cos-1.2.1/hooks/pre-install-check.sh
+        generate_loftsman_manifests: /iuf/install/cos-1.2.1/hooks/generate_loftsman_manifests.sh
+    - name: sma
+      version: 1.1.2
+      original_location: /rbd/whatever/sma-1.2.1
+      iuf_manifest_s3_location: /iuf/install/sma-1.2.1/iuf-manifest.yaml
+      before_hook_scripts:
+        pre_install_check: /iuf/install/sma-1.2.1/hooks/pre-install-check.sh
+        generate_loftsman_manifests: /iuf/install/sma-1.2.1/hooks/generate_loftsman_manifests.sh
+      after_hook_scripts:
+        pre_install_check: /iuf/install/sma-1.2.1/hooks/pre-install-check.sh
+        generate_loftsman_manifests: /iuf/install/sma-1.2.1/hooks/generate_loftsman_manifests.sh
+  stages:
+    - pre-install-check
+    - deliver-product
+    - update-config
+    - deploy-product
+    - rolling-reboot
+    - post-install-check
+  input_params:
+    vcs_working_branch_pattern: "{product_name}-{product_version}-integration"
+    vcs_working_branch_per_product:
+      cos: "cos-1.2.1-integration"
+
+# status:
+#   operations:
+#     - pre_install_check
+#     - generate_loftsman_manifests
+#     - s3_upload
+#     - nexus_setup
+#     - nexus_upload
+#     - vcs_upload
+#     - ims_upload
+#     - loftsman_manifest_upload
+#     - loftsman_manifest_deploy
+#   state: installing
+#   argo_workflow:
+#     name: workflow-kjnq34125kjfq
+#     state: suspended
