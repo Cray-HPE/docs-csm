@@ -9,10 +9,9 @@ The following procedure describes how to access the CFS configuration. This proc
 
     ```bash
     cat > vcs-creds-helper.sh << EOF
-
-    > #!/bin/bash
-    > kubectl get secret -n services vcs-user-credentials -o jsonpath={.data.vcs_password} | base64 -d
-    > EOF
+    #!/bin/bash
+    kubectl get secret -n services vcs-user-credentials -o jsonpath={.data.vcs_password} | base64 -d
+    EOF
     
     chmod u+x vcs-creds-helper.sh
     
@@ -52,5 +51,5 @@ The following procedure describes how to access the CFS configuration. This proc
 1. (`ncn-m#`) List the default `sat bootprep` input files in this repository:
 
     ```bash
-    ls bootrep
+    ls bootprep
     ```
