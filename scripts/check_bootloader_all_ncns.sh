@@ -22,13 +22,12 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-# Origin of workaround: https://jira-pro.its.hpecorp.net:8443/browse/MTL-1872
 
 set -euo pipefail
 
-workdir=$(dirname $0)
+workdir=/usr/share/doc/csm/scripts/
 
-if [[ $(hostname) == *-pit ]]; then
+if [[ -f /etc/pit-release ]]; then
     # Exclude ncn-m001 if this is run from the PIT node.
     readarray -t EXPECTED_NCNS < <(conman -q | grep -v m001 | sort -u | awk -F - '{print $1"-"$2}')
     if [ ${#EXPECTED_NCNS[@]} = 0 ]; then
@@ -48,35 +47,18 @@ for ncn in "${EXPECTED_NCNS[@]}"; do
     if ping -c 1 $ncn >/dev/null 2>&1 ; then
         NCNS+=( "$ncn" )
     else
-        echo >&2 "Failed to ping [$ncn]; skipping workaround for [$ncn]"
+        echo >&2 "Failed to ping [$ncn]; skipping hotfix for [$ncn]"
     fi
 done
 
 for ncn in "${NCNS[@]}"; do
-    printf "Uploading new metal-lib.sh to $ncn:/srv/cray/scripts/metal/ ... "
-    scp ${workdir}/metal-lib.sh ${ncn}:/srv/cray/scripts/metal/metal-lib.sh >/dev/null
+    printf "Uploading check_bootloader.sh to $ncn:/tmp/ ... "
+    scp ${workdir}/check_bootloader.sh ${ncn}:/tmp/ >/dev/null
     echo "Done" 
 done
 
-printf "Refreshing the bootorder on [${#NCNS[@]}] NCNs ... "
-if ! pdsh -S -b -w "$(printf '%s,' "${NCNS[@]}")" '
-. /srv/cray/scripts/metal/metal-lib.sh
-install_grub2 > /var/log/metal-boot-order-workarounds.log 2>/var/log/metal-boot-order-workarounds.error.log
-'; then
-    # This failure is not important.
-    :
-fi
-
-if ! pdsh -S -b -w "$(printf '%s,' "${NCNS[@]}")" '
-. /srv/cray/scripts/metal/metal-lib.sh
-setup_uefi_bootorder >> /var/log/metal-boot-order-workarounds.log 2>>/var/log/metal-boot-order-workarounds.error.log
-'; then
-    echo >&2 'Failed to fix boot order on one or more nodes. Check /var/log/metal-boot-order-workarounds*.log on each node for more information.'
-    exit 1
-fi
+# Do not run with -S, let the bootloader check report failures on every node and not exit early.
+pdsh -b -w "$(printf '%s,' "${NCNS[@]}")" '
+/tmp/check_bootloader.sh
+'
 echo "Done"
-
-echo "The following NCNs contain the boot-order patch:"
-printf "\t%s\n" "${NCNS[@]}"
-echo "This workaround has completed."
-
