@@ -182,6 +182,12 @@ The commands are the same for all hardware vendors, except where noted.
     ncn/pit# cat /tmp/bbs* | awk '!x[$0]++' | sed 's/^Boot//g' | tr -d '*' | awk '{print $1}' | xargs -r -t -i efibootmgr -b {} -a
     ```
 
+1. Set next boot entry.
+
+    ```bash
+    efibootmgr -n <desired_next_boot_device>
+    ```
+
 After following the steps above on a given NCN, that NCN will use the desired Shasta boot order.
 
 This is the end of the `Setting boot order` procedure.

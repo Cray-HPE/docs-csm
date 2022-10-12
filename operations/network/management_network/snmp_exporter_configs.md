@@ -7,7 +7,7 @@ The Prometheus SNMP Exporter is deployed by the the `cray-sysmgmt-health` chart 
 In order to provide data to the Grafana SNMP dashboards, the SNMP Exporter must be configured with a list of management network switches to scrape metrics from.
 
 This procedure assumes that this is being done as part of a CSM install as part of the
-[Prepare Site Init](../../../install/prepare_site_init.md#configure-prometheus-snmp-exporter) procedure.
+[Prepare `site-init`](../../../install/prepare_site_init.md#configure-prometheus-snmp-exporter) procedure.
 Specifically, it assumes that the `SYSTEM_NAME` and `PITDATA` variables are set, and that the `PITDATA` mount is
 in place.
 
@@ -18,7 +18,8 @@ in place.
     ```
 
     Expected output looks similar to the following:
-    ```
+
+    ```yaml
     10.252.0.2
     10.252.0.3
     10.252.0.4
@@ -78,8 +79,169 @@ The most common configuration parameters are specified in the following table. T
 |Customization|Default|Description|
 |-------------|-------|-----------|
 |`serviceMonitor.enabled`|`true`|Enables `serviceMonitor` for SNMP exporter \(default chart value is `true`\)|
-|`params.enabled`|`false`|Sets the snmp exporter params change to true \(default chart value is `false`\)|
+|`params.enabled`|`false`|Sets the SNMP exporter `params` change to true \(default chart value is `false`\)|
 |`params.conf.module`|`if_mib`| SNMP exporter to select which module \(default chart value is `if_mib`\)|
 |`params.conf.target`|`127.0.0.1`| Add list of switch targets to SNMP exporter to monitor \(default chart value is `127.0.0.1`\)|
 
 For a complete set of available parameters, consult the `values.yaml` file for the `cray-sysmgmt-health` chart.
+
+(`post-install-CSM#`)
+
+This procedure is to correct the SNMP exporter settings once the PIT node no longer exists by editing manifest and deploying `cray-sysmgmt-health chart`.
+
+1. (`ncn#`) Get the current cached customizations.
+
+   ```bash
+   kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ```
+
+1. (`ncn#`) Get the current cached platform manifest.
+
+   ```bash
+   kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
+   ```
+
+1. (`ncn#`) Edit the customizations as desired by adding or updating  `spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter`.
+
+   ```bash
+   yq write -s - -i /root/customizations.yaml <<EOF
+   - command: update
+     path: spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
+     value:
+             serviceMonitor:
+               enabled: true
+               params:
+                 enabled: true
+                 conf:
+                   module:
+                   - if_mib
+                   target:
+                   - 127.0.0.1s
+                   - 10.252.0.2
+                   - 10.252.0.3
+                   - 10.252.0.4
+                   - 10.252.0.5
+   EOF
+   ```
+
+1. (`ncn#`) Check that the customization file has been updated.
+
+   ```bash
+   yq read customizations.yaml "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter"
+   ```
+
+   Example output:
+
+   ```yaml
+   serviceMonitor:
+     enabled: true
+     params:
+       enabled: true
+       conf:
+         module:
+         - if_mib
+         target:
+         - 127.0.0.1
+         - 10.252.0.2
+         - 10.252.0.3
+         - 10.252.0.4
+         - 10.252.0.5
+   ```
+
+1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data.
+
+   The resources specified above will be updated in the next step. The version may differ, because this is an example.
+
+   ```yaml
+   apiVersion: manifests/v1beta1
+   metadata:
+     name: platform
+   spec:
+     charts:
+     - name: cray-sysmgmt-health
+       namespace: sysmgmt-health
+       values:
+   .
+   .
+   .
+       version: 0.12.0
+   ```
+
+1. (`ncn#`) Generate the manifest that will be used to redeploy the chart with the modified resources.
+
+   ```bash
+   manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
+   ```
+
+1. (`ncn#`) Check that the manifest file contains the desired resource settings.
+
+   ```bash
+   yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-snmp-exporter'
+   ```
+
+   Example output:
+
+   ```yaml
+   serviceMonitor:
+     enabled: true
+     params:
+       enabled: true
+       conf:
+         module:
+         - if_mib
+         target:
+         - 127.0.0.1
+         - 10.252.0.2
+         - 10.252.0.3
+         - 10.252.0.4
+         - 10.252.0.5
+   ```
+
+1. (`ncn#`) Redeploy the same chart version but with the desired SNMP configuration settings.
+
+   ```bash
+   loftsman ship charts-path /helm --manifest-path /root/manifest.yaml
+   ```
+
+1. Verify that the pod restarts and that the desired resources have been applied.
+
+   1. (`ncn#`) Watch the `cray-sysmgmt-health-prometheus-snmp-exporter-*` pod restart.
+
+      ```bash
+      watch "kubectl get pods -n sysmgmt-health -l app.kubernetes.io/name=prometheus-snmp-exporter"
+      ```
+
+      It may take about 10 minutes for the `cray-sysmgmt-health-prometheus-snmp-exporter-*` pod to terminate.
+      It can be forced deleted if it remains in the terminating state:
+
+      ```bash
+      kubectl delete pod cray-sysmgmt-health-prometheus-snmp-exporter-* --force --grace-period=0 -n sysmgmt-health 
+      ```
+
+1. (`ncn#`) **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
+
+   ```bash
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
+1. (`ncn#`) Verify that the resource changes are in place.
+
+   ```bash
+   kubectl get servicemonitor cray-sysmgmt-health-prometheus-snmp-exporter -n sysmgmt-health -o json | jq -r '.spec.endpoints[].params'         
+   ```
+
+   Example output:
+
+   ```json
+   {
+   "module": [
+      "if_mib"
+    ],
+   "target": [
+      "10.254.0.2"
+    ]
+   }
+   ```

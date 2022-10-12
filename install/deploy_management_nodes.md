@@ -605,14 +605,20 @@ be performed are in the [Deploy](#deploy) section.
     **If the check fails for any nodes, then the problem must be resolved before continuing.**
     See [LVM Check Failure Recovery](#lvm-check-failure-recovery).
 
-1. Apply the `kdump` workaround.
+1. (`pit#`) Apply the boot-order workaround.
+
+   ```bash
+   /usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
+   ```
+
+1. (`pit#`) Apply the `kdump` workaround.
 
     `kdump` assists in taking a dump of the NCN if it encounters a kernel panic.
     `kdump` does not work properly in CSM 1.2. Until this workaround is applied, `kdump` may not produce a proper dump.
     Running this script applies the workaround on all of the NCNs that were just deployed.
 
     ```bash
-    pit# /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
+    /usr/share/doc/csm/scripts/workarounds/kdump/run.sh
     ```
 
     Example output:

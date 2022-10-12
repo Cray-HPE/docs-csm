@@ -2,14 +2,14 @@
 
 > **Reminders:**
 >
-> - CSM 1.0.1 or higher is required in order to upgrade to CSM 1.2.0.
+> - CSM 1.0.1 or higher is required in order to upgrade to CSM 1.2.1.
 > - If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 >   [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
 ## Abstract (Stage 0)
 
 Stage 0 has several critical procedures which prepares and verify if the environment is ready for upgrade. First, the latest documentation RPM is installed; it includes
-critical install scripts used in the upgrade procedure. Next, the current configuration of the System Layout Service (SLS) is updated to have necessary information for CSM 1.2.
+critical install scripts used in the upgrade procedure. Next, the current configuration of the System Layout Service (SLS) is updated to have necessary information for CSM 1.2.x.
 The management network configuration is also upgraded. Towards the end, prerequisite checks are performed to ensure that the upgrade is ready to proceed. Finally, a
 backup of Workload Manager configuration data and files is created. Once complete, the upgrade proceeds to Stage 1.
 
@@ -27,7 +27,7 @@ backup of Workload Manager configuration data and files is created. Once complet
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   ncn-m001# CSM_RELEASE=csm-1.2.0
+   ncn-m001# CSM_RELEASE=csm-1.2.1
    ```
 
 1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.
@@ -119,10 +119,10 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 ### Abstract (Stage 0.2)
 
-CSM 1.2 introduces the bifurcated CAN (BICAN) as well as network configuration controlled by data in SLS. An offline upgrade of SLS data is performed. For more details on the
+CSM 1.2.x introduces the bifurcated CAN (BICAN) as well as network configuration controlled by data in SLS. An offline upgrade of SLS data is performed. For more details on the
 upgrade and its sequence of events, see the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md).
 
-The SLS data upgrade is a critical step in moving to CSM 1.2. Upgraded SLS data is used in DNS and management network configuration. For details to aid in understanding and
+The SLS data upgrade is a critical step in moving to CSM 1.2.x. Upgraded SLS data is used in DNS and management network configuration. For details to aid in understanding and
 decision making, see the [Management Network User Guide](../../operations/network/management_network/index.md).
 
 One detail which must not be overlooked is that the existing Customer Access Network (CAN) will be migrated or retrofitted into the new Customer Management Network (CMN) while
@@ -130,7 +130,7 @@ minimizing changes. A new CAN (or CHN) network is then created. Pivoting the exi
 moving standard user traffic to a new site-routable network. You can read more about this, as well as steps to ensure undisrupted access to UANs during upgrade, in
 [Plan and coordinate network upgrade](plan_and_coordinate_network_upgrade.md).
 
-> **Important:** If this is the first time performing the SLS update to CSM 1.2, review the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md) in order to ensure
+> **Important:** If this is the first time performing the SLS update to CSM 1.2.x, review the [SLS upgrade `README`](scripts/sls/README.SLS_Upgrade.md) in order to ensure
 the correct options for the specific environment are used. Two examples are given below. To see all options from the update script, run `./sls_updater_csm_1.2.py --help`.
 
 ### Retrieve SLS data as JSON
@@ -155,7 +155,7 @@ the correct options for the specific environment are used. Two examples are give
    ncn-m001# curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
    ```
 
-### Migrate SLS data JSON to CSM 1.2
+### Migrate SLS data JSON to CSM 1.2.x
 
 - Example 1: The CHN as the system default route (will by default output to `migrated_sls_file.json`).
 

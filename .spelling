@@ -1,6 +1,12 @@
 1.0.x
+v1.0.x
 1.6.x
 1.7.3a
+1.2.x
+1.2.x.
+v1.2.x.
+v1.2.1,
+v1.2.1.
 100GBASE-CR2
 100GBASE-CR4
 100GBASE-SR2
@@ -162,6 +168,7 @@ defenses
 defensive
 DellOS
 DHCP
+dhcp-manager
 dialog
 diskless
 DNS

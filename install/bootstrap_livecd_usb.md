@@ -475,6 +475,9 @@ information for this system has not yet been prepared.
 
    1. Note the version reported by the `csi` tool.
 
+      > ***NOTE*** The `App. Version` will report incorrectly in CSM 1.2.0 and CSM 1.2.1. Please obtain the
+      > version information by running the step below and by invoking `rpm -q cray-site-init`.
+
       ```bash
       linux# csi version
       ```
@@ -782,6 +785,9 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    recorded in the typescript file, in case it is needed later. For example, this information is useful to include in
    any bug reports or service queries for issues encountered on the PIT node.
 
+   > ***NOTE*** The `App. Version` will report incorrectly in CSM 1.2. Please obtain the
+   > version information by running the step below and by invoking `rpm -q cray-site-init`.
+
    ```bash
    pit# /root/bin/metalid.sh
    ```
@@ -829,7 +835,7 @@ On first log in (over SSH or at local console), the LiveCD will prompt the admin
    pit# /root/bin/pit-init.sh
    ```
 
-1. Install Goss tests.
+1. Install `csm-testing`.
 
    The following assumes the `CSM_PATH` environment variable is set to the absolute path of the unpacked CSM release.
 

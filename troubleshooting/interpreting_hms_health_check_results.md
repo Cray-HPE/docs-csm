@@ -6,6 +6,8 @@
 - [HMS smoke tests](#hms-smoke-tests)
 - [HMS functional tests](#hms-functional-tests)
 - [Additional troubleshooting](#additional-troubleshooting)
+  - [`run_hms_ct_tests.sh`](#run_hms_ct_testssh)
+    - [`smd_tavern_api_test_ncn-functional.sh`](#smd_tavern_api_test_ncn-functionalsh)
   - [`smd_discovery_status_test_ncn-smoke.sh`](#smd_discovery_status_test_ncn-smokesh)
     - [`HTTPsGetFailed`](#httpsgetfailed)
     - [`ChildVerificationFailed`](#childverificationfailed)
@@ -197,6 +199,136 @@ E   tavern.util.exceptions.TestFailError: Test 'Ensure the boot script service c
 ## Additional troubleshooting
 
 This section provides guidance for handling specific HMS health check failures that may occur.
+
+### `run_hms_ct_tests.sh`
+
+This script runs the suite of HMS CT tests.
+
+#### `smd_tavern_api_test_ncn-functional.sh`
+
+This script executes the tests for Hardware State Manager (HSM).
+
+##### `test_smd_components_ncn-functional_remote-functional.tavern.yaml and test_smd_hardware_ncn-functional_remote-functional.tavern.yaml`
+
+These tests require compute nodes to be discovered in HSM.
+
+The following is an example of a failed test execution due to no discovered compute nodes in HSM:
+
+```text
+running '/opt/cray/tests/ncn-functional/hms/hms-smd/smd_tavern_api_test_ncn-functional.sh'...
+
+...
+
+============================= test session starts ==============================
+platform linux -- Python 3.8.10, pytest-6.1.2, py-1.11.0, pluggy-0.13.1
+cachedir: /var/tmp/.pytest_cache
+rootdir: /opt/cray/tests/ncn-functional/hms/hms-smd, configfile: pytest.ini
+plugins: tavern-1.12.2, tap-3.3
+collected 37 items
+
+...
+
+opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml F [ 31%]
+
+...
+
+opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_hardware_ncn-functional_remote-functional.tavern.yaml . [ 50%]
+
+...
+
+=================================== FAILURES ===================================
+_ opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a variety of queries on the Components collection _
+
+...
+
+------------------------------ Captured log call -------------------------------
+WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+
+...
+
+_ opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_hardware_ncn-functional_remote-functional.tavern.yaml::Query the Hardware collection for Node information _
+
+...
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Retrieve the hardware information for a given node xname from the Hardware collection' failed:
+    - Status code was 404, expected 200:
+        {"type": "about:blank", "title": "Not Found", "detail": "no such xname.", "status": 404}
+
+...
+
+------------------------------ Captured log call -------------------------------
+WARNING  tavern.util.dict_util:dict_util.py:46 Formatting 'node_xname' will result in it being coerced to a string (it is a <class 'NoneType'>)
+
+...
+
+=========================== short test summary info ============================
+FAILED opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functional_remote-functional.tavern.yaml::Ensure that we can conduct a variety of queries on the Components collection
+FAILED opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_hardware_ncn-functional_remote-functional.tavern.yaml::Query the Hardware collection for Node information
+```
+
+(`ncn-mw#`) If these failures occur, confirm that there are no discovered compute nodes in HSM.
+
+```bash
+cray hsm state components list --type=Node --role=compute --format=json
+```
+
+Example output:
+
+```text
+{
+  "Components": []
+}
+```
+
+There are several reasons why there may be no discovered compute nodes in HSM.
+
+The following situations do not warrant additional troubleshooting and the test failures can be safely ignored if:
+
+- There is no compute hardware physically connected to the system
+- All compute hardware in the system is powered off
+
+If none of the above cases are applicable, then the failures warrant additional troubleshooting:
+
+(`ncn-mw#`) Run the `smd_discovery_status_test_ncn-smoke.sh` script.
+
+```bash
+/opt/cray/tests/ncn-smoke/hms/hms-smd/smd_discovery_status_test_ncn-smoke.sh
+```
+
+If the script fails, this indicates a discovery issue and further troubleshooting steps to take are printed.
+
+Otherwise, missing compute nodes in HSM with no discovery failures may indicate a problem with a `leaf-bmc` switch.
+
+(`ncn-mw#`) Check to see if the `leaf-bmc` switch resolves using the `nslookup` command.
+
+```bash
+nslookup <leaf-bmc-switch>
+```
+
+Example output:
+
+```text
+Server:     10.92.100.225
+Address:    10.92.100.225#53
+
+Name:   sw-leaf-bmc-001.nmn
+Address: 10.252.0.4
+```
+
+(`ncn-mw#`) Verify connectivity to the `leaf-bmc` switch.
+
+```bash
+ssh admin@<leaf-bmc-switch>
+```
+
+Example output:
+
+```text
+ssh: connect to host sw-leaf-bmc-001 port 22: Connection timed out
+```
+
+Restoring connectivity, resolving configuration issues, or restarting the relevant ports on the `leaf-bmc` switch should allow the compute hardware to issue DHCP requests and be discovered successfully.
 
 ### `smd_discovery_status_test_ncn-smoke.sh`
 

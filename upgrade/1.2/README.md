@@ -1,14 +1,16 @@
-# CSM 1.0.0 or later to 1.2.0 Upgrade Process
+# CSM 1.0.x to 1.2.x Upgrade Process
 
 ## Introduction
 
-This document guides an administrator through the upgrade of Cray Systems Management from v1.0 to v1.2. When upgrading a system, follow this top-level file
+This document guides an administrator through the upgrade of Cray Systems Management from v1.0.x to v1.2.x. When upgrading a system, follow this top-level file
 from top to bottom. The content on this top-level page is meant to be terse. For additional reference material on the upgrade processes and scripts
 mentioned explicitly on this page, see [resource material](resource_material/README.md).
 
-A major feature of CSM 1.2 is the Bifurcated CAN (BICAN). The BICAN is designed to separate administrative network traffic from user network traffic.
+If you are considering an upgrade from CSM 1.0.x to 1.2.0, please instead download and use CSM 1.2.1.
+
+A major feature of CSM 1.2.x is the Bifurcated CAN (BICAN). The BICAN is designed to separate administrative network traffic from user network traffic.
 For more information, see the [BICAN Summary](../../operations/network/management_network/bican_technical_summary.md).
-Review the BICAN Summary before continuing with the CSM 1.2 upgrade.
+Review the BICAN Summary before continuing with the CSM 1.2.x upgrade.
 
 For detailed BICAN documentation, see the [BICAN Technical Details](../../operations/network/management_network/bican_technical_details.md) page.
 
@@ -16,7 +18,7 @@ For detailed BICAN documentation, see the [BICAN Technical Details](../../operat
 
 - The SMA Grafana service is temporarily inaccessible during the upgrade.
 
-  During stage 3 of the CSM 1.2 upgrade, the SMA Grafana service will become inaccessible at its previous DNS location. It will
+  During stage 3 of the CSM 1.2.x upgrade, the SMA Grafana service will become inaccessible at its previous DNS location. It will
   remain inaccessible until the upgrade to SMA 1.6.x is applied. This is because of a change in DNS names for the service.
 
 - Service request adjustments are needed for small systems.
@@ -35,7 +37,7 @@ For detailed BICAN documentation, see the [BICAN Technical Details](../../operat
 
 ## Known issues
 
-- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2 (HPE Cray EX System Software 22.07 release). During the upgrade, a workaround is applied to fix this.
+- `kdump` (kernel dump) may hang and fail on NCNs in CSM 1.2.x (HPE Cray EX System Software 22.07 release). During the upgrade, a workaround is applied to fix this.
 - The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
 
 ## Plan and coordinate network upgrade
