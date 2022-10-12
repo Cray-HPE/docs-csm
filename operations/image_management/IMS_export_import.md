@@ -5,18 +5,16 @@ either using an automated script, or manually one at a time.
 
 ## Exporting Images and Recipes
 
-### Automated Procedure
-
-#### Prerequisites
+### Prerequisites
 
 * Ensure that the `cray` command line interface (CLI) is authenticated and configured to talk to
 system management services.
 
-#### Procedure
+### Automated Exporting Procedure
 
 1. (`ncn-mw`) Run the `ims-import-export.py` script located [here](../../scripts/operations/system_recovery). The `ims-import-export.py`
    script will create a directory named `ims-import-export-data` containing information about the recipes and images
-   that are registered with IMS. 
+   that are registered with IMS.
 
    ```bash
    ims-import-export.py --export --include-linked-artifacts
@@ -32,14 +30,7 @@ system management services.
    INFO:__main__:DONE!!
    ```
 
-### Manual Procedure
-
-#### Prerequisites
-
-* Ensure that the `cray` command line interface (CLI) is authenticated and configured to talk to
-system management services.
-
-#### Procedure
+### Manual Recipe Exporting Procedure
 
 1. (`ncn-mw`) Identify the recipes that you wish to manually export.
 
@@ -74,15 +65,17 @@ system management services.
    * Recipe Name
    * Recipe Link Path
 
-1. (`ncn-mw`) For each recipe that you wish to export, use the `cray artifacts` cli to download the recipe archive from Ceph S3.
+1. (`ncn-mw`) For each recipe that you wish to export, use the `cray artifacts` CLI to download the recipe archive from Ceph S3.
 
    ```bash
    export RECIPE_ID=1dd47f2f-aa37-4f17-9e9c-4e17a3675a92
    mkdir -p recipes/$RECIPE_ID
-   cray artifacts get ims recipes/$RECIPE_ID/recipe.tar.gz recipes/$RECIPE_ID/recipe.tar.gz 
+   cray artifacts get ims recipes/$RECIPE_ID/recipe.tar.gz recipes/$RECIPE_ID/recipe.tar.gz
    ```
 
-1. (`ncn-mw`) Identify the images that you wish to manually export. 
+### Manual Image Exporting Procedure
+
+1. (`ncn-mw`) Identify the images that you wish to manually export.
 
    ```bash
    cray ims images list --format json | jq
@@ -110,8 +103,8 @@ system management services.
    * Image ID
    * Image Name
    * Recipe Link Path
-    
-1. (`ncn-mw`) For each image that you wish to export, use the `cray artifacts` cli to download the image manifest from Ceph S3.
+
+1. (`ncn-mw`) For each image that you wish to export, use the `cray artifacts` CLI to download the image manifest from Ceph S3.
 
    ```bash
    export IMAGE_ID=0f1acea4-2bf1-4931-ac19-ce3c484af540
@@ -175,21 +168,19 @@ system management services.
 
 NOTE: recipes and images imported using these procedures will have their IMS ID and S3 location of linked artifacts
       changed during the import process. Any BOS Session templates, or other references to recipes, images or their
-      artifacts will need to be updated to use the new identifiers. 
+      artifacts will need to be updated to use the new identifiers.
 
-### Automated Procedure
-
-#### Prerequisites
+### Importing Prerequisites
 
 * Ensure that the `cray` command line interface (CLI) is authenticated and configured to talk to
 system management services.
 
-#### Procedure
+### Automated Importing Procedure
 
 1. (`ncn-mw`) If IMS data was previously exported using the `ims-import-export.py` script, the same script can be used to
    import IMS recipes and images that are missing after an upgrade. To do so, run the `ims-import-export.py` script
    located [here](../../scripts/operations/system_recovery).
-   
+
    ```bash
    ims-import-export.py --import
    ```
@@ -204,21 +195,12 @@ system management services.
    INFO:__main__:DONE!!
    ```
 
-### Manual Procedure
-
-#### Prerequisites
-
-* Ensure that the `cray` command line interface (CLI) is authenticated and configured to talk to
-system management services.
-
-#### Recipe Import
-
-##### Procedure
+### Manual Recipe Importing Procedure
 
 Using the recipe information previously noted, for each recipe that you wish to restore, perform the following steps:
 
 Note: In the example below, we are creating a new IMS recipe record for the recipe previously known as IMS recipe
-      ID 1dd47f2f-aa37-4f17-9e9c-4e17a3675a92.
+      ID `1dd47f2f-aa37-4f17-9e9c-4e17a3675a92`.
 
 1. (`ncn-mw`) Create a new IMS recipe record.
 
@@ -253,7 +235,7 @@ Note: In the example below, we are creating a new IMS recipe record for the reci
    ```
 
 1. (`ncn-mw`) Determine the S3 etag for the recipe archive
-   
+
    ```bash
    cray artifacts describe ims recipes/$NEW_RECIPE_ID/recipe.tar.gz --format json
    ```
@@ -274,7 +256,7 @@ Note: In the example below, we are creating a new IMS recipe record for the reci
      }
    } 
    ```
-   
+
 1. (`ncn-mw`) Update the IMS recipe record with the Ceph S3 location of the recipe archive
 
    ```bash
@@ -283,14 +265,12 @@ Note: In the example below, we are creating a new IMS recipe record for the reci
      --link-etag dd95e38bf328dd31d83d661877df8fcf
    ```
 
-#### Image Import
-
-##### Procedure
+### Manual Image Importing Procedure
 
 Using the image information previously noted, for each image that you wish to restore, perform the following steps:
 
 Note: In the example below, we are creating a new IMS image record for the image previously known as IMS image
-      ID 0f1acea4-2bf1-4931-ac19-ce3c484af540.
+      ID `0f1acea4-2bf1-4931-ac19-ce3c484af540`.
 
 1. (`ncn-mw`) Create a new IMS image record.
 
@@ -389,8 +369,8 @@ Note: In the example below, we are creating a new IMS image record for the image
    }
    ```
 
-1. (`ncn-mw`) Make a copy of the original IMS manifest.json and update with the new S3 link and etag values.
-   
+1. (`ncn-mw`) Make a copy of the original IMS `manifest.json` and update with the new S3 link and etag values.
+
    ```bash
    cp images/$OLD_IMAGE_ID/manifest.json images/$OLD_IMAGE_ID/manifest-new.json
    vi images/$OLD_IMAGE_ID/manifest-new.json
@@ -440,7 +420,7 @@ Note: In the example below, we are creating a new IMS image record for the image
    cray artifacts create boot-images $NEW_IMAGE_ID/manifest.json images/$OLD_IMAGE_ID/manifest-new.json
    ```
 
-1. (`ncn-mw`) Determine the S3 etag for the manifest.json
+1. (`ncn-mw`) Determine the S3 etag for the `manifest.json`
 
    ```bash
    cray artifacts describe ims $NEW_IMAGE_ID/manifest.json --format json
@@ -463,7 +443,7 @@ Note: In the example below, we are creating a new IMS image record for the image
    }
    ```
 
-1. (`ncn-mw`) Update the IMS image record with the Ceph S3 location of the manifest.json
+1. (`ncn-mw`) Update the IMS image record with the Ceph S3 location of the `manifest.json`
 
    ```bash
    cray ims images update $NEW_IMAGE_ID \
