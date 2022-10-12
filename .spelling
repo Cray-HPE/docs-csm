@@ -1,6 +1,7 @@
 1.0.x
 v1.0.x
 1.6.x
+1.7.3a
 1.2.x
 1.2.x.
 v1.2.x.
@@ -159,6 +160,7 @@ Cutoff
 CVEs
 CX-5
 CX-series
+daemonset
 datastore
 DB-9
 defense
@@ -306,6 +308,7 @@ LNet
 localtime
 localzone
 Loftsman
+Lnet
 loopback
 loopbacks
 lowercase
@@ -648,6 +651,9 @@ Preconfig
 preconfig
 
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
+lockout-tagout
+
+- operations/power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md
 lockout-tagout
 
 - operations/security_and_authentication/Manage_Sealed_Secrets.md

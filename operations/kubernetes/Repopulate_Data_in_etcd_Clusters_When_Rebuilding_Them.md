@@ -176,9 +176,7 @@ Data is repopulated in BSS when the REDS `init` job is run.
         ncn-m# rm -rf "${TMPFILE}"
         ```
 
-    1. Resubscribe the NCNs.
-
-        **NOTE:** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
+    1. Resubscribe the worker nodes.
 
         ```bash
         ncn-m# pdsh -w ncn-w00[1-4]-can.local "systemctl restart cray-orca"

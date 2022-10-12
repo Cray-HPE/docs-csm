@@ -723,10 +723,9 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 
 1. Verify that the worker nodes have `CHN` IP addresses set on the `hsn0` interface.
 
-   > Adjust the `-w` argument in the following command to cover the range of worker nodes on the system.
-
    ```bash
-   ncn# pdsh -w ncn-w00[1-4] 'ip ad show hsn0 | grep inet\ ' | dshbak -c
+   ncn# pdsh -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+            'ip ad show hsn0 | grep inet\ ' | dshbak -c
    ```
 
    Example output:

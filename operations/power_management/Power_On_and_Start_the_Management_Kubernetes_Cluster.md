@@ -68,6 +68,13 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     remote# ping NCN_M001_HOSTNAME
     ```
 
+   **Important:** For Gigabyte nodes only: If the console for `ncn-m001` shows that the node fails
+   to boot from its local storage and repeats in a boot loop never finding the local storage as a viable
+   boot option, it may be necessary to clear CMOS. This problem has been seen with BIOS C27 and earlier.
+
+   * See [Clear Gigabyte CMOS](../../install/clear_gigabyte_cmos.md).
+   * Then power the node on again and watch its console.
+
 1. Log in to `ncn-m001` as `root`.
 
    ```bash
@@ -142,6 +149,14 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     ```bash
     ncn-m001# screen -x 26745.SAT-console-ncn-m003-mgmt
     ```
+
+   **Important:** For Gigabyte nodes only: If the console for any of these management nodes shows
+   that the node fails to boot from its local storage and repeats in a boot loop never finding the local
+   storage as a viable boot option, it may be necessary to clear CMOS. This problem has been seen with
+   BIOS C27 and earlier.
+
+   * See [Clear Gigabyte CMOS](../../install/clear_gigabyte_cmos.md).
+   * Then power the node on again to have it boot to local storage.
 
 ### Verify access to Lustre file system
 
@@ -397,10 +412,10 @@ Verify that the Lustre file system is available from the management cluster.
         cray-console-node-1      3/3     Running            0          2m
         ```
 
-1. Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
+1. Determine whether the `cfs-state-reporter` service is failing to start on each management node while trying to contact CFS.
 
     ```bash
-    ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+    ncn-m001# pdsh -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') systemctl status cfs-state-reporter
     ```
 
     Example output:
@@ -429,7 +444,7 @@ Verify that the Lustre file system is available from the management cluster.
 
     1. On each NCN where `cfs-state-reporter` is stuck in `activating` as shown in the preceding error messages, restart the `cfs-state-reporter` service.
 
-        Do this by logging in to each affected NCN and running the following command:
+        For example:
 
         ```bash
         ncn# systemctl restart cfs-state-reporter
@@ -438,18 +453,24 @@ Verify that the Lustre file system is available from the management cluster.
     1. Check the status again.
 
         ```bash
-        ncn-m001# pdsh -w ncn-m00[1-3],ncn-w00[1-3] systemctl status cfs-state-reporter
+        ncn-m001# pdsh -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') systemctl status cfs-state-reporter
+        ```
+
+    1. If there are still issues with `cfe-state-reporter` on the storage nodes, then it might be because of a Spire issue which can be addressed with this script.
+
+        ```bash
+        ncn-m001# /opt/cray/platform-utils/spire/fix-spire-on-storage.sh
         ```
 
 ### Verify BGP peering sessions
 
 1. Check the status of the Border Gateway Protocol \(BGP\).
 
-    See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
+   For more information, see [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
 1. Check the status and health of `etcd` clusters.
 
-    See [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
+   See [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
 ### Check `cronjob`s
 
@@ -542,24 +563,19 @@ Verify that the Lustre file system is available from the management cluster.
 1. Use the `sat` command to check for management NCNs in an `Off` state.
 
     ```bash
-    ncn-m001# sat status --filter role=management
+    ncn-m001# sat status --filter role=management --filter enabled=true \
+                  --filter=state=off --fields xname,aliases,state,flag,role,subrole
     ```
 
     Example output:
 
     ```text
-    +----------------+------+----------+-------+---------+---------+------+-------+-------------+----------+
-    | xname          | Type | NID      | State | Flag    | Enabled | Arch | Class | Role        | Net Type |
-    +----------------+------+----------+-------+---------+---------+------+-------+-------------+----------+
-    | x3000c0s10b0n0 | Node | 100001   | On    | OK      | True    | X86  | River | Management  | Sling    |
-    | x3000c0s12b0n0 | Node | 100002   | Off   | OK      | True    | X86  | River | Management  | Sling    |
-    | x3000c0s14b0n0 | Node | 100003   | On    | Warning | True    | X86  | River | Management  | Sling    |
-    | x3000c0s16b0n0 | Node | 100004   | Ready | OK      | True    | X86  | River | Management  | Sling    |
-    | x3000c0s18b0n0 | Node | 100005   | Ready | OK      | True    | X86  | River | Management  | Sling    |
-    | x3000c0s20b0n0 | Node | 100006   | Off   | OK      | True    | X86  | River | Management  | Sling    |
-    | x3000c0s22b0n0 | Node | 100007   | On    | OK      | True    | X86  | River | Management  | Sling    |
-    | x3000c0s24b0n0 | Node | 100008   | On    | OK      | True    | X86  | River | Management  | Sling    |
-    | x3000c0s26b0n0 | Node | 100009   | On    | OK      | True    | X86  | River | Management  | Sling    |
+    +----------------+----------+-------+------+------------+---------+
+    | xname          | Aliases  | State | Flag | Role       | SubRole |
+    +----------------+----------+-------+------+------------+---------+
+    | x3000c0s13b0n0 | ncn-w004 | Off   | OK   | Management | Worker  |
+    | x3000c0s25b0n0 | ncn-w005 | Off   | OK   | Management | Worker  |
+    +----------------+----------+-------+------+------------+---------+
     ```
 
     **Attention:** When the NCNs are brought back online after a power outage or planned shutdown, `sat status` may report them as being `Off`.
@@ -567,7 +583,7 @@ Verify that the Lustre file system is available from the management cluster.
 1. Run a manual discovery of any NCNs in the `Off` state.
 
     ```bash
-    ncn-m001# cray hsm inventory discover create --xnames x3000c0s12b0,x3000c0s20b0 --format toml
+    ncn-m001# cray hsm inventory discover create --xnames x3000c0s13b0n0,x3000c0s25b0n0 --format toml
     ```
 
     Example output:
@@ -577,29 +593,107 @@ Verify that the Lustre file system is available from the management cluster.
     URI = "/hsm/v2/Inventory/DiscoveryStatus/0"
     ```
 
-1. Check for NCN status.
+1. Check the NCN state.
 
     ```bash
-    ncn-m001# sat status --filter Role=Management
+    ncn-m001# sat status --filter role=management --filter enabled=true \
+                  --filter=state=off --fields xname,aliases,state,flag,role,subrole
     ```
 
     Example output:
 
     ```text
-    +----------------+------+--------+-------+------+---------+------+-------+------------+----------+
-    | xname          | Type | NID    | State | Flag | Enabled | Arch | Class | Role       | Net Type |
-    +----------------+------+--------+-------+------+---------+------+-------+------------+----------+
-    | x3000c0s10b0n0 | Node | 100001 | On    | OK   | True    | X86  | River | Management | Sling    |
-    | x3000c0s12b0n0 | Node | 100002 | On    | OK   | True    | X86  | River | Management | Sling    |
-    | x3000c0s14b0n0 | Node | 100003 | On    | OK   | True    | X86  | River | Management | Sling    |
-    | x3000c0s16b0n0 | Node | 100004 | Ready | OK   | True    | X86  | River | Management | Sling    |
-    | x3000c0s18b0n0 | Node | 100005 | Ready | OK   | True    | X86  | River | Management | Sling    |
-    | x3000c0s20b0n0 | Node | 100006 | On    | OK   | True    | X86  | River | Management | Sling    |
-    | x3000c0s22b0n0 | Node | 100007 | On    | OK   | True    | X86  | River | Management | Sling    |
-    | x3000c0s24b0n0 | Node | 100008 | On    | OK   | True    | X86  | River | Management | Sling    |
-    | x3000c0s26b0n0 | Node | 100009 | On    | OK   | True    | X86  | River | Management | Sling    |
-    +----------------+------+--------+-------+------+---------+------+-------+------------+----------+
+    +----------------+----------+-------+------+------------+---------+
+    | xname          | Aliases  | State | Flag | Role       | SubRole |
+    +----------------+----------+-------+------+------------+---------+
+    | x3000c0s1b0n0  | ncn-m001 | Ready | OK   | Management | Master  |
+    | x3000c0s3b0n0  | ncn-m002 | Ready | OK   | Management | Master  |
+    | x3000c0s5b0n0  | ncn-m003 | Ready | OK   | Management | Master  |
+    | x3000c0s7b0n0  | ncn-w001 | Ready | OK   | Management | Worker  |
+    | x3000c0s9b0n0  | ncn-w002 | Ready | OK   | Management | Worker  |
+    | x3000c0s11b0n0 | ncn-w003 | Ready | OK   | Management | Worker  |
+    | x3000c0s13b0n0 | ncn-w004 | Ready | OK   | Management | Worker  |
+    | x3000c0s17b0n0 | ncn-s001 | Ready | OK   | Management | Storage |
+    | x3000c0s19b0n0 | ncn-s002 | Ready | OK   | Management | Storage |
+    | x3000c0s21b0n0 | ncn-s003 | Ready | OK   | Management | Storage |
+    | x3000c0s25b0n0 | ncn-w005 | Ready | OK   | Management | Worker  |
+    +----------------+----------+-------+------+------------+---------+
     ```
+
+1. Check whether CFS has run NCN personalization on the management nodes.
+
+    If a node has its `Configuration Status` set to `configured`, then that node has completed all configuration layers for post-boot CFS.
+
+    If any nodes have `Configuration Status` set to `pending`, then there should be a CFS session in progress which includes that node.
+
+    If any nodes have `Configuration Status` set to `failed` with `Error Count` set to `3`, then the node was unable complete a layer of configuration.
+
+    ```bash
+    ncn-m001# sat status --filter role=management --filter enabled=true --fields \
+                  xname,aliases,role,subrole,"desired config","configuration status","error count"
+    ```
+
+    Example output:
+
+    ```text
+    +----------------+----------+------------+---------+---------------------+----------------------+-------------+
+    | xname          | Aliases  | Role       | SubRole | Desired Config      | Configuration Status | Error Count |
+    +----------------+----------+------------+---------+---------------------+----------------------+-------------+
+    | x3000c0s1b0n0  | ncn-m001 | Management | Master  | ncn-personalization | configured           | 0           |
+    | x3000c0s3b0n0  | ncn-m002 | Management | Master  | ncn-personalization | configured           | 0           |
+    | x3000c0s5b0n0  | ncn-m003 | Management | Master  | ncn-personalization | configured           | 0           |
+    | x3000c0s7b0n0  | ncn-w001 | Management | Worker  | ncn-personalization | failed               | 3           |
+    | x3000c0s9b0n0  | ncn-w002 | Management | Worker  | ncn-personalization | failed               | 3           |
+    | x3000c0s11b0n0 | ncn-w003 | Management | Worker  | ncn-personalization | failed               | 3           |
+    | x3000c0s13b0n0 | ncn-w004 | Management | Worker  | ncn-personalization | pending              | 2           |
+    | x3000c0s17b0n0 | ncn-s001 | Management | Storage | ncn-personalization | configured           | 0           |
+    | x3000c0s19b0n0 | ncn-s002 | Management | Storage | ncn-personalization | configured           | 0           |
+    | x3000c0s21b0n0 | ncn-s003 | Management | Storage | ncn-personalization | configured           | 0           |
+    | x3000c0s25b0n0 | ncn-w005 | Management | Worker  | ncn-personalization | pending              | 2           |
+    +----------------+----------+------------+---------+---------------------+----------------------+-------------+
+    ```
+
+    1. If some nodes are not fully configured, then find any CFS sessions in progress.
+
+        ```bash
+        ncn-m001# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+        ```
+
+        Example output:
+
+        ```text
+        cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk                    7/9     Error       0          21m
+        cfs-157af6d5-b63d-48ba-9eb9-b33af9a8325d-tfj8x                    3/9     Not Ready   0          11m
+        ```
+
+        CFS sessions which are in `Not Ready` status are still in progress. CFS sessions with status `Error` had a failure in one of the layers.
+
+    1. Inspect all layers of Ansible configuration to find a failed layer.
+
+        ```bash
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
+        ```
+
+    **Important:** Some systems may have a failure to mount Lustre on the worker nodes during the COS 2.3
+    layer of configuration if their connection to the ClusterStor is via cables to Slingshot switches
+    in the liquid-cooled cabinets which have not been powered up at this point in the power on procedure.
+    This affects worker nodes which have Mellanox NICs. Worker nodes with Cassini NICs are unaffected.
+    This may include systems which have Arista switches.
+
+    Normally, CFS could be restarted for these worker nodes after the Slingshot switches in the
+    liquid-cooled cabinets have been powered up. however there is a known problem with Slingshot 1.7.3a
+    and earlier versions of the Slingshot Host Software (SHS) which require a special procedure in
+    the COS 2.3 layer to address this problem.
+
+    See [Worker Node COS Power Up Configuration](Worker_Node_COS_Power_Up_Configuration.md).
 
 1. To check the health and status of the management cluster after a power cycle, refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md).
 

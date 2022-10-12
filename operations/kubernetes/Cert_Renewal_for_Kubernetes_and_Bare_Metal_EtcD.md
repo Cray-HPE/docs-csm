@@ -88,7 +88,8 @@ Client (master and worker nodes):
 1. Backup existing certificates on master nodes:
 
     ```bash
-    ncn-m# pdsh -w ncn-m00[1-3] tar cvf /root/cert_backup.tar /etc/kubernetes/pki/ /var/lib/kubelet/pki/
+    ncn-m# pdsh -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+    tar cvf /root/cert_backup.tar /etc/kubernetes/pki/ /var/lib/kubelet/pki/
     ```
 
     Example output:
@@ -106,10 +107,9 @@ Client (master and worker nodes):
 
 1. Backup existing certificates on worker nodes:
 
-    **IMPORTANT:** The range of nodes below should reflect the size of the environment. This should run on every worker node.
-
     ```bash
-    ncn-m# pdsh -w ncn-w00[1-3] tar cvf /root/cert_backup.tar /var/lib/kubelet/pki/
+    ncn-m# pdsh -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+               tar cvf /root/cert_backup.tar /var/lib/kubelet/pki/
     ```
 
     Example output:
@@ -293,10 +293,10 @@ Run the following steps on each master node.
 
    Run the following command on each Kubernetes node.
 
-   **IMPORTANT:** The following example will need to be adjusted to reflect the correct amount of master and worker nodes in the environment being used.
-
    ```bash
-   ncn-m# pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] systemctl restart kubelet.service
+   ncn-m# pdsh -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+                  -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+                  systemctl restart kubelet.service
    ```
 
 1. Fix `kubectl` command access.
@@ -358,11 +358,10 @@ Run the following steps on each master node.
 
 1. Backup certificates for `kubelet` on each master and worker node:
 
-   **IMPORTANT:** The following example will need to be adjusted to reflect the correct number of master and worker nodes in the environment being used.
-
    ```bash
-   ncn-m# pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] tar cvf \
-               /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
+   ncn-m# pdsh -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
+                  -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') tar cvf \
+                  /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
    ```
 
 2. Log into the master node where the other certificates were updated.

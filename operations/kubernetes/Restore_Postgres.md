@@ -231,7 +231,7 @@ This assumes that a dump of the database exists and the Cray command line interf
 
 1. (`ncn-mw#`) Verify that the service is working.
 
-    The following should return a token.
+    The following command should return a token.
 
     ```bash
     /usr/bin/heartbeat-spire-agent api fetch jwt -socketPath=/root/spire/agent.sock -audience test
