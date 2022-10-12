@@ -40,7 +40,7 @@ and then set new credentials. The script can be run either interactively (no env
    Also note that this will change the SNMP credentials in Vault. See below for details on how to do that.
 
    ```bash
-   SNMPDELUSER=testuser SNMPNEWUSER=testuser \
+   SNMPNEWUSER=testuser \
              SNMPAUTHPW=$SNMP_AUTH_PASS SNMPPRIVPW=$SNMP_PRIV_PASS \
              SNMPMGMTPW=$SWITCH_ADMIN_PASSWORD \
              /opt/cray/csm/scripts/hms_verification/leaf_switch_snmp_creds.sh
