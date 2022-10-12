@@ -53,7 +53,7 @@ There are three steps involved. The first two steps involve running the *leaf_sw
    Also note that this will change the SNMP credentials in Vault. See below for details on how to do that.
 
    ```bash
-   ncn-m001# SNMPDELUSER=testuser SNMPNEWUSER=testuser \
+   ncn-m001# SNMPNEWUSER=testuser \
              SNMPAUTHPW=$SNMP_AUTH_PASS SNMPPRIVPW=$SNMP_PRIV_PASS \
              SNMPMGMTPW=$SWITCH_ADMIN_PASSWORD \
              /opt/cray/csm/scripts/hms_verification/leaf_switch_snmp_creds.sh
