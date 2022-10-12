@@ -308,7 +308,14 @@ restartk8s() {
 # but eventually works for this....
 kubeapiblurb() {
   apiserver="kube-apiserver-$(uname -n)"
-  printf "check logs for details why via:\nkubectl logs -f --namespace kube-system %s\nkubectl get pod --namespace kube-system %s\nkubectl describe pod --namespace kube-system %s\nyou will need to re-run this command again\n" "${apiserver}" "${apiserver}" "${apiserver}" >&2
+
+  cat << EOF >&2
+check logs for details why via:
+kubectl logs -f --namespace kube-system ${apiserver}
+kubectl get pod --namespace kube-system ${apiserver}
+kubectl describe pod --namespace kube-system ${apiserver}
+you will need to re-run this command again
+EOF
 }
 
 # Glorified wrapper functions for unit tests.
