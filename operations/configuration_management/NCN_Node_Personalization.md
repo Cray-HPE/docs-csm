@@ -36,11 +36,53 @@ The following procedure describes how to correctly edit the `sat bootprep` files
         cray cfs components describe <ncn-xname> --format json
         ```
 
-    1. (`ncn-m#`) Edit the `management-bootprep-node-personalization.yaml` file to replace the CPE and Analytics layers with the playbook, commit hash, and product values already in use on the NCNs for CPE and Analytics.
-    This must be done because the new versions of CPE and Analytics have not yet been installed at this time in the upgrade procedure.
+        Example output:
+
+        ```json
+        {
+            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/cpe-config-management.git",
+            "commit": "22056808ccf5e7994e75bb246df0abe550a1fe0f",
+            "lastUpdated": "...",
+            "playbook": "pe_deploy.yml",
+            "sessionName": "..."
+        },
+        {
+           "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/analytics-config-management.git",
+           "commit": "dbe24d4521155a683c52a14b39991aa3f410954e",
+           "lastUpdated": "..."
+           "playbook": "site.yml",
+           "sessionName": "..."
+        }
+        ```
+
+    1. (`ncn-m#`) Edit the `management-bootprep-node-personalization.yaml` file to replace the CPE and Analytics layers with the `cloneUrl`, `commit` and `playbook` values already in use on the NCNs for CPE and Analytics.
+       This must be done because the new versions of CPE and Analytics have not yet been installed at this time in the upgrade procedure.
+
+       In order to accurately represent the exact configuration already in use for CPE and Analytics, use the `git` key in the `bootprep` layer definition. Ensure that the values of `commit` and `playbook`
+       match their equivalents from the output of `cray cfs components describe`, and ensure that `url` matches the `cloneUrl` shown in that output. The example below shows what the CPE and Analytics
+       layers should look like.
+
+       ```yaml
+       - name: cpe-pe_deploy-integration-{{cpe.version}}
+         playbook: pe_deploy.yml
+         git:
+           url: https://api-gw-service-nmn.local/vcs/cray/cpe-config-management.git
+           commit: 22056808ccf5e7994e75bb246df0abe550a1fe0f
+       - name: analytics-site-integration-{{analytics.version}}
+         playbook: site.yml
+         git:
+           url: https://api-gw-service-nmn.local/vcs/cray/analytics-config-management.git
+           commit: dbe24d4521155a683c52a14b39991aa3f410954e
+       ```
 
 1. (`ncn-m#`) Run `sat bootprep` against the `management-bootprep-node-personalization.yaml` file to create the CFS configuration that will be used for node personalization on management NCNs.
 
     ```bash
     sat bootprep run management-bootprep-node-personalization.yaml
+    ```
+
+1. (`ncn-m#`) Optionally, delete `management-bootprep-node-personalization.yaml`, which is no longer needed.
+
+    ```bash
+    rm management-bootprep-node-personalization.yaml
     ```
