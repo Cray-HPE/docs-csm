@@ -183,6 +183,9 @@ fi
 # Gather the metallb pool information and add it to customizations
 poolindex=0
 
+# delete all address pools before re-creating them, this is needed for CAN > CHN cleanup 
+yq d -i "$c" 'spec.network.metallb.address-pools'
+
 networks=$(echo "${NETWORKSJSON}" | jq -r '.[].Name')
 for n in ${networks}; do
     subnets=$(echo "${NETWORKSJSON}" | jq -r --arg n "$n" '.[] | select(.Name == $n) | .ExtraProperties.Subnets[].Name')
