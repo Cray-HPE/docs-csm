@@ -3,22 +3,22 @@
 ## Introduction
 
 This document guides an administrator through the patch update to Cray Systems Management `v1.2.2` from `v1.2.0` or `1.2.1`.
-If upgrading from CSM v1.0.x directly to v1.2.2, follow the procedures described in [Upgrade CSM](../1.2/README.md) instead.
+If upgrading from CSM v1.0.x directly to `v1.2.2`, follow the procedures described in [Upgrade CSM](../1.2/README.md) instead.
 
 ## Bug Fixes
 
 * Fixes the NCN boot artifacts validation test
-* Fixes the incorrect AppVersion that was being reported from csi version report
-* Updates the System Power On documentation to add a rolling restart of spire request-ncn-join-token (to avoid issues with spire tokens)
-* Fixes speed with which the pods are restarted as a part of the precache chart upgrade (for better performance)
-* Increases the timeout for the etcd_database_health check in the ncn-healthcheck
-* Fixes issue with postgres dbase backups that caused them to fail to restore and cleans up existing (bad) postgres backups on the system
-* Fixes the pod anti-affinity settings and pod disruption budget settings for cray-dns-unbound
-* Fixes a race condition between MEDS adding the initial BMC entries and Kea dhcp-helper logic updating IP addresses
+* Fixes the incorrect `AppVersion` that was being reported from `csi` version report
+* Updates the System Power On documentation to add a rolling restart of spire `request-ncn-join-token` (to avoid issues with spire tokens)
+* Fixes speed with which the pods are restarted as a part of the `precache` chart upgrade (for better performance)
+* Increases the timeout for the `etcd_database_health` check in the `ncn-healthcheck`
+* Fixes issue with `postgres` database backups that caused them to fail to restore and cleans up existing (bad) `postgres` backups on the system
+* Fixes the pod anti-affinity settings and pod disruption budget settings for `cray-dns-unbound`
+* Fixes a race condition between MEDS adding the initial BMC entries and Kea `dhcp-helper` logic updating IP addresses
 * Adds documentation for CSM post-install SNMP exporter settings
-* Fixes an issue where snmp credentials being set on leaf switches were being lost
-* Fixes an issue where cray-hmcollector-poll pod was not collecting river telemetry due to a check the collector does against the SMA kafka instance
-* Fixes CVEs in the ims-load-artifacts container image 
+* Fixes an issue where `snmp` credentials being set on leaf switches were being lost
+* Fixes an issue where `cray-hmcollector-poll` pod was not collecting river telemetry due to a check the collector does against the SMA `kafka` instance
+* Fixes CVEs in the `ims-load-artifacts` container image
 * Adds documentation to remediate security issues with NCN image access and secret exposure
 
 ## Known Issues
