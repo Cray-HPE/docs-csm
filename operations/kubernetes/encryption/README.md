@@ -35,7 +35,7 @@ For further information, refer to the [official Kubernetes documentation](https:
 The `encryption.sh` command will need to be made available on all control plane nodes beyond `ncn-m002`.
 Shown here for `ncn-m003`.
 
-1. (`ncn-m>002#`) Set the `ENCRYPTION_CMD_PATH` variable to `/usr/share/doc/csm/scripts/operations/kubernetes`.
+1. (`ncn-m003#`) Set the `ENCRYPTION_CMD_PATH` variable to `/usr/share/doc/csm/scripts/operations/kubernetes`.
 
     For example:
 
@@ -43,7 +43,7 @@ Shown here for `ncn-m003`.
     ENCRYPTION_CMD_PATH=/usr/share/doc/csm/scripts/operations/kubernetes
     ```
 
-1. (`ncn-m>002#`) Copy the `encryption.sh` command from `ncn-m001`.
+1. (`ncn-m003#`) Copy the `encryption.sh` command from `ncn-m001`.
 
     ```bash
     mkdir -pv $ENCRYPTION_CMD_PATH
