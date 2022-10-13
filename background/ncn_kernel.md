@@ -231,10 +231,10 @@ This parameter's value tells the initramFS where to download the kernel, `initrd
 | NCN Type | Default Value(s) | Context |
 | :------: | :------------ | :------ |
 | All | `http://pit/<hostname>` | `/proc/cmdline` |
-| All | `http://rgw-vip.nmn/boot-images/k8s/<version>/rootfs<auth-token>` | `/proc/cmdline` |
-| All | `http://rgw-vip.nmn/boot-images/ceph/<version>/rootfs?<auth-token>` | `/proc/cmdline` |
-| All | `s3://boot-images/ceph/<version>/rootfs` | `cray-bss` |
-| All | `s3://boot-images/ceph/<version>/rootfs` | `cray-bss` |
+| All | `http://rgw-vip.nmn/$K8S_IMS_IMAGE_ID/rootfs?<auth-token>` | `/proc/cmdline` |
+| All | `http://rgw-vip.nmn/$CEPH_IMS_IMAGE_ID/rootfs?<auth-token>` | `/proc/cmdline` |
+| All | `s3://boot-images/$K8S_IMS_IMAGE_ID/rootfs` | `cray-bss` |
+| All | `s3://boot-images/$CEPH_IMS_IMAGE_ID/rootfs` | `cray-bss` |
 
 For more information, see [`dracut-metal-mdsquash`'s usage on `metal.server`][2].
 
