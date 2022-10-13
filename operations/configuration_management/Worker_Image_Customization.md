@@ -35,3 +35,9 @@ The following procedure describes how to correctly edit the `bootprep` files to 
 
 1. (`ncn-m#`) Perform the steps in [Management Node Image Customization](Management_Node_Image_Customization.md). Use the CFS configuration created in the previous step when
     customizing the image.
+
+1. (`ncn-m#`) Optionally, delete `management-bootprep-image-customization.yaml`, which is no longer needed.
+
+    ```bash
+    rm management-bootprep-image-customization.yaml
+    ```
