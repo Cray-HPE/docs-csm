@@ -47,9 +47,8 @@ Shown here for `ncn-m003`.
 
     ```bash
     mkdir -pv $ENCRYPTION_CMD_PATH
-    cd $ENCRYPTION_CMD_PATH
-    scp -p ncn-m001:${ENCRYPTION_CMD_PATH}/encryption.sh .
-    ls -l
+    scp -p ncn-m001:${ENCRYPTION_CMD_PATH}/encryption.sh $ENCRYPTION_CMD_PATH
+    ls -l $ENCRYPTION_CMD_PATH
     ```
 
     Example output:
