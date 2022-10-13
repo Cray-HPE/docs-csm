@@ -35,9 +35,16 @@ This procedure may be run on any master or worker NCN.
 
 ### Create image record
 
-1. Choose a descriptive name for the new IMS image record.
+1. Check if `IMS_ROOTFS_FILENAME` is already set. If you are following the steps in
+   [Management Node Image Customization](../configuration_management/Management_Node_Image_Customization.md), then
+   this should already be set.
 
-    Set the `IMS_ROOTFS_FILENAME` variable to the chosen name.
+    ```bash
+    echo $IMS_ROOTFS_FILENAME
+    ```
+
+1. If the above variable is not set, then set `IMS_ROOTFS_FILENAME` to the file name of the `rootfs` file
+   to be uploaded.
 
     ```bash
     IMS_ROOTFS_FILENAME=sles_15_image.squashfs
@@ -65,51 +72,100 @@ This procedure may be run on any master or worker NCN.
     IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
-### Upload to S3
+### Upload image to S3
 
 1. Upload the image root to S3.
 
-    1. Set an environment variable with the actual path and filename of the image root to be uploaded.
-
-        > This may be the same name as `IMS_ROOTFS_FILENAME`, but it is not required to be.
+    1. Navigate to the directory containing the `rootfs` file. Verify that it exists in your current working
+       directory.
 
         ```bash
-        ROOTFS_FILENAME=/home/rootfs.squashfs
+        ls $IMS_ROOTFS_FILENAME
         ```
 
     1. Record the `md5sum` of the image root to be uploaded.
 
         ```bash
-        IMS_ROOTFS_MD5SUM=$(md5sum $ROOTFS_FILENAME | awk '{ print $1 }')
+        IMS_ROOTFS_MD5SUM=$(md5sum $IMS_ROOTFS_FILENAME | awk '{ print $1 }')
         ```
 
     1. Upload the image root to S3.
 
         ```bash
-        cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_ROOTFS_FILENAME $ROOTFS_FILENAME
+        cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_ROOTFS_FILENAME $IMS_ROOTFS_FILENAME
         ```
 
 1. Optionally, upload the kernel for the image to S3.
 
-    > In this example, the relative path to the kernel from the working directory is
-    > `image-root/boot/vmlinuz`.
+    1. Check if `IMS_KERNEL_FILENAME` is already set. If you are following the steps in
+       [Management Node Image Customization](../configuration_management/Management_Node_Image_Customization.md), then
+       this should already be set.
 
-    ```bash
-    IMS_KERNEL_FILENAME=vmlinuz
-    cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_KERNEL_FILENAME image-root/boot/$IMS_KERNEL_FILENAME
-    IMS_KERNEL_MD5SUM=`md5sum image-root/boot/$IMS_KERNEL_FILENAME | awk '{ print $1 }'`
-    ```
+        ```bash
+        echo $IMS_KERNEL_FILENAME
+        ```
+
+    1. If the above variable is not set, then set `IMS_KERNEL_FILENAME` to the file name of the kernel file
+       to be uploaded.
+
+        ```bash
+        IMS_KERNEL_FILENAME=vmlinuz
+        ```
+
+    1. Navigate to the directory containing the kernel file. Verify that it exists in your current working
+       directory.
+
+        ```bash
+        ls $IMS_KERNEL_FILENAME
+        ```
+
+    1. Record the `md5sum` of the kernel to be uploaded.
+
+        ```bash
+        IMS_KERNEL_MD5SUM=$(md5sum $IMS_KERNEL_FILENAME | awk '{ print $1 }')
+        ```
+
+    1. Upload the kernel to S3.
+
+        ```bash
+        cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_KERNEL_FILENAME $IMS_KERNEL_FILENAME
+        ```
 
 1. Optionally, upload the `initrd` for the image to S3.
 
-    > In this example, the relative path to the `initrd` file from working directory is
-    > `image-root/boot/initrd`.
+    1. Check if `IMS_INITRD_FILENAME` is already set. If you are following the steps in
+       [Management Node Image Customization](../configuration_management/Management_Node_Image_Customization.md), then
+       this should already be set.
 
-    ```bash
-    IMS_INITRD_FILENAME=initrd
-    cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_INITRD_FILENAME image-root/boot/$IMS_INITRD_FILENAME
-    IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
-    ```
+        ```bash
+        echo $IMS_INITRD_FILENAME
+        ```
+
+    1. If the above variable is not set, then set `IMS_INITRD_FILENAME` to the file name of the initrd file
+       to be uploaded.
+
+        ```bash
+        IMS_INITRD_FILENAME=initrd
+        ```
+
+    1. Navigate to the directory containing the initrd file. Verify that it exists in your current working
+       directory.
+
+        ```bash
+        ls $IMS_INITRD_FILENAME
+        ```
+
+    1. Record the `md5sum` of the initrd to be uploaded.
+
+        ```bash
+        IMS_INITRD_MD5SUM=$(md5sum $IMS_INITRD_FILENAME | awk '{ print $1 }')
+        ```
+
+    1. Upload the initrd to S3.
+
+        ```bash
+        cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_INITRD_FILENAME $IMS_INITRD_FILENAME
+        ```
 
 ### Image manifest
 
