@@ -54,7 +54,7 @@ Describe 'encryption.sh logic'
       The status should equal 0
       The stdout should equal "unknown"
     End
-    It 'should strip prefixes correclty when multiple passed'
+    It 'should strip prefixes correctly when multiple passed'
       When call stripetcdprefix "identity aescbc:aescbc-a2192eeb9b7585151f53f0baf01f577d46936ffe0f97e38988506e01c07906a3"
       The status should equal 0
       The stdout should equal "identity aescbc-a2192eeb9b7585151f53f0baf01f577d46936ffe0f97e38988506e01c07906a3"
