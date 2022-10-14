@@ -27,6 +27,7 @@
     parameters:
       - name: dryRun
       - name: product
+      - name: originalLocation
   dag:
     tasks:
       - name: extract-release-distributions
@@ -39,4 +40,6 @@
               value: "{{ `{{inputs.parameters.dryRun}}` }}"
             - name: product
               value: "{{ `{{inputs.parameters.product}}` }}"
+            - name: originalLocation
+              value: "{{ `{{inputs.parameters.originalLocation}}` }}"
 {{end}}

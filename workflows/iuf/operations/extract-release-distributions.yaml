@@ -33,6 +33,7 @@ spec:
         parameters:
           - name: product
           - name: dryRun
+          - name: originalLocation
       retryStrategy:
         limit: "2"
         retryPolicy: "Always"
@@ -45,9 +46,9 @@ spec:
         command: [sh]
         source: |
           #!/bin/sh
-          echo "TBD: {{inputs.parameters.product}}"
-        # volumeMounts:
-        #   - name: ssh
-        #     mountPath: /myssh
-        #   - name: podinfo
-        #     mountPath: /etc/podinfo
+          echo "Extract from: {{inputs.parameters.originalLocation}} for product: {{inputs.parameters.product}}"
+          cd {{inputs.parameters.originalLocation}}
+          tar -xvzf {{inputs.parameters.originalLocation}}/*.tar.gz
+        volumeMounts:
+          - name: iuf
+            mountPath: /iuf

@@ -30,7 +30,7 @@ spec:
   products:
     - name: cos
       version: 1.1.2
-      original_location: /rbd/whatever/cos-1.2.1
+      original_location: /iuf/cos
       iuf_manifest_s3_location: /iuf/install/cos-1.2.1/iuf-manifest.yaml
       before_hook_scripts:
         pre_install_check: /iuf/install/cos-1.2.1/hooks/pre-install-check.sh
@@ -40,7 +40,7 @@ spec:
         generate_loftsman_manifests: /iuf/install/cos-1.2.1/hooks/generate_loftsman_manifests.sh
     - name: sma
       version: 1.1.2
-      original_location: /rbd/whatever/sma-1.2.1
+      original_location: /iuf/sma
       iuf_manifest_s3_location: /iuf/install/sma-1.2.1/iuf-manifest.yaml
       before_hook_scripts:
         pre_install_check: /iuf/install/sma-1.2.1/hooks/pre-install-check.sh

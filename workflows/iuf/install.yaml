@@ -30,6 +30,10 @@ spec:
     annotations:
       sidecar.istio.io/inject: "false"    
   volumes:
+    - name: iuf
+      hostPath:
+        path: /iuf
+        type: Directory
     - name: ssh
       hostPath:
         path: /root/.ssh
@@ -72,6 +76,8 @@ spec:
             matchExpressions:
             - key: node-role.kubernetes.io/master
               operator: Exists
+  nodeSelector:
+    kubernetes.io/hostname: ncn-m001
   entrypoint: main
   templates:
     - name: main
@@ -88,16 +94,18 @@ spec:
             {{ range $indexStage,$stage := $.Stages }}
               {{ if and (ne $stage "rolling-reboot") (ne $stage "post-install-check") }}
                 {{ if ne $stage "sat-bootprep" }}
-          - name: {{$product}}-{{$stage}}
+          - name: {{$product.Name}}-{{$stage}}
             template: {{$stage}}
                   {{ if ne $indexStage 0 }}
             dependencies:
-              - {{$product}}-{{ index $.Stages (add $indexStage -1) }}
+              - {{$product.Name}}-{{ index $.Stages (add $indexStage -1) }}
                   {{ end }}
             arguments: 
               parameters:
               - name: product
-                value: {{$product}}  
+                value: {{$product.Name}}  
+              - name: originalLocation
+                value: {{$product.OriginalLocation}}
               - name: dryRun
                 value: "{{$.DryRun}}"
                   {{ end }}
@@ -114,7 +122,7 @@ spec:
                 {{ range $indexStage,$stage := $.Stages }}
                   {{ if and (ne $stage "rolling-reboot") (ne $stage "post-install-check") }}
                     {{ if ne $stage "sat-bootprep" }}
-              - {{$product}}-{{$stage}}
+              - {{$product.Name}}-{{$stage}}
                     {{ end }}
                   {{ end }}
                 {{ end }}
@@ -137,7 +145,7 @@ spec:
                 {{ range $indexStage,$stage := $.Stages }}
                   {{ if and (ne $stage "rolling-reboot") (ne $stage "post-install-check") }}
                     {{ if ne $stage "sat-bootprep" }}
-              - {{$product}}-{{$stage}}
+              - {{$product.Name}}-{{$stage}}
                     {{ end }}
                   {{ end }}
                 {{ end }}
@@ -151,7 +159,7 @@ spec:
           # post-install-check
           {{ if has "post-install-check" $.Stages }}
             {{ range $indexProduct,$product := $.Products }}
-          - name: {{$product}}-post-install-check
+          - name: {{$product.Name}}-post-install-check
             template: post-install-check
             dependencies:
               {{ if has "rolling-reboot" $.Stages }}
@@ -159,14 +167,14 @@ spec:
               {{ else }}
                 {{ range $indexStage,$stage := $.Stages }}
                   {{ if and (ne $stage "rolling-reboot") (ne $stage "post-install-validation") }}
-              - {{$product}}-{{$stage}}
+              - {{$product.Name}}-{{$stage}}
                   {{ end }}
                 {{ end }}
               {{ end }}
             arguments: 
               parameters:
               - name: product
-                value: {{$product}}  
+                value: {{$product.Name}}  
               - name: dryRun
                 value:  "{{$.DryRun}}"
             {{ end }}
