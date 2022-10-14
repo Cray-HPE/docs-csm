@@ -192,10 +192,10 @@ Repeat the steps in this section on the next master node, until they have been p
     d5a8e497e2788510, started, ncn-m003, https://10.252.1.9:2380, https://10.252.1.9:2379,https://127.0.0.1:2379, false
     ```
 
-1. (`ncn-m#`)  After a few minutes, if any cronjobs appear stuck, and/or pods yet to reach the Running state, the conjobs will need to be restarted and the associated pods deleted.
+1. (`ncn-m#`)  After a few minutes, if any `cronjobs` appear stuck, and/or pods yet to reach the Running state, the `conjobs` will need to be restarted and the associated pods deleted.
 
-    For example, following a successful Bare-Metal etcd cluster restore it can be observed that the kube-etcdbackup,
-    cray-dns-unbound-manager and sonar-sync cronjobs have not been scheduled for 18 minutes. The hms-discovery cronjob at 20 minutes is in the same situation.
+    For example, following a successful Bare-Metal `etcd` cluster restore it can be observed that the `kube-etcdbackup`,
+    `cray-dns-unbound-manager` and `sonar-sync` `cronjobs` have not been scheduled for 18 minutes. The `hms-discovery` `cronjob` at 20 minutes is in the same situation.
 
     ```bash
     kubectl get cronjobs.batch -A
@@ -221,8 +221,8 @@ Repeat the steps in this section on the next master node, until they have been p
     vault         spire-intermediate                   0 0 * * 1      False     0        <none>          23h
     ```
 
-    The kube-etcdbackup, cray-dns-unbound-manager, sonar-sync and hms-discovery cronjobs were restarted.
-    For example restarting the kube-etcdbackup cron job:
+    The `kube-etcdbackup`, `cray-dns-unbound-manager`, `sonar-sync`, and `hms-discovery` `cronjobs` were restarted.
+    For example restarting the `kube-etcdbackup` cron job:
 
     ```bash
      kubectl get cronjobs.batch -n kube-system kube-etcdbackup -o json | \
@@ -238,7 +238,7 @@ Repeat the steps in this section on the next master node, until they have been p
     cronjob.batch/kube-etcdbackup replaced
     ```
 
-    and the stuck cronjobs are now running.
+    and the stuck `cronjobs` are now running.
 
     ```bash
     kubectl get cronjobs.batch -A
