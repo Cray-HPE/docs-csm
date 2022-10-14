@@ -84,11 +84,42 @@ after a break, always be sure that a typescript is running before proceeding.
 
    1. Create and map the `rbd` device.
 
-      **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`. This mount is available to stage content for the install/upgrade process.
+      **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`. This mount is available to stage content for the install/upgrade process. First, check if this device already exists.
 
       ```bash
       source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-      python /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
+      /usr/share/doc/csm/scripts/csm_rbd_tool.py --status
+      ```
+
+      >Expected output if `rbd` device does not exist:
+      >
+      >```text
+      >Pool csm_admin_pool does not exist
+      >Pool csm_admin_pool exists: False
+      >RBD device exists None
+      >```
+      >
+      >Example output if `rbd` device already exist:
+      >
+      >```text
+      >[{"id":"0","pool":"csm_admin_pool","namespace":"","name":"csm_scratch_img","snap":"-","device":"/dev/rbd0"}]
+      >Pool csm_admin_pool exists: True
+      >RBD device exists True
+      >RBD device mounted at - ncn-m002.nmn:/etc/cray/upgrade/csm
+      >```
+
+      If the `rbd` device already exists and is mounted, it can be moved to the desired node, if not already mounted there.
+      **IMPORTANT:** *If upgrading from a CSM version that had previously mounted this rbd device, the `/etc/cray/upgrade/csm/myenv` file will need to be removed before proceeding with this upgrade as it will contain information from the previous install.*
+
+      ```bash
+      /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m001
+      deactivate
+      ```
+
+      If the `rbd` device does not exists, create it.
+
+      ```bash
+      /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
       deactivate
       ```
 
