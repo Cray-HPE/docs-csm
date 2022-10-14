@@ -87,20 +87,42 @@ spec:
           #       2.1 after other stages if rolling-reboot is NOT defined 
             {{ range $indexStage,$stage := $.Stages }}
               {{ if and (ne $stage "rolling-reboot") (ne $stage "post-install-check") }}
+                {{ if ne $stage "sat-bootprep" }}
           - name: {{$product}}-{{$stage}}
             template: {{$stage}}
-              {{ if ne $indexStage 0 }}
+                  {{ if ne $indexStage 0 }}
             dependencies:
               - {{$product}}-{{ index $.Stages (add $indexStage -1) }}
-              {{ end }}
+                  {{ end }}
             arguments: 
               parameters:
               - name: product
                 value: {{$product}}  
               - name: dryRun
-                value:  "{{$.DryRun}}"
+                value: "{{$.DryRun}}"
+                  {{ end }}
               {{ end }}
             {{ end }}
+          {{ end }}
+
+          # sat-bootprepif defined in iuf session
+          {{ if has "sat-bootprep" $.Stages }}
+          - name: sat-bootprep
+            template: sat-bootprep
+            dependencies:
+              {{ range $indexProduct,$product := $.Products }}
+                {{ range $indexStage,$stage := $.Stages }}
+                  {{ if and (ne $stage "rolling-reboot") (ne $stage "post-install-check") }}
+                    {{ if ne $stage "sat-bootprep" }}
+              - {{$product}}-{{$stage}}
+                    {{ end }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+            arguments: 
+              parameters:
+              - name: dryRun
+                value:  "{{$.DryRun}}"
           {{ end }}
 
           # rolling-reboot if defined in iuf session
@@ -108,10 +130,15 @@ spec:
           - name: rolling-reboot
             template: rolling-reboot
             dependencies:
+              {{ if has "sat-bootprep" $.Stages }}
+              - sat-bootprep
+              {{ end }}
               {{ range $indexProduct,$product := $.Products }}
                 {{ range $indexStage,$stage := $.Stages }}
                   {{ if and (ne $stage "rolling-reboot") (ne $stage "post-install-check") }}
+                    {{ if ne $stage "sat-bootprep" }}
               - {{$product}}-{{$stage}}
+                    {{ end }}
                   {{ end }}
                 {{ end }}
               {{ end }}
@@ -144,238 +171,12 @@ spec:
                 value:  "{{$.DryRun}}"
             {{ end }}
           {{ end }}
-    # reference to individual tasks
-    - name: pre-install-check
-      inputs:
-        parameters:
-          - name: dryRun
-          - name: product
-      dag:
-        tasks:
-          - name: preflight-checks-for-services
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-    - name: deliver-product
-      inputs:
-        parameters:
-          - name: dryRun
-          - name: product
-      dag:
-        tasks:
-          - name: generate-loftsman-manifests
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-          - name: s3-upload
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-          - name: nexus-upload
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-          - name: vcs-upload
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-          - name: ims-upload
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-          - name: loftsman-manifest-upload
-            dependencies:
-              - generate-loftsman-manifests
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-    - name: update-config
-      inputs:
-        parameters:
-          - name: dryRun
-          - name: product
-      dag:
-        tasks:
-          - name: create-integration-branch
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-    - name: deploy-product
-      inputs:
-        parameters:
-          - name: dryRun
-          - name: product
-      dag:
-        tasks:
-          - name: loftsman-manifest-deploy
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-          - name: activate-cray-product-catalog
-            dependencies:
-              - loftsman-manifest-deploy
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-    - name: sat-bootprep
-      inputs:
-        parameters:
-          - name: dryRun
-          - name: product
-      dag:
-        tasks:
-          - name: sat-bootprep
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-    - name: rolling-reboot
-      inputs:
-        parameters:
-          - name: dryRun
-      dag:
-        tasks:
-          - name: rolling-reboot-ncn-master
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-          - name: rolling-reboot-ncn-worker
-            dependencies:
-              - rolling-reboot-ncn-master
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-          - name: rolling-reboot-ncn-storage
-            dependencies:
-              - rolling-reboot-ncn-worker
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-          - name: rolling-reboot-cn
-            dependencies:
-              - rolling-reboot-ncn-storage
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
-    - name: post-install-check
-      inputs:
-        parameters:
-          - name: dryRun
-          - name: product
-      dag:
-        tasks:
-          - name: wait-for-jobs
-            templateRef:
-              name: kubectl-and-curl-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{ `{{inputs.parameters.dryRun}}` }}"
-                - name: scriptContent
-                  value: |
-                    echo TODO
+    # reference to individual tasks, aka stages
+    {{- include "process-media" . | indent 4 }}
+    {{- include "pre-install-check" . | indent 4 }}
+    {{- include "deliver-product" . | indent 4 }}
+    {{- include "update-config" . | indent 4 }}
+    {{- include "deploy-product" . | indent 4 }}
+    {{- include "sat-bootprep" . | indent 4 }}
+    {{- include "rolling-reboot" . | indent 4 }}
+    {{- include "post-install-check" . | indent 4 }}
