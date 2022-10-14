@@ -11,6 +11,7 @@ Note that control plane is used in this document elsewhere master or management 
 ## Table of contents
 
 * [Implementation details](#implementation-details)
+* [Setup](#setup)
 * [Enabling encryption](#enabling-encryption)
 * [Disabling encryption](#disabling-encryption)
 * [Encryption status](#encryption-status)
@@ -29,15 +30,52 @@ For Kubernetes secret encryption, once all control plane nodes agree on encrypti
 
 For further information, refer to the [official Kubernetes documentation](https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/).
 
+## Setup
+
+The `encryption.sh` command will need to be made available on all control plane nodes beyond `ncn-m002`.
+Shown here for `ncn-m003`.
+
+1. (`ncn-m003#`) Set the `ENCRYPTION_CMD_PATH` variable to `/usr/share/doc/csm/scripts/operations/kubernetes`.
+
+    For example:
+
+    ```bash
+    ENCRYPTION_CMD_PATH=/usr/share/doc/csm/scripts/operations/kubernetes
+    ```
+
+1. (`ncn-m003#`) Copy the `encryption.sh` command from `ncn-m001`.
+
+    ```bash
+    mkdir -pv $ENCRYPTION_CMD_PATH
+    scp -p ncn-m001:${ENCRYPTION_CMD_PATH}/encryption.sh $ENCRYPTION_CMD_PATH
+    ls -l $ENCRYPTION_CMD_PATH
+    ```
+
+    Example output:
+
+    ```text
+    ncn-m003:~ # mkdir -pv $ENCRYPTION_CMD_PATH
+    mkdir: created directory '/usr/share/doc/csm'
+    mkdir: created directory '/usr/share/doc/csm/scripts'
+    mkdir: created directory '/usr/share/doc/csm/scripts/operations'
+    mkdir: created directory '/usr/share/doc/csm/scripts/operations/kubernetes'
+    ncn-m003:~ # scp -p ncn-m001:${ENCRYPTION_CMD_PATH}/encryption.sh $ENCRYPTION_CMD_PATH
+    encryption.sh
+    ncn-m003:~ # ls -l $ENCRYPTION_CMD_PATH
+    total 28
+    -rwxr-xr-x 1 root root 27658 Oct 11 20:20 encryption.sh
+    ncn-m003:~ #
+    ```
+
 ## Enabling encryption
 
 Before encryption is enabled, it is recommend that a Bare-Metal etcd backup is taken only if the etcd cluster is healthy.
 
 See [Create a manual Backup of a Healthy Bare-Metal etcd Cluster](../Create_a_Manual_Backup_of_a_Healthy_Bare-Metal_etcd_Cluster.md) for details.
 
-When enabling encryption it is important to ensure all 3 nodes are enabled in short order. However that does not mean all control plane nodes should run the script in parallel.
+When enabling encryption it is important to ensure all control plane nodes are enabled in short order. However that does not mean all control plane nodes should run the script in parallel.
 
-When encryption is enabled a Bare-Metal etcd cluster can not be restored from a backup taken before encryption is enabled. Such a backup can be used to restore etcd in the event that encryption is later disabled.
+When encryption is enabled a Bare-Metal etcd cluster can not be restored from a backup taken before encryption is enabled. Such a backup can be used to restore etcd in the event that encryption is later fully disabled.
 
 It is recommended to enable encryption on one node first. If successful may enable encryption in parallel on the remaining nodes.
 
@@ -169,7 +207,7 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
 
 If necessary, a forced rewrite of secret data can be performed. Generally unnecessary but can be used to reduce the time for nodes to synchronize status.
 
-* (`ncn-mw#`) Force a rewrite of existing data:
+* (`ncn-m#`) Force a rewrite of existing data:
 
     ```bash
     /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --restart
