@@ -222,7 +222,7 @@ Repeat the steps in this section on the next master node, until they have been p
     ```
 
     The `kube-etcdbackup`, `cray-dns-unbound-manager`, `sonar-sync` and `hms-discovery` cron jobs need to be restarted.
-    For example restarting the `kube-etcdbackup` cron job:
+    For example restarting the `kube-etcdbackup` cron job.
 
     ```bash
      kubectl get cronjobs.batch -n kube-system kube-etcdbackup -o json | \
