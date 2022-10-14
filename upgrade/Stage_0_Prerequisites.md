@@ -109,6 +109,7 @@ after a break, always be sure that a typescript is running before proceeding.
       >```
 
       If the `rbd` device already exists and is mounted, it can be moved to the desired node, if not already mounted there.
+      **IMPORTANT:** *If upgrading from a CSM version that had previously mounted this rbd device, the `/etc/cray/upgrade/csm/myenv` file will need to be removed before proceeding with this upgrade as it will contain information from the previous install.*
 
       ```bash
       /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m001
