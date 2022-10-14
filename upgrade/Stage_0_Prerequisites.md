@@ -116,7 +116,7 @@ after a break, always be sure that a typescript is running before proceeding.
       deactivate
       ```
 
-      If the `rbd` device does not exists, create it.
+      If the `rbd` device does not exist, create it.
 
       ```bash
       /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
