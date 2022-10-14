@@ -264,7 +264,7 @@ Repeat the steps in this section on the next master node, until they have been p
      vault         spire-intermediate                   0 0 * * 1      False     0        <none>          22h
      ```
 
-    At the same time these pods had not yet reached the running state and needed to be deleted.
+    At the same time these associated pods had not yet reached the running state and needed to be deleted.
 
    ```bash
     kubectl get pods -A -o wide | grep -v "Completed\|Running"
