@@ -226,7 +226,7 @@ function main()
         then 
             echo -e "\nNot all Postgres backups have been successfully re-generated."
         else
-            echo -e "\nPostgres backup(s) have been successfully re-genetated."
+            echo -e "\nPostgres backup(s) have been successfully regenerated."
         fi
     fi
 }
