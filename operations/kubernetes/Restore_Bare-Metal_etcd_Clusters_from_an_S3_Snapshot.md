@@ -192,7 +192,7 @@ Repeat the steps in this section on the next master node, until they have been p
     d5a8e497e2788510, started, ncn-m003, https://10.252.1.9:2380, https://10.252.1.9:2379,https://127.0.0.1:2379, false
     ```
 
-1. (`ncn-m#`)  After a few minutes, if any cron jobs appear stuck, and/or pods yet to reach the Running state, the cron jobs will need to be restarted and the associated pods deleted.
+1. (`ncn-m#`)  After a few minutes, if any cron jobs appear stuck, and/or pods have yet to reach the Running state, the cron jobs will need to be restarted and the associated pods deleted.
 
     For example, following a successful Bare-Metal etcd cluster restore it can be observed that the `kube-etcdbackup`,
     `cray-dns-unbound-manager` and `sonar-sync` cron jobs have not been scheduled for 18 minutes. The `hms-discovery` cron job at 20 minutes is in the same situation.
