@@ -1,0 +1,81 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: nexus-setup-template
+  namespace: argo
+spec:
+  arguments:
+    parameters:
+    - name: nexus_blob_stores
+    - name: nexus_repositories
+    - name: product
+    - name: product_host_path
+  entrypoint: nexus-setup
+  templates:
+  - name: nexus-setup
+    inputs:
+      parameters:
+      - name: nexus_blob_stores
+        value: "{{workflow.parameters.nexus_blob_stores}}"
+      - name: nexus_repositories
+        value: "{{workflow.parameters.nexus_repositories}}"
+      - name: product
+        value: "{{workflow.parameters.product}}"
+      - name: product_host_path
+        value: "{{workflow.parameters.product_host_path}}"
+    nodeSelector:
+      kubernetes.io/hostname: ncn-m001
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    container:
+      image: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.0-20221006225615_49737fe
+      command: [iuf-nexus-setup]
+      args: ["--blobstores","/products/{{workflow.parameters.product}}/{{workflow.parameters.nexus_blob_stores}}","--repositories","/products/{{workflow.parameters.product}}/{{workflow.parameters.nexus_repositories}}"]
+      env:
+      - name: NEXUS_URL
+        value: "https://packages.local"
+      - name: NEXUS_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: nexus-admin-credential
+            key: username
+      - name: NEXUS_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: nexus-admin-credential
+            key: password
+      volumeMounts:
+      - name: products
+        mountPath: /products
+    # This will be an RBD mount.
+    volumes:
+    - name: products
+      hostPath:
+        path: "{{workflow.parameters.product_host_path}}"
