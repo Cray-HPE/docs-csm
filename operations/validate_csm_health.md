@@ -278,7 +278,11 @@ ncn/pit# /opt/cray/platform-utils/ncnHealthChecks.sh -s pods_not_running
   - The `cray-crus-` pod is expected to be in the `Init` state until Slurm and MUNGE
 are installed. In particular, this will be the case if executing this as part of the validation after completing the [Install CSM Services](../install/install_csm_services.md).
 If in doubt, validate the CRUS service using the [CMS Validation Tool](#sms-health-checks). If the CRUS check passes using that tool, do not worry about the `cray-crus-` pod state.
+
   - The `hmn-discovery` and `cray-dns-unbound-manager` cronjob pods may be in a `NotReady` state. This is expected as these pods are periodically started and transition to the completed state.
+
+  - If some `*postgresql-db-backup` cronjob pods are in `Error` state, they can be ignored if the most recent pod `Completed`.
+The `Error` pods are cleaned up over time but are left to troubleshoot issues in the case that all retries for the `postgresql-db-backup` job fail.
 
 <a name="check-of-system-management-monitoring-tools"></a>
 
