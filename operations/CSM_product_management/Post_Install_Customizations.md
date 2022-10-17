@@ -106,6 +106,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
 * [Scale `cray-bss` service](#scale-cray-bss-service)
 * [Postgres PVC resize](#postgres-pvc-resize)
+* [Prometheus PVC resize](#prometheus-pvc-resize)
 * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
 
 ### Prerequisites
@@ -147,6 +148,8 @@ Trial and error may be needed to determine what is best for a given system at sc
    kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
    ```
 
+   If number of NCNs are less than 20, then
+
 1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources`.
 
    ```bash
@@ -154,6 +157,15 @@ Trial and error may be needed to determine what is best for a given system at sc
    yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.memory' '15Gi'
    yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.cpu' --style=double '6'
    yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.memory' '30Gi'
+   ```
+
+If number of NCNs are greater than 20, then
+
+   ```bash
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu' --style=double '6'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.memory' '50Gi'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.cpu' --style=double '12'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.memory' '60Gi'
    ```
 
 1. (`ncn#`) Check that the customization file has been updated.
@@ -624,6 +636,110 @@ Refer to the note at the end of this section for more details.
 
   * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
   * Resource path: `spec.kubernetes.services.spire.cray-service.sqlCluster.volumeSize`
+
+### Prometheus PVC resize
+
+Increase the PVC volume size associated with `prometheus-cray-sysmgmt-health-promet-prometheus` cluster in the `sysmgmt-health` namespace.
+This example is based on what was needed for a system with more than 20 non compute nodes (NCNs). The PVC size can only ever be increased.
+
+1. (`ncn#`) Get the current cached customizations.
+
+   ```bash
+   kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ```
+
+1. (`ncn#`) Get the current cached platform manifest.
+
+   ```bash
+   kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
+   ```
+
+1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage`.
+
+   ```bash
+   yq write -i customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage' '300Gi'
+   ```
+
+1. (`ncn#`) Check that the customization file has been updated.
+
+   ```bash
+   yq read customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage'
+
+   300Gi
+   ```
+
+1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data.
+
+   The `storage` specified above will be updated in the next step. The version may differ, because this is an example.
+
+   ```yaml
+   apiVersion: manifests/v1beta1
+   metadata:
+     name: platform
+   spec:
+     charts:
+     - name: cray-sysmgmt-health
+       namespace: sysmgmt-health
+       values:
+   .
+   .
+   .
+       version: 0.12.0
+   ```
+
+1. (`ncn#`) Generate the manifest that will be used to redeploy the chart with the modified volume size.
+
+   ```bash
+   manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
+   ```
+
+1. (`ncn#`) Check that the manifest file contains the desired storage size setting.
+
+   ```bash
+   yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.storageSpec.resources'
+   ```
+
+   Example output:
+
+   ```yaml
+   volumeClaimTemplate:
+   spec:
+    resources:
+      requests:
+        storage: 250Gi
+   ```
+
+1. (`ncn#`) Redeploy the same chart version but with the desired volume size setting.
+
+   ```bash
+   loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   ```
+
+1. (`ncn#`) Verify that the increased volume size has been applied.
+
+   ```bash
+   watch "kubectl get pvc -n sysmgmt-health prometheus-cray-sysmgmt-health-promet-prometheus-db-prometheus-cray-sysmgmt-health-promet-prometheus-0"
+   ```
+
+   Example output:
+
+   ```text
+   NAME                                                                                                     STATUS   VOLUME
+   CAPACITY   ACCESS MODES   STORAGECLASS           AGE
+   prometheus-cray-sysmgmt-health-promet-prometheus-db-prometheus-cray-sysmgmt-health-promet-prometheus-0   Bound    pvc-bcb8f4f1-fb84-4b48-95c7-63508ef18962
+   200Gi      RWO            k8s-block-replicated   3d2h
+   ```
+
+   At this point the Prometheus cluster is healthy, but additional steps are required to complete the resize of the Prometheus PVCs.
+
+1. (`ncn#`) **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
+
+   ```bash
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 ### `cray-hms-hmcollector` pods are `OOMKilled`
 
