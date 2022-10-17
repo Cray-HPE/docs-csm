@@ -19,6 +19,7 @@
   - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#componentendpoints-of-redfish-subtype-auxiliarycontroller-in-hsm)
   - [`ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM](#componentendpoints-with-ethernetinterfaces-named-de-in-hsm)
   - [Custom Roles and SubRoles for Components in HSM](#custom-roles-and-subroles-for-components-in-hsm)
+  - [Resolved backup pod issues causing smoke test failures](#resolved-backup-pod-issues-causing-smoke-test-failures)
 
 ## Introduction
 
@@ -449,6 +450,7 @@ This section outlines known issues that cause HMS health check failures. Some of
 - [`ComponentEndpoints` of Redfish subtype `AuxiliaryController` in HSM](#componentendpoints-of-redfish-subtype-auxiliarycontroller-in-hsm)
 - [`ComponentEndpoints` with `EthernetInterfaces` named `DE*` in HSM](#componentendpoints-with-ethernetinterfaces-named-de-in-hsm)
 - [Custom Roles and SubRoles for Components in HSM](#custom-roles-and-subroles-for-components-in-hsm)
+- [Resolved backup pod issues causing smoke test failures](#resolved-backup-pod-issues-causing-smoke-test-failures)
 
 ### Warning flags incorrectly set in HSM for Mountain BMCs
 
@@ -614,3 +616,45 @@ This issue looks similar to the following in the test output:
 ```
 
 Failures of this test caused by custom Component Roles or SubRoles can be safely ignored.
+
+### Resolved backup pod issues causing smoke test failures
+
+The following HMS smoke test may fail due to backup pods in bad states in Kubernetes:
+
+- `sls_smoke_test_ncn-smoke.sh`
+
+This issue looks similar to the following in the test output:
+
+```text
+running '/opt/cray/tests/ncn-smoke/hms/hms-sls/sls_smoke_test_ncn-smoke.sh'...
+Running sls_smoke_test...
+(07:17:52) Running '/opt/cray/tests/ncn-resources/hms/hms-test/hms_check_pod_status_ncn-resources_remote-resources.sh cray-sls'...
+services            cray-sls-58cfdb7c46-r7bgz                                         2/2     Running     0          8h
+services            cray-sls-58cfdb7c46-rb9gb                                         2/2     Running     0          8h
+services            cray-sls-58cfdb7c46-xrlfl                                         2/2     Running     0          8h
+services            cray-sls-init-load-2mbq5                                          0/2     Completed   0          8h
+services            cray-sls-postgres-0                                               3/3     Running     0          8h
+services            cray-sls-postgres-1                                               3/3     Running     0          8h
+services            cray-sls-postgres-2                                               3/3     Running     0          8h
+services            cray-sls-postgresql-db-backup-1665702600-b54xt                    0/1     Error       0          8h
+services            cray-sls-postgresql-db-backup-1665702600-l8pnn                    0/1     Error       0          8h
+services            cray-sls-postgresql-db-backup-1665702600-rcmzz                    0/1     Error       0          8h
+services            cray-sls-postgresql-db-backup-1665702600-rfgfh                    0/1     Error       0          8h
+services            cray-sls-postgresql-db-backup-1665702600-vzts9                    0/1     Error       0          8h
+services            cray-sls-postgresql-db-backup-1665702600-wfxjs                    0/1     Completed   0          7h57m
+services            cray-sls-wait-for-postgres-1-pc62h                                0/3     Completed   0          8h
+cray-sls-58cfdb7c46-r7bgz pod status: Running
+cray-sls-58cfdb7c46-rb9gb pod status: Running
+cray-sls-58cfdb7c46-xrlfl pod status: Running
+cray-sls-init-load-2mbq5 pod status: Completed
+cray-sls-postgres-0 pod status: Running
+cray-sls-postgres-1 pod status: Running
+cray-sls-postgres-2 pod status: Running
+cray-sls-postgresql-db-backup-1665702600-b54xt pod status: Error
+Unexpected pod status 'Error', expected one of: Running Completed
+Run 'kubectl -n services describe pod cray-sls-postgresql-db-backup-1665702600-b54xt' to continue troubleshooting
+ERROR: '/opt/cray/tests/ncn-resources/hms/hms-test/hms_check_pod_status_ncn-resources_remote-resources.sh cray-sls' failed with error code: 1
+FAIL: sls_smoke_test ran with failures
+```
+
+Failures of this test caused by backup pods in bad states can be safely ignored if a more recent backup of the same type has completed successfully.
