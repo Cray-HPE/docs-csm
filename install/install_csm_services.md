@@ -11,6 +11,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 * [Known issues](#known-issues)
   * [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
+  * [`Error releasing chart` known issues](#error-releasing-chart-known-issues)
   * [`Setup Nexus` known issues](#setup-nexus-known-issues)
 
 ## 1. Install CSM services
