@@ -26,7 +26,8 @@ This procedure can be run on any master NCN.
     1. List the available backups.
 
         ```bash
-        cd /opt/cray/platform-utils/s3 && ./list-objects.py --bucket-name etcd-backup
+        cd /opt/cray/platform-utils/s3 && ./list-objects.py \
+        --bucket-name etcd-backup | grep bare-metal
         ```
 
         Example output:
@@ -190,3 +191,90 @@ Repeat the steps in this section on the next master node, until they have been p
     986f6ff2a30b01cb, started, ncn-m002, https://10.252.1.8:2380, https://10.252.1.8:2379,https://127.0.0.1:2379, false
     d5a8e497e2788510, started, ncn-m003, https://10.252.1.9:2380, https://10.252.1.9:2379,https://127.0.0.1:2379, false
     ```
+
+1. (`ncn-m#`)  After a few minutes, if any cron jobs appear stuck, and/or pods have yet to reach the Running state, the cron jobs will need to be restarted and the associated pods deleted.
+
+    For example, following a successful Bare-Metal etcd cluster restore it can be observed that the `kube-etcdbackup`,
+    `cray-dns-unbound-manager` and `sonar-sync` cron jobs have not been scheduled for 18 minutes. The `hms-discovery` cron job at 20 minutes is in the same situation.
+
+    ```bash
+    kubectl get cronjobs.batch -A
+    ```
+
+    Example output:
+
+    ```text
+    NAMESPACE     NAME                                 SCHEDULE       SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+    argo          cray-nls-postgresql-db-backup        10 23 * * *    False     0        21h             26h
+    kube-system   kube-etcdbackup                      */10 * * * *   False     1        18m             33h
+    operators     kube-etcd-defrag                     0 0 * * *      False     0        20h             33h
+    operators     kube-etcd-defrag-cray-hbtd-etcd      0 */4 * * *    False     0        38m             33h
+    operators     kube-etcd-periodic-backup-cron       0 * * * *      False     0        38m             33h
+    services      cray-dns-unbound-manager             */2 * * * *    False     1        18m             33h
+    services      cray-keycloak-postgresql-db-backup   10 2 * * *     False     0        18h             33h
+    services      cray-sls-postgresql-db-backup        10 23 * * *    False     0        21h             33h
+    services      cray-smd-postgresql-db-backup        10 0 * * *     False     0        20h             33h
+    services      gitea-vcs-postgresql-db-backup       10 1 * * *     False     0        19h             33h
+    services      hms-discovery                        */3 * * * *    False     0        20m             33h
+    services      sonar-sync                           */1 * * * *    False     1        18m             34h
+    spire         spire-postgresql-db-backup           10 3 * * *     False     0        17h             33h
+    vault         spire-intermediate                   0 0 * * 1      False     0        <none>          23h
+    ```
+
+    The `kube-etcdbackup`, `cray-dns-unbound-manager`, `sonar-sync` and `hms-discovery` cron jobs need to be restarted.
+    For example restarting the `kube-etcdbackup` cron job:
+
+    ```bash
+     kubectl get cronjobs.batch -n kube-system kube-etcdbackup -o json | \
+     jq 'del(.spec.selector)' | \
+     jq 'del(.spec.template.metadata.labels."controller-uid")' | \
+     kubectl replace --force -f -
+    ```
+
+    Example output:
+
+    ```text
+    cronjob.batch "kube-etcdbackup" deleted
+    cronjob.batch/kube-etcdbackup replaced
+    ```
+
+    and the stuck cron jobs are now running.
+
+    ```bash
+    kubectl get cronjobs.batch -A
+    ```
+
+    Example output:
+
+    ```text
+     NAMESPACE     NAME                                 SCHEDULE       SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+     argo          cray-nls-postgresql-db-backup        10 23 * * *    False     0        21h             26h
+     kube-system   kube-etcdbackup                      */10 * * * *   False     0        41s             33h
+     operators     kube-etcd-defrag                     0 0 * * *      False     0        20h             33h
+     operators     kube-etcd-defrag-cray-hbtd-etcd      0 */4 * * *    False     0        30m             33h
+     operators     kube-etcd-periodic-backup-cron       0 * * * *      False     0        30m             33h
+     services      cray-dns-unbound-manager             */2 * * * *    False     0        41s             33h
+     services      cray-keycloak-postgresql-db-backup   10 2 * * *     False     0        18h             33h
+     services      cray-sls-postgresql-db-backup        10 23 * * *    False     0        21h             33h
+     services      cray-smd-postgresql-db-backup        10 0 * * *     False     0        20h             33h
+     services      gitea-vcs-postgresql-db-backup       10 1 * * *     False     0        19h             33h
+     services      hms-discovery                        */3 * * * *    False     1        41s             33h
+     services      sonar-sync                           */1 * * * *    False     1        41s             33h
+     spire         spire-postgresql-db-backup           10 3 * * *     False     0        17h             33h
+     vault         spire-intermediate                   0 0 * * 1      False     0        <none>          22h
+     ```
+
+    At the same time these associated pods had not yet reached the running state and needed to be deleted.
+
+   ```bash
+    kubectl get pods -A -o wide | grep -v "Completed\|Running"
+    ```
+
+    Example output:
+
+    ```text
+    NAMESPACE           NAME                                                              READY   STATUS              RESTARTS   AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+    kube-system         kube-etcdbackup-27758660-xj9kb                                    0/1     ContainerCreating   0          23m   <none>        ncn-w002   <none>           <none>
+    services            cray-dns-unbound-manager-27758660-d7d2l                           0/2     Init:0/1            0          23m   <none>        ncn-w003   <none>           <none>
+    services            sonar-sync-27758660-75qxb                                         0/1     ContainerCreating   0          23m   <none>        ncn-w002   <none>           <none>
+     ```
