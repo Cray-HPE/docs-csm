@@ -15,13 +15,13 @@ disables that override, and the test will use `nmnlb.<system-domain>`.
 
 ## Topics
 
-- [Running Gateway Tests on an NCN Management Node](#running-gateway-tests-on-an-ncn-management-node)
-- [Running Gateway Tests on a UAN or Compute Node](#running-gateway-tests-on-a-uan-or-a-compute-node)
-- [Running Gateway Tests on a UAI](#running-gateway-tests-on-a-uai)
-- [Running Gateway Tests on a Device Outside the System](#running-gateway-tests-on-a-device-outside-the-system)
-- [Example Results](#example-results)
+- [Running gateway tests on an NCN management node](#running-gateway-tests-on-an-ncn-management-node)
+- [Running gateway tests on a UAN or compute node](#running-gateway-tests-on-a-uan-or-compute-node)
+- [Running gateway tests on a UAI](#running-gateway-tests-on-a-uai)
+- [Running gateway tests on a device outside the system](#running-gateway-tests-on-a-device-outside-the-system)
+- [Example results](#example-results)
 
-## Running Gateway Tests on an NCN Management Node
+## Running gateway tests on an NCN management node
 
 The gateway test scripts can be found in `/usr/share/doc/csm/scripts/operations/gateway-test`. When `gateway-test.py` is
 run from an NCN, it has access to the admin client secret using `kubectl`. It will use the admin client secret to get
@@ -53,7 +53,7 @@ access each of the services defined in `gateway-test-defn.yaml`, on each of the 
 it should or should not be able to access the service, and it will output a `PASS` or `FAIL` for each service, as appropriate.
 At the end of the tests it will compile and output a final overall PASS/FAIL status.
 
-## Running Gateway Tests on a UAN or Compute Node
+## Running gateway tests on a UAN or compute node
 
 The same set of tests will be run from a UAN or Compute Node by executing the following command from an NCN that has the `docs-csm` RPM installed. The hostname of the UAN or Compute Node under test must be specified.
 
@@ -65,19 +65,19 @@ that should be accessible on the node based on the node type.
 The test will determine whether it should or should not be able to access the service, and it will output a `PASS` or `FAIL`
 for each service, as appropriate. At the end of the tests it will compile and output a final overall PASS/FAIL status.
 
-### UAN Test Execution
+### UAN test execution
 
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uan-gateway-test.sh <uan-hostname>
 ```
 
-### Compute Node Test Execution
+### Compute node test execution
 
 ```bash
 ncn# /usr/share/doc/csm/scripts/operations/gateway-test/cn-gateway-test.sh <cn-hostname>
 ```
 
-## Running Gateway Tests on a UAI
+## Running gateway tests on a UAI
 
 In order to test the gateways from a UAI, the `/usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh`
 script is used.
@@ -99,7 +99,7 @@ ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
 The test will find the first UAI `cray-uai-gateway-test` image to create the test UAI. A different image may optionally
 be specified by using the `--imagename` option.
 
-## Running Gateway Tests on a Device Outside the System
+## Running gateway tests on a device outside the system
 
 The following steps must be performed on the system where the test is to be run:
 
@@ -125,6 +125,11 @@ The following steps must be performed on the system where the test is to be run:
 
    ```bash
    ncn# kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
+   ```
+
+   Example output:
+
+   ```text
    26947343-d4ab-403b-14e937dbd700
    ```
 
@@ -146,7 +151,7 @@ The following steps must be performed on the system where the test is to be run:
    linux# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com outside
    ```
 
-## Example Results
+## Example results
 
 The results of running the tests will show the following:
 
@@ -160,10 +165,13 @@ The results of running the tests will show the following:
     - It will show `SKIP` for services that are not expected to be installed on the system.
 - The return code of `gateway-test.py` will be non-zero if any of the tests within it fail.
 
-### Running From an NCN with CHN as the User Network
+### Running from an NCN with CHN as the user network
 
 ```bash
-ncn-m001# ./gateway-test.py eniac.dev.cray.com
+ncn# /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com
+```
+
+```text
 auth.cmn.eniac.dev.cray.com is reachable
 Token successfully retrieved at https://auth.cmn.eniac.dev.cray.com/keycloak/realms/shasta/protocol/openid-connect/token
 
@@ -432,7 +440,10 @@ Overall Gateway Test Status:  PASS
 ### Running from a UAI
 
 ```bash
-ncn-m001# ./uai-gateway-test.sh
+ncn# /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
+```
+
+```text
 Creating Gateway Test UAI with image artifactory.algol60.net/csm-docker/stable/cray-gateway_test:1.4.0-20220418215843_786bfac
 Waiting for uai-vers-733eea45 to be ready
 status = Running: Not Ready
