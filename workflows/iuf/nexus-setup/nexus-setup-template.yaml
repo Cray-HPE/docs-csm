@@ -29,19 +29,18 @@ metadata:
 spec:
   arguments:
     parameters:
-    - name: nexus_blob_stores
-    - name: nexus_repositories
     - name: product
     - name: product_host_path
+    # The value for content is set to the json string value for 'content' in the manifest when --parameter-file is
+    # set to the path of the IUF manifest yaml file.
+    - name: content
   entrypoint: nexus-setup
   templates:
   - name: nexus-setup
     inputs:
       parameters:
-      - name: nexus_blob_stores
-        value: "{{workflow.parameters.nexus_blob_stores}}"
-      - name: nexus_repositories
-        value: "{{workflow.parameters.nexus_repositories}}"
+      - name: content
+        value: "{{workflow.parameters.content}}"
       - name: product
         value: "{{workflow.parameters.product}}"
       - name: product_host_path
@@ -57,7 +56,7 @@ spec:
     container:
       image: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.0-20221006225615_49737fe
       command: [iuf-nexus-setup]
-      args: ["--blobstores","/products/{{workflow.parameters.product}}/{{workflow.parameters.nexus_blob_stores}}","--repositories","/products/{{workflow.parameters.product}}/{{workflow.parameters.nexus_repositories}}"]
+      args: ["--blobstores","/products/{{workflow.parameters.product}}/{{=jsonpath(workflow.parameters.content,'$.nexus_blob_stores.yaml_path')}}","--repositories","/products/{{workflow.parameters.product}}/{{=jsonpath(workflow.parameters.content,'$.nexus_repositories.yaml_path')}}"]
       env:
       - name: NEXUS_URL
         value: "https://packages.local"
