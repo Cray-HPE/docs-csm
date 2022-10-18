@@ -4,10 +4,10 @@ Customer access to Shasta services is provided by a Customer Access Network (CAN
 
 ## Enabling Customer High-speed Network Routing
 
-By default, the Customer Access Network (CAN) is provided by the Node Management Network (NMN).  CSM 1.3 allows for the system to be optionally configured to allow the CAN to be provided by the High-speed Network (HSN).
+By default, the Customer Access Network (CAN) is provided by the Node Management Network (NMN). CSM 1.3 allows for the system to be optionally configured to allow the CAN to be provided by the High-speed Network (HSN).
 When customer access is provided by the HSN, this is called the Customer High-speed Network (CHN).
 
-If the CHN is the network for customer access, the following procedures will guide admins through changing the system configuration and applying the change to the Management Nodes, UANs, UAIs, Compute Nodes, Management Switches, and Edge Switches.
+If the CHN is the network for customer access, the following procedures will guide administrators through changing the system configuration and applying the change to the Management Nodes, UANs, UAIs, Compute Nodes, Management Switches, and Edge Switches.
 
 This feature has additional requirements which include.
 
@@ -15,7 +15,7 @@ This feature has additional requirements which include.
 - Cabling from HSN to edge switches
 - Additional IP address space
 
-**WARNING: This procedure is intended to be run after an upgrade to CSM 1.3 has been completed.  Future releases may introduce changes that impact this procedure.  It is important that this procedure only be run on healthy systems running CSM 1.3.
+**WARNING**: This procedure is intended to be run after an upgrade to CSM 1.3 has been completed. Future releases may introduce changes that impact this procedure. It is important that this procedure only be run on healthy systems running CSM 1.3.
 
 ## Procedure
 
