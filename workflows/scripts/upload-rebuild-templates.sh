@@ -35,6 +35,9 @@ function main() {
 function upload_iuf_install_template {
     kubectl -n argo delete configmap iuf-install-workflow-files || true
     kubectl -n argo create configmap iuf-install-workflow-files --from-file="${basedir}/../iuf"
+    kubectl -n argo delete configmap iuf-install-workflow-stages-files || true
+    kubectl -n argo create configmap iuf-install-workflow-stages-files --from-file="${basedir}/../iuf/stages"
+    kubectl -n argo apply -f "${basedir}/../iuf/operations" --recursive
 }
 
 function upload_worker_rebuild_template {
