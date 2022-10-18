@@ -36,4 +36,6 @@ argo -n argo template create nexus-setup-template.yaml
 ```
 
 ### Planned Work
-Provide a way to obtain a default values for items read from iuf-manifest.yaml (by ```jsonpath```) that may have not been set. Examples are ```nexus_blob_stores``` and ```nexus_repositories```.
+- Provide a way to obtain a default values for items read from iuf-manifest.yaml (by ```jsonpath```) that may have not been set. Examples are ```nexus_blob_stores``` and ```nexus_repositories```.
+
+- Obtain the ```nexus-admin-credential``` secret from the ```nexus``` namespace. The secret is currently manually copied into the ```argo``` namespace.
