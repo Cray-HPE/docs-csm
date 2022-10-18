@@ -1,53 +1,71 @@
 # Runbook - DHCP Troubleshooting
 
-## 1. Confirm The Status Of The `cray-dhcp-kea`
+- [Get an API token](#get-an-api-token)
+- [1 Confirm the status of the `cray-dhcp-kea` services](#1-confirm-the-status-of-the-cray-dhcp-kea-services)
+   1. [Check `cray-dchp-kea` pods](#11-check-cray-dchp-kea-pods)
+   1. [Check `cray-dhcp-kea` service endpoints](#12-check-cray-dhcp-kea-service-endpoints)
+   1. [Verify that `cray-dhcp-kea` configuration is valid](#13-verify-that-cray-dhcp-kea-configuration-is-valid)
+   1. [Review `cray-dhcp-kea` running configuration](#14-review-cray-dhcp-kea-running-configuration)
+   1. [Verify that `cray-dhcp-kea` has active DHCP leases](#15-verify-that-cray-dhcp-kea-has-active-dhcp-leases)
+   1. [Check `dhcp-helper.py` output](#16-check-dhcp-helperpy-output)
+   1. [Check `cray-dhcp-kea` logs](#17-check-cray-dhcp-kea-logs)
+- [2 Troubleshooting DHCP for a specific node](#2-troubleshooting-dhcp-for-a-specific-node)
+   1. [Check current DHCP leases](#21-check-current-dhcp-leases)
+   1. [Check the Hardware State Manager](#22-check-the-hardware-state-manager)
+      - [System Layout Service](#system-layout-service)
+      - [State Manager Daemon](#state-manager-daemon)
+   1. [Duplicate IP address](#23-duplicate-ip-address)
+   1. [Numerous DHCP decline messages during node boot](#24-numerous-dhcp-decline-messages-during-node-boot)
+- [3 Network troubleshooting](#3-network-troubleshooting)
+   1. [Check BGP/MetalLB](#31-check-bgpmetallb)
+      - [Mellanox spine switches](#mellanox-spine-switches)
+      - [Aruba spine switches](#aruba-spine-switches)
+   1. [`tcpdump`](#32-tcpdump)
+      - [Dell/Leaf CDU switches](#dellleaf-cdu-switches)
 
-Check if the `kea` DHCP services are running.
+## Get an API token
 
-Create API access token for the for system:
+(`ncn-mw#`) Some of the commands in these procedures require an API token to be acquired and stored in the `TOKEN` environment variable.
 
-   ```bash
-   export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-   ```
+```bash
+export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
+    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+```
 
-### 1.1 Check `cray-dchp-kea` Pods
+## 1 Confirm the status of the `cray-dhcp-kea` services
 
-On any worker/manager run:
+Check if the Kea DHCP services are running properly.
+
+### 1.1 Check `cray-dchp-kea` pods
+
+1. (`ncn-mw#`) List the `cray-dchp-kea` pods.
 
    ```bash
    kubectl get pods -n services -o wide | grep kea
    ```
 
-You should get a list of the following pods as output:
-
-   ```bash
-   kubectl get pods -n services -o wide | grep kea
-   ```
-
-   Potential output:
+   Expected output looks similar to the following:
 
    ```text
    cray-dhcp-kea-6f7ddf65dc-kckq6                                    3/3     Running            0          45h     10.37.0.47     ncn-w001   <none>           <none>
    ```
 
-- Make sure pods listed are in `Running` state
-- If `cray-dhcp-kea` pod is not in `Running` state.  Proceed to do Kubernetes troubleshooting.
+1. Verify that all pods listed are in `Running` state.
 
-This output will also show which worker node the `cray-kea-dhcp` pod is currently on.
+   If a `cray-dhcp-kea` pod is not in `Running` state, then perform Kubernetes troubleshooting.
 
-### 1.2 Check `cray-dhcp-kea` Service Endpoints
+   This output will also show which worker node the `cray-kea-dhcp` pod is currently on. This information may be useful when debugging a Kubernetes problem.
 
-On any worker/manager run:
+### 1.2 Check `cray-dhcp-kea` service endpoints
 
-   ```bash
-   kubectl get services -n services | grep kea
-   ```
-
-You should see the following services as output:
+1. (`ncn-mw#`) List the `cray-dhcp-kea` service endpoints.
 
    ```bash
    kubectl get services -n services | grep kea
    ```
+
+   Expected output looks similar to the following:
 
    ```text
    cray-dhcp-kea-api                             ClusterIP      10.31.247.201   <none>          8000/TCP                     3h36m
@@ -57,18 +75,23 @@ You should see the following services as output:
    cray-dhcp-kea-udp-nmn                         LoadBalancer   10.24.246.19    10.92.100.222   67:32188/UDP                 3h36m
    ```
 
-- Verify all `cray-dhcp-kea` services have no `Pending` status
-- If `cray-dhcp-kea` services is showing `Pending` state.  Proceed to do Kubernetes troubleshooting.
+1. Verify that all `cray-dhcp-kea` services are listed as `Pending`.
 
-### 1.3 Check `cray-dhcp-kea` Generated Configuration Is Valid
+   If any `cray-dhcp-kea` service is showing `Pending`, then perform Kubernetes troubleshooting.
 
-Check to make sure `cray-dhcp-kea` is running with a valid configuration by initiated a warm configuration-reload on `cray-dhcp-kea`.
+### 1.3 Verify that `cray-dhcp-kea` configuration is valid
+
+Check to make sure that `cray-dhcp-kea` is running with a valid configuration by initiating a warm configuration-reload on `cray-dhcp-kea`.
+
+1. [Get an API token](#get-an-api-token).
+
+1. (`ncn-mw#`) Initiate the configuration reload.
 
    ```bash
    curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-reload",  "service": [ "dhcp4" ] }' https://api_gw_service.local/apis/dhcp-kea | jq
    ```
 
-The expected output is:
+   The expected output is:
 
    ```json
    [
@@ -79,17 +102,23 @@ The expected output is:
    ]
    ```
 
-- There is a configuration data issue if you do not see the output above.
+   If the output is different from what is expected, then there is a configuration data issue.
 
-### 1.4 Review `cray-dhcp-kea` Running Configuration
+### 1.4 Review `cray-dhcp-kea` running configuration
 
-Confirm configuration being used is not the base configuration.
+Verify that the configuration being used is not the base configuration.
+
+1. [Get an API token](#get-an-api-token).
+
+1. (`ncn-mw#`) View the current configuration.
 
    ```bash
    curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-get",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq 
    ```
 
-If you see similar output where there are no system specific data like 'MACs', `IPs` or `Subnets`:
+1. Determine whether the base configuration is in use.
+
+   The base configuration will contain no system-specific data (such as MAC addresses, IP addresses, or subnets), similar to the following example:
 
    ```json
    {
@@ -145,50 +174,52 @@ If you see similar output where there are no system specific data like 'MACs', `
    }
    ```
 
-- `cray-dhcp-kea` using the base configuration indicates issues generating the configuration data from `cray-smd`, `cray-sls` and `cray-bss`. Verify those services are healthy.
+   If `cray-dhcp-kea` is using the base configuration, then this indicates issues generating the configuration data from `cray-smd`, `cray-sls`, and `cray-bss`.
+   Verify that those services are healthy.
 
-### 1.5 Verify `cray-dhcp-kea` has active DHCP Leases
+### 1.5 Verify that `cray-dhcp-kea` has active DHCP leases
 
-Verify `cray-dhcp-kea` is managing DHCP leases.
+Verify that `cray-dhcp-kea` is managing DHCP leases.
+
+1. [Get an API token](#get-an-api-token).
+
+1. (`ncn-mw#`) Check how many DHCP leases are found.
 
    ```bash
-   curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq .[].text
+   curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+      -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq .[].text
    ```
 
-Expected output will be similar to:
+   Expected output will be similar to:
 
    ```text
    "118 IPv4 lease(s) found."
    ```
 
-- The expectation is to have more than 0 `IPv4 lease(s) Found`.
-- If you see `"0 IPv4 lease(s) found."`, that indicates base configuration is being loaded or a network issue.
+   If things are working normally, then the expectation is to have more than 0 leases found.
+   If no leases are found, then that indicates the base configuration is being loaded or there is a network issue.
 
 ### 1.6 Check `dhcp-helper.py` output
+
+(`ncn-mw#`) Run `dhcp-helper.py`.
 
 ```bash
 kubectl exec -n services $(kubectl get pods -A|grep kea| awk '{ print $2 }') -c cray-dhcp-kea -- /srv/kea/dhcp-helper.py
 ```
 
-If there are no error, `dhcp-helper.py` will not return any messages or logs.
+If there are no errors, then `dhcp-helper.py` will not return any messages or logs.
 
-- If there is output from running the above command. The out will confirm and describe the data issue(s).
+If there is output from running the above command, then the output will include a description of any problems found.
 
 ### 1.7 Check `cray-dhcp-kea` logs
 
-In order to check the logs for the pod you'll need to know the pod name, run this command to see the pod name.
-
-```bash
-kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea
-```
-
-Example:
+- (`ncn-mw#`) View the pod logs.
 
    ```bash
    kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea
    ```
 
-   Potential output:
+   Beginning of example output:
 
    ```text
    2020-08-03 21:47:50.580 INFO  [kea-dhcp4.dhcpsrv/10] DHCPSRV_MEMFILE_LEASE_FILE_LOAD loading leases from file /cray-dhcp-kea-socket/dhcp4.leases
@@ -197,78 +228,88 @@ Example:
    2020-08-03 21:47:50.580 WARN  [kea-dhcp4.dhcpsrv/10] DHCPSRV_NO_SOCKETS_OPEN no interface configured to listen to DHCP traffic
    2020-08-03 21:48:00.602 INFO  [kea-dhcp4.commands/10] COMMAND_RECEIVED Received command 'lease4-get-all'
    {"Dhcp4": {"control-socket": {"socket-name": "/cray-dhcp-kea-socket/cray-dhcp-kea.socket", "socket-type": "unix"}, "hooks-libraries": [{"library": "/usr/local/lib/kea/hooks/libdhcp_lease_cmds.so"},
-   ...SNIP...
+   ```
+
+    Tail end of example output:
+
+   ```text
    waiting 10 seconds for any leases to be given out...
    [{'arguments': {'leases': []}, 'result': 3, 'text': '0 IPv4 lease(s) found.'}]
    2020-08-03 21:48:22.734 INFO  [kea-dhcp4.commands/10] COMMAND_RECEIVED Received command 'config-get'
    ```
 
-This command will output `kea` logs, if there are any errors see Is there an Error.
+- (`ncn-mw#`) Display only potential error messages in the pod logs.
 
    ```bash
    kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea | grep -i error
    ```
 
-## 2 Troubleshooting DHCP For A Specific Node
+## 2 Troubleshooting DHCP for a specific node
 
-### 2.1 Check Current DHCP leases
+### 2.1 Check current DHCP leases
 
-We'll use the Kea API to retrieve data from the DHCP lease database.
+Use the Kea API to retrieve data from the DHCP lease database.
 
-1. First you need to get the authentication token, On any worker/manager, run:
+1. [Get an API token](#get-an-api-token).
 
-```bash
-export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-```
+1. (`ncn-mw#`) Run desired commands to check DHCP leases.
 
-1. Once you generate the authentication token you can run these commands on a a worker or manager node.
-   If you want to retrieve all the Leases, (warning this may cause your terminal to crash based on the size of the output.)
+   - Get all leases.
 
-Get all leases:
+      Warning: this may cause the terminal to crash, if there is too much output.
 
-   ```curl
-   curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
-   ```
+      ```bash
+      curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+         -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
+      ```
 
-If you have the IP and are looking for the hostname/MAC address.
+   - Determine the hostname or MAC address from an IP address.
 
-IP Lookup
+      ```bash
+      IP=<IP_address>
+      curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+         -d "{ \"command\": \"lease4-get\", \"service\": [ \"dhcp4\" ], \"arguments\": { \"ip-address\": \"${IP}\" } }" \
+         https://api-gw-service-nmn.local/apis/dhcp-kea | jq
+      ```
 
-   ```curl
-   curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get", "service": [ "dhcp4" ], "arguments": { "ip-address": "$IP" } }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
-   ```
+   - Determine the hostname or IP address from the MAC address
 
-If you have the MAC and are looking for the hostname/IP Address.
+      ```bash
+      MAC=<MAC_address>
+      curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+         -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | \
+         jq ".[].arguments.leases[] | select(.\"hw-address\"==\"${MAC}\")"
+      ```
 
-MAC lookup
+   - Determine MAC or IP address from the hostname.
 
-   ```curl
-   curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].arguments.leases[] | select(."hw-address"=="$MAC")'
-   ```
+      The hostname can be either the component name (xname) or an alias, depending on the type of hardware.
 
-If you have the hostname and are looking for the MAC/IP address.
-Hostname can be either xname or alias depending on the type of hardware.
+      ```bash
+      HNAME=<hostname>
+      curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" \
+         -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | \
+         jq ".[].arguments.leases[] | select(.\"hostname\"==\"${HNAME}\")"
+      ```
 
-Hostname lookup
+### 2.2 Check the Hardware State Manager
 
-   ```curl
-   curl -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "lease4-get-all",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq '.[].arguments.leases[] | select(."hostname"=="$HOSTNAME")'
-   ```
+Hardware State Manager (HSM) has two important parts:
 
-### 2.2 Check HSM
+- [System Layout Service](#system-layout-service) (SLS): This is the "expected" state of the system (as populated by `networks.yaml` and other sources).
+- [State Manager Daemon](#state-manager-daemon) (SMD): This is the "discovered" or active state of the system during runtime.
 
-Hardware State Manager has two important parts:
+#### System Layout Service
 
-- SLS Systems Layout Service: This is the "expected" state of the system (as populated by `networks.yaml` and other sources).
-- SMD State Manager Daemon: This is the "discovered" or active state of the system during runtime.
+1. [Get an API token](#get-an-api-token).
 
-SLS
+1. (`ncn-mw#`) Retrieve SLS data.
 
-   ```curl
+   ```bash
    curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v2/hardware | jq | less
    ```
 
-   The output from SLS should look like this.
+   The output from SLS should look similar to the following:
 
    ```json
    {
@@ -287,31 +328,44 @@ SLS
    }
    ```
 
-SMD
+#### State Manager Daemon
 
-   ```curl
-   curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces | jq 
-   ```
+1. [Get an API token](#get-an-api-token).
 
-If you know the `MAC` address you are looking for:
+1. (`ncn-mw#`) Query SMD.
 
-   ```curl
-   curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/$MAC | jq 
-   ```
+   There are a number of options.
 
-If you know the `XNAME/ComponentID` address you are looking for:
+   - List all interfaces
 
-   ```curl
-   curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=$XNAME | jq 
-   ```
+      ```bash
+      curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces | jq 
+      ```
 
-If you know the `IP` address you are looking for:
+   - Lookup by MAC address
 
-   ```curl
-   curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?IPAddress=$IP | jq 
-   ```
+      The MAC address should contain no colons.
 
-Your output from SMD should look like this.
+      ```bash
+      MAC=<MAC address>
+      curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/${MAC} | jq 
+      ```
+
+   - Lookup by xname
+
+      ```bash
+      XNAME=<xname>
+      curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=${XNAME} | jq 
+      ```
+
+   - Lookup by IP address
+
+      ```bash
+      IP=<IP address>
+      curl -s -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?IPAddress=${IP} | jq 
+      ```
+
+   Output from SMD should look similar to the following:
 
    ```json
    {
@@ -325,76 +379,79 @@ Your output from SMD should look like this.
    }
    ```
 
-### 2.3 Duplicate IP
+### 2.3 Duplicate IP address
 
-A sign of a duplicate IP is seeing a DECLINE message from the client to the server.
+A sign of a duplicate IP address is seeing a `DECLINE` message from the client to the server.
 
-   ```text
-   10.40.0.0.337 > 10.42.0.58.67: BOOTP/DHCP, Request from b4:2e:99:be:1a:d3, length 301, hops 1, xid 0x9d1210d, Flags [none]
-        Gateway-IP 10.252.0.2
-        Client-Ethernet-Address b4:2e:99:be:1a:d3
-        Vendor-rfc1048 Extensions
-          Magic Cookie 0x63825363
-          DHCP-Message Option 53, length 1: Decline
-          Client-ID Option 61, length 19: hardware-type 255, 99:be:1a:d3:00:01:00:01:26:c8:55:c3:b4:2e:99:be:1a:d3
-          Server-ID Option 54, length 4: 10.42.0.58
-          Requested-IP Option 50, length 4: 10.252.0.26
-          Agent-Information Option 82, length 22: 
-            Circuit-ID SubOption 1, length 20: vlan2-ethernet1/1/12
-   ```
+```text
+10.40.0.0.337 > 10.42.0.58.67: BOOTP/DHCP, Request from b4:2e:99:be:1a:d3, length 301, hops 1, xid 0x9d1210d, Flags [none]
+     Gateway-IP 10.252.0.2
+     Client-Ethernet-Address b4:2e:99:be:1a:d3
+     Vendor-rfc1048 Extensions
+       Magic Cookie 0x63825363
+       DHCP-Message Option 53, length 1: Decline
+       Client-ID Option 61, length 19: hardware-type 255, 99:be:1a:d3:00:01:00:01:26:c8:55:c3:b4:2e:99:be:1a:d3
+       Server-ID Option 54, length 4: 10.42.0.58
+       Requested-IP Option 50, length 4: 10.252.0.26
+       Agent-Information Option 82, length 22: 
+         Circuit-ID SubOption 1, length 20: vlan2-ethernet1/1/12
+```
 
-To test for Duplicate IPs you can ping the suspected address while you turn off the node, if you continue to get responses, then you have a dupe IP.
+To test for duplicate IP addresses, ping the suspected IP address while turning off the node. If ping continues to get responses after the node is down, then there is a duplicate IP address.
 
-### 2.4 Seeing Large Number of DHCP Declines On A Node Boot
+### 2.4 Numerous DHCP decline messages during node boot
 
-- If you are seeing something like:
+The symptom of this looks similar to the following on a node console during boot:
 
-   ```text
-   IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
-   dracut-initqueue[1902]: wicked: eth0: Request to acquire DHCPv4 lease with UUID 13b0675f-12cb-0a00-2f0a-000001000000
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.51
-   random: fast init done
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.53
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.54
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.55
-   random: crng init done
-   random: 7 urandom warning(s) missed due to ratelimiting
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.56
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.57
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.58
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.59
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.60
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.51
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.53
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.54
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.61
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.62
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.63
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.64
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.65
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.66
-   dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.67
-   ```
+```text
+IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+dracut-initqueue[1902]: wicked: eth0: Request to acquire DHCPv4 lease with UUID 13b0675f-12cb-0a00-2f0a-000001000000
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.51
+random: fast init done
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.53
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.54
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.55
+random: crng init done
+random: 7 urandom warning(s) missed due to ratelimiting
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.56
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.57
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.58
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.59
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.60
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.51
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.53
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.54
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.61
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.62
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.63
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.64
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.65
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.66
+dracut-initqueue[1902]: wicked: eth0: Declining DHCPv4 lease with address 10.252.0.67
+```
 
-- This indicates an issue with an IP being allocated is already being used and not able to get the IP assigned to the device as previously set.
+This indicates that an IP address being allocated is already being used. If that is the case, use the following procedure to
+troubleshoot and remediate the problem.
 
-    Check for the that is supposed to be set for node:
+1. [Get an API token](#get-an-api-token).
 
-    Examples:
+1. (`ncn-mw#`) Determine the IP address that is supposed to be set for node.
 
-  - Check by MAC(no colons):
+   Example commands:
 
-    ```curl
-    curl -f -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/18c04d13d73c
-    ```
+   - Check by MAC address (no colons).
 
-  - Check by Xname:
+      ```bash
+      curl -f -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces/18c04d13d73c
+      ```
 
-    ```curl
-    curl -f -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=x3000c0s25b0n0
-    ```
+   - Check by xname.
 
-   Output should look similar to:
+      ```bash
+      curl -f -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v2/Inventory/EthernetInterfaces?ComponentID=x3000c0s25b0n0
+      ```
+
+   Output should look similar to the following:
 
    ```json
    {
@@ -408,12 +465,17 @@ To test for Duplicate IPs you can ping the suspected address while you turn off 
    }
    ```
 
-- We use the IP from the SMD entry to check to see if something is responding to the IP with ping
+1. (`ncn-mw#`) Ping the IP address from the SMD entry to see if something is responding to it.
 
-   Example:
+   Example command:
 
    ```bash
-   # ping -c 3 10.252.0.78
+   ping -c 3 10.252.0.78
+   ```
+
+   Example output:
+
+   ```text
    PING 10.252.0.78 (10.252.0.78) 56(84) bytes of data.
    64 bytes from 10.252.0.78: icmp_seq=1 ttl=64 time=0.102 ms
    64 bytes from 10.252.0.78: icmp_seq=2 ttl=64 time=0.229 ms
@@ -421,43 +483,45 @@ To test for Duplicate IPs you can ping the suspected address while you turn off 
    --- 10.252.0.78 ping statistics ---
    3 packets transmitted, 3 received, 0% packet loss, time 2054ms
    rtt min/avg/max/mdev = 0.096/0.142/0.229/0.062 ms
-   #
    ```
 
-- If ping comes back with responses, that confirms a device is responding to the IP and we need to set move the DHCP reservation for the device to another IP.
-- We will remove the entry from based on the MAC address(without colons) in the SMD Ethernet Table
+   If ping receives responses, then that confirms that a device is responding to the IP address. In that case, the DHCP reservation for the device must be moved to another IP address.
 
-Example:
+1. (`ncn-mw#`) Remove the entry by its MAC address (without colons) in the SMD Ethernet table.
 
-   ```curl
-   curl -f -X DELETE -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/18c04d13d73c
-   ```
+   Example:
 
-- Wait 5 minutes for HMS discovery to recreate the SMD Ethernet Table entry.
-- Reboot the node and let the node get an IP from DHCP
-- The standard discovery/DHCP/DNS process complete in about 5 minutes
-- This will get the node to boot up till DVS is needed.
-- The next step is follow the DVS node map update in the section "Troubleshoot Node Map IP Change Issues" in Section 7 in "Cray Shasta DVS Administration Guide". Shasta (V1.3) Software Documentation.
+    ```bash
+    curl -f -X DELETE -s -k -H "Authorization: Bearer ${TOKEN}" https://api_gw_service.local/apis/smd/hsm/v1/Inventory/EthernetInterfaces/18c04d13d73c
+    ```
 
-## 3. Network Troubleshooting
+1. Wait five minutes for HMS discovery to recreate the SMD Ethernet table entry.
+
+1. Reboot the node and let the node get an IP address from DHCP.
+
+   The standard discovery/DHCP/DNS process should complete in about 5 minutes.
+   This will get the node to boot up until DVS is needed (if the node is using DVS).
+
+1. If the node is using DVS, follow the DVS node map update procedure.
+
+   See `Troubleshoot Node Map IP Change Issues` in the `Cray Shasta DVS Administration Guide`.
+
+## 3 Network troubleshooting
 
 ### 3.1 Check BGP/MetalLB
 
-Log in to the spine switches and check that MetalLB is peering to the spines via BGP.
+Verify that the Metal Load Balancer (MetalLB) is peering to the spine switches via the Border Gateway Protocol (BGP). The commands in these sections must be
+run on the spine switches themselves.
 
-For **Mellanox** Spine Switches
+#### Mellanox spine switches
 
-   ```bash
+1. (`sw#`) Show the BGP status.
+
+   ```text
    show ip bgp summary
    ```
 
-Example working state: All the neighbors should be in the Established state.
-
-   ```bash
-   show ip bgp summary 
-   ```
-
-   Potential output:
+   All the neighbors should be in the `ESTABLISHED` state, as seen in the following example output:
 
    ```text
    VRF name                  : default
@@ -470,26 +534,28 @@ Example working state: All the neighbors should be in the Established state.
    L2VPN EVPN Prefixes       : 0
 
    ------------------------------------------------------------------------------------------------------------------
-   Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd    
+   Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   Up/Down       State/PfxRcd
    ------------------------------------------------------------------------------------------------------------------
    10.252.0.4        4    65533        465       501       6         0      0      0:03:37:43    ESTABLISHED/28
    10.252.0.5        4    65533        463       501       6         0      0      0:03:36:51    ESTABLISHED/28
    10.252.0.6        4    65533        463       500       6         0      0      0:03:36:39    ESTABLISHED/28
    ```
 
-If the `State/pfxrcd` is `IDLE` you need to restart the BGP process with this command:
+1. (`sw#`) If the `State/PfxRcd` is `IDLE`, then restart the BGP process.
 
-   ```bash
+   ```text
    clear ip bgp all
    ```
 
-Routes to Kea (10.92.100.222) via all workers (in the above 10.252.0.4,5,6) should be available.
+1. (`sw#`) Verify that routes to Kea via all workers are available.
 
-   ```bash
+   Routes to Kea (`10.92.100.222`) via all workers (in the above examples, `10.252.0.4` - `10.252.0.6`) should be available.
+
+   ```text
    show ip route 10.92.100.222
    ```
 
-   Potential output:
+   Example output:
 
    ```text
    Routes:All worker nodes (in the above example 3) should be peered with the spine BGP.
@@ -510,69 +576,72 @@ Routes to Kea (10.92.100.222) via all workers (in the above 10.252.0.4,5,6) shou
      10.92.100.222     255.255.255.255   c        10.252.0.4        vlan2            bgp        200/0   
                                          c        10.252.0.5        vlan2            bgp        200/0   
                                          c        10.252.0.6        vlan2            bgp        200/0
-
    ```
 
-For Aruba Spine Switches
+#### Aruba spine switches
 
-   ```bash
-   show bgp ipv4 u s
-   ```
+(`sw#`) Show BGP status.
 
-   Potential output:
+```text
+show bgp ipv4 u s
+```
 
-   ```text
-   VRF : default
-   BGP Summary
-   -----------
-    Local AS               : 65533        BGP Router Identifier  : 10.252.0.3
-    Peers                  : 4            Log Neighbor Changes   : No
-    Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
-    Confederation Id       : 0
-    
-    Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
-    10.252.0.2      65533       45052   45044   02m:02w:02d  Established   Up
-    10.252.1.7      65533       78389   90090   02m:02w:02d  Established   Up
-    10.252.1.8      65533       78384   90059   02m:02w:02d  Established   Up
-    10.252.1.9      65533       78389   90108   02m:02w:02d  Established   Up
-   ```
+Example output:
+
+```text
+VRF : default
+BGP Summary
+-----------
+ Local AS               : 65533        BGP Router Identifier  : 10.252.0.3
+ Peers                  : 4            Log Neighbor Changes   : No
+ Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
+ Confederation Id       : 0
+ 
+ Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
+ 10.252.0.2      65533       45052   45044   02m:02w:02d  Established   Up
+ 10.252.1.7      65533       78389   90090   02m:02w:02d  Established   Up
+ 10.252.1.8      65533       78384   90059   02m:02w:02d  Established   Up
+ 10.252.1.9      65533       78389   90108   02m:02w:02d  Established   Up
+```
 
 ### 3.2 `tcpdump`
 
-If your host is not getting an IP address you can run a packet capture to see if DHCP traffic is being transmitted.
-On `ncn-w001` or a worker/manager with `kubectl`, run
+If a host is not getting an IP address, then run a packet capture to see if DHCP traffic is being transmitted.
 
-   ```bash
-   tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68
-   ```
+```bash
+tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68
+```
 
-This will make a `.pcap` file named DHCP in your current directory.  It will collect all DHCP traffic on the port you specify, in this example we are looking for DHCP traffic on interface NMN (10.252.0.0/17)
+This will make a `.pcap` file named DHCP in the current directory. It will collect all DHCP traffic on the specified port. In this example, it is looking for DHCP traffic on
+the NMN interface (`10.252.0.0/17`).
 
-To view the DHCP traffic, run:
+View the DHCP traffic:
 
-   ```bash
-   tcpdump -r dhcp.pcap -v -n
-   ```
+```bash
+tcpdump -r dhcp.pcap -v -n
+```
 
-The output may be very long, you may want to use filters.
-If you want to do a `tcpdump` for a certain MAC address you can run:
+The output may be very long, which can be handled by using filters.
+Do a `tcpdump` for a certain MAC address:
 
-   ```bash
-   tcpdump -i eth0 -vvv -s 1500 '((port 67 or port 68) and (udp[38:4] = 0x993b7030))'
-   ```
+```bash
+tcpdump -i eth0 -vvv -s 1500 '((port 67 or port 68) and (udp[38:4] = 0x993b7030))'
+```
 
-This example is using the MAC of `b4:2e:99:3b:70:30` and will show the output on your terminal and not save to a file.
+This example is using the MAC address of `b4:2e:99:3b:70:30`. It will show the output on the terminal and not save to a file.
 
-You can also run a `tcpdump` from the Dell Leaf/CDU switches.
+#### Dell/Leaf CDU switches
 
-Example of `tcpdump` for DHCP traffic on the NMN:
+It is also possible to run `tcpdump` from the Dell Leaf/CDU switches.
 
-   ```bash
+- (`sw#`) Example of `tcpdump` for DHCP traffic on the NMN:
+
+   ```text
    system "sudo tcpdump -enli br2 port 67 or port 68"
    ```
 
-Example of `tcpdump` for DHCP traffic for interface 1/1/4:
+- (`sw#`) Example of `tcpdump` for DHCP traffic for interface `1/1/4`:
 
-   ```bash
+   ```text
    system "sudo tcpdump -enli e101-004-0 port 67 or port 68"
    ```

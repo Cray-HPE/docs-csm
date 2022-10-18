@@ -1,19 +1,18 @@
 # Management Network Upgrade CSM 1.2 to 1.3
 
-- [Management Network Upgrade CSM 1.2 to 1.3](#management-network-upgrade-csm-12-to-13)
-  - [Management Network Changelog](#management-network-changelog)
-  - [When to perform switch upgrades](#when-to-perform-switch-upgrades)
-  - [Prerequisites](#prerequisites)
-  - [Upgrade CANU to the latest version](#upgrade-canu-to-the-latest-version)
-  - [Backup running switch configurations](#backup-running-switch-configurations)
-  - [Retrieve SLS data](#retrieve-sls-data)
-  - [Generate CSM 1.3 switch configurations](#generate-csm-13-switch-configurations)
-  - [Discover CSM 1.2 to CSM 1.3 configuration changes](#discover-csm-12-to-csm-13-configuration-changes)
-  - [Test the network prior to update](#test-the-network-prior-to-update)
-  - [Apply and save the new switch configurations](#apply-and-save-the-new-switch-configurations)
-  - [Test the network after update](#test-the-network-after-update)
+- [Management network changelog](#management-network-changelog)
+- [When to perform switch upgrades](#when-to-perform-switch-upgrades)
+- [Prerequisites](#prerequisites)
+- [Upgrade CANU to the latest version](#upgrade-canu-to-the-latest-version)
+- [Backup running switch configurations](#backup-running-switch-configurations)
+- [Retrieve SLS data](#retrieve-sls-data)
+- [Generate CSM 1.3 switch configurations](#generate-csm-13-switch-configurations)
+- [Discover CSM 1.2 to CSM 1.3 configuration changes](#discover-csm-12-to-csm-13-configuration-changes)
+- [Test the network prior to update](#test-the-network-prior-to-update)
+- [Apply and save the new switch configurations](#apply-and-save-the-new-switch-configurations)
+- [Test the network after update](#test-the-network-after-update)
 
-## Management Network Changelog
+## Management network changelog
 
 CSM 1.3 includes full support for the Bifurcated CAN feature, specifically deployment of user traffic on the high speed network (CHN). Other switch related changes for the release are minimal.
 
@@ -29,18 +28,18 @@ Strict attention to the cut-over sequence will minimize downtime to UAN NCNs.
 
 ## When to perform switch upgrades
 
-At the end of the CSM 1.3 upgrade process or at the end of the process to [migrate](chn_enable.md) from `CAN` to `CHN`.
+At the end of the CSM 1.3 upgrade process or at the end of the process to [migrate](chn_enable.md) from CAN to CHN.
 
 Unlike most upgrades, the CSM 1.2 management network switch configuration changes come at the end of the system upgrade, not at the beginning. This allows the continued operations of services during upgrade.
 Additionally, UAN can be operated normally and any reboot or rebuild operations can be scheduled between between administrators and UAN users.
 
 ## Prerequisites
 
-- **IMPORTANT** If conversion from `CAN` to `CHN` is required, the [SLS update procedure](chn_enable.md) must have been applied prior to running this procedure.
+- **IMPORTANT** If conversion from CAN to CHN is required, the [SLS update procedure](chn_enable.md) must have been applied prior to running this procedure.
 - An up-to-date and validated copy of the system [CCJ/Paddle JSON topology file](https://github.com/Cray-HPE/canu/tree/main#validate-paddle) (preferred), or an up-to-date and validated [SHCD spreadsheet](https://github.com/Cray-HPE/canu/tree/main#validate-shcd).
   - The SHCD should be used as starting data over the CCJ/Paddle file only when node, network or cabling changes have taken place on the system.
   - A correct cabling and network topology must be reflected to ensure working switch configurations.
-- An [up-to-date custom configurations](https://github.com/Cray-HPE/canu/tree/main#generate-switch-configs-including-custom-configurations) `YAML` file to be used in `CANU` switch configuration generation with the `--custom-config` flag.
+- An [up-to-date custom configurations](https://github.com/Cray-HPE/canu/tree/main#generate-switch-configs-including-custom-configurations) YAML file to be used in CANU switch configuration generation with the `--custom-config` flag.
   - These custom configurations are critical to preserve site uplinks and any configurations which extend beyond plan-of-record.
   - This file should have been created during the CSM 1.2 system install or upgrade process and is required to ensure working switch configurations.
 
@@ -72,7 +71,7 @@ Additionally, UAN can be operated normally and any reboot or rebuild operations 
 
 ## Generate CSM 1.3 switch configurations
 
-- (`ncn-m001#`) Use CANU to [generate new switch configurations](https://github.com/Cray-HPE/canu/blob/main/docs/generate_network_config.md).  Shown below is an example using the preferred CCJ/Paddle file.
+- (`ncn-m001#`) Use CANU to [generate new switch configurations](https://github.com/Cray-HPE/canu/blob/main/docs/generate_network_config.md). Shown below is an example using the preferred CCJ/Paddle file.
 
    ```bash
    canu generate network config --csm 1.3 --architecture <full|tds|v1> --ccj <system-ccj.json> --custom-config <system-custom-config.yaml> --folder generated --sls-file sls_input_file.json
@@ -94,28 +93,28 @@ For *each* switch in the system, determine the configuration differences.
 
 ## Test the network prior to update
 
-- (`ncn-m001#`) Test the network **only** during 1.2 to 1.3 upgrades. Otherwise,
+- (`ncn-m001#`) **Only** during 1.2 to 1.3 upgrades.
 
    ```bash
    canu test network --csm 1.2
    ```
 
-- (`ncn-m001#`) Test the network during `CAN` to `CHN` [migration](chn_enable.md).
+- (`ncn-m001#`) During [CAN to CHN migration](chn_enable.md).
 
    ```bash
    canu test network --csm 1.3
    ```
 
-- All tests should `PASS` or have a known and explainable reason for failing.
+- All tests should pass or have a known and explainable reason for failing.
 
 ## Apply and save the new switch configurations
 
-For *each* switch in the system, apply the configuration changes, in two stages:
+For *each* switch in the system, apply the configuration changes in two stages:
 
 1. Apply just the `prefix-list` and `route-maps`.
-2. Apply the remaining configuration.
+1. Apply the remaining configuration.
 
-**Important** In addition to complete `spine`, `leaf` and `leaf-bmc` configurations, CANU now generates Arista edge router configurations required for CSM. These configurations must be applied as well if `CHN` is used.
+**Important** In addition to complete `spine`, `leaf` and `leaf-bmc` configurations, CANU now generates Arista edge router configurations required for CSM. These configurations must be applied as well if CHN is used.
 
 - (`ncn-m001#`) Set the switch configuration version string to be placed in `<CONFIG VERSION STRING>`.
 
@@ -123,7 +122,7 @@ For *each* switch in the system, apply the configuration changes, in two stages:
    echo "CSM_1_3_$(canu --version | tr -d ',' | cut -f 1,3 -d ' ' | tr ' .' '_' | tr '[:lower:]' '[:upper:]')"
    ```
 
-- (`switch#`) Save the configuration.  Replace `<CONFIG VERSION STRING>` with the value shown in the previous step.
+- (`switch#`) Save the configuration. Replace `<CONFIG VERSION STRING>` with the value shown in the previous step.
 
    ```text
    write memory
@@ -138,4 +137,4 @@ For *each* switch in the system, apply the configuration changes, in two stages:
    canu test network --csm 1.3
    ```
 
-   All tests should `PASS` or have a known and explainable reason for failing.
+   All tests should pass or have a known and explainable reason for failing.

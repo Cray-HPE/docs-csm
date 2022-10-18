@@ -1,91 +1,88 @@
 # Enabling Customer High Speed Network Routing
 
-## Overview
-
-- [Enabling Customer High Speed Network Routing](#enabling-customer-high-speed-network-routing)
-  - [Overview](#overview)
-  - [Process overview and warnings](#process-overview-and-warnings)
-  - [Prerequisites](#prerequisites)
-  - [Backup Phase](#backup-phase)
-    - [Preparation](#preparation)
-    - [Create system backups](#create-system-backups)
-  - [Update Phase](#update-phase)
-    - [Disable CFS for UAN](#disable-cfs-for-uan)
-    - [Update SLS](#update-sls)
-    - [Update customizations](#update-customizations)
-    - [Update CSM Service endpoint data (MetalLB)](#update-csm-service-endpoint-data-metallb)
-  - [Migrate Phase](#migrate-phase)
-    - [Migrate NCN workers](#migrate-ncn-workers)
-    - [Migrate CSM Services (MetalLB)](#migrate-csm-services-metallb)
-    - [Migrate UAN](#migrate-uan)
-    - [Minimizing UAN downtime](#minimizing-uan-downtime)
-      - [Enable CFS for UAN](#enable-cfs-for-uan)
-      - [Notify UAN users](#notify-uan-users)
-    - [Migrate UAI](#migrate-uai)
-    - [Migrate Computes (optional)](#migrate-computes-optional)
-      - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
-      - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
-      - [Enable CFS layer](#enable-cfs-layer)
-  - [Cleanup Phase](#cleanup-phase)
-    - [Remove CAN from SLS](#remove-can-from-sls)
-    - [Remove CAN from customizations](#remove-can-from-customizations)
-    - [Remove CAN from BSS](#remove-can-from-bss)
-    - [Remove CAN from CSM services](#remove-can-from-csm-services)
-    - [Remove CAN interfaces from NCNs](#remove-can-interfaces-from-ncns)
-    - [Remove CAN names from NCN hosts file](#remove-can-names-from-ncn-hosts-file)
-  - [Update the management network](#update-the-management-network)
-  - [Testing](#testing)
+- [Process overview and warnings](#process-overview-and-warnings)
+- [Prerequisites](#prerequisites)
+- [Backup phase](#backup-phase)
+  - [Preparation](#preparation)
+  - [Create system backups](#create-system-backups)
+- [Update phase](#update-phase)
+  - [Disable CFS for UAN](#disable-cfs-for-uan)
+  - [Update SLS](#update-sls)
+  - [Update customizations](#update-customizations)
+  - [Update CSM service endpoint data (MetalLB)](#update-csm-service-endpoint-data-metallb)
+- [Migrate phase](#migrate-phase)
+  - [Migrate NCN workers](#migrate-ncn-workers)
+  - [Migrate CSM services (MetalLB)](#migrate-csm-services-metallb)
+  - [Migrate UAN](#migrate-uan)
+  - [Minimizing UAN downtime](#minimizing-uan-downtime)
+    - [Enable CFS for UAN](#enable-cfs-for-uan)
+    - [Notify UAN users](#notify-uan-users)
+  - [Migrate UAI](#migrate-uai)
+  - [Migrate computes (optional)](#migrate-computes-optional)
+    - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
+    - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
+    - [Enable CFS layer](#enable-cfs-layer)
+- [Cleanup phase](#cleanup-phase)
+  - [Remove CAN from SLS](#remove-can-from-sls)
+  - [Remove CAN from customizations](#remove-can-from-customizations)
+  - [Remove CAN from BSS](#remove-can-from-bss)
+  - [Remove CAN from CSM services](#remove-can-from-csm-services)
+  - [Remove CAN interfaces from NCNs](#remove-can-interfaces-from-ncns)
+  - [Remove CAN names from NCN hosts files](#remove-can-names-from-ncn-hosts-files)
+- [Update the management network](#update-the-management-network)
+- [Testing](#testing)
 
 ## Process overview and warnings
 
-**IMPORTANT** This procedure is quite involved and the complexities should be completely understood before beginning.  The procedure is designed to be run after a CSM 1.3 upgrade.  With careful preparation this could be run as part of the CSM 1.3 upgrade.
+**IMPORTANT** This procedure is quite involved and the complexities should be completely understood before beginning. The procedure is designed to be run after a CSM 1.3 upgrade. With careful preparation this could be run as part of the CSM 1.3 upgrade.
 
-The primary objective of this procedure is to move user traffic (users running jobs) from a `CAN` network running over the CSM management network, to a `CHN` network over the Slingshot high speed network, while *minimizing* downtime and outages.
+The primary objective of this procedure is to move user traffic (users running jobs) from a CAN network running over the CSM management network, to a CHN network over the Slingshot high speed network, while *minimizing* downtime and outages.
 
-For safety and flexibility this procedures brings up the `CHN` network while the system remains running on the `CAN`.  Components can the be migrated to the `CHN` in a controlled manner, with minimal interruptions to existing `CAN` operations.
+For safety and flexibility this procedures brings up the CHN network while the system remains running on the CAN. Components can then be migrated to the CHN in a controlled manner, with minimal interruptions to existing CAN operations.
 
 The overall process can be summarized as:
 
 1. Backup phase
    1. Save critical runtime data
-2. Update phase
-   1. Prevent UAN from migrating to the `CHN`
-   2. Add the `CHN` data and configurations while the `CAN` remains as-is
-3. Migrate phase - perform a controlled configuration and migration of components from the `CAN` to the `CHN`
-      1. NCN workers
-      2. CSM services
-      3. UAN
-      4. UAI
-      5. Compute (optional)
-4. Cleanup phase
-   1. Remove the `CAN` from operations and all data sets
-5. Upgrade the management network switch configurations
+1. Update phase
+   1. Prevent UAN from migrating to the CHN
+   1. Add the CHN data and configurations while the CAN remains as-is
+1. Migrate phase - perform a controlled configuration and migration of components from the CAN to the CHN
+   1. NCN workers
+   1. CSM services
+   1. UAN
+   1. UAI
+   1. Compute (optional)
+1. Cleanup phase
+   1. Remove the CAN from operations and all data sets
+1. Upgrade the management network switch configurations
 
 The procedure, to be safe and flexible, is intensive from both the number of steps involved and the amount of system data which needs to be managed.
 However, during the migration phase, ample time and flexibility exists to contact system users as well as reverse the migration.
 
-**Note** that updates to the CSM management network are at the very end of this procedure.  CSM 1.3 network updates consist only of critical bugfixes as well as interface and `ACL` changes. This completes Bifurcated `CAN` transitions begun in CSM 1.2.
+**Note** that updates to the CSM management network are at the very end of this procedure. CSM 1.3 network updates consist only of critical bugfixes as well as interface and `ACL` changes. This completes Bifurcated CAN transitions begun in CSM 1.2.
 
 ## Prerequisites
 
 1. The system must have successfully completed a CSM 1.3 upgrade or be ready for CSM 1.3 upgrade.
    1. [Gateway tests from outside the system](../../../../../operations/validate_csm_health.md#413-gateway-health-tests-from-outside-the-system)
-   2. [UAI creation tests](../../../../../operations/validate_csm_health.md#62-validate-uai-creation)
-   3. [Confirm BGP peering of MetalLB with Edge Routers](../../../../../operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md#check-bgp-status-and-reset-sessions)
-2. [Install the latest CSM 1.3 documentation](../../../../../update_product_stream/README.md#check-for-latest-documentation)
-3. A site-routable IPv4 subnet for the `CHN`.  Minimally this must be sized to accommodate:
-   1. Three IPs for switching, plus
-   2. The number of `NCN` workers on the system, plus
-   3. One IP for the API ingress gateway, plus
-   4. One IP for the `oath2-proxy` service, plus
-   5. The number of `NCN` `UANs` on the system, plus
-   6. The maximum number of `UAIs` required, plus
-   7. IPs for any other services to be brought up dynamically on the `CHN`
-   8. **Note** A `/24` subnet is usually more than sufficient for small-to-medium sized systems with minimal `UAI` requirements.
-4. The Slingshot high speed network is configured and up, including the fabric manager service.  This network is required to transit CHN traffic.
-5. The Slingshot Host Software is installed and configured on NCN Worker nodes.  This is required to expose CHN services.  For the purpose of CHN, the host software creates the (required) primary IPv4 address on `hsn0`, often a `10.253` address.
+   1. [UAI creation tests](../../../../../operations/validate_csm_health.md#62-validate-uai-creation)
+   1. [Confirm BGP peering of MetalLB with Edge Routers](../../../../../operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md#check-bgp-status-and-reset-sessions)
+1. [Install the latest CSM 1.3 documentation](../../../../../update_product_stream/README.md#check-for-latest-documentation)
+1. A site-routable IPv4 subnet for the CHN.
+   - Minimally this must be sized to accommodate all of the following:
+     - Three IP addresses for switching
+     - One IP address for each NCN worker on the system
+     - One IP address for the API ingress gateway
+     - One IP address for the `oath2-proxy` service
+     - One IP address for each NCN UAN on the system
+     - IP addresses for the maximum number of UAIs required
+     - IP addresses for any other services to be brought up dynamically on the CHN
+   - **Note** A `/24` subnet is usually more than sufficient for small-to-medium sized systems with minimal UAI requirements.
+1. The Slingshot high speed network is configured and up, including the fabric manager service. This network is required to transit CHN traffic.
+1. The Slingshot Host Software is installed and configured on NCN Worker nodes. This is required to expose CHN services. For the purpose of CHN, the host software creates the (required) primary IPv4 address on `hsn0`, often a `10.253` IP address.
 
-## Backup Phase
+## Backup phase
 
 ### Preparation
 
@@ -101,7 +98,7 @@ However, during the migration phase, ample time and flexibility exists to contac
    export CLEANUPDIR=${BASEDIR}/cleanup
    ```
 
-2. (`ncn-m001#`) Obtain an API token.
+1. (`ncn-m001#`) Obtain an API token.
 
    ```bash
    export TOKEN=$(curl -s -k -S -d grant_type=client_credentials -d client_id=admin-client \
@@ -111,66 +108,66 @@ However, during the migration phase, ample time and flexibility exists to contac
 
 ### Create system backups
 
-**Recommend** copying and storing all data in ${BACKUPDIR} off-system in a version control repository is highly recommended.
+Copying and storing all data in `${BACKUPDIR}` off-system in a version control repository is **highly recommended**.
 
 1. (`ncn-m001#`) Change to the backup directory.
 
    ```bash
-   cd ${BACKUPDIR}
+   cd "${BACKUPDIR}"
    ```
 
-2. (`ncn-m001#`) Backup running system `SLS` data.
+1. (`ncn-m001#`) Backup running system SLS data.
 
    ```bash
    curl -k -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/sls/v1/dumpstate | jq -S . > sls_input_file.json
    ```
 
-3. (`ncn-m001#`) Backup running system customizations data.
+1. (`ncn-m001#`) Backup running system customizations data.
 
    ```bash
    kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
    ```
 
-4. (`ncn-m001#`) Backup running system MetalLB `ConfigMap` data.
+1. (`ncn-m001#`) Backup running system MetalLB `ConfigMap` data.
 
    ```bash
    kubectl get cm -n metallb-system metallb -o yaml | egrep -v 'creationTimestamp:|resourceVersion:|uid:' > metallb.yaml
    ```
 
-5. (`ncn-m001#`) Backup running system manifest data.
+1. (`ncn-m001#`) Backup running system manifest data.
 
    ```bash
    kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > manifest.yaml
    ```
 
-6. (`ncn-m001#`) Backup running system NCN Personalization data.
+1. (`ncn-m001#`) Backup running system NCN Personalization data.
 
    ```bash
    cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
    ```
 
-7. (`ncn-m001#`) Backup running system BSS data.
+1. (`ncn-m001#`) Backup running system BSS data.
 
    ```bash
    curl -s -X GET -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters | jq . > bss-bootparameters.json
    ```
 
-8. (`ncn-m001#`) Backup system databases (optional).
+1. (`ncn-m001#`) Backup system databases (optional).
 
    ```bash
    TODO: DO WE NEED THIS?
    ```
 
-## Update Phase
-
-**Recommend** copying and storing all data in ${UPDATEDIR} off-system in a version control repository is highly recommended.
+## Update phase
 
 ### Disable CFS for UAN
 
-1. (`ncn-m001#`) Disable CFS changes on UAN to prevent migration to the `CHN`.
+1. (`ncn-m001#`) Disable CFS changes on UAN to prevent migration to the CHN.
 
    ```bash
-   for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do cray cfs components update --enabled false --format json $xname; done
+   for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do
+       cray cfs components update --enabled false --format json "${xname}"
+   done
    ```
 
 ### Update SLS
@@ -178,31 +175,31 @@ However, during the migration phase, ample time and flexibility exists to contac
 1. (`ncn-m001#`) Move to the update directory.
 
    ```bash
-   cd ${UPDATEDIR}
+   cd "${UPDATEDIR}"
    ```
 
-2. (`ncn-m001#`) Set the directory location for the `SLS` `CHN` script
+1. (`ncn-m001#`) Set the directory location for the SLS CHN script.
 
    ```bash
    export SLS_CHN_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/sls
    ```
 
-3. (`ncn-m001#`) Add `CHN` to `SLS` data.
+1. (`ncn-m001#`) Add CHN to SLS data.
 
    ```bash
-   ${SLS_CHN_DIR}/sls_can_to_chn.py --sls-input-file ${BACKUPDIR}/sls_input_file.json \
+   "${SLS_CHN_DIR}/sls_can_to_chn.py" --sls-input-file "${BACKUPDIR}/sls_input_file.json" \
       --customer-highspeed-network <CHN VLAN> <CHN IPv4 Subnet> \
       --number-of-chn-edge-switches <number of edge switches> \
-      --sls-output-file ${UPDATEDIR}/sls_file_with_chn.json
+      --sls-output-file "${UPDATEDIR}/sls_file_with_chn.json"
    ```
 
    where:
 
-      - `<CHN VLAN>` is the "stub" `VLAN` for the `CHN`.  This is currently used only on the edge switches in access mode, not a trunk through the high speed network.
-      - `<CHN IPv4 Subnet>` is the pre-requisite site-routable IPv4 subnet for the `CHN`.
+      - `<CHN VLAN>` is the "stub" VLAN for the CHN. This is currently used only on the edge switches in access mode, not a trunk through the high speed network.
+      - `<CHN IPv4 Subnet>` is the pre-requisite site-routable IPv4 subnet for the CHN.
       - `<number of edge switches>` is typically 2 Arista or Aruba switches, but some pre-production systems have 1.
 
-4. (`ncn-m001#`) Upload data to `SLS`.
+1. (`ncn-m001#`) Upload data to SLS.
 
    ```bash
    curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F "sls_dump=@${UPDATEDIR}/sls_file_with_chn.json"
@@ -215,61 +212,67 @@ Add CHN to `customizations.yaml`
 1. (`ncn-m001#`) Move to the update directory.
 
    ```bash
-   cd ${UPDATEDIR}
+   cd "${UPDATEDIR}"
    ```
 
-2. (`ncn-m001#`) Set the directory location for the customizations script to add `CHN`.
+1. (`ncn-m001#`) Set the directory location for the customizations script to add CHN.
 
    ```bash
    export CUSTOMIZATIONS_SCRIPT_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/util
    ```
 
-3. (`ncn-m001#`) Create updated `customizations.yaml` against updated `SLS`.
+1. (`ncn-m001#`) Create updated `customizations.yaml` against updated SLS.
 
    ```bash
-   ${CUSTOMIZATIONS_SCRIPT_DIR}/update-customizations-network.sh ${BACKUPDIR}/customizations.yaml > ${UPDATEDIR}/customizations.yaml
-   yq validate ${UPDATEDIR}/customizations.yaml
+   "${CUSTOMIZATIONS_SCRIPT_DIR}/update-customizations-network.sh" "${BACKUPDIR}/customizations.yaml" > "${UPDATEDIR}/customizations.yaml"
+   yq validate "${UPDATEDIR}/customizations.yaml"
    ```
 
-   **Important** If the updated `customizations.yaml` file is empty or not valid `YAML`, do not proceed.  Debug in place.
+   **Important** If the updated `customizations.yaml` file is empty or not valid YAML, do not proceed. Instead, stop and debug.
 
-4. (`ncn-m001#`) Upload new `customizations.yaml` to ensure changes persist across updates
+1. (`ncn-m001#`) Upload new `customizations.yaml`.
+
+   This ensures that changes persist across updates.
 
    ```bash
    kubectl delete secret -n loftsman site-init
-   kubectl create secret -n loftsman generic site-init --from-file=${UPDATEDIR}/customizations.yaml
+   kubectl create secret -n loftsman generic site-init --from-file="${UPDATEDIR}/customizations.yaml"
    ```
 
-### Update CSM Service endpoint data (MetalLB)
+### Update CSM service endpoint data (MetalLB)
 
-1. (`ncn-m001#`) Create new MetalLB configuration map from updated customizations data.  The new ConfigMap will not be applied in the update phase as this would change service endpoints earlier than desired.
+1. (`ncn-m001#`) Create new MetalLB configuration map from updated customizations data.
+
+   The new ConfigMap will not be applied in the update phase because this would change service endpoints earlier than desired.
 
    ```bash
-    yq r ${UPDATEDIR}/customizations.yaml 'spec.network.metallb' |
-    yq p - 'data.config.' |
-    sed 's/config\:/config\:\ \|/' |
-    yq m - ${BACKUPDIR}/metallb.yaml > ${UPDATEDIR}/metallb.yaml
+    yq r "${UPDATEDIR}/customizations.yaml" 'spec.network.metallb' |
+        yq p - 'data.config.' |
+        sed 's/config\:/config\:\ \|/' |
+        yq m - "${BACKUPDIR}/metallb.yaml" > "${UPDATEDIR}/metallb.yaml"
    ```
 
-## Migrate Phase
+## Migrate phase
 
 ### Migrate NCN workers
 
 1. (`ncn-m001#`) Change to updates directory
 
    ```bash
-   cd ${UPDATEDIR}
+   cd "${UPDATEDIR}"
    ```
 
-2. (`ncn-m001#`) Ensure SHS is active by testing if there is an `HSN` IP address (typically `10.253`) on the `hsn0` interfaces.  If there is not primary address on the `hsn0` interface this must be fixed before proceeding;
+1. (`ncn-m001#`) Ensure that SHS is active by testing if there is an HSN IP address (typically `10.253`) on the `hsn0` interfaces.
+
+   If there is not a primary address on the `hsn0` interface, then this must be fixed before proceeding.
 
    ```bash
    pdsh -w ncn-w[$(printf "%03d-%03d" 1 $(egrep 'ncn-w...\.nmn' /etc/hosts | wc -l))] ip address list dev hsn0
    ```
 
-   **NOTE** If some interfaces have an `HSN` address and others do not, this is typically indicative that SHS installed on the image is failing.  This must be resolved before proceeding.
+   **NOTE** If some interfaces have an HSN address and others do not, then this typically indicates that SHS install is failing. This must be resolved before proceeding.
 
-3. Determine the CFS configuration in use on the worker nodes.
+1. Determine the CFS configuration in use on the worker nodes.
 
    1. (`ncn#`) Identify the all worker nodes.
 
@@ -286,7 +289,7 @@ Add CHN to `customizations.yaml`
       x3000c0s7b0n0
       ```
 
-   2. (`ncn#`) Identify CFS configuration in use by running the following for each of the the worker nodes identified above.
+   1. (`ncn#`) Identify CFS configuration in use by running the following for each of the the worker nodes identified above.
 
       ```bash
       cray cfs components describe --format toml x3000c0s4b0n0
@@ -302,15 +305,15 @@ Add CHN to `customizations.yaml`
       id = "x3000c0s4b0n0"
       ```
 
-      **Note** Errors or failed CFS personalization runs may be fixed via the following process as CFS will be re-run. Likely though, it's better to take a few minutes to troubleshoot the current issue.
+      **Note** Errors or failed CFS personalization runs may be fixed via the following process, because CFS will be re-run. However, it is better to take time now to troubleshoot the current issue.
 
-4. (`ncn#`) Extract the CFS configuration.
+1. (`ncn#`) Extract the CFS configuration.
 
    ```bash
    cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
    ```
 
-   The resulting output file should look similar to this. Installed products, versions, and commit hashes will vary. **Note** This is an example and should not be pasted directly into your working configuration.
+   The resulting output file should look similar to this. Installed products, versions, and commit hashes will vary. **Note** This is an example and should not be used directly as-is.
 
    ```json
    {
@@ -349,7 +352,9 @@ Add CHN to `customizations.yaml`
    }
    ```
 
-5. Edit the extracted file. Copy the existing CSM layer and create an new layer to run the `enable_chn.yml` playbook.  The original CSM layer should still exist after this operation as well as the new layer.
+1. Edit the extracted file.
+
+   Copy the existing CSM layer and create a new layer to run the `enable_chn.yml` playbook. The original CSM layer should still exist after this operation as well as the new layer.
 
    **Note** this is a an example and should not be copied into the running configuration.
 
@@ -362,9 +367,10 @@ Add CHN to `customizations.yaml`
    }
    ```
 
-   **Important:** This new layer *must* run after the COS `ncn-final.yml` layers, otherwise the HSN interfaces will not be configured correctly and this playbook will fail.  Typically at the end of the list is okay.
+   **Important:** This new layer *must* run after the COS `ncn-final.yml` layers, otherwise the HSN interfaces will not be configured correctly and this playbook will fail.
+   Typically, placing the new layer at the end of the list is okay.
 
-6. (`ncn#`) Update the NCN personalization configuration.
+1. (`ncn#`) Update the NCN personalization configuration.
 
    ```bash
    cray cfs configurations update ncn-personalization --file ncn-personalization.json --format toml
@@ -412,7 +418,7 @@ Add CHN to `customizations.yaml`
    playbook = "enable_chn.yml"
    ```
 
-7. (`ncn#`) Check that NCN personalization runs and completes successfully on all worker nodes.
+1. (`ncn#`) Check that NCN personalization runs and completes successfully on all worker nodes.
 
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command for all worker xnames to verify this has occurred.
 
@@ -435,25 +441,25 @@ Add CHN to `customizations.yaml`
 
    `configurationStatus` should change from `pending` to `configured` once NCN personalization completes successfully.
 
-For more information on managing NCN personalization, see [Perform NCN Personalization](../../../../../operations/CSM_product_management/Perform_NCN_Personalization.md).
+For more information on managing NCN personalization, see [Perform NCN Personalization](../../../../CSM_product_management/Perform_NCN_Personalization.md).
 
-### Migrate CSM Services (MetalLB)
+### Migrate CSM services (MetalLB)
 
-**Note** this will activate `CHN` service endpoints and deactivate CAN endpoints.
+**Note** this will activate CHN service endpoints and deactivate CAN endpoints.
 
 1. (`ncn-m001#`) Change to updates directory.
 
    ```bash
-   cd ${UPDATEDIR}
+   cd "${UPDATEDIR}"
    ```
 
-2. (`ncn-m001#`) Apply MetalLB configuration map with `CHN` data to the system.
+1. (`ncn-m001#`) Apply MetalLB configuration map with CHN data to the system.
 
    ```bash
-    kubectl apply -f ${UPDATEDIR}/metallb.yaml 
+   kubectl apply -f ${UPDATEDIR}/metallb.yaml 
    ```
 
-3. (`ncn-m001#`) Reload MetalLB with `CHN` data to activate new services.
+1. (`ncn-m001#`) Reload MetalLB with CHN data to activate new services.
 
    ```bash
    kubectl rollout restart deployments -n metallb-system metallb-controller
@@ -467,84 +473,87 @@ UANs running before and during an upgrade to CSM 1.2 will continue running with 
 
 The time frame over which the transition can be scheduled is quite large and the transition requires only that UAN users log out of the UAN (over the old IPv4 address) and log back in (over a new IPv4 address).
 
-Administrators should enable CFS for UAN, ensure plays run successfully and then notify users to migrate by logging out of the UAN over the `CAN` and back in over the `CHN`.
+Administrators should enable CFS for UAN, ensure plays run successfully and then notify users to migrate by logging out of the UAN over the CAN and back in over the CHN.
 
 #### Enable CFS for UAN
 
 1. (`ncn-m001#`) Enable CFS changes on UAN.
 
    ```bash
-   for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do cray cfs components update --enabled true --state "[]" --format json $xname; done
+   for xname in $(cray hsm state components list --role Application --subrole UAN --type Node --format json | jq -r .Components[].ID) ; do
+      cray cfs components update --enabled true --state "[]" --format json "${xname}"
+   done
    ```
 
-1. Reboot UANs.  When the UAN comes back up it should now have the CHN interface and updated default route configured.
+1. Reboot UANs.
 
-(`uan01#`) Verify default route configuration
+   When the UAN comes back up it should now have the CHN interface and updated default route configured.
 
-```bash
-ip r show default
-default via 10.103.11.193 dev hsn0
-```
+   1. (`uan#`) Verify default route configuration.
 
-Example output
+      ```bash
+      ip r show default
+      ```
 
-```bash
-default via 10.103.11.193 dev hsn0
-```
+      Example output
 
-(`uan01#`) Verify `hsn0` interface configuration
+      ```text
+      default via 10.103.11.193 dev hsn0
+      ```
 
-```bash
-ip a show hsn0
-```
+   1. (`uan#`) Verify `hsn0` interface configuration.
 
-Example output
+      ```bash
+      ip a show hsn0
+      ```
 
-```bash
-6: hsn0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
-    link/ether 02:00:00:00:00:07 brd ff:ff:ff:ff:ff:ff permaddr ec:0d:9a:c1:b4:30
-    altname enp3s0np0
-    altname ens2np0
-    inet 10.253.0.9/16 scope global hsn0
-       valid_lft forever preferred_lft forever
-    inet 10.103.11.200/26 scope global hsn0
-       valid_lft forever preferred_lft forever
-    inet6 fe80::ff:fe00:7/64 scope link 
-       valid_lft forever preferred_lft forever
-```
+      Example output
+
+      ```text
+      6: hsn0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
+          link/ether 02:00:00:00:00:07 brd ff:ff:ff:ff:ff:ff permaddr ec:0d:9a:c1:b4:30
+          altname enp3s0np0
+          altname ens2np0
+          inet 10.253.0.9/16 scope global hsn0
+             valid_lft forever preferred_lft forever
+          inet 10.103.11.200/26 scope global hsn0
+             valid_lft forever preferred_lft forever
+          inet6 fe80::ff:fe00:7/64 scope link 
+             valid_lft forever preferred_lft forever
+      ```
 
 #### Notify UAN users
 
-Notify users to log out of the UAN over the `CAN` and back in over the `CHN`.  The old `CAN` interface is removed during UAN rebuild, but access over the `CAN` will be removed during the [management network upgrade](#update-the-management-network).
+Notify users to log out of the UAN over the CAN and back in over the CHN. The old CAN interface is removed during UAN rebuild, but access over the CAN will be removed during the [management network upgrade](#update-the-management-network).
 
 ### Migrate UAI
 
 Newly created User Access Instances (UAI) will use the network configured as the `SystemDefaultRoute` in the SLS BICAN network structure.
 
-Existing UAIs will continue to use the network that was set when it was created.  Users with existing UAI will need to recreate their instances before the `CAN` network is removed from workers and the management network switches in the cleanup phase below.
+Existing UAIs will continue to use the network that was set when it was created. Users with existing UAI will need to recreate their instances before the CAN network is removed from workers and the management network switches in the cleanup phase below.
 
-### Migrate Computes (optional)
+### Migrate computes (optional)
 
-**Important** This part of the procedure is needed only if all compute nodes will have a `CHN` IPv4 address.  The `CHN` subnet must be large enough to hold *all* compute nodes in the system. The same UAN CFS configuration is used for computes.
+**Important** This part of the procedure is needed only if all compute nodes will have a CHN IPv4 address. The CHN subnet must be large enough to hold *all* compute nodes in the system. The same UAN CFS configuration is used for computes.
 
 #### Add compute IP addresses to CHN SLS data
 
-1. (`ncn-m001#`) Change to updates directory
+1. (`ncn-m001#`) Change to updates directory.
 
    ```bash
-   cd ${UPDATEDIR}
+   cd "${UPDATEDIR}"
    ```
 
-2. (`ncn-m001#`) Process the SLS file:
+1. (`ncn-m001#`) Process the SLS file.
 
    ```bash
    DOCDIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/sls
-   ${DOCDIR}/add_computes_to_chn.py --sls-input-file ${UPDATEDIR}/sls_file_with_chn.json --sls-output-file ${UPDATEDIR}/sls_file_with_chn_and_computes.json
+   "${DOCDIR}/add_computes_to_chn.py" --sls-input-file "${UPDATEDIR}/sls_file_with_chn.json" --sls-output-file "${UPDATEDIR}/sls_file_with_chn_and_computes.json"
    ```
 
 #### Upload migrated SLS file to SLS service
 
-(`ncn-m001#`) If the following command does not complete successfully, check if the `TOKEN` environment variable is set correctly.
+(`ncn-m001#`) If the following command does not complete successfully, then check if the `TOKEN` environment variable is set correctly.
 
    ```bash
    curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F "sls_dump=@${UPDATEDIR}/sls_file_with_chn_and_computes.json"
@@ -552,15 +561,17 @@ Existing UAIs will continue to use the network that was set when it was created.
 
 #### Enable CFS layer
 
-`CHN` network configuration of compute nodes is performed by the UAN CFS configuration layer. This procedure describes how to identify the UAN layer and add it to the compute node configuration.
+CHN network configuration of compute nodes is performed by the UAN CFS configuration layer. This procedure describes how to identify the UAN layer and add it to the compute node configuration.
 
-1. (`ncn-m001#`) Enable CFS changes on Computes.
+1. (`ncn-m001#`) Enable CFS changes on compute nodes.
 
    ```bash
-   for xname in $(cray hsm state components list --role Compute --type Node --format json | jq -r .Components[].ID) ; do cray cfs components update --enabled true --state "[]" --format json $xname; done
+   for xname in $(cray hsm state components list --role Compute --type Node --format json | jq -r .Components[].ID) ; do
+      cray cfs components update --enabled true --state "[]" --format json "${xname}"
+   done
    ```
 
-1. Determine the CFS configuration in use on the compute nodes.
+1. Determine the CFS configuration that is currently in use on the compute nodes.
 
    1. (`ncn-m001#`) Identify the compute nodes.
 
@@ -577,7 +588,7 @@ Existing UAIs will continue to use the network that was set when it was created.
       x1000c5s0b0n1
       ```
 
-   2. (`ncn-m001#`) Identify CFS configuration in use on the compute nodes.
+   1. (`ncn-m001#`) Identify the CFS configuration in use on the compute nodes.
 
       ```bash
       cray cfs components describe --format toml x1000c5s1b0n1
@@ -593,10 +604,10 @@ Existing UAIs will continue to use the network that was set when it was created.
       id = "x1000c5s1b0n1"
       ```
 
-   3. (`ncn-m001#`) Extract the CFS configuration.
+   1. (`ncn-m001#`) Extract the CFS configuration.
 
       ```bash
-      cray cfs configurations describe cos-config-full-2.3-integration --format json | jq 'del(.lastUpdated) | del(.name)' > ${UPDATEDIR}/cos-config-full-2.3-integration.json
+      cray cfs configurations describe cos-config-full-2.3-integration --format json | jq 'del(.lastUpdated) | del(.name)' > "${UPDATEDIR}/cos-config-full-2.3-integration.json"
       ```
 
 1. Identify the UAN CFS configuration.
@@ -604,7 +615,7 @@ Existing UAIs will continue to use the network that was set when it was created.
    1. (`ncn-m001#`) Identify the UAN nodes.
 
       ```bash
-      cray hsm state components list --role Application --subrole UAN --format    json | jq -r '.Components[] | .ID'
+      cray hsm state components list --role Application --subrole UAN --format json | jq -r '.Components[] | .ID'
       ```
 
       Example output:
@@ -615,7 +626,7 @@ Existing UAIs will continue to use the network that was set when it was created.
       x3000c0s15b0n0
       ```
 
-   2. (`ncn-m001#`) Identify the UAN CFS configuration in use.
+   1. (`ncn-m001#`) Identify the CFS configuration currently in use for the UANs.
 
       ```bash
       cray cfs components describe --format toml x3000c0s25b0n0
@@ -631,7 +642,7 @@ Existing UAIs will continue to use the network that was set when it was created.
       id = "x3000c0s25b0n0"
       ```
 
-   3. (`ncn-m001#`) Identify the UAN CFS configuration layer.
+   1. (`ncn-m001#`) Identify the UAN CFS configuration layer.
 
       ```bash
       cray cfs configurations describe chn-uan-cn --format json
@@ -654,12 +665,12 @@ Existing UAIs will continue to use the network that was set when it was created.
       }
       ```
 
-1. Edit the extracted compute node configuration and add the UAN layer to it.
+1. Edit the JSON file with the extracted compute node configuration and add the UAN layer to it.
 
 1. (`ncn-m001#`) Update the compute node CFS configuration.
 
    ```bash
-   cray cfs configurations update cos-config-full-2.3-integration --file ${UPDATEDIR}/cos-config-full-2.3-integration.json --format toml
+   cray cfs configurations update cos-config-full-2.3-integration --file "${UPDATEDIR}/cos-config-full-2.3-integration.json" --format toml
    ```
 
    Example output:
@@ -728,7 +739,7 @@ Existing UAIs will continue to use the network that was set when it was created.
    playbook = "site.yml"
    ```
 
-1. (`ncn-m001#`) Check that CFS configuration of the compute node completes successfully.
+1. (`ncn-m001#`) Check that the CFS configuration of the compute node completes successfully.
 
    Updating the CFS configuration will cause CFS to schedule the nodes for configuration. Run the following command to verify this has occurred.
 
@@ -751,21 +762,21 @@ Existing UAIs will continue to use the network that was set when it was created.
 
    `configurationStatus` should change from `pending` to `configured` once CFS configuration of the node is complete.
 
-For more information on managing node with CFS, see the [Configuration Management](../../../../../README.md#configuration-management) documentation.
+For more information on managing node with CFS, see [Configuration Management](../../../../../README.md#configuration-management).
 
-## Cleanup Phase
+## Cleanup phase
 
-**Recommend** copying and storing all data in the ${CLEANUPDIR} off-system in a version control repository is highly recommended.
+Copying and storing all data in the ${CLEANUPDIR} off-system in a version control repository is **highly recommended**.
 
 ### Remove CAN from SLS
 
 1. (`ncn-m001#`) Move to the update directory.
 
    ```bash
-   cd ${CLEANUPDIR}
+   cd "${CLEANUPDIR}"
    ```
 
-2. (`ncn-m001#`) Set the directory location for the `SLS` `CHN` script and `SLS` file.
+1. (`ncn-m001#`) Set the directory location for the SLS CHN script and SLS file.
 
    ```bash
    export SLS_CHN_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/sls
@@ -774,15 +785,15 @@ For more information on managing node with CFS, see the [Configuration Managemen
       export SLS_CHN_FILE=${UPDATEDIR}/sls_file_with_chn.json
    ```
 
-3. (`ncn-m001#`) Remove `CAN` from `SLS` data.
+1. (`ncn-m001#`) Remove CAN from SLS data.
 
    ```bash
-   ${SLS_CHN_DIR}/sls_del_can.py \
-      --sls-input-file ${SLS_CHN_FILE} \
-      --sls-output-file ${CLEANUPDIR}/sls_file_without_can.json
+   "${SLS_CHN_DIR}/sls_del_can.py" \
+      --sls-input-file "${SLS_CHN_FILE}" \
+      --sls-output-file "${CLEANUPDIR}/sls_file_without_can.json"
    ```
 
-4. (`ncn-m001#`) Upload data to `SLS`.
+1. (`ncn-m001#`) Upload data to SLS.
 
    ```bash
    curl --fail -H "Authorization: Bearer ${TOKEN}" -k -L -X POST 'https://api-gw-service-nmn.local/apis/sls/v1/loadstate' -F "sls_dump=@${CLEANUPDIR}/sls_file_without_can.json"
@@ -793,29 +804,31 @@ For more information on managing node with CFS, see the [Configuration Managemen
 1. (`ncn-m001#`) Move to the cleanup directory.
 
    ```bash
-   cd ${CLEANUPDIR}
+   cd "${CLEANUPDIR}"
    ```
 
-2. (`ncn-m001#`) Set the directory location for the customizations script to remove `CAN`.
+1. (`ncn-m001#`) Set the directory location for the customizations script to remove CAN.
 
    ```bash
    export CUSTOMIZATIONS_SCRIPT_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/util
    ```
 
-3. (`ncn-m001#`) Remove `CAN` from `customizations.yaml`.
+1. (`ncn-m001#`) Remove CAN from `customizations.yaml`.
 
    ```bash
-   ${CUSTOMIZATIONS_SCRIPT_DIR}/update-customizations-network.sh ${UPDATEDIR}/customizations.yaml > ${CLEANUPDIR}/customizations.yaml
-   yq validate ${CLEANUPDIR}/customizations.yaml
+   "${CUSTOMIZATIONS_SCRIPT_DIR}/update-customizations-network.sh" "${UPDATEDIR}/customizations.yaml" > "${CLEANUPDIR}/customizations.yaml"
+   yq validate "${CLEANUPDIR}/customizations.yaml"
    ```
 
-   **Important** If the updated `customizations.yaml` file is empty or not valid `YAML`, do not proceed.  Debug in place.
+   **Important** If the updated `customizations.yaml` file is empty or not valid YAML, then do not proceed. Instead, stop and debug.
 
-4. (`ncn-m001#`) Upload new `customizations.yaml` to ensure changes persist across updates
+1. (`ncn-m001#`) Upload new `customizations.yaml`.
+
+   This ensures that changes persist across updates.
 
    ```bash
    kubectl delete secret -n loftsman site-init
-   kubectl create secret -n loftsman generic site-init --from-file=${CLEANUPDIR}/customizations.yaml
+   kubectl create secret -n loftsman generic site-init "--from-file=${CLEANUPDIR}/customizations.yaml"
    ```
 
 ### Remove CAN from BSS
@@ -823,47 +836,47 @@ For more information on managing node with CFS, see the [Configuration Managemen
 1. (`ncn-m001#`) Move to the cleanup directory.
 
    ```bash
-   cd ${CLEANUPDIR}
+   cd "${CLEANUPDIR}"
    ```
 
-2. (`ncn-m001#`) Set the directory location for the `BSS` `CHN` script.
+1. (`ncn-m001#`) Set the directory location for the BSS CHN script.
 
    ```bash
-      export BSS_CAN_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/bss
+   export BSS_CAN_DIR=/usr/share/doc/csm/operations/network/customer_accessible_networks/can_to_chn/scripts/bss
    ```
 
-3. (`ncn-m001#`) Remove `CAN` from `BSS` data.
+1. (`ncn-m001#`) Remove CAN from BSS data.
 
    ```bash
-   ${BSS_CAN_DIR}/bss_remove_can.py --bss-input-file ${BACKUPDIR}/bss-bootparameters.json --bss-output-file ${CLEANUPDIR}/bss-ouput-chn.json
+   "${BSS_CAN_DIR}/bss_remove_can.py" --bss-input-file "${BACKUPDIR}/bss-bootparameters.json" --bss-output-file "${CLEANUPDIR}/bss-output-chn.json"
    ```
 
-4. (`ncn-m001#`) Upload data to `BSS`.
+1. (`ncn-m001#`) Upload data to BSS.
 
    ```bash
-   ${BSS_CAN_DIR}/post-bootparameters.sh -u https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters -f ${CLEANUPDIR}/bss-ouput-chn.json
+   "${BSS_CAN_DIR}/post-bootparameters.sh" -u https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters -f "${CLEANUPDIR}/bss-output-chn.json"
    ```
 
 ### Remove CAN from CSM services
 
-**Note** this will remove `CAN` service endpoints in Kubernetes.
+**Note** this will remove CAN service endpoints in Kubernetes.
 
 1. (`ncn-m001#`) Create new MetalLB configuration map from updated customizations data.
 
    ```bash
-    yq r ${CLEANUPDIR}/customizations.yaml 'spec.network.metallb' |
-    yq p - 'data.config.' |
-    sed 's/config\:/config\:\ \|/' |
-    yq m - ${UPDATEDIR}/metallb.yaml > ${CLEANUPDIR}/metallb.yaml
+   yq r "${CLEANUPDIR}/customizations.yaml" 'spec.network.metallb' |
+      yq p - 'data.config.' |
+      sed 's/config\:/config\:\ \|/' |
+      yq m - "${UPDATEDIR}/metallb.yaml" > "${CLEANUPDIR}/metallb.yaml"
    ```
 
-2. (`ncn-m001#`) Apply MetalLB configuration map with `CHN` data to the system.
+1. (`ncn-m001#`) Apply MetalLB configuration map with CHN data to the system.
 
    ```bash
-    kubectl apply -f ${CLEANUPDIR}/metallb.yaml 
+   kubectl apply -f "${CLEANUPDIR}/metallb.yaml"
    ```
 
-3. (`ncn-m001#`) Reload MetalLB without `CAN` data to remove `CAN` services.
+1. (`ncn-m001#`) Reload MetalLB without CAN data to remove CAN services.
 
    ```bash
    kubectl rollout restart deployments -n metallb-system metallb-controller
@@ -871,7 +884,7 @@ For more information on managing node with CFS, see the [Configuration Managemen
 
 ### Remove CAN interfaces from NCNs
 
-1. (`ncn-m001#`) Remove `CAN` interfaces from NCN master, worker and storage nodes.
+1. (`ncn-m001#`) Remove CAN interfaces from NCN master, worker, and storage nodes.
 
    ```bash
    pdsh -w $(grep -oP 'ncn-[mws]\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
@@ -879,9 +892,9 @@ For more information on managing node with CFS, see the [Configuration Managemen
                       wicked ifdown bond0.can0'
    ```
 
-### Remove CAN names from NCN hosts file
+### Remove CAN names from NCN hosts files
 
-1. (`ncn-m001#`) Remove `CAN` names from host files.
+1. (`ncn-m001#`) Remove CAN names from host files on NCN master, worker, and storage nodes.
 
    ```bash
    pdsh -w $(grep -oP 'ncn-[mws]\d+' /etc/hosts | sort -u |  tr -t '\n' ',') \
@@ -894,8 +907,8 @@ Follow the process outlined in [update the management network from CSM 1.2 to CS
 
 ## Testing
 
-The following tests should be run to confirm that the system is operating correctly on the `CHN`.
+The following tests should be run to confirm that the system is operating correctly on the CHN.
 
-1. [Gateway tests from outside the system](../../../../../operations/validate_csm_health.md#413-gateway-health-tests-from-outside-the-system)
-2. [UAI creation tests](../../../../../operations/validate_csm_health.md#62-validate-uai-creation)
-3. [Confirm BGP peering of MetalLB with Edge Routers](../../../../../operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md#check-bgp-status-and-reset-sessions)
+1. [Gateway tests from outside the system](../../../../validate_csm_health.md#413-gateway-health-tests-from-outside-the-system)
+1. [UAI creation tests](../../../../validate_csm_health.md#62-validate-uai-creation)
+1. [Confirm BGP peering of MetalLB with Edge Routers](../../../metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md#check-bgp-status-and-reset-sessions)

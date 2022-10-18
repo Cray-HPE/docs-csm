@@ -2,11 +2,11 @@
 
 ## Summary
 
-In a typical CHN configuration BGP peering is done over the CHN.  This means that the BGP control plane packets are sent over the High speed network on the CHN.  In some cases, admins may want to use the CMN as the BGP control plane.
+In a typical CHN configuration BGP peering is done over the CHN. This means that the BGP control plane packets are sent over the High speed network on the CHN. In some cases, administrators may want to use the CMN as the BGP control plane.
 
-The following example shows how to move the BGP control plane from the CHN to the CMN.  Currently, the MetalLB configuration will not persist through CSM upgrades.
+The following example shows how to move the BGP control plane from the CHN to the CMN. Currently, the MetalLB configuration will not persist through CSM upgrades.
 
-### Edge Router Configuration
+## Edge router configuration
 
 CANU `1.6.21` can generate this configuration for Arista Edge Routers.
 
@@ -19,25 +19,30 @@ canu generate network config --csm 1.3 --ccj ./ccj.json --sls-file ./sls_input_f
 ```
 
 - Remove existing BGP configuration and route-maps related to BI-CAN.
-- Loopback addresses of the edge switches can be changed if needed.  This will require updating the BGP configuration.
+- Loopback addresses of the edge switches can be changed if needed. This will require updating the BGP configuration.
 - Once you generate the configuration you can simply copy/paste the configuration onto the Edge Switches.
-- Verify BGP sessions are established
+- (`sw#`) Verify BGP sessions are established
 
-```code
-sw-edge-001(config-router-bgp)#show ip bgp summary
-BGP summary information for VRF default
-Router identifier 10.2.1.194, local AS number 65533
-Neighbor Status Codes: m - Under maintenance
-  Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
-  10.2.1.195       4  65533             41        42    0    0 00:00:12 Estab   0      0
-  10.103.11.22     4  65530             49        33    0    0 00:00:31 Estab   17     3
-  10.103.11.23     4  65530             51        34    0    0 00:00:31 Estab   19     3
-  10.103.11.24     4  65530             49        34    0    0 00:00:31 Estab   17     3
-```
+   ```text
+   show ip bgp summary
+   ```
 
-example configuration of `sw-edge-001` generated from CANU using the `--bgp-control-plane cmn` feature flag.
+   Example output:
 
-```code
+   ```text
+   BGP summary information for VRF default
+   Router identifier 10.2.1.194, local AS number 65533
+   Neighbor Status Codes: m - Under maintenance
+     Neighbor         V  AS           MsgRcvd   MsgSent  InQ OutQ  Up/Down State   PfxRcd PfxAcc
+     10.2.1.195       4  65533             41        42    0    0 00:00:12 Estab   0      0
+     10.103.11.22     4  65530             49        33    0    0 00:00:31 Estab   17     3
+     10.103.11.23     4  65530             51        34    0    0 00:00:31 Estab   19     3
+     10.103.11.24     4  65530             49        34    0    0 00:00:31 Estab   17     3
+   ```
+
+Example configuration of `sw-edge-001` generated from CANU using the `--bgp-control-plane cmn` feature flag.
+
+```text
 route-map ncn-w001-CHN permit 10
    match ip address prefix-list HSN
    set ip next-hop 10.103.11.199
@@ -86,17 +91,17 @@ router bgp 65533
       neighbor 10.103.11.24 activate
 ```
 
-### Configure MetalLB
+## Configure MetalLB
 
 1. (`ncn-m001#`) Backup running system MetalLB `ConfigMap` data.
 
-   ```bash
-    kubectl get cm -n metallb-system metallb -o yaml | egrep -v 'creationTimestamp:|resourceVersion:|uid:' | tee metallb.yaml > metallb_bak.yaml
-   ```
-
-    - The output of the file should be similar to the following.
-
     ```bash
+    kubectl get cm -n metallb-system metallb -o yaml | egrep -v 'creationTimestamp:|resourceVersion:|uid:' | tee metallb.yaml > metallb_bak.yaml
+    ```
+
+    The contents of the file should be similar to the following:
+
+    ```yaml
     apiVersion: v1
     data:
     config: |
@@ -146,15 +151,15 @@ router bgp 65533
             - 10.92.100.0/24
     ```
 
-1. Edit the CHN peer addresses.
+1. Edit the CHN peer IP addresses.
 
-    - The peer addresses should be changed to a loopback address from each edge switch.
+    - The peer IP addresses should be changed to a loopback address from each edge switch.
       - These addresses are generated from CANU, however they can be changed depending on the site requirements.
-    - This address needs to be reachable from the CMN network on the Worker NCNs.
+    - This IP address needs to be reachable from the CMN network on the worker NCNs.
 
-    before
+    Before:
 
-    ```bash
+    ```yaml
         - peer-address: 10.103.11.194
             peer-asn: 65533
             my-asn: 65530
@@ -163,9 +168,9 @@ router bgp 65533
             my-asn: 65530
     ```
 
-    after
+    After:
 
-    ```bash
+    ```yaml
         - peer-address: 10.2.1.194
             peer-asn: 65533
             my-asn: 65530
@@ -177,5 +182,5 @@ router bgp 65533
 1. (`ncn-m001#`) Apply MetalLB configuration map.
 
    ```bash
-    kubectl apply -f metallb.yaml 
+   kubectl apply -f metallb.yaml 
    ```
