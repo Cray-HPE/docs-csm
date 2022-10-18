@@ -99,7 +99,7 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   ncn-m002# CSM_RELEASE=csm-1.2.2
+   ncn-m002# CSM_RELEASE=csm-1.2.1
    ```
 
 1. Copy artifacts from `ncn-m001`.
