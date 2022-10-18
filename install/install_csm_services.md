@@ -11,6 +11,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 * [Known issues](#known-issues)
   * [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
+  * [`Error releasing chart` known issues](#error-releasing-chart-known-issues)
   * [`Setup Nexus` known issues](#setup-nexus-known-issues)
 
 ## 1. Install CSM services
@@ -163,6 +164,26 @@ The following error may occur during the `Deploy CSM Applications and Services` 
 
 1. Running the `yapl` command again is expected to succeed.
 
-### 5.2 `Setup Nexus` known issues
+### `Error releasing chart` known issues
+
+Some chart installation errors may occur during the `Deploy CSM Applications and Services` step:
+
+Example output (Constraint kind not recognized):
+
+```text
+ERR Error releasing chart gatekeeper-constraints v0.5.0: Shell error: Release "gatekeeper-constraints" does not exist. Installing it now.
+Error: admission webhook "validation.gatekeeper.sh" denied the request: Constraint kind K8sPSPFSGroup is not recognized chart=gatekeeper-constraints command=ship namespace=gatekeeper-system version=0.5.0
+```
+
+Another example output (connection refused):
+
+```text
+ERR Error releasing chart cray-metallb v1.1.1: Shell error: Release "cray-metallb" does not exist. Installing it now.
+Error: Internal error occurred: failed calling webhook "prometheusrulemutate.monitoring.coreos.com": Post "https://cray-sysmgmt-health-promet-operator.sysmgmt-health.svc:443/admission-prometheusrules/mutate?timeout=30s": dial tcp 10.17.87.159:443: connect: connection refused chart=cray-metallb command=ship namespace=metallb-system version=1.1.1
+```
+
+As most chart release errors are timing or transitory issues, running the `yapl` command again (or a few times) is expected to succeed.
+
+### `Setup Nexus` known issues
 
 Known potential issues along with suggested fixes are listed in [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md).
