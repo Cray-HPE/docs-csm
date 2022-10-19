@@ -58,12 +58,11 @@ function cleanup() {
         rm -rf "$TMPDIR"
     fi
 
-    echo "Cleaning up mounts"
+    echo "Cleaning up the unpacked squashfs"
     for squash in "${SQUASH_PATHS[@]}"; do
         squashfs_root=$(realpath "$(dirname "$squash")/squashfs-root")
-        mount | grep -q "$squashfs_root"/mnt/squashfs && umount -v "$squashfs_root"/mnt/squashfs
-        echo "Removing squashfs-root"
-        test -d "$squashfs_root" && rm -rf "$squashfs_root"
+        echo "Removing $squashfs_root if present"
+        rm -rf "$squashfs_root"
     done
 
     cd "$START_DIR"
@@ -381,21 +380,11 @@ function create_new_squashfs() {
         fi
 
         echo -e "\nCreating new boot artifacts..."
-        # There is an issue when running the following script on NCNs vs PIT nodes. On NCNs,
-        # the script throws an error because it can't unmount /mnt/squashfs from within the chroot
-        # environment. While that is being investigated, ignore the error for now...
-        chroot squashfs-root /srv/cray/scripts/common/create-kis-artifacts.sh squashfs-only || true
-        # ...and instead unmount it here:
-        umount -v squashfs-root/mnt/squashfs || true
-
-        mkdir -vp old
-        # get the names of the existing kernel/initrd
+        mksquashfs squashfs-root "$new_name" -no-xattrs -comp gzip -no-exports -noappend -no-recovery -processors "$(nproc)"
 
         # save original squashfs
+        mkdir -vp old
         mv -vb "$name" old/
-
-        # put new artifacts in place
-        mv -vb squashfs-root/squashfs/filesystem.squashfs "$new_name"
 
         echo -e "\nRemoving squashfs-root/"
         rm -rf squashfs-root
