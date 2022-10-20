@@ -22,7 +22,7 @@ This feature has additional requirements which include.
 - [Configure the system to enable the Customer High-speed Network (CHN)](./network/chn_enable.md)
 - [Apply the CHN configuration change to the system](./network/network_upgrade_1.2_to_1.3.md)
 
-## Additioinal Customer Accessable Documentation
+## Additional Customer Accessible Documentation
 
 - [Customer Accessible Networks](../Customer_Accessible_Networks.md)
 - [BICAN support matrix](../../management_network/bican_support_matrix.md)
