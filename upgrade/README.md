@@ -9,11 +9,10 @@ product streams for the HPE Cray EX system can be installed or upgraded.
 - [Upgrade CSM](#upgrade-csm)
   - [Known Issues](#known-issues)
   - [1. Prepare for upgrade](#1-prepare-for-upgrade)
-  - [2. (Optional) Enable Customer High Speed Network Routing](#2-optional-enable-customer-high-speed-network-routing)
-  - [3. Upgrade management nodes and CSM services](#3-upgrade-management-nodes-and-csm-services)
-  - [4. Validate CSM health](#4-validate-csm-health)
-  - [5. Apply security hardening](#5-apply-security-hardening)
-  - [6. Next topic](#6-next-topic)
+  - [2. Upgrade management nodes and CSM services](#2-upgrade-management-nodes-and-csm-services)
+  - [3. Validate CSM health](#3-validate-csm-health)
+  - [4. Apply security hardening](#4-apply-security-hardening)
+  - [5. Next topic](#5-next-topic)
 
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
@@ -89,13 +88,13 @@ The upgrade is a guided process starting with [Upgrade Management Nodes and CSM 
         cray artifacts create config-data "${TARFILE}" "/root/${TARFILE}"
         ```
 
-## 5. Apply security hardening
+## 4. Apply security hardening
 
 Review the security hardening guide, apply non-optional procedures, and review optional procedures.
 
 See [Security Hardening](../operations/CSM_product_management/Apply_Security_Hardening.md).
 
-## 6. Next topic
+## 5. Next topic
 
 After completion of the validation of CSM health, the CSM product stream has been fully upgraded and
 configured. Refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
