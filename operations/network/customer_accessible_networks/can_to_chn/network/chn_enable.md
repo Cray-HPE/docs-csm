@@ -660,7 +660,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
       }
       ```
 
-1. Edit the JSON file with the extracted compute node configuration and add the UAN layer to it.
+1. Edit the JSON file with the extracted compute node configuration and add the UAN layer to the end of the JSON file.
 
 1. (`ncn-m001#`) Update the compute node CFS configuration.
 
