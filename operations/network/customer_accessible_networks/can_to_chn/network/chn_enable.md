@@ -464,7 +464,7 @@ For more information on managing NCN personalization, see [Perform NCN Personali
 
 ### Minimizing UAN downtime
 
-UANs running before and during an upgrade to CSM 1.2 will continue running with no connectivity or local data impacts until an administrator-scheduled transition takes place. UAN rebuilds and reboots during this time are not supported.
+UANs running before and during an upgrade to CHN will continue running with no connectivity or local data impacts until an administrator-scheduled transition takes place. UAN rebuilds and reboots during this time are not supported.
 
 The time frame over which the transition can be scheduled is quite large and the transition requires only that UAN users log out of the UAN (over the old IPv4 address) and log back in (over a new IPv4 address).
 
