@@ -1,36 +1,37 @@
 # Enabling Customer High Speed Network Routing
 
-- [Process overview and warnings](#process-overview-and-warnings)
-- [Prerequisites](#prerequisites)
-- [Backup phase](#backup-phase)
-  - [Preparation](#preparation)
-  - [Create system backups](#create-system-backups)
-- [Update phase](#update-phase)
-  - [Disable CFS for UAN](#disable-cfs-for-uan)
-  - [Update SLS](#update-sls)
-  - [Update customizations](#update-customizations)
-  - [Update CSM service endpoint data (MetalLB)](#update-csm-service-endpoint-data-metallb)
-- [Migrate phase](#migrate-phase)
-  - [Migrate NCN workers](#migrate-ncn-workers)
-  - [Migrate CSM services (MetalLB)](#migrate-csm-services-metallb)
-  - [Migrate UAN](#migrate-uan)
-  - [Minimizing UAN downtime](#minimizing-uan-downtime)
-    - [Enable CFS for UAN](#enable-cfs-for-uan)
-    - [Notify UAN users](#notify-uan-users)
-  - [Migrate UAI](#migrate-uai)
-  - [Migrate computes (optional)](#migrate-computes-optional)
-    - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
-    - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
-    - [Enable CFS layer](#enable-cfs-layer)
-- [Cleanup phase](#cleanup-phase)
-  - [Remove CAN from SLS](#remove-can-from-sls)
-  - [Remove CAN from customizations](#remove-can-from-customizations)
-  - [Remove CAN from BSS](#remove-can-from-bss)
-  - [Remove CAN from CSM services](#remove-can-from-csm-services)
-  - [Remove CAN interfaces from NCNs](#remove-can-interfaces-from-ncns)
-  - [Remove CAN names from NCN hosts files](#remove-can-names-from-ncn-hosts-files)
-- [Update the management network](#update-the-management-network)
-- [Testing](#testing)
+- [Enabling Customer High Speed Network Routing](#enabling-customer-high-speed-network-routing)
+  - [Process overview and warnings](#process-overview-and-warnings)
+  - [Prerequisites](#prerequisites)
+  - [Backup phase](#backup-phase)
+    - [Preparation](#preparation)
+    - [Create system backups](#create-system-backups)
+  - [Update phase](#update-phase)
+    - [Disable CFS for UAN](#disable-cfs-for-uan)
+    - [Update SLS](#update-sls)
+    - [Update customizations](#update-customizations)
+    - [Update CSM service endpoint data (MetalLB)](#update-csm-service-endpoint-data-metallb)
+  - [Migrate phase](#migrate-phase)
+    - [Migrate NCN workers](#migrate-ncn-workers)
+    - [Migrate CSM services (MetalLB)](#migrate-csm-services-metallb)
+    - [Migrate UAN](#migrate-uan)
+    - [Minimizing UAN downtime](#minimizing-uan-downtime)
+      - [Enable CFS for UAN](#enable-cfs-for-uan)
+      - [Notify UAN users](#notify-uan-users)
+    - [Migrate UAI](#migrate-uai)
+    - [Migrate computes (optional)](#migrate-computes-optional)
+      - [Add compute IP addresses to CHN SLS data](#add-compute-ip-addresses-to-chn-sls-data)
+      - [Upload migrated SLS file to SLS service](#upload-migrated-sls-file-to-sls-service)
+      - [Enable CFS layer](#enable-cfs-layer)
+  - [Cleanup phase](#cleanup-phase)
+    - [Remove CAN from SLS](#remove-can-from-sls)
+    - [Remove CAN from customizations](#remove-can-from-customizations)
+    - [Remove CAN from BSS](#remove-can-from-bss)
+    - [Remove CAN from CSM services](#remove-can-from-csm-services)
+    - [Remove CAN interfaces from NCNs](#remove-can-interfaces-from-ncns)
+    - [Remove CAN names from NCN hosts files](#remove-can-names-from-ncn-hosts-files)
+  - [Update the management network](#update-the-management-network)
+  - [Testing](#testing)
 
 ## Process overview and warnings
 
@@ -150,12 +151,6 @@ Copying and storing all data in `${BACKUPDIR}` off-system in a version control r
 
    ```bash
    curl -s -X GET -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters | jq . > bss-bootparameters.json
-   ```
-
-1. (`ncn-m001#`) Backup system databases (optional).
-
-   ```bash
-   TODO: DO WE NEED THIS?
    ```
 
 ## Update phase
