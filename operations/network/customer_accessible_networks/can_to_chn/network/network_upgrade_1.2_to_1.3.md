@@ -1,16 +1,17 @@
 # Management Network Upgrade CSM 1.2 to 1.3
 
-- [Management network changelog](#management-network-changelog)
-- [When to perform switch upgrades](#when-to-perform-switch-upgrades)
-- [Prerequisites](#prerequisites)
-- [Upgrade CANU to the latest version](#upgrade-canu-to-the-latest-version)
-- [Backup running switch configurations](#backup-running-switch-configurations)
-- [Retrieve SLS data](#retrieve-sls-data)
-- [Generate CSM 1.3 switch configurations](#generate-csm-13-switch-configurations)
-- [Discover CSM 1.2 to CSM 1.3 configuration changes](#discover-csm-12-to-csm-13-configuration-changes)
-- [Test the network prior to update](#test-the-network-prior-to-update)
-- [Apply and save the new switch configurations](#apply-and-save-the-new-switch-configurations)
-- [Test the network after update](#test-the-network-after-update)
+- [Management Network Upgrade CSM 1.2 to 1.3](#management-network-upgrade-csm-12-to-13)
+  - [Management network changelog](#management-network-changelog)
+  - [When to perform switch upgrades](#when-to-perform-switch-upgrades)
+  - [Prerequisites](#prerequisites)
+  - [Upgrade CANU to the latest version](#upgrade-canu-to-the-latest-version)
+  - [Backup running switch configurations](#backup-running-switch-configurations)
+  - [Retrieve SLS data](#retrieve-sls-data)
+  - [Generate CSM 1.3 switch configurations](#generate-csm-13-switch-configurations)
+  - [Discover CSM 1.2 to CSM 1.3 configuration changes](#discover-csm-12-to-csm-13-configuration-changes)
+  - [Test the network prior to update](#test-the-network-prior-to-update)
+  - [Apply and save the new switch configurations](#apply-and-save-the-new-switch-configurations)
+  - [Test the network after update](#test-the-network-after-update)
 
 ## Management network changelog
 
@@ -30,7 +31,7 @@ Strict attention to the cut-over sequence will minimize downtime to UAN NCNs.
 
 At the end of the CSM 1.3 upgrade process or at the end of the process to [migrate](chn_enable.md) from CAN to CHN.
 
-Unlike most upgrades, the CSM 1.2 management network switch configuration changes come at the end of the system upgrade, not at the beginning. This allows the continued operations of services during upgrade.
+Unlike most upgrades, the CSM 1.3 management network switch configuration changes come at the end of the system upgrade, not at the beginning. This allows the continued operations of services during upgrade.
 Additionally, UAN can be operated normally and any reboot or rebuild operations can be scheduled between between administrators and UAN users.
 
 ## Prerequisites
