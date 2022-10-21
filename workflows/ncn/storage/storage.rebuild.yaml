@@ -102,8 +102,15 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: scriptContent
                   value: |
-                    ceph auth get client.ro >/dev/null 2>/dev/null || ceph-authtool -C /etc/ceph/ceph.client.ro.keyring -n client.ro --cap mon 'allow r' --cap mds 'allow r' --cap osd 'allow r' --cap mgr 'allow r' --gen-key
-                    ceph auth import -i /etc/ceph/ceph.client.ro.keyring
+                    if ! $(ceph auth get client.ro >/dev/null 2>/dev/null); then
+                      ceph-authtool -C /etc/ceph/ceph.client.ro.keyring -n client.ro --cap mon 'allow r' --cap mds 'allow r' --cap osd 'allow r' --cap mgr 'allow r' --gen-key
+                    fi
+                    if [ -f "/etc/ceph/ceph.client.ro.keyring" ]; then
+                      ceph auth import -i /etc/ceph/ceph.client.ro.keyring
+                    else
+                      ceph auth get client.ro -o /etc/ceph/ceph.client.ro.keyring
+                      ceph auth import -i /etc/ceph/ceph.client.ro.keyring
+                    fi
                     for node in $(ceph orch host ls --format=json|jq -r '.[].hostname'); do scp /etc/ceph/ceph.client.ro.keyring $node:/etc/ceph/ceph.client.ro.keyring; done
           - name: pre-upgrade-ceph-health-check
             templateRef:
