@@ -65,7 +65,7 @@ for it to be applied to the NCNs.
    any special characters.
 
    ```bash
-   ncn-mw# kubectl exec -itn vault cray-vault-0 -- sh
+   ncn-mw# kubectl exec -itn vault cray-vault-0 -c vault -- sh
    cray-vault-0# export VAULT_ADDR=http://cray-vault:8200
    cray-vault-0# vault login
    cray-vault-0# vault write secret/csm/users/root password='<INSERT HASH HERE>' [... other fields (see warning below) ...]
