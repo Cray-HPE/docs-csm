@@ -60,7 +60,7 @@ personalization including the CSM layer is run.
    any special characters.
 
    ```bash
-   ncn-mw# kubectl exec -itn vault cray-vault-0 -- sh
+   ncn-mw# kubectl exec -itn vault cray-vault-0 -c vault -- sh
    cray-vault-0# export VAULT_ADDR=http://cray-vault:8200
    cray-vault-0# vault login
    cray-vault-0# vault write secret/csm/management_nodes root_password='HASH'
