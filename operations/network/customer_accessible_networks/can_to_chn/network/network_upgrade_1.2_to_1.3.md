@@ -30,7 +30,7 @@ Strict attention to the cut-over sequence will minimize downtime to UAN NCNs.
 
 At the end of the CSM 1.3 upgrade process or at the end of the process to [migrate](chn_enable.md) from CAN to CHN.
 
-Unlike most upgrades, the CSM 1.2 management network switch configuration changes come at the end of the system upgrade, not at the beginning. This allows the continued operations of services during upgrade.
+Unlike most upgrades, the CSM 1.3 management network switch configuration changes come at the end of the system upgrade, not at the beginning. This allows the continued operations of services during upgrade.
 Additionally, UAN can be operated normally and any reboot or rebuild operations can be scheduled between between administrators and UAN users.
 
 ## Prerequisites
@@ -96,13 +96,13 @@ For *each* switch in the system, determine the configuration differences.
 - (`ncn-m001#`) **Only** during 1.2 to 1.3 upgrades.
 
    ```bash
-   canu test network --csm 1.2
+   canu test --csm 1.2
    ```
 
 - (`ncn-m001#`) During [CAN to CHN migration](chn_enable.md).
 
    ```bash
-   canu test network --csm 1.3
+   canu test --csm 1.3
    ```
 
 - All tests should pass or have a known and explainable reason for failing.
@@ -134,7 +134,7 @@ For *each* switch in the system, apply the configuration changes in two stages:
 - (`ncn-m001#`) Use CANU to test the network.
 
    ```bash
-   canu test network --csm 1.3
+   canu test --csm 1.3
    ```
 
    All tests should pass or have a known and explainable reason for failing.

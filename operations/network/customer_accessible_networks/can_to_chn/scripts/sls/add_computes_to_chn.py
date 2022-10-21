@@ -74,7 +74,7 @@ def main(
     sls_input_file,
     sls_output_file,
 ):
-    """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
+    """Upgrade a system SLS file to work with CHN.
 
     Args:
         ctx: Click context
@@ -247,7 +247,7 @@ def main(
     )
 
     click.secho(
-        f"Writing CSM 1.2 upgraded and schema validated SLS file to {sls_output_file.name}",
+        f"Writing upgraded and schema validated SLS file to {sls_output_file.name}",
         fg="bright_white",
     )
 

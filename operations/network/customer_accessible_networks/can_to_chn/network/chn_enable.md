@@ -152,12 +152,6 @@ Copying and storing all data in `${BACKUPDIR}` off-system in a version control r
    curl -s -X GET -H "Authorization: Bearer ${TOKEN}" https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters | jq . > bss-bootparameters.json
    ```
 
-1. (`ncn-m001#`) Backup system databases (optional).
-
-   ```bash
-   TODO: DO WE NEED THIS?
-   ```
-
 ## Update phase
 
 ### Disable CFS for UAN
@@ -469,7 +463,7 @@ For more information on managing NCN personalization, see [Perform NCN Personali
 
 ### Minimizing UAN downtime
 
-UANs running before and during an upgrade to CSM 1.2 will continue running with no connectivity or local data impacts until an administrator-scheduled transition takes place. UAN rebuilds and reboots during this time are not supported.
+UANs running before and during an upgrade to CHN will continue running with no connectivity or local data impacts until an administrator-scheduled transition takes place. UAN rebuilds and reboots during this time are not supported.
 
 The time frame over which the transition can be scheduled is quite large and the transition requires only that UAN users log out of the UAN (over the old IPv4 address) and log back in (over a new IPv4 address).
 
@@ -665,7 +659,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
       }
       ```
 
-1. Edit the JSON file with the extracted compute node configuration and add the UAN layer to it.
+1. Edit the JSON file with the extracted compute node configuration and add the UAN layer to the end of the JSON file.
 
 1. (`ncn-m001#`) Update the compute node CFS configuration.
 
