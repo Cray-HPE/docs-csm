@@ -1,4 +1,4 @@
-# FASUpdate Script
+# `FASUpdate` Script
 
 The `FASUpdate` Script automates several steps for updating firmware using one of the standard default FAS action recipes.
 
@@ -16,35 +16,38 @@ https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/
 | jq -r '.access_token')
 ```
 
-The FASUpdate Script will be installed in `/usr/share/doc/csm/scripts/operations/firmware`
+The `FASUpdate` Script will be installed in `/usr/share/doc/csm/scripts/operations/firmware`
 
 ## List Available Action Recipes
 
 `FASUpdate.py --list` : list the available action recipes in the default directory
 
-`FASUpdate.py --list --recipedir {dir}` : list the available action recipes in the directory {dir}
+`FASUpdate.py --list --recipedir {dir}` : list the available action recipes in the directory `{dir}`
 
 ## Preforming a FAS Update
 
-`FASUpdate.py --file {filename} --overrideDryrun [true/false]` : Use recipe {filename} in default directory to do an update on the system.  OverrideDryrun is set to true to do an actual update instead of a dryrun.  Default for overrideDryrun is false.
+`FASUpdate.py --file {filename} --overrideDryrun [true/false]` : Use recipe {`filename`} in default directory to do an update on the system.
+Default for `overrideDryrun` is false, which will perform a dryrun of the update.
+Set `overrideDryrun` to true to do an actual update instead of a dryrun.
 
-`FASUpdate.py --file {filename} --recipedir {dir}` : Use recipe {filename} in directory {dir} to do an update on the system.
+`FASUpdate.py --file {filename} --recipedir {dir}` : Use recipe {`filename`} in directory {`dir`} to do an update on the system.
 
-`FASUpdate.py --file {filename} --xnames x1,x2,x3` : Use recipe {filename} to do an update only on x1, x2, and x3
+`FASUpdate.py --file {filename} --xnames x1,x2,x3` : Use recipe {`filename`} to do an update only on `x1`, `x2`, and `x3`
 
-`FASUpdate.py --file {filename} --watchtime {sec} --description {des}` : Use recipe {filename} to do an update, output summary every {sec} seconds (default 30) and overwrite the description with {des}.
+`FASUpdate.py --file {filename} --watchtime {sec} --description {des}` : Use recipe {`filename`} to do an update, output summary every {`sec`} seconds (default 30) and overwrite the description with {`des`}.
 
-## Options for FASUpdate Script
-  * --file filename : Name of the action recipe file (required for update).
-  * --list : List the available action recipe files in the default or specified directory.
-  * --recipedir dir : Directory containing the action recipe file (if not using the default directory).
-  * --xnames xname1,xname2 : List of xnames to be updated.  If not present, FAS will check all xnames.
-  * --overredDryrun {true/false} : Default false - Set to true to do an actual update run instead of a dryrun.
-  * --watchtime sec : Number of seconds to wait before outputting the summary status (default 30).
-  * --description des : Overwrite the description field in the recipe file.
-  * --url-fas url : URL to access FAS (usually not needed).
+## Options for `FASUpdate` Script
 
-## Sample FASUpdate Script Run
+* `--file filename` : Name of the action recipe file (required for update).
+* `--list` : List the available action recipe files in the default or specified directory.
+* `--recipedir dir` : Directory containing the action recipe file (if not using the default directory).
+* `--xnames xname1,xname2` : List of xnames to be updated.  If not present, FAS will check all xnames.
+* `--overredDryrun {true/false}` : Default false - Set to true to do an actual update run instead of a dryrun.
+* `--watchtime sec` : Number of seconds to wait before outputting the summary status (default 30).
+* `--description des` : Overwrite the description field in the recipe file.
+* `--url-fas url` : URL to access FAS (usually not needed).
+`
+## Sample `FASUpdate` Script Run
 
   ```bash
   export TOKEN=$(curl -s -S -d grant_type=client_credentials \
