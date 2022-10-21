@@ -1,17 +1,16 @@
 # Management Network Upgrade CSM 1.2 to 1.3
 
-- [Management Network Upgrade CSM 1.2 to 1.3](#management-network-upgrade-csm-12-to-13)
-  - [Management network changelog](#management-network-changelog)
-  - [When to perform switch upgrades](#when-to-perform-switch-upgrades)
-  - [Prerequisites](#prerequisites)
-  - [Upgrade CANU to the latest version](#upgrade-canu-to-the-latest-version)
-  - [Backup running switch configurations](#backup-running-switch-configurations)
-  - [Retrieve SLS data](#retrieve-sls-data)
-  - [Generate CSM 1.3 switch configurations](#generate-csm-13-switch-configurations)
-  - [Discover CSM 1.2 to CSM 1.3 configuration changes](#discover-csm-12-to-csm-13-configuration-changes)
-  - [Test the network prior to update](#test-the-network-prior-to-update)
-  - [Apply and save the new switch configurations](#apply-and-save-the-new-switch-configurations)
-  - [Test the network after update](#test-the-network-after-update)
+- [Management network changelog](#management-network-changelog)
+- [When to perform switch upgrades](#when-to-perform-switch-upgrades)
+- [Prerequisites](#prerequisites)
+- [Upgrade CANU to the latest version](#upgrade-canu-to-the-latest-version)
+- [Backup running switch configurations](#backup-running-switch-configurations)
+- [Retrieve SLS data](#retrieve-sls-data)
+- [Generate CSM 1.3 switch configurations](#generate-csm-13-switch-configurations)
+- [Discover CSM 1.2 to CSM 1.3 configuration changes](#discover-csm-12-to-csm-13-configuration-changes)
+- [Test the network prior to update](#test-the-network-prior-to-update)
+- [Apply and save the new switch configurations](#apply-and-save-the-new-switch-configurations)
+- [Test the network after update](#test-the-network-after-update)
 
 ## Management network changelog
 
