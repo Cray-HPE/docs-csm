@@ -105,7 +105,7 @@ configuration layer requires special placement in the layer list.
 1. Update the desired configuration for all NCNs.
 
    ```bash
-   for xname in $(cray hsm state components list --role Management --type node --format json | jq -r .Components[].ID)
+   for xname in $(cray hsm state components list --role Management --type Node --format json | jq -r .Components[].ID)
    do
        cray cfs components update --desired-config ncn-personalization --enabled true --format json $xname
    done
