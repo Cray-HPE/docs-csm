@@ -659,7 +659,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
 the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
 the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
-or the file `hpe_nodeBMC_systemRom.json` for HPE Node System Rom updates.
+or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -952,7 +952,7 @@ Make sure you have waited for the current firmware to be updated before starting
 }
 ```
 
-#### Manufacturer: HPE | Device Type: NCN `NodeBMC` | Target: `System Rom` aka BIOS
+#### Manufacturer: HPE | Device Type: NCN `NodeBMC` | Target: `System ROM` aka BIOS
 
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
 > For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
@@ -996,8 +996,8 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
 the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
 the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
-or the file `hpe_nodeBMC_systemRom.json` for HPE Node System Rom updates.
-The script flag --xnames x1,x2 can be used to limit the updates to certain xnames
+or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
+The script flag `--xnames x1,x2` can be used to limit the updates to certain xnames
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc) for more information.

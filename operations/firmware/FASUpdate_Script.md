@@ -6,7 +6,7 @@ The script will use an action recipe and monitor the update until all nodes have
 While waiting for the update to complete, a summary will periodically be outputted.
 
 To update the firmware, first create an authentication token.
-On most systems, this is created with the following command (ncn#)
+On most systems, this is created with the following command (`ncn#`)
 
 ```bash
 export TOKEN=$(curl -s -S -d grant_type=client_credentials \\
@@ -46,7 +46,7 @@ Set `overrideDryrun` to true to do an actual update instead of a dryrun.
 * `--watchtime sec` : Number of seconds to wait before outputting the summary status (default 30).
 * `--description des` : Overwrite the description field in the recipe file.
 * `--url-fas url` : URL to access FAS (usually not needed).
-`
+
 ## Sample `FASUpdate` Script Run
 
   ```bash
