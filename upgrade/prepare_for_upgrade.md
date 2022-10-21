@@ -2,12 +2,13 @@
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.
 
-- [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
-- [Start typescript](#start-typescript)
-- [Running sessions](#running-sessions)
-- [Health validation](#health-validation)
-- [Stop typescript](#stop-typescript)
-- [Preparation completed](#preparation-completed)
+- [Prepare for Upgrade](#prepare-for-upgrade)
+  - [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
+  - [Start typescript](#start-typescript)
+  - [Running sessions](#running-sessions)
+  - [Health validation](#health-validation)
+  - [Stop typescript](#stop-typescript)
+  - [Preparation completed](#preparation-completed)
 
 ## Reduced resiliency during upgrade
 
@@ -88,4 +89,4 @@ For any typescripts that were started during this preparation stage, stop them w
 ## Preparation completed
 
 After completing the above steps, proceed to
-[Upgrade Management Nodes and CSM Services](README.md#3-upgrade-management-nodes-and-csm-services).
+[Upgrade Management Nodes and CSM Services](README.md#2-upgrade-management-nodes-and-csm-services).
