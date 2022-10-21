@@ -3,16 +3,15 @@
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, then see
 [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-- [Stage 4 - Ceph Upgrade](#stage-4---ceph-upgrade)
-  - [Ceph upgrade contents](#ceph-upgrade-contents)
-  - [Start typescript](#start-typescript)
-  - [Procedure](#procedure)
-    - [Initiate upgrade](#initiate-upgrade)
-    - [Diagnose a stalled upgrade](#diagnose-a-stalled-upgrade)
-      - [`UPGRADE_FAILED_PULL: Upgrade: failed to pull target image`](#upgrade_failed_pull-upgrade-failed-to-pull-target-image)
-    - [Troubleshoot a failed upgrade](#troubleshoot-a-failed-upgrade)
-  - [Stop typescript](#stop-typescript)
-  - [Stage completed](#stage-completed)
+- [Ceph upgrade contents](#ceph-upgrade-contents)
+- [Start typescript](#start-typescript)
+- [Procedure](#procedure)
+  - [Initiate upgrade](#initiate-upgrade)
+  - [Diagnose a stalled upgrade](#diagnose-a-stalled-upgrade)
+    - [`UPGRADE_FAILED_PULL: Upgrade: failed to pull target image`](#upgrade_failed_pull-upgrade-failed-to-pull-target-image)
+  - [Troubleshoot a failed upgrade](#troubleshoot-a-failed-upgrade)
+- [Stop typescript](#stop-typescript)
+- [Stage completed](#stage-completed)
 
 ## Ceph upgrade contents
 
