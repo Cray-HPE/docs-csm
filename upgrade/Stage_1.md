@@ -77,14 +77,14 @@ It is possible to upgrade a single storage node at a time using the following co
 > - If the upgrade is 'waiting for ceph HEALTH_OK', the output from commands `ceph -s` and `ceph health detail` should provide information.
 > - If a crash has occurred, [dumping the ceph crash data](../operations/utility_storage/Dump_Ceph_Crash_Data.md) will return Ceph to healthy state and allow the upgrade to continue.
 >   The crash should be evaluated to determine if there is an issue that should be addressed.
-> - If the following error occurs during the `check-ceph-ro-key` phase, "Can't open input file /etc/ceph/ceph.client.ro.keyring: [Errno 2] No such file or directory: '/etc/ceph/ceph.client.ro.keyring'", 
+> - If the following error occurs during the `check-ceph-ro-key` phase, "Can't open input file /etc/ceph/ceph.client.ro.keyring: [Errno 2] No such file or directory: '/etc/ceph/ceph.client.ro.keyring'",
 >then export the keyring in a separate terminal. The workflow will continue on its own.
 >
 >   (`ncn-m001#`) Export keyring.
 >
 >   ```bash
 >   ceph auth get client.ro -o /etc/ceph/ceph.client.ro.keyring
->   ``` 
+>   ```
 >
 > - Refer to [storage troubleshooting documentation](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) for Ceph related issues.
 
