@@ -34,11 +34,90 @@ spec:
     # The value for content is set to the json string value for 'content' in the manifest when --parameter-file is
     # set to the path of the IUF manifest yaml file.
     - name: content
-  entrypoint: nexus-setup
+  entrypoint: main
   templates:
-  - name: nexus-setup
+### Main Steps ###
+  - name: main
+    steps:
+    - - name: nexus-get-admin-credential
+        template: nexus-get-admin-credential-template
+    - - name: nexus-setup
+        template: nexus-setup-template
+        arguments:
+          parameters:
+          - name: nexus_admin_credential_secret_name
+            value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
+          - name: content
+            value: "{{workflow.parameters.content}}"
+          - name: product
+            value: "{{workflow.parameters.product}}"
+          - name: product_host_path
+            value: "{{workflow.parameters.product_host_path}}"
+    - - name: cleanup
+        template: cleanup-template
+        arguments:
+          parameters:
+          - name: nexus_admin_credential_secret_name
+            value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
+### Templates ###
+## nexus-get-secret-template ##
+  - name: nexus-get-admin-credential-template
+    nodeSelector:   
+      kubernetes.io/hostname: ncn-m001
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    outputs:
+      parameters:
+        - name: secret_name
+          valueFrom:
+            path: /tmp/secret_name
+    retryStrategy:
+        limit: "2"
+        retryPolicy: "Always"
+        backoff:
+          duration: "10s" # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+          factor: "2"
+          maxDuration: "1m"
+    script:
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      command: [bash]
+      source: |
+        function sync_item() {
+          item_name="$1"
+          source_ns="$2"
+          destination_name="$3-$RANDOM"
+          destination_ns="$4"
+          if kubectl get $item_name -n $source_ns &> /dev/null; then
+            echo "Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+            kubectl get $item_name -n $source_ns -o json | \
+              jq 'del(.metadata.namespace)' | \
+              jq 'del(.metadata.creationTimestamp)' | \
+              jq 'del(.metadata.resourceVersion)' | \
+              jq 'del(.metadata.selfLink)' | \
+              jq 'del(.metadata.uid)' | \
+              jq 'del(.metadata.ownerReferences)' | \
+              jq 'del(.metadata.name)' | \
+              jq '.metadata |= . + {"name":"'$destination_name'"}' | \
+              kubectl apply -n $destination_ns -f -
+              return $?
+          else
+            echo "Didn't find $item_name in the $source_ns namespace"
+            return 1
+          fi
+        }
+        sync_item secret/nexus-admin-credential nexus nexus-admin-credential-argo argo
+        rc=$?
+        echo $destination_name >> /tmp/secret_name
+        exit $rc
+## nexus-setup-template ##
+  - name: nexus-setup-template
     inputs:
       parameters:
+      - name: nexus_admin_credential_secret_name
       - name: content
         value: "{{workflow.parameters.content}}"
       - name: product
@@ -63,12 +142,12 @@ spec:
       - name: NEXUS_USERNAME
         valueFrom:
           secretKeyRef:
-            name: nexus-admin-credential
+            name: "{{inputs.parameters.nexus_admin_credential_secret_name}}"
             key: username
       - name: NEXUS_PASSWORD
         valueFrom:
           secretKeyRef:
-            name: nexus-admin-credential
+            name: "{{inputs.parameters.nexus_admin_credential_secret_name}}"
             key: password
       volumeMounts:
       - name: products
@@ -78,3 +157,23 @@ spec:
     - name: products
       hostPath:
         path: "{{workflow.parameters.product_host_path}}"
+## cleanup-template ##
+## Remove the secret created earlier.
+  - name: cleanup-template
+    inputs:
+      parameters:
+      - name: nexus_admin_credential_secret_name
+        value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
+    nodeSelector:
+      kubernetes.io/hostname: ncn-m001
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    script:
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      command: [bash]
+      source: |
+        kubectl -n argo delete secret/{{inputs.parameters.nexus_admin_credential_secret_name}}
