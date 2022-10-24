@@ -5,7 +5,6 @@
 
 - [Stage 1 - Ceph image upgrade](#stage-1---ceph-image-upgrade)
   - [Start typescript](#start-typescript)
-  - [Apply boot order workaround](#apply-boot-order-workaround)
   - [Argo workflows](#argo-workflows)
   - [CSM Upgrade requirement for upgrades staying within a CSM release version](#csm-upgrade-requirement-for-upgrades-staying-within-a-csm-release-version)
   - [Storage node image upgrade](#storage-node-image-upgrade)
@@ -26,14 +25,6 @@
 
 If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
 after a break, always be sure that a typescript is running before proceeding.
-
-## Apply boot order workaround
-
-(`ncn-m001#`) Apply a workaround for the boot order:
-
-```bash
-/usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
-```
 
 ## Argo workflows
 
