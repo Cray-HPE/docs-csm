@@ -23,7 +23,7 @@ The gateway test scripts can be found in `/usr/share/doc/csm/scripts/operations/
 run from an NCN, it has access to the admin client secret using `kubectl`. It will use the admin client secret to get
 the token for accessing the APIs.
 
-Execute the test by running following command.
+(`ncn#`) Execute the test by running following command.
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
@@ -63,11 +63,15 @@ for each service, as appropriate. At the end of the tests it will compile and ou
 
 ### UAN test execution
 
+(`ncn#`) 
+
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/uan-gateway-test.sh <uan-hostname>
 ```
 
 ### Compute node test execution
+
+(`ncn#`) 
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/cn-gateway-test.sh <cn-hostname>
@@ -86,7 +90,7 @@ This script will execute the following steps:
 1. Output the results.
 1. Delete the test UAI.
 
-Run the test by executing the following command.
+(`ncn#`) Run the test by executing the following command.
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
@@ -114,7 +118,7 @@ The following steps must be performed on the system where the test is to be run:
       - `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py`
       - `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test-defn.yaml`
 
-1. Obtain the admin client secret.
+1. (`ncn#`) Obtain the admin client secret.
 
    Because access to `kubectl` is not possible from outside of the cluster, obtain the admin client secret by running the
    following command on an NCN.
@@ -129,7 +133,7 @@ The following steps must be performed on the system where the test is to be run:
    26947343-d4ab-403b-14e937dbd700
    ```
 
-1. Export the admin client secret in an environment variable.
+1. (`linux#`) Export the admin client secret in an environment variable.
 
    Back on the system where the tests will be run, set and export the `ADMIN_CLIENT_SECRET` environment variable,
    using the `admin-client-auth` secret obtained in the previous step.
@@ -138,7 +142,7 @@ The following steps must be performed on the system where the test is to be run:
    export ADMIN_CLIENT_SECRET=26947343-d4ab-403b-14e937dbd700
    ```
 
-1. Execute the test.
+1. (`linux#`) Execute the test.
 
    Execute the test by running following command. The system domain (in this example, `eniac.dev.cray.com`) must
    be specified.
@@ -162,6 +166,8 @@ The results of running the tests will show the following:
 - The return code of `gateway-test.py` will be non-zero if any of the tests within it fail.
 
 ### Running from an NCN with CHN as the user network
+
+(`ncn#`)
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com
@@ -431,6 +437,8 @@ Overall Gateway Test Status:  PASS
 ```
 
 ### Running from a UAI
+
+(`ncn#`)
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
