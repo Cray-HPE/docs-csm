@@ -116,7 +116,7 @@ The following steps must be performed on the system where the test is to be run:
 
 1. Obtain the admin client secret.
 
-   Because we do not have access to `kubectl` outside of the cluster, obtain the admin client secret by running the
+   Because access to `kubectl` is not possible from outside of the cluster, obtain the admin client secret by running the
    following command on an NCN.
 
    ```bash
@@ -132,7 +132,7 @@ The following steps must be performed on the system where the test is to be run:
 1. Export the admin client secret in an environment variable.
 
    Back on the system where the tests will be run, set and export the `ADMIN_CLIENT_SECRET` environment variable,
-   using the `admin-client-auth` secret obtained in the previous step:
+   using the `admin-client-auth` secret obtained in the previous step.
 
    ```bash
    export ADMIN_CLIENT_SECRET=26947343-d4ab-403b-14e937dbd700
