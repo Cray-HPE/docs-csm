@@ -63,7 +63,7 @@ for each service, as appropriate. At the end of the tests it will compile and ou
 
 ### UAN test execution
 
-(`ncn#`) 
+(`ncn#`)
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/uan-gateway-test.sh <uan-hostname>
@@ -71,7 +71,7 @@ for each service, as appropriate. At the end of the tests it will compile and ou
 
 ### Compute node test execution
 
-(`ncn#`) 
+(`ncn#`)
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/cn-gateway-test.sh <cn-hostname>
