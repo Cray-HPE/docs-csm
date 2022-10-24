@@ -673,22 +673,25 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 
 ## Versioning
 
-| CSM Release               | Kernel Version            | Kernel Change Rationale  |
-| :------------------------ | :------------------------ | ------------------------ |
-| CSM 0.9.0 (Shasta v1.4.0) | 5.3.18-24.49.2            | Initial                  |
-| CSM 0.9.2 (Shasta v1.4.1) | 5.3.18-24.49.2            |                          |
-| CSM 0.9.3 (Shasta v1.4.2) | 5.3.18-24.49.2            |                          |
-| CSM 0.9.3                 | 5.3.18-24.**75.3**        | Proactive update         |
-| CSM 0.9.4                 | 5.3.18-24.75.3            |                          |
-| CSM 0.9.5                 | 5.3.18-24.75.3            |                          |
-| CSM 0.9.6                 | 5.3.18-24.75.3            |                          |
-| CSM 1.0.0                 | 5.3.18-24.75.3            |                          |
-| CSM 1.0.1 (Shasta v1.5.0) | 5.3.18-24.75.3            |                          |
-| CSM 1.0.10                | 5.3.18-24.75.3            |                          |
-| CSM 1.0.11                | 5.3.18-24.**99.1**        | [`CVE-2021-4034`][21]    |
-| CSM 1.2.0                 | 5.3.18-**150300.59.43.1** | [`CVE-2022-0185`][22]    |
-| CSM 1.2.1                 | 5.3.18-150300.59.43.1     | [`CVE-2022-0185`][22]    |
-| CSM 1.3.0                 | 5.3.18-150300.59.**87.1** | [`CVE-2022-33981`][23]   |
+| CSM Release               | Kernel Version             | Kernel Change Rationale  |
+| :------------------------ | :------------------------- | ------------------------ |
+| CSM 0.9.0 (Shasta v1.4.0) | 5.3.18-24.49.2             | Initial                  |
+| CSM 0.9.2 (Shasta v1.4.1) | 5.3.18-24.49.2             |                          |
+| CSM 0.9.3 (Shasta v1.4.2) | 5.3.18-24.49.2             |                          |
+| CSM 0.9.3                 | 5.3.18-24.**75.3**         | Proactive update         |
+| CSM 0.9.4                 | 5.3.18-24.75.3             |                          |
+| CSM 0.9.5                 | 5.3.18-24.75.3             |                          |
+| CSM 0.9.6                 | 5.3.18-24.75.3             |                          |
+| CSM 1.0.0                 | 5.3.18-24.75.3             |                          |
+| CSM 1.0.1 (Shasta v1.5.0) | 5.3.18-24.75.3             |                          |
+| CSM 1.0.10                | 5.3.18-24.75.3             |                          |
+| CSM 1.0.11                | 5.3.18-24.**99.1**         | [`CVE-2021-4034`][21]    |
+| CSM 1.2.0                 | 5.3.18-**150300.59.43.1**  | [`CVE-2022-0185`][22]    |
+| CSM 1.2.1                 | 5.3.18-150300.59.43.1      | [`CVE-2022-0185`][22]    |
+| CSM 1.2.2                 | 5.3.18-150300.59.43.1      |                          |
+| CSM 1.3.0                 | 5.3.18-150300.59.**87.1**  | [`CVE-2022-33981`][23]   |
+| CSM 1.3.1                 | 5.3.18-150300.59.87.1      |                          |
+| CSM 1.4.0                 | 5.**14.21-150400.24.21.2** | SLES-15-SP4 Upgrade      |
 
 [1]:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
 [2]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.md#usage
