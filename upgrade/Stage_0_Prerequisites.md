@@ -253,19 +253,19 @@ after a break, always be sure that a typescript is running before proceeding.
 
 There are two possible scenarios. Follow the procedure for the scenario that is applicable to the upgrade being performed.
 
-- [Standard upgrade](#standard-upgrade) - Upgrading CSM on a system that has products installed other than CSM.
-- [CSM-only system upgrade](#csm-only-system-upgrade) - Upgrading CSM only on a CSM-only system **no other products installed or being upgraded**.
-
 While the names are similar, image customization is different than node personalization. Image customization is the
 process of using Ansible stored in VCS in conjunction with the CFS and IMS microservices to customize an image before
 it is booted. Node personalization is the process of using Ansible stored in VCS in conjunction with the CFS and IMS
 microservices to personalize a node after it has booted.
 
-**NOTE:** For the standard upgrade, it will not be possible to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
+- [Standard upgrade](#standard-upgrade) - Upgrading CSM on a system that has products installed other than CSM.
+- [CSM-only system upgrade](#csm-only-system-upgrade) - Upgrading CSM only on a CSM-only system **no other products installed or being upgraded**.
 
 ### Standard upgrade
 
 In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade. In the standard upgrade, worker NCN image customization and node personalization steps are required.
+
+**NOTE:** For the standard upgrade, it will not be possible to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
 
 1. If not already done, consult the `HPE Cray EX System Software Getting Started Guide`.
 
@@ -288,7 +288,7 @@ Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data), skipping t
 
 This upgrade scenario is extremely uncommon in production environments.
 
-1. (`ncn-m001#`) Generate new CFS configuration for the NCNs.
+1. (`ncn-m001#`) Generate a new CFS configuration for the NCNs.
 
     This script will also leave CFS disabled for the NCNs. CFS will automatically be re-enabled on them as they are rebooted during the upgrade.
 

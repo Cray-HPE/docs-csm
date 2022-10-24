@@ -11,19 +11,19 @@ return code to make sure it gets the expected response.
 
 ## Topics
 
-- [Running Gateway Tests on an NCN Management Node](#running-gateway-tests-on-an-ncn-management-node)
-- [Running Gateway Tests on a UAN or Compute Node](#running-gateway-tests-on-a-uan-or-compute-node)
-- [Running Gateway Tests on a UAI](#running-gateway-tests-on-a-uai)
-- [Running Gateway Tests on a Device Outside the System](#running-gateway-tests-on-a-device-outside-the-system)
-- [Example Results](#example-results)
+- [Running gateway tests on an NCN management node](#running-gateway-tests-on-an-ncn-management-node)
+- [Running gateway tests on a UAN or compute node](#running-gateway-tests-on-a-uan-or-compute-node)
+- [Running gateway tests on a UAI](#running-gateway-tests-on-a-uai)
+- [Running gateway tests on a device outside the system](#running-gateway-tests-on-a-device-outside-the-system)
+- [Example results](#example-results)
 
-## Running Gateway Tests on an NCN Management Node
+## Running gateway tests on an NCN management node
 
 The gateway test scripts can be found in `/usr/share/doc/csm/scripts/operations/gateway-test`. When `gateway-test.py` is
 run from an NCN, it has access to the admin client secret using `kubectl`. It will use the admin client secret to get
 the token for accessing the APIs.
 
-Execute the test by running following command.
+(`ncn#`) Execute the test by running following command.
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/ncn-gateway-test.sh
@@ -49,7 +49,7 @@ access each of the services defined in `gateway-test-defn.yaml`, on each of the 
 it should or should not be able to access the service, and it will output a `PASS` or `FAIL` for each service, as appropriate.
 At the end of the tests it will compile and output a final overall PASS/FAIL status.
 
-## Running Gateway Tests on a UAN or Compute Node
+## Running gateway tests on a UAN or compute node
 
 The same set of tests will be run from a UAN or Compute Node by executing the following command from an NCN that has the `docs-csm` RPM installed. The hostname of the UAN or Compute Node under test must be specified.
 
@@ -61,19 +61,23 @@ that should be accessible on the node based on the node type.
 The test will determine whether it should or should not be able to access the service, and it will output a `PASS` or `FAIL`
 for each service, as appropriate. At the end of the tests it will compile and output a final overall PASS/FAIL status.
 
-### UAN Test Execution
+### UAN test execution
+
+(`ncn#`)
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/uan-gateway-test.sh <uan-hostname>
 ```
 
-### Compute Node Test Execution
+### Compute node test execution
+
+(`ncn#`)
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/cn-gateway-test.sh <cn-hostname>
 ```
 
-## Running Gateway Tests on a UAI
+## Running gateway tests on a UAI
 
 In order to test the gateways from a UAI, the `/usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh`
 script is used.
@@ -86,7 +90,7 @@ This script will execute the following steps:
 1. Output the results.
 1. Delete the test UAI.
 
-Run the test by executing the following command.
+(`ncn#`) Run the test by executing the following command.
 
 ```bash
 /usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
@@ -95,7 +99,7 @@ Run the test by executing the following command.
 The test will find the first UAI `cray-uai-gateway-test` image to create the test UAI. A different image may optionally
 be specified by using the `--imagename` option.
 
-## Running Gateway Tests on a Device Outside the System
+## Running gateway tests on a device outside the system
 
 The following steps must be performed on the system where the test is to be run:
 
@@ -114,26 +118,31 @@ The following steps must be performed on the system where the test is to be run:
       - `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py`
       - `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test-defn.yaml`
 
-1. Obtain the admin client secret.
+1. (`ncn#`) Obtain the admin client secret.
 
-   Because we do not have access to `kubectl` outside of the cluster, obtain the admin client secret by running the
+   Because access to `kubectl` is not possible from outside of the cluster, obtain the admin client secret by running the
    following command on an NCN.
 
    ```bash
    kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d
+   ```
+
+   Example output:
+
+   ```text
    26947343-d4ab-403b-14e937dbd700
    ```
 
-1. Export the admin client secret in an environment variable.
+1. (`linux#`) Export the admin client secret in an environment variable.
 
    Back on the system where the tests will be run, set and export the `ADMIN_CLIENT_SECRET` environment variable,
-   using the `admin-client-auth` secret obtained in the previous step:
+   using the `admin-client-auth` secret obtained in the previous step.
 
    ```bash
    export ADMIN_CLIENT_SECRET=26947343-d4ab-403b-14e937dbd700
    ```
 
-1. Execute the test.
+1. (`linux#`) Execute the test.
 
    Execute the test by running following command. The system domain (in this example, `eniac.dev.cray.com`) must
    be specified.
@@ -142,7 +151,7 @@ The following steps must be performed on the system where the test is to be run:
    /usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com outside
    ```
 
-## Example Results
+## Example results
 
 The results of running the tests will show the following:
 
@@ -156,10 +165,15 @@ The results of running the tests will show the following:
     - It will show `SKIP` for services that are not expected to be installed on the system.
 - The return code of `gateway-test.py` will be non-zero if any of the tests within it fail.
 
-### Running From an NCN with CHN as the User Network
+### Running from an NCN with CHN as the user network
+
+(`ncn#`)
 
 ```bash
-./gateway-test.py eniac.dev.cray.com
+/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py eniac.dev.cray.com
+```
+
+```text
 auth.cmn.eniac.dev.cray.com is reachable
 Token successfully retrieved at https://auth.cmn.eniac.dev.cray.com/keycloak/realms/shasta/protocol/openid-connect/token
 
@@ -424,8 +438,13 @@ Overall Gateway Test Status:  PASS
 
 ### Running from a UAI
 
+(`ncn#`)
+
 ```bash
-./uai-gateway-test.sh
+/usr/share/doc/csm/scripts/operations/gateway-test/uai-gateway-test.sh
+```
+
+```text
 Creating Gateway Test UAI with image artifactory.algol60.net/csm-docker/stable/cray-gateway_test:1.4.0-20220418215843_786bfac
 Waiting for uai-vers-733eea45 to be ready
 status = Running: Not Ready
