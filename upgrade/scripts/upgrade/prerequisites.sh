@@ -763,7 +763,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
-    pgLeaderPod=$(kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list | grep Leader | awk -F'|' '{print $2}')
+    pgLeaderPod=$(kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list -f json | jq -r '.[] | select(.Role == "Leader").Member')
     kubectl exec -it "${pgLeaderPod}" -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
 
     SECRETS=( "postgres" "service-account" "standby" )
