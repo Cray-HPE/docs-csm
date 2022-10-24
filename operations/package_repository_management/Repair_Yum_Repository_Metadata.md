@@ -2,7 +2,7 @@
 
 Nexus may have trouble \(re\)generating repository metadata \(for example, repodata/repomd.xml\), especially for larger repositories. Configure the `Repair - Rebuild Yum repository metadata (repodata)` task in Nexus to create the metadata if the standard generation fails. This is not typically needed, which makes it a repair task.
 
-The example in this procedure is for creating a repair task to rebuild Yum metadata for the `mirror-1.3.0-opensuse-leap-15` repository.
+The example in this procedure is for creating a repair task to rebuild Yum metadata for the `mirror-1.4.0-opensuse-leap-15` repository.
 
 See the Nexus documentation on Tasks for more details: [https://help.sonatype.com/repomanager3/system-configuration/tasks](https://help.sonatype.com/repomanager3/system-configuration/tasks)
 
@@ -74,7 +74,7 @@ The system is fully installed.
 
 9.  Track down the name of the repository being repaired.
 
-    In this example, `mirror-1.3.0-opensuse-leap-15` is used.
+    In this example, `mirror-1.4.0-opensuse-leap-15` is used.
 
 10. View the repodata for the repository.
 
@@ -113,18 +113,18 @@ The system is fully installed.
         -rw-r--r-- 1 nexus nexus 1525 Aug 23 01:00 repository.cleanup-20200823010000013.log
         ```
 
-        If multiple repositories are being rebuilt, search the logs for the specific repository to find the latest corresponding log file. The example below is for `mirror-1.3.0-opensuse-leap-15`:
+        If multiple repositories are being rebuilt, search the logs for the specific repository to find the latest corresponding log file. The example below is for `mirror-1.4.0-opensuse-leap-15`:
 
         ```bash
         kubectl -n nexus exec -ti nexus-55d8c77547-65k6q \
-        -c nexus -- grep -R 'Rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15' \
+        -c nexus -- grep -R 'Rebuilding yum metadata for repository mirror-1.4.0-opensuse-leap-15' \
         /nexus-data/log/tasks
         ```
 
         Example output:
 
         ```
-        /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822235306934.log:2020-08-22 23:53:06,936+0000 INFO  [event-12-thread-797]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15
+        /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822235306934.log:2020-08-22 23:53:06,936+0000 INFO  [event-12-thread-797]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Rebuilding yum metadata for repository mirror-1.4.0-opensuse-leap-15
         ```
 
     3.  View the log file for the rebuild.
@@ -142,12 +142,12 @@ The system is fully installed.
         2020-08-22 23:53:06,934+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask - Task information:
         2020-08-22 23:53:06,935+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  ID: 35536bcd-3947-4ba9-8d6d-43dcadbb87ad
         2020-08-22 23:53:06,935+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Type: repository.yum.rebuild.metadata
-        2020-08-22 23:53:06,935+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Name: Rebuild Yum metadata - mirror-1.3.0-opensuse-leap-15
-        2020-08-22 23:53:06,935+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Description: Rebuild metadata for mirror-1.3.0-opensuse-leap-15
+        2020-08-22 23:53:06,935+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Name: Rebuild Yum metadata - mirror-1.4.0-opensuse-leap-15
+        2020-08-22 23:53:06,935+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Description: Rebuild metadata for mirror-1.4.0-opensuse-leap-15
         2020-08-22 23:53:06,936+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask - Task log: /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822235306934.log
-        2020-08-22 23:53:06,936+0000 INFO  [event-12-thread-797]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15
+        2020-08-22 23:53:06,936+0000 INFO  [event-12-thread-797]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Rebuilding yum metadata for repository mirror-1.4.0-opensuse-leap-15
         2020-08-22 23:53:06,936+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask - Task complete
-        2020-08-23 00:50:47,468+0000 INFO  [event-12-thread-797]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Finished rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15
+        2020-08-23 00:50:47,468+0000 INFO  [event-12-thread-797]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Finished rebuilding yum metadata for repository mirror-1.4.0-opensuse-leap-15
         ```
 
         The returned `Finished rebuilding yum metadata for repository` without any other `ERROR` or `WARN` messages indicates the rebuild has completed successfully.
@@ -160,7 +160,7 @@ The system is fully installed.
 
     ![Repodata Attributes](../../img/operations/Nexus_Repodata_Attributes_After.png "Repodata Attributes")
 
-**Troubleshooting:** When a rebuild fails, expect to see `ERROR` and `WARN` messages around the same time as the `Finished rebuilding yum metadata for repository` message. For example, consider the log from a failed rebuild of `mirror-1.3.0-opensuse-leap-15`:
+**Troubleshooting:** When a rebuild fails, expect to see `ERROR` and `WARN` messages around the same time as the `Finished rebuilding yum metadata for repository` message. For example, consider the log from a failed rebuild of `mirror-1.4.0-opensuse-leap-15`:
 
 ```bash
 kubectl -n nexus exec -ti nexus-55d8c77547-65k6q -c nexus -- \
@@ -173,13 +173,13 @@ Example output:
 2020-08-22 23:12:59,523+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask - Task information:
 2020-08-22 23:12:59,526+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  ID: 35536bcd-3947-4ba9-8d6d-43dcadbb87ad
 2020-08-22 23:12:59,526+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Type: repository.yum.rebuild.metadata
-2020-08-22 23:12:59,526+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Name: Rebuild Yum metadata - mirror-1.3.0-opensuse-leap-15
-2020-08-22 23:12:59,527+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Description: Rebuild metadata for mirror-1.3.0-opensuse-leap-15
+2020-08-22 23:12:59,526+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Name: Rebuild Yum metadata - mirror-1.4.0-opensuse-leap-15
+2020-08-22 23:12:59,527+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask -  Description: Rebuild metadata for mirror-1.4.0-opensuse-leap-15
 2020-08-22 23:12:59,529+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask - Task log: /nexus-data/log/tasks/repository.yum.rebuild.metadata-20200822231259523.log
-2020-08-22 23:12:59,529+0000 INFO  [event-12-thread-780]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15
+2020-08-22 23:12:59,529+0000 INFO  [event-12-thread-780]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Rebuilding yum metadata for repository mirror-1.4.0-opensuse-leap-15
 2020-08-22 23:12:59,531+0000 INFO  [quartz-9-thread-20]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.task.YumCreateRepoTask - Task complete
 2020-08-22 23:24:16,974+0000 INFO  [Thread-1948 <command>sql.select from asset where (component IS NOT NULL  AND attributes.yum.asset_kind = :p0) and (bucket=#59:1)</command>]  *SYSTEM com.orientechnologies.common.profiler.OProfilerStub - $ANSI{green {db=component}} [TIP] Query 'SELECT FROM asset WHERE (component IS NOT NULL AND attributes.yum.asset_kind = "RPM" ) AND (bucket = #59:1 )' returned a result set with more than 10000 records. Check if you really need all these records, or reduce the resultset by using a LIMIT to improve both performance and used RAM
-2020-08-22 23:29:57,700+0000 INFO  [event-12-thread-780]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Finished rebuilding yum metadata for repository mirror-1.3.0-opensuse-leap-15
+2020-08-22 23:29:57,700+0000 INFO  [event-12-thread-780]  *SYSTEM org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl - Finished rebuilding yum metadata for repository mirror-1.4.0-opensuse-leap-15
 2020-08-22 23:29:57,701+0000 ERROR [event-12-thread-780]  *SYSTEM com.google.common.eventbus.EventBus.nexus.async - Could not dispatch event org.sonatype.nexus.repository.yum.internal.createrepo.YumMetadataInvalidationEvent@75b487e7 to subscriber org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl$$EnhancerByGuice$$9db995@93053b8 method [public void org.sonatype.nexus.repository.yum.internal.createrepo.CreateRepoFacetImpl.on(org.sonatype.nexus.repository.yum.internal.createrepo.YumMetadataInvalidationEvent)]
 org.sonatype.nexus.repository.InvalidContentException: Invalid RPM: external/noarch/redeclipse-data-1.5.6-lp151.2.5.noarch.rpm
     at org.sonatype.nexus.repository.yum.internal.rpm.YumRpmParser.parse(YumRpmParser.java:108)

@@ -2,7 +2,7 @@
 
 > **Reminders:**
 >
-> - CSM 1.2.0 or higher is required in order to upgrade to CSM 1.3.0.
+> - CSM 1.3.0 or higher is required in order to upgrade to CSM 1.4.0.
 > - If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 >   [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
@@ -40,7 +40,7 @@ after a break, always be sure that a typescript is running before proceeding.
 1. (`ncn-m001#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   CSM_RELEASE=1.3.0
+   CSM_RELEASE=1.4.0
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
@@ -51,7 +51,7 @@ after a break, always be sure that a typescript is running before proceeding.
       > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why these commands copy it there.
 
       ```bash
-      wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.3/noarch/docs-csm-latest.noarch.rpm \
+      wget https://artifactory.algol60.net/artifactory/csm-rpms/hpe/stable/sle-15sp2/docs-csm/1.4/noarch/docs-csm-latest.noarch.rpm \
           -O /root/docs-csm-latest.noarch.rpm &&
       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
       ```
