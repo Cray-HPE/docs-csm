@@ -65,3 +65,27 @@ When the issue materializes, then it is highly likely the Ceph container images 
    ceph mgr fail $(ceph mgr dump | jq -r .active_name)
    ```
 
+## Services not starting due to ssh keys not cached on nodes
+
+```bash
+num_storage_nodes=$(ceph node ls|jq -r '.osd|keys|length')
+ceph cephadm get-pub-key > /etc/ceph/ceph.pub
+for node in $(seq 1 $num_storage_nodes); do
+   nodename=$(printf "ncn-s%03d" $node)
+   ssh-keyscan -t rsa -H $nodename >> ~/.ssh/known_hosts
+done
+```
+
+You may also want to clear the local cache entries in the known_host files on the nodes.
+
+```bash
+for node in $(seq 1 "$num_storage_nodes"); do
+ nodename=$(printf "ncn-s%03d" "$node")
+ ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
+done
+
+for node in $(seq 1 "$num_storage_nodes"); do
+ nodename=$(printf "ncn-s%03d.nmn" "$node")
+ ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
+done
+```
