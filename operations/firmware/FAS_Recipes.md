@@ -2,8 +2,8 @@
 
 **NEW** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-> **`NOTE`** This is a collection of various FAS recipes for performing updates.
-> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update.
 
@@ -20,8 +20,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### (Cray) Device Type: `ChassisBMC` | Target: BMC
 
-> **`NOTE`** This is a collection of various FAS recipes for performing updates.
-> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:** Before updating a CMM:
 >
@@ -87,8 +87,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### (Cray) Device Type: `NodeBMC` | Target: `NodeBIOS`
 
-> **`NOTE`** This is a collection of various FAS recipes for performing updates.
-> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:**
 >
@@ -128,8 +128,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA
 
-> **`NOTE`** This is a collection of various FAS recipes for performing updates.
-> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:**
 >
@@ -199,8 +199,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### (HPE) Device Type: `NodeBMC` | Target: System ROM (BIOS)
 
-> **`NOTE`** This is a collection of various FAS recipes for performing updates.
-> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:**
 >
