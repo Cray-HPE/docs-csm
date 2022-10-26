@@ -2,11 +2,14 @@
 
 Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmware.
 
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
 ## Topics
 
 * [Warning for Non-Compute Nodes (NCNs)](#warning-for-non-compute-nodes-ncns)
 * [Declarative vs Imperative FAS Updates](#declarative-vs-imperative-fas-updates)
-* [Ignore Nodes within FAS](#ignore-nodes-within-fas)
+* [Ignore Management Nodes within FAS](#ignore-management-nodes-within-fas)
+* [Excluding Nodes from an Update](#excluding-nodes-from-an-update)
 * [Override an Image for an Update](#override-an-image-for-an-update)
 * [Check for New Firmware Versions with a Dry-Run](#check-for-new-firmware-versions-with-a-dry-run)
 * [Load Firmware from Nexus](#load-firmware-from-nexus)
@@ -36,7 +39,19 @@ If the required image is not installed, obtain the RPM or ZIP file and use the [
 
 ---
 
-## Ignore Nodes within FAS
+## Excluding Nodes from an Update
+
+The default behavior for FAS to update every node in the system that fits the specified action filters.
+
+To exclude one or more nodes the following options are available:
+
+1. Lock the nodes you do not want to update using the Hardware State Manager (HSM).
+Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
+Make sure to unlock these nodes once the update is complete.
+2. Use the `xname` filter to only include the nodes that you wish to update.
+See [`stateComponentFilter`](FAS_Filters.md#stateComponentFilter) for more information.
+
+## Ignore Management Nodes within FAS
 
 The default configuration of FAS no longer ignores `management` nodes, which prevents FAS from firmware updating the NCNs.
 To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure they cannot have their firmware upgraded, the `NODE_BLACKLIST` value must be manually enabled
@@ -44,7 +59,7 @@ To reconfigure the FAS deployment to exclude non-compute nodes (NCNs) and ensure
 **Preferred Method:** Nodes can also be locked with the Hardware State Manager (HSM) API.
 Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
 
-### Procedure to Ignore Nodes
+### Procedure to Ignore Management Nodes
 
 1. (`ncn#`) Check that there are no FAS actions running.
 
