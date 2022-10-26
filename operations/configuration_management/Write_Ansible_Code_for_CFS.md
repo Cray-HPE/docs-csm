@@ -166,7 +166,7 @@ Some Ansible modules will optimize the command, such as grouping package install
 
 For users just starting to write plays, or who just want to focus on the biggest improvements, here is a summary of the key tips:
 
-* Disable fact gathering if the play doesn't use Ansible facts: `gather_facts: false`
+* Disable fact gathering if the play does not use Ansible facts: `gather_facts: false`
 * Use image customization where possible to avoid running tasks every time nodes boot.
 * Use `group_by`, `add_host` and `include_*` rather than `roles:` and `when:` to avoid repeating conditionals.
 * Use existing Ansible modules rather than calling shell commands or scripts.

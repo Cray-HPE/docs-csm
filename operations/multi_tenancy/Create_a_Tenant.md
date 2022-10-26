@@ -146,7 +146,7 @@ Slurm provisioning is similar to tenant creation, using a CR.
 - (`ncn-mw#`) To see all possible configuration settings for the custom
     resource, run this command:
 
-    ```sh
+    ```bash
     kubectl get crd slurmclusters.wlm.hpe.com -o yaml
     ```
 
@@ -222,7 +222,7 @@ spec:
         accessModes:
           - ReadWriteOnce
         storage: 10Gi
-      # Backup daily at 9:10PM (doesn't conflict with other CSM DB backups)
+      # Backup daily at 9:10PM (does not conflict with other CSM DB backups)
       schedule: "10 21 * * *"
       keep: 3
       resources:
@@ -250,7 +250,7 @@ spec:
 - (`ncn-mw#`) To create the tenant and deploy Slurm resources, apply the tenant
     file with `kubectl`:
 
-    ```sh
+    ```bash
     kubectl apply -f <cluster>.yaml
     ```
 
