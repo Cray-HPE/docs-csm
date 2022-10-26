@@ -22,7 +22,7 @@ then quorum would be lost.
 
 ## Disable encryption for upgrade if enabled
 
-While it is possible to upgrade with Kubernetes encryption enabled, we recommend disabling encryption for the duration of the upgrade if it has been enabled.
+While it is possible to upgrade with Kubernetes encryption enabled, disabling encryption is recommended for the duration of the upgrade if it has been enabled.
 
 Reference the [Kubernetes Encryption](../operations/kubernetes/encryption/README.md) for details.
 
