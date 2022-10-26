@@ -612,9 +612,6 @@ Zypper
 
 - background/README.md
 initramFS
-initrd
-overlayFS
-squashFS
 
 - glossary.md
 # To allow 802.3cd/bs
