@@ -14,8 +14,7 @@ BMC/controller passwords.
 1. [Lock management nodes](#3-lock-management-nodes)
 1. [Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
 1. [Configure non-compute nodes with CFS](#5-configure-non-compute-nodes-with-cfs)
-1. [Upload Olympus BMC recovery firmware into TFTP server](#6-upload-olympus-bmc-recovery-firmware-into-tftp-server)
-1. [Proceed to next topic](#7-proceed-to-next-topic)
+1. [Proceed to next topic](#6-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
