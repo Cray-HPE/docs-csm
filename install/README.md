@@ -162,22 +162,30 @@ types include Slack, Pager Duty, email, or a custom integration via a generic we
 See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for an example
 configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
 
-### 8. Update firmware with FAS
+### 8. Upload Olympus BMC recovery firmware into TFTP server
+
+> **IMPORTANT:**
+> Before Firmware can be updated the HPC Firmware Pack (HFP) must be installed  refer to the
+> [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
+> on the HPE Customer Support Center for more information about how to install
+> the HPE Cray EX HPC Firmware Pack (HFP) product.
+
+The Olympus hardware needs to have recovery firmware loaded to the `cray-tftp` server in case the BMC loses its firmware.
+The BMCs are configured to load a recovery firmware from a TFTP server.
+This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
+
+See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).
+
+## 9. Update firmware with FAS
 
 Now that all management nodes and CSM services have been validated as healthy, the firmware on other
 components in the system can be checked and updated. The Firmware Action Service (FAS) communicates
 with many devices on the system. FAS can be used to update the firmware for all of the devices it
 communicates with at once, or specific devices can be targeted for a firmware update.
 
-> **IMPORTANT:**
-> Before FAS can be used to update firmware, refer to the
-> [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
-> on the HPE Customer Support Center for more information about how to install
-> the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
-> available. Once FAS is aware that new firmware is available, then see
-> [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
+See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
 
-### 9. Prepare compute nodes
+### 10. Prepare compute nodes
 
 After completion of the firmware update with FAS, compute nodes can be prepared. Some compute node
 types have special preparation steps, but most compute nodes are ready to be used now.
@@ -189,7 +197,7 @@ These compute node types require preparation:
 
 See [Prepare Compute Nodes](prepare_compute_nodes.md).
 
-### 10. Next topic
+### 11. Next topic
 
 After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
 been fully installed and configured.
@@ -205,7 +213,7 @@ for additional information on system hardware, troubleshooting, and administrati
 
 See [Troubleshooting Installation Problems](troubleshooting_installation.md).
 
-### 11. Kubernetes encryption
+### 12. Kubernetes encryption
 
 As an optional post installation task, encryption of Kubernetes secrets may be enabled. This enables
 at rest encryption of data in the `etcd` database used by Kubernetes.

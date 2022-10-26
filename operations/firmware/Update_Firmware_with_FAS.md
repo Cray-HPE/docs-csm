@@ -4,7 +4,7 @@ If FAS has not yet been installed, firmware for NCNs can be updated manually wit
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
 
-Reset Gigabyte node BMC to factory defaults if having problems with `ipmitool`, problems using Redfish, or when flashing procedures fail.
+Gigabyte nodes that are having issues with `ipmitool`, Redfish, or flashing firmware may need to be reset to factory defaults.
 See [Set Gigabyte Node BMC to Factory Defaults](../../operations/node_management/Set_Gigabyte_Node_BMC_to_Factory_Defaults.md).
 
 FAS images contain the following information that is needed for a hardware device to update firmware versions:
@@ -59,7 +59,7 @@ Table 1. Upgradable Firmware Items
 | Cray             | `chassisBMC` | `BMC`, `Recovery`                                                                   |
 | Cray             | `routerBMC`  | `BMC`, `Recovery`                                                                   |
 | Gigabyte         | `nodeBMC`    | `BMC`, `BIOS`                                                                       |
-| HPE              | `nodeBMC`    | `iLO 5` (`BMC` or `1` ), `System ROM` ,`Redundant System ROM` (`BIOS` or `2`)       |
+| HPE              | `nodeBMC`    | `iLO 5`, `System ROM` ,`Redundant System ROM`                                       |
 
 ## Order of operations
 
