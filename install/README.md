@@ -39,12 +39,13 @@ shown here with numbered topics.
     1. [Configure administrative access](#5-configure-administrative-access)
     1. [Validate CSM health](#6-validate-csm-health)
     1. [Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-    1. [Update firmware with FAS](#8-update-firmware-with-fas)
-    1. [Prepare compute nodes](#9-prepare-compute-nodes)
-    1. [Next topic](#10-next-topic)
+    1. [Upload Olympus BMC recovery firmware into TFTP server](#8-upload-olympus-bmc-recovery-firmware-into-tftp-server)
+    1. [Update firmware with FAS](#9-update-firmware-with-fas)
+    1. [Prepare compute nodes](#10-prepare-compute-nodes)
+    1. [Next topic](#11-next-topic)
     - [Troubleshooting installation problems](#troubleshooting-installation-problems)
 1. [Post-installation](#post-installation)
-    1. [Kubernetes encryption](#11-encryption)
+    1. [Kubernetes encryption](#12-encryption)
 
 > **`NOTE`** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#troubleshooting-installation-problems) and
