@@ -104,7 +104,7 @@ In order to simplify HNC management CSM NCNs are installed with the `kubectl-hns
     ```
 
 Note that propagating `Roles` and `RoleBindings` are default behavior for `hnc`.
-If there are `Roles` and `Rolebindings` that shouldn't be propagated to child namespaces, this behavior can be changed by adding a Kubernetes annotation to the object in the parent namespace:
+If there are `Roles` and `Rolebindings` that should not be propagated to child namespaces, this behavior can be changed by adding a Kubernetes annotation to the object in the parent namespace:
 
 ```text
 propagate.hnc.x-k8s.io/none: "true"
