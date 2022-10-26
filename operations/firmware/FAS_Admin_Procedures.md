@@ -2,7 +2,7 @@
 
 Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmware.
 
-**NEW** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 ## Topics
 

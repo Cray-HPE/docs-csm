@@ -10,7 +10,7 @@ This includes NCNs which are manually locked to prevent accidental rebooting and
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
 
-**NEW** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 ## Prerequisites
 
