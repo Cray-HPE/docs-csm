@@ -92,7 +92,8 @@ MSG_CRAY_VERIFY = 105
 MSG_MISSING_SCRIPT = 106
 MSG_CONFIGFILE_NOT_PRESENT = 107
 MSG_PYTHON_SCRIPT_ERROR = 108
-MSG_LAST = 109
+MSG_K8S_NOT_CONFIGURED = 109
+MSG_LAST = 110
 INIT_FAILURE_MSG = {
     MSG_USER_SECRET : "Failed to obtain user secret",
     MSG_REMOTE_COPY_FAILURE : "Failed to copy script to remote host",
@@ -102,6 +103,7 @@ INIT_FAILURE_MSG = {
     MSG_MISSING_SCRIPT : "Script missing on remote node",
     MSG_CONFIGFILE_NOT_PRESENT : "Initialization file not present",
     MSG_PYTHON_SCRIPT_ERROR : "Python script failed",
+    MSG_K8S_NOT_CONFIGURED : "Kubernetes not configured on this node",
 }
 
 class CliUserAuth(object):
@@ -578,12 +580,12 @@ def callRemoteFunc(nodes, cmdOpt):
         results = remote_init_results[fn]
         if results[0] >= MSG_USER_SECRET and results[0]<MSG_LAST:
             # given a failure code we know - log the message
-            LOGGER.error(f"{fn}: ERROR: {INIT_FAILURE_MSG[results[0]]}")
+            LOGGER.warning(f"{fn}: WARNING: {INIT_FAILURE_MSG[results[0]]}")
             # log the entire call output if debug logging requested
             LOGGER.debug(f"{fn}: {results[1]}")
         else:
             # unknown message, display the entire thing
-            LOGGER.error(f"{fn}: {results[1]}")
+            LOGGER.warning(f"{fn}: {results[1]}")
 
 # Do initialization of cray CLI on an individual node
 def doIndividualInit(k8sClientApi):
@@ -598,6 +600,7 @@ def doIndividualInit(k8sClientApi):
     MSG_CRAY_INIT - calling 'cray init' failed
     MSG_CRAY_AUTH - calling 'cray auth login' failed
     MSG_CRAY_VERIFY - CLI usage verification failed
+    MSG_K8S_NOT_CONFIGURED - k8s not configured on this node
     """
     # get the CLI user secret - should not need to be created
     tmpUser = CliUserAuth(
@@ -636,7 +639,7 @@ def checkCrayCli(exitErr):
     if s3Pass and imsPass and slsPass:
         LOGGER.info(f"Verified - cray CLI working correctly")
     else:
-        LOGGER.error(f"FAILED: Cray CLI check failed with: {outStr}")
+        LOGGER.warning(f"WARNING: Cray CLI check failed with: {outStr}")
         sys.exit(exitErr)
 
 # Helper function to call expect script with command and input pairs
@@ -765,8 +768,14 @@ def main():
         sys.exit(1)
 
     # Load K8s configuration
-    k8sConfig = config.load_kube_config()
-    k8sClientApi = client.CoreV1Api()
+    k8sConfig = None
+    k8sClientApi = None
+    try:
+        k8sConfig = config.load_kube_config()
+        k8sClientApi = client.CoreV1Api()
+    except Exception as err:
+        LOGGER.error(f"Error initializing k8s: {err}")
+        sys.exit(MSG_K8S_NOT_CONFIGURED)
 
     # figure out which part we are running
     if args.run:
