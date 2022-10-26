@@ -32,7 +32,6 @@ Glossary of terms used in CSM documentation.
 * [High Speed Network (HSN)](#high-speed-network-hsn)
 * [Image Management Service (IMS)](#image-management-service-ims)
 * [Kubernetes NCNs](#kubernetes-ncns)
-* [LiveCD](#livecd)
 * [Management Cabinet](#management-cabinet)
 * [Management Nodes](#management-nodes)
 * [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service-meds)
@@ -43,6 +42,8 @@ Glossary of terms used in CSM documentation.
 * [Olympus Cabinet](#olympus-cabinet)
 * [Power Distribution Unit (PDU)](#power-distribution-unit-pdu)
 * [Pre-Install Toolkit (PIT) node](#pre-install-toolkit-pit)
+  * [LiveCD](#livecd)
+  * [RemoteISO](#remoteiso)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
@@ -304,13 +305,6 @@ The Kubernetes NCNs are the management nodes which are known as Kubernetes maste
 (`ncn-mXXX`) or Kubernetes worker nodes (`ncn-wXXX`). The only type of management node which is
 excluded from this is the utility storage node (`ncn-sXXX`).
 
-## LiveCD
-
-The LiveCD has a complete bootable Linux operating system that can be run from a read-only CD or
-DVD, a writable USB flash drive, or a hard disk. It is used to bootstrap the installation
-process for CSM software. It contains the Pre-Install Toolkit (PIT). The node which boots
-from it during the install is known as the [PIT node](#pre-install-toolkit-pit).
-
 ## Management Cabinet
 
 At least one 19 inch IEA management cabinet is required for every HPE Cray EX system to
@@ -383,21 +377,22 @@ not connect to the SMNet.
 
 ## Pre-Install Toolkit (PIT)
 
-The Pre-Install Toolkit is installed onto the initial node used as the inception node during software
-installation which is booted from a [LiveCD](#livecd). This is the node that will eventually become `ncn-m001`.
-The node running the Pre-Install Toolkit is known as the PIT node during the installation process
-until it reboots from a normal management node image like the other master nodes.
+The Pre-Install Toolkit (PIT) provides a framework for bare-metal discovery, recovery, and for starting a CSM installation.
+The PIT can be used on any node in the system for recovery, for installations and bare-metal discovery it is commonly
+used from a node that has a site-link (such as a Kubernetes master).
 
-Early in the install process, before the Pre-Install Toolkit has been installed or booted, the
-documents may still refer to the PIT node. In this case, they are referring to the node which
-will eventually become the PIT node.
+Typically the first Kubernetes master (`ncn-m001`) is chosen for running the PIT during a CSM installation. After CSM is installed,
+the node running the PIT will be rebooted and deployed via CSM services before finally joining the running Kubernetes cluster.
 
-In this documentation, PIT node, RemoteISO, and LiveCD are sometimes used interchangeably to refer to various contexts:
+The PIT is ephemeral, it runs in either in memory or it can be written to a USB stick for persistence.
 
-* The pre-install-toolkit (PIT) refers to the running environment used for CSM installations and recovery. Example: "Once in the PIT, proceed with the pre-installation,"
-  means once the user is in the environment provided by the LiveCD they can proceed with their procedure.
-* The LiveCD refers to the artifact (e.g. the `.iso` file) providing the PIT. Example: "A new LiveCD is needed," means a new artifact is needed.
-* The term RemoteISO is used to refer to the LiveCD (e.g the `.iso`) when it is remotely mounted on a server's BMC). Example: "The RemoteISO failed," means that the remotely connected LiveCD is having an issue.
+### LiveCD
+
+The **LiveCD** refers to the artifact (e.g. the `.iso` file) providing the PIT. Example: "A new LiveCD is needed," means a new artifact is needed.
+
+### RemoteISO
+
+The term **RemoteISO** is used to refer to the LiveCD (e.g the `.iso`) when it is remotely mounted on a server's BMC). Example: "The RemoteISO failed," means that the remotely connected LiveCD is having an issue.
 
 ## Rack-Mounted CDU
 
