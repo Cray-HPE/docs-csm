@@ -13,6 +13,8 @@ FAS images contain the following information that is needed for a hardware devic
 * Selection criteria: How to link a firmware image to a specific hardware type.
 * Image data: Where the firmware image resides in Simple Storage Service (S3) and what `firmwareVersion` it will report after it is successfully applied. See [Artifact Management](../artifact_management/Artifact_Management.md) for more information.
 
+**NEW** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
 ## Topics
 
 * [Prerequisites](#prerequisites)

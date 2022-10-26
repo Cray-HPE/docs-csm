@@ -1,5 +1,7 @@
 # FAS Recipes
 
+**NEW** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
 > **`NOTE`** This is a collection of various FAS recipes for performing updates.
 > For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
