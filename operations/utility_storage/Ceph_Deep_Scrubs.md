@@ -7,7 +7,7 @@ are not deep-scrubbed at the same time.
 
 ## Ceph Deep Scrub Behavior During Outages
 
-When one or more OSDs are down, the deep scrubbing of the PGs on those OSDs can't be performed. If a
+When one or more OSDs are down, the deep scrubbing of the PGs on those OSDs cannot be performed. If a
 deep scrub of a PG is scheduled to occur while the OSD is down, the deep scrubbing will be delayed
 until the OSDs are available. This commonly occurs when the storage nodes are powered down as part
 of the [System Power Off Procedures](../power_management/System_Power_Off_Procedures.md).
