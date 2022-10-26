@@ -55,6 +55,8 @@ done
 for ncn in "${NCNS[@]}"; do
     printf "Uploading new metal-lib.sh to $ncn:/srv/cray/scripts/metal/ ... "
     scp ${workdir}/metal-lib.sh ${ncn}:/srv/cray/scripts/metal/metal-lib.sh >/dev/null
+    printf "Uploading lib.sh to $ncn:/srv/cray/scripts/common/ ... "
+    scp ${workdir}/lib.sh ${ncn}:/srv/cray/scripts/common/lib.sh >/dev/null
     echo "Done" 
 done
 
