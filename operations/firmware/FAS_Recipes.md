@@ -20,6 +20,9 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### (Cray) Device Type: `ChassisBMC` | Target: BMC
 
+> **`NOTE`** This is a collection of various FAS recipes for performing updates.
+> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+
 > **IMPORTANT:** Before updating a CMM:
 >
 > - Make sure all slot and rectifier power is off.
@@ -84,6 +87,9 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### (Cray) Device Type: `NodeBMC` | Target: `NodeBIOS`
 
+> **`NOTE`** This is a collection of various FAS recipes for performing updates.
+> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+
 > **IMPORTANT:**
 >
 > - The nodes themselves must be powered **off** in order to update their BIOS. The BMC will still have power and will perform the update.
@@ -122,6 +128,9 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA
 
+> **`NOTE`** This is a collection of various FAS recipes for performing updates.
+> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+
 > **IMPORTANT:**
 >
 > - The nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
@@ -159,6 +168,9 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### (HPE) Device Type: `NodeBMC` | Target: iLO 5 (BMC)
 
+> **`NOTE`** This is a collection of various FAS recipes for performing updates.
+> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+
 ```json
 {
 "stateComponentFilter": {
@@ -186,6 +198,9 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 ```
 
 ### (HPE) Device Type: `NodeBMC` | Target: System ROM (BIOS)
+
+> **`NOTE`** This is a collection of various FAS recipes for performing updates.
+> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:**
 >
@@ -225,6 +240,9 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 ## Manufacturer: Gigabyte
 
 ### (Gigabyte) Device Type: `NodeBMC` | Target: BMC
+
+> **`NOTE`** This is a collection of various FAS recipes for performing updates.
+> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ```json
 {
@@ -274,6 +292,9 @@ To resolve this issue, do either of the following actions:
 Make sure to wait for the current firmware to be updated before starting a new FAS action on the same node.
 
 ### (Gigabyte) Device Type: `NodeBMC` | Target: BIOS
+
+> **`NOTE`** This is a collection of various FAS recipes for performing updates.
+> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ```json
 {
