@@ -20,6 +20,14 @@ there may be a degraded system. For example, if there are three Kubernetes maste
 maintained by the remaining two nodes. If one of those two nodes has a fault before the third node completes its upgrade,
 then quorum would be lost.
 
+## Disable encryption for upgrade if enabled
+
+While it is possible to upgrade with Kubernetes encryption enabled, we recommend disabling encryption for the duration of the upgrade if it has been enabled.
+
+Reference the [Kubernetes Encryption](../operations/kubernetes/encryption/README.md) for details.
+
+Once the upgrade is complete encryption can be turned back on.
+
 ## Start typescript
 
 1. (`ncn-m001#`) If a typescript session is already running in the shell, then first stop it with the `exit` command.
