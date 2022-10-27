@@ -690,6 +690,9 @@ Alerta
 - operations/network/dns/DNS.md
 ExternalDNS
 
+- operations/network/dns/Manage_the_DNS_Unbound_Resolver.md
+ExternalDNS
+
 - RELEASE_NOTES.md
 5.x
 Antero
