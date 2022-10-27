@@ -25,7 +25,7 @@ The current implementation has a known limitation in regards to upgrades. While 
 boot and operational issues it is recommended to disable encryption prior to any upgrades. Failure to disable encryption will cause each control plane node to fail
 to complete `cloud-init` as the default Kubernetes configuration lacks the necessary keys to decrypt etcd data.
 
-Once upgraded you may re-enable encryption
+Once upgraded, encryption can be re-enabled.
 
 ## Implementation details
 
@@ -250,7 +250,7 @@ All subsequent ciphers provided allow for any secrets encrypted with that cipher
 
 * (`ncn-m#`) The `encryption.sh` script needs to be run with the new key as the first switch and the existing key as a subsequent switch.
 
-    As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
+    **`NOTE`**: As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
 
     ```bash
      /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --enable --aescbc NEWKEYVALUE --aescbc EXISTINGKEYVALUE
@@ -262,12 +262,12 @@ All subsequent ciphers provided allow for any secrets encrypted with that cipher
     ncn-m001 configuration updated ensure all control plane nodes run this same command
     ```
 
-Once completed, reference Encryption status for details, you may optionally remove the old key from all control plane nodes. Note that removing the old key will mean you will be unable to
-use etcd backups that contain data with that encryption key.
+Once completed, reference the Encryption status for details. Optionally, the old key can be removed from all control plane nodes. Note that removing the old key will make
+the etcd backups that contain data with that encryption key unusable.
 
 * (`ncn-m#`) The `encryption.sh` script needs to be run again with just the new key.
 
-    As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
+    **`NOTE`**: As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
 
     ```bash
      /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --enable --aescbc NEWKEYVALUE
