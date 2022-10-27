@@ -110,7 +110,7 @@ The API gateway uses OAuth2 for authentication. A token is required to authentic
 
     ```bash
     ncn# TOKEN=access_token
-    ncn# curl -H "Authorization: Bearer $TOKEN" https://api.cmn.SYSTEM_DOMAIN_NAME/apis/capmc/capmc/get_node_rules
+    ncn# curl -H "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/capmc/capmc/get_node_rules
     ```
 
     Example output:
