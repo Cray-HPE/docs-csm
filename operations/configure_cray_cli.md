@@ -64,7 +64,7 @@ before proceeding.
 
 The `craycli_init.py` script can be used to create a new Keycloak account that is authorized for the `cray` CLI.
 That account can in turn be used to initialize and authorize the `cray` CLI on all master, worker, and storage nodes
-in the cluster that have Kubernetes configured.  This account is only intended to be used for the duration of the
+in the cluster that have Kubernetes configured. This account is only intended to be used for the duration of the
 install and should be removed when the install is complete.
 
 ### Procedure for temporary Keycloak user
@@ -106,7 +106,7 @@ install and should be removed when the install is complete.
     2021-12-21 15:50:52,714 - WARNING  - ncn-s003: WARNING: Kubernetes not configured on this node
     ```
 
-    NOTE: in the above example, Kubernetes was not configured on `ncn-s002` and `ncn-s003` so the
+    NOTE: In the above example, Kubernetes was not configured on `ncn-s002` and `ncn-s003`; the
     `cray` CLI was not authenticated on those nodes, but is functional on the other nodes.
 
     The `cray` CLI is now operational on all nodes where success was reported. If a node was
