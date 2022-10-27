@@ -377,22 +377,23 @@ not connect to the SMNet.
 
 ## Pre-Install Toolkit (PIT)
 
-The Pre-Install Toolkit (PIT) provides a framework for bare-metal discovery, recovery, and for starting a CSM installation.
+The Pre-Install Toolkit (PIT) provides a framework for bare-metal discovery, recovery, and for starting a [CSM](#cray-system-management-csm) installation.
 The PIT can be used on any node in the system for recovery, for installations and bare-metal discovery it is commonly
 used from a node that has a site-link (such as a Kubernetes master).
 
-Typically the first Kubernetes master (`ncn-m001`) is chosen for running the PIT during a CSM installation. After CSM is installed,
-the node running the PIT will be rebooted and deployed via CSM services before finally joining the running Kubernetes cluster.
+Typically, the first Kubernetes master (`ncn-m001`) is chosen for running the PIT during a [CSM](#cray-system-management-csm) installation. After [CSM](#cray-system-management-csm) is installed,
+the node running the PIT will be rebooted and deployed via [CSM](#cray-system-management-csm) services before finally joining the running Kubernetes cluster.
 
 The PIT is delivered as a [LiveCD](#livecd), a disk image that can be used to remotely boot a node (e.g. a [RemoteISO](#remoteiso)) or by a USB stick.
 
 ### LiveCD
 
-The **LiveCD** refers to the artifact, the literal image file that contains the pre-install toolkit.
+The term *LiveCD* refers to the artifact, the literal image file that contains the pre-install toolkit.
 
 ### RemoteISO
 
-The term **RemoteISO** is used to refer to a remotely mounted the LiveCD. A remotely mounted LiveCD has no persistence.
+The term *RemoteISO* refers to a [LiveCD](#livecd) that is remotely mounted on a server. A remotely mounted LiveCD has no persistence,
+a reboot of a RemoteISO will lose all data/information from the running session.
 
 ## Rack-Mounted CDU
 
