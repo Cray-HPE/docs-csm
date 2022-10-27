@@ -20,6 +20,7 @@ The example below shows how to run the template using the current required param
 argo -n argo submit --from workflowtemplate/nexus-setup-template \
   -p 'product=foo' \
   -p 'product_host_path=/root/rnoska/argo-nexus/products' \
+  -p 'nexus_setup_image=artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.0-20221021164623_e8d3d3d' \
   --parameter-file /root/rnoska/argo-nexus/products/foo/iuf-manifest.yaml \
   --watch 
 ```
