@@ -39,12 +39,13 @@ shown here with numbered topics.
     1. [Configure administrative access](#5-configure-administrative-access)
     1. [Validate CSM health](#6-validate-csm-health)
     1. [Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-    1. [Update firmware with FAS](#8-update-firmware-with-fas)
-    1. [Prepare compute nodes](#9-prepare-compute-nodes)
-    1. [Next topic](#10-next-topic)
+    1. [Upload Olympus BMC recovery firmware into TFTP server](#8-upload-olympus-bmc-recovery-firmware-into-tftp-server)    
+    1. [Update firmware with FAS](#9-update-firmware-with-fas)
+    1. [Prepare compute nodes](#10-prepare-compute-nodes)
+    1. [Next topic](#11-next-topic)
     - [Troubleshooting installation problems](#troubleshooting-installation-problems)
 1. [Post-installation](#post-installation)
-    1. [Apply security hardening](#11-apply-security-hardening)
+    1. [Apply security hardening](#12-apply-security-hardening)
 
 > **`NOTE`** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#troubleshooting-installation-problems) and
@@ -162,21 +163,29 @@ types include Slack, Pager Duty, email, or a custom integration via a generic we
 See [Configure Prometheus Email Alert Notifications](../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for an example
 configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
 
-### 8. Update firmware with FAS
+### 8. Upload Olympus BMC recovery firmware into TFTP server
+
+> **IMPORTANT:**
+> Before Firmware can be updated the HPC Firmware Pack (HFP) must be installed  refer to the
+> [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
+> on the HPE Customer Support Center for more information about how to install
+> the HPE Cray EX HPC Firmware Pack (HFP) product.
+The Olympus hardware needs to have recovery firmware loaded to the `cray-tftp` server in case the BMC loses its firmware.
+The BMCs are configured to load a recovery firmware from a TFTP server.
+This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
+
+See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).
+
+### 9. Update firmware with FAS
 
 Now that all management nodes and CSM services have been validated as healthy, the firmware on other
 components in the system can be checked and updated. The Firmware Action Service (FAS) communicates
 with many devices on the system. FAS can be used to update the firmware for all of the devices it
 communicates with at once, or specific devices can be targeted for a firmware update.
 
-> **IMPORTANT:**
-> Before FAS can be used to update firmware, refer to the _HPE Cray EX System Software Getting Started Guide S-8000_
-> on the [HPE Customer Support Center](https://www.hpe.com/support/ex-S-8000) for more information about how to install
-> the HPE Cray EX HPC Firmware Pack (HFP) product. The installation of HFP will inform FAS of the newest firmware
-> available. Once FAS is aware that new firmware is available, then see
-> [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
+See [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md)
 
-### 9. Prepare compute nodes
+### 10. Prepare compute nodes
 
 After completion of the firmware update with FAS, compute nodes can be prepared. Some compute node
 types have special preparation steps, but most compute nodes are ready to be used now.
@@ -188,7 +197,7 @@ These compute node types require preparation:
 
 See [Prepare Compute Nodes](prepare_compute_nodes.md).
 
-### 10. Next topic
+### 11. Next topic
 
 After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
 been fully installed and configured.
@@ -206,7 +215,7 @@ See [Troubleshooting Installation Problems](troubleshooting_installation.md).
 
 ## Post-installation
 
-### 11. Apply security hardening
+### 12. Apply security hardening
 
 Review the security hardening guide, apply non-optional procedures, and review optional procedures.
 
