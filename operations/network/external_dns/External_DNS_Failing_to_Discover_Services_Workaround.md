@@ -1,18 +1,17 @@
 # External DNS Failing to Discover Services Workaround
 
-Many external DNS issues can be worked around by directly connecting to the desired backend service. This can circumvent authentication and authorization protections, but it may be necessary to access specific services when mitigating critical issues.
+Many external DNS issues can be worked around by directly connecting to the desired backend service. This can circumvent authentication and authorization protections,
+but it may be necessary to access specific services when mitigating critical issues.
 
-Istio's ingress gateway uses Gateway and VirtualService objects to configure how traffic is routed to backend services. Currently, there are three gateways supporting the externally accessible services. They are services-gateway, customer-admin-gateway and customer-user-gateway. They are configured to support traffic on any host depending on the network over which the services are accessed. It is the VirtualService objects that ultimately control routing based on hostname.
+Istio's ingress gateway uses `Gateway` and `VirtualService` objects to configure how traffic is routed to backend services. Currently, there are three gateways supporting the externally
+accessible services: `services-gateway`, `customer-admin-gateway`, and `customer-user-gateway`. They are configured to support traffic on any host depending on the network over which the
+services are accessed. It is the `VirtualService` objects that ultimately control routing based on hostname.
 
 Use this procedure to resolve any external DNS routing issues with backend services.
 
-### Prerequisites
+## Procedure
 
-This procedure requires administrative privileges.
-
-### Procedure
-
-1.  Search for the VirtualService object that corresponds to the desired service.
+1. (`ncn-mw#`) Search for the `VirtualService` object that corresponds to the desired service.
 
     The command below will list all external hostnames.
 
@@ -22,7 +21,7 @@ This procedure requires administrative privileges.
 
     Example output:
 
-    ```
+    ```text
     NAMESPACE        NAME                              GATEWAYS                       HOSTS                                                          AGE
     istio-system     kiali                             [services/services-gateway]    [kiali-istio.cmn.SYSTEM_DOMAIN_NAME]                           2d16h
     istio-system     tracing                           [services/services-gateway]    [jaeger-istio.cmn.SYSTEM_DOMAIN_NAME]                          2d16h
@@ -35,9 +34,9 @@ This procedure requires administrative privileges.
     sysmgmt-health   cray-sysmgmt-health-prometheus    [services/services-gateway]    [prometheus.cmn.SYSTEM_DOMAIN_NAME]                            2d16h
     ```
 
-2.  Inspect the VirtualService object\(s\) to learn the destination service and port.
+1. (`ncn-mw#`) Inspect the `VirtualService` objects to learn the destination service and port.
 
-    Use the NAME value returned in the previous step. The following example is for the cray-sysmgmt-health-prometheus service.
+    Use the `NAME` value returned in the previous step. The following example is for the `cray-sysmgmt-health-prometheus` service.
 
     ```bash
     kubectl get vs -n sysmgmt-health cray-sysmgmt-health-prometheus -o yaml
@@ -79,7 +78,7 @@ This procedure requires administrative privileges.
               number: 9090
     ```
 
-    From the VirtualService data, it is straightforward to see how traffic will be routed. In this example, connections to prometheus.cmn.SYSTEM_DOMAIN_NAME will be routed to the cray-sysmgmt-health-prometheus service in the sysmgmt-health namespace on port 9090.
+    From the `VirtualService data`, it is straightforward to see how traffic will be routed. In this example, connections to `prometheus.cmn.SYSTEM_DOMAIN_NAME` will be routed to the
+    `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace on port 9090.
 
-External DNS will now be connected to the back-end service.
-
+External DNS will now be connected to the backend service.
