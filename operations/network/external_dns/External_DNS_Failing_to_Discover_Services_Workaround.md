@@ -79,7 +79,7 @@ Use this procedure to resolve any external DNS routing issues with backend servi
               number: 9090
     ```
 
-    From the `VirtualService data`, it is straightforward to see how traffic will be routed. In this example, connections to `prometheus.cmn.SYSTEM_DOMAIN_NAME` will be routed to the
+    From the `VirtualService data`, it is straightforward to see how traffic will be routed. In this example, connections to `prometheus.SYSTEM_DOMAIN_NAME` will be routed to the
     `cray-sysmgmt-health-prometheus` service in the `sysmgmt-health` namespace on port 9090.
 
 External DNS will now be connected to the backend service.
