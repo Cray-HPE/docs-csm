@@ -63,8 +63,9 @@ before proceeding.
 ## Configure all NCNs with temporary Keycloak user
 
 The `craycli_init.py` script can be used to create a new Keycloak account that is authorized for the `cray` CLI.
-That account can in turn be used to initialize and authorize the `cray` CLI on all master and worker nodes in the cluster.
-This account is only intended to be used for the duration of the install and should be removed when the install is complete.
+That account can in turn be used to initialize and authorize the `cray` CLI on all master, worker, and storage nodes
+in the cluster that have Kubernetes configured. This account is only intended to be used for the duration of the
+install and should be removed when the install is complete.
 
 ### Procedure for temporary Keycloak user
 
@@ -91,22 +92,25 @@ This account is only intended to be used for the duration of the install and sho
     Expected output showing the results of the operation on each node:
 
     ```text
-    2021-12-21 15:50:47,814 - INFO    - Loading Keycloak secrets.
-    2021-12-21 15:50:48,095 - INFO    - Created user 'craycli_tmp_user'
-    2021-12-21 15:50:52,714 - INFO    - Initializing nodes:
-    2021-12-21 15:50:52,714 - INFO    - ncn-m001: Success
-    2021-12-21 15:50:52,714 - INFO    - ncn-m002: Success
-    2021-12-21 15:50:52,714 - INFO    - ncn-m003: Success
-    2021-12-21 15:50:52,714 - INFO    - ncn-s001: Success
-    2021-12-21 15:50:52,714 - INFO    - ncn-s002: Success
-    2021-12-21 15:50:52,714 - INFO    - ncn-s003: Success
-    2021-12-21 15:50:52,714 - INFO    - ncn-w001: Success
-    2021-12-21 15:50:52,714 - INFO    - ncn-w002: Success
-    2021-12-21 15:50:52,714 - INFO    - ncn-w003: Success
+    2021-12-21 15:50:47,814 - INFO     - Loading Keycloak secrets.
+    2021-12-21 15:50:48,095 - INFO     - Created user 'craycli_tmp_user'
+    2021-12-21 15:50:52,714 - INFO     - Initializing nodes:
+    2021-12-21 15:50:52,714 - INFO     - ncn-m001: Success
+    2021-12-21 15:50:52,714 - INFO     - ncn-m002: Success
+    2021-12-21 15:50:52,714 - INFO     - ncn-m003: Success
+    2021-12-21 15:50:52,714 - INFO     - ncn-s001: Success
+    2021-12-21 15:50:52,714 - INFO     - ncn-w001: Success
+    2021-12-21 15:50:52,714 - INFO     - ncn-w002: Success
+    2021-12-21 15:50:52,714 - INFO     - ncn-w003: Success
+    2021-12-21 15:50:52,714 - WARNING  - ncn-s002: WARNING: Kubernetes not configured on this node
+    2021-12-21 15:50:52,714 - WARNING  - ncn-s003: WARNING: Kubernetes not configured on this node
     ```
 
+    NOTE: In the above example, Kubernetes was not configured on `ncn-s002` and `ncn-s003`; the
+    `cray` CLI was not authenticated on those nodes, but is functional on the other nodes.
+
     The `cray` CLI is now operational on all nodes where success was reported. If a node was
-    unsuccessful with initialization, then there will be an error reported. See
+    unsuccessful with initialization, then there will be a warning reported. See
     [Troubleshooting results of the automated script](#troubleshooting-results-of-the-automated-script)
     for additional information.
 
@@ -126,18 +130,18 @@ This account is only intended to be used for the duration of the install and sho
     Expect output showing the results of the operation on each node:
 
     ```text
-    2021-12-21 15:52:31,611 - INFO    - Removing temporary user and uninitializing the cray CLI
-    2021-12-21 15:52:31,783 - INFO    - Deleted user 'craycli_tmp_user'
-    2021-12-21 15:52:31,798 - INFO    - Uninitializing nodes:
-    2021-12-21 15:52:32,714 - INFO    - ncn-m001: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-m002: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-m003: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-s001: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-s002: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-s003: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-w001: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-w002: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-w003: Success
+    2021-12-21 15:52:31,611 - INFO     - Removing temporary user and uninitializing the cray CLI
+    2021-12-21 15:52:31,783 - INFO     - Deleted user 'craycli_tmp_user'
+    2021-12-21 15:52:31,798 - INFO     - Uninitializing nodes:
+    2021-12-21 15:52:32,714 - INFO     - ncn-m001: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-m002: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-m003: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-s001: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-w001: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-w002: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-w003: Success
+    2021-12-21 15:50:52,714 - WARNING  - ncn-s002: WARNING: Kubernetes not configured on this node
+    2021-12-21 15:50:52,714 - WARNING  - ncn-s003: WARNING: Kubernetes not configured on this node
     ```
 
     At this point, the `cray` CLI will no longer be operational on these nodes until they are
@@ -155,29 +159,29 @@ This account is only intended to be used for the duration of the install and sho
     using the input user to initialize and authorize the `cray` CLI on each node:
 
     ```text
-    2021-12-21 15:52:31,611 - INFO    - Removing temporary user and uninitializing the cray CLI
-    2021-12-21 15:52:31,783 - INFO    - Deleted user 'craycli_tmp_user'
-    2021-12-21 15:52:31,798 - INFO    - Uninitializing nodes:
-    2021-12-21 15:52:32,714 - INFO    - ncn-m001: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-m002: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-m003: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-s001: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-s002: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-s003: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-w001: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-w002: Success
-    2021-12-21 15:52:32,714 - INFO    - ncn-w003: Success
-    2021-12-21 15:52:33,079 - INFO    - Re-initializing the cray CLI with existing Keycloak user MY_USERNAME
-    2021-12-21 15:52:33,131 - INFO    - Initializing nodes:
-    2021-12-21 15:52:37,714 - INFO    - ncn-m001: Success
-    2021-12-21 15:52:37,714 - INFO    - ncn-m002: Success
-    2021-12-21 15:52:37,714 - INFO    - ncn-m003: Success
-    2021-12-21 15:52:37,714 - INFO    - ncn-s001: Success
-    2021-12-21 15:52:38,714 - INFO    - ncn-s002: Success
-    2021-12-21 15:52:38,714 - INFO    - ncn-s003: Success
-    2021-12-21 15:52:38,714 - INFO    - ncn-w001: Success
-    2021-12-21 15:52:38,714 - INFO    - ncn-w002: Success
-    2021-12-21 15:52:38,714 - INFO    - ncn-w003: Success
+    2021-12-21 15:52:31,611 - INFO     - Removing temporary user and uninitializing the cray CLI
+    2021-12-21 15:52:31,783 - INFO     - Deleted user 'craycli_tmp_user'
+    2021-12-21 15:52:31,798 - INFO     - Uninitializing nodes:
+    2021-12-21 15:52:32,714 - INFO     - ncn-m001: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-m002: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-m003: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-s001: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-w001: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-w002: Success
+    2021-12-21 15:52:32,714 - INFO     - ncn-w003: Success
+    2021-12-21 15:50:52,714 - WARNING  - ncn-s002: WARNING: Kubernetes not configured on this node
+    2021-12-21 15:50:52,714 - WARNING  - ncn-s003: WARNING: Kubernetes not configured on this node
+    2021-12-21 15:52:33,079 - INFO     - Re-initializing the cray CLI with existing Keycloak user MY_USERNAME
+    2021-12-21 15:52:33,131 - INFO     - Initializing nodes:
+    2021-12-21 15:52:37,714 - INFO     - ncn-m001: Success
+    2021-12-21 15:52:37,714 - INFO     - ncn-m002: Success
+    2021-12-21 15:52:37,714 - INFO     - ncn-m003: Success
+    2021-12-21 15:52:37,714 - INFO     - ncn-s001: Success
+    2021-12-21 15:52:38,714 - INFO     - ncn-w001: Success
+    2021-12-21 15:52:38,714 - INFO     - ncn-w002: Success
+    2021-12-21 15:52:38,714 - INFO     - ncn-w003: Success
+    2021-12-21 15:50:52,714 - WARNING  - ncn-s002: WARNING: Kubernetes not configured on this node
+    2021-12-21 15:50:52,714 - WARNING  - ncn-s003: WARNING: Kubernetes not configured on this node
     ```
 
     At this point the `cray` CLI will be operational on all successful nodes and authenticated with
@@ -187,21 +191,23 @@ This account is only intended to be used for the duration of the install and sho
 
 Each node will have `Success` reported if everything worked, the node was initialized,
 and the `cray` CLI is operational for that node. For nodes with problems, there will be a
-brief error message that reports what the problem is on that node.
+brief warning message that reports what the problem is on that node.
 
 Results with problems on some nodes may look like the following:
 
 ```text
-2021-12-21 15:50:47,814 - INFO    - Loading Keycloak secrets.
-2021-12-21 15:50:48,095 - INFO    - Created user 'craycli_tmp_user'
-2021-12-21 15:50:52,714 - INFO    - Initializing nodes:
-2021-12-21 15:50:52,714 - INFO    - ncn-m001: Success
-2021-12-21 15:50:52,714 - INFO    - ncn-m002: Success
-2021-12-21 15:50:52,714 - INFO    - ncn-w001: Success
-2021-12-21 15:50:52,714 - ERROR   - ncn-m003: ERROR: Call to cray init failed
-2021-12-21 15:50:52,714 - ERROR   - ncn-s001: ERROR: Python script failed
-2021-12-21 15:50:52,714 - ERROR   - ncn-w002: ERROR: Failed to copy script to remote host
-2021-12-21 15:50:52,714 - ERROR   - ncn-w003: ERROR: Verification that cray CLI is operational failed
+2021-12-21 15:50:47,814 - INFO     - Loading Keycloak secrets.
+2021-12-21 15:50:48,095 - INFO     - Created user 'craycli_tmp_user'
+2021-12-21 15:50:52,714 - INFO     - Initializing nodes:
+2021-12-21 15:50:52,714 - INFO     - ncn-m001: Success
+2021-12-21 15:50:52,714 - INFO     - ncn-m002: Success
+2021-12-21 15:50:52,714 - INFO     - ncn-w001: Success
+2021-12-21 15:50:52,714 - WARNING  - ncn-m003: WARNING: Call to cray init failed
+2021-12-21 15:50:52,714 - WARNING  - ncn-s001: WARNING: Python script failed
+2021-12-21 15:50:52,714 - WARNING  - ncn-w002: WARNING: Failed to copy script to remote host
+2021-12-21 15:50:52,714 - WARNING  - ncn-w003: WARNING: Verification that cray CLI is operational failed
+2021-12-21 15:50:52,714 - WARNING  - ncn-s002: WARNING: Kubernetes not configured on this node
+2021-12-21 15:50:52,714 - WARNING  - ncn-s003: WARNING: Kubernetes not configured on this node
 ```
 
 At this point, the script may be re-run with the `--debug` flag added, in order for
@@ -227,9 +233,9 @@ debug level log messages to be displayed. Alternatively, each failing node may b
 1. (`ncn-mws#`) Check for missing Python Modules
 
    It is possible that some Python modules required for the script are missing on individual
-   nodes - particularly on the `PIT` node if that is still active. This script could run from
-   any of the NCNs, so if it fails on one node, copy it to any location on another node
-   and try to run it from there.
+   nodes - particularly on the `PIT` or storage nodes. This script could run from any of the
+   NCNs, so if it fails on one node, copy it to any location on another node and try to run
+   it from there.
 
    In the following example the script fails on an NCN because of the missing Python module `oauthlib`.
    To work around that, the script is copied to `ncn-m002`, where it is successfully run.
