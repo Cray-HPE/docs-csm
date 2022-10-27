@@ -31,8 +31,6 @@ Glossary of terms used in CSM documentation.
 * [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon-hbtd)
 * [High Speed Network (HSN)](#high-speed-network-hsn)
 * [Image Management Service (IMS)](#image-management-service-ims)
-* [Kubernetes NCNs](#kubernetes-ncns)
-* [Management Cabinet](#management-cabinet)
 * [Management Nodes](#management-nodes)
 * [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service-meds)
 * [NIC Mezzanine Card (NMC)](#nic-mezzanine-card-nmc)
@@ -299,28 +297,16 @@ It tracks changes in heartbeats and conveys changes to HSM.
 
 The High Speed Network (HSN) in an HPE Cray EX system is based on the Slingshot switches.
 
-## Kubernetes NCNs
-
-The Kubernetes NCNs are the management nodes which are known as Kubernetes master nodes
-(`ncn-mXXX`) or Kubernetes worker nodes (`ncn-wXXX`). The only type of management node which is
-excluded from this is the utility storage node (`ncn-sXXX`).
-
-## Management Cabinet
-
-At least one 19 inch IEA management cabinet is required for every HPE Cray EX system to
-support the management non-compute nodes (NCN), system management network, utility
-storage, and other support equipment. This cabinet serves as the primary customer access
-point for managing the system.
-
 ## Management Nodes
 
-The management nodes are one grouping of NCNs. The management nodes include the master nodes
-with hostnames of the form of `ncn-mXXX`, the worker nodes with hostnames of the form `ncn-wXXX`,
-and utility storage nodes, with hostnames of the form `ncn-sXXX`, where the `XXX` is a three
-digit number starting with zero padding. The utility storage nodes provide Ceph storage for use
-by the management nodes. The master nodes provide Kubernetes master functions and have the
-etcd cluster which provides a datastore for Kubernetes. The worker nodes provide Kubernetes
-worker functions where most of the containerized workload is scheduled by Kubernetes.
+The management nodes refer to [non-compute nodes (NCNs)](#non-compute-node-ncn). Management nodes
+provide containerization services as well as storage classes.
+
+The management nodes have various roles:
+
+- masters nodes are Kubernetes masters 
+- worker nodes are Kubernetes workers and have physical connections to the [high-speed network](#high-speed-network-hsn)
+- storage nodes physically have more local storage for providing storage classes to Kubernetes
 
 ## Mountain Cabinet
 
@@ -356,8 +342,8 @@ general access to management REST APIs.
 
 ## Non-Compute Node (NCN)
 
-Any node which is not a compute node may be called a Non-Compute Node (NCN). The NCNs include
-management nodes and application nodes.
+The non-compute nodes are in the management-plane, these nodes serve infrastructure for microservices
+(e.g. Kubernetes and storage classes).
 
 ## Olympus Cabinet
 
@@ -377,12 +363,14 @@ not connect to the SMNet.
 
 ## Pre-Install Toolkit (PIT)
 
-The Pre-Install Toolkit (PIT) provides a framework for bare-metal discovery, recovery, and for starting a [CSM](#cray-system-management-csm) installation.
-The PIT can be used on any node in the system for recovery, for installations and bare-metal discovery it is commonly
-used from a node that has a site-link (such as a Kubernetes master).
+The Pre-Install Toolkit (PIT), also known as the *Cray Pre-Install Toolkit"*, provides a framework installing [Cray Systems Management](#cray-system-management-csm).
+The PIT can be used on any node in the system for recovery and bare-metal discovery, the PIT includes tooling
+for recovering any [non-compute nodes](#non-compute-node-ncn), and can remotely recover other [NCNs](#non-compute-node-ncn).
 
-Typically, the first Kubernetes master (`ncn-m001`) is chosen for running the PIT during a [CSM](#cray-system-management-csm) installation. After [CSM](#cray-system-management-csm) is installed,
-the node running the PIT will be rebooted and deployed via [CSM](#cray-system-management-csm) services before finally joining the running Kubernetes cluster.
+Regarding [CSM](#cray-system-management-csm) installations, typically the first Kubernetes master (`ncn-m001`) is chosen for
+running the PIT during a [CSM](#cray-system-management-csm) installation. After [CSM](#cray-system-management-csm) is installed,
+the node running the PIT will be rebooted and deployed via [CSM](#cray-system-management-csm) services before finally joining
+the running Kubernetes cluster.
 
 The PIT is delivered as a [LiveCD](#livecd), a disk image that can be used to remotely boot a node (e.g. a [RemoteISO](#remoteiso)) or by a USB stick.
 
@@ -413,9 +401,9 @@ Redfish, such as a ServerTech PDU in a River Cabinet.
 ## River Cabinet
 
 At least one 19 inch IEA management cabinet is required for every HPE Cray EX system to
-support the management non-compute nodes (NCN), system management network, utility
-storage, and other support equipment. Additional River cabinets may be included to
-house storage storage or compute nodes which are not in an Olympus liquid-cooled cabinet.
+support the [management nodes](#management-nodes), system management network, utility
+storage, and other support equipment. This cabinet serves as the primary customer access
+point for managing the system.
 
 ## River Endpoint Discovery Service (REDS)
 
