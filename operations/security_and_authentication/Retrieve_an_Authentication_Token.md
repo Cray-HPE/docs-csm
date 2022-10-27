@@ -81,7 +81,7 @@ The API gateway uses OAuth2 for authentication. A token is required to authentic
               ncn-mw# curl -s -d grant_type=client_credentials \
                             -d client_id=admin-client \
                             -d client_secret=2b0d6df0-183b-40e6-93be-51c7854388a1 \
-                            https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/realms/shasta/protocol/openid-connect/token |
+                            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
                         python -mjson.tool
               ```
 
