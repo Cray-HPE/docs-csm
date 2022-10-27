@@ -10,12 +10,22 @@ Note that control plane is used in this document elsewhere master or management 
 
 ## Table of contents
 
+* [Upgrade limitation](#upgrade-limitation)
 * [Implementation details](#implementation-details)
 * [Setup](#setup)
 * [Enabling encryption](#enabling-encryption)
 * [Disabling encryption](#disabling-encryption)
 * [Encryption status](#encryption-status)
 * [Force rewrite](#force-rewrite)
+* [Key rotation](#key-rotation)
+
+## Upgrade limitation
+
+The current implementation has a known limitation in regards to upgrades. While it is technically feasible to upgrade a cluster with encryption enabled, to minimize
+boot and operational issues it is recommended to disable encryption prior to any upgrades. Failure to disable encryption will cause each control plane node to fail
+to complete `cloud-init` as the default Kubernetes configuration lacks the necessary keys to decrypt etcd data.
+
+Once upgraded, encryption can be re-enabled.
 
 ## Implementation details
 
@@ -230,4 +240,41 @@ If necessary, a forced rewrite of secret data can be performed. Generally unnece
     Waiting for daemon set "cray-k8s-encryption" rollout to finish: 2 out of 3 new pods have been updated...
     Waiting for daemon set "cray-k8s-encryption" rollout to finish: 2 of 3 updated pods are available...
     daemon set "cray-k8s-encryption" successfully rolled out
+    ```
+
+## Key rotation
+
+Rotation of the encryption keys is similar to disabling encryption. The first cipher passed to `encryption.sh` is the cipher that will be used to encrypt secrets.
+
+All subsequent ciphers provided allow for any secrets encrypted with that cipher to be read but will not be used for new secrets.
+
+* (`ncn-m#`) The `encryption.sh` script needs to be run with the new key as the first switch and the existing key as a subsequent switch.
+
+    **`NOTE`**: As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
+
+    ```bash
+     /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --enable --aescbc NEWKEYVALUE --aescbc EXISTINGKEYVALUE
+    ```
+
+    Example output:
+
+    ```text
+    ncn-m001 configuration updated ensure all control plane nodes run this same command
+    ```
+
+Once completed, reference the Encryption status for details. Optionally, the old key can be removed from all control plane nodes. Note that removing the old key will make
+the etcd backups that contain data with that encryption key unusable.
+
+* (`ncn-m#`) The `encryption.sh` script needs to be run again with just the new key.
+
+    **`NOTE`**: As shown in the following command example, always run `encryption.sh` with a leading space on the command line. This will cause Bash to not record the command in the `.bash_history` file.
+
+    ```bash
+     /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --enable --aescbc NEWKEYVALUE
+    ```
+
+    Example output:
+
+    ```text
+    ncn-m001 configuration updated ensure all control plane nodes run this same command
     ```
