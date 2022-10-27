@@ -383,15 +383,15 @@ used from a node that has a site-link (such as a Kubernetes master).
 Typically the first Kubernetes master (`ncn-m001`) is chosen for running the PIT during a CSM installation. After CSM is installed,
 the node running the PIT will be rebooted and deployed via CSM services before finally joining the running Kubernetes cluster.
 
-The PIT is ephemeral, it runs in either in memory or it can be written to a USB stick for persistence.
+The PIT is delivered as a [LiveCD](#livecd), a disk image that can be used to remotely boot a node (e.g. a [RemoteISO](#remoteiso)) or by a USB stick.
 
 ### LiveCD
 
-The **LiveCD** refers to the artifact (e.g. the `.iso` file) providing the PIT. Example: "A new LiveCD is needed," means a new artifact is needed.
+The **LiveCD** refers to the artifact, the literal image file that contains the pre-install toolkit.
 
 ### RemoteISO
 
-The term **RemoteISO** is used to refer to the LiveCD (e.g the `.iso`) when it is remotely mounted on a server's BMC). Example: "The RemoteISO failed," means that the remotely connected LiveCD is having an issue.
+The term **RemoteISO** is used to refer to a remotely mounted the LiveCD. A remotely mounted LiveCD has no persistence.
 
 ## Rack-Mounted CDU
 
