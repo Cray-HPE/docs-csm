@@ -29,7 +29,7 @@ The API gateway uses OAuth2 for authentication. A token is required to authentic
                     -d client_id=shasta \
                     -d username=myuser \
                     -d password=mypass \
-                    https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/realms/shasta/protocol/openid-connect/token |
+                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
                   python -mjson.tool
         ```
 
