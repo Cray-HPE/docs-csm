@@ -22,9 +22,9 @@ CSM installation is complete.
 
     ```bash
     curl -sS https://packages.local/service/rest/beta/repositories \
-        | jq '.[] | select(.name == \"registry\") | .docker.forceBasicAuth = true' \
+        | jq '.[] | select(.name == "registry") | .docker.forceBasicAuth = true' \
         | curl -sSi -X PUT 'https://packages.local/service/rest/beta/repositories/docker/hosted/registry' \
-            -H \"Content-Type: application/json\" -d @-
+            -H "Content-Type: application/json" -d @-
     ```
 
 1. (`ncn-mw#`) Set the `SYSTEM_DOMAIN_NAME` variable.
