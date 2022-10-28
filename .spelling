@@ -627,6 +627,12 @@ Init
 # To allow Site Init
 Init
 
+- operations/network/dns/DNS.md
+ExternalDNS
+
+- operations/network/dns/Manage_the_DNS_Unbound_Resolver.md
+ExternalDNS
+
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
 
