@@ -134,7 +134,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 1. (`ncn-mw#`) Import the signing key.
 
     ```bash
-    rpm --import hpe-singing-key.asc
+    rpm --import hpe-signing-key.asc
     ```
 
 1. (`ncn-mw#`) Search for the signed packages using the version number from the previous step.
