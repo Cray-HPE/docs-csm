@@ -15,8 +15,7 @@ BMC/controller passwords.
 1. [Lock management nodes](#4-lock-management-nodes)
 1. [Configure BMC and controller parameters with SCSD](#5-configure-bmc-and-controller-parameters-with-scsd)
 1. [Configure non-compute nodes with CFS](#6-configure-non-compute-nodes-with-cfs)
-1. [Upload Olympus BMC recovery firmware into TFTP server](#7-upload-olympus-bmc-recovery-firmware-into-tftp-server)
-1. [Proceed to next topic](#8-proceed-to-next-topic)
+1. [Proceed to next topic](#7-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
@@ -95,18 +94,7 @@ CSM provide one or more layers of configuration in a process called "NCN persona
 
 See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).
 
-## 7. Upload Olympus BMC recovery firmware into TFTP server
-
-> **`NOTE`** This step requires the CSM software, Cray CLI, and HPC Firmware Pack (HFP) to be installed.
-> If these are not currently installed, then skip this step and perform it later.
-
-The Olympus hardware needs to have recovery firmware loaded to the `cray-tftp` server in case the BMC loses its firmware.
-The BMCs are configured to load a recovery firmware from a TFTP server.
-This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
-
-See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).
-
-## 8. Proceed to next topic
+## 7. Proceed to next topic
 
 After completing the operational procedures above which configure administrative access, the next step is to validate the health of management nodes and CSM services.
 
