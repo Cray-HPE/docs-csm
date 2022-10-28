@@ -13,8 +13,6 @@ The contents of the new LDAP server are the same as the previous LDAP server. Fo
 
 Follow the steps in only one of the sections below:
 
-Follow the steps in only one of the sections below:
-
 - [Use the Keycloak administration console UI](#use-the-keycloak-administration-console-ui)
 - [Use the Keycloak REST API](#use-the-keycloak-rest-api)
 
