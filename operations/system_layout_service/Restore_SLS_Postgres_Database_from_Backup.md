@@ -167,7 +167,15 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
     ncn# /usr/share/doc/csm/scripts/operations/system_layout_service/restore_sls_postgres_from_backup.sh
     ```
 
-7. Verify the health of the SLS Postgres cluster by running the `ncnPostgresHealthChecks.sh` script. Follow the [`ncnPostgresHealthChecks` topic in Validate CSM Health document](../validate_csm_health.md#pet-ncnpostgreshealthchecks).
+7. Verify the health of the SLS Postgres cluster by running the following scripts.
+    If there are issues with `run_hms_ct_tests.sh`, then follow [Interpreting HMS Health Check Results](../../troubleshooting/interpreting_hms_health_check_results.md).
+    If there are issues with `verify_hsm_discovery.py`, then follow the "Interpreting HSM discovery results" section of the [Validate CSM Health document](../validate_csm_health.md#221-interpreting-hsm-discovery-results).
+
+    ```bash
+    ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -t sls
+    ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+    ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
+    ```
 
 8. Verify that the service is functional:
 
