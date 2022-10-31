@@ -100,7 +100,7 @@ Validate the worker node added successfully.
 
 1. Confirm the pods are beginning to get scheduled and reach a `Running` state on the worker node.
 
-    Run this command on any master or worker node. This command assumes you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites).
+    Run this command on any master or worker node. This command assumes you have set the variables from [the prerequisites section](Add_Remove_Replace_NCNs.md#add-ncn-prerequisites).
 
     ```bash
     ncn# kubectl get po -A -o wide | grep $NODE
@@ -208,4 +208,4 @@ Validate the storage node added successfully. The following examples are based o
 
 ## Next Step
 
-Proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.
