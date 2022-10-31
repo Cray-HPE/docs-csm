@@ -6,7 +6,7 @@ Remove a master, worker, or storage NCN from current roles. Select the procedure
 
 ## Procedure
 
-**IMPORTANT:** The following procedures assume that you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites).
+**IMPORTANT:** The following procedures assume that you have set the variables from [the prerequisites section](Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites).
 
 1. [Remove roles](#1-remove-roles)
     - [Master node](#master-node-remove-roles)
@@ -443,4 +443,4 @@ CSM. This is a preventative measure in the event that the boot order on the targ
 ## Next step
 
 Proceed to [Remove NCN Data](Remove_NCN_Data.md) or return to the main
-[Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+[Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.

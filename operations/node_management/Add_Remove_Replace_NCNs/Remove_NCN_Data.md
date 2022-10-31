@@ -6,7 +6,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
 
 ## Procedure
 
-**IMPORTANT:** The following procedures assume that you have set the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites).
+**IMPORTANT:** The following procedures assume that you have set the variables from [the prerequisites section](Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites).
 
 1. (`ncn-mw#`) Prepare for the procedure.
 
@@ -175,4 +175,4 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     ```
 
 Proceed to [Remove Switch Configuration](Remove_Switch_Config.md) or return to the main
-[Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+[Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.
