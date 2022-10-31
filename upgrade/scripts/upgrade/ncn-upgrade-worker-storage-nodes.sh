@@ -52,15 +52,6 @@ function usage() {
     echo
 }
 
-# Warn when passing in extra arguments that probably were intended to be comma
-# separated hosts to upgrade, should fix this script to just accept all args
-# after the first however
-function argerr() {
-  printf "Extra arguments %s present after arg parsing, did you intend these to be in the comma separated host list instead?\n\n" "$*">&2
-}
-
-terminal=false
-
 while [[ $# -gt 0 ]]; do
   case $1 in
     --no-retry)
@@ -81,36 +72,22 @@ while [[ $# -gt 0 ]]; do
         shift # past argument
         ;;
     ncn-w[0-9][0-9][0-9]*)
-        if $terminal; then
-          argerr "$@"
-          usage
-          exit 1
-        else
-          target_ncns=$1
-          shift # past argument
-          IFS=', ' read -r -a array <<< "$target_ncns"
-          jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
-          nodeType="worker"
-        fi
-        terminal=true
+        target_ncns=$1
+        shift # past argument
+        IFS=', ' read -r -a array <<< "$target_ncns"
+        jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
+        nodeType="worker"
         ;;
     ncn-s[0-9][0-9][0-9]*)
-        if $terminal; then
-          argerr "$@"
-          usage
-          exit 1
-        else
-          target_ncns=$1
-          shift # past argument
-          IFS=', ' read -r -a array <<< "$target_ncns"
-          jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
-          nodeType="storage"
-        fi
-        terminal=true
+        target_ncns=$1
+        shift # past argument
+        IFS=', ' read -r -a array <<< "$target_ncns"
+        jsonArray=$(jq -r --compact-output --null-input '$ARGS.positional' --args -- "${array[@]}")
+        nodeType="storage"
         ;;
     *)
-        echo
-        echo "Unknown option $1"
+        echo 
+        echo "Unknown option $1" 
         usage
         exit 1
         ;;
