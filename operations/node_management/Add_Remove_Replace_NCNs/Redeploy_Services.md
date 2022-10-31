@@ -2,15 +2,15 @@
 
 This procedure redeploys S3 and `sysmgmt-health` services to add or remove storage node endpoints.
 
-**This procedure can be skipped if a worker or master node has been added.** In that case, proceed to the next step to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+**This procedure can be skipped if a worker or master node has been added.** In that case, proceed to the next step to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.
 
-**This procedure can be skipped if a worker or master node have been removed.** In that case, proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+**This procedure can be skipped if a worker or master node have been removed.** In that case, proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.
 
 Otherwise, if a storage node has been added or removed, proceed with the following steps.
 
 ## Prerequisite
 
-The docs-csm RPM has been installed on the NCN. Verify that the following file exists:
+The `docs-csm` RPM has been installed on the NCN. Verify that the following file exists:
 
 ```bash
 ncn-m# ls /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/update_customizations.sh
@@ -77,7 +77,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 
    Example output:
 
-   ```
+   ```text
    10.252.1.13
    ```
 
@@ -151,7 +151,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 
     Example output:
 
-    ```
+    ```text
     10.252.1.13
     10.252.1.4
     10.252.1.5
@@ -194,7 +194,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 
     Example Output:
 
-    ```
+    ```text
     48h
     ```
 
@@ -248,7 +248,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 
     Example output:
 
-    ```
+    ```text
     10.252.1.13
     10.252.1.4
     10.252.1.5
@@ -267,5 +267,5 @@ ncn-m# rm /tmp/customizations.yaml /tmp/customizations.original.yaml /tmp/custom
 
 Proceed to the next step:
 
-- If a storage NCN was added, proceed to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
-- If a storage NCN was removed, proceed to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+- If a storage NCN was added, proceed to [Validate NCN](Validate_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+- If a storage NCN was removed, proceed to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.
