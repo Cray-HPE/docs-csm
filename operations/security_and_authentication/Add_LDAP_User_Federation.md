@@ -356,7 +356,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
          Example output:
 
          ```text
-         emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
+         CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1,O=DigiCert Inc,C=US
          ```
 
       1. Extract the issuer's certificate using the `awk` command.
@@ -367,7 +367,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
          ```bash
          openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null |
-            awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' |
+            awk '/s:CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1,O=DigiCert Inc,C=US/,/END CERTIFICATE/' |
             awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
          ```
 
