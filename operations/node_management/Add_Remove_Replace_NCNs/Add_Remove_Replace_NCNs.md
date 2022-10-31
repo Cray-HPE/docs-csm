@@ -26,7 +26,7 @@ The system is fully installed and has transitioned off of the LiveCD.
 
 All activities required for site maintenance are complete.
 
-The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
 1. (`ncn-m#`) Run `ncn_add_pre-req.py` to adjust the network.
 
@@ -209,21 +209,21 @@ XNAME=<xname>
 * Ensure that the NCN BMC is configured to use DHCP.
   * This does not apply to the BMC for `ncn-m001`, because it is statically configured for the site.
 * Ensure that the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs.
-  * See the [Switch PXE Boot from Onboard NIC to PCIe](Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md) procedure.
+  * See the [Switch PXE Boot from Onboard NIC to PCIe](../Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md) procedure.
 
 ### Add NCN procedure
 
 The following is a high-level overview of the add NCN workflow:
 
-1. [Allocate NCN IP Addresses](Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md).
-1. [Add Switch Configuration](Add_Remove_Replace_NCNs/Add_Switch_Config.md).
-1. [Add NCN data](Add_Remove_Replace_NCNs/Add_NCN_Data.md) for SLS, BSS and HSM.
-1. [Update Firmware](Add_Remove_Replace_NCNs/Update_Firmware.md) via FAS.
-1. [Update NCN BIOS TPM State](Add_Remove_Replace_NCNs/Update_NCN_BIOS_TPM_State.md)
-1. [Boot NCN and Configure](Add_Remove_Replace_NCNs/Boot_NCN.md).
-1. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md).
-1. [Validate NCN](Add_Remove_Replace_NCNs/Validate_NCN.md).
-1. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md).
+1. [Allocate NCN IP Addresses](Allocate_NCN_IP_Addresses.md).
+1. [Add Switch Configuration](Add_Switch_Config.md).
+1. [Add NCN data](Add_NCN_Data.md) for SLS, BSS and HSM.
+1. [Update Firmware](Update_Firmware.md) via FAS.
+1. [Update NCN BIOS TPM State](Update_NCN_BIOS_TPM_State.md)
+1. [Boot NCN and Configure](Boot_NCN.md).
+1. [Redeploy Services](Redeploy_Services.md).
+1. [Validate NCN](Validate_NCN.md).
+1. [Validate Health](Validate_Health.md).
 
 ## Remove worker, storage, or master NCNs
 
@@ -247,11 +247,11 @@ echo "${XNAME}"
 
 The following is a high-level overview of the remove NCN workflow:
 
-1. [Remove NCN from Role, Wipe the Disks, and Power Down](Add_Remove_Replace_NCNs/Remove_NCN_from_Role.md).
-1. [Remove NCN data](Add_Remove_Replace_NCNs/Remove_NCN_Data.md) from SLS, BSS and HSM.
-1. [Remove Switch Configuration](Add_Remove_Replace_NCNs/Remove_Switch_Config.md).
-1. [Redeploy Services](Add_Remove_Replace_NCNs/Redeploy_Services.md).
-1. [Validate Health](Add_Remove_Replace_NCNs/Validate_Health.md).
+1. [Remove NCN from Role, Wipe the Disks, and Power Down](Remove_NCN_from_Role.md).
+1. [Remove NCN data](Remove_NCN_Data.md) from SLS, BSS and HSM.
+1. [Remove Switch Configuration](Remove_Switch_Config.md).
+1. [Redeploy Services](Redeploy_Services.md).
+1. [Validate Health](Validate_Health.md).
 
 **IMPORTANT:** Update the SHCD to remove the device. This is only needed if no NCN device will be added back to same location with the same cabling.
 

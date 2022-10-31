@@ -66,4 +66,4 @@ The following procedures can be run from any master or worker node.
    After that is done, the `ncn-healthcheck-storage` tests should then be re-run to verify that all tests pass.
    - `Spire Health Check`
 
-The procedure is complete. [Return to Main Page](../Add_Remove_Replace_NCNs.md).
+The procedure is complete. [Return to Main Page](Add_Remove_Replace_NCNs.md).
