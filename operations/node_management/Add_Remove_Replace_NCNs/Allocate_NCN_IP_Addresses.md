@@ -117,4 +117,4 @@ This procedure will perform and verify the following:
 
 ## Next step
 
-Proceed to the next step to [Add Switch Configuration](Add_Switch_Config.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Add Switch Configuration](Add_Switch_Config.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.

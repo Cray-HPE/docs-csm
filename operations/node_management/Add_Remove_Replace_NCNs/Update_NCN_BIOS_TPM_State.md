@@ -87,4 +87,4 @@ With Intel hardware skip these steps and proceed to the next step to [Boot NCN a
 
 ## Next Step
 
-Proceed to the next step to [Boot NCN and Configure](Boot_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+Proceed to the next step to [Boot NCN and Configure](Boot_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.
