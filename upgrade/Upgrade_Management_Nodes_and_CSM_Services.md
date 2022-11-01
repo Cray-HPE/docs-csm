@@ -111,3 +111,7 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 
   - See the inline comment above on how to rerun a single step.
   - In order to rerun the whole upgrade of a node, delete its state file.
+
+- Helm Chart Timeouts
+
+  See [`Helm Chart Timeouts` known issues](../troubleshooting/known_issues/helm_chart_deploy_timeouts.md) for steps to increase the timeout for a chart that is taking longer than five minutes to deploy.
