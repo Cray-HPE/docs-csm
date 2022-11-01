@@ -4,15 +4,32 @@ The Image Management Service \(IMS\) is typically used to build images from IMS 
 However, it is sometimes the case that an image is built using a mechanism other than by IMS and needs to be added to IMS. In these cases,
 the following procedure can be used to add this external image to IMS and upload the image's artifact(s) to the Simple Storage Service (S3).
 
+* [Prerequisites](#prerequisites)
+* [Limitations](#limitations)
+* [Procedure](#procedure)
+    1. [Ensure supported format](#1-ensure-supported-format)
+    1. [Set helper variables](#2-set-helper-variables)
+    1. [Record artifact checksums](#3-record-artifact-checksums)
+    1. [Create image record in IMS](#4-create-image-record-in-ims)
+    1. [Upload artifacts to S3](#5-upload-artifacts-to-s3)
+    1. [Create, upload, and register image manifest](#6-create-upload-and-register-image-manifest)
+
 ## Prerequisites
 
-* System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
-  * `cray-ims`, the Image Management Service \(IMS\)
-* `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
-* An image root archive or a pre-built image root SquashFS archive is available.
-* Optionally, additional image artifacts including a kernel, `initrd`, and kernel parameters file are available.
-* The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
-* A token providing Simple Storage Service \(S3\) credentials has been generated.
+* CSM is fully installed, configured, and healthy.
+  * The Image Management Service \(IMS\) is healthy.
+  * The Simple Storage Service \(S3\) is healthy.
+  * The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
+  * These may be validated by performing the following health checks:
+    * [Platform health checks](../validate_csm_health.md#1-platform-health-checks)
+    * [Software Management Service health checks](../validate_csm_health.md#3-software-management-services-health-checks)
+* The Cray CLI is configured.
+  * See [Configure the Cray CLI](../configure_cray_cli.md).
+* Image artifact files are available.
+  * An image root file is required.
+  * Optionally, additional image artifacts may be specified including a kernel, `initrd`, and kernel parameters file.
+
+* A token providing S3 credentials has been generated.
 
 ## Limitations
 
@@ -21,26 +38,98 @@ the following procedure can be used to add this external image to IMS and upload
 
 ## Procedure
 
-1. <a name="ensure_supported_format"></a>Ensure that the image root is in a supported format.
+This procedure may be run on any master or worker NCN.
+
+The procedure on this page uses example commands that assume the image has an associated kernel and `initrd` artifact. This is the case,
+for example, for NCN boot images. If the actual set of image artifacts differs from this, then be sure to modify the commands accordingly.
+
+### 1. Ensure supported format
+
+1. Ensure that the image root is in a supported format.
 
     IMS requires that an image's root filesystem is in SquashFS format. Select one of the following options based on the current state of the image root being used:
 
-    * If the image being added is in `tgz` format, refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.md).
-    * If the image being added meets the above requirements, proceed to [Create an IMS image record](#create_image_record).
-    * If the image root is in a format other than `tgz` or SquashFS, convert the image root to `tgz`/SquashFS before continuing.
+    * If the image being added is in `tgz` format, then refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.md).
+    * If the image being added meets the above requirements, then proceed to [Create image record in IMS](#2-create-image-record-in-ims).
+    * If the image root is in a format other than `tgz` or SquashFS, then convert the image root to `tgz`/SquashFS before continuing.
 
-1. <a name="create_image_record"></a>Choose a descriptive name for the new IMS image record.
+### 2. Set helper variables
 
-    Set the `IMS_ROOTFS_FILENAME` variable to the chosen name.
+Set variables for all of the image artifact files, if needed. For example, `IMS_ROOTFS_FILENAME`, `IMS_INITRD_FILENAME`, and `IMS_KERNEL_FILENAME`.
+
+1. Set the `IMS_ROOTFS_FILENAME` variable to the file name of the SquashFS image root file to be uploaded.
+
+    For example:
 
     ```bash
     ncn-mw# IMS_ROOTFS_FILENAME=sles_15_image.squashfs
     ```
 
+1. Set the `IMS_INITRD_FILENAME` variable to the file name of the `initrd` file to be uploaded.
+
+    > Skip this if no `initrd` file is associated with this image.
+
+    For example:
+
+    ```bash
+    ncn-mw# IMS_INITRD_FILENAME=initrd
+    ```
+
+1. Set the `IMS_KERNEL_FILENAME` variable to the file name of the kernel file to be uploaded.
+
+    > Skip this if no kernel file is associated with this image.
+
+    For example:
+
+    ```bash
+    ncn-mw# IMS_KERNEL_FILENAME=vmlinuz
+    ```
+
+### 3. Record artifact checksums
+
+1. Navigate to the directory containing the artifact files.
+
+1. Verify that all image artifacts exist in the current working directory.
+
+    > If necessary, modify the following command to reflect the actual set of artifacts included in the image.
+
+    ```bash
+    ncn-mw# ls -al "${IMS_ROOTFS_FILENAME}" "${IMS_INITRD_FILENAME}" "${IMS_KERNEL_FILENAME}"
+    ```
+
+1. Record the checksums of all of the artifacts.
+
+    1. Record the SquashFS image root checksum in the `IMS_ROOTFS_MD5SUM` variable.
+
+        ```bash
+        ncn-mw# IMS_ROOTFS_MD5SUM=$(md5sum "${IMS_ROOTFS_FILENAME}" | awk '{ print $1 }')
+        ncn-mw# echo "${IMS_ROOTFS_MD5SUM}"
+        ```
+
+    1. Record the `initrd` checksum in the `IMS_INITRD_MD5SUM` variable.
+
+        > Skip this if no `initrd` file is associated with this image.
+
+        ```bash
+        ncn-mw# IMS_INITRD_MD5SUM=$(md5sum "${IMS_INITRD_FILENAME}" | awk '{ print $1 }')
+        ncn-mw# echo "${IMS_INITRD_MD5SUM}"
+        ```
+
+    1. Record the kernel checksum in the `IMS_KERNEL_MD5SUM` variable.
+
+        > Skip this if no kernel file is associated with this image.
+
+        ```bash
+        ncn-mw# IMS_KERNEL_MD5SUM=$(md5sum "${IMS_KERNEL_FILENAME}" | awk '{ print $1 }')
+        ncn-mw# echo "${IMS_KERNEL_MD5SUM}"
+        ```
+
+### 4. Create image record in IMS
+
 1. Create a new IMS image record for the image.
 
     ```bash
-    ncn-mw# cray ims images create --name $IMS_ROOTFS_FILENAME --format toml
+    ncn-mw# cray ims images create --name "${IMS_ROOTFS_FILENAME}" --format toml
     ```
 
     Example output:
@@ -59,112 +148,103 @@ the following procedure can be used to add this external image to IMS and upload
     ncn-mw# IMS_IMAGE_ID=4e78488d-4d92-4675-9d83-97adfc17cb19
     ```
 
-1. <a name="upload_to_s3"></a>Upload the image root to S3.
+### 5. Upload artifacts to S3
 
-    1. Set an environment variable with the actual path and filename of the image root to be uploaded.
+1. Navigate to the directory containing the artifact files.
 
-        > This may be the same name as `IMS_ROOTFS_FILENAME`, but it is not required to be.
+1. Verify that all image artifacts exist in the current working directory.
 
-        ```bash
-        ncn-mw# ROOTFS_FILENAME=/home/rootfs.squashfs
-        ```
-
-    1. Record the `md5sum` of the image root to be uploaded.
-
-        ```bash
-        ncn-mw# IMS_ROOTFS_MD5SUM=$(md5sum $ROOTFS_FILENAME | awk '{ print $1 }')
-        ```
-
-    1. Upload the image root to S3.
-
-        ```bash
-        ncn-mw# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_ROOTFS_FILENAME $ROOTFS_FILENAME
-        ```
-
-1. Optionally, upload the kernel for the image to S3.
-
-    > In this example, the relative path to the kernel from the working directory is
-    > `image-root/boot/vmlinuz`.
+    > If necessary, modify the following command to reflect the actual set of artifacts included in the image.
 
     ```bash
-    ncn-mw# IMS_KERNEL_FILENAME=vmlinuz
-    ncn-mw# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_KERNEL_FILENAME image-root/boot/$IMS_KERNEL_FILENAME
-    ncn-mw# IMS_KERNEL_MD5SUM=`md5sum image-root/boot/$IMS_KERNEL_FILENAME | awk '{ print $1 }'`
+    ncn-mw# ls -al "${IMS_ROOTFS_FILENAME}" "${IMS_INITRD_FILENAME}" "${IMS_KERNEL_FILENAME}"
     ```
 
-1. Optionally, upload the `initrd` for the image to S3.
+1. Upload the artifacts to S3.
 
-    > In this example, the relative path to the `initrd` file from working directory is
-    > `image-root/boot/initrd`.
+    1. Upload the SquashFS image root to S3.
 
-    ```bash
-    ncn-mw# IMS_INITRD_FILENAME=initrd
-    ncn-mw# cray artifacts create boot-images $IMS_IMAGE_ID/$IMS_INITRD_FILENAME image-root/boot/$IMS_INITRD_FILENAME
-    ncn-mw# IMS_INITRD_MD5SUM=`md5sum image-root/boot/$IMS_INITRD_FILENAME | awk '{ print $1 }'`
-    ```
+        ```bash
+        ncn-mw# cray artifacts create boot-images "${IMS_IMAGE_ID}/${IMS_ROOTFS_FILENAME}" "${IMS_ROOTFS_FILENAME}"
+        ```
 
-1. <a name="image_manifest"></a>Create an image manifest and upload it to S3.
+    1. Upload the kernel to S3.
 
-    HPE Cray uses a manifest file that associates multiple related boot artifacts \(kernel, `initrd`, `rootfs`, etc.\) into
-    an image description that is used by IMS and other services to boot nodes. Artifacts listed within the manifest are
-    identified by a `type` value:
+        ```bash
+        ncn-mw# cray artifacts create boot-images "${IMS_IMAGE_ID}/${IMS_KERNEL_FILENAME}" "${IMS_KERNEL_FILENAME}"
+        ```
 
-    * `application/vnd.cray.image.rootfs.squashfs`
-    * `application/vnd.cray.image.initrd`
-    * `application/vnd.cray.image.kernel`
-    * `application/vnd.cray.image.parameters.boot`
+    1. Upload the `initrd` to S3.
 
-    1. Generate an image manifest file.
+        ```bash
+        ncn-mw# cray artifacts create boot-images "${IMS_IMAGE_ID}/${IMS_INITRD_FILENAME}" "${IMS_INITRD_FILENAME}"
+        ```
 
-        ```console
-        ncn-mw# cat <<EOF> manifest.json
+### 6. Create, upload, and register image manifest
+
+HPE Cray uses a manifest file that associates multiple related boot artifacts \(kernel, `initrd`, image root, etc.\) into
+an image description that is used by IMS and other services to boot nodes. Artifacts listed within the manifest are
+identified by a `type` value:
+
+* `application/vnd.cray.image.rootfs.squashfs`
+* `application/vnd.cray.image.initrd`
+* `application/vnd.cray.image.kernel`
+* `application/vnd.cray.image.parameters.boot`
+
+1. Generate an image manifest file.
+
+    > If necessary, modify the following example to reflect the actual set of artifacts included in the image.
+    >
+    > Note that the following command makes use of several variables that have been set during
+    > this procedure. The command must be run from the Bash shell in order for them to be properly evaluated.
+
+    ```console
+    ncn-mw# cat <<EOF> manifest.json
+    {
+      "created": "`date '+%Y-%m-%d %H:%M:%S'`",
+      "version": "1.0",
+      "artifacts": [
         {
-          "created": "`date '+%Y-%m-%d %H:%M:%S'`",
-          "version": "1.0",
-          "artifacts": [
-            {
-              "link": {
-                  "path": "s3://boot-images/$IMS_IMAGE_ID/$IMS_ROOTFS_FILENAME",
-                  "type": "s3"
-              },
-              "md5": "$IMS_ROOTFS_MD5SUM",
-              "type": "application/vnd.cray.image.rootfs.squashfs"
-            },
-            {
-              "link": {
-                  "path": "s3://boot-images/$IMS_IMAGE_ID/$IMS_KERNEL_FILENAME",
-                  "type": "s3"
-              },
-              "md5": "$IMS_KERNEL_MD5SUM",
-              "type": "application/vnd.cray.image.kernel"
-            },
-            {
-              "link": {
-                  "path": "s3://boot-images/$IMS_IMAGE_ID/$IMS_INITRD_FILENAME",
-                  "type": "s3"
-              },
-              "md5": "$IMS_INITRD_MD5SUM",
-              "type": "application/vnd.cray.image.initrd"
-            }
-          ]
+          "link": {
+              "path": "s3://boot-images/${IMS_IMAGE_ID}/${IMS_ROOTFS_FILENAME}",
+              "type": "s3"
+          },
+          "md5": "${IMS_ROOTFS_MD5SUM}",
+          "type": "application/vnd.cray.image.rootfs.squashfs"
+        },
+        {
+          "link": {
+              "path": "s3://boot-images/${IMS_IMAGE_ID}/${IMS_KERNEL_FILENAME}",
+              "type": "s3"
+          },
+          "md5": "${IMS_KERNEL_MD5SUM}",
+          "type": "application/vnd.cray.image.kernel"
+        },
+        {
+          "link": {
+              "path": "s3://boot-images/${IMS_IMAGE_ID}/${IMS_INITRD_FILENAME}",
+              "type": "s3"
+          },
+          "md5": "${IMS_INITRD_MD5SUM}",
+          "type": "application/vnd.cray.image.initrd"
         }
-        EOF
-        ```
+      ]
+    }
+    EOF
+    ```
 
-    1. Upload the manifest to S3.
-
-        ```bash
-        ncn-mw# cray artifacts create boot-images $IMS_IMAGE_ID/manifest.json manifest.json
-        ```
-
-1. <a name="register"></a>Register the image manifest with the IMS service.
-
-    Update the IMS image record.
+1. Upload the manifest to S3.
 
     ```bash
-    ncn-mw# cray ims images update $IMS_IMAGE_ID \
+    ncn-mw# cray artifacts create boot-images "${IMS_IMAGE_ID}/manifest.json" manifest.json
+    ```
+
+1. Update the IMS image record with the image manifest information.
+
+    ```bash
+    ncn-mw# cray ims images update "${IMS_IMAGE_ID}" \
                 --link-type s3 \
-                --link-path s3://boot-images/$IMS_IMAGE_ID/manifest.json \
+                --link-path "s3://boot-images/${IMS_IMAGE_ID}/manifest.json" \
                 --format toml
     ```
 
