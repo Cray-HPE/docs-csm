@@ -191,11 +191,19 @@ with system-specific customizations.
         openssl s_client -showcerts -nameopt RFC2253 -connect "${LDAP}:${PORT}" </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
         ```
 
-        Expected output includes a line similar to this:
+        Expected output includes a line similar to one of the below examples:
+
+        Self-signed Certificate:
 
         ```text
         emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
         ```
+
+        Signed Certificate:
+
+        ```text
+         CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1,O=DigiCert Inc,C=US
+         ```
 
     1. (`pit#`) Extract the issuer's certificate using `awk`.
 
