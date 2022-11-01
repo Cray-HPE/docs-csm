@@ -5,13 +5,18 @@ is only relevant for booting compute nodes and can be ignored when working with 
 
 This document describes the configuration of a Kubernetes NCN image. The same steps could be used to modify a Ceph NCN image.
 
-1. (`ncn-mw#`) Locate the NCN image to be modified.
+1. Identify the NCN image to be modified.
 
-    This example assumes that the administrator wants to modify the Kubernetes image that is currently in use by Kubernetes NCNs. However, the steps are the same for any Management NCN SquashFS image.
+    This example assumes that the administrator wants to modify the Kubernetes image that is currently in use by Kubernetes NCNs.
+    However, the steps are the same for any Management NCN SquashFS image.
 
     If the image to be modified is the image currently booted on a Kubernetes NCN, the value for `ARTIFACT_VERSION` can be found by looking
     at the boot parameters for the NCNs, or from `/proc/cmdline` on a booted Kubernetes NCN. The version has the form of `X.Y.Z`.
     See: [boot parameters](../../background#metalserver)
+
+1. (`ncn-mw#`) Obtain the NCN image's associated artifacts (SquashFS, kernel, and `initrd`).
+
+    These example commands show how to download these artifacts from S3, which is where the NCN image artifacts are stored.
 
     ```bash
     ARTIFACT_VERSION=<artifact-version>
@@ -29,67 +34,72 @@ This document describes the configuration of a Kubernetes NCN image. The same st
     export IMS_INITRD_FILENAME="${ARTIFACT_VERSION}-initrd"
     ```
 
-1. [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md).
+1. Import the NCN image into IMS.
 
-    This document will instruct the administrator to set several environment variables, including the three set in
-    the previous step.
+    Perform the [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md) procedure, except
+    skip the following sections:
 
-1. If `sat bootprep` was not used in [Worker Image Customization](Worker_Image_Customization.md) to create a CFS
+    * [Set helper variables](../image_management/Import_External_Image_to_IMS.md#2-set-helper-variables)
+      * Skip this section because the variables have already been set above, in the previous step.
+    * [Upload artifacts to S3](../image_management/Import_External_Image_to_IMS.md#5-upload-artifacts-to-s3)
+      * Skip this section because the artifacts are already in S3.
+
+1. (`ncn-m001#`) If `sat bootprep` was not used in [Worker Image Customization](Worker_Image_Customization.md) to create a CFS
    configuration for management node image customization, then execute the following two substeps:
 
     1. Clone the `csm-config-management` repository.
 
-       ```bash
-       VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-       VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-       git clone https://$VCS_USER:$VCS_PASS@api-gw-service-nmn.local/vcs/cray/csm-config-management.git
-       ```
+        ```bash
+        VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+        VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+        git clone "https://${VCS_USER}:${VCS_PASS}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+        ```
 
-       You will need a Git commit hash from this repo in the following step.
+        A Git commit hash from this repository is needed in the following step.
 
     1. [Create a CFS Configuration](Create_a_CFS_Configuration.md).
 
-       The first layer in the CFS configuration should be similar to this:
+        The first layer in the CFS configuration should be similar to this:
 
-       ```json
-       "layers": [
-       {
-         "name": "csm-ncn-workers",
-         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-         "playbook": "ncn-worker_nodes.yml",
-         "commit": "<git commit hash>"
-       },
-       ```
+        ```json
+        {
+          "name": "csm-ncn-workers",
+          "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+          "playbook": "ncn-worker_nodes.yml",
+          "commit": "<git commit hash>"
+        }
+        ```
 
-       The last layer in the CFS configuration should be similar to this:
+        The last layer in the CFS configuration should be similar to this:
 
-       ```json
-       "layers": [
-       {
-         "name": "csm-ncn-initrd",
-         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-         "playbook": "ncn-initrd.yml",
-         "commit": "<git commit hash>"
-       }
-       ```
+        ```json
+        {
+          "name": "csm-ncn-initrd",
+          "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+          "playbook": "ncn-initrd.yml",
+          "commit": "<git commit hash>"
+        }
+        ```
 
-1. Ensure the environment variable `$IMS_IMAGE_ID` was set during
+1. (`ncn-mw#`) Ensure that the environment variable `$IMS_IMAGE_ID` was set during
    [Import an External Image to IMS](../image_management/Import_External_Image_to_IMS.md).
 
-   ```bash
-   echo $IMS_IMAGE_ID
-   ```
+    ```bash
+    echo "${IMS_IMAGE_ID}"
+    ```
 
-1. Use the following command to create an image customization CFS session. See
-   [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional information
-   on creating an image customization CFS session.
+1. (`ncn-mw#`) Create an image customization CFS session.
 
-   ```bash
-   cray cfs sessions create --name ncn-image-customization-session \
-       --configuration-name ncn-image-customization \
-       --target-definition image --format json \
-       --target-group Management_Worker $IMS_IMAGE_ID
-   ```
+    See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional information
+    on creating an image customization CFS session.
+
+    ```bash
+    cray cfs sessions create \
+        --name "ncn-image-customization-session-$(date +%Y%m%d_%H%M%S)" \
+        --configuration-name ncn-image-customization \
+        --target-definition image --format json \
+        --target-group Management_Worker "${IMS_IMAGE_ID}"
+    ```
 
 1. (`ncn-mw#`) Update boot parameters for a Kubernetes NCN.
 
@@ -123,7 +133,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
         echo "${PARAMS}"
         ```
 
-        In the output of the final echo command, verify that the value of `metal.server` was correctly set to `${NEW_METAL_SERVER}`.
+        In the output of the final `echo` command, verify that the value of `metal.server` was correctly set to `${NEW_METAL_SERVER}`.
 
     1. Update BSS with the new boot parameters.
 
@@ -135,6 +145,6 @@ This document describes the configuration of a Kubernetes NCN image. The same st
         ```
 
    **NOTE**: If the worker node image is being customized as part of a Cray EX initial install or upgrade involving multiple products,
-   then refer to the /HPE Cray EX System Software Getting Started Guide/ (S-8000) for details on when to reboot the worker nodes to the new image.
+   then refer to the `HPE Cray EX System Software Getting Started Guide (S-8000)` for details on when to reboot the worker nodes to the new image.
 
-   If this procedure is being followed outside of the `S-8000` document, you may proceed to [rebuild the NCN](../node_management/Rebuild_NCNs/Rebuild_NCNs.md).
+   If this procedure is being followed outside of the `S-8000` document, then proceed to [rebuild the NCN](../node_management/Rebuild_NCNs/Rebuild_NCNs.md).
