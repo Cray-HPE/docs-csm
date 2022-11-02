@@ -69,7 +69,7 @@ This procedure is applicable for the following types of standard rack nodes:
 
 1. (`ncn#`) **If the node being removed is an UAN**, then remove the IP address reservation for the node in the `CAN` or `CHN` networks.
 
-    **Node** If the the UAN is being replaced within the same rack slot, then this step can be skipped.
+    **Node** If the UAN is being replaced within the same rack slot, then this step can be skipped.
 
    1. Perform a dry-run:
 

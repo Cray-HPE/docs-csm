@@ -216,7 +216,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
      * ldapDoFullSync: Tells the HPE Cray EX Keycloak localization tool to perform an immediate full user synchronization after configuring the LDAP integration.
        - default: true
        - type: string
-     * ldapRoleMapperDn: If this is an empty string then a role mapper is not created, otherwise this the the DN used as the search base to find role entries.
+     * ldapRoleMapperDn: If this is an empty string then a role mapper is not created, otherwise this the DN used as the search base to find role entries.
        - default: ""
        - type: string
      * ldapRoleMapperRoleNameLDAPAttribute: The LDAP attribute to map to the role name in Keycloak.

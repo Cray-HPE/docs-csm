@@ -113,7 +113,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 
 In order to apply post-install customizations to a system, the affected Helm chart must exist on the system so that the same chart version can be redeployed with the desired customizations.
 
-This example unpacks the the `csm-1.0.0` tarball under `/root` and lists the Helm charts that are now on the system.
+This example unpacks the `csm-1.0.0` tarball under `/root` and lists the Helm charts that are now on the system.
 Set `PATH_TO_RELEASE` to the release directory where the `helm` directory exists.
 `PATH_TO_RELEASE` will be used below when deploying a customization.
 

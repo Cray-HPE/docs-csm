@@ -46,7 +46,7 @@ In order for CANU to parse CSI output, use the `--csi-folder` flag specify the d
 
 The `sls_input_file.json` file is generally stored in one of two places, depending on how far the system is in the install process.
 
-* Early in the install process, when running off of the LiveCD, the `sls_input_file.json` file is normally found on the PIT node in the the `/var/www/ephemeral/prep/SYSTEMNAME/` directory.
+* Early in the install process, when running off of the LiveCD, the `sls_input_file.json` file is normally found on the PIT node in the `/var/www/ephemeral/prep/SYSTEMNAME/` directory.
 * Later in the install process, after the PIT node has been redeployed, the `sls_input_file.json` file is generally found on
 `ncn-m001` or `ncn-m003` in the `/metal/bootstrap/prep/SYSTEMNAME/` directory.
 

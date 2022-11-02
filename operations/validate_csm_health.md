@@ -116,7 +116,7 @@ If all designated prerequisites are met, the availability of system management h
 [Access System Management Health Services](system_management_health/Access_System_Management_Health_Services.md).
 It is very important to check the `Prerequisites` section of this document.
 
-If one or more of the the URLs listed in the procedure are inaccessible, it does not necessarily mean that system is not healthy. It may simply mean that not all of the
+If one or more of the URLs listed in the procedure are inaccessible, it does not necessarily mean that system is not healthy. It may simply mean that not all of the
 prerequisites have been met to allow access to the system management health tools via URL.
 
 Information to assist with troubleshooting some of the components mentioned in the prerequisites can be accessed here:
@@ -334,7 +334,7 @@ BMC can be safely ignored or needs to be addressed before proceeding.
 - In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated
   BMCs will have no HSM data and will show up in the mismatch list.
 
-If it was determined that the mismatch can not be ignored, then proceed onto the the [2.2.2 Known Issues](#222-known-issues-with-hsm-discovery-validation) below to troubleshoot any mismatched BMCs.
+If it was determined that the mismatch can not be ignored, then proceed onto the [2.2.2 Known Issues](#222-known-issues-with-hsm-discovery-validation) below to troubleshoot any mismatched BMCs.
 
 #### 2.2.2 Known issues with HSM discovery validation
 
@@ -550,7 +550,7 @@ This section can be run on any NCN or the PIT node.
     version = "1.11.5"
     ```
 
-    In this example output, it shows that UAS is installed and running the `1.11.5` version.
+    In this example output, it shows that UAS is installed and running the `1.11.5` version. If the error "Token not valid for UAS" occurs, see [Authorization issues](#641-authorization-issues).
 
 1. (`ncn#` or `pit#`) List UAIs on the system.
 
@@ -747,7 +747,7 @@ Try 'cray uas list --help' for help.
 Error: Bad Request: Token not valid for UAS. Attributes missing: ['gidNumber', 'loginShell', 'homeDirectory', 'uidNumber', 'name']
 ```
 
-Fix this by logging in as a real user (someone with actual Linux credentials) and making sure that `CRAY_CREDENTIALS` is unset.
+Fix this by logging in as a Keycloak user with the above attributes defined using `cray auth login`, and make sure that `CRAY_CREDENTIALS` is unset.
 
 #### 6.4.2 UAS cannot access Keycloak
 

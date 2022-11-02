@@ -62,7 +62,7 @@ With Intel hardware skip these steps and proceed to the next step to [Boot NCN a
 
 1. (`ncn-mw#`) Enable the TPM state if it is `Disabled`.
 
-    If the the previous step showed that TPM was `Disabled`, then `Enable` it with the following request.
+    If the previous step showed that TPM was `Disabled`, then `Enable` it with the following request.
 
     ```bash
     cray scsd bmc bios update tpmstate $XNAME_BMC --future Enabled
