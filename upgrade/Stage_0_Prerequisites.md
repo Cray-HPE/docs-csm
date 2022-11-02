@@ -280,7 +280,7 @@ In the standard upgrade, the new worker NCN images must be customized, and all N
 
 1. Prepare the post-boot NCN personalizations.
 
-    This will ensure that the appropriate CFS configuration layers are applied when performing post-boot node personalization of the NCNs.
+    This will ensure that the appropriate CFS configuration layers are applied when performing post-boot node personalization of the master, storage, and worker NCNs.
     See [NCN Node Personalization](../operations/configuration_management/NCN_Node_Personalization.md).
 
 Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data), skipping the [CSM-only system upgrade](#csm-only-system-upgrade) subsection below.
