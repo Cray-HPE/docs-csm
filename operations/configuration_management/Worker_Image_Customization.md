@@ -33,8 +33,13 @@ The following procedure describes how to correctly edit the `bootprep` files to 
     sat bootprep run management-bootprep-image-customization.yaml
     ```
 
-1. (`ncn-m#`) Perform the steps in [Management Node Image Customization](Management_Node_Image_Customization.md). Use the CFS configuration created in the previous step when
-    customizing the image.
+1. Customize the worker NCN image and update BSS to use the new image.
+
+    Perform the steps in [Management Node Image Customization](Management_Node_Image_Customization.md), with the following notes:
+
+    - Skip the steps in the linked procedure to create the CFS configuration, because the CFS configuration was already created in the previous step.
+    - When creating the CFS session to customize the image, use the CFS configuration created in the previous step.
+    - When updating the boot parameters, update them for every NCN worker node in the system.
 
 1. (`ncn-m#`) Optionally, delete `management-bootprep-image-customization.yaml`, which is no longer needed.
 
