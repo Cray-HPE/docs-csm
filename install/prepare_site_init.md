@@ -309,7 +309,7 @@ with system-specific customizations.
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
 
-#### End of LDAP configuation
+#### End of LDAP configuration
 
 1. (`pit#`) Configure the Unbound DNS resolver (if needed).
 
