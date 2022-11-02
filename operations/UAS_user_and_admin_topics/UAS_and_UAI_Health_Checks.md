@@ -131,7 +131,7 @@ If other UAI images have been created and registered, they may also appear in th
 
 The following are needed for this procedure:
 
-* Must run on a master or worker node \(and not ncn-w001\)
+* Must run on a master or worker node
 * Must run on the HPE Cray EX system \(or from an external host, but the procedure for that is not covered here\)
 * Requires that the CLI be initialized and authorized as for the current user
 
