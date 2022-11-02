@@ -550,7 +550,7 @@ This section can be run on any NCN or the PIT node.
     version = "1.11.5"
     ```
 
-    In this example output, it shows that UAS is installed and running the `1.11.5` version.
+    In this example output, it shows that UAS is installed and running the `1.11.5` version. If the error "Token not valid for UAS" occurs, see [Authorization issues](#641-authorization-issues).
 
 1. (`ncn#` or `pit#`) List UAIs on the system.
 
@@ -747,7 +747,7 @@ Try 'cray uas list --help' for help.
 Error: Bad Request: Token not valid for UAS. Attributes missing: ['gidNumber', 'loginShell', 'homeDirectory', 'uidNumber', 'name']
 ```
 
-Fix this by logging in as a real user (someone with actual Linux credentials) and making sure that `CRAY_CREDENTIALS` is unset.
+Fix this by logging in as a Keycloak user with the above attributes defined using the the command `cray auth login`, and make sure that `CRAY_CREDENTIALS` is unset.
 
 #### 6.4.2 UAS cannot access Keycloak
 
