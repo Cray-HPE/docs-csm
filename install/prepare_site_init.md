@@ -157,6 +157,7 @@ with system-specific customizations.
     > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
     > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
+
    > **`NOTE`** Requires a properly configured Docker or Podman
    > environment.
 
@@ -225,6 +226,7 @@ with system-specific customizations.
     > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
     > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
+
     > **`NOTE`** The alias used in this command for `cray-data-center-ca` should be changed to match your LDAP.
 
     ```bash
@@ -290,6 +292,7 @@ with system-specific customizations.
 
     > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
     > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
+
 
     > **`NOTE`** There may be one or more groups in LDAP for admins and one or more for users.
     > Each admin group needs to be assigned to role `admin` and set to both `shasta` and `cray` clients in Keycloak.
