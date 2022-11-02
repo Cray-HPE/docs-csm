@@ -273,12 +273,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       > **`NOTE`** Requires a properly configured Docker or Podman environment.
 
       ```bash
-      ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+      ${CSM_DISTDIR}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim
       ```
 
       **Troubleshooting:**
 
-      - If the output shows the `skopeo.tar` file cannot be found, then ensure that the `$CSM_DISTDIR` directory looks contains the `dtr.dev.cray.com` directory which includes the originally installed docker images.
+      - If the output shows the `skopeo.tar` file cannot be found, then ensure that the `$CSM_DISTDIR` directory looks contains the `artifactory.algol60.net` directory which includes the originally installed docker images.
 
          The following is an example of the skopeo.tar file not being found:
 
@@ -308,7 +308,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       > **IMPORTANT:** Replace `<ca-cert.pem>` and `<alias>` before running the command.
 
       ```bash
-      podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
+      podman run --rm -v "$(pwd):/data" artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool \
          -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
          -storepass password -noprompt
       ```
@@ -408,7 +408,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Create `certs.jks`.
 
       ```bash
-      podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
+      podman run --rm -v "$(pwd):/data" artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool -importcert \
         -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
         -storepass password -noprompt
       ```

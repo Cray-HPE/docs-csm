@@ -156,8 +156,8 @@ with system-specific customizations.
 
 1. (`pit#`) Load the `openjdk` container image.
 
-    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
-    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
+   > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+   > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
    > **`NOTE`** Requires a properly configured Docker or Podman
    > environment.
