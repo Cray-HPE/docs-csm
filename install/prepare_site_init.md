@@ -142,6 +142,9 @@ with system-specific customizations.
 
 1. (`pit#`) Set environment variables for the LDAP server and its port.
 
+    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
+
    In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
 
    ```bash
@@ -150,6 +153,9 @@ with system-specific customizations.
    ```
 
 1. (`pit#`) Load the `openjdk` container image.
+
+    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
    > **`NOTE`** Requires a properly configured Docker or Podman
    > environment.
@@ -160,6 +166,9 @@ with system-specific customizations.
 
 1. (`pit#`) Get the issuer certificate.
 
+    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
+
     Retrieve the issuer certificate for the LDAP server at port 636. Use `openssl s_client` to connect
     and show the certificate chain returned by the LDAP host:
 
@@ -168,6 +177,9 @@ with system-specific customizations.
     ```
 
 1. Enter the issuer's certificate into `cacert.pem`.
+
+    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
     Either manually extract (i.e., cut/paste) the issuer's
     certificate into `cacert.pem`, or try the following commands to
@@ -210,6 +222,9 @@ with system-specific customizations.
 
 1. (`pit#`) Create `certs.jks`.
 
+    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
+
     > **`NOTE`** The alias used in this command for `cray-data-center-ca` should be changed to match your LDAP.
 
     ```bash
@@ -221,11 +236,17 @@ with system-specific customizations.
 
 1. (`pit#`) Create `certs.jks.b64` by base-64 encoding `certs.jks`.
 
+    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
+
     ```bash
     base64 certs.jks > certs.jks.b64
     ```
 
 1. (`pit#`) Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
+
+    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
     ```bash
     cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
@@ -247,6 +268,9 @@ with system-specific customizations.
 1. (`pit#`) Update the `keycloak_users_localize` sealed secret with the
     appropriate value for `ldap_connection_url`.
 
+    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
+
     1. (`pit#`) Set `ldap_connection_url` in `customizations.yaml`.
 
        ```bash
@@ -263,6 +287,9 @@ with system-specific customizations.
 
 1. Configure the `ldapSearchBase` and `localRoleAssignments` settings for
     the `cray-keycloak-users-localize` chart in `customizations.yaml`.
+
+    > **`NOTE`** Skip this step if there is no LDAP configuration at this time. If LDAP should be enabled later,
+    > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
     > **`NOTE`** There may be one or more groups in LDAP for admins and one or more for users.
     > Each admin group needs to be assigned to role `admin` and set to both `shasta` and `cray` clients in Keycloak.
