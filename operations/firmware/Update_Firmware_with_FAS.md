@@ -4,7 +4,7 @@ If FAS has not yet been installed, firmware for NCNs can be updated manually wit
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State Managers (HSM), device data, and image data in order to update firmware.
 
-Reset Gigabyte node BMC to factory defaults if having problems with `ipmitool`, problems using Redfish, or when flashing procedures fail.
+Gigabyte nodes that are having issues with `ipmitool`, Redfish, or flashing firmware may need to be reset to factory defaults.
 See [Set Gigabyte Node BMC to Factory Defaults](../../operations/node_management/Set_Gigabyte_Node_BMC_to_Factory_Defaults.md).
 
 FAS images contain the following information that is needed for a hardware device to update firmware versions:
@@ -12,6 +12,8 @@ FAS images contain the following information that is needed for a hardware devic
 * Hardware-specific information: Contains the allowed device states and how to reboot a device if necessary.
 * Selection criteria: How to link a firmware image to a specific hardware type.
 * Image data: Where the firmware image resides in Simple Storage Service (S3) and what `firmwareVersion` it will report after it is successfully applied. See [Artifact Management](../artifact_management/Artifact_Management.md) for more information.
+
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 ## Topics
 
@@ -41,7 +43,7 @@ Failure to lock the NCNs could result in unintentional update of the NCNs if FAS
 If the action is timed out, these nodes report as `failed` with the `stateHelper` message of `"time expired; could not complete update"`.
 This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
 
-Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS Recipes](FAS_Recipes.md) to update each supported type.
+Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS Use Cases](FAS_Use_Cases.md) to update each supported type.
 
 > **`NOTE`** Each system is different and may not have all hardware options.
 
@@ -57,7 +59,7 @@ Table 1. Upgradable Firmware Items
 | Cray             | `chassisBMC` | `BMC`, `Recovery`                                                                   |
 | Cray             | `routerBMC`  | `BMC`, `Recovery`                                                                   |
 | Gigabyte         | `nodeBMC`    | `BMC`, `BIOS`                                                                       |
-| HPE              | `nodeBMC`    | `iLO 5` (`BMC` or `1` ), `System ROM` ,`Redundant System ROM` (`BIOS` or `2`)       |
+| HPE              | `nodeBMC`    | `iLO 5`, `System ROM` ,`Redundant System ROM`                                       |
 
 ## Order of operations
 
@@ -105,18 +107,18 @@ After identifying which hardware is in the system, start with the top item on th
 > Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 > **`NOTE`** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
-1. [Cray](FAS_Recipes.md#manufacturer--cray)
-   1. [`ChassisBMC`](FAS_Recipes.md#cray-device-type-chassisbmc--target-bmc)
+1. [Cray](FAS_Use_Cases.md#liquid-cooled-nodes-update-procedures)
+   1. [`ChassisBMC`](FAS_Use_Cases.md#update-chassis-management-module-firmware)
    1. `NodeBMC`
-      1. [BMC](FAS_Recipes.md#cray-device-type-nodebmc--target-bmc)
-      1. [`NodeBIOS`](FAS_Recipes.md#cray-device-type-nodebmc--target-nodebios)
-      1. [Redstone FPGA](FAS_Recipes.md#cray-device-type-nodebmc--target-redstone-fpga)
-1. [Gigabyte](FAS_Recipes.md#manufacturer-gigabyte)
-   1. [BMC](FAS_Recipes.md#cray-device-type-nodebmc--target-bmc)
-   1. [BIOS](FAS_Recipes.md#gigabyte-device-type-nodebmc--target-bios)
-1. [HPE](FAS_Recipes.md#manufacturer-hpe)
-   1. [BMC (`iLO5`)](FAS_Recipes.md#hpe-device-type-nodebmc--target-ilo-5-bmc)
-   1. [BIOS (System ROM)](FAS_Recipes.md#hpe-device-type-nodebmc--target-system-rom-bios)
+      1. [BMC](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-bmc)
+      1. [`NodeBIOS`](FAS_Use_Cases.md#manufacturer-cray--device-type--nodebmc--target--nodebios)
+      1. [Redstone FPGA](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-redstone-fpga)
+1. [Gigabyte](FAS_Use_Cases.md#gigabyte)
+   1. [BMC](FAS_Use_Cases.md#manufacturer-gigabyte--device-type-nodebmc--target-bmc)
+   1. [BIOS](FAS_Use_Cases.md#manufacturer-gigabyte--device-type--nodebmc--target--bios)
+1. [HPE](FAS_Use_Cases.md#hpe)
+   1. [`iLO 5` (BMC)](FAS_Use_Cases.md#manufacturer-hpe--device-type-nodebmc--target-ilo-5-bmc)
+   1. [System ROM (BIOS)](FAS_Use_Cases.md#manufacturer-hpe--device-type-nodebmc--target-system-rom-bios)
 
 ## FAS administrative procedures
 

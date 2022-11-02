@@ -1,0 +1,23 @@
+{
+    "inventoryHardwareFilter": {
+        "manufacturer": "hpe"
+    },
+    "stateComponentFilter": {
+        "deviceTypes": [
+          "NodeBMC"
+        ]
+    },
+    "targetFilter": {
+        "targets": [
+          "System Rom"
+        ]
+    },
+    "command": {
+        "version": "latest",
+        "tag": "default",
+        "overrideDryrun": false,
+        "restoreNotPossibleOverride": true,
+        "timeLimit": 1000,
+        "description": "Upgrade of HPE node System Rom"
+    }
+}

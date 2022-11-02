@@ -1,14 +1,19 @@
-# Keycloak User Management with kcadm.sh
+# Keycloak User Management with `kcadm.sh`
 
 ## Overview
 
-The Cray CLI requires a valid Keycloak JWT token. If the token is not present it must be obtained by supplying valid user credentials at the time of CLI initialization. During the installation or upgrade of a Shasta system, the Keycloak user LDAP federation state or credentials may not be known, or the external LDAP system for which the user may have been federated may not be available. These scenarios make it impossible to initialize the Cray CLI with a previously valid Keycloak user or LDAP federated Keycloak user. If for any reason the Keycloak UI is not available for the administrator to verify the state of the user, using Keycloak's `kcadm.sh` utility from the command line will be required.
+The Cray CLI requires a valid Keycloak JWT token. If the token is not present it must be obtained by supplying valid user credentials at the time of CLI
+initialization. During the installation or upgrade of a Shasta system, the Keycloak user LDAP federation state or credentials may not be known, or the external
+LDAP system for which the user may have been federated may not be available. These scenarios make it impossible to initialize the Cray CLI with a previously
+valid Keycloak user or LDAP federated Keycloak user. If for any reason the Keycloak UI is not available for the administrator to verify the state of the user,
+using Keycloak's `kcadm.sh` utility from the command line will be required.
 
 The `kcadm.sh` utility is included with the Shasta Keycloak container image and can be used as described below to:
-    * Perform troubleshooting operations that can verify the existence of a user.
-    * Determine if a user is federated.
-    * Change a user credential (for a keycloak-local account only).
-    * Create a new local Keycloak user that is compatible (has the correct role mappings) with the Cray CLI.
+
+* Perform troubleshooting operations that can verify the existence of a user.
+* Determine if a user is federated.
+* Change a user credential (for a Keycloak local account only).
+* Create a new local Keycloak user that is compatible (has the correct role mappings) with the Cray CLI.
 
 All of the operations described below must be run as `root` from the `ncn-m001` node.
 

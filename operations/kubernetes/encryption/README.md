@@ -203,7 +203,7 @@ Encryption status is obtained through the `--status` switch of the `encryption.s
     The output shows that the `current` key and `goal` keys are in agreement. This indicates that all secret data in `etcd`
     is now encrypted with this key provider's name. This indicates that all secret data in etcd is now encrypted with this key provider's name.
 
-## Forcing encryption
+## Force rewrite
 
 If necessary, a forced rewrite of secret data can be performed. Generally unnecessary but can be used to reduce the time for nodes to synchronize status.
 

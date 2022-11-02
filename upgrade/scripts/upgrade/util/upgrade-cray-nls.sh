@@ -32,7 +32,7 @@ function deployNLS() {
     manifestgen -i "${CSM_ARTI_DIR}/manifests/platform.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/platform.yaml"
     charts="$(yq r /tmp/build/platform.yaml 'spec.charts[*].name')"
     for chart in $charts; do
-        if [[ $chart != "cray-nls" ]] && [[ $chart != "cray-opa" ]] && [[ $chart != "cray-drydock" ]] && [[ $chart != "cray-oauth2-proxies" ]]; then 
+        if [[ $chart != "cray-iuf" ]] && [[ $chart != "cray-nls" ]] && [[ $chart != "cray-opa" ]] && [[ $chart != "cray-drydock" ]] && [[ $chart != "cray-oauth2-proxies" ]]; then 
             yq d -i /tmp/build/platform.yaml "spec.charts.(name==$chart)"
         fi
     done

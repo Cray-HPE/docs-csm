@@ -1,5 +1,7 @@
 # FAS CLI
 
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
 This section describes the basic capabilities of the Firmware Action Service (FAS) CLI commands. These commands can be used to manage firmware for system hardware supported by FAS. Refer to the
 prerequisites section before proceeding to any of the sections for the supported operations.
 
@@ -52,7 +54,7 @@ query according to the filters requested by the admin. It will initiate an updat
 
 #### Execute an action: Procedure
 
-This covers the generic process for executing an action. For more specific examples and detailed explanations of options, see [FAS Recipes](FAS_Recipes.md) and [FAS Filters](FAS_Filters.md).
+This covers the generic process for executing an action. For more specific examples and detailed explanations of options, see [FAS Use Cases](FAS_Use_Cases.md) and [FAS Filters](FAS_Filters.md).
 
 1. Identify the selection of filters to apply.
 

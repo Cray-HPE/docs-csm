@@ -51,7 +51,7 @@ Any steps run on an `external` server require that server to have the following 
    # e.g. an alpha : CSM_RELEASE=1.4.0-alpha.99
    # e.g. an RC    : CSM_RELEASE=1.4.0-rc.1
    # e.g. a stable : CSM_RELEASE=1.4.0  
-   CSM_RELEASE=1.3.0-alpha.9
+   CSM_RELEASE=1.4.0-alpha.9
    ```
 
    ```bash

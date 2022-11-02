@@ -1,0 +1,23 @@
+{
+    "inventoryHardwareFilter": {
+        "manufacturer": "gigabyte"
+    },
+    "stateComponentFilter": {
+        "deviceTypes": [
+          "nodeBMC"
+        ]
+    },
+    "targetFilter": {
+        "targets": [
+          "BIOS"
+        ]
+    },
+    "command": {
+        "version": "latest",
+        "tag": "default",
+        "overrideDryrun": false,
+        "restoreNotPossibleOverride": true,
+        "timeLimit": 4000,
+        "description": "Upgrade of Gigabyte node BIOS"
+    }
+}

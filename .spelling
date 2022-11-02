@@ -79,6 +79,7 @@ analyzers
 analyzes
 analyzing
 Ansible
+Antero
 AOS-CX
 API
 APIs
@@ -503,6 +504,10 @@ singlemode
 site-routable
 Skopeo
 SLES-based
+SLES-15-SP2
+SLES-15-SP3
+SLES-15-SP4
+SLES-15-SP5
 SLS
 Slurm
 SMNet
@@ -635,9 +640,6 @@ Zypper
 
 - background/README.md
 initramFS
-initrd
-overlayFS
-squashFS
 
 - glossary.md
 # To allow 802.3cd/bs
@@ -716,7 +718,14 @@ Alerta
 - operations/network/dns/DNS.md
 ExternalDNS
 
+- operations/network/dns/Manage_the_DNS_Unbound_Resolver.md
+ExternalDNS
+
 - RELEASE_NOTES.md
 5.x
 Antero
 Expat-15
+
+- troubleshooting/known_issues/antero_node_NID_allocation.md
+# To allow Site Init
+Init

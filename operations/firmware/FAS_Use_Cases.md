@@ -1,4 +1,4 @@
-# FAS Use Cases
+# FAS Recipes and Procedures
 
 Use the Firmware Action Service (FAS) to update the firmware on supported hardware devices. Each procedure includes the prerequisites and example recipes required to update the firmware.
 
@@ -9,6 +9,8 @@ If the action is timed out, these nodes report as `failed` with the `stateHelper
 This includes NCNs which are manually locked to prevent accidental rebooting and firmware updates.
 
 Refer to [FAS Filters](FAS_Filters.md) for more information on the content used in the example JSON files.
+
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 ## Prerequisites
 
@@ -141,7 +143,12 @@ It is also recommended that the nodes be powered back on after the updates are c
 }
 ```
 
-##### Cray Node BIOS Update Procedure
+##### Cray Node Firmware and BIOS Update Procedure
+
+**NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+Use the file `cray_nodeBMC_BMC.json` for Node BMC updates,
+`cray_nodeBMC_nodeBIOS.json` (or `cray_nodeBMC_node0BIOS.json` and `cray_nodeBMC_node1BIOS.json`) for Node BIOS updates,
+or `cray_nodeAccFPGA0.json` (or `cray_node_node0AccFPGA0.json` and `cray_nodeBMC_node1AcFPGA0.json`) for FPG updates.
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -310,9 +317,7 @@ Update the Chassis Management Module \(CMM\) controller \(cC\) firmware using FA
 
 The CMM firmware update process also checks and updates the Cabinet Environmental Controller \(CEC\) firmware.
 
-### Example Recipes
-
-**Manufacturer: Cray | Device Type: `ChassisBMC` | Target: BMC**
+### Manufacturer: Cray | Device Type: `ChassisBMC` | Target: BMC
 
 > **IMPORTANT:** Before updating a CMM, make sure all slot and rectifier power is off and the discovery job is stopped (see procedure below).
 
@@ -343,6 +348,9 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 ```
 
 #### Cray Chassis BMC Update Procedure
+
+**NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+Use the file `cray_chassisBMC_BMC.json` for Chassis BMC updates.
 
 1. (`ncn#`) Power off the liquid-cooled chassis slots and chassis rectifiers.
 
@@ -476,14 +484,6 @@ The CMM firmware update process also checks and updates the Cabinet Environmenta
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
 
-1. Bring up the Slingshot Fabric.
-
-    Refer to the following documentation on the HPE Customer Support Center
-    for more information on how to bring up the Slingshot Fabric:
-
-    * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
-    * The *HPE Slingshot Troubleshooting Guide* PDF.
-
 1. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
 ## Update Air-Cooled Compute Node BMC, BIOS, iLO 5, and System ROM
@@ -499,7 +499,7 @@ This procedure updates node controller \(nC\) firmware.
 
 ### Gigabyte
 
-**Device Type: `NodeBMC` | Target: BMC**
+#### Manufacturer: Gigabyte | Device Type: Compute `NodeBMC` | Target: BMC
 
 ```json
 {
@@ -550,7 +550,7 @@ To resolve this issue, do either of the following actions:
 
 Make sure to wait for the current firmware to be updated before starting a new FAS action on the same node.
 
-**Device Type: `NodeBMC` | Target: BIOS**
+#### Manufacturer: Gigabyte | Device Type: Compute `NodeBMC` | Target: BIOS
 
 ```json
 {
@@ -586,7 +586,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 ### HPE
 
-**Device Type: `NodeBMC` | Target: `iLO 5` aka BMC**
+#### Manufacturer: HPE | Device Type: Compute `NodeBMC` | Target: `iLO 5` aka BMC
 
 ```json
 {
@@ -617,7 +617,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 }
 ```
 
-**Device Type: `NodeBMC` | Target: `System ROM` aka BIOS**
+#### Manufacturer: HPE | Device Type: Compute `NodeBMC` | Target: `System ROM` aka BIOS
 
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
 > For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
@@ -653,7 +653,13 @@ Make sure to wait for the current firmware to be updated before starting a new F
 }
 ```
 
-#### HPE Node System ROM (BIOS) Update Procedure
+#### HPE and Gigabyte Compute Node Update Procedure
+
+**NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
+the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
+the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
+or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -834,7 +840,7 @@ Due to networking, FAS cannot update `ncn-m001`. See [Updating Firmware on `ncn-
 
 ### Gigabyte NCNs
 
-**Device Type: `NodeBMC` | Target: BMC**
+#### Manufacturer: Gigabyte | Device Type: NCN `NodeBMC` | Target: BMC
 
 ```json
 {
@@ -879,7 +885,7 @@ To resolve this issue, do either of the following actions:
 
 Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
 
-**Device Type: `NodeBMC` | Target: BIOS**
+#### Manufacturer: Gigabyte | Device Type: NCN `NodeBMC` | Target: BIOS
 
 ```json
 {
@@ -915,7 +921,7 @@ Make sure you have waited for the current firmware to be updated before starting
 
 ### HPE NCNs
 
-**Device Type: `NodeBMC` | Target: `iLO 5` aka BMC**
+#### Manufacturer: HPE | Device Type: NCN `NodeBMC` | Target: `iLO 5` aka BMC
 
 ```json
 {
@@ -946,7 +952,7 @@ Make sure you have waited for the current firmware to be updated before starting
 }
 ```
 
-**Device Type: `NodeBMC` | Target: `System ROM` aka BIOS**
+#### Manufacturer: HPE | Device Type: NCN `NodeBMC` | Target: `System ROM` aka BIOS
 
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
 > For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
@@ -984,7 +990,14 @@ Make sure you have waited for the current firmware to be updated before starting
 
 The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure.
 
-#### HPE Node System ROM (BIOS) Procedure for NCN
+#### Procedure for NCN updates
+
+**NOTE:** The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
+the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
+the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
+or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
+The script flag `--xnames x1,x2` can be used to limit the updates to certain xnames
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc) for more information.

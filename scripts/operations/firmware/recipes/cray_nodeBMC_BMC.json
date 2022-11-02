@@ -1,0 +1,23 @@
+{
+    "inventoryHardwareFilter": {
+        "manufacturer": "cray"
+    },
+    "stateComponentFilter": {
+        "deviceTypes": [
+          "nodeBMC"
+        ]
+    },
+    "targetFilter": {
+        "targets": [
+          "BMC"
+        ]
+    },
+    "command": {
+        "version": "latest",
+        "tag": "default",
+        "overrideDryrun": false,
+        "restoreNotPossibleOverride": true,
+        "timeLimit": 1000,
+        "description": "Upgrade of Olympus node BMCs"
+    }
+}
