@@ -240,7 +240,7 @@ updatek8sconfig() {
 # Note as I'm modifying all the same files that kubeadm upgrade apply does we
 # can skip that and modify the input file as well as the runtime files.
 #
-# Whilst not perhaps ideal it saves on the chances that the the kubeadm config
+# Whilst not perhaps ideal it saves on the chances that the kubeadm config
 # file has deviated from the running config and I would rather not have turning
 # on encryption breaking anything that it didn't setup.
 #

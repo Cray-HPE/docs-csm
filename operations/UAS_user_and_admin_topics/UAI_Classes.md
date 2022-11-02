@@ -9,7 +9,7 @@ In the [Legacy UAI Creation mode](Legacy_Mode_User-Driven_UAI_Management.md), de
 This is particularly useful with regard to volumes, since, without a default UAI Class, all user-created UAIs would simply try to attach all configured volumes.
 Finally, default UAI Classes enable the Legacy UAI Creation mode to access Resource Specifications and other configuration not normally available to user-created UAIs.
 
-This topic describes the content and purpose of the the fields in a UAI Class and gives guidance on setting those when creating UAI classes or various kinds.
+This topic describes the content and purpose of the fields in a UAI Class and gives guidance on setting those when creating UAI classes or various kinds.
 
 ## Example Listing and Overview
 

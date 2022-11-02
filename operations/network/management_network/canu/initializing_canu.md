@@ -14,7 +14,7 @@ In order to parse CSI output, use the `--csi-folder FOLDER` flag to pass in the 
 
 The `sls_input_file.json` file is generally stored in one of two places, depending on how far the system is in the install process.
 
-When running off of the LiveCD, the `sls_input_file.json` file is normally found in the the `/var/www/ephemeral/prep/SYSTEMNAME/` directory on the PIT node.
+When running off of the LiveCD, the `sls_input_file.json` file is normally found in the `/var/www/ephemeral/prep/SYSTEMNAME/` directory on the PIT node.
 
 After the PIT node has been redeployed, the `sls_input_file.json` file may be found in the `/metal/bootstrap/prep/SYSTEMNAME/` directory on `ncn-m001` or `ncn-m003`.
 

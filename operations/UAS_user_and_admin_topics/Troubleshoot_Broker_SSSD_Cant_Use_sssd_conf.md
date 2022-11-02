@@ -24,7 +24,7 @@ Diagnose the problem as follows:
    kubectl logs -n uas <pod-name> -c <uai-name>
    ```
 
-4. See if the the following errors appear in the log output:
+4. See if the following errors appear in the log output:
 
    ```bash
    (2022-01-28 17:46:44:642510): [sssd] [confdb_ldif_from_ini_file] (0x0020): Permission check on config file failed.

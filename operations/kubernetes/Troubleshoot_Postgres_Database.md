@@ -532,7 +532,7 @@ encounters issues syncing updates to the `postgresql` cluster.
     spire       spire-postgres               spire               11        3      20Gi     1             4Gi              4h10m   Running
     ```
 
-1. (`ncn-mw#`) Find the the `postgres-operator` pod name.
+1. (`ncn-mw#`) Find the `postgres-operator` pod name.
 
     ```bash
     kubectl get pods -l app.kubernetes.io/name=postgres-operator -n services

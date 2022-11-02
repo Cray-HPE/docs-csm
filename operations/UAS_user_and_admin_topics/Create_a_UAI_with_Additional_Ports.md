@@ -1,6 +1,6 @@
 # Create a UAI with Additional Ports
 
-In legacy mode UAI creation, an option is available to expose UAI ports to the customer user network in addition to the the port used for SSH access. These ports are restricted to ports 80, 443, and 8888.
+In legacy mode UAI creation, an option is available to expose UAI ports to the customer user network in addition to the port used for SSH access. These ports are restricted to ports 80, 443, and 8888.
 This procedure allows a user or administrator to create a new UAI with these additional ports.
 
 ## Prerequisites

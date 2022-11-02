@@ -134,7 +134,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
     cray capmc xname_off create --xnames x1005c3s0 --recursive true
     ```
 
-1. Install the the blade into the system into the desired location.
+1. Install the blade into the system into the desired location.
 
 1. (`ncn#`) Obtain an authentication token to access the API gateway.
 

@@ -897,7 +897,7 @@ class State:
                     expected_alias = f'{self.ncn_alias}.{network_name.lower()}'
                     if str(ip) == host_record["ip"]:
                         expected_aliases = [expected_alias]
-                        alternate_aliases = [] # ncn-m001 on the NMN can have an alternate host record for the the PIT
+                        alternate_aliases = [] # ncn-m001 on the NMN can have an alternate host record for the PIT
                         if network_name == "NMN":
                             expected_aliases.append(self.ncn_alias)
                             alternate_aliases = ["pit", "pit.nmn"]

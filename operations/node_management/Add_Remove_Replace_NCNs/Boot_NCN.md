@@ -77,7 +77,7 @@ program. Later messages will appear as the Linux kernel loads and the scripts in
     [  OK  ] Reached target Cloud-init target.
     ```
 
-1. Press enter on the console and ensure that the the login prompt includes the correct hostname of this node.
+1. Press enter on the console and ensure that the login prompt includes the correct hostname of this node.
 
 1. Exit the ConMan console (`&` then `.`).
 

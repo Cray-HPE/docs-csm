@@ -60,7 +60,7 @@ Preparation of the environment must be done before attempting to deploy the mana
 
 1. (`pit#`) If the NCNs are HPE hardware, then ensure that DCMI/IPMI is enabled.
 
-    This will enable `ipmitool` usage with the the BMCs.
+    This will enable `ipmitool` usage with the BMCs.
 
     ```bash
     /root/bin/bios-baseline.sh
@@ -177,7 +177,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
     grep -oP "(${mtoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
     ```
 
-1. (`pit#`) Start watching the the first Kubernetes master's console.
+1. (`pit#`) Start watching the first Kubernetes master's console.
 
     Either stop watching `ncn-s001-mgmt` before doing this, or do it in a different window.
 

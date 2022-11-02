@@ -122,7 +122,7 @@ This type of problem can occur in the following scenarios:
     }
     ```
 
-1. Apply the the systems's default BMC `root` user credentials to the BMC:
+1. Apply the systems's default BMC `root` user credentials to the BMC:
 
     ```bash
     cray scsd bmc discreetcreds create scsd_payload.json
@@ -137,7 +137,7 @@ This type of problem can occur in the following scenarios:
     StatusMsg = "No Content"
     ```
 
-    If the operation is not successful inspect the the SCSD logs.
+    If the operation is not successful inspect the SCSD logs.
 
 1. Remove SCSD payload file containing credentials from the file system:
 

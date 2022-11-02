@@ -236,7 +236,7 @@ The following are needed for this procedure:
 
 **Authorization Issues:**
 
-If the user is not logged in as a valid Keycloak user or is inadvertently using the `CRAY_CREDENTIALS` environment variable \(i.e. the variable is set if the user is logged in with the their username or another username\),
+If the user is not logged in as a valid Keycloak user or is inadvertently using the `CRAY_CREDENTIALS` environment variable \(i.e. the variable is set if the user is logged in with their username or another username\),
 the output of running the `cray uas list command` will produce output like the following.
 
 ```bash
