@@ -21,7 +21,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    1. Set the `CSM_DISTDIR` variable to the path to the unpacked CSM release tarball.
 
-      See [Download and extract CSM product release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
+      See [Download and extract CSM product release](../../update_product_stream/index.md#download-and-extract-csm-product-release).
 
    1. Create a new `site-init` directory using the CSM tarball.
 
