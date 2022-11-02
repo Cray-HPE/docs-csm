@@ -263,7 +263,8 @@ microservices to personalize a node after it has booted.
 
 ### Standard upgrade
 
-In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade. In the standard upgrade, worker NCN image customization and node personalization steps are required.
+In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade.
+In the standard upgrade, the new worker NCN images must be customized, and all NCNs must have their personalization configurations updated in CFS.
 
 **NOTE:** For the standard upgrade, it will not be possible to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
 
@@ -277,9 +278,9 @@ In most cases, administrators will be performing a standard upgrade and not a CS
     This will ensure that the CFS configuration layers are applied to perform image customization for the worker NCNs.
     See [Worker Image Customization](../operations/configuration_management/Worker_Image_Customization.md).
 
-1. Prepare the post-boot worker NCN personalizations.
+1. Prepare the post-boot NCN personalizations.
 
-    This will ensure that the appropriate CFS configuration layers are applied when performing post-boot node personalization of the worker NCNs.
+    This will ensure that the appropriate CFS configuration layers are applied when performing post-boot node personalization of the NCNs.
     See [NCN Node Personalization](../operations/configuration_management/NCN_Node_Personalization.md).
 
 Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data), skipping the [CSM-only system upgrade](#csm-only-system-upgrade) subsection below.
