@@ -6,6 +6,8 @@ directory which contains important customizations for various products.
 1. [Background](#1-background)
 1. [Create and Initialize `site-init` Directory](#2-create-and-initialize-site-init-directory)
 1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
+    1. [Setup LDAP configuration](#setup-ldap-configuration)
+    1. [End of LDAP configuration](#end-of-ldap-configuration)
 1. [Customer-Specific Customizations](#4-customer-specific-customizations)
 
 ## 1. Background
@@ -141,6 +143,11 @@ with system-specific customizations.
     [Certificate Authority](../background/certificate_authority.md).
 
     > **`IMPORTANT`** The CA may not be modified after install.
+
+#### Setup LDAP configuration
+
+> **`NOTE`** Skip past LDAP configuration to [here](#end-of-ldap-configuation) if there is no LDAP configuration at this time. If LDAP should be enabled later,
+> follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
 1. (`pit#`) Set environment variables for the LDAP server and its port.
 
@@ -313,6 +320,8 @@ with system-specific customizations.
        ```bash
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
+
+#### End of LDAP configuration
 
 1. (`pit#`) Configure the Unbound DNS resolver (if needed).
 
