@@ -1,0 +1,11 @@
+nav:
+    - RELEASE_NOTES.md
+    - introduction
+    - install
+    - upgrade
+    - troubleshooting
+    - operations
+    - update_product_stream
+    - background
+    - glossary.md
+
