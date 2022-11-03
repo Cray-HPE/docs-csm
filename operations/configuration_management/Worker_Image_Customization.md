@@ -35,7 +35,7 @@ to the NCN worker image before the workers are booted.
     cp management-bootprep.yaml management-bootprep-image-customization.yaml
     ```
 
-1. (`ncn-m#`) Delete the `ncn-personalization` configuration in the `management-bootprep-node-personalization.yaml` file.
+1. (`ncn-m#`) Delete the `ncn-personalization` configuration in the `management-bootprep-image-customization.yaml` file.
 
     After editing, the `ncn-image-customization` configuration should be the only entry remaining in the file, and
     the file should begin with the following lines:
