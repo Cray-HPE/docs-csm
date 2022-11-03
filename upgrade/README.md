@@ -20,6 +20,8 @@ sections, but there is also a general troubleshooting topic.
 
 - The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
 
+- If IMS image creation CFS jobs fail, see [Known Issue: IMS image creation failure](../troubleshooting/known_issues/ims_image_creation_failure.md) for a possible workaround.
+
 ## 1. Prepare for upgrade
 
 See [Prepare for Upgrade](prepare_for_upgrade.md).
