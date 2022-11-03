@@ -44,6 +44,13 @@ spec:
         template: nexus-get-admin-credential-template
     - - name: nexus-docker-load
         template: nexus-docker-load-template
+        hooks:
+          exit: 
+            template: cleanup-template
+            arguments:
+              parameters:
+              - name: nexus_admin_credential_secret_name
+                value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
         arguments:
           parameters:
           - name: nexus_docker_skopeo_image
@@ -56,12 +63,6 @@ spec:
             value: "{{workflow.parameters.product}}"
           - name: product_host_path
             value: "{{workflow.parameters.product_host_path}}"
-    - - name: cleanup
-        template: cleanup-template
-        arguments:
-          parameters:
-          - name: nexus_admin_credential_secret_name
-            value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
 ### Templates ###
 ## nexus-get-secret-template ##
   - name: nexus-get-admin-credential-template
@@ -141,8 +142,7 @@ spec:
     script:
       image: "{{inputs.parameters.nexus_docker_skopeo_image}}"
       command: [iuf-skopeo-sync]
-      # Fix hard-code image destination
-      args: ["/image/cray"]
+      args: ["{{workflow.parameters.content}}"]
       env:
       - name: NEXUS_USERNAME
         valueFrom:
@@ -162,11 +162,10 @@ spec:
     - name: image
       hostPath:
         # TBD: docker/path is an array and needs an iterator. Will that be done in the operator?
-        path: "{{workflow.parameters.product_host_path}}/{{workflow.parameters.product}}/docker"
+        path: "{{workflow.parameters.product_host_path}}/{{workflow.parameters.product}}"
 ## cleanup-template ##
 ## Remove the secret created earlier.
 # TBD: This is a repeated function. Can this change to a reference?
-# TBD: Can this be called from onExit and still access the secret_name parameter?
   - name: cleanup-template
     inputs:
       parameters:
