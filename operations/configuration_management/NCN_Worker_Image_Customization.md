@@ -6,39 +6,53 @@ is only relevant for booting compute nodes and can be ignored when working with 
 This document describes the configuration of a Kubernetes NCN image. The same steps could be used to modify
 a Ceph image.
 
-1. Locate the NCN image to be modified.
+1. Identify the NCN image to be modified.
 
-    This example assumes the administrator wants to modify the Kubernetes image that is currently in use by NCNs. However, the steps are the same for any NCN SquashFS image.
+    This example assumes that the administrator wants to modify the Kubernetes image that is currently in use by Kubernetes NCNs.
+    However, the steps are the same for any Management NCN SquashFS image.
 
     If the image to be modified is the image currently booted on an NCN, the value for `ARTIFACT_VERSION` can be found by looking
     at the boot parameters for the NCNs, or from `/proc/cmdline` on a booted NCN. The version has the form of `X.Y.Z`.
 
-    ```console
-    ncn# ARTIFACT_VERSION=<your-version>
+1. Obtain the NCN image's associated artifacts (SquashFS, kernel, and `initrd`).
 
-    ncn# cray artifacts get ncn-images k8s/$ARTIFACT_VERSION/filesystem.squashfs ./$ARTIFACT_VERSION-filesystem.squashfs
+    These example commands show how to download these artifacts from S3, which is where the NCN image artifacts are stored.
 
-    ncn# cray artifacts get ncn-images k8s/$ARTIFACT_VERSION/kernel ./$ARTIFACT_VERSION-kernel
+    ```bash
+    ncn-mw# ARTIFACT_VERSION=<artifact-version>
 
-    ncn# cray artifacts get ncn-images k8s/$ARTIFACT_VERSION/initrd ./$ARTIFACT_VERSION-initrd
+    ncn-mw# cray artifacts get ncn-images k8s/"${ARTIFACT_VERSION}"/filesystem.squashfs ./"${ARTIFACT_VERSION}"-filesystem.squashfs
 
-    ncn# export IMS_ROOTFS_FILENAME=$ARTIFACT_VERSION-filesystem.squashfs
+    ncn-mw# cray artifacts get ncn-images k8s/"${ARTIFACT_VERSION}"/kernel ./"${ARTIFACT_VERSION}"-kernel
 
-    ncn# export IMS_KERNEL_FILENAME=$ARTIFACT_VERSION-kernel
+    ncn-mw# cray artifacts get ncn-images k8s/"${ARTIFACT_VERSION}"/initrd ./"${ARTIFACT_VERSION}"-initrd
 
-    ncn# export IMS_INITRD_FILENAME=$ARTIFACT_VERSION-initrd
+    ncn-mw# export IMS_ROOTFS_FILENAME="${ARTIFACT_VERSION}"-filesystem.squashfs
+
+    ncn-mw# export IMS_KERNEL_FILENAME="${ARTIFACT_VERSION}"-kernel
+
+    ncn-mw# export IMS_INITRD_FILENAME="${ARTIFACT_VERSION}"-initrd
     ```
 
-1. [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md).
+1. Import the NCN image into IMS.
 
-    This document will instruct the administrator to set several environment variables, including the three set in
-    the previous step. The variables are being set to the same values, so the duplicate steps can be skipped.
+    Perform the [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md) procedure, except
+    skip the following sections:
+
+    * [Set helper variables](../image_management/Import_External_Image_to_IMS.md#2-set-helper-variables)
+      * Skip this section because the variables have already been set above, in the previous step.
+    * [Upload artifacts to S3](../image_management/Import_External_Image_to_IMS.md#5-upload-artifacts-to-s3)
+      * Skip this section because the artifacts are already in S3.
 
 1. Clone the `csm-config-management` repository.
 
-   ```bash
-   ncn# git clone https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git
-   ```
+    ```bash
+    ncn-mw# VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+    ncn-mw# VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+    ncn-mw# git clone "https://${VCS_USER}:${VCS_PASS}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+    ```
+
+    A Git commit hash from this repository is needed in the following step.
 
 1. [Create a CFS Configuration](Create_a_CFS_Configuration.md).
 
@@ -85,17 +99,17 @@ a Ceph image.
     in the previous step, which is repeated here for reference:
 
     ```console
-    ncn# cray cfs sessions describe example --format json | jq .status.artifacts
+    ncn-mw# cray cfs sessions describe example --format json | jq .status.artifacts
     ```
 
     Download the resultant NCN artifacts:
 
     ```console
-    ncn# cray artifacts get boot-images $IMS_RESULTANT_IMAGE_ID/rootfs kubernetes-$ARTIFACT_VERSION-1.squashfs
+    ncn-mw# cray artifacts get boot-images "${IMS_RESULTANT_IMAGE_ID}/rootfs" "kubernetes-${ARTIFACT_VERSION}-1.squashfs"
 
-    ncn# cray artifacts get boot-images $IMS_RESULTANT_IMAGE_ID/initrd initrd.img-$ARTIFACT_VERSION-1.xz
+    ncn-mw# cray artifacts get boot-images "${IMS_RESULTANT_IMAGE_ID}/initrd" "initrd.img-${ARTIFACT_VERSION}-1.xz"
 
-    ncn# cray artifacts get boot-images $IMS_RESULTANT_IMAGE_ID/kernel $ARTIFACT_VERSION-1.kernel
+    ncn-mw# cray artifacts get boot-images "${IMS_RESULTANT_IMAGE_ID}/kernel" "${ARTIFACT_VERSION}-1.kernel"
     ```
 
 1. Upload NCN boot artifacts into S3.
@@ -103,11 +117,11 @@ a Ceph image.
     This steps assumes that the `docs-csm` RPM is installed. See [Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
 
     ```console
-    ncn# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/$ARTIFACT_VERSION-1/filesystem.squashfs" --file-name kubernetes-$ARTIFACT_VERSION-1.squashfs
+    ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/${ARTIFACT_VERSION}-1/filesystem.squashfs" --file-name "kubernetes-${ARTIFACT_VERSION}-1.squashfs"
 
-    ncn# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/$ARTIFACT_VERSION-1/initrd" --file-name initrd.img-$ARTIFACT_VERSION-1.xz
+    ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/${ARTIFACT_VERSION}-1/initrd" --file-name "initrd.img-${ARTIFACT_VERSION}-1.xz"
 
-    ncn# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/$ARTIFACT_VERSION-1/kernel" --file-name $ARTIFACT_VERSION-1.kernel
+    ncn-mw# /usr/share/doc/csm/scripts/ceph-upload-file-public-read.py --bucket-name ncn-images --key-name "k8s/${ARTIFACT_VERSION}-1/kernel" --file-name "${ARTIFACT_VERSION}-1.kernel"
     ```
 
 1. Update NCN boot parameters.
@@ -115,8 +129,8 @@ a Ceph image.
     1. Get the existing `metal.server` setting for the component name (xname) of the node of interest.
 
         ```console
-        ncn# XNAME=<your-xname>
-        ncn# METAL_SERVER=$(cray bss bootparameters list --hosts $XNAME --format json | jq '.[] |."params"' \
+        ncn-mw# XNAME=<node-xname>
+        ncn-mw# METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
                  | awk -F 'metal.server=' '{print $2}' \
                  | awk -F ' ' '{print $1}')
         ```
@@ -124,40 +138,40 @@ a Ceph image.
     1. Verify that the variable was set correctly.
 
         ```console
-        ncn# echo $METAL_SERVER`
+        ncn-mw# echo "${METAL_SERVER}"
         ```
 
     1. Update the kernel, `initrd`, and metal server to point to the new artifacts.
 
         ```console
-        ncn# S3_ARTIFACT_PATH=ncn-images/k8s/$ARTIFACT_VERSION-1
-        ncn# NEW_METAL_SERVER=http://rgw-vip.nmn/$S3_ARTIFACT_PATH
+        ncn-mw# S3_ARTIFACT_PATH="ncn-images/k8s/${ARTIFACT_VERSION}-1"
+        ncn-mw# NEW_METAL_SERVER="http://rgw-vip.nmn/${S3_ARTIFACT_PATH}"
 
-        ncn# PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
+        ncn-mw# PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
                  sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
                  sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
                  tr -d \")
         ```
 
-    1. Verify that the value of `$NEW_METAL_SERVER` was set correctly within the boot parameters
+    1. Verify that the value of `$NEW_METAL_SERVER` was set correctly within the boot parameters.
 
         ```console
-        ncn# echo $PARAMS`
+        ncn-mw# echo "${PARAMS}"
         ```
 
     1. Update the boot parameters in BSS.
 
         ```console
-        ncn# cray bss bootparameters update --hosts $XNAME   \
-                 --kernel "s3://$S3_ARTIFACT_PATH/kernel" \
-                 --initrd "s3://$S3_ARTIFACT_PATH/initrd" \
-                 --params "$PARAMS"
+        ncn-mw# cray bss bootparameters update --hosts "${XNAME}"   \
+                 --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
+                 --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
+                 --params "${PARAMS}"
         ```
 
 1. Prepare for reboot.
 
    **NOTE**: If the worker node image is being customized as part of a Cray EX initial install or upgrade involving multiple products,
-   then refer to the /HPE Cray EX System Software Getting Started Guide/ (S-8000) for details on when to reboot the worker nodes to the new image.
+   then refer to the `HPE Cray EX System Software Getting Started Guide (S-8000)` for details on when to reboot the worker nodes to the new image.
 
    1. Failover any Postgres leader that is running on the worker node being rebooted.
 
@@ -216,11 +230,11 @@ a Ceph image.
       > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-w002`.
 
       ```bash
-      ncn# USERNAME=root
-      ncn# read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
-      ncn# export IPMI_PASSWORD
-      ncn# ipmitool -U "${USERNAME}" -E -H <node>-mgmt -I lanplus power off
-      ncn# ipmitool -U "${USERNAME}" -E -H <node>-mgmt -I lanplus power status
+      ncn-mw# USERNAME=root
+      ncn-mw# read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
+      ncn-mw# export IPMI_PASSWORD
+      ncn-mw# ipmitool -U "${USERNAME}" -E -H <node>-mgmt -I lanplus power off
+      ncn-mw# ipmitool -U "${USERNAME}" -E -H <node>-mgmt -I lanplus power status
       ```
 
       Ensure that the power is reporting as off. It may take 5-10 seconds for this to update.
@@ -231,8 +245,8 @@ a Ceph image.
       > In the example commands below, be sure to replace `<node>` with the name of the node being rebooted. For example, `ncn-w002`.
 
       ```bash
-      ncn# ipmitool -U "${USERNAME}" -E -H <node>-mgmt -I lanplus power on
-      ncn# ipmitool -U "${USERNAME}" -E -H <node>-mgmt -I lanplus power status
+      ncn-mw# ipmitool -U "${USERNAME}" -E -H <node>-mgmt -I lanplus power on
+      ncn-mw# ipmitool -U "${USERNAME}" -E -H <node>-mgmt -I lanplus power status
       ```
 
       Ensure that the power is reporting as on. It may take 5-10 seconds for this to update.
@@ -240,10 +254,10 @@ a Ceph image.
 1. Set `metal.no-wipe=1`.
 
     ```console
-    ncn# PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
+    ncn-mw# PARAMS=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' | \
              sed "s/metal.no-wipe=0/metal.no-wipe=1/" | \
              tr -d \")
 
-    ncn# cray bss bootparameters update --hosts $XNAME \
-             --params "$PARAMS"
+    ncn-mw# cray bss bootparameters update --hosts "${XNAME}" \
+             --params "${PARAMS}"
     ```
