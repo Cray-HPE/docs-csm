@@ -93,7 +93,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    ```yaml
      * <cray-keycloak-users-localize chart option name> : <description>
-       - default: <the default value if not overridden in customizations.yaml
+       - default: <the default value if not overridden in customizations.yaml>
        - type: <type that the value in customizations.yaml has to be. e.g., if type is string and a number is entered then you need to quote it>
        - allowed values: <if only certain values are allowed they are listed here>
    ```
@@ -273,12 +273,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       > **`NOTE`** Requires a properly configured Docker or Podman environment.
 
       ```bash
-      ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+      ${CSM_DISTDIR}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim
       ```
 
       **Troubleshooting:**
 
-      - If the output shows the `skopeo.tar` file cannot be found, then ensure that the `$CSM_DISTDIR` directory looks contains the `dtr.dev.cray.com` directory which includes the originally installed docker images.
+      - If the output shows the `skopeo.tar` file cannot be found, then ensure that the `$CSM_DISTDIR` directory looks contains the `artifactory.algol60.net` directory which includes the originally installed docker images.
 
          The following is an example of the skopeo.tar file not being found:
 
@@ -308,7 +308,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       > **IMPORTANT:** Replace `<ca-cert.pem>` and `<alias>` before running the command.
 
       ```bash
-      podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
+      podman run --rm -v "$(pwd):/data" artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool \
          -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
          -storepass password -noprompt
       ```
@@ -408,7 +408,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Create `certs.jks`.
 
       ```bash
-      podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
+      podman run --rm -v "$(pwd):/data" artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim keytool -importcert \
         -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
         -storepass password -noprompt
       ```
@@ -438,13 +438,6 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       }
       EOF
       ```
-
-1. Upload the modified `customizations.yaml` file to Kubernetes.
-
-   ```bash
-   kubectl delete secret -n loftsman site-init
-   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-   ```
 
 1. Prepare to generate sealed secrets.
 
@@ -514,6 +507,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    ldaps://my_ldap.my_org.test
    ```
 
+1. Upload the modified `customizations.yaml` file to Kubernetes.
+
+   ```bash
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
 1. Re-apply the `cray-keycloak` Helm chart with the updated `customizations.yaml` file.
 
    1. Retrieve the current `platform.yaml` manifest.
@@ -571,7 +571,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       ```bash
       helm ls -A -a | grep cray-keycloak-users-localize | awk '{print $(NF-1)}'
-      cray-keycloak-users-localize-1.5.6
+      cray-keycloak-users-localize-<VERSION>
       ```
 
    1. Create a manifest file that will be used to reapply the same chart version.
@@ -586,7 +586,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
         charts:
           - name: cray-keycloak-users-localize
             namespace: services
-            version: 1.5.6
+            version: <VERSION FROM OUTPUT>
       ```
 
    1. Uninstall the current `cray-keycloak-users-localize` chart.
