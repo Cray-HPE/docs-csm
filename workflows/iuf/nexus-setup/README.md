@@ -52,8 +52,6 @@ This template will upload docker images into Nexus. In its current form, the tem
 Most parameters should be automatically obtained from the product installer's IUF manifest file, but that functionality is not
 in place yet. The template requires a `skopeo` container image.
 
-### Developer usage
-
 Create the template in Argo by running:
 
 ```bash
@@ -75,4 +73,3 @@ argo -n argo submit --from workflowtemplate/nexus-docker-upload-template \
   --parameter-file $PRODUCTS_DIR/$PRODUCT/iuf-manifest.yaml \
   --watch
 ```
-
