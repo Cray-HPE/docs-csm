@@ -1,0 +1,65 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: cray-nls.hpe.com/v1
+kind: Hook
+metadata:
+  name: ensure-etcd-pods-are-healthy
+  labels:
+    before-each: "true"
+spec:
+  scriptContent: |
+    while [[ "$(kubectl get po -A -l 'app=cray-etcd-operator-etcd-operator-etcd-operator' | grep -v "Running"| wc -l)" != "1" ]]; do
+        echo "Etcd operator is not in running state, wait for 5s ..."
+        kubectl get po -A -l 'app=cray-etcd-operator-etcd-operator-etcd-operator' | grep -v "Running"
+        sleep 5
+    done
+
+    export GOSS_BASE=/opt/cray/tests/install/ncn
+    GOSS_ARG="--vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate \
+      --retry-timeout 1h \
+      --sleep 1m"
+
+    goss -g /opt/cray/tests/install/ncn/tests/goss-cray-service-etcd-health-check.yaml  ${GOSS_ARG}
+
+    while [[ "$(kubectl get po -A -l 'app=etcd' | grep -v "Running"| wc -l)" != "1" ]]; do
+        echo "Some etcd pods are not in running state, wait for 5s ..."
+        kubectl get po -A -l 'app=etcd' | grep -v "Running"
+        sleep 5
+    done
+
+    etcdClusters=$(kubectl get Etcdclusters -n services | grep "cray-"|awk '{print $1}')
+    for cluster in $etcdClusters
+    do
+        while true; do
+          numOfPods=$(kubectl get pods -A -l 'app=etcd'| grep $cluster | grep "Running" | wc -l)
+          if [[ $numOfPods -ne 3 ]];then
+            echo "ERROR - Etcd cluster: $cluster should have 3 pods running but only $numOfPods are running"
+            continue
+          else
+            echo "Etcd cluster: $cluster have 3 pods running"
+            break
+          fi
+        done
+    done
+  templateRefName: ssh-template

@@ -1,0 +1,84 @@
+{
+    "title": "SLS Network Schema",
+    "type": "object",
+    "patternProperties": {
+        "^[A-Z]{3}_*[A-Z]{0,3}$": {
+            "type": "object",
+            "properties": {
+                "Name": {
+                    "type": "string"
+                },
+                "FullName": {
+                    "type": "string"
+                },
+                "Type": {
+                    "type": "string"
+                },
+                "IPRanges": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "((^|\\.)((25[0-5])|(2[0-4]\\d)|(1\\d\\d)|([1-9]?\\d))){4}\\/(?:\\d|[12]\\d|3[01])$"
+                    }
+                },
+                "LastUpdated": {
+                    "type": "integer"
+                },
+                "LastUpdatedTime": {
+                    "type": "string"
+                },
+                "ExtraProperties": {
+                    "type": "object",
+                    "properties": {
+                        "Comment": {
+                            "type": "string"
+                        },
+                        "CIDR": {
+                            "type": "string",
+                            "pattern": "((^|\\.)((25[0-5])|(2[0-4]\\d)|(1\\d\\d)|([1-9]?\\d))){4}\\/(?:\\d|[12]\\d|3[01])$"
+                        },
+                        "MTU": {
+                            "type": "integer",
+                            "minimum": 1400,
+                            "maximum": 9200
+                        },
+                        "Subnets": {
+                            "$ref": "sls_subnets_schema.json"
+                        },
+                        "VlanRange": {
+                            "type": [
+                                "array",
+                                "null"
+                            ],
+                            "items": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 4094
+                            }
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "CIDR",
+                        "MTU",
+                        "Subnets",
+                        "VlanRange"
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "Name",
+                "FullName",
+                "IPRanges",
+                "Type",
+                "ExtraProperties"
+            ]
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "NMN",
+        "HMN"
+    ]
+}
