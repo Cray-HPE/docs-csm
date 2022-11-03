@@ -58,7 +58,7 @@ Create the template in Argo by running:
 argo -n argo template create nexus-setup-template.yaml
 ```
 
-The example below shows how to submit the template using the current required parameters. This example requires the existance
+The example below shows how to submit the template using the current required parameters. This example requires the existence
 of the product at `$PRODUCTS_DIR`/`$PRODUCT` and requires the `$SKOPEO_IMAGE` to be present in Nexus.
 
 ```bash
