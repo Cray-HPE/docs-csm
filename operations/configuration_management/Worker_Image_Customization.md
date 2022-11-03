@@ -69,7 +69,7 @@ to the NCN worker image before the workers are booted.
         ```
 
     - Skip the steps in the linked procedure to create the CFS configuration, because the CFS configuration was already created in the previous step.
-    - When creating the CFS session to customize the image, use the CFS configuration created in the previous step.
+    - When creating the CFS session to customize the image, use the `ncn-image-customization` CFS configuration created earlier in this procedure.
     - When updating the boot parameters, update them for every NCN worker node in the system.
 
 1. (`ncn-m#`) Optionally, delete `management-bootprep-image-customization.yaml`, which is no longer needed.
