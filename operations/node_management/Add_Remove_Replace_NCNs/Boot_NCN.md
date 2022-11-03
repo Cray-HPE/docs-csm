@@ -16,7 +16,7 @@ Boot a master, worker, or storage non-compute node (NCN) that is to be added to 
 
 ### Set the PXE boot option and power on the node
 
-**IMPORTANT:** These commands assume that the variables from [the prerequisites section](../Add_Remove_Replace_NCNs.md#add-ncn-prerequisites) have been set.
+**IMPORTANT:** These commands assume that the variables from [the prerequisites section](Add_Remove_Replace_NCNs.md#add-ncn-prerequisites) have been set.
 
 1. Set the `BMC` variable to the hostname of the BMC of the node being rebuilt.
 
@@ -77,7 +77,7 @@ program. Later messages will appear as the Linux kernel loads and the scripts in
     [  OK  ] Reached target Cloud-init target.
     ```
 
-1. Press enter on the console and ensure that the the login prompt includes the correct hostname of this node.
+1. Press enter on the console and ensure that the login prompt includes the correct hostname of this node.
 
 1. Exit the ConMan console (`&` then `.`).
 
@@ -291,4 +291,4 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
 ### Next step
 
 Proceed to [Redeploy Services](Redeploy_Services.md) or return to the main
-[Add, Remove, Replace, or Move NCNs](../Add_Remove_Replace_NCNs.md) page.
+[Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.

@@ -109,7 +109,7 @@ This section applies to all node types. The commands in this section assume the 
          cloud-init init
          ```
 
-1. Press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node.
+1. Press enter on the console to ensure that the login prompt is displayed including the correct hostname of this node.
 
 1. Exit the ConMan console.
 

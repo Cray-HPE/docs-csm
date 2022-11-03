@@ -76,54 +76,71 @@ after a break, always be sure that a typescript is running before proceeding.
 
 1. (`ncn-m001#`) Create and mount an `rbd` device where the CSM release tarball can be stored.
 
+   This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`. This mount is available to stage content for the install/upgrade process.
+
+   > For more information about the tool used in this procedure, including troubleshooting information, see
+   > [CSM RBD Tool Usage](../operations/utility_storage/CSM_rbd_tool_Usage.md).
+
    1. Initialize the Python virtual environment.
 
       ```bash
       tar xvf /usr/share/doc/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/
       ```
 
-   1. Create and map the `rbd` device.
-
-      **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`. This mount is available to stage content for the install/upgrade process. First, check if this device already exists.
+   1. Check if the `rbd` device already exists.
 
       ```bash
       source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
       /usr/share/doc/csm/scripts/csm_rbd_tool.py --status
       ```
 
-      >Expected output if `rbd` device does not exist:
-      >
-      >```text
-      >Pool csm_admin_pool does not exist
-      >Pool csm_admin_pool exists: False
-      >RBD device exists None
-      >```
-      >
-      >Example output if `rbd` device already exist:
-      >
-      >```text
-      >[{"id":"0","pool":"csm_admin_pool","namespace":"","name":"csm_scratch_img","snap":"-","device":"/dev/rbd0"}]
-      >Pool csm_admin_pool exists: True
-      >RBD device exists True
-      >RBD device mounted at - ncn-m002.nmn:/etc/cray/upgrade/csm
-      >```
+      - Expected output if `rbd` device does not exist:
 
-      If the `rbd` device already exists and is mounted, it can be moved to the desired node, if not already mounted there.
-      **IMPORTANT:** *If upgrading from a CSM version that had previously mounted this rbd device, the `/etc/cray/upgrade/csm/myenv` file will need to be removed before proceeding with this upgrade as it will contain information from the previous install.*
+         ```text
+         Pool csm_admin_pool does not exist
+         Pool csm_admin_pool exists: False
+         RBD device exists None
+         ```
 
-      ```bash
-      /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m001
-      deactivate
-      ```
+      - Example output if `rbd` device already exists and is mounted on `ncn-m002`:
 
-      If the `rbd` device does not exist, create it.
+         ```text
+         [{"id":"0","pool":"csm_admin_pool","namespace":"","name":"csm_scratch_img","snap":"-","device":"/dev/rbd0"}]
+         Pool csm_admin_pool exists: True
+         RBD device exists True
+         RBD device mounted at - ncn-m002.nmn:/etc/cray/upgrade/csm
+         ```
 
-      ```bash
-      /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
-      deactivate
-      ```
+   1. Perform one of the following options based on the output of the status check.
 
-      For more information or usage on the csm_rbd_tool utility please see [csm_rbd_tool Usage](../operations/utility_storage/CSM_rbd_tool_Usage.md)
+      - The `rbd` device does not exist.
+
+         1. Create and map the `rbd` device.
+
+            ```bash
+            /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
+            deactivate
+            ```
+
+      - The `rbd` device exists.
+
+         1. Move the device to `ncn-m001`, if necessary.
+
+            This step is not necessary if the status output indicated that the device is already mounted on `ncn-m001`.
+
+            ```bash
+            /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m001
+            deactivate
+            ```
+
+         1. Remove leftover state file from a previous CSM upgrade, if necessary.
+
+            **IMPORTANT:** If upgrading from a CSM version that had previously mounted this `rbd` device, then the `/etc/cray/upgrade/csm/myenv`
+            file must be removed before proceeding with this upgrade, because it contains information from the previous upgrade.
+
+            ```bash
+            [[ -f /etc/cray/upgrade/csm/myenv ]] && rm -f /etc/cray/upgrade/csm/myenv
+            ```
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 
@@ -263,7 +280,8 @@ microservices to personalize a node after it has booted.
 
 ### Standard upgrade
 
-In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade. In the standard upgrade, worker NCN image customization and node personalization steps are required.
+In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade.
+In the standard upgrade, the new worker NCN images must be customized, and all NCNs must have their personalization configurations updated in CFS.
 
 **NOTE:** For the standard upgrade, it will not be possible to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
 
@@ -277,9 +295,9 @@ In most cases, administrators will be performing a standard upgrade and not a CS
     This will ensure that the CFS configuration layers are applied to perform image customization for the worker NCNs.
     See [Worker Image Customization](../operations/configuration_management/Worker_Image_Customization.md).
 
-1. Prepare the post-boot worker NCN personalizations.
+1. Prepare the post-boot NCN personalizations.
 
-    This will ensure that the appropriate CFS configuration layers are applied when performing post-boot node personalization of the worker NCNs.
+    This will ensure that the appropriate CFS configuration layers are applied when performing post-boot node personalization of the master, storage, and worker NCNs.
     See [NCN Node Personalization](../operations/configuration_management/NCN_Node_Personalization.md).
 
 Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data), skipping the [CSM-only system upgrade](#csm-only-system-upgrade) subsection below.

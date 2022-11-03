@@ -6,6 +6,8 @@ directory which contains important customizations for various products.
 1. [Background](#1-background)
 1. [Create and Initialize `site-init` Directory](#2-create-and-initialize-site-init-directory)
 1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
+    1. [Setup LDAP configuration](#setup-ldap-configuration)
+    1. [End of LDAP configuration](#end-of-ldap-configuration)
 1. [Customer-Specific Customizations](#4-customer-specific-customizations)
 
 ## 1. Background
@@ -142,6 +144,11 @@ with system-specific customizations.
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
+#### Setup LDAP configuration
+
+> **`NOTE`** Skip past LDAP configuration to [here](#end-of-ldap-configuation) if there is no LDAP configuration at this time. If LDAP should be enabled later,
+> follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
+
 1. (`pit#`) Set environment variables for the LDAP server and its port.
 
    In the example below, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port 636.
@@ -191,11 +198,19 @@ with system-specific customizations.
         openssl s_client -showcerts -nameopt RFC2253 -connect "${LDAP}:${PORT}" </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
         ```
 
-        Expected output includes a line similar to this:
+        Expected output includes a line similar to one of the below examples:
+
+        Self-signed Certificate:
 
         ```text
         emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
         ```
+
+        Signed Certificate:
+
+        ```text
+         CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1,O=DigiCert Inc,C=US
+         ```
 
     1. (`pit#`) Extract the issuer's certificate using `awk`.
 
@@ -305,6 +320,8 @@ with system-specific customizations.
        ```bash
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
+
+#### End of LDAP configuration
 
 1. (`pit#`) Configure the Unbound DNS resolver (if needed).
 

@@ -41,8 +41,8 @@ Usage: cray config describe [OPTIONS]
 Error: No configuration exists. Run `cray init`
 ```
 
-If the output appears more like the following, then the CLI is initialized and logged in as vers. If that is the incorrect username, authorize the correct username and password in the next section.
-If vers is the correct user, proceed to the validation procedure on that node.
+If the output appears more like the following, then the CLI is initialized and logged in as `vers`. If that is the incorrect username, authorize the correct username and password in the next section.
+If `vers` is the correct user, proceed to the validation procedure on that node.
 
 If the CLI must be initialized again, use the following command and include the correct username, password, and the password response.
 
@@ -74,7 +74,7 @@ There is no mechanism to distribute CLI authorization amongst hosts.
 
 If initialization or authorization fails in any of the preceding steps, there are several common causes.
 
-* DNS failure looking up api-gw-service-nmn.local may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
+* DNS failure looking up `api-gw-service-nmn.local` may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
 * Network connectivity issues with the NMN may be preventing the CLI from reaching the API Gateway and Keycloak for authorization
 * Certificate mismatch or trust issues may be preventing a secure connection to the API Gateway
 * Istio failures may be preventing traffic from reaching Keycloak
@@ -124,14 +124,14 @@ default_image = "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest"
 image_list = [ "dtr.dev.cray.com/cray/cray-uai-sles15sp1:latest",]
 ```
 
-The output shows that the pre-made End-User UAI image, cray/cray-uai-sles15sp1:latest, is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use.
+The output shows that the pre-made End-User UAI image, `cray/cray-uai-sles15sp1:latest`, is registered with UAS. This does not necessarily mean this image is installed in the container image registry, but it is configured for use.
 If other UAI images have been created and registered, they may also appear in the output.
 
 ## Validate UAI Creation
 
 The following are needed for this procedure:
 
-* Must run on a master or worker node \(and not ncn-w001\)
+* Must run on a master or worker node
 * Must run on the HPE Cray EX system \(or from an external host, but the procedure for that is not covered here\)
 * Requires that the CLI be initialized and authorized as for the current user
 
@@ -236,8 +236,8 @@ The following are needed for this procedure:
 
 **Authorization Issues:**
 
-If the user is not logged in as a valid Keycloak user or is inadvertently using the `CRAY_CREDENTIALS` environment variable \(i.e. the variable is set if the user is logged in with the their username or another username\),
-the output of running the `cray uas list command` will produce output like the following.
+If the user is not logged in as a valid Keycloak user or is inadvertently using the `CRAY_CREDENTIALS` environment variable \(i.e. the variable is set if the user is logged in with their username or another username\),
+the output of running `cray uas list` will produce output like the following.
 
 ```bash
 cray uas list
@@ -251,7 +251,7 @@ Fix this by logging in as a "real user" \(a user with Linux credentials\) and en
 
 ## UAS Cannot Access Keycloak
 
-If the output of the cray uas list command appears similar to the following, the wrong hostname to reach the API gateway may be in use. In that case, run the CLI initialization steps again.
+If the output of `cray uas list` appears similar to the following, the wrong hostname to reach the API gateway may be in use. In that case, run the CLI initialization steps again.
 
 ```bash
 cray uas list
@@ -330,8 +330,8 @@ username = "vers"
 ## Missing Volumes and Other Container Startup Issues
 
 Various packages install volumes in the UAS configuration. All of those volumes must also have the underlying resources available, sometimes on the host node where the UAI is running and sometimes from within Kubernetes.
-If the UAI gets stuck with a ContainerCreating `uai_msg` field for an extended time, this is a likely cause.
-UAIs run in the user Kubernetes namespace and are pods that can be examined using kubectl describe.
+If the UAI gets stuck with a `ContainerCreating` `uai_msg` field for an extended time, this is a likely cause.
+UAIs run in the user Kubernetes namespace and are pods that can be examined using `kubectl describe`.
 
 Run the following command to locate the pod.
 

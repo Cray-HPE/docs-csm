@@ -33,7 +33,7 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
 
 ## Procedure
 
-1. Retrieve a previously taken SLS Postgres backup.
+1. (`ncn-mw#`) Retrieve a previously taken SLS Postgres backup.
    This can be either a previously taken manual SLS backup or an automatic Postgres backup in the `postgres-backup` S3 bucket.
 
     * From a previous manual backup:
@@ -86,7 +86,7 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
             export POSTGRES_SECRET_MANIFEST=$(realpath "$POSTGRES_SECRET_MANIFEST_NAME")
             ```
 
-2. Verify the `POSTGRES_SQL_FILE` and `POSTGRES_SECRET_MANIFEST` environment variables are set correctly:
+2. (`ncn-mw#`) Verify the `POSTGRES_SQL_FILE` and `POSTGRES_SECRET_MANIFEST` environment variables are set correctly:
 
     ```bash
     echo "$POSTGRES_SQL_FILE"
@@ -96,7 +96,7 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
     /root/cray-sls-postgres-backup_2021-07-07_16-39-44/cray-sls-postgres-backup_2021-07-07_16-39-44.manifest
     ```
 
-3. Re-run the SLS loader job:
+3. (`ncn-mw#`) Re-run the SLS loader job:
 
     ```bash
     kubectl -n services get job cray-sls-init-load -o json | jq 'del(.spec.selector)' | jq 'del(.spec.template.metadata.labels."controller-uid")' | kubectl replace --force -f -
@@ -108,7 +108,7 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
     kubectl wait -n services job cray-sls-init-load --for=condition=complete --timeout=5m
     ```
 
-4. Determine leader of the Postgres cluster:
+4. (`ncn-mw#`) Determine leader of the Postgres cluster:
 
     ```bash
     export POSTGRES_LEADER=$(kubectl exec cray-sls-postgres-0 -n services -c postgres -t -- patronictl list -f json | jq  -r '.[] | select(.Role == "Leader").Member')
@@ -121,7 +121,7 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
     cray-sls-postgres-0
     ```
 
-5. Determine the database schema version of the currently running SLS database and verify that it matches the database schema version from the Postgres backup:
+5. (`ncn-mw#`) Determine the database schema version of the currently running SLS database and verify that it matches the database schema version from the Postgres backup:
 
     Database schema of the currently running SLS Postgres instance.
 
@@ -162,16 +162,24 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
     __WARNING__: If the database schema versions do not match the version of the SLS deployed will need to be either upgraded/downgraded to a version with a compatible database schema version.
     Ideally to the same version of SLS that was used to create the Postgres backup.
 
-6. Restore the database from the backup using the `restore_sls_postgres_from_backup.sh` script. This script requires the `POSTGRES_SQL_FILE` and `POSTGRES_SECRET_MANIFEST` environment variables to be set.
+6. (`ncn-mw#`) Restore the database from the backup using the `restore_sls_postgres_from_backup.sh` script. This script requires the `POSTGRES_SQL_FILE` and `POSTGRES_SECRET_MANIFEST` environment variables to be set.
     > __THIS WILL DELETE AND REPLACE THE CURRENT CONTENTS OF THE SLS DATABASE__
 
     ```bash
     /usr/share/doc/csm/scripts/operations/system_layout_service/restore_sls_postgres_from_backup.sh
     ```
 
-7. Verify the health of the SLS Postgres cluster by running the `ncnPostgresHealthChecks.sh` script. Follow the [`ncnPostgresHealthChecks` topic in Validate CSM Health document](../validate_csm_health.md#1-platform-health-checks).
+7. (`ncn-mw#`) Verify the health of the SLS Postgres cluster by running the following scripts.
+   If there are issues with `run_hms_ct_tests.sh`, then follow [Interpreting HMS Health Check Results](../../troubleshooting/interpreting_hms_health_check_results.md).
+   If there are issues with `verify_hsm_discovery.py`, then follow the "Interpreting HSM discovery results" section of the [Validate CSM Health document](../validate_csm_health.md#221-interpreting-hsm-discovery-results).
 
-8. Verify that the service is functional:
+    ```bash
+    /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -t sls
+    /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
+    /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
+    ```
+
+8. (`ncn-mw#`) Verify that the service is functional:
 
     ```bash
     cray sls version list

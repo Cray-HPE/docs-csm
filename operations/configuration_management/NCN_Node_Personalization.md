@@ -2,6 +2,8 @@
 
 When performing an upgrade or fresh install, NCN node personalization must be performed on the NCN management nodes to ensure the appropriate CFS layers are applied post-boot.
 This step involves configuring CFS to use the default `sat bootprep` files from the `hpc-csm-software-recipe` repository and applying the resulting configuration to the NCN management nodes.
+The same CFS configuration is used for post-boot personalization of master, storage, and worker NCNs. However, some individual parts of that configuration will only be applied to
+appropriate node types.
 
 The definition of the CFS configuration used for node personalization is provided in the `hpc-csm-software-recipe` repository in VCS.
 The following procedure describes how to correctly edit the `sat bootprep` files to be able to use them to perform node personalization.
