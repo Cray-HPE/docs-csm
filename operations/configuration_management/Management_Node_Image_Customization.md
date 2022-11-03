@@ -101,6 +101,21 @@ This document describes the configuration of a Kubernetes NCN image. The same st
         --target-group Management_Worker "${IMS_IMAGE_ID}"
     ```
 
+1. (`ncn-mw#`) Determine the Xnames for Kubernetes worker nodes
+
+   To get a comma-separated list of all worker Xnames:
+
+   ```bash
+   cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join(",")'
+   ```
+
+   To get the Xname for a specific worker node, e.g. `ncn-w001`:
+
+   ```bash
+   ssh ncn-w001 cat /etc/cray/xname
+   x3000c0s4b0n0
+   ```
+
 1. (`ncn-mw#`) Update boot parameters for a Kubernetes NCN.
 
     1. Get the existing `metal.server` setting for the component name (xname) of the node of interest:
