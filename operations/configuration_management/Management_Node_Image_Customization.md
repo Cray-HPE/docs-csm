@@ -107,28 +107,28 @@ This document describes the configuration of a Kubernetes NCN image. The same st
 
    Options to determine node xnames:
 
-   - Get a comma-separated list of all worker NCN xnames:
+   * Get a comma-separated list of all worker NCN xnames:
 
       ```bash
       cray hsm state components list --role Management --subrole Worker --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")'
       ```
 
-   - Get a comma-separated list of all master NCN xnames:
+   * Get a comma-separated list of all master NCN xnames:
 
       ```bash
       cray hsm state components list --role Management --subrole Master --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")'
       ```
 
-   - Get a comma-separated list of all storage NCN xnames:
+   * Get a comma-separated list of all storage NCN xnames:
 
       ```bash
       cray hsm state components list --role Management --subrole Storage --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")'
       ```
 
-   - Get the xname for a specific NCN:
+   * Get the xname for a specific NCN:
 
       > In this example, the xname for `ncn-w001` is being found.
 
