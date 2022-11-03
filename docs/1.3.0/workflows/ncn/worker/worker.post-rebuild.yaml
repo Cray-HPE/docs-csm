@@ -1,0 +1,153 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+{{define "worker.post-rebuild"}}
+tasks:
+  - name: update-bss-no-wipe
+    templateRef:
+      name: kubectl-and-curl-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+            /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
+            set +e
+            CPS_PM_NODE=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=${TARGET_XNAME} | jq -r '.[].params' | grep -c "cps.pm-node=1")
+            if [[ ${CPS_PM_NODE} -eq 1 ]]; then
+              kubectl label nodes ${TARGET_NCN} "cps-pm-node=True"
+            fi
+  - name: wait-for-cfs-after-rebuild
+    templateRef:
+      name: kubectl-and-curl-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+
+            set -o pipefail
+
+            # Wait for component to become enabled (this should happen whether or not there is a desired configuration)
+            while true; do
+                # Retry CFS command if needed
+                COUNT=0
+                while true; do
+                    ENABLED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.enabled') && break
+                    let COUNT+=1
+                    if [[ ${COUNT} -gt 12 ]]; then
+                        echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
+                        exit 1
+                    fi
+                    echo "WARNING: Command pipeline failed querying CFS component '${TARGET_XNAME}'. Retrying after 5 seconds."
+                    sleep 5
+                done
+                if [[ ${ENABLED} == false ]]; then
+                    echo "CFS component '${TARGET_XNAME}' still not enabled. Checking again after 30 seconds."
+                    sleep 30
+                    continue
+                elif [[ ${ENABLED} != true ]]; then
+                    echo "ERROR: Unexpected contents of 'enabled' field for CFS component '${TARGET_XNAME}': '${ENABLED}'"
+                    exit 1
+                fi
+                echo "CFS component '${TARGET_XNAME}' is enabled"
+                break
+            done
+
+            # Retry CFS command if needed
+            COUNT=0
+            while true; do
+                DESIRED_CONFIG=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components/${TARGET_XNAME}" | jq -r '.desiredConfig') && break
+                let COUNT+=1
+                if [[ ${COUNT} -gt 12 ]]; then
+                    echo "ERROR: Even after retries, command pipeline failed querying CFS component '${TARGET_XNAME}'"
+                    exit 1
+                fi
+                echo "WARNING: Command pipeline failed querying CFS component '${TARGET_XNAME}'. Retrying after 5 seconds."
+                sleep 5
+            done
+            if [[ -z ${DESIRED_CONFIG} ]]; then
+              exit 0
+            fi
+            echo "Desired configuration for CFS component '${TARGET_XNAME}' is '${DESIRED_CONFIG}'"
+
+            while true; do
+              RESULT=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=pending" | jq length)
+              if [[ "$RESULT" -eq 0 ]]; then
+                break
+              fi
+              echo "Waiting for configuration to complete.  ${RESULT} components remaining."
+              sleep 30
+            done
+
+            CONFIGURED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=configured" | jq length)
+            FAILED=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed" | jq length)
+            echo "Configuration complete. $CONFIGURED component(s) completed successfully.  $FAILED component(s) failed."
+            if [ "$FAILED" -ne "0" ]; then
+              echo "The following components failed: $(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/cfs/v2/components?ids=${TARGET_XNAME}&status=failed"  | jq -r '. | map(.id) | join(",")')"
+              exit 1
+            fi
+  - name: ensure-csm-rpms-installed
+    templateRef:
+      name: ssh-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ `{{inputs.parameters.targetNcn}}` }} \
+              'source /srv/cray/scripts/metal/metal-lib.sh;install_csm_rpms'
+  - name: goss
+    dependencies:
+      - wait-for-cfs-after-rebuild
+      - update-bss-no-wipe
+      - ensure-csm-rpms-installed
+    templateRef:
+      name: ssh-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ `{{inputs.parameters.targetNcn}}` }} \
+              -t "SW_ADMIN_PASSWORD='{{.SwitchPassword}}' \
+                  GOSS_BASE=/opt/cray/tests/install/ncn \
+                  goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml \
+                    --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate \
+                    --retry-timeout 1h"
+
+{{end}}
