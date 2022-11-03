@@ -21,7 +21,7 @@ This document describes the configuration of a Kubernetes NCN image. The same st
 1. (`ncn-mw#`) Obtain the NCN image's associated artifacts (SquashFS, kernel, and `initrd`).
 
     These example commands show how to download these artifacts from S3, which is where the NCN image artifacts are stored.
-    If customizing a Ceph image, the `k8s` string in these examples would be replaced by `ceph`.
+    If customizing a Ceph image, then replace the `k8s` string in these examples with `ceph`.
 
     ```bash
     cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/rootfs" "./${ARTIFACT_VERSION}-rootfs"
