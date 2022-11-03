@@ -1,0 +1,9 @@
+nav:
+    - introduction
+    - install
+    - upgrade
+    - troubleshooting
+    - operations
+    - update_product_stream
+    - glossary.md
+
