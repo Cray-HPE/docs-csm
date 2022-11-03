@@ -6,6 +6,8 @@ directory which contains important customizations for various products.
 1. [Background](#1-background)
 1. [Create and Initialize Site-Init Directory](#2-create-and-initialize-site-init-directory)
 1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
+    1. [Setup LDAP configuration](#setup-ldap-configuration)
+    1. [End of LDAP configuration](#end-of-ldap-configuration)
 1. [Customer-Specific Customizations](#4-customer-specific-customizations)
 
 ## 1. Background
