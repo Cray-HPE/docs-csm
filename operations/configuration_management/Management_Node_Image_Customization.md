@@ -101,20 +101,40 @@ This document describes the configuration of a Kubernetes NCN image. The same st
         --target-group Management_Worker "${IMS_IMAGE_ID}"
     ```
 
-1. (`ncn-mw#`) Determine the Xnames for Kubernetes worker nodes
+1. (`ncn-mw#`) Determine the component names (xnames) for the NCNs which will boot from the new image.
 
-   To get a comma-separated list of all worker Xnames:
+   > If being done as part of a CSM upgrade, this will be the NCN worker nodes.  
 
-   ```bash
-   cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join(",")'
-   ```
+   Options to determine node xnames:
 
-   To get the Xname for a specific worker node, e.g. `ncn-w001`:
+   - Get a comma-separated list of all worker NCN xnames:
 
-   ```bash
-   ssh ncn-w001 cat /etc/cray/xname
-   x3000c0s4b0n0
-   ```
+      ```bash
+      cray hsm state components list --role Management --subrole Worker --type Node --format json |
+          jq -r '.Components | map(.ID) | join(",")'
+      ```
+
+   - Get a comma-separated list of all master NCN xnames:
+
+      ```bash
+      cray hsm state components list --role Management --subrole Master --type Node --format json |
+          jq -r '.Components | map(.ID) | join(",")'
+      ```
+
+   - Get a comma-separated list of all storage NCN xnames:
+
+      ```bash
+      cray hsm state components list --role Management --subrole Storage --type Node --format json |
+          jq -r '.Components | map(.ID) | join(",")'
+      ```
+
+   - Get the xname for a specific NCN:
+
+      > In this example, the xname for `ncn-w001` is being found.
+
+      ```bash
+      ssh ncn-w001 cat /etc/cray/xname
+      ```
 
 1. (`ncn-mw#`) Update boot parameters for a Kubernetes NCN.
 
