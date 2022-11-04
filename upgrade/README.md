@@ -14,6 +14,8 @@ product streams for the HPE Cray EX system can be installed or upgraded.
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
 
+- If IMS image creation CFS jobs fail, see [Known Issue: IMS image creation failure](../troubleshooting/known_issues/ims_image_creation_failure.md) for a possible workaround.
+
 ## 1. Prepare for upgrade
 
 See [Prepare for Upgrade](prepare_for_upgrade.md).
