@@ -55,12 +55,15 @@ usage()
    echo "All parameters are optional and the values will be determined automatically if not set."
    echo
    echo "Usage: backup_cfs_config_comp.sh [ -b base_directory | -d target_directory ]"
+   echo "                                 [--comp-only | --cnfg-only]"
    echo
    echo "By default, a backup directory will be created as a subdirectory of /root."
    echo
    echo "Options:"
    echo "-b base_directory    Create the backup directory under base_directory instead of /root"
    echo "-d target_directory  Create the backup files in target_directory instead of creating a new directory."
+   echo "--components-only           Only back up components"
+   echo "--configs-only              Only back up configurations"
    echo
 }
 
@@ -72,6 +75,9 @@ usage_err_exit()
 
 BASE_DIRECTORY=""
 TARGET_DIRECTORY=""
+ONLY=""
+CFG_BACKUP=""
+CMP_BACKUP=""
 
 if [[ $# -eq 1 ]] && [[ $1 == "-h" || $1 == "--help" ]]; then
     usage
@@ -81,7 +87,29 @@ fi
 while [[ $# -gt 0 ]]; do
     key="$1"
 
-    [[ ${key} != "-b" && ${key} != "-d" ]] && usage_err_exit "Unknown argument: '${key}'"
+    if [[ ${key} == "--components-only" ]]; then
+        if [[ ${ONLY} == components ]]; then
+            usage_err_exit "Argument specified multiple times: ${key}"
+        elif [[ -n ${ONLY} ]]; then
+            usage_err_exit "--components-only and --configs-only are mutually exclusive"
+        fi
+        ONLY="components"
+        shift
+        continue
+    elif [[ ${key} == "--configs-only" ]]; then
+        if [[ ${ONLY} == configs ]]; then
+            usage_err_exit "Argument specified multiple times: ${key}"
+        elif [[ -n ${ONLY} ]]; then
+            usage_err_exit "--components-only and --configs-only are mutually exclusive"
+        fi
+        ONLY="configs"
+        shift
+        continue
+    elif [[ ${key} != "-b" && ${key} != "-d" ]]; then
+        usage_err_exit "Unknown argument: '${key}'"
+    fi
+
+    # If we make it here, we are parsing -b or -d arguments
 
     # Both -b and -d require a nonblank argument
     [[ $# -lt 2 ]] && usage_err_exit "${key} requires an argument"
@@ -117,7 +145,12 @@ done
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 if [[ -z ${TARGET_DIRECTORY} ]]; then
     [[ -z ${BASE_DIRECTORY} ]] && BASE_DIRECTORY=/root
-    run_mktemp -d "${BASE_DIRECTORY}/cfs-cfg-comp-backups-${TIMESTAMP}-XXX"
+    if [[ -z ${ONLY} ]]; then
+        run_mktemp -d "${BASE_DIRECTORY}/cfs-configs-comps-backup-${TIMESTAMP}-XXX"
+    else
+        run_mktemp -d "${BASE_DIRECTORY}/cfs-${ONLY}-backup-${TIMESTAMP}-XXX"
+    fi
+
     TARGET_DIRECTORY=${tmpfile}
     # Since we just created this directory, we know its name already includes a timestamp and the fact that
     # these are CFS backups. We also then don't need to worry about existing files being in there whose names
@@ -127,21 +160,30 @@ if [[ -z ${TARGET_DIRECTORY} ]]; then
 else
     # In this case, since the target directory is dictated to us, we include more information in the backup file
     # names, as well as taking care to avoid existing files
-    run_mktemp "${TARGET_DIRECTORY}/cfs-configurations-backup-${TIMESTAMP}-XXX.json"
-    CFG_BACKUP=${tmpfile}
-    run_mktemp "${TARGET_DIRECTORY}/cfs-components-backup-${TIMESTAMP}-XXX.json"
-    CMP_BACKUP=${tmpfile}
+    if [[ -z ${ONLY} || ${ONLY} == configs ]]; then
+        run_mktemp "${TARGET_DIRECTORY}/cfs-configurations-backup-${TIMESTAMP}-XXX.json"
+        CFG_BACKUP=${tmpfile}
+    fi
+
+    if [[ -z ${ONLY} || ${ONLY} == components ]]; then   
+        run_mktemp "${TARGET_DIRECTORY}/cfs-components-backup-${TIMESTAMP}-XXX.json"
+        CMP_BACKUP=${tmpfile}
+    fi
 fi
 
-echo "Backing up CFS configurations and components to the following directory: ${TARGET_DIRECTORY}"
+echo "Backing up CFS to the following directory: ${TARGET_DIRECTORY}"
 
-echo "Backing up configurations to ${CFG_BACKUP}"
-cray cfs configurations list --format json > "${CFG_BACKUP}" ||
-    err_exit "Error writing to ${CFG_BACKUP} or running command: cray cfs configurations list --format json"
+if [[ -n ${CFG_BACKUP} ]]; then
+    echo "Backing up configurations to ${CFG_BACKUP}"
+    cray cfs configurations list --format json > "${CFG_BACKUP}" ||
+        err_exit "Error writing to ${CFG_BACKUP} or running command: cray cfs configurations list --format json"
+fi
 
-echo "Backing up components to ${CMP_BACKUP}"
-cray cfs components list --format json > "${CMP_BACKUP}" ||
-    err_exit "Error writing to ${CMP_BACKUP} or running command: cray cfs components list --format json"
+if [[ -n ${CMP_BACKUP} ]]; then
+    echo "Backing up components to ${CMP_BACKUP}"
+    cray cfs components list --format json > "${CMP_BACKUP}" ||
+        err_exit "Error writing to ${CMP_BACKUP} or running command: cray cfs components list --format json"
+fi
 
 echo "SUCCESS"
 exit 0
