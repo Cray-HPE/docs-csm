@@ -247,7 +247,7 @@ updatek8sconfig() {
 # So instead of kubeadm upgrade .. to restart the kubeadm containers, we simply
 # kubectl delete the local nodes kubeapi pod. Then validate that we have the
 # encryption config file passed into kubeapi's process args list. If yes, yatta,
-# we can then symlink curren.yaml to that file, if not we abort something is
+# we can then symlink current.yaml to that file; if not, we abort because something is
 # amiss.
 #
 # Arg is simply the full encryption filename path that we'll pass to pgrep -lif
@@ -274,7 +274,7 @@ restartk8s() {
 # Glorified wrapper functions for unit tests.
 
 # Simply wrapping around:
-# pgrep -lif proces.*something in the arg list
+# pgrep -lif process.*something in the arg list
 sutpgrep() {
   pgrep -lif "kube-apiserver.*${1:-invalid}" > /dev/null 2>&1
 }

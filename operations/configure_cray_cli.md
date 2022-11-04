@@ -400,7 +400,7 @@ debug level log messages to be displayed. Alternatively, each failing node may b
             ceph mgr dump | jq -r .active_name
             ```
 
-            Expect the output to be a different manager than was prevoiusly reported:
+            Expect the output to be a different manager than was previously reported:
 
             ```text
             ncn-s001.qucrpr

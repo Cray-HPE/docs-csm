@@ -276,7 +276,7 @@ Describe 'encryption.sh logic'
         The status should equal 1
       End
 
-      It 'returns ok when pgrep returns a kubeapi proces that matches'
+      It 'returns ok when pgrep returns a kubeapi process that matches'
         sutpgrep() {
           printf '12345 kube-api\n'
           return 0
