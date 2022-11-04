@@ -142,6 +142,9 @@ with minor command modifications.
 
 1. (`ncn-mw#`) Update boot parameters for a Kubernetes NCN.
 
+   **NOTE:** If you are following this procedure as part of the multi-product recipe upgrade, you should only modify NCN worker boot parameters.
+   Master and storage NCNs are managed automatically in later stages of the CSM upgrade.
+
     1. Get the existing `metal.server` setting for the component name (xname) of the node of interest:
 
         ```bash
