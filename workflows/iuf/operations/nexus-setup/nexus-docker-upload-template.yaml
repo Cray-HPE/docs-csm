@@ -184,4 +184,3 @@ spec:
       command: [bash]
       source: |
         kubectl -n argo delete secret/{{inputs.parameters.nexus_admin_credential_secret_name}}
-      
