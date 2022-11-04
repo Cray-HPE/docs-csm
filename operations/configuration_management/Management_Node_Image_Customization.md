@@ -3,24 +3,28 @@
 **NOTE:** Some of the documentation linked from this page mentions use of the Boot Orchestration Service (BOS). The use of BOS
 is only relevant for booting compute nodes and can be ignored when working with NCN images.
 
-This document describes the configuration of a Kubernetes NCN image. The same steps could be used to modify a Ceph NCN image.
+This document describes the configuration of a Kubernetes NCN image. The same steps could be used to modify a Ceph NCN image
+with minor command modifications.
 
-1. Identify the NCN image to be modified.
+1. (`ncn-mw#`) Identify the NCN image to be modified.
 
-    This example assumes that the administrator wants to modify the Kubernetes image that is currently in use by Kubernetes NCNs.
-    However, the steps are the same for any Management NCN SquashFS image.
+    If this procedure is being done as part of a CSM upgrade, then the documentation which linked to this procedure will have
+    provided instructions for how to set the `ARTIFACT_VERSION` variable.
 
-    If the image to be modified is the image currently booted on a Kubernetes NCN, the value for `ARTIFACT_VERSION` can be found by looking
-    at the boot parameters for the NCNs, or from `/proc/cmdline` on a booted Kubernetes NCN. The version has the form of `X.Y.Z`.
-    See: [boot parameters](../../background#metalserver)
+    Otherwise, if the image to be modified is the image currently booted on an NCN, then find the value for `ARTIFACT_VERSION`
+    by looking at the boot parameters for the NCNs, or by reading  `/proc/cmdline` on a booted NCN. The version has the form of `X.Y.Z`.
+    See [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
+
+    ```bash
+    ARTIFACT_VERSION=<artifact-version>
+    ```
 
 1. (`ncn-mw#`) Obtain the NCN image's associated artifacts (SquashFS, kernel, and `initrd`).
 
     These example commands show how to download these artifacts from S3, which is where the NCN image artifacts are stored.
+    If customizing a Ceph image, then replace the `k8s` string in these examples with `ceph`.
 
     ```bash
-    ARTIFACT_VERSION=<artifact-version>
-
     cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/rootfs" "./${ARTIFACT_VERSION}-rootfs"
 
     cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/kernel" "./${ARTIFACT_VERSION}-kernel"
