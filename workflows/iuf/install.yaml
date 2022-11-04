@@ -104,8 +104,8 @@ spec:
               parameters:
               - name: product
                 value: {{$product.Name}}  
-              - name: originalLocation
-                value: {{$product.OriginalLocation}}
+              - name: stageInput
+                value: {{$.StageInput}}
               - name: dryRun
                 value: "{{$.DryRun}}"
                   {{ end }}

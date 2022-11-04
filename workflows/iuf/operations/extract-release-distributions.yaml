@@ -33,12 +33,12 @@ spec:
         parameters:
           - name: product
           - name: dryRun
-          - name: originalLocation
+          - name: stageInput
       retryStrategy:
         limit: "2"
         retryPolicy: "Always"
         backoff:
-          duration: "10s"       # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+          duration: "10s" # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
           factor: "2"
           maxDuration: "1m"
       script:
@@ -46,9 +46,12 @@ spec:
         command: [sh]
         source: |
           #!/bin/sh
-          echo "Extract from: {{inputs.parameters.originalLocation}} for product: {{inputs.parameters.product}}"
-          cd {{inputs.parameters.originalLocation}}
-          tar -xvzf {{inputs.parameters.originalLocation}}/*.tar.gz
+          tarfile={{=jsonpath(inputs.parameters.product), '$.original_location'}}
+          productName={{=jsonpath(inputs.parameters.product), '$.name'}}
+          echo "Extract from: $productName for product: {{inputs.parameters.product}}"
+          dir=$(echo "$tarfile" | sed 's|\(.*\)/.*|\1|')
+          cd $dir
+          tar -xvzf $tarfile
         volumeMounts:
           - name: iuf
             mountPath: /iuf
