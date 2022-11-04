@@ -75,7 +75,7 @@ Certain kernel modules are blacklisted from loading on the non-compute node.
 
 ## Parameters
 
-Below are a list of kernel parameters used on an NCN, each will denote it's default value(s). If more
+Below are a list of kernel parameters used on an NCN, each will denote its default values. If more
 than one default value is listed, that means the parameter itself is listed on the command line
 multiple times.
 
@@ -155,7 +155,7 @@ not created for devices unless they had a corresponding `ip` parameter set. The 
 safest value to set here that did not disrupt the state of the NCN.
 
 > ***NOTE*** When an NCN boots using a disk this parameter is not set (`ip` is removed), disk boots
-> will use the already stored image found in the squashFS storage.
+> will use the already stored image found in the SquashFS storage.
 
 For more information, see [dracut command line's network parameter definition][13].
 
@@ -226,7 +226,7 @@ for host-only devices (e.g. devices created via SR-IOV).
 
 ### `metal.server`
 
-This parameter's value tells the initramFS where to download the kernel, initrd, and squashFS from.
+This parameter's value tells the initramFS where to download the kernel, `initrd`, and SquashFS from.
 
 | NCN Type | Default Value(s) | Context |
 | :------: | :------------ | :------ |
@@ -310,7 +310,7 @@ For more information, see [the Linux kernel user's administrator's guide][5].
 This parameter tells dracut two things:
 
 1. We are using the [`live` module][10] for booting images.
-1. Our squashFS image is on a filesystem with the `FSLabel` of `SQFSRAID`
+1. Our SquashFS image is on a filesystem with the `FSLabel` of `SQFSRAID`
 
 For more information, see [dracut command line's standard parameter definition][7], and
 [`dracut-metal-mdsquash` usage][2].
@@ -321,7 +321,7 @@ For more information, see [dracut command line's standard parameter definition][
 | :------: | :------------: |
 | All | `0` |
 
-This parameter determines whether or not to copy the entire squashFS image into RAM or not. This is
+This parameter determines whether or not to copy the entire SquashFS image into RAM or not. This is
 useful when the media resides on a slow I/O device such as a DVD.
 
 For more information, see [dracut command line's booting live images definitions][14].
@@ -332,9 +332,9 @@ For more information, see [dracut command line's booting live images definitions
 | :------: | :------------: |
 | All | `0` |
 
-This enables writing to the squashFS image, this is not always supported nor desired. CSM does not
+This enables writing to the SquashFS image, this is not always supported nor desired. CSM does not
 want to enable writing to the image in order to preserve the original image. All changes are written
-to a persistent overlayFS instead.
+to a persistent OverlayFS instead.
 
 For more information, see [dracut command line's booting live images definitions][14].
 
@@ -480,7 +480,7 @@ This parameter enables or disables `dmraid` in the initramFS.
 Whether or not the network is necessary for boot.
 
 > ***NOTE*** This is useful for booting over an NFS or other network share, NCNs set this to `0`
-> because despite downloading a squashFS the `root` parameter is set to a disk `FSLabel`. As such, `root`
+> because despite downloading a SquashFS the `root` parameter is set to a disk `FSLabel`. As such, `root`
 > is *not* dependent on the network to come up.
 
 ### `rd.peerdns`
@@ -635,7 +635,7 @@ Minimize the output from the initramFS to only `stderr`.
 
 The amount of memory reserved in the event of a crash to run dump tools.
 
-This must be larger than the size of the `kdump` initrd located in `/boot`.
+This must be larger than the size of the `kdump` `initrd` located in `/boot`.
 
 ### `log_buf_len`
 

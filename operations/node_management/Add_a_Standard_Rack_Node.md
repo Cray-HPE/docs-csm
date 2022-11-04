@@ -575,7 +575,7 @@ Usually there are two `cray-cps-cm-pm` pods, one on `ncn-w002` and one on `ncn-w
         DESIRED_IP_ADDRESS=10.252.0.26
         ```
 
-    1. Determine the HSM EthenretInterface entry holding onto the desired IP address.
+    1. Determine the HSM EthernetInterface entry holding onto the desired IP address.
 
         ```bash
         cray hsm inventory ethernetInterfaces list --ip-address "${DESIRED_IP_ADDRESS}" --output toml

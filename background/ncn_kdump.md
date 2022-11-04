@@ -118,7 +118,7 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
     1. Change to the desired crash dump directory.
 
-        For exmaple, if `2022-09-07-14:31` was the crash to be examined:
+        For example, if `2022-09-07-14:31` was the crash to be examined:
 
         ```bash
         cd /var/crash/2022-09-07-14\:31
