@@ -53,13 +53,13 @@ run_mktemp()
 
 usage()
 {
-   # Display Help
-   echo "Runs CFS to setup passwordless ssh"
+   # Display help
+   echo "Updates CFS configurations"
    echo "All parameters are optional and the values will be determined automatically if not set."
    echo
-   echo "Usage: deploy_ssh_keys.sh [ --csm-release version ] [ --git-commit hash ]"
-   echo "                            [ --git-clone-url url ] [ --ncn-config-file file ]"
-   echo "                            [ --xnames xname1,xname2... ] [ --clear-state ]"
+   echo "Usage: apply_csm_configuration.sh [ --csm-release version ] [ --git-commit hash ]"
+   echo "                                  [ --git-clone-url url ] [ --ncn-config-file file ]"
+   echo "                                  [ --xnames xname1,xname2... ] [ --clear-state ]"
    echo
    echo "Options:"
    echo "csm-release          The version of the CSM release to use. (e.g. 1.6.11)"
