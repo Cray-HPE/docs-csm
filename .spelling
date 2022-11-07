@@ -638,7 +638,7 @@ Zypper
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
 
-- background/README.md
+- background/ncn_kernel.md
 initramFS
 
 - glossary.md

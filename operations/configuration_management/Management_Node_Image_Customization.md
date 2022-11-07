@@ -107,40 +107,45 @@ with minor command modifications.
 
 1. (`ncn-mw#`) Determine the component names (xnames) for the NCNs which will boot from the new image.
 
-   > If being done as part of a CSM upgrade, this will be the NCN worker nodes.  
+    > If being done as part of a CSM upgrade, then this will be the NCN worker nodes.
 
-   Options to determine node xnames:
+    Options to determine node xnames:
 
-   * Get a comma-separated list of all worker NCN xnames:
+    * Get a comma-separated list of all worker NCN xnames:
 
-      ```bash
-      cray hsm state components list --role Management --subrole Worker --type Node --format json |
+        ```bash
+        cray hsm state components list --role Management --subrole Worker --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")'
-      ```
+        ```
 
-   * Get a comma-separated list of all master NCN xnames:
+    * Get a comma-separated list of all master NCN xnames:
 
-      ```bash
-      cray hsm state components list --role Management --subrole Master --type Node --format json |
+        ```bash
+        cray hsm state components list --role Management --subrole Master --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")'
-      ```
+        ```
 
-   * Get a comma-separated list of all storage NCN xnames:
+    * Get a comma-separated list of all storage NCN xnames:
 
-      ```bash
-      cray hsm state components list --role Management --subrole Storage --type Node --format json |
+        ```bash
+        cray hsm state components list --role Management --subrole Storage --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")'
-      ```
+        ```
 
-   * Get the xname for a specific NCN:
+    * Get the xname for a specific NCN:
 
-      > In this example, the xname for `ncn-w001` is being found.
+        > In this example, the xname for `ncn-w001` is being found.
 
-      ```bash
-      ssh ncn-w001 cat /etc/cray/xname
-      ```
+        ```bash
+        ssh ncn-w001 cat /etc/cray/xname
+        ```
 
 1. (`ncn-mw#`) Update boot parameters for a Kubernetes NCN.
+
+    > If being done as part of a CSM upgrade, then update the boot parameters for the NCN worker nodes.
+    > Master and storage NCNs are managed automatically in later stages of the CSM upgrade.
+
+    Perform the following procedure for each xname identified in the previous step.
 
     1. Get the existing `metal.server` setting for the component name (xname) of the node of interest:
 
