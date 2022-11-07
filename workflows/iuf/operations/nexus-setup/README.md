@@ -45,3 +45,31 @@ If you wish to make changes, edit the template and then update the template in A
 argo -n argo template delete nexus-setup-template
 argo -n argo template create nexus-setup-template.yaml
 ```
+
+## `nexus-docker-upload-template.yaml`
+
+This template will upload docker images into Nexus. In its current form, the template requires a few parameters.
+Most parameters should be automatically obtained from the product installer's IUF manifest file, but that functionality is not
+in place yet. The template requires a `skopeo` container image.
+
+Create the template in Argo by running:
+
+```bash
+argo -n argo template create nexus-setup-template.yaml
+```
+
+The example below shows how to submit the template using the current required parameters. This example requires the existence
+of the product at `$PRODUCTS_DIR`/`$PRODUCT` and requires the `$SKOPEO_IMAGE` to be present in Nexus.
+
+```bash
+PRODUCTS_DIR=/admin/rnoska/argo-nexus/nexus-upload/products
+PRODUCT=cos-2.5.38-20221024172946
+artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.1-20221101230212_86ad20d
+
+argo -n argo submit --from workflowtemplate/nexus-docker-upload-template \
+  -p product=$PRODUCT \
+  -p product_host_path=$PRODUCTS_DIR \
+  -p nexus_docker_skopeo_image=$SKOPEO_IMAGE \
+  --parameter-file $PRODUCTS_DIR/$PRODUCT/iuf-manifest.yaml \
+  --watch
+```
