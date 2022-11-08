@@ -1,34 +1,42 @@
 # Troubleshoot Ansible Play Failures in CFS Sessions
 
-View the Kubernetes logs for a Configuration Framework Service \(CFS\) pod in an error state to determine whether the error resulted from the CFS infrastructure or from an Ansible play that was run by a specific configuration layer in a CFS session.
+View the Kubernetes logs for a Configuration Framework Service \(CFS\) pod in an error state to determine whether the error resulted from the
+CFS infrastructure or from an Ansible play that was run by a specific configuration layer in a CFS session.
 
 Use this procedure to obtain important triage information for Ansible plays being called by CFS.
 
 ## Prerequisites
 
-* A configuration session exists for CFS.
+* A failed configuration session exists in CFS.
 
 ## Procedure
 
-1.  Find the CFS pod that is in an error state.
+1. Find the CFS pod that is in an error state.
 
-    In the example below, the $CFS\_POD\_NAME is cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn.
+    1. List all CFS pods in error state.
+
+        ```bash
+        ncn-mw# kubectl get pods -n services | grep -E "^cfs-.*[[:space:]]Error[[:space:]]"
+        ```
+
+        Example output:
+
+        ```text
+        cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn   0/3     Error    0          25h
+        ```
+
+    1. Set `CFS_POD_NAME` to the name of the pod to be investigated.
+
+        > Use the pod name identified in the previous substep.
+
+        ```bash
+        ncn-mw# CFS_POD_NAME=cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn
+        ```
+
+1. Check to see what containers are in the pod.
 
     ```bash
-    ncn# kubectl get pods -n services $CFS_POD_NAME
-    ```
-
-    Example output:
-
-    ```text
-    NAME                                             READY   STATUS   RESTARTS   AGE
-    cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn   0/3     Error    0          25h
-    ```
-
-2.  Check to see what containers are in the pod.
-
-    ```bash
-    ncn# kubectl logs -n services $CFS_POD_NAME
+    ncn-mw# kubectl logs -n services "${CFS_POD_NAME}"
     ```
 
     Example output:
@@ -37,20 +45,22 @@ Use this procedure to obtain important triage information for Ansible plays bein
     Error from server (BadRequest): a container name must be specified for pod cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn, choose one of: [inventory ansible-0 istio-proxy] or one of the init containers: [git-clone-0 istio-init]
     ```
 
-    Issues rarely occur in the istio-init and istio-proxy containers. These containers can be ignored for now.
+    Issues rarely occur in the `istio-init` and `istio-proxy` containers. These containers can be ignored for now.
 
-3.  Check the git-clone-0, inventory, ansible-0 containers in that order.
+1. Check the `git-clone-0`, `inventory`, and `ansible-0` containers, in that order.
 
-    1.  Check the git-clone-0 container.
+    > If there are additional Ansible pods, examine those as well, in ascending order.
+
+    1. Check the `git-clone-0` container.
 
         ```bash
-        ncn# kubectl logs -n services CFS_POD_NAME git-clone-0
+        ncn-mw# kubectl logs -n services "${CFS_POD_NAME}" git-clone-0
         ```
 
-    2.  Check the inventory container.
+    1. Check the `inventory` container.
 
         ```bash
-        # kubectl logs -n services CFS_POD_NAME inventory
+        ncn-mw# kubectl logs -n services "${CFS_POD_NAME}" inventory
         ```
 
         Example output:
@@ -78,12 +88,14 @@ Use this procedure to obtain important triage information for Ansible plays bein
         2019-12-05 15:00:12,227 - INFO    - cray.cfs.inventory - Writing out the inventory to /inventory/hosts
         ```
 
-    3.  Check the ansible-0 container.
+    1. Check the `ansible-0` container.
 
-        Look towards the end of the Ansible log in the PLAY RECAP section to see if any have failed. If it failed, look above at the immediately preceding play. In the example below, the ncmp\_hsn\_cns role has an issue when being run against the compute nodes.
+        Look towards the end of the Ansible log in the `PLAY RECAP` section to see if any targets failed.
+        If a target failed, then look above in the log at the immediately preceding play.
+        In the example below, the `ncmp_hsn_cns` role has an issue when being run against the compute nodes.
 
         ```bash
-        ncn# kubectl logs -n services CFS_POD_NAME ansible-0
+        ncn-mw# kubectl logs -n services "${CFS_POD_NAME}" ansible-0
         ```
 
         Example output:
@@ -113,6 +125,4 @@ Use this procedure to obtain important triage information for Ansible plays bein
         x3000c0s19b4n0             : ok=27   changed=19   unreachable=0    failed=1    skipped=63   rescued=0    ignored=1
         ```
 
-
 Run the Ansible play again once the underlying issue has been resolved.
-
