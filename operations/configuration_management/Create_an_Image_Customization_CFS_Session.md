@@ -12,13 +12,22 @@ that are not specified will not be included, even if they appear in other CFS in
 Users can expect that staging the image and generating an inventory will be a longer process than creating a session with other target definitions \(for example, inventories\). Tearing down the
 configuration session will also require additional time while IMS packages up the image build artifacts and uploads them to the artifact repository.
 
-- [Check if image is registered with IMS](#check-if-image-is-registered-with-ims)
-- [Create CFS image customization session](#create-cfs-image-customization-session)
-- [Retrieve the resultant image ID](#retrieve-the-resultant-image-id)
+- [Prerequisites](#prerequisites)
+- [1. Check if image is registered with IMS](#1-check-if-image-is-registered-with-ims)
+- [2. Create CFS image customization session](#2-create-cfs-image-customization-session)
+- [3. Wait for CFS session to complete successfully](#3-wait-for-cfs-session-to-complete-successfully)
+- [4. Retrieve the resultant image ID](#4-retrieve-the-resultant-image-id)
 
-## Check if image is registered with IMS
+## Prerequisites
 
-In order to use the `image` target definition, an image must be registered with the IMS.
+- The Cray CLI must be configured on the node where the commands are being run.
+  - See [Configure the Cray CLI](../configure_cray_cli.md).
+- The image being customized must be registered in IMS.
+  - See [Check if image is registered with IMS](#1-check-if-image-is-registered-with-ims).
+
+## 1. Check if image is registered with IMS
+
+In order to use the `image` target definition, an image must be registered with IMS.
 
 (`ncn-mw#`) For example, if the image ID is `5d64c8b2-4f0e-4b2e-b334-51daba16b7fb`, then use `jq` along with the CLI `--format json` output option to determine if the image ID is known to IMS:
 
@@ -32,7 +41,7 @@ Example output:
 true
 ```
 
-## Create CFS image customization session
+## 2. Create CFS image customization session
 
 (`ncn-mw#`) To create a CFS session for image customization, provide a session name, the name of the configuration to apply, and the group/image ID mapping:
 
@@ -81,7 +90,11 @@ Example output:
 }
 ```
 
-## Retrieve the resultant image ID
+## 3. Wait for CFS session to complete successfully
+
+See [Track the Status of a Session](Track_the_Status_of_a_Session.md).
+
+## 4. Retrieve the resultant image ID
 
 (`ncn-mw#`) When an image customization CFS session is complete, use the CFS `describe` command to show the IMS image ID that results from the applied configuration:
 
