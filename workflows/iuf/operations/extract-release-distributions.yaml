@@ -31,9 +31,9 @@ spec:
     - name: main
       inputs:
         parameters:
+          - name: auth_token
           - name: product
-          - name: dryRun
-          - name: stageInput
+          - name: stage_inputs
       retryStrategy:
         limit: "2"
         retryPolicy: "Always"
@@ -46,12 +46,12 @@ spec:
         command: [sh]
         source: |
           #!/bin/sh
-          tarfile={{=jsonpath(inputs.parameters.product), '$.original_location'}}
-          productName={{=jsonpath(inputs.parameters.product), '$.name'}}
+          tarfile="{{=jsonpath(inputs.parameters.product, '$.original_location')}}"
+          productName="{{=jsonpath(inputs.parameters.product, '$.name')}}"
           echo "Extract from: $productName for product: {{inputs.parameters.product}}"
           dir=$(echo "$tarfile" | sed 's|\(.*\)/.*|\1|')
           cd $dir
           tar -xvzf $tarfile
         volumeMounts:
           - name: iuf
-            mountPath: /iuf
+            mountPath: /etc/iuf
