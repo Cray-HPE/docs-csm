@@ -136,7 +136,6 @@ to
         local-zone: "nmn." static
         local-zone: "hmn." static
         local-zone: "10.in-addr.arpa." nodefault
-        local-zone: "."
 ```
 
 ## 3. Checking Hostname in DNS
