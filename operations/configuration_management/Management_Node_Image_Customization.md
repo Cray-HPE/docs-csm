@@ -94,12 +94,11 @@ with minor command modifications.
 
 1. (`ncn-mw#`) Create an image customization CFS session.
 
-    See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional information
-    on creating an image customization CFS session.
+    See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional information.
 
     ```bash
     cray cfs sessions create \
-        --name "ncn-image-customization-session-$(date +%Y%m%d_%H%M%S)" \
+        --name "ncn-image-customization-session-$(date +%y%m%d%H%M%S)" \
         --configuration-name ncn-image-customization \
         --target-definition image --format json \
         --target-group Management_Worker "${IMS_IMAGE_ID}"
