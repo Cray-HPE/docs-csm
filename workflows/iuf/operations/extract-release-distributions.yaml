@@ -32,7 +32,6 @@ spec:
       inputs:
         parameters:
           - name: auth_token
-          - name: product
           - name: stage_inputs
       retryStrategy:
         limit: "2"
@@ -46,9 +45,9 @@ spec:
         command: [sh]
         source: |
           #!/bin/sh
-          tarfile="{{=jsonpath(inputs.parameters.product, '$.original_location')}}"
-          productName="{{=jsonpath(inputs.parameters.product, '$.name')}}"
-          echo "Extract from: $productName for product: {{inputs.parameters.product}}"
+          tarfile="{{=jsonpath(inputs.parameters.stage_inputs, '$.products.current_product.original_location')}}"
+          productName="{{=jsonpath(inputs.parameters.stage_inputs, '$.products.current_product.name')}}"
+          echo "Extract from: $tarfile for product: $productName"
           dir=$(echo "$tarfile" | sed 's|\(.*\)/.*|\1|')
           cd $dir
           tar -xvzf $tarfile
