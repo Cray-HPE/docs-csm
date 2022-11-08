@@ -41,6 +41,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Antero node NID allocation](known_issues/antero_node_NID_allocation.md)
+* [Unbound forwarding to PowerDNS in an air-gapped environment](known_issues/unbound_airgap_forwarding.md)
 
 ## Booting
 
