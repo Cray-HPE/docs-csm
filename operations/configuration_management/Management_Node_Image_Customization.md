@@ -94,16 +94,24 @@ with minor command modifications.
 
 1. (`ncn-mw#`) Create an image customization CFS session.
 
-    See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional information
-    on creating an image customization CFS session.
+    See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional information.
 
-    ```bash
-    cray cfs sessions create \
-        --name "ncn-image-customization-session-$(date +%Y%m%d_%H%M%S)" \
-        --configuration-name ncn-image-customization \
-        --target-definition image --format json \
-        --target-group Management_Worker "${IMS_IMAGE_ID}"
-    ```
+    1. Set a name for the session.
+
+        ```bash
+        CFS_SESSION_NAME="ncn-image-customization-session-$(date +%y%m%d%H%M%S)"
+        echo "${CFS_SESSION_NAME}"
+        ```
+
+    1. Create the session.
+
+        ```bash
+        cray cfs sessions create \
+            --name "${CFS_SESSION_NAME}" \
+            --configuration-name ncn-image-customization \
+            --target-definition image --format json \
+            --target-group Management_Worker "${IMS_IMAGE_ID}"
+        ```
 
 1. (`ncn-mw#`) Determine the component names (xnames) for the NCNs which will boot from the new image.
 
@@ -163,7 +171,7 @@ with minor command modifications.
         in the "Create an Image Customization CFS Session" procedure, repeated here for convenience:
 
         ```bash
-        cray cfs sessions describe ncn-image-customization-session --format json | jq .status.artifacts
+        cray cfs sessions describe "${CFS_SESSION_NAME}" --format json | jq .status.artifacts
         ```
 
         ```bash
