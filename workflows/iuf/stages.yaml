@@ -1,105 +1,105 @@
 version: 0.1.0 # IUF version
 
 stages:
-    - name: process_media
+    - name: process-media
       type: product
       operations:
-        - name: extract_release_distributions
+        - name: extract-release-distributions
           local-path: operations/extract-release-distributions.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: pre_install_check
+    - name: pre-install-check
       type: global
       operations:
-        - name: preflight_checks_for_services
+        - name: preflight-checks-for-services
           local-path: operations/preflight-checks-for-services.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: deliver_product
+    - name: deliver-product
       type: product
       operations:
-        - name: loftsman_manifest_upload
+        - name: loftsman-manifest-upload
           local-path: operations/loftsman-manifest-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
-        - name: s3_upload
+        - name: s3-upload
           local-path: operations/s3-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
-        - name: nexus_setup
+        - name: nexus-setup
           local-path: nexus-setup/nexus-setup-template.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: # any parameters that will be supplied statically to this operation.
-            nexus_setup_image: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.0-20221021164623_e8d3d3d
-        - name: nexus_rpm_upload
+            nexus-setup-image: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.0-20221021164623-e8d3d3d
+        - name: nexus-rpm-upload
           local-path: operations/nexus-rpm-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
-        - name: nexus_docker_upload
+        - name: nexus-docker-upload
           local-path: operations/nexus-docker-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
-        - name: nexus_helm_upload
+        - name: nexus-helm-upload
           local-path: operations/nexus-helm-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
-        - name: vcs_upload
+        - name: vcs-upload
           local-path: operations/vcs-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
-        - name: ims_upload
+        - name: ims-upload
           local-path: operations/ims-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: update_vcs_config
+    - name: update-vcs-config
       type: product
       operations:
-        - name: update_working_branch
+        - name: update-working-branch
           local-path: operations/update-working-branch.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: update_cfs_config
+    - name: update-cfs-config
       type: global
       operations:
-        - name: update_cfs_config
+        - name: update-cfs-config
           local-path: operations/update-cfs-config.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: deploy_product
+    - name: deploy-product
       type: product
       operations:
-        - name: loftsman_manifest_deploy
+        - name: loftsman-manifest-deploy
           local-path: operations/loftsman-manifest-deploy.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
-        - name: set_product_active
+        - name: set-product-active
           local-path: operations/set-product-active.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: prepare_images
+    - name: prepare-images
       type: global
       operations:
-        - name: prepare_images
+        - name: prepare-images
           local-path: operations/prepare-images.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: management_nodes_rollout
+    - name: management-nodes-rollout
       type: global
       operations:
-        - name: management_nodes_rollout
+        - name: management-nodes-rollout
           local-path: operations/management-nodes-rollout.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: post_install_service_check
+    - name: post-install-service-check
       type: product
       operations:
-        - name: post_install_service_check
+        - name: post-install-service-check
           local-path: operations/post-install-service-check.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: managed_nodes_rollout
+    - name: managed-nodes-rollout
       type: global
       operations:
-        - name: managed_nodes_rollout
+        - name: managed-nodes-rollout
           local-path: operations/managed-nodes-rollout.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
-    - name: post_install_check
+    - name: post-install-check
       type: product
       operations:
-        - name: post_install_check
+        - name: post-install-check
           local-path: operations/post-install-check.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
 
