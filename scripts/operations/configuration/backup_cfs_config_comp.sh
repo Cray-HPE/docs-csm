@@ -55,7 +55,7 @@ usage()
    echo "All parameters are optional and the values will be determined automatically if not set."
    echo
    echo "Usage: backup_cfs_config_comp.sh [ -b base_directory | -d target_directory ]"
-   echo "                                 [--comp-only | --cnfg-only]"
+   echo "                                 [--components-only | --configs-only]"
    echo
    echo "By default, a backup directory will be created as a subdirectory of /root."
    echo
