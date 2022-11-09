@@ -23,30 +23,12 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
+locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# Inform ShellCheck about the file we are sourcing
+# shellcheck source=./bash_lib/common.sh
+. "${locOfScript}/bash_lib/common.sh"
+
 set -o pipefail
-
-err()
-{
-    echo "ERROR: $*" 1>&2
-}
-
-err_exit()
-{
-    err "$@"
-    exit 1
-}
-
-run_mktemp()
-{
-    tmpfile=$(mktemp "$@") || err_exit "Command failed with rc $?: mktemp $*"
-    [[ -n ${tmpfile} ]] || err_exit "mktemp command passed but gave no output"
-    [[ -e ${tmpfile} ]] || err_exit "mktemp command passed but '${tmpfile}' does not exist"
-    if [[ $# -gt 0 && "$1" == "-d" ]]; then
-        [[ -d ${tmpfile} ]] || err_exit "mktemp -d command passed and '${tmpfile}' exists, but is not a directory"
-    else
-        [[ -f ${tmpfile} ]] || err_exit "mktemp command passed and '${tmpfile}' exists, but is not a regular file"
-    fi
-}
 
 usage()
 {
@@ -65,12 +47,6 @@ usage()
    echo "--components-only           Only back up components"
    echo "--configs-only              Only back up configurations"
    echo
-}
-
-usage_err_exit()
-{
-    usage
-    err_exit "usage: $*"
 }
 
 BASE_DIRECTORY=""
@@ -146,12 +122,11 @@ TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 if [[ -z ${TARGET_DIRECTORY} ]]; then
     [[ -z ${BASE_DIRECTORY} ]] && BASE_DIRECTORY=/root
     if [[ -z ${ONLY} ]]; then
-        run_mktemp -d "${BASE_DIRECTORY}/cfs-configs-comps-backup-${TIMESTAMP}-XXX"
+        TARGET_DIRECTORY=$(run_mktemp -d "${BASE_DIRECTORY}/cfs-configs-comps-backup-${TIMESTAMP}-XXX")
     else
-        run_mktemp -d "${BASE_DIRECTORY}/cfs-${ONLY}-backup-${TIMESTAMP}-XXX"
+        TARGET_DIRECTORY=$(run_mktemp -d "${BASE_DIRECTORY}/cfs-${ONLY}-backup-${TIMESTAMP}-XXX")
     fi
 
-    TARGET_DIRECTORY=${tmpfile}
     # Since we just created this directory, we know its name already includes a timestamp and the fact that
     # these are CFS backups. We also then don't need to worry about existing files being in there whose names
     # may collide with ours.
@@ -161,13 +136,11 @@ else
     # In this case, since the target directory is dictated to us, we include more information in the backup file
     # names, as well as taking care to avoid existing files
     if [[ -z ${ONLY} || ${ONLY} == configs ]]; then
-        run_mktemp "${TARGET_DIRECTORY}/cfs-configurations-backup-${TIMESTAMP}-XXX.json"
-        CFG_BACKUP=${tmpfile}
+        CFG_BACKUP=$(run_mktemp "${TARGET_DIRECTORY}/cfs-configurations-backup-${TIMESTAMP}-XXX.json")
     fi
 
     if [[ -z ${ONLY} || ${ONLY} == components ]]; then   
-        run_mktemp "${TARGET_DIRECTORY}/cfs-components-backup-${TIMESTAMP}-XXX.json"
-        CMP_BACKUP=${tmpfile}
+        CMP_BACKUP=$(run_mktemp "${TARGET_DIRECTORY}/cfs-components-backup-${TIMESTAMP}-XXX.json")
     fi
 fi
 

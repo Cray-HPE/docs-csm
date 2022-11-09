@@ -47,19 +47,9 @@ import requests
 import sys
 import time
 
+from python_lib.common import err, err_exit, stdout_write_flush
+
 VAULT_SECRET_FIELD_NAMES = [ "password", "ssh_private_key", "ssh_public_key" ]
-
-def stdout_write_flush(msg):
-    sys.stdout.write(msg)
-    sys.stdout.flush()
-
-def err(msg):
-    sys.stderr.write("ERROR: {}\n".format(msg))
-    sys.stderr.flush()
-
-def err_exit(msg):
-    err(msg)
-    sys.exit(1)
 
 def read_file(filename):
     """
