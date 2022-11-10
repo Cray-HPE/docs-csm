@@ -132,3 +132,14 @@
    ```
 
    This is normal, and backups should resume after 24 hours.
+
+- `Goss test "Validate PodSecurityPolicy is enabled" fails`
+
+   If this Goss test fails, enable Pod Security Policy.
+
+   (`ncn-m001#`) Run `enable-psp.sh`.
+
+   ```bash
+   /usr/share/doc/csm/upgrade/scripts/k8s/enable-psp.sh
+   ```
+
