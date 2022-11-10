@@ -24,6 +24,13 @@
 #
 
 set -e
+
+if [[ -z ${CSM_ARTI_DIR} ]]; then
+    echo "CSM_ARTI_DIR environment variable has not been set"
+    echo "make sure you have followed the upgrade guide"
+    exit 1
+fi
+
 basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . ${basedir}/../common/upgrade-state.sh
 trap 'err_report' ERR
@@ -84,7 +91,14 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     wget -q http://rgw-vip.nmn/ncn-utils/csi;chmod 0755 csi; mv csi /usr/bin/csi
-    csi pit validate --postgres
+    pushd /tmp
+    rm -rf opt
+    rpm2cpio "$(find ${CSM_ARTI_DIR}/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)" | cpio -idmv
+    opt/cray/tests/install/ncn/scripts/postgres_clusters_running.sh
+    opt/cray/tests/install/ncn/scripts/postgres_pods_running.sh -p
+    opt/cray/tests/install/ncn/scripts/postgres_clusters_leader.sh -p
+    opt/cray/tests/install/ncn/scripts/postgres_replication_lag.sh -p -e
+    popd
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
