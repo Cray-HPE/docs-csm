@@ -1,0 +1,188 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: nexus-rpm-upload-template
+  namespace: argo
+spec:
+  arguments:
+    parameters:
+    - name: nexus_setup_image
+    - name: product
+    - name: product_host_path
+    # The value for content is set to the json string value for 'content' in the manifest when --parameter-file is
+    # set to the path of the IUF manifest yaml file.
+    - name: content
+  entrypoint: main
+  templates:
+### Main Steps ###
+  - name: main
+    steps:
+    - - name: nexus-get-admin-credential
+        template: nexus-get-admin-credential-template
+    - - name: nexus-rpm-load
+        template: nexus-rpm-load-template
+        hooks:
+          exit: 
+            template: cleanup-template
+            arguments:
+              parameters:
+              - name: nexus_admin_credential_secret_name
+                value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
+        arguments:
+          parameters:
+          - name: nexus_setup_image
+            value: "{{workflow.parameters.nexus_setup_image}}"
+          - name: nexus_admin_credential_secret_name
+            value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
+          - name: content
+            value: "{{workflow.parameters.content}}"
+          - name: product
+            value: "{{workflow.parameters.product}}"
+          - name: product_host_path
+            value: "{{workflow.parameters.product_host_path}}"
+### Templates ###
+## nexus-get-secret-template ##
+  - name: nexus-get-admin-credential-template
+    nodeSelector:   
+      kubernetes.io/hostname: ncn-m001
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    outputs:
+      parameters:
+        - name: secret_name
+          valueFrom:
+            path: /tmp/secret_name
+    retryStrategy:
+        limit: "2"
+        retryPolicy: "Always"
+        backoff:
+          duration: "10s" # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+          factor: "2"
+          maxDuration: "1m"
+    script:
+      # TBD: This is a repeated function. Can this change to a reference?
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      command: [bash]
+      source: |
+        function sync_item() {
+          item_name="$1"
+          source_ns="$2"
+          destination_name="$3-$RANDOM"
+          destination_ns="$4"
+          if kubectl get $item_name -n $source_ns &> /dev/null; then
+            echo "Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+            kubectl get $item_name -n $source_ns -o json | \
+              jq 'del(.metadata.namespace)' | \
+              jq 'del(.metadata.creationTimestamp)' | \
+              jq 'del(.metadata.resourceVersion)' | \
+              jq 'del(.metadata.selfLink)' | \
+              jq 'del(.metadata.uid)' | \
+              jq 'del(.metadata.ownerReferences)' | \
+              jq 'del(.metadata.name)' | \
+              jq '.metadata |= . + {"name":"'$destination_name'"}' | \
+              kubectl apply -n $destination_ns -f -
+              return $?
+          else
+            echo "Didn't find $item_name in the $source_ns namespace"
+            return 1
+          fi
+        }
+        sync_item secret/nexus-admin-credential nexus nexus-admin-credential-argo argo
+        rc=$?
+        echo $destination_name >> /tmp/secret_name
+        exit $rc
+## nexus-rpm-load-template ##
+  - name: nexus-rpm-load-template
+    inputs:
+      parameters:
+      - name: nexus_setup_image
+        value: "{{workflow.parameters.nexus_docker_skopeo_image}}"
+      - name: nexus_admin_credential_secret_name
+      - name: content
+        value: "{{workflow.parameters.content}}"
+      - name: product
+        value: "{{workflow.parameters.product}}"
+      - name: product_host_path
+        value: "{{workflow.parameters.product_host_path}}"
+    nodeSelector:
+      kubernetes.io/hostname: ncn-m001
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    script:
+      image: "{{inputs.parameters.nexus_setup_image}}"
+      command: [iuf-rpm-upload]
+      args: ["{{workflow.parameters.content}}"]
+      env:
+      - name: NEXUS_URL
+        value: "https://packages.local"
+      - name: NEXUS_USERNAME
+        valueFrom:
+          secretKeyRef:
+            name: "{{inputs.parameters.nexus_admin_credential_secret_name}}"
+            key: username
+      - name: NEXUS_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: "{{inputs.parameters.nexus_admin_credential_secret_name}}"
+            key: password
+      volumeMounts:
+      - name: product
+        mountPath: /product
+    # This will be an RBD mount.
+    volumes:
+    - name: product
+      hostPath:
+        # TBD: docker/path is an array and needs an iterator. Will that be done in the operator?
+        path: "{{workflow.parameters.product_host_path}}/{{workflow.parameters.product}}"
+## cleanup-template ##
+## Remove the secret created earlier.
+# TBD: This is a repeated function. Can this change to a reference?
+  - name: cleanup-template
+    inputs:
+      parameters:
+      - name: nexus_admin_credential_secret_name
+        value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
+    nodeSelector:
+      kubernetes.io/hostname: ncn-m001
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    script:
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      command: [bash]
+      source: |
+        kubectl -n argo delete secret/{{inputs.parameters.nexus_admin_credential_secret_name}}
