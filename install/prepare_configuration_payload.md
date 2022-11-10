@@ -74,6 +74,8 @@ seen by running `csi config init --help`.
 | `--primary-server-name` `primary` | Desired name for the primary DNS server |
 | `--secondary-servers` `""` | Comma-separated list of FQDN/IP for all DNS servers to be notified on DNS zone update |
 | `--notify-zones` `""` | A comma-separated list of DNS zones to transfer |
+| `--k8s-api-auditing-enabled` | Enable Kubernetes API audit logging |
+| `--ncn-mgmt-node-auditing-enabled` | Enable host audit logging |
 
 * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
 * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management nodes.
@@ -85,11 +87,11 @@ seen by running `csi config init --help`.
 * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help` output for more information.
 
 * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
-* Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network).
+* Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the Customer Access Network (CAN).
   * The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN.
   * The `can-cidr` is the IP subnet for the CAN assigned to this system.
   * The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN.
-* Several parameters (`cmn-gateway`, `cmn-cidr`, `cmn-static-pool`, `cmn-dynamic-pool`) describe the CMN (Customer Management network).
+* Several parameters (`cmn-gateway`, `cmn-cidr`, `cmn-static-pool`, `cmn-dynamic-pool`) describe the Customer Management Network (CMN).
   * The `cmn-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CMN.
   * The `cmn-cidr` is the IP subnet for the CMN assigned to this system.
   * The `cmn-static-pool` and `cmn-dynamic-pool` are the MetalLB address static and dynamic pools for the CMN.
@@ -104,6 +106,9 @@ seen by running `csi config init --help`.
   * See [Create Cabinets YAML](create_cabinets_yaml.md).
 * The PowerDNS zone transfer arguments `primary-server-name`, `secondary-servers`, and `notify-zones` are optional unless zone transfer is being configured.
   * See the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md#zone-transfer).
+* Use `--k8s-api-auditing-enabled=true` to enable Kubernetes API audit logging,
+  and use `--ncn-mgmt-node-auditing-enabled=true` to enable host audit logging.
+  See [Audit Logs](../operations/security_and_authentication/Audit_Logs.md) for more information.
 
 <a name="configuration_payload_files"></a>
 
