@@ -23,33 +23,10 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-err()
-{
-    echo "ERROR: $*" 1>&2
-}
-
-err_exit()
-{
-    err "$@"
-    exit 1
-}
-
-run_cmd()
-{
-    "$@" || err_exit "Command failed with rc $?: $*"
-}
-
-run_mktemp()
-{
-    tmpfile=$(mktemp "$@") || err_exit "Command failed with rc $?: mktemp $*"
-    [[ -n "${tmpfile}" ]] || err_exit "mktemp command passed but gave no output"
-    [[ -e "${tmpfile}" ]] || err_exit "mktemp command passed but '${tmpfile}' does not exist"
-    if [[ $# -gt 0 && "$1" == "-d" ]]; then
-        [[ -d "${tmpfile}" ]] || err_exit "mktemp -d command passed and '${tmpfile}' exists, but is not a directory"
-    else
-        [[ -f "${tmpfile}" ]] || err_exit "mktemp command passed and '${tmpfile}' exists, but is not a regular file"
-    fi
-}
+locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# Inform ShellCheck about the file we are sourcing
+# shellcheck source=./bash_lib/common.sh
+. "${locOfScript}/bash_lib/common.sh"
 
 usage()
 {
@@ -72,12 +49,6 @@ usage()
    echo "no-enable            By default, the script enables all of the NCNs and waits for them to complete configuration. If this flag is set,"
    echo "                     however, it updates their desired configurations but leaves them disabled."
    echo
-}
-
-usage_err_exit()
-{
-    usage
-    err_exit "usage: $*"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -167,22 +138,17 @@ fi
 # The script will keep all relevant files in a temporary directory. During
 # CSM upgrades, this directory will be backed up, in case it is needed for
 # future reference.
-run_mktemp -d "${HOME}/apply_csm_configuration.$(date +%Y%m%d_%H%M%S).XXXXXX"
-TMPDIR=${tmpfile}
+
+TMPDIR=$(run_mktemp -d "${HOME}/apply_csm_configuration.$(date +%Y%m%d_%H%M%S).XXXXXX")
 
 # If a file is passed in as input, keep a copy in the temporary directory
 if [[ -n ${OLD_NCN_CONFIG_FILE} && -f ${OLD_NCN_CONFIG_FILE} ]]; then
     run_cmd cp "${OLD_NCN_CONFIG_FILE}" "${TMPDIR}"
 fi
 
-run_mktemp --tmpdir="${TMPDIR}" "csm-config-$VERSION-XXXXXX.json"
-CSM_CONFIG_FILE=${tmpfile}
-
-run_mktemp --tmpdir="${TMPDIR}" "new-ncn-personalization-XXXXXX.json"
-NCN_CONFIG_FILE=${tmpfile}
-
-run_mktemp --tmpdir="${TMPDIR}" "backup-ncn-personalization-XXXXXX.json"
-BACKUP_NCN_CONFIG_FILE=${tmpfile}
+CSM_CONFIG_FILE=$(run_mktemp --tmpdir="${TMPDIR}" "csm-config-$VERSION-XXXXXX.json")
+NCN_CONFIG_FILE=$(run_mktemp --tmpdir="${TMPDIR}" "new-ncn-personalization-XXXXXX.json")
+BACKUP_NCN_CONFIG_FILE=$(run_mktemp --tmpdir="${TMPDIR}" "backup-ncn-personalization-XXXXXX.json")
 
 if [[ -z "${CLONE_URL}" ]]; then
     CLONE_URL="https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
@@ -193,8 +159,7 @@ if [[ -z "${COMMIT}" ]]; then
     [[ -n "${VCS_USER}" ]] || err_exit "Unable to obtain VCS username"
     VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials --template='{{.data.vcs_password}}' | base64 --decode)
     [[ -n "${VCS_PASSWORD}" ]] || err_exit "Unable to obtain VCS password"
-    run_mktemp -d
-    TEMP_DIR=${tmpfile}
+    TEMP_DIR=$(run_mktemp -d)
     TEMP_HOME=${HOME}
     HOME=${TEMP_DIR}
     cd "${TEMP_DIR}" || err_exit "Unable to change directory to '${TEMP_DIR}'"
