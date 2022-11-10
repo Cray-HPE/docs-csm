@@ -439,12 +439,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       EOF
       ```
 
-     1. Update kafka secrets with the new `certs.jks.b64`.
+  1. Update kafka secrets with the new `certs.jks.b64`.
 
      ```bash
     kubectl get secret cray-shared-kafka-clients-ca-cert -n services -o json | jq --rawfile cert certs.jks.b64 '.data["ca.p12"]=$cert'
     kubectl get secret cray-shared-kafka-cluster-ca-cert -n services -o json | jq --rawfile cert certs.jks.b64 '.data["ca.p12"]=$cert'
-     ``` 
+     ```
 
      Then restart the operator to apply the change
 
