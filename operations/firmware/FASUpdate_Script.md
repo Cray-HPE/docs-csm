@@ -42,7 +42,7 @@ Set `overrideDryrun` to true to do an actual update instead of a dryrun.
 * `--list` : List the available action recipe files in the default or specified directory.
 * `--recipedir dir` : Directory containing the action recipe file (if not using the default directory).
 * `--xnames xname1,xname2` : List of xnames to be updated.  If not present, FAS will check all xnames.
-* `--overredDryrun {true/false}` : Default false - Set to true to do an actual update run instead of a dryrun.
+* `--overrideDryrun {true/false}` : Default false - Set to true to do an actual update run instead of a dryrun.
 * `--watchtime sec` : Number of seconds to wait before outputting the summary status (default 30).
 * `--description des` : Overwrite the description field in the recipe file.
 * `--url-fas url` : URL to access FAS (usually not needed).

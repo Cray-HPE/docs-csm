@@ -64,7 +64,7 @@ of the product at `$PRODUCTS_DIR`/`$PRODUCT` and requires the `$SKOPEO_IMAGE` to
 ```bash
 PRODUCTS_DIR=/admin/rnoska/argo-nexus/nexus-upload/products
 PRODUCT=cos-2.5.38-20221024172946
-SKOPEO_IMAGE=artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.1-20221101230212_86ad20d
+artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.1-20221101230212_86ad20d
 
 argo -n argo submit --from workflowtemplate/nexus-docker-upload-template \
   -p product=$PRODUCT \
@@ -90,7 +90,7 @@ of the product at `$PRODUCTS_DIR`/`$PRODUCT` and requires the `$NEXUS_SETUP_IMAG
 ```bash
 PRODUCTS_DIR=/admin/rnoska/argo-nexus/nexus-upload/products
 PRODUCT=cos-2.5.38-20221024172946
-SKOPEO_IMAGE=artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.1-20221110002429_3de03c8
+NEXUS_SETUP_IMAGE=artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.1-20221110002429_3de03c8
 
 argo -n argo submit --from workflowtemplate/nexus-rpm-upload-template \
   -p product=$PRODUCT \

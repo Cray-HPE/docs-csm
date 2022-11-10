@@ -124,7 +124,7 @@ def main():
 
     parser.add_argument("--file", type=str, required=False, help="Filename of the .json action recipe file to use", default="")
     parser.add_argument("--list", required=False, help="List files available in the recipes directory", action="store_true")
-    parser.add_argument("--recipedir", type=str, required=False, help="Specify the directory to find the recipies", default="")
+    parser.add_argument("--recipedir", type=str, required=False, help="Specify the directory to find the recipes", default="")
     parser.add_argument("--xnames", type=str, required=False, help="List of xnames to update", default="")
     parser.add_argument("--overrideDryrun", type=str2bool, required=False, help="Perform Dry or Real update", default=False)
     parser.add_argument("--watchtime", type=int, required=False, help="Time between actions status", default=30)

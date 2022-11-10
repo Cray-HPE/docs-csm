@@ -4,9 +4,11 @@
 
 There is a known issue where the Ceph container images will not start after a power failure or server component failure that causes the server to crash and not boot back up
 
-There will be a message similar to the following in the journalctl logs for the Ceph services on the machine that crashed:
+There will be a message similar to the following in the `journalctl` logs for the Ceph services on the machine that crashed:
 
-`ceph daemons will not start due to: Error: readlink /var/lib/containers/storage/overlay/l/CXMD7IEI4LUKBJKX5BPVGZLY3Y: no such file or directory`
+```screen
+ceph daemons will not start due to: Error: readlink /var/lib/containers/storage/overlay/l/CXMD7IEI4LUKBJKX5BPVGZLY3Y: no such file or directory
+```
 
 When the issue materializes, then it is highly likely the Ceph container images have been corrupted.
 
@@ -32,7 +34,7 @@ When the issue materializes, then it is highly likely the Ceph container images 
 
    Example output:
 
-   ```
+   ```screen
    NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                                       IMAGE    ID      CONTAINER ID
    alertmanager.ncn-s001            ncn-s001  running (95m)  2m ago     97m  0.20.0   registry.local/prometheus/alertmanager:v0.20.0      0881eb8f169f  a3fbad5afe50
    crash.ncn-s001                   ncn-s001  running (97m)  2m ago     97m  15.2.8   registry.local/ceph/ceph:v15.2.8                    5553b0cb212c  ddc724e9a18e
@@ -59,9 +61,33 @@ When the issue materializes, then it is highly likely the Ceph container images 
 
    At this point, the processes are starting/running on the node that crashed; this may take a few minutes.
 
-   If after five mins the services are still reporting down, then fail-over the ceph mgr daemon and re-check the daemons:
+   If after five minutes the services are still reporting down, then fail-over the Ceph mgr daemon and re-check the daemons:
 
    ```bash
    ceph mgr fail $(ceph mgr dump | jq -r .active_name)
    ```
 
+## Services not starting due to `ssh` keys not cached on nodes
+
+```bash
+num_storage_nodes=$(ceph node ls|jq -r '.osd|keys|length')
+ceph cephadm get-pub-key > /etc/ceph/ceph.pub
+for node in $(seq 1 $num_storage_nodes); do
+   nodename=$(printf "ncn-s%03d" $node)
+   ssh-keyscan -t rsa -H $nodename >> ~/.ssh/known_hosts
+done
+```
+
+It is recommended to also clear the local cache entries in the `known_host` files on the nodes.
+
+```bash
+for node in $(seq 1 "$num_storage_nodes"); do
+    nodename=$(printf "ncn-s%03d" "$node")
+    ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
+done
+
+for node in $(seq 1 "$num_storage_nodes"); do
+ nodename=$(printf "ncn-s%03d.nmn" "$node")
+ ssh-keyscan -H "$nodename" >> ~/.ssh/known_hosts
+done
+```
