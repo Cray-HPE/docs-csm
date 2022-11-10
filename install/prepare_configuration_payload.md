@@ -87,9 +87,8 @@ For more description of these settings and the default values, see
 * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file.
   This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the ID of every cabinet in the system.
    See [Create Cabinets YAML](create_cabinets_yaml.md).
-* Set `--k8s-api-auditing-enabled` to `--k8s-api-auditing-enabled=true` to enable Kubernetes API audit logging,
-  and set `--ncn-mgmt-node-auditing-enabled` to `--ncn-mgmt-node-auditing-enabled=true` to enable host
-  audit logging.
+* Use `--k8s-api-auditing-enabled=true` to enable Kubernetes API audit logging,
+  and use `--ncn-mgmt-node-auditing-enabled=true` to enable host audit logging.
   See [Audit Logs](../operations/security_and_authentication/Audit_Logs.md) for more information.
 
 <a name="configuration_payload_files"></a>
