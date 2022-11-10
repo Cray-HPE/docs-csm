@@ -446,7 +446,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       kubectl get secret cray-shared-kafka-cluster-ca-cert -n services -o json | jq --rawfile cert certs.jks.b64 '.data["ca.p12"]=$cert'
       ```
 
-      Then restart the operator to apply the change
+      Restart the operator to apply the change:
 
       ```bash
       kubectl rollout restart -n services deployments cray-shared-kafka-entity-operator
