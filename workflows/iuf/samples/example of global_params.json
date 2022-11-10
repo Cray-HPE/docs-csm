@@ -2,7 +2,7 @@
   "product_manifest": {
     "products": {
       "cos": {
-        "parent_directory": "path to parent directory containing COS's iuf-product-manifest.yaml",
+        "parent_directory": "/etc/iuf/alice_230116/cos-2.5.34-20221012230953",
         "manifest": {
           "iuf_version": "^0.1.0",
           "name": "cos",
@@ -19,7 +19,7 @@
         }
       },
       "sdu": {
-        "parent_directory": "path to parent directory containing SDU's iuf-product-manifest.yaml",
+        "parent_directory": "/etc/iuf/alice_230116/sdu-1.2.3",
         "manifest": {
           "iuf_version": "^0.1.0",
           "name": "sdu",
@@ -28,7 +28,7 @@
       }
     },
     "current_product": {
-      "parent_directory": "path to parent directory containing COS's iuf-product-manifest.yaml",
+      "parent_directory": "/etc/iuf/alice_230116/cos-2.5.34-20221012230953",
       "manifest": {
         "iuf_version": "^0.1.0",
         "name": "cos",
@@ -47,7 +47,7 @@
   },
   "input_params": {
     "products": ["cos", "sdu"],
-    "media_dir": "/iuf/alice_230116",
+    "media_dir": "/etc/iuf/alice_230116",
     "bootprep_config_managed": [
       {
         "contents": "boot prep file contents as a string"
