@@ -31,8 +31,8 @@
 /operations/system_configuration_service                 @Cray-HPE/metal
 
 # Continuous Integration Items
-.github/                                                 @Cray-HPE/ci
-Jenkinsfile.github                                       @Cray-HPE/ci
+.github/                                                 @Cray-HPE/csm-devops
+Jenkinsfile.github                                       @Cray-HPE/csm-devops
 
 # CMS Items
 /operations/boot_orchestration                           @Cray-HPE/cms-core-bos
