@@ -23,8 +23,6 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -euo pipefail
-
 function deployNLS() {
     BUILDDIR="/tmp/build"
     mkdir -p "$BUILDDIR"
@@ -49,7 +47,7 @@ if [[ -z $1 ]]; then
 else
     CHART_PATH="$1"
 fi
-
+set -euo pipefail
 echo "Get NLS chart version"
 tarFileName=$(ls -l "$CHART_PATH" | awk '{print $9}' | grep "cray-nls")
 tarFileName=${tarFileName#"cray-nls-"}
