@@ -65,6 +65,8 @@ For more description of these settings and the default values, see
 | `--application-node-config-yaml` `application_node_config.yaml` | Name of `application_node_config.yaml` |
 | `--cabinets-yaml` `cabinets.yaml` | Name of `cabinets.yaml` |
 | `--bgp-peers` `aggregation` | Override the default BGP peers, using aggregation switches instead of spines |
+| `--k8s-api-auditing-enabled` | Enable Kubernetes API audit logging |
+| `--ncn-mgmt-node-auditing-enabled` | Enable host audit logging |
 
 * This is a long list of options. It can be helpful to create a Bash script file to call the `csi` command with all of these options, and then edit that file to adjust the values for the particular system being installed.
 * The `bootstrap-ncn-bmc-user` and `bootstrap-ncn-bmc-pass` must match what is used for the BMC account and its password for the management nodes.
@@ -75,7 +77,7 @@ For more description of these settings and the default values, see
   * `p801p1,p801p2` for Intel nodes
   * The starting cabinet number for each type of cabinet (for example, `starting-mountain-cabinet`) has a default that can be overridden. See the `csi config init --help` output for more information.
 * An override to default cabinet IPv4 subnets can be made with the `hmn-mtn-cidr` and `nmn-mtn-cidr` parameters.
-* Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the CAN (Customer Access network).
+* Several parameters (`can-gateway`, `can-cidr`, `can-static-pool`, `can-dynamic-pool`) describe the Customer Access Network (CAN).
   * The `can-gateway` is the common gateway IP address used for both spine switches and commonly referred to as the Virtual IP address for the CAN.
   * The `can-cidr` is the IP subnet for the CAN assigned to this system.
   * The `can-static-pool` and `can-dynamic-pool` are the MetalLB address static and dynamic pools for the CAN.
@@ -85,6 +87,9 @@ For more description of these settings and the default values, see
 * For systems that use non-sequential cabinet ID numbers, use `cabinets-yaml` to include the `cabinets.yaml` file.
   This file can include information about the starting ID for each cabinet type and number of cabinets which have separate command line options, but is a way to specify explicitly the ID of every cabinet in the system.
    See [Create Cabinets YAML](create_cabinets_yaml.md).
+* Use `--k8s-api-auditing-enabled=true` to enable Kubernetes API audit logging,
+  and use `--ncn-mgmt-node-auditing-enabled=true` to enable host audit logging.
+  See [Audit Logs](../operations/security_and_authentication/Audit_Logs.md) for more information.
 
 <a name="configuration_payload_files"></a>
 
