@@ -601,6 +601,8 @@ this step may be skipped.
    > - For more description of these settings and the default values, see
    >   [Default IP Address Ranges](../introduction/csm_overview.md#2-default-ip-address-ranges) and the other topics in
    >   [CSM Overview](../introduction/csm_overview.md).
+   > - To enable or disable audit logging, refer to [Audit Logs](../operations/security_and_authentication/Audit_Logs.md)
+   >   for more information.
    > - If the system is using a `cabinets.yaml` file, be sure to update the `cabinets-yaml` field with `'cabinets.yaml'` as its value.
 
    ```bash

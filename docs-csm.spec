@@ -21,7 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-Name: docs-csm
+Name: %(echo $NAME)
 License: MIT License
 Summary: Documentation for Cray System Management (CSM) Installation and Upgrade
 BuildArchitectures: noarch
