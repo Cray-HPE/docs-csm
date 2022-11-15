@@ -32,7 +32,7 @@ spec:
       inputs:
         parameters:
           - name: auth_token
-          - name: stage_inputs
+          - name: global_params
       retryStrategy:
         limit: "2"
         retryPolicy: "Always"
@@ -45,8 +45,8 @@ spec:
         command: [sh]
         source: |
           #!/bin/sh
-          tarfile="{{=jsonpath(inputs.parameters.stage_inputs, '$.products.current_product.original_location')}}"
-          productName="{{=jsonpath(inputs.parameters.stage_inputs, '$.products.current_product.name')}}"
+          tarfile="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.original_location')}}"
+          productName="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.name')}}"
           echo "Extract from: $tarfile for product: $productName"
           dir=$(echo "$tarfile" | sed 's|\(.*\)/.*|\1|')
           cd $dir
