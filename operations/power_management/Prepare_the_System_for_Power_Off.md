@@ -6,7 +6,7 @@ The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down
 
 ## Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
+An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
 ## Procedure
 
@@ -22,7 +22,7 @@ An authentication token is required to access the API gateway and to use the `sa
 
     If SAT has already been authenticated to the API gateway, this step may be skipped.
 
-    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
+    See the "SAT Authentication" section in the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
 1.  Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
 
@@ -79,14 +79,19 @@ An authentication token is required to access the API gateway and to use the `sa
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+       cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
        ```
 
-       Example output:
+       Example output(s):
 
        ```
        node_list = [ "x3000c0s19b1n0", "x3000c0s19b2n0", "x3000c0s19b3n0", "x3000c0s19b4n0",]
        ```
+
+       ```
+       node_roles_groups = [ "Compute",]
+       ```
+
 
 1.  Use sat to capture state of the system before the shutdown.
 
@@ -176,19 +181,41 @@ An authentication token is required to access the API gateway and to use the `sa
         kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
                      -c slingshot-fabric-manager -- fmn_status --details | tee fabric.status
         ```
+    1. Check management switches to verify they are reachable.
 
-    1. Check management switches to verify they are reachable \(switch host names depend on system configuration\).
+        > *Note:* The switch host names depend on the system configuration.
 
-        ```bash
-        for switch in sw-leaf-00{1,2}.mtl sw-spine-00{1,2}.mtl sw-cdu-00{1,2}.mtl; do
-                 while true; do
-                     ping -c 1 $switch > /dev/null && break
-                     echo "switch $switch is not yet up"
-                     sleep 5
-                 done
-                 echo "switch $switch is up"
-             done | tee switches
-        ```
+        1. Look in `/etc/hosts` for the management network switches on this system. The names of
+        all spine switches, leaf switches, leaf BMC switches, and CDU switches need to be used in
+        the next step.
+
+           ```bash
+           ncn# grep sw- /etc/hosts
+           ```
+
+           Example output:
+
+           ```text
+           10.254.0.2      sw-spine-001
+           10.254.0.3      sw-spine-002
+           10.254.0.4      sw-leaf-bmc-001
+           10.254.0.5      sw-leaf-bmc-002
+           10.100.0.2      sw-cdu-001
+           10.100.0.3      sw-cdu-002
+           ```
+
+        1. Ping all switches using the proper list of hostnames in the index of the for loop.
+
+           ```bash
+           ncn# for switch in sw-leaf-00{1,2} sw-leaf-bmc-00{1-2} sw-spine-00{1,2} sw-cdu-00{1,2}l; do
+                   while true; do
+                        ping -c 1 $switch > /dev/null && break
+                        echo "switch $switch is not yet up"
+                        sleep 5
+                    done
+                    echo "switch $switch is up"
+                done | tee switches
+           ```
 
     1. Check Lustre server health.
 
@@ -207,7 +234,7 @@ An authentication token is required to access the API gateway and to use the `sa
 1.  Check for running sessions.
 
     ```bash
-    sat bootsys shutdown --stage session-checks | tee sat.session-checks
+    sat bootsys shutdown --stage session-checks 2>&1 | tee sat.session-checks
     ```
 
     Example output:
@@ -331,6 +358,12 @@ An authentication token is required to access the API gateway and to use the `sa
     There is no method to prevent new sessions from being created as long as the service APIs are accessible on the API gateway.
 
 1.  Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, see the `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
+
+    Below is an example of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
+
+    ```bash
+    scontrol update NodeName=scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown" State=DRAIN Reason=<reason>
+    ```
 
 ## Next Step
 
