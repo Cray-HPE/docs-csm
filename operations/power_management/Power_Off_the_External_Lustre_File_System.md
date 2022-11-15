@@ -45,7 +45,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     . . .
     ```
 
-1.  Stop the Lustre file system.
+1.  Stop the Lustre file system (`FILESYSTEM_NAME` will be reported from the `cscli fs_info` command run above).
 
     ```bash
     [n000]# cscli unmount -f FILESYSTEM_NAME
@@ -70,7 +70,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     cls01234n006_md7-fsys (ocf::heartbeat:XYMNTR): Stopped
     ```
 
-1.  SSH to the MGS node.
+1.  SSH to the MGS node (the `MGS_NODE` name will be reported from the `cscli fs_info` command run above).
 
     ```bash
     ssh MGS_NODE
@@ -92,7 +92,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     cls01234n003_md65-fsys (ocf::heartbeat:XYMNTR): Started
     ```
 
-1.  If the node is not stopped, issue the `stop_xyraid` command and verify that the node is stopped:
+    If the output above shows a partial stopped state (`Stopped` and `Started`), issue the `stop_xyraid` command and verify that the node is stopped:
 
     ```bash
     [MGS]# stop_xyraid nodename_md65-group
@@ -110,45 +110,42 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
 1. Power off the non-MGMT diskless nodes.
 
-    ```bash
-    cscli power_manage -n DISKLESS_NODES[XX-YY --power-off
-    ```
 
-1. Check power state of all non-MGMT nodes and list the node hostnames \(in this example `cls01234n[02-15]`\) before power off.
+  1. Check power state of all non-MGMT nodes and list the node hostnames \(in this example `cls01234n[02-15]`\) before power off.
+  
+      ```bash
+      pm -q
+      ```
+  
+      Example output:
+  
+      ```
+      on: cls01234n[000-001]
+      on: cls01234n[002-015]
+      unknown:
+      ```
+  
+  1. Power off all non-MGMT nodes.
+  
+      ```bash
+      [n00]$ cscli power_manage -n cls01234n[02-15] --power-off
+      ```
+  
+  1. Check the power status of the nodes.
+  
+      ```bash
+      pm -q
+      ```
+  
+      Example output:
+  
+      ```
+      on: cls01234n[000-001]
+      off: cls01234n[002-015]
+      unknown:
+      ```
 
-    ```bash
-    pm –q
-    ```
-
-    Example output:
-
-    ```
-    on: cls01234n[000-001]
-    on: cls01234n[002-015]
-    unknown:
-    ```
-
-1. Power off all non-MGMT nodes.
-
-    ```bash
-    [n00]$ cscli power_manage -n cls01234n[02-15] --power-off
-    ```
-
-1. Check the power status of the nodes.
-
-    ```bash
-    pm –q
-    ```
-
-    Example output:
-
-    ```
-    on: cls01234n[000-001]
-    off: cls01234n[002-015]
-    unknown:
-    ```
-
-1. Repeat step 14 until all non-MGMT nodes are powered off.
+1. Repeat step 11 until all non-MGMT nodes are powered off.
 
 1. From the primary MGMT node, power off the MGMT nodes:
 
