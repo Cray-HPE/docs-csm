@@ -73,3 +73,25 @@ argo -n argo submit --from workflowtemplate/nexus-docker-upload-template \
   --parameter-file $PRODUCTS_DIR/$PRODUCT/iuf-manifest.yaml \
   --watch
 ```
+
+## `nexus-rpm-upload-template.yaml`
+
+This template will upload content for one or more type "raw" or "yum" repositories into Nexus.
+
+Create the template in Argo by running:
+
+```bash
+argo -n argo template create nexus-rpm-upload-template.yaml
+```
+
+The example below shows how to submit the template using the current required parameters. This example requires the existence
+of the product at `$PRODUCTS_DIR`/`$PRODUCT` and requires the `$NEXUS_SETUP_IMAGE` to be present in Nexus.
+
+```bash
+argo -n argo submit --from workflowtemplate/nexus-rpm-upload-template \
+  -p product=$PRODUCT \
+  -p product_host_path=$PRODUCTS_DIR \
+  -p nexus_setup_image=$NEXUS_SETUP_IMAGE \
+  --parameter-file $PRODUCTS_DIR/$PRODUCT/iuf-manifest.yaml \
+  --watch
+```
