@@ -23,38 +23,36 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-set -euo pipefail
-
 function deployNLS() {
     BUILDDIR="/tmp/build"
     mkdir -p "$BUILDDIR"
     kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${BUILDDIR}/customizations.yaml"
-    manifestgen -i "${CSM_ARTI_DIR}/manifests/platform.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/platform.yaml"
+    kubectl get configmap -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > "${BUILDDIR}/iuf.yaml"
+    manifestgen -i "${BUILDDIR}/iuf.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/platform.yaml"
+    yq w -i "${BUILDDIR}/platform.yaml" 'spec.charts[0].version' "$2"
     charts="$(yq r /tmp/build/platform.yaml 'spec.charts[*].name')"
     for chart in $charts; do
-        if [[ $chart != "cray-iuf" ]] && [[ $chart != "cray-nls" ]] && [[ $chart != "cray-opa" ]] && [[ $chart != "cray-drydock" ]] && [[ $chart != "cray-oauth2-proxies" ]]; then 
+        if [[ $chart != "cray-iuf" ]] && [[ $chart != "cray-nls" ]]; then 
             yq d -i /tmp/build/platform.yaml "spec.charts.(name==$chart)"
         fi
     done
 
     yq d -i /tmp/build/platform.yaml "spec.sources"
 
-    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path /tmp/build/platform.yaml
+    loftsman ship --charts-path "$1" --manifest-path /tmp/build/platform.yaml
 }
 
-function patchKeycloak() {
-    ARGO_URL=$(kubectl get VirtualService/cray-argo -n argo -o json | jq -r '.spec.hosts[0]')
-    KC_CLIENT_ID=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.client-id}' -n services | base64 -d)
-    KC_USERNAME=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.user}' -n services | base64 -d)
-    KC_PASSWORD=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.password}' -n services | base64 -d)
+if [[ -z $1 ]]; then
+    CHART_PATH="${CSM_ARTI_DIR}/helm/"
+else
+    CHART_PATH="$1"
+fi
+set -euo pipefail
+echo "Get NLS chart version"
+tarFileName=$(ls -l "$CHART_PATH" | awk '{print $9}' | grep "cray-nls")
+tarFileName=${tarFileName#"cray-nls-"}
+version=${tarFileName%".tgz"}
+echo "Version: $version"
 
-    export ARGO_URL="${ARGO_URL}"
-    export KC_CLIENT_ID="${KC_CLIENT_ID}"
-    export KC_USERNAME="${KC_USERNAME}"
-    export KC_PASSWORD="${KC_PASSWORD}"
-    
-    python /usr/share/doc/csm/upgrade/scripts/upgrade/util/nls-keycloak-configure.py
-}
 
-deployNLS
-patchKeycloak
+deployNLS "$CHART_PATH" "$version"
