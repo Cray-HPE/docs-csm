@@ -21,18 +21,57 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-"""Shared Python function library"""
+"""Shared Python function library: basic functions"""
 
+import logging
 import sys
+import traceback
 
-def stdout_write_flush(msg):
-    sys.stdout.write(msg)
-    sys.stdout.flush()
 
-def err(msg):
-    sys.stderr.write("ERROR: {}\n".format(msg))
+class ScriptException(Exception):
+    """
+    Generic script exception class
+    """
+
+
+def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+    """
+    1) If a parent exception is passed in, make a debug log entry with its stack trace.
+    2) Log an error with the specified message.
+    3) Raise a ScriptException with the specified message (from the parent exception, if
+       specified)
+    """
+    if parent_exception is not None:
+        logging.debug(traceback.format_exc())
+    logging.error(msg)
+    if parent_exception is None:
+        raise ScriptException(msg)
+    raise ScriptException(msg) from parent_exception
+
+
+def print_err_exit(msg: str) -> None:
+    """
+    Print the specified error message to stderr and exit the script with return code 1
+    """
+    sys.stderr.write(f"ERROR: {msg}\n")
     sys.stderr.flush()
-
-def err_exit(msg):
-    err(msg)
     sys.exit(1)
+
+
+def read_file(filename: str, min_length: int = 4) -> str:
+    """
+    Reads contents of text file, verifies it is more than the specified length,
+    and returns it as a string.
+    """
+    logging.info(f"Reading in file '{filename}'")
+    try:
+        with open(filename, "rt", encoding="utf-8") as textfile:
+            contents = textfile.read()
+    except FileNotFoundError:
+        log_error_raise_exception(f"File '{filename}' does not exist")
+    if min_length > 0:
+        file_len = len(contents)
+        if file_len < min_length:
+            log_error_raise_exception(
+                f"File '{filename}' only contains {file_len} characters")
+    return contents
