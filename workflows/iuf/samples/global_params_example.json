@@ -66,16 +66,16 @@
     },
     "products": {
       "cos": {
-        "vcs_branch": "integration-2.5.34",
+        "working_branch": "integration-2.5.34",
         "some_cos_site_parameter": "lorem ipsum"
       },
       "sdu": {
-        "vcs_branch": "integration-1.2.3",
+        "working_branch": "integration-1.2.3",
         "some_sdu_site_parameter": "lorem ipsum"
       }
     },
     "current_product": {
-      "vcs_branch": "integration-2.5.34",
+      "working_branch": "integration-2.5.34",
       "some_cos_site_parameter": "lorem ipsum"
     }
   },
