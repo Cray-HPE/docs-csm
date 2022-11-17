@@ -48,17 +48,17 @@ stages:
           local-path: operations/s3-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
         - name: nexus-setup
-          local-path: nexus-setup/nexus-setup-template.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
+          local-path: operations/nexus-setup/nexus-setup-template.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: # any parameters that will be supplied statically to this operation.
             nexus-setup-image: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.0-20221021164623-e8d3d3d
         - name: nexus-rpm-upload
-          local-path: operations/nexus-rpm-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
+          local-path: operations/nexus-setup/nexus-rpm-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
         - name: nexus-docker-upload
-          local-path: operations/nexus-docker-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
+          local-path: operations/nexus-setup/nexus-docker-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
         - name: nexus-helm-upload
-          local-path: operations/nexus-helm-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
+          local-path: operations/nexus-setup/nexus-helm-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
           static-parameters: {} # any parameters that will be supplied statically to this operation.
         - name: vcs-upload
           local-path: operations/vcs-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
