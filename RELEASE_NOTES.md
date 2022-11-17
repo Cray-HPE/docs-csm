@@ -12,13 +12,13 @@
 
 ### DHCP
 
-#### Changed
+#### Changed in DHCP
 
 * **Kea**: Fixed a bug that could cause the auto-repair logic to fail due to an incorrect index
 
 ### DNS
 
-#### Changed
+#### Changed in DNS
 
 * **`ExternalDNS`**: Fixed a bug where `cray-externaldns-manager` could panic if it couldn't connect to PowerDNS on startup
 * **PowerDNS**: Changed `powerdns-manager` SLS error message to debug
@@ -30,17 +30,17 @@
 
 ### Management Network
 
-#### Added
+#### Added in Management Network
 
 * **Documentation**: Added procedure to migrate from the customer access network (CAN) to the customer high-speed network (CHN), allowing user traffic over
   the HSN instead of the NMN (This is an extension of the `bi-furcated` CAN feature that shipped in CSM 1.2)
 * **Documentation**: Added various troubleshooting guides
 * **Hardware**: Validated the Aruba 8360 (JL705C) switch for the management network
 
-#### Changed
+#### Changed in Management Network
 
 * **CANU**: Fixed bug where UAN VLANs in generated switch configurations were wrong when using the CHN
-* **CANU**: Other various bug fixes (see https://github.com/cray-hpe/canu for a full changelog)
+* **CANU**: Other various bug fixes (see [CANU `Github` Page](https://github.com/cray-hpe/canu) for a full changelog)
 * **CANU**: Added an ACL on systems with Dell and Mellanox switches to prevent high-speed network (HSN) switches on the Hardware Management Network (HMN)
   from communicating with the Fabric Manager service on the Node Management Network (NMN) API gateway
 * **CSI**: Fixed bug where CSI could generate bad SLS chassis data
@@ -51,11 +51,11 @@
 
 ### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
 
-#### Added
+#### Added in Management Nodes
 
 * **ALL**: Initial support for NVME drives
 
-#### Changed
+#### Changed in Management Nodes
 
 * **All**: Updated kernel to `kernel-default-5.3.18-150300.59.87.1`
 * **All**: Various package updates to apply latest security patches
@@ -73,18 +73,17 @@
 
 ### User Application Nodes (UAN)
 
-#### Added
+#### Added in UAN
 
 * **UAN**: Initial release of UAN images based on kernels without modifications (technical preview)
 * **Documentation**: Added procedure for re-purposing compute nodes as UAN's (only applicable in specific scenarios)
 * **Documentation**: Added instructions to set/trim the boot order on UANs
 
-#### Changed
+#### Changed in UAN
 
 * **UAN**: Pressure Stall Information (PSI) is now enabled by default on COS-based images
 * **UAN**: Updated to the latest COS image
 * **UAN**: Network changes related to the CAN and CHN may impact VLAN tagging on management network ports connected to UANs to ensure proper network traffic segregation.
-
 
 ### Miscellaneous functionality
 
@@ -184,7 +183,7 @@
 
 The following features are now deprecated and will be removed from CSM in a future release.
 
-* [BOS](glossary.md#boot-orchestration-service-bos) v1 is now deprecated, in favor of BOS v2. BOS v1 will be removed from CSM in the CSM-1.9 release.
+* [BOS](glossary.md#boot-orchestration-service-bos) v1 is now deprecated, in favor of BOS v2. BOS v1 will be removed from CSM in the `CSM-1.9` release.
   * It is likely that even prior to BOS v1 being removed from CSM, the [Cray CLI](glossary.md#cray-cli-cray) will change its behavior when no
     version is explicitly specified in BOS commands. Currently it defaults to BOS v1, but it may change to default to BOS v2 even before BOS v1
     is removed from CSM.
@@ -199,6 +198,9 @@ see [Deprecated Features](introduction/deprecated_features/README.md).
 ## Known issues
 
 * UAIs use a default route that sends outbound packets over the CMN, this will be addressed in a future release so that the default route uses the CAN/CHN.
+
+* On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like `slurm` and services that are backed by `etcd` clusters to exhibit slowness and possible timeouts.
+See [Known Issue: Ceph OSD latency](troubleshooting/known_issues/ceph_osd_latency.md) for a workaround.
 
 ### Security vulnerability exceptions in CSM 1.3
 
