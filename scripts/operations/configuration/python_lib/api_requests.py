@@ -1,0 +1,101 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+"""Shared Python function library: API requests"""
+
+import logging
+import time
+import traceback
+from typing import Callable
+
+from . import common
+
+
+def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+    """
+    1) If a parent exception is passed in, make a debug log entry with its stack trace.
+    2) Log an error with the specified message.
+    3) Raise a ScriptException with the specified message (from the parent exception, if
+       specified)
+    """
+    if parent_exception is not None:
+        logging.debug(traceback.format_exc())
+    logging.error(msg)
+    if parent_exception is None:
+        raise common.ScriptException(msg)
+    raise common.ScriptException(msg) from parent_exception
+
+
+def make_api_request_with_retries(request_method: Callable,
+                                  url: str,
+                                  expected_status_code: int,
+                                  **request_kwargs):
+    """
+    Makes request with specified method to specified URL with specified keyword arguments (if any).
+    If the expected status code is returned, then the response body is returned (or None, if empty).
+    If a 5xx status code is returned, the request will be retried after a brief wait, a limited
+    number of times.
+    If the expected status code is never returned (or an unexpected and non-5xx status code is
+    ever returned), then raise an exception
+    """
+    try:
+        method_name = request_method.__name__.upper()
+    except Exception as e:
+        log_error_raise_exception(
+            "Unexpected error determining API request method name", e)
+
+    count = 0
+    max_attempts = 6
+    while count < max_attempts:
+        count += 1
+        logging.info(f"Making {method_name} request to {url}")
+        try:
+            resp = request_method(url, **request_kwargs)
+        except Exception as e:
+            log_error_raise_exception(
+                f"Error making {method_name} request to {url}", e)
+        logging.debug(f"Response status code = {resp.status_code}")
+        if resp.status_code == expected_status_code:
+            if resp.text:
+                try:
+                    return resp.json()
+                except Exception as e:
+                    logging.debug(f"Response reason = {resp.reason}")
+                    logging.debug(f"Response text = {resp.text}")
+                    log_error_raise_exception(
+                        f"Error parsing {url} {method_name} response as JSON", e)
+            else:
+                return None
+        logging.debug(f"Response reason = {resp.reason}")
+        logging.debug(f"Response text = {resp.text}")
+        if not 500 <= resp.status_code <= 599:
+            log_error_raise_exception(
+                "Unexpected status code received in response to API request."
+                f"Received {resp.status_code}, expecting {expected_status_code}")
+        elif count >= max_attempts:
+            log_error_raise_exception(
+                f"API request unsuccessful even after {max_attempts} attempts")
+        logging.info("Sleeping 3 seconds before retrying..")
+        time.sleep(3)
+    log_error_raise_exception(
+        "PROGRAMMING LOGIC ERROR: make_api_request_with_retries function should get here")
