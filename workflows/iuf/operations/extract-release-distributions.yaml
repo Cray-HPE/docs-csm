@@ -49,8 +49,8 @@ spec:
           productName="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.name')}}"
           echo "Extract from: $tarfile for product: $productName"
           dir=$(dirname "$tarfile")
-          output=${tarfile%.tar.*}
-          echo ${output} > /tmp/parent_directory
+          parent_directory=${tarfile%.tar.*}
+          echo ${parent_directory} > /tmp/parent_directory
           cd $dir
           tar -xvzf $tarfile
         volumeMounts:
