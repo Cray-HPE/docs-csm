@@ -5,7 +5,7 @@
 
 ## Procedure
 
-1. (`ncn-m002#`) Apply a workaround for the boot order:
+1. (`ncn-m001#`) Apply a workaround for the boot order:
 
 ```bash
 /usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
