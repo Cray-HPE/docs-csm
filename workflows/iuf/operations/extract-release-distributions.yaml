@@ -48,7 +48,7 @@ spec:
           tarfile="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.original_location')}}"
           productName="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.name')}}"
           echo "Extract from: $tarfile for product: $productName"
-          dir=$(echo "$tarfile" | sed 's|\(.*\)/.*|\1|')
+          dir=$(dirname "$tarfile")
           output=${tarfile%.tar.*}
           echo ${output} > /tmp/parent_directory
           cd $dir
