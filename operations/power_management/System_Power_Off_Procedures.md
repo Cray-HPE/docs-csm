@@ -22,7 +22,7 @@ To save management switch configuration settings, refer to [Save Management Netw
 
 ## Power Off System Cabinets
 
-To power off standard rack and liquid-cooled cabinet PDUs, refer to [Power Off Compute and IO Cabinets](Power_Off_Compute_and_IO_Cabinets.md).
+To power off standard rack and liquid-cooled cabinet PDUs, refer to [Power Off Compute Cabinets](Power_Off_Compute_Cabinets.md).
 
 ## Shut Down the Management Kubernetes Cluster
 
