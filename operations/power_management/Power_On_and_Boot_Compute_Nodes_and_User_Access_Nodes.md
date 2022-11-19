@@ -12,7 +12,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 ## Procedure
 
-1. Check whether CFS has run NCN personalization on the management nodes.
+1. (`ncn-m001#`) Check whether CFS has run NCN personalization on the management nodes.
 
     If a node has its `Configuration Status` set to `configured`, then that node has completed all configuration layers for post-boot CFS.
 
@@ -21,7 +21,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     If any nodes have `Configuration Status` set to `failed` with `Error Count` great than `0`, then the node was unable to complete a layer of configuration.
 
     ```bash
-    ncn-m001# sat status --filter role=management --filter enabled=true --fields \
+    sat status --filter role=management --filter enabled=true --fields \
                   xname,aliases,role,subrole,"desired config","configuration status","error count"
     ```
 
@@ -48,7 +48,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     1. If some nodes are not fully configured, then find any CFS sessions in progress.
 
         ```bash
-        ncn-m001# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+        kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
         ```
 
         Example output:
@@ -63,18 +63,50 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     1. Inspect all layers of Ansible configuration to find a failed layer.
 
         ```bash
-        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
-        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
-        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
-        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
-        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
-        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
-        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
-        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
-        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
         ```
 
-1. List detailed information about the available boot orchestration service \(BOS\) session template names.
+1. (`ncn-m001#`) Check that the slingshot switches are all online.
+
+    If BOS will be used to boot computes and if DVS is configured to use HSN, then check the fabric manager switches to ensure the switches are all online
+    before attempting to boot computes.
+
+    ```bash
+    kubectl exec slingshot-fabric-manager-c8f64d665-mbn59 -n services -it -- fmn_status -q
+    ```
+
+    Example output:
+
+    ```text
+    ------------------------------------------
+    Topology Status
+    Active: template-policy
+    Health
+    ------
+    Runtime:HEALTHY
+    Configuration:HEALTHY
+    Traffic:HEALTHY
+    Security:HEALTHY
+    For more detailed Health - run 'fmctl get health-engines/template-policy'
+
+
+    ============================
+    Edge Total: 17 Online: 13, Offline: 4
+    Fabric Total: 0 Online: 0, Offline: 0
+    Ports Reported: 17 / 17
+    ============================
+    Offline Switches:
+    ```
+
+1. (`ncn-m001#`) List detailed information about the available boot orchestration service \(BOS\) session template names.
 
     Identify the BOS session template names (such as `"cos-2.0.x"`, `slurm`, or `uan-slurm`), and choose the appropriate compute and UAN node templates for the power on and boot.
 
@@ -96,13 +128,13 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     description = "Template for booting UANs with Slurm"
     ```
 
-1. To display more information about a session template, for example `cos-2.0.0`, use the `describe` option.
+1. (`ncn-m001#`) To display more information about a session template, for example `cos-2.0.0`, use the `describe` option.
 
     ```bash
     cray bos sessiontemplate describe cos-2.0.x
     ```
 
-1. Use `sat bootsys boot` to power on and boot UANs and compute nodes.
+1. (`ncn-m001#`) Use `sat bootsys boot` to power on and boot UANs and compute nodes.
 
     **Attention:** Specify the required session template name for `COS_SESSION_TEMPLATE` and `UAN_SESSION_TEMPLATE` in the following command line.
 
@@ -134,7 +166,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
     Note the returned job ID for each session; for example: `"boa-caa15959-2402-4190-9243-150d568942f6"`
 
-1. Use the job ID strings to monitor the progress of the boot job.
+1. (`ncn-m001#`) Use the job ID strings to monitor the progress of the boot job.
 
     **Tip:** The commands needed to monitor the progress of the job are provided in the output of the `sat bootsys boot` command.
 
@@ -142,7 +174,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     kubectl -n services logs -c boa -f --selector job-name=boa-caa15959-2402-4190-9243-150d568942f6
     ```
 
-1. In another shell window, use a similar command to monitor the UAN session.
+1. (`ncn-m001#`) In another shell window, use a similar command to monitor the UAN session.
 
     ```bash
     kubectl -n services logs -c boa -f --selector job-name=boa-a1a697fc-e040-4707-8a44-a6aef9e4d6ea
@@ -150,7 +182,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 1. Wait for compute nodes and UANs to boot and check the Configuration Framework Service \(CFS\) log for errors.
 
-1. Verify that nodes have booted and indicate `Ready`.
+1. (`ncn-m001#`) Verify that nodes have booted and indicate `Ready`.
 
     ```bash
     sat status

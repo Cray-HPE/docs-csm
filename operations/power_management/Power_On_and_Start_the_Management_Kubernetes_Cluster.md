@@ -68,7 +68,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
     1. (`remote#`) Power cycle again to boot into `ncn-m001`.
 
-    > In the example commands below, replace `NCN_M001_BMC_HOSTNAME` with the hostname of the BMC of `ncn-m001`.
+         > In the example commands below, replace `NCN_M001_BMC_HOSTNAME` with the hostname of the BMC of `ncn-m001`.
 
         ```bash
         ipmitool -I lanplus -U "${USERNAME}" -E -H NCN_M001_BMC_HOSTNAME chassis power on

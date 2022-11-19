@@ -110,39 +110,39 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
 1. Power off the non-MGMT diskless nodes.
 
-  1. Check power state of all non-MGMT nodes and list the node hostnames \(in this example `cls01234n[02-15]`\) before power off.
+    1. Check power state of all non-MGMT nodes and list the node hostnames \(in this example `cls01234n[02-15]`\) before power off.
   
-      ```bash
-      pm -q
-      ```
+        ```bash
+        pm -q
+        ```
   
-      Example output:
+        Example output:
   
-      ```text
-      on: cls01234n[000-001]
-      on: cls01234n[002-015]
-      unknown:
-      ```
+        ```text
+        on: cls01234n[000-001]
+        on: cls01234n[002-015]
+        unknown:
+        ```
   
-  1. Power off all non-MGMT nodes.
+    1. Power off all non-MGMT nodes.
   
-      ```bash
-      [n00]$ cscli power_manage -n cls01234n[02-15] --power-off
-      ```
+        ```bash
+        [n00]$ cscli power_manage -n cls01234n[02-15] --power-off
+        ```
   
-  1. Check the power status of the nodes.
+    1. Check the power status of the nodes.
   
-      ```bash
-      pm -q
-      ```
+        ```bash
+        pm -q
+        ```
   
-      Example output:
+        Example output:
   
-      ```text
-      on: cls01234n[000-001]
-      off: cls01234n[002-015]
-      unknown:
-      ```
+        ```text
+        on: cls01234n[000-001]
+        off: cls01234n[002-015]
+        unknown:
+        ```
 
 1. Repeat step 11 until all non-MGMT nodes are powered off.
 

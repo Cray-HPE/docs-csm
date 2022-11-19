@@ -6,7 +6,7 @@ The `sat bootsys shutdown` and `sat bootsys boot` commands are used to shut down
 
 ## Prerequisites
 
-An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the 
+An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the
 HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
 ## Procedure
@@ -92,7 +92,6 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        ```text
        node_roles_groups = [ "Compute",]
        ```
-
 
 1. Use sat to capture state of the system before the shutdown.
 
@@ -182,6 +181,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         kubectl exec -it -n services slingshot-fabric-manager-5dc448779c-d8n6q \
                      -c slingshot-fabric-manager -- fmn_status --details | tee fabric.status
         ```
+
     1. Check management switches to verify they are reachable.
 
         > *Note:* The switch host names depend on the system configuration.
@@ -330,8 +330,8 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Delete the BOA job(s).
 
         ```bash
-        kubectl -n services delete job <BOA JOB ID>
-	```
+        kubectl -n services delete job <boa-job-id>
+        ```
 
         This will kill the BOA job and the BOS session associated with it.
 
@@ -360,10 +360,14 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 1. Follow the vendor workload manager documentation to drain processes running on compute nodes. For Slurm, see the `scontrol` man page. For PBS Professional, see the `pbsnodes` man page.
 
-    Below is an example of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
+    Below are examples of how to drain nodes using `slurm`. The list of nodes can be copy/pasted from the `sinfo` command for nodes in an `idle` state:
 
     ```bash
-    scontrol update NodeName=scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown" State=DRAIN Reason=<reason>
+    scontrol update NodeName=nid[001001-001003,001005] State=DRAIN Reason="Shutdown"
+    ```
+
+    ```bash
+    scontrol update NodeName=ALL State=DRAIN Reason="Shutdown"
     ```
 
 ## Next Step
