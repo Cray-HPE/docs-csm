@@ -80,7 +80,8 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     before attempting to boot computes.
 
     ```bash
-    kubectl exec slingshot-fabric-manager-c8f64d665-mbn59 -n services -it -- fmn_status -q
+    kubectl exec -it -n services "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager -n services --no-headers | head -1 | awk '{print $1}')" \
+            -c slingshot-fabric-manager -- fmn_status -q
     ```
 
     Example output:
