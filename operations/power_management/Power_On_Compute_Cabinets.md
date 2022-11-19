@@ -1,4 +1,4 @@
-# Power On Compute and IO Cabinets
+# Power On Compute Cabinets
 
 Power on liquid-cooled and standard rack cabinet PDUs.
 
@@ -43,8 +43,12 @@ power-on command from Cray System Management \(CSM\) software.
 
 1. Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets chassis and slots.
 
+   Note that the default timeout for powering the compute cabinets is 60 seconds, which is generally too low.
+   To avoid needing to re-run the command in the event of a timeout, increase the timeout using the `--discovery-timeout` option.
+   See `sat bootsys boot --help` for additional information and options.
+
    ```console
-   sat bootsys boot --stage cabinet-power
+   sat bootsys boot --stage cabinet-power --discovery-timeout 600
    ```
 
    This command resumes the `hms-discovery` job which initiates power-on of the liquid-cooled cabinets. The `--stage cabinet-power`
@@ -67,21 +71,15 @@ power-on command from Cray System Management \(CSM\) software.
 
 ### Power On Standard Rack PDU Circuit Breakers
 
-1. Switch the standard rack compute and I/O cabinet PDU circuit breakers to ON.
+1. Switch the standard rack compute cabinet PDU circuit breakers to ON.
 
-   This applies power to the server BMCs and connects them to the management network. Compute and I/O nodes
+   This applies power to the server BMCs and connects them to the management network. Compute nodes
    **do not power on and boot automatically**. The Boot Orchestration Service \(BOS\) brings up compute nodes and User Access Nodes \(UANs\).
 
    If necessary, use IPMI commands to power on individual servers as needed.
 
 1. Verify that all system management network switches and Slingshot network switches are powered on in each rack, and that
    there are no error LEDS or hardware failures.
-
-1. Bring up the Slingshot Fabric.
-   Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
-
-      * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
-      * The *HPE Slingshot Troubleshooting* PDF.
 
 ## Next Step
 

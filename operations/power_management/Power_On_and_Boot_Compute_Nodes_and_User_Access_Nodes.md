@@ -7,14 +7,72 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 ## Prerequisites
 
 * All compute cabinet PDUs, servers, and switches must be powered on.
-* The Slingshot Fabric is up and configured.
-  Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
-  * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
-  * The *HPE Slingshot Troubleshooting* PDF.
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section
   of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
 
 ## Procedure
+
+1. Check whether CFS has run NCN personalization on the management nodes.
+
+    If a node has its `Configuration Status` set to `configured`, then that node has completed all configuration layers for post-boot CFS.
+
+    If any nodes have `Configuration Status` set to `pending`, then there should be a CFS session in progress which includes that node.
+
+    If any nodes have `Configuration Status` set to `failed` with `Error Count` set to `3`, then the node was unable complete a layer of configuration.
+
+    ```bash
+    ncn-m001# sat status --filter role=management --filter enabled=true --fields \
+                  xname,aliases,role,subrole,"desired config","configuration status","error count"
+    ```
+
+    Example output:
+
+    ```text
+    +----------------+----------+------------+---------+---------------------+----------------------+-------------+
+    | xname          | Aliases  | Role       | SubRole | Desired Config      | Configuration Status | Error Count |
+    +----------------+----------+------------+---------+---------------------+----------------------+-------------+
+    | x3000c0s1b0n0  | ncn-m001 | Management | Master  | ncn-personalization | configured           | 0           |
+    | x3000c0s3b0n0  | ncn-m002 | Management | Master  | ncn-personalization | configured           | 0           |
+    | x3000c0s5b0n0  | ncn-m003 | Management | Master  | ncn-personalization | configured           | 0           |
+    | x3000c0s7b0n0  | ncn-w001 | Management | Worker  | ncn-personalization | failed               | 3           |
+    | x3000c0s9b0n0  | ncn-w002 | Management | Worker  | ncn-personalization | failed               | 3           |
+    | x3000c0s11b0n0 | ncn-w003 | Management | Worker  | ncn-personalization | failed               | 3           |
+    | x3000c0s13b0n0 | ncn-w004 | Management | Worker  | ncn-personalization | pending              | 2           |
+    | x3000c0s17b0n0 | ncn-s001 | Management | Storage | ncn-personalization | configured           | 0           |
+    | x3000c0s19b0n0 | ncn-s002 | Management | Storage | ncn-personalization | configured           | 0           |
+    | x3000c0s21b0n0 | ncn-s003 | Management | Storage | ncn-personalization | configured           | 0           |
+    | x3000c0s25b0n0 | ncn-w005 | Management | Worker  | ncn-personalization | pending              | 2           |
+    +----------------+----------+------------+---------+---------------------+----------------------+-------------+
+    ```
+
+    1. If some nodes are not fully configured, then find any CFS sessions in progress.
+
+        ```bash
+        ncn-m001# kubectl -n services --sort-by=.metadata.creationTimestamp get pods | grep cfs
+        ```
+
+        Example output:
+
+        ```text
+        cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk                    7/9     Error       0          21m
+        cfs-157af6d5-b63d-48ba-9eb9-b33af9a8325d-tfj8x                    3/9     Not Ready   0          11m
+        ```
+
+        CFS sessions which are in `Not Ready` status are still in progress. CFS sessions with status `Error` had a failure in one of the layers.
+
+    1. Inspect all layers of Ansible configuration to find a failed layer.
+
+        ```bash
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
+        ncn-m001# kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
+        ```
 
 1. List detailed information about the available boot orchestration service \(BOS\) session template names.
 
