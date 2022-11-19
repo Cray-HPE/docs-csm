@@ -1,4 +1,4 @@
-# Power Off Compute and IO Cabinets
+# Power Off Compute Cabinets
 
 Power off HPE Cray EX liquid-cooled and standard racks.
 

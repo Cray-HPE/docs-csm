@@ -8,7 +8,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 * All compute cabinet PDUs, servers, and switches must be powered on.
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section
-  of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (S-8031) for instructions on how to acquire a SAT authentication token.
+  of the HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 
 ## Procedure
 
@@ -18,7 +18,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
     If any nodes have `Configuration Status` set to `pending`, then there should be a CFS session in progress which includes that node.
 
-    If any nodes have `Configuration Status` set to `failed` with `Error Count` set to `3`, then the node was unable complete a layer of configuration.
+    If any nodes have `Configuration Status` set to `failed` with `Error Count` great than `0`, then the node was unable to complete a layer of configuration.
 
     ```bash
     ncn-m001# sat status --filter role=management --filter enabled=true --fields \
