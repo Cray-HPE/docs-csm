@@ -477,9 +477,9 @@ Verify that the Lustre file system is available from the management cluster.
 
     See [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
 
-### Check `cronjob`s
+### Check `cronjobs`
 
-1. (`ncn-m001#`) Display all the Kubernetes `cronjob`s.
+1. (`ncn-m001#`) Display all the Kubernetes `cronjobs`.
 
     ```bash
     kubectl get cronjobs.batch -A
@@ -503,9 +503,9 @@ Verify that the Lustre file system is available from the management cluster.
     **Attention:** It is normal for the `hms-discovery` service to be suspended at this point if liquid-cooled cabinets have not been powered on. The `hms-discovery` service is
     un-suspended during the liquid-cooled cabinet power on procedure. Do not recreate the `hms-discovery` `cronjob` at this point.
 
-1. Check for `cronjob`s that have a `LAST SCHEDULE` time that is older than the `SCHEDULE` time. These `cronjob`s must be restarted.
+1. Check for `cronjobs` that have a `LAST SCHEDULE` time that is older than the `SCHEDULE` time. These `cronjobs` must be restarted.
 
-1. (`ncn-m001#`) Check any `cronjob`s in question for errors.
+1. (`ncn-m001#`) Check any `cronjobs` in question for errors.
 
     ```bash
     kubectl describe cronjobs.batch -n kube-system kube-etcdbackup | egrep -A 15 Events
@@ -523,7 +523,7 @@ Verify that the Lustre file system is available from the management cluster.
                                                                               or check clock skew
     ```
 
-1. (`ncn-m001#`) For any `cronjob`s producing errors, get the YAML representation of the `cronjob` and edit the YAML file:
+1. (`ncn-m001#`) For any `cronjobs` producing errors, get the YAML representation of the `cronjob` and edit the YAML file:
 
     ```bash
     cd ~/k8s
