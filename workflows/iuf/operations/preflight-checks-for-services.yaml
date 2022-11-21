@@ -34,6 +34,10 @@ spec:
   entrypoint: main
   templates:
     - name: main
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
       dag:
         tasks:
           - name: preflight-checks
