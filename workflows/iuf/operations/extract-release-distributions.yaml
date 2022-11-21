@@ -48,9 +48,16 @@ spec:
           tarfile="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.original_location')}}"
           productName="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.name')}}"
           echo "Extract from: $tarfile for product: $productName"
-          dir=$(echo "$tarfile" | sed 's|\(.*\)/.*|\1|')
+          dir=$(dirname "$tarfile")
+          parent_directory=${tarfile%.tar.*}
+          echo ${parent_directory} > /tmp/parent_directory
           cd $dir
           tar -xvzf $tarfile
         volumeMounts:
           - name: iuf
             mountPath: /etc/iuf
+      outputs:
+        parameters:
+          - name: parent_directory
+            valueFrom:
+              path: /tmp/parent_directory
