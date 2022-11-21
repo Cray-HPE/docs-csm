@@ -23,7 +23,7 @@ ncn-m# curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscript
 * If the subscription number is increasing, the BMC will need to be reset.
 * If there are no subscriptions, the BMC will need to be reset.
 
-Reset BMC with ipmitool
+Reset BMC with `ipmitool`
 ```bash
 ncn-m# ipmitool -H $BMC -U root -P $PASSWD -I lanplus mc reset cold
 ```
