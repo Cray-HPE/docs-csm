@@ -41,24 +41,32 @@ power-on command from Cray System Management \(CSM\) software.
 
    ![PSU Status LEDs](../../img/operations/PSU_Status.svg)
 
-1. Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets chassis and slots.
-
-   Note that the default timeout for powering the compute cabinets is 60 seconds, which is generally too low.
-   To avoid needing to re-run the command in the event of a timeout, increase the timeout using the `--discovery-timeout` option.
-   See `sat bootsys boot --help` for additional information and options.
+1. (`ncn-m001#`) Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets, chassis, and slots.
 
    ```console
-   sat bootsys boot --stage cabinet-power --discovery-timeout 600
+   sat bootsys boot --stage cabinet-power
    ```
 
-   This command resumes the `hms-discovery` job which initiates power-on of the liquid-cooled cabinets. The `--stage cabinet-power`
-   option controls power only to liquid-cooled cabinets.
+   This command first resumes the `hms-discovery` Kubernetes cronjob and waits for it to be
+   scheduled. Then, the `hms-discovery` job initiates power-on of the liquid-cooled cabinets.
+   Finally, the `sat bootsys` command waits for the components in the liquid-cooled cabinets to be
+   powered on. The `sat bootsys` command controls power only to liquid-cooled cabinets.
 
-   If `sat bootsys` fails to schedule `hms-discovery` with the following message, then delete and recreate the cron job.
+   The `sat bootsys` command may time out while waiting for the `hms-discovery` cronjob to be
+   scheduled and display the following message:
 
    ```text
    ERROR: The cronjob hms-discovery in namespace services was not scheduled within expected window after being resumed.
    ```
+
+   If this occurs, first check if the cronjob needs to be re-created. To do this, follow the instructions
+   in the [Check `cronjobs`](Power_On_and_Start_the_Management_Kubernetes_Cluster.md#check-cronjobs)
+   section of the [Power On and Start the Management Kubernetes Cluster](Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
+   procedure.
+
+   If the cronjob does not need to be re-created and has been scheduled within the time expected
+   (based on its cron schedule), execute the `sat bootsys boot --stage cabinet-power` command
+   again.
 
    If `sat bootsys` fails to power on the cabinets through `hms-discovery`, then use CAPMC to manually power on the cabinet chassis,
    compute blade slots, and all populated switch blade slots \(1, 3, 5, and 7\). This example shows cabinets 1000-1003.
