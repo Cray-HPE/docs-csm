@@ -1,6 +1,7 @@
-# HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software.
+# HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software
 
 HPE Systems impacted:
+
 * DL385
 * Apollo 6500
 
@@ -14,9 +15,11 @@ extremely large and increasing, this would indicate the iLO is receiving an
 error when trying to send Redfish events.
 
 Check subscriptions on affected BMC
+
 ```bash
 ncn-m# curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -c '.Members[]'
 ```
+
 * If there is at least one subscription and it is a low number, everything is OK. No action is needed.
 * If there is at least one subscription and it is large number, verify it is not increasing by executing the above command several times over ~10 minutes.
 * If the subscription number is not increasing, everything is OK. No action is needed.
@@ -24,6 +27,7 @@ ncn-m# curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscript
 * If there are no subscriptions, the BMC will need to be reset.
 
 Reset BMC with `ipmitool`
+
 ```bash
 ncn-m# ipmitool -H $BMC -U root -P $PASSWD -I lanplus mc reset cold
 ```
