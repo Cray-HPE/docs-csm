@@ -1,4 +1,4 @@
-# Power Off Compute and IO Cabinets
+# Power Off Compute Cabinets
 
 Power off HPE Cray EX liquid-cooled and standard racks.
 
@@ -10,14 +10,14 @@ HPE Cray EX liquid-cooled cabinet CDU and PDU circuit breakers are controlled ma
 
 When the PDU breakers are switched to `OFF`, the Chassis Management Modules \(CMMs\) and Cabinet Environmental Controllers \(CECs\) are also powered off.
 
-**Warning:** The cabinet 480VAC power bus bars remain energized. Facility power must be disconnected to completely remove power from the cabinet. Follow lockout-tagout procedures for the site before maintenance.
+**Warning:** The cabinet 480VAC power bus bars remain energized. Facility power must be disconnected to completely remove power from the cabinet. Follow `lockout-tagout` procedures for the site before maintenance.
 
 ### Standard racks
 
 HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU models may require a flat-blade screwdriver to open or close the PDU circuit breakers.
 
 **Warning:** The cabinet PDUs remain energized when circuit breakers are `OFF`. Facility power must be disconnected or the PDUs must be unplugged to completely remove power from the rack. Follow
-lockout-tagout procedures for the site before maintenance.
+`lockout-tagout` procedures for the site before maintenance.
 
 ## Prerequisites
 

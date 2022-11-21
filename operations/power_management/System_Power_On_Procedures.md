@@ -29,9 +29,9 @@ To power on an external Lustre file system (ClusterStor), refer to [Power On the
 
 To power on the management cabinet and bring up the management Kubernetes cluster, refer to [Power On and Start the Management Kubernetes Cluster](Power_On_and_Start_the_Management_Kubernetes_Cluster.md).
 
-## Power on compute and IO cabinets
+## Power on compute cabinets
 
-To power on all liquid-cooled cabinet CDUs and cabinet PDUs, refer to [Power On Compute and IO Cabinets](Power_On_Compute_and_IO_Cabinets.md).
+To power on all liquid-cooled cabinet CDUs and cabinet PDUs, refer to [Power On Compute Cabinets](Power_On_Compute_Cabinets.md).
 
 ## Power on and boot compute nodes and user access nodes \(UANs\)
 
