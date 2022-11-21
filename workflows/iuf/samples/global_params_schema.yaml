@@ -55,10 +55,6 @@ properties:
               Represents the manifest and its parent location
             additionalProperties: false
             properties:
-              parent_directory:
-                type: string
-                description: >
-                  The parent directory containing the iuf-product-manifest.yaml
               manifest:
                 type: object
                 description: >
@@ -69,10 +65,6 @@ properties:
           The inlined JSON of the current product that the operation is working with.
         additionalProperties: false
         properties:
-          parent_directory:
-            type: string
-            description: >
-              The parent directory containing the iuf-product-manifest.yaml
           manifest:
             type: object
             description: >
