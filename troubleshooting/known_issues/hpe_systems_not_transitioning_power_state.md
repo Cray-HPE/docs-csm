@@ -13,8 +13,9 @@ failures. To detect this state, look at the subscription numbers under
 extremely large and increasing, this would indicate the iLO is receiving an
 error when trying to send Redfish events.
 
+Check subscriptions on affected BMC
 ```bash
-# curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -c '.Members[]'
+ncn-m# curl -sk -u root:$PASSWD https://${BMC}/redfish/v1/EventService/Subscriptions | jq -c '.Members[]'
 ```
 * If there is at least one subscription and it is a low number, everything is OK. No action is needed.
 * If there is at least one subscription and it is large number, verify it is not increasing by executing the above command several times over ~10 minutes.
@@ -22,8 +23,7 @@ error when trying to send Redfish events.
 * If the subscription number is increasing, the BMC will need to be reset.
 * If there are no subscriptions, the BMC will need to be reset.
 
-Reset the BMC with ipmitool
-
+Reset BMC with ipmitool
 ```bash
-# ipmitool -H $BMC -U root -P $PASSWD -I lanplus mc reset cold
+ncn-m# ipmitool -H $BMC -U root -P $PASSWD -I lanplus mc reset cold
 ```
