@@ -342,13 +342,20 @@ with system-specific customizations.
     172.30.84.40
     ```
 
-    If there is **no requirement to resolve external hostnames or no upstream DNS server**,
-    then remove the DNS forwarding configuration from the `cray-dns-unbound` service.
+    If there is **no requirement to resolve external hostnames (including other services on the site network) or no upstream DNS server**,
+    then the `cray-dns-unbound` service should be configured to forward to the `cray-dns-powerdns` service.
 
-    1. (`pit#`) Remove the `forwardZones` configuration for the `cray-dns-unbound` service.
+    1. (`pit#`) Update the `forwardZones` configuration for the `cray-dns-unbound` service to point to the `cray-dns-powerdns` service.
 
         ```bash
-        yq delete -i "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-dns-unbound.forwardZones
+        yq write -s - -i ${SITE_INIT}/customizations.yaml <<EOF
+        - command: update
+          path: spec.kubernetes.services.cray-dns-unbound.forwardZones
+          value:
+          - name: "."
+            forwardIps:
+            - "10.92.100.85"
+        EOF
         ```
 
     1. (`pit#`) Review the `cray-dns-unbound` values.
@@ -358,6 +365,20 @@ with system-specific customizations.
         ```bash
         yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-dns-unbound
         ```
+
+        Expected Output:
+
+        ```text
+        domain_name: '{{ network.dns.external }}'
+        forwardZones:
+          - name: "."
+            forwardIps:
+              - "10.92.100.85"
+        ```
+
+    See the following documentation regarding known issues when operating with no upstream DNS server.
+    - [Spire Database Cluster DNS Lookup Failure](../troubleshooting/known_issues/spire_database_lookup_error.md)
+    - [Spire database connection pool configuration in an air-gapped environment](../troubleshooting/known_issues/spire_database_airgap_configuration.md)
 
 1. (Optional) Configure PowerDNS zone transfer and DNSSEC. See the [PowerDNS Configuration Guide](../operations/network/dns/PowerDNS_Configuration.md) for more information.
 
