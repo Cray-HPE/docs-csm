@@ -35,14 +35,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v18.7
-      with:
-        files: "workflows/iuf/operations/**"
-        files_ignore: "**/*.md"
-
     - uses: docker://artifactory.algol60.net/csm-docker/stable/quay.io/argoproj/argocli:v3.3.6
       with:
-        args: "template lint ${{ steps.changed-files.outputs.all_changed_files }}"
+        args: "template lint workflows/iuf/operations"
 
