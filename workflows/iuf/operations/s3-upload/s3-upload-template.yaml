@@ -26,10 +26,6 @@ metadata:
   name: s3-upload
   namespace: argo
 spec:
-  arguments:
-    parameters:
-      - name: auth_token
-      - name: global_params
   volumes:
     - name: ca-bundle
       hostPath:

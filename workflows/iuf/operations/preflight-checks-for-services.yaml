@@ -27,10 +27,10 @@ metadata:
   name: preflight-checks-for-services
 spec:
   volumes:
-   - name: ca-bundle
-     hostPath:
-       path: /var/lib/ca-certificates
-       type: Directory
+    - name: ca-bundle
+      hostPath:
+        path: /var/lib/ca-certificates
+        type: Directory
   entrypoint: main
   templates:
     - name: main
@@ -38,19 +38,19 @@ spec:
         parameters:
           - name: auth_token
           - name: global_params
+      retryStrategy:
+        limit: "2"
+        retryPolicy: "Always"
+        backoff:
+          duration: "10s" # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+          factor: "2"
+          maxDuration: "1m"
       dag:
         tasks:
           - name: preflight-checks
-            templateRef: 
+            templateRef:
               name: iuf-base-template
               template: shell-script
-            retryStrategy:
-              limit: "2"
-              retryPolicy: "Always"
-              backoff:
-                duration: "10s"       # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
-                factor: "2"
-                maxDuration: "1m"
             arguments:
               parameters:
                 - name: dryRun
@@ -66,7 +66,7 @@ spec:
                     else
                       echo "s3 is operational."
                     fi
-                    
+
                     # check CFS
                     if ! cray cfs options list > /dev/null; then
                       echo "Error: CFS is not operational."
@@ -74,7 +74,7 @@ spec:
                     else
                       echo "CFS is operational."
                     fi
-                    
+
                     # check gitea VCS
                     tmpdir=$(mktemp -d)
                     pushd $tmpdir > /dev/null
@@ -87,7 +87,7 @@ spec:
                     fi
                     popd > /dev/null
                     rm -rf $tmpdir
-                    
+
                     # Check IMS
                     if ! cray ims images list > /dev/null; then
                       echo "Error: IMS is not operational."
