@@ -2,6 +2,7 @@
 
 HPE Systems impacted:
 
+* DL325
 * DL385
 * Apollo 6500
 
