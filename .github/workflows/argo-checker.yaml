@@ -35,11 +35,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: docker://argoproj/argocli:v3.3.6
-      env:
-          KUBECONFIG: /dev/null
-      with:
-        args: "template lint workflows/iuf/operations"
+    - run: docker run -e KUBECONFIG=/dev/null -v "/home/runner/work/docs-csm/docs-csm":"/github/workspace" --workdir /github/workspace argoproj/argocli:v3.3.6 template lint workflows/iuf/operations
+      name: argo-check
         
 
 
