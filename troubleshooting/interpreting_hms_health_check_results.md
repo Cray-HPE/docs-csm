@@ -364,7 +364,7 @@ FAILED test_hardware.tavern.yaml::Query the Hardware collection for Node informa
 (`ncn-mw#`) If these failures occur, confirm that there are no discovered compute nodes in HSM.
 
 ```bash
-cray hsm state components list --type=Node --role=compute --format=json
+cray hsm state components list --type Node --role compute --format json
 ```
 
 Example output:
