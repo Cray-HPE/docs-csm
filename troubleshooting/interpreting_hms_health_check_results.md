@@ -423,6 +423,47 @@ ssh: connect to host sw-leaf-bmc-001 port 22: Connection timed out
 
 Restoring connectivity, resolving configuration issues, or restarting the relevant ports on the `leaf-bmc` switch should allow the compute hardware to issue DHCP requests and be discovered successfully.
 
+##### `test_components.tavern.yaml`
+
+These tests include checks for healthy BMC states in HSM.
+
+The following is an example of a failed test execution due to an unexpected BMC state in HSM:
+
+```text
+Running functional tests...
+============================= test session starts ==============================
+platform linux -- Python 3.9.13, pytest-7.1.2, pluggy-1.0.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /src/app, configfile: pytest.ini
+plugins: tavern-1.23.1
+collecting ... collected 38 items
+
+...
+
+test_components.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection FAILED [ 26%]
+
+...
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all NodeBMCs' failed:
+    - Error calling validate function '<function validate_pykwalify at 0x7f22cbaf0700>':
+        Traceback (most recent call last):
+          File "/usr/lib/python3.9/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.9/site-packages/pykwalify/core.py", line 194, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'Off' does not exist. Path: '/Components/1/State' Enum: ['Ready'].
+
+...
+
+=========================== short test summary info ============================
+FAILED test_components.tavern.yaml::Ensure that we can conduct a query for all Node BMCs in the Component collection
+=================== 1 failed, 37 passed in 214.09s (0:03:34) ===================
+```
+
+Test failures due to unexpected BMC states in HSM can be safely ignored if there are BMCs in the system that are intentionally powered off, such as during system shutdown and power off testing.
+
 ### `hsm_discovery_status_test.sh`
 
 This test verifies that the system hardware has been discovered successfully.
