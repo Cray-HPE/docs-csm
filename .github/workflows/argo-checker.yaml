@@ -21,7 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Argo Template Checker
+name: Check Workflow
 
 on:
   pull_request:
@@ -36,10 +36,11 @@ jobs:
     - uses: actions/checkout@v3
 
     - uses: docker://argoproj/argocli:v3.3.6
+      env:
+          KUBECONFIG: /dev/null
       with:
         args: "template lint workflows/iuf/operations"
-        env:
-          KUBECONFIG: /dev/null
+        
 
 
 
