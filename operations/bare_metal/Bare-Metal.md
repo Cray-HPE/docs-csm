@@ -23,5 +23,4 @@ not native Redfish devices; they have a proprietary interface which is
 abstracted by the HMS Redfish Translation Service.
 
 To set ServerTech PDU default credentials, follow the procedure outlined in
-[Change ServerTech PDU Credentials](Change_ServerTech_PDU_Credentials.md).
-
+[Change Credentials on ServerTech PDUs](../security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
