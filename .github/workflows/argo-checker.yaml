@@ -35,7 +35,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - uses: docker://artifactory.algol60.net/csm-docker/stable/quay.io/argoproj/argocli:v3.3.6
+    - uses: docker://argoproj/argocli:v3.3.6
       with:
         args: "template lint workflows/iuf/operations"
 
