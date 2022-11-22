@@ -30,6 +30,7 @@ This document provides links to troubleshooting information for services and fun
 * [Kafka Failure after CSM 1.2 Upgrade](known_issues/kafka_upgrade_failure.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Multiple Console Node Pods on the Same Worker](known_issues/Multiple_Console_Node_Pods_on_the_Same_Worker.md)
+* [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
 
 ## Kubernetes
 
