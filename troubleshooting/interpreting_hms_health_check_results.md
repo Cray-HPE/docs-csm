@@ -471,7 +471,7 @@ This job executes the tests for the Firmware Action Service (FAS).
 
 ##### `test_actions.tavern.yaml`
 
-These tests require at least one healthy (State=Ready, Flag=OK) BMC in HSM.
+These tests require at least one healthy BMC (State=Ready, Flag=OK) in HSM.
 
 The following is an example of a failed test execution due to no healthy BMCs in HSM:
 
