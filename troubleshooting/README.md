@@ -42,6 +42,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Antero node NID allocation](known_issues/antero_node_NID_allocation.md)
 * [Unbound forwarding to PowerDNS in an air-gapped environment](known_issues/unbound_airgap_forwarding.md)
+* [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
 
 ## Booting
 
