@@ -165,14 +165,35 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     All BOS sessions completed.
     ```
 
-    Note the returned job ID for each session; for example: `"boa-caa15959-2402-4190-9243-150d568942f6"`
+    Note the returned job ID for each session, for example: `"boa-79584ffe-104c-4766-b584-06c5a3a60996"`.
+
+    **Note:** In certain cases, the command may display an error similar to the following:
+
+    ```text
+    ERROR: Failed to get state of nodes in session template 'UAN_SESSION_TEMPLATE': Failed to get state of nodes with role=['Application', 'Application_UAN'] for boot set 'BOOT_SET' of session template 'UAN_SESSION_TEMPLATE': GET request to URL 'https://api-gw-service-nmn.local/apis/smd/hsm/v2/State/Components' failed with status code 400: Bad Request. Bad Request Detail: bad query param: Argument was not a valid HMS Role
+    ```
+
+    This is a non-fatal error and does not affect the `bos-operations` stage of `sat bootsys`.
+
+    **Note:** In certain cases, the command may fail before reaching the displayed timeout
+    and show warnings similar to the following:
+
+    ```text
+    WARNING: The 'kubectl wait' command failed instead of timing out. stderr: error: condition not met for jobs/boa-79584ffe-104c-4766-b584-06c5a3a60996
+    ```
+
+    The BOS operation can still proceed even with these warnings. However, the warnings
+    may result in the `bos-operations` stage of the `sat bootsys` command exiting before the BOS
+    operation is complete. Because of this, it is important to view the logs in order to monitor the
+    boot and to verify that the nodes reached the expected state. Both of these recommendations are shown
+    in the remaining steps.
 
 1. (`ncn-m001#`) Use the job ID strings to monitor the progress of the boot job.
 
     **Tip:** The commands needed to monitor the progress of the job are provided in the output of the `sat bootsys boot` command.
 
     ```bash
-    kubectl -n services logs -c boa -f --selector job-name=boa-caa15959-2402-4190-9243-150d568942f6
+    kubectl -n services logs -c boa -f --selector job-name=boa-79584ffe-104c-4766-b584-06c5a3a60996
     ```
 
 1. (`ncn-m001#`) In another shell window, use a similar command to monitor the UAN session.
