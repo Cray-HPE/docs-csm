@@ -35,7 +35,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - run: docker run -e KUBECONFIG=/dev/null -v "/home/runner/work/docs-csm/docs-csm":"/github/workspace" --workdir /github/workspace argoproj/argocli:v3.3.6 template lint workflows/iuf/operations
+    - run: docker run -e ARGO_NAMESPACE=argo -e ARGO_TOKEN='Bearer ******' -e KUBECONFIG=/dev/null -v "/home/runner/work/docs-csm/docs-csm":"/github/workspace" --workdir /github/workspace argoproj/argocli:v3.3.6 template lint workflows/iuf/operations
       name: argo-check
         
 
