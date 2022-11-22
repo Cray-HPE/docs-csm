@@ -12,6 +12,7 @@
 - [Additional troubleshooting](#additional-troubleshooting)
   - [`run_hms_ct_tests.sh`](#run_hms_ct_testssh)
     - [`cray-hms-smd-test-functional`](#cray-hms-smd-test-functional)
+    - [`cray-hms-firmware-action-test-functional`](#cray-hms-firmware-action-test-functional)
   - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
     - [`HTTPsGetFailed`](#httpsgetfailed)
     - [`ChildVerificationFailed`](#childverificationfailed)
@@ -363,7 +364,7 @@ FAILED test_hardware.tavern.yaml::Query the Hardware collection for Node informa
 (`ncn-mw#`) If these failures occur, confirm that there are no discovered compute nodes in HSM.
 
 ```bash
-cray hsm state components list --type=Node --role=compute --format=json
+cray hsm state components list --type Node --role compute --format json
 ```
 
 Example output:
@@ -463,6 +464,44 @@ FAILED test_components.tavern.yaml::Ensure that we can conduct a query for all N
 ```
 
 Test failures due to unexpected BMC states in HSM can be safely ignored if there are BMCs in the system that are intentionally powered off, such as during system shutdown and power off testing.
+
+#### `cray-hms-firmware-action-test-functional`
+
+This job executes the tests for the Firmware Action Service (FAS).
+
+##### `test_actions.tavern.yaml`
+
+These tests require at least one healthy (State=Ready, Flag=OK) BMC in HSM.
+
+The following is an example of a failed test execution due to no healthy BMCs in HSM:
+
+```text
+Running functional tests...
+============================= test session starts ==============================
+platform darwin -- Python 3.9.13, pytest-7.1.2, pluggy-1.0.0
+rootdir: /Users/schooler/Git/GitHub/hms-firmware-action/test/ct/api/1-non-disruptive, configfile: pytest.ini
+plugins: tavern-1.23.3
+collected 6 items
+
+...
+
+test_actions.tavern.yaml::Ensure that the BMC firmware can be updated with a FAS action FAILED [ 16%]
+
+...
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Ensure that the BMC firmware can be updated with a FAS action' failed:
+    - Status code was 400, expected 202:
+        {"type": "about:blank", "detail": "invalid/duplicate xnames: [None]", "status": 400, "title": "Bad Request"}
+
+...
+
+=========================== short test summary info ============================
+FAILED test_actions.tavern.yaml::Ensure that the BMC firmware can be updated with a FAS action
+=================== 1 failed, 5 passed in 21.22s ===============================
+```
+
+Test failures due to no healthy BMCs in HSM can be safely ignored if the BMCs in the system are intentionally powered off, such as during system shutdown and power off testing.
 
 ### `hsm_discovery_status_test.sh`
 
