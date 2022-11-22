@@ -163,7 +163,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 1.  Determine the version of RTS:
 
     ```bash
-    ncn-m001# RTS_VERSION=$(kubectl -n loftsman get cm loftsman-core-services -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-hms-rts).version')
+    ncn-m001# RTS_VERSION=$(kubectl -n loftsman get cm loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-hms-rts).version')
     ncn-m001# echo $RTS_VERSION
     ```
 
@@ -196,7 +196,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
         --manifest-path rts-manifest.out.yaml
     ```
 
-1.  Wait for the RTS Init job to run to completion:
+1.  Wait for the RTS job to run to completion:
 
     ```bash
     ncn-m001# kubectl -n services wait job cray-hms-rts-init --for=condition=complete --timeout=5m
