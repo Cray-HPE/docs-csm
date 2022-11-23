@@ -78,14 +78,14 @@ spec:
                       elif [ -f $MANIFEST ]; then
                         IS_DIR=false
                       else
-                        echo "Error: Unable to find file or directory: $MANIFEST. Could not deploy."
+                        echo "Error: Unable to find file or directory: $MANIFEST. (deploy=${DEPLOY})"
                         err=1
                         path_exists=false
                       fi
                       
                       if ! $path_exists; then
                         continue
-                      elif [[ $DEPLOY == "True" ]] || $DEPLOY; then
+                      elif [[ $DEPLOY == "True" ]] || $DEPLOY 2> /dev/null; then
                         if $IS_DIR; then
                           echo "Deploying loftsman manifests under $MANIFEST/"
                           for manifest in "${MANIFEST}"/*.yml "${MANIFEST}"/*.yaml; do
