@@ -53,6 +53,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     ```
 
 4. Acquire sealed secret keys:
+
     ```bash
     ncn-m001# mkdir -p certs
     ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d > certs/sealed_secrets.crt
@@ -69,7 +70,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 
     Expected output looks similar to the following:
 
-    ```
+    ```json
     {
       "Username": "admn",
       "Password": "foo"
@@ -84,14 +85,14 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 
     Expected output looks similar to the following:
 
-    ```
+    ```json
     {
       "Username": "root",
       "Password": "secret"
     }
     ```
 
-2. Update the default credentials in `customizations.yaml` for RTS:
+3. Update the default credentials in `customizations.yaml` for RTS:
 
     Specify the desired default ServerTech PDU credentials:
 
@@ -132,7 +133,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 
     Expected output looks similar to the following:
 
-    ```
+    ```json
     {
       "Username": "admn",
       "Password": "foobar"
@@ -147,13 +148,12 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 
     Expected output looks similar to the following:
 
-    ```
+    ```json
     {
       "Username": "root",
       "Password": "supersecret"
     }
     ```
-
 
 5. Update the `site-init` secret for the system:
 
@@ -162,7 +162,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
     ```
 
-#### 1.3 Redeploy RTS to pick up the new sealed secret and push credentials into vault.
+#### 1.3 Redeploy RTS to pick up the new sealed secret and push credentials into vault
 
 1. Determine the version of RTS:
 
@@ -215,7 +215,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 
     Expected output:
 
-    ```
+    ```text
     ====== Data ======
     Key         Value
     ---         -----
@@ -231,7 +231,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
 
     Expected output:
 
-    ```
+    ```text
     ====== Data ======
     Key         Value
     ---         -----
