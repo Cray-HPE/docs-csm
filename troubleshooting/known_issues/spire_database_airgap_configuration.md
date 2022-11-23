@@ -37,7 +37,7 @@ Due to the way the resolver code works in certain versions of Alpine Linux, it m
 
    Example output:
 
-   ```text
+   ```yaml
    containers:
    - env:
      - name: PGHOST
@@ -46,7 +46,7 @@ Due to the way the resolver code works in certain versions of Alpine Linux, it m
 
    Change `PGHOST` to:
 
-   ```text
+   ```yaml
    containers:
    - env:
      - name: PGHOST
