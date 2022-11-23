@@ -55,7 +55,7 @@ spec:
                       exit_code=0
 
                       if ! cray artifacts get config-data argo/loftsman/${product_name}/manifests/${manifest} ${manifest}; then
-                        echo "Could not get argo/loftsman/${product_name}/manifests/${manifest} from s3."
+                        echo "Error: Could not get argo/loftsman/${product_name}/manifests/${manifest} from s3. It cannot be deployed because of this."
                         exit_code=1
                       else
                         echo "Deploying ${manifest}"
