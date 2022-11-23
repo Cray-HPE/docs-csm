@@ -1,0 +1,106 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: loftsman-manifest-deploy
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      dag:
+        tasks:
+          - name: manifest-deploy
+            templateRef: 
+              name: iuf-base-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: false
+                - name: scriptContent
+                  value: |
+                    PRODUCT_NAME="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+                    JSON_CONTENT="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.content')}}"
+                    LOFTSMAN_ENTRIES=$(echo "$JSON_CONTENT" | jq '.loftsman | length')
+
+                    deploy_manifest() {
+                      manifest=$1
+                      product_name=$2
+                      exit_code=0
+
+                      if ! cray artifacts get config-data argo/loftsman/${product_name}/manifests/${manifest} ${manifest}; then
+                        echo "Error: Could not get argo/loftsman/${product_name}/manifests/${manifest} from s3. It cannot be deployed because of this."
+                        exit_code=1
+                      else
+                        echo "Deploying ${manifest}"
+                        if ! loftsman ship --manifest-path ${manifest} --charts-repo https://packages.local/repository/charts; then
+                          echo "Error: There was a problem deploying ${manifest}."
+                          exit_code=1
+                        fi
+                      fi
+                      return $exit_code
+                    }
+
+                    err=0
+                    for (( i=0; i< LOFTSMAN_ENTRIES; i++ )); do
+                      path_exists=true
+                      MANIFEST=$(echo "$JSON_CONTENT" | jq -r '.loftsman['$i'].path')
+                      DEPLOY=$(echo "$JSON_CONTENT" | jq -r '.loftsman['$i'].deploy')
+                      IS_DIR=false
+                      if [ -d $MANIFEST ]; then
+                        IS_DIR=true
+                      elif [ -f $MANIFEST ]; then
+                        IS_DIR=false
+                      else
+                        echo "Error: Unable to find file or directory: $MANIFEST. (deploy=${DEPLOY})"
+                        err=1
+                        path_exists=false
+                      fi
+                      
+                      if ! $path_exists; then
+                        continue
+                      elif [[ $DEPLOY == "True" ]] || $DEPLOY 2> /dev/null; then
+                        if $IS_DIR; then
+                          echo "Deploying loftsman manifests under $MANIFEST/"
+                          for manifest in "${MANIFEST}"/*.yml "${MANIFEST}"/*.yaml; do
+                            deploy_manifest ${manifest} $PRODUCT_NAME
+                            if [[ $? != 0 ]]; then err=1; fi
+                          done
+                        else
+                          deploy_manifest $MANIFEST $PRODUCT_NAME
+                          if [[ $? != 0 ]]; then err=1; fi
+                        fi
+                      else
+                        echo "Not deploying argo/loftsman/${PRODUCT_NAME}/manifests/${MANIFEST} becasue loftsman.deploy=${DEPLOY}."
+                      fi
+                    done
+
+                    exit $err
+
+                    
