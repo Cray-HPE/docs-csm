@@ -355,7 +355,7 @@ with system-specific customizations.
     If there is **no requirement to resolve external hostnames (including other services on the site network) or no upstream DNS server**,
     then the `cray-dns-unbound` service should be configured to forward to the `cray-dns-powerdns` service.
 
-    1. (`pit#`) Update the `forwardZones` configuration for the `cray-dns-unbound` service to point to the `cray-dns-powerdns` service.
+    1. (`pit#`) Update the `forwardZones` configuration for the `cray-dns-unbound` service to point to the `cray-dns-powerdns` service and only answer `mtl` network queries from static records.
 
         ```bash
         yq write -s - -i ${SITE_INIT}/customizations.yaml <<EOF
@@ -365,6 +365,11 @@ with system-specific customizations.
           - name: "."
             forwardIps:
             - "10.92.100.85"
+        - command: update
+          path: spec.kubernetes.services.cray-dns-unbound.localZones
+          value:
+          - name: "mtl."
+            localType: static
         EOF
         ```
 
@@ -384,6 +389,9 @@ with system-specific customizations.
           - name: "."
             forwardIps:
               - "10.92.100.85"
+        localZones:
+          - name: "mtl."
+            localType: static
         ```
 
     See the following documentation regarding known issues when operating with no upstream DNS server.
