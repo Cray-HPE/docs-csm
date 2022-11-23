@@ -234,7 +234,10 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
 - [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
   - [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
 - [CFS Key Management](configuration_management/CFS_Key_Management.md)
-- [Management Node Image Customization](configuration_management/Management_Node_Image_Customization.md)
+- Management NCN personalization and image customization
+  - [NCN Node Personalization](configuration_management/NCN_Node_Personalization.md)
+  - [Management Node Image Customization](configuration_management/Management_Node_Image_Customization.md)
+  - [Worker Image Customization](configuration_management/Worker_Image_Customization.md)
 
 ## Kubernetes
 
