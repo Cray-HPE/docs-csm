@@ -4,10 +4,11 @@
 - [Prerequisites](#prerequisites)
 - [Procedure](#procedure)
   1. [Preparation](#1-preparation)
-  1. [Edit CPE and Analytics layers](#2-edit-cpe-and-analytics-layers)
-  1. [Disable CFS on management NCNs](#3-disable-cfs-on-management-ncns)
-  1. [Update CFS configuration and components](#4-update-cfs-configuration-and-components)
-  1. [Cleanup](#5-cleanup)
+  1. [Remove layers for absent products](#2-remove-layers-for-absent-products)
+  1. [Edit CPE and Analytics layers](#3-edit-cpe-and-analytics-layers)
+  1. [Disable CFS on management NCNs](#4-disable-cfs-on-management-ncns)
+  1. [Update CFS configuration and components](#5-update-cfs-configuration-and-components)
+  1. [Cleanup](#6-cleanup)
 
 ## Background
 
@@ -73,10 +74,18 @@ All of the following are prerequisites on the node where this procedure is being
     - name: ncn-personalization
     ```
 
-### 2. Edit CPE and Analytics layers
+### 2. Remove layers for absent products
+
+(`ncn-m#`) Review the layers in `management-bootprep-node-personalization.yaml`. If there are any
+layers for products that are not installed on the system, edit the file to remove those layers.
+In the case of CSM fresh installs, the `Getting Started Guide` section that linked to this procedure
+should indicate which layers to remove and which to preserve.
+
+### 3. Edit CPE and Analytics layers
 
 This section is required if this procedure is being performed as part of a CSM upgrade.
-If that is not the case, then skip ahead to [Update CFS configuration and components](#4-update-cfs-configuration-and-components).
+If that is not the case (for example, during CSM fresh installs),
+then skip ahead to [Update CFS configuration and components](#5-update-cfs-configuration-and-components).
 
 In this section, the `management-bootprep-node-personalization.yaml` file is modified to specify the versions of CPE and Analytics that
 are currently in use on the system. This is necessary because the new versions of CPE and Analytics have not yet been installed at this
@@ -158,10 +167,11 @@ time in the CSM upgrade procedure.
         commit: c9c0b2cc69998830a47d7c989b07f550814af095
     ```
 
-### 3. Disable CFS on management NCNs
+### 4. Disable CFS on management NCNs
 
 This section is required if this procedure is being performed as part of a CSM upgrade.
-If that is not the case, then skip ahead to [Update CFS configuration and components](#4-update-cfs-configuration-and-components).
+If that is not the case (for example, during CSM fresh installs),
+then skip ahead to [Update CFS configuration and components](#5-update-cfs-configuration-and-components).
 
 (`ncn-m#`) Disable CFS on the management NCNs.
 
@@ -172,7 +182,7 @@ cray hsm state components list --role Management --type Node --format json | jq 
 
 If there is no output, or if the output ends with `ERROR`, then there is a problem. In that case, stop and troubleshoot.
 
-### 4. Update CFS configuration and components
+### 5. Update CFS configuration and components
 
 1. (`ncn-m#`) Create the `ncn-personalization` CFS configuration.
 
@@ -193,25 +203,35 @@ If there is no output, or if the output ends with `ERROR`, then there is a probl
         > things will happen automatically when the NCNs are rebuilt during the CSM upgrade.
 
         ```bash
-        cray hsm state components list --role Management --type Node --format json | jq -r '.Components[] | .ID' | 
-            xargs -rI {} cray cfs components update {} --desired-config ncn-personalization || echo ERROR
+        /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+            --no-config-change --config-name ncn-personalization --no-enable --no-clear-err
         ```
 
-        If there is no output, or if the output ends with `ERROR`, then there is a problem. In that case, stop and troubleshoot.
+        Successful output will end with the following:
 
-    - If this is NOT being done as part of a CSM upgrade, then run the following command:
+        ```text
+        All components updated successfully.
+        ```
+
+    - If this is NOT being done as part of a CSM upgrade (for example, if being done during a CSM fresh install), then run the following command:
 
         > In addition to updating the desired configuration for the NCNs in CFS, this also enables them in CFS, clears their CFS
-        > state, and clears their CFS error count.
+        > state, and clears their CFS error count. After doing this, it waits for all of the management NCNs to complete configuration.
 
         ```bash
-        cray hsm state components list --role Management --type Node --format json | jq -r '.Components[] | .ID' | 
-            xargs -rI {} cray cfs components update {} --desired-config ncn-personalization --enabled true --error-count 0 --state "[]" || echo ERROR
+        /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+            --no-config-change --config-name ncn-personalization --clear-state
         ```
 
-        If there is no output, or if the output ends with `ERROR`, then there is a problem. In that case, stop and troubleshoot.
+        Successful output will end with a message similar to the following:
 
-### 5. Cleanup
+        ```text
+        Configuration complete. 9 component(s) completed successfully.  0 component(s) failed.
+        ```
+
+        The number reported should match the number of management NCNs in the system.
+
+### 6. Cleanup
 
 (`ncn-m#`) Optionally, delete `management-bootprep-node-personalization.yaml`, which is no longer needed.
 

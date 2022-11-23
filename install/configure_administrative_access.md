@@ -63,7 +63,7 @@ completely restarted.
 
 **Lock the management nodes now!**
 
-Run the `lock_management_nodes.py` script to lock all management nodes and their BMCs that are not already locked:
+(`ncn-mw#`) Run the `lock_management_nodes.py` script to lock all management nodes and their BMCs that are not already locked:
 
 ```bash
 /opt/cray/csm/scripts/admin_access/lock_management_nodes.py
