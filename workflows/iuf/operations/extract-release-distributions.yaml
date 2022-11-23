@@ -55,7 +55,7 @@ spec:
           tar -xvzf $tarfile
         volumeMounts:
           - name: iuf
-            mountPath: /opt/cray/iuf
+            mountPath: {{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}
       outputs:
         parameters:
           - name: parent_directory
