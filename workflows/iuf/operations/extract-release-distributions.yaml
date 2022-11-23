@@ -55,7 +55,7 @@ spec:
           tar -xvzf $tarfile
         volumeMounts:
           - name: iuf
-            mountPath: /etc/iuf
+            mountPath: /opt/cray/iuf
       outputs:
         parameters:
           - name: parent_directory
