@@ -27,9 +27,9 @@ personalization. Review the upgrade documentation for more information.
    - [Option 1: Automatic configuration](#option-1-automatic-configuration)
      - [Automatic configuration: CSM fresh install](#automatic-configuration-csm-fresh-install)
      - [Automatic configuration: Apply changes](#automatic-configuration-apply-changes)
-     - [Automatic configuration: Modes of operation](#automatic-configuration-modes-of-operation).
-     - [Automatic configuration: Usage](#automatic-configuration-usage).
-     - [Automatic configuration: Parameters](#automatic-configuration-parameters).
+     - [Automatic configuration: Modes of operation](#automatic-configuration-modes-of-operation)
+     - [Automatic configuration: Usage](#automatic-configuration-usage)
+     - [Automatic configuration: Parameters](#automatic-configuration-parameters)
    - [Option 2: Manual configuration](#option-2-manual-configuration)
 
 ## 1. Set up passwordless SSH
@@ -320,9 +320,9 @@ The options used with the script depend on the context in which this procedure i
 In either case, although it is not usually required, it is possible to further customize the behavior of the script.
 For more information, see:
 
-- [Automatic configuration: Modes of operation](#automatic-configuration-modes-of-operation).
-- [Automatic configuration: Usage](#automatic-configuration-usage).
-- [Automatic configuration: Parameters](#automatic-configuration-parameters).
+- [Automatic configuration: Modes of operation](#automatic-configuration-modes-of-operation)
+- [Automatic configuration: Usage](#automatic-configuration-usage)
+- [Automatic configuration: Parameters](#automatic-configuration-parameters)
 
 #### Automatic configuration: CSM fresh install
 
