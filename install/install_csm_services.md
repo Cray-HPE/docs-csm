@@ -46,6 +46,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 >   the `--console-output execute` argument to the `yapl` command.
 > * The `yapl` command can safely be rerun. By default, it will skip any steps which were previously completed successfully. To force it to
 >   rerun all steps regardless of what was previously completed, append the `--no-cache` argument to the `yapl` command.
+> * The order of the `yapl` command arguments is important. The syntax is `yapl -f install.yaml [--console-output] execute [--no-cache]`.
 
 ## 2. Create base BSS global boot parameters
 
