@@ -1,0 +1,98 @@
+{
+  "product_manifest": {
+    "products": {
+      "cos": {
+        "manifest": {
+          "iuf_version": "^0.1.0",
+          "name": "cos",
+          "description": "The Cray Operating System (COS).\n",
+          "version": "2.5.34-20221012230953",
+          "content": {
+            "docker": [
+              {
+                "path": "docker/cray"
+              }
+            ],
+            "rest of the file snipped in this example": []
+          }
+        }
+      },
+      "sdu": {
+        "manifest": {
+          "iuf_version": "^0.1.0",
+          "name": "sdu",
+          "rest of the file snipped in this example": {}
+        }
+      }
+    },
+    "current_product": {
+      "manifest": {
+        "iuf_version": "^0.1.0",
+        "name": "cos",
+        "description": "The Cray Operating System (COS).\n",
+        "version": "2.5.34-20221012230953",
+        "content": {
+          "docker": [
+            {
+              "path": "docker/cray"
+            }
+          ],
+          "rest of the file snipped in this example": []
+        }
+      }
+    }
+  },
+  "input_params": {
+    "products": ["cos", "sdu"],
+    "media_dir": "/etc/iuf/alice_230116",
+    "bootprep_config_managed": [
+      {
+        "contents": "boot prep file contents as a string"
+      }
+    ],
+    "bootprep_config_management": [
+      {
+        "contents": "boot prep file contents as a string"
+      }
+    ],
+    "limit_nodes": ["x12413515", "x15464574"]
+  },
+  "site_params": {
+    "global": {
+      "some_global_site_parameter": "lorem ipsum"
+    },
+    "products": {
+      "cos": {
+        "working_branch": "integration-2.5.34",
+        "some_cos_site_parameter": "lorem ipsum"
+      },
+      "sdu": {
+        "working_branch": "integration-1.2.3",
+        "some_sdu_site_parameter": "lorem ipsum"
+      }
+    },
+    "current_product": {
+      "working_branch": "integration-2.5.34",
+      "some_cos_site_parameter": "lorem ipsum"
+    }
+  },
+  "stage_params": {
+    "process_media": {
+      "global": {},
+      "products": {
+        "cos": {
+          "parent_directory": "/etc/iuf/alice_230116/cos-2.5.34-20221012230953"
+        },
+        "sdu": {
+          "parent_directory": "/etc/iuf/alice_230116/sdu-1.2.3",
+        }
+      },
+      "current_product": {
+        "parent_directory": "/etc/iuf/alice_230116/cos-2.5.34-20221012230953"
+      }
+    },
+    "pre_install_check": {
+      "global": {}
+    }
+  }
+}

@@ -1,0 +1,253 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+---
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: "Schema for parameters passed "
+description: >
+  Describes parameters for global_params that is used to pass between operations and hooks.
+version: 0.1.0
+type: object
+required:
+  - product_manifest
+  - input_params
+  - site_params
+  - stage_params
+additionalProperties: false
+properties:
+  product_manifest:
+    description: >
+      The product manifests across all the products being installed/upgraded
+    type: object
+    required:
+      - products
+      - current_product
+    additionalProperties: false
+    properties:
+      products:
+        type: object
+        description: >
+          The key is the product name, and the value is the iuf-product-manifest.yaml contents inlined as JSON
+        patternProperties:
+          "^.*$":
+            type: object
+            description: >
+              Represents the manifest and its parent location
+            additionalProperties: false
+            properties:
+              manifest:
+                type: object
+                description: >
+                  The iuf-product-manifest.yaml contents inlined as JSON
+      current_product:
+        type: object
+        description: >
+          The inlined JSON of the current product that the operation is working with.
+        additionalProperties: false
+        properties:
+          manifest:
+            type: object
+            description: >
+              The iuf-product-manifest.yaml contents inlined as JSON
+  input_params:
+    description: >
+      The input parameters supplied through the IUF CLI, which become the Activity's parameters.
+    type: object
+    additionalProperties: false
+    required:
+      - products
+      - media_dir
+      - bootprep_config_managed
+      - bootprep_config_management
+      - limit_nodes
+    properties:
+      products:
+        description: >
+          The names of products that are being installed/upgraded.
+        type: array
+        items:
+          type: string
+      media_dir:
+        type: string
+      bootprep_config_managed:
+        description: >
+          Each item is inline contents of the bootprep files.
+        type: array
+        items:
+          type: object
+          properties:
+            contents:
+              type: string
+      bootprep_config_management:
+        description: >
+          Each item is inline contents of the bootprep files.
+        items:
+          type: object
+          properties:
+            contents:
+              type: string
+        type: array
+      limit_nodes:
+        description: >
+          Each item is the xname of a node.
+        items:
+          type: string
+        type: array
+
+  site_params:
+    description: >
+      The site parameters supplied through the site.yaml file.
+    type: object
+    additionalProperties: false
+    required:
+      - global
+      - products
+      - current_product
+    properties:
+      global:
+        type: object
+        description: >
+          The global parameters listed in the site.yaml file
+      products:
+        type: object
+        description: >
+          The key is the product name and the value is a key-value dictionary of the site parameters for that product from site.yaml file.
+      current_product:
+        type: object
+        description: >
+          The inlined key-value dictionary of the current product that the operation is working with.
+
+  stage_params:
+    description: >
+      The object representing the output of each operation.
+    type: object
+    properties:
+      process_media:
+        type: object
+        properties:
+          extract_release_distributions:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+      pre_install_check:
+        type: object
+        properties:
+          preflight_checks_for_services:
+            description: >
+              This is a singleton stage, hence the key-values are results of this operation.
+            type: object
+      deliver_product:
+        type: object
+        properties:
+          loftsman_manifest_upload:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+          s3_upload:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+          nexus_setup:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+          nexus_rpm_upload:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+          nexus_docker_upload:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+          nexus_helm_upload:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+          vcs_upload:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+          ims_upload:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+      update_vcs_config:
+        type: object
+        properties:
+          update_working_branch:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+      update_cfs_config:
+        type: object
+        properties:
+          update_cfs_config:
+            description: >
+              This is a singleton stage, hence the key-values are results of this operation.
+            type: object
+      deploy_product:
+        type: object
+        properties:
+          loftsman_manifest_deploy:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+          set_product_active:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
+      prepare_images:
+        type: object
+        properties:
+          prepare_images:
+            description: >
+              This is a singleton stage, hence the key-values are results of this operation.
+            type: object
+      management_nodes_rollout:
+        type: object
+        properties:
+          management_nodes_rollout:
+            description: >
+              This is a singleton stage, hence the key-values are results of this operation.
+            type: object
+      post_install_service_check:
+        type: object
+        properties:
+          post_install_service_check:
+            description: >
+              This is a singleton stage, hence the key-values are results of this operation.
+            type: object
+      managed_nodes_rollout:
+        type: object
+        properties:
+          managed_nodes_rollout:
+            description: >
+              This is a singleton stage, hence the key-values are results of this operation.
+            type: object
+      post_install_check:
+        type: object
+        properties:
+          post_install_check:
+            description: >
+              This is a product-specific stage. Hence, the key is the name of the product, and the value is the output of the operation for that product
+            type: object
