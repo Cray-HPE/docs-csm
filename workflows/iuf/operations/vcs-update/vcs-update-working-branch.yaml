@@ -1,0 +1,188 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: vcs-update-working-branch-main-steps
+spec:
+  entrypoint: main
+  arguments:
+    parameters:
+      - name: product_manifest
+      - name: pristine_branch
+      - name: customer_branch
+  templates:
+    ### Main Steps ###
+    - name: main
+      steps:
+        - - name: get-vcs-secrets
+            template: get-vcs-secrets-template
+        - - name: gitea-update-content
+            template: gitea-update-content
+            arguments:
+              parameters:
+                - name: vcs_user_credentials_secret_name
+                  value: "{{steps.get-vcs-secrets.outputs.parameters.secret_name}}"
+        - - name: cleanup
+            template: cleanup-template
+            arguments:
+              parameters:
+                - name: vcs_user_credentials_secret_name
+                  value: "{{steps.get-vcs-secrets.outputs.parameters.secret_name}}"
+    ### Templates ###
+    ## get-vcs-secrets-template ##
+    - name: get-vcs-secrets-template
+      nodeSelector:
+        kubernetes.io/hostname: ncn-m001
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+      outputs:
+        parameters:
+          - name: secret_name
+            valueFrom:
+              path: /tmp/secret_name
+      retryStrategy:
+        limit: "2"
+        retryPolicy: "Always"
+        backoff:
+          duration: "10s" # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+          factor: "2"
+          maxDuration: "1m"
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+        command: [bash]
+        source: |
+          function sync_item() {
+            item_name="$1"
+            source_ns="$2"
+            destination_name="$3-$RANDOM"
+            destination_ns="$4"
+            if kubectl get $item_name -n $source_ns &> /dev/null; then
+              echo "Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+              kubectl get $item_name -n $source_ns -o json | \
+                jq 'del(.metadata.namespace)' | \
+                jq 'del(.metadata.creationTimestamp)' | \
+                jq 'del(.metadata.resourceVersion)' | \
+                jq 'del(.metadata.selfLink)' | \
+                jq 'del(.metadata.uid)' | \
+                jq 'del(.metadata.ownerReferences)' | \
+                jq 'del(.metadata.name)' | \
+                jq '.metadata |= . + {"name":"'$destination_name'"}' | \
+                kubectl apply -n $destination_ns -f -
+                return $?
+            else
+              echo "Didn't find $item_name in the $source_ns namespace"
+              return 1
+            fi
+          }
+          sync_item secret/vcs-user-credentials services vcs-user-credentials-argo argo
+          rc=$?
+          echo $destination_name >> /tmp/secret_name
+          exit $rc
+    ## gitea-update-content ##
+    - name: gitea-update-content
+      nodeSelector:
+        kubernetes.io/hostname: ncn-m001
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+      inputs:
+        parameters:
+          - name: vcs_user_credentials_secret_name
+          - name: cf_update_gitea_url
+            value: "https://api-gw-service-nmn.local/vcs"
+          - name: cf_update_product_name
+            value: "{{=jsonpath(workflow.parameters.product_manifest, '$.current_product.manifest.name')}}"
+          - name: cf_update_product_version
+            value: "{{=jsonpath(workflow.parameters.product_manifest, '$.current_product.manifest.version')}}"
+          - name: cf_update_gitea_org
+            value: cray # default
+          - name: pristine_branch
+            value: "{{workflow.parameters.pristine_branch}}"
+          - name: customer_branch
+            value: "{{workflow.parameters.customer_branch}}"
+      container:
+        image: registry.local/artifactory.algol60.net/csm-docker/unstable/cf-gitea-update:0.1.0-CASMCMS-8304.1_dd28e36
+        command:
+          - "/bin/sh"
+        args: ["-c", "/opt/csm/cf-gitea-update/entrypoint.sh"]
+        env:
+          - name: CF_UPDATE_GITEA_USER
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.vcs_user_credentials_secret_name}}"
+                key: vcs_username
+          - name: CF_UPDATE_GITEA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "{{inputs.parameters.vcs_user_credentials_secret_name}}"
+                key: vcs_password
+          - name: CF_UPDATE_GITEA_URL
+            value: "{{inputs.parameters.cf_update_gitea_url}}"
+          - name: CF_UPDATE_PRODUCT_NAME
+            value: "{{inputs.parameters.cf_update_product_name}}"
+          - name: CF_UPDATE_PRODUCT_VERSION
+            value: "{{inputs.parameters.cf_update_product_version}}"
+          - name: CF_UPDATE_GITEA_ORG
+            value: "{{inputs.parameters.cf_update_gitea_org}}"
+          - name: PRISTINE_BRANCH
+            value: "{{inputs.parameters.pristine_branch}}"
+          - name: CUSTOMER_BRANCH
+            value: "{{inputs.parameters.customer_branch}}"
+        volumeMounts:
+          - name: certs # mount cluster certs to ca-certificates.crt for curl/http libraries
+            mountPath: /etc/ssl/certs/ca-certificates.crt
+            subPath: platform-ca-certs.crt
+      volumes:
+        - name: certs
+          hostPath:
+            path: /etc/pki/trust/anchors
+    ## cleanup-template ##
+    ## Remove the secret created earlier.
+    - name: cleanup-template
+      inputs:
+        parameters:
+          - name: vcs_user_credentials_secret_name
+            value: "{{steps.get-vcs-secrets.outputs.parameters.secret_name}}"
+      nodeSelector:
+        kubernetes.io/hostname: ncn-m001
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+        command: [bash]
+        source: |
+          kubectl -n argo delete secret/{{inputs.parameters.vcs_user_credentials_secret_name}}
