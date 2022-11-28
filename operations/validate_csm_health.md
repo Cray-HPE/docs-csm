@@ -594,6 +594,9 @@ This section can be run on any NCN or the PIT node.
    > from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
    > waiting state trying to set up volume mounts. See the
    > [UAI Troubleshooting](#64-uasuai-troubleshooting) section for more information.
+   > **IMPORTANT:** If the site is configured to use the CHN, and the high speed network has not been
+   > installed and configured, this procedure can not be completed. The UAI that is created will be inaccessible
+   > until the high speed network is available.
 
 This procedure must run on a master or worker node (**not the PIT node**).
 
