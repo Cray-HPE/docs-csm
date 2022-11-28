@@ -285,11 +285,6 @@ In the standard upgrade, the new worker NCN images must be customized, and all N
 
 **NOTE:** For the standard upgrade, it will not be possible to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
 
-1. If not already done, consult the `HPE Cray EX System Software Getting Started Guide`.
-
-    Read the `HPE Cray EX software upgrade workflow` section. Pay particular attention to the `HPC CSM Software Recipe` and `Cray System Management (CSM)` subsections,
-    as well as any `NCN Personalization` subsections.
-
 1. Prepare the pre-boot worker NCN image customizations.
 
     This will ensure that the CFS configuration layers are applied to perform image customization for the worker NCNs.
