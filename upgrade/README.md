@@ -11,7 +11,8 @@ product streams for the HPE Cray EX system can be installed or upgraded.
 - [2. Upgrade management nodes and CSM services](#2-upgrade-management-nodes-and-csm-services)
 - [3. Validate CSM health](#3-validate-csm-health)
 - [4. Apply security hardening](#4-apply-security-hardening)
-- [5. Next topic](#5-next-topic)
+- [5. Check and Update Firmware](#5-check-and-update-firmware)
+- [6. Next topic](#6-next-topic)
 
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
@@ -98,13 +99,15 @@ Review the security hardening guide, apply non-optional procedures, and review o
 
 See [Security Hardening](../operations/CSM_product_management/Apply_Security_Hardening.md).
 
-## 5. Next topic
+## 5. Check and Update Firmware
+
+Check and update firmware if not already at the correct versions.
+Make sure the latest version of the HPE Cray EX HPC Firmware Pack (HFP) has been installed.
+Follow the procedures for updating firmware with the Firmware Actions Service (FAS) document
+[Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
+
+## 6. Next topic
 
 After completion of the validation of CSM health, the CSM product stream has been fully upgraded and
 configured. Refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
 on the HPE Customer Support Center for more information on other product streams to be upgraded and configured after CSM.
-
-> **`NOTE`** If a newer version of the HPE Cray EX HPC Firmware Pack (HFP) is available, then the next step
-is to install HFP. This will inform the Firmware Action Services (FAS) of the newest firmware
-available. Once FAS is aware that new firmware is available, then see
-[Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
