@@ -6,7 +6,7 @@ Shut down management services and power off the HPE Cray EX management Kubernete
 - [Prerequisites](#prerequisites)
 - [Check health of the management cluster](#check-health-of-the-management-cluster)
 - [Shut down the Kubernetes management cluster](#shut-down-the-kubernetes-management-cluster)
-- [Next step]
+- [Next step](#next-step)
 
 ## Overview
 
@@ -258,6 +258,9 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
     ```bash
     USERNAME=root
     read -r -s -p "NCN BMC ${USERNAME} password: " IPMI_PASSWORD
+    ```
+
+    ```bash
     export IPMI_PASSWORD
     for ncn in ncn-m00{2,3} ncn-w00{1,2,3} ncn-s00{1,2,3}; do
         echo -n "${ncn}: "

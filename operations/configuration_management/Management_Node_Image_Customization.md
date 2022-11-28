@@ -57,13 +57,63 @@ The Cray CLI must be configured on the node where the commands are being run. Se
 
 ### 2. Import the NCN image into IMS
 
-Perform the [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md) procedure, except
-skip the following sections:
+Perform the [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md) procedure except:
 
-* [Set helper variables](../image_management/Import_External_Image_to_IMS.md#2-set-helper-variables)
-  * Skip this section because the variables have already been set above, in the previous step.
-* [Upload artifacts to S3](../image_management/Import_External_Image_to_IMS.md#5-upload-artifacts-to-s3)
-  * Skip this section because the artifacts are already in S3.
+* Skip this section: [Set helper variables](../image_management/Import_External_Image_to_IMS.md#2-set-helper-variables)
+
+  This is skipped because the variables have already been set above, in the previous step.
+
+* Modify this section: [Create image record in IMS](../image_management/Import_External_Image_to_IMS.md#4-create-image-record-in-ims) as follows:
+
+  (`ncn-mw#`) Use a unique name for the new IMS image in the first step for the revision intended. For example:
+
+  ```bash
+  cray ims images create --name "${IMS_ROOTFS_FILENAME}-REV" --format toml
+  ```
+
+* Skip this section: [Upload artifacts to S3](../image_management/Import_External_Image_to_IMS.md#5-upload-artifacts-to-s3)
+
+  This is skipped because the artifacts are already in S3.
+
+* Modify this section: [Create, upload, and register image manifest](../image_management/Import_External_Image_to_IMS.md#6-create-upload-and-register-image-manifest) as follows:
+
+  (`ncn-mw#`) When creating the image manifest, use the following command to create the manifest file. This is adjusted to reflect the
+  different image paths in S3.
+
+  ```console
+  cat <<EOF> manifest.json
+  {
+    "created": "`date '+%Y-%m-%d %H:%M:%S'`",
+    "version": "1.0",
+    "artifacts": [
+      {
+        "link": {
+            "path": "s3://boot-images/k8s/${ARTIFACT_VERSION}/rootfs",
+            "type": "s3"
+        },
+        "md5": "${IMS_ROOTFS_MD5SUM}",
+        "type": "application/vnd.cray.image.rootfs.squashfs"
+      },
+      {
+        "link": {
+            "path": "s3://boot-images/k8s/${ARTIFACT_VERSION}/kernel",
+            "type": "s3"
+        },
+        "md5": "${IMS_KERNEL_MD5SUM}",
+        "type": "application/vnd.cray.image.kernel"
+      },
+      {
+        "link": {
+            "path": "s3://boot-images/k8s/${ARTIFACT_VERSION}/initrd",
+            "type": "s3"
+        },
+        "md5": "${IMS_INITRD_MD5SUM}",
+        "type": "application/vnd.cray.image.initrd"
+      }
+    ]
+  }
+  EOF
+  ```
 
 ### 3. Create a CFS configuration, if needed
 

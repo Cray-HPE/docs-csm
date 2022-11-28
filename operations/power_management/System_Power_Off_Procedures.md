@@ -4,9 +4,9 @@ The procedures in this section detail the high-level tasks required to power off
 
 ## Note about Services Used During System Power Off
 
--   The Cray Advanced Platform Monitoring and Control \(CAPMC\) service controls power to major components. CAPMC sequences the power off tasks in the correct order, but **does not** gracefully shut down software services.
--   The Boot Orchestration Service \(BOS\) manages proper shutdown and power off tasks for compute nodes and User Access Nodes \(UANs\).
--   The System Admin Toolkit \(SAT\) automates shutdown services by stage.
+- The Cray Advanced Platform Monitoring and Control \(CAPMC\) service controls power to major components. CAPMC sequences the power off tasks in the correct order, but **does not** gracefully shut down software services.
+- The Boot Orchestration Service \(BOS\) manages proper shutdown and power off tasks for compute nodes and User Access Nodes \(UANs\).
+- The System Admin Toolkit \(SAT\) automates shutdown services by stage.
 
 ## Prepare the System for Power Off
 
@@ -22,7 +22,7 @@ To save management switch configuration settings, refer to [Save Management Netw
 
 ## Power Off System Cabinets
 
-To power off standard rack and liquid-cooled cabinet PDUs, refer to [Power Off Compute and IO Cabinets](Power_Off_Compute_and_IO_Cabinets.md).
+To power off standard rack and liquid-cooled cabinet PDUs, refer to [Power Off Compute Cabinets](Power_Off_Compute_Cabinets.md).
 
 ## Shut Down the Management Kubernetes Cluster
 
@@ -32,6 +32,6 @@ To shut down the management Kubernetes cluster, refer to [Shut Down and Power Of
 
 To power off the external Lustre file system (ClusterStor), refer to [Power Off the External Lustre File System](Power_Off_the_External_Lustre_File_System.md).
 
-## Lockout Tagout Facility Power
+## `Lockout Tagout` Facility Power
 
-If facility power must be removed from a single cabinet or cabinet group for maintenance, follow proper lockout-tagout procedures for the site.
+If facility power must be removed from a single cabinet or cabinet group for maintenance, follow proper `lockout-tagout` procedures for the site.

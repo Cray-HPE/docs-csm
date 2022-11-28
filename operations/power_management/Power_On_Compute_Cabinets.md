@@ -1,4 +1,4 @@
-# Power On Compute and IO Cabinets
+# Power On Compute Cabinets
 
 Power on liquid-cooled and standard rack cabinet PDUs.
 
@@ -41,20 +41,32 @@ power-on command from Cray System Management \(CSM\) software.
 
    ![PSU Status LEDs](../../img/operations/PSU_Status.svg)
 
-1. Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets chassis and slots.
+1. (`ncn-m001#`) Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets, chassis, and slots.
 
    ```console
    sat bootsys boot --stage cabinet-power
    ```
 
-   This command resumes the `hms-discovery` job which initiates power-on of the liquid-cooled cabinets. The `--stage cabinet-power`
-   option controls power only to liquid-cooled cabinets.
+   This command first resumes the `hms-discovery` Kubernetes cronjob and waits for it to be
+   scheduled. Then, the `hms-discovery` job initiates power-on of the liquid-cooled cabinets.
+   Finally, the `sat bootsys` command waits for the components in the liquid-cooled cabinets to be
+   powered on. The `sat bootsys` command controls power only to liquid-cooled cabinets.
 
-   If `sat bootsys` fails to schedule `hms-discovery` with the following message, then delete and recreate the cron job.
+   The `sat bootsys` command may time out while waiting for the `hms-discovery` cronjob to be
+   scheduled and display the following message:
 
    ```text
    ERROR: The cronjob hms-discovery in namespace services was not scheduled within expected window after being resumed.
    ```
+
+   If this occurs, first check if the cronjob needs to be re-created. To do this, follow the instructions
+   in the [Check `cronjobs`](Power_On_and_Start_the_Management_Kubernetes_Cluster.md#check-cronjobs)
+   section of the [Power On and Start the Management Kubernetes Cluster](Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
+   procedure.
+
+   If the cronjob does not need to be re-created and has been scheduled within the time expected
+   (based on its cron schedule), execute the `sat bootsys boot --stage cabinet-power` command
+   again.
 
    If `sat bootsys` fails to power on the cabinets through `hms-discovery`, then use CAPMC to manually power on the cabinet chassis,
    compute blade slots, and all populated switch blade slots \(1, 3, 5, and 7\). This example shows cabinets 1000-1003.
@@ -67,21 +79,15 @@ power-on command from Cray System Management \(CSM\) software.
 
 ### Power On Standard Rack PDU Circuit Breakers
 
-1. Switch the standard rack compute and I/O cabinet PDU circuit breakers to ON.
+1. Switch the standard rack compute cabinet PDU circuit breakers to ON.
 
-   This applies power to the server BMCs and connects them to the management network. Compute and I/O nodes
+   This applies power to the server BMCs and connects them to the management network. Compute nodes
    **do not power on and boot automatically**. The Boot Orchestration Service \(BOS\) brings up compute nodes and User Access Nodes \(UANs\).
 
    If necessary, use IPMI commands to power on individual servers as needed.
 
 1. Verify that all system management network switches and Slingshot network switches are powered on in each rack, and that
    there are no error LEDS or hardware failures.
-
-1. Bring up the Slingshot Fabric.
-   Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
-
-      * The *HPE Slingshot Operations Guide* PDF for HPE Cray EX systems.
-      * The *HPE Slingshot Troubleshooting* PDF.
 
 ## Next Step
 
