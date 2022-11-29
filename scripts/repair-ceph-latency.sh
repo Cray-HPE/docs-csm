@@ -143,7 +143,8 @@ function restart_osds() {
 }
 
 function set_memory_target_settings() {
-  ceph config set osd osd_memory_target_autotune false
+  ceph config rm osd bluestore_rocksdb_options
+  ceph config set osd osd_memory_target_autotune true
   ceph config set osd osd_memory_target ${osd_memory_target_bytes}
 }
 
