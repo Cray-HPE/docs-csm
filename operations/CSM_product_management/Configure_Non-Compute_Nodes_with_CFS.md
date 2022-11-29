@@ -19,7 +19,7 @@ procedures may be re-run as needed.
    - [Option 3: Disable CSM-provided passwordless SSH](#set_up_passwordless_ssh_option_3)
    - [Restore CSM-provided SSH keys](#set_up_passwordless_ssh_restore)
 2. [Configure the `root` password in Vault](#set_root_password)
-3. [Run NCN personalization](#run_ncn_personalization)
+3. [Run management NCN personalization](#run_ncn_personalization)
 
 <a name="set_up_passwordless_ssh"></a>
 
@@ -45,6 +45,10 @@ The management of keys on NCNs is achieved by the `trust-csm-ssh-keys` and
 `passwordless-ssh` Ansible roles in the CSM configuration management repository.
 The SSH keypair is applied to management nodes using NCN personalization.
 
+> **NOTE:** CFS itself does not use the CSM-provided (or user-supplied) SSH keys
+> to make connections between nodes. CFS will continue to function if
+> passwordless SSH is disabled between CSM and other product environments.
+
 <a name="set_up_passwordless_ssh_option_1"></a>
 
 ### Option 1: Use the CSM-provided SSH keys
@@ -66,8 +70,8 @@ keys.
     > key files on the system.
 
     ```bash
-    ncn# PUBLIC_KEY_FILE=/path/to/id_rsa-csm.pub
-    ncn# PRIVATE_KEY_FILE=/path/to/id_rsa-csm
+    ncn-mw# PUBLIC_KEY_FILE=/path/to/id_rsa-csm.pub
+    ncn-mw# PRIVATE_KEY_FILE=/path/to/id_rsa-csm
     ```
 
 1. Provide the custom keys by script or manually.
@@ -82,8 +86,8 @@ keys.
         > [Check for Latest Documentation](../../update_product_stream/index.md#documentation)
 
         ```bash
-        ncn# /usr/share/doc/csm/scripts/operations/configuration/replace_ssh_keys.sh \
-                --public-key-file "${PUBLIC_KEY_FILE}" --private-key-file "${PRIVATE_KEY_FILE}"
+        ncn-mw# /usr/share/doc/csm/scripts/operations/configuration/replace_ssh_keys.sh \
+                  --public-key-file "${PUBLIC_KEY_FILE}" --private-key-file "${PRIVATE_KEY_FILE}"
         ```
 
     - Manually provide custom SSH keys
@@ -93,19 +97,19 @@ keys.
         1. Replace the private key half:
 
             ```bash
-            ncn# KEY64=$(cat "${PRIVATE_KEY_FILE}" | base64) &&
-                 kubectl get secret -n services csm-private-key -o json | \
-                    jq --arg value "$KEY64" '.data["value"]=$value' | kubectl apply -f - &&
-                 unset KEY64
+            ncn-mw# KEY64=$(cat "${PRIVATE_KEY_FILE}" | base64) &&
+                    kubectl get secret -n services csm-private-key -o json | \
+                       jq --arg value "$KEY64" '.data["value"]=$value' | kubectl apply -f - &&
+                    unset KEY64
             ```
 
         1. Replace the public key half:
 
             ```bash
-            ncn# kubectl delete configmap -n services csm-public-key &&
-                    cat "${PUBLIC_KEY_FILE}" | base64 > ./value &&
-                    kubectl create configmap --from-file value csm-public-key --namespace services &&
-                    rm ./value
+            ncn-mw# kubectl delete configmap -n services csm-public-key &&
+                       cat "${PUBLIC_KEY_FILE}" | base64 > ./value &&
+                       kubectl create configmap --from-file value csm-public-key --namespace services &&
+                       rm ./value
             ```
 
 Passwordless SSH with the provided keys will be setup once NCN personalization
@@ -133,10 +137,6 @@ Modifying Ansible plays in a configuration repository will require a new commit
 and subsequent update of the [configuration layer](../configuration_management/Configuration_Layers.md)
 associated with the product.
 
-> **NOTE:** CFS itself does not use the CSM-provided (or user-supplied) SSH keys
-> to make connections between nodes. CFS will continue to function if
-> passwordless SSH is disabled between CSM and other product environments.
-
 Proceed [Configure the `root` password in Vault](#set_root_password).
 
 <a name="set_up_passwordless_ssh_restore"></a>
@@ -155,13 +155,13 @@ keys will be republished.
 1. Delete the `csm-private-key` Kubernetes secret.
 
     ```bash
-    ncn# kubectl delete secret -n services csm-private-key
+    ncn-mw# kubectl delete secret -n services csm-private-key
     ```
 
 1. Delete the `csm-public-key` Kubernetes ConfigMap.
 
     ```bash
-    ncn# kubectl delete configmap -n services csm-public-key
+    ncn-mw# kubectl delete configmap -n services csm-public-key
     ```
 
 <a name="set_root_password"></a>
@@ -179,9 +179,9 @@ and managed in Vault.
 
 <a name="run_ncn_personalization"></a>
 
-## 3. Run NCN personalization
+## 3. Run management NCN personalization
 
-Prior to running NCN personalization, gather the following information:
+Prior to running management NCN personalization, gather the following information:
 
 - HTTP clone URL for the configuration repository in [VCS](../configuration_management/Version_Control_Service_VCS.md).
 - Path to the Ansible play to run in the repository.
@@ -199,11 +199,12 @@ Prior to running NCN personalization, gather the following information:
    installation or upgrade, use the commit containing the changes.
 
 1. If no changes have been made, then the latest commit on the default branch for
-   this version of CSM should be used. Find the commit in the
-   `cray-product-catalog` for the current version of CSM. For example:
+   this version of CSM should be used.
+
+   Find the commit in the `cray-product-catalog` ConfigMap for the current version of CSM. For example:
 
    ```bash
-   ncn# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+   ncn-mw# kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
    ```
 
    Look for something similar to the following in the output:
@@ -221,7 +222,7 @@ Prior to running NCN personalization, gather the following information:
    The commit will be different for each system and version of CSM. For
    this example, it is `43ecfa8236bed625b54325ebb70916f55884b3a4`.
 
-1. Craft a new configuration layer entry for the new CSM:
+1. Craft a new configuration layer entry for the new CSM.
 
    ```json
          {
@@ -232,13 +233,7 @@ Prior to running NCN personalization, gather the following information:
          }
    ```
 
-1. (Install Only) Follow the procedure in [Perform NCN Personalization](Perform_NCN_Personalization.md),
-   adding a CSM configuration layer to the NCN personalization using the JSON
-   from step 3.
+1. Create or update the NCN personalization configuration in CFS.
 
-1. (Upgrade Only) Follow the procedure in [Perform NCN Personalization](Perform_NCN_Personalization.md),
-   replacing the existing CSM configuration layer to the NCN personalization
-   using the JSON from step 3.
-
-> **NOTE:** The CSM configuration layer **MUST** be the first layer in the
-> NCN personalization CFS configuration.
+    > **`NOTE`** The CSM configuration layer **MUST** be the first layer in the
+    > NCN personalization CFS configuration.
