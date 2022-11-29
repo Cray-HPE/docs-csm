@@ -26,6 +26,12 @@ kind: WorkflowTemplate
 metadata:
   name: extract-release-distributions
 spec:
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+  nodeSelector:
+    kubernetes.io/hostname: ncn-m001
   entrypoint: main
   templates:
     - name: main
@@ -33,31 +39,67 @@ spec:
         parameters:
           - name: auth_token
           - name: global_params
-      retryStrategy:
-        limit: "2"
-        retryPolicy: "Always"
-        backoff:
-          duration: "10s" # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
-          factor: "2"
-          maxDuration: "1m"
+      dag:
+        tasks:
+          - name: list-tar-files
+            inline:
+              script:
+                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.0.4
+                command: [sh]
+                source: |
+                  #!/bin/sh
+                  set -x
+                  media_dir="{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
+                  cd $media_dir && ls *.tar.gz | jq -R -s -c 'split("\n")[:-1]'
+                volumeMounts:
+                  - name: iuf
+                    mountPath: /opt/cray/iuf
+              volumes:
+                - name: iuf
+                  hostPath:
+                    path: /opt/cray/iuf
+                    type: Directory
+          - name: extract-tar-files
+            dependencies:
+              - list-tar-files
+            arguments:
+              parameters:
+                - name: tarfile
+                  value: "{{item}}"
+                - name: media_dir
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
+            withParam: "{{tasks.list-tar-files.outputs.result}}"
+            template: extract-tar-files
+    - name: extract-tar-files
+      inputs:
+        parameters:
+          - name: tarfile
+          - name: media_dir
       script:
         image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
         command: [sh]
         source: |
           #!/bin/sh
-          tarfile="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.original_location')}}"
-          productName="{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.name')}}"
-          echo "Extract from: $tarfile for product: $productName"
-          dir=$(dirname "$tarfile")
-          parent_directory=${tarfile%.tar.*}
-          echo ${parent_directory} > /tmp/parent_directory
-          cd $dir
-          tar -xvzf $tarfile
+          set -x
+          media_dir={{inputs.parameters.media_dir}}
+          cd $media_dir
+          tar -xvzf {{inputs.parameters.tarfile}} &> /dev/stderr
+          dir_name=`tar -tzf {{inputs.parameters.tarfile}} | head -1 | cut -f1 -d"/"`
+          cat ${dir_name}/iuf-product-manifest.yaml > /tmp/manifest.yaml
+          echo $media_dir/$dir_name > /tmp/original_location
         volumeMounts:
           - name: iuf
-            mountPath: /etc/iuf
+            mountPath: /opt/cray/iuf
       outputs:
         parameters:
-          - name: parent_directory
+          - name: manifest
             valueFrom:
-              path: /tmp/parent_directory
+              path: "/tmp/manifest.yaml"
+          - name: original_location
+            valueFrom:
+              path: "/tmp/original_location"
+      volumes:
+        - name: iuf
+          hostPath:
+            path: /opt/cray/iuf
+            type: Directory
