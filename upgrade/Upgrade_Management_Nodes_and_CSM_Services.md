@@ -70,6 +70,12 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
    After upgrading, if health checks indicate the Postgres pods are not in a healthy/running state, recovery procedures may be needed.
    See [Troubleshoot Postgres Database](../operations/kubernetes/Troubleshoot_Postgres_Database.md) for troubleshooting and recovery procedures.
 
+- Back-ups for Postgres databases
+
+   After upgrading, if any `*postgresql-db-backup` cronjob pods are in error, see [NCN Resource Checks](../troubleshooting/known_issues/ncn_resource_checks.md).
+   If the most recent `*postgresql-db-backup` cronjob pod is in error and the pod log indicates a failure
+   due to `pg_dumpall: error: pg_dump failed on database ...`, contact support to further investigate and resolve.
+
 - Troubleshooting Spire pods not starting on NCNs
 
    See [Troubleshoot Spire Failing to Start on NCNs](../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
