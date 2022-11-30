@@ -52,7 +52,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
        else
          scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring\} /etc/ceph/
        fi
-                
+              
        if [[ ! $(pdsh -w $node "ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
        then
          (( counter+1 ))
