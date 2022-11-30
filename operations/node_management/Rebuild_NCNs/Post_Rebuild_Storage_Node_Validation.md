@@ -81,4 +81,4 @@ Skip this section if a master or worker node was rebuilt.
 
 ## Next Step
 
-Return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
+Return to the main [Rebuild NCNs](Rebuild_NCNs.md#validation) page.
