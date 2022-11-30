@@ -57,4 +57,4 @@ This section applies to all node types. The commands in this section assume the 
 
 ## Next Step
 
-Proceed to the next step to [Power Cycle and Rebuild Nodes](Power_Cycle_and_Rebuild_Nodes.md) or return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
+Proceed to the next step to [Power Cycle and Rebuild Nodes](Power_Cycle_and_Rebuild_Nodes.md). Otherwise, return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
