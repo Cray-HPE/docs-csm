@@ -1045,6 +1045,34 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="UPDATE_CLOCK_SKEW_TEST"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    if ! test -f "$locOfScript"/files/goss-check-clock-skew.yaml; then
+        echo "could not find goss-check-clock-skew.yaml"
+        exit 1
+    fi
+    new_clock_skew_test=$locOfScript/files/goss-check-clock-skew.yaml
+    clock_skew_dest=$(rpm -ql csm-testing | grep goss-check-clock-skew.yaml)
+    for target_ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
+        if [[ "$target_ncn" = "$(hostname)" ]]; then
+            cp -af $new_clock_skew_test $clock_skew_dest
+            continue
+        fi
+        # ensure host is accessible, skip it if not
+        if ! ssh "$target_ncn" hostname > /dev/null; then
+            continue
+        fi
+        rsync -aq $new_clock_skew_test $target_ncn:$clock_skew_dest
+    done
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 # restore previous ssh config if there was one, remove ours
 rm -f /root/.ssh/config
 test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
