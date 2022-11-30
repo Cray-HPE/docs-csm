@@ -163,6 +163,6 @@ This section applies to all node types. The commands in this section assume the 
          diff "${XNAME}.json" "${XNAME}.check.json"
          ```
 
-## Next step
+## Next Step
 
-Proceed to the next step to [Validate Boot Loader](Validate_Boot_Loader.md).
+Proceed to the next step to [Validate Boot Loader](Validate_Boot_Loader.md). Otherwise, return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.

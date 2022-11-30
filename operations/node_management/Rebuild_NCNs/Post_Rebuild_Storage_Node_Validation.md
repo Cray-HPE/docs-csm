@@ -14,7 +14,7 @@ Skip this section if a master or worker node was rebuilt.
 
     Example output:
 
-    ```
+    ```yaml
       cluster:
         id:     22d01fcd-a75b-4bfc-b286-2ed8645be2b5
         health: HEALTH_OK
@@ -45,7 +45,7 @@ Skip this section if a master or worker node was rebuilt.
 
     Example output:
 
-    ```
+    ```text
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95917 root default
     -3        6.98639     host ncn-s001
@@ -75,7 +75,7 @@ Skip this section if a master or worker node was rebuilt.
 
     Example output:
 
-    ```
+    ```text
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 
