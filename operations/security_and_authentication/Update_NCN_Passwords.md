@@ -24,6 +24,11 @@ Vault instance and then apply it immediately to management nodes with the `csm.p
 role via a CFS session. The same root password from Vault will be applied anytime that the NCN
 personalization including the CSM layer is run.
 
+* [Procedure: Configure `root` password in Vault](#procedure-configure-root-password-in-vault)
+* [Procedure: Apply `root` password to NCNs (standalone)](#procedure-apply-root-password-to-ncns-standalone)
+
+<a name="configure_root_password_in_vault"></a>
+
 ## Procedure: Configure `root` password in Vault
 
 1. Generate a new password hash for the `root` user.
@@ -33,81 +38,94 @@ personalization including the CSM layer is run.
    > cannot be viewed later.
 
    ```bash
-   ncn# read -r -s -p "New root password for NCN images: " PW1 ; echo ; if [[ -z ${PW1} ]]; then
+   linux# read -r -s -p "New root password for NCN images: " PW1 ; echo ; if [[ -z ${PW1} ]]; then
             echo "ERROR: Password cannot be blank"
-        else
+          else
             read -r -s -p "Enter again: " PW2
             echo
             if [[ ${PW1} != ${PW2} ]]; then
-                echo "ERROR: Passwords do not match"        
+              echo "ERROR: Passwords do not match"        
             else
-                echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c4) --stdin
+              echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc ./A-Za-z0-9 | head -c4) --stdin
             fi
-        fi ; unset PW1 PW2
+          fi ; unset PW1 PW2
    ```
 
-1. Get the HashiCorp Vault root token:
+1. Get the HashiCorp Vault root token.
 
    ```bash
    ncn-mw# kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
    ```
 
-1. Write the password hash from step 1 to the HashiCorp Vault. The `vault login`
-   command will request the token value from the output of step 2 above. The
-   `vault read` command verifies the hash was stored correctly.
+1. Write the password hash to the [HashiCorp Vault](HashiCorp_Vault.md).
 
-   ***NOTE***: It is important to enclose the hash in single quotes to preserve
-   any special characters.
+   1. Open an interactive shell in the Vault Kubernetes pod.
 
-   ```bash
-   ncn-mw# kubectl exec -itn vault cray-vault-0 -c vault -- sh
-   cray-vault-0# export VAULT_ADDR=http://cray-vault:8200
-   cray-vault-0# vault login
-   cray-vault-0# vault write secret/csm/management_nodes root_password='HASH'
-   cray-vault-0# vault read secret/csm/management_nodes
-   cray-vault-0# exit
-   ```
+      ```bash
+      ncn-mw# kubectl exec -itn vault cray-vault-0 -c vault -- sh
+      ```
+
+   1. Write the password hash to Vault.
+
+      * The `vault login` command will request the token value from the output of the previous step.
+      * Use the password hash generated in the earlier step.
+        * **`NOTE`**: It is important to enclose the hash in single quotes to preserve any special characters.
+      * The `vault read` command allows the administrator to verify that the contents of the secret were stored correctly.
+
+      ```bash
+      cray-vault# export VAULT_ADDR=http://cray-vault:8200
+      cray-vault# vault login
+      cray-vault# vault write secret/csm/management_nodes root_password='HASH'
+      cray-vault# vault read secret/csm/management_nodes
+      cray-vault# exit
+      ```
 
 ## Procedure: Apply `root` password to NCNs (standalone)
 
-Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to
-**only** change the root password on NCNs. This is a quick alternative to
-running a [full NCN personalization](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password),
-where passwords are also applied using the password stored in Vault set in the
-procedure above.
+Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to **only** change the root password on NCNs.
+This is a quick alternative to running a full management NCN personalization, as documented in the
+[Configure Non-Compute Nodes with CFS](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md) procedure.
 
 1. Create a CFS configuration layer to run the password change Ansible playbook.
 
-   ```bash
-   ncn# cat ncn-password-update-config.json
-   ```
+   **`NOTE`** This step only needs to be done once, as long as the commit in the CSM
+   configuration management Git repository has not changed. If the commit has not changed since the
+   last time this step was run, this step may be skipped, because the previously created CFS configuration
+   will still work.
 
-   Example output:
+   1. Create a file containing only this CFS configuration layer.
 
-   ```json
-   {
-     "layers": [
-       {
-         "name": "ncn-password-update",
-         "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-         "playbook": "rotate-pw-mgmt-nodes.yml",
-         "commit": "<INSERT GIT COMMIT ID>"
-       }
-     ]
-   }
-   ```
+      The file contents should be as follows, except replace the `<INSERT GIT COMMIT ID>` text with the commit in the
+      CSM configuration management Git repository that is in use.
 
-   ```bash
-   ncn# cray cfs configurations update ncn-password-update --file ./ncn-password-update-config.json
-   ```
+      ```json
+      {
+        "layers": [
+          {
+            "name": "ncn-password-update",
+            "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+            "playbook": "rotate-pw-mgmt-nodes.yml",
+            "commit": "<INSERT GIT COMMIT ID>"
+          }
+        ]
+      }
+      ```
+
+   1. Create the `ncn-password-update` configuration in CFS.
+
+      Replace the `<INSERT FILE PATH HERE>` text with the path to the file created in the previous step.
+      If a CFS configuration already exists with this name, the following command will overwrite it.
+
+      ```bash
+      ncn-mw# cray cfs configurations update ncn-password-update --file <INSERT FILE PATH HERE>
+      ```
 
 1. Create a CFS configuration session to apply the password update.
 
    ```bash
-   ncn# cray cfs sessions create --name ncn-password-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-password-update
+   ncn-mw# cray cfs sessions create --name ncn-password-update-`date +%Y%m%d%H%M%S` --configuration-name ncn-password-update
    ```
 
-   **NOTE:** Subsequent password changes need only update the password hash in
-   HashiCorp Vault and create the CFS session as long as the commit in the CSM
-   configuration management repository has not changed. If the commit has
-   changed, repeat this procedure from the beginning.
+1. Monitor the CFS session.
+
+   See [Track the Status of a Session](../configuration_management/Track_the_Status_of_a_Session.md).
