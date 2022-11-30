@@ -163,6 +163,7 @@ This section applies to all node types. The commands in this section assume the 
          diff "${XNAME}.json" "${XNAME}.check.json"
          ```
 
-## Next step
+## Next Step
 
-Proceed to the next step to [Validate Boot Loader](Validate_Boot_Loader.md).
+Proceed to the next step to [Re-add Storage Node to Ceph](Re-add_Storage_Node_to_Ceph.md) or return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
+

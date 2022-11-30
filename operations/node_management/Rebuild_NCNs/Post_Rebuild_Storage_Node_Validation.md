@@ -81,4 +81,4 @@ Skip this section if a master or worker node was rebuilt.
 
 ## Next Step
 
-Return to the main [Rebuild NCNs](Rebuild_NCNs.md#validation) page.
+Proceed to the next step to [Validate Boot Loader](Validate_Boot_Loader.md) or return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
