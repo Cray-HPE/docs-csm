@@ -25,7 +25,7 @@ version: 0.1.0 # IUF version
 
 stages:
   - name: process-media
-    type: product
+    type: global
     operations:
       - name: extract-release-distributions
         local-path: operations/extract-release-distributions.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
