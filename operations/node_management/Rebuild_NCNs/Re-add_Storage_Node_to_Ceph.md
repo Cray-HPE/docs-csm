@@ -17,16 +17,26 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
    host=$(hostname)
 
-   > ~/.ssh/known_hosts
+   if [[ ! -f ~/.ssh/known_hosts ]]; then
+     > ~/.ssh/known_hosts
+   fi
 
    for node in ncn-s001 ncn-s002 ncn-s003; do
-     ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
+     # remove the old authorized_hosts entry for the $node
+     ncn_ip=$(host ${node} | awk '{ print $NF }')
+     [ -n "${ncn_ip}" ]
+     [ $? -ne 0 ] && exit 1
+     ssh-keygen -R "${node}" -f "~/.ssh/known_hosts" > /dev/null 2>&1
+     [ $? -ne 0 ] && return 1
+     ssh-keygen -R "${ncn_ip}" -f "~/.ssh/known_hosts" > /dev/null 2>&1
+     [ $? -ne 0 ] && return 1
+     # add new authorized_hosts entry for the node
+     ssh-keyscan -H "${node},${ncn_ip}" >> ~/.ssh/known_hosts
+
      pdsh -w $node > ~/.ssh/known_hosts
      if [[ "$host" == "$node" ]]; then
        continue
-     fi
-
-     if [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]
+     elif [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]
      then
        if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
        then
@@ -35,7 +45,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
          scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
        fi
 
-       if [[ ! $(pdsh -w $node "/srv/cray/scripts/common/pre-load-images.sh; ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-keyscan -H $host >> ~/.ssh/known_hosts ;ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
+       if [[ ! $(pdsh -w $node "/srv/cray/scripts/common/pre-load-images.sh; ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H $host >> ~/.ssh/known_hosts ;ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
        then
          (( counter+1 ))
          if [[ $counter -ge 3 ]]
