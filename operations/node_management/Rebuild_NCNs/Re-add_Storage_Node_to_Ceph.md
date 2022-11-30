@@ -16,6 +16,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    host=$(hostname)
    host_ip=$(host ${host} | awk '{ print $NF }')
 
+
    # run preload images on host
    if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
      echo "Unable to run pre-load-images.sh on $host."
