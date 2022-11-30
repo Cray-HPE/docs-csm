@@ -33,9 +33,8 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
      # add new authorized_hosts entry for the node
      ssh-keyscan -H "${node},${ncn_ip}" >> ~/.ssh/known_hosts
 
-     pdsh -w $node > ~/.ssh/known_hosts
      if [[ "$host" == "$node" ]]; then
-       continue
+       (( counter+1 ))
      elif [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]
      then
        if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
@@ -44,7 +43,9 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
        else
          scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
        fi
-
+       
+       ssh $node "if [[ ! -f ~/.ssh/known_hosts ]]; then > ~/.ssh/known_hosts; fi"
+         
        if [[ ! $(pdsh -w $node "/srv/cray/scripts/common/pre-load-images.sh; ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H $host >> ~/.ssh/known_hosts ;ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
        then
          (( counter+1 ))
