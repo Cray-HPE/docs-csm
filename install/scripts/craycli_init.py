@@ -434,11 +434,11 @@ def checkSsh(host):
     elif idx==2:
         # should not have exited yet
         msg = "Should not have recieved EOF from ssh"
-        LOGGER.warning(f"  {host}: " + msg)
+        LOGGER.warning(  f"{host}: " + msg)
         return MSG_SSH_ERROR, msg
     elif idx==3:
         msg = "Timeout waiting for ssh"
-        LOGGER.warning(f"  {host}: " + msg)
+        LOGGER.warning(  f"{host}: " + msg)
         return MSG_SSH_ERROR, msg
 
     # logout, capture the rest of the output, and wait for the process to exit
