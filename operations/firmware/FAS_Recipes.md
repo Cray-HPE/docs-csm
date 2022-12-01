@@ -33,7 +33,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 >     - This command may produce a large list of errors when talking to BMCs. This is expected if the hardware has been partially powered down.
 >     - Verify chassis power is Off.
 >       - `cray capmc get_xname_status create --xnames x[1000-1008]c[0-7]`
->       - If the chassis power is Off, everything else is Off, it is safe to procede.
+>       - If the chassis power is Off, everything else is Off, it is safe to proceed.
 
 ```json
 {
