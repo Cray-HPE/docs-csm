@@ -1,6 +1,6 @@
 # Install CSM
 
-Note: If you are beginning an install with CSM 1.2.0, please download and proceed to install the latest released CSM 1.2.x version, instead. This will save you time performing a patch update later.
+Note: If installing CSM 1.2.0, then in order to avoid performing a patch update later, instead install the latest released CSM 1.2.x version.
 
 ## Abstract
 
