@@ -24,7 +24,9 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 ## Stage 0.1 - Prepare assets
 
-1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade. The command below is just an example.  Be sure you are setting the appropriate `CSM_RELEASE` version for your upgrade.
+1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
+
+   > The following command is just an example. Be sure to set the appropriate `CSM_RELEASE` version for the upgrade being performed.
 
    ```bash
    ncn-m001# CSM_RELEASE=csm-1.2.2
