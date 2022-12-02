@@ -47,7 +47,7 @@ spec:
           - name: auth_token
             value: "{{inputs.parameters.auth_token}}"
           - name: iuf_release_mount_path
-            value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.process_media.current_product.parent_directory')}}"
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.process-media.current_product.parent_directory')}}"
           - name: media_dir
             value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
         hooks:
