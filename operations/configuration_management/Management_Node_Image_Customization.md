@@ -33,7 +33,7 @@ The Cray CLI must be configured on the node where the commands are being run. Se
     See [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
 
     ```bash
-    NCN_IMS_IMAGE_ID=<k8s-UUID-value>
+    NCN_IMS_IMAGE_ID=<UUID-value>
     ```
 
 ### 2. Create a CFS configuration, if needed

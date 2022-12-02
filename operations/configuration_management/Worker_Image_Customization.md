@@ -80,7 +80,7 @@ All of the following are prerequisites on the node where this procedure is being
       - (`ncn-m001#`) If doing this as part of a CSM upgrade, then use the following command to set the `NCN_IMS_IMAGE_ID` variable.
 
           ```bash
-          NCN_IMS_IMAGE_ID=$(grep "^export NCN_IMS_IMAGE_ID=" /etc/cray/upgrade/csm/myenv | tail -1 | cut -d= -f2)
+          NCN_IMS_IMAGE_ID=$(grep "^export K8S_IMS_IMAGE_ID=" /etc/cray/upgrade/csm/myenv | tail -1 | cut -d= -f2)
           echo "${NCN_IMS_IMAGE_ID}"
           ```
 
