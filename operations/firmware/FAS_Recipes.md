@@ -46,8 +46,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 >
 >      1. Issue power off command.
 >
->         > This command may produce a large list of errors when talking to BMCs. This is expected if the hardware
->         > has been partially powered down.
+>         This command may produce a large list of errors when talking to BMCs. This is expected if the hardware
+>         has been partially powered down.
 >
 >         ```bash
 >         ncn-mw# cray capmc xname_off create --xnames x[1000-1008]c[0-7] --force true --continue true --recursive true
