@@ -2,7 +2,7 @@
 
 > **Reminders:**
 >
-> - CSM 1.0.1 or higher is required in order to upgrade to CSM 1.2.1.
+> - CSM 1.0.1 or higher is required in order to upgrade to CSM 1.2.x.
 > - If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 >   [Relevant troubleshooting links for upgrade-related issues](README.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
@@ -24,10 +24,10 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 ## Stage 0.1 - Prepare assets
 
-1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
+1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade. The command below is just an example.  Be sure you are setting the appropriate `CSM_RELEASE` version for your upgrade.
 
    ```bash
-   ncn-m001# CSM_RELEASE=csm-1.2.1
+   ncn-m001# CSM_RELEASE=csm-1.2.2
    ```
 
 1. If there are space concerns on the node, then add an `rbd` device on the node for the CSM tarball.

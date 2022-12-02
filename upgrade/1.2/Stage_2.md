@@ -96,10 +96,10 @@ upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to
 
    See [Configure the Cray Command Line Interface](../../operations/configure_cray_cli.md) for details on how to do this.
 
-1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
+1. Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade. Be sure you have the `CSM_RELEASE` version set appropriately for the version of CSM 1.2.x you are upgrading to.
 
    ```bash
-   ncn-m002# CSM_RELEASE=csm-1.2.1
+   ncn-m002# CSM_RELEASE=csm-1.2.2
    ```
 
 1. Copy artifacts from `ncn-m001`.
