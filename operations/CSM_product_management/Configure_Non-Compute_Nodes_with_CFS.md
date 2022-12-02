@@ -175,7 +175,7 @@ and managed in Vault.
 1. Set the password in Vault by following the `Configure Root Password in Vault`
    procedure in [Update NCN Passwords](../security_and_authentication/Update_NCN_Passwords.md).
 1. Apply the Vault password to the NCNs in the
-   [NCN personalization](#run_ncn_personalization) procedure.
+   [3. Run management NCN personalization](#run_ncn_personalization) procedure.
 
 <a name="run_ncn_personalization"></a>
 
