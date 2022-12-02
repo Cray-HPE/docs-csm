@@ -1,20 +1,22 @@
 # Update a CFS Configuration
 
-Modify a Configuration Framework Service \(CFS\) configuration by specifying the JSON of the configuration and its layers. Use the `cray cfs configurations update` command, similar to creating a configuration.
+Modify a Configuration Framework Service \(CFS\) configuration by specifying the JSON of the configuration and its layers. Use the
+`cray cfs configurations update` command, similar to creating a configuration.
 
 ## Prerequisites
 
 * A CFS configuration has been created.
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+  See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure
 
-1.  Add and/or remove the configuration layers from an existing JSON configuration file.
+1. Add and/or remove the configuration layers from an existing JSON configuration file.
 
     Do not include the name of the configuration in the JSON file. This is specified on the command line in the next step.
 
     ```bash
-    ncn# cat configurations-example.json
+    ncn-mw# cat configurations-example.json
     ```
 
     Example configuration:
@@ -32,11 +34,10 @@ Modify a Configuration Framework Service \(CFS\) configuration by specifying the
     }
     ```
 
-2.  Update the configuration in CFS.
+1. Update the configuration in CFS.
 
     ```bash
-    ncn# cray cfs configurations update configurations-example \
-    --file ./configurations-example.json --format json
+    ncn-mw# cray cfs configurations update configurations-example --file ./configurations-example.json --format json
     ```
 
     Example output:
@@ -55,4 +56,3 @@ Modify a Configuration Framework Service \(CFS\) configuration by specifying the
       "name": "configurations-example"
     }
     ```
-
