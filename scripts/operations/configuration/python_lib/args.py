@@ -31,7 +31,7 @@ import os
 from typing import Callable, List
 
 
-text_file_type = argparse.FileType('rt', encoding="utf-8")
+TEXT_FILE_TYPE = argparse.FileType('rt', encoding="utf-8")
 
 
 def get_text_file_contents(file_name: str,
@@ -47,7 +47,7 @@ def get_text_file_contents(file_name: str,
     """
     # Use the built-in argparse FileType to open the file for reading.
     # This will automatically raise appropriate errors if there are any issues.
-    file_contents = text_file_type(file_name).read()
+    file_contents = TEXT_FILE_TYPE(file_name).read()
 
     if value_validator is not None:
         try:
@@ -126,7 +126,7 @@ class PasswordPromptAction(argparse.Action):
     and then validate that it meets the minimum and maximum length requirements (if any).
     """
 
-    def __init__(self, option_strings: List, dest: str, nargs = 0,
+    def __init__(self, option_strings: List, dest: str, nargs=0,
                  min_length: int = None, max_length: int = None, **kwargs):
         """
         Initialize the custom action, storing the length requirements for later use
