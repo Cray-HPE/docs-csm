@@ -77,11 +77,11 @@ All of the following are prerequisites on the node where this procedure is being
 
     - The linked procedure gives examples of customizing a Kubernetes NCN image, which is what needs to be done in this case.
     - In the steps to identify the NCN image and obtain its artifacts, do the following based on the current scenario:
-      - (`ncn-m001#`) If doing this as part of a CSM upgrade, then use the following command to set the `ARTIFACT_VERSION` variable.
+      - (`ncn-m001#`) If doing this as part of a CSM upgrade, then use the following command to set the `NCN_IMS_IMAGE_ID` variable.
 
           ```bash
-          ARTIFACT_VERSION=$(grep "^export KUBERNETES_VERSION=" /etc/cray/upgrade/csm/myenv | tail -1 | cut -d= -f2)
-          echo "${ARTIFACT_VERSION}"
+          NCN_IMS_IMAGE_ID=$(grep "^export NCN_IMS_IMAGE_ID=" /etc/cray/upgrade/csm/myenv | tail -1 | cut -d= -f2)
+          echo "${NCN_IMS_IMAGE_ID}"
           ```
 
       - Otherwise, follow the instructions in the linked procedure to identify the currently booted image for one of the worker NCNs.

@@ -26,96 +26,17 @@ The Cray CLI must be configured on the node where the commands are being run. Se
 1. (`ncn-mw#`) Identify the NCN image to be modified.
 
     If this procedure is being done as part of a CSM upgrade, then the documentation which linked to this procedure will have
-    provided instructions for how to set the `ARTIFACT_VERSION` variable.
+    provided instructions for how to set the `NCN_IMS_IMAGE_ID` variable.
 
-    Otherwise, if the image to be modified is the image currently booted on an NCN, then find the value for `ARTIFACT_VERSION`
-    by looking at the boot parameters for the NCNs, or by reading  `/proc/cmdline` on a booted NCN. The version has the form of `X.Y.Z`.
+    Otherwise, if the image to be modified is the image currently booted on an NCN, then find the value for `NCN_IMS_IMAGE_ID`
+    by looking at the boot parameters for the NCNs, or by reading  `/proc/cmdline` on a booted NCN. The version is a UUID value.
     See [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
 
     ```bash
-    ARTIFACT_VERSION=<artifact-version>
+    NCN_IMS_IMAGE_ID=<k8s-UUID-value>
     ```
 
-1. (`ncn-mw#`) Obtain the NCN image's associated artifacts (SquashFS, kernel, and `initrd`).
-
-    These example commands show how to download these artifacts from S3, which is where the NCN image artifacts are stored.
-    If customizing a Ceph image, then replace the `k8s` string in these examples with `ceph`.
-
-    ```bash
-    cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/rootfs" "./${ARTIFACT_VERSION}-rootfs"
-
-    cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/kernel" "./${ARTIFACT_VERSION}-kernel"
-
-    cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/initrd" "./${ARTIFACT_VERSION}-initrd"
-
-    export IMS_ROOTFS_FILENAME="${ARTIFACT_VERSION}-rootfs"
-
-    export IMS_KERNEL_FILENAME="${ARTIFACT_VERSION}-kernel"
-
-    export IMS_INITRD_FILENAME="${ARTIFACT_VERSION}-initrd"
-    ```
-
-### 2. Import the NCN image into IMS
-
-Perform the [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md) procedure except:
-
-* Skip this section: [Set helper variables](../image_management/Import_External_Image_to_IMS.md#2-set-helper-variables)
-
-  This is skipped because the variables have already been set above, in the previous step.
-
-* Modify this section: [Create image record in IMS](../image_management/Import_External_Image_to_IMS.md#4-create-image-record-in-ims) as follows:
-
-  (`ncn-mw#`) Use a unique name for the new IMS image in the first step for the revision intended. For example:
-
-  ```bash
-  cray ims images create --name "${IMS_ROOTFS_FILENAME}-REV" --format toml
-  ```
-
-* Skip this section: [Upload artifacts to S3](../image_management/Import_External_Image_to_IMS.md#5-upload-artifacts-to-s3)
-
-  This is skipped because the artifacts are already in S3.
-
-* Modify this section: [Create, upload, and register image manifest](../image_management/Import_External_Image_to_IMS.md#6-create-upload-and-register-image-manifest) as follows:
-
-  (`ncn-mw#`) When creating the image manifest, use the following command to create the manifest file. This is adjusted to reflect the
-  different image paths in S3.
-
-  ```console
-  cat <<EOF> manifest.json
-  {
-    "created": "`date '+%Y-%m-%d %H:%M:%S'`",
-    "version": "1.0",
-    "artifacts": [
-      {
-        "link": {
-            "path": "s3://boot-images/k8s/${ARTIFACT_VERSION}/rootfs",
-            "type": "s3"
-        },
-        "md5": "${IMS_ROOTFS_MD5SUM}",
-        "type": "application/vnd.cray.image.rootfs.squashfs"
-      },
-      {
-        "link": {
-            "path": "s3://boot-images/k8s/${ARTIFACT_VERSION}/kernel",
-            "type": "s3"
-        },
-        "md5": "${IMS_KERNEL_MD5SUM}",
-        "type": "application/vnd.cray.image.kernel"
-      },
-      {
-        "link": {
-            "path": "s3://boot-images/k8s/${ARTIFACT_VERSION}/initrd",
-            "type": "s3"
-        },
-        "md5": "${IMS_INITRD_MD5SUM}",
-        "type": "application/vnd.cray.image.initrd"
-      }
-    ]
-  }
-  EOF
-  ```
-
-### 3. Create a CFS configuration, if needed
+### 2. Create a CFS configuration, if needed
 
 If `sat bootprep` was used to create a CFS configuration for management node image customization, then one does not
 need to be created now. For example. this will be the case if this procedure is being followed as part of
@@ -158,7 +79,7 @@ then skip this step and proceed to [Run the CFS image customization session](#4-
     }
     ```
 
-### 4. Run the CFS image customization session
+### 3. Run the CFS image customization session
 
 1. (`ncn-mw#`) Record the name of the CFS configuration to use for image customization.
 
@@ -171,12 +92,10 @@ then skip this step and proceed to [Run the CFS image customization session](#4-
     CFS_CONFIG_NAME=ncn-image-customization
     ```
 
-1. (`ncn-mw#`) Ensure that the environment variable `IMS_IMAGE_ID` is set.
-
-    It should have been set as part of [Import an External Image to IMS](../image_management/Import_External_Image_to_IMS.md).
+1. (`ncn-mw#`) Ensure that the environment variable `NCN_IMS_IMAGE_ID` is set.
 
     ```bash
-    echo "${IMS_IMAGE_ID}"
+    echo "${NCN_IMS_IMAGE_ID}"
     ```
 
 1. (`ncn-mw#`) Create an image customization CFS session.
@@ -197,7 +116,7 @@ then skip this step and proceed to [Run the CFS image customization session](#4-
             --name "${CFS_SESSION_NAME}" \
             --configuration-name "${CFS_CONFIG_NAME}" \
             --target-definition image --format json \
-            --target-group Management_Worker "${IMS_IMAGE_ID}"
+            --target-group Management_Worker "${NCN_IMS_IMAGE_ID}"
         ```
 
     1. Monitor the CFS session until it completes successfully.
@@ -218,7 +137,7 @@ then skip this step and proceed to [Run the CFS image customization session](#4-
         a44ff301-6232-46b4-9ba6-88ee1d19e2c2
         ```
 
-### 5. Update NCN boot parameters
+### 4. Update NCN boot parameters
 
 Every NCN which will be booting from the customized image must have its boot parameters updated in BSS to use the artifacts of the customized image.
 
