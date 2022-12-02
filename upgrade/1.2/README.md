@@ -6,7 +6,7 @@ This document guides an administrator through the upgrade of Cray Systems Manage
 from top to bottom. The content on this top-level page is meant to be terse. For additional reference material on the upgrade processes and scripts
 mentioned explicitly on this page, see [resource material](resource_material/README.md).
 
-If you are considering an upgrade from CSM 1.0.x to 1.2.0, please instead download and use the latest released version of CSM 1.2.x.
+If upgrading from CSM 1.0.x to 1.2.0, then instead upgrade directly to the latest released version of CSM 1.2.x.
 
 A major feature of CSM 1.2.x is the Bifurcated CAN (BICAN). The BICAN is designed to separate administrative network traffic from user network traffic.
 For more information, see the [BICAN Summary](../../operations/network/management_network/bican_technical_summary.md).
