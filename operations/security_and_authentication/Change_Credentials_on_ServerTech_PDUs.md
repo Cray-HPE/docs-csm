@@ -207,7 +207,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     1) "x3000m0/redfish/v1/Managers"
     2) "x3001m0/redfish/v1/Managers"
     ```
-    
+
 1. (`ncn-mw#`) After waiting 10 minutes, Check that the PDU has been correctly discovered by HSM:
 
   ```bash
