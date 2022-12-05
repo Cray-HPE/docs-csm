@@ -86,7 +86,7 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 
 - Rerun a step
 
-   When running upgrade scripts, each script records what has been done successfully on a node. This is recorded in the
+   When running master node and storage node upgrade scripts, each script records what has been done successfully on a node. This is recorded in the
    `/etc/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state` file.
    If a rerun is required, the recorded steps to be re-run must be removed from this file.
 
@@ -117,3 +117,34 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 
   - See the inline comment above on how to rerun a single step.
   - In order to rerun the whole upgrade of a node, delete its state file.
+
+- Skip a step after running it manually
+
+   When running master node and storage node upgrade scripts, each script records what has been done successfully on a node. This is recorded in the
+   `/etc/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state` file.
+   If a step fails in the upgrade script and then is successfully run manually, this step needs to be added to the state file so it will be skipped by the upgrade procedure.
+
+   (`ncn#`) Here is an example of state file of `ncn-m001`:
+
+   ```bash
+   cat /etc/cray/upgrade/csm/csm-{CSM_VERSION}/ncn-m001/state
+   ```
+
+   Example output:
+
+   ```text
+   [2021-07-22 20:05:27] UNTAR_CSM_TARBALL_FILE
+   [2021-07-22 20:05:30] INSTALL_CSI
+   [2021-07-22 20:05:30] INSTALL_WAR_DOC
+   [2021-07-22 20:13:15] SETUP_NEXUS
+   [2021-07-22 20:13:16] UPGRADE_BSS
+   [2021-07-22 20:16:30] CHECK_CLOUD_INIT_PREREQ
+   [2021-07-22 20:19:17] APPLY_POD_PRIORITY
+   [2021-07-22 20:19:38] UPDATE_BSS_CLOUD_INIT_RECORDS
+   [2021-07-22 20:19:38] UPDATE_CRAY_DHCP_KEA_TRAFFIC_POLICY
+   [2021-07-22 20:21:03] UPLOAD_NEW_NCN_IMAGE
+   [2021-07-22 20:21:03] EXPORT_GLOBAL_ENV
+   [2021-07-22 20:50:36] PREFLIGHT_CHECK
+   [2021-07-22 20:50:38] UNINSTALL_CONMAN
+   [2021-07-22 20:58:39] INSTALL_NEW_CONSOLE <=== Add this line if this has been manually run and should be skipped
+   ```
