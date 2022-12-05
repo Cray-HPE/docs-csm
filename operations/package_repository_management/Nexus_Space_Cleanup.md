@@ -62,7 +62,7 @@ total size the blob store can be deleted.
 
 ## Check PVC size
 
-To check the amount of storage used, available and total in the PVC.
+To check the amount of storage used, available, and total in the PVC.
 
 (`ncn-m#`) Run the following command on a mater node:
 
