@@ -25,17 +25,15 @@ Due to the way the resolver code works in certain versions of Alpine Linux, it m
 
 ## Solution
 
-1. (`ncn-mw#`) Edit the `spire-postgres-pooler` Deployment.
-
-   Command:
+1. Edit the `spire-postgres-pooler` deployment.
 
    ```bash
-   kubectl -n spire edit deployment spire-postgres-pooler
+   ncn-mw# kubectl -n spire edit deployment spire-postgres-pooler
    ```
 
 1. Update the `PGHOST` environment variable to use the fully qualified domain name.
 
-   Example output:
+   An example of the deployment before being edited:
 
    ```yaml
    containers:

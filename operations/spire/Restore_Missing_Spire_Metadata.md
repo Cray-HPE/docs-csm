@@ -15,10 +15,10 @@ to be rerun.
 
 ## Check
 
-(`ncn-m#`) Run the `goss-spire-bss-metadata-exist` test.
+Run the `goss-spire-bss-metadata-exist` test.
 
 ```bash
-goss -g /opt/cray/tests/install/ncn/tests/goss-spire-bss-metadata-exist.yaml v
+ncn-mw# goss -g /opt/cray/tests/install/ncn/tests/goss-spire-bss-metadata-exist.yaml v
 ```
 
 Example output:
@@ -45,8 +45,11 @@ Count: 1, Failed: 1, Skipped: 0
 Run the following command on a master node to restart the job that populates
 the metadata server with the correct Spire information.
 
-(`ncn-m#`) Re-run the `spire-update-bss` job.
+Re-run the `spire-update-bss` job.
 
 ```bash
-JOB=$(kubectl get jobs -n spire -l app.kubernetes.io/name=spire-update-bss --no-headers -oname |sort -u | tail -n1); kubectl get -n spire $JOB -o json  | jq 'del(.spec.selector,.spec.template.metadata.labels)' | kubectl replace --force -f -
+ncn-mw# JOB=$(kubectl get jobs -n spire -l app.kubernetes.io/name=spire-update-bss --no-headers -oname |
+                sort -u | tail -n1)
+ncn-mw# kubectl get -n spire $JOB -o json  | jq 'del(.spec.selector,.spec.template.metadata.labels)' |
+            kubectl replace --force -f -
 ```

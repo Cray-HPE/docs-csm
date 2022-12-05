@@ -33,10 +33,8 @@ Nexus, and a list of what blob store each repository point to.
 The script can be run on any master NCN where the latest CSM documentation is installed. See
 [Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
 
-(`ncn-m#`) Run the script as follows:
-
 ```bash
-/usr/share/doc/csm/scripts/nexus-space-usage.sh
+ncn-m# /usr/share/doc/csm/scripts/nexus-space-usage.sh
 ```
 
 ## Remove data marked for deletion
@@ -62,12 +60,11 @@ total size the blob store can be deleted.
 
 ## Check PVC size
 
-To check the amount of storage used, available and total in the PVC.
-
-(`ncn-m#`) Run the following command on a mater node:
+To check the amount of storage used, available, and total in the PVC, run the following command:
 
 ```bash
-kubectl exec -n nexus deploy/nexus -c nexus -- df -Ph /nexus-data | grep '/nexus-data' | awk '{print ("Used:", $3, "Avaliable:", $4, "Total Size:", $2)}'
+ncn-m# kubectl exec -n nexus deploy/nexus -c nexus -- df -Ph /nexus-data | grep '/nexus-data' |
+            awk '{print ("Used:", $3, "Avaliable:", $4, "Total Size:", $2)}'
 ```
 
 ## Increase PVC size

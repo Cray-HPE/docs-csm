@@ -9,10 +9,10 @@ There is a known issue where an Etcd cluster backup will fails if it takes longe
 * An Etcd cluster backup was not created in the last 24 hours.
 * The `etcdbackup` status contains `MultipartUpload: upload multipart failed`.
 
-1. (`ncn-mw#`) Check for recent Etcd cluster backups listed in the `etcd-backup` S3 bucket.
+1. Check for recent Etcd cluster backups listed in the `etcd-backup` S3 bucket.
 
   ```bash
-  /opt/cray/platform-utils/s3/list-objects.py --bucket-name etcd-backup | grep -v bare-metal
+  ncn-mw# /opt/cray/platform-utils/s3/list-objects.py --bucket-name etcd-backup | grep -v bare-metal
   ```
 
   Example output:
@@ -32,11 +32,13 @@ There is a known issue where an Etcd cluster backup will fails if it takes longe
   .
   ```
 
-1. (`ncn-mw#`) If the latest backup listed in the `etcd-backup` S3 bucket for a given Etcd cluster is older than 24 hours,
-check the status of the `etcdbackup` resource. This example is checking `cray-bos etcdbackup` resource:
+1. If the latest backup listed in the `etcd-backup` S3 bucket for a given Etcd cluster is older than 24 hours,
+   then check the status of the `etcdbackup` resource.
+
+  This example is checking `cray-bos etcdbackup` resource:
 
   ```bash
-  kubectl describe etcdbackup cray-bos-etcd-cluster-periodic-backup -n services | grep -A8  "Status":
+  ncn-mw# kubectl describe etcdbackup cray-bos-etcd-cluster-periodic-backup -n services | grep -A8  "Status":
   ```
 
   Example output:
@@ -57,10 +59,12 @@ check the status of the `etcdbackup` resource. This example is checking `cray-bo
 
 Add a `backupPolicy.timeoutInSecond` of 600 to the `etcdbackup` resource to allow the backup to take up to 10 minutes to complete.
 
-1. (`ncn-mw#`) Patch the `etcdbackup` resource. This example patches the `cray-bos etcdbackup` resource:
+1. Patch the `etcdbackup` resource.
+
+   This example patches the `cray-bos etcdbackup` resource.
 
    ```bash
-   kubectl patch etcdbackup cray-bos-etcd-cluster-periodic-backup -n services --type=merge -p '{"spec":{"backupPolicy":{"timeoutInSecond": 600}}}'
+   ncn-mw# kubectl patch etcdbackup cray-bos-etcd-cluster-periodic-backup -n services --type=merge -p '{"spec":{"backupPolicy":{"timeoutInSecond": 600}}}'
    ```
 
   Example output:
@@ -69,12 +73,17 @@ Add a `backupPolicy.timeoutInSecond` of 600 to the `etcdbackup` resource to allo
   etcdbackup.etcd.database.coreos.com/cray-bos-etcd-cluster-periodic-backup patched
   ```
 
-1. (`ncn-mw#`) To verify that backups can now be successfully created, temporarily set the `backupIntervalInSecond` to force a backup every minute. This example patches the `cray-bos etcdbackup` resource:
+1. Verify that backups can now be successfully created.
+
+  Temporarily set the `backupIntervalInSecond` to force a backup every minute.
+  This example patches the `cray-bos etcdbackup` resource:
 
   ```bash
-  INTERVAL=$(kubectl get etcdbackups cray-bos-etcd-cluster-periodic-backup -n services -o json | jq -r '.spec.backupPolicy.backupIntervalInSecond')
-  TMPINTERVAL=60
-  kubectl patch etcdbackup cray-bos-etcd-cluster-periodic-backup -n services --type=json  -p="[{'op' : 'replace', 'path':'/spec/backupPolicy/backupIntervalInSecond', 'value' : \"$TMPINTERVAL\" }]"
+  ncn-mw# INTERVAL=$(kubectl get etcdbackups cray-bos-etcd-cluster-periodic-backup -n services -o json |
+                        jq -r '.spec.backupPolicy.backupIntervalInSecond')
+  ncn-mw# TMPINTERVAL=60
+  ncn-mw# kubectl patch etcdbackup cray-bos-etcd-cluster-periodic-backup -n services --type=json \
+            -p="[{'op' : 'replace', 'path':'/spec/backupPolicy/backupIntervalInSecond', 'value' : \"$TMPINTERVAL\" }]"
   ```
 
   Example output:
@@ -83,10 +92,12 @@ Add a `backupPolicy.timeoutInSecond` of 600 to the `etcdbackup` resource to allo
   etcdbackup.etcd.database.coreos.com/cray-bos-etcd-cluster-periodic-backup patched
   ```
 
-1. (`ncn-mw#`) Re-check the list of Etcd cluster backups. It will take a few minutes for the new backup to show in the list.
+1. Re-check the list of Etcd cluster backups.
+
+  It will take a few minutes for the new backup to show in the list.
 
   ```bash
-  /opt/cray/platform-utils/s3/list-objects.py --bucket-name etcd-backup | grep -v bare-metal
+  ncn-mw# /opt/cray/platform-utils/s3/list-objects.py --bucket-name etcd-backup | grep -v bare-metal
   ```
 
   Example output:
@@ -106,8 +117,9 @@ Add a `backupPolicy.timeoutInSecond` of 600 to the `etcdbackup` resource to allo
   .
   ```
 
-1. (`ncn-mw#`) Reset the `backupIntervalInSecond` to the original value so backups are not running every minute.
+1. Reset the `backupIntervalInSecond` to the original value so backups are not running every minute.
 
   ```bash
-  kubectl patch etcdbackup cray-bos-etcd-cluster-periodic-backup -n services --type=json  -p="[{'op' : 'replace', 'path':'/spec/backupPolicy/backupIntervalInSecond', 'value' : \"$INTERVAL\" }]"
+  ncn-mw# kubectl patch etcdbackup cray-bos-etcd-cluster-periodic-backup -n services --type=json \
+            -p="[{'op' : 'replace', 'path':'/spec/backupPolicy/backupIntervalInSecond', 'value' : \"$INTERVAL\" }]"
   ```

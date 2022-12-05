@@ -199,7 +199,7 @@ Use the following procedure to ensure that the `hms-discovery` job and Redfish T
       ncn-mw# vault kv delete secret/pdu-creds/$PDU
       ```
 
-   1. (`ncn-mw#`) Restart the Redfish Translation Service (RTS).
+   1. Restart the Redfish Translation Service (RTS).
 
       ```bash
       ncn-mw# kubectl -n services rollout restart deployment cray-hms-rts
