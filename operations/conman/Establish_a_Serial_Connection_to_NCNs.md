@@ -121,7 +121,7 @@ in [Multiple Console Node Pods on the Same Worker](../../troubleshooting/known_i
 
     ```bash
     ncn-mw# kubectl get pods -n services -l 'app.kubernetes.io/name in (cray-console-node, cray-console-data, cray-console-operator)' \
-        --field-selector spec.nodeName=$WNODE | awk '{print $1}'
+                --field-selector spec.nodeName=$WNODE | awk '{print $1}'
     ```
 
     Example output:
@@ -138,12 +138,12 @@ in [Multiple Console Node Pods on the Same Worker](../../troubleshooting/known_i
 
         ```bash
         ncn-mw# for POD in $(kubectl get pods -n services -l 'app.kubernetes.io/name in (cray-console-data, cray-console-operator)' \
-            --field-selector spec.nodeName=$WNODE | awk '{print $1}'); do
-                    kubectl -n services delete pod $POD
+                    --field-selector spec.nodeName=$WNODE | awk '{print $1}'); do
+                kubectl -n services delete pod $POD
             done
         ```
 
-    1. (`ncn-mw#`) Wait for the `console-operator` and `console-data` pods to be re-scheduled on other nodes.
+    1. Wait for the `console-operator` and `console-data` pods to be re-scheduled on other nodes.
 
         Run the following command until both deployments show `2/2` pods are ready.
 

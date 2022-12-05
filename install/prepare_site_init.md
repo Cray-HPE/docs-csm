@@ -229,7 +229,7 @@ with system-specific customizations.
                 emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC/MCS,O=HPE,ST=WI,C=US
                 ```
 
-            1. Extract the issuer's certificate using `awk`.
+            1. Extract the issuer's certificate.
 
                 > **`NOTE`** The issuer DN is properly escaped as part of the
                 > `awk` pattern below. It must be changed to match the value
@@ -574,9 +574,9 @@ Using `csi` on a generated `site-init` directory:
 
    ```bash
    pit# csi patch ca \
-   --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
-   --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
-   --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
+            --cloud-init-seed-file /var/www/ephemeral/configs/data.json \
+            --customizations-file /var/www/ephemeral/prep/site-init/customizations.yaml \
+            --sealed-secret-key-file /var/www/ephemeral/prep/site-init/certs/sealed_secrets.key
    ```
 
 1. Ensure that it picks up the new metadata.
