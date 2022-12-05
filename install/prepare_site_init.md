@@ -212,7 +212,7 @@ with system-specific customizations.
          CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1,O=DigiCert Inc,C=US
          ```
 
-    1. (`pit#`) Extract the issuer's certificate using `awk`.
+    1. (`pit#`) Extract the issuer's certificate.
 
         > **`NOTE`** The issuer DN is properly escaped as part of the
         > `awk` pattern below. It must be changed to match the value
@@ -376,9 +376,9 @@ with system-specific customizations.
         yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-dns-unbound
         ```
 
-        Expected Output:
+        Expected output:
 
-        ```text
+        ```yaml
         domain_name: '{{ network.dns.external }}'
         forwardZones:
           - name: "."
