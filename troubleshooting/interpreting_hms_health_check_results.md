@@ -305,7 +305,7 @@ This script runs the suite of HMS CT tests.
 
 This job executes the tests for Hardware State Manager (HSM).
 
-##### `test_components.tavern.yaml and test_hardware.tavern.yaml`
+##### `test_components.tavern.yaml` and `test_hardware.tavern.yaml`
 
 These tests require compute nodes to be discovered in HSM.
 

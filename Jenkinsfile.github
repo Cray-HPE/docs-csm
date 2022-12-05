@@ -26,7 +26,6 @@
 @Library('csm-shared-library') _
 
 def sleImage = 'artifactory.algol60.net/csm-docker/stable/csm-docker-sle'
-def sleVersion = '15.3'
 def major
 def minor
 def patch
@@ -35,7 +34,6 @@ if ( isStable ) {
     (major, minor, patch) = env.TAG_NAME.tokenize('.')
     major = major.replaceAll("^v","")
 }
-
 pipeline {
     agent {
         label "metal-gcp-builder"
@@ -55,58 +53,97 @@ pipeline {
         ADDITIONAL_VERSIONS = "${env.VERSION == env.TAG_POINTS_AT_HEAD ? 'latest' : ''}"
         SLACK_CHANNEL_ALERTS = "csm-release-alerts"
     }
-    
+
     stages {
-      stage('Prepare: RPMs') {
-            agent {
-                docker {
-                    image "${sleImage}:${sleVersion}"
-                    reuseNode true
+
+        stage('Build & Publish') {
+
+            matrix {
+
+                agent {
+                    node {
+                        label "metal-gcp-builder"
+                        customWorkspace "${env.WORKSPACE}/${sleVersion}"
+                    }
                 }
-            }
-            steps {
-                script {
-                    withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
-                        runLibraryScript("addRpmMetaData.sh", "${env.NAME}.spec")
-                        sh "git update-index --assume-unchanged ${env.NAME}.spec"
-                        sh "echo ${env.BRANCH_NAME}"
-                        sh "env"
-                        sh "make prepare"
+
+                axes {
+                    axis {
+                        name 'sleVersion'
+                        values 15.3, 15.4
+                    }
+                }
+
+                stages {
+
+                    stage('Prepare: RPMs') {
+                        agent {
+                            docker {
+                                label 'docker'
+                                reuseNode true
+                                image "${sleImage}:${sleVersion}"
+                            }
+                        }
+                        steps {
+                            withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                                runLibraryScript("addRpmMetaData.sh", "${env.NAME}.spec")
+                                sh "git update-index --assume-unchanged ${env.NAME}.spec"
+                                sh "echo ${env.BRANCH_NAME}"
+                                sh "env"
+                                sh "make prepare"
+                            }
+                        }
+                    }
+
+                    stage('Build: RPMs') {
+                        agent {
+                            docker {
+                                label 'docker'
+                                reuseNode true
+                                image "${sleImage}:${sleVersion}"
+                            }
+                        }
+                        steps {
+                            withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
+                                sh "make rpm"
+                            }
+                        }
+                    }
+
+                    stage('Publish: RPMs') {
+                        steps {
+                            script {
+                                if( isStable ){
+                                    RELEASE_FOLDER = "/${major}.${minor}"
+                                } else {
+                                    RELEASE_FOLDER = ""
+                                }
+                                ADDITIONAL_VERSIONS = ("${env.ADDITIONAL_VERSIONS}" == "null") ? [] : ["${env.ADDITIONAL_VERSIONS}"]
+                                sles_version_parts = "${sleVersion}".tokenize('.')
+                                sles_major = "${sles_version_parts[0]}"
+                                sles_minor = "${sles_version_parts[1]}"
+                                publishCsmRpms(
+                                        additionalVersions: ADDITIONAL_VERSIONS,
+                                        arch: "noarch",
+                                        component: env.NAME + RELEASE_FOLDER,
+                                        isStable: isStable,
+                                        os: "sle-${sles_major}sp${sles_minor}",
+                                        pattern: "dist/rpmbuild/RPMS/noarch/*.rpm",
+                                )
+                                publishCsmRpms(
+                                        additionalVersions: ADDITIONAL_VERSIONS,
+                                        arch: "src",
+                                        component: env.NAME + RELEASE_FOLDER,
+                                        isStable: isStable,
+                                        os: "sle-${sles_major}sp${sles_minor}",
+                                        pattern: "dist/rpmbuild/SRPMS/*.rpm",
+                                )
+                            }
+                        }
                     }
                 }
             }
-      }
-      stage('Build: RPMs') {
-          agent {
-              docker {
-                  image "${sleImage}:${sleVersion}"
-                  reuseNode true
-              }
-          }
-          steps {
-              script {
-                  withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
-                      sh "make rpm"
-                  }
-                }
-            }
-      }
-      stage('Publish: RPMs') {
-          steps {
-            script {
-                if( isStable ){
-                    RELEASE_FOLDER = "/${major}.${minor}"
-                } else {
-                    RELEASE_FOLDER = ""
-                }
-                ADDITIONAL_VERSIONS = ("${env.ADDITIONAL_VERSIONS}" == "null") ? [] : ["${env.ADDITIONAL_VERSIONS}"]
-                publishCsmRpms(component: env.NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp2', arch: "noarch", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
-                publishCsmRpms(component: env.NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/RPMS/noarch/${env.NAME}-${env.VERSION}*noarch.rpm", os: 'sle-15sp3', arch: "noarch", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
-                publishCsmRpms(component: env.NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp2', arch: "src", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
-                publishCsmRpms(component: env.NAME + RELEASE_FOLDER, pattern: "dist/rpmbuild/SRPMS/${env.NAME}-${env.VERSION}*src.rpm", os: 'sle-15sp3', arch: "src", isStable: isStable, additionalVersions: ADDITIONAL_VERSIONS)
-            }
         }
-      }
     }
     post {
         failure {

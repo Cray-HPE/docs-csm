@@ -55,12 +55,12 @@ spec:
                       exit_code=0
 
                       if ! cray artifacts get config-data argo/loftsman/${product_name}/manifests/${manifest} ${manifest}; then
-                        echo "Error: Could not get argo/loftsman/${product_name}/manifests/${manifest} from s3. It cannot be deployed because of this."
+                        echo "ERROR Could not get argo/loftsman/${product_name}/manifests/${manifest} from s3. It cannot be deployed because of this."
                         exit_code=1
                       else
-                        echo "Deploying ${manifest}"
+                        echo "INFO Deploying ${manifest}"
                         if ! loftsman ship --manifest-path ${manifest} --charts-repo https://packages.local/repository/charts; then
-                          echo "Error: There was a problem deploying ${manifest}."
+                          echo "ERROR There was a problem deploying ${manifest}."
                           exit_code=1
                         fi
                       fi
@@ -78,7 +78,7 @@ spec:
                       elif [ -f $MANIFEST ]; then
                         IS_DIR=false
                       else
-                        echo "Error: Unable to find file or directory: $MANIFEST. (deploy=${DEPLOY})"
+                        echo "ERROR Unable to find file or directory: $MANIFEST. (deploy=${DEPLOY})"
                         err=1
                         path_exists=false
                       fi
@@ -87,7 +87,7 @@ spec:
                         continue
                       elif [[ $DEPLOY == "True" ]] || $DEPLOY 2> /dev/null; then
                         if $IS_DIR; then
-                          echo "Deploying loftsman manifests under $MANIFEST/"
+                          echo "INFO Deploying loftsman manifests under $MANIFEST/"
                           for manifest in "${MANIFEST}"/*.yml "${MANIFEST}"/*.yaml; do
                             deploy_manifest ${manifest} $PRODUCT_NAME
                             if [[ $? != 0 ]]; then err=1; fi
@@ -97,7 +97,7 @@ spec:
                           if [[ $? != 0 ]]; then err=1; fi
                         fi
                       else
-                        echo "Not deploying argo/loftsman/${PRODUCT_NAME}/manifests/${MANIFEST} becasue loftsman.deploy=${DEPLOY}."
+                        echo "INFO Not deploying argo/loftsman/${PRODUCT_NAME}/manifests/${MANIFEST} becasue loftsman.deploy=${DEPLOY}."
                       fi
                     done
 
