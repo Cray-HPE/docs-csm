@@ -24,7 +24,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: vcs-upload-content
+  name: vcs-upload
 spec:
   entrypoint: main
   templates:
@@ -48,7 +48,7 @@ spec:
                 - name: cf_import_product_version
                   value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
                 - name: cf_import_content_hostpath # parent path + content.vcs.path from manifest
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.process_media.current_product.parent_directory')}}/{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.content.vcs.path')}}"
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.process-media.current_product.parent_directory')}}/{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.content.vcs.path')}}"
                 - name: cf_import_gitea_org
                   value: cray
                 - name: cf_import_gitea_url
@@ -137,8 +137,8 @@ spec:
             valueFrom:
               path: /results/records.yaml
             default: ""
-      container:
-        image: registry.local/artifactory.algol60.net/csm-docker/stable/cf-gitea-import:1.8.0-alpha.16_a2674cd
+      container: # TODO merge 8306 on gitea-import
+        image: registry.local/artifactory.algol60.net/csm-docker/unstable/cf-gitea-import:1.8.0-CASMCMS-8306.1_c61030d
         command:
           - "/bin/sh"
         args: ["-c", "/opt/csm/cf-gitea-import/argo_entrypoint.sh"]
@@ -165,7 +165,7 @@ spec:
             value: /content
         volumeMounts:
           - name: content
-            mountPath: "{{inputs.parameters.cf_import_content}}"
+            mountPath: /content
           - name: results
             mountPath: /results
           - name: certs # mount cluster certs to ca-certificates.crt for curl/http libraries
