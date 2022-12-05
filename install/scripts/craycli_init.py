@@ -93,7 +93,8 @@ MSG_MISSING_SCRIPT = 106
 MSG_CONFIGFILE_NOT_PRESENT = 107
 MSG_PYTHON_SCRIPT_ERROR = 108
 MSG_K8S_NOT_CONFIGURED = 109
-MSG_LAST = 110
+MSG_SSH_ERROR = 110
+MSG_LAST = 111
 INIT_FAILURE_MSG = {
     MSG_USER_SECRET : "Failed to obtain user secret",
     MSG_REMOTE_COPY_FAILURE : "Failed to copy script to remote host",
@@ -104,6 +105,7 @@ INIT_FAILURE_MSG = {
     MSG_CONFIGFILE_NOT_PRESENT : "Initialization file not present",
     MSG_PYTHON_SCRIPT_ERROR : "Python script failed",
     MSG_K8S_NOT_CONFIGURED : "Kubernetes not configured on this node",
+    MSG_SSH_ERROR : "Error using passwordless ssh with this node",
 }
 
 class CliUserAuth(object):
@@ -410,33 +412,73 @@ def read_keycloak_master_admin_secrets(k8sClientApi):
         LOGGER.error(f"Keycloak master admin secret not present: {err}")
         sys.exit(1)
 
+def checkSsh(host):
+    LOGGER.debug(f"Ensuring passwordless ssh set up for {host}")
+
+    # spawn the ssh command to the host
+    child = pexpect.spawn(f"ssh {host}")
+
+    # we expect either a prompt that the key has not been added yet, or
+    # a command prompt if it is present
+    idx = child.expect_exact(['#', '?', pexpect.EOF, pexpect.TIMEOUT])
+    if idx==0:
+        # good - all is well
+        LOGGER.debug(  "ssh key already present")
+    elif idx==1:
+        # not added as key yet, say 'yes'
+        child.sendline("yes")
+        LOGGER.debug(  "ssh key added for host")
+
+        # now we should get the command prompt
+        child.expect("#")
+    elif idx==2:
+        # should not have exited yet
+        msg = "Should not have recieved EOF from ssh"
+        LOGGER.warning(  f"{host}: " + msg)
+        return MSG_SSH_ERROR, msg
+    elif idx==3:
+        msg = "Timeout waiting for ssh"
+        LOGGER.warning(  f"{host}: " + msg)
+        return MSG_SSH_ERROR, msg
+
+    # logout, capture the rest of the output, and wait for the process to exit
+    child.sendline("exit")
+    idx = child.expect([pexpect.EOF, pexpect.TIMEOUT])
+    child.wait()
+    return 0, ""
+
 def run_remote_command(host, cmdOpt):
-    # copy the script file to the remote host
-    fileCpCmd = ["scp", THIS_FILE_FULL_PATH, f"{host}:{REMOTE_FILE_NAME}"]
-    cpOut = subprocess.run(fileCpCmd, shell=False, stdout=subprocess.PIPE, 
-        stderr=subprocess.STDOUT)
+    # make sure passwordless ssh is set up without return prompts to
+    # mess up the scripts
+    rc, outStr = checkSsh(host)
 
-    # check for copy failure
-    outStr = cpOut.stdout.decode().rstrip()
-    rc = cpOut.returncode
-    if rc == 0:
-        # copying the script was successful - run the script command on the
-        # remote host using ssh - capture output
-        cmdStr = f"python3 {REMOTE_FILE_NAME} {cmdOpt}"
-        exeOut = subprocess.run(["ssh","-oStrictHostKeyChecking=no", host, cmdStr], 
-            shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # only run the rest of the commands if the ssh key is established correctly
+    if rc==0:
+        # copy the script file to the remote host
+        fileCpCmd = ["scp", THIS_FILE_FULL_PATH, f"{host}:{REMOTE_FILE_NAME}"]
+        cpOut = subprocess.run(fileCpCmd, shell=False, stdout=subprocess.PIPE, 
+            stderr=subprocess.STDOUT)
 
-        # if the script file is not present on the remote machine, we need to
-        # interpret that and intercept the error message here
-        outStr = exeOut.stdout.decode().rstrip()
-        rc = exeOut.returncode
-        if rc == 1 and "python3: can't open file" in outStr:
-            rc = MSG_MISSING_SCRIPT
-        elif rc == 1 and "Traceback" in outStr:
-            rc = MSG_PYTHON_SCRIPT_ERROR
-    else:
-        # failed to copy the script to the remote host
-        rc = MSG_REMOTE_COPY_FAILURE
+        # check for copy failure
+        outStr = cpOut.stdout.decode().rstrip()
+        rc = cpOut.returncode
+        if rc == 0:
+            # copying the script was successful - run the script command on the
+            # remote host using ssh - capture output
+            exeOut = subprocess.run(["ssh", host, f"python3 {REMOTE_FILE_NAME} {cmdOpt}"],
+                shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+            # if the script file is not present on the remote machine, we need to
+            # interpret that and intercept the error message here
+            outStr = exeOut.stdout.decode().rstrip()
+            rc = exeOut.returncode
+            if rc == 1 and "python3: can't open file" in outStr:
+                rc = MSG_MISSING_SCRIPT
+            elif rc == 1 and "Traceback" in outStr:
+                rc = MSG_PYTHON_SCRIPT_ERROR
+        else:
+            # failed to copy the script to the remote host
+            rc = MSG_REMOTE_COPY_FAILURE
 
     # report results for this host in a thread safe manner
     report_remote_init_results(host, rc, outStr)
