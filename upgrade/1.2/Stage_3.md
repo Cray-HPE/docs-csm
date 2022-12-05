@@ -62,11 +62,11 @@
 
 ## Fix the disk boot entries and boot order
 
-1. (`ncn-m002#`) Apply a workaround for the boot order and ensure disk boot entries appear in the BIOS boot selection menu:
+1. Apply a workaround for the boot order and to ensure that disk boot entries appear in the BIOS boot selection menu.
 
-```bash
-/usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
-```
+   ```bash
+   ncn-m002# /usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
+   ```
 
 ## Perform upgrade
 
@@ -100,7 +100,7 @@ Occasionally the `cray-shared-kafka-kafka` pods will be restarted before the
 of `1/1`. If any of them have a `2/2`, then run the `kafka-restart.sh` script.
 
 ```bash
-ncn# kubectl get pods -n services -l app.kubernetes.io/instance=cray-shared-kafka
+ncn-m002# kubectl get pods -n services -l app.kubernetes.io/instance=cray-shared-kafka
 ```
 
 Expected output:
@@ -119,7 +119,7 @@ cray-shared-kafka-zookeeper-2                        1/1     Running   0        
 In this example, because some of the pods are `2/2`, the `kafka-restart.sh` script must be run.
 
 ```bash
-ncn# /usr/share/doc/csm/upgrade/1.2/scripts/strimzi/kafka-restart.sh
+ncn-m002# /usr/share/doc/csm/upgrade/1.2/scripts/strimzi/kafka-restart.sh
 ```
 
 ## Verify Keycloak users

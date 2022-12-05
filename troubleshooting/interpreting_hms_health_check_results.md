@@ -23,12 +23,15 @@
 
 ## Introduction
 
-This document describes how to interpret the results of the HMS health check scripts and techniques for troubleshooting when failures occur.
+This document describes how to interpret the results of the HMS health check scripts and techniques for troubleshooting
+when failures occur.
 
 ## HMS smoke tests
 
-The HMS smoke tests consist of bash scripts that check the status of HMS service pods and jobs in Kubernetes and verify HTTP status codes returned by the HMS service APIs. Additionally, there is one
-test called `smd_discovery_status_test_ncn-smoke.sh` which verifies that the system hardware has been discovered successfully. The `hms_run_ct_smoke_tests_ncn-resources.sh` wrapper script checks for
+The HMS smoke tests consist of bash scripts that check the status of HMS service pods and jobs in Kubernetes and verify
+HTTP status codes returned by the HMS service APIs. Additionally, there is one
+test called `smd_discovery_status_test_ncn-smoke.sh` which verifies that the system hardware has been discovered
+successfully. The `hms_run_ct_smoke_tests_ncn-resources.sh` wrapper script checks for
 executable files in the HMS smoke test directory on the NCN and runs all tests found in succession.
 
 ```bash
@@ -123,7 +126,8 @@ FAIL: bss_tavern_api_test ran with failures
 cleaning up...
 ```
 
-A summary of the test suites executed and their results is printed for each HMS service tested. Period '.' characters represent test cases that passed and letter 'F' characters represent test cases that failed within each test suite.
+A summary of the test suites executed and their results is printed for each HMS service tested. Period '.' characters
+represent test cases that passed and letter 'F' characters represent test cases that failed within each test suite.
 
 The following is an example of a `pytest` summary table for Tavern test suites executed against a service:
 
@@ -154,9 +158,12 @@ test_smd_state_change_notifications_ncn-functional_remote-functional.tavern.yaml
 When API test failures occur, output from Tavern is printed by `pytest` indicating the following:
 
 - The `Source test stage` that was executing when the failure occurred which is a portion of the source code for the failed test case.
-- The `Formatted stage` that was executing when the failure occurred which is a portion of the source code for the failed test case with its variables filled in with the values that were set at the
-  time of the failure. This includes the request header, method, URL, and other options of the failed test case which is useful for attempting to reproduce the failure using the `curl` command.
-- The specific `Errors` encountered when processing the API response that caused the failure. **This is the first place to look when debugging API test failures.**
+- The `Formatted stage` that was executing when the failure occurred which is a portion of the source code for the
+  failed test case with its variables filled in with the values that were set at the
+  time of the failure. This includes the request header, method, URL, and other options of the failed test case which is
+  useful for attempting to reproduce the failure using the `curl` command.
+- The specific `Errors` encountered when processing the API response that caused the failure.
+  **This is the first place to look when debugging API test failures.**
 
 The following is an example `Source test stage`:
 
@@ -209,7 +216,7 @@ This script runs the suite of HMS CT tests.
 
 This script executes the tests for Hardware State Manager (HSM).
 
-##### `test_smd_components_ncn-functional_remote-functional.tavern.yaml and test_smd_hardware_ncn-functional_remote-functional.tavern.yaml`
+##### `test_smd_components_ncn-functional_remote-functional.tavern.yaml` and `test_smd_hardware_ncn-functional_remote-functional.tavern.yaml`
 
 These tests require compute nodes to be discovered in HSM.
 
@@ -268,15 +275,15 @@ FAILED opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_components_ncn-functio
 FAILED opt/cray/tests/ncn-functional/hms/hms-smd/test_smd_hardware_ncn-functional_remote-functional.tavern.yaml::Query the Hardware collection for Node information
 ```
 
-(`ncn-mw#`) If these failures occur, confirm that there are no discovered compute nodes in HSM.
+If these failures occur, then confirm that there are no discovered compute nodes in HSM.
 
 ```bash
-cray hsm state components list --type=Node --role=compute --format=json
+ncn-mw# cray hsm state components list --type=Node --role=compute --format=json
 ```
 
 Example output:
 
-```text
+```json
 {
   "Components": []
 }
@@ -291,20 +298,20 @@ The following situations do not warrant additional troubleshooting and the test 
 
 If none of the above cases are applicable, then the failures warrant additional troubleshooting:
 
-(`ncn-mw#`) Run the `smd_discovery_status_test_ncn-smoke.sh` script.
+Run the `smd_discovery_status_test_ncn-smoke.sh` script.
 
 ```bash
-/opt/cray/tests/ncn-smoke/hms/hms-smd/smd_discovery_status_test_ncn-smoke.sh
+ncn-mw# /opt/cray/tests/ncn-smoke/hms/hms-smd/smd_discovery_status_test_ncn-smoke.sh
 ```
 
 If the script fails, this indicates a discovery issue and further troubleshooting steps to take are printed.
 
 Otherwise, missing compute nodes in HSM with no discovery failures may indicate a problem with a `leaf-bmc` switch.
 
-(`ncn-mw#`) Check to see if the `leaf-bmc` switch resolves using the `nslookup` command.
+Check to see if the `leaf-bmc` switch resolves using the `nslookup` command.
 
 ```bash
-nslookup <leaf-bmc-switch>
+ncn-mw# nslookup <leaf-bmc-switch>
 ```
 
 Example output:
@@ -317,10 +324,10 @@ Name:   sw-leaf-bmc-001.nmn
 Address: 10.252.0.4
 ```
 
-(`ncn-mw#`) Verify connectivity to the `leaf-bmc` switch.
+Verify connectivity to the `leaf-bmc` switch.
 
 ```bash
-ssh admin@<leaf-bmc-switch>
+ncn-mw# ssh admin@<leaf-bmc-switch>
 ```
 
 Example output:
@@ -329,7 +336,8 @@ Example output:
 ssh: connect to host sw-leaf-bmc-001 port 22: Connection timed out
 ```
 
-Restoring connectivity, resolving configuration issues, or restarting the relevant ports on the `leaf-bmc` switch should allow the compute hardware to issue DHCP requests and be discovered successfully.
+Restoring connectivity, resolving configuration issues, or restarting the relevant ports on the `leaf-bmc` switch should
+allow the compute hardware to issue DHCP requests and be discovered successfully.
 
 ### `smd_discovery_status_test_ncn-smoke.sh`
 
@@ -353,7 +361,8 @@ FAIL: smd_discovery_status_test found 4 endpoints that failed discovery, maximum
 ```
 
 The expected state of `LastDiscoveryStatus` is `DiscoverOK` for all endpoints with the exception of the BMC for `ncn-m001`, which is not normally connected to the site network and expected to be
-`HTTPsGetFailed`. If the test fails because of two or more endpoints not having been discovered successfully, then take the following additional steps in order to determine the cause of the failure:
+`HTTPsGetFailed`. If the test fails because of two or more endpoints not having been discovered successfully, then take
+the following additional steps in order to determine the cause of the failure:
 
 #### `HTTPsGetFailed`
 
@@ -381,12 +390,15 @@ The expected state of `LastDiscoveryStatus` is `DiscoverOK` for all endpoints wi
     ncn-mw# curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers | jq
     ```
 
-If discovery failures for Gigabyte CMCs with component names (xnames) of the form `xXc0sSb999` occur, verify that the root service account is configured for the CMC and add it if needed by following
-the steps outlined in [Add Root Service Account for Gigabyte Controllers](../operations/security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
+If discovery failures for Gigabyte CMCs with component names (xnames) of the form `xXc0sSb999` occur, then verify that
+the root service account is configured for the CMC and add it if needed by following the steps outlined in
+[Add Root Service Account for Gigabyte Controllers](../operations/security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
 
-If discovery failures for HPE PDUs with component names (xnames) of the form `xXmM` occur, this may indicate that configuration steps have not yet been executed which are required for the PDUs to be
-discovered. Refer to [HPE PDU Admin Procedures](../operations/hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU. The steps to run will depend on if the PDU has
-been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
+If discovery failures for HPE PDUs with component names (xnames) of the form `xXmM` occur, this may indicate that
+configuration steps have not yet been executed which are required for the PDUs to be discovered. Refer to
+[HPE PDU Admin Procedures](../operations/hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this
+type of PDU. The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh
+install of CSM is being performed.
 
 #### `ChildVerificationFailed`
 
@@ -417,7 +429,8 @@ Check the SMD logs to determine the cause of the bad Redfish path encountered du
 
 #### `DiscoveryStarted`
 
-The endpoint is in the process of being inventoried by Hardware State Manager (HSM). Wait for the current discovery operation to end which should result in a new `LastDiscoveryStatus` state being set for the endpoint.
+The endpoint is in the process of being inventoried by Hardware State Manager (HSM). Wait for the current discovery
+operation to end which should result in a new `LastDiscoveryStatus` state being set for the endpoint.
 
 Use the following command to check the current discovery status of the endpoint:
 

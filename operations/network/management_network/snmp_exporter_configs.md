@@ -85,26 +85,27 @@ The most common configuration parameters are specified in the following table. T
 
 For a complete set of available parameters, consult the `values.yaml` file for the `cray-sysmgmt-health` chart.
 
-(`post-install-CSM#`)
+## Configuration after CSM install
 
 This procedure is to correct the SNMP exporter settings once the PIT node no longer exists by editing manifest and deploying `cray-sysmgmt-health chart`.
 
-1. (`ncn#`) Get the current cached customizations.
+1. Get the current cached customizations.
 
    ```bash
-   kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ncn-mw# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' |
+                base64 -d > customizations.yaml
    ```
 
-1. (`ncn#`) Get the current cached platform manifest.
+1. Get the current cached platform manifest.
 
    ```bash
-   kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
+   ncn-mw# kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
    ```
 
-1. (`ncn#`) Edit the customizations as desired by adding or updating  `spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter`.
+1. Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter`.
 
    ```bash
-   yq write -s - -i /root/customizations.yaml <<EOF
+   ncn-mw# yq write -s - -i /root/customizations.yaml <<EOF
    - command: update
      path: spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
      value:
@@ -124,10 +125,10 @@ This procedure is to correct the SNMP exporter settings once the PIT node no lon
    EOF
    ```
 
-1. (`ncn#`) Check that the customization file has been updated.
+1. Check that the customization file has been updated.
 
    ```bash
-   yq read customizations.yaml "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter"
+   ncn-mw# yq read customizations.yaml "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter"
    ```
 
    Example output:
@@ -167,16 +168,16 @@ This procedure is to correct the SNMP exporter settings once the PIT node no lon
        version: 0.12.0
    ```
 
-1. (`ncn#`) Generate the manifest that will be used to redeploy the chart with the modified resources.
+1. Generate the manifest that will be used to redeploy the chart with the modified resources.
 
    ```bash
-   manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
+   ncn-mw# manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
    ```
 
-1. (`ncn#`) Check that the manifest file contains the desired resource settings.
+1. Check that the manifest file contains the desired resource settings.
 
    ```bash
-   yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-snmp-exporter'
+   ncn-mw# yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-snmp-exporter'
    ```
 
    Example output:
@@ -197,40 +198,41 @@ This procedure is to correct the SNMP exporter settings once the PIT node no lon
          - 10.252.0.5
    ```
 
-1. (`ncn#`) Redeploy the same chart version but with the desired SNMP configuration settings.
+1. Redeploy the same chart version but with the desired SNMP configuration settings.
 
    ```bash
-   loftsman ship charts-path /helm --manifest-path /root/manifest.yaml
+   ncn-mw# loftsman ship charts-path /helm --manifest-path /root/manifest.yaml
    ```
 
 1. Verify that the pod restarts and that the desired resources have been applied.
 
-   1. (`ncn#`) Watch the `cray-sysmgmt-health-prometheus-snmp-exporter-*` pod restart.
-
-      ```bash
-      watch "kubectl get pods -n sysmgmt-health -l app.kubernetes.io/name=prometheus-snmp-exporter"
-      ```
-
-      It may take about 10 minutes for the `cray-sysmgmt-health-prometheus-snmp-exporter-*` pod to terminate.
-      It can be forced deleted if it remains in the terminating state:
-
-      ```bash
-      kubectl delete pod cray-sysmgmt-health-prometheus-snmp-exporter-* --force --grace-period=0 -n sysmgmt-health 
-      ```
-
-1. (`ncn#`) **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
-
-   If this is not done, these changes will not persist in future installs or upgrades.
+   Watch the `cray-sysmgmt-health-prometheus-snmp-exporter-*` pod restart.
 
    ```bash
-   kubectl delete secret -n loftsman site-init
-   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ncn-mw# watch "kubectl get pods -n sysmgmt-health -l app.kubernetes.io/name=prometheus-snmp-exporter"
    ```
 
-1. (`ncn#`) Verify that the resource changes are in place.
+   It may take about 10 minutes for the `cray-sysmgmt-health-prometheus-snmp-exporter-*` pod to terminate.
+   It can be forced deleted if it remains in the terminating state:
 
    ```bash
-   kubectl get servicemonitor cray-sysmgmt-health-prometheus-snmp-exporter -n sysmgmt-health -o json | jq -r '.spec.endpoints[].params'         
+   ncn-mw# kubectl delete pod cray-sysmgmt-health-prometheus-snmp-exporter-* --force --grace-period=0 -n sysmgmt-health
+   ```
+
+1. Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
+
+   **This step is critical.** If this is not done, then these changes will not persist in future installs or upgrades.
+
+   ```bash
+   ncn-mw# kubectl delete secret -n loftsman site-init
+   ncn-mw# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
+1. Verify that the resource changes are in place.
+
+   ```bash
+   ncn-mw# kubectl get servicemonitor cray-sysmgmt-health-prometheus-snmp-exporter -n sysmgmt-health -o json |
+                jq -r '.spec.endpoints[].params'
    ```
 
    Example output:
