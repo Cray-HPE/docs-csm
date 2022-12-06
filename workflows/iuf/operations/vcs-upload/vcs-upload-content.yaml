@@ -138,7 +138,7 @@ spec:
               path: /results/records.yaml
             default: ""
       container: # TODO merge 8306 on gitea-import
-        image: registry.local/artifactory.algol60.net/csm-docker/unstable/cf-gitea-import:1.8.0-CASMCMS-8306.1_c61030d
+        image: registry.local/artifactory.algol60.net/csm-docker/unstable/cf-gitea-import:1.8.0-alpha.19_6747be7
         command:
           - "/bin/sh"
         args: ["-c", "/opt/csm/cf-gitea-import/argo_entrypoint.sh"]
