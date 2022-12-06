@@ -45,26 +45,41 @@ Any steps run on an `external` server require that server to have the following 
    >
    > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
    > - **If air-gapped or behind a strict firewall**, then the tarball must be obtained from the medium delivered by Cray-HPE. For these cases, copy or download the tarball to the working
-   >   directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [Download CSM tarball](#21-download-csm-tarball) step.
+   > directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [Download CSM tarball](#21-download-csm-tarball) step.
 
-   ```bash
-   # e.g. an alpha : CSM_RELEASE=1.3.0-alpha.99
-   # e.g. an RC    : CSM_RELEASE=1.3.0-rc.1
-   # e.g. a stable : CSM_RELEASE=1.3.0  
-   CSM_RELEASE=1.3.0-alpha.9
-   ```
+1. (`external#`) Set the CSM RELEASE version
 
-   ```bash
-   curl -C - -f -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
-   ```
+      ```bash
+      # e.g. an alpha : CSM_RELEASE=1.3.0-alpha.99
+      # e.g. an RC    : CSM_RELEASE=1.3.0-rc.1
+      # e.g. a stable : CSM_RELEASE=1.3.0  
+      CSM_RELEASE=1.3.0-alpha.9
+      ```
+
+1. (`external#`) Download the CSM tarball
+
+      > ***NOTE:*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
+      Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
+
+      - Without proxy:
+
+         ```bash
+         curl -C - -f -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
+         ```
+
+      - With https proxy:
+
+         ```bash
+         https_proxy=https://example.proxy.net:443 curl -C - -f -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
+         ```
 
 1. (`external#`) Extract the LiveCD from the tarball.
 
-   ```bash
-   OUT_DIR="$(pwd)/csm-temp"
-   mkdir -pv "${OUT_DIR}"
-   tar -C "${OUT_DIR}" --wildcards --no-anchored --transform='s/.*\///' -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-pre-install-toolkit-*.iso'
-   ```
+      ```bash
+      OUT_DIR="$(pwd)/csm-temp"
+      mkdir -pv "${OUT_DIR}"
+      tar -C "${OUT_DIR}" --wildcards --no-anchored --transform='s/.*\///' -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-pre-install-toolkit-*.iso'
+      ```
 
 ### 1.2 Boot the LiveCD
 
@@ -361,11 +376,21 @@ These variables will need to be set for many procedures within the CSM installat
    - From Cray using `curl`:
 
       > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
+      > - CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints. Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
 
-      ```bash
-      curl -C - -f -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
-        "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
-      ```
+      - Without proxy:
+
+         ```bash
+         curl -C - -f -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
+         "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
+         ```
+
+      - With https proxy:
+
+         ```bash
+         https_proxy=https://example.proxy.net:443 curl -C - -f -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
+         "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
+         ```
 
    - `scp` from the external server used in [Prepare installation environment server](#11-prepare-installation-environment-server):
 
