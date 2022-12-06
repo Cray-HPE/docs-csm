@@ -207,3 +207,40 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     1) "x3000m0/redfish/v1/Managers"
     2) "x3001m0/redfish/v1/Managers"
     ```
+
+1. (`ncn-mw#`) After waiting 10 minutes, Check that the PDU has been correctly discovered by HSM:
+
+   ```bash
+   cray hsm inventory redfishEndpoints describe x3000m0 --format json
+   ```
+
+   Example output:
+
+   ```json
+   {
+     "ID": "x3000m0",
+     "Type": "CabinetPDUController",
+     "Hostname": "x3000m0-rts:8083",
+     "Domain": "",
+     "FQDN": "x3000m0-rts:8083",
+     "Enabled": true,
+     "User": "root",
+     "Password": "",
+     "MACAddr": "000a9c6236a5",
+     "RediscoverOnUpdate": true,
+     "DiscoveryInfo": {
+       "LastDiscoveryAttempt": "2022-11-30T22:11:30.712119Z",
+       "LastDiscoveryStatus": "DiscoverOK",
+       "RedfishVersion": "2019.1"
+     }
+   }
+   ```
+
+   (`ncn-mw#`)If the `FQDN` does not contain `rts:8083`, then a manual update to the HSM record is required:
+
+   ```bash
+   cray hsm inventory redfishEndpoints update x3000m0 --fqdn x3000m0-rts:8083 --id x3000m0 --hostname x3000m0-rts:8083
+   ```
+
+   Recheck `cray hsm inventory redfishEndpoints` to verify the FQDN was updated.
+   Repeat this step for each ServerTech PDU.
