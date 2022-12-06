@@ -266,7 +266,7 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     1. Perform the load state operation.
 
         ```bash
-        ncn-mw# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -F sls_dump=@sls_input_file.json \
+        ncn-mw# curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -F sls_dump=@sls_dump.json \
                    https://api-gw-service-nmn.local/apis/sls/v1/loadstate
         ```
 
