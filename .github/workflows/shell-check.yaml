@@ -26,23 +26,21 @@ on:
   pull_request:
 
 jobs:
-  sh-checker:
+  shell-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v18.7
-        with:
-          files: "**/*.sh"
-          files_ignore: ".github/**/*"
+    - uses: actions/checkout@v2
 
-      - name: Run the sh-checker
-        uses: luizm/action-sh-checker@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SHELLCHECK_OPTS: --severity=warning --color=always ${{ steps.changed-files.outputs.all_changed_files }} # We can globally ignore things here if we want with -e SC1234
-          SHFMT_OPTS: -ci -p -i 2 -bn -sr ${{ steps.changed-files.outputs.all_changed_files }}
-        with:
-          sh_checker_comment: true
-          sh_checker_exclude: "spec" # We can exclude things here as well that should never be checked spec excluded as sh-fmt can't parse them sanely
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v18.7
+      with:
+        files: "**/*.sh"
+        files_ignore: ".github/**/*"
+
+    - uses: docker://koalaman/shellcheck:stable
+      if: ${{ steps.changed-files.outputs.all_changed_files }}
+      id: shell-check
+      with:
+        args: --severity=warning --color=always ${{ steps.changed-files.outputs.all_changed_files }}
+
