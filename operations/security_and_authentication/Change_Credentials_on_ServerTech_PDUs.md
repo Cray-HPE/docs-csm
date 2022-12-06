@@ -242,5 +242,5 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
   ncn-mw# cray hsm inventory redfishEndpoints update x3000m0 --fqdn x3000m0-rts:8083 --id x3000m0 --hostname x3000m0-rts:8083
   ```
 
-  Recheck `hsm inventory` to verify the FQDN was updated.
+  Recheck `cray hsm inventory redfishEndpoints` to verify the FQDN was updated.
   Repeat this step for each ServerTech PDU.
