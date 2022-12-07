@@ -666,7 +666,9 @@ Overall status: PASSED (Passed: 40, Failed: 0)
 
 ### 4.3 External SSH access test execution
 
-The external SSH access tests may be run on any system external to the cluster.
+The external SSH access tests may be run on any system external to the cluster. The tests should not be run from another system
+running the Cray System Management software if that system was configured with the same internal network ranges as the system
+being tested as this will cause some tests to fail.
 
 1. Python version 3 must be installed (if it is not already).
 
