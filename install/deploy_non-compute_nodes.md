@@ -26,7 +26,8 @@ the number of storage and worker nodes.
 1. [Deploy management nodes](#2-deploy-management-nodes)
     1. [Deploy storage NCNs](#21-deploy-storage-ncns)
     1. [Deploy Kubernetes NCNs](#22-deploy-kubernetes-ncns)
-    1. [Check LVM on Kubernetes NCNs](#23-check-lvm-on-kubernetes-ncns)
+    1. [Run Ceph Latency Repair Script](#23-run-ceph-latency-repair-script)
+    1. [Check LVM on Kubernetes NCNs](#24-check-lvm-on-kubernetes-ncns)
 1. [Cleanup](#3-cleanup)
 1. [Validate deployment](#4-validate-deployment)
 1. [Next topic](#next-topic)
@@ -261,7 +262,11 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
     See [SHCD check cabling guide](../operations/network/management_network/validate_cabling.md).
 
-### 2.3 Check LVM on Kubernetes NCNs
+### 2.3 Run Ceph Latency Repair Script
+
+Ceph can begin to exhibit latency over time unless OSDs are restarted and some OSD memory settings are changed. It is recommended to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md).
+
+### 2.4 Check LVM on Kubernetes NCNs
 
 Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes.
 
