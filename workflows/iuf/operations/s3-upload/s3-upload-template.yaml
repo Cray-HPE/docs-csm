@@ -27,22 +27,12 @@ metadata:
   name: s3-upload
   namespace: argo
 spec:
-  arguments:
-    parameters:
-      - name: auth_token
-      - name: global_params
-  volumes:
-    - name: ca-bundle
-      hostPath:
-        path: /var/lib/ca-certificats
-        type: Directory
   entrypoint: main
   templates:
 ### Main Steps ###
   - name: main
     inputs:
       parameters:
-        - name: auth_token
         - name: global_params
     steps:
     - - name: s3-upload
@@ -55,7 +45,7 @@ spec:
               value: false
             - name: scriptContent
               value: |
-                bash /usr/local/bin/s3-upload "{{=jsonpath(workflow.parameters.global_params, '$.product_manifest.current_product.content') }}"
-              volumeMounts:
-                - name: ca-bundle
-              mountPath: /var/lib/ca-certificates
+                CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
+                PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
+
+                /usr/local/bin/s3-upload "$CONTENT" "$PARENT_DIR"
