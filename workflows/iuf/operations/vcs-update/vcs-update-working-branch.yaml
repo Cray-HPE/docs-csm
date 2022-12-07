@@ -44,6 +44,12 @@ spec:
               parameters:
                 - name: vcs_user_credentials_secret_name
                   value: "{{steps.get-vcs-secrets.outputs.parameters.secret_name}}"
+                - name: cf_update_gitea_org
+                  value: cray #default
+                - name: cf_update_product_name
+                  value: "{{=jsonpath(workflow.parameters.product_manifest, '$.current_product.manifest.name')}}"
+                - name: cf_update_product_version
+                  value: "{{=jsonpath(workflow.parameters.product_manifest, '$.current_product.manifest.version')}}"
         - - name: cleanup
             template: cleanup-template
             arguments:
@@ -120,17 +126,14 @@ spec:
           - name: cf_update_gitea_url
             value: "https://api-gw-service-nmn.local/vcs"
           - name: cf_update_product_name
-            value: "{{=jsonpath(workflow.parameters.product_manifest, '$.current_product.manifest.name')}}"
           - name: cf_update_product_version
-            value: "{{=jsonpath(workflow.parameters.product_manifest, '$.current_product.manifest.version')}}"
           - name: cf_update_gitea_org
-            value: cray # default
-          - name: pristine_branch # TODO: current_product.pristine does not exist yet, still talking with John.
-            value: "{{=jsonpath(workflow.parameters.site_params, '$.site_params.current_product.pristine_branch')}}"
+          - name: pristine_branch
+            value: "{{inputs.parameters.cf_update_gitea_org}}/{{inputs.parameters.cf_update_product_name}}/{{inputs.parameters.cf_update_product_version}}"
           - name: customer_branch
             value: "{{=jsonpath(workflow.parameters.site_params, '$.site_params.current_product.working_branch')}}"
       container:
-        image: registry.local/artifactory.algol60.net/csm-docker/unstable/cf-gitea-update:0.1.0-CASMCMS-8304.1_dd28e36
+        image: registry.local/artifactory.algol60.net/csm-docker/unstable/cf-gitea-update:0.1.0-CASMCMS-8304.1_89332ca
         command:
           - "/bin/sh"
         args: ["-c", "/opt/csm/cf-gitea-update/entrypoint.sh"]
