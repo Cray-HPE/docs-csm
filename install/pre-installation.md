@@ -145,7 +145,7 @@ On first login, the LiveCD will prompt the administrator to change the password.
 
 1. (`pit#`) Configure the site-link (`lan0`), DNS, and gateway IP addresses.
 
-   1. Set `site_ip`, `site_gw`, and `site_dns` variables.
+   1. Set `site_ip`, `site_gw`, `site_dns`, and `SYSTEM_NAME`  variables.
 
       > **NOTE:** The `site_ip`, `site_gw`, and `site_dns` values must come from the local network administration or authority.
 
@@ -162,6 +162,11 @@ On first login, the LiveCD will prompt the administrator to change the password.
       ```bash
       # IPv4 Format: A.B.C.D
       site_dns=
+      ```
+
+      ```bash
+      # Name of the system. This will only be used for the pit hostname. This variable is capitlized because it will be used in a subsequent section.
+      SYSTEM_NAME=
       ```
 
    1. Set `site_nics` variable.
@@ -181,7 +186,7 @@ On first login, the LiveCD will prompt the administrator to change the password.
       > - The hostname is auto-resolved based on reverse DNS.
 
       ```bash
-      /root/bin/csi-setup-lan0.sh "${site_ip}" "${site_gw}" "${site_dns}" "${site_nics}"
+      /root/bin/csi-setup-lan0.sh "${SYSTEM_NAME}" "${site_ip}" "${site_gw}" "${site_dns}" "${site_nics}"
       ```
 
 1. (`pit#`) Verify that the assigned IP address was successfully applied to `lan0` .
