@@ -25,14 +25,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: vcs-update-working-branch-main-steps
+  name: vcs-update-working-branch
 spec:
   entrypoint: main
   arguments:
     parameters:
       - name: product_manifest
-      - name: pristine_branch
-      - name: customer_branch
+      - name: site_params
   templates:
     ### Main Steps ###
     - name: main
@@ -126,10 +125,10 @@ spec:
             value: "{{=jsonpath(workflow.parameters.product_manifest, '$.current_product.manifest.version')}}"
           - name: cf_update_gitea_org
             value: cray # default
-          - name: pristine_branch
-            value: "{{workflow.parameters.pristine_branch}}"
+          - name: pristine_branch # TODO: current_product.pristine does not exist yet, still talking with John.
+            value: "{{=jsonpath(workflow.parameters.site_params, '$.site_params.current_product.pristine_branch')}}"
           - name: customer_branch
-            value: "{{workflow.parameters.customer_branch}}"
+            value: "{{=jsonpath(workflow.parameters.site_params, '$.site_params.current_product.working_branch')}}"
       container:
         image: registry.local/artifactory.algol60.net/csm-docker/unstable/cf-gitea-update:0.1.0-CASMCMS-8304.1_dd28e36
         command:
