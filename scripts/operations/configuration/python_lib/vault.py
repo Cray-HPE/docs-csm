@@ -29,18 +29,27 @@ import base64
 import logging
 import requests
 
+# So we can catch exceptions decoding JSON
+import simplejson.errors
+
 from . import api_requests
 from . import common
 from . import k8s
 
-SECRET_FIELD_NAMES = ["password", "ssh_private_key", "ssh_public_key"]
+from .types import JSONObject
 
 K8S_NAMESPACE = "vault"
 K8S_SECRET_NAME = "cray-vault-unseal-keys"
 K8S_SERVICE_NAME = "cray-vault"
 
+CSM_ROOT_SECRET_KEY = "csm/users/root"
+
 TOKEN_STRING = None
 API_URL = None
+
+API_STATUS_OK_WITH_DATA = 200
+API_STATUS_OK_EMPTY = 204
+API_STATUS_NOT_FOUND = 404
 
 
 def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
@@ -72,16 +81,16 @@ def get_token_string() -> str:
             name=K8S_SECRET_NAME, namespace=K8S_NAMESPACE)
         try:
             encoded_vault_token = vault_secret.data["vault-root"]
-        except (AttributeError, KeyError, TypeError) as e:
+        except (AttributeError, KeyError, TypeError) as exc:
             log_error_raise_exception(
-                f"{secret_label} has an unexpected format", e)
+                f"{secret_label} has an unexpected format", exc)
         # return decoded bytes as a string
         try:
             TOKEN_STRING = base64.standard_b64decode(
                 encoded_vault_token).decode()
-        except Exception as e:
+        except Exception as exc:
             log_error_raise_exception(
-                f"Error decoding token in {secret_label}", e)
+                f"Error decoding token in {secret_label}", exc)
     return TOKEN_STRING
 
 
@@ -106,9 +115,9 @@ def get_api_url() -> str:
                 if vault_port.name == 'http-api-port':
                     API_URL = f"http://{vault_ip}:{vault_port.port}"
                     break
-        except (AttributeError, KeyError, TypeError) as e:
+        except (AttributeError, KeyError, TypeError) as exc:
             log_error_raise_exception(
-                f"{service_label} has an unexpected format", e)
+                f"{service_label} has an unexpected format", exc)
 
         if API_URL is None:
             log_error_raise_exception(
@@ -117,94 +126,163 @@ def get_api_url() -> str:
     return API_URL
 
 
-def get_csm_root_secret_api_url() -> str:
+def get_secret_api_url(secret_key: str) -> str:
     """
-    Returns the Vault API endpoint URL for the secret/csm/users/root Vault entry
+    Given the key for a Vault secret, returns the API URL for that secret.
+    Essentially this is just appending the secret key to the base API URL.
     """
     api_url_base = get_api_url()
-    return f"{api_url_base}/v1/secret/csm/users/root"
+    return f"{api_url_base}/v1/secret/{secret_key}"
 
 
-def write_root_secrets(ssh_private_key: str,
-                       ssh_public_key: str,
-                       password_hash: str,
-                       verify: bool = True) -> None:
+def get_secret_data_from_response(api_response: requests.models.Response) -> JSONObject:
     """
-    Write the SSH keys and passwords to the csm root secret in Vault.
-    If verify is true, read them back to verify that they were set to the desired values.
+    This is used to parse an API response to a Vault read request and extract the
+    secret data (a JSON object). That data is returned. An exception is raised if
+    anything goes wrong with this. The status code of the response is not validated.
+    """
+    if not api_response.text:
+        log_error_raise_exception("Vault response to read secret request has empty body")
+    try:
+        resp_body = api_response.json()
+    except simplejson.errors.JSONDecodeError as exc:
+        log_error_raise_exception(
+            "Error decoding JSON in Vault response to read secret request", exc)
+    try:
+        return resp_body["data"]
+    except (KeyError, TypeError) as exc:
+        log_error_raise_exception(
+            "Vault response to read secret request is not in expected format", exc)
+
+
+def get_api_request_headers(additional_headers: JSONObject = None) -> JSONObject:
+    """
+    Return the headers to use for Vault API requests. If additional_headers are
+    provided, the function returns a dictionary of the default headers updated using
+    the additional headers.
+    """
+    default_headers = {"X-Vault-Request": "true", "X-Vault-Token": get_token_string()}
+    if additional_headers is None:
+        return default_headers
+    default_headers.update(additional_headers)
+    return default_headers
+
+
+def vault_api_delete(**kwargs) -> requests.models.Response:
+    """
+    Just a function wrapper to simplify making DELETE requests to Vault
+    using api_requests.retry_request_validate_status()
+    It specifies the request_method argument. If the caller
+    specifies headers, the default headers (from delete_api_request_headers())
+    will be updated with those values.
     """
 
-    secrets_to_write = {
-        "ssh_private_key": ssh_private_key,
-        "ssh_public_key": ssh_public_key,
-        "password": password_hash}
+    # Get additional headers, if any, and remove them from the keyword arguments
+    additional_headers = kwargs.pop("headers", None)
+    # Generate request headers, combining additional ones, if any
+    request_headers = get_api_request_headers(additional_headers)
+    return api_requests.retry_request_validate_status(request_method=requests.delete,
+                                                      headers=request_headers, **kwargs)
 
-    csm_root_secret_url = get_csm_root_secret_api_url()
-    logging.debug(f"csm_root_secret_url = {csm_root_secret_url}")
-    request_headers = {
-        "X-Vault-Request": "true",
-        "X-Vault-Token": get_token_string()}
 
-    # Create API request session
-    with requests.Session() as session:
-        # The same headers are used for all requests we'll be making
-        session.headers.update(request_headers)
+def vault_api_get(**kwargs) -> requests.models.Response:
+    """
+    Just a function wrapper to simplify making GET requests to Vault
+    using api_requests.retry_request_validate_status()
+    It specifies the request_method argument. If the caller
+    specifies headers, the default headers (from get_api_request_headers())
+    will be updated with those values.
+    """
 
-        # Write secrets to Vault
-        logging.info(
-            "Writing SSH keys and root password hash to secret/csm/users/root in Vault")
-        # We do not expect or care about any output of the write request,
-        # so no need to save the function return
-        try:
-            api_requests.make_api_request_with_retries(request_method=session.post,
-                                                       url=csm_root_secret_url,
-                                                       expected_status_code=204,
-                                                       json=secrets_to_write)
-        except Exception as e:
-            log_error_raise_exception(
-                f"Error making POST request to {csm_root_secret_url}", e)
+    # Get additional headers, if any, and remove them from the keyword arguments
+    additional_headers = kwargs.pop("headers", None)
+    # Generate request headers, combining additional ones, if any
+    request_headers = get_api_request_headers(additional_headers)
+    return api_requests.retry_request_validate_status(request_method=requests.get,
+                                                      headers=request_headers, **kwargs)
 
-        if not verify:
-            logging.info("Vault write completed successfully")
-            return
 
-        # Read secrets back from Vault
-        logging.info(
-            "Read back secrets from Vault to verify that the values were correctly saved")
-        try:
-            resp_body = api_requests.make_api_request_with_retries(request_method=session.get,
-                                                                   url=csm_root_secret_url,
-                                                                   expected_status_code=200)
-        except Exception as e:
-            log_error_raise_exception(
-                f"Error making GET request to {csm_root_secret_url}", e)
+def vault_api_post(**kwargs) -> requests.models.Response:
+    """
+    Just a function wrapper to simplify making POST requests to Vault
+    using api_requests.retry_request_validate_status()
+    It specifies the request_method argument. If the caller
+    specifies headers, the default headers (from post_api_request_headers())
+    will be updated with those values.
+    """
 
-        if resp_body is None:
-            log_error_raise_exception(
-                "Empty body in response to Vault API read request")
+    # Get additional headers, if any, and remove them from the keyword arguments
+    additional_headers = kwargs.pop("headers", None)
+    # Generate request headers, combining additional ones, if any
+    request_headers = get_api_request_headers(additional_headers)
+    return api_requests.retry_request_validate_status(request_method=requests.post,
+                                                      headers=request_headers, **kwargs)
 
-        try:
-            retrieved_vault_secrets = {
-                field: resp_body["data"][field] for field in SECRET_FIELD_NAMES}
-        except (KeyError, TypeError) as e:
-            log_error_raise_exception(
-                "Vault API read response has unexpected format", e)
 
-    # Validate that Vault values match what we wrote
-    logging.debug(
-        "Validating that Vault contents match what was written to it")
-    if retrieved_vault_secrets == secrets_to_write:
-        logging.info(
-            "Secrets read back from Vault match desired values -- "
-            "all secrets successfully written to Vault")
-        return
+def delete_secret(secret_key: str) -> None:
+    """
+    Deletes the specified secret key from Vault. This is also required in the case where the last
+    field of data in a secret is being removed, because Vault does not allow for empty secrets.
+    Raises an exception if anything goes wrong.
+    """
+    secret_url = get_secret_api_url(secret_key)
+    logging.debug(f"{secret_key} secret URL = {secret_url}")
+    logging.debug(f"Deleting {secret_key} secret from Vault")
+    vault_api_delete(url=secret_url, expected_status_codes=API_STATUS_OK_EMPTY)
 
-    # Print summary of differences
-    for field in SECRET_FIELD_NAMES:
-        if secrets_to_write[field] == retrieved_vault_secrets[field]:
-            logging.debug(f"Vault value for {field} matches what was written")
-        else:
-            logging.error(
-                f"Vault value for {field} DOES NOT MATCH what was written")
-    raise common.ScriptException(
-        "Secrets read back from Vault do not all match what was written")
+
+def get_secret(secret_key: str, must_exist: bool = False) -> JSONObject:
+    """
+    Retrieves the Vault secret with the specified key and returns its contents.
+    The must_exist argument governs whether a 404 response status code results
+    in an exception or not. If must_exist is False and the response is 404, then
+    None is returned.
+    An exception is raised if any problems occur
+    """
+    secret_url = get_secret_api_url(secret_key)
+    logging.debug(f"{secret_key} secret URL = {secret_url}")
+    if must_exist:
+        expected_status_codes = {API_STATUS_OK_WITH_DATA}
+    else:
+        expected_status_codes = {API_STATUS_OK_WITH_DATA, API_STATUS_NOT_FOUND}
+
+    logging.debug(f"Reading {secret_key} secret from Vault")
+    resp = vault_api_get(url=secret_url, expected_status_codes=expected_status_codes)
+    if resp.status_code == API_STATUS_NOT_FOUND:
+        # Since an exception was not raised, this must mean we are in the case where this is okay.
+        # So return None.
+        return None
+    # Return the secret data from the response
+    return get_secret_data_from_response(resp)
+
+
+def write_secret(secret_key: str, secret_data: JSONObject) -> None:
+    """
+    Writes the specified secret data to Vault using the specified secret key.
+    Raises an exception if anything goes wrong.
+    """
+    secret_url = get_secret_api_url(secret_key)
+    logging.debug(f"{secret_key} secret URL = {secret_url}")
+    logging.debug(f"Writing {secret_key} secret to Vault")
+    vault_api_post(url=secret_url, expected_status_codes=API_STATUS_OK_EMPTY, json=secret_data)
+
+
+def delete_csm_root_secret(**kwargs) -> None:
+    """
+    Wrapper function that supplies the CSM root secret key to delete_secret()
+    """
+    delete_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
+
+
+def get_csm_root_secret(**kwargs) -> JSONObject:
+    """
+    Wrapper function that supplies the CSM root secret key to get_secret()
+    """
+    return get_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
+
+
+def write_csm_root_secret(**kwargs) -> None:
+    """
+    Wrapper function that supplies the CSM root secret key to write_secret()
+    """
+    write_secret(secret_key=CSM_ROOT_SECRET_KEY, **kwargs)
