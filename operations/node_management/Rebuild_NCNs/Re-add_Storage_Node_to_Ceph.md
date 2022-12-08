@@ -97,6 +97,19 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    do
      systemctl enable $service
    done
+
+   # check rgw and haproxy are functional
+   res_file=$(mktemp)
+   http_code=$(curl -k -s -o "${res_file}" -w "%{http_code}" "https://rgw-vip.nmn")
+   if [[ ${http_code} != 200 ]]; then
+     echo "ERROR Rados GW and haproxy are not healthy."
+     exit 1
+   fi
+   # check keepalived is active
+   if [[ $(systemctl is-active keepalived.service) != "active" ]]; then
+     echo "ERROR keepalived is not active on $host"
+     exit 1
+   fi
    ```
 
 1. Change the mode of the script.
