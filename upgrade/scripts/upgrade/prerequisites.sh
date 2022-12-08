@@ -368,7 +368,7 @@ if [[ ${state_recorded} == "0" ]]; then
         echo "ERROR: docs-csm-latest.noarch.rpm is missing under: /root -- halting..."
         exit 1
     fi
-    cp /root/docs-csm-latest.noarch.rpm "${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/"
+    cp /root/docs-csm-latest.noarch.rpm "${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp3/"
 
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
