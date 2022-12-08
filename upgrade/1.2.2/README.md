@@ -5,21 +5,40 @@
 This document guides an administrator through the patch update to Cray Systems Management `v1.2.2` from `v1.2.0` or `1.2.1`.
 If upgrading from CSM v1.0.x directly to `v1.2.2`, follow the procedures described in [Upgrade CSM](../1.2/README.md) instead.
 
-## Bug Fixes
+## Bug Fixes and Improvements
 
-* Fixes the NCN boot artifacts validation test
 * Fixes the incorrect `AppVersion` that was being reported from `csi` version report
-* Updates the System Power On documentation to add a rolling restart of spire `request-ncn-join-token` (to avoid issues with spire tokens)
 * Fixes speed with which the pods are restarted as a part of the `precache` chart upgrade (for better performance)
 * Increases the timeout for the `etcd_database_health` check in the `ncn-healthcheck`
 * Fixes issue with `postgres` database backups that caused them to fail to restore and cleans up existing (bad) `postgres` backups on the system
 * Fixes the pod anti-affinity settings and pod disruption budget settings for `cray-dns-unbound`
+* Fixes problem with unbound forwarding to `powerDNS` in an air-gapped environment
 * Fixes a race condition between MEDS adding the initial BMC entries and Kea `dhcp-helper` logic updating IP addresses
-* Adds documentation for CSM post-install SNMP exporter settings
 * Fixes an issue where `snmp` credentials being set on leaf switches were being lost
 * Fixes an issue where `cray-hmcollector-poll` pod was not collecting river telemetry due to a check the collector does against the SMA `kafka` instance
-* Fixes CVEs in the `ims-load-artifacts` container image
-* Adds documentation to remediate security issues with NCN image access and secret exposure
+* Fixes CVEs in container images
+* Limits Keycloak access (via ingress OPA policy) to well known OIDC endpoints for `Shasta` realm and only allow Keycloak administration through CMN
+* Adds remediation for `CVE-2020-10770` for `keycloak`
+* Fixes issue with missing `App.version` field in `csi version` command
+* Adds capability to `capmc` to use the PATCH URI when trying to set multiple controls for Olympus hardware
+* Fixes failure in backing up `vcs` data when there are extra spaces in the pod name
+* Adds procedure to remediate NCN image access and exposure to security hardening guide
+* Adds documentation for CSM post-install SNMP exporter settings
+* Updates the System Power On documentation to add a rolling restart of spire `request-ncn-join-token` (to avoid issues with spire tokens)
+* Documents workaround for iLO FW dropping redfish subscriptions
+* Adds improvements to documentation of `canu` commands
+* Documents known issues for gatekeeper constraint and refused connection
+* Documents syntax error in gateway test example command
+* Documents a workaround for known issue with boot order
+* Improves documentation around CFS image customization session procedure
+* Documents usage of the `--no-cache` flag when resuming CSM services install
+* Improvements and better documentation for the `external SSH test`
+* Adds clarity to `Site Init` documentation on external hosts
+* Adds documentation for the DNS zone forwarding for `powerDNS` in an air-gapped environment
+* Adds timeout to etcd database health check
+* Fixes the NCN boot artifacts validation test
+* Adds NTP `goss` test
+* Improvements in pod back-up test scripts
 
 ## Known Issues
 
