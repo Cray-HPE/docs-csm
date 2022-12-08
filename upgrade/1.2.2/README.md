@@ -18,7 +18,7 @@ If upgrading from CSM v1.0.x directly to `v1.2.2`, follow the procedures describ
 * Fixes an issue where `cray-hmcollector-poll` pod was not collecting river telemetry due to a check the collector does against the SMA `kafka` instance
 * Fixes CVEs in container images
 * Limits Keycloak access (via ingress OPA policy) to well known OIDC endpoints for `Shasta` realm and only allow Keycloak administration through CMN
-* Adds remediation for CVE-2020-10770 for keycloak
+* Adds remediation for `CVE-2020-10770` for `keycloak`
 * Fixes issue with missing `App.version` field in `csi version` command
 * Adds capability to `capmc` to use the PATCH URI when trying to set multiple controls for Olympus hardware
 * Fixes failure in backing up `vcs` data when there are extra spaces in the pod name
