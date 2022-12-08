@@ -16,14 +16,13 @@ If upgrading from CSM v1.0.x directly to `v1.2.2`, follow the procedures describ
 * Fixes a race condition between MEDS adding the initial BMC entries and Kea `dhcp-helper` logic updating IP addresses
 * Fixes an issue where `snmp` credentials being set on leaf switches were being lost
 * Fixes an issue where `cray-hmcollector-poll` pod was not collecting river telemetry due to a check the collector does against the SMA `kafka` instance
-* Fixes CVEs in the `ims-load-artifacts` container image
-* Fixes CVE in the `oauth2-proxy` container image
-* Adds `opa` policies to force `keycloak` admin operations through CMN and to address `keycloak` vulnerability around `request_uri`
+* Fixes CVEs in container images
+* Limits Keycloak access (via ingress OPA policy) to well known OIDC endpoints for `Shasta` realm and only allow Keycloak administration through CMN
+* Adds remediation for CVE-2020-10770 for keycloak
 * Fixes issue with missing `App.version` field in `csi version` command
 * Adds capability to `capmc` to use the PATCH URI when trying to set multiple controls for Olympus hardware
 * Fixes failure in backing up `vcs` data when there are extra spaces in the pod name
-* Adds documentation to remediate security issues with NCN image access and secret exposure
-* Documented remediation for NCN Image access and secret exposure
+* Adds procedure to remediate NCN image access and exposure to security hardening guide
 * Adds documentation for CSM post-install SNMP exporter settings
 * Updates the System Power On documentation to add a rolling restart of spire `request-ncn-join-token` (to avoid issues with spire tokens)
 * Documents workaround for iLO FW dropping redfish subscriptions
