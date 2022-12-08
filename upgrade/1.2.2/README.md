@@ -12,36 +12,34 @@ If upgrading from CSM v1.0.x directly to `v1.2.2`, follow the procedures describ
 * Increases the timeout for the `etcd_database_health` check in the `ncn-healthcheck`
 * Fixes issue with `postgres` database backups that caused them to fail to restore and cleans up existing (bad) `postgres` backups on the system
 * Fixes the pod anti-affinity settings and pod disruption budget settings for `cray-dns-unbound`
-* Fixes problem with unbound forwarding to powerDNS in an air-gapped environment
+* Fixes problem with unbound forwarding to `powerDNS` in an air-gapped environment
 * Fixes a race condition between MEDS adding the initial BMC entries and Kea `dhcp-helper` logic updating IP addresses
 * Fixes an issue where `snmp` credentials being set on leaf switches were being lost
 * Fixes an issue where `cray-hmcollector-poll` pod was not collecting river telemetry due to a check the collector does against the SMA `kafka` instance
 * Fixes CVEs in the `ims-load-artifacts` container image
 * Fixes CVE in the `oauth2-proxy` container image
-* Adds opa policies to force keycloak admin operations through CMN and to address keycloak vulnerability around request_uri
+* Adds `opa` policies to force `keycloak` admin operations through CMN and to address `keycloak` vulnerability around `request_uri`
 * Fixes issue with missing `App.version` field in `csi version` command
-* Adds capability to capmc to use the PATCH URI when trying to set multiple controls for Olympus hardware
-* Fixes failure in backing up vcs data when there are extra spaces in the pod name
+* Adds capability to `capmc` to use the PATCH URI when trying to set multiple controls for Olympus hardware
+* Fixes failure in backing up `vcs` data when there are extra spaces in the pod name
 * Adds documentation to remediate security issues with NCN image access and secret exposure
 * Documented remediation for NCN Image access and secret exposure
 * Adds documentation for CSM post-install SNMP exporter settings
 * Updates the System Power On documentation to add a rolling restart of spire `request-ncn-join-token` (to avoid issues with spire tokens)
-* Documents workaround for iLO FW droppping redfish subscriptions
-* Adds improvements to documentation of canu commands
+* Documents workaround for iLO FW dropping redfish subscriptions
+* Adds improvements to documentation of `canu` commands
 * Documents known issues for gatekeeper constraint and refused connection
 * Documents syntax error in gateway test example command
 * Documents a workaround for known issue with boot order
 * Improves documentation around CFS image customization session procedure
 * Documents usage of the `--no-cache` flag when resuming CSM services install
 * Improvements and better documentation for the `external SSH test`
-* Adds clarity to Site Init documentation on external hosts
-* Adds documentation for the DNS zone forwarding for powerDNS in an air-gapped environment
+* Adds clarity to `Site Init` documentation on external hosts
+* Adds documentation for the DNS zone forwarding for `powerDNS` in an air-gapped environment
 * Adds timeout to etcd database health check
 * Fixes the NCN boot artifacts validation test
-* Adds NTP goss test
+* Adds NTP `goss` test
 * Improvements in pod back-up test scripts
- 
- 
 
 ## Known Issues
 
