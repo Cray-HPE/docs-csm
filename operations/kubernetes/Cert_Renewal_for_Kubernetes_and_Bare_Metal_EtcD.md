@@ -10,7 +10,16 @@ As part of the installation, Kubernetes generates certificates for the required 
 
 **`IMPORTANT:`** This document is based off a base hardware configuration of 3 masters and 3 workers (We are leaving off utility storage since they are not running Kubernetes). Please make sure to update any commands that run on multiple nodes accordingly.
 
-## File locations
+Procedures for Certificate Renewal:
+
+- [File Locations](#file-locations)
+- [Check Certificates](#check-certificates)
+- [Backup Existing Certificates](#backup-existing-certificates)
+- [Renew All Certificates](#renew-all-certificates)
+- [Renew Etcd Certificate](#renew-etcd-certificate)
+- [Update Client Secrets](#update-client-secrets)
+
+## File Locations
 
 **`IMPORTANT:`** Master nodes will have certificates for both Kubernetes services and the Kubernetes client. Workers will only have the certificates for the Kubernetes client.
 
@@ -50,7 +59,7 @@ Client (master and worker nodes):
 /var/lib/kubelet/pki/kubelet.key
 ```
 
-## Procedure
+## Check Certificates
 
 Check the expiration of the certificates.
 
@@ -78,7 +87,7 @@ Check the expiration of the certificates.
     front-proxy-ca          Sep 02, 2030 15:21 UTC   8y              no
     ```
 
-### Backing up existing certificates
+## Backup Existing Certificates
 
 1. Backup existing certificates.
 
@@ -113,9 +122,9 @@ Check the expiration of the certificates.
     ..  shortened output
     ```
 
-### Renewing Certificates
+## Renew All Certificates
 
-#### On each master node
+### On each master node
 
 1. Renew the Certificates.
 
@@ -239,7 +248,8 @@ Check the expiration of the certificates.
    ```
 
    **`IMPORTANT:`** DO NOT forget to verify certificates in /etc/kubernetes/pki/etcd.
-   - As noted in our above output all certificates including those for etcd were updated. Please note `apiserver-etcd-client.crt` is a Kubernetes api cert not an etcd only cert. Also the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
+   - As noted in our above output all certificates including those for etcd were updated. Please note `apiserver-etcd-client.crt` is critical as it is the cert that allows the Kubernetes API server to talk to the bare-metal etcd cluster. 
+Also the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
 
 1. Restart etcd.
 
@@ -249,7 +259,7 @@ Check the expiration of the certificates.
    ncn-m# systemctl restart etcd.service
    ```
 
-#### On master and worker nodes
+### On master and worker nodes
 
 1. Restart kubelet.
 
@@ -305,8 +315,7 @@ Check the expiration of the certificates.
    ncn-m# pdcp -w ncn-m00[2-3] -w ncn-w001 /root/.kube/config /root/.kube/
    ```
 
-## Regenerating kubelet .pem certificates
-
+### Regenerating kubelet .pem certificates
 
 1. Backup certificates for `kubelet` on each master and worker node:
 
@@ -487,7 +496,24 @@ Check the expiration of the certificates.
       WARNING: 2021/09/24 17:35:11 grpc: addrConn.createTransport failed to connect to {0.0.0.0:2379 0  <nil>}. Err :connection error: desc = "transport: authentication handshake failed: remote error: tls: bad certificate". Reconnecting...
       ```
 
-## Update client secrets
+## Renew Etcd Certificate
+
+If [Check Certificates](#check-certificates) indicates that only the `apiserver-etcd-client` need to be renewed, then the following can be used to renew just that one certificate.
+The full [Renew All Certificates](#renew-all-certificates) procedure will also renew this certificate.
+
+Run the following steps on each master node.
+
+1. Renew the Etcd certificate.
+
+    ```bash
+    kubeadm alpha certs renew apiserver-etcd-client --config /etc/kubernetes/kubeadmcfg.yaml
+    systemctl restart etcd.service
+    systemctl restart kubelet.service
+    ```
+
+## Update Client Secrets
+
+The client secrets can be updated independently from the Kubernetes certs.
 
 Run the following steps from a master node.
 
