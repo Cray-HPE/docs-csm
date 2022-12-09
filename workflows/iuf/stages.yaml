@@ -70,7 +70,7 @@ stages:
   - name: update-vcs-config
     type: product
     operations:
-      - name: update-working-branch
+      - name: vcs-update-working-branch
         local-path: operations/vcs-update/vcs-update-working-branch.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
