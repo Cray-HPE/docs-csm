@@ -231,10 +231,10 @@ This parameter's value tells the initramFS where to download the kernel, `initrd
 | NCN Type | Default Value(s) | Context |
 | :------: | :------------ | :------ |
 | All | `http://pit/<hostname>` | `/proc/cmdline` |
-| All | `http://rgw-vip.nmn/boot-images/k8s/<version>/rootfs<auth-token>` | `/proc/cmdline` |
-| All | `http://rgw-vip.nmn/boot-images/ceph/<version>/rootfs?<auth-token>` | `/proc/cmdline` |
-| All | `s3://boot-images/ceph/<version>/rootfs` | `cray-bss` |
-| All | `s3://boot-images/ceph/<version>/rootfs` | `cray-bss` |
+| All | `http://rgw-vip.nmn/$K8S_IMS_IMAGE_ID/rootfs?<auth-token>` | `/proc/cmdline` |
+| All | `http://rgw-vip.nmn/$CEPH_IMS_IMAGE_ID/rootfs?<auth-token>` | `/proc/cmdline` |
+| All | `s3://boot-images/$K8S_IMS_IMAGE_ID/rootfs` | `cray-bss` |
+| All | `s3://boot-images/$CEPH_IMS_IMAGE_ID/rootfs` | `cray-bss` |
 
 For more information, see [`dracut-metal-mdsquash`'s usage on `metal.server`][2].
 
@@ -691,7 +691,7 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 | CSM 1.2.2                 | 5.3.18-150300.59.43.1      |                          |
 | CSM 1.3.0                 | 5.3.18-150300.59.**87.1**  | [`CVE-2022-33981`][23]   |
 | CSM 1.3.1                 | 5.3.18-150300.59.87.1      |                          |
-| CSM 1.4.0                 | 5.**14.21-150400.24.21.2** | SLES-15-SP4 Upgrade      |
+| CSM 1.4.0                 | 5.**14.21-150400.24.33.2** | SLES-15-SP4 Upgrade      |
 
 [1]:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
 [2]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.md#usage

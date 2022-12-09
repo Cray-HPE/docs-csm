@@ -25,7 +25,7 @@ version: 0.1.0 # IUF version
 
 stages:
   - name: process-media
-    type: product
+    type: global
     operations:
       - name: extract-release-distributions
         local-path: operations/extract-release-distributions.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
@@ -61,7 +61,7 @@ stages:
         local-path: operations/nexus-setup/nexus-helm-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
         static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: vcs-upload
-        local-path: operations/vcs-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
+        local-path: operations/vcs-upload/vcs-upload-content.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm
         static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: ims-upload
         local-path: operations/ims-upload.yaml # this is relative to stages.yaml, which is contained in workflows/iuf/ in docs-csm

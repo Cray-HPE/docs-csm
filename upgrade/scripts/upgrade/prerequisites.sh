@@ -368,7 +368,7 @@ if [[ ${state_recorded} == "0" ]]; then
         echo "ERROR: docs-csm-latest.noarch.rpm is missing under: /root -- halting..."
         exit 1
     fi
-    cp /root/docs-csm-latest.noarch.rpm "${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/"
+    cp /root/docs-csm-latest.noarch.rpm "${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp3/"
 
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
@@ -442,7 +442,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    
+        helm -n argo upgrade --install cray-iuf "${CSM_ARTI_DIR}/helm/cray-iuf-0.0.1.tgz"
         "${locOfScript}/util/upgrade-cray-nls.sh"
 
     } >> "${LOG_FILE}" 2>&1
@@ -533,13 +533,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
     set +o pipefail
 
-    # clean up any previous set values just in case.
-    sed -i 's/^export CEPH_VERSION.*//' /etc/cray/upgrade/csm/myenv
-    sed -i 's/^export KUBERNETES_VERSION.*//' /etc/cray/upgrade/csm/myenv
-    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')
-    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')
-    echo "export CEPH_VERSION=${CEPH_VERSION}" >> /etc/cray/upgrade/csm/myenv
-    echo "export KUBERNETES_VERSION=${KUBERNETES_VERSION}" >> /etc/cray/upgrade/csm/myenv
     k8s_done=0
     ceph_done=0
     if [[ -f ${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs ]]; then
@@ -548,7 +541,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     if [[ -f ${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs ]]; then
         ceph_done=1
     fi
-    
+
     if [[ ${k8s_done} = 1 && ${ceph_done} = 1 ]]; then
         echo "Already ran ${NCN_IMAGE_MOD_SCRIPT}, skipping re-run."
     else
@@ -561,14 +554,71 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     fi
 
     set -o pipefail
-    cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/rootfs" "${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
-    cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/initrd" "${artdir}/kubernetes/initrd.img-${KUBERNETES_VERSION}.xz"
-    cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/kernel" "${artdir}"/kubernetes/*.kernel
-    cray artifacts create boot-images "ceph/${CEPH_VERSION}/rootfs" "${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs" 
-    cray artifacts create boot-images "ceph/${CEPH_VERSION}/initrd" "${artdir}/storage-ceph/initrd.img-${CEPH_VERSION}.xz" 
-    cray artifacts create boot-images "ceph/${CEPH_VERSION}/kernel" "${artdir}"/storage-ceph/*.kernel
+    IMS_UPLOAD_SCRIPT=$(rpm -ql docs-csm | grep ncn-ims-image-upload.sh)
+
+    export IMS_ROOTFS_FILENAME="${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
+    export IMS_INITRD_FILENAME="${artdir}/kubernetes/initrd.img-${KUBERNETES_VERSION}.xz"
+    export IMS_KERNEL_FILENAME="${artdir}/kubernetes/*.kernel"
+    K8S_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
+    [[ -n ${K8S_IMS_IMAGE_ID} ]]
+
+    export IMS_ROOTFS_FILENAME="${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs"
+    export IMS_INITRD_FILENAME="${artdir}/storage-ceph/initrd.img-${CEPH_VERSION}.xz"
+    export IMS_KERNEL_FILENAME="${artdir}/storage-ceph/*.kernel"
+    STORAGE_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
+    [[ -n ${STORAGE_IMS_IMAGE_ID} ]]
     set +o pipefail
 
+    # clean up any previous set values just in case.
+    sed -i 's/^export STORAGE_IMS_IMAGE_ID.*//' /etc/cray/upgrade/csm/myenv
+    sed -i 's/^export KUBERNETES_IMS_IMAGE_ID.*//' /etc/cray/upgrade/csm/myenv
+    echo "export STORAGE_IMS_IMAGE_ID=${STORAGE_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
+    echo "export K8S_IMS_IMAGE_ID=${K8S_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
+
+    echo "Retrieving a list of all management node component names (xnames)"
+    set -o pipefail
+
+    WORKER_XNAMES=$(cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+    [[ -n "${WORKER_XNAMES}" ]]
+    MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+    [[ -n "${MASTER_XNAMES}" ]]
+    K8S_XNAMES="$WORKER_XNAMES $MASTER_XNAMES"
+    K8S_XNAME_LIST=${K8S_XNAMES//,/ }
+    STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+    [[ -n "${STORAGE_XNAMES}" ]]
+    STORAGE_XNAME_LIST=${STORAGE_XNAMES//,/ }
+    set +o pipefail
+
+    for xname in ${K8S_XNAME_LIST}; do
+        METAL_SERVER=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
+            | awk -F 'metal.server=' '{print $2}' \
+            | awk -F ' ' '{print $1}')
+        NEW_METAL_SERVER="s3://boot-images/${K8S_IMS_IMAGE_ID}/rootfs"
+        PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' | \
+            sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+            sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
+            tr -d \")
+
+        cray bss bootparameters update --hosts "${xname}" \
+            --kernel "s3://boot-images/${K8S_IMS_IMAGE_ID}/kernel" \
+            --initrd "s3://boot-images/${K8S_IMS_IMAGE_ID}/initrd" \
+            --params "${PARAMS}"
+    done
+    for xname in ${STORAGE_XNAME_LIST}; do
+        METAL_SERVER=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' \
+            | awk -F 'metal.server=' '{print $2}' \
+            | awk -F ' ' '{print $1}')
+        NEW_METAL_SERVER="s3://boot-images/${STORAGE_IMS_IMAGE_ID}/rootfs"
+        PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' | \
+            sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+            sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
+            tr -d \")
+
+        cray bss bootparameters update --hosts "${xname}" \
+            --kernel "s3://boot-images/${STORAGE_IMS_IMAGE_ID}/kernel" \
+            --initrd "s3://boot-images/${STORAGE_IMS_IMAGE_ID}/initrd" \
+            --params "${PARAMS}"
+    done
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
@@ -606,11 +656,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         --request PUT \
         --data @cloud-init-global_update.json \
         https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters
-
-    csi upgrade metadata --1-2-to-1-3 \
-        --k8s-version "${KUBERNETES_VERSION}" \
-        --storage-version "${CEPH_VERSION}"
-
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
     echo

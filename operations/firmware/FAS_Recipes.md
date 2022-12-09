@@ -135,7 +135,11 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 >
 > - The nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
 > - If updating FPGAs fails because of `No Image available`, update using the "Override an Image for an Update" procedure in [FAS Admin Procedures](FAS_Admin_Procedures.md):
->   - (`ncn-mw#`) Find the `imageID` using the following command: `cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'`
+>   - (`ncn-mw#`) Find the `imageID` using the following command:
+>
+>     ```bash
+>     cray fas images list --format json | jq '.[] | .[] | select(.target=="Node0.AccFPGA0")'
+>     ```
 
 ```json
 {
@@ -277,7 +281,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 A node may fail to update with the output:
 
-```text
+```toml
 stateHelper = "Firmware Update Information Returned Downloading – See /redfish/v1/UpdateService"
 ```
 

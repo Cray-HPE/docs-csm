@@ -54,18 +54,18 @@ spec:
 
                     # check s3 
                     if ! cray artifacts list boot-images > /dev/null; then
-                      echo "Error: s3 is not operational."
+                      echo "ERROR s3 is not operational."
                       error_flag=1
                     else
-                      echo "s3 is operational."
+                      echo "INFO s3 is operational."
                     fi
                     
                     # check CFS
                     if ! cray cfs options list > /dev/null; then
-                      echo "Error: CFS is not operational."
+                      echo "ERROR CFS is not operational."
                       error_flag=1
                     else
-                      echo "CFS is operational."
+                      echo "INFO CFS is operational."
                     fi
                     
                     # check gitea VCS
@@ -73,38 +73,38 @@ spec:
                     pushd $tmpdir > /dev/null
                     gp=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} 2> /dev/null | base64 --decode)
                     if ! git clone --depth 1 https://crayvcs:"${gp}"@api-gw-service-nmn.local/vcs/cray/cos-config-management.git &> /dev/null; then
-                      echo "Error: VCS is not operational. This check will fail if there are not valid SSL certificates located at '/var/lib/ca-certificates'."
+                      echo "ERROR VCS is not operational. This check will fail if there are not valid SSL certificates located at '/var/lib/ca-certificates'."
                       error_flag=1
                     else
-                      echo "VCS is operational."
+                      echo "INFO VCS is operational."
                     fi
                     popd > /dev/null
                     rm -rf $tmpdir
                     
                     # Check IMS
                     if ! cray ims images list > /dev/null; then
-                      echo "Error: IMS is not operational."
+                      echo "ERROR IMS is not operational."
                       error_flag=1
                     else
-                      echo "IMS is operational."
+                      echo "INFO IMS is operational."
                     fi
 
                     # check the operating status of Nexus
                     res_file=$(mktemp)
                     http_code=$(curl -s -o "${res_file}" -w "%{http_code}" "https://packages.local/service/rest/v1/status")
                     if [[ ${http_code} != 200 ]]; then
-                      echo "Error: Nexus is not healthy."
+                      echo "ERROR Nexus is not healthy."
                       error_flag=1
                     else
-                      echo "Nexus is operational."
+                      echo "INFO Nexus is operational."
                     fi
 
                     # check for product catalog
                     if ! kubectl get cm cray-product-catalog -n services > /dev/null; then
-                      echo "Error: Cray Product Catalog configmap could not be found."
+                      echo "ERROR Cray Product Catalog configmap could not be found."
                       error_flag=1
                     else
-                      echo "Cray Product Catalog configmap exists."
+                      echo "INFO Cray Product Catalog configmap exists."
                     fi
 
                     exit $error_flag

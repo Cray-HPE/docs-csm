@@ -230,9 +230,10 @@ if __name__ == '__main__':
       slsnetworks = get_sls_networks(ADMIN_SECRET, SYSTEM_DOMAIN, svcs['test-networks'])
       if "can" in slsnetworks:
         USER_NET = "can"
-      if "chn" in slsnetworks:
-        USER_NET = "chn"
-    reachnets.append(USER_NET)
+#      CASMINST-5647: removing CHN test from 1.3 until test case can be redesigned.
+#      if "chn" in slsnetworks:
+#        USER_NET = "chn"
+    	reachnets.append(USER_NET)
 
     if NODE_TYPE == "ncn":
       reachnets.append("nmnlb")

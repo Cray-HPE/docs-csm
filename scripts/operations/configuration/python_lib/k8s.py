@@ -61,15 +61,15 @@ def get_configuration() -> kubernetes.client.configuration.Configuration:
         logging.debug("Loading Kubernetes configuration")
         try:
             kubernetes.config.load_kube_config()
-        except Exception as e:
+        except Exception as exc:
             log_error_raise_exception(
-                "Error loading Kubernetes configuration", e)
+                "Error loading Kubernetes configuration", exc)
         logging.debug("Getting default copy of Kubernetes configuration")
         try:
             K8S_CONFIGURATION = kubernetes.client.Configuration().get_default_copy()
-        except Exception as e:
+        except Exception as exc:
             log_error_raise_exception(
-                "Error getting default copy of Kubernetes configuration", e)
+                "Error getting default copy of Kubernetes configuration", exc)
     return K8S_CONFIGURATION
 
 
@@ -84,14 +84,14 @@ def get_api_client() -> kubernetes.client.api.core_v1_api.CoreV1Api:
         logging.debug("Setting client default Kubernetes configuration")
         try:
             kubernetes.client.Configuration.set_default(k8s_config)
-        except Exception as e:
+        except Exception as exc:
             log_error_raise_exception(
-                "Error setting default Kubernetes configuration", e)
+                "Error setting default Kubernetes configuration", exc)
         try:
             K8S_API_CLIENT = kubernetes.client.api.core_v1_api.CoreV1Api()
-        except Exception as e:
+        except Exception as exc:
             log_error_raise_exception(
-                "Error obtaining Kubernetes API client", e)
+                "Error obtaining Kubernetes API client", exc)
     return K8S_API_CLIENT
 
 
@@ -104,8 +104,8 @@ def get_secret(name: str, namespace: str) -> kubernetes.client.models.v1_secret.
     logging.debug(f"Getting {secret_label}")
     try:
         return api_client.read_namespaced_secret(name=name, namespace=namespace)
-    except Exception as e:
-        log_error_raise_exception(f"Error retrieving {secret_label}", e)
+    except Exception as exc:
+        log_error_raise_exception(f"Error retrieving {secret_label}", exc)
 
 
 def get_service(name: str, namespace: str) -> kubernetes.client.models.v1_service.V1Service:
@@ -117,5 +117,5 @@ def get_service(name: str, namespace: str) -> kubernetes.client.models.v1_servic
     logging.debug(f"Getting {service_label}")
     try:
         return api_client.read_namespaced_service(name=name, namespace=namespace)
-    except Exception as e:
-        log_error_raise_exception(f"Error retrieving {service_label}", e)
+    except Exception as exc:
+        log_error_raise_exception(f"Error retrieving {service_label}", exc)

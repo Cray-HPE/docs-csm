@@ -21,28 +21,9 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Check Licenses
+"""Shared Python function library: Type hints"""
 
-on:
-  pull_request:
+from typing import Any, Dict
 
-jobs:
-  license-check:
-    runs-on: ubuntu-latest
-
-    container:
-      image: artifactory.algol60.net/csm-docker/stable/license-checker:latest
-      credentials:
-          username: ${{ secrets.ARTIFACTORY_ALGOL60_READONLY_USERNAME }}
-          password: ${{ secrets.ARTIFACTORY_ALGOL60_READONLY_TOKEN }}
-
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v34
-
-    - name: License Check
-      if: ${{ steps.changed-files.outputs.all_changed_files }}
-      run: /usr/local/bin/python3 /license_check/license_check.py ${{ steps.changed-files.outputs.all_changed_files }}
+# A simplified type hint to use for JSON objects
+JSONObject = Dict[str, Any]

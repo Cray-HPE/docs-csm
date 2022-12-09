@@ -213,8 +213,8 @@ There are two options for setting the `root` password and SSH keys in Vault:
 [automated default](#option-1-automated-default) or [manual](#option-2-manual).
 
 After these have been set in Vault, they will automatically be applied to NCNs during NCN personalization.
-For more information on how to configure and run NCN personalization, see the
-[Perform NCN personalization](#3-perform-ncn-personalization) procedure later in this page.
+For more information on how to configure and run NCN personalization, see
+[3. Perform management NCN personalization](#3-perform-management-ncn-personalization).
 
 ### Option 1: Automated default
 
@@ -270,7 +270,7 @@ All secrets successfully written to Vault
 SUCCESS
 ```
 
-Proceed to [Perform NCN personalization](#3-perform-ncn-personalization).
+Proceed to [3. Perform management NCN personalization](#3-perform-management-ncn-personalization).
 
 ### Option 2: Manual
 
@@ -286,7 +286,7 @@ Set the `root` user password and SSH keys in Vault by combining the following tw
 - The `Configure Root Password in Vault` procedure in [Update NCN User Passwords](../security_and_authentication/Update_NCN_Passwords.md#procedure-configure-root-password-in-vault).
 - The `Configure Root SSH Keys in Vault` procedure in [Update NCN User SSH Keys](../security_and_authentication/SSH_Keys.md#procedure-apply-root-ssh-keys-to-ncns-standalone).
 
-Proceed to [Perform NCN personalization](#3-perform-ncn-personalization).
+Proceed to [3. Perform management NCN personalization](#3-perform-management-ncn-personalization).
 
 ## 3. Perform management NCN personalization
 
