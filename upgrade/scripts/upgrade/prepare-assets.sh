@@ -89,8 +89,8 @@ if [[ -z ${TARBALL_FILE} ]]; then
     # Download tarball from internet
 
     if [[ -z ${ENDPOINT} ]]; then
-        # default endpoint to internal artifactory
-        ENDPOINT=https://artifactory.algol60.net/artifactory/csm-releases/csm/1.3/
+        # default endpoint to release.algol60.net
+        ENDPOINT=https://release.algol60.net/csm-1.3/csm/
         echo "Use internal endpoint: ${ENDPOINT}"
     fi
 
