@@ -2,7 +2,9 @@
 
 ## Introduction
 
-This document is intended to guide an administrator through the upgrade process going to Cray Systems Management v1.0.1 from v0.9 (v0.9.4 or later) or v1.0.0. When upgrading a system, this top-level README.md file should be followed top to bottom, and the content on this top level page is meant to be terse. See the additional files in the various directories under the resource_material directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
+This document is intended to guide an administrator through the upgrade process going to Cray Systems Management `v1.0.1` from `v0.9` (`v0.9.4` or later) or `v1.0.0`.
+When upgrading a system, this top-level `README.md` file should be followed top to bottom, and the content on this top level page is meant to be terse.
+See the additional files in the various directories under the `resource_material` directory for additional reference material in support of the process/scripts mentioned explicitly on this page.
 
 ## Terminology
 
@@ -30,7 +32,7 @@ upgrade that node.
 
 ### General Kubernetes Commands for Troubleshooting
 
-Please see [Kubernetes_Troubleshooting_Information](../../troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md).
+Please see [Kubernetes Troubleshooting Information](../../troubleshooting/kubernetes/Kubernetes_Troubleshooting_Information.md).
 
 ### Troubleshooting PXE Boot Issues
 
@@ -39,7 +41,7 @@ If execution of the upgrade procedures results in NCNs that have errors booting,
 
 ### Troubleshooting NTP
 
-During execution of the upgrade procedure, if it is noted that there is clock skew on one or more NCNs, the following procedure can be used to troubleshoot NTP config or to sync time:
+During execution of the upgrade procedure, if it is noted that there is clock skew on one or more NCNs, the following procedure can be used to troubleshoot NTP configuration or to sync time:
 [Configure NTP on NCNs](../../operations/node_management/Configure_NTP_on_NCNs.md)
 
 ### Bare-Metal Etcd Recovery
@@ -48,12 +50,17 @@ If in the upgrade process of the master nodes, it is found that the bare-metal e
 it may be necessary to restore that cluster from back-up. Please see
 [Restore Bare-Metal etcd Clusters from an S3 Snapshot](../../operations/kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md) for that procedure.
 
+### Bare-metal Etcd certificate
+
+After upgrading, `apiserver-etcd-client` certificate may need to been renewed. See [Kubernetes and Bare Metal EtcD Certificate Renewal](../../operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-etcd-certificate)
+for procedures to check and renew this certificate.
+
 ### Back-ups for Etcd-Operator Clusters
 
 After upgrading, if health checks indicate that etcd pods are not in a healthy/running state, recovery procedures may be needed. Please see
 [Backups for etcd-operator Clusters](../../operations/kubernetes/Backups_for_etcd-operator_Clusters.md) for these procedures.
 
-### Recovering from Postgres Dbase Issues
+### Recovering from Postgres Database Issues
 
 After upgrading, if health checks indicate the Postgres pods are not in a healthy/running state, recovery procedures may be needed.
 Please see [Troubleshoot Postgres Database](../../operations/kubernetes/Troubleshoot_Postgres_Database.md) for troubleshooting and recovery procedures.
@@ -62,10 +69,10 @@ Please see [Troubleshoot Postgres Database](../../operations/kubernetes/Troubles
 
 Please see [Troubleshoot Spire Failing to Start on NCNs](../../operations/spire/Troubleshoot_Spire_Failing_to_Start_on_NCNs.md).
 
-
 ### Rerun a step/script
 
-When running upgrade scripts, each script record what has been done successfully on a node. This `state` file is stored at `/ect/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`. If a rerun is required, you will need to remove the recorded steps from this file.
+When running upgrade scripts, each script record what has been done successfully on a node. This `state` file is stored at `/ect/cray/upgrade/csm/{CSM_VERSION}/{NAME_OF_NODE}/state`.
+If a rerun is required, you will need to remove the recorded steps from this file.
 
 Here is an example of state file of `ncn-m001`:
 
@@ -87,5 +94,5 @@ ncn-m001:~ # cat /etc/cray/upgrade/csm/{CSM_VERSION}/ncn-m001/state
 [2021-07-22 20:58:39] INSTALL_NEW_CONSOLE
 ```
 
-* See the inline comment above on how to rerun a single step
-* If you need to rerun the whole upgrade of a node, you can just delete the state file
+- See the inline comment above on how to rerun a single step
+- If you need to rerun the whole upgrade of a node, you can just delete the state file
