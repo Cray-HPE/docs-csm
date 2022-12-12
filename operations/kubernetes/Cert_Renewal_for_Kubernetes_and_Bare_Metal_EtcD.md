@@ -10,6 +10,15 @@ This document will help walk through the process of renewing the certificates.
 - The node referenced in this document as `ncn-m` is the master node selected to renew the certificates on.
 - This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes. Make sure to update any commands that run on multiple nodes accordingly.
 
+Procedures for Certificate Renewal:
+
+- [File Locations](#file-locations)
+- [Check Certificates](#check-certificates)
+- [Backup Existing Certificates](#backup-existing-certificates)
+- [Renew All Certificates](#renew-all-certificates)
+- [Renew Etcd Certificate](#renew-etcd-certificate)
+- [Update Client Secrets](#update-client-secrets)
+
 ## File Locations
 
 **IMPORTANT:** Master nodes will have certificates for both Kubernetes services and the Kubernetes client. Workers will only have the certificates for the Kubernetes client.
@@ -50,14 +59,14 @@ Client (master and worker nodes):
 /var/lib/kubelet/pki/kubelet.key
 ```
 
-## Procedure
+## Check Certificates
 
 1. Log into a master node.
 
 1. Check the expiration of the certificates.
 
     ```bash
-    kubeadm alpha certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
+    kubeadm certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
     ```
 
     Example output:
@@ -83,7 +92,7 @@ Client (master and worker nodes):
     front-proxy-ca          Sep 02, 2030 15:21 UTC   8y              no
     ```
 
-### Backup Existing Certificates
+## Backup Existing Certificates
 
 1. Backup existing certificates on master nodes:
 
@@ -124,14 +133,14 @@ Client (master and worker nodes):
     [...]
     ```
 
-### Renew Certificates
+## Renew All Certificates
 
 Run the following steps on each master node.
 
 1. Renew the certificates.
 
     ```bash
-    kubeadm alpha certs renew all --config /etc/kubernetes/kubeadmcfg.yaml
+    kubeadm certs renew all --config /etc/kubernetes/kubeadmcfg.yaml
     ```
 
     Example output:
@@ -153,7 +162,7 @@ Run the following steps on each master node.
 1. Check the new expiration.
 
     ```bash
-    kubeadm alpha certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
+    kubeadm certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
     ```
 
     Example output:
@@ -276,7 +285,7 @@ Run the following steps on each master node.
    ```
 
    **IMPORTANT:** Do **NOT** forget to verify certificates in `/etc/kubernetes/pki/etcd`.
-   - As noted in the above output, all certificates including those for Etcd were updated. Note that `apiserver-etcd-client.crt` is a Kubernetes API certificate, not an Etcd only certificate.
+   - As noted in the above output, all certificates including those for Etcd were updated. Note that `apiserver-etcd-client.crt` is critical as it is the cert that allows the Kubernetes API server to talk to the bare-metal etcd cluster.
      Also, the `/var/lib/kubelet/pki/` certificates will be updated in the Kubernetes client section that follows.
 
 1. Restart `etcd`.
@@ -437,7 +446,24 @@ Run the following steps on each master node.
 
    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.
 
-### Update client secrets
+## Renew Etcd Certificate
+
+If [Check Certificates](#check-certificates) indicates that only the `apiserver-etcd-client` need to be renewed, then the following can be used to renew just that one certificate.
+The full [Renew All Certificates](#renew-all-certificates) procedure will also renew this certificate.
+
+Run the following steps on each master node.
+
+1. Renew the Etcd certificate.
+
+    ```bash
+    kubeadm certs renew apiserver-etcd-client --config /etc/kubernetes/kubeadmcfg.yaml
+    systemctl restart etcd.service
+    systemctl restart kubelet.service
+    ```
+
+## Update Client Secrets
+
+The client secrets can be updated independently from the Kubernetes certs.
 
 Run the following steps from a master node.
 
