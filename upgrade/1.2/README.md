@@ -88,6 +88,11 @@ undisrupted access to UANs during the upgrade.
    it may be necessary to restore that cluster from backup. See
    [Restore Bare-Metal etcd Clusters from an S3 Snapshot](../../operations/kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md) for that procedure.
 
+- Bare-metal Etcd certificate
+
+   After upgrading, the `apiserver-etcd-client` certificate may need to been renewed. See [Kubernetes and Bare Metal EtcD Certificate Renewal](../../operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#renew-etcd-certificate)
+   for procedures to check and renew this certificate.
+
 - Back-ups for `etcd-operator` Clusters
 
    After upgrading, if health checks indicate that Etcd pods are not in a healthy/running state, recovery procedures may be needed. See
