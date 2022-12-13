@@ -39,14 +39,10 @@ To view the logs of the various containers:
 kubectl logs -n services ${CFS_POD_NAME} -c ${CONTAINER_NAME}
 ```
 
-The `${CONTAINER_NAME}` value is one of the containers mentioned in [Configuration Sessions](Configuration_Sessions.md). Depending on the number of configuration layers in the
-session, some sessions will have more containers available. Use the `-f` option in the previous command to follow the logs if the session is still running.
-
-To view the Ansible logs, determine which configuration layer's logs to view from the order of the configuration set in the session. For example, if it is the first layer,
-then the `${CONTAINER_NAME}` will be `ansible-0`.
+The `${CONTAINER_NAME}` value is one of the containers mentioned in [Configuration Sessions](Configuration_Sessions.md). To view the Ansible logs, the `${CONTAINER_NAME}` will be `ansible`.
 
 ```bash
-kubectl logs -n services ${CFS_POD_NAME} -c ansible-0
+kubectl logs -n services ${CFS_POD_NAME} -c ansible
 ```
 
-The `git-clone-#` and `ansible-#` containers may not start at 0 and may not be numbered sequentially if the session was created with the `--configuration-limit` option.
+Use the `-f` option with the previous command to follow the logs if the session is still running.

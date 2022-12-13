@@ -42,19 +42,19 @@ Use this procedure to obtain important triage information for Ansible plays bein
     Example output:
 
     ```text
-    Error from server (BadRequest): a container name must be specified for pod cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn, choose one of: [inventory ansible-0 istio-proxy] or one of the init containers: [git-clone-0 istio-init]
+    Error from server (BadRequest): a container name must be specified for pod cfs-e8e48c2a-448f-4e6b-86fa-dae534b1702e-pnxmn, choose one of: [inventory ansible istio-proxy] or one of the init containers: [git-clone istio-init]
     ```
 
     Issues rarely occur in the `istio-init` and `istio-proxy` containers. These containers can be ignored for now.
 
-1. (`ncn-mw#`) Check the `git-clone-0`, `inventory`, and `ansible-0` containers, in that order.
+1. (`ncn-mw#`) Check the `git-clone`, `inventory`, and `ansible` containers, in that order.
 
     > If there are additional Ansible pods, examine those as well, in ascending order.
 
-    1. Check the `git-clone-0` container.
+    1. Check the `git-clone` container.
 
         ```bash
-        kubectl logs -n services "${CFS_POD_NAME}" git-clone-0
+        kubectl logs -n services "${CFS_POD_NAME}" git-clone
         ```
 
     1. Check the `inventory` container.
@@ -88,14 +88,14 @@ Use this procedure to obtain important triage information for Ansible plays bein
         2019-12-05 15:00:12,227 - INFO    - cray.cfs.inventory - Writing out the inventory to /inventory/hosts
         ```
 
-    1. Check the `ansible-0` container.
+    1. Check the `ansible` container.
 
         Look towards the end of the Ansible log in the `PLAY RECAP` section to see if any targets failed.
         If a target failed, then look above in the log at the immediately preceding play.
         In the example below, the `ncmp_hsn_cns` role has an issue when being run against the compute nodes.
 
         ```bash
-        kubectl logs -n services "${CFS_POD_NAME}" ansible-0
+        kubectl logs -n services "${CFS_POD_NAME}" ansible
         ```
 
         Example output:
