@@ -34,27 +34,19 @@ for cleanup. Age is given in the format "1d" for days, or "6h" for hours.
 
 CFS progresses through a session by running a series of commands in containers located in a Kubernetes job pod. Four container types are present in the job pod which pertain to CFS session setup, execution, and teardown:
 
-* **`git-clone-*`**
+* **`git-clone`**
 
-  These init containers are responsible for cloning the configuration repository and checking out the branch/commit specified in each configuration layer.
-
-  These containers are run in the same order as the layers are specified, and their names are indexed appropriately: `git-clone-0`, `git-clone-1`, and so on.
-
-* **`git-clone-hosts`**
-
-  This init container clones the repository specified in the parameter `additionalInventoryUrl`, if specified.
+  This init container is responsible for cloning the configuration repositories and checking out the branch/commit specified in each configuration layer. This init container also clones the repository specified in the parameter `additionalInventoryUrl`, if specified.
 
 * **`inventory`**
 
   This container is responsible for generating the dynamic inventory or for communicating to IMS to stage boot image roots that need to be made available via SSH when the session `--target-definition` is `image`.
 
-* **`ansible-*`**
+* **`ansible`**
 
-  These containers run the AEE after CFS injects the inventory and Git repository content from previous containers. One container is executed for each configuration layer specified.
-
-  These containers are run in the same order as the layers are specified, and their names are indexed appropriately: `ansible-0`, `ansible-1`, and so on.
+  This container runs the AEE after CFS injects the inventory and Git repository content from previous containers. This container runs the Ansible configuration for each layer specified.
 
 * **`teardown`**
 
-  This container waits for the last `ansible-*` to complete and subsequently calls IMS to package up customized image roots. The container only exists when the session `--target-definition` is `image`.
+  This container waits for the `ansible` to complete and subsequently calls IMS to package up customized image roots. The container only exists when the session `--target-definition` is `image`.
 
