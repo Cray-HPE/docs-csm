@@ -134,13 +134,13 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
 1. Download and upgrade the latest documentation RPM.
 
    ```bash
-   linux# rpm -Uvh --force https://release.algol60.net/csm-1.2/docs-csm/docs-csm-latest.rpm
+   linux# rpm -Uvh --force https://release.algol60.net/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm
    ```
 
    If this machine does not have direct internet access, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
 
    ```bash
-   linux# wget https://release.algol60.net/csm-1.2/docs-csm/docs-csm-latest.rpm -O docs-csm-latest.noarch.rpm
+   linux# wget https://release.algol60.net/csm-1.2/docs-csm/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
    linux# scp docs-csm-latest.noarch.rpm ncn-m001:/root
    linux# ssh ncn-m001
    ncn-m001# rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
