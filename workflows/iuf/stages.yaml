@@ -106,4 +106,3 @@ stages:
     operations:
       - name: post-install-check
         static-parameters: {} # any parameters that will be supplied statically to this operation.
-

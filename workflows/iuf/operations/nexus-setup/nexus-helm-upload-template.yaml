@@ -24,7 +24,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: nexus-setup
+  name: nexus-helm-upload
   namespace: argo
 spec:
   entrypoint: main
@@ -33,8 +33,8 @@ spec:
   - name: main
     inputs:
       parameters:
-        - name: auth_token
-        - name: global_params
+      - name: auth_token
+      - name: global_params
     steps:
     - - name: nexus-get-prerequisites
         template: nexus-get-prerequisites-template
@@ -42,10 +42,10 @@ spec:
           parameters:
           - name: global_params
             value: "{{inputs.parameters.global_params}}"
-    - - name: nexus-setup
-        template: nexus-setup-template
+    - - name: nexus-helm-load
+        template: nexus-helm-load-template
         hooks:
-          exit:
+          exit: 
             template: cleanup-template
             arguments:
               parameters:
@@ -64,7 +64,7 @@ spec:
 ### Templates ###
 ## nexus-get-prerequisites-template ##
   - name: nexus-get-prerequisites-template
-    nodeSelector:
+    nodeSelector:   
       kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
@@ -75,6 +75,7 @@ spec:
     inputs:
       parameters:
       - name: global_params
+        value: "{{workflow.parameters.global_params}}"
     outputs:
       parameters:
         - name: secret_name
@@ -151,8 +152,8 @@ spec:
 
         # Exit with an error if we had any.
         exit $err
-## nexus-setup-template ##
-  - name: nexus-setup-template
+## nexus-helm-load-template ##
+  - name: nexus-helm-load-template
     inputs:
       parameters:
       - name: nexus_setup_image
@@ -167,10 +168,10 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
-    container:
+    script:
       image: "{{inputs.parameters.nexus_setup_image}}"
-      command: [iuf-nexus-setup]
-      args: ["--blobstores","/products/{{=jsonpath(inputs.parameters.content,'$.nexus_blob_stores.yaml_path')}}","--repositories","/products/{{=jsonpath(inputs.parameters.content,'$.nexus_repositories.yaml_path')}}"]
+      command: [iuf-helm-upload]
+      args: ["{{inputs.parameters.content}}"]
       env:
       - name: NEXUS_URL
         value: "https://packages.local"
@@ -185,19 +186,21 @@ spec:
             name: "{{inputs.parameters.nexus_admin_credential_secret_name}}"
             key: password
       volumeMounts:
-      - name: products
-        mountPath: /products
+      - name: product
+        mountPath: /product
     # This will be an RBD mount.
     volumes:
-    - name: products
+    - name: product
       hostPath:
         path: "{{inputs.parameters.product_directory}}"
 ## cleanup-template ##
 ## Remove the secret created earlier.
+# TBD: This is a repeated function. Can this change to a reference?
   - name: cleanup-template
     inputs:
       parameters:
       - name: nexus_admin_credential_secret_name
+        value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
     nodeSelector:
       kubernetes.io/hostname: ncn-m001
     tolerations:
