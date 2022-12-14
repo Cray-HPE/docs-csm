@@ -51,7 +51,7 @@ after a break, always be sure that a typescript is running before proceeding.
       > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why these commands copy it there.
 
       ```bash
-      wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.rpm \
+      wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.noarch.rpm \
           -O /root/docs-csm-latest.noarch.rpm &&
       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
       ```
