@@ -21,36 +21,36 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 > **IMPORTANT:** Before updating a CMM:
 >
 > - The `hms-discovery` job must be stopped before updates are done and restarted after updates are complete.
->   - Stop the `hms-discovery` job.
+>   - (ncn-mw#) Stop the `hms-discovery` job.
 >
 >     ```bash
->     ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'
+>     kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'
 >     ```
 >
->   - Start the `hms-discovery` job.
+>   - (ncn-mw#) Start the `hms-discovery` job.
 >
 >     ```bash
->     ncn-mw# kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'
+>     kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'
 >     ```
 >
 > - Use CAPMC to make sure all chassis rectifier power is off.
 >   1. Check power status of the chassis.
 >
->     If the chassis power is off, then everything else is off, and it is safe to proceed.
+>     (ncn-mw#) If the chassis power is off, then everything else is off, and it is safe to proceed.
 >
 >     ```bash
->     ncn-mw# cray capmc get_xname_status create --xnames x[1000-1008]c[0-7]
+>     cray capmc get_xname_status create --xnames x[1000-1008]c[0-7]
 >     ```
 >
 >   1. If the chassis are still powered on, then use CAPMC to make sure everything is off.
 >
->      1. Issue power off command.
+>      1. (ncn-mw#) Issue power off command.
 >
 >         This command may produce a large list of errors when talking to BMCs. This is expected if the hardware
 >         has been partially powered down.
 >
 >         ```bash
->         ncn-mw# cray capmc xname_off create --xnames x[1000-1008]c[0-7] --force true --continue true --recursive true
+>         cray capmc xname_off create --xnames x[1000-1008]c[0-7] --force true --continue true --recursive true
 >         ```
 >
 >      1. Verify that chassis power is off.
