@@ -48,13 +48,25 @@ after a break, always be sure that a typescript is running before proceeding.
 
    - If `ncn-m001` has internet access, then use the following commands to download and install the latest documentation.
 
-      > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why these commands copy it there.
+      > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why these commands copy it there.  
+      > ***NOTE:*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
+      Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
 
-      ```bash
-      wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.noarch.rpm \
+      - Without proxy:
+
+          ```bash
+          wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.noarch.rpm \
           -O /root/docs-csm-latest.noarch.rpm &&
-      rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-      ```
+          rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+          ```
+
+      - With https proxy:
+
+          ```bash
+          https_proxy=https://example.proxy.net:443 wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.rpm \
+          -O /root/docs-csm-latest.noarch.rpm &&
+          rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+          ```
 
    - Otherwise, use the following procedure to download and install the latest documentation.
 
@@ -159,6 +171,15 @@ after a break, always be sure that a typescript is running before proceeding.
    ENDPOINT=https://put.the/url/here/
    ```
 
+1. This step should ONLY be performed if an http proxy is required to access a public endpoint on the internet for the purpose of downloading artifacts.
+CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
+The http proxy variables must be `unset` after the desired artifacts are downloaded. Failure to unset the http proxy variables after downloading artifacts will cause many failures in subsequent steps.
+
+   ```bash
+   export https_proxy=https://example.proxy.net:443
+   export http_proxy=http://example.proxy.net:80
+   ```
+
 1. (`ncn-m001#`) Run the script.
 
    **NOTE** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
@@ -169,6 +190,13 @@ after a break, always be sure that a typescript is running before proceeding.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
+   ```
+
+1. This step must be performed if an http proxy was set previously.
+
+   ```bash
+   unset https_proxy
+   unset http_proxy
    ```
 
 1. Skip the `Manual copy` subsection and proceed to [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
