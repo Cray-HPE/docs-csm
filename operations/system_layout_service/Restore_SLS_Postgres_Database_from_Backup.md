@@ -172,7 +172,7 @@ by the `cray-sls-postgresql-db-backup` Kubernetes cronjob.
     If there are issues with `verify_hsm_discovery.py`, then follow the "Interpreting HSM discovery results" section of the [Validate CSM Health document](../validate_csm_health.md#221-interpreting-hsm-discovery-results).
 
     ```bash
-    ncn# /opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -t sls
+    ncn# /opt/cray/tests/ncn-smoke/hms/hms-sls/sls_smoke_test_ncn-smoke.sh
     ncn# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
     ncn# /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
     ```
