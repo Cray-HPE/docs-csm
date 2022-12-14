@@ -450,7 +450,7 @@ automatic backup created by the `cray-smd-postgresql-db-backup` Kubernetes cronj
     [Troubleshoot Issues with Redfish Endpoint Discovery](../node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md) procedure for guidance.
 
 1. (`ncn#`) **Perform this step only if the system has Intel management NCNs, otherwise for HPE or Gigabyte management NCNs skip this step.** Due to known firmware issues on Intel BMCs they do not report the MAC addresses of the management NICs via
-    Redfish, and when the BMC is discovered after restoring from a Postgres backup the management NIC MACs in HSM will have an empty component id. The following script will correct any Ethernet Interfaces for a Intel management NCN without a
+    Redfish, and when the BMC is discovered after restoring from a Postgres backup the management NIC MACs in HSM will have an empty component ID. The following script will correct any Ethernet Interfaces for a Intel management NCN without a
     component ID.
 
     ```bash
