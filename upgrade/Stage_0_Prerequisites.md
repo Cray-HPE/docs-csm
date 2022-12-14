@@ -55,7 +55,7 @@ after a break, always be sure that a typescript is running before proceeding.
       - Without proxy:
 
           ```bash
-          wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.rpm \
+          wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.noarch.rpm \
           -O /root/docs-csm-latest.noarch.rpm &&
           rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
           ```

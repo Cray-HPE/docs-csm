@@ -159,13 +159,13 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
    - With https proxy:
 
      ```bash
-     rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.rpm
+     rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.noarch.rpm
      ```
 
    If this machine does not have internet access with or without a proxy, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
 
    ```bash
-   wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.rpm -O docs-csm-latest.noarch.rpm
+   wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
    scp docs-csm-latest.noarch.rpm ncn-m001:/root
    ssh ncn-m001
    rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
