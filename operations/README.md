@@ -421,6 +421,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Grafana Dashboards by Component](system_management_health/Grafana_Dashboards_by_Component.md)
   - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
 - [Remove Kiali](system_management_health/Remove_Kiali.md)
+- [Prometheus-kafka-adapter error during install](system_management_health/Prometheus_Kafka_Error.md)
 
 ## System Layout Service (SLS)
 
