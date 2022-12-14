@@ -154,7 +154,7 @@ Using http proxies in any way other than the following examples will cause many 
    Without proxy:
 
    ```bash
-   rpm -Uvh --force https://release.algol60.net/csm-1.4/docs-csm/docs-csm-latest.rpm
+   rpm -Uvh --force https://release.algol60.net/csm-1.4/docs-csm/docs-csm-latest.noarch.rpm
    ```
 
    With https proxy:
@@ -166,7 +166,7 @@ Using http proxies in any way other than the following examples will cause many 
    If this machine does not have direct internet access, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
 
    ```bash
-   wget https://release.algol60.net/csm-1.4/docs-csm/docs-csm-latest.rpm -O docs-csm-latest.noarch.rpm
+   wget https://release.algol60.net/csm-1.4/docs-csm/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
    scp docs-csm-latest.noarch.rpm ncn-m001:/root
    ssh ncn-m001
    rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
