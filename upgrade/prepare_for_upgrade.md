@@ -3,6 +3,7 @@
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.
 
 - [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
+- [Export Nexus data](#export-nexus-data)
 - [Start typescript](#start-typescript)
 - [Running sessions](#running-sessions)
 - [Health validation](#health-validation)
@@ -19,6 +20,15 @@ upgrade. If, while one node is being upgraded, another node of the same type has
 there may be a degraded system. For example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is
 maintained by the remaining two nodes. If one of those two nodes has a fault before the third node completes its upgrade,
 then quorum would be lost.
+
+## Export Nexus data
+
+**Warning:** This process can take multiple hours where Nexus is unavailable and should be done during scheduled maintenance periods.
+
+Prior to the upgrade it is recommended that a Nexus export is taken. This is not a required step but highly recommend to protect the data in Nexus.
+If there is no maintenance period available then this step should be skipped until after the upgrade process.
+
+Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
 
 ## Start typescript
 
