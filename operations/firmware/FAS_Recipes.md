@@ -25,14 +25,14 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:** Before updating a CMM:
 >
-> - The `hms-discovery` job must be stopped before updates are done and restarted after updates are complete.
->   - (`ncn-mw#`) Stop the `hms-discovery` job.
+> - Stop the `hms-discovery` job before updates are done, and then restart it after updates are complete.
+>   1. (`ncn-mw#`) Stop the `hms-discovery` job.
 >
 >     ```bash
 >     kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":true}}'
 >     ```
 >
->   - (`ncn-mw#`) Start the `hms-discovery` job.
+>   1. (`ncn-mw#`) Start the `hms-discovery` job.
 >
 >     ```bash
 >     kubectl -n services patch cronjobs hms-discovery -p '{"spec":{"suspend":false}}'
@@ -41,11 +41,11 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 > - Use CAPMC to make sure all chassis rectifier power is off.
 >   1. Check power status of the chassis.
 >
->     (`ncn-mw#`) If the chassis power is off, then everything else is off, and it is safe to proceed.
+>      (`ncn-mw#`) If the chassis power is off, then everything else is off, and it is safe to proceed.
 >
->     ```bash
->     cray capmc get_xname_status create --xnames x[1000-1008]c[0-7]
->     ```
+>      ```bash
+>      cray capmc get_xname_status create --xnames x[1000-1008]c[0-7]
+>      ```
 >
 >   1. If the chassis are still powered on, then use CAPMC to make sure everything is off.
 >
