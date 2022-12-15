@@ -61,7 +61,7 @@ DKMS operation.
 
     Look for the lines:
 
-    ```text
+    ```yaml
         JOB_ENABLE_DKMS: "False"
         JOB_KATA_RUNTIME: kata-qemu
     ```
@@ -69,7 +69,7 @@ DKMS operation.
     Change the value for `JOB_ENABLE_DKMS` to `True`. If the Kata runtime class on the system is not
     `kata-qemu` then change the `JOB_KATA_RUNTIME` to the desired configuration:
 
-    ```text
+    ```yaml
         JOB_ENABLE_DKMS: "True"
         JOB_KATA_RUNTIME: kata-qemu
     ```
@@ -113,7 +113,7 @@ access change the `ims-config` setting back to `False` and restart the `cray-ims
 
     Look for the lines:
 
-    ```text
+    ```yaml
         JOB_ENABLE_DKMS: "True"
         JOB_KATA_RUNTIME: kata-qemu
     ```
@@ -121,7 +121,7 @@ access change the `ims-config` setting back to `False` and restart the `cray-ims
     Change the value for `JOB_ENABLE_DKMS` to `False`. The variable`JOB_KATA_RUNTIME` is not used when
     under this scenario so it's value does not matter.
 
-    ```text
+    ```yaml
         JOB_ENABLE_DKMS: "False"
         JOB_KATA_RUNTIME: kata-qemu
     ```
