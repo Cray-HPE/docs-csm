@@ -100,7 +100,7 @@ DKMS operation.
     Then wait until the new pod is in the `2/2 Running` status. New IMS jobs will be created in
     Kata VM's with enhanced kernel access.
 
-## Revert back to non dkms usage
+## Revert back to non DKMS usage
 
 To revert the settings so the IMS jobs no longer run inside a Kata VM with the enhanced kernel
 access change the `ims-config` setting back to `False` and restart the `cray-ims` pod again.
