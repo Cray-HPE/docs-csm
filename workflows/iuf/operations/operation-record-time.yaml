@@ -1,0 +1,12 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: workflow-template-record-time-template
+spec:
+  entrypoint: record-time-template
+  templates:
+  - name: record-time-template
+    container:
+      image: registry.local/alpine:3.7
+      command: [date]
+      args: ["+%s"]
