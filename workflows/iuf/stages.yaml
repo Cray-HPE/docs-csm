@@ -39,6 +39,8 @@ stages:
   - name: deliver-product
     type: product
     operations:
+      - name: add-product-to-product-catalog
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: loftsman-manifest-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: s3-upload
