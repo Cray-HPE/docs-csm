@@ -46,6 +46,7 @@ shown here with numbered topics.
     - [Troubleshooting installation problems](#troubleshooting-installation-problems)
 1. [Post-installation](#post-installation)
     1. [Kubernetes encryption](#12-encryption)
+    1. [Export Nexus data](#13-export-nexus-data)
 
 > **`NOTE`** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#troubleshooting-installation-problems) and
@@ -220,3 +221,12 @@ As an optional post installation task, encryption of Kubernetes secrets may be e
 at rest encryption of data in the `etcd` database used by Kubernetes.
 
 See [Kubernetes Encryption](../operations/kubernetes/encryption/README.md).
+
+### 13. Export Nexus data
+
+**Warning:** This process can take multiple hours where Nexus is unavailable and should be done during scheduled maintenance periods.
+
+Prior to the upgrade it is recommended that a Nexus export is taken. This is not a required step but highly recommend to protect the data in Nexus.
+If there is no maintenance period available then this step should be skipped until after the upgrade process.
+
+Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
