@@ -10,14 +10,14 @@ allow the expanded access, the IMS configuration must be modified to enable the 
 ## Requirements of DMKS
 
 Many DKMS build and install scripts require access to the system `/proc`, `/dev`, and `/sys` directories which
-allows access to running processes and system services. The IMS jobs run as an adminstrator user since preparing
+allows access to running processes and system services. The IMS jobs run as an administrator user since preparing
 images requires root access to work properly. Allowing root access to the running system would allow an
 unacceptable security vulnerability to the Kubernetes worker node the job is running on.
 
 ## Using Kata
 
 To address the security concerns, but also allow the DKMS tool to install kernel modules in image customization,
-a Kata Vitrual Machine (VM) is used. When DKMS is enabled in IMS, the jobs are modified to run inside a
+a Kata Virtual Machine (VM) is used. When DKMS is enabled in IMS, the jobs are modified to run inside a
 Kata VM. The DKMS tool then has enhanced access to the running Kata VM kernel, but is unable to interact directly
 with the Kubernetes worker the job is running on.
 
@@ -33,7 +33,7 @@ The following steps will enable DKMS operation for all IMS jobs including those 
 Management Service (CFS). It will remain in this configuration until manually reverted back to disabling the
 DKMS operation.
 
-1. (`ncn-mw#`) Check which kata runtime class is installed.
+1. (`ncn-mw#`) Check which Kata runtime class is installed.
 
     ```bash
     kubectl get runtimeclass
@@ -76,7 +76,7 @@ DKMS operation.
 
     Exit editing the configmap, saving the new values.
 
-1. (`ncn-mw#`) Restart the IMS pod to pick up the new configmap values.
+1. (`ncn-mw#`) Restart the IMS pod to pick up the new ConfigMap values.
 
     Find the current `cray-ims` pod:
 
@@ -100,7 +100,7 @@ DKMS operation.
     Then wait until the new pod is in the `2/2 Running` status. New IMS jobs will be created in
     Kata VM's with enhanced kernel access.
 
-## Revert back to non-dkms usage
+## Revert back to non dkms usage
 
 To revert the settings so the IMS jobs no longer run inside a Kata VM with the enhanced kernel
 access change the `ims-config` setting back to `False` and restart the `cray-ims` pod again.
@@ -128,7 +128,7 @@ access change the `ims-config` setting back to `False` and restart the `cray-ims
 
     Exit editing the configmap, saving the new values.
 
-1. (`ncn-mw#`) Restart the IMS pod to pick up the new configmap values.
+1. (`ncn-mw#`) Restart the IMS pod to pick up the new ConfigMap values.
 
     Find the current `cray-ims` pod:
 
