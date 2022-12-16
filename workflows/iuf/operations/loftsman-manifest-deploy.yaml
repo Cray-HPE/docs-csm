@@ -109,5 +109,3 @@ spec:
                   done
 
                   exit $err
-
-                  
