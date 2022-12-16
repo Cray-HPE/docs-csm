@@ -91,6 +91,15 @@ stages:
       - name: management-nodes-rollout
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
+#  - name: management-m001-rollout
+#    type: global
+#    # m001 doesn't support hooks right now because we source hook scripts from m001 because rbd mount only exists there
+#    # Therefore, by specifying no-hooks: true, we are effectively making sure we do not run this stage on ncn-m001
+#    no-hooks: true
+#    operations:
+#      - name: management-m001-rollout
+#        static-parameters: {} # any parameters that will be supplied statically to this operation.
+
   - name: post-install-service-check
     type: product
     operations:
@@ -108,3 +117,8 @@ stages:
     operations:
       - name: post-install-check
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+
+# The following are the template references to hook scripts.
+hooks:
+  master_host: master-host-hook-script
