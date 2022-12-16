@@ -1,19 +1,17 @@
 # Dump SLS Information
 
-Perform a dump of the System Layout Service \(SLS\) database and an encrypted dump of the credentials stored in Vault.
-
-This procedure will create three files in the current directory \(private\_key.pem, public\_key.pem, sls\_dump.json\). These files should be kept in a safe and secure place as the private key can decrypt the encrypted passwords stored in the SLS dump file.
+Perform a dump of the System Layout Service \(SLS\) database.
 
 This procedure preserves the information stored in SLS when backing up or reinstalling the system.
+It will create the file, `sls_dump.json`, in the current directory.
 
-### Prerequisites
+## Prerequisites
 
 This procedure requires administrative privileges.
 
-### Procedure
+## Procedure
 
-
-1.  Use the get\_token function to retrieve a token to validate requests to the API gateway.
+1. Use the get\_token function to retrieve a token to validate requests to the API gateway.
 
     ```bash
     ncn-m001# function get_token () {
@@ -24,27 +22,12 @@ This procedure requires administrative privileges.
     }
     ```
 
-2.  Generate a private and public key pair.
+2. Perform the SLS dump.
 
-    Execute the following commands to generate a private and public key to use for the dump.
-
-    ```bash
-    ncn-m001# openssl genpkey -out private_key.pem -algorithm RSA -pkeyopt rsa_keygen_bits:2048
-    ncn-w001# openssl rsa -in private_key.pem -outform PEM -pubout -out public_key.pem
-    ```
-
-    The above commands will create two files the private key private\_key.pem file and the public key public\_key.pem file.
-
-    Make sure to use a new private and public key pair for each dump operation, and do not reuse an existing private and public key pair. The private key should be treated securely because it will be required to decrypt the SLS dump file when the dump is loaded back into SLS. Once the private key is used to load state back into SLS, it should be considered insecure.
-
-3.  Perform the SLS dump.
-
-    The SLS dump will be stored in the sls\_dump.json file. The sls\_dump.json and private\_key.pem files are required to perform the SLS load state operation.
+    The SLS dump will be stored in the `sls_dump.json` file.
 
     ```bash
-    ncn-m001# curl -X POST \
+    ncn-m001# curl -X GET \
     https://api-gw-service-nmn.local/apis/sls/v1/dumpstate \
-    -H "Authorization: Bearer $(get_token)" \
-    -F public_key=@public_key.pem > sls_dump.json
+    -H "Authorization: Bearer $(get_token)" > sls_dump.json
     ```
-

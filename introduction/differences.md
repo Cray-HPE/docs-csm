@@ -51,6 +51,7 @@ The following features are no longer supported and are planned to be removed in 
 * The Compute Rolling Upgrade Service (CRUS) is deprecated in CSM 1.2.0 and will be removed in a future CSM release. Enhanced BOS functionality will replace CRUS. This includes the ability
   to stage changes to nodes that can be acted upon later when the node reboots. It also includes the ability to reboot nodes without specifying any boot artifacts. This latter
   ability relies on the artifacts already having been staged.
+* SLS support for downloading and uploading credentials in the `dumpstate` and `loadstate` REST APIs.
 
 <a name="removed_features"></a>
 

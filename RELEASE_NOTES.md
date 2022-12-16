@@ -159,6 +159,7 @@ CSM 1.2 contains approximately 2000 changes spanning bug fixes, new feature deve
   * The `cray-dns-unbound-manager` CronJob will be deprecated in a future release once all DNS records are migrated to PowerDNS.
   * The introduction of PowerDNS and Bifurcated CAN will introduce some node and service naming changes.
   * See the [PowerDNS Migration Guide](operations/network/dns/PowerDNS_migration.md) for more information.
+* SLS support for downloading and uploading credentials in the SLS `dumpstate` and `loadstate` REST APIs is deprecated.
 
 See [Deprecated features](introduction/differences.md#deprecated_features).
 

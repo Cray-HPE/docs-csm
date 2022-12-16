@@ -1,17 +1,16 @@
 # Load SLS Database with Dump File
 
-Load the contents of the SLS dump file to restore SLS to the state of the system at the time of the dump. This will upload and overwrite the current SLS database with the contents of the SLS dump file, and update Vault with the encrypted credentials.
+Load the contents of the SLS dump file to restore SLS to the state of the system at the time of the dump. This will upload and overwrite the current SLS database with the contents of the SLS dump file.
 
 Use this procedure to restore SLS data after a system re-install.
 
-### Prerequisites
+## Prerequisites
 
 The System Layout Service \(SLS\) database has been dumped. See [Dump SLS Information](Dump_SLS_Information.md) for more information.
 
-### Procedure
+## Procedure
 
-
-1.  Use the get\_token function to retrieve a token to validate requests to the API gateway.
+1. Use the get\_token function to retrieve a token to validate requests to the API gateway.
 
     ```bash
     ncn-m001# function get_token () {
@@ -22,17 +21,13 @@ The System Layout Service \(SLS\) database has been dumped. See [Dump SLS Inform
     }
     ```
 
-2.  Load the dump file into SLS.
+2. Load the dump file into SLS.
 
-    This will upload and overwrite the current SLS database with the contents of the posted file, as well as update the Vault with the encrypted credentials. The private key that was used to generate the SLS dump file is required.
+    This will upload and overwrite the current SLS database with the contents of the posted file.
 
     ```bash
     ncn-m001# curl -X POST \
     https://api-gw-service-nmn.local/apis/sls/v1/loadstate \
     -H "Authorization: Bearer $(get_token)" \
-    -F sls_dump=@sls_dump.json \
-    -F private_key=@private_key.pem
+    -F sls_dump=@sls_dump.json
     ```
-
-    After performing the load state operation, the private key should be considered insecure and should no longer be used.
-
