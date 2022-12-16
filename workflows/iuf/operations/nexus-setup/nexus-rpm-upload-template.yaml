@@ -24,24 +24,24 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: nexus-rpm-upload-template
+  name: nexus-rpm-upload
   namespace: argo
 spec:
-  arguments:
-    parameters:
-    - name: nexus_setup_image
-    - name: product
-    - name: product_host_path
-    # The value for content is set to the json string value for 'content' in the manifest when --parameter-file is
-    # set to the path of the IUF manifest yaml file.
-    - name: content
   entrypoint: main
   templates:
 ### Main Steps ###
   - name: main
+    inputs:
+      parameters:
+        - name: auth_token
+        - name: global_params
     steps:
-    - - name: nexus-get-admin-credential
-        template: nexus-get-admin-credential-template
+    - - name: nexus-get-prerequisites
+        template: nexus-get-prerequisites-template
+        arguments:
+          parameters:
+          - name: global_params
+            value: "{{inputs.parameters.global_params}}"
     - - name: nexus-rpm-load
         template: nexus-rpm-load-template
         hooks:
@@ -50,23 +50,21 @@ spec:
             arguments:
               parameters:
               - name: nexus_admin_credential_secret_name
-                value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
+                value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
         arguments:
           parameters:
           - name: nexus_setup_image
-            value: "{{workflow.parameters.nexus_setup_image}}"
+            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.8.1
           - name: nexus_admin_credential_secret_name
-            value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
+            value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
-            value: "{{workflow.parameters.content}}"
-          - name: product
-            value: "{{workflow.parameters.product}}"
-          - name: product_host_path
-            value: "{{workflow.parameters.product_host_path}}"
+            value: "{{steps.nexus-get-prerequisites.outputs.parameters.current_product_manifest}}"
+          - name: product_directory
+            value: "{{steps.nexus-get-prerequisites.outputs.parameters.product_directory}}"
 ### Templates ###
-## nexus-get-secret-template ##
-  - name: nexus-get-admin-credential-template
-    nodeSelector:   
+## nexus-get-prerequisites-template ##
+  - name: nexus-get-prerequisites-template
+    nodeSelector:
       kubernetes.io/hostname: ncn-m001
     tolerations:
     - key: node-role.kubernetes.io/master
@@ -74,11 +72,20 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
+    inputs:
+      parameters:
+      - name: global_params
     outputs:
       parameters:
         - name: secret_name
           valueFrom:
             path: /tmp/secret_name
+        - name: current_product_manifest
+          valueFrom:
+            path: /tmp/current_product_manifest
+        - name: product_directory
+          valueFrom:
+            path: /tmp/product_directory
     retryStrategy:
         limit: "2"
         retryPolicy: "Always"
@@ -114,23 +121,44 @@ spec:
             return 1
           fi
         }
+        err=0
         sync_item secret/nexus-admin-credential nexus nexus-admin-credential-argo argo
         rc=$?
-        echo $destination_name >> /tmp/secret_name
-        exit $rc
+        echo $destination_name > /tmp/secret_name
+        if [ $rc -ne 0 ]; then
+          err=1
+        fi
+
+        # Extract the content of the current product manifest as json.
+        echo "Extracting the product manifest."
+        cat <<EOF | jq '.product_manifest.current_product.manifest.content' > /tmp/current_product_manifest
+          {{inputs.parameters.global_params}}
+        EOF
+        rc=$?
+        if [ $rc -ne 0 ]; then
+          err=1
+        fi
+
+        # Extract the product directory.
+        echo "Extracting the product directory."
+        cat <<EOF | jq -r '.product_manifest.current_product.original_location' > /tmp/product_directory
+          {{inputs.parameters.global_params}}
+        EOF
+        rc=$?
+        if [ $rc -ne 0 ]; then
+          err=1
+        fi
+
+        # Exit with an error if we had any.
+        exit $err
 ## nexus-rpm-load-template ##
   - name: nexus-rpm-load-template
     inputs:
       parameters:
       - name: nexus_setup_image
-        value: "{{workflow.parameters.nexus_docker_skopeo_image}}"
       - name: nexus_admin_credential_secret_name
       - name: content
-        value: "{{workflow.parameters.content}}"
-      - name: product
-        value: "{{workflow.parameters.product}}"
-      - name: product_host_path
-        value: "{{workflow.parameters.product_host_path}}"
+      - name: product_directory
     nodeSelector:
       kubernetes.io/hostname: ncn-m001
     tolerations:
@@ -142,7 +170,7 @@ spec:
     script:
       image: "{{inputs.parameters.nexus_setup_image}}"
       command: [iuf-rpm-upload]
-      args: ["{{workflow.parameters.content}}"]
+      args: ["{{inputs.parameters.content}}"]
       env:
       - name: NEXUS_URL
         value: "https://packages.local"
@@ -158,13 +186,12 @@ spec:
             key: password
       volumeMounts:
       - name: product
-        mountPath: /product
+        mountPath: /images
     # This will be an RBD mount.
     volumes:
     - name: product
       hostPath:
-        # TBD: docker/path is an array and needs an iterator. Will that be done in the operator?
-        path: "{{workflow.parameters.product_host_path}}/{{workflow.parameters.product}}"
+        path: "{{inputs.parameters.product_directory}}"
 ## cleanup-template ##
 ## Remove the secret created earlier.
 # TBD: This is a repeated function. Can this change to a reference?
@@ -172,7 +199,6 @@ spec:
     inputs:
       parameters:
       - name: nexus_admin_credential_secret_name
-        value: "{{steps.nexus-get-admin-credential.outputs.parameters.secret_name}}"
     nodeSelector:
       kubernetes.io/hostname: ncn-m001
     tolerations:

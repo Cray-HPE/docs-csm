@@ -101,11 +101,24 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
         1. Install from Artifactory.
 
-            ```bash
-            zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/15-SP3/x86_64/update_debug/ temp-debug
-            . /srv/cray/scripts/metal/dracut-lib.sh
-            zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
-            ```
+            > ***NOTE*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
+            Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
+
+            * Without proxy:
+
+              ```bash
+              zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/15-SP3/x86_64/update_debug/ temp-debug
+              . /srv/cray/scripts/metal/dracut-lib.sh
+              zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
+              ```
+
+            * With https proxy:
+
+              ```bash
+              https_proxy=https://example.proxy.net:443 zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/15-SP3/x86_64/update_debug/ temp-debug
+              . /srv/cray/scripts/metal/dracut-lib.sh
+              zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
+              ```
 
 1. (`ncn#`) On the node with the dump, select a crash dump and navigate to its directory.
 

@@ -27,32 +27,18 @@ function deployNLS() {
     BUILDDIR="/tmp/build"
     mkdir -p "$BUILDDIR"
     kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${BUILDDIR}/customizations.yaml"
-    kubectl get configmap -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > "${BUILDDIR}/iuf.yaml"
-    manifestgen -i "${BUILDDIR}/iuf.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/platform.yaml"
-    yq w -i "${BUILDDIR}/platform.yaml" 'spec.charts[0].version' "$2"
-    charts="$(yq r /tmp/build/platform.yaml 'spec.charts[*].name')"
+    manifestgen -i "${CSM_ARTI_DIR}/manifests/platform.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/iufnls.yaml"
+    charts="$(yq r $BUILDDIR/iufnls.yaml 'spec.charts[*].name')"
     for chart in $charts; do
         if [[ $chart != "cray-iuf" ]] && [[ $chart != "cray-nls" ]]; then 
-            yq d -i /tmp/build/platform.yaml "spec.charts.(name==$chart)"
+            yq d -i ${BUILDDIR}/iufnls.yaml "spec.charts.(name==$chart)"
         fi
     done
 
-    yq d -i /tmp/build/platform.yaml "spec.sources"
+    yq w -i ${BUILDDIR}/iufnls.yaml "metadata.name" "iufnls"
+    yq d -i ${BUILDDIR}/iufnls.yaml "spec.sources"
 
-    loftsman ship --charts-path "$1" --manifest-path /tmp/build/platform.yaml
+    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path ${BUILDDIR}/iufnls.yaml
 }
 
-if [[ -z $1 ]]; then
-    CHART_PATH="${CSM_ARTI_DIR}/helm/"
-else
-    CHART_PATH="$1"
-fi
-set -euo pipefail
-echo "Get NLS chart version"
-tarFileName=$(ls -l "$CHART_PATH" | awk '{print $9}' | grep "cray-nls")
-tarFileName=${tarFileName#"cray-nls-"}
-version=${tarFileName%".tgz"}
-echo "Version: $version"
-
-
-deployNLS "$CHART_PATH" "$version"
+deployNLS

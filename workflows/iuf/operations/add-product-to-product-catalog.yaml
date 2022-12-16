@@ -21,11 +21,11 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: s3-upload
-  namespace: argo
+  name: add-product-to-product-catalog
 spec:
   entrypoint: main
   templates:
@@ -33,19 +33,17 @@ spec:
   - name: main
     inputs:
       parameters:
-        - name: global_params
+      - name: global_params
     steps:
-    - - name: s3-upload
+    - - name: update-product-catalog
         templateRef:
-          name: iuf-base-template
-          template: shell-script
+          name: update-product-catalog-template
+          template: catalog-update
         arguments:
           parameters:
-            - name: dryRun
-              value: false
-            - name: scriptContent
-              value: |
-                CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
-                PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
-
-                /usr/local/bin/s3-upload "$CONTENT" "$PARENT_DIR"
+          - name: product-name
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+          - name: product-version
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+          - name: yaml-content
+            value: "{}"

@@ -1,0 +1,226 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: ims-upload
+spec:
+  entrypoint: main
+  templates:
+### Main Steps ###
+  - name: main
+    inputs:
+      parameters:
+      - name: auth_token
+      - name: global_params
+    steps:
+    - - name: get-s3-secrets
+        template: get-s3-secrets-template
+    - - name: ims-upload-content
+        template: ims-upload-content
+        arguments:
+          parameters:
+          - name: s3_credentials_secret_name
+            value: "{{steps.get-s3-secrets.outputs.parameters.secret_name}}"
+          - name: auth_token
+            value: "{{inputs.parameters.auth_token}}"
+          - name: iuf_release_mount_path
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.process-media.current_product.parent_directory')}}"
+        hooks:
+          exit:
+            template: cleanup-template
+            arguments:
+              parameters:
+              - name: s3_credentials_secret_name
+                value: "{{steps.get-s3-secrets.outputs.parameters.secret_name}}"
+    - - name: ims-update-product-catalog
+        templateRef:
+          name: update-product-catalog-template
+          template: catalog-update
+        arguments:
+          parameters:
+          - name: product-name
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+          - name: product-version
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+          - name: yaml-content
+            value: "{{steps.ims-upload-content.outputs.parameters.ims_records}}"
+### Templates ###
+## get-s3-secrets-template ##
+  - name: get-s3-secrets-template
+    nodeSelector:
+      kubernetes.io/hostname: ncn-m001
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    outputs:
+      parameters:
+        - name: secret_name
+          valueFrom:
+            path: /tmp/secret_name
+    retryStrategy:
+        limit: "2"
+        retryPolicy: "Always"
+        backoff:
+          duration: "10s" # Must be a string. Default unit is seconds. Could also be a Duration, e.g.: "2m", "6h", "1d"
+          factor: "2"
+          maxDuration: "1m"
+    script:
+      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      command: [bash]
+      source: |
+        function sync_item() {
+          item_name="$1"
+          source_ns="$2"
+          destination_name="$3-$RANDOM"
+          destination_ns="$4"
+          if kubectl get $item_name -n $source_ns &> /dev/null; then
+            echo "Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+            kubectl get $item_name -n $source_ns -o json | \
+              jq 'del(.metadata.namespace)' | \
+              jq 'del(.metadata.creationTimestamp)' | \
+              jq 'del(.metadata.resourceVersion)' | \
+              jq 'del(.metadata.selfLink)' | \
+              jq 'del(.metadata.uid)' | \
+              jq 'del(.metadata.ownerReferences)' | \
+              jq 'del(.metadata.name)' | \
+              jq '.metadata |= . + {"name":"'$destination_name'"}' | \
+              kubectl apply -n $destination_ns -f -
+              return $?
+          else
+            echo "Didn't find $item_name in the $source_ns namespace"
+            return 1
+          fi
+        }
+        sync_item secret/ims-s3-credentials services ims-s3-credentials-argo argo
+        rc=$?
+        echo "$destination_name" >> /tmp/secret_name
+        exit $rc
+## ims-upload-content ##
+  - name: ims-upload-content
+    nodeSelector:
+      kubernetes.io/hostname: ncn-m001
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    inputs:
+      parameters:
+      - name: s3_credentials_secret_name
+      - name: ims_upload_ims_url
+        value: "https://api-gw-service-nmn.local/apis/ims/v2"
+      - name: ca_certs_bundle
+        value: /etc/ssl/certs/ca-certificates.crt
+      - name: auth_token
+      - name: iuf_release_mount_path
+    outputs:
+      parameters:
+      - name: ims_records
+        valueFrom:
+          path: /results/records.yaml
+        default: ""
+
+    container:
+      # replace image with standard ims-load-artifacts once PR is merged
+      image: registry.local/artifactory.algol60.net/artifactory/csm-docker/stable/cray-ims-load-artifacts:2.0.0
+      command: ['python3']
+      args: ['-m', 'ims_load_artifacts.load_artifacts']
+      env:
+      - name: LOG_LEVEL
+        value: INFO
+      - name: PYTHONPATH
+        value: "/"
+      - name: REQUESTS_CA_BUNDLE
+        value: "{{inputs.parameters.ca_certs_bundle}}"
+      - name: IUF
+        value: "1"
+      - name: IMS_URL
+        value: "{{inputs.parameters.ims_upload_ims_url}}"
+      - name: S3_ENDPOINT
+        valueFrom:
+          secretKeyRef:
+            name: "{{inputs.parameters.s3_credentials_secret_name}}"
+            key: "s3_endpoint"
+      - name: SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: "{{inputs.parameters.s3_credentials_secret_name}}"
+            key: "secret_key"
+      - name: ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: "{{inputs.parameters.s3_credentials_secret_name}}"
+            key: "access_key"
+      - name: SSL_VALIDATE
+        valueFrom:
+          secretKeyRef:
+            name: "{{inputs.parameters.s3_credentials_secret_name}}"
+            key: "ssl_validate"
+      - name: AUTH_TOKEN
+        value: "{{inputs.parameters.auth_token}}"
+      - name: IUF_RELEASE_PATH
+        value: "{{inputs.parameters.iuf_release_mount_path}}"
+      volumeMounts:
+      - name: certs # mount cluster certs to ca-certificates.crt for curl/http libraries
+        mountPath: /etc/ssl/certs/ca-certificates.crt
+        subPath: platform-ca-certs.crt
+      - name: results
+        mountPath: /results
+      - name: release-distribution
+        mountPath: "{{inputs.parameters.iuf_release_mount_path}}"
+    volumes:
+    - name: certs
+      hostPath:
+        path: /etc/pki/trust/anchors
+    - name: release-distribution
+      hostPath:
+        path: "{{inputs.parameters.iuf_release_mount_path}}"
+    - name: results
+      emptyDir: {}
+  ## cleanup-template ##
+  ## Remove the secret created earlier.
+  - name: cleanup-template
+    inputs:
+      parameters:
+      - name: s3_credentials_secret_name
+        value: "{{steps.get-s3-secrets.outputs.parameters.secret_name}}"
+    nodeSelector:
+      kubernetes.io/hostname: ncn-m001
+    tolerations:
+    - key: node-role.kubernetes.io/master
+      effect: NoSchedule
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+    script:
+      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      command: [bash]
+      source: |
+        kubectl -n argo delete secret/{{inputs.parameters.s3_credentials_secret_name}}

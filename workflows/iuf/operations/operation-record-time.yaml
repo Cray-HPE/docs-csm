@@ -24,28 +24,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: s3-upload
-  namespace: argo
+  name: workflow-template-record-time-template
 spec:
-  entrypoint: main
+  entrypoint: record-time-template
   templates:
-### Main Steps ###
-  - name: main
-    inputs:
-      parameters:
-        - name: global_params
-    steps:
-    - - name: s3-upload
-        templateRef:
-          name: iuf-base-template
-          template: shell-script
-        arguments:
-          parameters:
-            - name: dryRun
-              value: false
-            - name: scriptContent
-              value: |
-                CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
-                PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
-
-                /usr/local/bin/s3-upload "$CONTENT" "$PARENT_DIR"
+  - name: record-time-template
+    container:
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+      command: [date]
+      args: ["+%s"]

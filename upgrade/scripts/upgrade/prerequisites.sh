@@ -442,7 +442,6 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-        helm -n argo upgrade --install cray-iuf "${CSM_ARTI_DIR}/helm/cray-iuf-0.0.1.tgz"
         "${locOfScript}/util/upgrade-cray-nls.sh"
 
     } >> "${LOG_FILE}" 2>&1
