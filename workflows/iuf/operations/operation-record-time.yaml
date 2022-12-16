@@ -30,6 +30,6 @@ spec:
   templates:
   - name: record-time-template
     container:
-      image: registry.local/alpine:3.7
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
       command: [date]
       args: ["+%s"]

@@ -122,7 +122,7 @@ spec:
             valueFrom:
               path: /tmp/diff_time.txt
       container:
-        image: registry.local/alpine:3.7
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
         command: [sh, -c]
         args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
     - name: extract-tar-files
