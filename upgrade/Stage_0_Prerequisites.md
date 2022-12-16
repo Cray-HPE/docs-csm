@@ -351,9 +351,11 @@ the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Wor
 
 ## Stage 0.5 - Regenerate Postgres backups
 
-The current Postgres opt-in backups need to be re-generated to fix a known issue. This requires a new image.
+The current Postgres opt-in backups need to be re-generated to fix a known issue.
 
 1. (`ncn-m001#`) Load the updated `cray-postgres-db-backup` image into the nexus local registry.
+
+   > ***NOTE:*** This step is only necessary if upgrading to CSM 1.3.0, if upgrading to CSM 1.3.1 (estimated to be released the second week of January, 2023), proceed to Step 2.
 
    - If `ncn-m001` has internet access, then use the following commands.
 
@@ -371,7 +373,7 @@ The current Postgres opt-in backups need to be re-generated to fix a known issue
 
          ```bash
          podman pull docker://artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
-         podman save -o cray-postgres-db-backup.tar docker.io/artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
+         podman save -o cray-postgres-db-backup.tar artifactory.algol60.net/csm-docker/stable/cray-postgres-db-backup:0.2.3
          ```
 
       1. Copy the `cray-postgres-db-backup.tar` to the target system under `/root`.
