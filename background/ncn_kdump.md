@@ -81,7 +81,7 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
         ```bash
         zypper ar https://packages.local/repository/csm-${CSM_RELEASE}-embedded csm-embedded
-        . /srv/cray/scripts/metal/dracut-lib.sh
+        KVER=$(rpm -q --queryformat='%{VERSION}-%{RELEASE}' kernel-default)
         zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
         ```
 
@@ -108,7 +108,7 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
                 ```bash
                 zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/15-SP3/x86_64/update_debug/ temp-debug
-                . /srv/cray/scripts/metal/dracut-lib.sh
+                KVER=$(rpm -q --queryformat='%{VERSION}-%{RELEASE}' kernel-default)
                 zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
                 ```
 
@@ -116,7 +116,7 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
                 ```bash
                 https_proxy=https://example.proxy.net:443 zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/15-SP3/x86_64/update_debug/ temp-debug
-                . /srv/cray/scripts/metal/dracut-lib.sh
+                KVER=$(rpm -q --queryformat='%{VERSION}-%{RELEASE}' kernel-default)
                 zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
                 ```
 
@@ -146,7 +146,7 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
     > that of the currently running kernel.
 
     ```bash
-    . /srv/cray/scripts/metal/dracut-lib.sh
+    . /srv/cray/scripts/common/dracut-lib.sh
     crash ./vmlinux-${KVER}.gz ./vmcore
     ```
 
@@ -248,6 +248,6 @@ restarting the `kdump.service` daemon.
 1. (`ncn#`) Verify that a new `kdump` image exists for the current kernel.
 
     ```bash
-    . /srv/cray/scripts/metal/dracut-lib.sh
+    . /srv/cray/scripts/common/dracut-lib.sh
     ls -l /boot/initrd-${KVER}-kdump
     ```
