@@ -17,11 +17,11 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
    host=$(hostname)
 
-   > ~/.ssh/known_hosts
+   true > ~/.ssh/known_hosts
 
    for node in ncn-s001 ncn-s002 ncn-s003; do
      ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
-     pdsh -w $node > ~/.ssh/known_hosts
+     pdsh -w $node '> ~/.ssh/known_hosts'
      if [[ "$host" == "$node" ]]; then
        continue
      fi
@@ -55,7 +55,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    until [[ $(cephadm shell -- ceph-volume inventory --format json-pretty|jq '.[] | select(.available == true) | .path' | wc -l) == 0 ]]
    do
      for node in ncn-s001 ncn-s002 ncn-s003; do
-       if [[ $ceph_mgr_successful_restarts > 10 ]]
+       if [[ $ceph_mgr_successful_restarts -gt 10 ]]
        then
          echo "Failed to bring in OSDs, manual troubleshooting required."
          exit 1
