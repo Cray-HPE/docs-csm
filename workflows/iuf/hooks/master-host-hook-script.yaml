@@ -58,6 +58,9 @@ spec:
                     chmod +x {{inputs.parameters.script_path}}
 
                     auth_token="{{inputs.parameters.auth_token}}"
+
+                    cd "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.process-media.current_product.parent_directory')}}"
+                    
                     global_params="/tmp/${global_params_file}.json" sh -c {{inputs.parameters.script_path}}
             name: call-hook-script
             templateRef:
