@@ -97,17 +97,18 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    do
      systemctl enable $service
    done
-
+   echo "Completed adding $host to ceph cluster."
+   echo "Checking haproxy and keepalived..."
    # check rgw and haproxy are functional
    res_file=$(mktemp)
    http_code=$(curl -k -s -o "${res_file}" -w "%{http_code}" "https://rgw-vip.nmn")
    if [[ ${http_code} != 200 ]]; then
-     echo "ERROR Rados GW and haproxy are not healthy. Deploy RGW on rebuilt node."
+     echo "NOTICE Rados GW and haproxy are not healthy. Deploy RGW on rebuilt node."
      exit 1
    fi
    # check keepalived is active
    if [[ $(systemctl is-active keepalived.service) != "active" ]]; then
-     echo "ERROR keepalived is not active on $host. Add node to Haproxy and Keepalived."
+     echo "NOTICE keepalived is not active on $host. Add node to Haproxy and Keepalived."
      exit 1
    fi
    ```
@@ -194,7 +195,7 @@ This is automated as part of the install, but administrators may have to regener
    - Configure Rados Gateway containers with the complete list of nodes it should be running on:
 
      ```bash
-     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
+     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >" --port=8080
      ```
 
 1. Verify Rados Gateway is running on the desired nodes.
