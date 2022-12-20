@@ -502,8 +502,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        echo "${NCN_MOD_SCRIPT}"
        "${NCN_MOD_SCRIPT}" -p \
           -d /root/.ssh \
-          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}-$(uname -i).squashfs" \
+          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}-$(uname -i).squashfs"
        ```
 
 1. (`pit#`) Log the currently installed PIT packages.
