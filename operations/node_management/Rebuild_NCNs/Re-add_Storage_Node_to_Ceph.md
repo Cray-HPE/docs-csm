@@ -13,29 +13,46 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    ```bash
    #!/bin/bash
 
-   (( counter=0 ))
-
    host=$(hostname)
+   host_ip=$(host ${host} | awk '{ print $NF }')
 
-   > ~/.ssh/known_hosts
+   # run preload images on host
+   if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
+     echo "Unable to run pre-load-images.sh on $host."
+   fi
 
+   # update ssh keys for rebuilt node on host and on ncn-s001/2/3
+   truncate --size=0 ~/.ssh/known_hosts 2>&1
    for node in ncn-s001 ncn-s002 ncn-s003; do
-     ssh-keyscan -H "$node" >> ~/.ssh/known_hosts
-     pdsh -w $node > ~/.ssh/known_hosts
-     if [[ "$host" == "$node" ]]; then
-       continue
+     if ! host ${node}; then
+       echo "Unable to get IP address of $node"
+       exit 1
+     else
+       ncn_ip=$(host ${node} | awk '{ print $NF }')
      fi
+     # add new authorized_hosts entry for the node
+     ssh-keyscan -H "${node},${ncn_ip}" >> ~/.ssh/known_hosts
+     
+     if [[ "$host" != "$node" ]]; then
+       ssh $node "if [[ ! -f ~/.ssh/known_hosts ]]; then > ~/.ssh/known_hosts; fi; ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $host_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${host},${host_ip} >> ~/.ssh/known_hosts"
+     fi
+   done
 
-     if [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]
+   # copy necessary ceph files to rebuilt node
+   (( counter=0 ))
+   for node in ncn-s001 ncn-s002 ncn-s003; do
+     if [[ "$host" == "$node" ]]; then
+       (( counter+1 ))
+     elif [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]
      then
        if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
        then
          scp $node:/etc/ceph/* /etc/ceph
        else
-         scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
+         scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring\} /etc/ceph/
        fi
 
-       if [[ ! $(pdsh -w $node "/srv/cray/scripts/common/pre-load-images.sh; ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-keyscan -H $host >> ~/.ssh/known_hosts ;ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
+       if [[ ! $(pdsh -w $node "ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
        then
          (( counter+1 ))
          if [[ $counter -ge 3 ]]
@@ -55,7 +72,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    until [[ $(cephadm shell -- ceph-volume inventory --format json-pretty|jq '.[] | select(.available == true) | .path' | wc -l) == 0 ]]
    do
      for node in ncn-s001 ncn-s002 ncn-s003; do
-       if [[ $ceph_mgr_successful_restarts > 10 ]]
+       if [[ $ceph_mgr_successful_restarts -gt 10 ]]
        then
          echo "Failed to bring in OSDs, manual troubleshooting required."
          exit 1
@@ -80,6 +97,20 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    do
      systemctl enable $service
    done
+   echo "Completed adding $host to ceph cluster."
+   echo "Checking haproxy and keepalived..."
+   # check rgw and haproxy are functional
+   res_file=$(mktemp)
+   http_code=$(curl -k -s -o "${res_file}" -w "%{http_code}" "https://rgw-vip.nmn")
+   if [[ ${http_code} != 200 ]]; then
+     echo "NOTICE Rados GW and haproxy are not healthy. Deploy RGW on rebuilt node."
+     exit 1
+   fi
+   # check keepalived is active
+   if [[ $(systemctl is-active keepalived.service) != "active" ]]; then
+     echo "NOTICE keepalived is not active on $host. Add node to Haproxy and Keepalived."
+     exit 1
+   fi
    ```
 
 1. Change the mode of the script.
@@ -164,7 +195,7 @@ This is automated as part of the install, but administrators may have to regener
    - Configure Rados Gateway containers with the complete list of nodes it should be running on:
 
      ```bash
-     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >"
+     ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >" --port=8080
      ```
 
 1. Verify Rados Gateway is running on the desired nodes.
