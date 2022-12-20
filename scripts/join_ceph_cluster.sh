@@ -23,6 +23,8 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
+#!/bin/bash
+
 host=$(hostname)
 host_ip=$(host ${host} | awk '{ print $NF }')
 
@@ -107,16 +109,17 @@ for service in $(cephadm ls | jq -r '.[].systemd_unit')
 do
   systemctl enable $service
 done
-
+echo "Completed adding $host to ceph cluster."
+echo "Checking haproxy and keepalived..."
 # check rgw and haproxy are functional
 res_file=$(mktemp)
 http_code=$(curl -k -s -o "${res_file}" -w "%{http_code}" "https://rgw-vip.nmn")
 if [[ ${http_code} != 200 ]]; then
-  echo "ERROR Rados GW and haproxy are not healthy. Deploy RGW on rebuilt node."
+  echo "NOTICE Rados GW and haproxy are not healthy. Deploy RGW on rebuilt node."
   exit 1
 fi
 # check keepalived is active
 if [[ $(systemctl is-active keepalived.service) != "active" ]]; then
-  echo "ERROR keepalived is not active on $host. Add node to Haproxy and Keepalived."
+  echo "NOTICE keepalived is not active on $host. Add node to Haproxy and Keepalived."
   exit 1
 fi
