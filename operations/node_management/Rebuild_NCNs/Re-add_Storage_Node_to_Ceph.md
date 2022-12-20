@@ -49,7 +49,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
        then
          scp $node:/etc/ceph/* /etc/ceph
        else
-         scp $node:/etc/ceph/rgw.pem /etc/ceph/rgw.pem
+         scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring\} /etc/ceph/
        fi
                 
        if [[ ! $(pdsh -w $node "ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
@@ -102,12 +102,12 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    res_file=$(mktemp)
    http_code=$(curl -k -s -o "${res_file}" -w "%{http_code}" "https://rgw-vip.nmn")
    if [[ ${http_code} != 200 ]]; then
-     echo "ERROR Rados GW and haproxy are not healthy."
+     echo "ERROR Rados GW and haproxy are not healthy. Deploy RGW on rebuilt node."
      exit 1
    fi
    # check keepalived is active
    if [[ $(systemctl is-active keepalived.service) != "active" ]]; then
-     echo "ERROR keepalived is not active on $host"
+     echo "ERROR keepalived is not active on $host. Add node to Haproxy and Keepalived."
      exit 1
    fi
    ```
