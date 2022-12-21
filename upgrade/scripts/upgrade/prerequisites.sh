@@ -676,7 +676,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
 
     # As boot parameters are added or removed, update these arrays.
     # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
-    bootparameters_to_set=( "psi=1" "rd.live.squashimg=rootfs" )
+    bootparameters_to_set=( "split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" )
     bootparameters_to_delete=( "rd.live.squashimg" )
 
     for bootparameter in "${bootparameters_to_delete[@]}"; do
