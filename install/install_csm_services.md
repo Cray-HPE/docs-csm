@@ -9,8 +9,8 @@ This procedure will install CSM applications and services into the CSM Kubernete
 1. [Wait for everything to settle](#3-wait-for-everything-to-settle)
 1. [Next topic](#next-topic)
 1. [Known issues](#known-issues)
-  * [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
-  * [`Setup Nexus` known issues](#setup-nexus-known-issues)
+  1. [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
+  1. [`Setup Nexus` known issues](#setup-nexus-known-issues)
 
 ## 1. Install CSM services
 
