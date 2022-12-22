@@ -9,8 +9,8 @@ This page provides information on the Linux kernel in the NCN.
   * [`ifname`](#ifname)
   * [`ip`](#ip)
   * [`psi`](#psi)
-  * [`pcie_ports`](#pcie_ports)
-  * [`transparent_hugepage`](#transparent_hugepage)
+  * [`pcie_ports`](#pcieports)
+  * [`transparent_hugepage`](#transparenthugepage)
   * [`console`](#console)
   * [`iommu`](#iommu)
   * [`metal.server`](#metalserver)
@@ -50,7 +50,8 @@ This page provides information on the Linux kernel in the NCN.
   * [`nosplash`](#nosplash)
   * [`quiet`](#quiet)
   * [`crashkernel`](#crashkernel)
-  * [`log_buf_len`](#log_buf_len)
+  * [`log_buf_len`](#logbuflen)
+  * [`split_lock_detect`](#split_lock_detect)
   * [`rd.retry`](#rdretry)
   * [`rd.shell`](#rdshell)
   * [`xname`](#xname)
@@ -645,6 +646,17 @@ This must be larger than the size of the `kdump` `initrd` located in `/boot`.
 
 Size of the kernel's internal log buffer by powers of 2.
 
+### `split_lock_detect`
+
+| NCN Type | Default Value(s) |
+| :------: | :------------: |
+| All | `off` |
+
+Intel has added Split Lock Detection to its 10th generation CPUs and this affects the Castle and Wisteria
+platforms which will be delivered in the Alice release. The Linux kernel has Split Lock Detect enabled
+by default, but it can be disabled on a host by adding the kernel parameter, `split_lock_detect=off`
+to the kernel command line. See [this ticket][24] for more detail.
+
 ### `rd.retry`
 
 | NCN Type | Default Value(s) |
@@ -716,3 +728,4 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 [21]:https://www.suse.com/security/cve/CVE-2021-4034.html
 [22]:https://www.suse.com/security/cve/CVE-2022-0185.html
 [23]:https://www.suse.com/security/cve/CVE-2022-33981.html
+[24]:https://www.virtualbox.org/ticket/20180
