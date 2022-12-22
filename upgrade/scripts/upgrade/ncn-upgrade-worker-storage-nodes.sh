@@ -89,15 +89,15 @@ while [[ $# -gt 0 ]]; do
         dryRun=true
         shift # past argument
         ;;
-    --upgrade
+    --upgrade)
         upgrade=true
         shift # past argument
         ;;
-    --rebuild
+    --rebuild)
         rebuild=true
         shift # past argument
         ;;
-    --zap-osds
+    --zap-osds)
         zapOsds=true
         shift # past argument
         ;;
@@ -129,7 +129,6 @@ while [[ $# -gt 0 ]]; do
         fi
         terminal=true
         ;;
-    --
     *)
         echo
         echo "Unknown option $1"
@@ -187,7 +186,7 @@ EOF
 "dryRun": ${dryRun},
 "hosts": ${jsonArray},
 "zapOsds": ${zapOsds},
-"workflowType": ${workflowType}
+"workflowType": "${workflowType}"
 }
 EOF
     fi

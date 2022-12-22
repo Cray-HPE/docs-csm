@@ -49,17 +49,17 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 
 ## Storage node image upgrade
 
-(`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for all storage nodes to be upgraded. Provide the storage nodes in a comma-separated list, such as `ncn-s001,ncn-s002,ncn-s003`. This upgrades the storage nodes sequentially.
+(`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` with the `--upgrade` flag for all storage nodes to be upgraded. Provide the storage nodes in a comma-separated list, such as `ncn-s001,ncn-s002,ncn-s003`. This upgrades the storage nodes sequentially.
 
 ```bash
-/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001,ncn-s002,ncn-s003
+/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001,ncn-s002,ncn-s003 --upgrade
 ```
 
 **`NOTE`**
 It is possible to upgrade a single storage node at a time using the following command.
 
 ```bash
-/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001
+/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001 --upgrade
 ```
 
 >**Storage node image upgrade troubleshooting**
