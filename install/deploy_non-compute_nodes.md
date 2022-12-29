@@ -314,21 +314,6 @@ If the check fails after doing the rebuild, contact support.
     "${CSM_PATH}"/lib/install-goss-tests.sh
     ```
 
-1. (`pit#`) Remove the default NTP pool.
-
-    This removes the default pool, which can cause contention issues with NTP.
-
-    ```bash
-    pdsh -b -S -w "$(grep -oP 'ncn-\w\d+' /etc/dnsmasq.d/statics.conf | grep -v m001 | sort -u |  tr -t '\n' ',')" \
-            'sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf' && echo SUCCESS
-    ```
-
-    Successful output is:
-
-    ```text
-    SUCCESS
-    ```
-
 ## 4. Validate deployment
 
 1. (`pit#`) Check the storage nodes.
