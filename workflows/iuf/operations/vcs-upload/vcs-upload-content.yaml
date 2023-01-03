@@ -53,6 +53,18 @@ spec:
                   value: cray
                 - name: cf_import_gitea_url
                   value: "https://api-gw-service-nmn.local/vcs"
+        - - name: vcs-update-product-catalog
+            templateRef:
+              name: update-product-catalog-template
+              template: catalog-update
+            arguments:
+              parameters:
+              - name: product-name
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+              - name: product-version
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+              - name: yaml-content
+                value: "{{steps.gitea-upload-content.outputs.parameters.vcs-upload-content-results}}"
         - - name: cleanup
             template: cleanup-template
             arguments:
