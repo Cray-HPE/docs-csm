@@ -193,7 +193,7 @@ see [Deprecated Features](introduction/deprecated_features/README.md).
 
 ## Removals
 
-* TBD
+* SLS support for downloading and uploading credentials in the `dumpstate` and `loadstate` REST APIs
 
 ## Known issues
 

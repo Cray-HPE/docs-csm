@@ -15,6 +15,9 @@ features are listed first).
   * It is likely that even prior to BOS v1 being removed from CSM, the [Cray CLI](../../glossary.md#cray-cli-cray) will change its behavior when no
     version is explicitly specified in BOS commands. Currently it defaults to BOS v1, but it may change to default to BOS v2 even before BOS v1
     is removed from CSM.
+* [System Layout Service (SLS)](../../glossary.md#system-layout-service-sls) removed public and private key options from the `loadstate` and `dumpstate` REST API
+  * The SLS `loadstate` and `dumpstate` no longer support the option to load or dump credential information. This includes the removal of the `public_key` and
+    `private_key` options that were used for encryption and decryption.
 
 ## Deprecated in CSM 1.2
 
