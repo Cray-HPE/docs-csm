@@ -146,7 +146,7 @@ with system-specific customizations.
 
 #### Setup LDAP configuration
 
-> **`NOTE`** Skip past LDAP configuration to [here](#end-of-ldap-configuation) if there is no LDAP configuration at this time. If LDAP should be enabled later,
+> **`NOTE`** Skip past LDAP configuration to [here](#end-of-ldap-configuration) if there is no LDAP configuration at this time. If LDAP should be enabled later,
 > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
 1. (`pit#`) Set environment variables for the LDAP server and its port.
