@@ -21,7 +21,6 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 """Add Compute node IPs to the CHN"""
-import ipaddress
 import json
 import sys
 import re
@@ -50,7 +49,7 @@ Script processing involves:
   * If not it's possible that either a NAT device is in place, or
   * This procedure is not required, or
   * The CHN was truly not large enough to accommodate all the compute nodes (typical).
- 
+
 NOTE:  Typically you will want a NAT device instead of running this, unless a very large CHN is allocated.
 
 """
@@ -75,7 +74,7 @@ def main(
     sls_input_file,
     sls_output_file,
 ):
-    """Upgrade a system SLS file from CSM 1.0 to CSM 1.2.
+    """Upgrade a system SLS file to work with CHN.
 
     Args:
         ctx: Click context
@@ -103,14 +102,14 @@ def main(
     if bican is None:
         click.secho(
             "INFO: The BICAN network does not exist in SLS.  This script has nothing to process for CSM < 1.2.",
-            fg="bright_white"
+            fg="bright_white",
         )
         sys.exit(1)
 
     if bican.system_default_route() != "CHN":
         click.secho(
             "INFO: The BICAN toggle (SystemDefaultRoute) is not set to CHN. This script has nothing to process.",
-            fg="bright_white"
+            fg="bright_white",
         )
         sys.exit(1)
 
@@ -119,7 +118,7 @@ def main(
         click.secho(
             "ERROR:  The BICAN toggle (SystemDefaultRoute)is set to CHN, but the CHN Network does not exist.\n"
             "        This should never happen.  Look at CSI output or sls_upgrader output for the root cause.",
-            fg="red"
+            fg="red",
         )
         sys.exit(1)
 
@@ -128,7 +127,7 @@ def main(
         click.secho(
             "ERROR:  The CHN Subnet bootrap_dhcp does not exist and is required.\n"
             "        Look at CSI output or sls_upgrader output for the root cause.",
-            fg="red"
+            fg="red",
         )
         sys.exit(1)
 
@@ -137,7 +136,7 @@ def main(
         click.secho(
             "ERROR:  The HSN network does not exist, but the CHN Network exists.\n"
             "        HSN is pre-requisite for CHN.  Look at CSI output or sls_upgrader output for the root cause.",
-            fg="red"
+            fg="red",
         )
         sys.exit(1)
 
@@ -146,7 +145,7 @@ def main(
         click.secho(
             "ERROR:  The HSN Subnet hsn_base_subnet does not exist and is required.\n"
             "        Look at CSI output or sls_upgrader output for the root cause.",
-            fg="red"
+            fg="red",
         )
         sys.exit(1)
 
@@ -156,22 +155,38 @@ def main(
     click.secho(
         f"INFO:  The HSN {hsn_ipv4_network} supports {hsn_size} addresses "
         f"of which {hsn_used} are currently used.",
-        fg="bright_white"
+        fg="bright_white",
     )
 
-    xname_pattern = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h0$') # HSN Node NIC xXcCsSbBnNhH but only the h0 one
-    xname_pattern_chn = re.compile('^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h([0-3])$') # HSN Node NIC xXcCsSbBnNhH
+    xname_pattern = re.compile(
+        "^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h0$"
+    )  # HSN Node NIC xXcCsSbBnNhH but only the h0 one
+    xname_pattern_chn = re.compile(
+        "^x([0-9]{1,4})c([0-7])s([0-9]+)b([0-9]+)n([0-9]+)h([0-3])$"
+    )  # HSN Node NIC xXcCsSbBnNhH
 
     hsn_reservations = hsn_subnet.reservations().values()
-    hsn_xnames = set([r.name() for r in hsn_reservations if xname_pattern.match(r.name())])
+    hsn_xnames = set(
+        [r.name() for r in hsn_reservations if xname_pattern.match(r.name())]
+    )
 
     chn_ipv4_network = chn_subnet.ipv4_network()
-    chn_xnames = set([r.name() for r in chn_subnet.reservations().values() if xname_pattern_chn.match(r.name())])
+    chn_xnames = set(
+        [
+            r.name()
+            for r in chn_subnet.reservations().values()
+            if xname_pattern_chn.match(r.name())
+        ]
+    )
     chn_size = chn_ipv4_network.num_addresses
     chn_used = len(chn_subnet.reservations()) + 1
 
-    hsn_to_be_added = hsn_xnames - chn_xnames   # xnames in hsn but not in chn (these will be added to chn)
-    chn_to_be_removed = chn_xnames - hsn_xnames # xnames in chn but not in hsn, also any h[1-3] nodes in chn (these will be removed from chn)
+    hsn_to_be_added = (
+        hsn_xnames - chn_xnames
+    )  # xnames in hsn but not in chn (these will be added to chn)
+    chn_to_be_removed = (
+        chn_xnames - hsn_xnames
+    )  # xnames in chn but not in hsn, also any h[1-3] nodes in chn (these will be removed from chn)
 
     chn_available_ips = chn_size - chn_used + len(chn_to_be_removed)
     net_chn_add_count = len(hsn_to_be_added) - len(chn_to_be_removed)
@@ -179,7 +194,7 @@ def main(
         f"INFO:  The CHN {chn_ipv4_network} supports {chn_size} addresses "
         f"of which {chn_used} are currently used. {len(hsn_to_be_added)} "
         f"will be added and {len(chn_to_be_removed)} will be removed.",
-        fg="bright_white"
+        fg="bright_white",
     )
     if chn_available_ips < net_chn_add_count:
         click.secho(
@@ -187,7 +202,7 @@ def main(
             "        This can be for two reasons:\n"
             "        1. A NAT device is in place to provides HSN egress access for Computes.\n"
             "        2. The CHN size allocated during installation or upgrade is indeed to small and needs resizing.",
-            fg="red"
+            fg="red",
         )
         sys.exit(1)
 
@@ -195,7 +210,7 @@ def main(
         if xname in chn_subnet.reservations():
             click.secho(
                 f"    Removing {xname} from CHN because it is not in HSN or is not an h0 node",
-                fg="white"
+                fg="white",
             )
             del chn_subnet.reservations()[xname]
 
@@ -204,21 +219,17 @@ def main(
         if not xname_pattern.match(new_name):
             click.secho(
                 f"    Skipping {new_name} because it is not an xname for HSN h0 Node NIC",
-                fg="white"
+                fg="white",
             )
             continue
         if new_name in chn_xnames:
             click.secho(
-                f"    Skipping {new_name} because it is already in the CHN",
-                fg="white"
+                f"    Skipping {new_name} because it is already in the CHN", fg="white"
             )
             continue
 
         new_ipv4_address = next_free_ipv4_address(chn_subnet)
-        click.secho(
-            f"    Adding Reservation {new_name} {new_ipv4_address}",
-            fg="white"
-        )
+        click.secho(f"    Adding Reservation {new_name} {new_ipv4_address}", fg="white")
         chn_subnet.reservations().update(
             {
                 new_name: Reservation(
@@ -232,11 +243,11 @@ def main(
 
     click.secho(
         f"CHN now has {len(chn_subnet.reservations()) + 1} IP reservations",
-        fg="bright_white"
+        fg="bright_white",
     )
 
     click.secho(
-        f"Writing CSM 1.2 upgraded and schema validated SLS file to {sls_output_file.name}",
+        f"Writing upgraded and schema validated SLS file to {sls_output_file.name}",
         fg="bright_white",
     )
 
