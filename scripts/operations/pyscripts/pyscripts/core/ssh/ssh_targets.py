@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -149,7 +149,7 @@ class SshTargets:
                 self.ncn_worker.append(host)
                 self.byHostname[host.hostname] = host
                 self.byXname[xname] = host
-            elif x["Type"] == "comptype_node" and x["ExtraProperties"]["Role"] == "Application" and x["ExtraProperties"]["SubRole"] == "UAN":
+            elif x["Type"] == "comptype_node" and x["ExtraProperties"]["Role"] == "Application" and ("SubRole" in x["ExtraProperties"] and x["ExtraProperties"]["SubRole"] == "UAN"):
                 host = SshHost(x["ExtraProperties"]["Aliases"][0], "root", x)
                 self.uan.append(host)
                 self.byHostname[host.hostname] = host
