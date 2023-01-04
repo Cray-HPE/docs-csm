@@ -40,10 +40,12 @@ parser = argparse.ArgumentParser(description='utility script to configure keyclo
 session = requests.Session()
 session.verify = False
 
-argo_url=os.environ.get('ARGO_URL')
+kc_url="https://" + os.environ.get('KC_URL')
+argo_url="https://" + os.environ.get('ARGO_URL')
 kc_client_id=os.environ.get('KC_CLIENT_ID')
 kc_username=os.environ.get('KC_USERNAME')
 kc_password=os.environ.get('KC_PASSWORD')
+
 try:
     # Get TOKEN
     data = {
@@ -52,7 +54,7 @@ try:
             "username": kc_username,
             "password": kc_password
             }
-    token_response = session.post('https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token', data=data)
+    token_response = session.post(kc_url + '/keycloak/realms/master/protocol/openid-connect/token', data=data)
     token_json = token_response.json()
     token = token_json['access_token']
     if token is None:
@@ -61,12 +63,12 @@ try:
     session.headers["Content-Type"]="application/json"
 
     # Get keycloak clients and find oauth2-proxy-customer-management client
-    clients_response = session.get('https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients')
+    clients_response = session.get(kc_url + '/keycloak/admin/realms/shasta/clients')
     clients_json = clients_response.json()
     customerManagementClient = None
     for client in clients_json:
         if client['clientId'] == "oauth2-proxy-customer-management":
-            customerManagementClientRes=session.get('https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients/'+client['id'])
+            customerManagementClientRes=session.get(kc_url + '/keycloak/admin/realms/shasta/clients/'+client['id'])
             customerManagementClient=customerManagementClientRes.json()
             break
     if customerManagementClient is None:
@@ -74,19 +76,19 @@ try:
 
     needConfigure=False
     # Configure webOrigins
-    argoWebOrigin="https://"+argo_url
+    argoWebOrigin=argo_url
     if not argoWebOrigin in customerManagementClient['webOrigins']:
         customerManagementClient['webOrigins'].append(argoWebOrigin)
         needConfigure=True
     # Configure redirectUris
-    argoRedirectUri="https://"+argo_url+"/oauth/callback"
+    argoRedirectUri=argo_url + "/oauth/callback"
     if not argoRedirectUri in customerManagementClient['redirectUris']:
         customerManagementClient['redirectUris'].append(argoRedirectUri)
         needConfigure=True
 
     if needConfigure:
         patch_response=session.put(
-            'https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients/'+customerManagementClient['id'],
+            kc_url + '/keycloak/admin/realms/shasta/clients/'+customerManagementClient['id'],
             data=json.dumps(customerManagementClient),
         )
         if patch_response.status_code != 204:
