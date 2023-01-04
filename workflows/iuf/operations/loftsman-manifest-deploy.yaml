@@ -72,6 +72,11 @@ spec:
                   JSON_CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
                   LOFTSMAN_ENTRIES=$(echo "$JSON_CONTENT" | jq '.content.loftsman | length')
                   PARENT_PATH=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
+                  PRODUCT_VERSION=$(echo "$JSON_CONTENT" | jq -r '.version')
+                  if [[ "${PRODUCT_VERSION,,}" == "null" ]] || [[ -z "$PRODUCT_VERSION" ]]; then
+                      echo "ERROR product version not found in manifest"
+                      exit 1
+                  fi
 
                   if [[ -z "$LOFTSMAN_ENTRIES" ]]; then
                       echo "ERROR Did not receive any loftsman context."
@@ -83,8 +88,8 @@ spec:
                     product_name=$2
                     exit_code=0
 
-                    if ! cray artifacts get config-data argo/loftsman/${product_name}/manifests/"$(basename $manifest)" /tmp/"$(basename $manifest)"; then
-                      echo "ERROR Could not get argo/loftsman/${product_name}/manifests/"$(basename $manifest)" from s3. It cannot be deployed because of this."
+                    if ! cray artifacts get config-data argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" /tmp/"$(basename $manifest)"; then
+                      echo "ERROR Could not get argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" from s3. It cannot be deployed because of this."
                       exit_code=1
                     else
                       echo "INFO Deploying ${manifest}"
