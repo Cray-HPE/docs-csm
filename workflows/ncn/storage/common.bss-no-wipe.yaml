@@ -21,9 +21,9 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-{{define "common.set-bss-no-wipe"}}
+{{define "common.set-bss-no-wipe-1"}}
 tasks:
-  - name: set-bss-no-wipe
+  - name: set-bss-no-wipe-1
     templateRef:
       name: kubectl-and-curl-template
       template: shell-script
@@ -33,16 +33,28 @@ tasks:
           value: "{{ `{{inputs.parameters.dryRun}}` }}"
         - name: scriptContent
           value: |
-            WIPE_OSDS="{{ `{{inputs.parameters.wipeOsds}}` }}"
-            no_wipe_flag=1
-            if $WIPE_OSDS; then
-              no_wipe_flag=0
-            fi
-            echo "WIPE_OSDS: $WIPE_OSDS"
-            echo "metal.no-wipe is being set to ${no_wipe_flag}."
             TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
-            echo "Setting metal.no-wipe=${no_wipe_flag}"
+            echo "Setting metal.no-wipe=1"
             TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                 jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-            /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=${no_wipe_flag} --limit $TARGET_XNAME
+            /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
+{{end}}
+
+{{define "common.set-bss-no-wipe-0"}}
+tasks:
+  - name: set-bss-no-wipe-0
+    templateRef:
+      name: kubectl-and-curl-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+            echo "Setting metal.no-wipe=0"
+            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+            /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
 {{end}}

@@ -21,7 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-{{define "worker.common.parameters"}}
+{{define "storage.common.parameters"}}
 parameters:
   - name: targetNcn
   - name: dryRun

@@ -105,11 +105,7 @@ spec:
                     source /srv/cray/scripts/metal/metal-lib.sh
                     csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3" \
                       | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
-                    pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
-                    if [[ $? -eq 106 ]]; then
-                      # csi is already installed
-                      exit 0
-                    fi
+                    pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url" || [[ $? -eq 106 ]] # code 106 means "nothing to do, csi is installed"
           {{- range $index,$value := .TargetNcns}}
           - name: verify-bss-runcmd
             templateRef:
@@ -213,7 +209,7 @@ spec:
                     echo "Successfully checked bootloader on $TARGET_NCN and removed /metal/recovery."
           # storage nodes rebuild with bss.no-wipe=0
           - name: set-bss-no-wipe-0-{{$value}}
-            template: set-bss-no-wipe
+            template: set-bss-no-wipe-0
             dependencies:
               - enter-ceph-orch-maintenance-mode
             arguments:
@@ -222,8 +218,6 @@ spec:
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
-              - name: wipeOsds
-                value: "true" # TODO wipe-osds
           # reboot node and wait for cloud-init before proceeding
           - name: reboot-{{$value}}
             dependencies: 
@@ -239,7 +233,7 @@ spec:
                 value: "{{$.DryRun}}"
           # set bss.no-wipe to 1 so that node will not be accidentally wiped
           - name: set-bss-no-wipe-1-{{$value}}
-            template: set-bss-no-wipe
+            template: set-bss-no-wipe-1
             dependencies:
               - reboot-{{$value}}
             arguments:
@@ -248,8 +242,6 @@ spec:
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
-              - name: wipeOsds
-                value: "false"
           - name: copy-ceph-pub-to-{{$value}}
             dependencies:
               - reboot-{{$value}}
@@ -371,7 +363,7 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN={{$value}}
-                    zapOsds={{$.ZapOsds}}
+                    zapOsds=false#{{$.ZapOsds}}
                     echo "zapOsds parameter recieved is: $zapOsds"
                     echo "not going to zap osds despite parameter"
                     #if $zapOsds; then
@@ -458,6 +450,8 @@ spec:
                       systemctl enable keepalived.service
                       systemctl restart keepalived.service'
           - name: post-rebuild-ceph-health-check
+            dependencies:
+              - add-nodes-haproxy-keepalived
             templateRef:
               name: ssh-template
               template: shell-script
@@ -469,11 +463,16 @@ spec:
                   value: |
                     /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true || /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -A true -v true
           {{- end }}
-    - name: set-bss-no-wipe
+    - name: set-bss-no-wipe-0
       inputs:
         {{- include "storage.common.parameters" . | indent 8 }}
       dag:
-        {{- include "common.set-bss-no-wipe" . | indent 8 }}
+        {{- include "common.set-bss-no-wipe-0" . | indent 8 }}
+    - name: set-bss-no-wipe-1
+      inputs:
+        {{- include "storage.common.parameters" . | indent 8 }}
+      dag:
+        {{- include "common.set-bss-no-wipe-1" . | indent 8 }}
     - name: reboot-node
       inputs:
         {{- include "storage.common.parameters" . | indent 8 }}
