@@ -25,4 +25,5 @@
 parameters:
   - name: targetNcn
   - name: dryRun
+  - name: imageId
 {{end}}

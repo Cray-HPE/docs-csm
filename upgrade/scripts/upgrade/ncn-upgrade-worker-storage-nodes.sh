@@ -37,6 +37,7 @@ upgrade=false
 rebuild=false
 zapOsds=false
 workflowType=""
+imageId=""
 
 function usage() {
     echo "CSM ncn worker and storage upgrade script"
@@ -49,14 +50,15 @@ function usage() {
     echo "--dry-run      Print out steps of workflow instead of running steps (default: ${dryRun})"
     echo "--upgrade      Perfrom a node upgrade. This only needs to be specified when upgrading storage nodes."
     echo "--rebuild      Perfrom a node rebuild. This only needs to be specified when rebuilding storage nodes"
+    echo "--image-id     The image-id that a worker or storage node should be booted into when a node is rebuilt. This is optional."
     echo "--zap-osds     Zap osds. Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt. (This can only be used with storage rebuilds)."
     echo
     echo "*COMMA_SEPARATED_NCN_HOSTNAMES"
     echo "  worker upgrade  - example 1) ncn-w001"
-    echo "  worker upgrade  - example 2) ncn-w001,ncn-w002,ncn-w003"
+    echo "  worker upgrade  - example 2) ncn-w001,ncn-w002,ncn-w003 --image-id <image-id>"
     echo "  storage upgrade - example 3) ncn-s001 --upgrade"
     echo "  storage upgrade - example 4) ncn-s001,ncn-s002,ncn-s003 --upgrade"
-    echo "  storage rebuild - example 5) ncn-s001 --rebuild"
+    echo "  storage rebuild - example 5) ncn-s001 --rebuild --image-id <image-id>"
     echo "  storage rebuild - example 6) ncn-s001,ncn-s002,ncn-s003 --rebuild"
     echo
 }
@@ -96,6 +98,11 @@ while [[ $# -gt 0 ]]; do
     --rebuild)
         rebuild=true
         shift # past argument
+        ;;
+    --image-id)
+        imageId="$2"
+        shift # past argument
+        shift # past value
         ;;
     --zap-osds)
         zapOsds=true
@@ -174,7 +181,8 @@ function createWorkflowPayload() {
 {
 "dryRun": ${dryRun},
 "hosts": ${jsonArray},
-"switchPassword": "${SW_ADMIN_PASSWORD}"
+"switchPassword": "${SW_ADMIN_PASSWORD}",
+"imageId": "${imageId}"
 }
 EOF
     fi
@@ -186,7 +194,8 @@ EOF
 "dryRun": ${dryRun},
 "hosts": ${jsonArray},
 "zapOsds": ${zapOsds},
-"workflowType": "${workflowType}"
+"workflowType": "${workflowType}",
+"imageId": "${imageId}"
 }
 EOF
     fi
