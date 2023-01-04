@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -43,9 +43,9 @@ import traceback
 from python_lib import args
 from python_lib import common
 from python_lib import logger
-from python_lib import vault
-
 from python_lib.types import JSONObject
+from python_lib.vault import Vault
+
 
 # Default values
 PRI_KEY_PATH = "/root/.ssh/id_rsa"
@@ -73,7 +73,7 @@ def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> N
     raise common.ScriptException(msg) from parent_exception
 
 
-def get_root_hash_from_etc_shadow() -> str:
+def root_hash_from_etc_shadow() -> str:
     """
     Find the line in /etc/shadow for the root user and return the
     hashed password field from that line.
@@ -162,7 +162,8 @@ def update_secret_fields(secret: JSONObject, field_changes: JSONObject) -> JSONO
             # This means the field should be removed, if it is set
             try:
                 del updated_secret[field_name]
-                logging.debug(f"CSM root secret {field_name} in Vault will be deleted")
+                logging.debug(
+                    f"CSM root secret {field_name} in Vault will be deleted")
             except KeyError:
                 # Not a problem, but let's note it for the log
                 logging.debug(
@@ -181,7 +182,8 @@ def compare_root_secrets(secret_written: JSONObject, secret_read: JSONObject) ->
     secrets_match = True
 
     # Validate that Vault values match what we wrote
-    logging.debug("Validating that Vault contents match what was written to it")
+    logging.debug(
+        "Validating that Vault contents match what was written to it")
 
     fields_not_written = secret_written.keys() - secret_read.keys()
     extra_fields = secret_read.keys() - secret_written.keys()
@@ -207,10 +209,12 @@ def compare_root_secrets(secret_written: JSONObject, secret_read: JSONObject) ->
             logging.debug(f"Vault value for {field} matches what was written")
         else:
             secrets_match = False
-            logging.error(f"Vault value for {field} DOES NOT MATCH what was written")
+            logging.error(
+                f"Vault value for {field} DOES NOT MATCH what was written")
 
     if not secrets_match:
-        raise common.ScriptException("Secret read back from Vault does not match what was written")
+        raise common.ScriptException(
+            "Secret read back from Vault does not match what was written")
 
     logging.info("Secrets read back from Vault match desired values")
 
@@ -222,6 +226,8 @@ def update_root_secret_in_vault(field_changes: JSONObject) -> None:
     Then read secret the back to verify it matches what was written (or verify that it
     no longer exists in Vault, if applicable).
     """
+
+    vault = Vault()
 
     # Get the current CSM root secrets from Vault. It is possible that the secret is not in Vault.
     csm_root_secret_before = vault.get_csm_root_secret(must_exist=False)
@@ -237,7 +243,8 @@ def update_root_secret_in_vault(field_changes: JSONObject) -> None:
     if not csm_root_secret_to_write:
         logging.info("Based on inputs, the desired CSM root secret is empty")
         if not csm_root_secret_before:
-            logging.info("The CSM root secret in Vault is already empty, so nothing to do.")
+            logging.info(
+                "The CSM root secret in Vault is already empty, so nothing to do.")
             return
 
         # Vault does not allow empty secrets do be written. Instead, they must be deleted.
@@ -333,14 +340,16 @@ def parse_args() -> JSONObject:
     elif parsed_args.pw_env_var is not None:
         # Generate the hash
         logging.debug("Generating password hash")
-        field_changes[PASSWORD_HASH_FIELD_NAME] = crypt.crypt(parsed_args.pw_env_var)
+        field_changes[PASSWORD_HASH_FIELD_NAME] = crypt.crypt(
+            parsed_args.pw_env_var)
     elif parsed_args.pw_prompt is not None:
         # Generate the hash
         logging.debug("Generating password hash")
-        field_changes[PASSWORD_HASH_FIELD_NAME] = crypt.crypt(parsed_args.pw_prompt)
+        field_changes[PASSWORD_HASH_FIELD_NAME] = crypt.crypt(
+            parsed_args.pw_prompt)
     elif not parsed_args.pw_no_change:
         # Default is to read it from the system
-        field_changes[PASSWORD_HASH_FIELD_NAME] = get_root_hash_from_etc_shadow()
+        field_changes[PASSWORD_HASH_FIELD_NAME] = root_hash_from_etc_shadow()
 
     if parsed_args.pri_key_remove:
         # Clear the field in Vault, if it is set

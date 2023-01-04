@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,7 +23,16 @@
 #
 """Shared Python function library: Type hints"""
 
-from typing import Any, Dict
+from typing import Any, Dict, Union
+
+from packaging.version import LegacyVersion, Version
+import simplejson.errors
 
 # A simplified type hint to use for JSON objects
 JSONObject = Dict[str, Any]
+
+# A generic version type that covers both Version and LegacyVersion
+GenericVersion = Union[LegacyVersion, Version]
+
+# So we can catch exceptions decoding JSON
+JSONDecodeError = simplejson.errors.JSONDecodeError
