@@ -43,11 +43,20 @@ function deployNLS() {
 }
 
 function patchKeycloak() {
+
+    # Get the SYSTEM_DOMAIN from cloud-init 
+    SYSTEM_NAME=$(craysys metadata get system-name)
+    SITE_DOMAIN=$(craysys metadata get site-domain)
+    SYSTEM_DOMAIN=${SYSTEM_NAME}.${SITE_DOMAIN}
+
+    # Use the CMN LB/Ingress
+    KC_URL="auth.cmn.${SYSTEM_DOMAIN}"
     ARGO_URL=$(kubectl get VirtualService/cray-argo -n argo -o json | jq -r '.spec.hosts[0]')
     KC_CLIENT_ID=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.client-id}' -n services | base64 -d)
     KC_USERNAME=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.user}' -n services | base64 -d)
     KC_PASSWORD=$(kubectl get secrets keycloak-master-admin-auth -o jsonpath='{.data.password}' -n services | base64 -d)
 
+    export KC_URL="${KC_URL}"
     export ARGO_URL="${ARGO_URL}"
     export KC_CLIENT_ID="${KC_CLIENT_ID}"
     export KC_USERNAME="${KC_USERNAME}"
