@@ -270,7 +270,7 @@ class Vault():
         self.api_post(
             url=secret_url, expected_status_codes=API_STATUS_OK_EMPTY, json=secret_data)
 
-    def delete_csm_root_secret(self, **kwargs) -> None:
+    def delete_csm_root_secret(self) -> None:
         """
         Wrapper function that supplies the CSM root secret key to delete_secret()
         """
