@@ -39,8 +39,8 @@ from .types import JSONDecodeError
 
 ADMIN_CLIENT_SECRET_NAME = "admin-client-auth"
 ADMIN_CLIENT_SECRET_NAMESPACE = "default"
-AUTH_TOKEN_URL = ("https://api-gw-service-nmn.local/"
-                  "keycloak/realms/shasta/protocol/openid-connect/token")
+API_GW_BASE_URL = "https://api-gw-service-nmn.local"
+AUTH_TOKEN_URL = f"{API_GW_BASE_URL}/keycloak/realms/shasta/protocol/openid-connect/token"
 
 # For type hints
 ApiResponse = requests.models.Response
@@ -111,7 +111,8 @@ def get_api_token(k8s_client: k8s.CoreV1API = None) -> str:
 
 
 def make_api_request_with_retries(request_method: Callable, url: str, add_api_token: bool = False,
-                                  k8s_client: k8s.CoreV1API = None, **request_kwargs) -> ApiResponse:
+                                  k8s_client: k8s.CoreV1API = None,
+                                  **request_kwargs) -> ApiResponse:
     """
     Makes request with specified method to specified URL with specified keyword arguments (if any).
     If a 5xx status code is returned, the request will be retried after a brief wait, a limited
