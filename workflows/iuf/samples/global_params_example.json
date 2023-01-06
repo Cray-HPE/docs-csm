@@ -84,7 +84,7 @@
           "parent_directory": "/etc/iuf/alice_230116/cos-2.5.34-20221012230953"
         },
         "sdu": {
-          "parent_directory": "/etc/iuf/alice_230116/sdu-1.2.3",
+          "parent_directory": "/etc/iuf/alice_230116/sdu-1.2.3"
         }
       },
       "current_product": {
