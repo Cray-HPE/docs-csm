@@ -205,7 +205,12 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN={{$value}}
-                    ssh $TARGET_NCN 'if [[ ! -f /opt/cray/tests/install/ncn/scripts/check_bootloader.sh ]]; then echo "Error: this file is not present /opt/cray/tests/install/ncn/scripts/check_bootloader.sh. Please make sure the latest docs has been downloaded"; exit 1; fi; /opt/cray/tests/install/ncn/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
+                    if [[ ! -f /opt/cray/tests/install/ncn/scripts/check_bootloader.sh ]]; then 
+                      echo "Error: this file is not present /opt/cray/tests/install/ncn/scripts/check_bootloader.sh on ncn-m001."
+                      exit 1
+                    fi
+                    scp /opt/cray/tests/install/ncn/scripts/check_bootloader.sh $TARGET_NCN:/opt/cray/tests/install/ncn/scripts/check_bootloader.sh
+                    ssh $TARGET_NCN '/opt/cray/tests/install/ncn/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
                     echo "Successfully checked bootloader on $TARGET_NCN and removed /metal/recovery."
           # storage nodes rebuild with bss.no-wipe=0
           - name: set-bss-no-wipe-0-{{$value}}
@@ -368,7 +373,7 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN={{$value}}
-                    zapOsds={{$.ZapOsds}}
+                    zapOsds="{{$.ZapOsds}}"
                     if $zapOsds; then
                       echo "Zapping-OSDs..."
                       for drive in $(ceph orch device ls $TARGET_NCN --format json-pretty |jq -r '.[].devices[].path'); do
