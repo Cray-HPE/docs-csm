@@ -25,5 +25,4 @@
 parameters:
   - name: targetNcn
   - name: dryRun
-  - name: zapOsds
 {{end}}

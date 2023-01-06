@@ -205,7 +205,7 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN={{$value}}
-                    ssh $TARGET_NCN '/opt/cray/tests/install/ncn/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
+                    ssh $TARGET_NCN 'if [[ ! -f /opt/cray/tests/install/ncn/scripts/check_bootloader.sh ]]; then echo "Error: this file is not present /opt/cray/tests/install/ncn/scripts/check_bootloader.sh. Please make sure the latest docs has been downloaded"; exit 1; fi; /opt/cray/tests/install/ncn/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
                     echo "Successfully checked bootloader on $TARGET_NCN and removed /metal/recovery."
           # storage nodes rebuild with bss.no-wipe=0
           - name: set-bss-no-wipe-0-{{$value}}
@@ -277,10 +277,15 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN={{$value}}
-                    ceph orch host maintenance exit $TARGET_NCN
-                    if [[ $? -ne 0 ]]; then
-                      echo "ERROR exiting maintenance mode on $TARGET_NCN"
-                      exit 1
+                    if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
+                      echo "$TARGET_NCN is in maintenance mode. Exiting maintence mode now."
+                      ceph orch host maintenance exit $TARGET_NCN
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR exiting maintenance mode on $TARGET_NCN"
+                        exit 1
+                      fi
+                    else
+                      echo "$TARGET_NCN is not in maintenance mode. Nothing to do."
                     fi
           - name: update-ssh-keys-on-{{$value}}
             dependencies:
@@ -331,7 +336,7 @@ spec:
                       else
                         if [[ "$TARGET_NCN" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
                         then
-                          scp $node:/etc/ceph/* ${TARGET_NCN}:/etc/ceph
+                          scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring,ceph.client.admin.keyring\} ${TARGET_NCN}:/etc/ceph
                         else
                           scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring\}  ${TARGET_NCN}:/etc/ceph/
                         fi
@@ -363,11 +368,8 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN={{$value}}
-                    zapOsds=false#{{$.ZapOsds}}
-                    echo "zapOsds parameter recieved is: $zapOsds"
-                    echo "not going to zap osds despite parameter"
-                    #if $zapOsds; then
-                    if false; then
+                    zapOsds={{$.ZapOsds}}
+                    if $zapOsds; then
                       echo "Zapping-OSDs..."
                       for drive in $(ceph orch device ls $TARGET_NCN --format json-pretty |jq -r '.[].devices[].path'); do
                         ceph orch device zap $TARGET_NCN $drive --force
@@ -389,13 +391,8 @@ spec:
                   value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
-                    if true; then # this will change once num_rgw_instances is configurable
-                      # deploy rados gateway on all storage nodes
-                      storage_nodes=$(ceph orch host ls --format json | jq -r '.[].hostname' | tr '\n' ' ')
-                    else #once configurable, change num='2'
-                      # deploy rados gateway on specified 'n' storage nodes, (deploys on ncn-s00[1-n] nodes)
-                      storage_nodes=$(ceph orch host ls --format json |jq -r '.[].hostname' | tr '\n' ' ' | awk -v num='2' -F" " '{ for (x=1; x<=num; x++) printf("%s ", $x) }')
-                    fi
+                    # deploy rados gateway on all storage nodes
+                    storage_nodes=$(ceph orch host ls --format json | jq -r '.[].hostname' | tr '\n' ' ')
                     # remove space at end of string
                     storage_nodes="${storage_nodes%?}"
                     ceph orch apply rgw site1 zone1 --placement="${storage_nodes}" --port=8080
@@ -434,14 +431,8 @@ spec:
                   value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
-                    if true; then # this will change once num_rgw_instances is configurable
-                      # deploy haproxy and keepalived on all storage nodes
-                      num_storage_nodes=$(ceph orch host ls | tail -1 | awk '{print $1}')
-                    else
-                      # deploy haproxy and keepalived on specified 'n' storage nodes, (deploys on ncn-s00[1-n] nodes)
-                      num_storage_nodes=3
-                    fi
-                    pdsh -w ncn-s00[1-${num_storage_nodes}] -f 2 \
+                    num_storage_nodes=$(ceph orch host ls | tail -1 | awk '{print $1}')
+                    pdsh -R ssh -w ncn-s00[1-${num_storage_nodes}] -S -f 2 \
                       'source /srv/cray/scripts/metal/update_apparmor.sh
                       reconfigure-apparmor; /srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg
                       systemctl enable haproxy.service
