@@ -91,7 +91,7 @@ properties:
         type: string
       bootprep_config_managed:
         description: >
-          Each item is inline contents of the bootprep files.
+          Each item is the relative path to media_dir for a bootprep config file for managed nodes
         type: array
         items:
           type: object
@@ -100,7 +100,7 @@ properties:
               type: string
       bootprep_config_management:
         description: >
-          Each item is inline contents of the bootprep files.
+          Each item is the relative path to media_dir for a bootprep config file for management nodes
         items:
           type: object
           properties:
