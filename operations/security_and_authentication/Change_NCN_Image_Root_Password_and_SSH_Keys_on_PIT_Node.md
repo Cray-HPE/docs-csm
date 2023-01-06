@@ -19,9 +19,9 @@ see [Set NCN Image Root Password, SSH Keys, and Timezone](Change_NCN_Image_Root_
   - [Enter password and generate hash](#enter-password-and-generate-hash)
 - [Timezone](#timezone)
 - [Examples](#examples)
-  - [Example 1: New keys, copy PIT password, keep UTC](#example-1-new-keys-copy-pit-password-keep-utc)
-  - [Example 2: Provide keys, prompt for password, change timezone](#example-2-provide-keys-prompt-for-password-change-timezone)
-  - [Example 3: New keys, copy PIT password, keep UTC, no prompting](#example-3-new-keys-copy-pit-password-keep-utc-no-prompting)
+  - [Example 1: New keys, copy PIT password, keep UTC](#example-1--new-keys-copy-pit-password-keep-utc)
+  - [Example 2: Provide keys, prompt for password, change timezone](#example-2--provide-keys-prompt-for-password-change-timezone)
+  - [Example 3: New keys, copy PIT password, keep UTC, no prompting](#example-3--new-keys-copy-pit-password-keep-utc-no-prompting)
 - [Cleanup](#cleanup)
 
 ## Overview
@@ -59,7 +59,7 @@ To have the script generate the SSH keys automatically, it must be provided with
 - To view the complete list of supported `ssh-keygen` options, view the script usage statement by running it with the `-h` argument.
 - If the `-N` option is not used to specify the passphrase, then the script will prompt for the passphrase when it generates the keys.
   - Even specifying an empty passphrase will prevent being prompted to enter the passphrase during script execution.
-    See [Example 3](#example-3-new-keys-copy-pit-password-keep-utc-no-prompting).
+    See [Example 3](#example-3--new-keys-copy-pit-password-keep-utc-no-prompting).
 
 ### Administrator-provided keys
 
@@ -126,13 +126,13 @@ copies the `root` user password from the PIT node. It does not change the timezo
 
 ```bash
 export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
-KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
-CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
+CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
    
 $NCN_MOD_SCRIPT -p \
                 -t rsa \
-                -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-                -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+                -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}-$(uname -i).squashfs" \
+                -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}-$(uname -i).squashfs"
 ```
 
 ### Example 2: Provide keys, prompt for password, change timezone
@@ -144,8 +144,8 @@ administrator for the `root` user password during execution. It changes the time
 $NCN_MOD_SCRIPT -p \
                 -d /my/pre-existing/keys \
                 -z America/Chicago \
-                -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-                -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+                -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}-$(uname -i).squashfs" \
+                -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}-$(uname -i).squashfs"
 ```
 
 ### Example 3: New keys, copy PIT password, keep UTC, no prompting
@@ -159,8 +159,8 @@ export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
 $NCN_MOD_SCRIPT -p \
                 -t rsa \
                 -N "" \
-                -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-                -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+                -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}-$(uname -i).squashfs" \
+                -s "${PITDATA}/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}-$(uname -i).squashfs"
 ```
 
 ## Cleanup

@@ -81,7 +81,7 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
 
         ```bash
         zypper ar https://packages.local/repository/csm-${CSM_RELEASE}-embedded csm-embedded
-        . /srv/cray/scripts/metal/dracut-lib.sh
+        KVER=$(rpm -q --queryformat='%{VERSION}-%{RELEASE}' kernel-default)
         zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
         ```
 
@@ -107,16 +107,18 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
             * Without proxy:
 
               ```bash
-              zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/15-SP3/x86_64/update_debug/ temp-debug
-              . /srv/cray/scripts/metal/dracut-lib.sh
+              DISTRO="$(grep VERSION= /etc/os-release | awk -F= '{print $NF}' | tr -d \")"
+              zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/${DISTRO}/$(uname -i)/update_debug/ temp-debug
+              KVER=$(rpm -q --queryformat='%{VERSION}-%{RELEASE}' kernel-default)
               zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
               ```
 
             * With https proxy:
 
               ```bash
-              https_proxy=https://example.proxy.net:443 zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/15-SP3/x86_64/update_debug/ temp-debug
-              . /srv/cray/scripts/metal/dracut-lib.sh
+              DISTRO="$(grep VERSION= /etc/os-release | awk -F= '{print $NF}' | tr -d \")"
+              https_proxy=https://example.proxy.net:443 zypper ar https://$ARTIFACTORY_USER:$ARTIFACTORY_TOKEN@artifactory.algol60.net/artifactory/sles-mirror/Updates/SLE-Module-Basesystem/${DISTRO}/$(uname -i)/update_debug/ temp-debug
+              KVER=$(rpm -q --queryformat='%{VERSION}-%{RELEASE}' kernel-default)
               zypper --plus-content debug in -y kernel-default-debuginfo=${KVER%-default}
               ```
 
@@ -146,7 +148,7 @@ to be installed; the `crash` command can not thoroughly analyze a dump without t
     > that of the currently running kernel.
 
     ```bash
-    . /srv/cray/scripts/metal/dracut-lib.sh
+    . /srv/cray/scripts/common/dracut-lib.sh
     crash ./vmlinux-${KVER}.gz ./vmcore
     ```
 
@@ -167,7 +169,7 @@ An example of a frozen crash might look like this:
 ```text
 [496626.051460] sysrq: Trigger a crash
 [496626.054963] Kernel panic - not syncing: sysrq triggered crash
-[496626.060807] CPU: 27 PID: 3860549 Comm: bash Kdump: loaded Tainted: G               X    5.3.18-150300.59.87-default #1 SLE15-SP3
+[496626.060807] CPU: 27 PID: 3860549 Comm: bash Kdump: loaded Tainted: G               X    5.3.18-150300.59.87-default #1 SLE15-SP4
 [496626.072448] Hardware name: Intel Corporation S2600WFT/S2600WFT, BIOS SE5C620.86B.02.01.0012.C0001.070720200218 07/07/2020
 [496626.083485] Call Trace:
 [496626.086033]  dump_stack+0x66/0x8b
@@ -248,6 +250,6 @@ restarting the `kdump.service` daemon.
 1. (`ncn#`) Verify that a new `kdump` image exists for the current kernel.
 
     ```bash
-    . /srv/cray/scripts/metal/dracut-lib.sh
+    . /srv/cray/scripts/common/dracut-lib.sh
     ls -l /boot/initrd-${KVER}-kdump
     ```

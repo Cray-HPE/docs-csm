@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -21,15 +21,4 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate
-metadata:
-  name: workflow-template-record-time-template
-spec:
-  entrypoint: record-time-template
-  templates:
-  - name: record-time-template
-    container:
-      image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
-      command: [date]
-      args: ["+%s"]
+"""Python Utilities for SLS."""

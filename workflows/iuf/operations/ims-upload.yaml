@@ -91,7 +91,7 @@ spec:
           factor: "2"
           maxDuration: "1m"
     script:
-      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
       command: [bash]
       source: |
         function sync_item() {
@@ -148,8 +148,7 @@ spec:
         default: ""
 
     container:
-      # replace image with standard ims-load-artifacts once PR is merged
-      image: registry.local/artifactory.algol60.net/artifactory/csm-docker/stable/cray-ims-load-artifacts:2.0.0
+      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.0.1
       command: ['python3']
       args: ['-m', 'ims_load_artifacts.load_artifacts']
       env:
@@ -220,7 +219,7 @@ spec:
       annotations:
         sidecar.istio.io/inject: "false"
     script:
-      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
       command: [bash]
       source: |
         kubectl -n argo delete secret/{{inputs.parameters.s3_credentials_secret_name}}

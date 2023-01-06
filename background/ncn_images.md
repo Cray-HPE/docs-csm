@@ -25,15 +25,15 @@ To boot an NCN, you need three artifacts for each node-type (`kubernetes-master/
 
 1. The Kubernetes SquashFS ([stable][4] or [unstable][5])
 
-   * `initrd.img-[RELEASE].xz`
-   * `$version-[RELEASE].kernel`
-   * `kubernetes-[RELEASE].squashfs`
+   * `initrd.img-[RELEASE]-[ARCH].xz`
+   * `$version-[RELEASE]-[ARCH].kernel`
+   * `kubernetes-[RELEASE]-[ARCH].squashfs`
 
 1. The CEPH SquashFS ([stable][6] or [unstable][7])
 
    * `initrd.img-[RELEASE].xz`
    * `$version-[RELEASE].kernel`
-   * `storage-ceph-[RELEASE].squashfs`
+   * `storage-ceph-[RELEASE]-[ARCH].squashfs`
 
 ### LiveCD Server
 
@@ -79,13 +79,13 @@ To boot an NCN, you need three artifacts for each node-type (`kubernetes-master/
    Resolving images to boot ...
    Images resolved
    Kubernetes Boot Selection:
-   kernel: /var/www/ephemeral/data/k8s/fe775c6-1659395320990/5.3.18-150300.59.76-default-fe775c6-1659395320990.kernel
-   initrd: /var/www/ephemeral/data/k8s/fe775c6-1659395320990/initrd.img-fe775c6-1659395320990.xz
-   squash: /var/www/ephemeral/data/k8s/fe775c6-1659395320990/secure-kubernetes-fe775c6-1659395320990.squashfs
+   kernel: /var/www/ephemeral/data/k8s/fe775c6-1659395320990/5.3.18-150300.59.76-default-fe775c6-1659395320990-x86_64.kernel
+   initrd: /var/www/ephemeral/data/k8s/fe775c6-1659395320990/initrd.img-fe775c6-1659395320990-x86_64.xz
+   squash: /var/www/ephemeral/data/k8s/fe775c6-1659395320990/secure-kubernetes-fe775c6-1659395320990-x86_64.squashfs
    Storage Boot Selection:
-   kernel: /var/www/ephemeral/data/ceph/fe775c6-1659395320990/5.3.18-150300.59.76-default-fe775c6-1659395320990.kernel
-   initrd: /var/www/ephemeral/data/ceph/fe775c6-1659395320990/initrd.img-fe775c6-1659395320990.xz
-   squash: /var/www/ephemeral/data/ceph/fe775c6-1659395320990/secure-storage-ceph-fe775c6-1659395320990.squashfs
+   kernel: /var/www/ephemeral/data/ceph/fe775c6-1659395320990/5.3.18-150300.59.76-default-fe775c6-1659395320990-x86_64.kernel
+   initrd: /var/www/ephemeral/data/ceph/fe775c6-1659395320990/initrd.img-fe775c6-1659395320990-x86_64.xz
+   squash: /var/www/ephemeral/data/ceph/fe775c6-1659395320990/secure-storage-ceph-fe775c6-1659395320990-x86_64.squashfs
    Attempting to set all known BMCs (from /etc/conman.conf) to DHCP mode
    current BMC count: 0
    Waiting on 9 to request DHCP ...
@@ -109,49 +109,49 @@ To boot an NCN, you need three artifacts for each node-type (`kubernetes-master/
    ```bash
    ncn-m001:
    total 4
-   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8.squashfs
-   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8.xz
-   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8.kernel
+   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8-x86_64.squashfs
+   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8-x86_64.xz
+   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8-x86_64.kernel
 
    ncn-m002:
    total 4
-   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8.squashfs
-   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8.xz
-   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8.kernel
+   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8-x86_64.squashfs
+   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8-x86_64.xz
+   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8-x86_64.kernel
 
    ncn-m003:
    total 4
-   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8.squashfs
-   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8.xz
-   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8.kernel
+   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8-x86_64.squashfs
+   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8-x86_64.xz
+   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8-x86_64.kernel
 
    ncn-s001:
    total 4
-   lrwxrwxrwx 1 root root 56 Dec 26 06:11 rootfs -> ../ephemeral/data/ceph/0.0.7/storage-ceph-0.0.7.squashfs
+   lrwxrwxrwx 1 root root 56 Dec 26 06:11 rootfs -> ../ephemeral/data/ceph/0.0.7/storage-ceph-0.0.7-x86_64.squashfs
    lrwxrwxrwx 1 root root 48 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/ceph/0.0.7/initrd.img-0.0.7.xz
    lrwxrwxrwx 1 root root 62 Dec 26 06:11 kernel -> ../ephemeral/data/ceph/0.0.7/5.3.18-24.37-default-0.0.7.kernel
 
    ncn-s002:
    total 4
-   lrwxrwxrwx 1 root root 56 Dec 26 06:11 rootfs -> ../ephemeral/data/ceph/0.0.7/storage-ceph-0.0.7.squashfs
+   lrwxrwxrwx 1 root root 56 Dec 26 06:11 rootfs -> ../ephemeral/data/ceph/0.0.7/storage-ceph-0.0.7-x86_64.squashfs
    lrwxrwxrwx 1 root root 48 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/ceph/0.0.7/initrd.img-0.0.7.xz
    lrwxrwxrwx 1 root root 62 Dec 26 06:11 kernel -> ../ephemeral/data/ceph/0.0.7/5.3.18-24.37-default-0.0.7.kernel
 
    ncn-s003:
    total 4
-   lrwxrwxrwx 1 root root 56 Dec 26 06:11 rootfs -> ../ephemeral/data/ceph/0.0.7/storage-ceph-0.0.7.squashfs
+   lrwxrwxrwx 1 root root 56 Dec 26 06:11 rootfs -> ../ephemeral/data/ceph/0.0.7/storage-ceph-0.0.7-x86_64.squashfs
    lrwxrwxrwx 1 root root 48 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/ceph/0.0.7/initrd.img-0.0.7.xz
    lrwxrwxrwx 1 root root 62 Dec 26 06:11 kernel -> ../ephemeral/data/ceph/0.0.7/5.3.18-24.37-default-0.0.7.kernel
 
    ncn-w002:
    total 4
-   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8.squashfs
-   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8.xz
-   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8.kernel
+   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8-x86_64.squashfs
+   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8-x86_64.xz
+   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8-x86_64.kernel
 
    ncn-w003:
    total 4
-   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8.squashfs
-   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8.xz
-   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8.kernel
+   lrwxrwxrwx 1 root root 53 Dec 26 06:11 rootfs -> ../ephemeral/data/k8s/0.0.8/kubernetes-0.0.8-x86_64.squashfs
+   lrwxrwxrwx 1 root root 47 Dec 26 06:11 initrd.img.xz -> ../ephemeral/data/k8s/0.0.8/initrd.img-0.0.8-x86_64.xz
+   lrwxrwxrwx 1 root root 61 Dec 26 06:11 kernel -> ../ephemeral/data/k8s/0.0.8/5.3.18-24.37-default-0.0.8-x86_64.kernel
    ```

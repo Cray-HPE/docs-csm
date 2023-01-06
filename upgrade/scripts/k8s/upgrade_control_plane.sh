@@ -75,4 +75,19 @@ do
   echo ""
   echo "Successfully upgraded kube-system pods for $master."
   echo ""
+  echo "Upgrading apiserver-etcd-client certificate for $master:"
+  echo ""
+  pdsh -b -S -w $master "kubeadm certs renew apiserver-etcd-client --config /etc/kubernetes/kubeadmcfg.yaml"
+  rc=$?
+  if [ "$rc" -ne 0 ]; then
+    echo ""
+    echo "ERROR: The 'kubeadm certs renew apiserver-etcd-client' failed. The output from this script should be inspected"
+    echo "       and addressed before moving on with the upgrade. If unable to determine the issue"
+    echo "       and run this script without errors, discontinue the upgrade and contact HPE Service"
+    echo "       for support."
+    exit 1
+  fi
+  echo ""
+  echo "Successfully upgraded  apiserver-etcd-client certificate for $master."
+  echo ""
 done
