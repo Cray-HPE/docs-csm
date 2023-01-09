@@ -69,7 +69,19 @@ make sure that the following conditions are met:
 
 ### Storage node
 
-See [Prepare storage nodes](Prepare_Storage_Nodes.md).
+#### Option 1
+
+Rebuild the storage node manually. See [Prepare storage nodes](Prepare_Storage_Nodes.md).
+
+#### Option 2 (Tech preview)
+
+Rebuild the storage node automatically. This rebuilds a storage node via argo workflows. See [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md) and [Using Argo Workflows](../operations/argo/Using_Argo_Workflows.md) before starting the rebuild.
+
+(`ncn-m001#`) Rebuild storage node ncn-s00x:
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s00x --rebuild
+```
 
 ## Validation
 
