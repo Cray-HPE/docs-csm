@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -102,4 +102,3 @@ if [ "$FAILED" -ne "0" ]; then
    echo "The following components failed: $(cray cfs components list --status failed ${XNAME_PARAMETER} --format json  | jq -r '. | map(.id) | join(",")')"
    exit 1
 fi
-
