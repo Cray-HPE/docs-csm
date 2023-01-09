@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -75,8 +75,6 @@ stages:
     type: product
     operations:
       - name: loftsman-manifest-deploy
-        static-parameters: {} # any parameters that will be supplied statically to this operation.
-      - name: set-product-active
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
   - name: prepare-images
