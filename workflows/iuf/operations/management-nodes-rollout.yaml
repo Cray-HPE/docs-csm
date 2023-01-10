@@ -1,0 +1,162 @@
+#
+# MIT License
+#
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: management-nodes-rollout
+spec:
+  volumes:
+    - name: ssh
+      hostPath:
+        path: /root/.ssh
+        type: Directory
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+  entrypoint: main
+  templates:
+### Main Steps ###
+  - name: main
+    inputs:
+      parameters:
+      - name: global_params
+    dag:
+      tasks:
+        - name: rebuild-worker-nodes
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "Worker nodes will be rebuilt in sets of 5 or less"
+                  worker_nodes=$(kubectl get node --selector='!node-role.kubernetes.io/master' --no-headers=true | awk '{print $1}' | tr "\n", " ")
+                  start_workflow() {
+                    # remove last comma
+                    nodes_to_rebuild=${1%?}
+                    echo "Starting workflow to rebuild: $nodes_to_rebuild"
+                    #/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $nodes_to_rebuild --dry-run #--image-id {{$GETIMAGEID}}
+                  }
+                  count=0
+                  list=""
+                  # split worker nodes into sets of 5 or less to be rebuilt
+                  for node in $worker_nodes; do
+                    list=$list"${node},"
+                    count=$(( $count + 1 ))
+                    if [[ $count -eq 5 ]]; then
+                      start_workflow $list
+                      list=""
+                      count=0
+                    fi
+                  done
+                  if [[ $count -gt 0 ]]; then
+                    start_workflow $list
+                  fi
+        - name: rebuild-storage-nodes
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: scriptContent
+                value: |
+                  storage_nodes=$(ceph orch host ls --format json | jq -r '.[].hostname' | tr '\n' ',')
+                  storage_nodes=${storage_nodes%?} #remove last comma from list
+                  echo "starting workflow to rebuild: ${storage_nodes}"
+                  #/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $storage_nodes --dry-run  #--image-id <image_id>
+        - name: rebuild-master-nodes-excluding-m001
+          dependencies:
+            - rebuild-worker-nodes
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: scriptContent
+                value: |
+                  master_nodes=$(kubectl get node --selector='node-role.kubernetes.io/master' --no-headers=true | awk '{print $1}' | tr "\n", " ")
+                  for node in $master_nodes; do
+                    if [[ $node != "ncn-m001" ]]; then
+                      echo " testing: call /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh $node"
+                    fi
+                    ## add check to verify that this worked correctly
+                  done
+        - name: health-check-before-m001-rebuild
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          dependencies:
+            - rebuild-master-nodes-excluding-m001
+            - rebuild-storage-nodes
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "SHOULD PERFORM SOME HEALTH CHECK HERE"
+        - name: rebuild-m001
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                    - ncn-m002
+          dependencies:
+            - health-check-before-m001-rebuild
+          inline:
+            script:
+              image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+              command: [sh]
+              source: |
+                #!/bin/sh
+                echo "Starting rebuild of ncn-m001."
+                ssh -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@ncn-m002 "echo 'test rebuild'"
+                # below line is important, it is commented out for testing
+                # ssh -i /myssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@ncn-m002 "/usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m001"
+              volumeMounts:
+                - name: ssh
+                  mountPath: /myssh
+            volumes:
+              - name: ssh
+                hostPath:
+                  path: /root/.ssh
+                  type: Directory
