@@ -29,10 +29,8 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.1`, follow the procedures descr
 
 * Placeholder, need input from individual teams
 
-
 ## Steps
 
-1. [Upgrade CSM network configuration](upgrade_network.md)
 1. [Preparation](#preparation)
 1. [Setup Nexus](#setup-nexus)
 1. [Upgrade services](#upgrade-services)
@@ -112,7 +110,7 @@ ncn-m001# ./upgrade.sh
 
 ## Update test suite packages
 
-Update the `csm-testing` and `goss-servers` RPMs on the NCNs, adjusting the `pdsh` node ranges for the node type and counts on your system. 
+Update the `csm-testing` and `goss-servers` RPMs on the NCNs, adjusting the `pdsh` node ranges for the node type and counts on your system.
 
 ```bash
 ncn-m001# pdsh -f 1 -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] "zypper install -y csm-testing goss-servers"
