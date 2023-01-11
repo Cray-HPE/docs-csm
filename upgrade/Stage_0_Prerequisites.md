@@ -63,7 +63,7 @@ after a break, always be sure that a typescript is running before proceeding.
       - With https proxy:
 
         ```bash
-        https_proxy=https://example.proxy.net:443 wget https://release.algol60.net/csm-1.4/docs-csm/docs-csm-latest.rpm \
+        https_proxy=https://example.proxy.net:443 wget https://release.algol60.net/csm-1.4/docs-csm/docs-csm-latest.noarch.rpm \
           -O /root/docs-csm-latest.noarch.rpm &&
         rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
         ```
