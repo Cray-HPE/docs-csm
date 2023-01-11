@@ -153,7 +153,7 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
    - Without proxy:
 
      ```bash
-     rpm -Uvh --force https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.rpm
+     rpm -Uvh --force https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.noarch.rpm
      ```
 
    - With https proxy:
