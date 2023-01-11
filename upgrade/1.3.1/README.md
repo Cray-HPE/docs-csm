@@ -8,7 +8,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.1`, follow the procedures descr
 ## Bug Fixes and Improvements
 
 * Fix HSN NIC numbering in SMD for devices managed by HPE Proliant iLO (Redfish).
-* Restrict accessible Keycloak endpoints in OPA Policy. Require use of CMN LB for Keycloak master realm or admin. 
+* Restrict accessible Keycloak endpoints in OPA Policy. Require use of CMN LB for Keycloak master realm or admin.
 * Fix Prometheus error with web hook for node exporter fix.
 * Add support for collapsing session layers in CFS.
 * Mitigate security issue for kea regarding RFC 8357 support.
