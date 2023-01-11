@@ -42,8 +42,7 @@ spec:
     target_xname=$(echo ${ncn_cache} | \
         jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
     candidate_xnames=$(cray hsm state components list \
-        --role Management --subrole Worker --state Ready \
-        --softwarestatus DvsAvailable --format json | \
+        --role Management --subrole Worker --state Ready --format json | \
         jq -r '.Components[] | .ID' | sort | uniq)
     candidate_xnames=$(echo ${candidate_xnames} ${target_xname} | \
         tr " " "\n" | sort | uniq -u | tr "\n" " ")
