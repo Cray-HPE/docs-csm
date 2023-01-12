@@ -131,7 +131,7 @@ spec:
           - name: pristine_branch
             value: "{{inputs.parameters.cf_update_gitea_org}}/{{inputs.parameters.cf_update_product_name}}/{{inputs.parameters.cf_update_product_version}}"
           - name: customer_branch
-            value: "{{=jsonpath(workflow.parameters.global_params, '$.site_params.current_product.working_branch')}}"
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.site_params.current_product.working_branch')}}"
       container:
         image: artifactory.algol60.net/csm-docker/unstable/cf-gitea-update:0.1.0-CASMCMS-8304.1_89332ca
         command:
