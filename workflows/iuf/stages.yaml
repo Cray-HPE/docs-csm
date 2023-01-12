@@ -46,8 +46,7 @@ stages:
       - name: s3-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: nexus-setup
-        static-parameters: # any parameters that will be supplied statically to this operation.
-          nexus-setup-image: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.0-20221021164623-e8d3d3d
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: nexus-rpm-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: nexus-docker-upload
