@@ -532,7 +532,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
     set +o pipefail
 
-    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $2}')
+    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')")
     CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $3}')
 
     k8s_done=0
