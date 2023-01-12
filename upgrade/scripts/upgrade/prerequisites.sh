@@ -532,13 +532,16 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
     set +o pipefail
 
+    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')")
+    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')")
+
     k8s_done=0
     ceph_done=0
     arch="$(uname -i)"
     if [[ -f ${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs ]]; then
         k8s_done=1
     fi
-    if [[ -f ${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs ]]; then
+    if [[ -f ${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs ]]; then
         ceph_done=1
     fi
 
@@ -558,13 +561,17 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
 
     export IMS_ROOTFS_FILENAME="${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
     export IMS_INITRD_FILENAME="${artdir}/kubernetes/initrd.img-${KUBERNETES_VERSION}-${arch}.xz"
-    export IMS_KERNEL_FILENAME="${artdir}/kubernetes/*-${arch}.kernel"
+    # do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
+    resolve_kernel_glob=$(echo ${artdir}/kubernetes/*-${arch}.kernel)
+    export IMS_KERNEL_FILENAME=$resolve_kernel_glob
     K8S_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
     [[ -n ${K8S_IMS_IMAGE_ID} ]]
 
     export IMS_ROOTFS_FILENAME="${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs"
     export IMS_INITRD_FILENAME="${artdir}/storage-ceph/initrd.img-${CEPH_VERSION}-${arch}.xz"
-    export IMS_KERNEL_FILENAME="${artdir}/storage-ceph/*-${arch}.kernel"
+    # do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
+    resolve_kernel_glob=$(echo ${artdir}/storage-ceph/*-${arch}.kernel)
+    export IMS_KERNEL_FILENAME=$resolve_kernel_glob
     STORAGE_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
     [[ -n ${STORAGE_IMS_IMAGE_ID} ]]
     set +o pipefail
