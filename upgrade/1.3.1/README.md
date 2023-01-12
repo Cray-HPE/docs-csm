@@ -13,6 +13,8 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.1`, follow the procedures descr
 * Fix Prometheus error with web hook for node exporter fix.
 * Add support for collapsing session layers in CFS.
 * Mitigate security issue for kea regarding RFC 8357 support.
+* Increase CoreDNS forwarding `max_concurrent` tuning to `10000`.
+* Remove deprecated Kubernetes API use in cray-dns-unbound.
 * Allow BOS `non-rootfs_providers` to specify `root=<values>` in parameters `sessiontemplates`.
 * Mitigate Keycloak vulnerability CVE-2020-10770 via OPA Policy (API AuthZ).
 * Add a message key (hms-collector) to kafka messages to ensure events are sent to the same Kafka partition. The message key is the BMC Xname concatenated with the Redfish Event Message ID. For example `x3000c0s11b4.EventLog.1.0.PowerStatusChange`.
@@ -25,6 +27,13 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.1`, follow the procedures descr
 * Update cfs-operator to remove the high priority on pods.
 * Add cray-console-* timeout to allow more time for post-upgrade hooks to complete.
 * Increase cray-dhcp-kea timeout on readiness check to from default value.
+* Fix stuck sessions during staged shutdown operations in BOS v2.
+* Add 'retry' in IMS when fetching files from S3.
+* Update documentation to run Ceph latency adjustment script during install and upgrade.
+* Add documentation to remove private key from SLS `loadstate` and `dumpstate`.
+* Add documentation and tooling for Ceph latency recovery.
+* Add documentation to resolve issue with Unbound not forwarding to PowerDNS in air-gapped configurations.
+* Add documentation to increase `fs.inotify.max_user_watches` on Kubernetes worker nodes in response to `kubectl logs -f` returning `no space` errors.
 
 ## Known Issues
 
