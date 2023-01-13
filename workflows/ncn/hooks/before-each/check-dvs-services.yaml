@@ -30,6 +30,27 @@ metadata:
 spec:
   scriptContent: |
     TARGET_NCN={{inputs.parameters.targetNcn}}
+    SSH_OPT="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    # Cover a fresh install case where CSM is installed, but COS is not yet
+    # installed by checking if DVS is loaded on the target
+    lsmod_out=$(ssh ${SSH_OPT} ${TARGET_NCN} lsmod || true)
+    if ! [[ -z ${lsmod_out} ]]; then
+        # verify we obtained legitimate output from lsmod by checking its header
+        if [[ "Module Size Used by" == $(echo "${lsmod_out}" | head -n 1 | tr -s " ") ]]; then
+            dvs_loaded=$(echo "${lsmod_out}" | grep -w ^dvs || true)
+            if [[ -z ${dvs_loaded} ]]; then
+                # if DVS is not loaded, we won't make things worse by rebooting the node
+                echo "INFO: dvs module is not loaded on the TARGET_NCN: ${TARGET_NCN}"
+                exit 0
+            fi
+        else
+            echo "WARNING: unexpected output for lsmod from TARGET_NCN: ${TARGET_NCN}"
+        fi
+    else
+        # maybe we could not ssh to TARGET_NCN, but DVS might still be operable...
+        echo "WARNING: could not obtain lsmod output from TARGET_NCN: ${TARGET_NCN}"
+    fi
+    # Cover the upgrade case, where we always need to have 2+ workers running CPS/DVS
     # obtain map: worker_xnames <--> hostname_aliases
     token=$(curl -k -s -S -d grant_type=client_credentials \
         -d client_id=admin-client \
@@ -61,7 +82,7 @@ spec:
         else
             echo "INFO: ${candidate_xname} has ncn hostname: ${candidate_ncn}"
         fi
-        dvs_loaded=$(ssh ${candidate_ncn} lsmod | grep -w ^dvs || true)
+        dvs_loaded=$(ssh ${SSH_OPT} ${candidate_ncn} lsmod | grep -w ^dvs || true)
         if [[ -z ${dvs_loaded} ]]; then
             echo "WARNING: dvs module is not loaded on ${candidate_ncn}"
             continue
@@ -76,10 +97,8 @@ spec:
         ((count=count+1))
     done
     # FAIL (return non-0) if count < 2
-    ret_val=0
     if [[ ${count} -lt 2 ]]; then
         echo "ERROR: HA requires at least 2 other cps/dvs servers, but we only detected ${count}"
-        ret_val=1
+        exit 1
     fi
-    exit ${ret_val}
   templateRefName: ssh-template
