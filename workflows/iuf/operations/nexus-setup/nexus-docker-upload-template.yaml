@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -76,8 +76,9 @@ spec:
                 value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
         arguments:
           parameters:
+          # TODO(CASM-3758): Replace this with a stable build of cray-nexus-setup
           - name: nexus_setup_image
-            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.8.1
+            value: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.9.0-20230119181910_d505f8b
           - name: nexus_admin_credential_secret_name
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
@@ -100,6 +101,18 @@ spec:
             value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
           - name: pdversion
             value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+    - - name: nexus-docker-upload-update-product-catalog
+        templateRef:
+          name: update-product-catalog-template
+          template: catalog-update
+        arguments:
+          parameters:
+            - name: product-name
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - name: product-version
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - name: yaml-content
+              value: "{{steps.nexus-docker-load.outputs.parameters.nexus_docker_load_results}}"
   - name: prom-metrics
     inputs:
       parameters:
@@ -237,6 +250,11 @@ spec:
       - name: nexus_admin_credential_secret_name
       - name: content
       - name: product_directory
+    outputs:
+      parameters:
+        - name: nexus_docker_load_results
+          valueFrom:
+            path: /results/records.yaml
     nodeSelector:
       kubernetes.io/hostname: ncn-m001
     tolerations:
