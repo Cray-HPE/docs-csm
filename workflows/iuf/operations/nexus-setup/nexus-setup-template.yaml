@@ -78,7 +78,7 @@ spec:
           parameters:
           # TODO(CASM-3758): Replace this with a stable build of cray-nexus-setup
           - name: nexus_setup_image
-            value: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.9.0-20230110162650_ca30f84
+            value: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.9.0-20230113201221_9b36065
           - name: nexus_admin_credential_secret_name
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
