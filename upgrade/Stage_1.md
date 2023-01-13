@@ -38,7 +38,7 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 **IMPORTANT:**
 
 - ***If upgrading from CSM 1.3 to CSM 1.4, the Ceph version is not being upgraded, and this step must be executed!***
-- If the upgrade is staying with a CSM release, e.g. `CSM-1.4.0-rc1` to `CSM-1.4.0-rc2`, then you will need to run the following to point the Ceph cluster to use the Ceph container image stored in Nexus.
+- If the upgrade is staying within a CSM release family, e.g. `CSM-1.4.0-rc1` to `CSM-1.4.0-rc2`, then you will need to run the following to point the Ceph cluster to use the Ceph container image stored in Nexus.
 - The issue stems from slightly different `sha` values for the Ceph containers for in-family CSM storage node images which will prevent the Ceph containers from starting.
 - This will utilize the upgrade procedure to accomplish this as it has built in checks and health monitoring to better manage this rolling restart of the Ceph containers with the image stored in Nexus.  Please see [`cubs_tool` usage for further information](../operations/utility_storage/Cubs_tool_Usage.md)
 
