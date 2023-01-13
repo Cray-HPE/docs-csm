@@ -27,7 +27,7 @@ import traceback
 
 import logging
 
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from . import api_requests
 from . import common
@@ -37,7 +37,7 @@ BSS_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/bss"
 BSS_BOOTPARAMS_URL = f"{BSS_BASE_URL}/boot/v1/bootparameters"
 
 
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None] = None) -> None:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.
@@ -52,7 +52,7 @@ def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> N
     raise common.ScriptException(msg) from parent_exception
 
 
-def get_bootparameters(xname_list: List[str] = None,
+def get_bootparameters(xname_list: Union[List[str], None] = None,
                        expected_to_exist: bool = True) -> List[dict]:
     """
     Queries BSS for all bootparameters for the specified xnames (or all bootparameters, if

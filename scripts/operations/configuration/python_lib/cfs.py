@@ -27,7 +27,7 @@ import traceback
 
 import logging
 
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from . import api_requests
 from . import common
@@ -39,7 +39,7 @@ CFS_V2_CONFIGS_URL = f"{CFS_V2_BASE_URL}/configurations"
 CFS_V2_SESSIONS_URL = f"{CFS_V2_BASE_URL}/sessions"
 
 
-def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
+def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None] = None) -> None:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.
@@ -54,7 +54,7 @@ def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> N
     raise common.ScriptException(msg) from parent_exception
 
 
-def get_session(session_name: str, expected_to_exist: bool = True) -> dict:
+def get_session(session_name: str, expected_to_exist: bool = True) -> Union[dict, None]:
     """
     Queries CFS for the specified session and returns it. Throws an exception if it
     is not found, unless expected_to_exist is set to False, in which case None is
@@ -80,7 +80,7 @@ def get_session(session_name: str, expected_to_exist: bool = True) -> dict:
 
 
 def create_dynamic_session(session_name: str, config_name: str,
-                           xname_limit: List[str] = None) -> dict:
+                           xname_limit: Union[List[str], None] = None) -> dict:
     """
     Creates a CFS session of dynamic type with the specified name, running the specified
     CFS configuration. By default this will be run on all applicable nodes, based on
@@ -104,7 +104,7 @@ def create_dynamic_session(session_name: str, config_name: str,
         log_error_raise_exception("Response from CFS has unexpected format", exc)
 
 
-def get_configuration(config_name: str, expected_to_exist: bool = True) -> dict:
+def get_configuration(config_name: str, expected_to_exist: bool = True) -> Union[dict, None]:
     """
     Queries CFS for the specified configuration and returns it. Throws an exception if it
     is not found, unless expected_to_exist is set to False, in which case None is
