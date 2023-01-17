@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -33,22 +33,31 @@ dryRun=false
 baseUrl="https://api-gw-service-nmn.local"
 retry=true
 force=false
+upgrade=false
+rebuild=false
+zapOsds=false
+workflowType=""
 
 function usage() {
     echo "CSM ncn worker and storage upgrade script"
     echo
-    echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run]"
+    echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run|--upgrade|--rebuild]"
     echo "options:"
     echo "--no-retry     Do not automatically retry  (default: false)"
     echo "-f|--force     Remove failed worker or storage rebuild/upgrade workflow and create a new one  (default: ${force})"
     echo "--base-url     Specify base url (default: ${baseUrl})"
     echo "--dry-run      Print out steps of workflow instead of running steps (default: ${dryRun})"
+    echo "--upgrade      Perfrom a node upgrade. This only needs to be specified when upgrading storage nodes."
+    echo "--rebuild      Perfrom a node rebuild. This only needs to be specified when rebuilding storage nodes"
+    echo "--zap-osds     Zap osds. Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt. (This can only be used with storage rebuilds)."
     echo
     echo "*COMMA_SEPARATED_NCN_HOSTNAMES"
     echo "  worker upgrade  - example 1) ncn-w001"
     echo "  worker upgrade  - example 2) ncn-w001,ncn-w002,ncn-w003"
-    echo "  storage upgrade - example 3) ncn-s001"
-    echo "  storage upgrade - example 4) ncn-s001,ncn-s002,ncn-s003"
+    echo "  storage upgrade - example 3) ncn-s001 --upgrade"
+    echo "  storage upgrade - example 4) ncn-s001,ncn-s002,ncn-s003 --upgrade"
+    echo "  storage rebuild - example 5) ncn-s001 --rebuild"
+    echo "  storage rebuild - example 6) ncn-s001,ncn-s002,ncn-s003 --rebuild"
     echo
 }
 
@@ -78,6 +87,18 @@ while [[ $# -gt 0 ]]; do
         ;;
     --dry-run)
         dryRun=true
+        shift # past argument
+        ;;
+    --upgrade)
+        upgrade=true
+        shift # past argument
+        ;;
+    --rebuild)
+        rebuild=true
+        shift # past argument
+        ;;
+    --zap-osds)
+        zapOsds=true
         shift # past argument
         ;;
     ncn-w[0-9][0-9][0-9]*)
@@ -122,6 +143,21 @@ if $retry && $force; then
     retry=false
 fi
 
+if [[ $nodeType == "storage" ]]; then
+    if $upgrade; then 
+        workflowType="upgrade"
+    elif $rebuild; then
+        workflowType="rebuild"
+    else
+        echo "Input Error: when rebuilding or upgrading storage nodes, the '--rebuild' or '--upgrade' flag needs to specified."
+        exit 1
+    fi
+    if $upgrade && $rebuild; then
+        echo "Input Error: cannot use both '--rebuild' and '--upgrade' flag at the same time."
+        exit 1
+    fi
+fi
+
 function uploadWorkflowTemplates() {
     "${basedir}"/../../../workflows/scripts/upload-rebuild-templates.sh
 }
@@ -148,7 +184,9 @@ EOF
         cat << EOF
 {
 "dryRun": ${dryRun},
-"hosts": ${jsonArray}
+"hosts": ${jsonArray},
+"zapOsds": ${zapOsds},
+"workflowType": "${workflowType}"
 }
 EOF
     fi

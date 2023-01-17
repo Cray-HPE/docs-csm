@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -46,8 +46,7 @@ stages:
       - name: s3-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: nexus-setup
-        static-parameters: # any parameters that will be supplied statically to this operation.
-          nexus-setup-image: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.0-20221021164623-e8d3d3d
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: nexus-rpm-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: nexus-docker-upload
@@ -75,8 +74,6 @@ stages:
     type: product
     operations:
       - name: loftsman-manifest-deploy
-        static-parameters: {} # any parameters that will be supplied statically to this operation.
-      - name: set-product-active
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
   - name: prepare-images

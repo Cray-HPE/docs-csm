@@ -207,8 +207,8 @@ the following procedures must all be completed.
    Excerpt of example output:
 
    ```xml
-   <repository type="rpm-md" alias="csm-{{ CSM_RELEASE_VERSION }}-sle-15sp3" priority="2" imageinclude="true">
-       <source path="https://packages.local/repository/csm-{{ CSM_RELEASE_VERSION }}-sle-15sp3/"/>
+   <repository type="rpm-md" alias="csm-{{ CSM_RELEASE_VERSION }}-sle-{{ SLE_VERSION }}" priority="2" imageinclude="true">
+       <source path="https://packages.local/repository/csm-{{ CSM_RELEASE_VERSION }}-sle-{{ SLE_VERSION}}/"/>
    </repository>
    ```
 
@@ -245,6 +245,8 @@ the following procedures must all be completed.
     [[template_dictionary]]
     key = "CSM_RELEASE_VERSION"
     value = "1.2.5"
+    key = "SLE_VERSION"
+    value = "15sp4"
     ```
 
     Additional key/value pairs can be added by providing a list of comma-separated keys/values to the
@@ -284,6 +286,8 @@ the following procedures must all be completed.
    [[template_dictionary]]
    key = "CSM_RELEASE_VERSION"
    value = "1.2.5"
+   key = "SLE_VERSION"
+   value = "15sp4
    
    [link]
    path = "s3://ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/recipe.tar.gz"

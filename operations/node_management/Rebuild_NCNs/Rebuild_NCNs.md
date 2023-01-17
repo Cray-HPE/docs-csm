@@ -34,7 +34,9 @@ Only follow the steps in the section for the node type that is being rebuilt.
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w001
    ```
 
-   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
+   > **`NOTES:`**
+     - The `root` user password for the node may need to be reset after it is rebooted.
+     - See [Starting a new workflow after a failed workflow](../../argo/Using_Argo_Workflows.md) if this command fails and needs to be restarted.
 
 #### Option 2 (Tech preview)
 
@@ -67,7 +69,19 @@ make sure that the following conditions are met:
 
 ### Storage node
 
-See [Prepare storage nodes](Prepare_Storage_Nodes.md).
+#### Option 1
+
+Rebuild the storage node manually. See [Prepare storage nodes](Prepare_Storage_Nodes.md).
+
+#### Option 2 (Tech preview)
+
+Rebuild the storage node automatically. This rebuilds a storage node via argo workflows. See [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md) and [Using Argo Workflows](../operations/argo/Using_Argo_Workflows.md) before starting the rebuild.
+
+(`ncn-m001#`) Rebuild storage node ncn-s00x:
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s00x --rebuild
+```
 
 ## Validation
 

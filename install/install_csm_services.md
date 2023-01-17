@@ -7,11 +7,10 @@ This procedure will install CSM applications and services into the CSM Kubernete
 1. [Install CSM services](#1-install-csm-services)
 1. [Create base BSS global boot parameters](#2-create-base-bss-global-boot-parameters)
 1. [Wait for everything to settle](#3-wait-for-everything-to-settle)
-
-* [Known issues](#known-issues)
-  * [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
-  * [`Setup Nexus` known issues](#setup-nexus-known-issues)
-  * [`Helm Chart Timeouts` known issues](../troubleshooting/known_issues/helm_chart_deploy_timeouts.md)
+1. [Next topic](#next-topic)
+1. [Known issues](#known-issues)
+  1. [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
+  1. [`Setup Nexus` known issues](#setup-nexus-known-issues)
 
 ## 1. Install CSM services
 
@@ -111,6 +110,10 @@ Taking a manual backup enables restoring from backup later in this install proce
    ```
 
 1. The next step is to validate CSM health before redeploying the final NCN. See [Validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
+
+## Next Topic
+
+After installing CSM, proceed to [validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
 
 ## Known issues
 

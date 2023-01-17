@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -66,7 +66,8 @@ IMS_ROOTFS_MD5SUM=$(md5sum "$IMS_ROOTFS_FILENAME" | awk '{ print $1 }')
 IMS_INITRD_MD5SUM=$(md5sum "$IMS_INITRD_FILENAME" | awk '{ print $1 }')
 IMS_KERNEL_MD5SUM=$(md5sum "$IMS_KERNEL_FILENAME" | awk '{ print $1 }')
 
-IMS_IMAGE_ID=$(cray ims images create --name "$IMS_ROOTFS_FILENAME" --format json | jq -r .id)
+IMS_IMAGE_NAME=$(basename "${IMS_ROOTFS_FILENAME}")
+IMS_IMAGE_ID=$(cray ims images create --name "${IMS_IMAGE_NAME}" --format json | jq -r .id)
 cray artifacts create boot-images "$IMS_IMAGE_ID/rootfs" "$IMS_ROOTFS_FILENAME" > /dev/null
 cray artifacts create boot-images "$IMS_IMAGE_ID/kernel" "$IMS_KERNEL_FILENAME" > /dev/null
 cray artifacts create boot-images "$IMS_IMAGE_ID/initrd" "$IMS_INITRD_FILENAME" > /dev/null
@@ -78,24 +79,24 @@ cat <<EOF> ims_manifest.json
   "artifacts": [
     {
       "link": {
-	  "path": "s3://boot-images/$IMS_IMAGE_ID/rootfs",
-          "type": "s3"
+        "path": "s3://boot-images/$IMS_IMAGE_ID/rootfs",
+        "type": "s3"
       },
       "md5": "$IMS_ROOTFS_MD5SUM",
       "type": "application/vnd.cray.image.rootfs.squashfs"
     },
     {
       "link": {
-	  "path": "s3://boot-images/$IMS_IMAGE_ID/kernel",
-          "type": "s3"
+        "path": "s3://boot-images/$IMS_IMAGE_ID/kernel",
+        "type": "s3"
       },
       "md5": "$IMS_KERNEL_MD5SUM",
       "type": "application/vnd.cray.image.kernel"
     },
     {
       "link": {
-	  "path": "s3://boot-images/$IMS_IMAGE_ID/initrd",
-          "type": "s3"
+        "path": "s3://boot-images/$IMS_IMAGE_ID/initrd",
+        "type": "s3"
       },
       "md5": "$IMS_INITRD_MD5SUM",
       "type": "application/vnd.cray.image.initrd"

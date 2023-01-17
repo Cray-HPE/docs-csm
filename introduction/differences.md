@@ -4,9 +4,9 @@ The most noteworthy changes since the previous release are described here.
 
 ## Topics
 
-   * [New Features](#new-features)
-   * [Deprecated Features](#deprecated-features)
-   * [Removed Features](#removed-features)
+* [New Features](#new-features)
+* [Deprecated Features](#deprecated-features)
+* [Removed Features](#removed-features)
 
 ## New Features
 
@@ -55,3 +55,4 @@ The following features have been completely removed:
 
 * `cray-conman` pod. This has been replaced by `cray-console-node`.
 * CFS v1 API and CLI. The v2 API and CLI have been the default since CSM 0.9 (Shasta 1.4).
+* SLS support for downloading and uploading credentials in the `dumpstate` and `loadstate` REST APIs.

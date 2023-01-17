@@ -394,7 +394,7 @@ These variables will need to be set for many procedures within the CSM installat
 
       ```bash
       https_proxy=https://example.proxy.net:443 curl -C - -f -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
-        "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
+        "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
       ```
 
    - `scp` from the external server used in [Prepare installation environment server](#11-prepare-installation-environment-server):
@@ -424,8 +424,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
        ```bash
        zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
            --no-gpg-checks \
            install -y docs-csm
        ```
@@ -437,8 +436,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
        ```bash
        zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
            --no-gpg-checks \
            update -y cray-site-init
        ```
@@ -449,8 +447,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
        ```bash
        zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
            --no-gpg-checks \
            install -y csm-testing
       ```
@@ -458,9 +455,9 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 1. (`pit#`) Get the artifact versions.
 
    ```bash
-   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
    echo "${KUBERNETES_VERSION}"
-   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
    echo "${CEPH_VERSION}"
    ```
 
@@ -502,8 +499,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        echo "${NCN_MOD_SCRIPT}"
        "${NCN_MOD_SCRIPT}" -p \
           -d /root/.ssh \
-          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}-$(uname -i).squashfs" \
+          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}-$(uname -i).squashfs"
        ```
 
 1. (`pit#`) Log the currently installed PIT packages.

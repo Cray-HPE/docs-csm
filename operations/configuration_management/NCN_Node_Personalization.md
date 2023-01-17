@@ -67,7 +67,7 @@ All of the following are prerequisites on the node where this procedure is being
     the file should begin with the following lines:
 
     ```yaml
-    # (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+    # (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
     ---
     schema_version: 1.0.2
     configurations:

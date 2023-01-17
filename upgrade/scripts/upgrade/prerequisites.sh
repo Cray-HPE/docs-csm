@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -532,38 +532,46 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
     set +o pipefail
 
+    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
+    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
+
     k8s_done=0
     ceph_done=0
-    if [[ -f ${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs ]]; then
+    arch="$(uname -i)"
+    if [[ -f ${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs ]]; then
         k8s_done=1
     fi
-    if [[ -f ${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs ]]; then
+    if [[ -f ${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs ]]; then
         ceph_done=1
     fi
 
     if [[ ${k8s_done} = 1 && ${ceph_done} = 1 ]]; then
         echo "Already ran ${NCN_IMAGE_MOD_SCRIPT}, skipping re-run."
     else
-        rm -f "${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs" "${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
+        rm -f "${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs" "${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
         DEBUG=1 "${NCN_IMAGE_MOD_SCRIPT}" \
             -d /root/.ssh \
-            -k "${artdir}/kubernetes/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-            -s "${artdir}/storage-ceph/storage-ceph-${CEPH_VERSION}.squashfs" \
+            -k "${artdir}/kubernetes/kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs" \
+            -s "${artdir}/storage-ceph/storage-ceph-${CEPH_VERSION}-${arch}.squashfs" \
             -p
     fi
 
     set -o pipefail
     IMS_UPLOAD_SCRIPT=$(rpm -ql docs-csm | grep ncn-ims-image-upload.sh)
 
-    export IMS_ROOTFS_FILENAME="${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
-    export IMS_INITRD_FILENAME="${artdir}/kubernetes/initrd.img-${KUBERNETES_VERSION}.xz"
-    export IMS_KERNEL_FILENAME="${artdir}/kubernetes/*.kernel"
+    export IMS_ROOTFS_FILENAME="${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
+    export IMS_INITRD_FILENAME="${artdir}/kubernetes/initrd.img-${KUBERNETES_VERSION}-${arch}.xz"
+    # do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
+    resolve_kernel_glob=$(echo ${artdir}/kubernetes/*-${arch}.kernel)
+    export IMS_KERNEL_FILENAME=$resolve_kernel_glob
     K8S_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
     [[ -n ${K8S_IMS_IMAGE_ID} ]]
 
-    export IMS_ROOTFS_FILENAME="${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs"
-    export IMS_INITRD_FILENAME="${artdir}/storage-ceph/initrd.img-${CEPH_VERSION}.xz"
-    export IMS_KERNEL_FILENAME="${artdir}/storage-ceph/*.kernel"
+    export IMS_ROOTFS_FILENAME="${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs"
+    export IMS_INITRD_FILENAME="${artdir}/storage-ceph/initrd.img-${CEPH_VERSION}-${arch}.xz"
+    # do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
+    resolve_kernel_glob=$(echo ${artdir}/storage-ceph/*-${arch}.kernel)
+    export IMS_KERNEL_FILENAME=$resolve_kernel_glob
     STORAGE_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
     [[ -n ${STORAGE_IMS_IMAGE_ID} ]]
     set +o pipefail
@@ -675,7 +683,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
 
     # As boot parameters are added or removed, update these arrays.
     # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
-    bootparameters_to_set=( "psi=1" "rd.live.squashimg=rootfs" )
+    bootparameters_to_set=( "split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" )
     bootparameters_to_delete=( "rd.live.squashimg" )
 
     for bootparameter in "${bootparameters_to_delete[@]}"; do
