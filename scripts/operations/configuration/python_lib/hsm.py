@@ -58,7 +58,7 @@ def get_management_ncn_xnames() -> List[str]:
     """
     params = {"type": "Node", "role": "Management"}
     resp = api_requests.get_retry_validate(url=SMD_HSM_COMPONENTS_URL, expected_status_codes=200,
-                                           add_api_token=True, verify=False, params=params)
+                                           add_api_token=True, params=params)
     try:
         component_list = resp.json()["Components"]
         return sorted([comp["ID"] for comp in component_list])
