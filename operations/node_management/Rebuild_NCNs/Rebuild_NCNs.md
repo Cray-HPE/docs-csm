@@ -51,7 +51,7 @@ make sure that the following conditions are met:
 
     In this case, the rebuild should be split into multiple requests, with each request specifying no more than five workers.
 
-- No single rebuild request should include all of the worker nodes that have DVS running on them.
+- No single rebuild request should include all of the worker nodes that have DVS running on them.  For High Availability, DVS requires at least two workers running DVS and CPS at all times.
 
 ##### Example
 
