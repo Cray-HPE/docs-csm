@@ -48,8 +48,8 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.1`, follow the procedures descr
 1. Start a typescript on `ncn-m001` to capture the commands and output from this procedure.
 
    ```bash
-   ncn-m001# script -af csm-update.$(date +%Y-%m-%d).txt
-   ncn-m001# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   script -af csm-update.$(date +%Y-%m-%d).txt
+   export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
 1. Download and extract the CSM `v1.3.1` release to `ncn-m001`.
@@ -61,15 +61,15 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.1`, follow the procedures descr
    **IMPORTANT**: If necessary, change this command to match the actual location of the extracted files.
 
    ```bash
-   ncn-m001# CSM_DISTDIR="$(pwd)/csm-1.3.1"
-   ncn-m001# echo "${CSM_DISTDIR}"
+   CSM_DISTDIR="$(pwd)/csm-1.3.1"
+   echo "${CSM_DISTDIR}"
    ```
 
 1. Set `CSM_RELEASE_VERSION` to the CSM release version.
 
    ```bash
-   ncn-m001# export CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
-   ncn-m001# echo "${CSM_RELEASE_VERSION}"
+   export CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
+   necho "${CSM_RELEASE_VERSION}"
    ```
 
 1. Download and install/upgrade the **latest** documentation on `ncn-m001`.
@@ -82,21 +82,21 @@ Run `lib/setup-nexus.sh` to configure Nexus and upload new CSM RPM
 repositories, container images, and Helm charts:
 
 ```bash
-ncn-m001# cd "$CSM_DISTDIR"
-ncn-m001# ./lib/setup-nexus.sh
+cd "$CSM_DISTDIR"
+./lib/setup-nexus.sh
 ```
 
 On success, `setup-nexus.sh` will output `OK` on `stderr` and exit with status
 code `0`. For example:
 
 ```console
-ncn-m001# ./lib/setup-nexus.sh
+./lib/setup-nexus.sh
 
 [... output omitted ...]
 
 + Nexus setup complete
 setup-nexus.sh: OK
-ncn-m001# echo $?
+echo $?
 0
 ```
 
@@ -110,8 +110,8 @@ with status code `0`.
 Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
 ```bash
-ncn-m001# cd "$CSM_DISTDIR"
-ncn-m001# ./upgrade.sh
+cd "$CSM_DISTDIR"
+./upgrade.sh
 ```
 
 ## Update test suite packages
@@ -119,7 +119,7 @@ ncn-m001# ./upgrade.sh
 Update the `csm-testing` and `goss-servers` RPMs on the NCNs, adjusting the `pdsh` node ranges for the node type and counts on your system.
 
 ```bash
-ncn-m001# pdsh -f 1 -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] "zypper install -y csm-testing goss-servers"
+pdsh -f 1 -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] "zypper install -y csm-testing goss-servers"
 ```
 
 ## Verification
@@ -129,7 +129,7 @@ ncn-m001# pdsh -f 1 -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] "zypper install -y
    Verify that the new CSM version is listed in the output of the following command:
 
    ```bash
-   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
+   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
    ```
 
    Example output that includes the new CSM version (`1.3.1`):
@@ -154,7 +154,7 @@ ncn-m001# pdsh -f 1 -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] "zypper install -y
    Confirm that the `import_date` reflects the timestamp of the upgrade.
 
    ```bash
-   ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.3.1".configuration.import_date'
+   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.3.1".configuration.import_date'
    ```
 
 ## Complete upgrade
@@ -162,7 +162,7 @@ ncn-m001# pdsh -f 1 -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] "zypper install -y
 1. Remember to exit the typescript that was started at the beginning of the upgrade.
 
      ```bash
-     ncn-m001# exit
+     exit
      ```
 
 It is recommended to save the typescript file for later reference.
