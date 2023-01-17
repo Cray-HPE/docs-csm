@@ -1,4 +1,4 @@
-# Upgrade CSM
+# CSM 1.2.x to 1.3.x Upgrade Process
 
 The process for upgrading Cray Systems Management (CSM) has many steps in multiple procedures which should be done in a specific order.
 

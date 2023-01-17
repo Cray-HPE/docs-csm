@@ -35,10 +35,6 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.1`, follow the procedures descr
 * Add documentation to resolve issue with Unbound not forwarding to PowerDNS in air-gapped configurations.
 * Add documentation to increase `fs.inotify.max_user_watches` on Kubernetes worker nodes in response to `kubectl logs -f` returning `no space` errors.
 
-## Known Issues
-
-* Placeholder, need input from individual teams
-
 ## Steps
 
 1. [Preparation](#preparation)
