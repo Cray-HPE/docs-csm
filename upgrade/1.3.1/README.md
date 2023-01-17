@@ -69,7 +69,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.1`, follow the procedures descr
 
    ```bash
    export CSM_RELEASE_VERSION="$(${CSM_DISTDIR}/lib/version.sh --version)"
-   necho "${CSM_RELEASE_VERSION}"
+   echo "${CSM_RELEASE_VERSION}"
    ```
 
 1. Download and install/upgrade the **latest** documentation on `ncn-m001`.
