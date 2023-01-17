@@ -103,7 +103,7 @@ spec:
                 - name: scriptContent
                   value: |
                     source /srv/cray/scripts/metal/metal-lib.sh
-                    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release))" \
+                    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp4" \
                       | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
                     pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url" || [[ $? -eq 106 ]] # code 106 means "nothing to do, csi is installed"
           {{- range $index,$value := .TargetNcns}}
