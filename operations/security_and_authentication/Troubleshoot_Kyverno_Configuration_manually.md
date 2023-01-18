@@ -1,25 +1,21 @@
-# How to troubleshoot Kyverno configuration manually
+# Troubleshoot Kyverno configuration manually
 
-## Check if Kyverno pods are up and running
+## Check Kyverno pods
 
-Run the script with -p option.
+(`ncn-mw#`) Run the following script to verify that the expected Kyverno pods are running:
 
 ```bash
 /opt/cray/tests/install/livecd/scripts/k8s_kyverno_pods_running.sh -p
 ```
 
-This will list the expected Kyverno pods in running state.
+## Check Kyverno policy report
 
-## Check if Kyverno policy report doesn’t have Failures, Warnings, Errors and Skipped policies count
-
-Run the script with -p option.
+(`ncn-mw#`) Run the following script in order to check the Kyverno policy report for any failures, warnings, errors, and skipped policies:
 
 ```bash
 /opt/cray/tests/install/livecd/scripts/k8s_kyverno_polr_list.sh -p
 ```
 
-This is used to check the Kyverno policy report for any Failures, Warnings, Errors and Skipped policies count.
+## More information
 
-### For more information check
-
-* [Kyverno](../kubernetes/Kyverno.md)
+See [Kyverno](../kubernetes/Kyverno.md).
