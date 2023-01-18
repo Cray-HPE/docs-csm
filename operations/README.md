@@ -59,7 +59,7 @@ General information on what needs to be done before the initial install of CSM.
 
 - [Bare-Metal Steps](bare_metal/Bare-Metal.md)
 - [Change Air-Cooled BMC Credentials](bare_metal/Change_River_BMC_Credentials.md)
-- [Change ServerTech PDU Credentials](bare_metal/Change_ServerTech_PDU_Credentials.md)
+- [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
 
 ## Image management
 
@@ -421,6 +421,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Grafana Dashboards by Component](system_management_health/Grafana_Dashboards_by_Component.md)
   - [Troubleshoot Grafana Dashboard](system_management_health/Troubleshoot_Grafana_Dashboard.md)
 - [Remove Kiali](system_management_health/Remove_Kiali.md)
+- [`prometheus-kafka-adapter` errors during installation](system_management_health/Prometheus_Kafka_Error.md)
 
 ## System Layout Service (SLS)
 
