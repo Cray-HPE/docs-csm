@@ -94,7 +94,7 @@ Example output:
       },
       {
         "members": [
-          "<IMS_IMAGE_ID>
+          "<IMS_IMAGE_ID>"
         ],
         "name": "Application_UAN"
       }
