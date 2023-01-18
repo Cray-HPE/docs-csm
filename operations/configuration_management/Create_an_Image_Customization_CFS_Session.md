@@ -37,7 +37,7 @@ ncn-mw# cray ims images list --format json | jq -r 'any(.[]; .id == "5d64c8b2-4f
 
 Example output:
 
-```text
+```json
 true
 ```
 
