@@ -26,7 +26,7 @@ Topology example:
 
 ### Custom switch configuration
 
-- Custom switch configuration is injected into the management network switch configuration when it's generated from CANU.
+- Custom switch configuration is injected into the management network switch configuration when it is generated from CANU.
 - Most sites require custom configuration for the site connection.
 - This configuration should be discussed and approved by the site networking team.
 - The example below is using OSPF point-to-pint links between the spine and edge switches for site connectivity.

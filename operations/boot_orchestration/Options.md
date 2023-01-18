@@ -61,7 +61,7 @@ The following are the BOS global options:
 
 * `disable_components_on_completion`
 
-    Determines if a component will be marked as disabled after it's desired state matches its current state.
+    Determines if a component will be marked as disabled after its desired state matches its current state.
     If false, BOS will continue to maintain the state of the nodes declaratively.
     This is an experimental feature and is not fully supported.
 
