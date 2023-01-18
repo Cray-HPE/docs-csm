@@ -59,9 +59,9 @@ RETRY_SECONDS=5
 until [ "$(kubectl get pods -n spire --no-headers | wc -l)" -ne 0 ]; do
   if [[ "$RETRY" -lt "$MAX_RETRIES" ]]; then
     RETRY="$((RETRY + 1))"
-    echo "spire-server is not ready. Will retry after $RETRY_SECONDS seconds. ($RETRY/$MAX_RETRIES)"
+    echo "Spire is still in the process of being uninstalled. Will retry after $RETRY_SECONDS seconds. ($RETRY/$MAX_RETRIES)"
   else
-    echo "spire-server did not start after $(echo "$RETRY_SECONDS" \* "$MAX_RETRIES" | bc) seconds."
+    echo "Spire did not completely uninstall after $(echo "$RETRY_SECONDS" \* "$MAX_RETRIES" | bc) seconds."
     exit 1
   fi
   sleep "$RETRY_SECONDS"
