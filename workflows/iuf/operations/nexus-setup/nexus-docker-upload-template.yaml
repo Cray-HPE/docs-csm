@@ -85,6 +85,18 @@ spec:
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.current_product_manifest}}"
           - name: product_directory
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.product_directory}}"
+    - - name: nexus-docker-upload-update-product-catalog
+        templateRef:
+          name: update-product-catalog-template
+          template: catalog-update
+        arguments:
+          parameters:
+            - name: product-name
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - name: product-version
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - name: yaml-content
+              value: "{{steps.nexus-docker-load.outputs.parameters.nexus_docker_load_results}}"
     - - name: end-operation
         templateRef:
           name: workflow-template-record-time-template
@@ -101,18 +113,7 @@ spec:
             value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
           - name: pdversion
             value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
-    - - name: nexus-docker-upload-update-product-catalog
-        templateRef:
-          name: update-product-catalog-template
-          template: catalog-update
-        arguments:
-          parameters:
-            - name: product-name
-              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
-            - name: product-version
-              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
-            - name: yaml-content
-              value: "{{steps.nexus-docker-load.outputs.parameters.nexus_docker_load_results}}"
+
   - name: prom-metrics
     inputs:
       parameters:
