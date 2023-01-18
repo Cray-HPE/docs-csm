@@ -36,10 +36,6 @@ function sshnh() {
   /usr/bin/ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$@"
 }
 
-function scpnh() {
-  /usr/bin/scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$@"
-}
-
 for node in $(kubectl get nodes -o name | cut -d"/" -f2) $(ceph node ls | jq -r '.[] | keys[]' | sort -u); do
   echo "$node: Stopping spire-agent"
   sshnh "$node" systemctl stop spire-agent
