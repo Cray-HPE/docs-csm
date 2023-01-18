@@ -82,5 +82,5 @@ This step is the same for master and worker nodes.  Run the following command to
 ncn-mw: # mount -a
 ```
 
-If the above command fails, the error likely indicates there's an issue communicating with Ceph's `Radosgw` endpoint (`rgw-vip`).
+If the above command fails, then the error likely indicates that there is an issue communicating with Ceph's `Radosgw` endpoint (`rgw-vip`).
 In this case the [Troubleshoot an Unresponsive S3 Endpoint](Troubleshoot_an_Unresponsive_S3_Endpoint.md) procedure should be followed to ensure the endpoint is healthy.
