@@ -215,18 +215,18 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     See the product manuals for further information on configuring other Cray products, as this procedure documents only the configuration of the UAN. More layers can be added
     to be configured in a single CFS session.
 
-    The following configuration example can be used for preboot image customization as well as post-boot node configuration.
+    The following configuration example can be used for preboot image customization as well as post-boot node configuration. This example contains only a single
+    layer. However, configuration layers for other products may be specified in the list after this layer, if desired.
 
     ```json
     {
       "layers": [
         {
-          "name": "uan-integration-PRODUCT\_VERSION",
+          "name": "uan-integration-PRODUCT_VERSION",
           "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/uan-config-management.git",
           "playbook": "site.yml",
           "commit": "ecece54b1eb65d484444c4a5ca0b244b329f4667"
-        }
-        # **{ ... add configuration layers for other products here, if desired ... }**
+        }        
       ]
     }
     ```
@@ -243,6 +243,9 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
     Example output:
 
+    > This output uses the example single-layer configuration from earlier. If layers were added for additional products, then they will also
+    > appear in the output.
+
     ```json
     {
       "lastUpdated": "2021-07-28T03:26:00:37Z",
@@ -252,7 +255,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
           "commit": "ecece54b1eb65d484444c4a5ca0b244b329f4667",
           "name": "uan-integration-PRODUCT_VERSION",
           "playbook": "site.yml"
-        }  # <-- Additional layers not shown, but would be inserted here
+        }
       ],
       "name": "uan-config-PRODUCT_VERSION"
     }
@@ -298,7 +301,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         ```bash
         ncn# UAN_IMAGE_ID=IMAGE_ID
         ncn# cray artifacts get boot-images ${UAN_IMAGE_ID}/rootfs ${UAN_IMAGE_ID}.squashfs
-        ncn# la ${UAN_IMAGE_ID}.squashfs
+        ncn# ls -A ${UAN_IMAGE_ID}.squashfs
         ```
 
         Example output:
