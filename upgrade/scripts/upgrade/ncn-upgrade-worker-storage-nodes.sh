@@ -38,27 +38,29 @@ rebuild=false
 zapOsds=false
 workflowType=""
 imageId=""
+desiredCfsConfig=""
 
 function usage() {
     echo "CSM ncn worker and storage upgrade script"
     echo
     echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run|--upgrade|--rebuild]"
     echo "options:"
-    echo "--no-retry     Do not automatically retry  (default: false)"
-    echo "-f|--force     Remove failed worker or storage rebuild/upgrade workflow and create a new one  (default: ${force})"
-    echo "--base-url     Specify base url (default: ${baseUrl})"
-    echo "--dry-run      Print out steps of workflow instead of running steps (default: ${dryRun})"
-    echo "--upgrade      Perfrom a node upgrade. This only needs to be specified when upgrading storage nodes."
-    echo "--rebuild      Perfrom a node rebuild. This only needs to be specified when rebuilding storage nodes"
-    echo "--image-id     The image-id that a worker or storage node should be booted into when a node is rebuilt. This is optional."
-    echo "--zap-osds     Zap osds. Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt. (This can only be used with storage rebuilds)."
+    echo "--no-retry          Do not automatically retry  (default: false)"
+    echo "-f|--force          Remove failed worker or storage rebuild/upgrade workflow and create a new one  (default: ${force})"
+    echo "--base-url          Specify base url (default: ${baseUrl})"
+    echo "--dry-run           Print out steps of workflow instead of running steps (default: ${dryRun})"
+    echo "--upgrade           Perfrom a node upgrade. This only needs to be specified when upgrading storage nodes."
+    echo "--rebuild           Perfrom a node rebuild. This only needs to be specified when rebuilding storage nodes"
+    echo "--image-id          The image-id that a worker or storage node should be booted into when a node is rebuilt. This is optional."
+    echo "--zap-osds          Zap osds. Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt. (This can only be used with storage rebuilds)."
+    echo "--desired-cfs-conf  The desired cfs config worker or storage node should be booted into when a node is rebuilt. This is optional."
     echo
     echo "*COMMA_SEPARATED_NCN_HOSTNAMES"
     echo "  worker upgrade  - example 1) ncn-w001"
     echo "  worker upgrade  - example 2) ncn-w001,ncn-w002,ncn-w003 --image-id <image-id>"
     echo "  storage upgrade - example 3) ncn-s001 --upgrade"
     echo "  storage upgrade - example 4) ncn-s001,ncn-s002,ncn-s003 --upgrade"
-    echo "  storage rebuild - example 5) ncn-s001 --rebuild --image-id <image-id>"
+    echo "  storage rebuild - example 5) ncn-s001 --rebuild --image-id <image-id> --desired-cfs-conf <config-name>"
     echo "  storage rebuild - example 6) ncn-s001,ncn-s002,ncn-s003 --rebuild"
     echo
 }
@@ -101,6 +103,11 @@ while [[ $# -gt 0 ]]; do
         ;;
     --image-id)
         imageId="$2"
+        shift # past argument
+        shift # past value
+        ;;
+    --desired-cfs-conf)
+        desiredCfsConfig="$2"
         shift # past argument
         shift # past value
         ;;
@@ -165,6 +172,15 @@ if [[ $nodeType == "storage" ]]; then
     fi
 fi
 
+# check that cfs config exists if desiredCfsConfig is not empty
+if [[ -n $desiredCfsConfig ]]; then
+    cray cfs configurations describe "$desiredCfsConfig" > /dev/null
+    if [[ $? -ne 0 ]]; then
+      # could not find the desired cfs configuration
+      exit 1
+    fi
+fi
+
 function uploadWorkflowTemplates() {
     "${basedir}"/../../../workflows/scripts/upload-rebuild-templates.sh
 }
@@ -182,7 +198,8 @@ function createWorkflowPayload() {
 "dryRun": ${dryRun},
 "hosts": ${jsonArray},
 "switchPassword": "${SW_ADMIN_PASSWORD}",
-"imageId": "${imageId}"
+"imageId": "${imageId}",
+"desiredCfsConfig": "${desiredCfsConfig}"
 }
 EOF
     fi
@@ -195,7 +212,8 @@ EOF
 "hosts": ${jsonArray},
 "zapOsds": ${zapOsds},
 "workflowType": "${workflowType}",
-"imageId": "${imageId}"
+"imageId": "${imageId}",
+"desiredCfsConfig": "${desiredCfsConfig}"
 }
 EOF
     fi
