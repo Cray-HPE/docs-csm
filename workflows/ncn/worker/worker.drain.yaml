@@ -82,8 +82,46 @@ tasks:
               /host_usr_bin/csi handoff bss-update-param --set cps.pm-node=1 --limit $TARGET_XNAME
             fi
  
-            IMAGE_ID={{ `{{inputs.parameters.imageId}}` }}  # not sure this is accurate
-            ## ADD COMMAND HERE TO SET IMAGE ID IN BSS IF IMAGE_ID recieved IS NOT BLANK OR EMPTY ##
+
+            # set image to boot into in BSS
+            IMAGE_ID={{ `{{inputs.parameters.imageId}}` }}
+            if [[ -n $IMAGE_ID ]]; then
+              echo "INFO  Changing boot image in bss to $IMAGE_ID"
+              METAL_SERVER=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' \
+              | awk -F 'metal.server=' '{print $2}' \
+              | awk -F ' ' '{print $1}')
+              NEW_METAL_SERVER="s3://${IMAGE_ID}/rootfs"
+              PARAMS=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' | \
+                  sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+                  sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
+                  tr -d \")
+              cray bss bootparameters update --hosts "${TARGET_XNAME}" \
+                --kernel "s3://${IMAGE_ID}/kernel" \
+                --initrd "s3://${IMAGE_ID}/initrd" \
+                --params "${PARAMS}"
+            else
+              echo "INFO  No Image ID was specified for the boot image. The image that will be booted is the current image in BSS."
+            fi
+  - name: update-cfs
+    templateRef:
+      name: kubectl-and-curl-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: scriptContent
+          value: |
+            TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+            TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
             
-            
+            DESIRED_CFS_CONFIG={{ `{{inputs.parameters.desiredCfsConfig}}` }}
+            if [[ -n $DESIRED_CFS_CONFIG ]]; then
+              echo "INFO  Changing CFS configuration to $DESIRED_CFS_CONFIG"
+              cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${DESIRED_CFS_CONFIG}"
+              cray cfs components describe "${TARGET_XNAME}"
+            else
+              echo "INFO  No desired CFS configuration was specified so the CFS configuration after reboot will be the current CFS configuration."
+            fi
 {{end}}

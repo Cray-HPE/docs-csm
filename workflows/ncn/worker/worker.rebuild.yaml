@@ -138,6 +138,8 @@ spec:
                 value: "{{$.DryRun}}"
               - name: imageId
                 value: "{{$.ImageId}}"
+              - name: desiredCfsConfig
+                value: "{{$.DesiredCfsConfig}}"
           # wipe and reboot: parallel
           #     once a worker node is drained from k8s
           #     we can safely wipe and reboot this node

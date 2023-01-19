@@ -26,4 +26,5 @@ parameters:
   - name: targetNcn
   - name: dryRun
   - name: imageId
+  - name: desiredCfsConfig
 {{end}}
