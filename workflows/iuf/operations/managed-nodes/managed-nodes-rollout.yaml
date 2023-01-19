@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: managed-nodes-rollout
+spec:
+  entrypoint: main
+  templates:
+    ### Main Steps ###
+    - name: main
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      steps:
+        - - name: sat-general
+            templateRef:
+              name: sat-general
+              template: sat-general
+            arguments:
+              parameters:
+                - name: auth_token
+                  value: "{{inputs.parameters.auth_token}}"
+                - name: scriptContent
+                  value: sat status #TODO change
