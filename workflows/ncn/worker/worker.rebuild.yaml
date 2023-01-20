@@ -42,6 +42,15 @@ spec:
       hostPath:
         path: /usr/bin
         type: Directory
+    # the volumes below are needed for iuf-base-template
+    - name: ca-bundle
+      hostPath:
+        path: /var/lib/ca-certificates
+        type: Directory
+    # iuf needs to be specified but will not be used which is reasoning for using emptyDir'
+    - name: iuf
+      emptyDir:
+        sizeLimit: 1Mi
     - name: podinfo
       downwardAPI:
         items:
@@ -122,6 +131,10 @@ spec:
                   value: {{$value}}
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: imageId
+                  value: "{{$.ImageId}}"
+                - name: desiredCfsConfig
+                  value: "{{$.DesiredCfsConfig}}"
           # drain: sync
           #     Only one worker can be drained at a time
           - name: drain-{{$value}}
@@ -154,6 +167,10 @@ spec:
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
+              - name: imageId
+                value: "{{$.ImageId}}"
+              - name: desiredCfsConfig
+                value: "{{$.DesiredCfsConfig}}"
           # after each: parallel
           #     once a worker node is rebooted
           #     we need to run post boot hooks
@@ -167,6 +184,10 @@ spec:
                   value: {{$value}}
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: imageId
+                  value: "{{$.ImageId}}"
+                - name: desiredCfsConfig
+                  value: "{{$.DesiredCfsConfig}}"
           # post rebuild: parallel
           #     Post rebuild validation can be run in parallel
           - name: post-rebuild-{{$value}}
@@ -179,6 +200,10 @@ spec:
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
+              - name: imageId
+                value: "{{$.ImageId}}"
+              - name: desiredCfsConfig
+                value: "{{$.DesiredCfsConfig}}"
           {{- end }}
           - name: after-all
             template: after-all

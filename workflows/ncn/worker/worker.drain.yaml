@@ -63,7 +63,7 @@ tasks:
             done
   - name: update-bss
     templateRef:
-      name: kubectl-and-curl-template
+      name: iuf-base-template
       template: shell-script
     arguments:
       parameters:
@@ -74,8 +74,6 @@ tasks:
             TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
             TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                 jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-            /host_usr_bin/csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
-            /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
 
             CPS_PM_NODE=$( kubectl get node ${TARGET_NCN} -o json | jq -r '.metadata.labels."cps-pm-node"')
             if [ "$CPS_PM_NODE" = "True" ]; then
@@ -85,26 +83,50 @@ tasks:
 
             # set image to boot into in BSS
             IMAGE_ID={{ `{{inputs.parameters.imageId}}` }}
+
             if [[ -n $IMAGE_ID ]]; then
+              # get needed paths
+              image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
+              image_manifest_str=${image_manifest_str#*s3://}
+              bucket="$( cut -d '/' -f 1 <<< "$image_manifest_str" )"
+              bucket_rm="${bucket}/"
+              path=${image_manifest_str#*${bucket_rm}}
+              path=${path%?}
+
+              temp_file="/tmp/$(echo $RANDOM | md5sum | head -c 21; echo).json"
+              cray artifacts get $bucket $path $temp_file
+
+              metal_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.rootfs.squashfs") | .path ' < $temp_file)
+              echo "Setting metal.server image to: $metal_image"
+              kernel_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.kernel") | .path ' < $temp_file)
+              kernel_image=$(echo "$kernel_image" | tr -d '"')
+              echo "Setting kernel image to: $kernel_image"
+              initrd_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.initrd") | .path ' < $temp_file)
+              initrd_image=$(echo "$initrd_image" | tr -d '"')
+              echo "Setting initrd image to: $initrd_image"
+
               echo "INFO  Changing boot image in bss to $IMAGE_ID"
               METAL_SERVER=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' \
               | awk -F 'metal.server=' '{print $2}' \
               | awk -F ' ' '{print $1}')
-              NEW_METAL_SERVER="s3://${IMAGE_ID}/rootfs"
+              NEW_METAL_SERVER=$metal_image
               PARAMS=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' | \
                   sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
                   sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
                   tr -d \")
               cray bss bootparameters update --hosts "${TARGET_XNAME}" \
-                --kernel "s3://${IMAGE_ID}/kernel" \
-                --initrd "s3://${IMAGE_ID}/initrd" \
+                --kernel $kernel_image \
+                --initrd $initrd_image \
                 --params "${PARAMS}"
             else
               echo "INFO  No Image ID was specified for the boot image. The image that will be booted is the current image in BSS."
+              echo "INFO setting metal.no-wipe=0 in BSS"
+              /host_usr_bin/csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
+              /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
             fi
   - name: update-cfs
     templateRef:
-      name: kubectl-and-curl-template
+      name: iuf-base-template
       template: shell-script
     arguments:
       parameters:
@@ -120,7 +142,6 @@ tasks:
             if [[ -n $DESIRED_CFS_CONFIG ]]; then
               echo "INFO  Changing CFS configuration to $DESIRED_CFS_CONFIG"
               cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${DESIRED_CFS_CONFIG}"
-              cray cfs components describe "${TARGET_XNAME}"
             else
               echo "INFO  No desired CFS configuration was specified so the CFS configuration after reboot will be the current CFS configuration."
             fi
