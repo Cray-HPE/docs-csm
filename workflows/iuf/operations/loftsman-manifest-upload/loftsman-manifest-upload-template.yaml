@@ -72,6 +72,21 @@ spec:
                 PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
                 PRODUCT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.name')
 
+                if [[ "${CONTENT,,}" == "null" ]] || [[ "$CONTENT" == "" ]]; then
+                    echo "ERROR current_product.manifest is null or empty"
+                    exit 1
+                fi
+
+                if [[ "${PARENT_DIR,,}" == "null" ]] || [[ "$PARENT_DIR" == "" ]]; then
+                    echo "ERROR current_product.parent_directory is null or empty"
+                    exit 1
+                fi
+
+                if [[ "${PRODUCT,,}" == "null" ]] || [[ "$PRODUCT" == "" ]]; then
+                    echo "ERROR current_product.manifest.name is null or empty"
+                    exit 1
+                fi
+
                 /usr/local/bin/loftsman-manifest-upload "$CONTENT" "$PARENT_DIR" "$PRODUCT"
     - - name: end-operation
         templateRef:

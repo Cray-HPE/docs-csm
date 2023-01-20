@@ -71,6 +71,16 @@ spec:
                 CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
                 PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
 
+                if [[ "${CONTENT,,}" == "null" ]] || [[ "$CONTENT" == "" ]]; then
+                    echo "ERROR current_product.manifest is null or empty"
+                    exit 1
+                fi
+
+                if [[ "${PARENT_DIR,,}" == "null" ]] || [[ "$PARENT_DIR" == "" ]]; then
+                    echo "ERROR current_product.parent_directory is null or empty"
+                    exit 1
+                fi
+
                 /usr/local/bin/s3-upload "$CONTENT" "$PARENT_DIR"
     - - name: end-operation
         templateRef:
