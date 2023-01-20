@@ -127,7 +127,7 @@ spec:
                         if [[ $? != 0 ]]; then err=1; fi
                       fi
                     else
-                      echo "INFO Not deploying argo/loftsman/${PRODUCT_NAME}/manifests/$(basename ${MANIFEST}) becasue loftsman.deploy=${DEPLOY}."
+                      echo "INFO Not deploying argo/loftsman/${PRODUCT_NAME}/${PRODUCT_VERSION}/manifests/$(basename ${MANIFEST}) because loftsman.deploy=${DEPLOY}."
                     fi
                   done
 
