@@ -181,6 +181,15 @@ if [[ -n $desiredCfsConfig ]]; then
     fi
 fi
 
+# check that image-id exists if imageId is not empty
+if [[ -n $imageId ]]; then
+    cray ims images describe "$imageId" > /dev/null
+    if [[ $? -ne 0 ]]; then
+      # could not find the desired cfs configuration
+      exit 1
+    fi
+fi
+
 function uploadWorkflowTemplates() {
     "${basedir}"/../../../workflows/scripts/upload-rebuild-templates.sh
 }
