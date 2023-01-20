@@ -238,14 +238,14 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
     ssh ncn-m002 \
         "mkdir -pv /metal/bootstrap
          rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${PITDATA}'/prep /metal/bootstrap/
-         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/pre-install-toolkit*.iso /metal/bootstrap/"
     ```
 
 1. (`pit#`) Upload install files to S3 in the cluster.
 
     ```bash
     PITBackupDateTime=$(date +%Y-%m-%d_%H-%M-%S)
-    tar -czf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/cray-pre-install-toolkit"*.iso &&
+    tar -czf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/pre-install-toolkit"*.iso &&
     cray artifacts create config-data \
         "PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" \
         "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" &&
@@ -407,7 +407,7 @@ it is used for Cray installation and bootstrap.
 
     ```bash
     mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs && \
-        mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/ && \
+        mount -v /metal/bootstrap/pre-install-toolkit-*.iso /mnt/livecd/ && \
         mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/ && \
         mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/ && \
         cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi && \
