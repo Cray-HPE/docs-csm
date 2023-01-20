@@ -17,7 +17,7 @@ This page will guide a user on booting the LiveCD `.iso` file directly onto a BM
 A Cray Pre-Install Toolkit ISO is required for this process. This ISO can be obtained from:
 
 - The Cray Pre-Install Toolkit ISO included in a CSM release tar file. It will have a filename similar to
-  `cray-pre-install-toolkit-sle15sp2.x86_64-1.4.10-20210514183447-gc054094.iso`
+  `pre-install-toolkit-0.4.10-x86_64.iso`
 
 ## BMCs' virtual mounts
 
