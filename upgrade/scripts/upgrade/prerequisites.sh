@@ -520,6 +520,33 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="UPGRADE_TFTP"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+    
+    upgrade_csm_chart cray-tftp sysmgmt.yaml
+
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+state_name="UPGRADE_TFTP_PVC"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+    
+    upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
+
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then

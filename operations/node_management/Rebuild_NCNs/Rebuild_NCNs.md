@@ -51,7 +51,7 @@ make sure that the following conditions are met:
 
     In this case, the rebuild should be split into multiple requests, with each request specifying no more than five workers.
 
-- No single rebuild request should include all of the worker nodes that have DVS running on them.
+- No single rebuild request should include all of the worker nodes that have DVS running on them.  For High Availability, DVS requires at least two workers running DVS and CPS at all times.
 
 ##### Example
 
@@ -69,19 +69,7 @@ make sure that the following conditions are met:
 
 ### Storage node
 
-#### Option 1
-
-Rebuild the storage node manually. See [Prepare storage nodes](Prepare_Storage_Nodes.md).
-
-#### Option 2 (Tech preview)
-
-Rebuild the storage node automatically. This rebuilds a storage node via argo workflows. See [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md) and [Using Argo Workflows](../operations/argo/Using_Argo_Workflows.md) before starting the rebuild.
-
-(`ncn-m001#`) Rebuild storage node ncn-s00x:
-
-```bash
-/usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s00x --rebuild
-```
+See [Prepare storage nodes](Prepare_Storage_Nodes.md) to begin storage node rebuild.
 
 ## Validation
 
