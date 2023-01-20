@@ -77,13 +77,25 @@ spec:
         arguments:
           parameters:
           - name: nexus_setup_image
-            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.8.1
+            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.9.0
           - name: nexus_admin_credential_secret_name
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.current_product_manifest}}"
           - name: product_directory
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.product_directory}}"
+    - - name: nexus-helm-upload-update-product-catalog
+        templateRef:
+          name: update-product-catalog-template
+          template: catalog-update
+        arguments:
+          parameters:
+            - name: product-name
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - name: product-version
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - name: yaml-content
+              value: "{{steps.nexus-helm-load.outputs.parameters.nexus_helm_load_results}}"
     - - name: end-operation
         templateRef:
           name: workflow-template-record-time-template
@@ -237,6 +249,11 @@ spec:
       - name: nexus_admin_credential_secret_name
       - name: content
       - name: product_directory
+    outputs:
+      parameters:
+        - name: nexus_helm_load_results
+          valueFrom:
+            path: /results/records.yaml
     nodeSelector:
       kubernetes.io/hostname: ncn-m001
     tolerations:
