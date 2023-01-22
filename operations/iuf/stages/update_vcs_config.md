@@ -95,8 +95,7 @@ Session variables are the set of product/version combinations being installed by
 `iuf` builds a set of effective site variables utilized by back-end IUF operations by performing a set of merges and substitutions:
 
 1. The base set of data is created from the most recent product entries in the product catalog.
-1. Recipe variables, if specified, will be merged, overriding any matching entries.
-  - **Caveat**: Any product specified with the `iuf run` `--mask-recipe-prods` argument will be omitted from this merge, i.e. the version found in step 1 will be used instead.
+1. Recipe variables, if specified, will be merged, overriding any matching entries. **Caveat**: Any product specified with the `iuf run` `--mask-recipe-prods` argument will be omitted from this merge, i.e. the version found in step 1 will be used instead.
 1. Site variables, if specified, will be merged, overriding any matching entries.
 1. Session variables will be merged, overriding any matching entries.
 

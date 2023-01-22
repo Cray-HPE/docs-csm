@@ -32,6 +32,7 @@ The following IUF topics are discussed in the subsections below.
 - [Output and Log Files](#output-and-log-files)
 - [Site and Recipe Variables](#site-and-recipe-variables)
 - [Product Workflows](#product-workflows)
+- [Troubleshooting](#troubleshooting)
 
 
 ## Limitations
@@ -406,5 +407,11 @@ stages. For example, the `working_branch` variable defines the naming convention
 containing site-customized configuration content, which happens as part of the `update-vcs-config` stage.
  
 ## Product Workflows
+
+The following are examples of workflows for installing and upgrading product content using `iuf`.
+
+- [Upgrade All Products Provided in a HPC CSM Software Recipe ](workflows/upgrade_all_products.md)
+
+## Troubleshooting
 
 << TODO >>
