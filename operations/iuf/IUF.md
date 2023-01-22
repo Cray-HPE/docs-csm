@@ -21,7 +21,7 @@ visibility into the status of the operations through the [Argo UI](../argo/Using
 Argo workflow based on the subcommand specified. The Argo workflow is not controlled by `iuf` once it has been created, but
 `iuf` does displays status to the administrator as the Argo workflow executes.
 
-The following IUF topics are discussed in the following subsections.
+The following IUF topics are discussed in the subsections below.
 
 - [Limitations](#limitations)
 - [Initial Install and Upgrade Workflows](#initial-install-and-upgrade-workflows)
