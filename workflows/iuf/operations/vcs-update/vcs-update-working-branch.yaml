@@ -216,7 +216,7 @@ spec:
           - name: customer_branch
             value: "{{=jsonpath(inputs.parameters.global_params, '$.site_params.current_product.working_branch')}}"
       container:
-        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-update:1.0.1
+        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-update:1.0.2
         command:
           - "/bin/sh"
         args: ["-c", "/opt/csm/cf-gitea-update/entrypoint.sh"]
