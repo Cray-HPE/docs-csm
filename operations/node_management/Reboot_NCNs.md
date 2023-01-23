@@ -268,29 +268,20 @@ Before rebooting NCNs:
        This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
        ```bash
-       cray cfs components describe XNAME --format json
+       cray cfs components describe XNAME --format json | jq .configurationStatus
        ```
 
        Example output:
 
        ```json
-       {
-         "configurationStatus": "configured",
-         "desiredConfig": "ncn-personalization-full",
-         "enabled": true,
-         "errorCount": 0,
-         "id": "x3000c0s7b0n0",
-         "retryPolicy": 3,
-
-         "lines omitted": "..."
-
-       }
+       "configured"
        ```
 
        * If the `configurationStatus` is `pending`, then wait for the job to finish before continuing.
        * If the `configurationStatus` is `failed`, then this means the failed CFS job `configurationStatus` should be addressed now for this node.
        * If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
-       * If the `configurationStatus` is `failed`, then see [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+       * If the `configurationStatus` is `failed`, then see
+         [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
          for how to analyze the pod logs from `cray-cfs` in order to determine why the configuration may not have completed.
 
     1. (`ncn-mw#`) Run the platform health checks from the [Validate CSM Health](../validate_csm_health.md) procedure.
@@ -456,29 +447,20 @@ Before rebooting NCNs:
        This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
        ```bash
-       cray cfs components describe XNAME --format json
+       cray cfs components describe XNAME --format json | jq .configurationStatus
        ```
 
        Example output:
 
        ```json
-       {
-         "configurationStatus": "configured",
-         "desiredConfig": "ncn-personalization-full",
-         "enabled": true,
-         "errorCount": 0,
-         "id": "x3000c0s7b0n0",
-         "retryPolicy": 3,
-
-         "lines omitted": "..."
-
-       }
+       "configured"
        ```
 
        * If the `configurationStatus` is `pending`, then wait for the job to finish before continuing.
        * If the `configurationStatus` is `failed`, then this means the failed CFS job `configurationStatus` should be addressed now for this node.
        * If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
-       * If the `configurationStatus` is `failed`, then see [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+       * If the `configurationStatus` is `failed`, then see
+         [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
          for how to analyze the pod logs from `cray-cfs` in order to determine why the configuration may not have completed.
 
     1. (`ncn-mw#`) Remove the node cordon.
@@ -590,29 +572,20 @@ Before rebooting NCNs:
        This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
        ```bash
-       cray cfs components describe XNAME --format json
+       cray cfs components describe XNAME --format json | jq .configurationStatus
        ```
 
        Example output:
 
        ```json
-       {
-         "configurationStatus": "configured",
-         "desiredConfig": "ncn-personalization-full",
-         "enabled": true,
-         "errorCount": 0,
-         "id": "x3000c0s7b0n0",
-         "retryPolicy": 3,
-
-         "lines omitted": "..."
-
-       }
+       "configured"
        ```
 
        * If the `configurationStatus` is `pending`, then wait for the job to finish before continuing.
        * If the `configurationStatus` is `failed`, then this means the failed CFS job `configurationStatus` should be addressed now for this node.
        * If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
-       * If the `configurationStatus` is `failed`, then see [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+       * If the `configurationStatus` is `failed`, then see
+         [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
          for how to analyze the pod logs from `cray-cfs` in order to determine why the configuration may not have completed.
 
     1. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
@@ -702,29 +675,20 @@ Before rebooting NCNs:
        This can be run on any NCN where the Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
        ```bash
-       cray cfs components describe XNAME --format json
+       cray cfs components describe XNAME --format json | jq .configurationStatus
        ```
 
        Example output:
 
        ```json
-       {
-         "configurationStatus": "configured",
-         "desiredConfig": "ncn-personalization-full",
-         "enabled": true,
-         "errorCount": 0,
-         "id": "x3000c0s7b0n0",
-         "retryPolicy": 3,
-
-         "lines omitted": "..."
-
-       }
+       "configured"
        ```
 
        * If the `configurationStatus` is `pending`, then wait for the job to finish before continuing.
        * If the `configurationStatus` is `failed`, then this means the failed CFS job `configurationStatus` should be addressed now for this node.
        * If the `configurationStatus` is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, then this can be ignored.
-       * If the `configurationStatus` is `failed`, then see [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+       * If the `configurationStatus` is `failed`, then see
+         [Troubleshoot Ansible Play Failures in CFS Sessions](../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
          for how to analyze the pod logs from `cray-cfs` in order to determine why the configuration may not have completed.
 
     1. Run the platform health checks in [Validate CSM Health](../validate_csm_health.md).
