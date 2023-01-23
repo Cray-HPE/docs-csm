@@ -9,7 +9,7 @@ Note: The default value for these settings is 365 days.
 
 Log in to Keycloak with the default admin credentials.
 
-Point a browser at `https://auth.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing `SYSTEM_DOMAIN_NAME` with the actual NCN's DNS name.
+Point a browser at `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing `SYSTEM_DOMAIN_NAME` with the actual NCN's DNS name. Use of the `auth.cmn.` sub-domain is required for administrative access to Keycloak.
 
 The following is an example URL for a system: `https://auth.cmn.system1.us.cray.com/keycloak/admin`
 
