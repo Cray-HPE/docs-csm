@@ -2,15 +2,17 @@
 
 The `management-nodes-rollout` stage performs a controlled rebuild of the management worker nodes in order to reboot them to a new image and configuration. IUF will account for the necessary minimum number of critical software instances running on worker nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
 
+## Impact
+
 The `management-nodes-rollout` stage changes the running state of the system.
 
-## Required Input
+## Input
 
-The following arguments must be specified. See `iuf -h` and `iuf run -h` for additional optional arguments.
+The following arguments are most often used with the `management-nodes-rollout` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input           | `iuf` Argument |
-| --------------- | -------------- |
-| activity        | `-a ACTIVITY`  |
+| Input           | `iuf` Argument | Description |
+| --------------- | -------------- | ----------- |
+| activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations |
 
 ## Execution Details
 
@@ -18,8 +20,8 @@ The code executed by this stage primarily exists with IUF itself. See the `manag
 
 ## Example
 
-(ncn-m001#) << TODO >>
+(ncn-m001#) Execute the `management-nodes-rollout` stage.
 
 ```bash
-<< TODO >>
+iuf -a joe-install-20230107 run -r management-nodes-rollout
 ```

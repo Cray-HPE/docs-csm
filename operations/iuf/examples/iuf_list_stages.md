@@ -1,9 +1,9 @@
 # `iuf list-stages` Examples
 
-(ncn-m001#) << TODO >>
+(ncn-m001#) List the stages for activity `joe-install-20230107-2` along with their status and duration values.
 
 ```bash
-iuf -a roe-install-20230107-2 list-stages
+iuf -a joe-install-20230107-2 list-stages
 +----------------------------+--------------------------------------------------------------------------------------------+-----------+----------+
 | stage                      | description                                                                                | status    | duration |
 +----------------------------+--------------------------------------------------------------------------------------------+-----------+----------+
@@ -20,9 +20,9 @@ iuf -a roe-install-20230107-2 list-stages
 | post-install-check         | Perform post-install checks                                                                | N/A       | N/A      |
 +----------------------------+--------------------------------------------------------------------------------------------+-----------+----------+
 Stage Summary
-activity session: roe-install-20230107-2
-command line: iuf -a roe-install-20230107-2 run -r deliver-product
-log dir: /etc/cray/upgrade/csm/iuf/roe-install-20230107-2/log
-media dir: /opt/cray/iuf/roe-install-20230107-2
+activity session: joe-install-20230107-2
+command line: iuf -a joe-install-20230107-2 run -r deliver-product
+log dir: /etc/cray/upgrade/csm/iuf/joe-install-20230107-2/log
+media dir: /opt/cray/iuf/joe-install-20230107-2
 ran stages: process-media pre-install-check deliver-product
 ```

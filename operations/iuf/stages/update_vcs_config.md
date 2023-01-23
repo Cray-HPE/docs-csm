@@ -4,17 +4,20 @@ The `update-vcs-config` stage performs a variety of update operations for each p
 
 **`NOTE`** After `update-vcs-config` has completed and before proceeding to additional stages, any desired site configuration customizations should be performed. Refer to individual product documentation for configuration customization details.
 
-The `update-vcs-config` stage does not change the running state of the system.
-
 `update-vcs-config` details are explained in the following subsections:
 
+- [Impact](#impact)
 - [Prerequisites](#prerequisites)
 - [Terminology](#terminology)
 - [Branch Creation and Modification](#branch-creation-and-modification)
 - [Customer Branch Name](#customer-branch-name)
-- [Required Input](#required-input)
+- [Input](#input)
 - [Execution Details](#execution-details)
 - [Example](#example)
+
+## Impact
+
+The `update-vcs-config` stage does not change the running state of the system.
 
 ## Prerequisites
 
@@ -109,9 +112,9 @@ Once `iuf` has performed the merges, it performs substitutions based on the foll
 {{working_branch}} - default working branch
 ```
 
-## Required Input
+## Input
 
-The most common use case includes supplying site variables and recipe variables. See `iuf -h` and `iuf run -h` for additional optional arguments.
+The following arguments are most often used with the `update-vcs-config` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
 | Input            | `iuf` Argument | Description   |
 | ---------------- | -------------- |-------------- |
