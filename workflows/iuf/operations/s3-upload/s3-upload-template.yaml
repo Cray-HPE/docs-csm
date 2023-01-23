@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -82,6 +82,26 @@ spec:
                 fi
 
                 /usr/local/bin/s3-upload "$CONTENT" "$PARENT_DIR"
+    - - name: s3-manufacture-product-catalog-data
+        template: make-product-catalog-content
+        arguments:
+          parameters:
+            - name: manifest_s3_content
+              value: "{{=toJson(jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.content.s3'))}}"
+
+    - - name: s3-update-product-catalog
+        templateRef:
+          name: update-product-catalog-template
+          template: catalog-update
+        arguments:
+          parameters:
+            - name: product-name
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - name: product-version
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - name: yaml-content
+              value: "{{steps.s3-manufacture-product-catalog-data.outputs.parameters.product-content}}"
+
     - - name: end-operation
         templateRef:
           name: workflow-template-record-time-template
@@ -136,3 +156,24 @@ spec:
       image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
       command: [sh, -c]
       args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
+  
+  - name: make-product-catalog-content
+    inputs:
+      parameters:
+      - name: manifest_s3_content
+    outputs:
+      parameters:
+      - name: product-content
+        valueFrom:
+          path: /tmp/product-content
+          default: "{\"component_versions\": {\"s3\": []}}"
+    script:
+      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/iuf:v0.1.0
+      command: [bash]
+      source: |
+        ARRAY=$(echo '{{inputs.parameters.manifest_s3_content}}' | jq -r '[.[] | {"bucket": .bucket, "key": .key}]')
+        if [ $? -ne 0 ]; then
+          ARRAY="[]"
+          echo "No S3 content found."
+        fi
+        echo "{\"component_versions\": {\"s3\": ${ARRAY}}}" > /tmp/product-content
