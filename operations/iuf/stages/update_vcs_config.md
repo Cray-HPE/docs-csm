@@ -4,7 +4,7 @@ The `update-vcs-config` stage performs a variety of update operations for each p
 
 **`NOTE`** After `update-vcs-config` has completed and before proceeding to additional stages, any desired site configuration customizations should be performed. Refer to individual product documentation for configuration customization details.
 
-`update-vcs-config` details are explained in the following subsections:
+`update-vcs-config` details are explained in the following sections:
 
 - [Impact](#impact)
 - [Prerequisites](#prerequisites)
