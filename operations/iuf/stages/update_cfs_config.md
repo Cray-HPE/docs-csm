@@ -6,15 +6,17 @@ The `update-cfs-config` stage creates updated CFS configurations used for image 
 
 << TODO: add details on what determines what products/versions/branches/etc. are used to create configurations >>
 
-The `update-cfs-config` stage does not change the running state of the system.
+## Impact
 
-## Required Input
+The `update-cfs-config` stage does not change the running state of the system as it does not deploy the newly created CFS configurations.
 
-The following arguments must be specified. See `iuf -h` and `iuf run -h` for additional optional arguments.
+## Input
 
-| Input           | `iuf` Argument |
-| --------------- | -------------- |
-| activity        | `-a ACTIVITY`  |
+The following arguments are most often used with the `update-cfs-config` stage. See `iuf -h` and `iuf run -h` for additional arguments.
+
+| Input           | `iuf` Argument | Description |
+| --------------- | -------------- | ----------- |
+| activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations |
 
 ## Execution Details
 
@@ -22,8 +24,8 @@ The code executed by this stage utilizes `sat bootprep` to create CFS configurat
 
 ## Example
 
-(ncn-m001#) << TODO >>
+(ncn-m001#) Execute the `update-cfs-config` stage.
 
 ```bash
-<< TODO >>
+iuf -a joe-install-20230107 run -r update-cfs-config
 ```

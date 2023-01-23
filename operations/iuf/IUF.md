@@ -73,11 +73,11 @@ iuf -a joe-install-20230107 activity
 +---------------------+----------------+-----------------------------------------------------+---------+-----------------+-----------------------+
 | start               | activity state | IUF sessionid                                       | Status  | Duration        | Comment               |
 +---------------------+----------------+-----------------------------------------------------+---------+-----------------+-----------------------+
-| 2023-01-07t21:58:25 | in_progress    | joe-install-20230107u0sil-process-media-8lqms       | n/a     | 0:01:35         | Run process-media     |
+| 2023-01-07t21:58:25 | in_progress    | joe-install-20230107-u0sil-process-media-8lqms      | n/a     | 0:01:35         | Run process-media     |
 | 2023-01-07t22:00:00 | waiting_admin  | None                                                | n/a     | 0:37:15         | None                  |
-| 2023-01-07t22:37:15 | in_progress    | joe-install-20230107rr78c-pre-install-check-nn9hs   | n/a     | 0:00:25         | Run pre-install-check |
+| 2023-01-07t22:37:15 | in_progress    | joe-install-20230107-rr78c-pre-install-check-nn9hs  | n/a     | 0:00:25         | Run pre-install-check |
 | 2023-01-07t22:37:40 | waiting_admin  | None                                                | n/a     | 1:02:52         | None                  |
-| 2023-01-07t23:40:32 | in_progress    | joe-install-20230107kq3cr-deliver-product-qfj9s     | n/a     | 0:07:16         | Run deliver-product   |
+| 2023-01-07t23:40:32 | in_progress    | joe-install-20230107-kq3cr-deliver-product-qfj9s    | n/a     | 0:07:16         | Run deliver-product   |
 | 2023-01-07t23:47:48 | waiting_admin  | None                                                | n/a     | 22:26:27        | None                  |
 | 2023-01-08t22:14:15 | debug          | None                                                | n/a     | 0:00:40         | test 1                |
 +---------------------+----------------+-----------------------------------------------------+---------+-----------------+-----------------------+
@@ -85,7 +85,7 @@ iuf -a joe-install-20230107 activity
 
 ## Sessions
 
-A session is a unique string identifier automatically created by IUF to track IUF activity operations on a finer granularity. An example of a session identifier is `joe-install-20230107u0sil-process-media-8lqms`. A session is generated within an IUF activity for each `iuf` operation executed. For example, if an administrator invokes IUF to execute the `process-media` and `pre-install-check` stages, two sessions will be created: one associated with the `process-media` operations and one associated with the `pre-install-check` operations. Not all operations in an activity are associated with a session, however. For example, annotation events and time spent waiting for the administrator to invoke the next operation do not result in the execution of IUF install and upgrade operations, and thus are not associated with a session.
+A session is a unique string identifier automatically created by IUF to track IUF activity operations on a finer granularity. An example of a session identifier is `joe-install-20230107-u0sil-process-media-8lqms`. A session is generated within an IUF activity for each `iuf` operation executed. For example, if an administrator invokes IUF to execute the `process-media` and `pre-install-check` stages, two sessions will be created: one associated with the `process-media` operations and one associated with the `pre-install-check` operations. Not all operations in an activity are associated with a session, however. For example, annotation events and time spent waiting for the administrator to invoke the next operation do not result in the execution of IUF install and upgrade operations, and thus are not associated with a session.
 
 Session identifiers are recorded in the IUF log files and are also displayed by `iuf activity`. In general, administrators do not need to be concerned with sessions. The exception is when IUF encounters an error. At that point, session identifiers can be specified via `iuf` to resume or abort the session (see `iuf resume -h` and `iuf abort -h`).
 
@@ -93,27 +93,29 @@ Session identifiers are recorded in the IUF log files and are also displayed by 
 
 ```bash
 iuf -a joe-install-20230107 activity
-+------------------------------------------------------------------------------------------------------------------------------+
-| Activity: joe-install-20230107                                                                                               |
-+---------------------+----------------+-----------------------------------------------+--------+----------+-------------------+
-| start               | activity state | IUF sessionid                                 | Status | Duration | Comment           |
-+---------------------+----------------+-----------------------------------------------+--------+----------+-------------------+
-| 2023-01-07t21:58:25 | in_progress    | joe-install-20230107u0sil-process-media-8lqms | n/a    | 0:01:35  | Run process-media |
-| 2023-01-07t22:00:00 | waiting_admin  | None                                          | n/a    | 0:08:49  | None              |
-+---------------------+----------------+-----------------------------------------------+--------+----------+-------------------+
++-------------------------------------------------------------------------------------------------------------------------------+
+| Activity: joe-install-20230107                                                                                                |
++---------------------+----------------+------------------------------------------------+--------+----------+-------------------+
+| start               | activity state | IUF sessionid                                  | Status | Duration | Comment           |
++---------------------+----------------+------------------------------------------------+--------+----------+-------------------+
+| 2023-01-07t21:58:25 | in_progress    | joe-install-20230107-u0sil-process-media-8lqms | n/a    | 0:01:35  | Run process-media |
+| 2023-01-07t22:00:00 | waiting_admin  | None                                           | n/a    | 0:08:49  | None              |
++---------------------+----------------+------------------------------------------------+--------+----------+-------------------+
 ```
 
 ## Stages and Hooks
 
 Install and upgrade operations performed by IUF are organized into stages. The administrator can execute one or more stages in a single invocation of `iuf run`. A single stage can execute with the content of one or more products. IUF operates on all products found in a single media directory specified by the administrator.  When possible, IUF will parallelize execution for products within a stage, e.g. the `process-media` stage will extract content for all products found in the media directory at the same time.
 
-A stage will not complete until it has completed execution for all products specified in the activity. If an error is encountered while executing a stage for a given product, IUF will allow other products to complete the execution of the stage and will then stop execution, marking the activity as `<< TODO >>` and the stage as `<< TODO >>`.
+A stage will not complete until it has completed execution for all products specified in the activity. If an error is encountered while executing a stage for a given product, IUF will allow other products to complete the execution of the stage and will then stop execution. It will create an entry within the activity with a status of `Failed` and set the stage status to `Failed`.
 
 IUF provides a hook capability for all stages. This allows a product to execute additional scripts before and/or after a given stage executes. Hooks allow products to perform special actions that IUF does not perform itself at an appropriate time in an initial install or upgrade workflow. These hook scripts are executed automatically by IUF; no input from the administrator is required. All product scripts registered via a pre-stage hooks must complete before the stage executes, and no product post-stage hook will execute until the stage itself has completed.
 
 The administrator may execute one, multiple, or all stages in a single `iuf run` invocation depending on the task to be accomplished. If multiple stages are specified, they must be executed in the order listed below and displayed by the `iuf list-stages` subcommand. The `iuf run` subcommand provides arguments to specify which stages are to be run and if any stages should be skipped.
 
-The following table lists all of the stages in the order they are executed when performing an initial install or upgrade of one or more products. **Click the links in the `Stage` column for additional details about the stages.**
+The following table lists all of the stages in the order they are executed when performing an initial install or upgrade of one or more products.
+
+**`NOTE`** Click the links in the `Stage` column for additional details about the stages.
 
 | Stage                                                              | Description                                                                              |
 | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
@@ -147,46 +149,40 @@ The `iuf` command line interface is used to invoke all IUF operations. The `iuf`
 Global arguments may be specified when invoking `iuf`. They must be specified before any `iuf` subcommand and its subcommand-specific arguments are specified. The following global arguments are available:
 
 ```bash
-usage: iuf [-h] [-i INPUT_FILE] [-w] [-a ACTIVITY_SESSION] [-b BASE_DIR]
-           [-s STATE_DIR] [-m MEDIA_DIR] [-sp SITE_PARAMETERS]
-           [--log-dir LOG_DIR] [-l {CRITICAL,ERROR,WARNING,INFO,DEBUG,TRACE}]
-           [-v]
-           {run,activity,list-stages|ls,list-products|resume|restart|abort}
-           ...
+usage: iuf [-h] [-i INPUT_FILE] [-w] [-a ACTIVITY_SESSION] [-c CONCURRENCY] [-b BASE_DIR]
+           [-s STATE_DIR] [-m MEDIA_DIR] [-mh MEDIA_HOST] [--log-dir LOG_DIR]
+           [-l {CRITICAL,ERROR,WARNING,INFO,DEBUG,TRACE}] [-v]
+           {run,activity,list-stages|ls,list-products|resume|restart|abort} ...
 
 The CSM Install and Upgrade Framework (IUF) Installer.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -i INPUT_FILE, --input-file INPUT_FILE
-                        Input file used to control the install. Command line
-                        arguments will override what is in the file. Input
-                        file should be YAML. Can also be set via the
-                        IUF_INPUT_FILE environment variable.
+                        Input file used to control the install. Command line arguments will override what
+                        is in the file. Input file should be YAML. Can also be set via the IUF_INPUT_FILE
+                        environment variable.
   -w, --write-input-file
-                        Write out a new config file to the input file
-                        specified with defaults+ any command line options
-                        specified and quit.
+                        Write out a new config file to the input file specified with defaults+ any command
+                        line options specified and quit.
   -a ACTIVITY_SESSION, --activity-session ACTIVITY_SESSION
-                        Activity session name. Must be a unique identifier.
-                        Session names must only contain letters (A-Za-z),
-                        numbers (0-9), periods (.), and dashes (-). Can also
-                        be set via the IUF_ACTIVITY_SESSION environment
-                        variable.
+                        Activity session name. Must be a unique identifier. Session names must only contain
+                        letters (A-Za-z), numbers (0-9), periods (.), and dashes (-). Can also be set via
+                        the IUF_ACTIVITY_SESSION environment variable.
+  -c CONCURRENCY, --concurrency CONCURRENCY
+                        Run the argo processes concurrently. Defaults to a threaded model. To use at most
+                        N threads, specify `concurrency=N`.
   -b BASE_DIR, --base-dir BASE_DIR
                         Base directory for state and log dirs. Default is
                         ${RSM_BASE_DIR}/iuf/<activity-session>
   -s STATE_DIR, --state-dir STATE_DIR
-                        A directory used to store the current state of stages.
-                        Defaults to [base-dir]/state.
+                        A directory used to store the current state of stages. Defaults to [base-dir]/state.
   -m MEDIA_DIR, --media-dir MEDIA_DIR
-                        Location of installation media you would like to
-                        install. Defaults to $RBD_BASE_DIR/{activity_session}
-  -sp SITE_PARAMETERS, --site-parameters SITE_PARAMETERS
-                        Path to site parameters file. Default is ${RSM_BASE_DI
-                        R}/$IUF_ACTIVITY_SESSION}/site_parameters.yaml
-  --log-dir LOG_DIR     Location used to store log files. Defaults to [base-
-                        dir]/log
+                        Location of installation media you would like to install. Defaults to
+                        $RBD_BASE_DIR/{activity_session}
+  -mh MEDIA_HOST, --media-host MEDIA_HOST
+                        Host to extract the media onto. Defaults to ncn-m001
+  --log-dir LOG_DIR     Location used to store log files. Defaults to [base-dir]/log
   -l {CRITICAL,ERROR,WARNING,INFO,DEBUG,TRACE}, --level {CRITICAL,ERROR,WARNING,INFO,DEBUG,TRACE}
                         Set the debug level to the console
   -v, --verbose         Generates more verbose messages
@@ -223,15 +219,17 @@ The `run` subcommand is used to execute one or more IUF stages. The `-b`, `-e`, 
 The following arguments may be specified when invoking `iuf run`:
 
 ```bash
-usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE]
-               [-r RUN_STAGES [RUN_STAGES ...]]
+usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE] [-r RUN_STAGES [RUN_STAGES ...]]
                [-s SKIP_STAGES [SKIP_STAGES ...]] [-F FORCE]
                [-bc BOOTPREP_CONFIG_MANAGED [BOOTPREP_CONFIG_MANAGED ...]]
-               [-bm BOOTPREP_CONFIG_MANAGEMENT] [-bpcd BOOTPREP_CONFIG_DIR]
-               [-rv RECIPE_VARS] [-um UPDATE_METHOD_MANAGEMENT]
-               [-uc UPDATE_METHOD_MANAGED] [-ln LIMIT_NODES [LIMIT_NODES ...]]
+               [-bm BOOTPREP_CONFIG_MANAGEMENT [BOOTPREP_CONFIG_MANAGEMENT ...]]
+               [-bpcd BOOTPREP_CONFIG_DIR] [-rv RECIPE_VARS] [-sv SITE_VARS]
+               [-um UPDATE_METHOD_MANAGEMENT] [-uc UPDATE_METHOD_MANAGED]
+               [--limit-managed-nodes LIMIT_MANAGED_NODES [LIMIT_MANAGED_NODES ...]]
+               [--limit-management-nodes LIMIT_MANAGEMENT_NODES [LIMIT_MANAGEMENT_NODES ...]]
+               [-mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]]
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -b BEGIN_STAGE, --begin-stage BEGIN_STAGE
                         The first stage to execute
@@ -245,7 +243,7 @@ optional arguments:
                         Force re-execution of stage operations.
   -bc BOOTPREP_CONFIG_MANAGED [BOOTPREP_CONFIG_MANAGED ...], --bootprep-config-managed BOOTPREP_CONFIG_MANAGED [BOOTPREP_CONFIG_MANAGED ...]
                         List of `sat bootprep` config files for non-mgmt nodes (compute, UAN).
-  -bm BOOTPREP_CONFIG_MANAGEMENT, --bootprep-config-management BOOTPREP_CONFIG_MANAGEMENT
+  -bm BOOTPREP_CONFIG_MANAGEMENT [BOOTPREP_CONFIG_MANAGEMENT ...], --bootprep-config-management BOOTPREP_CONFIG_MANAGEMENT [BOOTPREP_CONFIG_MANAGEMENT ...]
                         List of `sat bootprep` config files for management NCN nodes.
   -bpcd BOOTPREP_CONFIG_DIR, --bootprep-config-dir BOOTPREP_CONFIG_DIR
                         directory containing bootprep configuration files.  The expected layout would be:
@@ -254,14 +252,25 @@ optional arguments:
                                 $(BOOTPREP_CONFIG_DIR)/bootprep/management-bootprep.yaml
   -rv RECIPE_VARS, --recipe-vars RECIPE_VARS
                         location of the recipe_vars.yaml file (aka product_vars.yaml), used by `sat bootprep`
+  -sv SITE_VARS, --site-vars SITE_VARS
+                        Path to site parameters file.  Default is ${RSM_BASE_DIR}/$IUF_ACTIVITY_SESSION}/site_vars.yaml
   -um UPDATE_METHOD_MANAGEMENT, --update-method-management UPDATE_METHOD_MANAGEMENT
-                        Method to update the management nodes.  (rolling) 'reboot' or (rolling) 'in_place' (update running nodes).  Defaults to 'reboot'
+                        Method to update the management nodes.  (rolling) 'reboot' or (rolling) 'in_place'
+                        (update running nodes).  Defaults to 'reboot'
   -uc UPDATE_METHOD_MANAGED, --update-method-managed UPDATE_METHOD_MANAGED
-                        Method to update the managed nodes.  (rolling) 'reboot' or (rolling) 'in_place' (update running nodes).  Defaults to 'reboot'
-  -ln LIMIT_NODES [LIMIT_NODES ...], --limit-nodes LIMIT_NODES [LIMIT_NODES ...]
-                        Override list used in rolling stage to assist with repairing broken nodes.
-                        For example, --limit-nodes ncn-w003 would cause the rollout stage to only
-                        reload ncn-w003;  --limit-nodes x3000c0s37b0n0 would also work.
+                        Method to update the managed nodes.  (rolling) 'reboot' or (rolling) 'in_place'
+                        (update running nodes).  Defaults to 'reboot'
+  --limit-managed-nodes LIMIT_MANAGED_NODES [LIMIT_MANAGED_NODES ...]
+                        Override list used in rolling stage to assist with repairing broken managed
+                        nodes.
+  --limit-management-nodes LIMIT_MANAGEMENT_NODES [LIMIT_MANAGEMENT_NODES ...]
+                        Override list used in rolling stage to assist with repairing broken management
+                        nodes.
+  -mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...], --mask-recipe-prods MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]
+                        If product_vars was specified, mask the versions found within product_vars for
+                        the products specified, So versions for the specified products would be pulled
+                        from the product catalog.  Note that the versions found in the `--site-vars` (or
+                        the version being installed) would override it anyway.
 ```
 
 These [examples](examples/iuf_run.md) highlight common use cases of `iuf run`.
@@ -311,8 +320,8 @@ The activity details displayed are:
 | Column         | Description                                                      |
 | -------------- | ---------------------------------------------------------------- |
 | start          | The time that this operation began execution                     |
-| activity state | << TODO >>                                                       |
-| IUF sessionid  | The IUF session ID associated with the operation                 |
+| activity state | The state of the activity when the operation was created         |
+| IUF sessionid  | The IUF Argo session ID associated with the operation            |
 | Status         | The status of the operation                                      |
 | Duration       | How long the operation has been in this state (if not completed) |
 | Comment        | User-specified comments associated with the operation            |
@@ -360,7 +369,60 @@ These [examples](examples/iuf_list_stages.md) highlight common use cases of `iuf
 
 ## Output and Log Files
 
-`iuf` subcommands display status information to standard output as the operations execute. IUF stores more detailed information in log files which are stored on a Ceph Block Device typically mounted at `/etc/cray/upgrade/`. The default log file directory can be overridden with the `iuf -b` and `iuf --log-dir` options (see `iuf -h` for details).
+### `iuf` Output
+
+`iuf` subcommands display status information to standard output as stages execute. Stages are made up of one or more phases, each performing a specific task via an Argo workflow pod or step. `iuf` output primarily consists of:
+
+- stage begin messages
+- stage end summaries
+- Argo workflow session identifiers created when executing a stage for a given product
+- phase begin and end messages
+- completion status of each phase (Succeeded, Failed)
+- time duration metrics
+
+In addition, any IUF log messages generated by IUF or products with a severify of `INFO` or higher are printed to standard output.
+
+The Argo session identifiers displayed, like `Analytics-1-4-15-rc11-add-product-to-product-catalog-o99pn` in the example below, can be queried in the [Argo UI](../argo/Using_the_Argo_UI.md) to provide access to more detailed log information and monitoring capabilities.
+
+(ncn-m001#) Example of `iuf` output.
+
+```bash
+iuf -a activity-20230119-1342 run -b pre-install-check -e update-vcs-config
+INFO MONITORING SESSION: activity-20230119-1342-wfcgl
+INFO BEGINNING STAGE: pre-install-check
+INFO     WORKFLOW ID: activity-20230119-1342-wfcgl-pre-install-check-k8nbc
+INFO         BEGIN PHASE: preflight-checks-for-services
+INFO         BEGIN PHASE: start-operation
+INFO      FINISHED PHASE: start-operation [Succeeded]
+INFO         BEGIN PHASE: preflight-checks
+INFO         BEGIN PHASE: preflight-checks(0)
+INFO      FINISHED PHASE: preflight-checks [Succeeded]
+INFO      FINISHED PHASE: preflight-checks(0) [Succeeded]
+INFO         BEGIN PHASE: end-operation
+INFO      FINISHED PHASE: end-operation [Succeeded]
+INFO         BEGIN PHASE: prom-metrics
+INFO      FINISHED PHASE: preflight-checks-for-services [Succeeded]
+INFO      FINISHED PHASE: prom-metrics [Succeeded]
+INFO          RESULT: Succeeded
+INFO        DURATION: 0:36:09
+INFO BEGINNING STAGE: deliver-product
+INFO     WORKFLOW ID: activity-20230119-1342-wfcgl-deliver-product-7pv5b
+INFO         BEGIN PHASE: Analytics-1-4-15-rc11-add-product-to-product-catalog-o99pn
+INFO         BEGIN PHASE: [0]
+INFO         BEGIN PHASE: start-operation
+INFO         BEGIN PHASE: slingshot-host-software-2-1-0-195-dev-cos-2-5-add-product-n2jat
+INFO         BEGIN PHASE: [0]
+INFO         BEGIN PHASE: start-operation
+INFO      FINISHED PHASE: [0] [Succeeded]
+INFO      FINISHED PHASE: start-operation [Succeeded]
+INFO         BEGIN PHASE: [1]
+INFO         BEGIN PHASE: update-product-catalog
+[...]
+```
+
+### Log Files
+
+IUF stores more detailed information in log files which are stored on a Ceph Block Device typically mounted at `/etc/cray/upgrade/`. The default log file directory location can be overridden with the `iuf -b` and `iuf --log-dir` options (see `iuf -h` for details).
 
 Log files are organized by activity identifiers. The following example shows the log files that exist for the `joe-install-20230107` activity and the session information recorded in an IUF state log file.
 
@@ -379,7 +441,7 @@ joe-install-20230107:
   states:
     '2023-01-07t21:58:25':
       comment: Run process-media
-      sessionid: joe-install-20230107u0sil-process-media-8lqms
+      sessionid: joe-install-20230107-u0sil-process-media-8lqms
       state: in_progress
       status: n/a
     '2023-01-07t22:00:00':
@@ -405,6 +467,8 @@ The `iuf run` subcommand has arguments that allow the administrator to reference
 variables specified in the files are used by IUF when executing the `update-vcs-config`, `update-cfs-config`, and `prepare-images`
 stages. For example, the `working_branch` variable defines the naming convention used by IUF to find or create a product's VCS branch
 containing site-customized configuration content, which happens as part of the `update-vcs-config` stage.
+
+An example use case for site and recipe variables is provided in the [`update-vcs-config`](stages/update_vcs_config.md) stage documentation.
  
 ## Product Workflows
 
@@ -414,4 +478,7 @@ The following are examples of workflows for installing and upgrading product con
 
 ## Troubleshooting
 
-<< TODO >>
+The following actions may be useful if errors are encountered when executing `iuf`.
+
+- Examine IUF log files as described in the [Output and Log Files](#output-and-log-files) subsection for information not provided on `iuf` standard output.
+- Use the [Argo UI](../argo/Using_the_Argo_UI.md) to find the Argo pod that corresponds to the failed IUF operation. This can be done by finding the Argo session ID displayed on [`iuf` standard output](#iuf-output) for the failed IUF operation and performing an Argo UI query with that value. The Argo UI will provide additional log information that may be useful.

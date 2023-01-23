@@ -4,15 +4,17 @@ The `prepare-images` stage configures NCN management node images and builds and 
 
 << TODO: add details on determines what products/configurations/etc. are used to create images >>
 
-The `prepare-images` stage does not change the running state of the system.
+## Impact
 
-## Required Input
+The `prepare-images` stage does not change the running state of the system as it does not deploy the newly created images.
 
-The following arguments must be specified. See `iuf -h` and `iuf run -h` for additional optional arguments.
+## Input
 
-| Input           | `iuf` Argument |
-| --------------- | -------------- |
-| activity        | `-a ACTIVITY`  |
+The following arguments are most often used with the `prepare-images` stage. See `iuf -h` and `iuf run -h` for additional arguments.
+
+| Input           | `iuf` Argument | Description |
+| --------------- | -------------- | ----------- |
+| activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations |
 
 ## Execution Details
 
@@ -20,8 +22,8 @@ The code executed by this stage utilizes `sat bootprep` to build and customize i
 
 ## Example
 
-(ncn-m001#) << TODO >>
+(ncn-m001#) Execute the `prepare-images` stage.
 
 ```bash
-<< TODO >>
+iuf -a joe-install-20230107 run -r prepare-images
 ```

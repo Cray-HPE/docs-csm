@@ -2,15 +2,17 @@
 
 The `deploy-product` stage uses Loftsman to deploy product microservices to the system. The microservices are specified in the `loftsman` entry in each product's `iuf-product-manifest.yaml` file within the product distribution file.
 
+## Impact
+
 The `deploy-product` stage changes the running state of the system.
 
-## Required Input
+## Input
 
-The following arguments must be specified. See `iuf -h` and `iuf run -h` for additional optional arguments.
+The following arguments are most often used with the `deploy-product` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input           | `iuf` Argument |
-| --------------- | -------------- |
-| activity        | `-a ACTIVITY`  |
+| Input           | `iuf` Argument | Description |
+| --------------- | -------------- | ----------- |
+| activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations |
 
 ## Execution Details
 
@@ -18,8 +20,8 @@ The code executed by this stage primarily exists with IUF itself. See the `deplo
 
 ## Example
 
-(ncn-m001#) << TODO >>
+(ncn-m001#) Execute the `deploy-product` stage.
 
 ```bash
-<< TODO >>
+iuf -a joe-install-20230107 run -r deploy-product
 ```

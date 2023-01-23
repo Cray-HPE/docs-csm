@@ -2,15 +2,17 @@
 
 The `post-install-service-check` stage validates that the microservices deployed by the preceding `deploy-product` stage are executing correctly. It primarily executes pre- and post-stage hook scripts provided by products in their `iuf-product-manifest.yaml` file.
 
+## Impact
+
 The `post-install-service-check` stage does not change the running state of the system.
 
-## Required Input
+## Input
 
-The following arguments must be specified. See `iuf -h` and `iuf run -h` for additional optional arguments.
+The following arguments are most often used with the `post-install-service-check` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input           | `iuf` Argument |
-| --------------- | -------------- |
-| activity        | `-a ACTIVITY`  |
+| Input           | `iuf` Argument | Description |
+| --------------- | -------------- | ----------- |
+| activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations |
 
 ## Execution Details
 
@@ -18,8 +20,8 @@ The code executed by this stage primarily exists with IUF itself. See the `post-
 
 ## Example
 
-(ncn-m001#) << TODO >>
+(ncn-m001#) Execute the `post-install-service-check` stage.
 
 ```bash
-<< TODO >>
+iuf -a joe-install-20230107 run -r post-install-service-check
 ```
