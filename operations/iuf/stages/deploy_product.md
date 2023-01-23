@@ -20,7 +20,7 @@ The code executed by this stage primarily exists with IUF itself. See the `deplo
 
 ## Example
 
-(ncn-m001#) Execute the `deploy-product` stage.
+(`ncn-m001#`) Execute the `deploy-product` stage.
 
 ```bash
 iuf -a joe-install-20230107 run -r deploy-product

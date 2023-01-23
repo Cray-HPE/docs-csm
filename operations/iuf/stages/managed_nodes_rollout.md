@@ -16,11 +16,12 @@ The following arguments are most often used with the `managed-nodes-rollout` sta
 
 ## Execution Details
 
-The code executed by this stage primarily exists with IUF itself. See the `managed-nodes-rollout` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/` for details on the commands executed.
+The code executed by this stage primarily exists with IUF itself. See the `managed-nodes-rollout` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+for details on the commands executed.
 
 ## Example
 
-(ncn-m001#) Execute the `managed-nodes-rollout` stage.
+(`ncn-m001#`) Execute the `managed-nodes-rollout` stage.
 
 ```bash
 iuf -a joe-install-20230107 run -r managed-nodes-rollout

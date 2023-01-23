@@ -1,6 +1,6 @@
 # `iuf restart` Examples
 
-(ncn-m001#) << TODO >>
+(`ncn-m001#`) << TODO >>
 
 ```bash
 << TODO >>
