@@ -1,6 +1,7 @@
 # post-install-service-check
 
-The `post-install-service-check` stage validates that the microservices deployed by the preceding `deploy-product` stage are executing correctly. It primarily executes pre- and post-stage hook scripts provided by products in their `iuf-product-manifest.yaml` file.
+The `post-install-service-check` stage validates that the microservices deployed by the preceding `deploy-product` stage are executing correctly. It primarily executes pre- and post-stage hook scripts provided by products
+in their `iuf-product-manifest.yaml` file.
 
 ## Impact
 
@@ -16,11 +17,12 @@ The following arguments are most often used with the `post-install-service-check
 
 ## Execution Details
 
-The code executed by this stage primarily exists with IUF itself. See the `post-install-service-check` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/` for details on the commands executed.
+The code executed by this stage primarily exists with IUF itself. See the `post-install-service-check` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+for details on the commands executed.
 
 ## Example
 
-(ncn-m001#) Execute the `post-install-service-check` stage.
+(`ncn-m001#`) Execute the `post-install-service-check` stage.
 
 ```bash
 iuf -a joe-install-20230107 run -r post-install-service-check

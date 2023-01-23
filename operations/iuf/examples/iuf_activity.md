@@ -1,6 +1,6 @@
 # `iuf activity` Examples
 
-(ncn-m001#) Display an activity.
+(`ncn-m001#`) Display an activity.
 
 ```bash
 iuf -a joe-install-20230107-2 activity
@@ -18,7 +18,7 @@ iuf -a joe-install-20230107-2 activity
 +---------------------+----------------+-----------------------------------------------------+--------+----------+-----------------------+
 ```
 
-(ncn-m001#) Create a new activity state.
+(`ncn-m001#`) Create a new activity state.
 
 ```bash
 iuf -a joe-install-20230107-2 activity --create --comment "test 1" debug
@@ -37,7 +37,7 @@ iuf -a joe-install-20230107-2 activity --create --comment "test 1" debug
 +---------------------+----------------+-----------------------------------------------------+--------+----------+-----------------------+
 ```
 
-(ncn-m001#) Edit the comment associated with an existing entry.
+(`ncn-m001#`) Edit the comment associated with an existing entry.
 
 ```bash
 iuf -a joe-install-20230107-2 activity --time 2023-01-08t22:14:15 --comment "test 3" debug

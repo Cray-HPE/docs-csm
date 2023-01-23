@@ -1,6 +1,6 @@
 # `iuf list-stages` Examples
 
-(ncn-m001#) List the stages for activity `joe-install-20230107-2` along with their status and duration values.
+(`ncn-m001#`) List the stages for activity `joe-install-20230107-2` along with their status and duration values.
 
 ```bash
 iuf -a joe-install-20230107-2 list-stages

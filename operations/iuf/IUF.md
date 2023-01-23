@@ -34,12 +34,13 @@ The following IUF topics are discussed in the sections below.
 - [Product Workflows](#product-workflows)
 - [Troubleshooting](#troubleshooting)
 
-
 ## Limitations
 
-- `iuf` must be executed from the ncn-m001 node.
-- While IUF enables non-interactive deployment of product software, it does not automatically configure the software beyond merging new VCS release branch content to customer working branches. For example, if a product requires manual configuration, the administrator must stop IUF execution after the `update-vcs-config` stage, perform the manual configurations steps, and then resume with the next IUF stage (`update-cfs-config`).
-- IUF leverages `sat bootprep` for CFS configuration and image creation. It is intended to be used with the configuration files provided in the HPC CSM Software Recipe and requires the administrator to verify and customize those configurations to their specific needs.
+- `iuf` must be executed from `ncn-m001`.
+- While IUF enables non-interactive deployment of product software, it does not automatically configure the software beyond merging new VCS release branch content to customer working branches. For example, if a product requires
+  manual configuration, the administrator must stop IUF execution after the `update-vcs-config` stage, perform the manual configurations steps, and then resume with the next IUF stage (`update-cfs-config`).
+- IUF leverages `sat bootprep` for CFS configuration and image creation. It is intended to be used with the configuration files provided in the HPC CSM Software Recipe and requires the administrator to verify and customize
+  those configurations to their specific needs.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
 
@@ -54,17 +55,20 @@ The time at which IUF stages are executed in an initial install or upgrade workf
 | upgrade         | CSM and products | Upgrade CSM, **including** any IUF stages embedded in the CSM installation documentation |
 | upgrade         | products only    | Execute IUF stages to upgrade non-CSM product content |
 
-**<< TODO: INSERT INITIAL INSTALL AND UPGRADE DIAGRAMS HERE >>**
+<< TODO: INSERT INITIAL INSTALL AND UPGRADE DIAGRAMS HERE >>
 
 ## Activities
 
-An activity is a user-specified unique string identifier used to group and track IUF actions, typically those needed to complete an install or upgrade using a set of product distribution files. An example of an activity identifier is `joe-install-20221219`. `iuf` subcommands accept an activity as input, and the corresponding IUF output and log files are organized by that activity. The activity can be specified via an `iuf` argument or an environment variable; for more details, see `iuf -h`.  The activity will be created automatically upon the first invocation of IUF with that given activity string.
+An activity is a user-specified unique string identifier used to group and track IUF actions, typically those needed to complete an install or upgrade using a set of product distribution files. An example of an activity
+identifier is `joe-install-20221219`. `iuf` subcommands accept an activity as input, and the corresponding IUF output and log files are organized by that activity. The activity can be specified via an `iuf` argument or an environment
+variable; for more details, see `iuf -h`.  The activity will be created automatically upon the first invocation of IUF with that given activity string.
 
-IUF provides operational metrics associated with an activity (e.g. the time duration of each stage executed). Users can also create annotations for an activity, e.g. to note that an operation has been paused, to note that time was spent debugging an issue, etc. `iuf` subcommands can be invoked to display a summary of actions, annotations, and metrics associated with an activity.
+IUF provides operational metrics associated with an activity (e.g. the time duration of each stage executed). Users can also create annotations for an activity, e.g. to note that an operation has been paused, to note that time was
+spent debugging an issue, etc. `iuf` subcommands can be invoked to display a summary of actions, annotations, and metrics associated with an activity.
 
 The following example shows stage information associated with the `joe-install-20230107` activity:
 
-(ncn-m001#) List operations for an IUF activity.
+(`ncn-m001#`) List operations for an IUF activity.
 
 ```bash
 iuf -a joe-install-20230107 activity
@@ -85,11 +89,15 @@ iuf -a joe-install-20230107 activity
 
 ## Sessions
 
-A session is a unique string identifier automatically created by IUF to track IUF activity operations on a finer granularity. An example of a session identifier is `joe-install-20230107-u0sil-process-media-8lqms`. A session is generated within an IUF activity for each `iuf` operation executed. For example, if an administrator invokes IUF to execute the `process-media` and `pre-install-check` stages, two sessions will be created: one associated with the `process-media` operations and one associated with the `pre-install-check` operations. Not all operations in an activity are associated with a session, however. For example, annotation events and time spent waiting for the administrator to invoke the next operation do not result in the execution of IUF install and upgrade operations, and thus are not associated with a session.
+A session is a unique string identifier automatically created by IUF to track IUF activity operations on a finer granularity. An example of a session identifier is `joe-install-20230107-u0sil-process-media-8lqms`. A session is
+generated within an IUF activity for each `iuf` operation executed. For example, if an administrator invokes IUF to execute the `process-media` and `pre-install-check` stages, two sessions will be created: one associated with the
+`process-media` operations and one associated with the `pre-install-check` operations. Not all operations in an activity are associated with a session, however. For example, annotation events and time spent waiting for the
+administrator to invoke the next operation do not result in the execution of IUF install and upgrade operations, and thus are not associated with a session.
 
-Session identifiers are recorded in the IUF log files and are also displayed by `iuf activity`. In general, administrators do not need to be concerned with sessions. The exception is when IUF encounters an error. At that point, session identifiers can be specified via `iuf` to resume or abort the session (see `iuf resume -h` and `iuf abort -h`).
+Session identifiers are recorded in the IUF log files and are also displayed by `iuf activity`. In general, administrators do not need to be concerned with sessions. The exception is when IUF encounters an error. At that point,
+session identifiers can be specified via `iuf` to resume or abort the session (see `iuf resume -h` and `iuf abort -h`).
 
-(ncn-m001#) The following example shows session information reported by the `iuf activity` command.
+(`ncn-m001#`) The following example shows session information reported by the `iuf activity` command.
 
 ```bash
 iuf -a joe-install-20230107 activity
@@ -105,13 +113,19 @@ iuf -a joe-install-20230107 activity
 
 ## Stages and Hooks
 
-Install and upgrade operations performed by IUF are organized into stages. The administrator can execute one or more stages in a single invocation of `iuf run`. A single stage can execute with the content of one or more products. IUF operates on all products found in a single media directory specified by the administrator.  When possible, IUF will parallelize execution for products within a stage, e.g. the `process-media` stage will extract content for all products found in the media directory at the same time.
+Install and upgrade operations performed by IUF are organized into stages. The administrator can execute one or more stages in a single invocation of `iuf run`. A single stage can execute with the content of one or more products.
+IUF operates on all products found in a single media directory specified by the administrator. When possible, IUF will parallelize execution for products within a stage, e.g. the `process-media` stage will extract content for all
+products found in the media directory at the same time.
 
-A stage will not complete until it has completed execution for all products specified in the activity. If an error is encountered while executing a stage for a given product, IUF will allow other products to complete the execution of the stage and will then stop execution. It will create an entry within the activity with a status of `Failed` and set the stage status to `Failed`.
+A stage will not complete until it has completed execution for all products specified in the activity. If an error is encountered while executing a stage for a given product, IUF will allow other products to complete the execution
+of the stage and will then stop execution. It will create an entry within the activity with a status of `Failed` and set the stage status to `Failed`.
 
-IUF provides a hook capability for all stages. This allows a product to execute additional scripts before and/or after a given stage executes. Hooks allow products to perform special actions that IUF does not perform itself at an appropriate time in an initial install or upgrade workflow. These hook scripts are executed automatically by IUF; no input from the administrator is required. All product scripts registered via a pre-stage hooks must complete before the stage executes, and no product post-stage hook will execute until the stage itself has completed.
+IUF provides a hook capability for all stages. This allows a product to execute additional scripts before and/or after a given stage executes. Hooks allow products to perform special actions that IUF does not perform itself at an
+appropriate time in an initial install or upgrade workflow. These hook scripts are executed automatically by IUF; no input from the administrator is required. All product scripts registered via a pre-stage hooks must complete before
+the stage executes, and no product post-stage hook will execute until the stage itself has completed.
 
-The administrator may execute one, multiple, or all stages in a single `iuf run` invocation depending on the task to be accomplished. If multiple stages are specified, they must be executed in the order listed below and displayed by the `iuf list-stages` subcommand. The `iuf run` subcommand provides arguments to specify which stages are to be run and if any stages should be skipped.
+The administrator may execute one, multiple, or all stages in a single `iuf run` invocation depending on the task to be accomplished. If multiple stages are specified, they must be executed in the order listed below and displayed by
+the `iuf list-stages` subcommand. The `iuf run` subcommand provides arguments to specify which stages are to be run and if any stages should be skipped.
 
 The following table lists all of the stages in the order they are executed when performing an initial install or upgrade of one or more products.
 
@@ -123,7 +137,7 @@ The following table lists all of the stages in the order they are executed when 
 | [pre-install-check](stages/pre_install_check.md)                   | Perform pre-install readiness checks                                                     |
 | [deliver-product](stages/deliver_product.md)                       | Upload product content onto the system                                                   |
 | [update-vcs-config](stages/update_vcs_config.md)                   | Merge working branches and perform automated VCS configuration                           |
-| [update-cfs-config](stages/update_cfs_config.md)                   | Update CFS configuration (executes `sat bootprep`)                                       | 
+| [update-cfs-config](stages/update_cfs_config.md)                   | Update CFS configuration (executes `sat bootprep`)                                       |
 | [prepare-images](stages/prepare_images.md)                         | Build and configure management node and/or managed node images (executes `sat bootprep`) |
 | [management-nodes-rollout](stages/management_nodes_rollout.md)     | Rolling reboot or live update of management nodes                                        |
 | [deploy-product](stages/deploy_product.md)                         | Deploy services to system                                                                |
@@ -193,7 +207,9 @@ subcommands:
 
 ### Input File
 
-As described in the [Output and Log Files](#output-and-log-files) section, the `-i INPUT_FILE` argument can be used to read `iuf` arguments and values from a YAML input file. Both global and subcommand-specific arguments can be specified in the input file. If an input file is used in addition to `iuf` arguments, the `iuf` arguments take precedence. The name of an entries in the input file corresponds to the long form name of the `iuf` argument with hyphens replaced by underscores.
+As described in the [Output and Log Files](#output-and-log-files) section, the `-i INPUT_FILE` argument can be used to read `iuf` arguments and values from a YAML input file. Both global and subcommand-specific arguments can be
+specified in the input file. If an input file is used in addition to `iuf` arguments, the `iuf` arguments take precedence. The name of an entries in the input file corresponds to the long form name of the `iuf` argument with
+hyphens replaced by underscores.
 
 The following in an example of an `iuf` input file:
 
@@ -214,7 +230,8 @@ run:
 
 #### `run`
 
-The `run` subcommand is used to execute one or more IUF stages. The `-b`, `-e`, `-r` and `-s` arguments can be specified to limit the stages executed. If none of those arguments are specified, `iuf run` will execute all stages in order. If an activity identifier is not provided via `-a`, a new activity will be created automatically.
+The `run` subcommand is used to execute one or more IUF stages. The `-b`, `-e`, `-r` and `-s` arguments can be specified to limit the stages executed. If none of those arguments are specified, `iuf run` will execute all stages
+in order. If an activity identifier is not provided via `-a`, a new activity will be created automatically.
 
 The following arguments may be specified when invoking `iuf run`:
 
@@ -313,7 +330,8 @@ These [examples](examples/iuf_restart.md) highlight common use cases of `iuf res
 
 #### `activity`
 
-The `activity` subcommand allows the administrator to create a new activity, display details for an activity, and create, update, and annotate activity states. These operations allow the administrator to easily determine the status of IUF activity operations and associate time-based metrics and user-specified comments with them. 
+The `activity` subcommand allows the administrator to create a new activity, display details for an activity, and create, update, and annotate activity states. These operations allow the administrator to easily determine the status
+of IUF activity operations and associate time-based metrics and user-specified comments with them.
 
 The activity details displayed are:
 
@@ -382,9 +400,10 @@ These [examples](examples/iuf_list_stages.md) highlight common use cases of `iuf
 
 In addition, any IUF log messages generated by IUF or products with a severity of `INFO` or higher are printed to standard output.
 
-The Argo session identifiers displayed, like `Analytics-1-4-15-rc11-add-product-to-product-catalog-o99pn` in the example below, can be queried in the [Argo UI](../argo/Using_the_Argo_UI.md) to provide access to more detailed log information and monitoring capabilities.
+The Argo session identifiers displayed, like `Analytics-1-4-15-rc11-add-product-to-product-catalog-o99pn` in the example below, can be queried in the [Argo UI](../argo/Using_the_Argo_UI.md) to provide access to more detailed log
+information and monitoring capabilities.
 
-(ncn-m001#) Example of `iuf` output.
+(`ncn-m001#`) Example of `iuf` output.
 
 ```bash
 iuf -a activity-20230119-1342 run -b pre-install-check -e update-vcs-config
@@ -426,7 +445,7 @@ IUF stores more detailed information in log files which are stored on a Ceph Blo
 
 Log files are organized by activity identifiers. The following example shows the log files that exist for the `joe-install-20230107` activity and the session information recorded in an IUF state log file.
 
-(ncn-m001#) Display log files and examine a specific state log file.
+(`ncn-m001#`) Display log files and examine a specific state log file.
 
 ```bash
 find /opt/cray/iuf/joe-install-20230107/ -type f
@@ -469,18 +488,22 @@ stages. For example, the `working_branch` variable defines the naming convention
 containing site-customized configuration content, which happens as part of the `update-vcs-config` stage.
 
 An example use case for site and recipe variables is provided in the [`update-vcs-config`](stages/update_vcs_config.md) stage documentation.
- 
+
 ## Product Workflows
 
 The following are examples of workflows for installing and upgrading product content using `iuf`.
 
-- [Upgrade All Products Provided in a HPC CSM Software Recipe ](workflows/upgrade_all_products.md)
+- [Upgrade All Products Provided in a HPC CSM Software Recipe](workflows/upgrade_all_products.md)
 
 ## Troubleshooting
 
 The following actions may be useful if errors are encountered when executing `iuf`.
 
 - Examine IUF log files as described in the [Output and Log Files](#output-and-log-files) section for information not provided on `iuf` standard output.
-- Use the [Argo UI](../argo/Using_the_Argo_UI.md) to find the Argo pod that corresponds to the failed IUF operation. This can be done by finding the Argo session ID displayed on [`iuf` standard output](#iuf-output) for the failed IUF operation and performing an Argo UI query with that value. Argo session IDs can also be found by running [`iuf activity`](#activities). The Argo UI will provide additional log information that may help debug the issue.
-- If an error is associated with a script invoked by a product's [stage hook](#stages-and-hooks), the script can be found in the expanded product distribution file located in the media directory (`iuf -m MEDIA_DIR`). Examine the `hooks` entry in the product's `iuf-product-manifest.yaml` file in the media directory for the path to the script.
-- If the source of the error can not be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and Hooks](#stages-and-hooks) section of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the workflow and debug the issue.
+- Use the [Argo UI](../argo/Using_the_Argo_UI.md) to find the Argo pod that corresponds to the failed IUF operation. This can be done by finding the Argo session ID displayed on [`iuf` standard output](#iuf-output) for the failed
+  IUF operation and performing an Argo UI query with that value. Argo session IDs can also be found by running [`iuf activity`](#activities). The Argo UI will provide additional log information that may help debug the issue.
+- If an error is associated with a script invoked by a product's [stage hook](#stages-and-hooks), the script can be found in the expanded product distribution file located in the media directory (`iuf -m MEDIA_DIR`). Examine the
+  `hooks` entry in the product's `iuf-product-manifest.yaml` file in the media directory for the path to the script.
+- If the source of the error can not be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and Hooks](#stages-and-hooks) section
+  of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the
+  workflow and debug the issue.

@@ -1,6 +1,7 @@
 # `process-media`
 
-The `process-media` stage extracts all product distribution files found in the media directory specified by the user via `-m`. The product content is extracted into that same directory. All future stages associated with the activity will execute for all applicable products found in the media directory.
+The `process-media` stage extracts all product distribution files found in the media directory specified by the user via `-m`. The product content is extracted into that same directory. All future stages associated with the activity
+will execute for all applicable products found in the media directory.
 
 ## Impact
 
@@ -17,11 +18,12 @@ The following arguments are most often used with the `process-media`. See `iuf -
 
 ## Execution Details
 
-The code executed by this stage primarily exists with IUF itself. See the `process-media` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/` for details on the commands executed.
+The code executed by this stage primarily exists with IUF itself. See the `process-media` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+for details on the commands executed.
 
 ## Example
 
-(ncn-m001#) Execute the `process-media` stage with product distribution content found in `/opt/cray/iuf/joe/`.
+(`ncn-m001#`) Execute the `process-media` stage with product distribution content found in `/opt/cray/iuf/joe/`.
 
 ```bash
 iuf -a joe-install-20230107 -m /opt/cray/iuf/joe/ run -r process-media
