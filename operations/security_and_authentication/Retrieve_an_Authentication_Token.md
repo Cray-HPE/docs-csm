@@ -1,6 +1,6 @@
 # Retrieve an Authentication Token
 
-Retrieve a token for authenticating to one of the API gateways, for the `shasta` realm. 
+Retrieve a token for authenticating to one of the API gateways, for the `shasta` realm.
 
 The following are important properties of authentication tokens:
 
