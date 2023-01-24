@@ -2,13 +2,13 @@
 
 This procedure is intended to repopulate HSM in the event when no Postgres backup exists.
 
-### Prerequisite
+## Prerequisite
 
 - Healthy System Layout Service (SLS). Recovered first if also affected.
 
 - Healthy HSM service.
 
-  Verify all 3 HSM postgres replicas are up and running:
+  Verify all 3 HSM Postgres replicas are up and running:
 
   ```bash
   kubectl -n services get pods -l cluster-name=cray-smd-postgres
@@ -16,14 +16,14 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 
   Example output:
 
-  ```
+  ```text
   NAME                  READY   STATUS    RESTARTS   AGE
   cray-smd-postgres-0   3/3     Running   0          18d
   cray-smd-postgres-1   3/3     Running   0          18d
   cray-smd-postgres-2   3/3     Running   0          18d
   ```
 
-### Procedure
+## Procedure
 
 1. Re-run the HSM loader job.
 
@@ -45,7 +45,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 
     Example output:
 
-    ```
+    ```text
     code = 0
     message = "HSM is healthy"
     ```
@@ -58,7 +58,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 
 4. Restart MEDS and REDS.
 
-    To repopulate HSM with components, restart MEDS and REDS so that they will add known RedfishEndpoints back in to HSM. This will also kick off HSM rediscovery to repopulate components and hardware inventory.
+    To repopulate HSM with components, restart MEDS and REDS so that they will add known `RedfishEndpoints` back in to HSM. This will also kick off HSM rediscovery to repopulate components and hardware inventory.
 
     ```bash
     kubectl scale deployment cray-meds -n services --replicas=0
@@ -82,12 +82,12 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     cray hsm inventory redfishEndpoints list --format json | grep LastDiscoveryStatus | grep -v -c "DiscoverOK"
     ```
 
-    If any of the RedfishEndpoint entries have a `LastDiscoveryStatus` other than `DiscoverOK` after discovery has completed, refer to the [Troubleshoot Issues with Redfish Endpoint Discovery](../node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md) procedure for guidance.
+    If any of the RedfishEndpoint entries have a `LastDiscoveryStatus` other than `DiscoverOK` after discovery has completed, refer
+    to the [Troubleshoot Issues with Redfish Endpoint Discovery](../node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md) procedure for guidance.
 
 6. Re-apply any component group or partition customizations.
 
     Any component groups or partitions created before HSM's Postgres information was lost will need to be manually re-entered.
 
-    * [Manage Component Groups](Manage_Component_Groups.md)
-    * [Manage Component Partitions](Manage_Component_Partitions.md)
-
+    - [Manage Component Groups](Manage_Component_Groups.md)
+    - [Manage Component Partitions](Manage_Component_Partitions.md)
