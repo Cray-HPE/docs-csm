@@ -59,16 +59,19 @@ Usage: set_ssh_keys.py [options]
 Apply the workaround to the `set_ssh_keys.py` script.
 
 1. Delete the following lines:
+
 ```text
-		if not "Class" in comp:
-			if comp['Type'] == "CabinetPDUController":
+      if not "Class" in comp:
+         if comp['Type'] == "CabinetPDUController":
 ```
-2. Replace the deleted lines with the following:
+
+1. Replace the deleted lines with the following:
+
 ```text
-		if "Class" in comp:
-			tclass = comp['Class']
-		else:
-			if comp['Type'] == "CabinetPDUController" or comp['Type'] == "CabinetPDUPowerConnector":
+      if "Class" in comp:
+         tclass = comp['Class']
+      else:
+         if comp['Type'] == "CabinetPDUController" or comp['Type'] == "CabinetPDUPowerConnector":
 ```
 
 If no command line arguments are needed, SSH keys are set on all discovered mountain controllers using the root account's public RSA key. Using an alternate key requires the `--sshkey=key` argument:
