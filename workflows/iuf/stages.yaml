@@ -109,3 +109,8 @@ stages:
     operations:
       - name: post-install-check
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+
+# The following are the template references to hook scripts.
+hooks:
+  master_host: master-host-hook-script
