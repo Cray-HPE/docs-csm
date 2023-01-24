@@ -40,7 +40,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 2. Verify that the service is functional.
 
     ```bash
-    cray hsm service ready
+    cray hsm service ready list
     ```
 
     Example output:
@@ -53,7 +53,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 3. Get the number of node objects stored in HSM.
 
     ```bash
-    cray hsm state components list --type node --format json | jq .[].ID | wc -l
+    cray hsm state components list --type Node --format json | jq .Components[].ID | wc -l
     ```
 
 4. Restart MEDS and REDS.
@@ -70,7 +70,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     Wait for the RedfishEndpoints table to get repopulated and discovery to complete.
 
     ```bash
-    cray hsm inventory RedfishEndpoints list --format json | jq .[].ID | wc -l
+    cray hsm inventory redfishEndpoints list --format json | jq .RedfishEndpoints[].ID | wc -l
     100
     cray hsm inventory redfishEndpoints list --format json | grep -c "DiscoveryStarted"
     0
