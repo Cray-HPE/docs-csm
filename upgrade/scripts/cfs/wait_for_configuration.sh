@@ -81,7 +81,7 @@ elif [[ -n $ROLE ]] || [[ -n $SUBROLE ]]; then
   if [[ -n $SUBROLE ]]; then
     SUBROLE_PARAMETER="--subrole $SUBROLE"
   fi
-  XNAMES=$(cray hsm state components list --type node $ROLE_PARAMETER $SUBROLE_PARAMETER --format json \
+  XNAMES=$(cray hsm state components list --type Node $ROLE_PARAMETER $SUBROLE_PARAMETER --format json \
     | jq -r '.Components | map(.ID) | join(",")')
   XNAME_PARAMETER="--ids ${XNAMES}"
 fi
