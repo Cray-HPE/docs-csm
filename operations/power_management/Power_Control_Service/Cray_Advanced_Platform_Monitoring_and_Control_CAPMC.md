@@ -83,38 +83,3 @@ node type has its own power capping capabilities.
 **`NOTE`** Power capping is not supported for liquid cooled chassis, switch
 modules, compute blades, and any non-compute nodes (NCNs) in air cooled
 cabinets.
-
-## Deprecated Interfaces
-See the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
-more information
-
-### Power Control and Query by NID
-Use the interfaces from [Power control and query by xname](#power-control-and-query-by-xname):
-- node_on
-- node_off
-- node_reinit
-- get_node_status
-
-### Power Control and Query by group
-Use the interfaces from [Power control and query by xname](#power-control-and-query-by-xname):
-- group_on
-- group_off
-- group_reinit
-- get_group_status
-
-### Node Energy
-Use the System Monitoring Application (SMA) Grafana instance:
-- get_node_energy
-- get_node_energy_stats
-- get_node_energy_counters
-
-### System Monitor
-Use the System Monitoring Application (SMA) Grafana instance:
-- get_system_parameters
-- get_system_power
-- get_system_power_details
-
-### Others
-- get_node_rules
-- emergency_power_off
-- get_nid_map

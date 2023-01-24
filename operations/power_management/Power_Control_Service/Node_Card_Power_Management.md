@@ -1,30 +1,27 @@
-# Liquid Cooled Node Power Management
+# Node Card Power Management
 
-Liquid Cooled AMD EPYC compute blade node card power capabilities and limits.
+Node power management is supported by the server vendor BMC firmware. The BMC exposes the power control API for a node through the node's Redfish Power schema.
 
-Liquid Cooled cabinet node card power features are supported by the node
-controller (nC) firmware and CPU vendor. The nC exposes the power control API
-for each node via the node's Redfish Control schema. Out-of-band power
-management data is produced and collected by the nC hardware and firmware. This
-data can be published to a collector using the Redfish EventService, or
-retrieved on-demand from the Redfish ChassisSensors resource.
+Out-of-band power management data is polled by a collector and published on a
+Kafka bus for entry into the Power Management Database (PMDB). Access to the
+data stored in the PMDB is available through the System Monitoring Application
+(SMA) Grafana instance.
+
+Power limiting of a node must be enabled and may require additional licenses to
+use. Refer to vendor documentation for instructions on how to enable power
+limiting and what licenses, if any, are needed.
 
 ## Requirements
 
-* Hardware State Manager (`cray-hms-smd`) at least `v1.30.16`
-* CAPMC (`cray-hms-capmc`) at least `1.31.0`
-* Cray CLI at least `0.44.0`
-
-## Deprecated Interfaces
-
-Set the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
-more information.
-
-* `get_node_energy`
-* `get_node_energy_stats`
-* `get_system_power`
+* Hardware State Manager (`cray-hms-smd`) at least `v2.0.0`
+* CAPMC (`cray-power-control`) at least `1.0.0`
+* Cray CLI at least `0.61.0`
 
 ## Redfish API
+
+The Redfish API for rack-mounted nodes is the node's Power resource which is
+presented by the BMC. OEM properties may be used to augment the Power schema to
+provide additional power management capabilities.
 
 The Redfish API for Liquid Cooled compute blades is the node's Control resource
 which is presented by the nC. The Control resource presents the various power
@@ -49,11 +46,14 @@ of power a system or a select subset of the system may consume.
 CAPMC API calls provide means for third party software to implement advanced
 power management strategies using JSON data structures.
 
-The AMD EPYC node card supports these power limiting and monitoring API calls:
+The ??? node card supports these power limiting and monitoring API calls:
 
 * `get_power_cap_capabilities`
 * `get_power_cap`
 * `set_power_cap`
+
+In general, rack-mounted compute nodes do not allow for power limiting of any
+installed accelerators separately from the node limit.
 
 Power limit control will only be valid on a compute node when power limiting is
 enabled, the node is booted, and the node is in the Ready state as seen via the
@@ -415,3 +415,22 @@ curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
         https://${BMC}/redfish/v1/Chassis/${node}/Controls/Accelerator3PowerLimit \
         -d '{"ControlMode":"Disabled"}'
 ```
+
+
+### Gigabyte
+
+* **Enable Power Limiting**
+
+    ```bash
+    curl -k -u $login:$pass -H "Content-Type: application/json" \
+    -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+    --data '{"PowerLimitTrigger": "Activate"}'
+    ```
+
+* **Deactivate Node Power Limit**
+
+    ```bash
+    curl -k -u $login:$pass -H "Content-Type: application/json" \
+    -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
+    --data '{"PowerLimitTrigger": "Deactivate"}'
+    ```
