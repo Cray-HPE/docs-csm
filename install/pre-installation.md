@@ -78,7 +78,7 @@ Any steps run on an `external` server require that server to have the following 
    ```bash
    OUT_DIR="$(pwd)/csm-temp"
    mkdir -pv "${OUT_DIR}"
-   tar -C "${OUT_DIR}" --wildcards --no-anchored --transform='s/.*\///' -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-pre-install-toolkit-*.iso'
+   tar -C "${OUT_DIR}" --wildcards --no-anchored --transform='s/.*\///' -xzvf "csm-${CSM_RELEASE}.tar.gz" 'pre-install-toolkit-*.iso'
    ```
 
 ### 1.2 Boot the LiveCD
@@ -96,7 +96,7 @@ Any steps run on an `external` server require that server to have the following 
 
    - **HPE iLO BMCs**
 
-      Prepare a server on the network to host the `cray-pre-install-toolkit` ISO file, if the current server is insufficient.
+      Prepare a server on the network to host the `pre-install-toolkit` ISO file, if the current server is insufficient.
       Then follow the [HPE iLO BMCs](livecd/Boot_LiveCD_RemoteISO.md#hpe-ilo-bmcs) to boot the RemoteISO before returning here.
 
    - **Gigabyte BMCs** and **Intel BMCs**

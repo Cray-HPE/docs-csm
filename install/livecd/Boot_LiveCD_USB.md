@@ -52,7 +52,7 @@ which device will be used for it.
     - Use the CSI application to do this:
 
         ```bash
-        csi pit format "${USB}" "${OUT_DIR}/"cray-pre-install-toolkit-*.iso 50000
+        csi pit format "${USB}" "${OUT_DIR}/"pre-install-toolkit-*.iso 50000
         ```
 
     - If CSI is unavailable, then fetch and use the `write-livecd.sh` script:
@@ -77,7 +77,7 @@ which device will be used for it.
         >
 
         ```bash
-        write-livecd.sh "${USB}" "${OUT_DIR}/"cray-pre-install-toolkit-*.iso 50000
+        write-livecd.sh "${USB}" "${OUT_DIR}/"pre-install-toolkit-*.iso 50000
         ```
 
 ## Boot the LiveCD
