@@ -140,10 +140,10 @@ Copying and storing all data in `${BACKUPDIR}` off-system in a version control r
    kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > manifest.yaml
    ```
 
-1. (`ncn-m001#`) Backup running system NCN Personalization data.
+1. (`ncn-m001#`) Backup running system CFS configuration data.
 
    ```bash
-   cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
+   cray cfs configurations list --format json > cfs-configurations.json
    ```
 
 1. (`ncn-m001#`) Backup running system BSS data.
@@ -286,28 +286,26 @@ Add CHN to `customizations.yaml`
    1. (`ncn#`) Identify CFS configuration in use by running the following for each of the the worker nodes identified above.
 
       ```bash
-      cray cfs components describe --format toml x3000c0s4b0n0
+      cray cfs components describe --format json x3000c0s4b0n0 | jq .desiredConfig
       ```
 
       Example output:
 
-      ```toml
-      configurationStatus = "configured"
-      desiredConfig = "ncn-personalization"
-      enabled = true
-      errorCount = 0
-      id = "x3000c0s4b0n0"
+      ```json
+      "management-23.03"
       ```
 
       **Note** Errors or failed CFS personalization runs may be fixed via the following process, because CFS will be re-run. However, it is better to take time now to troubleshoot the current issue.
 
-1. (`ncn#`) Extract the CFS configuration.
+1. (`ncn#`) Extract the CFS configuration identified in the previous step.
 
    ```bash
-   cray cfs configurations describe ncn-personalization --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-personalization.json
+   CFS_CONFIG_NAME="management-23.03"
+   cray cfs configurations describe "${CFS_CONFIG_NAME}" --format json | jq 'del(.lastUpdated) | del(.name)' > ncn-cfs-configuration.json
    ```
 
-   The resulting output file should look similar to this. Installed products, versions, and commit hashes will vary. **Note** This is an example and should not be used directly as-is.
+   The resulting output file should look similar to this in structure. However, installed products, versions, commit hashes, playbooks, and names will vary.
+   **Note** This is an example and should not be used directly as-is.
 
    ```json
    {
@@ -364,19 +362,19 @@ Add CHN to `customizations.yaml`
    **Important:** This new layer *must* run after the COS `ncn-final.yml` layers, otherwise the HSN interfaces will not be configured correctly and this playbook will fail.
    Typically, placing the new layer at the end of the list is okay.
 
-1. (`ncn#`) Update the NCN personalization configuration.
+1. (`ncn#`) Update the CFS configuration.
 
    ```bash
-   cray cfs configurations update ncn-personalization --file ncn-personalization.json --format toml
+   cray cfs configurations update "${CFS_CONFIG_NAME}" --file ncn-cfs-configuration.json --format toml
    ```
 
    Example output:
 
    ```toml
-   lastUpdated = "2022-05-25T09:22:44Z"
-   name = "ncn-personalization"
+   lastUpdated = "2023-05-25T09:22:44Z"
+   name = "management-23.03"
    [[layers]]
-   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/   slingshot-host-software-config-management.git"
+   cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/slingshot-host-software-config-management.git"
    commit = "f4e2bb7e912c39fc63e87a9284d026a5bebb6314"
    name = "shs-1.7.3-45-1.0.26"
    playbook = "shs_mellanox_install.yml"
@@ -424,7 +422,7 @@ Add CHN to `customizations.yaml`
 
    ```toml
    configurationStatus = "pending"
-   desiredConfig = "ncn-personalization"
+   desiredConfig = "management-23.03"
    enabled = true
    errorCount = 0
    id = "x3000c0s4b0n0"
