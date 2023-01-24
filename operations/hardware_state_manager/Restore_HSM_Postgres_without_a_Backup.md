@@ -8,7 +8,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 
 - Healthy HSM service.
 
-  Verify all 3 HSM postgres replicas are up and running:
+  Verify all 3 HSM Postgres replicas are up and running:
 
   ```bash
   kubectl -n services get pods -l cluster-name=cray-smd-postgres
@@ -58,7 +58,7 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 
 4. Restart MEDS and REDS.
 
-    To repopulate HSM with components, restart MEDS and REDS so that they will add known RedfishEndpoints back in to HSM. This will also kick off HSM rediscovery to repopulate components and hardware inventory.
+    To repopulate HSM with components, restart MEDS and REDS so that they will add known `RedfishEndpoints` back in to HSM. This will also kick off HSM rediscovery to repopulate components and hardware inventory.
 
     ```bash
     kubectl scale deployment cray-meds -n services --replicas=0
