@@ -430,7 +430,7 @@ it is used for Cray installation and bootstrap.
 (`ncn-m001#`) Run the following command to remove the default pool, in order to prevent contention issues with NTP.
 
 ```bash
-sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
+sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf && systemctl restart chronyd
 ```
 
 ## 7. Configure DNS and NTP on each BMC
