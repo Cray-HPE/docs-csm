@@ -11,14 +11,14 @@ on ignoring nodes, refer to the following sections:
 The following actions can be prevented when a node and its BMC is locked.
 
 * Firmware upgrades with FAS
-* Power off operations with CAPMC
-* Reset operations with CAPMC
+* Power off operations with PCS/CAPMC
+* Reset operations with PCS/CAPMC
 
 Doing any of these actions by accident will shut down a management node. If the node is a Kubernetes master or worker
 node, this can have serious negative effects on system operations. If a single node is taken down by mistake, it is
 possible that services will recover. If all management nodes are taken down, or all Kubernetes worker nodes are taken down by mistake, the system must be restarted.
 
-After critical nodes are locked, power/reset (CAPMC) or firmware (FAS) operations cannot affect the nodes unless
+After critical nodes are locked, power/reset (PCS/CAPMC) or firmware (FAS) operations cannot affect the nodes unless
 they are unlocked. For example, any locked node that is included in a list of nodes to be reset will result in a
 failure.
 

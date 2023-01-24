@@ -4,8 +4,9 @@ Redfish HTTP communications are capable of using TLS certificates and Certificat
 
 The following services communicate with Redfish BMCs:
 
-- State Manager Daemon \(SMD\)
+- State Manager Daemon \(SMD\) aka Hardware State Manager \(HSM\)
 - Cray Advanced Platform Monitoring and Control \(CAPMC\)
+- Power Control Serivce \(PCS\)
 - Firmware Action Service \(FAS\)
 - HMS Collector
 - River Endpoint Discovery Service \(REDS\)

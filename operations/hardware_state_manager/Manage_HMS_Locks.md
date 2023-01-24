@@ -31,7 +31,7 @@ ReservationDisabled = false
 
 ### Disable Reservations
 
-Disabling a lock prevents a service from being able to make a reservation on it, and it releases/ends any current reservations. Even though SMD removes the reservation when disabling a lock, it does not mean that the Firmware Action Service (FAS) is aware that it has lost the reservation. Additionally, if CAPMC has a reservation that is cancelled, disabled, or broken, it will do nothing to the existing CAPMC operation. There are no checks by CAPMC to make sure things are still reserved at any time during a power operation.
+Disabling a lock prevents a service from being able to make a reservation on it, and it releases/ends any current reservations. Even though SMD removes the reservation when disabling a lock, it does not mean that the Firmware Action Service (FAS) is aware that it has lost the reservation. Additionally, if PCS/CAPMC has a reservation that is cancelled, disabled, or broken, it will do nothing to the existing PCS/CAPMC operation. There are no checks by PCS/CAPMC to make sure things are still reserved at any time during a power operation.
 
 This is a way to stop new operations from happening, not a way to prevent currently executing operations.
 
