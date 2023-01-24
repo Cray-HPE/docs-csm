@@ -332,8 +332,11 @@ This upgrade scenario is extremely uncommon in production environments.
 
     This script will also leave CFS disabled for the NCNs. CFS will automatically be re-enabled on them as they are rebooted during the upgrade.
 
+    > The configuration name in the following command (`management-0.0`) is deliberately used to distinguish this from the CFS configurations created during
+    > standard upgrade, where the `0.0` would instead be the CSM recipe version.
+
     ```bash
-    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh --no-enable
+    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh --no-enable --config-name management-0.0
     ```
 
     Successful output should end with the following line:
