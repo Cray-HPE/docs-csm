@@ -76,16 +76,26 @@ spec:
                 value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
         arguments:
           parameters:
-          # TODO(CASM-3758): Replace this with a stable build of cray-nexus-setup
           - name: nexus_setup_image
-            value: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.9.0-20230110162650_ca30f84
+            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.9.0
           - name: nexus_admin_credential_secret_name
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.current_product_manifest}}"
           - name: product_directory
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.product_directory}}"
-
+    - - name: nexus-setup-update-product-catalog
+        templateRef:
+          name: update-product-catalog-template
+          template: catalog-update
+        arguments:
+          parameters:
+            - name: product-name
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - name: product-version
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - name: yaml-content
+              value: "{{steps.nexus-setup.outputs.parameters.nexus_setup_results}}"
     - - name: end-operation
         templateRef:
           name: workflow-template-record-time-template
@@ -102,18 +112,7 @@ spec:
             value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
           - name: pdversion
             value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
-    - - name: nexus-setup-update-product-catalog
-        templateRef:
-          name: update-product-catalog-template
-          template: catalog-update
-        arguments:
-          parameters:
-            - name: product-name
-              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
-            - name: product-version
-              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
-            - name: yaml-content
-              value: "{{steps.nexus-setup.outputs.parameters.nexus_setup_results}}"
+
   - name: prom-metrics
     inputs:
       parameters:
