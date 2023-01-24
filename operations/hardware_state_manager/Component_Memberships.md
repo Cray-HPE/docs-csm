@@ -27,13 +27,13 @@ By default, the memberships collection contains all components, regardless of if
 Retrieve all node memberships:
 
 ```bash
-cray hsm memberships list --type node
+cray hsm memberships list --type Node
 ```
 
 Retrieve only nodes not in a partition:
 
 ```bash
-cray hsm memberships list --type node --partition NULL
+cray hsm memberships list --type Node --partition NULL
 ```
 
 ### Retrieve Membership Data for a Given Component
