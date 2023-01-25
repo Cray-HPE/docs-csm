@@ -27,6 +27,8 @@
 test -n "$DEBUG" && set -x
 set -eou pipefail
 
+unset CRAY_FORMAT
+
 while [[ $# -gt 0 ]]; do
     case $1 in
         -k)
