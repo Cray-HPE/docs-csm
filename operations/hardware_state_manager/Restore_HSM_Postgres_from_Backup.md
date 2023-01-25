@@ -422,7 +422,7 @@ automatic backup created by the `cray-smd-postgresql-db-backup` Kubernetes cronj
     Get the number of node objects stored in HSM:
 
     ```bash
-    cray hsm state components list --type node --format json | jq .Components[].ID | wc -l
+    cray hsm state components list --type Node --format json | jq .Components[].ID | wc -l
     ```
 
 1. (`ncn#`) Resync the component state and inventory.

@@ -46,14 +46,10 @@
     "products": ["cos", "sdu"],
     "media_dir": "/etc/iuf/alice_230116",
     "bootprep_config_managed": [
-      {
-        "contents": "boot prep file contents as a string"
-      }
+      "media_dir/relative/path/to/bootprep/config/managed/file"
     ],
     "bootprep_config_management": [
-      {
-        "contents": "boot prep file contents as a string"
-      }
+      "media_dir/relative/path/to/bootprep/config/management/file"
     ],
     "limit_nodes": ["x12413515", "x15464574"]
   },
@@ -84,7 +80,7 @@
           "parent_directory": "/etc/iuf/alice_230116/cos-2.5.34-20221012230953"
         },
         "sdu": {
-          "parent_directory": "/etc/iuf/alice_230116/sdu-1.2.3",
+          "parent_directory": "/etc/iuf/alice_230116/sdu-1.2.3"
         }
       },
       "current_product": {
