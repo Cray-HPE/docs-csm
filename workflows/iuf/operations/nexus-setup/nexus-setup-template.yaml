@@ -263,6 +263,7 @@ spec:
         - name: nexus_setup_results
           valueFrom:
             path: /results/records.yaml
+            default: "{}"
     container:
       image: "{{inputs.parameters.nexus_setup_image}}"
       command: [iuf-nexus-setup]
