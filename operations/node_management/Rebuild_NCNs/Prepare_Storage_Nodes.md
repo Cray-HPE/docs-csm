@@ -6,18 +6,19 @@ Prepare a storage node before rebuilding it.
 
 ## Prerequisites
 
-If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` has been removed from the `runcmd` in BSS.
+When rebuilding a node, make sure that the `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` and `/srv/cray/scripts/common/pre-load-images.sh`, has been removed from the `runcmd` in BSS.
 
-1. Get the component name (xname) for `ncn-s001`.
+1. (`ncn-m001#`) Set node name and xname if not already set.
 
    ```bash
-   ssh ncn-s001 cat /etc/cray/xname
+   NODE=ncn-sXXX
+   XNAME=$(ssh $NODE cat /etc/cray/xname)
    ```
 
-2. Check the `bss bootparameters` for `ncn-s001`.
+1. (`ncn-m001#`) Get the `runcmd` in BSS.
 
    ```bash
-   cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
+   cray bss bootparameters list --name ${XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
    ```
 
    Expected Output:
@@ -27,13 +28,12 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
    "/srv/cray/scripts/metal/net-init.sh",
    "/srv/cray/scripts/common/update_ca_certs.py",
    "/srv/cray/scripts/metal/install.sh",
-   "/srv/cray/scripts/common/pre-load-images.sh",
    "/srv/cray/scripts/common/ceph-enable-services.sh",
    "touch /etc/cloud/cloud-init.disabled"
    ]
    ```
 
-   If it is there then it will need to be fixed by running:
+   If `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` or `/srv/cray/scripts/common/pre-load-images.sh` is in the `runcmd`, then it will need to be fixed by running:
 
    A token will need to be generated and made available as an environment variable. Refer to the [Retrieve an Authentication Token](../../security_and_authentication/Retrieve_an_Authentication_Token.md) procedure for more information.
 
@@ -45,11 +45,67 @@ If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` ha
 
 ## Procedure
 
+Upload ceph container images into nexus.
+
+1. On (`ncn-m001#`) or on (`ncn-s001/2/3#`) run the following script. This should be saved to a file and then executed.
+
+    ```bash
+    #!/bin/bash
+
+    # get images
+    images=""
+    for daemon_type in "mgr" "node-exporter" "alertmanager" "grafana" "prometheus"; do
+        add_image=$(ceph orch ps --format json | jq --arg DAEMON $daemon_type '.[] | select(.daemon_type == $DAEMON) | .container_image_name' | tr -d '"' | sort -u)
+        unique_image=true
+        for image in $images; do
+          if [[ $image == $add_image ]]; then
+            unique_image=false
+          fi
+        done
+        if $unique_image; then
+          images="${images}"" "${add_image}
+        fi
+    done
+
+    nexus_username=$(kubectl get secret -n nexus nexus-admin-credential --template={{.data.username}} | base64 --decode)
+    nexus_password=$(kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode)
+
+    function push_image_and_upgrade() { 
+      image_name=$1
+      if [[ $1 == "registry.local"* ]]; then
+        continue;
+      elif [[ $1 == "localhost"* ]]; then
+        image_name=$(echo $1 | sed 's/localhost/registry.local/g')
+      else
+        image_name="registry.local/$1"
+      fi
+      echo "Pushing image: $image_name"
+      podman push --creds $nexus_username:$nexus_password $image_name
+      ceph orch upgrade start --image $image_name
+    }
+
+    for image in $images; do
+        push_image_and_upgrade $image
+    done
+    ```
+
+    After running the script, run the following command to check for errors or completion of the `ceph orch upgrade` command run in the script.
+
+    ```bash
+    ceph orch upgrade status
+    ```
+
+    Expected output:
+
+    ```bash
+    TBD
+    ```
+
 Check the status of Ceph.
 
 1. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
 
-    On the node being rebuilt run:
+    (`ncn-sXXX#`) On the node being rebuilt run:
 
     ```bash
     for service in $(cephadm ls |jq -r '.[].systemd_unit'); do systemctl stop $service; systemctl disable $service; done
