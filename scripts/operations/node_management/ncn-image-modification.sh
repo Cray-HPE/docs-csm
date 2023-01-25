@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2014-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2014-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -311,8 +311,22 @@ function set_timezone() {
     if [ -n "$TIMEZONE" ]; then
         for squash in "${SQUASH_PATHS[@]}"; do
             squashfs_root="$(dirname "$squash")"/squashfs-root
-            echo "TZ=$TIMEZONE" > "$squashfs_root"/etc/environment
-            sed -i "s#^timedatectl set-timezone UTC#timedatectl set-timezone $NEWTZ#" "$squashfs_root"/srv/cray/scripts/metal/ntp-upgrade-config.sh
+
+            pushd "$squashfs_root"
+            if ! test -f usr/share/zoneinfo/"$TIMEZONE"; then
+                echo >&2 "Timezone file /usr/share/zoneinfo/$TIMEZONE does not exist"
+                exit 1
+            fi
+
+            # clean up any previous set values just in case.
+            sed -i 's/^TZ.*//' etc/environment
+
+            echo "TZ=$TIMEZONE" >> etc/environment
+            rm -f etc/localtime
+
+            ln -s usr/share/zoneinfo/"$TIMEZONE" etc/localtime
+            popd
+
         done
     fi
 }
