@@ -72,6 +72,10 @@ cray artifacts create boot-images "$IMS_IMAGE_ID/rootfs" "$IMS_ROOTFS_FILENAME" 
 cray artifacts create boot-images "$IMS_IMAGE_ID/kernel" "$IMS_KERNEL_FILENAME" > /dev/null
 cray artifacts create boot-images "$IMS_IMAGE_ID/initrd" "$IMS_INITRD_FILENAME" > /dev/null
 
+ROOTFS_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/rootfs --format json | jq -r .artifact.ETag  | tr -d '"' )
+KERNEL_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/kernel --format json | jq -r .artifact.ETag  | tr -d '"' )
+INITRD_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/initrd --format json | jq -r .artifact.ETag  | tr -d '"' )
+
 cat <<EOF> ims_manifest.json
 {
   "created": "$(date '+%Y-%m-%d %H:%M:%S')",
@@ -79,6 +83,7 @@ cat <<EOF> ims_manifest.json
   "artifacts": [
     {
       "link": {
+        "etag": "${ROOTFS_ETAG}",
         "path": "s3://boot-images/$IMS_IMAGE_ID/rootfs",
         "type": "s3"
       },
@@ -87,6 +92,7 @@ cat <<EOF> ims_manifest.json
     },
     {
       "link": {
+        "etag": "${KERNEL_ETAG}",
         "path": "s3://boot-images/$IMS_IMAGE_ID/kernel",
         "type": "s3"
       },
@@ -95,6 +101,7 @@ cat <<EOF> ims_manifest.json
     },
     {
       "link": {
+        "etag": "${INITRD_ETAG}",
         "path": "s3://boot-images/$IMS_IMAGE_ID/initrd",
         "type": "s3"
       },
@@ -106,9 +113,11 @@ cat <<EOF> ims_manifest.json
 EOF
 
 cray artifacts create boot-images "$IMS_IMAGE_ID/manifest.json" ims_manifest.json > /dev/null
+MANIFEST_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/manifest.json --format json | jq -r .artifact.ETag  | tr -d '"' )
 
 cray ims images update "$IMS_IMAGE_ID" \
         --link-type s3 \
+        --link-etag "${MANIFEST_ETAG}" \
         --link-path "s3://boot-images/$IMS_IMAGE_ID/manifest.json" > /dev/null
 
 echo "$IMS_IMAGE_ID"

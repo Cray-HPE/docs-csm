@@ -198,6 +198,14 @@ identified by a `type` value:
 * `application/vnd.cray.image.kernel`
 * `application/vnd.cray.image.parameters.boot`
 
+1. (`ncn-mw#`) Collect etag values for uploaded files.
+
+    ```bash
+    ROOTFS_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/${IMS_ROOTFS_FILENAME} --format json | jq -r .artifact.ETag  | tr -d '"' )
+    KERNEL_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/${IMS_KERNEL_FILENAME} --format json | jq -r .artifact.ETag  | tr -d '"' )
+    INITRD_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/${IMS_INITRD_FILENAME} --format json | jq -r .artifact.ETag  | tr -d '"' )
+    ```
+
 1. (`ncn-mw#`) Generate an image manifest file.
 
     > If necessary, modify the following example to reflect the actual set of artifacts included in the image.
@@ -213,6 +221,7 @@ identified by a `type` value:
       "artifacts": [
         {
           "link": {
+              "etag": "${ROOTFS_ETAG}",
               "path": "s3://boot-images/${IMS_IMAGE_ID}/${IMS_ROOTFS_FILENAME}",
               "type": "s3"
           },
@@ -221,6 +230,7 @@ identified by a `type` value:
         },
         {
           "link": {
+              "etag": "${KERNEL_ETAG}",
               "path": "s3://boot-images/${IMS_IMAGE_ID}/${IMS_KERNEL_FILENAME}",
               "type": "s3"
           },
@@ -229,6 +239,7 @@ identified by a `type` value:
         },
         {
           "link": {
+              "etag": "${INITRD_ETAG}",
               "path": "s3://boot-images/${IMS_IMAGE_ID}/${IMS_INITRD_FILENAME}",
               "type": "s3"
           },
@@ -246,12 +257,19 @@ identified by a `type` value:
     cray artifacts create boot-images "${IMS_IMAGE_ID}/manifest.json" manifest.json
     ```
 
+1. (`ncn-mw#`) Collect the etag for the manifest file.
+
+    ```bash
+    MANIFEST_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/manifest.json --format json | jq -r .artifact.ETag  | tr -d '"' )
+    ```
+
 1. (`ncn-mw#`) Update the IMS image record with the image manifest information.
 
     ```bash
     cray ims images update "${IMS_IMAGE_ID}" \
         --link-type s3 \
         --link-path "s3://boot-images/${IMS_IMAGE_ID}/manifest.json" \
+        --link-etag "${MANIFEST_ETAG}" \
         --format toml
     ```
 
@@ -265,5 +283,5 @@ identified by a `type` value:
     [link]
     type = "s3"
     path = "s3://boot-images/4e78488d-4d92-4675-9d83-97adfc17cb19/manifest.json"
-    etag = ""
+    etag = "627264cd4ab4d231a0b2bf42aabb4156"
     ```
