@@ -164,23 +164,10 @@ Run the following commands from a node that has `cray` CLI initialized. See [Con
 
     There are multiple ways to do this. Choose the one which best fits the situation.
 
-    * Run the following commands to list the available configurations.
+    * Run the following command to list the available configurations.
 
         ```bash
         cray cfs configurations list --format toml
-        ```
-
-        Example output:
-
-        ```toml
-        [[results]]
-        lastUpdated = "2022-03-14T20:59:44Z"
-        name = "ncn-personalization"
-        [[results.layers]]
-        cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
-        commit = "1dc4038615cebcfad3e8230caecc885d987e8148"
-        name = "csm-ncn-1.6.28"
-        playbook = "site.yml"
         ```
 
     * Determine the configuration applied another NCN of the same type. This example checks the configuration on `ncn-w002`.
@@ -189,41 +176,24 @@ Run the following commands from a node that has `cray` CLI initialized. See [Con
         cray cfs components describe "$(ssh ncn-w002 cat /etc/cray/xname)" --format toml
         ```
 
-        Example output:
-
-        ```toml
-        configurationStatus = "configured"
-        desiredConfig = "ncn-personalization"
-        enabled = true
-        errorCount = 0
-        id = "x3000c0s9b0n0"
-        [[state]]
-        cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
-        commit = "1dc4038615cebcfad3e8230caecc885d987e8148"
-        lastUpdated = "2022-03-15T15:29:20Z"
-        playbook = "site.yml"
-        sessionName = "batcher-5e431205-a4b4-4a2e-8be3-21cf058774cc"
-        ```
-
 1. (`ncn#`) Select the appropriate configuration based on the previous step to personalize the added NCN.
 
-    In this example, the `ncn-personalization` configuration is used.
+    In this example, the `management-23.03` configuration is used.
 
     ```bash
-    cray cfs components update "${XNAME}" --desired-config ncn-personalization
+    cray cfs components update "${XNAME}" --desired-config management-23.03
     ```
 
 1. (`ncn#`) Wait for `configurationStatus` to transition from `pending` to `configured`.
 
     ```bash
-    watch "cray cfs components describe '${XNAME}' --format toml"
+    watch "cray cfs components describe '${XNAME}' --format json | jq .configurationStatus"
     ```
 
     Example output excerpt:
 
-    ```toml
-    configurationStatus = "configured"
-    desiredConfig = "ncn-personalization"
+    ```json
+    "configured"
     ```
 
 ### Set BMC management roles

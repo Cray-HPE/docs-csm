@@ -50,7 +50,7 @@ All of the following are prerequisites on the node where this procedure is being
     cp management-bootprep.yaml management-bootprep-image-customization.yaml
     ```
 
-1. (`ncn-m#`) Delete the `ncn-personalization` configuration in the `management-bootprep-image-customization.yaml` file.
+1. (`ncn-m#`) Delete the `management-<CSM recipe version>` configuration in the `management-bootprep-image-customization.yaml` file.
 
     After editing, the `ncn-image-customization` configuration should be the only entry remaining in the file, and
     the file should begin with the following lines:
