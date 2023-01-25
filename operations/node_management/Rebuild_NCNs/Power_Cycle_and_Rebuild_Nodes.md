@@ -28,9 +28,12 @@ This section applies to all node types. The commands in this section assume the 
 
         > NOTE: `read -s` is used to prevent the password from echoing to the screen or
         > being saved in the shell history.
-
+         
         ```bash
         read -r -s -p "${BMC} root password: " IPMI_PASSWORD
+        ```
+
+        ```bash
         export IPMI_PASSWORD
         ```
 
