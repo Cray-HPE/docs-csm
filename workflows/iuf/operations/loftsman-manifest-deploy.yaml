@@ -123,7 +123,7 @@ spec:
                     elif [[ "$DEPLOY" = "true" ]] || [[ "$DEPLOY" = "True" ]]; then
                       if $IS_DIR; then
                         echo "INFO Deploying loftsman manifests under $MANIFEST/"
-                        manifest_files=$(ls "$manifest_path"/*.yml "$manifest_path"/*.yaml 2>/dev/null)
+                        manifest_files=$(ls "${MANIFEST_PATH}"/*.yml "${MANIFEST_PATH}"/*.yaml 2>/dev/null)
                         for manifest in $manifest_files; do
                           deploy_manifest ${manifest} $PRODUCT_NAME
                           if [[ $? != 0 ]]; then err=1; fi
