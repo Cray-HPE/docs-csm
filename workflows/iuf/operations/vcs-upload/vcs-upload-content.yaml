@@ -225,6 +225,7 @@ spec:
           - name: vcs-upload-content-results
             valueFrom:
               path: /results/records.yaml
+              default: "{}"
       container:
         image: registry.local/artifactory.algol60.net/csm-docker/stable/cf-gitea-import:1.8.0-alpha.19_6747be7
         command:
