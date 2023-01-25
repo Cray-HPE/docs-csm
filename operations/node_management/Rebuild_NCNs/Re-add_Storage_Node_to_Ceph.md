@@ -6,20 +6,18 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 ## Add Join Script
 
-1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`.
-
-   **`NOTE`** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***`docs-csm`*** RPM is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
+1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`. If there is an existing script in that location, then replace it.
 
    ```bash
    #!/bin/bash
 
+   # fix spire and restart cfs
+   scp ncn-m001:/etc/kubernetes/admin.conf /etc/kubernetes/admin.conf
+   ssh ncn-m001 '/opt/cray/platform-utils/spire/fix-spire-on-storage.sh'
+   systemctl restart cfs-state-reporter.service
+
    host=$(hostname)
    host_ip=$(host ${host} | awk '{ print $NF }')
-
-   # run preload images on host
-   if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
-     echo "Unable to run pre-load-images.sh on $host."
-   fi
 
    # update ssh keys for rebuilt node on host and on ncn-s001/2/3
    truncate --size=0 ~/.ssh/known_hosts 2>&1
@@ -37,6 +35,9 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
        ssh $node "if [[ ! -f ~/.ssh/known_hosts ]]; then > ~/.ssh/known_hosts; fi; ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $host_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${host},${host_ip} >> ~/.ssh/known_hosts"
      fi
    done
+
+   # update ssh keys for rebuilt node on m001
+   ssh ncn-m001 "ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $host_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${host},${host_ip} >> ~/.ssh/known_hosts"
 
    # copy necessary ceph files to rebuilt node
    (( counter=0 ))
@@ -66,6 +67,11 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
      fi
    done
 
+   # run preload images on host
+   if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
+     echo "Unable to run pre-load-images.sh on $host."
+   fi
+
    sleep 30
    (( ceph_mgr_failed_restarts=0 ))
    (( ceph_mgr_successful_restarts=0 ))
@@ -92,6 +98,12 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
        fi
      done
    done
+
+   # check if node-exporter needs to be restarted
+   status=$(ceph orch ps $host --format json | jq '.[] | select(.daemon_type == "node-exporter") | .status_desc' | tr -d '"')
+   if [[ $status != "running" ]]; then
+     ceph orch daemon restart node-exporter.${host}
+   fi
 
    for service in $(cephadm ls | jq -r '.[].systemd_unit')
    do
