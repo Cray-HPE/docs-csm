@@ -222,6 +222,7 @@ spec:
       - name: ims_records
         valueFrom:
           path: /results/records.yaml
+          default: "{}"
 
     container:
       # replace image with standard ims-load-artifacts once PR is merged
