@@ -46,8 +46,7 @@ stages:
       - name: s3-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: nexus-setup
-        static-parameters: # any parameters that will be supplied statically to this operation.
-          nexus-setup-image: artifactory.algol60.net/csm-docker/unstable/cray-nexus-setup:0.8.0-20221021164623-e8d3d3d
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: nexus-rpm-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: nexus-docker-upload
@@ -68,7 +67,9 @@ stages:
   - name: update-cfs-config
     type: global
     operations:
-      - name: update-cfs-config
+      - name: update-management-cfs-config
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: update-managed-cfs-config
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
   - name: deploy-product
@@ -80,7 +81,9 @@ stages:
   - name: prepare-images
     type: global
     operations:
-      - name: prepare-images
+      - name: prepare-management-images
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: prepare-managed-images
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
   - name: management-nodes-rollout
@@ -106,3 +109,8 @@ stages:
     operations:
       - name: post-install-check
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+
+# The following are the template references to hook scripts.
+hooks:
+  master_host: master-host-hook-script

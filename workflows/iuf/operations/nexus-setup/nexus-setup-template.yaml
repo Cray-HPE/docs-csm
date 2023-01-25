@@ -31,11 +31,34 @@ spec:
   templates:
 ### Main Steps ###
   - name: main
+    metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "nexus-setup"
+            - key: stage
+              value: "deliver-product"
+            - key: type
+              value: "product"
+            - key: pname
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - key: pversion
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
     inputs:
       parameters:
         - name: auth_token
         - name: global_params
     steps:
+    - - name: start-operation
+        templateRef:
+          name: workflow-template-record-time-template
+          template: record-time-template
     - - name: nexus-get-prerequisites
         template: nexus-get-prerequisites-template
         arguments:
@@ -54,13 +77,81 @@ spec:
         arguments:
           parameters:
           - name: nexus_setup_image
-            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.8.1
+            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.9.0
           - name: nexus_admin_credential_secret_name
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.current_product_manifest}}"
           - name: product_directory
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.product_directory}}"
+    - - name: nexus-setup-update-product-catalog
+        templateRef:
+          name: update-product-catalog-template
+          template: catalog-update
+        arguments:
+          parameters:
+            - name: product-name
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+            - name: product-version
+              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+            - name: yaml-content
+              value: "{{steps.nexus-setup.outputs.parameters.nexus_setup_results}}"
+    - - name: end-operation
+        templateRef:
+          name: workflow-template-record-time-template
+          template: record-time-template
+    - - name:  prom-metrics
+        template: prom-metrics
+        arguments:
+          parameters:
+          - name: opstart
+            value: "{{steps.start-operation.outputs.result}}"
+          - name: opend
+            value: "{{steps.end-operation.outputs.result}}"
+          - name: pdname
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+          - name: pdversion
+            value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+
+  - name: prom-metrics
+    inputs:
+      parameters:
+      - name: opstart
+      - name: opend
+      - name: pdname
+      - name: pdversion
+    metrics:
+      prometheus:
+        - name: operation_time
+          help: "Duration gauge by operation name in seconds"
+          labels:
+            - key: opname
+              value: "nexus-setup"
+            - key: stage
+              value: "deliver-product"
+            - key: type
+              value: "product"
+            - key: pdname
+              value: "{{inputs.parameters.pdname}}"
+            - key: pdversion
+              value: "{{inputs.parameters.pdversion}}"
+            - key: opstart
+              value: "{{inputs.parameters.opstart}}"
+            - key: opend
+              value: "{{inputs.parameters.opend}}"
+          gauge:
+            value: "{{outputs.parameters.diff-time-value}}"
+    outputs:
+      parameters:
+        - name: diff-time-value
+          globalName: diff-time-value
+          valueFrom:
+            path: /tmp/diff_time.txt
+    container:
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+      command: [sh, -c]
+      args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
+
 ### Templates ###
 ## nexus-get-prerequisites-template ##
   - name: nexus-get-prerequisites-template
@@ -167,6 +258,11 @@ spec:
     metadata:
       annotations:
         sidecar.istio.io/inject: "false"
+    outputs:
+      parameters:
+        - name: nexus_setup_results
+          valueFrom:
+            path: /results/records.yaml
     container:
       image: "{{inputs.parameters.nexus_setup_image}}"
       command: [iuf-nexus-setup]

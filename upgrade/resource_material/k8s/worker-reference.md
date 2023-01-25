@@ -1,15 +1,23 @@
 # Worker-Specific Manual Steps
 
-1. Determine if the worker being rebuilt is running a `cray-cps-cm-pm` pod, by running the `cray cps deployment list`
-   command below. If so, there is a final step to redeploy this pod once the worker is rebuilt. In the example below,
-   nodes `ncn-w001`, `ncn-w002`, and `ncn-w003` have the pod.
+1. Determine if the worker being rebuilt is running a `cray-cps-cm-pm` pod.
 
-   > NOTE: If the command below does not return any pod names, proceed to step 2.
-   > NOTE: A 404 error is expected if the COS product is not installed on the system. In this case, proceed to step 2.
-   > NOTE: If the `cray` command is not initialized, see [Initialize the CLI Configuration](../../../operations/configure_cray_cli.md)
+   (`ncn#`) This is determined by running the `cray cps deployment list` command below. If so, there is a final step to redeploy this pod once the worker is rebuilt.
+   In the example below, nodes `ncn-w001`, `ncn-w002`, and `ncn-w003` have the pod.
+
+   > NOTES:
+   >
+   > * If the command below does not return any pod names, then skip this step and proceed to the next step.
+   > * A 404 error is expected if the COS product is not installed on the system. In this case, then skip this step and proceed to the next step.
+   > * If the `cray` command is not initialized, then see [Initialize the CLI Configuration](../../../operations/configure_cray_cli.md).
 
     ```bash
     cray cps deployment list --format json | jq '.[] | [.node,.podname]'
+    ```
+
+    Example output:
+
+    ```json
     [
       "ncn-w003",
       "cray-cps-cm-pm-9tdg5"
@@ -32,22 +40,22 @@
    cray cps deployment update --nodes "ncn-w002"
    ```
 
-1. Confirm the CFS `configurationStatus` for **all** worker nodes before shutting down this worker node. If the state is `pending`,
-   the administrator may want to tail the logs of the CFS pod running on that node to watch the job finish
-   before rebooting this node. If the state is `failed` for this node, then this indicates that the failed CFS job state
+1. Confirm the CFS `configurationStatus` for **all** worker nodes before shutting down this worker node.
+
+   (`ncn#`) If the following command reports that the state is `pending`, then the administrator should tail the logs of the CFS pod running on that node
+   in order to watch the job finish before rebooting this node. If the state is `failed` for this node, then this indicates that the failed CFS job state
    preceded this worker rebuild, and that it can be addressed independent of rebuilding this worker.
 
    This example uses `ncn-w002`.
 
    ```bash
-   export NODE=ncn-w002
-   export XNAME=$(ssh $NODE cat /etc/cray/xname)
-   cray cfs components describe $XNAME --format json
-   {
-     "configurationStatus": "configured",
-     "desiredConfig": "ncn-personalization-full",
-     "enabled": true,
-     "errorCount": 0,
-     "id": "x3000c0s7b0n0",
-     "retryPolicy": 3,
+   NODE=ncn-w002
+   XNAME=$(ssh "${NODE}" cat /etc/cray/xname)
+   cray cfs components describe "${XNAME}" --format json | jq .configurationStatus
+   ```
+
+   Example output:
+
+   ```json
+   "configured"
    ```
