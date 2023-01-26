@@ -168,7 +168,7 @@ spec:
           path: /tmp/product-content
           default: "{\"component_versions\": {\"s3\": []}}"
     script:
-      image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/iuf:v0.1.0
+      image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
       command: [bash]
       source: |
         ARRAY=$(echo '{{inputs.parameters.manifest_s3_content}}' | jq -r '[.[] | {"bucket": .bucket, "key": .key}]')
