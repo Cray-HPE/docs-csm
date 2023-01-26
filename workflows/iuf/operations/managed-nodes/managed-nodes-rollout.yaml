@@ -12,18 +12,6 @@ spec:
           - name: auth_token
           - name: global_params
       steps:
-        - - name: parse-bos-sessiontemplates
-            template: parse-bos-sessiontemplates
-            arguments:
-              parameters:
-                - name: prepare_images_output
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.prepare_images')}}"
-                - name: managed_rollout_strategy
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.managed_rollout_strategy')}}"
-                  # TODO: is --limit-managed-rollout going to be present?
-                - name: limit_managed_rollout
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.limit_managed_rollout')}}"
-                  
         - - name: sat-bootsys-reboot
             templateRef:
               name: sat-general-template
@@ -34,46 +22,58 @@ spec:
                   value: "{{inputs.parameters.auth_token}}"
                 - name: script_content
                   value: |
-                    session_templates="{{steps.parse-bos-sessiontemplates.outputs.results}}"
-                    echo "$session_templates"
+                      prepare_images_output="{{=jsonpath(inputs.parameters.global_params, '$.stage_params.prepare_images')}}"
+                      managed_rollout_strategy="{{=jsonpath(inputs.parameters.global_params, '$.input_params.managed_rollout_strategy')}}"
+                      limit_managed_rollout="{{=jsonpath(inputs.parameters.global_params, '$.input_params.limit_managed_rollout')}}"
 
-                    managed_rollout_strategy="{{arguments.parameters.managed_rollout_strategy}}"
-                    if [ -z "$managed_rollout_strategy"]; then
-                        echo "No managed_rollout_strategy specified."
-                        exit 1
-                    fi
+                      function main {
+                          if [ -z "$managed_rollout_strategy" ] ; then
+                              echo "ERROR: No managed_rollout_strategy provided."
+                              exit 1
+                          elif [ -z "$prepare_images_output" ] ; then
+                              echo "ERROR: No prepare_images_output provided."
+                              exit 1
+                          fi
 
-                    # TODO: Should I do BOOT or REBOOT?
-                    if [ "$managed_rollout_strategy" == "reboot"]; then
-                        sat bootsys reboot --stage bos-operations --bos-templates $session_templates
-                    elif [ "$managed_rollout_strategy" == "stage"]; then
-                        sat bootsys boot --stage bos-operations --staged --bos-templates $session_templates
-                    fi
+                          parse_session_templates
+                          sat_bootsys_subcommand
+                      }
 
-    - name: parse-bos-sessiontemplates
-      script:
-        image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
-        command: [bash]
-        source: |
-          #!/bin/bash
-          
-          tmpfile=$(mktemp /tmp/script.XXXXXX)
-          templates='"{{arguments.parameters.prepare_images_output}}"'
-          echo "${templates}" | jq ".session_templates" >> "$tmpfile"
-          count=$(jq '. | length' "$tmpfile")
+                      function parse_session_templates {
+                          tmpfile=$(mktemp /tmp/script.XXXXXX)
 
-          if (( $count == 0 )); then
-              echo "No session templates provided to parse, prepare-images output is empty."
-              exit 0
-          fi
+                          echo "${prepare_images_output}" | jq ".session_templates" >> "$tmpfile"
+                          count=$(jq '. | length' "$tmpfile")
 
-          session_templates_string=""
-          delim=""
-          for ((i=0; i<$count; i++)); do
-              template_name=$(jq -r '.['$i'].name' "$tmpfile")
-              session_templates_string="$session_templates_string$delim$template_name"
-              delim=","
-          done
+                          if (( $count == 0 )); then
+                              echo "ERROR: No session templates provided to parse, prepare-images output is empty."
+                              exit 1
+                          fi
 
-          rm "${tmpfile}"
-          echo "$session_templates_string"
+                          session_templates_string=""
+                          delim=""
+                          for ((i=0; i<$count; i++)); do
+                              template_name=$(jq -r '.['$i'].name' "$tmpfile")
+                              session_templates_string="$session_templates_string$delim$template_name"
+                              delim=","
+                          done
+
+                          rm "${tmpfile}"
+                          if [ "$session_templates_string" == "" ]; then
+                              echo "ERROR: Failed to parse session_templates from prepare_images_output"
+                              exit 1
+                          fi
+
+                          echo "$session_templates_string"
+                      }
+
+                      function sat_bootsys_subcommand {
+                          # TODO: Should I do BOOT or REBOOT?
+                          if [ "$managed_rollout_strategy" == "reboot" ]; then
+                              sat bootsys reboot --stage bos-operations --bos-templates "$session_templates_string"
+                          elif [ "$managed_rollout_strategy" == "stage" ]; then
+                              sat bootsys boot --stage bos-operations --staged --bos-templates "$session_templates_string"
+                          fi
+                      }
+
+                      main
