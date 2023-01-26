@@ -85,7 +85,6 @@ def fetch_base_current_vers():
     return current_version
 
 def fetch_curr_sha(cmd, new_version):
-    #cmd = {"prefix":"orch ps", "format":"json"}
     cmd_results = cluster.mon_command(json.dumps(cmd), b'', timeout=5)
     results = json.loads(cmd_results[1])
     for s in range(len(results)):
