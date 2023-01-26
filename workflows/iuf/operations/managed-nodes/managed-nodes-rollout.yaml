@@ -12,6 +12,21 @@ spec:
           - name: auth_token
           - name: global_params
       steps:
+        - - name: build-sat-general-subcommand
+            template: build-sat-general-subcommand
+            inputs:
+              parameters:
+                - name: prepare_images_output
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.prepare_images')}}"
+                - name: managed_rollout_strategy
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.managed_rollout_strategy')}}"
+                - name: limit_managed_rollout
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.limit_managed_rollout')}}"
+            outputs:
+              parameters:
+                - name: sat_command
+                  valueFrom:
+                    path: /tmp/sat_command
         - - name: sat-bootsys-reboot
             templateRef:
               name: sat-general-template
@@ -22,58 +37,95 @@ spec:
                   value: "{{inputs.parameters.auth_token}}"
                 - name: script_content
                   value: |
-                      prepare_images_output="{{=jsonpath(inputs.parameters.global_params, '$.stage_params.prepare_images')}}"
-                      managed_rollout_strategy="{{=jsonpath(inputs.parameters.global_params, '$.input_params.managed_rollout_strategy')}}"
-                      limit_managed_rollout="{{=jsonpath(inputs.parameters.global_params, '$.input_params.limit_managed_rollout')}}"
+                    "{{steps.build-sat-general-subcommand.outputs.parameters.sat_command}}"
 
-                      function main {
-                          if [ -z "$managed_rollout_strategy" ] ; then
-                              echo "ERROR: No managed_rollout_strategy provided."
-                              exit 1
-                          elif [ -z "$prepare_images_output" ] ; then
-                              echo "ERROR: No prepare_images_output provided."
-                              exit 1
-                          fi
+    - name: build-sat-general-subcommand
+      nodeSelector:
+        kubernetes.io/hostname: ncn-m001
+      tolerations:
+        - key: node-role.kubernetes.io/master
+          effect: NoSchedule
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
+        command: [bash]
+        source: |
+          #!/bin/bash
+          JSONPATH='jsonpath'
+          prepare_images_output="{{inputs.parameters.prepare_images_output}}"
+          managed_rollout_strategy="{{inputs.parameters.managed_rollout_strategy}}"
+          limit_managed_rollout="{{inputs.parameters.limit_managed_rollout}}"
 
-                          parse_session_templates
-                          sat_bootsys_subcommand
-                      }
+          function main_sat_command {
+              print_input_variables
+              if [ -z "$managed_rollout_strategy" ] || [[ "$managed_rollout_strategy" == *"$JSONPATH"* ]] ; then
+                  echo "ERROR: No managed_rollout_strategy provided."
+                  exit 1
+              elif [ -z "$prepare_images_output" ] || [[ "$prepare_images_output" == *"$JSONPATH"* ]] ; then
+                  echo "ERROR: No prepare_images_output provided."
+                  exit 1
+              elif [[ "$limit_managed_rollout" == *"$JSONPATH"* ]] ; then
+                  limit_managed_rollout=""
+              fi
 
-                      function parse_session_templates {
-                          tmpfile=$(mktemp /tmp/script.XXXXXX)
+              parse_session_templates
+              sat_bootsys_subcommand
+          }
 
-                          echo "${prepare_images_output}" | jq ".session_templates" >> "$tmpfile"
-                          count=$(jq '. | length' "$tmpfile")
+          function parse_session_templates {
+              tmpfile=$(mktemp /tmp/script.XXXXXX)
+              echo "${prepare_images_output}" | jq ".session_templates" >> "$tmpfile"
+              count=$(jq '. | length' "$tmpfile")
+              if (( $count == 0 )); then
+                  echo "ERROR: No session templates provided to parse, prepare_images_output is empty."
+                  exit 1
+              fi
 
-                          if (( $count == 0 )); then
-                              echo "ERROR: No session templates provided to parse, prepare-images output is empty."
-                              exit 1
-                          fi
+              session_templates_string=""
+              delim=""
+              for ((i=0; i<$count; i++)); do
+                  template_name=$(jq -r '.['$i'].name' "$tmpfile")
+                  session_templates_string="$session_templates_string$delim$template_name"
+                  delim=","
+              done
 
-                          session_templates_string=""
-                          delim=""
-                          for ((i=0; i<$count; i++)); do
-                              template_name=$(jq -r '.['$i'].name' "$tmpfile")
-                              session_templates_string="$session_templates_string$delim$template_name"
-                              delim=","
-                          done
+              rm "${tmpfile}"
+              if [ "$session_templates_string" == "" ]; then
+                  echo "ERROR: Failed to parse session_templates from prepare_images_output"
+                  exit 1
+              fi
 
-                          rm "${tmpfile}"
-                          if [ "$session_templates_string" == "" ]; then
-                              echo "ERROR: Failed to parse session_templates from prepare_images_output"
-                              exit 1
-                          fi
+              echo "$session_templates_string"
+          }
 
-                          echo "$session_templates_string"
-                      }
+          function sat_bootsys_subcommand {
+              # TODO: Should I do BOOT or REBOOT? need to account for limit as well
+              sat_command=""
+              if [ "$managed_rollout_strategy" == "reboot" ]; then
+                  sat_command="sat bootsys reboot --stage bos-operations --bos-templates $session_templates_string"
+              elif [ "$managed_rollout_strategy" == "stage" ]; then
+                  sat_command="sat bootsys boot --stage bos-operations --staged --bos-templates $session_templates_string"
+              fi
 
-                      function sat_bootsys_subcommand {
-                          # TODO: Should I do BOOT or REBOOT?
-                          if [ "$managed_rollout_strategy" == "reboot" ]; then
-                              sat bootsys reboot --stage bos-operations --bos-templates "$session_templates_string"
-                          elif [ "$managed_rollout_strategy" == "stage" ]; then
-                              sat bootsys boot --stage bos-operations --staged --bos-templates "$session_templates_string"
-                          fi
-                      }
+              if [ ! -z "$limit_managed_rollout" ]; then
+                  sat_command="$sat_command --bos-limit $limit_managed_rollout"
+              fi
 
-                      main
+              if [ -z "$sat_command" ] ; then
+                  echo "ERROR: Failed to create a valid sat bootsys command."
+                  exit 1
+              fi
+
+              output_file=$(mktemp /tmp/sat_command)
+              echo "$sat_command" >> "$output_file"
+          }
+
+          function print_input_variables {
+              echo "prepare_images_output = $prepare_images_output"
+              echo "managed_rollout_strategy = $managed_rollout_strategy"
+              echo "limit_managed_rollout = $limit_managed_rollout" 
+          }
+
+          main_sat_command
