@@ -131,7 +131,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     ```bash
     csi handoff bss-metadata \
         --data-file "${PITDATA}/configs/data.json" \
-        --kubernetes-ims-image-id "$K8S_IMS_IMAGE_ID}" \
+        --kubernetes-ims-image-id "$K8S_IMS_IMAGE_ID" \
         --storage-ims-image-id "$STORAGE_IMS_IMAGE_ID" && echo SUCCESS
     ```
 
