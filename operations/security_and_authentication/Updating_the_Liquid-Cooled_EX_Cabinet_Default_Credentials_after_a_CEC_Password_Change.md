@@ -224,11 +224,20 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
     ```bash
     \
-    REDFISH_ENDPOINTS=$(cray hsm inventory redfishEndpoints list --type '!RouterBMC' --format json | jq .RedfishEndpoints[].ID -r | sort -V )
+    cray hsm inventory redfishEndpoints list --format json > /tmp/redfishEndpoints.json
     cray hsm state components list --format json  > /tmp/components.json
 
+    REDFISH_ENDPOINTS=$(jq .RedfishEndpoints[].ID -r /tmp/redfishEndpoints.json | sort -V)
     for RF in $REDFISH_ENDPOINTS; do
         echo "$RF: Checking..."
+        TYPE=$(jq -r --arg XNAME "$RF" '.RedfishEndpoints[] | select(.ID == $XNAME).Type' /tmp/redfishEndpoints.json)
+        if [[ -z "$TYPE" ]]; then
+            echo "$RF missing Type, skipping..."
+            continue
+        elif [[ "$TYPE" == "RouterBMC" ]]; then
+            echo "$RF is a RouterBMC, skipping..."
+            continue
+        fi
         CLASS=$(jq -r --arg XNAME "$RF" '.Components[] | select(.ID == $XNAME).Class' /tmp/components.json)
         if [[ "$CLASS" != "Mountain" ]]; then
             echo "$RF is not Mountain, skipping..."
@@ -267,11 +276,17 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
     ```bash
     \
-    cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
+    cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --format json > /tmp/redfishEndpoints.json
     cray hsm state components list --format json  > /tmp/components.json
 
     REDFISH_ENDPOINTS=$(jq .RedfishEndpoints[].ID -r /tmp/redfishEndpoints.json | sort -V)
     for RF in $REDFISH_ENDPOINTS; do
+        TYPE=$(jq -r --arg XNAME "$RF" '.RedfishEndpoints[] | select(.ID == $XNAME).Type' /tmp/redfishEndpoints.json)
+        if [[ -z "$TYPE" ]]; then
+            continue
+        elif [[ "$TYPE" == "RouterBMC" ]]; then
+            continue
+        fi
         CLASS=$(jq -r --arg XNAME "$RF" '.Components[] | select(.ID == $XNAME).Class' /tmp/components.json)
         if [[ "$CLASS" != "Mountain" ]]; then
             continue
@@ -421,11 +436,17 @@ Before redeploying MEDS, update the `customizations.yaml` file in the `site-init
 
     ```bash
     \
-    cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --type '!RouterBMC' --format json > /tmp/redfishEndpoints.json
+    cray hsm inventory redfishEndpoints list --laststatus '!DiscoverOK' --format json > /tmp/redfishEndpoints.json
     cray hsm state components list --format json  > /tmp/components.json
 
     REDFISH_ENDPOINTS=$(jq .RedfishEndpoints[].ID -r /tmp/redfishEndpoints.json | sort -V)
     for RF in $REDFISH_ENDPOINTS; do
+        TYPE=$(jq -r --arg XNAME "$RF" '.RedfishEndpoints[] | select(.ID == $XNAME).Type' /tmp/redfishEndpoints.json)
+        if [[ -z "$TYPE" ]]; then
+            continue
+        elif [[ "$TYPE" == "RouterBMC" ]]; then
+            continue
+        fi
         CLASS=$(jq -r --arg XNAME "$RF" '.Components[] | select(.ID == $XNAME).Class' /tmp/components.json)
         if [[ "$CLASS" != "Mountain" ]]; then
             continue

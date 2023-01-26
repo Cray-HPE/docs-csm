@@ -26,7 +26,7 @@ components to be added:
   only available with the full SAT product stream.
 
 If the SAT product stream is not installed, there will be no configuration content for SAT in VCS. Therefore, CFS
-configurations that apply to NCNs (for example, `ncn-personalization`) should not include a SAT layer.
+configurations that apply to NCNs should not include a SAT layer.
 
 The SAT configuration layer modifies the permissions of files left over from prior installations of SAT, so that the
 Keycloak username that authenticates to the API gateway cannot be read by users other than `root`. Specifically, it
