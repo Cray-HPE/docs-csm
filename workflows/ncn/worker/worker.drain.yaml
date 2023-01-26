@@ -76,4 +76,8 @@ tasks:
                 jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
             /host_usr_bin/csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
             /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+            CPS_PM_NODE=$( kubectl get node ${TARGET_NCN} -o json | jq -r '.metadata.labels."cps-pm-node"')
+            if [ "$CPS_PM_NODE" = "True" ]; then
+              /host_usr_bin/csi handoff bss-update-param --set cps.pm-node=1 --limit $TARGET_XNAME
+            fi
 {{end}}
