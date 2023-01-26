@@ -119,7 +119,7 @@ access change the `ims-config` setting back to `False` and restart the `cray-ims
     ```
 
     Change the value for `JOB_ENABLE_DKMS` to `False`. The variable`JOB_KATA_RUNTIME` is not used when
-    under this scenario so it's value does not matter.
+    under this scenario so its value does not matter.
 
     ```yaml
         JOB_ENABLE_DKMS: "False"

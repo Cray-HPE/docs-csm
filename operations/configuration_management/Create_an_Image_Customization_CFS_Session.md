@@ -37,7 +37,7 @@ cray ims images list --format json | jq -r 'any(.[]; .id == "5d64c8b2-4f0e-4b2e-
 
 Example output:
 
-```text
+```json
 true
 ```
 
@@ -54,7 +54,7 @@ cray cfs sessions create --name example \
     --target-definition image --format json \
     --target-group Application <IMS_IMAGE_ID> \
     --target-group Application_UAN <IMS_IMAGE_ID> \
-    --image-map <IMS_IMAGE_ID> <RESULTING_IMAGE_NAME>
+    --target-image-map <IMS_IMAGE_ID> <RESULTING_IMAGE_NAME>
 ```
 
 Example output:
@@ -88,20 +88,20 @@ Example output:
     "groups": [
       {
         "members": [
-          IMS_IMAGE_ID
+          "<IMS_IMAGE_ID>"
         ],
         "name": "Application"
       },
       {
         "members": [
-          IMS_IMAGE_ID
+          "<IMS_IMAGE_ID>"
         ],
         "name": "Application_UAN"
       }
     ],
     "imageMap": {
-      "source_id": IMS_IMAGE_ID,
-      "result_name": RESULTING_IMAGE_NAME
+      "source_id": "<IMS_IMAGE_ID>",
+      "result_name": "<RESULTING_IMAGE_NAME>"
     }
   }
 }
