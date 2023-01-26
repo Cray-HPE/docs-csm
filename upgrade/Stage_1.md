@@ -45,7 +45,7 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 (`ncn-s001#`) In family upgrade to a new container with the same Ceph version:
 
 ```bash
-/srv/cray/scripts/common/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io --upgrade --in_family_override
+/usr/share/doc/csm/scripts/cubs_tool.py --version v16.2.9 --registry registry.local/artifactory.algol60.net/csm-docker/stable/quay.io --upgrade --in_family_override
 ```
 
 ## Storage node image upgrade
