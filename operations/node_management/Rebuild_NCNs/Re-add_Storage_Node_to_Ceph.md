@@ -6,15 +6,10 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 ## Add Join Script
 
-1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`. If there is an existing script in that location, then replace it.
+1. (`ncn-sXXX#`) Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh` on the node being **rebuilt**. If there is an existing script in that location, then replace it.
 
    ```bash
    #!/bin/bash
-
-   # fix spire and restart cfs
-   scp ncn-m001:/etc/kubernetes/admin.conf /etc/kubernetes/admin.conf
-   ssh ncn-m001 '/opt/cray/platform-utils/spire/fix-spire-on-storage.sh'
-   systemctl restart cfs-state-reporter.service
 
    host=$(hostname)
    host_ip=$(host ${host} | awk '{ print $NF }')
@@ -123,9 +118,14 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
      echo "NOTICE keepalived is not active on $host. Add node to Haproxy and Keepalived."
      exit 1
    fi
+
+   # fix spire and restart cfs
+   scp ncn-m001:/etc/kubernetes/admin.conf /etc/kubernetes/admin.conf
+   ssh ncn-m001 '/opt/cray/platform-utils/spire/fix-spire-on-storage.sh'
+   systemctl restart cfs-state-reporter.service
    ```
 
-1. Change the mode of the script.
+1. (`ncn-sXXX#`) On the node being rebuilt, change the mode of the script.
 
    ```bash
    chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
@@ -137,7 +137,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    watch ceph -s
    ```
 
-1. Execute the script.
+1. (`ncn-sXXX#`) Execute the script on the **node being rebuilt**.
 
    ```bash
    /srv/cray/scripts/common/join_ceph_cluster.sh
@@ -210,10 +210,10 @@ This is automated as part of the install, but administrators may have to regener
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >" --port=8080
      ```
 
-1. Verify Rados Gateway is running on the desired nodes.
+1. (`ncn-s00[1/2/3]#`) Verify Rados Gateway is running on the desired nodes.
 
     ```bash
-    ncn-s00(1/2/3)# ceph orch ps --daemon_type rgw
+    ceph orch ps --daemon_type rgw
     ```
 
     Example output:
