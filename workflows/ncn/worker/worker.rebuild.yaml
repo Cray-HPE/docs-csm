@@ -98,6 +98,8 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: targetNcns
+                  value: "{{$.TargetNcns}}"
           {{- range $index,$value := .TargetNcns }}
           - name: add-labels-{{$value}}
             template: add-labels
@@ -191,6 +193,7 @@ spec:
       inputs:
         parameters:
           - name: dryRun
+          - name: targetNcns
       dag:
         tasks:
 {{ getHooks "before-all" . | indent 8 }}
