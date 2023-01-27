@@ -1,6 +1,6 @@
 # Troubleshoot Nodes Failing to Upgrade in a CRUS Session
 
-**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
+**Note:** CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0. It will be replaced with BOS V2, which will provide similar functionality. See
 [Deprecated features](../../introduction/differences.md#deprecated_features).
 
 Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade Service \(CRUS\) session and rerun the session on the failed nodes.
@@ -20,7 +20,7 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
 1. Determine which nodes failed the upgrade by listing the contents of the Hardware State Manager \(HSM\) group that was set up for failed nodes.
 
     ```bash
-    ncn# cray hsm groups describe FAILED_NODES_GROUP
+    ncn# cray hsm groups describe FAILED_NODES_GROUP --format toml
     ```
 
     Example output:
@@ -66,6 +66,7 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
                 --upgrade-step-size 50 \
                 --workload-manager-type slurm \
                 --upgrade-template-id boot-template
+                --format toml
         ```
 
         Example output:

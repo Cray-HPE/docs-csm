@@ -2,43 +2,33 @@
 
 Check for any etcd cluster alarms and clear them as needed. An etcd cluster alarm must be manually cleared.
 
-For example, a cluster's database "NOSPACE" alarm is set when database storage space is no longer available. A subsequent defrag may free up database storage space, but writes to the database will continue to fail while the "NOSPACE" alarm is set.
+For example, a cluster's database `NOSPACE` alarm is set when database storage space is no longer available. A subsequent defrag may free up database storage space, but writes to the database will continue to fail while the `NOSPACE` alarm is set.
 
+## Prerequisites
 
-### Prerequisites
+- This procedure requires root privileges.
+- The etcd clusters are in a healthy state.
 
--   This procedure requires root privileges.
--   The etcd clusters are in a healthy state.
+## Procedure
 
-
-### Procedure
-
-1.  Check for etcd cluster alarms.
+1. Check for etcd cluster alarms.
 
     An empty list will be returned if no alarms are set.
 
-    -   Check if any etcd alarms are set for etcd clusters in the services namespace.
+    - Check if any etcd alarms are set for etcd clusters in the services namespace.
 
         ```bash
-        for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
+        ncn-mw# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
                              -n services -o jsonpath='{.items[*].metadata.name}')
-        do
-            echo "### ${pod} Alarms Set: ###"
-            kubectl -n services exec ${pod} -- /bin/sh \
-                    -c "ETCDCTL_API=3 etcdctl alarm list"
-        done
-        ```
-
-        ```bash
-        ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services \
-        -o jsonpath='{.items[*].metadata.name}'); \
-        do echo "### ${pod} Alarms Set: ###"; kubectl -n services exec ${pod} -- /bin/sh -c \
-        "ETCDCTL_API=3 etcdctl alarm list"; done
+                do
+                    echo "### ${pod} Alarms Set: ###"
+                    kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl alarm list"
+                done
         ```
 
         Example output:
 
-        ```
+        ```text
         ### cray-bos-etcd-7cxq6qrhz5 Alarms Set: ###
         ### cray-bos-etcd-b9m4k5qfrd Alarms Set: ###
         ### cray-bos-etcd-tnpv8x6cxv Alarms Set: ###
@@ -57,59 +47,43 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         [...]
         ```
 
-    -   Check if any etcd alarms are set for a particular etcd cluster in the services namespace.
+    - Check if any etcd alarms are set for a particular etcd cluster in the services namespace.
 
         ```bash
-        for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
+        ncn-mw# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
                              -n services -o jsonpath='{.items[*].metadata.name}')
-        do
-            echo "### ${pod} Alarms Set: ###"
-            kubectl -n services exec ${pod} -- /bin/sh \
-                    -c "ETCDCTL_API=3 etcdctl alarm list"
-        done
-        ```
-
-        ```bash
-        ncn-w001# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
-        -n services -o jsonpath='{.items[*].metadata.name}'); do echo "### \
-        ${pod} Alarms Set: ###"; kubectl -n services exec ${pod} -- /bin/sh -c \
-        "ETCDCTL_API=3 etcdctl alarm list"; done
+                do
+                    echo "### ${pod} Alarms Set: ###"
+                    kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl alarm list"
+                done
         ```
 
         Example output:
 
-        ```
+        ```text
         ### cray-bos-etcd-7cxq6qrhz5 Alarms Set: ###
         ### cray-bos-etcd-b9m4k5qfrd Alarms Set: ###
         ### cray-bos-etcd-tnpv8x6cxv Alarms Set: ###
         ```
 
-2.  Clear any etcd cluster alarms.
+1. Clear any etcd cluster alarms.
 
     A list of disarmed alarms will be returned. An empty list is returned if no alarms were set.
 
-    -   Clear all etcd alarms set in etcd clusters.
+    - Clear all etcd alarms set in etcd clusters.
 
         ```bash
-        for pod in $(kubectl get pods -l app=etcd -n services \
+        ncn-mw# for pod in $(kubectl get pods -l app=etcd -n services \
                              -o jsonpath='{.items[*].metadata.name}')
-        do
-            echo "### ${pod} Disarmed Alarms: ###"
-            kubectl -n services exec ${pod} -- /bin/sh \
-                    -c "ETCDCTL_API=3 etcdctl alarm disarm"
-        done
-        ```
-
-        ```bash
-        ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services -o \
-        jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} Disarmed Alarms: \
-        ###"; kubectl -n services exec ${pod} -- /bin/sh -c \
-        "ETCDCTL_API=3 etcdctl alarm disarm"; done
+                do
+                    echo "### ${pod} Disarmed Alarms: ###"
+                    kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl alarm disarm"
+                done
         ```
 
         Example output:
 
-        ```
+        ```text
         ### cray-bos-etcd-7cxq6qrhz5 Disarmed Alarms: ###
         ### cray-bos-etcd-b9m4k5qfrd Disarmed Alarms: ###
         ### cray-bos-etcd-tnpv8x6cxv Disarmed Alarms: ###
@@ -122,28 +96,20 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         [...]
         ```
 
-    -   Clear all alarms in one particular etcd cluster.
+    - Clear all alarms in one particular etcd cluster.
 
         ```bash
-        for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
+        ncn-mw# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
                              -n services -o jsonpath='{.items[*].metadata.name}')
-        do
-            echo "### ${pod} Disarmed Alarms:  ###"
-            kubectl -n services exec ${pod} -- /bin/sh \
-                    -c "ETCDCTL_API=3 etcdctl alarm disarm"
-        done
-        ```
-
-        ```bash
-        ncn-w001# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
-        -n services -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} \
-        Disarmed Alarms:  ###"; kubectl -n services exec ${pod} -- /bin/sh \
-        -c "ETCDCTL_API=3 etcdctl alarm disarm"; done
+                do
+                    echo "### ${pod} Disarmed Alarms:  ###"
+                    kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl alarm disarm"
+                done
         ```
 
         Example output:
 
-        ```
+        ```text
         ### cray-bos-etcd-7cxq6qrhz5 Disarmed Alarms:  ###
         memberID:14039380531903955557 alarm:NOSPACE
         memberID:10060051157615504224 alarm:NOSPACE
@@ -151,4 +117,3 @@ For example, a cluster's database "NOSPACE" alarm is set when database storage s
         ### cray-bos-etcd-b9m4k5qfrd Disarmed Alarms:  ###
         ### cray-bos-etcd-tnpv8x6cxv Disarmed Alarms:  ###
         ```
-

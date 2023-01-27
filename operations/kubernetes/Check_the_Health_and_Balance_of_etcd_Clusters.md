@@ -1,30 +1,30 @@
 # Check the Health and Balance of etcd Clusters
 
-Check to see if all of the etcd clusters have healthy pods, are balanced, and have a healthy cluster database. There needs to be the same number of pods running on each worker node for the etcd clusters to be balanced. If the number of pods is not the same for each worker node, the cluster is not balanced.
+Check to see if all of the etcd clusters have healthy pods, are balanced, and have a healthy cluster database. There needs to be the same number of pods running on each worker node
+for the etcd clusters to be balanced. If the number of pods is not the same for each worker node, the cluster is not balanced.
 
 Any clusters that do not have healthy pods will need to be rebuilt. Kubernetes cluster data will not be stored as efficiently when etcd clusters are not balanced.
 
-
-### Prerequisites
+## Prerequisites
 
 This procedure requires root privileges.
 
+## Procedure
 
-### Procedure
-
-1.  Check the health of the clusters.
+1. Check the health of the clusters.
 
     To check the health of the etcd clusters in the services namespace without TLS authentication:
 
     ```bash
-    ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services \
-    -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} ###"; \
-    kubectl -n services exec ${pod} -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint health"; done
+    ncn-mw# for pod in $(kubectl get pods -l app=etcd -n services -o jsonpath='{.items[*].metadata.name}'); do
+                echo "### ${pod} ###"
+                kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint health"
+            done
     ```
 
     Example output:
 
-    ```
+    ```text
     ### cray-bos-etcd-6nkn6dzhv7 ###
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 1.670457ms
     ### cray-bos-etcd-6xtp2gqs64 ###
@@ -45,19 +45,21 @@ This procedure requires root privileges.
 
     If any of the etcd clusters are not healthy, refer to [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
 
-2.  Check the number of pods in each cluster and verify they are balanced.
+1. Check the number of pods in each cluster and verify they are balanced.
 
     Each cluster should contain at least three pods, but may contain more. Ensure that no two pods in a given cluster exist on the same worker node.
 
     ```bash
-    ncn-w001# kubectl get pod -n services -o wide | head -n 1; for cluster in \
-    $(kubectl get etcdclusters.etcd.database.coreos.com -n services | grep -v NAME | \
-    awk '{print $1}'); do kubectl get pod -n services -o wide | grep $cluster; echo ""; done
+    ncn-mw# kubectl get pod -n services -o wide | head -n 1 ; \
+            for cluster in $(kubectl get etcdclusters.etcd.database.coreos.com -n services | grep -v NAME | awk '{print $1}')
+            do
+                kubectl get pod -n services -o wide | grep $cluster; echo ""
+            done
     ```
 
     Example output:
 
-    ```
+    ```text
     NAME                                    READY   STATUS    RESTARTS AGE   IP            NODE       NOMINATED NODE  READINESS GATE
     cray-bos-etcd-7gl9dccmrq                1/1     Running   0        8d    10.40.0.88    ncn-w003   <none>          <none>
     cray-bos-etcd-g65fjhhlbg                1/1     Running   0        8d    10.42.0.36    ncn-w002   <none>          <none>
@@ -102,46 +104,32 @@ This procedure requires root privileges.
 
     If the etcd clusters are not balanced, see [Rebalance Healthy etcd Clusters](Rebalance_Healthy_etcd_Clusters.md).
 
-3.  Check the health of an etcd cluster database.
+1. Check the health of an etcd cluster database.
 
-    -   To check the health of an etcd cluster's database in the services namespace:
+    - To check the health of an etcd cluster's database in the `services` namespace:
 
         ```bash
-        for pod in $(kubectl get pods -l app=etcd -n services \
+        ncn-mw# for pod in $(kubectl get pods -l app=etcd -n services \
                              -o jsonpath='{.items[*].metadata.name}')
-        do
-            echo "### ${pod} Etcd Database Check: ###"
-            dbc=$(kubectl -n services exec ${pod} -- /bin/sh \
+                do
+                    echo "### ${pod} Etcd Database Check: ###"
+                    dbc=$(kubectl -n services exec ${pod} -- /bin/sh \
                           -c "ETCDCTL_API=3 etcdctl put foo fooCheck && \
                           ETCDCTL_API=3 etcdctl get foo && \
                           ETCDCTL_API=3 etcdctl del foo && \
                           ETCDCTL_API=3 etcdctl get foo" 2>&1)
-            echo $dbc | awk '{ if ( $1=="OK" && $2=="foo" && \
-                               $3=="fooCheck" && $4=="1" && $5=="" ) print \
-            "PASS:  " PRINT $0;
-            else \
-            print "FAILED DATABASE CHECK - EXPECTED: OK foo fooCheck 1 \
-            GOT: " PRINT $0 }'
-        done
-        ```
-
-        Example of command being entered:
-
-        ```bash
-        ncn-w001# for pod in $(kubectl get pods -l app=etcd -n services -o \
-        jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} \
-        Etcd Database Check: ###"; dbc=$(kubectl -n services exec ${pod} \
-        -- /bin/sh -c "ETCDCTL_API=3 etcdctl put foo fooCheck && ETCDCTL_API=3 \
-        etcdctl get foo && ETCDCTL_API=3 etcdctl del foo && ETCDCTL_API=3 \
-        etcdctl get foo" 2>&1); echo $dbc | awk '{ if ( $1=="OK" && \
-        $2=="foo" && $3=="fooCheck" && $4=="1" && $5=="" ) print "PASS:  \
-        " PRINT $0; else print "FAILED DATABASE CHECK - \
-        EXPECTED: OK foo fooCheck 1   GOT: " PRINT $0 \}'; done
+                    echo $dbc | awk '{ if ( $1=="OK" && $2=="foo" && \
+                                $3=="fooCheck" && $4=="1" && $5=="" ) print \
+                                "PASS:  " PRINT $0;
+                                else \
+                                print "FAILED DATABASE CHECK - EXPECTED: OK foo fooCheck 1 \
+                                GOT: " PRINT $0 }'
+                done
         ```
 
         Example output:
 
-        ```
+        ```text
         ### cray-bos-etcd-7cxq6qrhz5 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
         ### cray-bos-etcd-b9m4k5qfrd Etcd Database Check: ###
@@ -172,45 +160,30 @@ This procedure requires root privileges.
         [...]
         ```
 
-    -   To check one cluster:
+    - To check one cluster:
 
         ```bash
-        for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd -n services \
+        ncn-mw# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd -n services \
                              -o jsonpath='{.items[*].metadata.name}')
-        do
-            echo "### ${pod} Etcd Database Check: ###"
-            dbc=$(kubectl -n services exec ${pod} -- /bin/sh \
+                do
+                    echo "### ${pod} Etcd Database Check: ###"
+                    dbc=$(kubectl -n services exec ${pod} -- /bin/sh \
                           -c "ETCDCTL_API=3 etcdctl put foo fooCheck && \
                           ETCDCTL_API=3 etcdctl get foo && \
                           ETCDCTL_API=3 etcdctl del foo && \
                           ETCDCTL_API=3 etcdctl get foo" 2>&1)
-            echo $dbc | awk '{ if ( $1=="OK" && $2=="foo" && \
-                               $3=="fooCheck" && $4=="1" && $5=="" ) print \
-            "PASS:  " PRINT $0;
-            else \
-            print "FAILED DATABASE CHECK - EXPECTED: OK foo fooCheck 1 \
-            GOT: " PRINT $0 }'
-        done
-        ```
-
-        Example of command being entered:
-
-        ```bash
-        ncn-w001# for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
-        -n services -o jsonpath='{.items[*].metadata.name}'); do echo \
-        "### ${pod} Etcd Database Check: ###";  dbc=$(kubectl -n \
-        services exec ${pod} -- /bin/sh -c "ETCDCTL_API=3 etcdctl \
-        put foo fooCheck && ETCDCTL_API=3 etcdctl get foo && \
-        ETCDCTL_API=3 etcdctl del foo && ETCDCTL_API=3 etcdctl get \
-        foo" 2>&1); echo $dbc | awk '{ if ( $1=="OK" && $2=="foo" && \
-        $3=="fooCheck" && $4=="1" && $5=="" ) print "PASS:  " PRINT $0; \
-        else print "FAILED DATABASE CHECK - EXPECTED: \
-        OK foo fooCheck 1   GOT: " PRINT $0 }'; done
+                    echo $dbc | awk '{ if ( $1=="OK" && $2=="foo" && \
+                                $3=="fooCheck" && $4=="1" && $5=="" ) print \
+                                "PASS:  " PRINT $0;
+                                else \
+                                print "FAILED DATABASE CHECK - EXPECTED: OK foo fooCheck 1 \
+                                GOT: " PRINT $0 }'
+                done
         ```
 
         Example output:
 
-        ```
+        ```text
         ### cray-bos-etcd-7cxq6qrhz5 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
         ### cray-bos-etcd-b9m4k5qfrd Etcd Database Check: ###
@@ -219,8 +192,7 @@ This procedure requires root privileges.
         PASS:  OK foo fooCheck 1
         ```
 
-    If any of the etcd cluster databases are not healthy, refer to the following procedures:
+    If any of the etcd cluster databases are not healthy, then refer to the following procedures:
 
-    - Refer to [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
-    - Refer to [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
-
+    - [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
+    - [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
