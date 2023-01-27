@@ -354,7 +354,7 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 Successful output ends with a line similar to the following:
 
 ```text
-SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs
+SUCCESS: All 6 service tests passed: bos, cfs, conman, ims, tftp, vcs
 ```
 
 ## 4. Gateway health and SSH access checks

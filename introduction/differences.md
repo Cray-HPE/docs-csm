@@ -45,9 +45,6 @@ The following features are no longer supported and are planned to be removed in 
   * The `--template-body` option for the Cray CLI `bos` command is deprecated.
   * Prior to CSM V1.2.0, performing a successful `GET` on the session status for a boot set (i.e. `/v1/session/{session_id}/status/{boot_set_name}`) incorrectly returned
     a status code of 201. It now correctly returns a status code of 200.
-* The Compute Rolling Upgrade Service (CRUS) is deprecated in CSM 1.2.0 and will be removed in a future CSM release. Enhanced BOS functionality will replace CRUS. This includes the ability
-  to stage changes to nodes that can be acted upon later when the node reboots. It also includes the ability to reboot nodes without specifying any boot artifacts. This latter
-  ability relies on the artifacts already having been staged.
 
 ## Removed features
 
@@ -56,3 +53,5 @@ The following features have been completely removed:
 * `cray-conman` pod. This has been replaced by `cray-console-node`.
 * CFS v1 API and CLI. The v2 API and CLI have been the default since CSM 0.9 (Shasta 1.4).
 * SLS support for downloading and uploading credentials in the `dumpstate` and `loadstate` REST APIs.
+* The Compute Rolling Upgrade Service (CRUS) was deprecated in CSM 1.2.0 and removed in CSM 1.6.0.
+  * Enhanced BOS functionality replaces CRUS. See [Rolling Upgrades using BOS](../operations/boot_orchestration/Rolling_Upgrades.md).
