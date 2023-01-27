@@ -95,9 +95,11 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    done
 
    # check if node-exporter needs to be restarted
-   status=$(ceph orch ps $host --format json | jq '.[] | select(.daemon_type == "node-exporter") | .status_desc' | tr -d '"')
+   status=$(ceph --name client.ro orch ps $host --format json | jq '.[] | select(.daemon_type == "node-exporter") | .status_desc' | tr -d '"')
    if [[ $status != "running" ]]; then
-     ceph orch daemon restart node-exporter.${host}
+     for node in ncn-s001 ncn-s002 ncn-s003; do
+       ssh $node "ceph orch daemon restart node-exporter.${host}"
+       if [[ $? -eq 0 ]]; then break; fi
    fi
 
    for service in $(cephadm ls | jq -r '.[].systemd_unit')
@@ -111,12 +113,10 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    http_code=$(curl -k -s -o "${res_file}" -w "%{http_code}" "https://rgw-vip.nmn")
    if [[ ${http_code} != 200 ]]; then
      echo "NOTICE Rados GW and haproxy are not healthy. Deploy RGW on rebuilt node."
-     exit 1
    fi
    # check keepalived is active
    if [[ $(systemctl is-active keepalived.service) != "active" ]]; then
      echo "NOTICE keepalived is not active on $host. Add node to Haproxy and Keepalived."
-     exit 1
    fi
 
    # fix spire and restart cfs
