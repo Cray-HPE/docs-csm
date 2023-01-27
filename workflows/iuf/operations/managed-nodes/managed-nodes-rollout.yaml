@@ -14,30 +14,27 @@ spec:
       steps:
         - - name: build-sat-general-subcommand
             template: build-sat-general-subcommand
-            inputs:
+            arguments:
               parameters:
                 - name: prepare_images_output
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.prepare_images')}}"
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.prepare-images.global.prepare-managed-images.sat-bootprep-run.script_stdout')}}"
                 - name: managed_rollout_strategy
                   value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.managed_rollout_strategy')}}"
-                - name: limit_managed_rollout
-                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.limit_managed_rollout')}}"
-            outputs:
-              parameters:
-                - name: sat_command
-                  valueFrom:
-                    path: /tmp/sat_command
+                - name: limit_managed_nodes
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.limit_managed_nodes')}}"
         - - name: sat-bootsys-reboot
             templateRef:
               name: sat-general-template
               template: sat-wrapper
             arguments:
               parameters:
+                - name: media_dir
+                  value: "{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
                 - name: auth_token
                   value: "{{inputs.parameters.auth_token}}"
                 - name: script_content
                   value: |
-                    "{{steps.build-sat-general-subcommand.outputs.parameters.sat_command}}"
+                    {{steps.build-sat-general-subcommand.outputs.parameters.sat_command}}
 
     - name: build-sat-general-subcommand
       nodeSelector:
@@ -48,29 +45,41 @@ spec:
       metadata:
         annotations:
           sidecar.istio.io/inject: "false"
+      inputs:
+        parameters:
+          - name: prepare_images_output
+          - name: managed_rollout_strategy
+          - name: limit_managed_nodes
+      outputs:
+        parameters:
+          - name: sat_command
+            valueFrom:
+              path: /tmp/sat_command.txt
       script:
         image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
         command: [bash]
         source: |
           #!/bin/bash
           JSONPATH='jsonpath'
-          prepare_images_output="{{inputs.parameters.prepare_images_output}}"
+          prepare_images_output='{{inputs.parameters.prepare_images_output}}'
           managed_rollout_strategy="{{inputs.parameters.managed_rollout_strategy}}"
-          limit_managed_rollout="{{inputs.parameters.limit_managed_rollout}}"
+          limit_managed_nodes="{{inputs.parameters.limit_managed_nodes}}"
 
           function main_sat_command {
-              print_input_variables
+              print_inputs_variables
               if [ -z "$managed_rollout_strategy" ] || [[ "$managed_rollout_strategy" == *"$JSONPATH"* ]] ; then
                   echo "ERROR: No managed_rollout_strategy provided."
                   exit 1
               elif [ -z "$prepare_images_output" ] || [[ "$prepare_images_output" == *"$JSONPATH"* ]] ; then
                   echo "ERROR: No prepare_images_output provided."
                   exit 1
-              elif [[ "$limit_managed_rollout" == *"$JSONPATH"* ]] ; then
-                  limit_managed_rollout=""
               fi
 
+              if [[ "$limit_managed_nodes" == *"$JSONPATH"* ]] ; then
+                  limit_managed_nodes=""
+              fi
               parse_session_templates
+              clean_limit_managed_nodes
               sat_bootsys_subcommand
           }
 
@@ -78,14 +87,14 @@ spec:
               tmpfile=$(mktemp /tmp/script.XXXXXX)
               echo "${prepare_images_output}" | jq ".session_templates" >> "$tmpfile"
               count=$(jq '. | length' "$tmpfile")
-              if (( $count == 0 )); then
+              if [[ "$count" == "0" ]]; then
                   echo "ERROR: No session templates provided to parse, prepare_images_output is empty."
                   exit 1
               fi
 
               session_templates_string=""
               delim=""
-              for ((i=0; i<$count; i++)); do
+              for ((i=0; i < $count; i++)); do
                   template_name=$(jq -r '.['$i'].name' "$tmpfile")
                   session_templates_string="$session_templates_string$delim$template_name"
                   delim=","
@@ -96,21 +105,26 @@ spec:
                   echo "ERROR: Failed to parse session_templates from prepare_images_output"
                   exit 1
               fi
-
               echo "$session_templates_string"
           }
 
+          function clean_limit_managed_nodes {
+            limit_managed_nodes=${limit_managed_nodes//[/}
+            limit_managed_nodes=${limit_managed_nodes//]/}
+            limit_managed_nodes=${limit_managed_nodes// /,}
+            echo "limit_managed_nodes = $limit_managed_nodes"
+          }
+
           function sat_bootsys_subcommand {
-              # TODO: Should I do BOOT or REBOOT? need to account for limit as well
               sat_command=""
               if [ "$managed_rollout_strategy" == "reboot" ]; then
-                  sat_command="sat bootsys reboot --stage bos-operations --bos-templates $session_templates_string"
+                  sat_command="sat bootsys --bos-version v2 reboot --disruptive --stage bos-operations --bos-templates $session_templates_string"
               elif [ "$managed_rollout_strategy" == "stage" ]; then
-                  sat_command="sat bootsys boot --stage bos-operations --staged --bos-templates $session_templates_string"
+                  sat_command="sat bootsys --bos-version v2 reboot --disruptive --stage bos-operations --bos-templates $session_templates_string"
               fi
 
-              if [ ! -z "$limit_managed_rollout" ]; then
-                  sat_command="$sat_command --bos-limit $limit_managed_rollout"
+              if [ ! -z "$limit_managed_nodes" ]; then
+                  sat_command="$sat_command --bos-limit $limit_managed_nodes"
               fi
 
               if [ -z "$sat_command" ] ; then
@@ -118,14 +132,15 @@ spec:
                   exit 1
               fi
 
-              output_file=$(mktemp /tmp/sat_command)
+              output_file=/tmp/sat_command.txt
+              touch "$output_file"
               echo "$sat_command" >> "$output_file"
           }
 
-          function print_input_variables {
+          function print_inputs_variables {
               echo "prepare_images_output = $prepare_images_output"
               echo "managed_rollout_strategy = $managed_rollout_strategy"
-              echo "limit_managed_rollout = $limit_managed_rollout" 
+              echo "limit_managed_nodes = $limit_managed_nodes" 
           }
 
           main_sat_command
