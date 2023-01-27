@@ -34,6 +34,8 @@ Follow the steps in only one of the sections below:
 
 1. Save the client secret stored in the `Secret` field.
 
+    > **NOTE**: If the `Secret` field is empty hit the `Regenerate Secret` button to get the client secret.
+
     ![Keycloak Client Secret](../../img/operations/Keycloak_Client_Secret.png "Keycloak Client Secret")
 
 1. (`linux#`) Create a variable for the client secret.
@@ -92,6 +94,12 @@ Follow the steps in only one of the sections below:
 
     ```text
     8a91fdf2-f9c5-4c7f-8da8-49cfbb97680a
+    ```
+
+    If the command returns an error with `KeyError: 'value'` then run the following command to generate a new secret and retrieve it.
+
+    ```bash
+    curl -s -X POST -H "Authorization: Bearer $(get_master_token)" https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients/$CLIENT_ID/client-secret | jq -r .value
     ```
 
 1. (`ncn-mw#`) Create a variable for the client secret.

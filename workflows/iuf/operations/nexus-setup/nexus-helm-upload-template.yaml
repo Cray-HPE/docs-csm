@@ -254,6 +254,7 @@ spec:
         - name: nexus_helm_load_results
           valueFrom:
             path: /results/records.yaml
+            default: "{}"
     nodeSelector:
       kubernetes.io/hostname: ncn-m001
     tolerations:
