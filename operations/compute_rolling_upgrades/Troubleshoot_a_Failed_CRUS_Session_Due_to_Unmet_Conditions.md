@@ -1,6 +1,6 @@
 # Troubleshoot a Failed CRUS Session Because of Unmet Conditions
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0.
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)
@@ -21,10 +21,10 @@ The following are examples of unmet conditions:
 
 ## Procedure
 
-1. View the details for the CRUS session that failed.
+1. (`ncn-mw#`) View the details for the CRUS session that failed.
 
     ```bash
-    cray crus session describe CRUS_UPGRADE_ID
+    cray crus session describe CRUS_UPGRADE_ID --format toml
     ```
 
     Example output:
@@ -47,12 +47,12 @@ The following are examples of unmet conditions:
     The `messages` value returned in the output will provide details explaining where the job failed. In this example, there is a note stating the failed node group could not be
     obtained. This implies that the user forgot to create the failed node group before starting the job.
 
-1. Create a new node group for the missing group.
+1. (`ncn-mw#`) Create a new node group for the missing group.
 
     Following the example in the previous step, the failed node group needs to be created.
 
     ```bash
-    cray hsm groups create --label failed-node-group
+    cray hsm groups create --label failed-node-group --format toml
     ```
 
     Example output:
@@ -62,10 +62,10 @@ The following are examples of unmet conditions:
     URI = "/hsm/v2/groups/failed-node-group"
     ```
 
-1. View the details for the CRUS session again to see if the job started.
+1. (`ncn-mw#`) View the details for the CRUS session again to see if the job started.
 
     ```bash
-    cray crus session describe CRUS_UPGRADE_ID
+    cray crus session describe CRUS_UPGRADE_ID --format toml
     ```
 
     Example output:

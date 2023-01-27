@@ -137,8 +137,11 @@ management status of nodes, handling each of the steps required to upgrade compu
 
 See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
-[Deprecated Features](introduction/deprecated_features/README.md).
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0.
+> See the following links for more information:
+>
+> * [Rolling Upgrades with BOS V2](operations/boot_orchestration/Rolling_Upgrades.md)
+> * [Deprecated Features](introduction/deprecated_features/README.md)
 
 ## Cray Advanced Platform Monitoring and Control (CAPMC)
 
@@ -304,9 +307,9 @@ provide containerization services as well as storage classes.
 
 The management nodes have various roles:
 
-- masters nodes are Kubernetes masters 
-- worker nodes are Kubernetes workers and have physical connections to the [high-speed network](#high-speed-network-hsn)
-- storage nodes physically have more local storage for providing storage classes to Kubernetes
+* Masters nodes are Kubernetes masters.
+* Worker nodes are Kubernetes workers and have physical connections to the [High Speed Network](#high-speed-network-hsn).
+* Storage nodes physically have more local storage for providing storage classes to Kubernetes.
 
 ## Mountain Cabinet
 
