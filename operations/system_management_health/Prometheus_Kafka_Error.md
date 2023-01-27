@@ -1,6 +1,6 @@
 # `prometheus-kafka-adapter` errors during installation
 
-On a fresh install of CSM 1.3.1, the Prometheus log has following example errors:
+On a fresh install of CSM, the Prometheus log has following example errors:
 
 ```text
 ts=2022-12-05T13:35:53.495Z caller=dedupe.go:112 component=remote level=warn remote_name=2eb187 
