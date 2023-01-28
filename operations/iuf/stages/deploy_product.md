@@ -16,7 +16,7 @@ The following arguments are most often used with the `deploy-product` stage. See
 
 ## Execution Details
 
-The code executed by this stage primarily exists with IUF itself. See the `deploy-product` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/` for details on the commands executed.
+The code executed by this stage exists within IUF. See the `deploy-product` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/` for details on the commands executed.
 
 ## Example
 

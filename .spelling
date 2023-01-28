@@ -291,6 +291,7 @@ iPXE
 iSCSI
 Istio
 Istio's
+IUF
 Jetstack
 Jinja
 Jinja2
@@ -336,6 +337,8 @@ Luks
 LVM
 LVMs
 macOS
+managed-nodes-rollout
+management-nodes-rollout
 maneuver
 maneuvers
 Mbs
@@ -574,6 +577,8 @@ Unsuspend
 untainting
 Untar
 untarred
+update-cfs-config
+update-vcs-config
 upgrader
 Upgrader
 upgrader's
