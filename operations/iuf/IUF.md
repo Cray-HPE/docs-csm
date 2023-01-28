@@ -50,7 +50,7 @@ The time at which IUF stages are executed in an initial install or upgrade workf
 
 | Operation       | Content          | Tasks |
 | --------------- | ---------------- | ----- |
-| initial install | CSM and products | Install CSM, **ignoring** any IUF stages embedded in the CSM installation documentation <br> Execute all IUF stages to install product content after CSM is fully functional |
+| initial install | CSM and products | Install CSM, **ignoring** any IUF stages embedded in the CSM installation documentation. Then execute all IUF stages to install product content with CSM fully functional. |
 | initial install | products only    | Execute IUF stages to install non-CSM product content |
 | upgrade         | CSM and products | Upgrade CSM, **including** any IUF stages embedded in the CSM installation documentation |
 | upgrade         | products only    | Execute IUF stages to upgrade non-CSM product content |

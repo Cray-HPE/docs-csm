@@ -114,7 +114,6 @@ Once `iuf` has performed the merges, it performs substitutions based on the foll
 
 ```yaml
 {{name}} - product name from the product manifest
-{{version}} - version from the product manifest
 {{version_x_y}} - x.y portion of the product version
 {{version_x_y_z}} - x.y.z portion of the product version
 {{working_branch}} - default working branch
@@ -132,7 +131,7 @@ The following arguments are most often used with the `update-vcs-config` stage. 
 
 ## Execution Details
 
-The code executed by this stage primarily exists with IUF itself. See the `update-vcs-config` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage exists within IUF. See the `update-vcs-config` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
 ## Example

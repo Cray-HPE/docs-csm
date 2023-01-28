@@ -16,7 +16,7 @@ The following arguments are most often used with the `managed-nodes-rollout` sta
 
 ## Execution Details
 
-The code executed by this stage primarily exists with IUF itself. See the `managed-nodes-rollout` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage exists within IUF. See the `managed-nodes-rollout` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
 ## Example
