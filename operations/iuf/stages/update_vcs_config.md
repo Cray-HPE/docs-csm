@@ -136,8 +136,9 @@ for details on the commands executed.
 
 ## Example
 
-(`ncn-m001#`) Run all stages up to and including `update-vcs-config` using the specified `site_vars.yaml` file and the `product_vars.yaml` file found in the `hpc-csm-software-recipe-23.03.0/vcs` directory of the 22.03.0 HPC CSM Software Recipe distribution file.
+(`ncn-m001#`) Run all stages up to and including `update-vcs-config` using the specified `site_vars.yaml` file and the `product_vars.yaml` file found in the `hpc-csm-software-recipe-23.03.0/vcs` directory of the
+22.03.0 HPC CSM Software Recipe distribution file.
 
 ```bash
-iuf -a test-activity-20230123 -m /etc/cray/upgrade/csm/test-activity-20230123 run --site-vars /etc/cray/upgrade/csm/iuf/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/test-activity-20230123/hpc-csm-software-recipe-23.03.0/vcs -e update-vcs-config
+iuf -a activity-20230123 -m /etc/cray/upgrade/csm/activity-20230123 run --site-vars /etc/cray/upgrade/csm/iuf/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/activity-20230123/hpc-csm-software-recipe-23.03.0/vcs -e update-vcs-config
 ```

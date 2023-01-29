@@ -278,6 +278,7 @@ iLO5
 iLOM
 IMS
 IMS-hosted
+in_progress
 inband
 InfiniBand
 IP
@@ -493,6 +494,7 @@ Runbook
 S-8000
 S-8024
 S-8031
+S-8052
 sC
 SCSD
 sC-ToR
@@ -623,6 +625,7 @@ virtualization
 virtualized
 VLANs
 VSF-enabled
+waiting_admin
 webhook
 webserver
 webUI
@@ -684,6 +687,10 @@ Lorem
 - introduction/site_survey.md
 # To allow Site Init
 Init
+
+- operations/iuf/IUF.md
+sessionid
+SESSIONID
 
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
