@@ -30,7 +30,7 @@ The following arguments are most often used with the `deliver-product` stage. Se
 
 ## Execution Details
 
-The code executed by this stage exists withinin IUF. See the `deliver-product` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage exists within IUF. See the `deliver-product` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
 ## Example
