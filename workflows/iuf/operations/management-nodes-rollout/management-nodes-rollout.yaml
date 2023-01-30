@@ -44,9 +44,9 @@ spec:
           help: "Count of step execution by result status"
           labels:
             - key: "opname"
-              value: "extract-release-distributions"
+              value: "management-nodes-rollout"
             - key: stage
-              value: "process-media"
+              value: "management-nodes-rollout"
             - key: type
               value: "global"
             - key: pname
@@ -374,9 +374,9 @@ spec:
             help: "Duration gauge by operation name in seconds"
             labels:
               - key: "opname"
-                value: "extract-release-distributions"
+                value: "management-nodes-rollout"
               - key: stage
-                value: "process-media"
+                value: "management-nodes-rollout"
               - key: type
                 value: "global"
               - key: pdname
