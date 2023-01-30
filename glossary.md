@@ -156,7 +156,7 @@ management status of nodes, handling each of the steps required to upgrade compu
 
 See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
 
-**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+**Note:** CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0. It will be replaced with BOS V2, which will provide similar functionality.
 
 <a name="cray-advanced-platform-monitoring-and-control"></a>
 
@@ -392,6 +392,12 @@ digit number starting with zero padding. The utility storage nodes provide Ceph 
 by the management nodes. The master nodes provide Kubernetes master functions and have the
 etcd cluster which provides a datastore for Kubernetes. The worker nodes provide Kubernetes
 worker functions where most of the containerized workload is scheduled by Kubernetes.
+
+The management nodes have various roles:
+
+* Masters nodes are Kubernetes masters.
+* Worker nodes are Kubernetes workers and have physical connections to the [High Speed Network](#high-speed-network-hsn).
+* Storage nodes physically have more local storage for providing storage classes to Kubernetes.
 
 <a name="mountain-cabinet"></a>
 

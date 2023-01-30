@@ -1,6 +1,6 @@
 # Troubleshoot a Failed CRUS Session Because of Unmet Conditions
 
-**Note:** CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+**Note:** CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0. It will be replaced with BOS V2, which will provide similar functionality.
 
 If a CRUS session has any unmet conditions, adding or fixing them will cause the session to continue from wherever it got stuck. Updating other parts of the system to meet
 the required conditions of a CRUS session will unblock the upgrade session.
@@ -20,7 +20,7 @@ The following are examples of unmet conditions:
 1. View the details for the CRUS session that failed.
 
     ```bash
-    ncn# cray crus session describe CRUS_UPGRADE_ID
+    ncn# cray crus session describe CRUS_UPGRADE_ID --format toml
     ```
 
     Example output:
@@ -48,7 +48,7 @@ The following are examples of unmet conditions:
     Following the example in the previous step, the failed node group needs to be created.
 
     ```bash
-    ncn# cray hsm groups create --label failed-node-group
+    ncn# cray hsm groups create --label failed-node-group --format toml
     ```
 
     Example output:
@@ -61,7 +61,7 @@ The following are examples of unmet conditions:
 1. View the details for the CRUS session again to see if the job started.
 
     ```bash
-    ncn# cray crus session describe CRUS_UPGRADE_ID
+    ncn# cray crus session describe CRUS_UPGRADE_ID --format toml
     ```
 
     Example output:
