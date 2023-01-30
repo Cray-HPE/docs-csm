@@ -1,6 +1,6 @@
 # Compute Rolling Upgrades
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0.
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)

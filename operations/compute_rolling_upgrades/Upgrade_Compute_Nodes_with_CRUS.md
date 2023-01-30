@@ -1,6 +1,6 @@
 # Upgrade Compute Nodes with CRUS
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0.
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)
@@ -18,7 +18,7 @@ out of service and upgrading it. Then reboot it into the upgraded state and retu
 
 This procedure can be run on any master or worker NCN.
 
-1. Create and populate the starting node group.
+1. (`ncn-mw#`) Create and populate the starting node group.
 
     This is the group of nodes that will be upgraded.
 
@@ -45,7 +45,7 @@ This procedure can be run on any master or worker NCN.
         URI = "/hsm/v2/groups/slurm-nodes/members/x0c0s28b0n0"
         ```
 
-1. Create a group for upgrading nodes \(upgrading label\).
+1. (`ncn-mw#`) Create a group for upgrading nodes \(upgrading label\).
 
     The label name used in this example is `upgrading-nodes`.
 
@@ -55,7 +55,7 @@ This procedure can be run on any master or worker NCN.
 
     Do not add members to this group; it should be empty when the compute rolling upgrade process begins.
 
-1. Create a group for failed nodes \(failed label\).
+1. (`ncn-mw#`) Create a group for failed nodes \(failed label\).
 
     The label name used in this example is `failed-nodes`.
 
@@ -65,7 +65,7 @@ This procedure can be run on any master or worker NCN.
 
     Do not add members to this group; it should be empty when the compute rolling upgrade process begins.
 
-1. Create an upgrade session with CRUS.
+1. (`ncn-mw#`) Create an upgrade session with CRUS.
 
     The following example is upgrading 50 nodes per step. The `--upgrade-template-id` value should be the name of the Boot Orchestration Service \(BOS\) session template
     being used to reboot the nodes.
@@ -98,13 +98,13 @@ This procedure can be run on any master or worker NCN.
     workload_manager_type = "slurm"
     ```
 
-1. Note the `upgrade_id` in the returned data of the previous command.
+1. (`ncn-mw#`) Note the `upgrade_id` in the returned data of the previous command.
 
     ```bash
     UPGRADE_ID=e0131663-dbee-47c2-aa5c-13fe9b110242
     ```
 
-1. Monitor the status of the upgrade session.
+1. (`ncn-mw#`) Monitor the status of the upgrade session.
 
     The progress of the session through the upgrade process is described in the `messages` field of the session. This is a list of messages, in chronological order, containing
     information about stage transitions, step transitions, and other conditions of interest encountered by the session as it progresses. It is cleared once the session completes.
@@ -144,7 +144,7 @@ This procedure can be run on any master or worker NCN.
 
     When a step moves from one stage to the next, CRUS adds a message to the `messages` field of the upgrade session to mark the progress.
 
-1. Delete the CRUS upgrade session. (Optional)
+1. (`ncn-mw#`) Delete the CRUS upgrade session. (Optional)
 
     Once a CRUS upgrade session has completed, it can no longer be used. It can be kept for historical purposes if desired, or it can be deleted.
 

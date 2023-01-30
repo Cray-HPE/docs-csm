@@ -1,6 +1,6 @@
 # Troubleshoot Nodes Failing to Upgrade in a CRUS Session
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0.
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)
@@ -23,10 +23,10 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
 - A CRUS upgrade session has completed with a group of nodes that failed to upgrade.
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
-1. Determine which nodes failed the upgrade by listing the contents of the Hardware State Manager \(HSM\) group that was set up for failed nodes.
+1. (`ncn-mw#`) Determine which nodes failed the upgrade by listing the contents of the Hardware State Manager \(HSM\) group that was set up for failed nodes.
 
     ```bash
-    cray hsm groups describe FAILED_NODES_GROUP
+    cray hsm groups describe FAILED_NODES_GROUP --format toml
     ```
 
     Example output:
@@ -39,7 +39,7 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
     ids = [ "x0c0s28b0n0",]
     ```
 
-1. Determine the cause of the failed nodes and fix it.
+1. (`ncn-mw#`) Determine the cause of the failed nodes and fix it.
 
     Failed nodes result from the following:
 
@@ -49,7 +49,7 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
     - Deletion of a CRUS session while the current step is at or beyond the `Booting` stage causes all of the nodes in that step that have not reached a ready state in the
       workload manager to be marked as failed.
 
-1. Create a new CRUS session on the failed nodes.
+1. (`ncn-mw#`) Create a new CRUS session on the failed nodes.
 
     1. Create a new failed node group with a different name.
 
@@ -71,7 +71,8 @@ Complete a CRUS session that did not successfully upgrade all of the intended co
             --failed-label NEW_FAILED_NODES_GROUP \
             --upgrade-step-size 50 \
             --workload-manager-type slurm \
-            --upgrade-template-id boot-template
+            --upgrade-template-id boot-template \
+            --format toml
         ```
 
         Example output:

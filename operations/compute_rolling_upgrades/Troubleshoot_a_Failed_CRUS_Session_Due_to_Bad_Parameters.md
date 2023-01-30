@@ -1,6 +1,6 @@
 # Troubleshoot a Failed CRUS Session Because of Bad Parameters
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0.
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)
@@ -21,14 +21,14 @@ The following are examples of incorrect parameters:
 
 ## Procedure
 
-1. Delete the failed session.
+1. (`ncn-mw#`) Delete the failed session.
 
     Deleting a CRUS session that is in progress will terminate the session and move all of the unfinished nodes into the group said up for failed nodes. The time frame for
     recognizing a delete request, cleaning up, and deleting the session is roughly a minute. A session being deleted will move to a `DELETING` status immediately upon receiving
     a delete request, which will prevent further processing of the upgrade in that session.
 
     ```bash
-    cray crus session delete CRUS_UPGRADE_ID
+    cray crus session delete CRUS_UPGRADE_ID --format toml
     ```
 
     Example output:
@@ -48,7 +48,7 @@ The following are examples of incorrect parameters:
     workload_manager_type = "slurm"
     ```
 
-1. Recreate the session that failed.
+1. (`ncn-mw#`) Recreate the session that failed.
 
     Ensure that the correct parameters are used when restarting the session.
 
@@ -59,7 +59,8 @@ The following are examples of incorrect parameters:
         --failed-label failed-node-group \
         --upgrade-step-size 50 \
         --workload-manager-type slurm \
-        --upgrade-template-id boot-template
+        --upgrade-template-id boot-template \
+        --format toml
     ```
 
     Example output:

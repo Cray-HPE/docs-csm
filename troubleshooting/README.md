@@ -41,7 +41,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Antero node NID allocation](known_issues/antero_node_NID_allocation.md)
-* [Unbound forwarding to PowerDNS in an air-gapped environment](known_issues/unbound_airgap_forwarding.md)
 * [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
 
 ## Booting
@@ -62,8 +61,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Compute rolling upgrades
 
-CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
-See [Deprecated Features](../introduction/deprecated_features/README.md).
+CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0. See [Deprecated Features](../introduction/deprecated_features/README.md).
 
 * [Nodes Failing to Upgrade in a CRUS Session](../operations/compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
 * [Failed CRUS Session Because of Unmet Conditions](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
