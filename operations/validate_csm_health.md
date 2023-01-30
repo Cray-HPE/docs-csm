@@ -209,23 +209,31 @@ that discovery has completed successfully and consists of two steps.
     HSM Cabinet Summary
     ===================
     x1000 (Mountain)
-      Discovered Nodes:          50
-      Discovered Node BMCs:      25
-      Discovered Router BMCs:    32
+      Discovered Nodes:          16
+      Discovered Node BMCs:       5
+      Discovered Router BMCs:    16
       Discovered Chassis BMCs:    8
+      Compute Module slots
+        Populated:   5
+        Empty:      59
+      Router Module slots
+        Populated:  16
+        Empty:      48
     x3000 (River)
-      Discovered Nodes:          23 (12 Mgmt, 7 Application, 4 Compute)
-      Discovered Node BMCs:      24
+      Discovered Nodes:          12 (10 Mgmt, 2 Application, 0 Compute)
+      Discovered Node BMCs:      11
       Discovered Router BMCs:     2
-      Discovered Cab PDU Ctlrs:   0
+      Discovered Chassis BMCs:    0
+      Discovered Cab PDU Ctlrs:   2
+      Discovered CMCs:            0
 
     River Cabinet Checks
-    ====================
-    x3000
+    ============================
+    x3000 (River)
       Nodes: PASS
       NodeBMCs: PASS
       RouterBMCs: PASS
-      ChassisBMCs: PASS
+      CMCs: PASS
       CabinetPDUControllers: PASS
 
     Mountain/Hill Cabinet Checks
@@ -235,6 +243,10 @@ that discovery has completed successfully and consists of two steps.
       Nodes: PASS
       NodeBMCs: PASS
       RouterBMCs: PASS
+
+    EX2500 Cabinet Checks
+    ============================
+    None Found.
     ```
 
     Refer to [2.2.1 Interpreting results](#221-interpreting-hsm-discovery-results) and
@@ -243,22 +255,24 @@ that discovery has completed successfully and consists of two steps.
 
 #### 2.2.1 Interpreting HSM discovery results
 
-The Cabinet Checks output is divided into three sections:
+The Cabinet Checks output is divided into four sections:
 
-- Summary information for each cabinet
-- Detail information for River cabinets
+- Summary information for each cabinet.
+- Detail information for River cabinets.
 - Detail information for Mountain/Hill cabinets.
+- Detail information for EX2500 cabinets.
 
 In the River section, any hardware found in SLS and not discovered by HSM is
-considered a failure, with the exception of PDU controllers, which is a
-warning. Also, the BMC of one of the management NCNs (typically `ncn-m001`)
-will not be connected to the HSM HW network and thus will show up as being not
-discovered and/or not having any `mgmt` network connection. This is treated as
-a warning.
+considered a failure.
 
-In the Mountain section, the only thing considered a failure are Chassis BMCs
-that are not discovered in HSM. All other items (nodes, node BMCs and router
-BMCs) which are not discovered are considered warnings.
+In the Mountain/Hill section, the only thing considered a failures are Chassis BMCs
+that are not discovered in HSM, and undiscovered BMCs from populated slots.
+
+In the EX2500 section, performs checks for both air-cooled and liquid-cooled hardware
+based on the chassis. For the liquid-cooled chassis the only thing considered a failures
+are Chassis BMCs that are not discovered in HSM, and undiscovered BMCs from populated slots.
+In the air-cooled chassis (if present) any hardware found in SLS and not discovered by HSM is
+considered a failure.
 
 Any failures need to be investigated by the admin for rectification. Any
 warnings should also be examined by the administrator to ensure they are accurate and
@@ -268,7 +282,6 @@ For each of the BMCs that show up as not being present in HSM components or
 Redfish Endpoints use the following notes to determine whether the issue with the
 BMC can be safely ignored or needs to be addressed before proceeding.
 
-- The node BMC of `ncn-m001` will not typically be present in HSM component data, as it is typically connected to the site network instead of the HMN network.
 - The node BMCs for HPE Apollo XL645D nodes may report as a mismatch depending on the state of the system when the `verify_hsm_discovery.py` script is run. If the system is currently going through the
   process of installation, then this is an expected mismatch as the [Prepare Compute Nodes](../install/prepare_compute_nodes.md) procedure required to configure the BMC of the HPE Apollo 6500 XL645D node
   may not have been completed yet.
@@ -283,7 +296,7 @@ BMC can be safely ignored or needs to be addressed before proceeding.
        - x3000c0s19b1 - Not found in HSM Components; Not found in HSM Redfish Endpoints.
    ```
 
-- Chassis Management Controllers (CMC) may show up as not being present in HSM. CMCs for Intel node blades can be ignored. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated.
+- Chassis Management Controllers (CMC) may show up as not being present in HSM. Gigabyte node blade CMCs not found in HSM is not normal and should be investigated.
   If a Gigabyte CMC is expected to not be connected to the HMN network, then it can be ignored. Otherwise, verify that the root service account is configured for the CMC and add it if needed by following
   the steps outlined in [Add Root Service Account for Gigabyte Controllers](security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md).
    > CMCs have component names (xnames) in the form of `xXc0sSb999`, where `X` is the cabinet and `S` is the rack U of the compute node chassis.
@@ -330,9 +343,10 @@ BMC can be safely ignored or needs to be addressed before proceeding.
    Refer to [HPE PDU Admin Procedures](hpe_pdu/hpe_pdu_admin_procedures.md) for additional configuration for this type of PDU.
    The steps to run will depend on if the PDU has been set up yet, and whether or not an upgrade or fresh install of CSM is being performed.
 
-- BMCs having no association with a management switch port will be annotated as such, and should be investigated. Exceptions to this are in Mountain or Hill configurations where Mountain BMCs will show this condition on SLS/HSM mismatches, which is normal.
-- In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). Any non-populated
-  BMCs will have no HSM data and will show up in the mismatch list.
+- River BMCs having no association with a management switch port will be annotated as such, and should be investigated.
+
+- In Hill configurations SLS assumes BMCs in chassis 1 and 3 are fully populated (32 Node BMCs), and in Mountain configurations SLS assumes all BMCs are fully populated (128 Node BMCs). For EX2500 cabinets will have either 1, 2, or 3 fully populated
+  chassis depending on how the cabinet is configured. BMCs from non-populated chassis slots will not show up in the mismatch list. Any BMCs missing in populated chassis slots with no HSM data and will show up in the mismatch list.
 
 If it was determined that the mismatch can not be ignored, then proceed onto the [2.2.2 Known Issues](#222-known-issues-with-hsm-discovery-validation) below to troubleshoot any mismatched BMCs.
 
