@@ -74,6 +74,9 @@ Jenkinsfile.github                                       @Cray-HPE/csm-devops
 # SAT Items
 /operations/sat                                          @Cray-HPE/system-admin-toolkit-admin
 
+# IUF Items
+/operations/iuf/                                         @Cray-HPE/IUF
+
 # Include SSI on these CSM items.
 /install/                                                @Cray-HPE/metal @Cray-HPE/ssi-reviewers
 /operations/                                             @Cray-HPE/ssi-reviewers
