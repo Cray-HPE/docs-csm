@@ -272,22 +272,10 @@ This procedure adds one or more liquid-cooled cabinets and associated CDU manage
     diff sls_dump.original.json sls_dump.json
     ```
 
-1. (`ncn-m#`) Perform an SLS load state operation to replace the contents of SLS with the data from the `sls_dump.json` file.
-
-    Get an API Token:
+1. (`ncn-m#`) Perform a SLS load state operation to replace the contents of SLS with the data from the `sls_dump.json` file.
 
     ```bash
-    TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                -d client_id=admin-client \
-                -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-    ```
-
-    Perform the load state operation:
-
-    ```bash
-    curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -F sls_dump=@sls_dump.json \
-        https://api-gw-service-nmn.local/apis/sls/v1/loadstate
+    cray sls loadstate create sls_dump.json
     ```
 
 1. MEDS will automatically start looking for potential hardware in the newly added liquid-cooled cabinets.
