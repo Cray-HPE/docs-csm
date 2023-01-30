@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -278,6 +278,7 @@ iLO5
 iLOM
 IMS
 IMS-hosted
+in_progress
 inband
 InfiniBand
 IP
@@ -291,6 +292,7 @@ iPXE
 iSCSI
 Istio
 Istio's
+IUF
 Jetstack
 Jinja
 Jinja2
@@ -336,6 +338,8 @@ Luks
 LVM
 LVMs
 macOS
+managed-nodes-rollout
+management-nodes-rollout
 maneuver
 maneuvers
 Mbs
@@ -490,6 +494,7 @@ Runbook
 S-8000
 S-8024
 S-8031
+S-8052
 sC
 SCSD
 sC-ToR
@@ -574,6 +579,8 @@ Unsuspend
 untainting
 Untar
 untarred
+update-cfs-config
+update-vcs-config
 upgrader
 Upgrader
 upgrader's
@@ -618,6 +625,7 @@ virtualization
 virtualized
 VLANs
 VSF-enabled
+waiting_admin
 webhook
 webserver
 webUI
@@ -679,6 +687,10 @@ Lorem
 - introduction/site_survey.md
 # To allow Site Init
 Init
+
+- operations/iuf/IUF.md
+sessionid
+SESSIONID
 
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer

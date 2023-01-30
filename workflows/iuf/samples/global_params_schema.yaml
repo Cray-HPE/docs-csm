@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -91,22 +91,16 @@ properties:
         type: string
       bootprep_config_managed:
         description: >
-          Each item is inline contents of the bootprep files.
+          Each item is the path to the bootprep config file for managed nodes, relative to the media_dir
         type: array
         items:
-          type: object
-          properties:
-            contents:
-              type: string
+          type: string
       bootprep_config_management:
         description: >
-          Each item is inline contents of the bootprep files.
-        items:
-          type: object
-          properties:
-            contents:
-              type: string
+          Each item is the path to the bootprep config file for management nodes, relative to the media_dir
         type: array
+        items:
+          type: string
       limit_nodes:
         description: >
           Each item is the xname of a node.

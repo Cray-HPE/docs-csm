@@ -78,7 +78,7 @@ Any steps run on an `external` server require that server to have the following 
    ```bash
    OUT_DIR="$(pwd)/csm-temp"
    mkdir -pv "${OUT_DIR}"
-   tar -C "${OUT_DIR}" --wildcards --no-anchored --transform='s/.*\///' -xzvf "csm-${CSM_RELEASE}.tar.gz" 'cray-pre-install-toolkit-*.iso'
+   tar -C "${OUT_DIR}" --wildcards --no-anchored --transform='s/.*\///' -xzvf "csm-${CSM_RELEASE}.tar.gz" 'pre-install-toolkit-*.iso'
    ```
 
 ### 1.2 Boot the LiveCD
@@ -96,7 +96,7 @@ Any steps run on an `external` server require that server to have the following 
 
    - **HPE iLO BMCs**
 
-      Prepare a server on the network to host the `cray-pre-install-toolkit` ISO file, if the current server is insufficient.
+      Prepare a server on the network to host the `pre-install-toolkit` ISO file, if the current server is insufficient.
       Then follow the [HPE iLO BMCs](livecd/Boot_LiveCD_RemoteISO.md#hpe-ilo-bmcs) to boot the RemoteISO before returning here.
 
    - **Gigabyte BMCs** and **Intel BMCs**
@@ -394,7 +394,7 @@ These variables will need to be set for many procedures within the CSM installat
 
       ```bash
       https_proxy=https://example.proxy.net:443 curl -C - -f -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
-        "https://artifactory.algol60.net/artifactory/csm-releases/csm/$(awk -F. '{print $1"."$2}' <<< ${CSM_RELEASE})/csm-${CSM_RELEASE}.tar.gz"
+        "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
       ```
 
    - `scp` from the external server used in [Prepare installation environment server](#11-prepare-installation-environment-server):
@@ -424,8 +424,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
        ```bash
        zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
            --no-gpg-checks \
            install -y docs-csm
        ```
@@ -437,10 +436,20 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
        ```bash
        zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
            --no-gpg-checks \
            update -y cray-site-init
+       ```
+
+   1. Install `iuf-cli`.
+
+       > ***NOTE*** This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../operations/iuf/IUF.md).
+
+       ```bash
+       zypper \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+           --no-gpg-checks \
+           install -y iuf-cli
        ```
 
    1. Install `csm-testing` RPM.
@@ -449,8 +458,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
        ```bash
        zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
            --no-gpg-checks \
            install -y csm-testing
       ```
@@ -458,9 +466,9 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 1. (`pit#`) Get the artifact versions.
 
    ```bash
-   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
    echo "${KUBERNETES_VERSION}"
-   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $NF}')"
+   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
    echo "${CEPH_VERSION}"
    ```
 

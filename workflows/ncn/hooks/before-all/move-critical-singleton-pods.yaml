@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -29,17 +29,20 @@ metadata:
     before-all: "true"
 spec:
   scriptContent: |
-    targetNcns="{{.TargetNcns}}"
-    # remove '[' and ']'
-    targetNcns=${targetNcns:1:-1}
+    targetNcns={{inputs.parameters.targetNcns}}
+    echo "targetNcns: $targetNcns"
+    # example input of targetNcns: ["ncn-w001","ncn-w002","ncn-w003"]
+    # remove '[', ']' and '"' to: ncn-w001,ncn-w002,ncn-w003
+    targetNcns=$(echo $targetNcns | tr -d '"[]')
     # convert to array
-    targetNcnsArray=($targetNcns)
+    targetNcnsArray=(${targetNcns//,/ })
     # set last rebuilding worker to nodeMoveTo
     nodeMoveTo=${targetNcnsArray[-1]}
+    echo "last worker node to be rebuilt: $nodeMoveTo"
     # try to find a node that is not in targetNcns
     nodes=$(kubectl get nodes | grep "ncn-w" | awk '{print $1}')
     for node in $nodes;do
-      if echo $targetNcns | grep $node; then
+      if [[ $targetNcns == *$node* ]]; then
         echo "skip $node"
       else
         nodeMoveTo=${node}

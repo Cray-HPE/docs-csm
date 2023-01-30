@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -28,7 +28,6 @@ locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # shellcheck source=./bash_lib/common.sh
 . "${locOfScript}/bash_lib/common.sh"
 
-DEFAULT_CONFIG_NAME="ncn-personalization"
 CONFIG_NAME=""
 CONFIG_CHANGE=""
 RELEASE=""
@@ -47,13 +46,13 @@ usage()
    echo "Updates CFS configurations"
    echo "All parameters are optional and the values will be determined automatically if not set."
    echo
-   echo "Usage 1: apply_csm_configuration.sh [ --config-change ] [ --config-name name ]"
+   echo "Usage 1: apply_csm_configuration.sh [ --config-change ] --config-name name"
    echo "                                    [ --csm-release version ] [ --git-commit hash ]"
    echo "                                    [ --git-clone-url url ] [ --ncn-config-file file ]"
    echo "                                    [ --clear-state ] [ --no-enable ] [ --no-clear-err ]"
    echo "                                    [ --xnames xname1,xname2... ]"
    echo
-   echo "Usage 2: apply_csm_configuration.sh --no-config-change [ --config-name name ]"
+   echo "Usage 2: apply_csm_configuration.sh --no-config-change --config-name name"
    echo "                                    [ --clear-state ] [ --no-enable ] [ --no-clear-err ]"
    echo "                                    [ --xnames xname1,xname2... ]"
    echo
@@ -63,7 +62,6 @@ usage()
    echo "Options:"
    echo "config-name          Usage 1: name to use for the new/updated CFS configuration."
    echo "                     Usage 2: name of existing CFS configuration to use"
-   echo "                     Default: ${DEFAULT_CONFIG_NAME}"
    echo "config-change        Specifies usage 1. (default)"
    echo "no-config-change     Specifies usage 2."
    echo "csm-release          The version of the CSM release to use. (e.g. 1.6.11). Only valid with usage 1."
@@ -177,7 +175,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 ## Set defaults
-[[ -z ${CONFIG_NAME} ]] && CONFIG_NAME=${DEFAULT_CONFIG_NAME}
+[[ -z ${CONFIG_NAME} ]] && usage_err_exit "Configuration name must be specified with --config-name argument"
 [[ -z ${CONFIG_CHANGE} ]] && CONFIG_CHANGE="true"
 
 # The script will keep all relevant files in a temporary directory. During

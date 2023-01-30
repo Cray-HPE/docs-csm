@@ -28,21 +28,21 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
     Example output:
 
     ```text
-    +----------------+----------+------------+---------+---------------------+----------------------+-------------+
-    | xname          | Aliases  | Role       | SubRole | Desired Config      | Configuration Status | Error Count |
-    +----------------+----------+------------+---------+---------------------+----------------------+-------------+
-    | x3000c0s1b0n0  | ncn-m001 | Management | Master  | ncn-personalization | configured           | 0           |
-    | x3000c0s3b0n0  | ncn-m002 | Management | Master  | ncn-personalization | configured           | 0           |
-    | x3000c0s5b0n0  | ncn-m003 | Management | Master  | ncn-personalization | configured           | 0           |
-    | x3000c0s7b0n0  | ncn-w001 | Management | Worker  | ncn-personalization | failed               | 3           |
-    | x3000c0s9b0n0  | ncn-w002 | Management | Worker  | ncn-personalization | failed               | 3           |
-    | x3000c0s11b0n0 | ncn-w003 | Management | Worker  | ncn-personalization | failed               | 3           |
-    | x3000c0s13b0n0 | ncn-w004 | Management | Worker  | ncn-personalization | pending              | 2           |
-    | x3000c0s17b0n0 | ncn-s001 | Management | Storage | ncn-personalization | configured           | 0           |
-    | x3000c0s19b0n0 | ncn-s002 | Management | Storage | ncn-personalization | configured           | 0           |
-    | x3000c0s21b0n0 | ncn-s003 | Management | Storage | ncn-personalization | configured           | 0           |
-    | x3000c0s25b0n0 | ncn-w005 | Management | Worker  | ncn-personalization | pending              | 2           |
-    +----------------+----------+------------+---------+---------------------+----------------------+-------------+
+    +----------------+----------+------------+---------+------------------+----------------------+-------------+
+    | xname          | Aliases  | Role       | SubRole | Desired Config   | Configuration Status | Error Count |
+    +----------------+----------+------------+---------+------------------+----------------------+-------------+
+    | x3000c0s1b0n0  | ncn-m001 | Management | Master  | management-23.03 | configured           | 0           |
+    | x3000c0s3b0n0  | ncn-m002 | Management | Master  | management-23.03 | configured           | 0           |
+    | x3000c0s5b0n0  | ncn-m003 | Management | Master  | management-23.03 | configured           | 0           |
+    | x3000c0s7b0n0  | ncn-w001 | Management | Worker  | management-23.03 | failed               | 3           |
+    | x3000c0s9b0n0  | ncn-w002 | Management | Worker  | management-23.03 | failed               | 3           |
+    | x3000c0s11b0n0 | ncn-w003 | Management | Worker  | management-23.03 | failed               | 3           |
+    | x3000c0s13b0n0 | ncn-w004 | Management | Worker  | management-23.03 | pending              | 2           |
+    | x3000c0s17b0n0 | ncn-s001 | Management | Storage | management-23.03 | configured           | 0           |
+    | x3000c0s19b0n0 | ncn-s002 | Management | Storage | management-23.03 | configured           | 0           |
+    | x3000c0s21b0n0 | ncn-s003 | Management | Storage | management-23.03 | configured           | 0           |
+    | x3000c0s25b0n0 | ncn-w005 | Management | Worker  | management-23.03 | pending              | 2           |
+    +----------------+----------+------------+---------+------------------+----------------------+-------------+
     ```
 
     1. If some nodes are not fully configured, then find any CFS sessions in progress.
@@ -60,18 +60,10 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
         CFS sessions which are in `Not Ready` status are still in progress. CFS sessions with status `Error` had a failure in one of the layers.
 
-    1. Inspect all layers of Ansible configuration to find a failed layer.
+    1. Inspect the Ansible logs to find a failed layer.
 
         ```bash
-        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-0
-        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-1
-        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-2
-        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-3
-        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-4
-        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-5
-        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-6
-        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-7
-        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible-8
+        kubectl logs -f -n services cfs-51a7665d-l63d-41ab-e93e-796d5cb7b823-czkhk ansible
         ```
 
 1. (`ncn-m001#`) Check that the slingshot switches are all online.
@@ -226,6 +218,6 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
 
 1. Make nodes available to customers and refer to [Validate CSM Health](../validate_csm_health.md) to check system health and status.
 
-## Next Step
+## Next step
 
 Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.

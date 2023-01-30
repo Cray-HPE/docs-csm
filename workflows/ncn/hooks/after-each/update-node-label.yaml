@@ -1,8 +1,7 @@
-#!/usr/bin/env bash
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -22,16 +21,20 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-echo "When prompted, please enter the NCN password for ncn-m002"
-if ! SCRIPT=$(cat /usr/share/doc/csm/install/scripts/check_lvm_helper); then
-    echo "ERROR: Unable to read /usr/share/doc/csm/install/scripts/check_lvm_helper" 1>&2
-    exit 1
-fi
-
-if ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ncn-m002 "$SCRIPT" ; then
-    echo "SUCCESS: LVM checks passed on all master and worker NCNs"
-    exit 0
-else
-    echo "FAILURE: At least one problem encountered performing LVM checks on master and worker NCNs" 1>&2
-    exit 1
-fi
+apiVersion: cray-nls.hpe.com/v1
+kind: Hook
+metadata:
+  name: update-node-label
+  labels:
+    after-each: "true"
+spec:
+  scriptContent: |
+    TARGET_NCN={{inputs.parameters.targetNcn}}
+    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+    set +e
+    CPS_PM_NODE=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" -X GET https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters?name=${TARGET_XNAME} | jq -r '.[].params' | grep -c "cps.pm-node=1")
+    if [[ ${CPS_PM_NODE} -eq 1 ]]; then
+        kubectl label nodes ${TARGET_NCN} "cps-pm-node=True"
+    fi
+  templateRefName: kubectl-and-curl-template

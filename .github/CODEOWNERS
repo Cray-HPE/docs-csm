@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -74,8 +74,10 @@ Jenkinsfile.github                                       @Cray-HPE/csm-devops
 # SAT Items
 /operations/sat                                          @Cray-HPE/system-admin-toolkit-admin
 
+# IUF Items
+/operations/iuf/                                         @Cray-HPE/IUF
+
 # Include SSI on these CSM items.
 /install/                                                @Cray-HPE/metal @Cray-HPE/ssi-reviewers
 /operations/                                             @Cray-HPE/ssi-reviewers
 /upgrade/                                                @Cray-HPE/ssi-reviewers
-

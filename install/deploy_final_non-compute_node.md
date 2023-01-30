@@ -15,8 +15,7 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
    1. [Backup](#33-backup)
 1. [Reboot](#4-reboot)
 1. [Enable NCN disk wiping safeguard](#5-enable-ncn-disk-wiping-safeguard)
-1. [Remove the default NTP pool](#6-remove-the-default-ntp-pool)
-1. [Configure DNS and NTP on each BMC](#7-configure-dns-and-ntp-on-each-bmc)
+1. [Configure DNS and NTP on each BMC](#6-configure-dns-and-ntp-on-each-bmc)
 1. [Next topic](#8-next-topic)
 
 ## 1. Required services
@@ -132,7 +131,7 @@ The steps in this section load hand-off data before a later procedure reboots th
     ```bash
     csi handoff bss-metadata \
         --data-file "${PITDATA}/configs/data.json" \
-        --kubernetes-ims-image-id "$K8S_IMS_IMAGE_ID}" \
+        --kubernetes-ims-image-id "$K8S_IMS_IMAGE_ID" \
         --storage-ims-image-id "$STORAGE_IMS_IMAGE_ID" && echo SUCCESS
     ```
 
@@ -239,14 +238,14 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
     ssh ncn-m002 \
         "mkdir -pv /metal/bootstrap
          rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${PITDATA}'/prep /metal/bootstrap/
-         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/cray-pre-install-toolkit*.iso /metal/bootstrap/"
+         rsync -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' -rltD -P --delete pit.nmn:'${CSM_PATH}'/pre-install-toolkit*.iso /metal/bootstrap/"
     ```
 
 1. (`pit#`) Upload install files to S3 in the cluster.
 
     ```bash
     PITBackupDateTime=$(date +%Y-%m-%d_%H-%M-%S)
-    tar -czf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/cray-pre-install-toolkit"*.iso &&
+    tar -czf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/pre-install-toolkit"*.iso &&
     cray artifacts create config-data \
         "PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" \
         "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" &&
@@ -408,7 +407,7 @@ it is used for Cray installation and bootstrap.
 
     ```bash
     mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs && \
-        mount -v /metal/bootstrap/cray-pre-install-toolkit-*.iso /mnt/livecd/ && \
+        mount -v /metal/bootstrap/pre-install-toolkit-*.iso /mnt/livecd/ && \
         mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/ && \
         mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/ && \
         cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi && \
@@ -433,15 +432,7 @@ it is used for Cray installation and bootstrap.
     /tmp/csi handoff bss-update-param --set metal.no-wipe=1
     ```
 
-## 6. Remove the default NTP pool
-
-(`ncn-m001#`) Run the following command to remove the default pool, in order to prevent contention issues with NTP.
-
-```bash
-sed -i "s/^! pool pool\.ntp\.org.*//" /etc/chrony.conf
-```
-
-## 7. Configure DNS and NTP on each BMC
+## 6. Configure DNS and NTP on each BMC
 
  > **`NOTE`** Only follow this section if the NCNs are HPE hardware. If the system uses
  > Gigabyte or Intel hardware, then skip this section.
@@ -452,7 +443,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
 1. (`ncn-m001#`) Validate that the system is HPE hardware.
 
     ```bash
-    ipmitool mc info | grep "Hewlett Packard Enterprise" || echo "Not HPE hardware -- SKIP these steps"
+    ipmitool mc info | grep "Hewlett Packard Enterprise" || echo "Not HPE hardware -- SKIP this section"
     ```
 
 1. (`ncn-m001#`) Set environment variables.

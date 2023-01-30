@@ -39,7 +39,8 @@ All of the following are prerequisites on the node where this procedure is being
 
 1. (`ncn-m#`) Back up the current CFS state.
 
-    For the CSM 1.3 release, the NCN personalization configuration is named `ncn-personalization`.
+    In previous CSM releases, the the NCN personalization configurations were named `ncn-personalization`.
+    Starting in the CSM 1.4 release, the NCN personalization configurations are named `management-<CSM recipe version>`.
     If a CFS configuration with this name already exists, the procedure on this page will overwrite it.
 
     Because this procedure will create/update a CFS configuration and modify the CFS components of the management NCNs,
@@ -63,15 +64,17 @@ All of the following are prerequisites on the node where this procedure is being
 
 1. (`ncn-m#`) Delete the `ncn-image-customization` configuration in the `management-bootprep-node-personalization.yaml` file.
 
-    After editing, the `ncn-personalization` configuration should be the only entry remaining in the file, and
-    the file should begin with the following lines:
+    After editing, the `management-<CSM recipe version>` configuration should be the only entry remaining in the file, and the
+    file should begin with the following lines:
+
+    > The version number in the configuration name may vary from that given in the following example.
 
     ```yaml
-    # (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+    # (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
     ---
     schema_version: 1.0.2
     configurations:
-    - name: ncn-personalization
+    - name: management-23.03
     ```
 
 ### 2. Remove layers for absent products
@@ -115,7 +118,7 @@ time in the CSM upgrade procedure.
         Example output:
 
         ```text
-        ncn-personalization
+        management-23.03
         ```
 
     1. Show the CPE and Analytics layers of that configuration.
@@ -184,7 +187,7 @@ If there is no output, or if the output ends with `ERROR`, then there is a probl
 
 ### 5. Update CFS configuration and components
 
-1. (`ncn-m#`) Create the `ncn-personalization` CFS configuration.
+1. (`ncn-m#`) Create the NCN personalization CFS configuration.
 
     Run `sat bootprep` against the `management-bootprep-node-personalization.yaml` file to create the CFS configuration that will be used for node personalization on management NCNs.
 
@@ -192,7 +195,19 @@ If there is no output, or if the output ends with `ERROR`, then there is a probl
     sat bootprep run management-bootprep-node-personalization.yaml
     ```
 
-1. (`ncn-m#`) Set the management NCNs to use the `ncn-personalization` configuration.
+1. (`ncn-m#`) Record the name of the new CFS configuration.
+
+    ```bash
+    CFS_CONFIG_NAME=$(yq r management-bootprep-node-personalization.yaml 'configurations[0].name') ; echo "${CFS_CONFIG_NAME}"
+    ```
+
+    Example output:
+
+    ```text
+    management-23.03
+    ```
+
+1. (`ncn-m#`) Set the management NCNs to use the new configuration.
 
     The command to use varies based on whether or not this is being done as part of a CSM upgrade.
 
@@ -204,7 +219,7 @@ If there is no output, or if the output ends with `ERROR`, then there is a probl
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            --no-config-change --config-name ncn-personalization --no-enable --no-clear-err
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --no-enable --no-clear-err
         ```
 
         Successful output will end with the following:
@@ -220,7 +235,7 @@ If there is no output, or if the output ends with `ERROR`, then there is a probl
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-            --no-config-change --config-name ncn-personalization --clear-state
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --clear-state
         ```
 
         Successful output will end with a message similar to the following:

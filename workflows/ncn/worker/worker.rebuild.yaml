@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -98,6 +98,8 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: targetNcns
+                  value: "{{$.TargetNcns}}"
           {{- range $index,$value := .TargetNcns }}
           - name: add-labels-{{$value}}
             template: add-labels
@@ -191,6 +193,7 @@ spec:
       inputs:
         parameters:
           - name: dryRun
+          - name: targetNcns
       dag:
         tasks:
 {{ getHooks "before-all" . | indent 8 }}

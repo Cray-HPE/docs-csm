@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -506,6 +506,18 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="UPGRADE_CRAY_KYVERNO_POLICIES_UPSTREAM"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+    upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPGRADE_BSS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -513,6 +525,33 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     {
     
     upgrade_csm_chart cray-hms-bss sysmgmt.yaml
+
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+state_name="UPGRADE_TFTP"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+    
+    upgrade_csm_chart cray-tftp sysmgmt.yaml
+
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+state_name="UPGRADE_TFTP_PVC"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+    
+    upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
 
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
@@ -532,13 +571,16 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
     set +o pipefail
 
+    KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
+    CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
+
     k8s_done=0
     ceph_done=0
     arch="$(uname -i)"
     if [[ -f ${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs ]]; then
         k8s_done=1
     fi
-    if [[ -f ${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs ]]; then
+    if [[ -f ${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs ]]; then
         ceph_done=1
     fi
 
@@ -558,13 +600,17 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
 
     export IMS_ROOTFS_FILENAME="${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
     export IMS_INITRD_FILENAME="${artdir}/kubernetes/initrd.img-${KUBERNETES_VERSION}-${arch}.xz"
-    export IMS_KERNEL_FILENAME="${artdir}/kubernetes/*-${arch}.kernel"
+    # do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
+    resolve_kernel_glob=$(echo ${artdir}/kubernetes/*-${arch}.kernel)
+    export IMS_KERNEL_FILENAME=$resolve_kernel_glob
     K8S_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
     [[ -n ${K8S_IMS_IMAGE_ID} ]]
 
     export IMS_ROOTFS_FILENAME="${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs"
     export IMS_INITRD_FILENAME="${artdir}/storage-ceph/initrd.img-${CEPH_VERSION}-${arch}.xz"
-    export IMS_KERNEL_FILENAME="${artdir}/storage-ceph/*-${arch}.kernel"
+    # do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
+    resolve_kernel_glob=$(echo ${artdir}/storage-ceph/*-${arch}.kernel)
+    export IMS_KERNEL_FILENAME=$resolve_kernel_glob
     STORAGE_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
     [[ -n ${STORAGE_IMS_IMAGE_ID} ]]
     set +o pipefail
