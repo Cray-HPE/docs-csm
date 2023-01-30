@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright [2022-2023] Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -215,7 +215,7 @@ for chassis in chassis_list:
                     "Xname": nodeXname,
                     "Type": "comptype_node",
                     "TypeString": "Node",
-                    "Class": args.cabinet_type,
+                    "Class": cabinet_class,
                     "ExtraProperties": {
                         "NID": currentNID,
                         "Role": "Compute",

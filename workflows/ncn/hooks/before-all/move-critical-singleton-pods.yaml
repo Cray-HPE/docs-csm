@@ -29,13 +29,13 @@ metadata:
     before-all: "true"
 spec:
   scriptContent: |
-    targetNcns={{inputs.parameters.targetNcns}}
+    targetNcns="{{inputs.parameters.targetNcns}}"
     echo "targetNcns: $targetNcns"
-    # example input of targetNcns: ["ncn-w001","ncn-w002","ncn-w003"]
-    # remove '[', ']' and '"' to: ncn-w001,ncn-w002,ncn-w003
-    targetNcns=$(echo $targetNcns | tr -d '"[]')
+    # example input of targetNcns: [ncn-w001 ncn-w002 ncn-w003]
+    # remove '[' and ']'
+    targetNcns=${targetNcns:1:-1}
     # convert to array
-    targetNcnsArray=(${targetNcns//,/ })
+    targetNcnsArray=($targetNcns)
     # set last rebuilding worker to nodeMoveTo
     nodeMoveTo=${targetNcnsArray[-1]}
     echo "last worker node to be rebuilt: $nodeMoveTo"
