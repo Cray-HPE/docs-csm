@@ -37,6 +37,8 @@ The following administrative topics can be found in this guide:
 - [Spire](#spire)
 - [Update firmware with FAS](#update-firmware-with-fas)
 - [User Access Service (UAS)](#user-access-service-uas)
+- [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
+- [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 
 ## CSM product management
 
@@ -727,3 +729,11 @@ components. In CSM 1.3 and newer, the `sat` command is available on the Kubernet
 product stream.
 
 - [System Admin Toolkit in CSM](sat/sat_in_csm.md)
+
+## Install and Upgrade Framework (IUF)
+
+The Install and Upgrade Framework (IUF) provides a CLI and API which automates operations required to install, upgrade
+and deploy non-CSM product content onto an HPE Cray EX system. Each product distribution includes an `iuf-product-manifest.yaml`
+file which IUF uses to determine what operations are needed to install, upgrade, and deploy the product.
+
+- [Install and Upgrade Framework (IUF)](iuf/IUF.md)
