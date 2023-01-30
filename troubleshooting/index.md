@@ -76,7 +76,7 @@ This document provides links to troubleshooting information for services and fun
 
 ## Compute rolling upgrades
 
-CRUS is deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
+CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0. It will be replaced with BOS V2, which will provide similar functionality.
 See [Deprecated features](../introduction/differences.md#deprecated_features) for more information.
 
 * [Nodes Failing to Upgrade in a CRUS Session](../operations/compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
