@@ -263,7 +263,7 @@ spec:
       volumes:
         - name: content
           hostPath:
-            # /opt/cray/iuf/
+            # /etc/cray/upgrade/csm
             path: "{{inputs.parameters.cf_import_content_hostpath}}"
         - name: results
           emptyDir: {}
