@@ -4,7 +4,7 @@
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)
-> - [Deprecated features](../../introduction/differences.md#deprecated-features)
+> - [Deprecated Features](../../introduction/deprecated_features/README.md)
 
 Troubleshoot compute nodes failing to upgrade during a Compute Rolling Upgrade Service \(CRUS\) session and rerun the session on the failed nodes.
 

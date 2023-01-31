@@ -90,7 +90,7 @@ Repopulate clusters for CPS.
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)
-> - [Deprecated features](../../introduction/differences.md#deprecated-features)
+> - [Deprecated Features](../../introduction/deprecated_features/README.md)
 
 1. (`ncn-mw#`) View the progress of existing CRUS sessions.
 

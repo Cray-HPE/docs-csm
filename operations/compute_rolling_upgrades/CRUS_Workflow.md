@@ -4,7 +4,7 @@
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)
-> - [Deprecated features](../../introduction/differences.md#deprecated-features)
+> - [Deprecated Features](../../introduction/deprecated_features/README.md)
 
 The following workflow is intended to be a high-level overview of how to upgrade compute nodes. This workflow depicts how services interact with each other during the compute node
 upgrade process, and helps to provide a quicker and deeper understanding of how the system functions.
