@@ -37,23 +37,23 @@ spec:
     - name: main
       metrics:
         prometheus:
-        - name: operation_counter
-          help: "Count of step execution by result status"
-          labels:
-            - key: "opname"
-              value: "extract-release-distributions"
-            - key: stage
-              value: "process-media"
-            - key: type
-              value: "global"
-            - key: pname
-              value: "global"
-            - key: pversion
-              value: "global"
-            - key: status
-              value: "{{status}}"
-          counter:
-            value: "1"
+          - name: operation_counter
+            help: "Count of step execution by result status"
+            labels:
+              - key: "opname"
+                value: "extract-release-distributions"
+              - key: stage
+                value: "process-media"
+              - key: type
+                value: "global"
+              - key: pname
+                value: "global"
+              - key: pversion
+                value: "global"
+              - key: status
+                value: "{{status}}"
+            counter:
+              value: "1"
       inputs:
         parameters:
           - name: auth_token
@@ -69,7 +69,7 @@ spec:
               - start-operation
             inline:
               script:
-                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.0.4
+                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.1
                 command: [sh]
                 source: |
                   #!/bin/sh
@@ -78,11 +78,11 @@ spec:
                   cd $media_dir && ls *.tar.gz | jq -R -s -c 'split("\n")[:-1]'
                 volumeMounts:
                   - name: iuf
-                    mountPath: /opt/cray/iuf
+                    mountPath: /etc/cray/upgrade/csm
               volumes:
                 - name: iuf
                   hostPath:
-                    path: /opt/cray/iuf
+                    path: /etc/cray/upgrade/csm
                     type: Directory
           - name: extract-tar-files
             dependencies:
@@ -108,17 +108,17 @@ spec:
             template: prom-metrics
             arguments:
               parameters:
-              - name: opstart
-                value: "{{tasks.start-operation.outputs.result}}"
-              - name: opend
-                value: "{{tasks.end-operation.outputs.result}}"
+                - name: opstart
+                  value: "{{tasks.start-operation.outputs.result}}"
+                - name: opend
+                  value: "{{tasks.end-operation.outputs.result}}"
 
 
     - name: prom-metrics
       inputs:
         parameters:
-        - name: opstart
-        - name: opend
+          - name: opstart
+          - name: opend
       metrics:
         prometheus:
           - name: operation_time
@@ -169,7 +169,7 @@ spec:
           echo $media_dir/$dir_name > /tmp/original_location
         volumeMounts:
           - name: iuf
-            mountPath: /opt/cray/iuf
+            mountPath: /etc/cray/upgrade/csm
       outputs:
         parameters:
           - name: manifest
@@ -181,5 +181,5 @@ spec:
       volumes:
         - name: iuf
           hostPath:
-            path: /opt/cray/iuf
+            path: /etc/cray/upgrade/csm
             type: Directory

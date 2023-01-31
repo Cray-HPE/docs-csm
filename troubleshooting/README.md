@@ -19,7 +19,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 * [Known issues](#known-issues)
 * [Booting](#booting)
-* [Compute rolling upgrades](#compute-rolling-upgrades)
 * [Configuration management](#configuration-management)
 * [ConMan](#conman)
 * [Customer Management Network (CMN)](#customer-management-network-cmn)
@@ -58,15 +57,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Troubleshooting Using Kubernetes](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Using_Kubernetes.md)
 * [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
 * [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
-
-## Compute rolling upgrades
-
-CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
-See [Deprecated features](../introduction/differences.md#deprecated-features).
-
-* [Nodes Failing to Upgrade in a CRUS Session](../operations/compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
-* [Failed CRUS Session Because of Unmet Conditions](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
-* [Failed CRUS Session Because of Bad Parameters](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
 
 ## Configuration management
 

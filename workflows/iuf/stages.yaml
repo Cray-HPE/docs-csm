@@ -61,7 +61,7 @@ stages:
   - name: update-vcs-config
     type: product
     operations:
-      - name: update-working-branch
+      - name: vcs-update-working-branch
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
   - name: update-cfs-config
@@ -95,7 +95,11 @@ stages:
   - name: post-install-service-check
     type: product
     operations:
+      - name: post-install-service-check-start
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: post-install-service-check
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: post-install-service-check-end
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
   - name: managed-nodes-rollout
@@ -107,7 +111,11 @@ stages:
   - name: post-install-check
     type: product
     operations:
+      - name: post-install-check-start
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: post-install-check
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: post-install-check-end
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
 

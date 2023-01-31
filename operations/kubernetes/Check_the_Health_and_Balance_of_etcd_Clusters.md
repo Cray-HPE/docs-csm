@@ -12,14 +12,15 @@ This procedure requires root privileges.
 
 ## Procedure
 
-1. Check the health of the clusters.
+1. (`ncn-mw#`) Check the health of the clusters.
 
     To check the health of the etcd clusters in the services namespace without TLS authentication:
 
     ```bash
-    for pod in $(kubectl get pods -l app=etcd -n services \
-    -o jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} ###"; \
-    kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint health"; done
+    for pod in $(kubectl get pods -l app=etcd -n services -o jsonpath='{.items[*].metadata.name}'); do
+        echo "### ${pod} ###"
+        kubectl -n services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl endpoint health"
+    done
     ```
 
     Example output:
@@ -45,14 +46,16 @@ This procedure requires root privileges.
 
     If any of the etcd clusters are not healthy, refer to [Rebuild Unhealthy etcd Clusters](Rebuild_Unhealthy_etcd_Clusters.md).
 
-2. Check the number of pods in each cluster and verify they are balanced.
+1. (`ncn-mw#`) Check the number of pods in each cluster and verify they are balanced.
 
     Each cluster should contain at least three pods, but may contain more. Ensure that no two pods in a given cluster exist on the same worker node.
 
     ```bash
-    kubectl get pod -n services -o wide | head -n 1; for cluster in \
-    $(kubectl get etcdclusters.etcd.database.coreos.com -n services | grep -v NAME | \
-    awk '{print $1}'); do kubectl get pod -n services -o wide | grep $cluster; echo ""; done
+    kubectl get pod -n services -o wide | head -n 1 ; \
+    for cluster in $(kubectl get etcdclusters.etcd.database.coreos.com -n services | grep -v NAME | awk '{print $1}')
+    do
+        kubectl get pod -n services -o wide | grep $cluster; echo ""
+    done
     ```
 
     Example output:
@@ -70,10 +73,6 @@ This procedure requires root privileges.
     cray-cps-etcd-8ndvn4dlx4                1/1     Running   0        20h   10.47.0.100   ncn-w001   <none>          <none>
     cray-cps-etcd-gvlql48gwk                1/1     Running   0        8d    10.40.0.89    ncn-w003   <none>          <none>
     cray-cps-etcd-wsvhmp4f7p                1/1     Running   0        8d    10.42.0.64    ncn-w002   <none>          <none>
-
-    cray-crus-etcd-2wvb2bpczb               1/1     Running   0        20h   10.47.0.117   ncn-w001   <none>          <none>
-    cray-crus-etcd-fhbcvknghh               1/1     Running   0        8d    10.42.0.34    ncn-w002   <none>          <none>
-    cray-crus-etcd-nrxqzftrzr               1/1     Running   0        8d    10.40.0.45    ncn-w003   <none>          <none>
 
     cray-externaldns-etcd-7skqmr825d        1/1     Running   0        20h   10.47.0.119   ncn-w001   <none>          <none>
     cray-externaldns-etcd-gm2s7nkjgl        1/1     Running   0        8d    10.42.0.13    ncn-w002   <none>          <none>
@@ -102,9 +101,9 @@ This procedure requires root privileges.
 
     If the etcd clusters are not balanced, see [Rebalance Healthy etcd Clusters](Rebalance_Healthy_etcd_Clusters.md).
 
-3. Check the health of an etcd cluster database.
+1. (`ncn-mw#`) Check the health of an etcd cluster database.
 
-    - To check the health of an etcd cluster's database in the services namespace:
+    - To check the health of an etcd cluster's database in the `services` namespace:
 
         ```bash
         for pod in $(kubectl get pods -l app=etcd -n services \
@@ -123,20 +122,6 @@ This procedure requires root privileges.
             print "FAILED DATABASE CHECK - EXPECTED: OK foo fooCheck 1 \
             GOT: " PRINT $0 }'
         done
-        ```
-
-        Example of command being entered:
-
-        ```bash
-        for pod in $(kubectl get pods -l app=etcd -n services -o \
-        jsonpath='{.items[*].metadata.name}'); do echo "### ${pod} \
-        Etcd Database Check: ###"; dbc=$(kubectl -n services exec ${pod} -c etcd \
-        -- /bin/sh -c "ETCDCTL_API=3 etcdctl put foo fooCheck && ETCDCTL_API=3 \
-        etcdctl get foo && ETCDCTL_API=3 etcdctl del foo && ETCDCTL_API=3 \
-        etcdctl get foo" 2>&1); echo $dbc | awk '{ if ( $1=="OK" && \
-        $2=="foo" && $3=="fooCheck" && $4=="1" && $5=="" ) print "PASS:  \
-        " PRINT $0; else print "FAILED DATABASE CHECK - \
-        EXPECTED: OK foo fooCheck 1   GOT: " PRINT $0 \}'; done
         ```
 
         Example output:
@@ -159,12 +144,6 @@ This procedure requires root privileges.
         ### cray-cps-etcd-fp4kfsf799 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
         ### cray-cps-etcd-g6gz9vmmdn Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-crus-etcd-6z9zskl6cr Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-crus-etcd-krp255f97q Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-crus-etcd-tpclqfln67 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
         ### cray-externaldns-etcd-2vnb5t4657 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
@@ -193,21 +172,6 @@ This procedure requires root privileges.
         done
         ```
 
-        Example of command being entered:
-
-        ```bash
-        for pod in $(kubectl get pods -l etcd_cluster=cray-bos-etcd \
-        -n services -o jsonpath='{.items[*].metadata.name}'); do echo \
-        "### ${pod} Etcd Database Check: ###";  dbc=$(kubectl -n \
-        services exec ${pod} -c etcd -- /bin/sh -c "ETCDCTL_API=3 etcdctl \
-        put foo fooCheck && ETCDCTL_API=3 etcdctl get foo && \
-        ETCDCTL_API=3 etcdctl del foo && ETCDCTL_API=3 etcdctl get \
-        foo" 2>&1); echo $dbc | awk '{ if ( $1=="OK" && $2=="foo" && \
-        $3=="fooCheck" && $4=="1" && $5=="" ) print "PASS:  " PRINT $0; \
-        else print "FAILED DATABASE CHECK - EXPECTED: \
-        OK foo fooCheck 1   GOT: " PRINT $0 }'; done
-        ```
-
         Example output:
 
         ```text
@@ -219,7 +183,7 @@ This procedure requires root privileges.
         PASS:  OK foo fooCheck 1
         ```
 
-    If any of the etcd cluster databases are not healthy, refer to the following procedures:
+    If any of the etcd cluster databases are not healthy, then refer to the following procedures:
 
-    - Refer to [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
-    - Refer to [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)
+    - [Check for and Clear etcd Cluster Alarms](Check_for_and_Clear_etcd_Cluster_Alarms.md)
+    - [Clear Space in an etcd Cluster Database](Clear_Space_in_an_etcd_Cluster_Database.md)

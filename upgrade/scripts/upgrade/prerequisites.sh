@@ -968,6 +968,22 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# CRUS is being removed as part of this upgrade
+state_name="UNINSTALL_CRUS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+        # If CRUS is installed, uninstall it
+        if helm status -n services cray-crus ; then
+            helm uninstall -n services cray-crus
+        fi
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # restore previous ssh config if there was one, remove ours
 rm -f /root/.ssh/config
 test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
