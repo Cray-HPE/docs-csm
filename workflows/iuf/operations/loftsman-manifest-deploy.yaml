@@ -122,8 +122,8 @@ spec:
                       continue
                     elif [[ "$DEPLOY" = "true" ]] || [[ "$DEPLOY" = "True" ]]; then
                       if $IS_DIR; then
-                        echo "INFO Deploying loftsman manifests under $MANIFEST/"
-                        manifest_files=$(ls "${MANIFEST_PATH}"/*.yml "${MANIFEST_PATH}"/*.yaml 2>/dev/null)
+                        echo "INFO Deploying loftsman manifests under $MANIFEST_PATH/"
+                        manifest_files=$(ls "${MANIFEST_PATH}"/*.yml "${MANIFEST_PATH}"/*.yaml 2>/dev/null) || true
                         for manifest in $manifest_files; do
                           deploy_manifest ${manifest} $PRODUCT_NAME
                           if [[ $? != 0 ]]; then err=1; fi
@@ -133,7 +133,7 @@ spec:
                         if [[ $? != 0 ]]; then err=1; fi
                       fi
                     else
-                      echo "INFO Not deploying argo/loftsman/${PRODUCT_NAME}/${PRODUCT_VERSION}/manifests/$(basename ${MANIFEST}) because loftsman.deploy=${DEPLOY}."
+                      echo "NOTICE Not deploying argo/loftsman/${PRODUCT_NAME}/${PRODUCT_VERSION}/manifests/$(basename ${MANIFEST}) because loftsman.deploy=${DEPLOY}."
                     fi
                   done
 
