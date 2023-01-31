@@ -88,20 +88,6 @@ spec:
                 fi
 
                 /usr/local/bin/loftsman-manifest-upload "$CONTENT" "$PARENT_DIR" "$PRODUCT"
-
-    - - name: loftsman-update-product-catalog
-        templateRef:
-          name: update-product-catalog-template
-          template: catalog-update
-        arguments:
-          parameters:
-            - name: product-name
-              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
-            - name: product-version
-              value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
-            - name: yaml-content
-              value: "{{steps.loftsman-manifest-upload.outputs.parameters.output}}"
-
     - - name: end-operation
         templateRef:
           name: workflow-template-record-time-template
