@@ -26,7 +26,7 @@ its power limited.
 
 ## Deprecated Interfaces
 
-See the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
+See the [CAPMC Deprecation Notice](../../introduction/deprecated_features/CAPMC_Deprecation_Notice.md) for
 more information.
 
 * `get_node_energy` (Deprecated)
