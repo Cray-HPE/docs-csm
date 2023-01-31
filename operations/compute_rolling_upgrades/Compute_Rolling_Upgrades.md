@@ -4,7 +4,7 @@
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)
-> - [Deprecated features](../../introduction/differences.md#deprecated-features)
+> - [Deprecated Features](../../introduction/deprecated_features/README.md)
 
 The Compute Rolling Upgrade Service \(CRUS\) upgrades sets of compute nodes without requiring an entire set of nodes to be out of service at once. CRUS manages the workload
 management status of nodes, handling each of the following steps required to upgrade compute nodes:

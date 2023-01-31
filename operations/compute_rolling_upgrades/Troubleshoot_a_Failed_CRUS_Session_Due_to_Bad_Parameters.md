@@ -4,7 +4,7 @@
 > See the following links for more information:
 >
 > - [Rolling Upgrades with BOS V2](../boot_orchestration/Rolling_Upgrades.md)
-> - [Deprecated features](../../introduction/differences.md#deprecated-features)
+> - [Deprecated Features](../../introduction/deprecated_features/README.md)
 
 A CRUS session must be deleted and recreated if it does not start or complete because of parameters having incorrect values.
 

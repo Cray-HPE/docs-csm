@@ -59,6 +59,7 @@ Glossary of terms used in CSM documentation.
 * [System Management Network (SMNet)](#system-management-network-smnet)
 * [System Management Services (SMS)](#system-management-services-sms)
 * [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
+* Tenant and Partition Management Service (TAPMS)
 * [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
 * [User Access Instance (UAI)](#user-access-instance-uai)
 * [User Access Node (UAN)](#user-access-node-uan)
@@ -140,7 +141,7 @@ See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
 > See the following links for more information:
 >
 > * [Rolling Upgrades with BOS V2](operations/boot_orchestration/Rolling_Upgrades.md)
-> * [Deprecated features](introduction/differences.md#deprecated-features)
+> * [Deprecated Features](introduction/deprecated_features/README.md)
 
 ## Cray Advanced Platform Monitoring and Control (CAPMC)
 

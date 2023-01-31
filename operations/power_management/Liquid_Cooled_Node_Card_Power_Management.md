@@ -1,13 +1,26 @@
-# Liquid Cooled Node Power Management
+# Liquid-cooled Node Power Management
 
-Liquid Cooled AMD EPYC compute blade node card power capabilities and limits.
+Liquid-cooled AMD EPYC compute blade node card power capabilities and limits.
 
-Liquid Cooled cabinet node card power features are supported by the node
+Liquid-cooled cabinet node card power features are supported by the node
 controller (nC) firmware and CPU vendor. The nC exposes the power control API
 for each node via the node's Redfish Control schema. Out-of-band power
 management data is produced and collected by the nC hardware and firmware. This
-data can be published to a collector using the Redfish EventService, or
-retrieved on-demand from the Redfish ChassisSensors resource.
+data can be published to a collector using the Redfish `EventService`, or
+retrieved on-demand from the Redfish `ChassisSensors` resource.
+
+* [Requirements](#requirements)
+* [Deprecated interfaces](#deprecated-interfaces)
+* [Redfish API](#redfish-api)
+* [Power limiting](#power-limiting)
+  * [Cray CLI examples](#cray-cli-examples)
+    * [Get node power control and limit settings](#get-node-power-control-and-limit-settings)
+    * [Get power limit capabilities](#get-power-limit-capabilities)
+    * [Set node power limit](#set-node-power-limit)
+    * [Remove node power limit (set to default)](#remove-node-power-limit-set-to-default)
+    * [Enable and disable power limiting](#enable-and-disable-power-limiting)
+      * [Enable power limiting](#enable-power-limiting)
+      * [Disable power limiting](#disable-power-limiting)
 
 ## Requirements
 
@@ -15,9 +28,9 @@ retrieved on-demand from the Redfish ChassisSensors resource.
 * CAPMC (`cray-hms-capmc`) at least `1.31.0`
 * Cray CLI at least `0.44.0`
 
-## Deprecated Interfaces
+## Deprecated interfaces
 
-Set the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
+Set the [CAPMC Deprecation Notice](../../introduction/deprecated_features/CAPMC_Deprecation_Notice.md) for
 more information.
 
 * `get_node_energy`
@@ -26,7 +39,7 @@ more information.
 
 ## Redfish API
 
-The Redfish API for Liquid Cooled compute blades is the node's Control resource
+The Redfish API for liquid-cooled compute blades is the node's Control resource
 which is presented by the nC. The Control resource presents the various power
 management capabilities for the node and any associated accelerator cards.
 
@@ -39,7 +52,7 @@ The Control resources will only manifest in the nC's Redfish endpoint after
 a node has been powered on and background processes have discovered the node's
 power management capabilities.
 
-## Power Limiting
+## Power limiting
 
 CAPMC power limit controls for compute nodes can query component capabilities
 and manipulate the node power constraints. This functionality enables external
@@ -56,12 +69,12 @@ The AMD EPYC node card supports these power limiting and monitoring API calls:
 * `set_power_cap`
 
 Power limit control will only be valid on a compute node when power limiting is
-enabled, the node is booted, and the node is in the Ready state as seen via the
+enabled, the node is booted, and the node is in the `Ready` state as seen via the
 Hardware State Manager.
 
-## Cray CLI Examples for Liquid Cooled Compute Node Power Management
+### Cray CLI examples
 
-### Get Node Power Control and Limit Settings
+#### Get node power control and limit settings
 
 ```console
 cray capmc get_power_cap create –-nids NID_LIST --format json
@@ -69,7 +82,7 @@ cray capmc get_power_cap create –-nids NID_LIST --format json
 
 Return the current power cap settings for a node and any accelerators that
 are installed. Valid settings are only returned if power limiting is enabled
-on the target nodes, those nodes are booted, and the nodes are in the Ready
+on the target nodes, those nodes are booted, and the nodes are in the `Ready`
 state.
 
 ```console
@@ -112,13 +125,13 @@ Example output:
 }
 ```
 
-### Get Power Limit Capabilities
+#### Get power limit capabilities
 
 ```console
- cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
+cray capmc get_power_cap_capabilities create –-nids NID_LIST --format json
 ```
 
-Return the min and max power cap settings for the node list and any
+Return the `min` and `max` power cap settings for the node list and any
 accelerators that are installed.
 
 ```console
@@ -180,7 +193,7 @@ Example output:
 }
 ```
 
-### Set Node Power Limit
+#### Set node power limit
 
 ```console
 cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME VALUE --format json
@@ -256,14 +269,14 @@ Example output:
 }
 ```
 
-### Remove Node Power Limit (Set to Default)
+#### Remove node power limit (set to default)
 
 ```console
 cray capmc set_power_cap create --nids NID_LIST --control CONTROL_NAME 0 --format json
 ```
 
-Reset the power limit to the default maximum. Alternatively, using the max
-value returned from get_power_cap_capabilities may also be used. Multiple
+Reset the power limit to the default maximum. Alternatively, the `max`
+value returned from `get_power_cap_capabilities` may be used. Multiple
 controls can be set at the same time on multiple nodes, but all target nodes
 must have the same set of controls available, otherwise the call will fail.
 
@@ -287,9 +300,9 @@ Example output:
 }
 ```
 
-## Enable and Disable Power Limiting
+#### Enable and disable power limiting
 
-### Enable Power Limiting
+##### Enable power limiting
 
 Determine the valid power limit range for the target control by using the
 `get_power_cap_capabilities` Cray CLI option.
@@ -359,7 +372,7 @@ Example output:
 }
 ```
 
-Selecting a value that is in the min to max range, make a `curl` call to the
+Selecting a value that is in the `min` to `max` range, make a `curl` call to the
 Redfish endpoint to enable power limiting for each control. Be aware that
 the power limit for accelerators will be much lower than the power limit for
 the node.
@@ -371,7 +384,7 @@ curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
         -d '{"ControlMode":"Automatic","SetPoint":'${limit}'}'
 ```
 
-If there are accelerators installed, enabled power limiting on those as well.
+If there are accelerators installed, then enable power limiting on those as well.
 
 ```console
 limit=400
@@ -389,7 +402,7 @@ curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
         -d '{"ControlMode":"Automatic","SetPoint":'${limit}'}'
 ```
 
-### Disable Power Limiting
+##### Disable power limiting
 
 Each control at the Redfish endpoint needs to be disabled.
 
@@ -399,7 +412,7 @@ curl -k -u $login:$pass -H "Content-Type: application/json" \
         -d '{"ControlMode":"Disabled"}'
 ```
 
-If there are accelerators installed, disable power limiting on those as well.
+If there are accelerators installed, then disable power limiting on those as well.
 
 ```console
 curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \

@@ -4,7 +4,7 @@
 
 <!-- -->
 > **`NOTE`** This feature is the replacement for the Compute Rolling Upgrade Service (CRUS). CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0.
-> See [Deprecated features](../../introduction/differences.md#deprecated-features).
+> See [Deprecated Features](../../introduction/deprecated_features/README.md).
 
 BOS V2 allows users to stage boot artifacts, configuration, and an operation such as a reboot.
 The workload manager can later trigger the operation through BOS to apply that staged information, allowing rolling updates when nodes have no job running on them.
