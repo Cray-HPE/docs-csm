@@ -276,7 +276,7 @@ spec:
 
                     export TERM=linux
                     echo "NOTICE  rebuilding ncn-m002"
-                    # /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
+                    /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
           - name: rebuild-m003
             dependencies:
               - rebuild-m002
@@ -346,7 +346,7 @@ spec:
 
                     export TERM=linux
                     echo "NOTICE  rebuilding ncn-m003"
-                    # /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m003
+                    /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m003
           - name: end-operation
             dependencies:
               - rebuild-m003
@@ -403,7 +403,7 @@ spec:
                   echo "NOTICE  starting rebuild of $rebuild_set"
                   echo "INFO  using image: $image"
                   echo "INFO  using cfs-configuration: $configuration"
-                  /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --dry-run --image-id $image --desired-cfs-conf $configuration
+                  /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --image-id $image --desired-cfs-conf $configuration
     - name: prom-metrics
       inputs:
         parameters:
