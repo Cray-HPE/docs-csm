@@ -204,6 +204,8 @@ spec:
               parameters:
                 - name: nodes
                   value: "{{item}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
             withParam: "{{tasks.get-worker-rebuild-sets.outputs.result}}"
           - name: rebuild-m002
             dependencies:
@@ -366,6 +368,7 @@ spec:
       inputs:
         parameters:
           - name: nodes
+          - name: global_params
       dag:
         tasks:
           - name: rebuild-set
