@@ -1,4 +1,3 @@
-##### WORKING FROM TESTING IS BELOW
 #
 # MIT License
 #
@@ -210,7 +209,7 @@ spec:
             dependencies:
               - rebuild-worker-nodes
             templateRef:
-              name: ssh-template
+              name: iuf-base-template
               template: shell-script
             arguments:
               parameters:
@@ -218,7 +217,6 @@ spec:
                   value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
-                    # EXAMPLES
                     limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
                     if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then 
                       echo "NOTICE  Not rebuilding ncn-m002 nodes because 'Management_Master' was not in --limit-management-rollout"
@@ -235,6 +233,45 @@ spec:
                       exit 1
                     fi
                     
+                    echo "NOTICE  updating CFS config on ncn-m002"
+                    TARGET_NCN=ncn-m002
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
+                    configuration=$(echo $update_cfs_conf_ouput | jq '.configurations[].name' | tr -d '"')
+                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${configuration}"
+
+                    echo "NOTICE  updating boot-image in BSS on ncn-m002"
+                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    IMAGE_ID=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
+                    image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
+                    image_manifest_str=${image_manifest_str#*s3://}
+                    bucket="$( cut -d '/' -f 1 <<< "$image_manifest_str" )"
+                    bucket_rm="${bucket}/"
+                    path=${image_manifest_str#*${bucket_rm}}
+                    path=${path%?}
+                    temp_file="/tmp/$(echo $RANDOM | md5sum | head -c 21; echo).json"
+                    cray artifacts get $bucket $path $temp_file
+                    metal_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.rootfs.squashfs") | .path ' < $temp_file)
+                    echo "INFO  Setting metal.server image to: $metal_image"
+                    kernel_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.kernel") | .path ' < $temp_file)
+                    kernel_image=$(echo "$kernel_image" | tr -d '"')
+                    echo "INFO Setting kernel image to: $kernel_image"
+                    initrd_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.initrd") | .path ' < $temp_file)
+                    initrd_image=$(echo "$initrd_image" | tr -d '"')
+                    echo "INFO  Setting initrd image to: $initrd_image"
+                    METAL_SERVER=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' \
+                    | awk -F 'metal.server=' '{print $2}' \
+                    | awk -F ' ' '{print $1}')
+                    NEW_METAL_SERVER=$metal_image
+                    PARAMS=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' | \
+                        sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+                        tr -d \")
+                    cray bss bootparameters update --hosts "${TARGET_XNAME}" \
+                      --kernel $kernel_image \
+                      --initrd $initrd_image \
+                      --params "${PARAMS}"
+
                     export TERM=linux
                     echo "NOTICE  rebuilding ncn-m002"
                     # /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
@@ -267,6 +304,7 @@ spec:
                     fi
                     
                     echo "NOTICE  updating CFS config on ncn-m003"
+                    TARGET_NCN=ncn-m003
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
                     update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
