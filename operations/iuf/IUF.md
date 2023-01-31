@@ -33,6 +33,7 @@ The following IUF topics are discussed in the sections below.
 - [Site and Recipe Variables](#site-and-recipe-variables)
 - [Product Workflows](#product-workflows)
 - [Troubleshooting](#troubleshooting)
+- [Install and Upgrade Observability Framework](#install-and-upgrade-observability-framework)
 
 ## Limitations
 
@@ -543,3 +544,25 @@ The following actions may be useful if errors are encountered when executing `iu
 - If the source of the error can not be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and Hooks](#stages-and-hooks) section
   of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the
   workflow and debug the issue.
+
+## Install and Upgrade Observability Framework
+
+Install and Upgrade Observability Framework(IUATCT) creates unified consistent requirements for each product including assertions for GOSS health checks as well metrics and dashboards for health checks. Also includes a unified consistent method to automatically track Time to Install(TTI) and Time to Upgrade(TTU), as well as error and pattern count across clusters and product streams.
+
+1. Establish a consistent framework for health checks/validation, metrics and reporting for all product streams for Install/Upgrade observability.
+   > Inside-Out Views
+   > Outside-In Views
+   > Product Stream health
+
+2. Drill Down Health Dashboard with Roll up
+   > Aggregate Checks - Problem/OK counts across each product stream.
+   > Functional Checks - Product stream functional GOSS suites for key areas. Examples: REST APIs, micro-services, K8s, network, and database health for the specific product stream.
+   > Granular Checks - Individual GOSS tests for component level health checks within a functional area of a given product stream. Examples: Management switch Config verification, Routing table checks on OS, Gateway tests, Container Network Interface (CNI) tests.
+
+3. Boot, Install, Upgrade duration Monitoring - This will do automatic calculation and reporting of both the Time a given section of install/upgrade has taken, as well as Metrics on how many GOSS tests results show OK vs PROBLEM status.
+
+4. Time, Node, product stream, capacity and other dimension based Health and Performance Insight
+
+5. Multi-Interval Continuous Health Checks - We need to define and implement regular automatic scheduled health checks to occur both during Install and Upgrade as well as after Install/Upgrade has been completed. The frequency needs to be determined but will likely include every 6 hours, once a day and once a week.
+
+More on the observability framework on [Install and Upgrade Observability Framework](../observability/Observability.md)
