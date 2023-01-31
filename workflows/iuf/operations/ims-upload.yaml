@@ -226,7 +226,7 @@ spec:
 
     container:
       # replace image with standard ims-load-artifacts once PR is merged
-      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.0.0
+      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.0.1
       command: ['python3']
       args: ['-m', 'ims_load_artifacts.load_artifacts']
       env:
