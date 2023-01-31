@@ -194,11 +194,12 @@ spec:
           }
 
           function sat_bootsys_subcommand {
+              bos_timeout=30000
               sat_command=""
               if [ "$managed_rollout_strategy" == "reboot" ]; then
-                  sat_command="sat bootsys --bos-version v2 reboot --disruptive --stage bos-operations --bos-templates $session_templates_string"
+                  sat_command="sat bootsys --bos-version v2 reboot --disruptive --stage bos-operations --bos-templates $session_templates_string --bos-shutdown-timeout $bos_timeout --bos-boot-timeout $bos_timeout"
               elif [ "$managed_rollout_strategy" == "stage" ]; then
-                  sat_command="sat bootsys --bos-version v2 reboot --disruptive --stage bos-operations --bos-templates $session_templates_string"
+                  sat_command="sat bootsys --bos-version v2 reboot --stage bos-operations --staged-session --bos-templates $session_templates_string --bos-shutdown-timeout $bos_timeout --bos-boot-timeout $bos_timeout"
               fi
 
               if [ ! -z "$limit_managed_nodes" ]; then
