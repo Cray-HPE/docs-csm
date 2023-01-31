@@ -755,3 +755,8 @@ Expat-15
 - troubleshooting/known_issues/antero_node_NID_allocation.md
 # To allow Site Init
 Init
+
+- operations/observability/Observability.md
+IaC
+KPIs
+
