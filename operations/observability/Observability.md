@@ -265,7 +265,7 @@ data:
 
 After the preceding steps the `goss_tests` metrics are seen in Prometheus when Goss tests are run. Using these metrics, Grafana dashboards are created to shows the Goss tests details visually.
 
-Goss test dashboard features
+Goss test dashboard features:
 - The dashboard as dropdowns for product, suite, and tests.
 - By default, all products, suites and tests are selected for overall Goss tests result.
 - The overall product result, total number of the products, products passed, products failed, and its execution time is seen.
