@@ -278,7 +278,8 @@ Goss test dashboard features:
 
 Error dashboards provide key glance insights as to where and what is broken and needs attention. This works for both internal HPE environments and clusters as well as is a containerized shippable solution that customers can use as well.
 
-The automatic generation of the desired  prometheus grok exporter configuration based upon passing in a set of regex patterns to detect. This includes but is not limited to regex patterns to match and generate metrics on phases of manual Administrator steps, as well as phases of installation scripts and automation. 
+The automatic generation of the desired Prometheus grok-exporter configuration based upon passing in a set of regex patterns to detect.
+This includes but is not limited to regex patterns to match and generate metrics on phases of manual administrator steps, as well as phases of installation scripts and automation. 
 
 ### Error dashboards features
 
