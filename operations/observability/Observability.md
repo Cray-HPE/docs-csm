@@ -173,7 +173,7 @@ Metrics captured for the product:
 - product status (derived from the status of the stage)
 
 
-### Timing Dashboard
+### Timing dashboard
 
 - Created dynamic top-down and bottom-up dashboard to track install/upgrade status of any product, stage and operation.
 - Dashboard calculates the execution time for the install/ upgrade of any product, stage and operation.
