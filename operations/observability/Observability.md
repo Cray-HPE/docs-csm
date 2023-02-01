@@ -158,12 +158,13 @@ Metrics captured for the operations:
 - product version
 
 Metrics captured for the stage:
-1) stage name
-2) stage type
-3) stage start time (derived from min(start time of the all the operations presented in the stage)
-4) stage end time (derived from max(start time of the all the operations presented in the stage)\
-5) stage duration ( stage end time - stage start time)
-6) stage status ( derived from all the operations status)
+
+- stage name
+- stage type
+- stage start time (derived from min(start time of the all the operations presented in the stage)
+- stage end time (derived from max(start time of the all the operations presented in the stage)
+- stage duration (stage end time - stage start time)
+- stage status (derived from all the operations status)
 
 Metrics captured for the  product 
 1) product name
