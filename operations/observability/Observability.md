@@ -288,7 +288,7 @@ This includes but is not limited to regex patterns to match and generate metrics
 - Monitor ConMan logs from `csm-pit`.  
 - Quantify the results and provide easy at-glance reports, and dashboards to give us confidence about the health of a platform at any time.
 - Groks log files for errors and surface them
-- Creation of Trend, Error, and Alert frequency dashboard.
+- Create the Trend, Error, and Alert frequency dashboard.
 
 ### Error dashboards
 
