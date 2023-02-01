@@ -462,7 +462,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        ```bash
        zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
               --no-gpg-checks install -y csm-testing
-      ```
+       ```
 
 1. (`pit#`) Get the artifact versions.
 
