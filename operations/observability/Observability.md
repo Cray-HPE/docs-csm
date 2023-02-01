@@ -157,7 +157,7 @@ Metrics captured for the operations:
 - product name
 - product version
 
-Metrics captured for the stage
+Metrics captured for the stage:
 1) stage name
 2) stage type
 3) stage start time (derived from min(start time of the all the operations presented in the stage)
