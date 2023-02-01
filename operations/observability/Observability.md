@@ -260,7 +260,7 @@ After the above steps the `goss_tests` metrics are seen in prometheus when goss 
 Goss test dashboard features
 - The dashboard as dropdowns for product, suite, and tests.
 - By default, all products, suites and tests are selected for overall Goss tests result.
-- The overall product result, total number of the products, products passed, products failed and it's execution time is seen.
+- The overall product result, total number of the products, products passed, products failed, and its execution time is seen.
 - Suite results and test results are seen from the dashboard.
 - Node-wise test result are seen with failed nodes, passed nodes, and the suite/test description.
 
