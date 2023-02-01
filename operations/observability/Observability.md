@@ -285,7 +285,7 @@ This includes but is not limited to regex patterns to match and generate metrics
 
 - Automate Grafana dashboards with error and failure message during CSM upgrade and install.
 - Create dashboard for issue comparison across multiple dimensions and clusters.
-- Monitors conman logs from csm-pit.  
+- Monitor ConMan logs from `csm-pit`.  
 - Quantify the results and provide easy at-glance reports, and dashboards to give us confidence about the health of a platform at any time.
 - Groks log files for errors and surface them
 - Creation of Trend, Error, and Alert frequency dashboard.
