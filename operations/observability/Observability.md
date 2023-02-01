@@ -47,7 +47,7 @@ The following IUF topics are discussed in the following subsections.
 
 ## Automation of Observability framework
 
-Grok exporter, prometheus and grafana gets instantiated automatically on Combined Install Media LiveDVD for pit dimension of metrics for error/debug/count.
+Grok-exporter, Prometheus, and Grafana get instantiated automatically on the Combined Install Media LiveDVD for PIT dimension of metrics for error/debug/count.
 
 ### Automation framework features
 
