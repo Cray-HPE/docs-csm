@@ -61,7 +61,7 @@ Grok-exporter, Prometheus, and Grafana get instantiated automatically on the Com
 - Define and build IaC repo to store observability configuration.
 - Define and build automations to update configuration of observability configuration when the IaC configuration repo is updated.
 - Create an RPM with all the three containers and services for `csm-pit` and `csm-shared-pit` using Jenkins pipeline.
-- Mount all the log files from CSM-PIT to container which grok-exporter will parse.
+- Mount all of the log files from `csm-pit` to the container that the grok-exporter will parse.
 
 ### Automation workflow
 
