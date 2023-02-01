@@ -153,7 +153,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 1. (`pit#`) Tell the PIT node to PXE boot on the next boot.
 
     ```bash
-    efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
+    efibootmgr -n $(efibootmgr | grep -m1 -Ei "ip(v4|4)" | awk '{match($0, /[[:xdigit:]]{4}/, m); print m[0]}') | grep -i bootnext
     ```
 
 1. (`pit#`) Collect a backdoor login. Fetch the CMN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
