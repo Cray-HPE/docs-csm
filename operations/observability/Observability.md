@@ -167,10 +167,10 @@ Metrics captured for the stage:
 - stage status (derived from all the operations status)
 
 Metrics captured for the product: 
-1) product name
-2) product start time (derived from the start time of the process-media stage)
-3) product end time (derived from the start time of the post-install-check stage)
-4) product status (derived from the status of the stage)
+- product name
+- product start time (derived from the start time of the process-media stage)
+- product end time (derived from the start time of the post-install-check stage)
+- product status (derived from the status of the stage)
 
 
 ### Timing Dashboard
