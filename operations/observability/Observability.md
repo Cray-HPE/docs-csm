@@ -14,7 +14,9 @@ Install and Upgrade Observability Framework creates unified consistent requireme
    - Functional Checks - Product stream functional GOSS suites for key areas. Examples: REST APIs, micro-services, K8s, network, and database health for the specific product stream.
    - Granular Checks - Individual GOSS tests for component level health checks within a functional area of a given product stream. Examples: Management switch Config verification, Routing table checks on OS, Gateway tests, Container Network Interface (CNI) tests.
 
-3. Boot, Install, Upgrade duration Monitoring - This will do automatic calculation and reporting of both the Time a given section of install/upgrade has taken, as well as Metrics on how many GOSS tests results show OK vs PROBLEM status.
+3. Boot, install, and upgrade duration monitoring.
+   
+   This will do automatic calculation and reporting of both the time a given section of install/upgrade has taken, as well as metrics on how many GOSS tests results show OK versus PROBLEM status.
 
 4. Time, node, product stream, capacity, and other dimension based health and performance insight.
 
