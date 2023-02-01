@@ -18,7 +18,9 @@ Install and Upgrade Observability Framework creates unified consistent requireme
 
 4. Time, Node, product stream, capacity and other dimension based Health and Performance Insight
 
-5. Multi-Interval Continuous Health Checks - We need to define and implement regular automatic scheduled health checks to occur both during Install and Upgrade as well as after Install/Upgrade has been completed. The frequency needs to be determined but will likely include every 6 hours, once a day and once a week.
+5. Multi-Interval Continuous Health Checks.
+   Define and implement regular automatic scheduled health checks to occur both during install and upgrade, as well as after the install or upgrade has been completed.
+   The frequency needs to be determined but will likely include every six hours, once a day, and once a week.
 
 6. Automate the deployment, installation, and configuration of the Install&Upgrade Observability framework in a CSM environment. 
 
