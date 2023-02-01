@@ -16,7 +16,7 @@ Install and Upgrade Observability Framework creates unified consistent requireme
 
 3. Boot, Install, Upgrade duration Monitoring - This will do automatic calculation and reporting of both the Time a given section of install/upgrade has taken, as well as Metrics on how many GOSS tests results show OK vs PROBLEM status.
 
-4. Time, Node, product stream, capacity and other dimension based Health and Performance Insight
+4. Time, node, product stream, capacity, and other dimension based health and performance insight.
 
 5. Multi-Interval Continuous Health Checks.
    Define and implement regular automatic scheduled health checks to occur both during install and upgrade, as well as after the install or upgrade has been completed.
