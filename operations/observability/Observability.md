@@ -284,7 +284,7 @@ This includes but is not limited to regex patterns to match and generate metrics
 ### Error dashboards features
 
 - Automate Grafana dashboards with error and failure message during CSM upgrade and install.
-- Create Dashboard for Issue Comparison across multiple dimensions and Clusters.
+- Create dashboard for issue comparison across multiple dimensions and clusters.
 - Monitors conman logs from csm-pit.  
 - Quantify the results and provide easy at-glance reports, and dashboards to give us confidence about the health of a platform at any time.
 - Groks log files for errors and surface them
