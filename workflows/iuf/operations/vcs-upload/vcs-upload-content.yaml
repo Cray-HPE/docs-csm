@@ -74,6 +74,11 @@ spec:
                   value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.process-media.current_product.parent_directory')}}/{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.content.vcs.path')}}"
                 - name: cf_import_gitea_org
                   value: cray
+                - name: cf_import_gitea_repo
+                  value: >
+                    {{="repo_name" in jsonpath(inputs.parameters.global_params, "$.product_manifest.current_product.manifest.content.vcs") ?
+                    jsonpath(inputs.parameters.global_params, "$.product_manifest.current_product.manifest.content.vcs.repo_name") :
+                    ""}}
                 - name: cf_import_gitea_url
                   value: "https://api-gw-service-nmn.local/vcs"
         - - name: vcs-update-product-catalog
@@ -219,6 +224,7 @@ spec:
           - name: cf_import_product_name
           - name: cf_import_product_version
           - name: cf_import_gitea_org
+          - name: cf_import_gitea_repo
           - name: cf_import_content_hostpath
       outputs:
         parameters:
@@ -227,7 +233,7 @@ spec:
               path: /results/records.yaml
               default: "{}"
       container:
-        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-import:1.8.1
+        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-import:1.9.0
         command:
           - "/bin/sh"
         args: ["-c", "/opt/csm/cf-gitea-import/argo_entrypoint.sh"]
@@ -252,6 +258,8 @@ spec:
             value: "{{inputs.parameters.cf_import_product_version}}"
           - name: CF_IMPORT_GITEA_ORG
             value: "{{inputs.parameters.cf_import_gitea_org}}"
+          - name: CF_IMPORT_GITEA_REPO
+            value: "{{inputs.parameters.cf_import_gitea_repo}}"
           - name: CF_IMPORT_CONTENT
             value: /content
         volumeMounts:
