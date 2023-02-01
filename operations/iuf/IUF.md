@@ -565,4 +565,4 @@ Install and Upgrade Observability Framework(IUATCT) creates unified consistent r
 
 5. Multi-Interval Continuous Health Checks - We need to define and implement regular automatic scheduled health checks to occur both during Install and Upgrade as well as after Install/Upgrade has been completed. The frequency needs to be determined but will likely include every 6 hours, once a day and once a week.
 
-More on the observability framework on [Install and Upgrade Observability Framework](../observability/Observability.md)
+For more information on the observability framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).
