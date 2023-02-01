@@ -63,7 +63,7 @@ Grok-exporter, Prometheus, and Grafana get instantiated automatically on the Com
 
 ### `systemd` services
 
-Command to check the status of pit-observability services which includes Grok-exporter, Prometheus and Grafana.
+Command to check the status of `pit-observability` services which includes grok-exporter, Prometheus, and Grafana.
 
 ```bash
 systemctl status grok-exporter.service
