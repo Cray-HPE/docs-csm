@@ -292,7 +292,8 @@ This includes but is not limited to regex patterns to match and generate metrics
 
 ### Error dashboards
 
-Dashboard tracking different types of errors during Install/Upgrade.
+Dashboard tracking different types of errors during install/upgrade.
+
 - Frequency of message about known issues dashboard
 - CSM environments install progress dashboard
 - USB Device error tracking dashboard
