@@ -118,26 +118,26 @@ Jan 25 05:00:09 redbull-pit prometheus[25680]: ts=2023-01-25T05:00:09.263Z calle
 ```
 
 ```bash
-systemctl status prometheus.service
-● prometheus.service - Prometheus
-     Loaded: loaded (/usr/lib/systemd/system/prometheus.service; enabled; vendor preset: disabled)
-     Active: active (running) since Wed 2023-01-25 00:05:47 UTC; 6h ago
-   Main PID: 25680 (conmon)
+systemctl status grafana.service
+● grafana.service - Grafana
+     Loaded: loaded (/usr/lib/systemd/system/grafana.service; enabled; vendor preset: disabled)
+     Active: active (running) since Wed 2023-02-08 23:06:38 UTC; 4 days ago
+   Main PID: 82549 (conmon)
       Tasks: 2
-     CGroup: /system.slice/prometheus.service
-             ├─ 25674 /usr/bin/fuse-overlayfs -o ,lowerdir=/var/lib/containers/storage/overlay/l/NZKANI3GOO3KXVE2HIZI33JUTY:/var/lib/containers/storage/over>
-             └─ 25680 /usr/bin/conmon --api-version 1 -c 8221fc0337a5bc8ac706ffeb270c18719caf2c02de8402a047670e578010921f -u 8221fc0337a5bc8ac706ffeb270c187>
+     CGroup: /system.slice/grafana.service
+             ├─ 82540 /usr/bin/fuse-overlayfs -o lowerdir=/var/lib/containers/storage/overlay/l/UOU2YMGV3WT2CIASNIEDBIY6OK:/var/lib/containers/storage/overl>
+             └─ 82549 /usr/bin/conmon --api-version 1 -c f45f33ad520fb278776cf528dab1fdf619f0b1323e672d29d866f728ce8e2589 -u f45f33ad520fb278776cf528dab1fdf>
 
-Jan 25 00:05:47 redbull-pit prometheus[25680]: ts=2023-01-25T00:05:47.048Z caller=main.go:993 level=info fs_type=TMPFS_MAGIC
-Jan 25 00:05:47 redbull-pit prometheus[25680]: ts=2023-01-25T00:05:47.048Z caller=main.go:996 level=info msg="TSDB started"
-Jan 25 00:05:47 redbull-pit prometheus[25680]: ts=2023-01-25T00:05:47.048Z caller=main.go:1177 level=info msg="Loading configuration file" filename=/etc/pro>
-Jan 25 00:05:47 redbull-pit prometheus[25680]: ts=2023-01-25T00:05:47.052Z caller=main.go:1214 level=info msg="Completed loading of configuration file" file>
-Jan 25 00:05:47 redbull-pit prometheus[25680]: ts=2023-01-25T00:05:47.052Z caller=main.go:957 level=info msg="Server is ready to receive web requests."
-Jan 25 00:05:47 redbull-pit prometheus[25680]: ts=2023-01-25T00:05:47.052Z caller=manager.go:937 level=info component="rule manager" msg="Starting rule mana>
-Jan 25 03:06:09 redbull-pit prometheus[25680]: ts=2023-01-25T03:06:09.240Z caller=compact.go:519 level=info component=tsdb msg="write block" mint=1674605167>
-Jan 25 03:06:09 redbull-pit prometheus[25680]: ts=2023-01-25T03:06:09.242Z caller=head.go:840 level=info component=tsdb msg="Head GC completed" duration=1.3>
-Jan 25 05:00:09 redbull-pit prometheus[25680]: ts=2023-01-25T05:00:09.261Z caller=compact.go:519 level=info component=tsdb msg="write block" mint=1674612007>
-Jan 25 05:00:09 redbull-pit prometheus[25680]: ts=2023-01-25T05:00:09.263Z caller=head.go:840 level=info component=tsdb msg="Head GC completed" duration=1.7>
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=sqlstore t=2023-02-08T23:06:38.23+0000 lvl=info msg="Connecting to DB" dbtype=sqlite3
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=migrator t=2023-02-08T23:06:38.25+0000 lvl=info msg="Starting DB migrations"
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=migrator t=2023-02-08T23:06:38.26+0000 lvl=info msg="migrations completed" performed=0 skipped=393 durati>
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=plugin.manager t=2023-02-08T23:06:38.42+0000 lvl=info msg="Plugin registered" pluginId=input
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=query_data t=2023-02-08T23:06:38.43+0000 lvl=info msg="Query Service initialization"
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=live.push_http t=2023-02-08T23:06:38.44+0000 lvl=info msg="Live Push Gateway initialization"
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=grafanaStorageLogger t=2023-02-08T23:06:38.54+0000 lvl=info msg="storage starting"
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=ngalert t=2023-02-08T23:06:38.54+0000 lvl=info msg="warming cache for startup"
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=ngalert.multiorg.alertmanager t=2023-02-08T23:06:38.54+0000 lvl=info msg="starting MultiOrg Alertmanager"
+Feb 08 23:06:38 redbull-pit grafana[82549]: logger=http.server t=2023-02-08T23:06:38.55+0000 lvl=info msg="HTTP Server Listen" address=[::]:3000 protocol=http>
 ```
 
 ## IUF Timing dashboard
@@ -230,7 +230,7 @@ The service for the grok-exporter is created for access at port `9144`. Service-
 Created the configuration file for the grok-exporter to parse the Goss test log file and make metrics from them. 
 We are using grok-exporter config version 3 config for this task and matching log expressions with regex.
 
-The following is the example config passed to grok-exporter to get metrics:
+The following is the example configuration passed to the grok-exporter to get metrics:
 
 ```bash
 apiVersion: v1
@@ -286,10 +286,9 @@ This includes but is not limited to regex patterns to match and generate metrics
 ### Error dashboards features
 
 - Automate Grafana dashboards with error and failure message during CSM upgrade and install.
-- Create dashboard for issue comparison across multiple dimensions and clusters.
+- Create dashboard for issues comparison across multiple dimensions and clusters.
 - Monitor ConMan logs from `csm-pit`.  
-- Quantify the results and provide easy at-glance reports, and dashboards to give us confidence about the health of a platform at any time.
-- Groks log files for errors and surface them
+- Grok exporter parse the log files.
 - Create the Trend, Error, and Alert frequency dashboard.
 
 ### Error dashboards
