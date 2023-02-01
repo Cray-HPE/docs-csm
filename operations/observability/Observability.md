@@ -206,7 +206,7 @@ Running the automated scripts using the complete path of script like `/opt/cray/
 
 ### Log file format
 
-Individual lines of logs are in the following format for each node/pit-node, test name and source -
+Individual lines of logs are in the following format for each node or PIT node, test name, and source:
 
 ```bash
 {"log_timestamp": "20230118_094205.821955", "Product": "CSM", "log_script": "print_goss_json_results.py", "log_message": "Test result", "Description": "Validates that 'cray --version' is available and executes successfully on the local system.", "Execution Time (nanoseconds)": 1312368478, "Execution Time (seconds)": 1.312368478, "Node": "ncn-m001", "Result Code": 0, "Result String": "PASS", "Source": "http://ncn-m001.hmn:8997/ncn-healthcheck-master", "Test Name": "Command 'cray --version' Available", "Test Summary": "Command: command_available_1_cray_version: exit-status: matches expectation: [0]"}
