@@ -192,7 +192,7 @@ Metrics captured for the product:
 
 
 
-## GOSS Tests for PIT and NCN
+## Goss tests for PIT and NCN
 
 ### Goss test overview
 
