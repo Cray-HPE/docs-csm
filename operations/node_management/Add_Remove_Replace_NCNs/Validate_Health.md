@@ -6,9 +6,9 @@ Validate that the system is healthy.
 
 ## Procedure
 
-The following procedures can be run from any master or worker node.
+The following procedures can be run from any master NCN.
 
-1. Collect data about the system management platform health.
+1. (`ncn-m#`) Collect data about the system management platform health.
 
    ```bash
    /opt/cray/platform-utils/ncnHealthChecks.sh
@@ -24,13 +24,13 @@ The following procedures can be run from any master or worker node.
    If `ncn-s001`, `ncn-s002`, or `ncn-s003` has been temporarily removed, `HEALTH_WARN` may be seen until the storage node is added back to the cluster.
    - the `ncnHealthChecks` may report `FAIL: Ceph's health status is not "HEALTH_OK"`. If Ceph health is `HEALTH_WARN`, this failure can be ignored.
 
-1. Restart the Goss server on all the NCNs. Adjust the commands based on the number of master, worker, and storage nodes.
+1. (`ncn-m#`) Restart the Goss server on all the NCNs. Adjust the commands based on the number of master, worker, and storage nodes.
 
    ```bash
    pdsh -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] systemctl restart goss-servers
    ```
 
-1. Specify the `admin` user password for the management switches in the system.
+1. (`ncn-m#`) Specify the `admin` user password for the management switches in the system.
 
    > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
 
@@ -39,7 +39,7 @@ The following procedures can be run from any master or worker node.
     export SW_ADMIN_PASSWORD
     ```
 
-1. Collect data about the various subsystems.
+1. (`ncn-m#`) Validate the health of the various subsystems.
 
    ```bash
    /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master
@@ -53,7 +53,7 @@ The following procedures can be run from any master or worker node.
    - `Server URL: http://<NODE> ... ERROR: Server endpoint could not be reached`.
 
    **`NOTE`**
-   If workers have been removed and the worker count is currently at two, failures for the following tests can be ignored:
+   If workers have been removed and the worker count is currently at two, then failures for the following tests can be ignored:
    - `Kubernetes Postgres Clusters have the Correct Number of Pods 'Running'`
    - `Kubernetes Postgres Clusters Have Leaders`
    - `Kubernetes Postgres Check for Replication Lag Across Pods in a Cluster`
