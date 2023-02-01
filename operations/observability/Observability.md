@@ -144,7 +144,7 @@ Jan 25 05:00:09 redbull-pit prometheus[25680]: ts=2023-01-25T05:00:09.263Z calle
 
 ### Timing dashboard features
 
-- Using argo workflow to collect the install/upgrade timing details.
+- Use Argo workflows to collect the install/upgrade timing details.
 - Created argo workflow to get metrics from the details available.
 - Generated Prometheus install/upgrade timing metrics.
 - Created Grafana dashboard using Prometheus metrics.
