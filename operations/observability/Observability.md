@@ -61,7 +61,7 @@ Grok-exporter, Prometheus, and Grafana get instantiated automatically on the Com
 
 ![Automation framework workflow](../../img/operations/AutomationFrameworkWorkflow.png "Automation framework workflow")
 
-### Systemd services
+### `systemd` services
 
 Command to check the status of pit-observability services which includes Grok-exporter, Prometheus and Grafana.
 
