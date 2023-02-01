@@ -6,7 +6,7 @@ Remove a master, worker, or storage NCN from current roles. Select the procedure
 
 ## Procedure
 
-**IMPORTANT:** The following procedures assume that you have set the variables from [the prerequisites section](Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites).
+**IMPORTANT:** The following procedures assume that the variables from [the prerequisites section](Add_Remove_Replace_NCNs.md#remove-ncn-prerequisites) have been set.
 
 1. [Remove roles](#1-remove-roles)
     - [Master node](#master-node-remove-roles)
@@ -29,9 +29,6 @@ Remove a master, worker, or storage NCN from current roles. Select the procedure
 
 Determine if the master node being removed is the first master node.
 
-***IMPORTANT:*** The first master node is the node others contact to join the Kubernetes cluster. If this is the node being
-removed, then promote another master node to the initial node before proceeding.
-
 1. Fetch the defined `first-master-hostname`.
 
     ```bash
@@ -45,7 +42,10 @@ removed, then promote another master node to the initial node before proceeding.
     ```
 
     - If the node returned is not the one being removed, then skip the substeps here and proceed to
-    [Reset Kubernetes on master node being removed](#Reset-Kubernetes-on-master-node-being-removed).
+      [Reset Kubernetes on master node being removed](#Reset-Kubernetes-on-master-node-being-removed).
+    - ***IMPORTANT:*** The first master node is the node others contact to join the Kubernetes cluster.
+      If this is the node being removed, then perform the remaining substeps here in order to promote another
+      master node to the initial node, before proceeding with the rest of the overall procedure.
 
 1. Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
 
@@ -56,7 +56,7 @@ removed, then promote another master node to the initial node before proceeding.
 1. Edit the `Global.json` file and edit the indicated line.
 
     Change the `first-master-hostname` value to another node that will be promoted to the first master node.
-    For example, if the first node is changing from `ncn-m002` to `ncn-m001`, then the line would be changed to the following:
+    For example, in order to change the first master node to `ncn-m001`, then change the line to the following:
 
    ```text
    "first-master-hostname": "ncn-m001",
@@ -78,7 +78,7 @@ removed, then promote another master node to the initial node before proceeding.
            "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @./Global.json
    ```
 
-    Ensure that a good response, such as `HTTP CODE 200`, is returned in the `curl` output.
+    Ensure that a good response, such as HTTP code `200`, is returned in the `curl` output.
 
 1. Configure the newly promoted first master node so it is able to have other nodes join the cluster.
 
@@ -171,8 +171,8 @@ ncn-mw# kubectl delete node "${NODE}"
 1. Determine the member ID of the master node being removed.
 
     Run the following command and find the line with the name of the master being removed. Note the member ID and IP address for use in subsequent steps.
-      - The ***member ID*** is the alphanumeric string in the first field of that line.
-      - The ***IP address*** is in the URL in the fourth field in the line.
+      - The **member ID** is the alphanumeric string in the first field of that line.
+      - The **IP address** is in the URL in the fourth field in the line.
 
     On any master node:
 
@@ -222,9 +222,9 @@ ncn-m# rm -rf /var/lib/etcd/*
 
 #### Save `lan0` configuration from `ncn-m001`
 
-Save a copy of the `lan0` configuration from `ncn-m001` **only if `ncn-m001` is being removed**.
-
 **Skip this step if `ncn-m001` is not being removed.**
+
+Save a copy of the `lan0` configuration from `ncn-m001` **only if `ncn-m001` is being removed**.
 
 ```bash
 ncn-m001# rsync /etc/sysconfig/network/ifcfg-lan0 ncn-m002:/tmp/ifcfg-lan0-m001
@@ -339,7 +339,8 @@ The worker node role removal is complete. Proceed to [Wipe the drives](#2-wipe-t
 
 ### Storage node remove roles
 
-Open a new tab and follow [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) to remove Ceph role from the storage node.
+Open a new tab and follow the [Remove Ceph Node](../../utility_storage/Remove_Ceph_Node.md) procedure in order
+to remove Ceph role from the storage node.
 
 Once the storage node role removal is complete, then proceed to [Wipe the drives](#2-wipe-the-drives).
 
@@ -438,7 +439,7 @@ Once the wipe of the drives is complete, proceed to [Power off the node](#3-powe
 
 **IMPORTANT:** Run these commands from a node ***NOT*** being powered off.
 
-1. Set the BMC variable to the hostname of the BMC of the node being powered off.
+1. Set the `BMC` variable to the hostname of the BMC of the node being powered off.
 
    ```bash
    linux# BMC="${NODE}-mgmt"
@@ -495,7 +496,7 @@ Once the wipe of the drives is complete, proceed to [Power off the node](#3-powe
    linux# ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
    ```
 
-   > Ensure that the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before issuing any further commands.
+   > Ensure that the power is reporting as off. This may take 5-10 seconds for this to update. Wait about 30 seconds after receiving the correct power status before proceeding.
 
 ## Next step
 
