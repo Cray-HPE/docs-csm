@@ -200,7 +200,7 @@ Goss test logs are scraped using Grok-exporter and visualization using captured 
 
 The single Goss test is a YAML file and a collection of these Goss tests can be used together by adding them in another YAML file. These suites can be invoked through the script created to get a log file with results for the tests.
 
-Example - Goss test to validate expected Kubernetes nodes exist using the kubectl command based on node names pulled from /etc/hosts file. We are using the log files generated from automated scripts which run a set of test suites.
+For example, a Goss test to validate expected Kubernetes nodes exists using the `kubectl` command based on node names pulled from `/etc/hosts` file. The log files generated from automated scripts that run a set of test suites are used.
 
 Running the automated scripts using the complete path of script like `/opt/cray/tests/install/ncn/automated/ncn-healthcheck`.
 
