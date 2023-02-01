@@ -81,7 +81,7 @@ The non-compute node and pre-install toolkit come with multiple versions of Pyth
 The defined versions are as follows (this list will update as the non-compute node adopts/replaces new versions):
 
 * Python 3.6.15 (`/usr/bin/python3`)
-* Python 3.9.13 (`/usr/local/bin/python3`)
+* Python 3.10.8 (`/usr/local/bin/python3`)
 
 Each Python installation contains these packages (at a minimum) for building and/or running virtual environments:
 
