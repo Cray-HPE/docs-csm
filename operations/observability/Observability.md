@@ -226,7 +226,7 @@ We created the deployment for grok-exporter and set the node affinity to ncn-m00
 
 ### Configuration file for the grok-exporter
 
-Created the config file for the grok-exporter to parse the goss test log file and make metrics from them. 
+Created the configuration file for the grok-exporter to parse the Goss test log file and make metrics from them. 
 We are using grok-exporter config version 3 config for this task and matching log expressions with regex.
 
 The following is the example config passed to grok-exporter to get metrics:
