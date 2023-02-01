@@ -231,6 +231,7 @@ Created the configuration file for the grok-exporter to parse the Goss test log 
 We are using grok-exporter config version 3 config for this task and matching log expressions with regex.
 
 The following is the example config passed to grok-exporter to get metrics:
+
 ```bash
 apiVersion: v1
 kind: ConfigMap
