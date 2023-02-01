@@ -221,7 +221,8 @@ Individual lines of logs are in the following format for each node or PIT node, 
 
 ### Grok-exporter deployment, service and service-monitor
 
-We created the deployment for grok-exporter and set the node affinity to ncn-m001 for NCN deployment of grok-exporter. The service for grok-exporter is createdfor access at port `9144`. Service-monitor is created for prometheus to access the metrics that are created by grok-exporter.
+The deployment for the grok-exporter was created and set the node affinity to `ncn-m001` for NCN deployment of grok-exporter.
+The service for the grok-exporter is created for access at port `9144`. Service-monitor is created for Prometheus to access the metrics that are created by the grok-exporter.
 
 
 ### Configuration file for the grok-exporter
