@@ -196,7 +196,7 @@ Metrics captured for the product:
 
 ### Goss test overview
 
-We are scraping goss test logs using grok exporter and visualization using captured data. CSM-testing repository has goss-testing with all tests, suites and scripts to execute these goss tests. We are using the automated scripts to run goss tests in batches. These batches are based on functionality or the check performed in CSM. 
+Goss test logs are scraped using Grok-exporter and visualization using captured data. CSM-testing repository has goss-testing with all tests, suites and scripts to execute these Goss tests. We are using the automated scripts to run Goss tests in batches. These batches are based on functionality or the check performed in CSM. 
 
 The single goss test is an yaml file and a collection of these goss tests can be used together by adding them in another yaml file. These suites can be invoked through the script created to get a log file with results for the tests.
 
