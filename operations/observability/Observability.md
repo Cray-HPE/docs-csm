@@ -166,7 +166,7 @@ Metrics captured for the stage:
 - stage duration (stage end time - stage start time)
 - stage status (derived from all the operations status)
 
-Metrics captured for the  product 
+Metrics captured for the product: 
 1) product name
 2) product start time (derived from the start time of the process-media stage)
 3) product end time (derived from the start time of the post-install-check stage)
