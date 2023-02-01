@@ -198,7 +198,7 @@ Metrics captured for the product:
 
 Goss test logs are scraped using Grok-exporter and visualization using captured data. CSM-testing repository has goss-testing with all tests, suites and scripts to execute these Goss tests. We are using the automated scripts to run Goss tests in batches. These batches are based on functionality or the check performed in CSM. 
 
-The single goss test is an yaml file and a collection of these goss tests can be used together by adding them in another yaml file. These suites can be invoked through the script created to get a log file with results for the tests.
+The single Goss test is a YAML file and a collection of these Goss tests can be used together by adding them in another YAML file. These suites can be invoked through the script created to get a log file with results for the tests.
 
 Example - Goss test to validate expected Kubernetes nodes exist using the kubectl command based on node names pulled from /etc/hosts file. We are using the log files generated from automated scripts which run a set of test suites.
 
