@@ -49,11 +49,14 @@ Any steps run on an `external` server require that server to have the following 
 
    1. (`external#`) Set the CSM RELEASE version
 
+      > Example release versions:
+      >
+      > - An alpha build, `CSM_RELEASE=1.3.0-alpha.99`
+      > - A release candidate: `CSM_RELEASE=1.3.0-rc.1`
+      > - A stable release: `CSM_RELEASE=1.3.0`
+
       ```bash
-      # e.g. an alpha : CSM_RELEASE=1.3.0-alpha.99
-      # e.g. an RC    : CSM_RELEASE=1.3.0-rc.1
-      # e.g. a stable : CSM_RELEASE=1.3.0  
-      CSM_RELEASE=1.3.0-alpha.9
+      CSM_RELEASE=<value>
       ```
 
    1. (`external#`) Download the CSM tarball
@@ -127,7 +130,7 @@ Any steps run on an `external` server require that server to have the following 
             rmdir -pv "${OUT_DIR}/usr/local/bin/"
             ```
 
-         - Non-RPM Based Distros (requires `rpm2cpio`):
+         - Non-RPM-based distros (requires `rpm2cpio`):
 
             ```bash
             rpm2cpio cray-site-init-*.rpm | cpio -idmv
@@ -160,40 +163,43 @@ On first login, the LiveCD will prompt the administrator to change the password.
 
 1. (`pit#`) Configure the site-link (`lan0`), DNS, and gateway IP addresses.
 
-   1. Set `site_ip`, `site_gw`, `site_dns`, and `SYSTEM_NAME`  variables.
+   > **NOTE:** The `site_ip`, `site_gw`, and `site_dns` values must come from the local network administration or authority.
 
-      > **NOTE:** The `site_ip`, `site_gw`, and `site_dns` values must come from the local network administration or authority.
+   1. Set `site_ip` variable.
 
-      ```bash
-      # CIDR Format: A.B.C.D/N
-      site_ip=
-      ```
+      Set the `site_ip` value in CIDR format (`A.B.C.D/N`):
 
       ```bash
-      # IPv4 Format: A.B.C.D
-      site_gw=
+      site_ip=<IP CIDR>
       ```
+
+   1. Set the `site_gw` and `site_dns` variables.
+
+      Set the `site_gw` and `site_dns` values in IPv4 dotted decimal format (`A.B.C.D`):
 
       ```bash
-      # IPv4 Format: A.B.C.D
-      site_dns=
+      site_gw=<Gateway IP address>
+      site_dns=<DNS IP address>
       ```
+
+   1. Set the `site_nics` variable.
+
+      The `site_nics` value or values are found while the user is in the LiveCD (for example, `site_nics='p2p1 p2p2 p2p3'` or `site_nics=em1`).
 
       ```bash
-      # Name of the system. This will only be used for the pit hostname. This variable is capitlized because it will be used in a subsequent section.
-      SYSTEM_NAME=
+      site_nics='<site NIC or NICs>'
       ```
 
-   1. Set `site_nics` variable.
+   1. Set the `SYSTEM_NAME` variable.
 
-      > **NOTE:** The `site_nics` value or values are found while the user is in the LiveCD (for example, `site_nics='p2p1 p2p2 p2p3'` or `site_nics=em1`).
+      `SYSTEM_NAME` is the name of the system. This will only be used for the PIT hostname.
+      This variable is capitalized because it will be used in a subsequent section.
 
       ```bash
-      # Device Name: pXpY or emX (e.g. common values are p2p1, p801p1, or em1)
-      site_nics=
+      SYSTEM_NAME=<system name>
       ```
 
-   1. (`pit#`) Run the `csi-setup-lan0.sh` script to set up the site link and set the hostname.
+   1. Run the `csi-setup-lan0.sh` script to set up the site link and set the hostname.
 
       > **NOTES:**
       >
@@ -260,10 +266,13 @@ These variables will need to be set for many procedures within the CSM installat
 
       The value is based on the version of the CSM release being installed.
 
+      > Example release versions:
+      >
+      > - An alpha build, `CSM_RELEASE=1.3.0-alpha.99`
+      > - A release candidate: `CSM_RELEASE=1.3.0-rc.1`
+      > - A stable release: `CSM_RELEASE=1.3.0`
+
       ```bash
-      # e.g. an alpha : CSM_RELEASE=1.4.0-alpha.99
-      # e.g. an RC    : CSM_RELEASE=1.4.0-rc.1
-      # e.g. a stable : CSM_RELEASE=1.4.0  
       export CSM_RELEASE=<value>
       ```
 
@@ -280,10 +289,10 @@ These variables will need to be set for many procedures within the CSM installat
       This is the user friendly name for the system. For example, for `eniac-ncn-m001`, `SYSTEM_NAME` should be set to `eniac`.
 
       ```bash
-      export SYSTEM_NAME=<eniac>
+      export SYSTEM_NAME=<value>
       ```
 
-1. (`pit#`) Set `/etc/environment`.
+1. (`pit#`) Update `/etc/environment`.
 
    This ensures that these variables will be set in all future shells on the PIT node.
 
@@ -349,28 +358,28 @@ These variables will need to be set for many procedures within the CSM installat
    /root/bin/metalid.sh
    ```
 
-   > Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
-   >
-   > ```text
-   > = PIT Identification = COPY/CUT START =======================================
-   > VERSION=1.6.0
-   > TIMESTAMP=20220504161044
-   > HASH=g10e2532
-   > 2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
-   > CRAY-Site-Init build signature...
-   > Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   > Build Time     : 2022-05-02T20:21:46Z
-   > Go Version     : go1.16.10
-   > Git Version    : v1.9.13-29-g0915d59f
-   > Platform       : linux/amd64
-   > App. Version   : 1.17.1
-   > metal-ipxe-2.2.6-1.noarch
-   > metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   > metal-basecamp-1.1.12-1.x86_64
-   > pit-init-1.2.20-1.noarch
-   > pit-nexus-1.1.4-1.x86_64
-   > = PIT Identification = COPY/CUT END =========================================
-   > ```
+   Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
+
+   ```text
+   = PIT Identification = COPY/CUT START =======================================
+   VERSION=1.6.0
+   TIMESTAMP=20220504161044
+   HASH=g10e2532
+   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
+   CRAY-Site-Init build signature...
+   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
+   Build Time     : 2022-05-02T20:21:46Z
+   Go Version     : go1.16.10
+   Git Version    : v1.9.13-29-g0915d59f
+   Platform       : linux/amd64
+   App. Version   : 1.17.1
+   metal-ipxe-2.2.6-1.noarch
+   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
+   metal-basecamp-1.1.12-1.x86_64
+   pit-init-1.2.20-1.noarch
+   pit-nexus-1.1.4-1.x86_64
+   = PIT Identification = COPY/CUT END =========================================
+   ```
 
 ## 2. Import CSM tarball
 
@@ -390,7 +399,7 @@ These variables will need to be set for many procedures within the CSM installat
         "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
       ```
 
-      With https proxy:
+      With HTTPS proxy:
 
       ```bash
       https_proxy=https://example.proxy.net:443 curl -C - -f -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
@@ -420,13 +429,11 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    1. Install `docs-csm`.
 
-      > ***NOTE*** This installs necessary scripts for deployment checks, as well as the offline manual.
+       > ***NOTE*** This installs necessary scripts for deployment checks, as well as the offline manual.
 
        ```bash
-       zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-           --no-gpg-checks \
-           install -y docs-csm
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+              --no-gpg-checks install -y docs-csm
        ```
 
    1. Update `cray-site-init`.
@@ -435,10 +442,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        > orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
 
        ```bash
-       zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-           --no-gpg-checks \
-           update -y cray-site-init
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+              --no-gpg-checks update -y cray-site-init
        ```
 
    1. Install `iuf-cli`.
@@ -446,10 +451,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        > ***NOTE*** This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../operations/iuf/IUF.md).
 
        ```bash
-       zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-           --no-gpg-checks \
-           install -y iuf-cli
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+              --no-gpg-checks install -y iuf-cli
        ```
 
    1. Install `csm-testing` RPM.
@@ -457,11 +460,9 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        > ***NOTE*** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
 
        ```bash
-       zypper \
-           --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-           --no-gpg-checks \
-           install -y csm-testing
-      ```
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+              --no-gpg-checks install -y csm-testing
+       ```
 
 1. (`pit#`) Get the artifact versions.
 
@@ -523,28 +524,28 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    /root/bin/metalid.sh
    ```
 
-   > Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
-   >
-   > ```text
-   > = PIT Identification = COPY/CUT START =======================================
-   > VERSION=1.6.0
-   > TIMESTAMP=20220504161044
-   > HASH=g10e2532
-   > 2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
-   > CRAY-Site-Init build signature...
-   > Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   > Build Time     : 2022-05-02T20:21:46Z
-   > Go Version     : go1.16.10
-   > Git Version    : v1.9.13-29-g0915d59f
-   > Platform       : linux/amd64
-   > App. Version   : 1.17.1
-   > metal-ipxe-2.2.6-1.noarch
-   > metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   > metal-basecamp-1.1.12-1.x86_64
-   > pit-init-1.2.20-1.noarch
-   > pit-nexus-1.1.4-1.x86_64
-   > = PIT Identification = COPY/CUT END =========================================
-   > ```
+   Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
+
+   ```text
+   = PIT Identification = COPY/CUT START =======================================
+   VERSION=1.6.0
+   TIMESTAMP=20220504161044
+   HASH=g10e2532
+   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
+   CRAY-Site-Init build signature...
+   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
+   Build Time     : 2022-05-02T20:21:46Z
+   Go Version     : go1.16.10
+   Git Version    : v1.9.13-29-g0915d59f
+   Platform       : linux/amd64
+   App. Version   : 1.17.1
+   metal-ipxe-2.2.6-1.noarch
+   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
+   metal-basecamp-1.1.12-1.x86_64
+   pit-init-1.2.20-1.noarch
+   pit-nexus-1.1.4-1.x86_64
+   = PIT Identification = COPY/CUT END =========================================
+   ```
 
 ## 3. Create system configuration
 
@@ -598,7 +599,7 @@ this step may be skipped.
 
    - For re-installations of CSM 1.3, the previous seed files may be used and this step can be skipped.
    - For new installations of CSM 1.3 that have prior seed files from CSM 1.2 or older, the previous seed files
-   may be used **except that the following files must be recreated** because of content or formatting changes:
+     may be used **except that the following files must be recreated** because of content or formatting changes:
 
       - [Create `cabinets.yaml`](create_cabinets_yaml.md)
       - [Create `hmn_connections.json`](create_hmn_connections_json.md)

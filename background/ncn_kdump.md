@@ -196,7 +196,7 @@ An example of a frozen crash might look like this:
 Unable to ioctl(KDSETLED) -- are you not on the console? (Inappropriate ioctl for device)
 ```
 
-1. (`ncn#`) Reset the targetted node.
+1. (`ncn#`) Reset the targeted node.
 
     1. Set the IPMI username.
 
