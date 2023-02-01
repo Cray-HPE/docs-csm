@@ -28,7 +28,7 @@ Install and Upgrade Observability Framework creates unified consistent requireme
 
 6. Automate the deployment, installation, and configuration of the Install and Upgrade Observability framework in a CSM environment. 
 
-7. The automatic generation of configurable grafana dashboards that provide key insights and KPIs into: the frequency of errors across the complex systems, panels to visualize the outliers and trends in the complex system  across different dimensions.
+7. The automatic generation of configurable Grafana dashboards that provide key insights and KPIs into the frequency of errors across the complex systems, panels to visualize the outliers, and trends in the complex system  across different dimensions.
 
 The following IUF topics are discussed in the following subsections.
 
