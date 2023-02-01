@@ -10,9 +10,11 @@ Install and Upgrade Observability Framework creates unified consistent requireme
    - Product stream health
 
 2. Drill down health dashboard with roll up.
-   - Aggregate Checks - Problem/OK counts across each product stream.
-   - Functional Checks - Product stream functional GOSS suites for key areas. Examples: REST APIs, micro-services, K8s, network, and database health for the specific product stream.
-   - Granular Checks - Individual GOSS tests for component level health checks within a functional area of a given product stream. Examples: Management switch Config verification, Routing table checks on OS, Gateway tests, Container Network Interface (CNI) tests.
+   - Aggregate checks - Problem/OK counts across each product stream.
+   - Functional checks - Product stream functional Goss suites for key areas.
+     For example, REST APIs, micro-services, K8s, network, and database health for the specific product stream.
+   - Granular checks - Individual Goss tests for component level health checks within a functional area of a given product stream.
+     For example, management switch configuration verification, routing table checks on OS, gateway tests, and Container Network Interface (CNI) tests.
 
 3. Boot, install, and upgrade duration monitoring.
    
