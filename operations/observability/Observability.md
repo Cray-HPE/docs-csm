@@ -148,7 +148,7 @@ Jan 25 05:00:09 redbull-pit prometheus[25680]: ts=2023-01-25T05:00:09.263Z calle
 
 Able to get the start-time and end-time as Prometheus labels for the operations using Argo metrics approach. Added record time stamp task at the beginning and end of the operation template using timestamp output parameter as an input to the metrics.
 
-Metrics captured for the operations
+Metrics captured for the operations:
 1) start time
 2) end time
 3) duration
