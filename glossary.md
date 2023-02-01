@@ -59,6 +59,7 @@ Glossary of terms used in CSM documentation.
 * [System Management Network (SMNet)](#system-management-network-smnet)
 * [System Management Services (SMS)](#system-management-services-sms)
 * [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
+* Tenant and Partition Management Service (TAPMS)
 * [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
 * [User Access Instance (UAI)](#user-access-instance-uai)
 * [User Access Node (UAN)](#user-access-node-uan)
@@ -131,7 +132,7 @@ and CDU status to the CMMs for evaluation and/or action.
 
 ## Compute Rolling Upgrade Service (CRUS)
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.6.0. See [Removed features](introduction/differences.md#removed-features).
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.6.0. See [Deprecated Features](introduction/deprecated_features/README.md).
 
 See [Rolling Upgrades using BOS](operations/boot_orchestration/Rolling_Upgrades.md).
 
