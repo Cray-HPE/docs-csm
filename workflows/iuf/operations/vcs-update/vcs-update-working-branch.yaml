@@ -75,6 +75,10 @@ spec:
                   value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
                 - name: cf_update_product_version
                   value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+                - name: customer_branch
+                  value: >
+                    {{='working_branch' in jsonpath(inputs.parameters.global_params, '$.site_params.current_product') ?
+                    jsonpath(inputs.parameters.global_params, '$.site_params.current_product.working_branch') : ''}}
         - - name: cleanup
             template: cleanup-template
             arguments:
@@ -215,7 +219,6 @@ spec:
           - name: pristine_branch
             value: "{{inputs.parameters.cf_update_gitea_org}}/{{inputs.parameters.cf_update_product_name}}/{{inputs.parameters.cf_update_product_version}}"
           - name: customer_branch
-            value: "{{=jsonpath(inputs.parameters.global_params, '$.site_params.current_product.working_branch')}}"
       container:
         image: artifactory.algol60.net/csm-docker/unstable/cf-gitea-update:1.0.3-beta.1_206fefd
         command:
