@@ -31,8 +31,10 @@ The following IUF topics are discussed in the sections below.
 - [`iuf` CLI](#iuf-cli)
 - [Output and Log Files](#output-and-log-files)
 - [Site and Recipe Variables](#site-and-recipe-variables)
+- [`sat bootprep` Configuration Files](#sat-bootprep-configuration-files)
 - [Product Workflows](#product-workflows)
 - [Troubleshooting](#troubleshooting)
+- [Recovering From Failures](#recovering-from-failures)
 
 ## Limitations
 
@@ -43,6 +45,9 @@ The following IUF topics are discussed in the sections below.
   those configurations to their specific needs.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
+- The `management-nodes-rollout` stage currently does not reboot management NCN storage nodes or `ncn-m001`. These nodes must be rebooted using non-IUF methods described in the appropriate sections of the CSM documentation.
+- If the `iuf run` subcommand ends unexpectedly before the Argo workflow it created completes, there is no CLI option to reconnect to the Argo workflow and continue displaying status. It is recommended the administrator
+  monitors progress via the Argo workflow UI and/or IUF log files in this scenario.
 
 ## Initial Install and Upgrade Workflows
 
@@ -55,8 +60,6 @@ and tasks performed.
 | initial install | products only    | Execute IUF stages to install non-CSM product content |
 | upgrade         | CSM and products | Upgrade CSM, **including** any IUF stages embedded in the CSM installation documentation |
 | upgrade         | products only    | Execute IUF stages to upgrade non-CSM product content |
-
-<< TODO: INSERT INITIAL INSTALL AND UPGRADE DIAGRAMS HERE >>
 
 ## Activities
 
@@ -146,6 +149,9 @@ one or more products. This information is also provided by the `iuf list-stages`
 | [managed-nodes-rollout](stages/managed_nodes_rollout.md)           | Rolling reboot or live update of managed nodes nodes                                     |
 | [post-install-check](stages/post_install_check.md)                 | Perform post-install checks                                                              |
 
+The `process-media` stage must be run at least once for a given activity before any of the other stages can be run. This is required because `process-media` associates the product content being installed or upgraded with an
+activity identifier and that information is used for all other stages.
+
 ## `iuf` CLI
 
 The `iuf` command line interface is used to invoke all IUF operations. The `iuf` command provides the following subcommands.
@@ -153,7 +159,7 @@ The `iuf` command line interface is used to invoke all IUF operations. The `iuf`
 | Subcommand  | Description                                         |
 | ----------- | --------------------------------------------------- |
 | run         | Initiates execution of IUF operations               |
-| abort       | Abort a paused IUF session                          |
+| abort       | Abort an IUF session                                |
 | resume      | Resume a paused IUF session from where it stopped   |
 | restart     | Re-run a paused IUF session from the beginning      |
 | activity    | Display IUF activity details, annotate IUF activity |
@@ -163,7 +169,7 @@ The `iuf` command line interface is used to invoke all IUF operations. The `iuf`
 
 Global arguments may be specified when invoking `iuf`. They must be specified before any `iuf` subcommand and its subcommand-specific arguments are specified.
 
-The following example shows the global arguments available:
+The following shows the global arguments available.
 
 ```bash
 usage: iuf [-h] [-i INPUT_FILE] [-w] [-a ACTIVITY] [-c CONCURRENCY] [-b BASE_DIR] [-s STATE_DIR] [-m MEDIA_DIR]
@@ -237,6 +243,13 @@ activity:
 [...]
 ```
 
+An input file populated with default values can be created by using `iuf -w`:
+
+```bash
+ncn-m001:~ # iuf -a admin-230127 -m admin-230127/media -i /tmp/default-input-file -w
+Successfully wrote /tmp/default-input-file
+```
+
 ### Subcommands
 
 #### `run`
@@ -244,12 +257,12 @@ activity:
 The `run` subcommand is used to execute one or more IUF stages. The `-b`, `-e`, `-r` and `-s` arguments can be specified to limit the stages executed. If none of those arguments are specified, `iuf run` will execute all stages
 in order. If an activity identifier is not provided via `-a`, a new activity will be created automatically.
 
-The following example shows the arguments that may be specified when invoking `iuf run`:
+The following arguments may be specified when invoking `iuf run`.
 
 ```bash
 usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE] [-r RUN_STAGES [RUN_STAGES ...]] [-s SKIP_STAGES [SKIP_STAGES ...]]
-               [-F FORCE] [-bc BOOTPREP_CONFIG_MANAGED] [-bm BOOTPREP_CONFIG_MANAGEMENT] [-bpcd BOOTPREP_CONFIG_DIR]
-               [-rv RECIPE_VARS] [-sv SITE_VARS] [-mrs {reboot,stage}] [-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE]
+               [-bc BOOTPREP_CONFIG_MANAGED] [-bm BOOTPREP_CONFIG_MANAGEMENT] [-bpcd BOOTPREP_CONFIG_DIR] [-rv RECIPE_VARS]
+               [-sv SITE_VARS] [-mrs {reboot,stage}] [-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE]
                [--limit-managed-rollout LIMIT_MANAGED_ROLLOUT [LIMIT_MANAGED_ROLLOUT ...]]
                [--limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]]
                [-mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]]
@@ -259,31 +272,34 @@ Run IUF stages to execute install, upgrade and/or deploy operations for a given 
 options:
   -h, --help            show this help message and exit
   -b BEGIN_STAGE, --begin-stage BEGIN_STAGE
-                        The first stage to execute.
+                        The first stage to execute. Defaults to process-media
   -e END_STAGE, --end-stage END_STAGE
-                        The last stage to execute.
+                        The last stage to execute.  Defaults to post-install-check
   -r RUN_STAGES [RUN_STAGES ...], --run-stages RUN_STAGES [RUN_STAGES ...]
                         Run the specified stages only. This argument is not compatible with `-b`, `-e`, or `-s`.
   -s SKIP_STAGES [SKIP_STAGES ...], --skip-stages SKIP_STAGES [SKIP_STAGES ...]
                         Skip the execution of the specified stages.
-  -F FORCE, --force FORCE
-                        Force re-execution of stage operations.
   -bc BOOTPREP_CONFIG_MANAGED, --bootprep-config-managed BOOTPREP_CONFIG_MANAGED
-                        List of `sat bootprep` config files for managed (compute and
-                        application) nodes. Note the path is relative to the media directory (`iuf --media-dir`).
+                        `sat bootprep` config file for managed (compute and
+                        application) nodes.  Note the path is relative to $PWD, unless an
+                        absolute path is specified.
   -bm BOOTPREP_CONFIG_MANAGEMENT, --bootprep-config-management BOOTPREP_CONFIG_MANAGEMENT
-                        List of `sat bootprep` config files for management NCNs.
-                        Note the path is relative to the media directory (`iuf --media-dir`).
+                        `sat bootprep` config file for management NCNs.  Note the
+                        path is relative to $PWD, unless an absolute path is specified.
   -bpcd BOOTPREP_CONFIG_DIR, --bootprep-config-dir BOOTPREP_CONFIG_DIR
-                        Directory containing HPE `product_vars.yaml` and `sat bootprep` configuration files. The expected content is:
-                                $(BOOTPREP_CONFIG_DIR)/product_vars.yaml
-                                $(BOOTPREP_CONFIG_DIR)/bootprep/compute-and-uan-bootprep.yaml
-                                $(BOOTPREP_CONFIG_DIR)/bootprep/management-bootprep.yaml
+                        Directory containing HPE `product_vars.yaml` and `sat bootprep` configuration files.
+                        The expected content is:
+                            $(BOOTPREP_CONFIG_DIR)/product_vars.yaml
+                            $(BOOTPREP_CONFIG_DIR)/bootprep/compute-and-uan-bootprep.yaml
+                            $(BOOTPREP_CONFIG_DIR)/bootprep/management-bootprep.yaml
+                        Note the path is relative to $PWD, unless an absolute path is specified.
   -rv RECIPE_VARS, --recipe-vars RECIPE_VARS
-                        Path to a recipe variables YAML file. HPE provides the `product_vars.yaml` recipe variables file with each release.
+                        Path to a recipe variables YAML file. HPE provides the `product_vars.yaml` recipe
+                        variables file with each release.
   -sv SITE_VARS, --site-vars SITE_VARS
                         Path to a site variables YAML file. This file allows the user to override values defined in
                         the recipe variables YAML file. Defaults to ${RBD_BASE_DIR}/${IUF_ACTIVITY}/site_vars.yaml.
+                        Note the path is relative to $PWD, unless an absolute path is specified.
   -mrs {reboot,stage}, --managed-rollout-strategy {reboot,stage}
                         Method to update the managed nodes. Accepted values are 'reboot' (reboot nodes _now_) or
                         'stage' (set up nodes to reboot into new image after next WLM job). Defaults to 'stage'.
@@ -292,7 +308,8 @@ options:
                         concurrently based on the percentage specified. Must be an integer
                         between 1-100. Defaults to 20 (percent).
   --limit-managed-rollout LIMIT_MANAGED_ROLLOUT [LIMIT_MANAGED_ROLLOUT ...]
-                        Override list used to target specific nodes only when rolling out managed nodes.
+                        Override list used to target specific nodes only when rolling out
+                        managed nodes.  Arguments should be xnames or HSM node groups.
   --limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]
                         Override list used to target specific role_subrole(s) only when rolling out management nodes.
   -mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...], --mask-recipe-prods MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]
@@ -307,12 +324,21 @@ These [examples](examples/iuf_run.md) highlight common use cases of `iuf run`.
 
 #### `abort`
 
-The `abort` subcommand is specified by the administrator to end a paused IUF session instead of attempting to resume or restart it.
+The `abort` subcommand is specified by the administrator to end an IUF session. The IUF session will be terminated at the end of the current stage unless `-f` is specified, which causes the session to terminate immediately. Any
+terminated Argo Workflows will have a `Status` of `Failed` when displayed via `iuf activity`.
+
+**`NOTE`** Using Ctrl-C with `iuf` does not abort the IUF session. The `iuf` process will exit but the session will continue to execute via Argo.
 
 The following arguments may be specified when invoking `iuf abort`:
 
 ```bash
-[ IMPLEMENTATION PENDING ]
+usage: iuf abort [-h] [-f]
+
+Abort an IUF session for a given activity after the current stage completes.
+
+options:
+  -h, --help   show this help message and exit
+  -f, --force  Force the abort immediately.
 ```
 
 These [examples](examples/iuf_abort.md) highlight common use cases of `iuf abort`.
@@ -382,7 +408,8 @@ in progress at the time the entry was created, but it may not still be running w
 The following arguments may be specified when invoking `iuf activity`:
 
 ```bash
-usage: iuf activity [-h] [--time TIME] [--create] [--comment COMMENT] [--status {Succeeded,Failed,Running,n/a}] [--sessionid SESSIONID]
+usage: iuf activity [-h] [--time TIME] [--create] [--comment COMMENT] [--status {Succeeded,Failed,Running,n/a}]
+                    [--argo-workflow-id ARGO_WORKFLOW_ID]
                     [{in_progress,waiting_admin,paused,debug,blocked}]
 
 Create, display, or annotate activity information.
@@ -393,14 +420,14 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  --time TIME           A time value used when creating or modifying an activity entry. Must be specified and match an existing time value to modify that
-                        entry. Defaults to now.
+  --time TIME           A time value used when creating or modifying an activity entry. Must be specified and match an
+                        existing time value to modify that entry. Defaults to now.
   --create              Create a new activity entry.
   --comment COMMENT     A comment to be associated with an activity entry.
   --status {Succeeded,Failed,Running,n/a}
                         A status value to be associated with an activity entry.
-  --sessionid SESSIONID
-                        An Argo workflow session identifier to be associated with an activity entry.
+  --argo-workflow-id ARGO_WORKFLOW_ID
+                        An Argo workflow identifier to be associated with an activity entry.
 ```
 
 These [examples](examples/iuf_activity.md) highlight common use cases of `iuf activity`.
@@ -435,7 +462,9 @@ These [examples](examples/iuf_list_stages.md) highlight common use cases of `iuf
 - completion status of each phase (Succeeded, Failed)
 - time duration metrics
 
-In addition, any IUF log messages generated by IUF or products with a severity of `INFO` or higher are printed to standard output.
+In addition, any IUF log messages generated by IUF or products with a severity of `INFO` or higher are displayed to standard output.
+
+**`NOTE`** Messages from community software utilized by IUF and products being installed may also be displayed on `iuf` standard output if they match the message format and severity level `iuf` monitors.
 
 The Argo workflow identifiers displayed, like `admin-230127-zb268-process-media-v5dsw` in the example below, can be queried in the [Argo UI](../argo/Using_the_Argo_UI.md) to provide access to more detailed log
 information and monitoring capabilities. The lines prefixed with `BEGIN:` and `FINISHED:` primarily map to Argo steps and pods that are linked to the corresponding Argo workflow in the Argo UI.
@@ -508,22 +537,40 @@ find . -type f,l | sort -r
 
 ## Site and Recipe Variables
 
-IUF site and recipe variables allow the administrator to customize product, product version, and branch values used by IUF
-when executing IUF stages. They ensure automated VCS branch merging, CFS configuration creation, and IMS image creation
-operations are performed with values adhering to site preferences.
+IUF site and recipe variables allow the administrator to customize product, product version, and branch values used by IUF when
+executing IUF stages. They ensure automated VCS branch merging, CFS configuration creation, and IMS image creation operations are
+performed with values adhering to site preferences.
 
-Site variables are typically defined in a `site_vars.yaml` file created by the site administrator. The HPC CSM Software Recipe
-provides a default recipe variables file named `product_vars.yaml`. The recipe variable file allows HPE to provide default
-variables and values while the recipe variable file allows the administrator to extend or override the variables and values.
-If both files are used and specific variables are defined in both files, the values specified in the site variable file takes
+Recipe variables are provided via the `product_vars.yaml` file in the HPC CSM Software Recipe and provide a list of products and
+versions intended to be used together. `product_vars.yaml` also contains default settings and `working_branch` variable entries for
+products. `product_vars.yaml` is provided by HPE and the values are intended as defaults only.
+
+Site variables, typically specified in a `site_vars.yaml` file, allow the administrator to override values provided by recipe
+variables, including global default entries and product-specific entries. HPE does not provide a `site_vars.yaml` file as it is
+strictly for site use cases.
+
+If both files are used and specific variables are defined in both files, the values specified in the site variables file takes
 precedence.
 
-The `iuf run` subcommand has arguments that allow the administrator to reference the site and/or recipe variable files. The
-variables specified in the files are used by IUF when executing the `update-vcs-config`, `update-cfs-config`, and `prepare-images`
-stages. For example, the `working_branch` variable defines the naming convention used by IUF to find or create a product's VCS branch
-containing site-customized configuration content, which happens as part of the `update-vcs-config` stage.
+The `iuf run` subcommand has arguments that allow the administrator to reference the site and/or recipe variables files, `-sv` and `-rv`
+respectively. The variables specified in the files are used by IUF when executing the `update-vcs-config`, `update-cfs-config`, and
+`prepare-images` stages. For example, the `working_branch` variable defines the naming convention used by IUF to find or create a
+product's VCS branch containing site-customized configuration content, which happens as part of the `update-vcs-config` stage.
+
+The `iuf run` subcommand also has a `-bpcd` argument that allow the administrator to reference a directory containing the HPE-provided
+recipe variables file and `sat bootprep` input files. This can be used instead of the `-rv` argument.
 
 An example use case for site and recipe variables is provided in the [`update-vcs-config`](stages/update_vcs_config.md) stage documentation.
+
+## `sat bootprep` Configuration Files
+
+`sat bootprep` configuration files are used by the `update-cfs-config` and `prepare-images` IUF stages. `update-cfs-config` uses `sat bootprep`
+input files to define the CFS configurations used to customize management NCN and managed node images and post-boot node environments.
+`prepare-images` uses `sat bootprep` input files to create management NCN and managed node images.
+
+HPE provides management NCN and managed node `sat bootprep` configuration files in the HPC CSM Software Recipe. The files provide default
+CFS configuration, image, and BOS session template definitions. The administrator may customize the files as needed. The files include
+variables, and the values used are provided by the recipe variables and/or site variables files specified when running `iuf run`.
 
 ## Product Workflows
 
@@ -543,3 +590,21 @@ The following actions may be useful if errors are encountered when executing `iu
 - If the source of the error can not be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and Hooks](#stages-and-hooks) section
   of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the
   workflow and debug the issue.
+
+## Recovering From Failures
+
+If an error is encountered while executing `iuf run`, `iuf` will attempt to complete the current stage for the other products involved, if any. The following are strategies to recover from stage failures once the issue has been addressed.
+
+- If an error was encountered and the administrator decides to continue the install or upgrade with all of the same products, execute `iuf run` using the same activity identifier and arguments specified previously. If some IUF stages
+  completed successfully before the error occurred, use `iuf run -b` to begin at the stage that previously failed since it is not
+  necessary to re-run the IUF stages that completed successfully.
+- If an error was encountered with a specific product and the administrator decides to continue the install or upgrade without that product:
+  - Remove the undesired product from the IUF media directory.
+  - Execute `iuf run` using a **new** activity identifier but otherwise use the same arguments specified previously. If some IUF stages completed successfully before the error occurred:
+    - Execute `iuf run` with `-b process-media` to associate the product media with the new activity.
+    - Execute `iuf run -b` to begin at the stage that previously failed since it is not necessary to re-run the IUF stages that completed successfully. If the only product that failed that stage was the one removed from the media
+      directory, start with the next stage rather than re-running the stage that previously failed.
+- If an error was encountered with a specific product and the administrator obtains a new release of that product:
+  - Remove the undesired product from the IUF media directory.
+  - Add the new release of the product to the IUF media directory.
+  - Execute `iuf run` using a **new** activity identifier but otherwise use the same arguments specified previously in order to re-run the install or upgrade process.

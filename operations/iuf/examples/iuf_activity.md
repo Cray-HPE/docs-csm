@@ -1,6 +1,6 @@
 # `iuf activity` Examples
 
-(`ncn-m001#`) Display an activity.
+(`ncn-m001#`) Display activity `admin-230126`.
 
 ```bash
 iuf -a admin-230126 activity
@@ -31,7 +31,9 @@ Summary:
        blocked: 1:57:54
 ```
 
-(`ncn-m001#`) Create a new activity entry.
+---
+
+(`ncn-m001#`) Create a new `debug` entry and comment for activity `admin-230126`.
 
 ```bash
 iuf -a admin-230126 activity --create --comment "testing debug feature" debug
@@ -63,7 +65,9 @@ Summary:
        blocked: 1:57:54
 ```
 
-(`ncn-m001#`) Edit the comment associated with an existing activity entry.
+---
+
+(`ncn-m001#`) Edit the comment associated with the `2023-01-27t19:06:15` entry of activity `admin-230126`.
 
 ```bash
 iuf -a admin-230126 activity --time 2023-01-27t19:06:15 --comment "comment updated" debug
