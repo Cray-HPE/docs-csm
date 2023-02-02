@@ -71,6 +71,11 @@ spec:
                   value: "{{steps.get-vcs-secrets.outputs.parameters.secret_name}}"
                 - name: cf_update_gitea_org
                   value: cray #default
+                - name: cf_update_gitea_repo
+                  value: >
+                    {{="repo_name" in jsonpath(inputs.parameters.global_params, "$.product_manifest.current_product.manifest.content.vcs") ?
+                    jsonpath(inputs.parameters.global_params, "$.product_manifest.current_product.manifest.content.vcs.repo_name") :
+                    ""}}
                 - name: cf_update_product_name
                   value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
                 - name: cf_update_product_version
@@ -215,6 +220,7 @@ spec:
           - name: cf_update_product_name
           - name: cf_update_product_version
           - name: cf_update_gitea_org
+          - name: cf_update_gitea_repo
           - name: global_params
           - name: pristine_branch
             value: "{{inputs.parameters.cf_update_gitea_org}}/{{inputs.parameters.cf_update_product_name}}/{{inputs.parameters.cf_update_product_version}}"
@@ -245,6 +251,8 @@ spec:
             value: "{{inputs.parameters.cf_update_product_version}}"
           - name: CF_UPDATE_GITEA_ORG
             value: "{{inputs.parameters.cf_update_gitea_org}}"
+          - name: CF_UPDATE_GITEA_REPO
+            value: "{{inputs.parameters.cf_update_gitea_repo}}"
           - name: PRISTINE_BRANCH
             value: "{{inputs.parameters.pristine_branch}}"
           - name: CUSTOMER_BRANCH
