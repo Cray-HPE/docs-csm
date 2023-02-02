@@ -60,8 +60,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Configuration management
 
-* [Ansible Play Failures in CFS Sessions](../operations/configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
-* [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+* [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md)
 
 ## ConMan
 
