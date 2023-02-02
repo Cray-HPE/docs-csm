@@ -13,69 +13,42 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
 ## Procedure
 
-1. (`ncn-mw`) Load the `hardware-topology-assistant` container image into the systems Nexus container registry:
-    
-    - If the node has access to `artifactory.algol60.net` the following can be used to load Nexus:
-        ```bash
-        NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
-        NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
-
-        IMAGE=artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41
-        podman run --rm --network host  \
-            quay.io/skopeo/stable copy \
-            --src-tls-verify=false \
-            --dest-tls-verify=false \
-            --dest-username $NEXUS_USERNAME \
-            --dest-password $NEXUS_PASSWORD \
-            docker://$IMAGE \
-            docker://registry.local/$IMAGE
-        ```
-    
-    - If the node does not have have access to `artifactory.algol60.net`.
-
-        1. On a system that has access to `artifactory.algol60.net`
-
-            ```bash
-            docker pull artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41 
-            docker save artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41 > hardware-topology-assistant-0.2.0-20230202201610.7307a41.tar
-            ```
-        
-        1. Copy the `hardware-topology-assistant-0.2.0-20230202201610.7307a41.tar` tarball over the system.
-
-        1. Load the `hardware-topology-assistant` container image into the systems Nexus container registry. The following must be ran in the same directory as the `hardware-topology-assistant-0.2.0-20230202201610.7307a41.tar` tarball.
-            
-            ```bash
-            TAR=hardware-topology-assistant-0.2.0-20230202201610.7307a41.tar
-            IMAGE=artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41 
-
-            NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
-            NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
-
-            podman run --rm --network host \
-                --volume $PWD:/mnt/images \
-                quay.io/skopeo/stable copy \
-                --src-tls-verify=false \
-                --dest-tls-verify=false \
-                --dest-username $NEXUS_USERNAME \
-                --dest-password $NEXUS_PASSWORD \
-                docker-archive:/mnt/images/$TAR \
-                docker://registry.local/$IMAGE
-            ```
-
-1. (`ncn-mw`) Set a variable with the system's name.
+1. (`ncn-mw`) Extract the tarball containing artifacts and scripts to help facilitate adding air-cooled cabinets. **Note** the rest of the procedure assumes current working directory is in the extracted `add_river_cabinet_artifacts` folder.
 
     ```bash
-    SYSTEM_NAME=eniac
+    tar -xvf add_river_cabinet_artifacts.tar.gz
+    cd add_river_cabinet_artifacts
     ```
 
-1. (`ncn-mw`) [Validate the systems SHCD](../../operations/network/management_network/validate_shcd.md) using CANU to generate an updated CCJ file.
+1. Load the `hardware-topology-assistant` container image into the systems Nexus container registry. 
+
+    ```bash
+    TAR=hardware-topology-assistant-0.2.0-20230202201610.7307a41.tar
+    IMAGE=artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41 
+
+    NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
+    NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
+
+    podman run --rm --network host \
+        --volume $PWD:/mnt/images \
+        quay.io/skopeo/stable copy \
+        --src-tls-verify=false \
+        --dest-tls-verify=false \
+        --dest-username $NEXUS_USERNAME \
+        --dest-password $NEXUS_PASSWORD \
+        docker-archive:/mnt/images/$TAR \
+        docker://registry.local/$IMAGE
+    ```
+
+1. (`ncn-mw`) [Validate the systems SHCD](../../operations/network/management_network/validate_shcd.md) using CANU to generate an updated CCJ file. **This step can be skipped if you already have an updated CCJ file**.
 
    **Note do not** perform the step `Proceed to generate topology files` because it is not required.
 
 1. (`ncn-mw`) Once the validation is completed, ensure that the systems CCJ file is present in the current directory, and set the `CCJ_FILE` environment variable to the name of the file.
 
-    ```bash
-    CCJ_FILE=${SYSTEM_NAME}-full-paddle.json
+    Or if you have an existing file set it with:
+    ```
+    CCJ_FILE=paddle.json
     ```
 
 1. (`ncn-mw`) Retrieve an API token:
@@ -125,7 +98,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     2022/08/11 12:33:54 Add --application-node-metadata=application_node_metadata.yaml to the command line arguments and try again.
     ```
 
-    The following is an example entry in the `application_node_metadata.yaml` file that requires additional information to be filled in. **Do not** change any of the SubRole or aliases values for other application nodes.
+    The following is an example entry in the `application_node_metadata.yaml` file that requires additional information to be filled in. **Do not** change any of the SubRole or aliases values for other application nodes. The `canu_common_name` field contains the common name of the application node represented in the CANU CCJ/Paddle file. 
 
     ```yaml
     x3001c0s16b0n0:
@@ -166,7 +139,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     echo ${HARDWARE_TOPOLOGY_ASSISTANT_FILES}
     ```
 
-1. If desired inspect the changes to SLS:
+1. **Optional**: If desired inspect the changes to SLS. Verify changes look reasonable for the hardware being added. For example, the only hardware from the new cabinets are added, and networking changes for any new UAN or management switches are present.
 
     ```bash
     vimdiff <(jq -S . "${HARDWARE_TOPOLOGY_ASSISTANT_FILES}/existing_sls_state.json") <(jq -S . "${HARDWARE_TOPOLOGY_ASSISTANT_FILES}/modified_sls_state.json")
@@ -222,7 +195,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 1. (`ncn-mw`) Update `/etc/hosts` on the management NCNs with any newly added management switches.
 
     ```bash
-    /usr/share/doc/csm/scripts/operations/node_management/Add_River_Cabinets/update_ncn_etc_hosts.py "${TOPOLOGY_CHANGES_JSON}" --perform-changes
+    ./scripts/operations/node_management/Add_River_Cabinets/update_ncn_etc_hosts.py "${TOPOLOGY_CHANGES_JSON}" --perform-changes
     ```
 
 1. (`ncn-mw`) Update current cabinet routes on management NCNs.
@@ -254,7 +227,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
          - Root user exists on the BMC, but with an unexpected password.
 
     ```bash
-    /usr/share/doc/csm/scripts/operations/node_management/Add_River_Cabinets/verify_bmc_credentials.sh 
+    ./scripts/operations/node_management/Add_River_Cabinets/verify_bmc_credentials.sh 
     ```
 
     Potential scenarios:
@@ -299,5 +272,3 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
    - **If Slurm is the installed workload manager**, then see section *10.3.1 Add a New or Configure an Existing Slurm Template* in the *`HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)`* to regenerate the Slurm
       configuration to include any new compute nodes added to the system.
    - **If PBS Pro is the installed workload manager**: *Coming soon*
-
-1. **One at a time, add each** new management NCN using the [Add Remove Replace NCNs](../node_management/Add_Remove_Replace_NCNs.md) procedure.
