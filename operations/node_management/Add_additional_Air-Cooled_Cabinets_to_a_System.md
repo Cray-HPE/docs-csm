@@ -129,6 +129,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     ```yaml
     x3001c0s16b0n0:
+      canu_common_name: login010
       subrole: ~~FIXME~~
       aliases:
       - ~~FIXME~~
@@ -138,6 +139,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     ```yaml
     x3001c0s16b0n0:
+      canu_common_name: login010
       subrole: UAN
       aliases:
       - uan10
