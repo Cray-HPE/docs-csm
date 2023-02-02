@@ -11,7 +11,7 @@ When rebuilding a node, make sure that the `/srv/cray/scripts/common/storage-cep
 1. (`ncn-m001#`) Set node name and xname if not already set.
 
    ```bash
-   NODE=ncn-sXXX
+   NODE=ncn-s00n
    XNAME=$(ssh $NODE cat /etc/cray/xname)
    ```
 
