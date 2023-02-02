@@ -3,6 +3,13 @@
 The `post-install-check` stage validates that the managed compute and application nodes deployed by the preceding `managed-node-rollout` stage are executing correctly. It primarily executes pre- and post-stage hook scripts
 provided by products in their `iuf-product-manifest.yaml` file.
 
+`post-install-check` details are explained in the following sections:
+
+- [Impact](#impact)
+- [Input](#input)
+- [Execution Details](#execution-details)
+- [Example](#example)
+
 ## Impact
 
 The `post-install-check` stage does not change the running state of the system.
@@ -22,8 +29,8 @@ for details on the commands executed.
 
 ## Example
 
-(`ncn-m001#`) Execute the `post-install-check` stage.
+(`ncn-m001#`) Execute the `post-install-check` stage for activity `admin-230127`.
 
 ```bash
-iuf -a joe-install-20230107 run -r post-install-check
+iuf -a admin-230127 run -r post-install-check
 ```

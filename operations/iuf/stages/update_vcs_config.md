@@ -123,11 +123,12 @@ Once `iuf` has performed the merges, it performs substitutions based on the foll
 
 The following arguments are most often used with the `update-vcs-config` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input            | `iuf` Argument | Description   |
-| ---------------- | -------------- |-------------- |
-| activity         | `-a ACTIVITY`  | activity created for the install or upgrade operations |
-| site variables   | `--site-vars`  | path to YAML file containing site defaults and any overrides |
-| recipe variables | `--bootprep-config-dir` | Path to `vcs` directory within the expanded HPC CSM Software Recipe product distribution file. If no `sat bootprep` related arguments are supplied, a copy of the contents from VCS will be used if present. |
+| Input                           | `iuf` Argument              | Description   |
+| ------------------------------- | --------------------------- |-------------- |
+| activity                        | `-a ACTIVITY`               | activity created for the install or upgrade operations |
+| site variables                  | `-sv SITE_VARS`             | path to YAML file containing site defaults and any overrides |
+| recipe variables                | `-rv RECIPE_VARS`           | path to YAML file containing recipe variables file provided by HPE |
+| `sat bootprep` config directory | `-bpcd BOOTPREP_CONFIG_DIR` | directory containing `sat bootprep` config files and recipe variables |
 
 ## Execution Details
 
@@ -136,9 +137,9 @@ for details on the commands executed.
 
 ## Example
 
-(`ncn-m001#`) Run all stages up to and including `update-vcs-config` using the specified `site_vars.yaml` file and the `product_vars.yaml` file found in the `hpc-csm-software-recipe-23.03.0/vcs` directory of the
+(`ncn-m001#`) Execute the `update-vcs-config` stage for activity `admin-230127` using the specified `site_vars.yaml` file and the `product_vars.yaml` file found in the `hpc-csm-software-recipe-23.03.0/vcs` directory of the
 22.03.0 HPC CSM Software Recipe distribution file.
 
 ```bash
-iuf -a activity-20230123 -m /etc/cray/upgrade/csm/activity-20230123 run --site-vars /etc/cray/upgrade/csm/iuf/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/activity-20230123/hpc-csm-software-recipe-23.03.0/vcs -e update-vcs-config
+iuf -a admin-230127 run -sv ./site_vars.yaml -bpcd ./hpc-csm-software-recipe-23.03.0/vcs -r update-vcs-config
 ```
