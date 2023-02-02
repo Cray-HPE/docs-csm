@@ -6,7 +6,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 ## Add Join Script
 
-1. (`ncn-sXXX#`) Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh` on the node being **rebuilt**. If there is an existing script in that location, then replace it.
+1. (`ncn-s#`) Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh` **on the node being rebuilt**. If there is an existing script in that location, then replace it.
 
    ```bash
    #!/bin/bash
@@ -31,7 +31,9 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
      fi
    done
 
-   # update ssh keys for rebuilt node on m001
+   # add ssh key to m001, then update ssh keys for rebuilt node on m001
+   m001_ip=$(host ncn-m001 | awk '{ print $NF }')
+   ssh-keyscan -H ncn-m001,${m001_ip} >> ~/.ssh/known_hosts
    ssh ncn-m001 "ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $host_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${host},${host_ip} >> ~/.ssh/known_hosts"
 
    # copy necessary ceph files to rebuilt node
@@ -63,8 +65,9 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    done
 
    # run preload images on host
+   echo "Running pre-load-images on $host"
    if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
-     echo "Unable to run pre-load-images.sh on $host."
+     echo "ERROR  Unable to run pre-load-images.sh on $host."
    fi
 
    sleep 30
@@ -100,6 +103,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
      for node in ncn-s001 ncn-s002 ncn-s003; do
        ssh $node "ceph orch daemon restart node-exporter.${host}"
        if [[ $? -eq 0 ]]; then break; fi
+     done
    fi
 
    for service in $(cephadm ls | jq -r '.[].systemd_unit')
@@ -120,12 +124,13 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    fi
 
    # fix spire and restart cfs
+   echo "Fixing spire and restarting cfs-state-reporter"
    scp ncn-m001:/etc/kubernetes/admin.conf /etc/kubernetes/admin.conf
    ssh ncn-m001 '/opt/cray/platform-utils/spire/fix-spire-on-storage.sh'
    systemctl restart cfs-state-reporter.service
    ```
 
-1. (`ncn-sXXX#`) On the node being rebuilt, change the mode of the script.
+1. (`ncn-s#`) On the node being rebuilt, change the mode of the script.
 
    ```bash
    chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
@@ -137,7 +142,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    watch ceph -s
    ```
 
-1. (`ncn-sXXX#`) Execute the script on the **node being rebuilt**.
+1. (`ncn-s#`) Execute the script **on the node being rebuilt**.
 
    ```bash
    /srv/cray/scripts/common/join_ceph_cluster.sh
@@ -202,7 +207,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 **IMPORTANT:** `Rados-GW` by default is deployed to the first 3 storage nodes. This includes `HAproxy` and `Keepalived`.
 This is automated as part of the install, but administrators may have to regenerate the configuration if they are not running on the first 3 storage nodes or all nodes.
 
-1. Deploy Rados Gateway containers to the new nodes.
+1. (`ncn-s00[1/2/3]#`) Deploy Rados Gateway containers to the new nodes.
 
    - Configure Rados Gateway containers with the complete list of nodes it should be running on:
 
@@ -225,7 +230,7 @@ This is automated as part of the install, but administrators may have to regener
     rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8           553b0cb212c      a9706e6d7a69
     ```
 
-1. Add nodes into `HAproxy` and `KeepAlived`.
+1. (`ncn-s00[1/2/3]#`) Add nodes into `HAproxy` and `KeepAlived`.
 
    ```bash
    pdsh -w ncn-s00[1-(end node number)] -f 2 \
