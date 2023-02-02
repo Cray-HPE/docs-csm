@@ -47,49 +47,113 @@ When rebuilding a node, make sure that the `/srv/cray/scripts/common/storage-cep
 
 Upload ceph container images into nexus.
 
-1. On (`ncn-m001#`) or on (`ncn-s001/2/3#`) run the following script. This should be saved to a file and then executed.
+1. (`ncn-s#`) Copy and paste the below script into `/srv/cray/scripts/common/upload_ceph_images_to_nexus.sh` **on the node being rebuilt**.
 
     ```bash
     #!/bin/bash
 
-    # get images
-    images=""
-    for daemon_type in "mgr" "node-exporter" "alertmanager" "grafana" "prometheus"; do
-        add_image=$(ceph orch ps --format json | jq --arg DAEMON $daemon_type '.[] | select(.daemon_type == $DAEMON) | .container_image_name' | tr -d '"' | sort -u)
-        unique_image=true
-        for image in $images; do
-          if [[ $image == $add_image ]]; then
-            unique_image=false
-          fi
-        done
-        if $unique_image; then
-          images="${images}"" "${add_image}
+    nexus_username=$(ssh ncn-m001 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.username}} | base64 --decode')
+    nexus_password=$(ssh ncn-m001 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode')
+
+    function upload_image_and_upgrade() {
+        # get local image and nexus image location
+        name=$1
+        prefix=$2
+        to_configure=$3
+        local_image=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON $name '.[] | select(.daemon_type == $DAEMON) | .container_image_name' | tr -d '"' | sort -u | tail -1)
+        # if sha in image then remove and use version
+        if [[ $local_image == *"@sha"* ]]; then
+            without_sha=${local_image%"@sha"*}
+            version=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON $name '.[] | select(.daemon_type == $DAEMON) | .version' | tr -d '"' | sort -u)
+            if [[ $version != "v"* ]]; then version="v""$version"; fi
+            local_image="$without_sha"":""$version"
         fi
-    done
+        nexus_location="${prefix}""$(echo "$local_image" | rev | cut -d "/" -f1 | rev)"
 
-    nexus_username=$(kubectl get secret -n nexus nexus-admin-credential --template={{.data.username}} | base64 --decode)
-    nexus_password=$(kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode)
-
-    function push_image_and_upgrade() { 
-      image_name=$1
-      if [[ $1 == "registry.local"* ]]; then
-        continue;
-      elif [[ $1 == "localhost"* ]]; then
-        image_name=$(echo $1 | sed 's/localhost/registry.local/g')
-      else
-        image_name="registry.local/$1"
-      fi
-      echo "Pushing image: $image_name"
-      podman push --creds $nexus_username:$nexus_password $image_name
-      ceph orch upgrade start --image $image_name
+        # push images to nexus, point to nexus and run upgrade
+        echo "Pushing image: $local_image to $nexus_location"
+        podman pull $local_image
+        podman tag $local_image $nexus_location
+        podman push --creds $nexus_username:$nexus_password $nexus_location
+        for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+            ssh $storage_node "ceph config set mgr $to_configure $nexus_location"
+            if [[ $? == 0 ]]; then
+              break
+            fi
+        done
+        
+        # run upgrade if mgr
+        if [[ $name == "mgr" ]]; then
+          for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+            ssh $storage_node "ceph orch upgrade start --image $nexus_location"
+            if [[ $? == 0 ]]; then
+              break
+            fi
+          done
+        fi
     }
 
-    for image in $images; do
-        push_image_and_upgrade $image
+    #prometheus, node-exporter, and alertmanager have this prefix
+    prometheus_prefix="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/prometheus/"
+    upload_image_and_upgrade "prometheus" $prometheus_prefix "mgr/cephadm/container_image_prometheus"
+    upload_image_and_upgrade "node-exporter" $prometheus_prefix "mgr/cephadm/container_image_node_exporter"
+    upload_image_and_upgrade "alertmanager" $prometheus_prefix "mgr/cephadm/container_image_alertmanager"
+
+    # mgr and grafana have this prfix
+    ceph_prefix="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/"
+    upload_image_and_upgrade "grafana" $ceph_prefix "mgr/cephadm/container_image_grafana"
+    upload_image_and_upgrade "mgr" $ceph_prefix "container_image"
+
+    # watch upgrade status
+    echo "Waiting for upgrade to complete..."
+    sleep 10
+    int=0
+    success=false
+    while [[ $int -lt 100 ]] && ! $success; do
+      for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+        error=$(ssh $storage_node "ceph orch upgrade status --format json | jq '.message' | grep Error")
+        if [[ -n $error ]]; then
+          echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+          exit 1
+        fi
+        if [[ $(ssh $storage_node "ceph orch upgrade status --format json | jq '.in_progress'") != "true" ]]; then
+          echo "Upgrade complete"
+          success=true
+          break
+        else
+          int=$(( $int + 1 ))
+          sleep 10
+        fi
+      done
     done
+
+    # restart daemons
+    for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
+      daemons_to_restart=$(ceph --name client.ro orch ps | awk '{print $1}' | grep $daemon)
+      for each in $daemons_to_restart; do
+        for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+            ssh $storage_node "ceph orch daemon redeploy $each"
+            if [[ $? == 0 ]]; then
+              break
+            fi
+          done
+      done
+    done
+
+    echo "Process is complete."
+    ```
+1. Change the mode of the script.
+
+    ```bash
+    chmod u+x /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
+    ```
+1. Execute the script.
+
+    ```bash
+    /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
     ```
 
-    After running the script, run the following command to check for errors or completion of the `ceph orch upgrade` command run in the script.
+1. (`ncn-s00[1/2/3]#`) After running the script, run the following command to check for errors or completion of the `ceph orch upgrade` command run in the script.
 
     ```bash
     ceph orch upgrade status
@@ -98,14 +162,20 @@ Upload ceph container images into nexus.
     Expected output:
 
     ```bash
-    TBD
+    {
+    "target_image": null,
+    "in_progress": false,
+    "services_complete": [],
+    "progress": null,
+    "message": ""
+    }
     ```
 
 Check the status of Ceph.
 
 1. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
 
-    (`ncn-sXXX#`) On the node being rebuilt run:
+    (`ncn-s#`) On the node being rebuilt, run:
 
     ```bash
     for service in $(cephadm ls |jq -r '.[].systemd_unit'); do systemctl stop $service; systemctl disable $service; done
