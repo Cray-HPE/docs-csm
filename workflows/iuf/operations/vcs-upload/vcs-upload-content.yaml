@@ -227,7 +227,7 @@ spec:
               path: /results/records.yaml
               default: "{}"
       container:
-        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-import:1.8.1
+        image: artifactory.algol60.net/csm-docker/unstable/cf-gitea-import:1.9.0-bug-CASMINST-5843.16_f017da7
         command:
           - "/bin/sh"
         args: ["-c", "/opt/csm/cf-gitea-import/argo_entrypoint.sh"]
@@ -259,9 +259,8 @@ spec:
             mountPath: /content
           - name: results
             mountPath: /results
-          - name: certs # mount cluster certs to ca-certificates.crt for curl/http libraries
-            mountPath: /etc/ssl/certs/ca-certificates.crt
-            subPath: platform-ca-certs.crt
+          - name: certs
+            mountPath: /usr/local/share/ca-certificates
       volumes:
         - name: content
           hostPath:
@@ -270,8 +269,8 @@ spec:
         - name: results
           emptyDir: {}
         - name: certs
-          hostPath:
-            path: /etc/pki/trust/anchors
+          configMap:
+            name: cray-configmap-ca-public-key
     ## cleanup-template ##
     ## Remove the secret created earlier.
     - name: cleanup-template
