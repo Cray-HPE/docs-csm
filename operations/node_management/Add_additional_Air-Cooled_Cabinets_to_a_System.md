@@ -13,6 +13,55 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
 ## Procedure
 
+1. (`ncn-mw`) Load the `hardware-topology-assistant` container image into the systems Nexus container registry:
+    
+    - If the node has access to `artifactory.algol60.net` the following can be used to load Nexus:
+        ```bash
+        NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
+        NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
+
+        IMAGE=artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41
+        podman run --rm --network host  \
+            quay.io/skopeo/stable copy \
+            --src-tls-verify=false \
+            --dest-tls-verify=false \
+            --dest-username $NEXUS_USERNAME \
+            --dest-password $NEXUS_PASSWORD \
+            docker://$IMAGE \
+            docker://registry.local/$IMAGE
+        ```
+    
+    - If the node does not have have access to `artifactory.algol60.net`.
+
+        1. On a system that has access to `artifactory.algol60.net`
+
+            ```bash
+            docker pull artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41 
+            docker save artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41 > hardware-topology-assistant-0.2.0-20230202201610.7307a41.tar
+            ```
+        
+        1. Copy the `hardware-topology-assistant-0.2.0-20230202201610.7307a41.tar` tarball over the system.
+
+        1. Load the `hardware-topology-assistant` container image into the systems Nexus container registry. The following must be ran in the same directory as the `hardware-topology-assistant-0.2.0-20230202201610.7307a41.tar` tarball.
+            
+            ```bash
+            TAR=hardware-topology-assistant-0.2.0-20230202201610.7307a41.tar
+            IMAGE=artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41 
+
+            NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
+            NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
+
+            podman run --rm --network host \
+                --volume $PWD:/mnt/images \
+                quay.io/skopeo/stable copy \
+                --src-tls-verify=false \
+                --dest-tls-verify=false \
+                --dest-username $NEXUS_USERNAME \
+                --dest-password $NEXUS_PASSWORD \
+                docker-archive:/mnt/images/$TAR \
+                docker://registry.local/$IMAGE
+            ```
+
 1. (`ncn-mw`) Set a variable with the system's name.
 
     ```bash
@@ -39,19 +88,6 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     ```
 
-1. Determine the version of the latest hardware-topology-assistant.
-
-    ```bash
-    HTA_VERSION=$(curl https://registry.local/v2/artifactory.algol60.net/csm-docker/stable/hardware-topology-assistant/tags/list | jq -r .tags[] | sort -V | tail -n 1)
-    echo ${HTA_VERSION}
-    ```
-
-    Example output:
-
-    ```text
-    0.1.0
-    ```
-
 1. Perform a dry run of the hardware-topology-assistant. This will capture the changes needed to be made to the system.
 
     Each invocation of the hardware-topology-assistant creates a new folder in the current directory named similarly to `hardware-topology-assistant_TIMESTAMP`. This directory contains files with the following data:
@@ -71,7 +107,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     ```bash
     podman run --rm -it --name hardware-topology-assistant -v "$(realpath .)":/work -e TOKEN \
-        registry.local/artifactory.algol60.net/csm-docker/stable/hardware-topology-assistant:$HTA_VERSION \
+        registry.local/artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41 \
         update $CCJ_FILE --dry-run
     ```
 
@@ -156,13 +192,13 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     ```
 
 1. Update BSS boot parameters. This will update two places in BSS to allow management NCNs to have the correct information when they are rebuilt.
-    * Update the cabinet route on a per management NCN basis.
+    * Update the cabinet routes on a per management NCN basis.
     * Update the host records in the Global boot parameters which are used to generate `/etc/hosts` on management nodes. 
 
 
     ```bash
     for MODIFIED_BSS_BOOTPARAMETERS in $HARDWARE_TOPOLOGY_ASSISTANT_FILES/modified_bss*.json; do 
-        echo $MODIFIED_BSS_BOOTPARAMETERS
+        echo "Updating BSS boot parameters with $MODIFIED_BSS_BOOTPARAMETERS"
         curl -i -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
            "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d "@${MODIFIED_BSS_BOOTPARAMETERS}"
     done
