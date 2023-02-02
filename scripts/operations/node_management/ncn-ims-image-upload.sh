@@ -144,6 +144,6 @@ podman run --rm --name ncn-cpc \
     -e KUBECONFIG=/.kube/admin.conf \
     -e VALIDATE_SCHEMA="true" \
     -v /etc/kubernetes:/.kube:ro \
-    artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION
+    artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION > /dev/null
 
 echo "$IMS_IMAGE_ID"
