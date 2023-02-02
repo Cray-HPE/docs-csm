@@ -81,7 +81,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     ```bash
     podman run --rm -it --name hardware-topology-assistant -v "$(realpath .)":/work -e TOKEN \
         registry.local/artifactory.algol60.net/csm-docker/unstable/hardware-topology-assistant:0.2.0-20230202201610.7307a41 \
-        update $CCJ_FILE --dry-run
+        update $CCJ_FILE --ignore-removed-hardware --application-node-metadata=application_node_metadata.yaml --dry-run
     ```
 
     If prompted to fill in the generated application node metadata nodes having `~~FIXME~~` values, then follow the directions in the command output to update the application node metadata file. This is an optional file that is only required if
