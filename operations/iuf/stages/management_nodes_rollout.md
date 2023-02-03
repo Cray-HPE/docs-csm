@@ -25,13 +25,13 @@ The following arguments are most often used with the `management-nodes-rollout` 
 
 | Input                                    | `iuf` Argument                                        | Description                                                                            |
 | ---------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| activity                                 | `-a ACTIVITY`                                         | activity created for the install or upgrade operations                                 |
-| concurrent management rollout percentage | `-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE`      | percentage value that limits the number of NCN management nodes rolled out in parallel |
-| limit management rollout list            | `--limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT` | list of NCN management nodes to be rolled out, specified by HSM role and subrole       |
+| Activity                                 | `-a ACTIVITY`                                         | Activity created for the install or upgrade operations                                 |
+| Concurrent management rollout percentage | `-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE`      | Percentage value that limits the number of NCN management nodes rolled out in parallel |
+| Limit management rollout list            | `--limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT` | List of NCN management nodes to be rolled out, specified by HSM role and subrole       |
 
 ## Execution details
 
-The code executed by this stage exists within IUF. See the `management-nodes-rollout` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage exists within IUF. See the `management-nodes-rollout` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
 There are two methods administrators can use to avoid rollouts on specific NCN management nodes: by specifying the `--limit-management-rollout` argument or by using `kubectl` to label nodes with `iuf-prevent-rollout=true`.

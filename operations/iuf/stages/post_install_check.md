@@ -1,4 +1,4 @@
-# post-install-check
+# `post-install-check`
 
 The `post-install-check` stage validates that the managed compute and application nodes deployed by the preceding `managed-node-rollout` stage are executing correctly. It primarily executes pre- and post-stage hook scripts
 provided by products in their `iuf-product-manifest.yaml` file.
@@ -7,7 +7,7 @@ provided by products in their `iuf-product-manifest.yaml` file.
 
 - [Impact](#impact)
 - [Input](#input)
-- [Execution Details](#execution-details)
+- [Execution details](#execution-details)
 - [Example](#example)
 
 ## Impact
@@ -20,11 +20,11 @@ The following arguments are most often used with the `post-install-check` stage.
 
 | Input           | `iuf` Argument | Description |
 | --------------- | -------------- | ----------- |
-| activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations |
+| Activity        | `-a ACTIVITY`  | Activity created for the install or upgrade operations |
 
-## Execution Details
+## Execution details
 
-The code executed by this stage exists within IUF. See the `post-install-check` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage exists within IUF. See the `post-install-check` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
 ## Example

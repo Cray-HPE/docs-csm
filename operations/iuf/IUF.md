@@ -24,17 +24,17 @@ Argo workflows based on the subcommand specified. The Argo workflows are not con
 The following IUF topics are discussed in the sections below.
 
 - [Limitations](#limitations)
-- [Initial Install and Upgrade Workflows](#initial-install-and-upgrade-workflows)
+- [Initial install and upgrade workflows](#initial-install-and-upgrade-workflows)
 - [Activities](#activities)
-- [Argo Workflows](#argo-workflows)
-- [Stages and Hooks](#stages-and-hooks)
+- [Argo workflows](#argo-workflows)
+- [Stages and hooks](#stages-and-hooks)
 - [`iuf` CLI](#iuf-cli)
-- [Output and Log Files](#output-and-log-files)
-- [Site and Recipe Variables](#site-and-recipe-variables)
-- [`sat bootprep` Configuration Files](#sat-bootprep-configuration-files)
-- [Product Workflows](#product-workflows)
+- [Output and log files](#output-and-log-files)
+- [Site and recipe variables](#site-and-recipe-variables)
+- [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
+- [Product workflows](#product-workflows)
 - [Troubleshooting](#troubleshooting)
-- [Recovering From Failures](#recovering-from-failures)
+- [Recovering from failures](#recovering-from-failures)
 
 ## Limitations
 
@@ -49,7 +49,7 @@ The following IUF topics are discussed in the sections below.
 - If the `iuf run` subcommand ends unexpectedly before the Argo workflow it created completes, there is no CLI option to reconnect to the Argo workflow and continue displaying status. It is recommended the administrator
   monitors progress via the Argo workflow UI and/or IUF log files in this scenario.
 
-## Initial Install and Upgrade Workflows
+## Initial install and upgrade workflows
 
 The time at which IUF stages are executed in an initial install or upgrade workflow depends on whether CSM itself is also being installed or upgraded in addition to non-CSM products. This table describes the different use cases
 and tasks performed.
@@ -76,6 +76,11 @@ The following example shows history and status information associated with the `
 
 ```bash
 iuf -a admin-230127 activity
+```
+
+Example output:
+
+```text
 +-------------------------------------------------------------------------------------------------------------------------------+
 | Activity: admin-230127                                                                                                        |
 +---------------------+-------------+--------------------------------------------+-----------+----------+-----------------------+
@@ -102,7 +107,7 @@ Summary:
          debug: 2:21:17
 ```
 
-## Argo Workflows
+## Argo workflows
 
 [Argo workflows](../argo/Using_Argo_Workflows.md) orchestrate jobs on Kubernetes. IUF utilizes Argo workflows to execute and manage product install, upgrade, and deploy operations. For example, if an administrator invokes IUF to
 execute the `process-media` and `pre-install-check` stages for a product, two Argo workflows will be created: one associated with the `process-media` stage and one associated with the `pre-install-check` stage. Not all operations
@@ -113,10 +118,10 @@ Each Argo workflow created by IUF has a unique string identifier associated with
 files and are displayed by `iuf activity` as shown in the [Activities](#activities) section.
 
 Most Argo workflows created by IUF create multiple independent Argo steps to execute the workflow. `iuf` displays both Argo workflow and Argo step information on standard output as an IUF session executes. Argo
-workflow identifiers are prefixed with `ARGO WORKFLOW:` text and Argo steps for that workflow are displayed in an indented format underneath it. The [Output and Log Files](#output-and-log-files) section provides
+workflow identifiers are prefixed with `ARGO WORKFLOW:` text and Argo steps for that workflow are displayed in an indented format underneath it. The [Output and log files](#output-and-log-files) section provides
 an example of `iuf` output.
 
-## Stages and Hooks
+## Stages and hooks
 
 Install and upgrade operations performed by IUF are organized into stages. The administrator can execute one or more stages in a single invocation of `iuf run`. A single stage can execute with the content of one or more products.
 IUF operates on all products found in a single media directory specified by the administrator. When possible, IUF will parallelize execution for products within a stage, e.g. the `process-media` stage will extract content for all
@@ -165,7 +170,7 @@ The `iuf` command line interface is used to invoke all IUF operations. The `iuf`
 | activity    | Display IUF activity details, annotate IUF activity |
 | list-stages | Display stages and status for a given IUF activity  |
 
-### Global Arguments
+### Global arguments
 
 Global arguments may be specified when invoking `iuf`. They must be specified before any `iuf` subcommand and its subcommand-specific arguments are specified.
 
@@ -215,9 +220,9 @@ subcommands:
   {run,activity,list-stages|ls,resume,restart,abort}
 ```
 
-### Input File
+### Input file
 
-As described in the [Output and Log Files](#output-and-log-files) section, the `-i INPUT_FILE` argument can be used to read `iuf` arguments and values from a YAML input file. Both global and subcommand-specific arguments can be
+As described in the [Output and log files](#output-and-log-files) section, the `-i INPUT_FILE` argument can be used to read `iuf` arguments and values from a YAML input file. Both global and subcommand-specific arguments can be
 specified in the input file. If an input file is used in addition to `iuf` arguments, the `iuf` arguments take precedence. The name of an entries in the input file corresponds to the long form name of the `iuf` argument with
 hyphens replaced by underscores.
 
@@ -454,9 +459,9 @@ options:
 
 These [examples](examples/iuf_list_stages.md) highlight common use cases of `iuf list-stages`.
 
-## Output and Log Files
+## Output and log files
 
-### `iuf` Output
+### `iuf` output
 
 `iuf` subcommands display status information to standard output as IUF stages execute. Stages are made up of one or more Argo workflows, each performing a series of tasks via Argo steps. `iuf` output primarily consists of:
 
@@ -474,10 +479,15 @@ In addition, any IUF log messages generated by IUF or products with a severity o
 The Argo workflow identifiers displayed, like `admin-230127-zb268-process-media-v5dsw` in the example below, can be queried in the [Argo UI](../argo/Using_the_Argo_UI.md) to provide access to more detailed log
 information and monitoring capabilities. The lines prefixed with `BEGIN:` and `FINISHED:` primarily map to Argo steps and pods that are linked to the corresponding Argo workflow in the Argo UI.
 
-(`ncn-m001#`) Example of `iuf` output.
+(`ncn-m001#`) Example of `iuf` command and output.
 
 ```bash
 iuf -a admin-230127 -m admin-230127/media run --site-vars /opt/cray/iuf/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/iuf/hpc-csm-software-recipe-23.1.18/vcs -e update-vcs-config
+```
+
+Example output:
+
+```text
 INFO   ARGO WORKFLOW: admin-230127-zb268-process-media-v5dsw
 INFO              BEGIN: extract-release-distributions
 INFO              BEGIN: start-operation
@@ -507,7 +517,7 @@ INFO              BEGIN: preflight-checks(0)
 [...]
 ```
 
-### Log Files
+### Log files
 
 IUF stores detailed information in log files which are stored on a Ceph Block Device typically mounted at `/etc/cray/upgrade/`. The default log file directory location can be overridden with the `iuf -b` and `iuf --log-dir`
 options (see `iuf -h` for details).
@@ -527,8 +537,12 @@ describes the contents of the files in the `log` directory for an activity:
 
 ```bash
 cd /etc/cray/upgrade/csm/iuf/admin-230127
-
 find . -type f,l | sort -r
+```
+
+Truncated example output:
+
+```text
 ./log/install.log
 ./log/20230127203740/install.log
 ./log/20230127203740/argo_logs/admin-230127-zb268-process-media-v5dsw-2642752133.txt
@@ -537,10 +551,9 @@ find . -type f,l | sort -r
 ./log/20230127203740/argo_logs/admin-230127-f1w34-pre-install-check-ztsrg-3983759619.txt
 ./log/20230127203740/argo_logs/admin-230127-f1w34-pre-install-check-ztsrg-3010622324.txt
 ./log/20230127203740/argo_logs/admin-230127-f1w34-pre-install-check-ztsrg-1366701318.txt
-[...]
 ```
 
-## Site and Recipe Variables
+## Site and recipe variables
 
 IUF site and recipe variables allow the administrator to customize product, product version, and branch values used by IUF when
 executing IUF stages. They ensure automated VCS branch merging, CFS configuration creation, and IMS image creation operations are
@@ -567,7 +580,7 @@ recipe variables file and `sat bootprep` input files. This can be used instead o
 
 An example use case for site and recipe variables is provided in the [`update-vcs-config`](stages/update_vcs_config.md) stage documentation.
 
-## `sat bootprep` Configuration Files
+## `sat bootprep` configuration files
 
 `sat bootprep` configuration files are used by the `update-cfs-config` and `prepare-images` IUF stages. `update-cfs-config` uses `sat bootprep`
 input files to define the CFS configurations used to customize management NCN and managed node images and post-boot node environments.
@@ -577,7 +590,7 @@ HPE provides management NCN and managed node `sat bootprep` configuration files 
 CFS configuration, image, and BOS session template definitions. The administrator may customize the files as needed. The files include
 variables, and the values used are provided by the recipe variables and/or site variables files specified when running `iuf run`.
 
-## Product Workflows
+## Product workflows
 
 The following are examples of workflows for installing and upgrading product content using `iuf`.
 
@@ -587,16 +600,16 @@ The following are examples of workflows for installing and upgrading product con
 
 The following actions may be useful if errors are encountered when executing `iuf`.
 
-- Examine IUF log files as described in the [Output and Log Files](#output-and-log-files) section for information not provided on `iuf` standard output.
+- Examine IUF log files as described in the [Output and log files](#output-and-log-files) section for information not provided on `iuf` standard output.
 - Use the [Argo UI](../argo/Using_the_Argo_UI.md) to find the Argo pod that corresponds to the failed IUF operation. This can be done by finding the Argo workflow identifier displayed on [`iuf` standard output](#iuf-output) for the failed
   IUF operation and performing an Argo UI query with that value. Argo workflow identifiers can also be found by running [`iuf activity`](#activities). The Argo UI will provide additional log information that may help debug the issue.
 - If an error is associated with a script invoked by a product's [stage hook](#stages-and-hooks), the script can be found in the expanded product distribution file located in the media directory (`iuf -m MEDIA_DIR`). Examine the
   `hooks` entry in the product's `iuf-product-manifest.yaml` file in the media directory for the path to the script.
-- If the source of the error can not be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and Hooks](#stages-and-hooks) section
+- If the source of the error can not be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and hooks](#stages-and-hooks) section
   of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the
   workflow and debug the issue.
 
-## Recovering From Failures
+## Recovering from failures
 
 If an error is encountered while executing `iuf run`, `iuf` will attempt to complete the current stage for the other products involved, if any. The following are strategies to recover from stage failures once the issue has been addressed.
 

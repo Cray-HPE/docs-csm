@@ -1,4 +1,4 @@
-# update-vcs-config
+# `update-vcs-config`
 
 The `update-vcs-config` stage performs a variety of update operations for each product being installed that provides a configuration management repository in VCS. It ensures new product configuration content has been uploaded to VCS in
 a pristine branch and attempts to merge the new product configuration content into a corresponding customer branch.
@@ -10,10 +10,10 @@ a pristine branch and attempts to merge the new product configuration content in
 - [Impact](#impact)
 - [Prerequisites](#prerequisites)
 - [Terminology](#terminology)
-- [Branch Creation and Modification](#branch-creation-and-modification)
-- [Customer Branch Name](#customer-branch-name)
+- [Branch creation and modification](#branch-creation-and-modification)
+- [Customer branch name](#customer-branch-name)
 - [Input](#input)
-- [Execution Details](#execution-details)
+- [Execution details](#execution-details)
 - [Example](#example)
 
 ## Impact
@@ -27,11 +27,13 @@ product, product version, and branch values used by IUF when executing stages su
 
 ## Terminology
 
-- **Pristine branch**: the branch provided by HPE for a given product, e.g. `cray/cos/2.4.79`
-- **Customer branch**: the customer's working branch for a given product, e.g. `integration-2.4.79`
-- **Previous customer branch**: the latest existing customer branch for a given product which predates the specified customer branch, e.g. `integration-2.3.50`
+| Term                     | Example              | Meaning |
+| ------------------------ | -------------------- | ------- |
+| Pristine branch          | `cray/cos/2.4.79`    | The branch provided by HPE for a given product |
+| Customer branch          | `integration-2.4.79` | The customer's working branch for a given product |
+| Previous customer branch | `integration-2.3.50` | The latest existing customer branch for a given product which predates the specified customer branch |
 
-## Branch Creation and Modification
+## Branch creation and modification
 
 The following describes how `update-vcs-config` determines how to create or merge VCS content to the customer branch:
 
@@ -47,11 +49,11 @@ Once it is resolved, the session can be continued with `iuf resume` or can be ab
 
 **`NOTE`** Any product-specific stage hooks specified for `update-vcs-config` will also be executed and may also create or modify VCS content. Refer to individual product documentation for information on any stage hook operations performed by the product.
 
-## Customer Branch Name
+## Customer branch name
 
 The customer branch name is determined through one or a combination of the following sources:
 
-### Recipe Variables
+### Recipe variables
 
 Recipe variables are provided via the `product_vars.yaml` file in the HPC CSM Software Recipe and provide a list of products and versions intended to be used together. `product_vars.yaml` also contains default settings and
 `working_branch` variable entries for products. These values are intended as defaults and can be overridden with site variables.
@@ -75,7 +77,7 @@ cos:
 In this example, the COS reference to `{{ working_branch}}` will be substituted with the value specified in the default section for `working_branch`. Thus, the COS value for `working_branch` will be `integration-{{version_x_y_z}}`,
 which will in turn be substituted with the actual product value, resulting in the final value `integration-2.4.86`.
 
-### Site Variables
+### Site variables
 
 Site variables, typically specified in a `site_vars.yaml` file, allow the administrator to override values provided by recipe variables, including both default values and product-specific entries.
 
@@ -97,7 +99,7 @@ cos:
 
 Remember that content in `site_vars.yaml` overrides entries in `product_vars.yaml`, e.g. if a product entry in `site_vars.yaml` contained a `version` entry, that value would mask the `version` entry present in `product_vars.yaml`.
 
-### Session Variables
+### Session variables
 
 Session variables are the set of product/version combinations being installed by the current activity. These values are internal to `iuf`.
 
@@ -125,14 +127,14 @@ The following arguments are most often used with the `update-vcs-config` stage. 
 
 | Input                                  | `iuf` Argument              | Description   |
 | -------------------------------------- | --------------------------- |-------------- |
-| activity                               | `-a ACTIVITY`               | activity created for the install or upgrade operations |
-| site variables                         | `-sv SITE_VARS`             | path to YAML file containing site defaults and any overrides |
-| recipe variables                       | `-rv RECIPE_VARS`           | path to YAML file containing recipe variables file provided by HPE |
-| `sat bootprep` configuration directory | `-bpcd BOOTPREP_CONFIG_DIR` | directory containing `sat bootprep` configuration files and recipe variables |
+| Activity                               | `-a ACTIVITY`               | Activity created for the install or upgrade operations |
+| Site variables                         | `-sv SITE_VARS`             | Path to YAML file containing site defaults and any overrides |
+| Recipe variables                       | `-rv RECIPE_VARS`           | Path to YAML file containing recipe variables provided by HPE |
+| `sat bootprep` configuration directory | `-bpcd BOOTPREP_CONFIG_DIR` | Directory containing `sat bootprep` configuration files and recipe variables |
 
 ## Execution details
 
-The code executed by this stage exists within IUF. See the `update-vcs-config` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage exists within IUF. See the `update-vcs-config` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
 ## Example

@@ -19,11 +19,11 @@ The following arguments are most often used with the `deliver-product` stage. Se
 
 | Input           | `iuf` Argument | Description                                           |
 | --------------- | -------------- | ----------------------------------------------------- |
-| activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations|
+| Activity        | `-a ACTIVITY`  | Activity created for the install or upgrade operations|
 
 ## Execution details
 
-The code executed by this stage exists within IUF. See the `deliver-product` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage exists within IUF. See the `deliver-product` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
 Artifacts will be uploaded to the following locations based on entries specified in the products' `iuf-product-manifest.yaml` files.
