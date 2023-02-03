@@ -1,4 +1,4 @@
-# update-cfs-config
+# `update-cfs-config`
 
 The `update-cfs-config` stage creates updated CFS configurations used for image customization and personalization of management NCNs and managed (compute and application) nodes. This stage only creates the CFS configurations; the `prepare-images`,
 `management-nodes-rollout`, and `management-nodes-rollout` stages executed after `update-cfs-config` use the CFS configurations.
@@ -12,7 +12,7 @@ files can be substituted with values found in the recipe variables (`-rv`) and/o
 
 - [Impact](#impact)
 - [Input](#input)
-- [Execution Details](#execution-details)
+- [Execution details](#execution-details)
 - [Example](#example)
 
 ## Impact
@@ -23,26 +23,26 @@ The `update-cfs-config` stage does not change the running state of the system as
 
 The following arguments are most often used with the `update-cfs-config` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input                                  | `iuf` Argument                   | Description                                                                                           |
-| -------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| activity                               | `-a ACTIVITY`                    | activity created for the install or upgrade operations                                                |
-| managed `sat bootprep` config files    | `-bc BOOTPREP_CONFIG_MANAGED`    | list of `sat bootprep` config files used for managed images                                           |
-| management `sat bootprep` config files | `-bm BOOTPREP_CONFIG_MANAGEMENT` | list of `sat bootprep` config files used for management NCN images                                    |
-| `sat bootprep` config directory        | `-bpcd BOOTPREP_CONFIG_DIR`      | directory containing `sat bootprep` config files and recipe variables                                 |
-| recipe variables                       | `-rv RECIPE_VARS`                | path to YAML file containing recipe variables file provided by HPE                                    |
-| site variables                         | `-sv SITE_VARS`                  | path to YAML file containing site defaults and any overrides                                          |
-| recipe variables product mask          | `-mrp MASK_RECIPE_PRODS`         | mask the recipe variables file entries for the products specified, use product catalog values instead |
+| Input                                         | `iuf` Argument                   | Description                                                                                           |
+| --------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| activity                                      | `-a ACTIVITY`                    | activity created for the install or upgrade operations                                                |
+| managed `sat bootprep` configuration files    | `-bc BOOTPREP_CONFIG_MANAGED`    | list of `sat bootprep` configuration files used for managed images                                    |
+| management `sat bootprep` configuration files | `-bm BOOTPREP_CONFIG_MANAGEMENT` | list of `sat bootprep` configuration files used for management NCN images                             |
+| `sat bootprep` configuration directory        | `-bpcd BOOTPREP_CONFIG_DIR`      | directory containing `sat bootprep` configuration files and recipe variables                          |
+| recipe variables                              | `-rv RECIPE_VARS`                | path to YAML file containing recipe variables file provided by HPE                                    |
+| site variables                                | `-sv SITE_VARS`                  | path to YAML file containing site defaults and any overrides                                          |
+| recipe variables product mask                 | `-mrp MASK_RECIPE_PRODS`         | mask the recipe variables file entries for the products specified, use product catalog values instead |
 
-## Execution Details
+## Execution details
 
-The code executed by this stage utilizes `sat bootprep` to create CFS configurations. See the `update-cfs-config` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in
+The code executed by this stage utilizes `sat bootprep` to create CFS configurations. See the `update-cfs-config` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in
 `/usr/share/doc/csm/workflows/iuf/operations/` for details on the commands executed.
 
 See the [HPE Cray EX System Admin Toolkit (SAT) Guide](https://cray-hpe.github.io/docs-sat/) documentation for details on `sat bootprep`.
 
 ## Example
 
-(`ncn-m001#`) Execute the `update-cfs-config` stage for activity `admin-230127` using the specified `site_vars.yaml` file and the managed and management `sat bootprep` config files and the `product_vars.yaml` config file
+(`ncn-m001#`) Execute the `update-cfs-config` stage for activity `admin-230127` using the specified `site_vars.yaml` file and the managed and management `sat bootprep` configuration files and the `product_vars.yaml` configuration file
 found in the `hpc-csm-software-recipe-23.05.0/vcs` directory of the 23.05.0 HPC CSM Software Recipe distribution file.
 
 ```bash

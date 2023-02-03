@@ -10,7 +10,7 @@ activity identifier and that information is used for all other stages.
 
 - [Impact](#impact)
 - [Input](#input)
-- [Execution Details](#execution-details)
+- [Execution details](#execution-details)
 - [Example](#example)
 
 ## Impact
@@ -26,7 +26,7 @@ The following arguments are most often used with the `process-media`. See `iuf -
 | activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations                          |
 | media directory | `-m MEDIA_DIR` | directory containing the product distribution files to be installed or upgraded |
 
-## Execution Details
+## Execution details
 
 The code executed by this stage exists within IUF. See the `process-media` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.

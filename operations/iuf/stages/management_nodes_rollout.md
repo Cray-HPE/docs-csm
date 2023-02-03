@@ -1,4 +1,4 @@
-# management-nodes-rollout
+# `management-nodes-rollout`
 
 The `management-nodes-rollout` stage performs a controlled rebuild of the management NCNs in order to reboot them to a new image and configuration. A rebuild is a reboot operation that clears the persistent OverlayFS file system on
 that node. IUF will account for the necessary minimum number of critical software instances running on the nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
@@ -12,7 +12,7 @@ that node. IUF will account for the necessary minimum number of critical softwar
 
 - [Impact](#impact)
 - [Input](#input)
-- [Execution Details](#execution-details)
+- [Execution details](#execution-details)
 - [Example](#example)
 
 ## Impact
@@ -29,7 +29,7 @@ The following arguments are most often used with the `management-nodes-rollout` 
 | concurrent management rollout percentage | `-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE`      | percentage value that limits the number of NCN management nodes rolled out in parallel |
 | limit management rollout list            | `--limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT` | list of NCN management nodes to be rolled out, specified by HSM role and subrole       |
 
-## Execution Details
+## Execution details
 
 The code executed by this stage exists within IUF. See the `management-nodes-rollout` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
