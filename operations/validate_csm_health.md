@@ -375,6 +375,7 @@ These checks may be executed on any one worker or master NCN (but **not** `ncn-m
 
 The return code of the script is zero if all hardware checks run and pass, non-zero if not.
 On errors or failures, the script will print the path to the hardware checks log file for the administrator to inspect.
+See the [Flags Set For Nodes In HSM](../troubleshooting/known_issues/flags_set_for_nodes_in_hsm.md) documentation for more information about common types of hardware check failures.
 
 ## 3 Software Management Services (SMS) health checks
 
