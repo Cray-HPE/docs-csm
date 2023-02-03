@@ -26,12 +26,12 @@ upgrade. All of the new software provided in the release is deployed and all man
 
 1. Invoke `iuf run` to create an activity named `activity-all-products-upgrade` and use `-e` to execute the [`process-media`](../stages/process_media.md), [`pre-install-check`](../stages/pre_install_check.md),
    [`deliver-product`](../stages/deliver_product.md), and [`update-vcs-config`](../stages/update_vcs_config.md) stages. Perform the upgrade using product content found in the `${ACTIVITY_DIR}` directory. Use site variables
-   from the `${SITE_VARS_FILE}` file and recipe variables from the `product_vars.yaml` file found in the `${ACTIVITY_DIR}/hpc-csm-software-recipe-23.03.0/vcs` `sat bootprep` configuration directory.
+   from the `${SITE_VARS_FILE}` file and recipe variables from the `product_vars.yaml` file found in the `${ACTIVITY_DIR}/hpc-csm-software-recipe-23.05.0/vcs` `sat bootprep` configuration directory.
 
     (`ncn-m001#`) Execute the stages beginning with `process-media` and ending with `update-vcs-config`.
 
     ```bash
-    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.03.0/vcs -e update-vcs-config
+    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.05.0/vcs -e update-vcs-config
     ```
 
     Once this step has completed:
@@ -51,7 +51,7 @@ upgrade. All of the new software provided in the release is deployed and all man
     (`ncn-m001#`) Execute the `update-cfs-config` and `prepare-images` stages.
 
     ```bash
-    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.03.0/vcs -r update-cfs-config prepare-images
+    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.05.0/vcs -r update-cfs-config prepare-images
     ```
 
     Once this step has completed:
@@ -69,7 +69,7 @@ upgrade. All of the new software provided in the release is deployed and all man
     (`ncn-m001#`) Execute the `management-nodes-rollout` stage.
 
     ```bash
-    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.03.0/vcs -r management-nodes-rollout
+    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.05.0/vcs -r management-nodes-rollout
     ```
 
     Once this step has completed:
@@ -83,7 +83,7 @@ upgrade. All of the new software provided in the release is deployed and all man
     (`ncn-m001#`) Execute the `deploy-product` and `post-install-service-check` stages.
 
     ```bash
-    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.03.0/vcs -r deploy-product post-install-service-check
+    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.05.0/vcs -r deploy-product post-install-service-check
     ```
 
     Once this step has completed:
@@ -98,7 +98,7 @@ upgrade. All of the new software provided in the release is deployed and all man
     (`ncn-m001#`) Execute the `managed-nodes-rollout` stage.
 
     ```bash
-    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.03.0/vcs -r managed-nodes-rollout
+    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.05.0/vcs -r managed-nodes-rollout
     ```
 
     Once this step has completed:
@@ -112,7 +112,7 @@ upgrade. All of the new software provided in the release is deployed and all man
     (`ncn-m001#`) Execute the `post-install-check` stage.
 
     ```bash
-    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.03.0/vcs -r post-install-check
+    iuf -a activity-all-products-upgrade -m ${ACTIVITY_DIR} run --site-vars ${SITE_VARS_FILE} --bootprep-config-dir ${ACTIVITY_DIR}/hpc-csm-software-recipe-23.05.0/vcs -r post-install-check
     ```
 
     Once this step has completed:

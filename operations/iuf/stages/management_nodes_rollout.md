@@ -1,7 +1,7 @@
 # management-nodes-rollout
 
-The `management-nodes-rollout` stage performs a controlled rebuild of the management NCNs in order to reboot them to a new image and configuration. IUF will account for the necessary minimum number of critical software
-instances running on the nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
+The `management-nodes-rollout` stage performs a controlled rebuild of the management NCNs in order to reboot them to a new image and configuration. A rebuild is a reboot operation that clears the persistent OverlayFS file system on
+that node. IUF will account for the necessary minimum number of critical software instances running on the nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
 
 **`NOTE`** `management-nodes-rollout` currently does not rebuild management NCN storage nodes or `ncn-m001`. These nodes must be rebuilt using non-IUF methods described in the appropriate sections of the CSM documentation.
 

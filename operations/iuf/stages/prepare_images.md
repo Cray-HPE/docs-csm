@@ -1,7 +1,7 @@
 # prepare-images
 
 The `prepare-images` stage configures NCN management node images and builds and configures compute node, application node, and GPU images. It also creates new BOS session templates corresponding to the new node and image content.
-The `prepare-images` stage does not reboot nodes to the new images however; that is done by the `management-nodes-rollout` and `managed-nodes-rollout` stages.
+The `prepare-images` stage does not reboot nodes to the new images; however, that is done by the `management-nodes-rollout` and `managed-nodes-rollout` stages.
 
 The product content used to create the images is defined in `sat bootprep` input files. The `sat bootprep` input files used can be specified by `-bc`, `-bm`, and/or `-bpcd` as described below. Variables within the `sat bootprep`
 files can be substituted with values found in the recipe variables (`-rv`) and/or site variables (`-sv`) files.
@@ -41,8 +41,8 @@ See the [HPE Cray EX System Admin Toolkit (SAT) Guide](https://cray-hpe.github.i
 ## Example
 
 (`ncn-m001#`) Execute the `prepare-images` stage for activity `admin-230127` using the specified `site_vars.yaml` file and the managed and management `sat bootprep` config files and the `product_vars.yaml` config file
-found in the `hpc-csm-software-recipe-23.03.0/vcs` directory of the 22.03.0 HPC CSM Software Recipe distribution file.
+found in the `hpc-csm-software-recipe-23.05.0/vcs` directory of the 23.05.0 HPC CSM Software Recipe distribution file.
 
 ```bash
-iuf -a admin-230127 run -sv ./site_vars.yaml -bpcd ./hpc-csm-software-recipe-23.03.0/vcs -r prepare-images
+iuf -a admin-230127 run -sv ./site_vars.yaml -bpcd ./hpc-csm-software-recipe-23.05.0/vcs -r prepare-images
 ```
