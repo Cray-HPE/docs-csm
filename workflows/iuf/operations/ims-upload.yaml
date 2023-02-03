@@ -225,7 +225,7 @@ spec:
           default: "{}"
 
     container:
-      image: artifactory.algol60.net/csm-docker/unstable/cray-ims-load-artifacts:2.1.0-bug-CASMINST-5843.12_b65b903
+      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.1.0
       command:
         - "/bin/sh"
       args: ["-c", "/ims_load_artifacts/argo_entrypoint.sh"]
