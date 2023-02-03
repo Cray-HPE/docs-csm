@@ -141,6 +141,7 @@ Note: Do not run multiple instances of the HMS tests concurrently as they may in
 1. [Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
     1. [Interpreting HSM discovery results](#221-interpreting-hsm-discovery-results)
     1. [Known issues with HSM discovery validation](#222-known-issues-with-hsm-discovery-validation)
+1. [Hardware checks (optional)](#23-hardware-checks-optional)
 
 ### 2.1 HMS CT test execution
 
