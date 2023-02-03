@@ -25,7 +25,7 @@
 # shellcheck disable=SC2086
 
 test -n "$DEBUG" && set -x
-set -eou pipefail
+set -eo pipefail
 
 unset CRAY_FORMAT
 
@@ -136,14 +136,16 @@ cray ims images update "$IMS_IMAGE_ID" \
         --link-etag "${MANIFEST_ETAG}" \
         --link-path "s3://boot-images/$IMS_IMAGE_ID/manifest.json" > /dev/null
 
-podman run --rm --name ncn-cpc \
-    --user root \
-    -e PRODUCT=csm \
-    -e PRODUCT_VERSION=$CSM_RELEASE \
-    -e YAML_CONTENT_STRING="{images: {\"$IMS_IMAGE_NAME\": {id: \"$IMS_IMAGE_ID\"}}}" \
-    -e KUBECONFIG=/.kube/admin.conf \
-    -e VALIDATE_SCHEMA="true" \
-    -v /etc/kubernetes:/.kube:ro \
-    registry.local/artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION > /dev/null
+if ! test -f /etc/pit-release; then
+    podman run --rm --name ncn-cpc \
+        --user root \
+        -e PRODUCT=csm \
+        -e PRODUCT_VERSION=$CSM_RELEASE \
+        -e YAML_CONTENT_STRING="{images: {\"$IMS_IMAGE_NAME\": {id: \"$IMS_IMAGE_ID\"}}}" \
+        -e KUBECONFIG=/.kube/admin.conf \
+        -e VALIDATE_SCHEMA="true" \
+        -v /etc/kubernetes:/.kube:ro \
+        registry.local/artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION > /dev/null
+fi
 
 echo "$IMS_IMAGE_ID"
