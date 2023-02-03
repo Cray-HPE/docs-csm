@@ -25,13 +25,13 @@ The following arguments are most often used with the `update-cfs-config` stage. 
 
 | Input                                         | `iuf` Argument                   | Description                                                                                           |
 | --------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| activity                                      | `-a ACTIVITY`                    | activity created for the install or upgrade operations                                                |
-| managed `sat bootprep` configuration files    | `-bc BOOTPREP_CONFIG_MANAGED`    | list of `sat bootprep` configuration files used for managed images                                    |
-| management `sat bootprep` configuration files | `-bm BOOTPREP_CONFIG_MANAGEMENT` | list of `sat bootprep` configuration files used for management NCN images                             |
-| `sat bootprep` configuration directory        | `-bpcd BOOTPREP_CONFIG_DIR`      | directory containing `sat bootprep` configuration files and recipe variables                          |
-| recipe variables                              | `-rv RECIPE_VARS`                | path to YAML file containing recipe variables file provided by HPE                                    |
-| site variables                                | `-sv SITE_VARS`                  | path to YAML file containing site defaults and any overrides                                          |
-| recipe variables product mask                 | `-mrp MASK_RECIPE_PRODS`         | mask the recipe variables file entries for the products specified, use product catalog values instead |
+| Activity                                      | `-a ACTIVITY`                    | Activity created for the install or upgrade operations                                                |
+| Managed `sat bootprep` configuration files    | `-bc BOOTPREP_CONFIG_MANAGED`    | List of `sat bootprep` configuration files used for managed images                                    |
+| Management `sat bootprep` configuration files | `-bm BOOTPREP_CONFIG_MANAGEMENT` | List of `sat bootprep` configuration files used for management NCN images                             |
+| `sat bootprep` configuration directory        | `-bpcd BOOTPREP_CONFIG_DIR`      | Directory containing `sat bootprep` configuration files and recipe variables                          |
+| Recipe variables                              | `-rv RECIPE_VARS`                | Path to YAML file containing recipe variables provided by HPE                                         |
+| Site variables                                | `-sv SITE_VARS`                  | Path to YAML file containing site defaults and any overrides                                          |
+| Recipe variables product mask                 | `-mrp MASK_RECIPE_PRODS`         | Mask the recipe variables file entries for the products specified, use product catalog values instead |
 
 ## Execution details
 

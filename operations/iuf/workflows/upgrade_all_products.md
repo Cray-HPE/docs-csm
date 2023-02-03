@@ -10,8 +10,8 @@ upgrade. All of the new software provided in the release is deployed and all man
     ```bash
     DATE=`date +%Y%m%d%H%M%S`
     ACTIVITY_DIR=/etc/cray/upgrade/csm/iuf/${DATE}
-    mkdir ${ACTIVITY_DIR}
-    cd ${ACTIVITY_DIR}
+    mkdir -v "${ACTIVITY_DIR}"
+    cd "${ACTIVITY_DIR}"
     scp <HPC CSM Software Recipe content path> .
     ```
 
@@ -21,7 +21,7 @@ upgrade. All of the new software provided in the release is deployed and all man
 
     ```bash
     SITE_VARS_FILE=/etc/cray/upgrade/csm/iuf/site_vars.yaml
-    vi ${SITE_VARS_FILE}
+    vi "${SITE_VARS_FILE}"
     ```
 
 1. Invoke `iuf run` to create an activity named `activity-all-products-upgrade` and use `-e` to execute the [`process-media`](../stages/process_media.md), [`pre-install-check`](../stages/pre_install_check.md),

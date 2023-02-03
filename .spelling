@@ -699,15 +699,6 @@ rollout
 rollout
 rollouts
 
-- operations/iuf/stages/prepare_images.md
-config
-
-- operations/iuf/stages/update_cfs_config.md
-config
-
-- operations/iuf/stages/update_vcs_config.md
-config
-
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
 

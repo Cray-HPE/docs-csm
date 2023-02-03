@@ -23,12 +23,12 @@ The following arguments are most often used with the `process-media`. See `iuf -
 
 | Input           | `iuf` Argument | Description                                                                     |
 | --------------- | -------------- | ------------------------------------------------------------------------------- |
-| activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations                          |
-| media directory | `-m MEDIA_DIR` | directory containing the product distribution files to be installed or upgraded |
+| Activity        | `-a ACTIVITY`  | Activity created for the install or upgrade operations                          |
+| Media directory | `-m MEDIA_DIR` | Directory containing the product distribution files to be installed or upgraded |
 
 ## Execution details
 
-The code executed by this stage exists within IUF. See the `process-media` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
+The code executed by this stage exists within IUF. See the `process-media` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
 
 ## Example
