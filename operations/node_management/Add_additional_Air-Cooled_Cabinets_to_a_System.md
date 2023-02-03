@@ -2,10 +2,6 @@
 
 This procedure adds one or more air-cooled cabinets and all associated hardware within the cabinet except for management NCNs.
 
-**`NOTES`**
-
-- This procedure is intended to be used in conjunction with the top level [Add additional Air-Cooled Cabinets to a System](Add_additional_Air-Cooled_Cabinets_to_a_System.md) procedure.
-
 ## Prerequisites
 
 - The system's SHCD file has been updated with the new cabinets and cabling changes.
@@ -53,7 +49,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     Example output:
 
     ```text
-    0.1.0
+    0.2.0
     ```
 
 1. Perform a dry run of the hardware-topology-assistant.
@@ -65,6 +61,8 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
          - Modified networks.
            - Added IP address reservations.
            - Cabinet VLAN assignment.
+       -  Modified version of the SLS hardware and networks.
+       -  Modified versions of the BSS bootparameters for Management NCNs. 
     - Backups of the following before any changes are applied
        - BSS boot parameters for each existing management NCN.
        - Management NCN global BSS boot parameters.
@@ -92,10 +90,11 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     2022/08/11 12:33:54 Add --application-node-metadata=application_node_metadata.yaml to the command line arguments and try again.
     ```
 
-    The following is an example entry in the `application_node_metadata.yaml` file that requires additional information to be filled in. **Do not** change any of the SubRole or aliases values for other application nodes.
+    The following is an example entry in the `application_node_metadata.yaml` file that requires additional information to be filled in. **Do not** change any of the SubRole or aliases values for other application nodes. The `canu_common_name` field contains the common name of the application node represented in the CANU CCJ/Paddle file for easier recognition of what the node is when editing the file. 
 
     ```yaml
     x3001c0s16b0n0:
+      canu_common_name: login010
       subrole: ~~FIXME~~
       aliases:
       - ~~FIXME~~
@@ -105,6 +104,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     ```yaml
     x3001c0s16b0n0:
+      canu_common_name: login010
       subrole: UAN
       aliases:
       - uan10
@@ -148,13 +148,13 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 1. (`ncn-mw`) Update `/etc/hosts` on the management NCNs with any newly added management switches.
 
     ```bash
-    /usr/share/doc/csm/scripts/operatioAdd_River_Cabinets/update_ncn_etc_hosts.py "${TOPOLOGY_CHANGES_JSON}"
+    /usr/share/doc/csm/scripts/operatioAdd_River_Cabinets/update_ncn_etc_hosts.py "${TOPOLOGY_CHANGES_JSON}" --perform-changes
     ```
 
 1. (`ncn-mw`) Update cabinet routes on management NCNs.
 
     ```bash
-    /usr/share/doc/csm/scripts/operatioupdate-ncn-cabinet-routes.sh
+    /usr/share/doc/csm/scripts/operations/node_management/update-ncn-cabinet-routes.sh
     ```
 
 1. Reconfigure management network by following the [CANU Added Hardware](../network/management_network/added_hardware.md) procedure.
@@ -180,7 +180,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
          - Root user exists on the BMC, but with an unexpected password.
 
     ```bash
-    /usr/share/doc/csm/scripts/operatioAdd_River_Cabinets/verify_bmc_credentials.sh 
+    /usr/share/doc/csm/scripts/operations/node_management/Add_River_Cabinets/verify_bmc_credentials.sh 
     ```
 
     Potential scenarios:
