@@ -23,6 +23,28 @@ To delete a blob store, refer to [Remove Data Marked For Deletion](#remove-data-
 previous install, or data that was added during an install that is no longer needed. If there is anything in Nexus that is no longer needed,
 then it is recommended to delete that first, before taking any further steps.
 
+### Marking a repository for deletion
+
+A repository can be deleted from the web UI or from the CLI. To delete a repository from the CLI reference 
+[Manage Repositorys with Nexus](./Manage_Repositories_with_Nexus.md#delete-a-repository). To delete a repository out of the web UI first
+reference [Access Nexus with the Web UI](/Manage_Repositories_with_Nexus.md#access-nexus-with-the-web-ui). Once you are authenticated to the
+web UI browse to the Nexus admin section then clicking on **Repository**, then **Repositories**. 
+
+  ![Nexus Repository List](../../img/operations/Nexus_Repository_List.png "Nexus Repository List")
+
+Then you can select any repository that you want to delete, where the **Type** is **hosted** and a new screen with a button that says
+**Delete repository** should appear at the top. Clicking that button will mark the repository for deletion.
+
+  ![Nexus Delete Repository](../../img/operations/Nexus_Delete_Repository.png "Nexus Delete Repository")
+
+### Marking a artifact for deletion
+
+An artifact can be easily deleted from the web UI. To delete an artifact from a repository in the web UI you must be authenticated.
+Once autenticated click on **Browse** then the repo you want to remove an asset from then the asset itself (either the folder, component or asset),
+then delete on the right side popup.
+
+  ![Nexus Delete Asset](../../img/operations/Nexus_Delete_Asset.png "Nexus Delete Asset")
+
 ## Cleanup of old installs
 
 There is no documented list of files that are known to be older versions. If the system has been installed and around for
