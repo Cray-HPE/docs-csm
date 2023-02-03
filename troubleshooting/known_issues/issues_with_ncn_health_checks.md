@@ -145,4 +145,3 @@
    ```bash
    /usr/share/doc/csm/upgrade/scripts/k8s/enable-psp.sh
    ```
-
