@@ -7,7 +7,7 @@ in their `iuf-product-manifest.yaml` file.
 
 - [Impact](#impact)
 - [Input](#input)
-- [Execution Details](#execution-details)
+- [Execution details](#execution-details)
 - [Example](#example)
 
 ## Impact
@@ -22,7 +22,7 @@ The following arguments are most often used with the `post-install-service-check
 | --------------- | -------------- | ------------------------------------------------------ |
 | activity        | `-a ACTIVITY`  | activity created for the install or upgrade operations |
 
-## Execution Details
+## Execution details
 
 The code executed by this stage exists within IUF. See the `post-install-service-check` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.

@@ -123,14 +123,14 @@ Once `iuf` has performed the merges, it performs substitutions based on the foll
 
 The following arguments are most often used with the `update-vcs-config` stage. See `iuf -h` and `iuf run -h` for additional arguments.
 
-| Input                           | `iuf` Argument              | Description   |
-| ------------------------------- | --------------------------- |-------------- |
-| activity                        | `-a ACTIVITY`               | activity created for the install or upgrade operations |
-| site variables                  | `-sv SITE_VARS`             | path to YAML file containing site defaults and any overrides |
-| recipe variables                | `-rv RECIPE_VARS`           | path to YAML file containing recipe variables file provided by HPE |
-| `sat bootprep` config directory | `-bpcd BOOTPREP_CONFIG_DIR` | directory containing `sat bootprep` config files and recipe variables |
+| Input                                  | `iuf` Argument              | Description   |
+| -------------------------------------- | --------------------------- |-------------- |
+| activity                               | `-a ACTIVITY`               | activity created for the install or upgrade operations |
+| site variables                         | `-sv SITE_VARS`             | path to YAML file containing site defaults and any overrides |
+| recipe variables                       | `-rv RECIPE_VARS`           | path to YAML file containing recipe variables file provided by HPE |
+| `sat bootprep` configuration directory | `-bpcd BOOTPREP_CONFIG_DIR` | directory containing `sat bootprep` configuration files and recipe variables |
 
-## Execution Details
+## Execution details
 
 The code executed by this stage exists within IUF. See the `update-vcs-config` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.

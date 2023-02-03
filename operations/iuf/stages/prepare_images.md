@@ -1,4 +1,4 @@
-# prepare-images
+# `prepare-images`
 
 The `prepare-images` stage configures NCN management node images and builds and configures compute node, application node, and GPU images. It also creates new BOS session templates corresponding to the new node and image content.
 The `prepare-images` stage does not reboot nodes to the new images; however, that is done by the `management-nodes-rollout` and `managed-nodes-rollout` stages.
@@ -10,7 +10,7 @@ files can be substituted with values found in the recipe variables (`-rv`) and/o
 
 - [Impact](#impact)
 - [Input](#input)
-- [Execution Details](#execution-details)
+- [Execution details](#execution-details)
 - [Example](#example)
 
 ## Impact
@@ -31,7 +31,7 @@ The following arguments are most often used with the `prepare-images` stage. See
 | site variables                         | `-sv SITE_VARS`                  | path to YAML file containing site defaults and any overrides                                          |
 | recipe variables product mask          | `-mrp MASK_RECIPE_PRODS`         | mask the recipe variables file entries for the products specified, use product catalog values instead |
 
-## Execution Details
+## Execution details
 
 The code executed by this stage utilizes `sat bootprep` to build and customize images. See the `prepare-images` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding file(s) in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
@@ -40,7 +40,7 @@ See the [HPE Cray EX System Admin Toolkit (SAT) Guide](https://cray-hpe.github.i
 
 ## Example
 
-(`ncn-m001#`) Execute the `prepare-images` stage for activity `admin-230127` using the specified `site_vars.yaml` file and the managed and management `sat bootprep` config files and the `product_vars.yaml` config file
+(`ncn-m001#`) Execute the `prepare-images` stage for activity `admin-230127` using the specified `site_vars.yaml` file and the managed and management `sat bootprep` configuration files and the `product_vars.yaml` configuration file
 found in the `hpc-csm-software-recipe-23.05.0/vcs` directory of the 23.05.0 HPC CSM Software Recipe distribution file.
 
 ```bash

@@ -171,7 +171,7 @@ Global arguments may be specified when invoking `iuf`. They must be specified be
 
 The following shows the global arguments available.
 
-```bash
+```text
 usage: iuf [-h] [-i INPUT_FILE] [-w] [-a ACTIVITY] [-c CONCURRENCY] [-b BASE_DIR] [-s STATE_DIR] [-m MEDIA_DIR]
            [--log-dir LOG_DIR] [-l {CRITICAL,ERROR,WARNING,INFO,DEBUG,TRACE}] [-v]
            {run,activity,list-stages|ls,resume,restart,abort} ...
@@ -243,10 +243,15 @@ activity:
 [...]
 ```
 
-An input file populated with default values can be created by using `iuf -w`:
+(`ncn-m001#`) An input file populated with default values can be created by using `iuf -w`:
 
 ```bash
-ncn-m001:~ # iuf -a admin-230127 -m admin-230127/media -i /tmp/default-input-file -w
+iuf -a admin-230127 -m admin-230127/media -i /tmp/default-input-file -w
+```
+
+Example output:
+
+```text
 Successfully wrote /tmp/default-input-file
 ```
 
@@ -259,7 +264,7 @@ in order. If an activity identifier is not provided via `-a`, a new activity wil
 
 The following arguments may be specified when invoking `iuf run`.
 
-```bash
+```text
 usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE] [-r RUN_STAGES [RUN_STAGES ...]] [-s SKIP_STAGES [SKIP_STAGES ...]]
                [-bc BOOTPREP_CONFIG_MANAGED] [-bm BOOTPREP_CONFIG_MANAGEMENT] [-bpcd BOOTPREP_CONFIG_DIR] [-rv RECIPE_VARS]
                [-sv SITE_VARS] [-mrs {reboot,stage}] [-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE]
@@ -331,7 +336,7 @@ terminated Argo Workflows will have a `Status` of `Failed` when displayed via `i
 
 The following arguments may be specified when invoking `iuf abort`:
 
-```bash
+```text
 usage: iuf abort [-h] [-f]
 
 Abort an IUF session for a given activity after the current stage completes.
@@ -407,7 +412,7 @@ in progress at the time the entry was created, but it may not still be running w
 
 The following arguments may be specified when invoking `iuf activity`:
 
-```bash
+```text
 usage: iuf activity [-h] [--time TIME] [--create] [--comment COMMENT] [--status {Succeeded,Failed,Running,n/a}]
                     [--argo-workflow-id ARGO_WORKFLOW_ID]
                     [{in_progress,waiting_admin,paused,debug,blocked}]
