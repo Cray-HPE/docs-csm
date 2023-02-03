@@ -231,9 +231,14 @@ This is automated as part of the install, but administrators may have to regener
     ```
 
 1. (`ncn-s00[1/2/3]#`) Add nodes into `HAproxy` and `KeepAlived`.
+   
+   Set the end node number to deploy `HAproxy` and `KeepAlived` (example: end_node_number=5 if deploying on ncn-s001 through ncn-s005).
+   ```bash
+   end_node_number=n
+   ```
 
    ```bash
-   pdsh -w ncn-s00[1-(end node number)] -f 2 \
+   pdsh -w ncn-s00[1-${end_node_number}] -f 2 \
                    'source /srv/cray/scripts/metal/update_apparmor.sh
                     reconfigure-apparmor; /srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg
                     systemctl enable haproxy.service

@@ -173,6 +173,39 @@ Upload ceph container images into nexus.
 
 Check the status of Ceph.
 
+1. Check the OSD status, weight, and location:
+
+    ```bash
+    ceph osd tree
+    ```
+
+    Example output:
+
+    ```text
+    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+    -1         62.87558  root default
+    -5         20.95853      host ncn-s001
+    2    ssd   3.49309          osd.2          up   1.00000  1.00000
+    5    ssd   3.49309          osd.5          up   1.00000  1.00000
+    6    ssd   3.49309          osd.6          up   1.00000  1.00000
+    9    ssd   3.49309          osd.9          up   1.00000  1.00000
+    12   ssd   3.49309          osd.12         up   1.00000  1.00000
+    16   ssd   3.49309          osd.16         up   1.00000  1.00000
+    -3         20.95853      host ncn-s002
+    0    ssd   3.49309          osd.0          up   1.00000  1.00000
+    3    ssd   3.49309          osd.3          up   1.00000  1.00000
+    7    ssd   3.49309          osd.7          up   1.00000  1.00000
+    10   ssd   3.49309          osd.10         up   1.00000  1.00000
+    13   ssd   3.49309          osd.13         up   1.00000  1.00000
+    15   ssd   3.49309          osd.15         up   1.00000  1.00000
+    -7         20.95853      host ncn-s003
+    1    ssd   3.49309          osd.1          up   1.00000  1.00000
+    4    ssd   3.49309          osd.4          up   1.00000  1.00000
+    8    ssd   3.49309          osd.8          up   1.00000  1.00000
+    11   ssd   3.49309          osd.11         up   1.00000  1.00000
+    14   ssd   3.49309          osd.14         up   1.00000  1.00000
+    17   ssd   3.49309          osd.17         up   1.00000  1.00000
+
 1. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
 
     (`ncn-s#`) On the node being rebuilt, run:
@@ -197,7 +230,7 @@ Check the status of Ceph.
     Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.38.service.
     ```
 
-1. Check the OSD status, weight, and location:
+1. Re-check the OSD status, weight, and location:
 
     ```bash
     ceph osd tree
@@ -206,23 +239,29 @@ Check the status of Ceph.
     Example output:
 
     ```text
-    ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
-    -1       20.95917 root default
-    -3        6.98639     host ncn-s001
-     2   ssd  1.74660         osd.2         up  1.00000 1.00000
-     5   ssd  1.74660         osd.5         up  1.00000 1.00000
-     8   ssd  1.74660         osd.8         up  1.00000 1.00000
-    11   ssd  1.74660         osd.11        up  1.00000 1.00000
-    -7        6.98639     host ncn-s002
-     0   ssd  1.74660         osd.0         up  1.00000 1.00000
-     4   ssd  1.74660         osd.4         up  1.00000 1.00000
-     7   ssd  1.74660         osd.7         up  1.00000 1.00000
-    10   ssd  1.74660         osd.10        up  1.00000 1.00000
-    -5        6.98639     host ncn-s003
-     1   ssd  1.74660         osd.1       down        0 1.00000
-     3   ssd  1.74660         osd.3       down        0 1.00000
-     6   ssd  1.74660         osd.6       down        0 1.00000
-     9   ssd  1.74660         osd.9       down        0 1.00000
+    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+    -1         62.87558  root default
+    -5         20.95853      host ncn-s001
+    2    ssd   3.49309          osd.2          up   1.00000  1.00000
+    5    ssd   3.49309          osd.5          up   1.00000  1.00000
+    6    ssd   3.49309          osd.6          up   1.00000  1.00000
+    9    ssd   3.49309          osd.9          up   1.00000  1.00000
+    12   ssd   3.49309          osd.12         up   1.00000  1.00000
+    16   ssd   3.49309          osd.16         up   1.00000  1.00000
+    -3         20.95853      host ncn-s002
+    0    ssd   3.49309          osd.0          up   1.00000  1.00000
+    3    ssd   3.49309          osd.3          up   1.00000  1.00000
+    7    ssd   3.49309          osd.7          up   1.00000  1.00000
+    10   ssd   3.49309          osd.10         up   1.00000  1.00000
+    13   ssd   3.49309          osd.13         up   1.00000  1.00000
+    15   ssd   3.49309          osd.15         up   1.00000  1.00000
+    -7         20.95853      host ncn-s003
+    1    ssd   3.49309          osd.1        down         0  1.00000
+    4    ssd   3.49309          osd.4        down         0  1.00000
+    8    ssd   3.49309          osd.8        down         0  1.00000
+    11   ssd   3.49309          osd.11       down         0  1.00000
+    14   ssd   3.49309          osd.14       down         0  1.00000
+    17   ssd   3.49309          osd.17       down         0  1.00000
     ```
 
 1. Check the status of the Ceph cluster:
@@ -235,33 +274,33 @@ Check the status of Ceph.
 
     ```text
       cluster:
-        id:     184b8c56-172d-11ec-aa96-a4bf0138ee14
+        id:     4c9e9d74-a208-11ed-b008-98039bb427f6
         health: HEALTH_WARN
-                1/3 mons down, quorum ncn-s001,ncn-s002
-                6 osds down
+                4 failed cephadm daemon(s)
+                1/3 mons down, quorum ncn-s002,ncn-s003
+                1 osds down
                 1 host (6 osds) down
-                Degraded data redundancy: 21624/131171 objects degraded (16.485%),     522 pgs degraded, 763 pgs undersized
+                Degraded data redundancy: 37896/113690 objects degraded (33.333%), 370 pgs degraded, 503 pgs undersized
 
       services:
-        mon: 3 daemons, quorum ncn-s001,ncn-s002 (age 3m), out of quorum: ncn-s003
-        mgr: ncn-s001.afiqwl(active, since 14h), standbys: ncn-s002.nafbdr
-        mds: cephfs:1 {0=cephfs.ncn-s001.nzsgxr=up:active} 1 up:standby-replay
-        osd: 36 osds: 30 up (since 3m), 36 in (since 14h)
-        rgw: 3 daemons active (site1.zone1.ncn-s002.tipbuf, site1.zone1.ncn-s004.    uvzcms, site1.zone1.ncn-s005.twisxx)
-
-      task status:
+        mon: 3 daemons, quorum ncn-s002,ncn-s003 (age 14m), out of quorum: ncn-s001
+        mgr: ncn-s003.ndzqsk(active, since 17h), standbys: ncn-s002.mgvtbe
+        mds: 1/1 daemons up, 1 hot standby
+        osd: 18 osds: 12 up (since 14m), 13 in (since 4m)
+        rgw: 2 daemons active (2 hosts, 1 zones)
 
       data:
-        pools:   12 pools, 1641 pgs
-        objects: 43.72k objects, 81 GiB
-        usage:   228 GiB used, 63 TiB / 63 TiB avail
-        pgs:     21624/131171 objects degraded (16.485%)
-                 878 active+clean
-                 522 active+undersized+degraded
-                 241 active+undersized
+        volumes: 1/1 healthy
+        pools:   13 pools, 553 pgs
+        objects: 37.90k objects, 69 GiB
+        usage:   150 GiB used, 45 TiB / 45 TiB avail
+        pgs:     37896/113690 objects degraded (33.333%)
+                370 active+undersized+degraded
+                133 active+undersized
+                50  active+clean
 
       io:
-        client:   6.2 KiB/s rd, 280 KiB/s wr, 2 op/s rd, 49 op/s wr
+        client:   12 KiB/s rd, 787 KiB/s wr, 6 op/s rd, 51 op/s wr
     ```
 
 1. Remove Ceph OSDs.
