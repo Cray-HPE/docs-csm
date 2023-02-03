@@ -24,6 +24,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [2.2 Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
     - [2.2.1 Interpreting HSM discovery results](#221-interpreting-hsm-discovery-results)
     - [2.2.2 Known issues with HSM discovery validation](#222-known-issues-with-hsm-discovery-validation)
+  - [2.3 Hardware checks (optional)](#23-hardware-checks-optional)
 - [3. Software Management Services health checks](#3-software-management-services-sms-health-checks)
 - [4. Gateway health and SSH access checks](#4-gateway-health-and-ssh-access-checks)
   - [4.1 Gateway health tests](#41-gateway-health-tests)
@@ -356,6 +357,23 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 
 - Switches with river cabinets require SNMP to be enabled for discovery to work. For configuring SNMP, see [Configure SNMP](./network/management_network/configure_snmp.md)
 - [HMS Discovery job not creating Redfish Endpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
+
+### 2.3 Hardware checks (optional)
+
+Optionally, these checks may be executed to detect problems with hardware in the system. Hardware check failures
+are **not** blockers for system installations and upgrades, and it is typically safe to postpone the investigation
+and resolution of any such failures until after the CSM installation or upgrade has completed.
+
+These checks may be executed on any one worker or master NCN (but **not** `ncn-m001` if it is still the PIT node).
+
+(`ncn-mw#`) Run the hardware checks.
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hardware_checks.sh
+```
+
+The return code of the script is zero if all hardware checks run and pass, non-zero if not.
+On errors or failures, the script will print the path to the hardware checks log file for the administrator to inspect.
 
 ## 3 Software Management Services (SMS) health checks
 
