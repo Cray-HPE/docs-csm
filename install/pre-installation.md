@@ -51,9 +51,9 @@ Any steps run on an `external` server require that server to have the following 
 
       > Example release versions:
       >
-      > - An alpha build, `CSM_RELEASE=1.3.0-alpha.99`
-      > - A release candidate: `CSM_RELEASE=1.3.0-rc.1`
-      > - A stable release: `CSM_RELEASE=1.3.0`
+      > - An alpha build: `CSM_RELEASE=1.4.0-alpha.99`
+      > - A release candidate: `CSM_RELEASE=1.4.0-rc.1`
+      > - A stable release: `CSM_RELEASE=1.4.0`
 
       ```bash
       CSM_RELEASE=<value>
@@ -268,9 +268,9 @@ These variables will need to be set for many procedures within the CSM installat
 
       > Example release versions:
       >
-      > - An alpha build, `CSM_RELEASE=1.3.0-alpha.99`
-      > - A release candidate: `CSM_RELEASE=1.3.0-rc.1`
-      > - A stable release: `CSM_RELEASE=1.3.0`
+      > - An alpha build: `CSM_RELEASE=1.4.0-alpha.99`
+      > - A release candidate: `CSM_RELEASE=1.4.0-rc.1`
+      > - A stable release: `CSM_RELEASE=1.4.0`
 
       ```bash
       export CSM_RELEASE=<value>
