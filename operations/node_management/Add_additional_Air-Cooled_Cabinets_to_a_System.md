@@ -56,17 +56,17 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 
     Each invocation of the hardware-topology-assistant creates a new folder in the current directory named similarly to `hardware-topology-assistant_TIMESTAMP`. This directory contains files with the following data:
     - Log output from the hardware-topology-assistant run.
-       - `topology_changes.json` which enumerates the changes made to SLS.
+      - `topology_changes.json` which enumerates the changes made to SLS.
          - Added River hardware, except for management NCNs
          - Modified networks.
            - Added IP address reservations.
            - Cabinet VLAN assignment.
-       -  Modified version of the SLS hardware and networks.
-       -  Modified versions of the BSS bootparameters for Management NCNs. 
+      - Modified version of the SLS hardware and networks.
+      - Modified versions of the BSS bootparameters for Management NCNs.
     - Backups of the following before any changes are applied
-       - BSS boot parameters for each existing management NCN.
-       - Management NCN global BSS boot parameters.
-       - Dump state of SLS before any changes are applied.
+      - BSS boot parameters for each existing management NCN.
+      - Management NCN global BSS boot parameters.
+      - Dump state of SLS before any changes are applied.
 
     > **Reminder:** New management NCNs are not handled by this tool. They will be handled by a different procedure referenced in the last step of this procedure.
 
@@ -90,7 +90,8 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     2022/08/11 12:33:54 Add --application-node-metadata=application_node_metadata.yaml to the command line arguments and try again.
     ```
 
-    The following is an example entry in the `application_node_metadata.yaml` file that requires additional information to be filled in. **Do not** change any of the SubRole or aliases values for other application nodes. The `canu_common_name` field contains the common name of the application node represented in the CANU CCJ/Paddle file for easier recognition of what the node is when editing the file. 
+    The following is an example entry in the `application_node_metadata.yaml` file that requires additional information to be filled in. **Do not** change any of the SubRole or aliases values for other application nodes. The `canu_common_name` field
+    contains the common name of the application node represented in the CANU CCJ/Paddle file for easier recognition of what the node is when editing the file.
 
     ```yaml
     x3001c0s16b0n0:
@@ -123,6 +124,13 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
     > ```
 
     Add the `--application-node-metadata=application_node_metadata.yaml` to the list of CLI arguments, and attempt the dry run again.
+
+    > Additional **advanced** options that are available to control the behavior of the `hardware-topology-assistant`. Use these options with care.
+    > | Flag                                           | Description
+    > | ---------------------------------------------- | ----------------------------------------------
+    > | `--ignore-unknown-canu-hardware-architectures` | Ignore CANU hardware architectures that are unknown to this tool. Instead of erroring out the `hardware-topology-assistant` will issue warnings for unknown CANU hardware architectures.
+    > | `--ignore-removed-hardware`                    | Ignore hardware removed from the system, and only add new hardware to the system. This will prevent the `hardware-topology-assistant` from refusing to continue when hardware was removed.
+    > | `--hardware-ignore-list=xnames`                | Hardware to ignore specified as xnames. Multiple xnames can be specified in a comma separated list. For example, `--hardware-ignore-list=x3000c0s36b0n0,x3001c0s37b0n0`.
 
 1. (`ncn-mw`) Perform changes on the system by running the same command without the `--dry-run` flag.
 
