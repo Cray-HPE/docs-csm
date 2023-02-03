@@ -46,13 +46,15 @@ The areas should be tested in the order they are listed on this page. Errors in 
 
 ## 0. Cray command line interface
 
-The first time these checks are performed during a CSM install, the Cray Command Line Interface (CLI) has not yet been configured.
-Some of the health check tests cannot be run without the Cray CLI being configured. Tests with this dependency are noted in their
-descriptions below. These tests may be skipped but **this is not recommended**.
+Some of the health check tests will fail if the Cray Command Line Interface (CLI) is not configured on the management NCNs.
+Tests with this dependency are noted in their descriptions below. These tests may be skipped but **this is not recommended**.
 
-The Cray CLI must be configured on all NCNs and the PIT node. The following procedures explain how to do this:
+If running these checks during an initial CSM install, then to find details on configuring the Cray CLI, see
+[Configure the Cray command line interface](../install/configure_administrative_access.md#1-configure-the-cray-command-line-interface)
+from the install documentation.
 
-1. [Configure the Cray command line interface](../install/configure_administrative_access.md#1-configure-the-cray-command-line-interface)
+If running these checks after the initial CSM install, then to find details on configuring the Cray CLI, see
+[Configure the Cray CLI](configure_cray_cli.md) from the operational documentation.
 
 ## 1. Platform health checks
 
