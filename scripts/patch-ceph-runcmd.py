@@ -73,7 +73,7 @@ for storage_component in components_json['Components']:
         run_cmd.append(enable_script)
     
     preLoadImages_script="/srv/cray/scripts/common/pre-load-images.sh"
-    if args.removePreLoadImages and preLoadImages_script in run_cmd:
+    if preLoadImages_script in run_cmd:
         run_cmd.remove(preLoadImages_script)
 
     # Now patch BSS.
