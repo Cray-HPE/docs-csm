@@ -217,17 +217,18 @@ Check the status of Ceph.
     Example output:
 
     ```screen
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.39.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mgr.ncn-s003.tjuyhj.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mon.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.41.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.36.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.37.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mds.cephfs.ncn-s003.jcnovs.    service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.40.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@crash.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@node-exporter.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.38.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@rgw.site1.ncn-s003.iibwgo.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.14.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.1.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@mds.cephfs.ncn-s003.ijrnef.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.17.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.11.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@crash.ncn-s003.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@mgr.ncn-s003.gasosn.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@mon.ncn-s003.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@node-exporter.ncn-s003.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.8.service.
+    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.4.service.
     ```
 
 1. Re-check the OSD status, weight, and location:
@@ -256,12 +257,12 @@ Check the status of Ceph.
     13   ssd   3.49309          osd.13         up   1.00000  1.00000
     15   ssd   3.49309          osd.15         up   1.00000  1.00000
     -7         20.95853      host ncn-s003
-    1    ssd   3.49309          osd.1        down         0  1.00000
-    4    ssd   3.49309          osd.4        down         0  1.00000
-    8    ssd   3.49309          osd.8        down         0  1.00000
-    11   ssd   3.49309          osd.11       down         0  1.00000
-    14   ssd   3.49309          osd.14       down         0  1.00000
-    17   ssd   3.49309          osd.17       down         0  1.00000
+    1    ssd   3.49309          osd.1        down   1.00000  1.00000
+    4    ssd   3.49309          osd.4        down   1.00000  1.00000
+    8    ssd   3.49309          osd.8        down   1.00000  1.00000
+    11   ssd   3.49309          osd.11       down   1.00000  1.00000
+    14   ssd   3.49309          osd.14       down   1.00000  1.00000
+    17   ssd   3.49309          osd.17       down   1.00000  1.00000
     ```
 
 1. Check the status of the Ceph cluster:
@@ -276,31 +277,30 @@ Check the status of Ceph.
       cluster:
         id:     4c9e9d74-a208-11ed-b008-98039bb427f6
         health: HEALTH_WARN
-                4 failed cephadm daemon(s)
-                1/3 mons down, quorum ncn-s002,ncn-s003
-                1 osds down
+                1/3 mons down, quorum ncn-s001,ncn-s002
+                6 osds down
                 1 host (6 osds) down
-                Degraded data redundancy: 37896/113690 objects degraded (33.333%), 370 pgs degraded, 503 pgs undersized
+                Degraded data redundancy: 34257/102773 objects degraded (33.333%), 370 pgs degraded, 352 pgs undersized
 
       services:
-        mon: 3 daemons, quorum ncn-s002,ncn-s003 (age 14m), out of quorum: ncn-s001
-        mgr: ncn-s003.ndzqsk(active, since 17h), standbys: ncn-s002.mgvtbe
+        mon: 3 daemons, quorum ncn-s001,ncn-s002 (age 56s), out of quorum: ncn-s003
+        mgr: ncn-s002.amfitm(active, since 43m), standbys: ncn-s001.rytusj
         mds: 1/1 daemons up, 1 hot standby
-        osd: 18 osds: 12 up (since 14m), 13 in (since 4m)
+        osd: 18 osds: 12 up (since 55s), 18 in (since 13h)
         rgw: 2 daemons active (2 hosts, 1 zones)
 
       data:
         volumes: 1/1 healthy
         pools:   13 pools, 553 pgs
-        objects: 37.90k objects, 69 GiB
-        usage:   150 GiB used, 45 TiB / 45 TiB avail
-        pgs:     37896/113690 objects degraded (33.333%)
+        objects: 34.26k objects, 58 GiB
+        usage:   173 GiB used, 63 TiB / 63 TiB avail
+        pgs:     34257/102773 objects degraded (33.333%)
                 370 active+undersized+degraded
-                133 active+undersized
-                50  active+clean
+                159 active+undersized
+                24  active+clean
 
       io:
-        client:   12 KiB/s rd, 787 KiB/s wr, 6 op/s rd, 51 op/s wr
+        client:   8.7 KiB/s rd, 353 KiB/s wr, 3 op/s rd, 53 op/s wr
     ```
 
 1. Remove Ceph OSDs.
@@ -315,14 +315,14 @@ Check the status of Ceph.
 
      ```text
      ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
-     -1         62.87750  root default
-     -9         10.47958      host ncn-s003
-     36    ssd   1.74660          osd.36       down   1.00000  1.00000
-     37    ssd   1.74660          osd.37       down   1.00000  1.00000
-     38    ssd   1.74660          osd.38       down   1.00000  1.00000
-     39    ssd   1.74660          osd.39       down   1.00000  1.00000
-     40    ssd   1.74660          osd.40       down   1.00000  1.00000
-     41    ssd   1.74660          osd.41       down   1.00000  1.00000
+     -1         62.87758  root default
+     -7         20.95853      host ncn-s003
+      1    ssd   3.49309          osd.1        down   1.00000  1.00000
+      4    ssd   3.49309          osd.4        down   1.00000  1.00000
+      8    ssd   3.49309          osd.8        down   1.00000  1.00000
+      11   ssd   3.49309          osd.11       down   1.00000  1.00000
+      14   ssd   3.49309          osd.14       down   1.00000  1.00000
+      17   ssd   3.49309          osd.17       down   1.00000  1.00000
      ```
 
     1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
@@ -342,12 +342,16 @@ Check the status of Ceph.
         ```screen
         destroyed osd.1
         purged osd.1
-        destroyed osd.3
-        purged osd.3
+        destroyed osd.4
+        purged osd.4
         destroyed osd.6
         purged osd.6
-        destroyed osd.9
-        purged osd.9
+        destroyed osd.11
+        purged osd.11
+        destroyed osd.14
+        purged osd.14
+        destroyed osd.17
+        purged osd.17
         ```
 
 ## Next Step
