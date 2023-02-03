@@ -233,7 +233,7 @@ spec:
               path: /results/records.yaml
               default: "{}"
       container:
-        image: artifactory.algol60.net/csm-docker/unstable/cf-gitea-import:1.9.0-bug-CASMINST-5843.16_f017da7
+        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-import:1.9.0
         command:
           - "/bin/sh"
         args: ["-c", "/opt/csm/cf-gitea-import/argo_entrypoint.sh"]
