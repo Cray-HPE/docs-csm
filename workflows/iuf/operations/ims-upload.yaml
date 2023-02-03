@@ -225,10 +225,10 @@ spec:
           default: "{}"
 
     container:
-      # replace image with standard ims-load-artifacts once PR is merged
-      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.0.1
-      command: ['python3']
-      args: ['-m', 'ims_load_artifacts.load_artifacts']
+      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.1.0
+      command:
+        - "/bin/sh"
+      args: ["-c", "/ims_load_artifacts/argo_entrypoint.sh"]
       env:
       - name: LOG_LEVEL
         value: INFO
@@ -265,17 +265,16 @@ spec:
       - name: IUF_RELEASE_PATH
         value: "{{inputs.parameters.iuf_release_mount_path}}"
       volumeMounts:
-      - name: certs # mount cluster certs to ca-certificates.crt for curl/http libraries
-        mountPath: /etc/ssl/certs/ca-certificates.crt
-        subPath: platform-ca-certs.crt
+      - name: certs
+        mountPath: /usr/local/share/ca-certificates
       - name: results
         mountPath: /results
       - name: release-distribution
         mountPath: "{{inputs.parameters.iuf_release_mount_path}}"
     volumes:
     - name: certs
-      hostPath:
-        path: /etc/pki/trust/anchors
+      configMap:
+        name: cray-configmap-ca-public-key
     - name: release-distribution
       hostPath:
         path: "{{inputs.parameters.iuf_release_mount_path}}"
