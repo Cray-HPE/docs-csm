@@ -692,6 +692,13 @@ Init
 sessionid
 SESSIONID
 
+- operations/iuf/stages/managed_nodes_rollout.md
+rollout
+
+- operations/iuf/stages/management_nodes_rollout.md
+rollout
+rollouts
+
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
 
