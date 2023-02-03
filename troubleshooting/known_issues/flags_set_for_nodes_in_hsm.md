@@ -31,6 +31,8 @@ Warning flags are set for nodes in HSM when BMCs report an unhealthy status in R
 
 1. (`ncn-mw#`) Check the BMCs of the "Warning" flag nodes for endpoints with unhealthy statuses in Redfish.
 
+    Example command:
+
     ```bash
     curl -s -k -u root:<password> https://<bmc_xname>/redfish/v1/Systems/1/Memory/proc1dimm1 | jq
     ```
@@ -58,6 +60,8 @@ Warning flags are set for nodes in HSM when BMCs report an unhealthy status in R
         ...
     } 
     ```
+
+    Example command:
 
     ```bash
     curl -s -k -u root:<password> https://<bmc_xname>/redfish/v1/Chassis/Enclosure | jq
