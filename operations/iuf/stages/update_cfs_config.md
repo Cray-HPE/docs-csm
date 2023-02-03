@@ -43,8 +43,8 @@ See the [HPE Cray EX System Admin Toolkit (SAT) Guide](https://cray-hpe.github.i
 ## Example
 
 (`ncn-m001#`) Execute the `update-cfs-config` stage for activity `admin-230127` using the specified `site_vars.yaml` file and the managed and management `sat bootprep` config files and the `product_vars.yaml` config file
-found in the `hpc-csm-software-recipe-23.03.0/vcs` directory of the 22.03.0 HPC CSM Software Recipe distribution file.
+found in the `hpc-csm-software-recipe-23.05.0/vcs` directory of the 23.05.0 HPC CSM Software Recipe distribution file.
 
 ```bash
-iuf -a admin-230127 run -sv ./site_vars.yaml -bpcd ./hpc-csm-software-recipe-23.03.0/vcs -r update-cfs-config
+iuf -a admin-230127 run -sv ./site_vars.yaml -bpcd ./hpc-csm-software-recipe-23.05.0/vcs -r update-cfs-config
 ```

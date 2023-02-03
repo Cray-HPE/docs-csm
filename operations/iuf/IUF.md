@@ -45,7 +45,7 @@ The following IUF topics are discussed in the sections below.
   those configurations to their specific needs.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
-- The `management-nodes-rollout` stage currently does not reboot management NCN storage nodes or `ncn-m001`. These nodes must be rebooted using non-IUF methods described in the appropriate sections of the CSM documentation.
+- The `management-nodes-rollout` stage currently does not reboot management NCN storage nodes or `ncn-m001`. These nodes must be rebuilt using non-IUF methods described in the appropriate sections of the CSM documentation.
 - If the `iuf run` subcommand ends unexpectedly before the Argo workflow it created completes, there is no CLI option to reconnect to the Argo workflow and continue displaying status. It is recommended the administrator
   monitors progress via the Argo workflow UI and/or IUF log files in this scenario.
 

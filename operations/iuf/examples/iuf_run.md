@@ -1,6 +1,6 @@
 # `iuf run` Examples
 
-**`NOTE`** Due the the large number of arguments available for `iuf run` invocations, the following examples omit certain arguments in order to focus on those of interest for each example.
+**`NOTE`** Due to the large number of arguments available for `iuf run` invocations, these examples only include often used key arguments.
 
 (`ncn-m001#`) Execute stages `process-media` through `deliver-product` for activity `admin-230126`.
 
@@ -14,14 +14,6 @@ iuf -a admin-230126 run -b process-media -e deliver-product
 
 ```bash
 iuf -a admin-230126 run -b process-media -e deliver-product -s pre-install-check
-```
-
----
-
-(`ncn-m001#`) Execute the `update-vcs-config` stage for activity `admin-230126`.
-
-```bash
-iuf -a admin-230126 run -r update-vcs-config
 ```
 
 ---
