@@ -1,4 +1,4 @@
-# Troubleshoot Ceph image with tag:\<none\>
+# Troubleshoot Ceph image with tag:'\<none\>'
 
 Use the following procedure to fix a ceph image with tag: \<none\>.
 
