@@ -514,9 +514,9 @@ However, the commands in this section are all run **on** `ncn-m001`.
     done ; echo "Configuration completed on all NCN BMCs"
     ```
 
-## 7. Create and Mount an rbd Device
+## 7. Create and Mount an `rbd` Device
 
-  1. Create the rbd device for subsequent installs and upgrades:
+  1. Create the `rbd` device for subsequent installs and upgrades:
 
      ```bash
      tar xvf /usr/share/doc/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/; \
