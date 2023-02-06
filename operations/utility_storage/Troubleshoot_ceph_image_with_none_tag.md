@@ -2,8 +2,13 @@
 
 Use the following script to fix a ceph image with tag: \<none\>.
 
-1. ssh to the storage node that contains ceph image with tag: \<none\>
+All of the following commands should be run from the storage node that contains ceph image with tag: \<none\>.
+
 1. Run `podman images`.
+   
+   ```bash
+    podman images
+    ```
 
     Expected output:
 
@@ -29,21 +34,38 @@ Use the following script to fix a ceph image with tag: \<none\>.
     ```
 
 1. Fix the tag by running the following script on the storage node with the tag: \<none\>.
+    1. Copy the script below and paste it into `/tmp/fix_ceph_image_tag.sh`.
 
-    ```bash
-    #!/bin/bash
+        ```bash
+        #!/bin/bash
 
-    images_tagged_none=$(podman images | grep "<none>" | awk '{print $1","$3}')
-    for image in $images_tagged_none; do
-        image_name=$(echo $image | cut -d',' -f1)
-        image_id=$(echo $image | cut -d',' -f2)
-        full_id=$(podman images $image_name --format json | jq '.[].Id' | grep $image_id | tr -d '"' | tail -1)
-        version=$(podman images $image_name --format json | jq --arg FULL_ID $full_id '.[] | select (.Id == $FULL_ID) | .Labels."org.opencontainers.image.version"' | tr -d '"' | tail -1)
-        podman pull ${image_name}:${version}
-    done
-    ```
+        images_tagged_none=$(podman images | grep "<none>" | awk '{print $1","$3}')
+        for image in $images_tagged_none; do
+            image_name=$(echo $image | cut -d',' -f1)
+            image_id=$(echo $image | cut -d',' -f2)
+            full_id=$(podman images $image_name --format json | jq '.[].Id' | grep $image_id | tr -d '"' | tail -1)
+            version=$(podman images $image_name --format json | jq --arg FULL_ID $full_id '.[] | select (.Id == $FULL_ID) | .Labels."org.opencontainers.image.version"' | tr -d '"' | tail -1)
+            podman pull ${image_name}:${version}
+        done
+        ```
+    
+    1. Change the mode of the script.
+
+        ```bash
+        chmod u+x /tmp/fix_ceph_image_tag.sh
+        ```
+
+    1. Execute the script.
+
+        ```bash
+        /tmp/fix_ceph_image_tag.sh
+        ```
 
 1. Verify the tag has been fixed by re-running `podman images`.
+
+    ```bash
+    podman images
+    ```
 
     ```bash
     ncn-s002:~ # podman images
