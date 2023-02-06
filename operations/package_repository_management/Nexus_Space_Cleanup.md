@@ -33,7 +33,7 @@ To delete a repository from the CLI, reference
 To delete a repository out of the web UI:
 
 1. Refer to [Access Nexus with the Web UI](./Manage_Repositories_with_Nexus.md#access-nexus-with-the-web-ui).
-1. Authenticate to the web UI. 
+1. Authenticate to the web UI.
 1. Browse to the Nexus admin section.
 1. Click on **Repository**.
 1. Click on **Repositories**.
