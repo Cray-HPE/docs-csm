@@ -1,6 +1,6 @@
 # Troubleshoot Ceph image with tag:'\<none\>'
 
-Use the following script to fix a ceph image with tag: \<none\>.
+Use the following procedure to fix a ceph image with tag: \<none\>.
 
 All of the following commands should be run from the storage node that contains ceph image with tag: \<none\>.
 
