@@ -42,7 +42,7 @@ and Kubernetes API endpoints from the customer site via the High Speed Network (
 2. **Management Customer Access - CMN (Customer Management Network)** :  Using a VLAN on the Management Network, this feature allows system administrative access from the customer site.
 Prior to CSM 1.2, administrative access was available on the original CAN; this feature provided a traffic path and access split.
 
-Enabling BICAN removes the original CAN.
+Enabling the CHN removes the original CAN.
 
 **During installation, the opportunity to enable the new features will be presented.**
 
