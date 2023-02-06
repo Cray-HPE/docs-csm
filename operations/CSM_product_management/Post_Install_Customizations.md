@@ -218,7 +218,7 @@ Trial and error may be needed to determine what is best for a given system at sc
 1. (`ncn#`) Redeploy the same chart version but with the desired resource settings.
 
    ```bash
-   loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. Verify that the pod restarts and that the desired resources have been applied.
@@ -343,7 +343,7 @@ Refer to the note at the end of this section for more details.
 1. (`ncn#`) Redeploy the same chart version but with the desired resource settings.
 
    ```bash
-   loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. Verify the pods restart and that the desired resources have been applied.
@@ -468,7 +468,7 @@ Trial and error may be needed to determine what is best for a given system at sc
 1. (`ncn#`) Redeploy the same chart version but with the desired resource settings.
 
    ```bash
-   loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. Verify the `cray-bss` pods scale.
@@ -578,7 +578,7 @@ Refer to the note at the end of this section for more details.
 1. (`ncn#`) Redeploy the same chart version but with the desired volume size setting.
 
    ```bash
-   loftsman ship charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. (`ncn#`) Verify that the increased volume size has been applied.
