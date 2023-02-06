@@ -37,13 +37,6 @@ The panels interact with configured data sources, including the following:
 - Main
 - Clusters
 
-## Goss tests
-
-- Product test results
-- Suite test results
-- Test results
-- Node-wise test results
-
 ## Istio
 
 - Mesh
@@ -51,12 +44,6 @@ The panels interact with configured data sources, including the following:
 - Pilot
 - Service
 - Workload
-
-## IUF Dashboard
-
-- Product
-- Stage
-- Operation
 
 ## Kea
 
