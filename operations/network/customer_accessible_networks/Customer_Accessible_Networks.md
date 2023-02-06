@@ -17,7 +17,7 @@ The Customer Management Network \(CMN\) provides access from outside the custome
 
 These nodes and services need an IP address that routes to the customer's network in order to be accessed from outside the network.
 
-### Implications if CAN is not Configured
+### Implications if CMN is not Configured
 
 - No direct access to the NCNs other than `ncn-m001`. Will need to hop through `ncn-m001` to get to the rest of the NCNs.
 - No direct access to the UANs unless the UAN has a direct connection to the customer network.
