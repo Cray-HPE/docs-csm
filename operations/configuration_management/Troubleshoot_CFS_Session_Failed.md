@@ -1,4 +1,4 @@
-# Troubleshoot Ansible Play Failures in CFS Sessions
+# Troubleshoot Failed CFS Sessions
 
 View the Kubernetes logs for a Configuration Framework Service \(CFS\) pod in an error state to determine whether the error resulted from the
 CFS infrastructure or from an Ansible play that was run by a specific configuration layer in a CFS session.
@@ -48,8 +48,6 @@ Use this procedure to obtain important triage information for Ansible plays bein
     Issues rarely occur in the `istio-init` and `istio-proxy` containers. These containers can be ignored for now.
 
 1. (`ncn-mw#`) Check the `git-clone`, `inventory`, and `ansible` containers, in that order.
-
-    > If there are additional Ansible pods, examine those as well, in ascending order.
 
     1. Check the `git-clone` container.
 
@@ -125,4 +123,5 @@ Use this procedure to obtain important triage information for Ansible plays bein
         x3000c0s19b4n0             : ok=27   changed=19   unreachable=0    failed=1    skipped=63   rescued=0    ignored=1
         ```
 
-Run the Ansible play again once the underlying issue has been resolved.
+Debugging beyond this point is determined by the specific Ansible failure.
+If there is not enough information to determine a next step, see the documentation on how to [Increase the Ansible Verbosity](Change_the_Ansible_Verbosity_Logs.md).

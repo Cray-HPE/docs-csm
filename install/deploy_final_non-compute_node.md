@@ -160,7 +160,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 1. (`pit#`) Tell the PIT node to PXE boot on the next boot.
 
     ```bash
-    efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
+    efibootmgr -n $(efibootmgr | grep -m1 -Ei "ip(v4|4)" | awk '{match($0, /[[:xdigit:]]{4}/, m); print m[0]}') | grep -i bootnext
     ```
 
 1. (`pit#`) Collect a backdoor login. Fetch the CMN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
@@ -406,13 +406,12 @@ it is used for Cray installation and bootstrap.
 1. (`ncn-m001#`) Obtain access to CSI.
 
     ```bash
-    mkdir -pv /mnt/livecd /mnt/rootfs /mnt/sqfs && \
+    mkdir -pv /mnt/livecd /mnt/sqfs && \
         mount -v /metal/bootstrap/pre-install-toolkit-*.iso /mnt/livecd/ && \
         mount -v /mnt/livecd/LiveOS/squashfs.img /mnt/sqfs/ && \
-        mount -v /mnt/sqfs/LiveOS/rootfs.img /mnt/rootfs/ && \
-        cp -pv /mnt/rootfs/usr/bin/csi /tmp/csi && \
+        cp -pv /mnt/sqfs/usr/bin/csi /tmp/csi && \
         /tmp/csi version && \
-        umount -vl /mnt/sqfs /mnt/rootfs /mnt/livecd
+        umount -vl /mnt/sqfs /mnt/livecd
     ```
 
     > **`NOTE`** `/tmp/csi` will delete itself on the next reboot. The `/tmp` directory is `tmpfs` and runs in memory;

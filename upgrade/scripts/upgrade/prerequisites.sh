@@ -598,13 +598,15 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     set -o pipefail
     IMS_UPLOAD_SCRIPT=$(rpm -ql docs-csm | grep ncn-ims-image-upload.sh)
 
+    UUID_REGEX='^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$'
+
     export IMS_ROOTFS_FILENAME="${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
     export IMS_INITRD_FILENAME="${artdir}/kubernetes/initrd.img-${KUBERNETES_VERSION}-${arch}.xz"
     # do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
     resolve_kernel_glob=$(echo ${artdir}/kubernetes/*-${arch}.kernel)
     export IMS_KERNEL_FILENAME=$resolve_kernel_glob
     K8S_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
-    [[ -n ${K8S_IMS_IMAGE_ID} ]]
+    [[ -n ${K8S_IMS_IMAGE_ID} ]] && [[ ${K8S_IMS_IMAGE_ID} =~ $UUID_REGEX ]]
 
     export IMS_ROOTFS_FILENAME="${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs"
     export IMS_INITRD_FILENAME="${artdir}/storage-ceph/initrd.img-${CEPH_VERSION}-${arch}.xz"
@@ -612,7 +614,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     resolve_kernel_glob=$(echo ${artdir}/storage-ceph/*-${arch}.kernel)
     export IMS_KERNEL_FILENAME=$resolve_kernel_glob
     STORAGE_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
-    [[ -n ${STORAGE_IMS_IMAGE_ID} ]]
+    [[ -n ${STORAGE_IMS_IMAGE_ID} ]] && [[ ${STORAGE_IMS_IMAGE_ID} =~ $UUID_REGEX ]]
     set +o pipefail
 
     # clean up any previous set values just in case.
@@ -962,6 +964,22 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
             set +o pipefail
         done
 
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+# CRUS is being removed as part of this upgrade
+state_name="UNINSTALL_CRUS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+        # If CRUS is installed, uninstall it
+        if helm status -n services cray-crus ; then
+            helm uninstall -n services cray-crus
+        fi
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else

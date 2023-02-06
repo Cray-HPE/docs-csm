@@ -1,10 +1,8 @@
 # Troubleshoot Prometheus Alerts
 
-General Prometheus Alert Troubleshooting Topics
 - [`CephMgrIsAbsent` and `CephMgrIsMissingReplicas`](#cephmgrisabsent-and-cephmgrismissingreplicas)
 - [`CephNetworkPacketsDropped`](#cephnetworkpacketsdropped)
 - [`CPUThrottlingHigh`](#cputhrottlinghigh)
-- [`KubePodNotReady`](#kubepodnotready)
 - [`PostgresqlFollowerReplicationLagSMA`](#postgresqlfollowerreplicationlagsma)
 - [`PostgresqlHighRollbackRate`](#postgresqlhighrollbackrate)
 - [`PostgresqlInactiveReplicationSlot`](#postgresqlinactivereplicationslot)
@@ -56,7 +54,9 @@ The `CephMgrIsAbsent` and `CephMgrIsMissingReplicas` alerts should now clear in 
 
 ## `CephNetworkPacketsDropped`
 
-The `CephNetworkPacketsDropped` alert does not necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (it can be storage, master, or worker node). If the interface in question is determined to be healthy, then this alert can be ignored.
+The `CephNetworkPacketsDropped` alert does not necessarily indicate there are packets being dropped on an interface on a storage node. In a future release this alert will be renamed
+to be more generic. If this alert fires, inspect the IP address in the details of the alert to determine the node in question (it can be storage, master, or worker node). If the
+interface in question is determined to be healthy, then this alert can be ignored.
 
 ## `CPUThrottlingHigh`
 
@@ -68,13 +68,9 @@ Alerts for `CPUThrottlingHigh` on `smartmon` pods can be ignored. It is normal f
 
 Alerts for `CPUThrottlingHigh` on CFS services such as `cfs-batcher` and `cfs-trust` can be ignored. Because CFS is idle most of the time, these services have low CPU requests, and it is normal for CFS service resource usage to spike when it is in use.
 
-## `KubePodNotReady`
-
-Alerts for `KubePodNotReady` on `cray-crus` may be ignored if the Slurm software has not been installed. The `cray-crus` pod interacts with Slurm to manage compute node rolling upgrades.
-
 ## `PostgresqlFollowerReplicationLagSMA`
 
-Alerts for `PostgresqlFollowerReplicationLagSMA` on `sma-postgres-cluster` pods with `slot_name="permanent_physical_1"` can be ignored. This slot_name is disabled and will be removed in a future release.
+Alerts for `PostgresqlFollowerReplicationLagSMA` on `sma-postgres-cluster` pods with `slot_name="permanent_physical_1"` can be ignored. This `slot_name` is disabled and will be removed in a future release.
 
 ## `PostgresqlHighRollbackRate`
 
@@ -82,7 +78,7 @@ Alerts for `PostgresqlHighRollbackRate` on `spire-postgres` and `smd-postgres` p
 
 ## `PostgresqlInactiveReplicationSlot`
 
-Alerts for `PostgresqlInactiveReplicationSlot` on `sma-postgres-cluster` pods with `slot_name="permanent_physical_1"` can be ignored. This slot_name is disabled and will be removed in a future release.
+Alerts for `PostgresqlInactiveReplicationSlot` on `sma-postgres-cluster` pods with `slot_name="permanent_physical_1"` can be ignored. This `slot_name` is disabled and will be removed in a future release.
 
 ## `PostgresqlNotEnoughConnections`
 
@@ -90,4 +86,5 @@ Alerts for `PostgresqlNotEnoughConnections` for `datname="foo"` and `datname="ba
 
 ## `TargetDown`
 
-Many of the alerts for `TargetDown` for `sysmgmt-health/cray-sysmgmt-health-kubernetes-pods/0` are due to job pods that have `Completed` and no longer have an active endpoint that can be scraped. If the target that is down is from a job pod that has completed, the `TargetDown` alert for that pod can be ignored. This is being fixed in a future release.
+Many of the alerts for `TargetDown` for `sysmgmt-health/cray-sysmgmt-health-kubernetes-pods/0` are due to job pods that have `Completed` and no longer have an active endpoint that
+can be scraped. If the target that is down is from a job pod that has completed, the `TargetDown` alert for that pod can be ignored. This is being fixed in a future release.

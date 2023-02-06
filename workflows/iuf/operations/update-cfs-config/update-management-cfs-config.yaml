@@ -30,11 +30,34 @@ spec:
   templates:
     ### Main Steps ###
     - name: main
+      metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "update-management-cfs-config"
+            - key: stage
+              value: "update-cfs-config"
+            - key: type
+              value: "global"
+            - key: pname
+              value: "global"
+            - key: pversion
+              value: "global"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
       inputs:
         parameters:
           - name: auth_token
           - name: global_params
       steps:
+        - - name: start-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
         - - name: sat-bootprep-run
             templateRef:
               name: sat-general-template
@@ -65,3 +88,59 @@ spec:
                       --vars-file "$VARS_FILE_PATH" \
                       --format json \
                       $MEDIA_DIR/$BOOTPREP_FILE_PATH
+        - - name: end-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+
+        - - name:  prom-metrics
+            template: prom-metrics
+            arguments:
+              parameters:
+              - name: opstart
+                value: "{{steps.start-operation.outputs.result}}"
+              - name: opend
+                value: "{{steps.end-operation.outputs.result}}"
+              - name: pdname
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.name')}}"
+              - name: pdversion
+                value: "{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.version')}}"
+
+    - name: prom-metrics
+      inputs:
+        parameters:
+        - name: opstart
+        - name: opend
+        - name: pdname
+        - name: pdversion
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: opname
+                value: "update-management-cfs-config"
+              - key: stage
+                value: "update-cfs-config"
+              - key: type
+                value: "global"
+              - key: pdname
+                value: "global"
+              - key: pdversion
+                value: "global"
+              - key: opstart
+                value: "{{inputs.parameters.opstart}}"
+              - key: opend
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]

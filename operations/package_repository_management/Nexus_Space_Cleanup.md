@@ -12,8 +12,8 @@ This page outlines the procedure to manually cleanup Nexus, in order to ensure t
 
 - [Cleanup of data not being used](#cleanup-of-data-not-being-used)
 - [Cleanup of old installs](#cleanup-of-old-installs)
-- [Remove Data Marked for Deletion](#remove-data-marked-for-deletion)
-- [Check PVC Size](#check-pvc-size)
+- [Remove data marked for deletion](#remove-data-marked-for-deletion)
+- [Check PVC size](#check-pvc-size)
 - [Increase PVC size](#increase-pvc-size)
 
 ## Cleanup of data not being used
@@ -67,7 +67,7 @@ To check the amount of storage used, available, and total in the PVC.
 (`ncn-m#`) Run the following command on a mater node:
 
 ```bash
-kubectl exec -n nexus deploy/nexus -c nexus -- df -Ph /nexus-data | grep '/nexus-data' | awk '{print ("Used:", $3, "Avaliable:", $4, "Total Size:", $2)}'
+kubectl exec -n nexus deploy/nexus -c nexus -- df -Ph /nexus-data | grep '/nexus-data' | awk '{print ("Used:", $3, "Available:", $4, "Total Size:", $2)}'
 ```
 
 ## Increase PVC size

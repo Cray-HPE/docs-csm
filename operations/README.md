@@ -37,6 +37,8 @@ The following administrative topics can be found in this guide:
 - [Spire](#spire)
 - [Update firmware with FAS](#update-firmware-with-fas)
 - [User Access Service (UAS)](#user-access-service-uas)
+- [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
+- [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 
 ## CSM product management
 
@@ -180,18 +182,10 @@ Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifact
 
 ## Compute rolling upgrades
 
-Upgrade sets of compute nodes with the Compute Rolling Upgrade Service \(CRUS\) without requiring an entire set of nodes to be out of service at once. CRUS enables
-administrators to limit the impact on production caused from upgrading compute nodes by working through one step of the upgrade process at a time.
+**NOTE** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.6.0. See the following links for more information:
 
-> **NOTE** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
-See [Deprecated features](../introduction/differences.md#deprecated-features).
-
-- [Compute Rolling Upgrade Service (CRUS)](compute_rolling_upgrades/Compute_Rolling_Upgrades.md)
-- [CRUS Workflow](compute_rolling_upgrades/CRUS_Workflow.md)
-- [Upgrade Compute Nodes with CRUS](compute_rolling_upgrades/Upgrade_Compute_Nodes_with_CRUS.md)
-- [Troubleshoot Nodes Failing to Upgrade in a CRUS Session](compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
-- [Troubleshoot a Failed CRUS Session Because of Unmet Conditions](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
-- [Troubleshoot a Failed CRUS Session Because of Bad Parameters](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
+- [Rolling Upgrades using BOS](boot_orchestration/Rolling_Upgrades.md)
+- [Deprecated Features](../introduction/deprecated_features/README.md)
 
 ## Configuration management
 
@@ -215,9 +209,10 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [Automatic Session Deletion with `sessionTTL`](configuration_management/Automatic_Session_Deletion_with_sessionTTL.md)
   - [Track the Status of a Session](configuration_management/Track_the_Status_of_a_Session.md)
   - [View Configuration Session Logs](configuration_management/View_Configuration_Session_Logs.md)
-  - [Troubleshoot Ansible Play Failures in CFS Sessions](configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
-  - [Troubleshoot CFS Session Failing to Complete](configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
-  - [Troubleshoot CFS Sessions Failing to Start](configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
+  - [Troubleshoot CFS Issues](configuration_management/Troubleshoot_CFS_Issues.md)
+    - [Troubleshoot CFS Session Failed](configuration_management/Troubleshoot_CFS_Session_Failed.md)
+    - [Troubleshoot CFS Session Failing to Complete](configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+    - [Troubleshoot CFS Sessions Failing to Start](configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
 - [Configuration Management with the CFS Batcher](configuration_management/Configuration_Management_with_the_CFS_Batcher.md)
 - [CFS Flow Diagrams](configuration_management/CFS_Flow_Diagrams.md)
 - [Configuration Management of System Components](configuration_management/Configuration_Management_of_System_Components.md)
@@ -727,3 +722,11 @@ components. In CSM 1.3 and newer, the `sat` command is available on the Kubernet
 product stream.
 
 - [System Admin Toolkit in CSM](sat/sat_in_csm.md)
+
+## Install and Upgrade Framework (IUF)
+
+The Install and Upgrade Framework (IUF) provides a CLI and API which automates operations required to install, upgrade
+and deploy non-CSM product content onto an HPE Cray EX system. Each product distribution includes an `iuf-product-manifest.yaml`
+file which IUF uses to determine what operations are needed to install, upgrade, and deploy the product.
+
+- [Install and Upgrade Framework (IUF)](iuf/IUF.md)

@@ -64,6 +64,20 @@ if [ -z "$IMS_ROOTFS_FILENAME" ]; then
     exit 1
 fi
 
+if [[ -z ${CSM_RELEASE} ]]; then
+    echo "\$CSM_RELEASE is not specified" >&2
+    exit 1
+fi
+
+if [[ -z ${CSM_ARTI_DIR} ]] && [[ -z ${CSM_PATH} ]]; then
+    echo "One of \$CSM_ARTI_DIR or \$CSM_PATH must be set to the path of unpacked CSM tarball" >&2
+    exit 1
+fi
+
+CSM_TARBALL=${CSM_ARTI_DIR:-$CSM_PATH}
+
+CPC_VERSION=$(find "$CSM_TARBALL"/docker/artifactory.algol60.net/csm-docker/stable/ -maxdepth 1 | awk -F':' /cray-product-catalog-update/'{print $NF}' | sort -V | tail -1)
+
 IMS_ROOTFS_MD5SUM=$(md5sum "$IMS_ROOTFS_FILENAME" | awk '{ print $1 }')
 IMS_INITRD_MD5SUM=$(md5sum "$IMS_INITRD_FILENAME" | awk '{ print $1 }')
 IMS_KERNEL_MD5SUM=$(md5sum "$IMS_KERNEL_FILENAME" | awk '{ print $1 }')
@@ -121,5 +135,15 @@ cray ims images update "$IMS_IMAGE_ID" \
         --link-type s3 \
         --link-etag "${MANIFEST_ETAG}" \
         --link-path "s3://boot-images/$IMS_IMAGE_ID/manifest.json" > /dev/null
+
+podman run --rm --name ncn-cpc \
+    --user root \
+    -e PRODUCT=csm \
+    -e PRODUCT_VERSION=$CSM_RELEASE \
+    -e YAML_CONTENT_STRING="{images: {\"$IMS_IMAGE_NAME\": {id: \"$IMS_IMAGE_ID\"}}}" \
+    -e KUBECONFIG=/.kube/admin.conf \
+    -e VALIDATE_SCHEMA="true" \
+    -v /etc/kubernetes:/.kube:ro \
+    registry.local/artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION > /dev/null
 
 echo "$IMS_IMAGE_ID"
