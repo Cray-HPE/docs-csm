@@ -22,7 +22,6 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.1`, follow the procedures descr
 * Add TPM configuration support in SCSD.
 * Remove Hexane repo from RPM index.
 * Move spire jwks URL in cray-opa to ingress gateway.
-* Add Slingshot health event streaming to cray-hms-collector.
 * Fix unbound forward to PowerDNS does not working in an air-gapped configuration.
 * Update cfs-operator to remove the high priority on pods.
 * Add cray-console-* timeout to allow more time for post-upgrade hooks to complete.
