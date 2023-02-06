@@ -514,6 +514,17 @@ However, the commands in this section are all run **on** `ncn-m001`.
     done ; echo "Configuration completed on all NCN BMCs"
     ```
 
+## 7. Create and Mount an rbd Device
+
+    Create the rbd device for subsequent installs and upgrades:
+
+    ```bash
+    tar xvf /usr/share/doc/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/; \
+    source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate; \
+    /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001; \
+    deactivate
+    ```
+
 ## 8. Next topic
 
 After completing this procedure, the next step is to [Configure Administrative Access](README.md#5-configure-administrative-access).
