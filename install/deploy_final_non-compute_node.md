@@ -516,7 +516,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
 
 ## 7. Create and Mount an rbd Device
 
-    Create the rbd device for subsequent installs and upgrades:
+Create the rbd device for subsequent installs and upgrades:
 
     ```bash
     tar xvf /usr/share/doc/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/; \
