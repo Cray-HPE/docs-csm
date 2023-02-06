@@ -5,7 +5,7 @@ Use the following script to fix a ceph image with tag: \<none\>.
 All of the following commands should be run from the storage node that contains ceph image with tag: \<none\>.
 
 1. Run `podman images`.
-   
+
    ```bash
     podman images
     ```
@@ -48,7 +48,7 @@ All of the following commands should be run from the storage node that contains 
             podman pull ${image_name}:${version}
         done
         ```
-    
+
     1. Change the mode of the script.
 
         ```bash
