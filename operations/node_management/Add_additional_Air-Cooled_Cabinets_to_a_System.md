@@ -62,7 +62,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
            - Added IP address reservations.
            - Cabinet VLAN assignment.
       - Modified version of the SLS hardware and networks.
-      - Modified versions of the BSS bootparameters for Management NCNs.
+      - Modified versions of the BSS boot parameters for Management NCNs.
     - Backups of the following before any changes are applied
       - BSS boot parameters for each existing management NCN.
       - Management NCN global BSS boot parameters.
