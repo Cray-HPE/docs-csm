@@ -50,7 +50,7 @@ spec:
                     MEDIA_DIR="{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
                     BOOTPREP_FILE_PATH="{{=jsonpath(inputs.parameters.global_params, '$.input_params.bootprep_config_management')}}"
                     if [[ -z "$BOOTPREP_FILE_PATH" ]]; then
-                      echo "No bootprep file provided. Skipping operation." 1>&2
+                      echo "INFO No bootprep file provided. Skipping operation." 1>&2
                       echo "{}"
                       exit 0
                     fi
