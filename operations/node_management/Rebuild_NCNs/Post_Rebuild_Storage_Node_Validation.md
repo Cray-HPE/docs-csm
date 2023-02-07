@@ -6,7 +6,7 @@ Skip this section if a master or worker node was rebuilt.
 
 ## Procedure
 
-1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgws.
+1. Verify there are 3 `mons`, 3 `mds`, 3 `mgr` processes, and rgws.
 
     ```bash
     ceph -s
@@ -71,9 +71,9 @@ Skip this section if a master or worker node was rebuilt.
     17   ssd   3.49309          osd.17         up   1.00000  1.00000
     ```
 
-1. Verify the radosgw and haproxy are correct.
+1. Verify the `radosgw` and `haproxy` are correct.
 
-    There will be an output \(without an error\) returned if radosgw and haproxy are correct.
+    There will be an output \(without an error\) returned if `radosgw` and `haproxy` are correct.
 
     ```bash
     curl -k https://rgw-vip.nmn
