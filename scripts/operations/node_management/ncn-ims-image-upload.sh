@@ -157,7 +157,15 @@ if test -f /etc/pit-release; then
     FM=$(jq -r '."Global"."meta-data"."first-master-hostname"' < "${PITDATA}"/configs/data.json)
     ssh $FM $PODMAN_RUN >& /dev/null
 else
-    $PODMAN_RUN >& /dev/null
+    podman run --rm --name ncn-cpc \
+        --user root \
+        -e PRODUCT=csm \
+        -e PRODUCT_VERSION=$CSM_RELEASE \
+        -e YAML_CONTENT_STRING="{images: {\"$IMS_IMAGE_NAME\": {id: \"$IMS_IMAGE_ID\"}}}" \
+        -e KUBECONFIG=/.kube/admin.conf \
+        -e VALIDATE_SCHEMA="true" \
+        -v /etc/kubernetes:/.kube:ro \
+        registry.local/artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION >& /dev/null
 fi
 
 echo "$IMS_IMAGE_ID"
