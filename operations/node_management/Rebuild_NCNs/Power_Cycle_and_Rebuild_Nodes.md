@@ -28,7 +28,7 @@ This section applies to all node types. The commands in this section assume the 
 
         > NOTE: `read -s` is used to prevent the password from echoing to the screen or
         > being saved in the shell history.
-         
+
         ```bash
         read -r -s -p "${BMC} root password: " IPMI_PASSWORD
         ```
@@ -112,7 +112,7 @@ This section applies to all node types. The commands in this section assume the 
          cloud-init init
          ```
 
-    * **Verify cloud-init completed** If the console is not showing the expected output for cloud-init completing but the power cycled node is reachable via SSH, then run the following steps to verify if cloud-init successfully completed.
+   * **Verify cloud-init completed** If the console is not showing the expected output for cloud-init completing but the power cycled node is reachable via SSH, then run the following steps to verify if cloud-init successfully completed.
 
       1. The last thing cloud-init changes is the file: `/etc/cloud/cloud-init.disabled`. Check that the time on this file corresponds to the most recent power-cycle and the time that cloud-init would have completed.
 
@@ -120,7 +120,7 @@ This section applies to all node types. The commands in this section assume the 
         ssh $NODE ls -l /etc/cloud/cloud-init.disabled
         ```
 
-      1.  Check the last line in `/var/log/cloud-init-output.log`.
+      1. Check the last line in `/var/log/cloud-init-output.log`.
 
         ```bash
         ssh $NODE 'tail -1 /var/log/cloud-init-output.log'
