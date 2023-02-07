@@ -13,7 +13,7 @@ Glossary of terms used in CSM documentation.
   - [CEC microcontroller (eC)](#cec-microcontroller-ec)
   - [Compute Rolling Upgrade Service (CRUS)](#compute-rolling-upgrade-service-crus)
   - [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
-  - [Customer Access Network](#customer-access-network)
+  - [Customer Access Network (CAN)](#customer-access-network-can)
   - [Chassis Management Module (CMM)](#chassis-management-module-cmm)
   - [Compute Node (CN)](#compute-node-cn)
   - [Configuration Framework Service (CFS)](#configuration-framework-service-cfs)
@@ -62,7 +62,6 @@ Glossary of terms used in CSM documentation.
   - [System Management Network (SMNet)](#system-management-network-smnet)
   - [System Management Services (SMS)](#system-management-services-sms)
   - [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
-  - [Tenant and Partition Management Service (TAPMS)](#tenant-and-partition-management-service-tapms)
   - [User Access Instance (UAI)](#user-access-instance-uai)
   - [User Access Node (UAN)](#user-access-node-uan)
   - [User Access Service (UAS)](#user-access-service-uas)
@@ -151,7 +150,7 @@ software to more intelligently manage system-wide power consumption or configura
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management
 REST APIs into easily usable commands.
 
-## Customer Access Network
+## Customer Access Network (CAN)
 
 The Customer Access Network (CAN) provides access from outside the customer network to services, noncompute
 nodes (NCNs), and User Access Nodes (UANs) in the system. This allows for the following:

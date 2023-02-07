@@ -1,4 +1,4 @@
-# CAPMC Deprecation Notice:
+# CAPMC Deprecation Notice
 
 ## CAPMC enters final life cycle before deletion
 
