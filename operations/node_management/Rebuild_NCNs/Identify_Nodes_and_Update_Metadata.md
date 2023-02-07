@@ -6,7 +6,7 @@ This section applies to all node types. The commands in this section assume the 
 
 ## Procedure
 
-(`ncn-m001#`) The following steps can all be done completed on `ncn-m001`.
+(`ncn-m001#`) The following steps can all be done on `ncn-m001`.
 
 1. Generate the BSS boot parameters JSON file.
 
