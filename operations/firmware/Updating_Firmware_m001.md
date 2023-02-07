@@ -7,94 +7,118 @@ Retrieve the model name and firmware image required to update an HPE or Gigabyte
 > - On HPE nodes, the BMC firmware is iLO 5 and BIOS is System ROM.
 > - The commands in the procedure must be run on `ncn-m001`.
 
+- [Prerequisites](#prerequisites)
+- [Find the model name](#find-the-model-name)
+- [Get the firmware images](#get-the-firmware-images)
+- [Flash the firmware](#flash-the-firmware)
+  - [Flash Gigabyte `ncn-m001`](#flash-gigabyte-ncn-m001)
+  - [Flash HPE `ncn-m001`](#flash-hpe-ncn-m001)
+
 ## Prerequisites
+
+> **WARNING:** This procedure should not be performed during a CSM install while `ncn-m001` is booted as the PIT node using a remote ISO image.
+> Doing so may reset the remote ISO mount, requiring a reboot to recover.
 
 The following information is needed:
 
-- IP Address of `ncn-m001` BMC
-- IP Address of `ncn-m001`
+- IP address of `ncn-m001` BMC
+- IP address of `ncn-m001`
 - Root password for `ncn-m001` BMC
 
-## Find the Model Name
+## Find the model name
 
 Use one of the following commands to find the model name for the node type in use.
 
-### HPE Nodes
+- [Find HPE model name](#find-hpe-model-name)
+- [Find Gigabyte model name](#find-gigabyte-model-name)
 
-  ```bash
-  curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/1 | jq .Model
-  ```
+- (`ncn-m001#`) Find HPE model name.
 
-### Gigabyte Nodes
+    ```bash
+    curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/1 | jq .Model
+    ```
 
-  ```bash
-  curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/Self | jq .Model
-  ```
+- (`ncn-m001#`) Find Gigabyte model name.
 
-## Get the Firmware Images
+    ```bash
+    curl -k -u root:password https://ipaddressOfBMC/redfish/v1/Systems/Self | jq .Model
+    ```
 
-1. View a list of images stored in FAS that are ready to be flashed:
+## Get the firmware images
 
-    In the following example, `ModelName` is the name from the previous command.
+1. (`ncn-m001#`) View a list of images stored in FAS that are ready to be flashed.
+
+    In the following example, `ModelName` is the name found in the previous section.
 
     ```bash
     cray fas images list --format json | jq '.[] | .[] | select(.models | index("ModelName"))'
     ```
 
-    Locate the image in the returned output that is required to `ncn-m001` firmware and/or BIOS.
+    Locate the images in the returned output for the `ncn-m001` firmware and/or BIOS.
 
     Look for the returned `s3URL`. For example:
 
-    `"s3URL": "s3:/fw-update/4e5f569a603311eb96b582a8e219a16d/image.RBU"`
+    ```text
+    "s3URL": "s3:/fw-update/4e5f569a603311eb96b582a8e219a16d/image.RBU"
+    ```
 
-1. Get the firmware images using the `s3URL` path from the previous step.
+1. (`ncn-m001#`) Get the firmware images using the `s3URL` path from the previous step.
+
+    In the following example command, `4e5f569a603311eb96b582a8e219a16d/image.RBU` is the path in the `s3URL`,
+    and the image will be saved to the file `image.RBU` in the current directory.
 
     ```bash
     cray artifacts get fw-update 4e5f569a603311eb96b582a8e219a16d/image.RBU image.RBU
     ```
 
-    `4e5f569a603311eb96b582a8e219a16d/image.RBU` is the path in the `s3URL`.
-    `image.RBU` is the name of the file to save the image on local disk.
+## Flash the firmware
 
-## Flash the Firmware
+- [Flash Gigabyte `ncn-m001`](#flash-gigabyte-ncn-m001)
+- [Flash HPE `ncn-m001`](#flash-hpe-ncn-m001)
 
-### Gigabyte `ncn-m001`
+### Flash Gigabyte `ncn-m001`
 
-1. Start a webserver from the directory containing the downloaded image:
+1. (`ncn-m001#`) Start a webserver from the directory containing the downloaded image:
 
     ```bash
     python3 -m http.server 8770
     ```
 
-    1. Update BMC:
+1. (`ncn-m001#`) Update BMC.
 
-       - `passwd` = Root password of BMC
-       - `ipaddressOfBMC` = IP address of BMC
-       - `ipaddressOfM001` = IP address of `ncn-m001` node
-       - `filename` = Filename of the downloaded image
+    Be sure to substitute the correct values for the following strings in the example command:
 
-       ```bash
-       curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
-       ```
+    - `passwd` = Root password of `ncn-m001` BMC
+    - `ipaddressOfBMC` = IP address of `ncn-m001` BMC
+    - `ipaddressOfM001` = IP address of `ncn-m001` node
+    - `filename` = Filename of the downloaded image
 
-    2. Update BIOS:
+    ```bash
+    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' \
+        -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
+    ```
 
-       - `passwd` = Root password of BMC
-       - `ipaddressOfBMC` = IP address of BMC
-       - `ipaddressOfM001` = IP address of `ncn-m001` node
-       - `filename` = Filename of the downloaded image
+1. (`ncn-m001#`) Update BIOS.
 
-       ```bash
-       curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
-       ```
+    Be sure to substitute the correct values for the following strings in the example command:
 
-       > After updating BIOS, `ncn-m001` will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
+    - `passwd` = Root password of `ncn-m001` BMC
+    - `ipaddressOfBMC` = IP address of `ncn-m001` BMC
+    - `ipaddressOfM001` = IP address of `ncn-m001` node
+    - `filename` = Filename of the downloaded image
 
-### HPE `ncn-m001`
+    ```bash
+    curl -k -u root:passwd https://ipaddressOfBMC/redfish/v1/UpdateService/Actions/SimpleUpdate -H 'Content-Type: application/json' \
+        -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
+    ```
+
+    > After updating BIOS, `ncn-m001` will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
+
+### Flash HPE `ncn-m001`
 
 The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM (BIOS) on the HPE `ncn-m001` node.
 
-1. Copy the iLO 5 firmware and/or System ROM file(s) to a local computer from `ncn-m001` using `scp` or other secure copy tools.
+1. (`linux#`) Copy the iLO 5 firmware and/or System ROM files to a local computer from `ncn-m001` using `scp` or other secure copy tools.
 
     ```bash
     scp root@ipaddressOfM001Node:pathToFile/filename .
