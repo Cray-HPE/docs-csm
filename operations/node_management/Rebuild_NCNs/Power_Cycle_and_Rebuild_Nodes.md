@@ -112,7 +112,7 @@ This section applies to all node types. The commands in this section assume the 
          cloud-init init
          ```
 
-   * **Verify cloud-init completed** If the console is not showing the expected output for `cloud-init` completing but the power cycled node is reachable via SSH, then run the following steps to verify if `cloud-init` successfully completed.
+   * **Verify `cloud-init` completed** If the console is not showing the expected output for `cloud-init` completing but the power cycled node is reachable via SSH, then run the following steps to verify if `cloud-init` successfully completed.
 
       1. The last thing `cloud-init` changes is the file: `/etc/cloud/cloud-init.disabled`. Check that the time on this file corresponds to the most recent power-cycle and the time that `cloud-init` would have completed.
 
