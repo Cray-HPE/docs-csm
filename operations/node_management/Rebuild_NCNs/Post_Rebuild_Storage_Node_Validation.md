@@ -6,7 +6,7 @@ Skip this section if a master or worker node was rebuilt.
 
 ## Procedure
 
-1. Verify there are 3 `mons`, 3 `mds`, 3 `mgr` processes, and rgws.
+1. Verify there are 3 `mons`, 3 `mds`, 3 `mgr` processes, and `rgws`.
 
     ```bash
     ceph -s
