@@ -28,7 +28,7 @@
 m001_ip=$(host ncn-m001 | awk '{ print $NF }')
 ssh-keygen -R ncn-m001 -f ~/.ssh/known_hosts > /dev/null 2>&1
 ssh-keygen -R ${m001_ip} -f ~/.ssh/known_hosts > /dev/null 2>&1
-ssh-keyscan -H "ncn-m001,${ncn_ip}" >> ~/.ssh/known_hosts
+ssh-keyscan -H "ncn-m001,${m001_ip}" >> ~/.ssh/known_hosts
 
 nexus_username=$(ssh ncn-m001 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.username}} | base64 --decode')
 nexus_password=$(ssh ncn-m001 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode')
