@@ -156,7 +156,7 @@ This procedure adds one or more air-cooled cabinets and all associated hardware 
 1. (`ncn-mw`) Update `/etc/hosts` on the management NCNs with any newly added management switches.
 
     ```bash
-    /usr/share/doc/csm/scripts/operatioAdd_River_Cabinets/update_ncn_etc_hosts.py "${TOPOLOGY_CHANGES_JSON}" --perform-changes
+    /usr/share/doc/csm/scripts/operations/node_management/Add_River_Cabinets/update_ncn_etc_hosts.py "${TOPOLOGY_CHANGES_JSON}" --perform-changes
     ```
 
 1. (`ncn-mw`) Update cabinet routes on management NCNs.
