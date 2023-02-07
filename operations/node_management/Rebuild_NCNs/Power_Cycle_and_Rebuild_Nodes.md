@@ -188,7 +188,7 @@ This section applies to all node types. The commands in this section assume the 
 
 1. Update ssh-keys to the rebuild node.
 
-    This command will update ssh keys to the rebuilt node in the known_hosts file.
+    This command will update the ssh keys of the rebuilt node in the known_hosts file.
 
     ```bash
     node_ip=$(host $NODE | awk '{ print $NF }')
