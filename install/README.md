@@ -25,29 +25,28 @@ Detailed BICAN documentation can be found on the [BICAN technical details](../op
 The topics in this chapter need to be done as part of an ordered procedure so are
 shown here with numbered topics.
 
-- [Cray System Management Install](#cray-system-management-install)
-  - [Topics](#topics)
-  - [Pre-installation](#pre-installation)
-    - [1. Preparing for a re-installation](#1-preparing-for-a-re-installation)
-    - [2. Boot installation environment](#2-boot-installation-environment)
-    - [3. Import CSM tarball](#3-import-csm-tarball)
-    - [4. Create system configuration](#4-create-system-configuration)
-    - [5. Configure management network switches](#5-configure-management-network-switches)
-  - [Installation](#installation)
-  - [1. Deploy management nodes](#1-deploy-management-nodes)
-    - [2. Install CSM services](#2-install-csm-services)
-    - [3. Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
-    - [4. Deploy final NCN](#4-deploy-final-ncn)
-    - [5. Configure administrative access](#5-configure-administrative-access)
-    - [6. Validate CSM health](#6-validate-csm-health)
-    - [7. Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-    - [8. Upload Olympus BMC recovery firmware into TFTP server](#8-upload-olympus-bmc-recovery-firmware-into-tftp-server)
-  - [9. Update firmware with FAS](#9-update-firmware-with-fas)
-    - [10. Prepare compute nodes](#10-prepare-compute-nodes)
-    - [11. Next topic](#11-next-topic)
+1. [Pre-installation](#pre-installation)
+    1. [Preparing for a re-installation](#1-preparing-for-a-re-installation)
+    1. [Boot installation environment](#2-boot-installation-environment)
+    1. [Import CSM tarball](#3-import-csm-tarball)
+    1. [Create system configuration](#4-create-system-configuration)
+    1. [Configure management network switches](#5-configure-management-network-switches)
+1. [Installation](#installation)
+    1. [Deploy management nodes](#1-deploy-management-nodes)
+    1. [Install CSM services](#2-install-csm-services)
+    1. [Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
+    1. [Deploy final NCN](#4-deploy-final-ncn)
+    1. [Configure administrative access](#5-configure-administrative-access)
+    1. [Validate CSM health](#6-validate-csm-health)
+    1. [Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
+    1. [Upload Olympus BMC recovery firmware into TFTP server](#8-upload-olympus-bmc-recovery-firmware-into-tftp-server)
+    1. [Update firmware with FAS](#9-update-firmware-with-fas)
+    1. [Prepare compute nodes](#10-prepare-compute-nodes)
+    1. [Next topic](#11-next-topic)
     - [Troubleshooting installation problems](#troubleshooting-installation-problems)
-    - [12. Kubernetes encryption](#12-kubernetes-encryption)
-    - [13. Export Nexus data](#13-export-nexus-data)
+1. [Post-installation](#post-installation)
+    1. [Kubernetes encryption](#12-encryption)
+    1. [Export Nexus data](#13-export-nexus-data)
 
 > **`NOTE`** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#troubleshooting-installation-problems) and
@@ -137,8 +136,8 @@ Now that all of the CSM services have been installed and the final NCN has been 
 can be prepared. This may include configuring Keycloak with a local Keycloak account or confirming that Keycloak
 is properly federating LDAP or another Identity Provider (IdP), initializing the `cray` CLI for administrative
 commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by
-PCS/CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs (node
-controllers) for nodes in liquid-cooled cabinets.
+PCS/CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs
+(node controllers) for nodes in liquid-cooled cabinets.
 
 See [Configure Administrative Access](configure_administrative_access.md).
 

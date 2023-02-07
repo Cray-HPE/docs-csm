@@ -40,7 +40,7 @@ The following features are now deprecated and will be removed from CSM in a futu
     version is explicitly specified in BOS commands. Currently it defaults to BOS v1, but it may change to default to BOS v2 even before BOS v1
     is removed from CSM.
 
-For a list of all features with an announced deprecation target, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
+For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
 ## Removals
 
