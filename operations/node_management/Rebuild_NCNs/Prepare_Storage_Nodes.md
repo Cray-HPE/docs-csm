@@ -152,11 +152,13 @@ Upload ceph container images into nexus.
 
     echo "Process is complete."
     ```
+
 1. Change the mode of the script.
 
     ```bash
     chmod u+x /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
     ```
+
 1. Execute the script.
 
     ```bash
