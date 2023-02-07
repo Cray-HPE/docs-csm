@@ -47,7 +47,7 @@ When rebuilding a node, make sure that `/srv/cray/scripts/common/storage-ceph-cl
 
 Upload ceph container images into nexus.
 
-1. (`ncn-s#`) **On the node being rebuilt**, execute the upload_ceph_images_to_nexus.sh script.
+1. (`ncn-s#`) **On the node being rebuilt**, execute the `upload_ceph_images_to_nexus.sh` script.
 
    ```bash
    /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
