@@ -1,8 +1,7 @@
 # Interpreting HMS Health Check Results
 
-## Table of contents
-
 - [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
 - [Overview](#overview)
 - [Execution](#execution)
 - [Failure analysis](#failure-analysis)
@@ -22,6 +21,11 @@
 ## Introduction
 
 This document describes how to interpret the results of the HMS Health Check scripts and techniques for troubleshooting when failures occur.
+
+## Prerequisites
+
+The HMS health checks will not fail if the Cray CLI is not configured. However, some of the troubleshooting suggestions for investigating test failures
+involve using the CLI. For information on configuring the Cray CLI, see [Cray command line interface](../operations/validate_csm_health.md#0-cray-command-line-interface).
 
 ## Overview
 

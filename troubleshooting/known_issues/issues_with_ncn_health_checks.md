@@ -2,6 +2,9 @@
 
 - The first pass of running these tests may fail due to `cloud-init` not being completed on the storage nodes. In the case of failure, wait for five minutes and rerun the tests.
 
+- Some of the tests will fail if the Cray CLI is not configured on the management NCNs.
+  See [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface).
+
 - For any failures related to SSL certificates, see the [SSL Certificate Validation Issues](ssl_certificate_validation_issues.md) troubleshooting guide.
 
 - `Kubernetes Query BSS Cloud-init for ca-certs`
