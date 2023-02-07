@@ -15,7 +15,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 * Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
-* Blade is being added to an existing liquid-cooled cabinet in the system.
+* Node is being added to an existing air-cooled cabinet in the system.
 * The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
 * The System Layout Service (SLS) must have the desired HSN configuration.
 * Check the status of the high-speed network (HSN) and record link status before the procedure.
