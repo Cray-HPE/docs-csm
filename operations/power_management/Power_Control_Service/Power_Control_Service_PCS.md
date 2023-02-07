@@ -1,16 +1,16 @@
-# Cray Advanced Platform Monitoring and Control (CAPMC)
+# Power Control Service (PCS)
 
-The Cray Advanced Platform Monitoring and Control (CAPMC) service enables
-direct hardware control of nodes, compute blades, router modules, and liquid
-cooled chassis. CAPMC talks to BMCs via Redfish to control power, query status,
-and manage power capping on target components. These controls enable an
-administrator and 3rd party software to more intelligently manage state and
-system-wide power consumption.
+The Power Control Service (PCS) enables direct hardware control of nodes,
+compute blades, router modules, and liquid cooled chassis. PCS talks to
+BMCs via Redfish to control power, query status, and manage power capping
+on target components. These controls enable an administrator and 3rd party
+software to more intelligently manage state and system-wide power consumption.
 
 Administrators can use the `cray` CLI for power operations from any system that
 has HTTPS access to the
 [System Management Services](../network/Access_to_System_Management_Services.md).
 
+#TODO: continue here vvv
 Third party software can access the API directly. Refer to the
 [CAPMC API](https://github.com/Cray-HPE/hms-capmc/blob/v1.31.0/api/swagger.yaml)
 documentation for detailed information about API options and features.
