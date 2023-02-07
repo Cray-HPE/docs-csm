@@ -186,6 +186,17 @@ This section applies to all node types. The commands in this section assume the 
          diff "${XNAME}.json" "${XNAME}.check.json"
          ```
 
+1. Update ssh-keys to the rebuild node.
+
+    This command will update ssh keys to the rebuilt node in the known_hosts file.
+
+    ```bash
+    node_ip=$(host $NODE | awk '{ print $NF }')
+    ssh-keygen -R $NODE -f ~/.ssh/known_hosts > /dev/null 2>&1
+    ssh-keygen -R $node_ip -f ~/.ssh/known_hosts > /dev/null 2>&1
+    ssh-keyscan -H "$NODE,$node_ip" >> ~/.ssh/known_hosts
+    ```
+
 ## Next Step
 
 Proceed to the next step to [Validate Boot Loader](Validate_Boot_Loader.md). Otherwise, return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
