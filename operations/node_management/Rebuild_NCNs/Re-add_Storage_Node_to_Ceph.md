@@ -4,120 +4,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 **`NOTE`** This operation can be done to add more than one node at the same time.
 
-## Add Join Script
-
-1. Copy and paste the below script into `/srv/cray/scripts/common/join_ceph_cluster.sh`.
-
-   **`NOTE`** This script may also available in the `/usr/share/doc/csm/scripts` directory where the latest ***`docs-csm`*** RPM is installed. If so, it can be copied from that node to the new storage node being rebuilt and skip to step 2.
-
-   ```bash
-   #!/bin/bash
-
-   host=$(hostname)
-   host_ip=$(host ${host} | awk '{ print $NF }')
-
-   # run preload images on host
-   if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
-     echo "Unable to run pre-load-images.sh on $host."
-   fi
-
-   # update ssh keys for rebuilt node on host and on ncn-s001/2/3
-   truncate --size=0 ~/.ssh/known_hosts 2>&1
-   for node in ncn-s001 ncn-s002 ncn-s003; do
-     if ! host ${node}; then
-       echo "Unable to get IP address of $node"
-       exit 1
-     else
-       ncn_ip=$(host ${node} | awk '{ print $NF }')
-     fi
-     # add new authorized_hosts entry for the node
-     ssh-keyscan -H "${node},${ncn_ip}" >> ~/.ssh/known_hosts
-     
-     if [[ "$host" != "$node" ]]; then
-       ssh $node "if [[ ! -f ~/.ssh/known_hosts ]]; then > ~/.ssh/known_hosts; fi; ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $host_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${host},${host_ip} >> ~/.ssh/known_hosts"
-     fi
-   done
-
-   # copy necessary ceph files to rebuilt node
-   (( counter=0 ))
-   for node in ncn-s001 ncn-s002 ncn-s003; do
-     if [[ "$host" == "$node" ]]; then
-       (( counter+1 ))
-     elif [[ $(nc -z -w 10 $node 22) ]] || [[ $counter -lt 3 ]]
-     then
-       if [[ "$host" =~ ^("ncn-s001"|"ncn-s002"|"ncn-s003")$ ]]
-       then
-         scp $node:/etc/ceph/* /etc/ceph
-       else
-         scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring\} /etc/ceph/
-       fi
-
-       if [[ ! $(pdsh -w $node "ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
-       then
-         (( counter+1 ))
-         if [[ $counter -ge 3 ]]
-         then
-           echo "Unable to access ceph monitor nodes"
-           exit 1
-         fi
-       else
-         break
-       fi
-     fi
-   done
-
-   sleep 30
-   (( ceph_mgr_failed_restarts=0 ))
-   (( ceph_mgr_successful_restarts=0 ))
-   until [[ $(cephadm shell -- ceph-volume inventory --format json-pretty|jq '.[] | select(.available == true) | .path' | wc -l) == 0 ]]
-   do
-     for node in ncn-s001 ncn-s002 ncn-s003; do
-       if [[ $ceph_mgr_successful_restarts -gt 10 ]]
-       then
-         echo "Failed to bring in OSDs, manual troubleshooting required."
-         exit 1
-       fi
-       if pdsh -w $node ceph mgr fail
-       then
-         (( ceph_mgr_successful_restarts+1 ))
-         sleep 120
-         break
-       else
-         (( ceph_mgr_failed_restarts+1 ))
-         if [[ $ceph_mgr_failed_restarts -ge 3 ]]
-         then
-           echo "Unable to access ceph monitor nodes."
-           exit 1
-         fi
-       fi
-     done
-   done
-
-   for service in $(cephadm ls | jq -r '.[].systemd_unit')
-   do
-     systemctl enable $service
-   done
-   echo "Completed adding $host to ceph cluster."
-   echo "Checking haproxy and keepalived..."
-   # check rgw and haproxy are functional
-   res_file=$(mktemp)
-   http_code=$(curl -k -s -o "${res_file}" -w "%{http_code}" "https://rgw-vip.nmn")
-   if [[ ${http_code} != 200 ]]; then
-     echo "NOTICE Rados GW and haproxy are not healthy. Deploy RGW on rebuilt node."
-     exit 1
-   fi
-   # check keepalived is active
-   if [[ $(systemctl is-active keepalived.service) != "active" ]]; then
-     echo "NOTICE keepalived is not active on $host. Add node to Haproxy and Keepalived."
-     exit 1
-   fi
-   ```
-
-1. Change the mode of the script.
-
-   ```bash
-   chmod u+x /srv/cray/scripts/common/join_ceph_cluster.sh
-   ```
+## Run the Ceph Join Script
 
 1. In a separate window, log into one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`) and execute the following:
 
@@ -125,11 +12,12 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
    watch ceph -s
    ```
 
-1. Execute the script.
+1. (`ncn-m001#`) Copy `/usr/share/doc/csm/scripts/join_ceph_cluster.sh` to **the node being rebuilt** and execute it.
 
-   ```bash
-   /srv/cray/scripts/common/join_ceph_cluster.sh
-   ```
+    ```bash
+    scp /usr/share/doc/csm/scripts/join_ceph_cluster.sh ${NODE}:/srv/cray/scripts/common/join_ceph_cluster.sh
+    ssh $NODE /srv/cray/scripts/common/join_ceph_cluster.sh
+    ```
 
    **IMPORTANT:** While watching the window running `watch ceph -s`, the health will go to a `HEALTH_WARN` state. This is expected. Most commonly, there will be an alert about "failed to probe daemons or devices" and this will clear.
 
@@ -190,7 +78,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 **IMPORTANT:** `Rados-GW` by default is deployed to the first 3 storage nodes. This includes `HAproxy` and `Keepalived`.
 This is automated as part of the install, but administrators may have to regenerate the configuration if they are not running on the first 3 storage nodes or all nodes.
 
-1. Deploy Rados Gateway containers to the new nodes.
+1. (`ncn-s00[1/2/3]#`) Deploy Rados Gateway containers to the new nodes.
 
    - Configure Rados Gateway containers with the complete list of nodes it should be running on:
 
@@ -198,25 +86,31 @@ This is automated as part of the install, but administrators may have to regener
      ceph orch apply rgw site1 zone1 --placement="<node1 node2 node3 node4 ... >" --port=8080
      ```
 
-1. Verify Rados Gateway is running on the desired nodes.
+1. (`ncn-s00[1/2/3]#`) Verify Rados Gateway is running on the desired nodes.
 
     ```bash
-    ncn-s00(1/2/3)# ceph orch ps --daemon_type rgw
+    ceph orch ps --daemon_type rgw
     ```
 
     Example output:
 
     ```text
-    NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE     D              CONTAINER ID
-    rgw.site1.zone1.ncn-s001.kvskqt  ncn-s001  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8      553b0cb212c          6e323878db46
-    rgw.site1.zone1.ncn-s002.tisuez  ncn-s002  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8      553b0cb212c          278830a273d3
-    rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8           553b0cb212c      a9706e6d7a69
+    NAME                       HOST      PORTS   STATUS         REFRESHED  AGE  MEM USE  MEM LIM  VERSION  IMAGE ID      CONTAINER ID
+    rgw.site1.ncn-s001.bdprnl  ncn-s001  *:8080  running (22h)     7m ago  22h     348M        -  16.2.9   a3d3e58cb809  45b983e1eb23
+    rgw.site1.ncn-s002.lxyvkj  ncn-s002  *:8080  running (17h)     6m ago  17h     379M        -  16.2.9   a3d3e58cb809  a79964888adf
+    rgw.site1.ncn-s003.szrtek  ncn-s003  *:8080  running (18h)     6m ago  18h     479M        -  16.2.9   a3d3e58cb809  c800dce8d54f
     ```
 
-1. Add nodes into `HAproxy` and `KeepAlived`.
+1. (`ncn-s00[1/2/3]#`) Add nodes into `HAproxy` and `KeepAlived`.
+
+   Set the end node number to deploy `HAproxy` and `KeepAlived` (example: `end_node_number=5` if deploying on `ncn-s001` through `ncn-s005`).
 
    ```bash
-   pdsh -w ncn-s00[1-(end node number)] -f 2 \
+   end_node_number=n
+   ```
+
+   ```bash
+   pdsh -w ncn-s00[1-${end_node_number}] -f 2 \
                    'source /srv/cray/scripts/metal/update_apparmor.sh
                     reconfigure-apparmor; /srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg
                     systemctl enable haproxy.service
