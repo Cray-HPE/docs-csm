@@ -69,6 +69,11 @@ if [[ -z ${CSM_RELEASE} ]]; then
     exit 1
 fi
 
+if [[ -z ${PITDATA} ]] && [[ -f /etc/pit-release ]]; then
+    echo "\$PITDATA is not specified"
+    exit 1
+fi
+
 if [[ -z ${CSM_ARTI_DIR} ]] && [[ -z ${CSM_PATH} ]]; then
     echo "One of \$CSM_ARTI_DIR or \$CSM_PATH must be set to the path of unpacked CSM tarball" >&2
     exit 1
@@ -136,7 +141,22 @@ cray ims images update "$IMS_IMAGE_ID" \
         --link-etag "${MANIFEST_ETAG}" \
         --link-path "s3://boot-images/$IMS_IMAGE_ID/manifest.json" > /dev/null
 
-if ! test -f /etc/pit-release; then
+# shellcheck disable=SC2089
+PODMAN_RUN="podman run --rm --name ncn-cpc \
+    --user root \
+    -e PRODUCT=csm \
+    -e PRODUCT_VERSION=$CSM_RELEASE \
+    -e YAML_CONTENT_STRING=\"{images: {\"$IMS_IMAGE_NAME\": {id: \"$IMS_IMAGE_ID\"}}}\" \
+    -e KUBECONFIG=/.kube/admin.conf \
+    -e VALIDATE_SCHEMA=\"true\" \
+    -v /etc/kubernetes:/.kube:ro \
+    registry.local/artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION"
+
+# shellcheck disable=SC2090
+if test -f /etc/pit-release; then
+    FM=$(jq -r '."Global"."meta-data"."first-master-hostname"' < "${PITDATA}"/configs/data.json)
+    ssh $FM $PODMAN_RUN >& /dev/null
+else
     podman run --rm --name ncn-cpc \
         --user root \
         -e PRODUCT=csm \
@@ -145,7 +165,7 @@ if ! test -f /etc/pit-release; then
         -e KUBECONFIG=/.kube/admin.conf \
         -e VALIDATE_SCHEMA="true" \
         -v /etc/kubernetes:/.kube:ro \
-        registry.local/artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION > /dev/null
+        registry.local/artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION >& /dev/null
 fi
 
 echo "$IMS_IMAGE_ID"

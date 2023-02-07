@@ -4,9 +4,13 @@
 1. [Interpreting `cmsdev` Results](#32-interpreting-cmsdev-results)
 1. [Known issues with SMS tests](#33-known-issues-with-sms-tests)
 
+   - [Cray CLI](#cray-cli)
+   - [Etcd-restores](#etcd-restores)
+
 ## 3.1 SMS test execution
 
-The test in this section requires that the [Cray CLI is configured](../../operations/configure_cray_cli.md#configure-the-cray-command-line-interface-cray-cli) on nodes where the test is executed.
+This test requires that the Cray CLI is configured on nodes where the test is executed.
+See [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface).
 
 The following test can be run on any Kubernetes node (any master or worker node, but **not** on the PIT node).
 
@@ -34,6 +38,13 @@ The following test can be run on any Kubernetes node (any master or worker node,
 Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
 
 ## 3.3 Known issues with SMS tests
+
+### Cray CLI
+
+Some of the subtests may fail if the Cray CLI is not configured on the management NCN where `cmsdev` is executed.
+See [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface).
+
+### Etcd restores
 
 If an Etcd restore has been performed on one of the SMS services (such as BOS or CRUS), then the first Etcd pod that
 comes up after the restore will not have a PVC (Persistent Volume Claim) attached to it (until the pod is restarted).

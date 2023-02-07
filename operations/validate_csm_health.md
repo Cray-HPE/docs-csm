@@ -12,6 +12,9 @@ The following are examples of when to run health checks:
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
+Each section of this health check document provides links to relevant troubleshooting procedures. If additional help is needed, see
+[CSM Troubleshooting Information](../troubleshooting/README.md).
+
 ## Topics
 
 - [0. Cray command line interface](#0-cray-command-line-interface)
@@ -132,7 +135,8 @@ Information to assist with troubleshooting some of the components mentioned in t
 
 ## 2. Hardware Management Services health checks
 
-The checks in this section require that the [Cray CLI is configured](#0-cray-command-line-interface) on nodes where the checks are executed.
+> The checks in this section do not require that the [Cray CLI is configured](#0-cray-command-line-interface),
+> but in the case of failures, some of the tests will provide troubleshooting suggestions that involve using the CLI.
 
 Execute the HMS tests to confirm that the Hardware Management Services are running and operational.
 
@@ -361,6 +365,9 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 
 ## 3 Software Management Services (SMS) health checks
 
+This test requires that the Cray CLI is configured on nodes where the test is executed.
+See [Cray command line interface](#0-cray-command-line-interface).
+
 (`ncn-mw#`) To validate all SMS services, run the following:
 
 ```bash
@@ -372,6 +379,8 @@ Successful output ends with a line similar to the following:
 ```text
 SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs
 ```
+
+For more details, including known issues and other command line options, see [Software Management Services health checks](../troubleshooting/known_issues/sms_health_check.md).
 
 ## 4. Gateway health and SSH access checks
 
