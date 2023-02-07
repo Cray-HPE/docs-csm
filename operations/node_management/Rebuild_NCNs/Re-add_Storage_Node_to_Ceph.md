@@ -6,7 +6,7 @@ Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
 ## Run the Ceph Join Script
 
-Watch ceph health and run the ceph_join_cluster.sh script.
+Watch `ceph -s` and run the `ceph_join_cluster.sh` script.
 
 1. In a separate window, log into one of the first three storage nodes (`ncn-s001`, `ncn-s002`, or `ncn-s003`) and execute the following:
 
@@ -14,7 +14,7 @@ Watch ceph health and run the ceph_join_cluster.sh script.
    watch ceph -s
    ```
 
-1. (`ncn-s#`) **On the node being rebuilt**, execute the ceph_join_cluster.sh script.
+1. (`ncn-s#`) **On the node being rebuilt**, execute the `ceph_join_cluster.sh` script.
 
    ```bash
    /srv/cray/scripts/common/join_ceph_cluster.sh
@@ -104,7 +104,7 @@ This is automated as part of the install, but administrators may have to regener
 
 1. (`ncn-s00[1/2/3]#`) Add nodes into `HAproxy` and `KeepAlived`.
 
-   Set the end node number to deploy `HAproxy` and `KeepAlived` (example: end_node_number=5 if deploying on ncn-s001 through ncn-s005).
+   Set the end node number to deploy `HAproxy` and `KeepAlived` (example: `end_node_number=5` if deploying on `ncn-s001` through `ncn-s005`).
 
    ```bash
    end_node_number=n
