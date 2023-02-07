@@ -29,17 +29,20 @@ metadata:
     before-all: "true"
 spec:
   scriptContent: |
-    targetNcns="{{.TargetNcns}}"
+    targetNcns="{{inputs.parameters.targetNcns}}"
+    echo "targetNcns: $targetNcns"
+    # example input of targetNcns: [ncn-w001 ncn-w002 ncn-w003]
     # remove '[' and ']'
     targetNcns=${targetNcns:1:-1}
     # convert to array
     targetNcnsArray=($targetNcns)
     # set last rebuilding worker to nodeMoveTo
     nodeMoveTo=${targetNcnsArray[-1]}
+    echo "last worker node to be rebuilt: $nodeMoveTo"
     # try to find a node that is not in targetNcns
     nodes=$(kubectl get nodes | grep "ncn-w" | awk '{print $1}')
     for node in $nodes;do
-      if echo $targetNcns | grep $node; then
+      if [[ $targetNcns == *$node* ]]; then
         echo "skip $node"
       else
         nodeMoveTo=${node}

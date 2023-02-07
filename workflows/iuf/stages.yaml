@@ -41,28 +41,48 @@ stages:
     operations:
       - name: add-product-to-product-catalog
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes: []
       - name: loftsman-manifest-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.loftsman
       - name: s3-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.s3
       - name: nexus-setup
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.nexus_blob_stores
+          - content.nexus_repositories
       - name: nexus-rpm-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.rpms
       - name: nexus-docker-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.docker
       - name: nexus-helm-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.helm
       - name: vcs-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.vcs
       - name: ims-upload
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.ims
 
   - name: update-vcs-config
     type: product
     operations:
-      - name: update-working-branch
+      - name: vcs-update-working-branch
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.vcs
 
   - name: update-cfs-config
     type: global
@@ -77,6 +97,8 @@ stages:
     operations:
       - name: loftsman-manifest-deploy
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        required-manifest-attributes:
+          - content.loftsman
 
   - name: prepare-images
     type: global
@@ -95,7 +117,11 @@ stages:
   - name: post-install-service-check
     type: product
     operations:
+      - name: post-install-service-check-start
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: post-install-service-check
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: post-install-service-check-end
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
   - name: managed-nodes-rollout
@@ -107,5 +133,14 @@ stages:
   - name: post-install-check
     type: product
     operations:
+      - name: post-install-check-start
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
       - name: post-install-check
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: post-install-check-end
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+
+
+# The following are the template references to hook scripts.
+hooks:
+  master_host: master-host-hook-script

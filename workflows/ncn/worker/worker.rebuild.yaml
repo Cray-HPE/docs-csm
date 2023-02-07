@@ -42,6 +42,15 @@ spec:
       hostPath:
         path: /usr/bin
         type: Directory
+    # the volumes below are needed for iuf-base-template
+    - name: ca-bundle
+      hostPath:
+        path: /var/lib/ca-certificates
+        type: Directory
+    # iuf needs to be specified but will not be used which is reasoning for using emptyDir'
+    - name: iuf
+      emptyDir:
+        sizeLimit: 1Mi
     - name: podinfo
       downwardAPI:
         items:
@@ -98,6 +107,8 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: targetNcns
+                  value: "{{$.TargetNcns}}"
           {{- range $index,$value := .TargetNcns }}
           - name: add-labels-{{$value}}
             template: add-labels
@@ -120,6 +131,10 @@ spec:
                   value: {{$value}}
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: imageId
+                  value: "{{$.ImageId}}"
+                - name: desiredCfsConfig
+                  value: "{{$.DesiredCfsConfig}}"
           # drain: sync
           #     Only one worker can be drained at a time
           - name: drain-{{$value}}
@@ -134,6 +149,10 @@ spec:
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
+              - name: imageId
+                value: "{{$.ImageId}}"
+              - name: desiredCfsConfig
+                value: "{{$.DesiredCfsConfig}}"
           # wipe and reboot: parallel
           #     once a worker node is drained from k8s
           #     we can safely wipe and reboot this node
@@ -148,6 +167,10 @@ spec:
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
+              - name: imageId
+                value: "{{$.ImageId}}"
+              - name: desiredCfsConfig
+                value: "{{$.DesiredCfsConfig}}"
           # after each: parallel
           #     once a worker node is rebooted
           #     we need to run post boot hooks
@@ -161,6 +184,10 @@ spec:
                   value: {{$value}}
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: imageId
+                  value: "{{$.ImageId}}"
+                - name: desiredCfsConfig
+                  value: "{{$.DesiredCfsConfig}}"
           # post rebuild: parallel
           #     Post rebuild validation can be run in parallel
           - name: post-rebuild-{{$value}}
@@ -173,6 +200,10 @@ spec:
                 value: {{$value}}
               - name: dryRun
                 value: "{{$.DryRun}}"
+              - name: imageId
+                value: "{{$.ImageId}}"
+              - name: desiredCfsConfig
+                value: "{{$.DesiredCfsConfig}}"
           {{- end }}
           - name: after-all
             template: after-all
@@ -191,6 +222,7 @@ spec:
       inputs:
         parameters:
           - name: dryRun
+          - name: targetNcns
       dag:
         tasks:
 {{ getHooks "before-all" . | indent 8 }}

@@ -13,17 +13,16 @@ Glossary of terms used in CSM documentation.
   - [CEC microcontroller (eC)](#cec-microcontroller-ec)
   - [Compute Rolling Upgrade Service (CRUS)](#compute-rolling-upgrade-service-crus)
   - [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
-  - [Cray CLI (`cray`)](#cray-cli-cray)
   - [Customer Access Network](#customer-access-network)
   - [Chassis Management Module (CMM)](#chassis-management-module-cmm)
   - [Compute Node (CN)](#compute-node-cn)
   - [Configuration Framework Service (CFS)](#configuration-framework-service-cfs)
   - [Content Projection Service (CPS)](#content-projection-service-cps)
+  - [Cray CLI (`cray`)](#cray-cli-cray)
   - [Cray Site Init (CSI)](#cray-site-init-csi)
   - [Cray System Management (CSM)](#cray-system-management-csm)
   - [Data Virtualization Service (DVS)](#data-virtualization-service-dvs)
   - [EX Compute Cabinet](#ex-compute-cabinet)
-  - [Image Management Service (IMS)](#image-management-service-ims)
   - [EX TDS Cabinet](#ex-tds-cabinet)
   - [Fabric](#fabric)
   - [Floor Standing CDU](#floor-standing-cdu)
@@ -32,6 +31,7 @@ Glossary of terms used in CSM documentation.
   - [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
   - [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon-hbtd)
   - [High Speed Network (HSN)](#high-speed-network-hsn)
+  - [Image Management Service (IMS)](#image-management-service-ims)
   - [Management Nodes](#management-nodes)
   - [Mountain Cabinet](#mountain-cabinet)
   - [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service-meds)
@@ -62,7 +62,7 @@ Glossary of terms used in CSM documentation.
   - [System Management Network (SMNet)](#system-management-network-smnet)
   - [System Management Services (SMS)](#system-management-services-sms)
   - [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
-  - [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
+  - [Tenant and Partition Management Service (TAPMS)](#tenant-and-partition-management-service-tapms)
   - [User Access Instance (UAI)](#user-access-instance-uai)
   - [User Access Node (UAN)](#user-access-node-uan)
   - [User Access Service (UAS)](#user-access-service-uas)
@@ -134,13 +134,9 @@ and CDU status to the CMMs for evaluation and/or action.
 
 ## Compute Rolling Upgrade Service (CRUS)
 
-The Compute Rolling Upgrade Service (CRUS) upgrades sets of compute nodes without requiring an entire set of nodes to be out of service at once. CRUS manages the workload
-management status of nodes, handling each of the steps required to upgrade compute nodes.
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.6.0. See [Deprecated Features](introduction/deprecated_features/README.md).
 
-See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
-
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality. See
-[Deprecated features](introduction/differences.md#deprecated-features).
+See [Rolling Upgrades using BOS](operations/boot_orchestration/Rolling_Upgrades.md).
 
 ## Cray Advanced Platform Monitoring and Control (CAPMC)
 
@@ -306,9 +302,9 @@ provide containerization services as well as storage classes.
 
 The management nodes have various roles:
 
-- masters nodes are Kubernetes masters 
-- worker nodes are Kubernetes workers and have physical connections to the [high-speed network](#high-speed-network-hsn)
-- storage nodes physically have more local storage for providing storage classes to Kubernetes
+* Masters nodes are Kubernetes masters.
+* Worker nodes are Kubernetes workers and have physical connections to the [High Speed Network](#high-speed-network-hsn).
+* Storage nodes physically have more local storage for providing storage classes to Kubernetes.
 
 ## Mountain Cabinet
 

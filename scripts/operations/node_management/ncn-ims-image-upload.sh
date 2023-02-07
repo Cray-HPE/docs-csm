@@ -25,7 +25,9 @@
 # shellcheck disable=SC2086
 
 test -n "$DEBUG" && set -x
-set -eou pipefail
+set -eo pipefail
+
+unset CRAY_FORMAT
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -62,6 +64,25 @@ if [ -z "$IMS_ROOTFS_FILENAME" ]; then
     exit 1
 fi
 
+if [[ -z ${CSM_RELEASE} ]]; then
+    echo "\$CSM_RELEASE is not specified" >&2
+    exit 1
+fi
+
+if [[ -z ${PITDATA} ]] && [[ -f /etc/pit-release ]]; then
+    echo "\$PITDATA is not specified"
+    exit 1
+fi
+
+if [[ -z ${CSM_ARTI_DIR} ]] && [[ -z ${CSM_PATH} ]]; then
+    echo "One of \$CSM_ARTI_DIR or \$CSM_PATH must be set to the path of unpacked CSM tarball" >&2
+    exit 1
+fi
+
+CSM_TARBALL=${CSM_ARTI_DIR:-$CSM_PATH}
+
+CPC_VERSION=$(find "$CSM_TARBALL"/docker/artifactory.algol60.net/csm-docker/stable/ -maxdepth 1 | awk -F':' /cray-product-catalog-update/'{print $NF}' | sort -V | tail -1)
+
 IMS_ROOTFS_MD5SUM=$(md5sum "$IMS_ROOTFS_FILENAME" | awk '{ print $1 }')
 IMS_INITRD_MD5SUM=$(md5sum "$IMS_INITRD_FILENAME" | awk '{ print $1 }')
 IMS_KERNEL_MD5SUM=$(md5sum "$IMS_KERNEL_FILENAME" | awk '{ print $1 }')
@@ -72,6 +93,10 @@ cray artifacts create boot-images "$IMS_IMAGE_ID/rootfs" "$IMS_ROOTFS_FILENAME" 
 cray artifacts create boot-images "$IMS_IMAGE_ID/kernel" "$IMS_KERNEL_FILENAME" > /dev/null
 cray artifacts create boot-images "$IMS_IMAGE_ID/initrd" "$IMS_INITRD_FILENAME" > /dev/null
 
+ROOTFS_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/rootfs --format json | jq -r .artifact.ETag  | tr -d '"' )
+KERNEL_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/kernel --format json | jq -r .artifact.ETag  | tr -d '"' )
+INITRD_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/initrd --format json | jq -r .artifact.ETag  | tr -d '"' )
+
 cat <<EOF> ims_manifest.json
 {
   "created": "$(date '+%Y-%m-%d %H:%M:%S')",
@@ -79,6 +104,7 @@ cat <<EOF> ims_manifest.json
   "artifacts": [
     {
       "link": {
+        "etag": "${ROOTFS_ETAG}",
         "path": "s3://boot-images/$IMS_IMAGE_ID/rootfs",
         "type": "s3"
       },
@@ -87,6 +113,7 @@ cat <<EOF> ims_manifest.json
     },
     {
       "link": {
+        "etag": "${KERNEL_ETAG}",
         "path": "s3://boot-images/$IMS_IMAGE_ID/kernel",
         "type": "s3"
       },
@@ -95,6 +122,7 @@ cat <<EOF> ims_manifest.json
     },
     {
       "link": {
+        "etag": "${INITRD_ETAG}",
         "path": "s3://boot-images/$IMS_IMAGE_ID/initrd",
         "type": "s3"
       },
@@ -106,9 +134,30 @@ cat <<EOF> ims_manifest.json
 EOF
 
 cray artifacts create boot-images "$IMS_IMAGE_ID/manifest.json" ims_manifest.json > /dev/null
+MANIFEST_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/manifest.json --format json | jq -r .artifact.ETag  | tr -d '"' )
 
 cray ims images update "$IMS_IMAGE_ID" \
         --link-type s3 \
+        --link-etag "${MANIFEST_ETAG}" \
         --link-path "s3://boot-images/$IMS_IMAGE_ID/manifest.json" > /dev/null
+
+# shellcheck disable=SC2089
+PODMAN_RUN="podman run --rm --name ncn-cpc \
+    --user root \
+    -e PRODUCT=csm \
+    -e PRODUCT_VERSION=$CSM_RELEASE \
+    -e YAML_CONTENT_STRING=\"{images: {\"$IMS_IMAGE_NAME\": {id: \"$IMS_IMAGE_ID\"}}}\" \
+    -e KUBECONFIG=/.kube/admin.conf \
+    -e VALIDATE_SCHEMA=\"true\" \
+    -v /etc/kubernetes:/.kube:ro \
+    registry.local/artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update:$CPC_VERSION"
+
+# shellcheck disable=SC2090
+if test -f /etc/pit-release; then
+    FM=$(jq -r '."Global"."meta-data"."first-master-hostname"' < "${PITDATA}"/configs/data.json)
+    ssh $FM $PODMAN_RUN >& /dev/null
+else
+    $PODMAN_RUN >& /dev/null
+fi
 
 echo "$IMS_IMAGE_ID"

@@ -278,6 +278,7 @@ iLO5
 iLOM
 IMS
 IMS-hosted
+in_progress
 inband
 InfiniBand
 IP
@@ -291,6 +292,7 @@ iPXE
 iSCSI
 Istio
 Istio's
+IUF
 Jetstack
 Jinja
 Jinja2
@@ -336,6 +338,8 @@ Luks
 LVM
 LVMs
 macOS
+managed-nodes-rollout
+management-nodes-rollout
 maneuver
 maneuvers
 Mbs
@@ -491,6 +495,7 @@ Runbook
 S-8000
 S-8024
 S-8031
+S-8052
 sC
 SCSD
 sC-ToR
@@ -575,6 +580,8 @@ Unsuspend
 untainting
 Untar
 untarred
+update-cfs-config
+update-vcs-config
 upgrader
 Upgrader
 upgrader's
@@ -619,6 +626,7 @@ virtualization
 virtualized
 VLANs
 VSF-enabled
+waiting_admin
 webhook
 webserver
 webUI
@@ -680,6 +688,17 @@ Lorem
 - introduction/site_survey.md
 # To allow Site Init
 Init
+
+- operations/iuf/IUF.md
+sessionid
+SESSIONID
+
+- operations/iuf/stages/managed_nodes_rollout.md
+rollout
+
+- operations/iuf/stages/management_nodes_rollout.md
+rollout
+rollouts
 
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer

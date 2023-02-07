@@ -28,14 +28,14 @@ to the exiting problem seen into the existing search. (The example searches for 
   - [Configuration management](#configuration-management)
   - [ConMan](#conman)
   - [Customer Management Network (CMN)](#customer-management-network-cmn)
-  - [Grafana dashboards](#grafana-dashboards)
   - [Domain Name Service (DNS)](#domain-name-service-dns)
+  - [Grafana dashboards](#grafana-dashboards)
   - [Kubernetes](#kubernetes)
   - [MetalLB](#metallb)
   - [Node management](#node-management)
   - [Security and authentication](#security-and-authentication)
   - [Spire](#spire)
-  - [User Access service UAS](#user-access-service-uas)
+  - [User Access Service (UAS)](#user-access-service-uas)
   - [Utility storage](#utility-storage)
 
 ## Known issues
@@ -64,19 +64,9 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
 * [Issues Related to Slow Boot Times](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Slow_Boot_Times.md)
 
-## Compute rolling upgrades
-
-CRUS was deprecated in CSM 1.2.0. It will be removed in a future CSM release and replaced with BOS V2, which will provide similar functionality.
-See [Deprecated features](../introduction/differences.md#deprecated-features).
-
-* [Nodes Failing to Upgrade in a CRUS Session](../operations/compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
-* [Failed CRUS Session Because of Unmet Conditions](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
-* [Failed CRUS Session Because of Bad Parameters](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
-
 ## Configuration management
 
-* [Ansible Play Failures in CFS Sessions](../operations/configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
-* [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+* [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md)
 
 ## ConMan
 

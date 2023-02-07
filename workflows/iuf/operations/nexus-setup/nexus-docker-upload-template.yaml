@@ -77,7 +77,7 @@ spec:
         arguments:
           parameters:
           - name: nexus_setup_image
-            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.9.0
+            value: artifactory.algol60.net/csm-docker/stable/cray-nexus-setup:0.9.2
           - name: nexus_admin_credential_secret_name
             value: "{{steps.nexus-get-prerequisites.outputs.parameters.secret_name}}"
           - name: content
@@ -255,6 +255,7 @@ spec:
         - name: nexus_docker_load_results
           valueFrom:
             path: /results/records.yaml
+            default: "{}"
     nodeSelector:
       kubernetes.io/hostname: ncn-m001
     tolerations:

@@ -74,6 +74,11 @@ spec:
                   value: "{{=jsonpath(inputs.parameters.global_params, '$.stage_params.process-media.current_product.parent_directory')}}/{{=jsonpath(inputs.parameters.global_params, '$.product_manifest.current_product.manifest.content.vcs.path')}}"
                 - name: cf_import_gitea_org
                   value: cray
+                - name: cf_import_gitea_repo
+                  value: >
+                    {{="repo_name" in jsonpath(inputs.parameters.global_params, "$.product_manifest.current_product.manifest.content.vcs") ?
+                    jsonpath(inputs.parameters.global_params, "$.product_manifest.current_product.manifest.content.vcs.repo_name") :
+                    ""}}
                 - name: cf_import_gitea_url
                   value: "https://api-gw-service-nmn.local/vcs"
         - - name: vcs-update-product-catalog
@@ -219,18 +224,22 @@ spec:
           - name: cf_import_product_name
           - name: cf_import_product_version
           - name: cf_import_gitea_org
+          - name: cf_import_gitea_repo
           - name: cf_import_content_hostpath
       outputs:
         parameters:
           - name: vcs-upload-content-results
             valueFrom:
               path: /results/records.yaml
+              default: "{}"
       container:
-        image: registry.local/artifactory.algol60.net/csm-docker/stable/cf-gitea-import:1.8.0-alpha.19_6747be7
+        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-import:1.9.0
         command:
           - "/bin/sh"
         args: ["-c", "/opt/csm/cf-gitea-import/argo_entrypoint.sh"]
         env:
+          - name: IUF_LOGGING
+            value: "true"
           - name: CF_IMPORT_GITEA_USER
             valueFrom:
               secretKeyRef:
@@ -249,6 +258,8 @@ spec:
             value: "{{inputs.parameters.cf_import_product_version}}"
           - name: CF_IMPORT_GITEA_ORG
             value: "{{inputs.parameters.cf_import_gitea_org}}"
+          - name: CF_IMPORT_GITEA_REPO
+            value: "{{inputs.parameters.cf_import_gitea_repo}}"
           - name: CF_IMPORT_CONTENT
             value: /content
         volumeMounts:
@@ -256,19 +267,18 @@ spec:
             mountPath: /content
           - name: results
             mountPath: /results
-          - name: certs # mount cluster certs to ca-certificates.crt for curl/http libraries
-            mountPath: /etc/ssl/certs/ca-certificates.crt
-            subPath: platform-ca-certs.crt
+          - name: certs
+            mountPath: /usr/local/share/ca-certificates
       volumes:
         - name: content
           hostPath:
-            # /opt/cray/iuf/
+            # /etc/cray/upgrade/csm
             path: "{{inputs.parameters.cf_import_content_hostpath}}"
         - name: results
           emptyDir: {}
         - name: certs
-          hostPath:
-            path: /etc/pki/trust/anchors
+          configMap:
+            name: cray-configmap-ca-public-key
     ## cleanup-template ##
     ## Remove the secret created earlier.
     - name: cleanup-template
