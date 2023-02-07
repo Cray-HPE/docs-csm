@@ -62,4 +62,5 @@ spec:
                     sat bootprep run --limit images --limit session_templates \
                       --overwrite-images --overwrite-templates \
                       --vars-file "$VARS_FILE_PATH" --format json \
+                      --bos-version v2 \
                       $MEDIA_DIR/$BOOTPREP_FILE_PATH
