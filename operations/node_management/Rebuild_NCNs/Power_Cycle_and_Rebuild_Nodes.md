@@ -186,9 +186,9 @@ This section applies to all node types. The commands in this section assume the 
          diff "${XNAME}.json" "${XNAME}.check.json"
          ```
 
-1. Update `ssh-keys` to the rebuild node.
+1. Update SSH keys to the rebuild node.
 
-    This command will update the `ssh-keys` of the rebuilt node in the `known_hosts` file.
+    This command will update the SSH keys of the rebuilt node in the `known_hosts` file.
 
     ```bash
     node_ip=$(host $NODE | awk '{ print $NF }')
