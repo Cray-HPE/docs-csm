@@ -224,10 +224,10 @@ This is automated as part of the install, but administrators may have to regener
     Example output:
 
     ```text
-    NAME                             HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE     D              CONTAINER ID
-    rgw.site1.zone1.ncn-s001.kvskqt  ncn-s001  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8      553b0cb212c          6e323878db46
-    rgw.site1.zone1.ncn-s002.tisuez  ncn-s002  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8      553b0cb212c          278830a273d3
-    rgw.site1.zone1.ncn-s003.nnwuqy  ncn-s003  running (41m)  6m ago     41m  15.2.8   registry.local/ceph/ceph:v15.2.8           553b0cb212c      a9706e6d7a69
+    NAME                       HOST      PORTS   STATUS         REFRESHED  AGE  MEM USE  MEM LIM  VERSION  IMAGE ID      CONTAINER ID
+    rgw.site1.ncn-s001.bdprnl  ncn-s001  *:8080  running (22h)     7m ago  22h     348M        -  16.2.9   a3d3e58cb809  45b983e1eb23
+    rgw.site1.ncn-s002.lxyvkj  ncn-s002  *:8080  running (17h)     6m ago  17h     379M        -  16.2.9   a3d3e58cb809  a79964888adf
+    rgw.site1.ncn-s003.szrtek  ncn-s003  *:8080  running (18h)     6m ago  18h     479M        -  16.2.9   a3d3e58cb809  c800dce8d54f
     ```
 
 1. (`ncn-s00[1/2/3]#`) Add nodes into `HAproxy` and `KeepAlived`.

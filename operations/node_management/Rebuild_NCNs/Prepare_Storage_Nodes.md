@@ -6,7 +6,7 @@ Prepare a storage node before rebuilding it.
 
 ## Prerequisites
 
-When rebuilding a node, make sure that the `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` and `/srv/cray/scripts/common/pre-load-images.sh`, has been removed from the `runcmd` in BSS.
+When rebuilding a node, make sure that `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` and `/srv/cray/scripts/common/pre-load-images.sh` have been removed from the `runcmd` in BSS.
 
 1. (`ncn-m001#`) Set node name and xname if not already set.
 
@@ -52,9 +52,15 @@ Upload ceph container images into nexus.
     ```bash
     #!/bin/bash
 
+    m001_ip=$(host ncn-m001 | awk '{ print $NF }')
+    ssh-keygen -R ncn-m001 -f ~/.ssh/known_hosts > /dev/null 2>&1
+    ssh-keygen -R ${m001_ip} -f ~/.ssh/known_hosts > /dev/null 2>&1
+    ssh-keyscan -H "ncn-m001,${ncn_ip}" >> ~/.ssh/known_hosts
+
     nexus_username=$(ssh ncn-m001 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.username}} | base64 --decode')
     nexus_password=$(ssh ncn-m001 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode')
 
+    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     function upload_image_and_upgrade() {
         # get local image and nexus image location
         name=$1
@@ -76,7 +82,7 @@ Upload ceph container images into nexus.
         podman tag $local_image $nexus_location
         podman push --creds $nexus_username:$nexus_password $nexus_location
         for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-            ssh $storage_node "ceph config set mgr $to_configure $nexus_location"
+            ssh $storage_node ${ssh_options} "ceph config set mgr $to_configure $nexus_location"
             if [[ $? == 0 ]]; then
               break
             fi
@@ -85,7 +91,7 @@ Upload ceph container images into nexus.
         # run upgrade if mgr
         if [[ $name == "mgr" ]]; then
           for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-            ssh $storage_node "ceph orch upgrade start --image $nexus_location"
+            ssh $storage_node ${ssh_options} "ceph orch upgrade start --image $nexus_location"
             if [[ $? == 0 ]]; then
               break
             fi
@@ -111,12 +117,12 @@ Upload ceph container images into nexus.
     success=false
     while [[ $int -lt 100 ]] && ! $success; do
       for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-        error=$(ssh $storage_node "ceph orch upgrade status --format json | jq '.message' | grep Error")
+        error=$(ssh $storage_node ${ssh_options} "ceph orch upgrade status --format json | jq '.message' | grep Error")
         if [[ -n $error ]]; then
           echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
           exit 1
         fi
-        if [[ $(ssh $storage_node "ceph orch upgrade status --format json | jq '.in_progress'") != "true" ]]; then
+        if [[ $(ssh $storage_node ${ssh_options} "ceph orch upgrade status --format json | jq '.in_progress'") != "true" ]]; then
           echo "Upgrade complete"
           success=true
           break
@@ -126,13 +132,17 @@ Upload ceph container images into nexus.
         fi
       done
     done
+    if ! $success; then
+      echo "Error completing 'ceph orch upgrade'. Check upgrade status by running 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+      exit 1 
+    fi
 
     # restart daemons
     for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
       daemons_to_restart=$(ceph --name client.ro orch ps | awk '{print $1}' | grep $daemon)
       for each in $daemons_to_restart; do
         for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-            ssh $storage_node "ceph orch daemon redeploy $each"
+            ssh $storage_node ${ssh_options} "ceph orch daemon redeploy $each"
             if [[ $? == 0 ]]; then
               break
             fi
