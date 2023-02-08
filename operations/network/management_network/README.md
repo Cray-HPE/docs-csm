@@ -18,6 +18,7 @@ accessory drawings in this document are for illustration only, and may not exact
 
 ## Contents
 
+* [Adding Switch Admin Password to Vault](#Adding-switch-admin-password-to-vault)
 * [Switch configuration states](#switch-configuration-states)
 * [Starting points](#starting-points)
 * [User guides](#user-guides)
@@ -31,6 +32,17 @@ accessory drawings in this document are for illustration only, and may not exact
   * [Fixes](#fixes)
   * [Issues and workarounds](#issues-and-workarounds)
   * [Security Bulletin subscription service](#Security-bulletin-subscription-service)
+
+## Adding Switch Admin Password to Vault
+
+Run the following commands to add switch admin password to Vault.  
+This is required for some of our automated tests.
+
+```bash
+    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    vault kv put secret/net-creds/switch_admin admin=SWITCH_ADMIN_PASSWORD'
+```
 
 ## Switch configuration states
 
