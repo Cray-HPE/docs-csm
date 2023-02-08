@@ -1,7 +1,8 @@
 # Management Node Image Customization
 
-**NOTE:** Some of the documentation linked from this page mentions use of the Boot Orchestration Service (BOS). The use of BOS
-is only relevant for booting compute nodes and can be ignored when working with NCN images.
+**NOTE:** Some of the documentation linked from this page mentions use of the
+[Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos).
+The use of BOS is only relevant for booting compute nodes and should be ignored when working with NCN images.
 
 This document describes the configuration of a Kubernetes NCN image. The same steps could be used to modify a Ceph NCN image
 with minor command modifications.
@@ -17,7 +18,7 @@ with minor command modifications.
 
 ## Prerequisites
 
-The Cray CLI must be configured on the node where the commands are being run. See [Configure the Cray CLI](../configure_cray_cli.md).
+The Cray command line interface must be configured on the node where the commands are being run. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure
 
@@ -25,37 +26,93 @@ The Cray CLI must be configured on the node where the commands are being run. Se
 
 1. (`ncn-mw#`) Identify the NCN image to be modified.
 
-    If this procedure is being done as part of a CSM upgrade, then the documentation which linked to this procedure will have
-    provided instructions for how to set the `ARTIFACT_VERSION` variable.
+    How to do this varies depending on whether or not this procedure is being done as part of a CSM upgrade.
 
-    Otherwise, if the image to be modified is the image currently booted on an NCN, then find the value for `ARTIFACT_VERSION`
-    by looking at the boot parameters for the NCNs, or by reading  `/proc/cmdline` on a booted NCN. The version has the form of `X.Y.Z`.
-    See [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
+    * If this procedure is being done as part of a CSM upgrade, then the documentation which linked to this procedure will have
+      provided instructions for how to set the `ARTIFACT_VERSION` variable. Once that variable has been set, then set the
+      `ARTIFACT_S3_PREFIX` variable as follows:
 
-    ```bash
-    ARTIFACT_VERSION=<artifact-version>
-    ```
+      ```bash
+      ARTIFACT_S3_PREFIX="k8s/${ARTIFACT_VERSION}"
+      ```
+
+    * If not doing a CSM upgrade, and if the image to be modified is the image currently booted on an NCN, then identify the image
+      by examining the boot parameters used to boot the NCN in question.
+
+      1. Set the `BOOTED_NCN` variable to the hostname of the NCN that is booted using the image that is to be modified.
+
+         > For example, `ncn-w001` or `ncn-s002`.
+
+         ```bash
+         BOOTED_NCN=ncn-<msw###>
+         ```
+
+      1. Extract the S3 path prefix for the image used to boot the chosen NCN.
+
+         ```bash
+         ARTIFACT_S3_PREFIX=$(ssh "${BOOTED_NCN}" sed \
+                                  "'s#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#'" \
+                                  /proc/cmdline)
+         echo "${ARTIFACT_S3_PREFIX}"
+         ```
+
+         Some examples of possible expected output:
+
+         * `k8s/0.3.49`
+         * `ceph/0.4.57`
+         * `8f41cc54-82f8-436c-905f-869f216ce487`
+
+         > The command used in this substep is extracting the location of the NCN image from the `metal.server` boot parameter in
+         > the `/proc/cmdline` file on the booted NCN. For more information on that parameter, see
+         > [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
+
+    * If not doing a CSM upgrade, and if the image to be modified is the boot image of an NCN that is not currently booted, then
+      identify the image by examining that NCN's boot parameters in the
+      [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss).
+
+      > This procedure can also be used for an NCN which is booted, but the procedure obtains the boot image which will be used the next time
+      > that the NCN boots. This may not necessarily match what the NCN is currently booted with.
+
+      1. Set `NCN_XNAME` to the [component name (xname)](../../glossary.md#xname) of the NCN whose boot image is to be used.
+
+         ```bash
+         NCN_XNAME=<xname>
+         ```
+
+      1. Extract the S3 path prefix for the image that will be used on the next boot of the chosen NCN.
+
+         ```bash
+         ARTIFACT_S3_PREFIX=$(cray bss bootparameters list --name "${NCN_XNAME}" --format json | \
+                              jq -r '.[0].params' | \
+                              sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
+         echo "${ARTIFACT_S3_PREFIX}"
+         ```
+
+         Some examples of possible expected output:
+
+         * `k8s/0.3.49`
+         * `ceph/0.4.57`
+         * `8f41cc54-82f8-436c-905f-869f216ce487`
+
+         > The command used in this substep is extracting the location of the NCN image from the `metal.server` boot parameter for the
+         > NCN in BSS. For more information on that parameter, see [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
 
 1. (`ncn-mw#`) Obtain the NCN image's associated artifacts (SquashFS, kernel, and `initrd`).
 
     These example commands show how to download these artifacts from S3, which is where the NCN image artifacts are stored.
-    If customizing a Ceph image, then replace the `k8s` string in these examples with `ceph`.
 
     ```bash
-    cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/rootfs" "./${ARTIFACT_VERSION}-rootfs"
-
-    cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/kernel" "./${ARTIFACT_VERSION}-kernel"
-
-    cray artifacts get boot-images "k8s/${ARTIFACT_VERSION}/initrd" "./${ARTIFACT_VERSION}-initrd"
-
-    export IMS_ROOTFS_FILENAME="${ARTIFACT_VERSION}-rootfs"
-
-    export IMS_KERNEL_FILENAME="${ARTIFACT_VERSION}-kernel"
-
-    export IMS_INITRD_FILENAME="${ARTIFACT_VERSION}-initrd"
+    cray artifacts get boot-images "${ARTIFACT_S3_PREFIX}/rootfs" "./${ARTIFACT_S3_PREFIX//\//-}-rootfs" &&
+    cray artifacts get boot-images "${ARTIFACT_S3_PREFIX}/kernel" "./${ARTIFACT_S3_PREFIX//\//-}-kernel" &&
+    cray artifacts get boot-images "${ARTIFACT_S3_PREFIX}/initrd" "./${ARTIFACT_S3_PREFIX//\//-}-initrd" &&
+    export IMS_ROOTFS_FILENAME="${ARTIFACT_S3_PREFIX//\//-}-rootfs" &&
+    export IMS_KERNEL_FILENAME="${ARTIFACT_S3_PREFIX//\//-}-kernel" &&
+    export IMS_INITRD_FILENAME="${ARTIFACT_S3_PREFIX//\//-}-initrd"
     ```
 
 ### 2. Import the NCN image into IMS
+
+Next the NCN image must be imported into the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims).
 
 Perform the [Import External Image to IMS](../image_management/Import_External_Image_to_IMS.md) procedure except:
 
@@ -78,7 +135,7 @@ Perform the [Import External Image to IMS](../image_management/Import_External_I
 * Modify this section: [Create, upload, and register image manifest](../image_management/Import_External_Image_to_IMS.md#6-create-upload-and-register-image-manifest) as follows:
 
   (`ncn-mw#`) When creating the image manifest, use the following command to create the manifest file. This is adjusted to reflect the
-  different image paths in S3.
+  different image paths in S3. This makes use of several variables set earlier in this procedure.
 
   ```console
   cat <<EOF> manifest.json
@@ -88,7 +145,7 @@ Perform the [Import External Image to IMS](../image_management/Import_External_I
     "artifacts": [
       {
         "link": {
-            "path": "s3://boot-images/k8s/${ARTIFACT_VERSION}/rootfs",
+            "path": "s3://boot-images/${ARTIFACT_S3_PREFIX}/rootfs",
             "type": "s3"
         },
         "md5": "${IMS_ROOTFS_MD5SUM}",
@@ -96,7 +153,7 @@ Perform the [Import External Image to IMS](../image_management/Import_External_I
       },
       {
         "link": {
-            "path": "s3://boot-images/k8s/${ARTIFACT_VERSION}/kernel",
+            "path": "s3://boot-images/${ARTIFACT_S3_PREFIX}/kernel",
             "type": "s3"
         },
         "md5": "${IMS_KERNEL_MD5SUM}",
@@ -104,7 +161,7 @@ Perform the [Import External Image to IMS](../image_management/Import_External_I
       },
       {
         "link": {
-            "path": "s3://boot-images/k8s/${ARTIFACT_VERSION}/initrd",
+            "path": "s3://boot-images/${ARTIFACT_S3_PREFIX}/initrd",
             "type": "s3"
         },
         "md5": "${IMS_INITRD_MD5SUM}",
@@ -117,8 +174,9 @@ Perform the [Import External Image to IMS](../image_management/Import_External_I
 
 ### 3. Create a CFS configuration, if needed
 
-If `sat bootprep` was used to create a CFS configuration for management node image customization, then one does not
-need to be created now. For example. this will be the case if this procedure is being followed as part of
+If `sat bootprep` was used to create a configuration in the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
+for management node image customization, then one does not need to be created now.
+For example. this will be the case if this procedure is being followed as part of
 [Worker Image Customization](Worker_Image_Customization.md). If `sat bootprep` was used to create the CFS configuration,
 then skip this step and proceed to [Run the CFS image customization session](#4-run-the-cfs-image-customization-session).
 
