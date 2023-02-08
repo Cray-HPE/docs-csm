@@ -10,22 +10,19 @@ Administrators can use the `cray` CLI for power operations from any system that
 has HTTPS access to the
 [System Management Services](../network/Access_to_System_Management_Services.md).
 
-#TODO: continue here vvv
 Third party software can access the API directly. Refer to the
-[CAPMC API](https://github.com/Cray-HPE/hms-capmc/blob/v1.31.0/api/swagger.yaml)
+[PCS API](https://github.com/Cray-HPE/hms-power-control/blob/v1.4.0/api/swagger.yaml)
 documentation for detailed information about API options and features.
 
-The `cray capmc` command (see `--help`) can be used to control power to
-specific components by specifying the component NID, xname, or group.
+The `cray power` command (see `--help`) can be used to control power to
+specific components by specifying the component xname.
 
 ## Power Control and Query by xname
-- xname_on
-- xname_off
-- xname_reinit
-- get_xname_status
+- transitions
+- power-status
 
-CAPMC power control assumes that all cabinets and PDUs have been plugged in,
-breakers are on, and PDU controllers, BMCs, and other embedded controller are
+PCS power control assumes that all cabinets and PDUs have been plugged in,
+breakers are on, and PDU controllers, BMCs, and other embedded controllers are
 on, available, and have been discovered. Components have their power controlled
 in a pre-defined order to properly handle requests of dependent components.
 
@@ -43,6 +40,7 @@ boot (power On), shutdown, and reboot compute nodes.
 - Compute blades
 - Compute nodes
 
+#TODO: update this paragraph for PCS
 CAPMC uses xnames to specify entire cabinets or specific components throughout
 the system. By default, CAPMC controls power to only one component at a time. A
 `--recursive true` option can be passed to CAPMC using the `cray` CLI. When the
@@ -53,7 +51,7 @@ By the cabinet naming convention, each cabinet in the system is assigned a
 unique number. Cabinet numbers can range from 0-9999 and contain from 1-4 digits
 only.
 
-Although manufacturing typically follows a sequential cabinet numbering scheme:
+Manufacturing typically follows a sequential cabinet numbering scheme:
 - Liquid Cooled cabinet numbers: x1000–x2999
 - Air Cooled cabinet numbers: x3000–x4999
 - Liquid Cooled TDS cabinet numbers: x5000–5999
@@ -69,14 +67,12 @@ chassis 0)
 - NCN Nodes: x3200c0s9b0n0
 
 ## Power Capping
-- get_power_cap_capabilities
-- get_power_cap
-- set_power_cap
+- power-cap
 
-CAPMC is capable of setting node power limits on all supported compute node
+PCS is capable of setting node power limits on all supported compute node
 hardware in both liquid cooled cabinets and air cooled cabinets. This
 functionality enables external software to establish an upper bound, or estimate
-a minimum bound, on the amount of power a system may consume. Separate CAPMC
+a minimum bound, on the amount of power a system may consume. Separate PCS
 calls are required to power cap different compute node types as each compute
 node type has its own power capping capabilities.
 
