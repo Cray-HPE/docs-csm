@@ -28,11 +28,6 @@
 host=$(hostname)
 host_ip=$(host ${host} | awk '{ print $NF }')
 
-# run preload images on host
-if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
-  echo "Unable to run pre-load-images.sh on $host."
-fi
-
 # update ssh keys for rebuilt node on host and on ncn-s001/2/3
 truncate --size=0 ~/.ssh/known_hosts 2>&1
 for node in ncn-s001 ncn-s002 ncn-s003; do
@@ -50,6 +45,11 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
   fi
 done
 
+# add ssh key to m001, then update ssh keys for rebuilt node on m001
+m001_ip=$(host ncn-m001 | awk '{ print $NF }')
+ssh-keyscan -H ncn-m001,${m001_ip} >> ~/.ssh/known_hosts
+ssh ncn-m001 "ssh-keygen -R $host -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keygen -R $host_ip -f ~/.ssh/known_hosts > /dev/null 2>&1; ssh-keyscan -H ${host},${host_ip} >> ~/.ssh/known_hosts"
+
 # copy necessary ceph files to rebuilt node
 (( counter=0 ))
 for node in ncn-s001 ncn-s002 ncn-s003; do
@@ -63,7 +63,7 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
     else
       scp $node:/etc/ceph/\{rgw.pem,ceph.conf,ceph_conf_min,ceph.client.ro.keyring\} /etc/ceph/
     fi
-             
+
     if [[ ! $(pdsh -w $node "ceph orch host rm $host; ceph cephadm generate-key; ceph cephadm get-pub-key > ~/ceph.pub; ssh-copy-id -f -i ~/ceph.pub root@$host; ceph orch host add $host") ]]
     then
       (( counter+1 ))
@@ -78,13 +78,19 @@ for node in ncn-s001 ncn-s002 ncn-s003; do
   fi
 done
 
+# run preload images on host
+echo "Running pre-load-images on $host"
+if [[ ! $(/srv/cray/scripts/common/pre-load-images.sh) ]]; then
+  echo "ERROR  Unable to run pre-load-images.sh on $host."
+fi
+
 sleep 30
 (( ceph_mgr_failed_restarts=0 ))
 (( ceph_mgr_successful_restarts=0 ))
 until [[ $(cephadm shell -- ceph-volume inventory --format json-pretty|jq '.[] | select(.available == true) | .path' | wc -l) == 0 ]]
 do
   for node in ncn-s001 ncn-s002 ncn-s003; do
-    if [[ $ceph_mgr_successful_restarts -gt 10 ]]
+    if [[ $ceph_mgr_successful_restarts -gt 15 ]]
     then
       echo "Failed to bring in OSDs, manual troubleshooting required."
       exit 1
@@ -105,6 +111,15 @@ do
   done
 done
 
+# check if node-exporter needs to be restarted
+status=$(ceph --name client.ro orch ps $host --format json | jq '.[] | select(.daemon_type == "node-exporter") | .status_desc' | tr -d '"')
+if [[ $status != "running" ]]; then
+  for node in ncn-s001 ncn-s002 ncn-s003; do
+    ssh $node "ceph orch daemon restart node-exporter.${host}"
+    if [[ $? -eq 0 ]]; then break; fi
+  done
+fi
+
 for service in $(cephadm ls | jq -r '.[].systemd_unit')
 do
   systemctl enable $service
@@ -116,10 +131,14 @@ res_file=$(mktemp)
 http_code=$(curl -k -s -o "${res_file}" -w "%{http_code}" "https://rgw-vip.nmn")
 if [[ ${http_code} != 200 ]]; then
   echo "NOTICE Rados GW and haproxy are not healthy. Deploy RGW on rebuilt node."
-  exit 1
 fi
 # check keepalived is active
 if [[ $(systemctl is-active keepalived.service) != "active" ]]; then
   echo "NOTICE keepalived is not active on $host. Add node to Haproxy and Keepalived."
-  exit 1
 fi
+
+# fix spire and restart cfs
+echo "Fixing spire and restarting cfs-state-reporter"
+scp ncn-m001:/etc/kubernetes/admin.conf /etc/kubernetes/admin.conf
+ssh ncn-m001 '/opt/cray/platform-utils/spire/fix-spire-on-storage.sh'
+systemctl restart cfs-state-reporter.service
