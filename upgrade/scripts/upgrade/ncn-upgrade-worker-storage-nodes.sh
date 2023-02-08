@@ -50,18 +50,15 @@ function usage() {
     echo "--base-url          Specify base url (default: ${baseUrl})"
     echo "--dry-run           Print out steps of workflow instead of running steps (default: ${dryRun})"
     echo "--upgrade           Perfrom a node upgrade. This only needs to be specified when upgrading storage nodes."
-    echo "--rebuild           Perfrom a node rebuild. This only needs to be specified when rebuilding storage nodes"
-    echo "--image-id          The image-id that a worker or storage node should be booted into when a node is rebuilt. This is optional."
+    echo "--image-id          The image-id that a worker node should be booted into when a node is rebuilt. This is optional."
     echo "--zap-osds          Zap osds. Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt. (This can only be used with storage rebuilds)."
-    echo "--desired-cfs-conf  The desired cfs config worker or storage node should be booted into when a node is rebuilt. This is optional."
+    echo "--desired-cfs-conf  The desired cfs config worker node should be booted into when a node is rebuilt. This is optional."
     echo
     echo "*COMMA_SEPARATED_NCN_HOSTNAMES"
     echo "  worker upgrade  - example 1) ncn-w001"
     echo "  worker upgrade  - example 2) ncn-w001,ncn-w002,ncn-w003 --image-id <image-id>"
     echo "  storage upgrade - example 3) ncn-s001 --upgrade"
     echo "  storage upgrade - example 4) ncn-s001,ncn-s002,ncn-s003 --upgrade"
-    echo "  storage rebuild - example 5) ncn-s001 --rebuild --image-id <image-id> --desired-cfs-conf <config-name>"
-    echo "  storage rebuild - example 6) ncn-s001,ncn-s002,ncn-s003 --rebuild"
     echo
 }
 
@@ -161,9 +158,10 @@ if [[ $nodeType == "storage" ]]; then
     if $upgrade; then 
         workflowType="upgrade"
     elif $rebuild; then
-        workflowType="rebuild"
+        echo "Error: --rebuild flag was used for storage rebuild. This rebuild must be done manually. Follow instructions at /operations/node_management/Rebuild_NCNs/Rebuild_NCNs.md"
+        exit 1
     else
-        echo "Input Error: when rebuilding or upgrading storage nodes, the '--rebuild' or '--upgrade' flag needs to specified."
+        echo "Input Error: when upgrading storage nodes, the '--upgrade' flag needs to specified."
         exit 1
     fi
     if $upgrade && $rebuild; then
