@@ -71,6 +71,10 @@ for storage_component in components_json['Components']:
     enable_script = "/srv/cray/scripts/common/ceph-enable-services.sh"
     if enable_script not in run_cmd:
         run_cmd.append(enable_script)
+    
+    preLoadImages_script="/srv/cray/scripts/common/pre-load-images.sh"
+    if preLoadImages_script in run_cmd:
+        run_cmd.remove(preLoadImages_script)
 
     # Now patch BSS.
     patch_response = session.patch('https://{}/apis/bss/boot/v1/bootparameters'.format(args.api_gateway_address),
