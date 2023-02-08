@@ -31,6 +31,9 @@ This section applies to all node types. The commands in this section assume the 
 
         ```bash
         read -r -s -p "${BMC} root password: " IPMI_PASSWORD
+        ```
+
+        ```bash
         export IPMI_PASSWORD
         ```
 
@@ -109,6 +112,26 @@ This section applies to all node types. The commands in this section assume the 
          cloud-init init
          ```
 
+   * **Verify `cloud-init` completed** If the console is not showing the expected output for `cloud-init` completing but the power cycled node is reachable via SSH, then run the following steps to verify if `cloud-init` successfully completed.
+
+      1. The last thing `cloud-init` changes is the file: `/etc/cloud/cloud-init.disabled`. Check that the time on this file corresponds to the most recent power-cycle and the time that `cloud-init` would have completed.
+
+        ```bash
+        ssh $NODE ls -l /etc/cloud/cloud-init.disabled
+        ```
+
+      1. Check the last line in `/var/log/cloud-init-output.log`.
+
+        ```bash
+        ssh $NODE 'tail -1 /var/log/cloud-init-output.log'
+        ```
+
+        Expected output:
+
+        ```text
+        The system is finally up, after 214.43 seconds cloud-init has come to completion.
+        ```
+
 1. Press enter on the console to ensure that the the login prompt is displayed including the correct hostname of this node.
 
 1. Exit the ConMan console.
@@ -162,6 +185,17 @@ This section applies to all node types. The commands in this section assume the 
          ```bash
          diff "${XNAME}.json" "${XNAME}.check.json"
          ```
+
+1. Update SSH keys to the rebuild node.
+
+    This command will update the SSH keys of the rebuilt node in the `known_hosts` file.
+
+    ```bash
+    node_ip=$(host $NODE | awk '{ print $NF }')
+    ssh-keygen -R $NODE -f ~/.ssh/known_hosts > /dev/null 2>&1
+    ssh-keygen -R $node_ip -f ~/.ssh/known_hosts > /dev/null 2>&1
+    ssh-keyscan -H "$NODE,$node_ip" >> ~/.ssh/known_hosts
+    ```
 
 ## Next Step
 
