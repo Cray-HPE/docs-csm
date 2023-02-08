@@ -56,7 +56,7 @@ after a break, always be sure that a typescript is running before proceeding.
    **Note:** The source version in the output may vary, but the target version should match what is shown above. If the output does not match what is expected, then this can indicate that a previous step has failed.
    Review the output from [Stage 1](Stage_1.md) for errors or contact support.
 
-   If this is an in family upgrade and the Ceph upgrade was completed during [Stage 1](Stage_1.md), then the upgrade will not run again. The expected output is stated below.
+   If this is an in family upgrade, then the upgrade will not run again. The expected output is stated below.
 
    ```text
    Your current version is the same as the proposed version 16.2.9
