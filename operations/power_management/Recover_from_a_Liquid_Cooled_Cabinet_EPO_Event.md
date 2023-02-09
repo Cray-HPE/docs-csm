@@ -29,7 +29,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     A cabinet has eight chassis.
 
     ```bash
-    kubectl logs -n services -l app.kubernetes.io/name=cray-capm \
+    kubectl logs -n services -l app.kubernetes.io/name=cray-capmc \
     -c cray-capmc --tail -1 | grep EPO -A 10
     ```
 
