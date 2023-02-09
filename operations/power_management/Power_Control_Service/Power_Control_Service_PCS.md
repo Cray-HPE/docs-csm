@@ -31,11 +31,14 @@ in a pre-defined order to properly handle requests of dependent components.
 boot (power On), shutdown, and reboot compute nodes.
 
 ### Controllable Components
-**Air Cooled Cabinets**
+
+#### Air Cooled Cabinets ####
+
 * Compute Nodes
 * NCNs
 
-**Liquid Cooled Cabinets**
+#### Liquid Cooled Cabinets ####
+
 * Chassis
 * Slingshot Switch modules
 * Compute blades
@@ -57,7 +60,7 @@ Manufacturing typically follows a sequential cabinet numbering scheme:
 * Air Cooled cabinet numbers: x3000–x4999
 * Liquid Cooled TDS cabinet numbers: x5000–5999
 
-**Examples of valid xnames:**
+Examples of valid xnames:
 * Full system: s0, all
 * Cabinet numbers: x1000, x3000, x5000
 * Chassis numbers 0-7: x1000c7, x3500c0 (Air Cooled cabinets are always
@@ -68,6 +71,7 @@ chassis 0)
 * NCN Nodes: x3200c0s9b0n0
 
 ## Power Capping
+
 * power-cap
 
 PCS is capable of setting node power limits on all supported compute node
@@ -77,6 +81,6 @@ a minimum bound, on the amount of power a system may consume. Separate PCS
 calls are required to power cap different compute node types as each compute
 node type has its own power capping capabilities.
 
-**`NOTE`** Power capping is not supported for liquid cooled chassis, switch
+`NOTE` Power capping is not supported for liquid cooled chassis, switch
 modules, compute blades, and any non-compute nodes (NCNs) in air cooled
 cabinets.

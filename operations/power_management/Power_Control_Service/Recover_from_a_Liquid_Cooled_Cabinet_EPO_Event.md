@@ -85,7 +85,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     Example output:
 
-    ```
+    ```json
     {
       "transitionID": "b2c7e5d2-4575-4b70-b07e-f9cbb722c02c",
       "operation": "Force-Off",
@@ -120,7 +120,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     Example output:
 
-    ```
+    ```json
     {
       "transitionID": "f9445021-f9bc-4f7b-bbe1-7ef643259094",
       "operation": "Force-Off",
@@ -152,7 +152,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
 6. Restart the hms-discovery cron job.
 
-    ```screen
+    ```bash
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
@@ -172,8 +172,8 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
 7. Bring up the Slingshot Fabric.
     Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
-    *  The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
-    *  The *Slingshot Troubleshooting Guide* PDF.
+    * The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
+    * The *Slingshot Troubleshooting Guide* PDF.
 
 8. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
