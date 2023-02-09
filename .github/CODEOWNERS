@@ -75,7 +75,6 @@ Jenkinsfile.github                                       @Cray-HPE/ci
 /operations/sat                                          @Cray-HPE/system-admin-toolkit-admin
 
 # Include SSI on these CSM items.
-/install/                                                @Cray-HPE/metal @Cray-HPE/ssi-reviewers
-/operations/                                             @Cray-HPE/ssi-reviewers
-/upgrade/                                                @Cray-HPE/ssi-reviewers
-
+/install/                                                @Cray-HPE/docs-csm-reviewers @Cray-HPE/metal @Cray-HPE/ssi-reviewers
+/operations/                                             @Cray-HPE/docs-csm-reviewers @Cray-HPE/ssi-reviewers
+/upgrade/                                                @Cray-HPE/docs-csm-reviewers @Cray-HPE/ssi-reviewers
