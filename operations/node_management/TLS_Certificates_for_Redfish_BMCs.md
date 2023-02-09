@@ -18,7 +18,7 @@ Each Redfish BMC must have a TLS certificate in order to be useful. The certific
 PKI that issues the CA trust bundle. The Vault PKI is used to create the TLS certs. Services will get the CA
 trust bundle either directly from the Vault PKI, or it can be read in via a Kubernetes ConfigMap.
 
-### TLS Certificate Creation
+## TLS Certificate Creation
 
 TLS certificates are created by the System Configuration Service \(SCSD\) tool and are stored in Vault secure
 storage for later retrieval. Each certificate can be created at any level or domain from the individual BMC,
@@ -32,7 +32,7 @@ and store the certificates.
 Once the certificates are created, they can be placed on the target BMCs again using SCSD. Only liquid-cooled
 BMCs can have TLS certificates set in them.
 
-### CA Bundle Usage By Services
+## CA Bundle Usage By Services
 
 Services will use a CA trust bundle when creating secured/validated HTTP clients and transports for use in
 Redfish operations. Any services that communicate with other services must not use this same client/transport
@@ -47,4 +47,3 @@ the ConfigMap bundle.
 If the CA\_URI variable is an empty string, it means that the customizations.yaml has no special entry for it.
 In this event, each service is set up to not use a CA bundle for Redfish HTTP clients/transports. Thus, this
 implementation is very backward compatible.
-

@@ -6,7 +6,7 @@ Identify an emergency power off \(EPO\) has occurred and restore cabinets to a h
 
 If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use CAPMC to force off all the chassis affected by the EPO event.
 
-### Procedure
+## Procedure
 
 1.  Verify that the EPO event did not damage the system hardware.
 
@@ -18,7 +18,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     Example output:
 
-    ```
+    ```text
     e = 0
     err_msg = ""
     off = [ "x9000c1", "x9000c3",]
@@ -35,7 +35,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     Example output:
 
-    ```
+    ```text
     2019/10/24 02:37:30 capmcd.go:805: Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
     2019/10/24 02:37:30 capmcd.go:808: ExtendedInfo.Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
     2019/10/24 02:37:30 capmcd.go:809: ExtendedInfo.Resolution: Verify physical hardware, issue Enclosure Chassis.Reset --> 'ForceOff', and resubmit the request
@@ -62,7 +62,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     Example output:
 
-    ```
+    ```text
     e = 0
     err_msg = ""
     ```
@@ -75,14 +75,14 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     Example output:
 
-    ```
+    ```text
     e = 0
     err_msg = ""
     ```
 
 6.  Restart the hms-discovery cron job.
 
-    ```screen
+    ```bash
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
@@ -95,7 +95,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     Example output:
 
-    ```
+    ```text
     e = 0
     err_msg = ""
     ```

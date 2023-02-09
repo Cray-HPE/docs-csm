@@ -24,4 +24,3 @@ made on that component until the repair action is used.
 unintentionally firmware updating or powering off an NCN. If this lock is not engaged, an authorized request to FAS or
 PCS/CAPMC could power off the NCNs, which will negatively impact system stability and the health of services running
 on those NCNs.
-

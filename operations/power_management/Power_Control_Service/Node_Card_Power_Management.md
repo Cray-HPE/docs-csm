@@ -49,8 +49,8 @@ power management strategies using JSON data structures.
 
 The node card supports these power limiting and monitoring API calls:
 
-- `power-cap`
-- `power-cap/snapshot`
+* `power-cap`
+* `power-cap/snapshot`
 
 In general, rack-mounted compute nodes do not allow for power limiting of any
 installed accelerators separately from the node limit.

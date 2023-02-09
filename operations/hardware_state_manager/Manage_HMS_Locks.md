@@ -1,12 +1,16 @@
 # Manage HMS Locks
 
-This section describes how to check the status of a lock, disable reservations, and repair reservations. The disable and repair operations only affect the ability to make reservations on hardware devices.
+This section describes how to check the status of a lock, disable reservations, and repair reservations.
+The disable and repair operations only affect the ability to make reservations on hardware devices.
 
-Some of the common scenarios an admin might encounter when working with the Hardware State Manager (HSM) Locking API are also described.
+Some of the common scenarios an admin might encounter when working with the Hardware State Manager (HSM)
+Locking API are also described.
 
 ## Check Lock Status
 
-Use the following command to verify if a component name (xname) is locked or not. The command will show if it is locked (admin), reserved (service command), or reservation disabled (either an EPO or an admin command).
+Use the following command to verify if a component name (xname) is locked or not. The command will show
+if it is locked (admin), reserved (service command), or reservation disabled (either an EPO or an admin
+command).
 
 The following shows how to interpret the output:
 
@@ -31,7 +35,11 @@ ReservationDisabled = false
 
 ## Disable Reservations
 
-Disabling a lock prevents a service from being able to make a reservation on it, and it releases/ends any current reservations. Even though SMD removes the reservation when disabling a lock, it does not mean that the Firmware Action Service (FAS) is aware that it has lost the reservation. Additionally, if PCS/CAPMC has a reservation that is cancelled, disabled, or broken, it will do nothing to the existing PCS/CAPMC operation. There are no checks by PCS/CAPMC to make sure things are still reserved at any time during a power operation.
+Disabling a lock prevents a service from being able to make a reservation on it, and it releases/ends any
+current reservations. Even though SMD removes the reservation when disabling a lock, it does not mean that
+the Firmware Action Service (FAS) is aware that it has lost the reservation. Additionally, if PCS/CAPMC has
+a reservation that is cancelled, disabled, or broken, it will do nothing to the existing PCS/CAPMC operation.
+There are no checks by PCS/CAPMC to make sure things are still reserved at any time during a power operation.
 
 This is a way to stop new operations from happening, not a way to prevent currently executing operations.
 
@@ -72,7 +80,8 @@ ReservationDisabled = true
 
 ## Repair Reservations
 
-Locks must be manually repaired after disabling a component or performing a manual EPO. This prevents the system from automatically re-issuing reservations or giving out lock requests.
+Locks must be manually repaired after disabling a component or performing a manual EPO. This prevents the
+system from automatically re-issuing reservations or giving out lock requests.
 
 ```bash
 cray hsm locks repair create --component-ids x1003c5s2b1n1
@@ -183,7 +192,8 @@ ReservationDisabled = true
 
 ## Scenario: Can a `lock` be Issued to a Currently Locked Component?
 
-A lock cannot be issued to a component that is already locked. The following example shows a component that is already locked, and the returned error message when trying to lock the component again.
+A lock cannot be issued to a component that is already locked. The following example shows a component that is already
+locked, and the returned error message when trying to lock the component again.
 
 ```bash
 cray hsm locks status create --component-ids x1003c5s2b1n1

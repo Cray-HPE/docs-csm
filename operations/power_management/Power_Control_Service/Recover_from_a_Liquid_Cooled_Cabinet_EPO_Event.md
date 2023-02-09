@@ -8,9 +8,9 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
 ## Procedure
 
-1.  Verify that the EPO event did not damage the system hardware.
+1. Verify that the EPO event did not damage the system hardware.
 
-2.  From ncn-m001, check the status of the chassis.
+2. From ncn-m001, check the status of the chassis.
 
     ```bash
     cray power status list --xnames "x9000c[1,3]" --format json
@@ -57,7 +57,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     }
     ```
 
-3.  Check the Chassis Controller Module \(CCM\) log for `Critical` messages and the EPO event.
+3. Check the Chassis Controller Module \(CCM\) log for `Critical` messages and the EPO event.
 
     A cabinet has eight chassis.
 
@@ -66,7 +66,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     -c cray-power-control --tail -1 | grep EPO -A 10
     ```
 
-4.  Disable the hms-discovery Kubernetes cron job.
+4. Disable the hms-discovery Kubernetes cron job.
 
     ```bash
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : true }}'
@@ -74,7 +74,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
     **CAUTION:** Do not power the system on until it is safe to do so. Determine why the EPO event occurred before clearing the EPO state.
 
-5.  **If it is safe to power on the hardware**, clear all chassis in the EPO state in the cooling group.
+5. **If it is safe to power on the hardware**, clear all chassis in the EPO state in the cooling group.
 
     All chassis in cabinets 1000-1003 are forced off in this example. Power off all chassis in a cooling group simultaneously, or the EPO condition may persist.
 
@@ -150,7 +150,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     }
     ```
 
-6.  Restart the hms-discovery cron job.
+6. Restart the hms-discovery cron job.
 
     ```screen
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
@@ -170,12 +170,11 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     cray power transition describe TRANSITION_ID --format json
     ```
 
-7.  Bring up the Slingshot Fabric.
+7. Bring up the Slingshot Fabric.
     Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
-    -  The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
-    -  The *Slingshot Troubleshooting Guide* PDF.
+    *  The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
+    *  The *Slingshot Troubleshooting Guide* PDF.
 
-8.  After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+8. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
 
     See [Power On and Boot Compute and User Access Nodes](../Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md).
-
