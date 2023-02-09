@@ -6,7 +6,36 @@ When a feature is first deprecated, it may not yet be announced in which CSM ver
 been made, that information will be available on this page. For any deprecated features listed on this page that do not yet have an announced CSM
 version for their planned removal, customers are still strongly encouraged to make plans to migrate away from the deprecated feature.
 
-This page groups the deprecated features by the CSM release in which they were deprecated, in reverse chronological order (the most recently deprecated
+* [Removals](#removals)
+  * [Removals in CSM 1.3](#removals-in-csm-13)
+  * [Removals in CSM 1.5](#removals-in-csm-15)
+  * [Removals in CSM 1.9](#removals-in-csm-19)
+* [Deprecations](#deprecations)
+  * [Deprecated in CSM 1.3](#deprecated-in-csm-13)
+  * [Deprecated in CSM 1.2](#deprecated-in-csm-12)
+  * [Deprecated in CSM 1.0](#deprecated-in-csm-10)
+  * [Deprecated in CSM 0.9.3](#deprecated-in-csm-093)
+
+## Removals
+
+Any features that are being removed in the current or upcoming CSM releases are listed in this section, grouped by the CSM release when they are being removed,
+in chronological order.
+
+### Removals in CSM 1.3
+
+* [SLS](../../glossary.md#system-layout-service-sls) support for downloading and uploading credentials in the `dumpstate` and `loadstate` REST APIs
+
+### Removals in CSM 1.5
+
+* [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
+
+### Removals in CSM 1.9
+
+* [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
+
+## Deprecations
+
+This section groups the deprecated features by the CSM release in which they were deprecated, in reverse chronological order (the most recently deprecated
 features are listed first).
 
 ## Deprecated in CSM 1.3
@@ -22,9 +51,9 @@ features are listed first).
 ## Deprecated in CSM 1.2
 
 * [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd) v1 REST API
-  * The v1 HMNFD APIs are targeted for removal in the CSM 1.6 release.
+  * The v1 HMNFD APIs are targeted for removal in the CSM 1.5 release.
 * [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
-  * CRUS is targeted for removal in the CSM 1.6 release.
+  * CRUS will be removed in the CSM 1.5 release.
   * Enhanced BOS functionality will replace CRUS. See [Rolling Upgrades using BOS](../../operations/boot_orchestration/Rolling_Upgrades.md).
 * The `--template-body` option for the [BOS](../../glossary.md#boot-orchestration-service-bos) Cray CLI.
 

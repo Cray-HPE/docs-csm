@@ -193,7 +193,13 @@ see [Deprecated Features](introduction/deprecated_features/README.md).
 
 ## Removals
 
-* SLS support for downloading and uploading credentials in the `dumpstate` and `loadstate` REST APIs
+* [SLS](glossary.md#system-layout-service-sls) support for downloading and uploading credentials in the `dumpstate` and `loadstate` REST APIs
+
+The following previously deprecated feature now has an announced CSM version when it will be removed:
+
+* [CRUS](glossary.md#compute-rolling-upgrade-service-crus) was deprecated in CSM 1.2, and will be removed in CSM 1.5.
+
+For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
 ## Known issues
 
