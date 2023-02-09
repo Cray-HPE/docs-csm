@@ -31,15 +31,15 @@ power-on command from Cray System Management \(CSM\) software.
 
    1. Set the control panel circuit breakers to ON.
 
-      ![CDU Circuit Breakers](../../img/operations/CDU_Circuit_Breakers.png)
+      ![CDU Circuit Breakers](../../../img/operations/CDU_Circuit_Breakers.png)
 
 1. Set the PDU circuit breakers to on in each Cray EX cabinet.
 
-   ![Liquid-cooled Cabinet PDU](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
+   ![Liquid-cooled Cabinet PDU](../../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
 
 1. Verify the status LEDs on the PSU are OK.
 
-   ![PSU Status LEDs](../../img/operations/PSU_Status.svg)
+   ![PSU Status LEDs](../../../img/operations/PSU_Status.svg)
 
 1. (`ncn-m001#`) Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets, chassis, and slots.
 
@@ -60,8 +60,8 @@ power-on command from Cray System Management \(CSM\) software.
    ```
 
    If this occurs, first check if the cronjob needs to be re-created. To do this, follow the instructions
-   in the [Check `cronjobs`](Power_On_and_Start_the_Management_Kubernetes_Cluster.md#check-cronjobs)
-   section of the [Power On and Start the Management Kubernetes Cluster](Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
+   in the [Check `cronjobs`](../Power_On_and_Start_the_Management_Kubernetes_Cluster.md#check-cronjobs)
+   section of the [Power On and Start the Management Kubernetes Cluster](../Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
    procedure.
 
    If the cronjob does not need to be re-created and has been scheduled within the time expected
@@ -97,4 +97,4 @@ power-on command from Cray System Management \(CSM\) software.
 
 ## Next Step
 
-Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.
+Return to [System Power On Procedures](../System_Power_On_Procedures.md) and continue with next step.

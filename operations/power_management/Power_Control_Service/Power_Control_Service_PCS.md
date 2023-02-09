@@ -8,7 +8,7 @@ software to more intelligently manage state and system-wide power consumption.
 
 Administrators can use the `cray` CLI for power operations from any system that
 has HTTPS access to the
-[System Management Services](../network/Access_to_System_Management_Services.md).
+[System Management Services](../../network/Access_to_System_Management_Services.md).
 
 Third party software can access the API directly. Refer to the
 [PCS API](https://github.com/Cray-HPE/hms-power-control/blob/v1.4.0/api/swagger.yaml)

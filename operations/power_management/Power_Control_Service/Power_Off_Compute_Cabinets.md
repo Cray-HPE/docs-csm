@@ -24,7 +24,7 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT) product stream
   documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
 * This procedure assumes all system software and user jobs were shut down. See
-  [Shut Down and Power Off Compute and User Access Nodes (UAN)](Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
+  [Shut Down and Power Off Compute and User Access Nodes (UAN)](../Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md).
 
 ## Procedure
 
@@ -86,18 +86,18 @@ If the system does not include HPE Cray EX liquid-cooled cabinets, then skip the
 
     The `AC OK` LED on each PSU will remain amber for about 30 seconds \(`AC lost`\) until the system de-energizes, then it will extinguish.
 
-    ![Liquid-cooled Cabinet PDU](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
+    ![Liquid-cooled Cabinet PDU](../../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
 
     **`NOTE`** If the TDS cabinet rack-mounted coolant distribution unit \(MCDU\) is receiving power from the PDUs in the management cabinet, then the MCDU may stay on after the TDS cabinet PDU
     circuit breakers are set to `OFF`. This is expected.
 
-    ![Liquid-cooled TDS Cabinet PDU](../../img/operations/Liquid_Cooled_TDS_Cabinet_PDU.svg)
+    ![Liquid-cooled TDS Cabinet PDU](../../../img/operations/Liquid_Cooled_TDS_Cabinet_PDU.svg)
 
     **CAUTION:** Do not power off the CDU if it is actively cooling other equipment.
 
 1. If other systems are **not** being cooled by the floor-standing CDU, then open the CDU rear door to access the control panel and set the circuit breakers to `OFF`.
 
-    ![CDU Circuit Breakers](../../img/operations/CDU_Circuit_Breakers.png)
+    ![CDU Circuit Breakers](../../../img/operations/CDU_Circuit_Breakers.png)
 
 ### Power off standard rack PDU circuit breakers
 
@@ -180,4 +180,4 @@ If the system does not include HPE Cray EX liquid-cooled cabinets, then skip the
 
 ## Next step
 
-Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
+Return to [System Power Off Procedures](../System_Power_Off_Procedures.md) and continue with next step.
