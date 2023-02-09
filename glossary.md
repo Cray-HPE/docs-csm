@@ -143,7 +143,8 @@ The Cray Advanced Platform Monitoring and Control (CAPMC) service enables direct
 power on/off, power monitoring, or system-wide power telemetry and configuration parameters from Redfish.
 CAPMC implements a simple interface for powering on/off compute nodes and application nodes, querying
 node state information, and querying site-specific service usage rules. These controls enable external
-software to more intelligently manage system-wide power consumption or configuration parameters. CAPMC is replaced by PCS.
+software to more intelligently manage system-wide power consumption or configuration parameters. CAPMC is
+replaced by PCS.
 
 ## Cray CLI (`cray`)
 
@@ -353,10 +354,11 @@ the Olympus cabinet as a Mountain cabinet.
 
 ## Power Control Service (PCS)
 
-The Power Control Service (PCS) service enables direct hardware control of
-power on/off, power status, power capping via Redfish.
-PCS implements a simple interface for powering on/off compute nodes and application nodes and setting power caps. These controls enable external
-software to more intelligently manage system-wide power consumption. PCS is the replacement for CAPMC.
+The Power Control Service (PCS) service enables direct hardware control of power on/off,
+power status, power capping via Redfish. PCS implements a simple interface for powering
+on/off compute nodes and application nodes and setting power caps. These controls enable
+external software to more intelligently manage system-wide power consumption. PCS is the
+replacement for CAPMC.
 
 ## Power Distribution Unit (PDU)
 
