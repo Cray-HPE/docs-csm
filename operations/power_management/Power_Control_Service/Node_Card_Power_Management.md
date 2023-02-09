@@ -73,44 +73,64 @@ that are installed. Valid settings are only returned if power limiting is enable
 on the target nodes, those nodes are booted, and the nodes are in the Ready state.
 
 ```console
-cray power cap snapshot --xnames x3000c0s9b0n0 --format json
-cray power cap describe c36b6ee7-9d58-43b5-a44d-f6d75939e5ee --format json
+cray power cap snapshot --xnames x1000c0s2b0n0 --format json
+cray power cap describe e63c08a5-4ee6-40e4-97fd-eb1eaaf5231b --format json
 ```
 
 Example output:
 
-#TODO: update this with example from local instance of simulation environment, swagger doesn't show accelerator data
 ```json
 {
-    "e": 0,
-    "err_msg": "",
-    "nids": [
+  "taskID": "e63c08a5-4ee6-40e4-97fd-eb1eaaf5231b",
+  "type": "snapshot",
+  "taskCreateTime": "2023-02-08T23:42:32.047885871Z",
+  "automaticExpirationTime": "2023-02-09T23:42:32.047885951Z",
+  "taskStatus": "completed",
+  "taskCounts": {
+    "total": 5,
+    "new": 0,
+    "in-progress": 0,
+    "failed": 0,
+    "succeeded": 5,
+    "un-supported": 0
+  },
+  "components": [
+    {
+      "xname": "x1000c0s2b0n0",
+      "powerCapLimits": [
         {
-            "nid": 1160,
-            "controls": [
-                {
-                    "name": "Node Power Limit",
-                    "val": 1000
-                },
-                {
-                    "name": "Accelerator3 Power Limit",
-                    "val": 200
-                },
-                {
-                    "name": "Accelerator2 Power Limit",
-                    "val": 200
-                },
-                {
-                    "name": "Accelerator0 Power Limit",
-                    "val": 200
-                },
-                {
-                    "name": "Accelerator1 Power Limit",
-                    "val": 200
-                }
-            ]
+          "name": "Accelerator0 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Node Power Limit",
+          "currentValue": 0,
+          "maximumValue": 2754,
+          "minimumValue": 764
+        },
+        {
+          "name": "Accelerator1 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator3 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator2 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
         }
-    ]
+      ]
+    }
+  ]
 }
 ```
 
@@ -118,6 +138,7 @@ Example output:
 
 ```console
 cray power cap set --xnames XNAME_LIST --control CONTROL_NAME VALUE --format json
+cray power cap describe TASK_ID --format json
 ```
 
 Set the total power limit of the node by using the name of the node control.
@@ -125,23 +146,40 @@ The power provided to the host CPU and memory is the total node power limit
 minus the power limits of each accelerator installed on the node.
 
 ```console
-cray power cap set --xnames x3000c0s10b1n0 --control "Node Power Limit" 1785 --format json
+cray power cap set --xnames x1000c0s2b0n0 --control "Node Power Limit" 1785 --format json
+cray power cap describe 1059c5d3-770e-4cc0-85ca-ef0e8c79cd5f --format json
 ```
 
 Example output:
 
-#TODO: update this with example from local instance of simulation environment
 ```json
 {
-    "e": 0,
-    "err_msg": "",
-    "nids": [
+  "taskID": "1059c5d3-770e-4cc0-85ca-ef0e8c79cd5f",
+  "type": "patch",
+  "taskCreateTime": "2023-02-08T23:46:26.192294723Z",
+  "automaticExpirationTime": "2023-02-09T23:46:26.192294778Z",
+  "taskStatus": "completed",
+  "taskCounts": {
+    "total": 1,
+    "new": 0,
+    "in-progress": 0,
+    "failed": 0,
+    "succeeded": 1,
+    "un-supported": 0
+  },
+  "components": [
+    {
+      "xname": "x1000c0s2b0n0",
+      "powerCapLimits": [
         {
-            "nid": 1160,
-            "e": 0,
-            "err_msg": ""
+          "name": "Node Power Limit",
+          "currentValue": 1785,
+          "maximumValue": 2754,
+          "minimumValue": 764
         }
-    ]
+      ]
+    }
+  ]
 }
 ```
 
@@ -151,44 +189,106 @@ call will fail.
 
 ```console
 cray power cap set \
-            --xnames x3000c0s10b1n[0-3] \
-            --control "Node Power Limit" 1785 \
+            --xnames "x1000c0s2b[0-1]n0" \
+            --control "Node Power Limit" 1500 \
             --control "Accelerator0 Power Limit" 300 \
             --control "Accelerator1 Power Limit" 300 \
             --control "Accelerator2 Power Limit" 300 \
             --control "Accelerator3 Power Limit" 300 \
             --format json
+
+cray power cap describe a9e44f13-6633-4d3c-9091-59073e75430b --format json
 ```
 
 Example output:
 
-#TODO: update this with example from local instance of simulation environment
 ```json
 {
-    "e": 0,
-    "err_msg": "",
-    "nids": [
+  "taskID": "a9e44f13-6633-4d3c-9091-59073e75430b",
+  "type": "patch",
+  "taskCreateTime": "2023-02-08T23:53:16.288543057Z",
+  "automaticExpirationTime": "2023-02-09T23:53:16.288543155Z",
+  "taskStatus": "completed",
+  "taskCounts": {
+    "total": 2,
+    "new": 0,
+    "in-progress": 0,
+    "failed": 0,
+    "succeeded": 2,
+    "un-supported": 0
+  },
+  "components": [
+    {
+      "xname": "x1000c0s2b0n0",
+      "powerCapLimits": [
         {
-            "nid": 1160,
-            "e": 0,
-            "err_msg": ""
+          "name": "Node Power Limit",
+          "currentValue": 1500,
+          "maximumValue": 2754,
+          "minimumValue": 764
         },
         {
-            "nid": 1161,
-            "e": 0,
-            "err_msg": ""
+          "name": "Accelerator0 Power Limit",
+          "currentValue": 300,
+          "maximumValue": 560,
+          "minimumValue": 100
         },
         {
-            "nid": 1162,
-            "e": 0,
-            "err_msg": ""
+          "name": "Accelerator1 Power Limit",
+          "currentValue": 300,
+          "maximumValue": 560,
+          "minimumValue": 100
         },
         {
-            "nid": 1163,
-            "e": 0,
-            "err_msg": ""
+          "name": "Accelerator2 Power Limit",
+          "currentValue": 300,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator3 Power Limit",
+          "currentValue": 300,
+          "maximumValue": 560,
+          "minimumValue": 100
         }
-    ]
+      ]
+    },
+    {
+      "xname": "x1000c0s2b1n0",
+      "powerCapLimits": [
+        {
+          "name": "Accelerator3 Power Limit",
+          "currentValue": 300,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Node Power Limit",
+          "currentValue": 1500,
+          "maximumValue": 2754,
+          "minimumValue": 764
+        },
+        {
+          "name": "Accelerator0 Power Limit",
+          "currentValue": 300,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator1 Power Limit",
+          "currentValue": 300,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator2 Power Limit",
+          "currentValue": 300,
+          "maximumValue": 560,
+          "minimumValue": 100
+        }
+      ]
+    }
+  ]
 }
 ```
 
@@ -196,6 +296,7 @@ Example output:
 
 ```console
 cray power cap set --xnames XNAME_LIST --control CONTROL_NAME 0 --format json
+cray power cap describe TASK_ID --format json
 ```
 
 Reset the power limit to the default maximum. Alternatively, using the max
@@ -204,23 +305,72 @@ can be set at the same time on multiple nodes, but all target nodes must
 have the same set of controls available, otherwise the call will fail.
 
 ```console
-cray power cap set --xnames x3000c0s10b1n0 --control "Node Power Limit" 0 --format json
+cray power cap set \
+            --xnames x1000c0s2b0n0 \
+            --control "Node Power Limit" 0 \
+            --control "Accelerator0 Power Limit" 0 \
+            --control "Accelerator1 Power Limit" 0 \
+            --control "Accelerator2 Power Limit" 0 \
+            --control "Accelerator3 Power Limit" 0 \
+            --format json
+
+cray power cap describe 75b18ce8-454f-4218-a256-4962666a19a7 --format json
 ```
 
 Example output:
 
-#TODO: update this with example from local instance of simulation environment
 ```json
 {
-    "e": 0,
-    "err_msg": "",
-    "nids": [
+  "taskID": "75b18ce8-454f-4218-a256-4962666a19a7",
+  "type": "patch",
+  "taskCreateTime": "2023-02-09T00:03:42.757965479Z",
+  "automaticExpirationTime": "2023-02-10T00:03:42.757965783Z",
+  "taskStatus": "completed",
+  "taskCounts": {
+    "total": 1,
+    "new": 0,
+    "in-progress": 0,
+    "failed": 0,
+    "succeeded": 1,
+    "un-supported": 0
+  },
+  "components": [
+    {
+      "xname": "x1000c0s2b0n0",
+      "powerCapLimits": [
         {
-            "nid": 1160,
-            "e": 0,
-            "err_msg": ""
+          "name": "Node Power Limit",
+          "currentValue": 0,
+          "maximumValue": 2754,
+          "minimumValue": 764
+        },
+        {
+          "name": "Accelerator0 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator1 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator2 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator3 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
         }
-    ]
+      ]
+    }
+  ]
 }
 ```
 
@@ -239,63 +389,64 @@ cray power cap describe TASK_ID --format json
 For example:
 
 ```console
-cray power cap snapshot --xnames x3000c0s9b0n0 --format json
-cray power cap describe c36b6ee7-9d58-43b5-a44d-f6d75939e5ee --format json
+cray power cap snapshot --xnames x1000c0s2b0n0 --format json
+cray power cap describe da00767e-d750-434b-bad9-401ee7a40b46 --format json
 ```
 
 Example output:
 
-#TODO: update this with example from local instance of simulation environment
 ```json
 {
-    "e": 0,
-    "err_msg": "",
-    "groups": [
+  "taskID": "da00767e-d750-434b-bad9-401ee7a40b46",
+  "type": "snapshot",
+  "taskCreateTime": "2023-02-09T00:07:26.678274873Z",
+  "automaticExpirationTime": "2023-02-10T00:07:26.678274959Z",
+  "taskStatus": "completed",
+  "taskCounts": {
+    "total": 5,
+    "new": 0,
+    "in-progress": 0,
+    "failed": 0,
+    "succeeded": 5,
+    "un-supported": 0
+  },
+  "components": [
+    {
+      "xname": "x1000c0s2b0n0",
+      "powerCapLimits": [
         {
-            "name": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA.6922G5060202000.1321020042737",
-            "desc": "3_AuthenticAMD_64c_256GiB_3200MHz_NodeAccel.NVIDIA.6922G5060202000.1321020042737",
-            "host_limit_max": 1985,
-            "host_limit_min": 595,
-            "static": 0,
-            "supply": 1985,
-            "powerup": 0,
-            "nids": [
-                1160
-            ],
-            "controls": [
-                {
-                    "name": "Node Power Limit",
-                    "desc": "Node Power Limit",
-                    "max": 1985,
-                    "min": 595
-                },
-                {
-                    "name": "Accelerator0 Power Limit",
-                    "desc": "Accelerator0 Power Limit",
-                    "max": 400,
-                    "min": 100
-                },
-                {
-                    "name": "Accelerator1 Power Limit",
-                    "desc": "Accelerator1 Power Limit",
-                    "max": 400,
-                    "min": 100
-                },
-                {
-                    "name": "Accelerator2 Power Limit",
-                    "desc": "Accelerator2 Power Limit",
-                    "max": 400,
-                    "min": 100
-                },
-                {
-                    "name": "Accelerator3 Power Limit",
-                    "desc": "Accelerator3 Power Limit",
-                    "max": 400,
-                    "min": 100
-                }
-            ]
+          "name": "Accelerator2 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator3 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Node Power Limit",
+          "currentValue": 0,
+          "maximumValue": 2754,
+          "minimumValue": 764
+        },
+        {
+          "name": "Accelerator1 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
+        },
+        {
+          "name": "Accelerator0 Power Limit",
+          "currentValue": 0,
+          "maximumValue": 560,
+          "minimumValue": 100
         }
-    ]
+      ]
+    }
+  ]
 }
 ```
 
