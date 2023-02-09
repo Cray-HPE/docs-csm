@@ -32,35 +32,38 @@ boot (power On), shutdown, and reboot compute nodes.
 
 ### Controllable Components
 
-#### Air Cooled Cabinets ####
+Air Cooled Cabinets:
 
 * Compute Nodes
 * NCNs
 
-#### Liquid Cooled Cabinets ####
+Liquid Cooled Cabinets:
 
 * Chassis
 * Slingshot Switch modules
 * Compute blades
 * Compute nodes
 
-#TODO: update this paragraph for PCS
-CAPMC uses xnames to specify entire cabinets or specific components throughout
-the system. By default, CAPMC controls power to only one component at a time. A
-`--recursive true` option can be passed to CAPMC using the `cray` CLI. When the
-`--recursive true` option is included in a request, all of the sub-components of
-the target component are included in the power command.
+PCS uses xnames to specify entire cabinets or specific components throughout
+the system. By default, PCS controls power to only one component at a time.
+`--include parents` or `--include children` options can be passed to PCS using
+the `cray` CLI. When the `--include parents` option is specified in a request,
+all parent components of the target component are also included in the power
+operation. When the `--include children` option is specified, all children
+components of the target component are also included in the power operation.
 
 By the cabinet naming convention, each cabinet in the system is assigned a
 unique number. Cabinet numbers can range from 0-9999 and contain from 1-4 digits
 only.
 
 Manufacturing typically follows a sequential cabinet numbering scheme:
+
 * Liquid Cooled cabinet numbers: x1000–x2999
 * Air Cooled cabinet numbers: x3000–x4999
 * Liquid Cooled TDS cabinet numbers: x5000–5999
 
 Examples of valid xnames:
+
 * Full system: s0, all
 * Cabinet numbers: x1000, x3000, x5000
 * Chassis numbers 0-7: x1000c7, x3500c0 (Air Cooled cabinets are always
