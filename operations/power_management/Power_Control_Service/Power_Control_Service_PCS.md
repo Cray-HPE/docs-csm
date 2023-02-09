@@ -58,20 +58,19 @@ only.
 
 Manufacturing typically follows a sequential cabinet numbering scheme:
 
-* Liquid Cooled cabinet numbers: x1000–x2999
-* Air Cooled cabinet numbers: x3000–x4999
-* Liquid Cooled TDS cabinet numbers: x5000–5999
+* Liquid Cooled cabinet numbers: `x1000`–`x2999`
+* Air Cooled cabinet numbers: `x3000`–`x4999`
+* Liquid Cooled TDS cabinet numbers: `x5000`–`x5999`
 
 Examples of valid xnames:
 
-* Full system: s0, all
-* Cabinet numbers: x1000, x3000, x5000
-* Chassis numbers 0-7: x1000c7, x3500c0 (Air Cooled cabinets are always
-chassis 0)
-* Compute Blade Slots 0-7: x1000c7s3, x3500c0s15 (U15)
-* Compute Nodes: x1000c7s3b0n0, x3500c0s15b1n0
-* NCN Slots: x3200c0s9 (U9)
-* NCN Nodes: x3200c0s9b0n0
+* Full system: `s0`, `all`
+* Cabinet numbers: `x1000`, `x3000`, `x5000`
+* Chassis numbers 0-7: `x1000c7`, `x3500c0` (Air Cooled cabinets are always chassis 0)
+* Compute Blade Slots 0-7: `x1000c7s3`, `x3500c0s15` (U15)
+* Compute Nodes: `x1000c7s3b0n0`, `x3500c0s15b1n0`
+* NCN Slots: `x3200c0s9` (U9)
+* NCN Nodes: `x3200c0s9b0n0`
 
 ## Power Capping
 

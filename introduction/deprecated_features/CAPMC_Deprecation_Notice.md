@@ -3,7 +3,7 @@
 ## CAPMC enters final life cycle before deletion
 
 PCS v1 has been released to production and indicated the beginning of the final life cycle for CAPMC. CAPMC will
-continue to co-exist with PCS until its final deletion. CAPMC is slated to be permanately removed from the system
+continue to co-exist with PCS until its final deletion. CAPMC is slated to be permanently removed from the system
 beginning with the first release of software in 2024. Please begin to migrate to PCS.
 
 ### Deprecated Features in CSM 1.0

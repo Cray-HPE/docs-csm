@@ -10,7 +10,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 
 1. Verify that the EPO event did not damage the system hardware.
 
-2. From ncn-m001, check the status of the chassis.
+2. From `ncn-m001`, check the status of the chassis.
 
     ```bash
     cray capmc get_xname_status create --xnames x9000c[1,3]

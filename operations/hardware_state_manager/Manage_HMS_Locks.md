@@ -14,9 +14,9 @@ command).
 
 The following shows how to interpret the output:
 
-* Locked: Shows if the component name (xname) has been locked with the `cray hsm locks lock create` command.
-* Reserved: Shows if the component name (xname) has been locked for a time-boxed event. Only service can reserve component names (xnames); administrators are not able to reserve component names (xnames).
-* ReservationDisable: Shows if the ability to reserve a component name (xname) has been changed by an EPO or admin command.
+* `Locked`: Shows if the component name (xname) has been locked with the `cray hsm locks lock create` command.
+* `Reserved`: Shows if the component name (xname) has been locked for a time-boxed event. Only service can reserve component names (xnames); administrators are not able to reserve component names (xnames).
+* `ReservationDisable`: Shows if the ability to reserve a component name (xname) has been changed by an EPO or admin command.
 
 ```bash
 cray hsm locks status create --component-ids x1003c5s2b1n1

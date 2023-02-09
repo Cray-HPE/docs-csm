@@ -8,7 +8,7 @@ The following services communicate with Redfish BMCs:
 
 - State Manager Daemon \(SMD\) aka Hardware State Manager \(HSM\)
 - Cray Advanced Platform Monitoring and Control \(CAPMC\)
-- Power Control Serivce \(PCS\)
+- Power Control Service \(PCS\)
 - Firmware Action Service \(FAS\)
 - HMS Collector
 - River Endpoint Discovery Service \(REDS\)
@@ -41,9 +41,9 @@ need different HTTP clients/transports for Redfish and for inter-service communi
 
 The CA trust bundle is placed into a file visible by each HMS service. The Helm chart for each service will
 specify where this file is located. In addition, there is an environment variable \(CA\_URI\) that comes from
-a value in customizations.yaml and will direct the service to point to either the Vault PKI's CA bundle or to
+a value in `customizations.yaml` and will direct the service to point to either the Vault PKI's CA bundle or to
 the ConfigMap bundle.
 
-If the CA\_URI variable is an empty string, it means that the customizations.yaml has no special entry for it.
+If the CA\_URI variable is an empty string, it means that the `customizations.yaml` has no special entry for it.
 In this event, each service is set up to not use a CA bundle for Redfish HTTP clients/transports. Thus, this
 implementation is very backward compatible.
