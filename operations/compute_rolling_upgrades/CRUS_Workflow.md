@@ -1,6 +1,6 @@
 # CRUS Workflow
 
-**Note:** CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0. It will be replaced with BOS V2, which will provide similar functionality. See
+**Note:** CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See
 [Deprecated features](../../introduction/differences.md#deprecated_features).
 
 The following workflow is intended to be a high-level overview of how to upgrade compute nodes. This workflow depicts how services interact with each other during the compute node
