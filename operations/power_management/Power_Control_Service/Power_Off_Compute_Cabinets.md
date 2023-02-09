@@ -37,10 +37,10 @@ If the system does not include HPE Cray EX liquid-cooled cabinets, then skip the
 
 1. (`ncn-m#`) Check the power status before shutdown.
 
-    This example shows cabinets 1000 - 1003.
+    This example shows cabinets 1000-1003.
 
     ```bash
-    cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
+    cray power status list --xnames "x[1000-1003]c[0-7]" --format json
     ```
 
 1. (`ncn-m#`) Shut down services and power off liquid-cooled cabinets.
@@ -51,7 +51,7 @@ If the system does not include HPE Cray EX liquid-cooled cabinets, then skip the
 
     This command suspends the `hms-discovery` cron job and recursively powers off the liquid-cooled cabinet chassis.
 
-    The `sat bootsys shutdown` command may fail to power off some cabinets and indicate that requests to CAPMC have timed out. In this case, the `sat` command may be run with an increased `--api-timeout` option:
+    The `sat bootsys shutdown` command may fail to power off some cabinets and indicate that requests to PCS have timed out. In this case, the `sat` command may be run with an increased `--api-timeout` option:
 
     ```bash
     sat --api-timeout 180 bootsys shutdown --stage cabinet-power
@@ -74,10 +74,10 @@ If the system does not include HPE Cray EX liquid-cooled cabinets, then skip the
 
 1. (`ncn-m#`) Check the power off status.
 
-    This example shows cabinets 1000 - 1003.
+    This example shows cabinets 1000-1003.
 
     ```bash
-    cray capmc get_xname_status create --xnames x[1000-1003]c[0-7] --format json
+    cray power status list --xnames "x[1000-1003]c[0-7]" --format json
     ```
 
     Rectifiers \(PSUs\) should indicate that DC power is `OFF` \(`AC OK` means the power is on\).
@@ -106,61 +106,68 @@ If the system does not include HPE Cray EX liquid-cooled cabinets, then skip the
     This example shows nodes in cabinets 3001 - 3003.
 
     ```bash
-    cray capmc get_xname_status create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0 --format json
+    cray power status list --xnames "x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0" --format json
     ```
 
-    The `get_xname_status` command requires that the list of components be explicitly listed. In this example, the system includes only 2U servers and there are no state manager entries for even-numbered U-positions \(slots\); those would return an error.
-
-    The command does not filter nonexistent component names \(xnames\) and displays an error when invalid component names are specified. Use `--filter` `show_all` option to filter all the output:
-
-    ```bash
-    cray capmc get_xname_status create --filter show_all --format json
-    ```
+    In this example, the system includes only 2U servers and there are no state manager entries for even-numbered U-positions \(slots\); those would return an error.
 
     Example output:
 
     ```json
     {
-      "e": 0,
-      "err_msg": "",
-      "off": [
-        "x3000c0s19b0n0",
-        "x3000c0s20b0n0",
-        "x3000c0s22b0n0",
-        "x3000c0s24b0n0",
-        "x3000c0s27b1n0",
-        "x3000c0s27b2n0",
-        "x3000c0s27b3n0",
-        "x3000c0s27b4n0"
-      ],
-      "on": [
-        "x3000c0r15e0",
-        "x3000c0s2b0n0",
-        "x3000c0s3b0n0",
-        "x3000c0s4b0n0",
-        "x3000c0s5b0n0",
-        "x3000c0s6b0n0",
-        "x3000c0s7b0n0",
-        "x3000c0s8b0n0",
-        "x3000c0s9b0n0"
+      "status": [
+        {
+          "xname": "x3001c0s1b1n0",
+          "powerState": "on",
+          "managementState": "available",
+          "error": "",
+          "supportedPowerTransitions": [
+            "On",
+            "Soft-Off",
+            "Off",
+            "Soft-Restart",
+            "Force-Off",
+            "Init",
+            "Hard-Restart"
+          ],
+          "lastUpdated": "2023-02-08T23:19:31.182851004Z"
+        },
+        {
+          "xname": "x3003c0s19b1n0",
+          "powerState": "off",
+          "managementState": "available",
+          "error": "",
+          "supportedPowerTransitions": [
+            "On",
+            "Soft-Off",
+            "Off",
+            "Soft-Restart",
+            "Force-Off",
+            "Init",
+            "Hard-Restart"
+          ],
+          "lastUpdated": "2023-02-08T23:19:31.18712898Z"
+        },
+        ...
       ]
     }
     ```
 
-1. (`ncn-m#`) Use CAPMC to power off HPE Cray standard racks for **non-management** nodes.
+1. (`ncn-m#`) Use PCS to power off HPE Cray standard racks for **non-management** nodes.
 
     **CAUTION: Do not power off the management cabinet**. Verify that the components names \(xnames\) specified in the following command line do not accidentally power off management cabinets.
 
     This example shuts down racks 3001 - 3003.
 
     ```bash
-    cray capmc xname_off create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0
+    cray power transition off --xnames "x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0" --format json
     ```
 
-1. (`ncn-m#`) Check the status of the CAPMC power off command.
+1. (`ncn-m#`) Check the status of the PCS power off command and affected components.
 
     ```bash
-    cray capmc get_xname_status create --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0 --format json
+    cray power transition describe 6e495247-73b6-44d0-8059-df47b650f1f8 --format json
+    cray power status list --xnames "x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0" --format json
     ```
 
 1. Set each cabinet PDU circuit breaker to `OFF`.

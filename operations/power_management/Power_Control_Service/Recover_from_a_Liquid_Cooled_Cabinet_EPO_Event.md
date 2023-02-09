@@ -4,7 +4,7 @@ Identify an emergency power off \(EPO\) has occurred and restore cabinets to a h
 
 **CAUTION:** Verify the reason why the EPO occurred and resolve that problem before clearing the EPO state.
 
-If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use CAPMC to force off all the chassis affected by the EPO event.
+If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, the compute nodes may not boot. Use PCS to force off all the chassis affected by the EPO event.
 
 ### Procedure
 
@@ -13,15 +13,48 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
 2.  From ncn-m001, check the status of the chassis.
 
     ```bash
-    cray capmc get_xname_status create --xnames x9000c[1,3]
+    cray power status list --xnames "x9000c[1,3]" --format json
     ```
 
     Example output:
 
-    ```
-    e = 0
-    err_msg = ""
-    off = [ "x9000c1", "x9000c3",]
+    ```json
+    {
+      "status": [
+        {
+          "xname": "x9000c1",
+          "powerState": "off",
+          "managementState": "available",
+          "error": "",
+          "supportedPowerTransitions": [
+            "On",
+            "Force-Off",
+            "Soft-Off",
+            "Off",
+            "Init",
+            "Hard-Restart",
+            "Soft-Restart"
+          ],
+          "lastUpdated": "2023-02-08T23:20:31.322689726Z"
+        },
+        {
+          "xname": "x9000c3",
+          "powerState": "off",
+          "managementState": "available",
+          "error": "",
+          "supportedPowerTransitions": [
+            "On",
+            "Force-Off",
+            "Soft-Off",
+            "Off",
+            "Init",
+            "Hard-Restart",
+            "Soft-Restart"
+          ],
+          "lastUpdated": "2023-02-08T23:20:31.322689726Z"
+        }
+      ]
+    }
     ```
 
 3.  Check the Chassis Controller Module \(CCM\) log for `Critical` messages and the EPO event.
@@ -29,19 +62,8 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     A cabinet has eight chassis.
 
     ```bash
-    kubectl logs -n services -l app.kubernetes.io/name=cray-capm \
-    -c cray-capmc --tail -1 | grep EPO -A 10
-    ```
-
-    Example output:
-
-    ```
-    2019/10/24 02:37:30 capmcd.go:805: Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
-    2019/10/24 02:37:30 capmcd.go:808: ExtendedInfo.Message: Can not issue Enclosure Chassis.Reset 'On'|'Off' while in EPO state
-    2019/10/24 02:37:30 capmcd.go:809: ExtendedInfo.Resolution: Verify physical hardware, issue Enclosure Chassis.Reset --> 'ForceOff', and resubmit the request
-    2019/10/24 02:37:31 capmcd.go:136: Info: <-- Bad Request (400) POST https://x1000c7b0/redfish/v1/ Chassis/Enclosure/Actions/Chassis.Reset (1.045967005s)
-    2019/10/24 02:37:31 capmcd.go:799: POST https://x1000c7b0/redfish/v1/Chassis/Enclosure/Actions/Chassis.Reset
-    !HTTP Error!
+    kubectl logs -n services -l app.kubernetes.io/name=cray-power-control \
+    -c cray-power-control --tail -1 | grep EPO -A 10
     ```
 
 4.  Disable the hms-discovery Kubernetes cron job.
@@ -57,27 +79,75 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     All chassis in cabinets 1000-1003 are forced off in this example. Power off all chassis in a cooling group simultaneously, or the EPO condition may persist.
 
     ```bash
-    cray capmc xname_off create --xnames x[1000-1003]c[0-7] --force true
+    cray power transition force-off --xnames "x[1000-1003]c[0-7]" --format json
+    cray power transition describe b2c7e5d2-4575-4b70-b07e-f9cbb722c02c --format json
     ```
 
     Example output:
 
     ```
-    e = 0
-    err_msg = ""
+    {
+      "transitionID": "b2c7e5d2-4575-4b70-b07e-f9cbb722c02c",
+      "operation": "Force-Off",
+      "createTime": "2023-02-09T02:02:37.454064684Z",
+      "automaticExpirationTime": "2023-02-10T02:02:37.454064752Z",
+      "transitionStatus": "completed",
+      "taskCounts": {
+        "total": 32,
+        "new": 0,
+        "in-progress": 0,
+        "failed": 0,
+        "succeeded": 32,
+        "un-supported": 0
+      },
+      "tasks": [
+        {
+          "xname": "x1000c0",
+          "taskStatus": "succeeded",
+          "taskStatusDescription": "Transition confirmed, forceoff"
+        },
+        ...
+      ]
+    }
     ```
 
-    The HPE Cray EX EX TDS cabinet contains only two chassis: 1 \(bottom\) and 3 \(top\).
+    The HPE Cray EX TDS cabinet contains only two chassis: 1 \(bottom\) and 3 \(top\).
 
     ```bash
-    cray capmc xname_off create --xnames x9000c[1,3] --force true
+    cray power transition force-off --xnames "x9000c[1,3]" --format json
+    cray power transition describe f9445021-f9bc-4f7b-bbe1-7ef643259094 --format json
     ```
 
     Example output:
 
     ```
-    e = 0
-    err_msg = ""
+    {
+      "transitionID": "f9445021-f9bc-4f7b-bbe1-7ef643259094",
+      "operation": "Force-Off",
+      "createTime": "2023-02-09T02:02:37.454064684Z",
+      "automaticExpirationTime": "2023-02-10T02:02:37.454064752Z",
+      "transitionStatus": "completed",
+      "taskCounts": {
+        "total": 2,
+        "new": 0,
+        "in-progress": 0,
+        "failed": 0,
+        "succeeded": 2,
+        "un-supported": 0
+      },
+      "tasks": [
+        {
+          "xname": "x9000c1",
+          "taskStatus": "succeeded",
+          "taskStatusDescription": "Transition confirmed, forceoff"
+        },
+        {
+          "xname": "x9000c3",
+          "taskStatus": "succeeded",
+          "taskStatusDescription": "Transition confirmed, forceoff"
+        }
+      ]
+    }
     ```
 
 6.  Restart the hms-discovery cron job.
@@ -89,15 +159,15 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     About 5 minutes after hms-discovery restarts, the service will power on the chassis enclosures, switches, and compute blades. If components are not being powered back on, then power them on manually.
 
     ```bash
-    cray capmc xname_on create \
-    --xnames x[1000-1003]c[0-7]r[0-7],x[1000-1003]c[0-7]s[0-7] --prereq true --continue true
+    cray power transition on --xnames "x[1000-1003]c[0-7]" --format json
+    cray power transition on --xnames "x[1000-1003]c[0-7]s[0-7]" --format json
+    cray power transition on --xnames "x[1000-1003]c[0-7]r[0-7]" --format json
     ```
 
-    Example output:
+    Verify the status of each of the power operations.
 
-    ```
-    e = 0
-    err_msg = ""
+    ```bash
+    cray power transition describe TRANSITION_ID --format json
     ```
 
 7.  Bring up the Slingshot Fabric.
