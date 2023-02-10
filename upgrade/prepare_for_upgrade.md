@@ -41,7 +41,8 @@ This step is not required to configure the management network.
 If Vault is unavailable, this step can be temporarily skipped.
 Any automated tests that depend on the switch credentials being in Vault will fail until they are added.
 
-Run the following commands to add switch admin password to Vault. 
+Run the following commands to add switch admin password to Vault.
+
 ```bash
 VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
 alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
