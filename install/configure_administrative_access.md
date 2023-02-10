@@ -60,7 +60,7 @@ Manually configure the `cray` CLI with a valid Keycloak account using the follow
 
 The BMCs that control management nodes will not have been marked with the `Management` role in HSM. It is important
 to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
-as protections for FAS and CAPMC actions.
+as protections for FAS and PCS/CAPMC actions.
 
 **Set BMC `Management` roles now!**
 
@@ -69,7 +69,7 @@ See [Set BMC `Management` Role](../operations/hardware_state_manager/Set_BMC_Man
 ## 3. Lock management nodes
 
 The management nodes are unlocked at this point in the installation. Locking the management nodes and their BMCs will
-prevent actions from FAS to update their firmware or CAPMC to power off or do a power reset. Doing any of these by
+prevent actions from FAS to update their firmware or PCS/CAPMC to power off or do a power reset. Doing any of these by
 accident will take down a management node. If the management node is a Kubernetes master or worker node, this can have
 serious negative effects on system operation.
 
