@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management `v1.3.2` from `v1.3.1`.
+This document guides an administrator through the patch update to Cray Systems Management (CSM) `v1.3.2` from `v1.3.1`.
 If upgrading from CSM `v1.2.2` directly to `v1.3.2`, follow the procedures described in [Upgrade CSM](../README.md) instead.
 
 ## Bug Fixes and Improvements
@@ -60,7 +60,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.2`, follow the procedures descr
    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "customizations.yaml"
    ```
 
-1. Add customizations for the `cray-hms-hmcollector` helm chart:
+1. Add customizations for the `cray-hms-hmcollector` Helm chart:
 
    ```bash
    yq w -i "customizations.yaml" 'spec.kubernetes.services.cray-hms-hmcollector.hmcollector_external_hostname' 'hmcollector.hmnlb.{{ network.dns.external }}'
