@@ -137,7 +137,7 @@ management status of nodes, handling each of the steps required to upgrade compu
 
 See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0.
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0.
 > See the following links for more information:
 >
 > * [Rolling Upgrades with BOS V2](operations/boot_orchestration/Rolling_Upgrades.md)

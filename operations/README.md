@@ -183,7 +183,7 @@ Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifact
 Upgrade sets of compute nodes with the Compute Rolling Upgrade Service \(CRUS\) without requiring an entire set of nodes to be out of service at once. CRUS enables
 administrators to limit the impact on production caused from upgrading compute nodes by working through one step of the upgrade process at a time.
 
-> **NOTE** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0. See [Deprecated Features](../introduction/deprecated_features/README.md).
+> **NOTE** CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. See [Deprecated Features](../introduction/deprecated_features/README.md).
 
 - [Rolling Upgrades using BOS](boot_orchestration/Rolling_Upgrades.md)
 - [Compute Rolling Upgrade Service (CRUS)](compute_rolling_upgrades/Compute_Rolling_Upgrades.md)
