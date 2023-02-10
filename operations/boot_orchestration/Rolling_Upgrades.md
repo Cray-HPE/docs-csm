@@ -3,7 +3,7 @@
 > **`NOTE`** This section is for BOS V2 only.
 
 <!-- -->
-> **`NOTE`** This feature is the replacement for the Compute Rolling Upgrade Service (CRUS). CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.6.0.
+> **`NOTE`** This feature is the replacement for the Compute Rolling Upgrade Service (CRUS). CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.5.0.
 > See [Deprecated Features](../../introduction/deprecated_features/README.md).
 
 BOS V2 allows users to stage boot artifacts, configuration, and an operation such as a reboot.

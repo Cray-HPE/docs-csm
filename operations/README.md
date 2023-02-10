@@ -182,7 +182,7 @@ Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifact
 
 ## Compute rolling upgrades
 
-**NOTE** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.6.0. See the following links for more information:
+**NOTE** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.5.0. See the following links for more information:
 
 - [Rolling Upgrades using BOS](boot_orchestration/Rolling_Upgrades.md)
 - [Deprecated Features](../introduction/deprecated_features/README.md)

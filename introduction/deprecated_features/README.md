@@ -7,7 +7,7 @@ been made, that information will be available on this page. For any deprecated f
 version for their planned removal, customers are still strongly encouraged to make plans to migrate away from the deprecated feature.
 
 * [Removals](#removals)
-  * [Removals in CSM 1.6](#removals-in-csm-16)
+  * [Removals in CSM 1.5](#removals-in-csm-15)
   * [Removals in CSM 1.9](#removals-in-csm-19)
 * [Deprecations](#deprecations)
   * [Deprecated in CSM 1.3](#deprecated-in-csm-13)
@@ -24,7 +24,7 @@ in chronological order.
 
 * [SLS](../../glossary.md#system-layout-service-sls) support for downloading and uploading credentials in the `dumpstate` and `loadstate` REST APIs
 
-### Removals in CSM 1.6
+### Removals in CSM 1.5
 
 * [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
 
@@ -48,9 +48,9 @@ features are listed first).
 ### Deprecated in CSM 1.2
 
 * [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd) v1 REST API
-  * The v1 HMNFD APIs are targeted for removal in the CSM 1.6 release.
+  * The v1 HMNFD APIs are targeted for removal in the CSM 1.5 release.
 * [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
-  * CRUS will be removed in CSM 1.6.
+  * CRUS will be removed in CSM 1.5.
   * Enhanced [BOS](../../glossary.md#boot-orchestration-service-bos) functionality will replace CRUS. This includes the ability to stage changes to nodes that can be acted upon later when the node reboots.
     It also includes the ability to reboot nodes without specifying any boot artifacts, provided that the artifacts had been previously staged.
 * The `--template-body` option for the [BOS](../../glossary.md#boot-orchestration-service-bos) Cray CLI.
