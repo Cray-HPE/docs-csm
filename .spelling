@@ -254,6 +254,7 @@ HMN
 HMNLB
 HMN_MTN
 HMN_RVR
+hms-discovery
 honored
 hostname
 hostnames
@@ -424,6 +425,7 @@ passwordless
 Patroni
 PCH-style
 PCI-SIG
+PCS
 PDU
 PDUs
 PECs
