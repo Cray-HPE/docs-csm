@@ -8,7 +8,8 @@ If user IDs or passwords are needed, then see step 1 of the [Prepare the System 
 
 ## Note about services used during system power on
 
-- The Cray Advanced Platform Monitoring and Control \(CAPMC\) service controls power to major components. CAPMC sequences the power on tasks in the correct order, but **does not** determine if the required software services are running on the components.
+- The Power Control Service \(PCS\) service controls power to major components. PCS sequences the power on tasks in the correct order, but  **does not** determine if the required software services are running on the components.
+- The Cray Advanced Platform Monitoring and Control \(CAPMC\) service can also control power to major components. CAPMC sequences the power on tasks in the correct order, but **does not** determine if the required software services are running on the components.
 - The Boot Orchestration Service \(BOS\) manages and configures power on and boot tasks.
 - The System Admin Toolkit \(SAT\) automates boot and shutdown services by stage.
 
