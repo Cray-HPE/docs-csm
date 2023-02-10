@@ -35,7 +35,7 @@ All of the following are prerequisites on the node where this procedure is being
     Because this procedure will create/update a CFS configuration, take a snapshot of the current state of CFS.
 
     ```bash
-    /usr/share/doc/csm/scripts/operations/configuration/backup_cfs_config_comp.sh --cnfg-only
+    /usr/share/doc/csm/scripts/operations/configuration/backup_cfs_config_comp.sh --configs-only
     ```
 
 1. Gather a copy of the `sat bootprep` files.
