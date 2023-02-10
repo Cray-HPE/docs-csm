@@ -6,6 +6,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 1. [Install CSM services](#1-install-csm-services)
 1. [Create base BSS global boot parameters](#2-create-base-bss-global-boot-parameters)
+1. [Adding Switch Admin Password to Vault](#Adding-switch-admin-password-to-vault)
 1. [Wait for everything to settle](#3-wait-for-everything-to-settle)
 1. [Next topic](#next-topic)
 1. [Known issues](#known-issues)
@@ -95,8 +96,24 @@ This procedure will install CSM applications and services into the CSM Kubernete
    ```bash
    kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
    ```
+## 3. Adding Switch Admin Password to Vault
 
-## 3. Wait for everything to settle
+This is required for some of our automated tests.
+
+Add the switch credentials into Vault.
+Certain tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the state of the switch.
+This step is not required to configure the management network.
+If Vault is unavailable, this step can be temporarily skipped.
+Any automated tests that depend on the switch credentials being in Vault will fail until they are added.
+
+Run the following commands to add switch admin password to Vault. 
+```bash
+VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+vault kv put secret/net-creds/switch_admin admin=SWITCH_ADMIN_PASSWORD'
+```
+
+## 4. Wait for everything to settle
 
 Wait **at least 15 minutes** to let the various Kubernetes resources initialize and start before proceeding with the rest of the install.
 Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.

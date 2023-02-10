@@ -4,6 +4,7 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
 - [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
 - [Export Nexus data](#export-nexus-data)
+- [Adding Switch Admin Password to Vault](#Adding-switch-admin-password-to-vault)
 - [Start typescript](#start-typescript)
 - [Running sessions](#running-sessions)
 - [Health validation](#health-validation)
@@ -29,6 +30,20 @@ Prior to the upgrade it is recommended that a Nexus export is taken. This is not
 If there is no maintenance period available then this step should be skipped until after the upgrade process.
 
 Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
+
+## Adding Switch Admin Password to Vault
+
+Certain tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the state of the switch.
+This step is not required to configure the management network.
+If Vault is unavailable, this step can be temporarily skipped.
+Any automated tests that depend on the switch credentials being in Vault will fail until they are added.
+
+Run the following commands to add switch admin password to Vault. 
+```bash
+VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+vault kv put secret/net-creds/switch_admin admin=SWITCH_ADMIN_PASSWORD'
+```
 
 ## Start typescript
 
