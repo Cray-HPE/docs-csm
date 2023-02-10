@@ -1,6 +1,6 @@
 # Troubleshoot a Failed CRUS Session Because of Bad Parameters
 
-**Note:** CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0. It will be replaced with BOS V2, which will provide similar functionality. See
+**Note:** CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality. See
 [Deprecated features](../../introduction/differences.md#deprecated_features).
 
 A CRUS session must be deleted and recreated if it does not start or complete because of parameters having incorrect values.
