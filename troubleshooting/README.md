@@ -35,7 +35,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Known issues
 
-* [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+* [SAT/HSM/CAPMC/PCS Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
 * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 * [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
 * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)

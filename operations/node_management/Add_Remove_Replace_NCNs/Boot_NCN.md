@@ -205,7 +205,7 @@ This step is needed before locking the BCM of the added NCN.
 ### Lock the management nodes
 
 Follow the [How to Lock Management Single Node](../../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs) procedure.
-The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware, or from CAPMC to power off or do a power reset.
+The management nodes may be unlocked at this point. Locking the management nodes and their BMCs will prevent actions from FAS to update their firmware, or from PCS/CAPMC to power off or do a power reset.
 Doing any of these by accident will take down a management node. If the management node is a Kubernetes master or worker node,
 then this can have serious negative effects on system operation.
 

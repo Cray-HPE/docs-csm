@@ -4,19 +4,19 @@ Use the Hardware State Manager \(HSM\) Cray CLI commands to disable nodes on the
 
 Disabling nodes that are not configured correctly allows the system to successfully boot.
 
-### Prerequisites
+## Prerequisites
 
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system.
 
-### Procedure
+## Procedure
 
-1.  Disable one or more nodes with HSM.
+1. Disable one or more nodes with HSM.
 
     ```bash
     cray hsm state components bulkEnabled update --enabled false --component-ids XNAME_LIST
     ```
 
-2.  Verify the desired nodes are disabled.
+2. Verify the desired nodes are disabled.
 
     ```bash
     cray hsm state components query create --component-ids XNAME_LIST
@@ -24,7 +24,7 @@ Disabling nodes that are not configured correctly allows the system to successfu
 
     Example output:
 
-    ```
+    ```text
     [[Components]]
     Type = "Node"
     Enabled = false
@@ -48,5 +48,7 @@ Disabling nodes that are not configured correctly allows the system to successfu
     ID = "x5000c1s0b1n2"
     ```
 
-After changing the state of nodes, be cautious when powering them on/off. The preferred method for safely powering them on/off is via the Boot Orchestration Service \(BOS\). The Cray Advanced Platform Monitoring and Control \(CAPMC\) service is used to directly control the power for nodes, regardless of the state in HSM. CAPMC does not check if a node is disabled in HSM.
-
+After changing the state of nodes, be cautious when powering them on/off. The preferred method for safely
+powering them on/off is via the Boot Orchestration Service \(BOS\). The Cray Advanced Platform Monitoring
+and Control \(CAPMC\) or Power Control Service \(PCS\) is used to directly control the power for nodes,
+regardless of the state in HSM. PCS/CAPMC does not check if a node is disabled in HSM.
