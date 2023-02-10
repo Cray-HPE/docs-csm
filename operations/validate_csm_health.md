@@ -12,6 +12,9 @@ The following are examples of when to run health checks:
 
 The areas should be tested in the order they are listed on this page. Errors in an earlier check may cause errors in later checks because of dependencies.
 
+Each section of this health check document provides links to relevant troubleshooting procedures. If additional help is needed, see
+[CSM Troubleshooting Information](../troubleshooting/README.md).
+
 ## Topics
 
 - [0. Cray command line interface](#0-cray-command-line-interface)
@@ -24,6 +27,7 @@ The areas should be tested in the order they are listed on this page. Errors in 
   - [2.2 Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
     - [2.2.1 Interpreting HSM discovery results](#221-interpreting-hsm-discovery-results)
     - [2.2.2 Known issues with HSM discovery validation](#222-known-issues-with-hsm-discovery-validation)
+  - [2.3 Hardware checks (optional)](#23-hardware-checks-optional)
 - [3. Software Management Services health checks](#3-software-management-services-sms-health-checks)
 - [4. Gateway health and SSH access checks](#4-gateway-health-and-ssh-access-checks)
   - [4.1 Gateway health tests](#41-gateway-health-tests)
@@ -132,7 +136,8 @@ Information to assist with troubleshooting some of the components mentioned in t
 
 ## 2. Hardware Management Services health checks
 
-The checks in this section require that the [Cray CLI is configured](#0-cray-command-line-interface) on nodes where the checks are executed.
+> The checks in this section do not require that the [Cray CLI is configured](#0-cray-command-line-interface),
+> but in the case of failures, some of the tests will provide troubleshooting suggestions that involve using the CLI.
 
 Execute the HMS tests to confirm that the Hardware Management Services are running and operational.
 
@@ -142,6 +147,7 @@ Note: Do not run multiple instances of the HMS tests concurrently as they may in
 1. [Hardware State Manager discovery validation](#22-hardware-state-manager-discovery-validation)
     1. [Interpreting HSM discovery results](#221-interpreting-hsm-discovery-results)
     1. [Known issues with HSM discovery validation](#222-known-issues-with-hsm-discovery-validation)
+1. [Hardware checks (optional)](#23-hardware-checks-optional)
 
 ### 2.1 HMS CT test execution
 
@@ -359,7 +365,28 @@ Known issues that may prevent hardware from getting discovered by Hardware State
 - Switches with river cabinets require SNMP to be enabled for discovery to work. For configuring SNMP, see [Configure SNMP](./network/management_network/configure_snmp.md)
 - [HMS Discovery job not creating Redfish Endpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
+### 2.3 Hardware checks (optional)
+
+Optionally, these checks may be executed to detect problems with hardware in the system. Hardware check failures
+are **not** blockers for system installations and upgrades, and it is typically safe to postpone the investigation
+and resolution of any such failures until after the CSM installation or upgrade has completed.
+
+These checks may be executed on any one worker or master NCN (but **not** `ncn-m001` if it is still the PIT node).
+
+(`ncn-mw#`) Run the hardware checks.
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hardware_checks.sh
+```
+
+The return code of the script is zero if all hardware checks run and pass, non-zero if not.
+On errors or failures, the script will print the path to the hardware checks log file for the administrator to inspect.
+See the [Flags Set For Nodes In HSM](../troubleshooting/known_issues/flags_set_for_nodes_in_hsm.md) documentation for more information about common types of hardware check failures.
+
 ## 3 Software Management Services (SMS) health checks
+
+This test requires that the Cray CLI is configured on nodes where the test is executed.
+See [Cray command line interface](#0-cray-command-line-interface).
 
 (`ncn-mw#`) To validate all SMS services, run the following:
 
@@ -372,6 +399,8 @@ Successful output ends with a line similar to the following:
 ```text
 SUCCESS: All 6 service tests passed: bos, cfs, conman, ims, tftp, vcs
 ```
+
+For more details, including known issues and other command line options, see [Software Management Services health checks](../troubleshooting/known_issues/sms_health_check.md).
 
 ## 4. Gateway health and SSH access checks
 

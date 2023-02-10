@@ -70,6 +70,7 @@ It is possible to upgrade a single storage node at a time using the following co
 > - If a crash has occurred, [dumping the Ceph crash data](../operations/utility_storage/Dump_Ceph_Crash_Data.md) will return Ceph to healthy state and allow the upgrade to continue.
 >   The crash should be evaluated to determine if there is an issue that should be addressed.
 > - Refer to [storage troubleshooting documentation](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) for Ceph related issues.
+> - Refer to [troubleshoot Ceph image with tag:'\<none\>'](../operations/utility_storage/Troubleshoot_ceph_image_with_none_tag.md) if running `podman images` on a storage node shows an image with tag:\<none\>.
 
 ## Ensure that `rbd` stats monitoring is enabled
 
