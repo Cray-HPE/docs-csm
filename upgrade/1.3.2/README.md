@@ -7,7 +7,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.2`, follow the procedures descr
 
 ## Bug Fixes and Improvements
 
-* Fixed a scale issue with the `/v1/hardware` API in the System Layout Service (SLS) causing the service become deadlocked.
+* Fixed a scale issue with the `/v1/hardware` API in the System Layout Service (SLS) causing the service to become deadlocked.
 * Updated the `hms-hmcollector` to be accessible at the hostname `hmcollector.hmnlb.$SYSTEM_NAME.$SITE_DOMAIN`, in addition to its IP address `10.94.100.71`.
 
 ## Steps
@@ -37,7 +37,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.2`, follow the procedures descr
    **IMPORTANT**: If necessary, change this command to match the actual location of the extracted files.
 
    ```bash
-   CSM_DISTDIR="$(pwd)/csm-1.3.1"
+   CSM_DISTDIR="$(pwd)/csm-1.3.2"
    echo "${CSM_DISTDIR}"
    ```
 
