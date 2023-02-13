@@ -35,7 +35,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Known issues
 
-* [SAT/HSM/CAPMC Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
+* [SAT/HSM/CAPMC/PCS Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
 * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 * [`initrd.img.xz` not found](known_issues/initrd.img.zx_not_found.md)
 * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
@@ -61,7 +61,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Compute rolling upgrades
 
-CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.6.0. See [Deprecated Features](../introduction/deprecated_features/README.md).
+CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. See [Deprecated Features](../introduction/deprecated_features/README.md).
 
 * [Nodes Failing to Upgrade in a CRUS Session](../operations/compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
 * [Failed CRUS Session Because of Unmet Conditions](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)

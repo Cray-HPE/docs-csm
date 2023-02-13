@@ -69,7 +69,7 @@ spec:
               - start-operation
             inline:
               script:
-                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.2
+                image: artifactory.algol60.net/csm-docker/stable/iuf:v0.1.3
                 command: [sh]
                 source: |
                   #!/bin/sh
@@ -164,7 +164,7 @@ spec:
           media_dir={{inputs.parameters.media_dir}}
           cd $media_dir
           dir_name=`tar -tzf {{inputs.parameters.tarfile}} | head -1 | cut -f1 -d"/"`
-          [ ! -f $dir_name/iuf-product-manifest.yaml ] && tar -xvzf {{inputs.parameters.tarfile}} &> /dev/stderr
+          tar -xvzf {{inputs.parameters.tarfile}} &> /dev/stderr
           cat ${dir_name}/iuf-product-manifest.yaml > /tmp/manifest.yaml
           echo $media_dir/$dir_name > /tmp/original_location
         volumeMounts:

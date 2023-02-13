@@ -136,8 +136,8 @@ Now that all of the CSM services have been installed and the final NCN has been 
 can be prepared. This may include configuring Keycloak with a local Keycloak account or confirming that Keycloak
 is properly federating LDAP or another Identity Provider (IdP), initializing the `cray` CLI for administrative
 commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by
-CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs (node
-controllers) for nodes in liquid-cooled cabinets.
+PCS/CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs
+(node controllers) for nodes in liquid-cooled cabinets.
 
 See [Configure Administrative Access](configure_administrative_access.md).
 
