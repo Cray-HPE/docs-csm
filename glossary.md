@@ -2,70 +2,71 @@
 
 Glossary of terms used in CSM documentation.
 
-* [Application Node (AN)](#application-node-an)
-* [Baseboard Management Controller (BMC)](#baseboard-management-controller-bmc)
-* [Blade Switch Controller (sC)](#blade-switch-controller-sc)
-* [Boot Script Service (BSS)](#boot-script-service-bss)
-* [Boot Orchestration Service (BOS)](#boot-orchestration-service-bos)
-* [Cabinet Cooling Group](#cabinet-cooling-group)
-* [Cabinet Environmental Controller (CEC)](#cabinet-environmental-controller-cec)
-* [CEC microcontroller (eC)](#cec-microcontroller-ec)
-* [Compute Rolling Upgrade Service (CRUS)](#compute-rolling-upgrade-service-crus)
-* [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
-* [Customer Access Network](#customer-access-network)
-* [Chassis Management Module (CMM)](#chassis-management-module-cmm)
-* [Compute Node (CN)](#compute-node-cn)
-* [Configuration Framework Service (CFS)](#configuration-framework-service-cfs)
-* [Content Projection Service (CPS)](#content-projection-service-cps)
-* [Cray CLI (`cray`)](#cray-cli-cray)
-* [Cray Site Init (CSI)](#cray-site-init-csi)
-* [Cray System Management (CSM)](#cray-system-management-csm)
-* [Data Virtualization Service (DVS)](#data-virtualization-service-dvs)
-* [EX Compute Cabinet](#ex-compute-cabinet)
-* [EX TDS Cabinet](#ex-tds-cabinet)
-* [Fabric](#fabric)
-* [Floor Standing CDU](#floor-standing-cdu)
-* [Hardware Management Network (HMN)](#hardware-management-network-hmn)
-* [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon-hmnfd)
-* [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
-* [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon-hbtd)
-* [High Speed Network (HSN)](#high-speed-network-hsn)
-* [Image Management Service (IMS)](#image-management-service-ims)
-* [Management Nodes](#management-nodes)
-* [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service-meds)
-* [NIC Mezzanine Card (NMC)](#nic-mezzanine-card-nmc)
-* [Node Controller (nC)](#node-controller-nc)
-* [Node Management Network](#node-management-network)
-* [Non-Compute Node (NCN)](#non-compute-node-ncn)
-* [Olympus Cabinet](#olympus-cabinet)
-* [Power Distribution Unit (PDU)](#power-distribution-unit-pdu)
-* [Pre-Install Toolkit (PIT) node](#pre-install-toolkit-pit)
-  * [LiveCD](#livecd)
-  * [RemoteISO](#remoteiso)
-* [Rack-Mounted CDU](#rack-mounted-cdu)
-* [Rack System Compute Cabinet](#rack-system-compute-cabinet)
-* [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
-* [River Cabinet](#river-cabinet)
-* [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
-* [Rosetta ASIC](#rosetta-asic)
-* [Service/IO Cabinet](#serviceio-cabinet)
-* [Slingshot](#slingshot)
-* [Slingshot Blade Switch](#slingshot-blade-switch)
-* [Slingshot Top of Rack (ToR) Switch](#slingshot-top-of-rack-tor-switch)
-* [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram-shcd)
-* [Supply/Return Cutoff Valves](#supplyreturn-cutoff-valves)
-* [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
-* [System Layout Service (SLS)](#system-layout-service-sls)
-* [System Management Network (SMNet)](#system-management-network-smnet)
-* [System Management Services (SMS)](#system-management-services-sms)
-* [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
-* Tenant and Partition Management Service (TAPMS)
-* [Top of Rack Switch Controller (sC-ToR)](#top-of-rack-switch-controller-sc-tor)
-* [User Access Instance (UAI)](#user-access-instance-uai)
-* [User Access Node (UAN)](#user-access-node-uan)
-* [User Access Service (UAS)](#user-access-service-uas)
-* [Version Control Service (VCS)](#version-control-service-vcs)
-* [xname](#xname)
+* [Glossary](#glossary)
+  * [Application Node (AN)](#application-node-an)
+  * [Baseboard Management Controller (BMC)](#baseboard-management-controller-bmc)
+  * [Blade Switch Controller (sC)](#blade-switch-controller-sc)
+  * [Boot Script Service (BSS)](#boot-script-service-bss)
+  * [Boot Orchestration Service (BOS)](#boot-orchestration-service-bos)
+  * [Cabinet Cooling Group](#cabinet-cooling-group)
+  * [Cabinet Environmental Controller (CEC)](#cabinet-environmental-controller-cec)
+  * [CEC microcontroller (eC)](#cec-microcontroller-ec)
+  * [Compute Rolling Upgrade Service (CRUS)](#compute-rolling-upgrade-service-crus)
+  * [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
+  * [Customer Access Network (CAN)](#customer-access-network-can)
+  * [Chassis Management Module (CMM)](#chassis-management-module-cmm)
+  * [Compute Node (CN)](#compute-node-cn)
+  * [Configuration Framework Service (CFS)](#configuration-framework-service-cfs)
+  * [Content Projection Service (CPS)](#content-projection-service-cps)
+  * [Cray CLI (`cray`)](#cray-cli-cray)
+  * [Cray Site Init (CSI)](#cray-site-init-csi)
+  * [Cray System Management (CSM)](#cray-system-management-csm)
+  * [Data Virtualization Service (DVS)](#data-virtualization-service-dvs)
+  * [EX Compute Cabinet](#ex-compute-cabinet)
+  * [EX TDS Cabinet](#ex-tds-cabinet)
+  * [Fabric](#fabric)
+  * [Floor Standing CDU](#floor-standing-cdu)
+  * [Hardware Management Network (HMN)](#hardware-management-network-hmn)
+  * [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon-hmnfd)
+  * [Hardware State Manager (HSM)](#hardware-state-manager-hsm)
+  * [Heartbeat Tracker Daemon (HBTD)](#heartbeat-tracker-daemon-hbtd)
+  * [High Speed Network (HSN)](#high-speed-network-hsn)
+  * [Image Management Service (IMS)](#image-management-service-ims)
+  * [Management Nodes](#management-nodes)
+  * [Mountain Cabinet](#mountain-cabinet)
+  * [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service-meds)
+  * [NIC Mezzanine Card (NMC)](#nic-mezzanine-card-nmc)
+  * [Node Controller (nC)](#node-controller-nc)
+  * [Node Management Network](#node-management-network)
+  * [Non-Compute Node (NCN)](#non-compute-node-ncn)
+  * [Olympus Cabinet](#olympus-cabinet)
+  * [Power Control Service (PCS)](#power-control-service-pcs)
+  * [Power Distribution Unit (PDU)](#power-distribution-unit-pdu)
+  * [Pre-Install Toolkit (PIT)](#pre-install-toolkit-pit)
+    * [LiveCD](#livecd)
+    * [RemoteISO](#remoteiso)
+  * [Rack-Mounted CDU](#rack-mounted-cdu)
+  * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
+  * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
+  * [River Cabinet](#river-cabinet)
+  * [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
+  * [Rosetta ASIC](#rosetta-asic)
+  * [Service/IO Cabinet](#serviceio-cabinet)
+  * [Slingshot](#slingshot)
+  * [Slingshot Blade Switch](#slingshot-blade-switch)
+  * [Slingshot Top of Rack (ToR) Switch](#slingshot-top-of-rack-tor-switch)
+  * [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram-shcd)
+  * [Supply/Return Cutoff Valves](#supplyreturn-cutoff-valves)
+  * [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
+  * [System Layout Service (SLS)](#system-layout-service-sls)
+  * [System Management Network (SMNet)](#system-management-network-smnet)
+  * [System Management Services (SMS)](#system-management-services-sms)
+  * [System Management Services (SMS) nodes](#system-management-services-sms-nodes)
+  * [User Access Instance (UAI)](#user-access-instance-uai)
+  * [User Access Node (UAN)](#user-access-node-uan)
+  * [User Access Service (UAS)](#user-access-service-uas)
+  * [Version Control Service (VCS)](#version-control-service-vcs)
+  * [xname](#xname)
 
 ## Application Node (AN)
 
@@ -132,7 +133,7 @@ and CDU status to the CMMs for evaluation and/or action.
 
 ## Compute Rolling Upgrade Service (CRUS)
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.6.0. See [Deprecated Features](introduction/deprecated_features/README.md).
+> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.5.0. See [Deprecated Features](introduction/deprecated_features/README.md).
 
 See [Rolling Upgrades using BOS](operations/boot_orchestration/Rolling_Upgrades.md).
 
@@ -142,14 +143,15 @@ The Cray Advanced Platform Monitoring and Control (CAPMC) service enables direct
 power on/off, power monitoring, or system-wide power telemetry and configuration parameters from Redfish.
 CAPMC implements a simple interface for powering on/off compute nodes and application nodes, querying
 node state information, and querying site-specific service usage rules. These controls enable external
-software to more intelligently manage system-wide power consumption or configuration parameters.
+software to more intelligently manage system-wide power consumption or configuration parameters. CAPMC is
+replaced by PCS.
 
 ## Cray CLI (`cray`)
 
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management
 REST APIs into easily usable commands.
 
-## Customer Access Network
+## Customer Access Network (CAN)
 
 The Customer Access Network (CAN) provides access from outside the customer network to services, noncompute
 nodes (NCNs), and User Access Nodes (UANs) in the system. This allows for the following:
@@ -349,6 +351,14 @@ cabinets will also have at least one River cabinet to house non-compute node com
 such as management nodes, management network switches, storage nodes, application nodes,
 and possibly other air-cooled compute nodes. Some software and documentation refers to
 the Olympus cabinet as a Mountain cabinet.
+
+## Power Control Service (PCS)
+
+The Power Control Service (PCS) service enables direct hardware control of power on/off,
+power status, power capping via Redfish. PCS implements a simple interface for powering
+on/off compute nodes and application nodes and setting power caps. These controls enable
+external software to more intelligently manage system-wide power consumption. PCS is the
+replacement for CAPMC.
 
 ## Power Distribution Unit (PDU)
 

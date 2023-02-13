@@ -1,16 +1,20 @@
 # Change Settings for HMS Collector Polling of Air-Cooled Nodes
 
-The `cray-hms-hmcollector` service polls all air-cooled hardware to gather the necessary telemetry information for use by other services, such as the Cray Advanced Platform
-Monitoring and Control \(CAPMC\) service. This polling occurs every 10 seconds on a continual basis. Instabilities with the AMI Redfish implementation in the Gigabyte BMCs
-require a less significant approach when gathering power and temperature telemetry data. If the BMCs are overloaded, they can become unresponsive, return incorrect data, or
-encounter other errors.
+The `cray-hms-hmcollector` service polls all air-cooled hardware to gather the necessary telemetry information
+for telemetry purposes. This polling occurs every 10 seconds on a continual basis. Instabilities with the AMI
+Redfish implementation in the Gigabyte BMCs require a less significant approach when gathering power and
+temperature telemetry data. If the BMCs are overloaded, they can become unresponsive, return incorrect data,
+or encounter other errors.
 
-All of these issues prevent other services, such as CAPMC and the Firmware Action Service \(FAS\), from successfully acting on the BMCs. Recovery from this state requires a BMC
-reset and sometimes a hard power cycle by unplugging the server and plugging it back in.
+All of these issues prevent other services, such as PCS/CAPMC and the Firmware Action Service \(FAS\), from
+successfully acting on the BMCs. Recovery from this state requires a BMC reset and sometimes a hard power
+cycle by unplugging the server and plugging it back in.
 
-Collecting telemetry data while trying to boot air-cooled compute nodes increases the burden on the BMCs and increases the likelihood of BMC issues. The most likely time to
-encounter BMCs in a bad state is when trying to boot air-cooled compute nodes and User Access Nodes \(UANs\) using the Boot Orchestration Service, or when trying to do a firmware
-or BIOS update on the nodes. Check the service logs of CAPMC and FAS for error information returned from the BMCs.
+Collecting telemetry data while trying to boot air-cooled compute nodes increases the burden on the BMCs and
+increases the likelihood of BMC issues. The most likely time to encounter BMCs in a bad state is when trying
+to boot air-cooled compute nodes and User Access Nodes \(UANs\) using the Boot Orchestration Service, or when
+trying to do a firmware or BIOS update on the nodes. Check the service logs of PCS/CAPMC and FAS for error
+information returned from the BMCs.
 
 ## Recommendations for polling
 
