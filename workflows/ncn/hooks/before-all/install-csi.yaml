@@ -30,19 +30,12 @@ metadata:
 spec:
   scriptContent: |
     source /srv/cray/scripts/metal/metal-lib.sh
-    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp4" \
+    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3" \
       | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
     if [[ -z $csi_url ]]; then
-      csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3" \
-        | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
-      if [[ -n $csi_url ]]; then
-        echo "WARNING  when upgrading or rebuilding to csm-1.4, the packages.local repository should be csm-sle-15sp4. However, no csi url was found \
-        in csm-sle-15sp4 and it was found in csm-sle-15sp3."
-      else
-        echo "ERROR no url for installing csi was found at https://packages.local/service/rest/v1/components?repository=csm-sle-15sp4 or https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3."
+        echo "ERROR no url for installing csi was found at https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3."
         echo "Check that Nexus is functional."
         exit 1
-      fi
     fi
     installed=$(pdsh -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url" | grep "cray-site-init.*done\|No update candidate for 'cray-site-init" | wc -l)
     if [[ $installed -lt $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | wc -l) ]]; then
