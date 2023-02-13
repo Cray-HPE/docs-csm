@@ -40,7 +40,7 @@ spec:
         in csm-sle-15sp4 and it was found in csm-sle-15sp3."
       else
         echo "ERROR no url for installing csi was found at https://packages.local/service/rest/v1/components?repository=csm-sle-15sp4 or https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3."
-        echo "Check that nexus is functional."
+        echo "Check that Nexus is functional."
         exit 1
       fi
     fi
