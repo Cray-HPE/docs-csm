@@ -594,7 +594,7 @@ variables, and the values used are provided by the recipe variables and/or site 
 
 The following are examples of workflows for installing and upgrading product content using `iuf`.
 
-- [Upgrade All Products Provided in a HPC CSM Software Recipe](workflows/upgrade_all_products.md)
+- [Install or Upgrade All Products Provided in a HPC CSM Software Recipe](workflows/upgrade_all_products.md)
 
 ## Troubleshooting
 
