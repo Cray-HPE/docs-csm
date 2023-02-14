@@ -39,7 +39,7 @@ jobs:
         files: "**/*.md"
         files_ignore: ".github/**/*"
 
-    - uses: docker://ghcr.io/igorshubovych/markdownlint-cli:v0.31.1
+    - uses: docker://ghcr.io/igorshubovych/markdownlint-cli:v0.32.0
       with:
         args: "--config .github/config/markdown_style.yaml ${{ steps.changed-files.outputs.all_changed_files }}"
 
