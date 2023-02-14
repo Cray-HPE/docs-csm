@@ -1,45 +1,112 @@
 # Management Node Image Customization
 
-**NOTE:** Some of the documentation linked from this page mentions use of the Boot Orchestration Service (BOS). The use of BOS
-is only relevant for booting compute nodes and can be ignored when working with NCN images.
+**NOTE:** Some of the documentation linked from this page mentions use of the
+[Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos).
+The use of BOS is only relevant for booting compute nodes and should be ignored when working with NCN images.
 
 This document describes the configuration of a Kubernetes NCN image. The same steps could be used to modify a Ceph NCN image
 with minor command modifications.
 
 * [Prerequisites](#prerequisites)
 * [Procedure](#procedure)
-    1. [Obtain NCN image artifacts](#1-obtain-ncn-image-artifacts)
-    1. [Import the NCN image into IMS](#2-import-the-ncn-image-into-ims)
-    1. [Create a CFS configuration, if needed](#3-create-a-cfs-configuration-if-needed)
-    1. [Run the CFS image customization session](#4-run-the-cfs-image-customization-session)
-    1. [Update NCN boot parameters](#5-update-ncn-boot-parameters)
+    1. [Identify NCN image artifacts](#1-identify-ncn-image-artifacts)
+    1. [Create a CFS configuration, if needed](#2-create-a-cfs-configuration-if-needed)
+    1. [Run the CFS image customization session](#3-run-the-cfs-image-customization-session)
+    1. [Update NCN boot parameters](#4-update-ncn-boot-parameters)
 * [Next steps](#next-steps)
 
 ## Prerequisites
 
-The Cray CLI must be configured on the node where the commands are being run. See [Configure the Cray CLI](../configure_cray_cli.md).
+The Cray command line interface must be configured on the node where the commands are being run. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure
 
-### 1. Obtain NCN image artifacts
+### 1. Identify NCN image artifacts
 
-1. (`ncn-mw#`) Identify the NCN image to be modified.
+Specifically, determine the ID of the NCN boot image in the [Image Management Service (IMS)](../../glossary.md#image-management-service-ims).
+How to do this varies depending on whether or not this procedure is being done as part of a CSM upgrade.
 
-    If this procedure is being done as part of a CSM upgrade, then the documentation which linked to this procedure will have
-    provided instructions for how to set the `NCN_IMS_IMAGE_ID` variable.
+* [Get IMS ID during CSM upgrade](#get-ims-id-during-csm-upgrade)
+* [Get IMS ID of booted NCN, outside of a CSM upgrade](#get-ims-id-of-booted-ncn-outside-of-a-csm-upgrade)
+* [Get IMS ID of any management NCN, outside of a CSM upgrade](#get-ims-id-of-any-management-ncn-outside-of-a-csm-upgrade)
 
-    Otherwise, if the image to be modified is the image currently booted on an NCN, then find the value for `NCN_IMS_IMAGE_ID`
-    by looking at the boot parameters for the NCNs, or by reading  `/proc/cmdline` on a booted NCN. The version is a UUID value.
-    See [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
+#### Get IMS ID during CSM upgrade
 
-    ```bash
-    NCN_IMS_IMAGE_ID=<UUID-value>
-    ```
+If this procedure is being done as part of a CSM upgrade, then the documentation which linked to this procedure will have
+provided instructions for how to set the `NCN_IMS_IMAGE_ID` variable.
+
+(`ncn-mw#`) Set that variable now, if it has not already been set.
+
+```bash
+NCN_IMS_IMAGE_ID=<UUID-value>
+```
+
+#### Get IMS ID of booted NCN, outside of a CSM upgrade
+
+If not doing a CSM upgrade, and if the image to be modified is the image currently booted on an NCN, then identify the image
+by examining the boot parameters used to boot the NCN in question.
+
+1. (`ncn-mw#`) Set the `BOOTED_NCN` variable to the hostname of the NCN that is booted using the image that is to be modified.
+
+   > For example, `ncn-w001` or `ncn-s002`.
+
+   ```bash
+   BOOTED_NCN=ncn-<msw###>
+   ```
+
+1. (`ncn-mw#`) Extract the S3 path prefix for the image used to boot the chosen NCN.
+
+   This prefix corresponds to the IMS image ID of the boot image.
+
+   ```bash
+   NCN_IMS_IMAGE_ID=$(ssh "${BOOTED_NCN}" sed \
+                            "'s#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#'" \
+                            /proc/cmdline)
+   echo "${NCN_IMS_IMAGE_ID}"
+   ```
+
+   The output should be a UUID string. For example, `8f41cc54-82f8-436c-905f-869f216ce487`.
+
+   > The command used in this substep is extracting the location of the NCN image from the `metal.server` boot parameter in
+   > the `/proc/cmdline` file on the booted NCN. For more information on that parameter, see
+   > [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
+
+#### Get IMS ID of any management NCN, outside of a CSM upgrade
+
+If not doing a CSM upgrade, and if the image to be modified is the boot image of an NCN that is not currently booted, then
+identify the image by examining that NCN's boot parameters in the
+[Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss).
+
+> This procedure can also be used for an NCN which is booted, but the procedure obtains the boot image which will be used the next time
+> that the NCN boots. This may not necessarily match what the NCN is currently booted with.
+
+1. (`ncn-mw#`) Set `NCN_XNAME` to the [component name (xname)](../../glossary.md#xname) of the NCN whose boot image is to be used.
+
+   ```bash
+   NCN_XNAME=<xname>
+   ```
+
+1. (`ncn-mw#`) Extract the S3 path prefix for the image that will be used on the next boot of the chosen NCN.
+
+   This prefix corresponds to the IMS image ID of the boot image.
+
+   ```bash
+   NCN_IMS_IMAGE_ID=$(cray bss bootparameters list --name "${NCN_XNAME}" --format json | \
+                        jq -r '.[0].params' | \
+                        sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
+   echo "${NCN_IMS_IMAGE_ID}"
+   ```
+
+   The output should be a UUID string. For example, `8f41cc54-82f8-436c-905f-869f216ce487`.
+
+   > The command used in this substep is extracting the location of the NCN image from the `metal.server` boot parameter for the
+   > NCN in BSS. For more information on that parameter, see [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
 
 ### 2. Create a CFS configuration, if needed
 
-If `sat bootprep` was used to create a CFS configuration for management node image customization, then one does not
-need to be created now. For example. this will be the case if this procedure is being followed as part of
+If `sat bootprep` was used to create a configuration in the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
+for management node image customization, then one does not need to be created now.
+For example. this will be the case if this procedure is being followed as part of
 [Worker Image Customization](Worker_Image_Customization.md). If `sat bootprep` was used to create the CFS configuration,
 then skip this step and proceed to [Run the CFS image customization session](#4-run-the-cfs-image-customization-session).
 
