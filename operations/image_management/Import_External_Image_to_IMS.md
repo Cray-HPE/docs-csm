@@ -57,9 +57,6 @@ for example, for NCN boot images. If the actual set of image artifacts differs f
 
 Set variables for all of the image artifact files, if needed. For example, `IMS_ROOTFS_FILENAME`, `IMS_INITRD_FILENAME`, and `IMS_KERNEL_FILENAME`.
 
-If this procedure is being done as part of [Management Node Image Customization](../configuration_management/Management_Node_Image_Customization.md),
-then these should already be set. In this case, skip this section and proceed to [Record artifact checksums](#3-record-artifact-checksums).
-
 1. (`ncn-mw#`) Set the `IMS_ROOTFS_FILENAME` variable to the file name of the SquashFS image root file to be uploaded.
 
     For example:
@@ -152,10 +149,6 @@ then these should already be set. In this case, skip this section and proceed to
     ```
 
 ### 5. Upload artifacts to S3
-
-If this procedure is being done as part of [Management Node Image Customization](../configuration_management/Management_Node_Image_Customization.md),
-then these artifacts should already exist in S3. In this case, skip this section and proceed to
-[Create image manifest file and upload to S3](#6-create-image-manifest-file-and-upload-to-s3).
 
 1. Navigate to the directory containing the artifact files.
 
