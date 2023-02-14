@@ -29,7 +29,18 @@ The following IUF topics are discussed in the sections below.
 - [Argo workflows](#argo-workflows)
 - [Stages and hooks](#stages-and-hooks)
 - [`iuf` CLI](#iuf-cli)
+  - [Global arguments](#global-arguments)
+  - [Input file](#input-file)
+  - [Subcommands](#subcommands)
+    - [run](#run)
+    - [abort](#abort)
+    - [resume](#resume)
+    - [restart](#restart)
+    - [activity](#activity)
+    - [list-stages](#list-stages)
 - [Output and log files](#output-and-log-files)
+  - [`iuf` output](#iuf-output)
+  - [Log files](#log-files)
 - [Site and recipe variables](#site-and-recipe-variables)
 - [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
 - [Product workflows](#product-workflows)
@@ -161,14 +172,14 @@ activity identifier and that information is used for all other stages.
 
 The `iuf` command line interface is used to invoke all IUF operations. The `iuf` command provides the following subcommands.
 
-| Subcommand  | Description                                         |
-| ----------- | --------------------------------------------------- |
-| run         | Initiates execution of IUF operations               |
-| abort       | Abort an IUF session                                |
-| resume      | Resume a paused IUF session from where it stopped   |
-| restart     | Re-run a paused IUF session from the beginning      |
-| activity    | Display IUF activity details, annotate IUF activity |
-| list-stages | Display stages and status for a given IUF activity  |
+| Subcommand  | Description                                              |
+| ----------- | -------------------------------------------------------- |
+| run         | Initiates execution of IUF operations                    |
+| abort       | Abort an IUF session                                     |
+| resume      | Resume a previously aborted or failed IUF session        |
+| restart     | Restart the most recently aborted or failed IUF session  |
+| activity    | Display IUF activity details, annotate IUF activity      |
+| list-stages | Display stages and status for a given IUF activity       |
 
 ### Global arguments
 
@@ -226,7 +237,7 @@ As described in the [Output and log files](#output-and-log-files) section, the `
 specified in the input file. If an input file is used in addition to `iuf` arguments, the `iuf` arguments take precedence. The name of an entries in the input file corresponds to the long form name of the `iuf` argument with
 hyphens replaced by underscores.
 
-The following in an example of a partial `iuf` input file:
+The following in an example of a partial `iuf` input file. The first section displays global arguments and values and the following sections display subcommand arguments and values.
 
 ```yaml
 global:
@@ -234,7 +245,7 @@ global:
     concurrency: null
     base_dir: null
     state_dir: /etc/cray/upgrade/csm/iuf/admin-230127/state
-    media_dir: /opt/cray/iuf/reference_media
+    media_dir: /etc/cray/upgrade/csm/admin-230127
     media_host: ncn-m001
     log_dir: /etc/cray/upgrade/csm/iuf/admin-230127/log
     dryrun: false
@@ -242,6 +253,7 @@ global:
     verbose: false
 abort:
     comment: null
+    force: false
 activity:
     time: null
     create: false
@@ -267,7 +279,23 @@ Successfully wrote /tmp/default-input-file
 The `run` subcommand is used to execute one or more IUF stages. The `-b`, `-e`, `-r` and `-s` arguments can be specified to limit the stages executed. If none of those arguments are specified, `iuf run` will execute all stages
 in order. If an activity identifier is not provided via `-a`, a new activity will be created automatically.
 
-The following arguments may be specified when invoking `iuf run`.
+See the [Output and log files](#output-and-log-files) section for details on information printed on standard output as `iuf run` executes.
+
+Using Ctrl-C with `iuf run` does not immediately abort the IUF session. The following options will be printed and the administrator can select the desired action:
+
+```text
+Would you like to abort this run?
+    Enter Y, y, or yes to abort after the current stage.
+    Enter F, f, or force to abort immediately.
+    Enter D, d, or disconnect to exit the IUF CLI.  The install will continue in the background, however no logs will be collected.
+
+    Enter <return> to resume monitoring.
+    Note all logging will be suspended when backgrounded.
+```
+
+See the [resume](#resume) and [restart](#restart) sections for details on how to continue after aborting an IUF session.
+
+The following arguments may be specified when invoking `iuf run`:
 
 ```text
 usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE] [-r RUN_STAGES [RUN_STAGES ...]] [-s SKIP_STAGES [SKIP_STAGES ...]]
@@ -305,7 +333,8 @@ options:
                         Note the path is relative to $PWD, unless an absolute path is specified.
   -rv RECIPE_VARS, --recipe-vars RECIPE_VARS
                         Path to a recipe variables YAML file. HPE provides the `product_vars.yaml` recipe
-                        variables file with each release.
+                        variables file with each release. Note the path is relative to $PWD, unless
+                        an absolute path is specified.
   -sv SITE_VARS, --site-vars SITE_VARS
                         Path to a site variables YAML file. This file allows the user to override values defined in
                         the recipe variables YAML file. Defaults to ${RBD_BASE_DIR}/${IUF_ACTIVITY}/site_vars.yaml.
@@ -337,8 +366,6 @@ These [examples](examples/iuf_run.md) highlight common use cases of `iuf run`.
 The `abort` subcommand is specified by the administrator to end an IUF session. The IUF session will be terminated at the end of the current stage unless `-f` is specified, which causes the session to terminate immediately. Any
 terminated Argo Workflows will have a `Status` of `Failed` when displayed via `iuf activity`.
 
-**`NOTE`** Using Ctrl-C with `iuf` does not abort the IUF session. The `iuf` process will exit but the session will continue to execute via Argo.
-
 The following arguments may be specified when invoking `iuf abort`:
 
 ```text
@@ -355,24 +382,36 @@ These [examples](examples/iuf_abort.md) highlight common use cases of `iuf abort
 
 #### `resume`
 
-The `resume` subcommand is specified by the administrator to resume a paused IUF session.
+The `resume` subcommand is specified by the administrator to resume a previously aborted or failed IUF session for a given activity. The resumed IUF session continues execution with any Argo steps that previously failed or were
+not executed during the most recent stage.
 
 The following arguments may be specified when invoking `iuf resume`:
 
-```bash
-[ IMPLEMENTATION PENDING ]
+```text
+usage: iuf resume [-h]
+
+Resume a previously aborted or failed IUF session for a given activity.
+
+options:
+  -h, --help  show this help message and exit
 ```
 
 These [examples](examples/iuf_resume.md) highlight common use cases of `iuf resume`.
 
 #### `restart`
 
-The `restart` subcommand is specified by the administrator to restart a paused IUF session from the beginning of the session. This allows the administrator to make changes to the environment and re-execute the IUF session.
+The `restart` subcommand is specified by the administrator to restart a previously aborted or failed IUF session for a given activity. Specifically, it re-executes the most recent IUF session executed via `iuf run`. All stages
+of the IUF session will be re-executed, regardless of whether they succeeded or failed during the previous invocation of `iuf run`.
 
 The following arguments may be specified when invoking `iuf restart`:
 
-```bash
-[ IMPLEMENTATION PENDING ]
+```text
+usage: iuf restart [-h]
+
+Restart a previously aborted or failed IUF session for a given activity.
+
+options:
+  -h, --help  show this help message and exit
 ```
 
 These [examples](examples/iuf_restart.md) highlight common use cases of `iuf restart`.
@@ -430,7 +469,7 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  --time TIME           A time value used when creating or modifying an activity entry. Must be specified and match an
+  --time TIME           A time value used when creating or modifying an activity entry. Must match an
                         existing time value to modify that entry. Defaults to now.
   --create              Create a new activity entry.
   --comment COMMENT     A comment to be associated with an activity entry.
