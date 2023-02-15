@@ -36,66 +36,81 @@ The Cray command line interface must be configured on the node where the command
       ARTIFACT_S3_PREFIX="k8s/${ARTIFACT_VERSION}"
       ```
 
-    * If not doing a CSM upgrade, and if the image to be modified is the image currently booted on an NCN, then identify the image
-      by examining the boot parameters used to boot the NCN in question.
-
-      1. Set the `BOOTED_NCN` variable to the hostname of the NCN that is booted using the image that is to be modified.
-
-         > For example, `ncn-w001` or `ncn-s002`.
-
-         ```bash
-         BOOTED_NCN=ncn-<msw###>
-         ```
-
-      1. Extract the S3 path prefix for the image used to boot the chosen NCN.
-
-         ```bash
-         ARTIFACT_S3_PREFIX=$(ssh "${BOOTED_NCN}" sed \
-                                  "'s#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#'" \
-                                  /proc/cmdline)
-         echo "${ARTIFACT_S3_PREFIX}"
-         ```
-
-         Some examples of possible expected output:
-
-         * `k8s/0.3.49`
-         * `ceph/0.4.57`
-         * `8f41cc54-82f8-436c-905f-869f216ce487`
-
-         > The command used in this substep is extracting the location of the NCN image from the `metal.server` boot parameter in
-         > the `/proc/cmdline` file on the booted NCN. For more information on that parameter, see
-         > [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
-
-    * If not doing a CSM upgrade, and if the image to be modified is the boot image of an NCN that is not currently booted, then
-      identify the image by examining that NCN's boot parameters in the
+    * If not doing a CSM upgrade, then identify the image by examining that NCN's boot parameters in the
       [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss).
 
-      > This procedure can also be used for an NCN which is booted, but the procedure obtains the boot image which will be used the next time
+      > This procedure can be used whether or not the NCN in question is booted. It obtains the boot image which will be used the next time
       > that the NCN boots. This may not necessarily match what the NCN is currently booted with.
 
       1. Set `NCN_XNAME` to the [component name (xname)](../../glossary.md#xname) of the NCN whose boot image is to be used.
 
-         ```bash
-         NCN_XNAME=<xname>
-         ```
+          * If customizing a Kubernetes NCN image, since this procedure is being carried out on a Kubernetes NCN, the simplest option is to use
+            the xname of the current node:
+
+            ```bash
+            NCN_XNAME=$(cat /etc/cray/xname)
+            echo "${NCN_XNAME}"
+            ```
+
+          * If customizing a Ceph NCN image, the same method can be used over SSH to a storage NCN:
+
+            For example:
+
+            ```bash
+            NCN_XNAME=$(ssh ncn-s001 cat /etc/cray/xname)
+            echo "${NCN_XNAME}"
+            ```
 
       1. Extract the S3 path prefix for the image that will be used on the next boot of the chosen NCN.
 
-         ```bash
-         ARTIFACT_S3_PREFIX=$(cray bss bootparameters list --name "${NCN_XNAME}" --format json | \
-                              jq -r '.[0].params' | \
-                              sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
-         echo "${ARTIFACT_S3_PREFIX}"
-         ```
+          ```bash
+          ARTIFACT_S3_PREFIX=$(cray bss bootparameters list --name "${NCN_XNAME}" --format json | \
+                               jq -r '.[0].params' | \
+                               sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
+          echo "${ARTIFACT_S3_PREFIX}"
+          ```
 
-         Some examples of possible expected output:
+          Some examples of possible expected output:
 
-         * `k8s/0.3.49`
-         * `ceph/0.4.57`
-         * `8f41cc54-82f8-436c-905f-869f216ce487`
+          * `k8s/0.3.49`
+          * `ceph/0.4.57`
+          * `8f41cc54-82f8-436c-905f-869f216ce487`
 
-         > The command used in this substep is extracting the location of the NCN image from the `metal.server` boot parameter for the
-         > NCN in BSS. For more information on that parameter, see [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
+          > The command used in this substep is extracting the location of the NCN image from the `metal.server` boot parameter for the
+          > NCN in BSS. For more information on that parameter, see [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
+
+    * If not doing a CSM upgrade, and if the image to be modified is the image currently booted on an NCN, then identify the image
+      by examining the boot parameters used to boot the NCN in question.
+
+      > Note that even after a CSM install is completed, all of the management NCNs except for `ncn-m001` will have been booted from the
+      > PIT node. For such nodes, this method will not work, because their boot parameters will be pointing to the PIT node rather than to S3.
+
+      1. Set the `BOOTED_NCN` variable to the hostname of the NCN that is booted using the image that is to be modified.
+
+          > For example, `ncn-w001` or `ncn-s002`.
+
+          ```bash
+          BOOTED_NCN=ncn-<msw###>
+          ```
+
+      1. Extract the S3 path prefix for the image used to boot the chosen NCN.
+
+          ```bash
+          ARTIFACT_S3_PREFIX=$(ssh "${BOOTED_NCN}" sed \
+                                   "'s#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#'" \
+                                   /proc/cmdline)
+          echo "${ARTIFACT_S3_PREFIX}"
+          ```
+
+          Some examples of possible expected output:
+
+          * `k8s/0.3.49`
+          * `ceph/0.4.57`
+          * `8f41cc54-82f8-436c-905f-869f216ce487`
+
+          > The command used in this substep is extracting the location of the NCN image from the `metal.server` boot parameter in
+          > the `/proc/cmdline` file on the booted NCN. For more information on that parameter, see
+          > [`metal.server` boot parameter](../../background/ncn_kernel.md#metalserver).
 
 1. (`ncn-mw#`) Obtain the NCN image's associated artifacts (SquashFS, kernel, and `initrd`).
 
