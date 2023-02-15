@@ -383,6 +383,9 @@ spec:
       dag:
         tasks:
           - name: rebuild-set
+            hooks:
+              exit:
+                template: exit-worker-rebuild-set
             templateRef:
               name: ssh-template
               template: shell-script
@@ -471,6 +474,47 @@ spec:
           current_count="{{inputs.parameters.count}}"
           counter=$(($current_count + 1 ))
           echo $counter
+    - name: exit-worker-rebuild-set
+      dag:
+        tasks:
+          - name: clean-up-worker-rebuild
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: scriptContent
+                value: |
+                  lifecycle_pods_exist=false
+                  int=0
+                  while [[ $int -lt 3 ]]; do
+                    if [[ -n $(kubectl get pods -n argo | grep "ncn-lifecycle-rebuild" | grep -v "Completed") ]]; then
+                      lifecycle_pods_exist=true
+                      break
+                    fi
+                    int=$(($int + 1))
+                    sleep 2
+                  done
+                  if $lifecycle_pods_exist; then
+                    echo "NOTCIE a worker rebuild workflow is still runnning, this will delete any running worker-rebuild pods and stop the worker rebuild workflow"
+                    removed_all_pods=false
+                    while ! $removed_all_pods; do
+                      lifecycle_pods=$(kubectl get pods -n argo | grep "ncn-lifecycle-rebuild" | grep -v "Completed" | awk '{print $1}') || lifecycle_pods=""
+                      for pod in $lifecycle_pods; do
+                        echo "INFO delete pod:$pod in argo namespace"
+                        kubectl delete pod -n argo $pod
+                      done
+                      sleep 10
+                      if [[ -z $(kubectl get pods -n argo | grep "ncn-lifecycle-rebuild" | grep -v "Completed" | awk '{print $1}') ]]; then
+                        echo "NOTICE all worker rebuild workflow pods have been deleted and the worker rebuild has been stopped."
+                        removed_all_pods=true
+                      fi
+                    done
+                  else
+                    echo "INFO  no worker rebuild workflow is running. This step is doing nothing. This is expected if the worker rebuild workflow completed or has stopped."
+                  fi
     - name: prom-metrics
       inputs:
         parameters:
