@@ -45,7 +45,7 @@ The following describes how `update-vcs-config` determines how to create or merg
 - If the specified customer branch does not exist and a previous customer branch cannot be identified, the specified customer branch will be branched from the pristine branch.
 
 `update-vcs-config` will display information describing the operations performed. In the case of an error, such as a merge conflict, error information will be displayed and `iuf` will exit so the administrator can resolve the issue.
-Once it is resolved, the session can be continued with `iuf resume` or can be abandoned with `iuf abort`.
+Once it is resolved, the session can be continued with `iuf resume`, restarted with `iuf restart`, or abandoned with `iuf abort`.
 
 **`NOTE`** Any product-specific stage hooks specified for `update-vcs-config` will also be executed and may also create or modify VCS content. Refer to individual product documentation for information on any stage hook operations performed by the product.
 
