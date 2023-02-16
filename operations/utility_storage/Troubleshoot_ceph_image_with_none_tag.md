@@ -1,8 +1,8 @@
 # Troubleshoot Ceph image with tag:'&lt;none&gt;'
 
-Use the following procedure to fix a ceph image with tag: '&lt;none&gt;'.
+Use the following procedure to fix a Ceph image with tag: '&lt;none&gt;'.
 
-All of the following commands should be run from the storage node that contains ceph image with tag: '&lt;none&gt;'.
+All of the following commands should be run from the storage node that contains Ceph image with tag: '&lt;none&gt;'.
 
 1. Run `podman images`.
 
