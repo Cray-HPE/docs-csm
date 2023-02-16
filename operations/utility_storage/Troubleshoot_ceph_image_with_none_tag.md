@@ -1,8 +1,8 @@
-# Troubleshoot Ceph image with tag:'\<none\>'
+# Troubleshoot Ceph image with tag:'&lt;none&gt;'
 
-Use the following procedure to fix a ceph image with tag: \<none\>.
+Use the following procedure to fix a ceph image with tag: '&lt;none&gt;'.
 
-All of the following commands should be run from the storage node that contains ceph image with tag: \<none\>.
+All of the following commands should be run from the storage node that contains ceph image with tag: '&lt;none&gt;'.
 
 1. Run `podman images`.
 
@@ -33,7 +33,7 @@ All of the following commands should be run from the storage node that contains 
     ...
     ```
 
-1. Fix the tag by running the following script on the storage node with the tag: \<none\>.
+1. Fix the tag by running the following script on the storage node with the tag: '&lt;none&gt;'.
 
     1. Copy the script below and paste it into `/usr/share/doc/csm/scripts/fix_ceph_image_tag.sh`.
 
