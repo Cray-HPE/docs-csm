@@ -35,7 +35,8 @@ The NTP server and syslog server for BMCs in the liquid-cooled cabinet are typic
 ## Details
 
 ### Prerequisites
-- The latest CSM documentation is installed on the system. See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+
+* The latest CSM documentation is installed on the system. See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 
 Setting the SSH keys for mountain controllers is done by running the `/usr/share/doc/csm/scripts/operations/configuration/set_ssh_keys.py` script:
