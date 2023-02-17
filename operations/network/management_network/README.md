@@ -18,7 +18,7 @@ accessory drawings in this document are for illustration only, and may not exact
 
 ## Contents
 
-* [Adding Switch Admin Password to Vault](#Adding-switch-admin-password-to-vault)
+* [Adding Switch Admin Password to Vault](#adding-switch-admin-password-to-vault)
 * [Switch configuration states](#switch-configuration-states)
 * [Starting points](#starting-points)
 * [User guides](#user-guides)
@@ -27,11 +27,12 @@ accessory drawings in this document are for illustration only, and may not exact
 * [Products supported](#products-supported)
 * [Architecture and naming conventions](#architecture-and-naming-conventions)
 * [Minimum software version requirements](#minimum-software-version-requirements)
+* [Transceiver and cable guide](./transceiver_cable_guide.md)
 * [Changes](#changes)
   * [Enhancements](#enhancements)
   * [Fixes](#fixes)
   * [Issues and workarounds](#issues-and-workarounds)
-  * [Security Bulletin subscription service](#Security-bulletin-subscription-service)
+  * [Security Bulletin Subscription Service](#security-bulletin-subscription-service)
 
 ## Adding Switch Admin Password to Vault
 
@@ -128,7 +129,7 @@ These sections list enhancements, fixes, and known issues for this version of th
 * [Enhancements](#enhancements)
 * [Fixes](#fixes)
 * [Issues and workarounds](#issues-and-workarounds)
-* [Security Bulletin subscription service](#Security-bulletin-subscription-service)
+* [Security Bulletin Subscription Service](#security-bulletin-subscription-service)
 
 ### Enhancements
 
