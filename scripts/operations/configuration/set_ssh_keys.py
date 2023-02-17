@@ -2,7 +2,7 @@
 
 # MIT License
 #
-# (C) Copyright [2021] Hewlett Packard Enterprise Development LP
+# (C) Copyright [2021-2023] Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -226,7 +226,7 @@ def main():
 			return 1
 
 	# Get all discovered mountain BMCs -- ChassisBMCs, NodeBMCs, RouterBMCs.
-	# Get this info from the State/Components API in HSM.  Also get RF 
+	# Get this info from the State/Components API in HSM.  Also get RF
 	# endpoint info.
 
 	compRaw,stat = getHSMComponents(authToken)
@@ -271,7 +271,7 @@ def main():
 					break
 			if skip == True:
 				continue
-				
+
 		lcmp = None
 		tclass = None
 
@@ -317,7 +317,7 @@ def main():
 		'Params': {'SSHKey': rootSSHKey.rstrip()}
 	}
 
-	# Use SCSD to set SSH keys on all of these controllers.   Create a JSON 
+	# Use SCSD to set SSH keys on all of these controllers.   Create a JSON
 	# payload to cover all of them and use the /bmc/globalcreds API.
 
 	url = "https://api_gw_service.local/apis/scsd/v1/bmc/loadcfg"
@@ -347,6 +347,3 @@ def main():
 if __name__ == "__main__":
 	ret = main()
 	exit(ret)
-
-
-
