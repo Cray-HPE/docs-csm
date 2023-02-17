@@ -157,6 +157,37 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="CHECK_CEPH_GLOBAL_CONTAINER_IMAGE"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${target_ncn}"
+        ssh_keys_done=1
+    fi
+    # set ceph config global container_image if incorrect
+    image=$(cat /tmp/ceph_global_container_image.txt)
+    ssh ${target_ncn} podman pull $image
+    global_container_image=$(ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")|select(.section == "global")|.value' | tr -d '"')
+    image_contains_global_sha=$(ssh ${target_ncn} podman inspect $image | grep $global_container_image)
+    if [[ -z $image_contains_global_sha ]]; then
+        # ceph config global container_image is incorrect
+        ceph config set global container_image $image
+    fi
+    global_container_image=$(ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")|select(.section == "global")|.value' | tr -d '"')
+    image_contains_global_sha=$(ssh ${target_ncn} podman inspect $image | grep $global_container_image)
+    if [[ -z $image_contains_global_sha ]]; then
+        echo "ERROR there was a problem setting the ceph config global container_image. It should be set to $image"
+        echo "Manually run ceph config set global container_image $image"
+        exit 1
+    fi
+    } >> ${LOG_FILE} 2>&1
+    record_state "${state_name}" ${target_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 {
 . /usr/share/doc/csm/upgrade/scripts/ceph/lib/ceph-health.sh
 wait_for_health_ok ${target_ncn}

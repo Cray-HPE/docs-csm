@@ -54,18 +54,19 @@ function upload_image_and_upgrade() {
     podman pull $local_image
     podman tag $local_image $nexus_location
     podman push --creds $nexus_username:$nexus_password $nexus_location
-    for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-        ssh $storage_node ${ssh_options} "ceph config set mgr $to_configure $nexus_location"
-        if [[ $? == 0 ]]; then
-          break
-        fi
-    done
-    
+
     # run upgrade if mgr
     if [[ $name == "mgr" ]]; then
       for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
         ssh $storage_node ${ssh_options} "ceph config set global container_image $nexus_location"
         ssh $storage_node ${ssh_options} "ceph orch upgrade start --image $nexus_location"
+        if [[ $? == 0 ]]; then
+          break
+        fi
+      done
+    else
+      for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+        ssh $storage_node ${ssh_options} "ceph config set mgr $to_configure $nexus_location"
         if [[ $? == 0 ]]; then
           break
         fi
@@ -82,7 +83,7 @@ upload_image_and_upgrade "alertmanager" $prometheus_prefix "mgr/cephadm/containe
 # mgr and grafana have this prfix
 ceph_prefix="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/"
 upload_image_and_upgrade "grafana" $ceph_prefix "mgr/cephadm/container_image_grafana"
-upload_image_and_upgrade "mgr" $ceph_prefix "container_image_base"
+upload_image_and_upgrade "mgr" $ceph_prefix "mgr/cephadm/container_image_base"
 
 # watch upgrade status
 echo "Waiting for upgrade to complete..."
