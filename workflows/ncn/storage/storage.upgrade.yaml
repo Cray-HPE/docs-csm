@@ -228,6 +228,44 @@ spec:
                   value: |
                     nexus_image=$(cat /tmp/ceph_global_container_image.txt)
                     pdsh -w $(ceph orch host ls --format=json|jq -r '.[].hostname' | sort -u |  tr -t '\n' ',') "podman pull $nexus_image"
+          - name: run-ceph-upgrade
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              - pull-ceph-image-in-nexus
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+                    nexus_location=$(cat /tmp/ceph_global_container_image.txt)
+                    ceph orch upgrade start --image $nexus_location
+                    echo "Waiting for upgrade to complete..."
+                    sleep 10
+                    int=0
+                    success=false
+                    while [[ $int -lt 100 ]] && ! $success; do
+                        if [[ -n $(ceph orch upgrade status --format json | jq '.message' | grep Error) ]]; then
+                          echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+                          exit 1
+                        fi
+                        if [[ $(ceph orch upgrade status --format json | jq '.in_progress') != "true" ]]; then
+                          echo "Upgrade complete"
+                          success=true
+                          break
+                        else
+                          int=$(( $int + 1 ))
+                          sleep 10
+                        fi
+                    done
+                    if ! $success; then
+                      echo "Error completing 'ceph orch upgrade'. Check upgrade status by running 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+                      exit 1
+                    fi
+                    ceph config set global container_image $nexus_location
           {{ end }}
           - name: upgrade-{{$value}}
             templateRef:
@@ -235,7 +273,7 @@ spec:
               template: shell-script
             dependencies: 
               {{ if eq $index 0 }}
-              - pull-ceph-image-in-nexus
+              - run-ceph-upgrade
               {{ end }}
               # each upgrade depends on previous upgrade action and success
               {{ if ne $index 0 }}
@@ -300,55 +338,12 @@ spec:
                       echo "$RESULT"
                       exit 7
                     fi
-          - name: run-ceph-upgrade
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            dependencies:
-              - update-bss
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"  
-                - name: scriptContent
-                  value: |
-                    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-                    nexus_location=$(cat /tmp/ceph_global_container_image.txt)
-                    for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-                      ssh $storage_node ${ssh_options} "ceph orch upgrade start --image $nexus_location"
-                      if [[ $? -eq 0 ]]; then break; fi
-                    done
-                    echo "Waiting for upgrade to complete..."
-                    sleep 10
-                    int=0
-                    success=false
-                    while [[ $int -lt 100 ]] && ! $success; do
-                      for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
-                        error=$(ssh $storage_node ${ssh_options} "ceph orch upgrade status --format json | jq '.message' | grep Error")
-                        if [[ -n $error ]]; then
-                          echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
-                          exit 1
-                        fi
-                        if [[ $(ssh $storage_node ${ssh_options} "ceph orch upgrade status --format json | jq '.in_progress'") != "true" ]]; then
-                          echo "Upgrade complete"
-                          success=true
-                          break
-                        else
-                          int=$(( $int + 1 ))
-                          sleep 10
-                        fi
-                      done
-                    done
-                    if ! $success; then
-                      echo "Error completing 'ceph orch upgrade'. Check upgrade status by running 'ceph orch upgrade status' from ncn-s00[1/2/3]."
-                      exit 1 
-                    fi
           - name: ceph-health-check
             templateRef:
               name: ssh-template
               template: shell-script
             dependencies:
-              - run-ceph-upgrade
+              - update-bss
             arguments:
               parameters:
                 - name: dryRun
