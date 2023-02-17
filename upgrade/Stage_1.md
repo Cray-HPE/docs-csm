@@ -6,7 +6,6 @@
 - [Stage 1 - Ceph image upgrade](#stage-1---ceph-image-upgrade)
   - [Start typescript](#start-typescript)
   - [Argo workflows](#argo-workflows)
-  - [CSM Upgrade requirement for upgrades staying within a CSM release version](#csm-upgrade-requirement-for-upgrades-staying-within-a-csm-release-version)
   - [Storage node image upgrade](#storage-node-image-upgrade)
   - [Ensure that `rbd` stats monitoring is enabled](#ensure-that-rbd-stats-monitoring-is-enabled)
   - [Stop typescript](#stop-typescript)
