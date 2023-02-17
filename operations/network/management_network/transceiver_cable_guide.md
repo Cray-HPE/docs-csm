@@ -216,7 +216,7 @@ Cable (JL489A)
 
 #### 100G Transceivers and Cables <!-- markdownlint-disable-line MD024 MD026 -->
 
-* R9B63A2 Aruba 100G QSFP28 LC FR1 SMF 2km Transceiver
+* R9B63A Aruba 100G QSFP28 LC FR1 SMF 2km Transceiver
 
 #### 200G Transceivers and Cables
 
@@ -234,7 +234,7 @@ Cable (JL489A)
 * R9B46A Aruba 400G QSFP-DD to QSFP-DD 30m Active Optical Cable
 * R9B44A Aruba 400G QSFP-DD to QSFP-DD 50m Active Optical Cable
 * R9B41A Aruba 400G QSFP-DD MPO-16 SR8 100m MMF Transceiver
-* R9B42A2 Aruba 400G QSFP-DD MPO-12 eDR4 2km SMF Transceiver
+* R9B42A Aruba 400G QSFP-DD MPO-12 eDR4 2km SMF Transceiver
 
 #### 400G to 200G/100G Splitter cables
 
