@@ -32,9 +32,14 @@ for more information about these topics for changing the other parameters.
 
 The NTP server and syslog server for BMCs in the liquid-cooled cabinet are typically set by MEDS.
 
+## Prerequisites
+
+* The latest CSM documentation is installed on the system. See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+
 ## Details
 
-Setting the SSH keys for mountain controllers is done by running the `/opt/cray/csm/scripts/admin_access/set_ssh_keys.py` script:
+Setting the SSH keys for mountain controllers is done by running the `/usr/share/doc/csm/scripts/operations/configuration/set_ssh_keys.py` script:
+*NOTE*: The `set_ssh_keys.py` located in `/opt/cray/csm/scripts/admin_access` contains a bug and should not be used.
 
 ```text
 Usage: set_ssh_keys.py [options]
@@ -56,28 +61,10 @@ Usage: set_ssh_keys.py [options]
    --sshkey=key     SSH key to set on BMCs. If none is specified, will use
 ```
 
-Apply the workaround to the `set_ssh_keys.py` script.
-
-1. Delete the following lines:
-
-```text
-      if not "Class" in comp:
-         if comp['Type'] == "CabinetPDUController":
-```
-
-1. Replace the deleted lines with the following:
-
-```text
-      if "Class" in comp:
-         tclass = comp['Class']
-      else:
-         if comp['Type'] == "CabinetPDUController" or comp['Type'] == "CabinetPDUPowerConnector":
-```
-
 If no command line arguments are needed, SSH keys are set on all discovered mountain controllers using the root account's public RSA key. Using an alternate key requires the `--sshkey=key` argument:
 
 ```bash
-/opt/cray/csm/scripts/admin_access/set_ssh_keys.py --sshkey="AAAbbCcDddd...."
+/usr/share/doc/csm/scripts/operations/configuration/set_ssh_keys.py` --sshkey="AAAbbCcDddd...."
 ```
 
 After the script runs, verify that it worked:
