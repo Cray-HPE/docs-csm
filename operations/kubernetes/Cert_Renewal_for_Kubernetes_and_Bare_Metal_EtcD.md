@@ -373,27 +373,32 @@ Run the following steps on each master node.
                   /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
    ```
 
-2. Log into the master node where the other certificates were updated.
+2. Log into the master node that has the `kubeadm` configuration file to generate new `kubelet.conf` files.
 
-   1. Get the current `apiserver-advertise-address`.
+   1. Find the master node with the `/etc/cray/kubernetes/kubeadmin.yaml` file.
 
       ```bash
-      ncn# kubectl config view|grep server
+      ncn# MASTERNODE=$(for node in ncn-m00{1..3}; do ssh root@$node test -f /etc/cray/kubernetes/kubeadm.yaml && echo $node && break; done)
+      ncn# echo $MASTERNODE
       ```
 
       Example output:
 
       ```text
-      server: https://10.252.120.2:6442
+      ncn-m002 
       ```
 
-   1. Generate a new `kubelet.conf` file in the `/root/` directory with the IP address from the previous command.
+   1. Log into the master
 
-      **NOTE:** The `apiserver-advertise-address` may vary, so do not copy and paste without verifying.
+      ```bash
+      ncn# ssh $MASTERNODE
+      ```
+
+   1. Generate a new `kubelet.conf` file in the `/root/` directory.
 
       ```bash
       ncn-m# for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm alpha kubeconfig user --org system:nodes \
-                               --client-name system:node:$node --apiserver-advertise-address 10.252.120.2 --apiserver-bind-port 6442 > /root/$node.kubelet.conf; done
+                               --client-name system:node:$node --config /etc/cray/kubernetes/kubeadm.yaml | sed "/WARNING/d" > /root/$node.kubelet.conf; done
       ```
 
       There should be a new `kubelet.conf` file per node running Kubernetes.
