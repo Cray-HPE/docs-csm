@@ -351,3 +351,29 @@ spec:
                 - name: scriptContent
                   value: |
                     /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+          - name: check-ceph-config
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              - update-bss
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    if [[ $(ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")|.value' | wc -l) -gt 1 ]]; then
+                      echo "ERROR  the ceph config has more that one value for container_image set."
+                      echo "Look at the following output from ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")'"
+                      ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")'
+                      echo "There should only be one item and its section should be 'global'"
+                      echo
+                      echo "Troubleshoot this failure by investigating following items."
+                      echo "Run 'ceph -s' and 'ceph health detail'"
+                      echo "All ceph mon,mgr,mds,crash,rgw,osd daemons should be running the same image. Check this by running 'podman ps' on storage nodes."
+                      echo "Look at the ceph upgrade status by running 'ceph orch upgrade status' and check that it is not running and does not have an error."
+                      exit 1
+                    else
+                      echo "Ceph config check succeeded."
+                    fi
