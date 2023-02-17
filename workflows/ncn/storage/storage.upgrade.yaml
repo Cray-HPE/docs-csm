@@ -226,7 +226,7 @@ spec:
                   value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
-                    nexus_image=$(ceph config get mgr --format json | jq '."mgr/cephadm/container_image_base".value' | tr -d '"')
+                    nexus_image=$(cat /tmp/ceph_global_container_image.txt)
                     pdsh -w $(ceph orch host ls --format=json|jq -r '.[].hostname' | sort -u |  tr -t '\n' ',') "podman pull $nexus_image"
           {{ end }}
           - name: upgrade-{{$value}}
@@ -313,7 +313,7 @@ spec:
                 - name: scriptContent
                   value: |
                     ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-                    nexus_location=$(ceph config get mgr --format json | jq '."mgr/cephadm/container_image_base".value' | tr -d '"')
+                    nexus_location=$(cat /tmp/ceph_global_container_image.txt)
                     for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
                       ssh $storage_node ${ssh_options} "ceph orch upgrade start --image $nexus_location"
                       if [[ $? -eq 0 ]]; then break; fi
