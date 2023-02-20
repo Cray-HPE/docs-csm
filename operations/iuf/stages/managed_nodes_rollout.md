@@ -1,7 +1,8 @@
 # `managed-nodes-rollout`
 
-The `managed-nodes-rollout` stage performs a controlled reboot of the managed compute and application nodes in order to reboot them to a new image and configuration. The system must be configured to use BOS V2 as
-it is used to perform the controlled reboot.
+The `managed-nodes-rollout` stage performs a reboot of the managed compute and application nodes in order to reboot them to a new image and configuration. The system must be configured to use BOS V2 as
+it is used to perform the reboot. The reboot operations use the BOS session templates created during the `prepare-images` stage. The `-mrs stage` argument is only valid for compute nodes, since application nodes are not controlled
+by workload manager software. The `-mrs reboot` argument will reboot all compute and application nodes immediately if the `--limit-managed-rollout` argument is not specified.
 
 `managed-nodes-rollout` details are explained in the following sections:
 

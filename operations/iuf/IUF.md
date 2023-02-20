@@ -53,7 +53,7 @@ The following IUF topics are discussed in the sections below.
 - While IUF enables non-interactive deployment of product software, it does not automatically configure the software beyond merging new VCS release branch content to customer working branches. For example, if a product requires
   manual configuration, the administrator must stop IUF execution after the `update-vcs-config` stage, perform the manual configurations steps, and then resume with the next IUF stage (`update-cfs-config`).
 - IUF leverages `sat bootprep` for CFS configuration and image creation. It is intended to be used with the configuration files provided in the HPC CSM Software Recipe and requires the administrator to verify and customize
-  those configurations to their specific needs.
+  those configurations to their specific needs. Note that `sat` capabilities used by IUF rely on BOS V2.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
 - The `management-nodes-rollout` stage currently does not reboot management NCN storage nodes or `ncn-m001`. These nodes must be rebuilt using non-IUF methods described in the appropriate sections of the CSM documentation.
@@ -204,7 +204,7 @@ options:
                         options also specified. The file is named via the `-i` argument. The command exits once the
                         file has been created.
   -a ACTIVITY, --activity ACTIVITY
-                        Activity name. Must be a unique identifier. Activity names must only contain letters (A-Za-z),
+                        Activity name. Must be a unique identifier. Activity names must only contain lowercase letters (a-z),
                         numbers (0-9), periods (.), and dashes (-). Can also be set via the IUF_ACTIVITY environment
                         variable.
   -c CONCURRENCY, --concurrency CONCURRENCY
@@ -285,12 +285,13 @@ Using Ctrl-C with `iuf run` does not immediately abort the IUF session. The foll
 
 ```text
 Would you like to abort this run?
-    Enter Y, y, or yes to abort after the current stage.
-    Enter F, f, or force to abort immediately.
+    Enter Y, y, or yes to abort after the current stage completes.
+    Enter F, f, or force to abort the current stage immediately.
     Enter D, d, or disconnect to exit the IUF CLI.  The install will continue in the background, however no logs will be collected.
 
     Enter <return> to resume monitoring.
-    Note all logging will be suspended when backgrounded.
+    NOTE: The IUF CLI will remain connected until Argo completes the abort process.  Use the disconnect option to exit the IUF CLI immediately.
+    NOTE: All logging will be suspended when disconnected.
 ```
 
 See the [resume](#resume) and [restart](#restart) sections for details on how to continue after aborting an IUF session.
@@ -347,10 +348,11 @@ options:
                         concurrently based on the percentage specified. Must be an integer
                         between 1-100. Defaults to 20 (percent).
   --limit-managed-rollout LIMIT_MANAGED_ROLLOUT [LIMIT_MANAGED_ROLLOUT ...]
-                        Override list used to target specific nodes only when rolling out
-                        managed nodes.  Arguments should be xnames or HSM node groups.
+                        Override list used to target specific nodes only when rolling out managed nodes.  Arguments
+                        should be xnames or HSM node groups. Defaults to the Compute role.
   --limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]
                         Override list used to target specific role_subrole(s) only when rolling out management nodes.
+                        Defaults to the Management_Worker role.
   -mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...], --mask-recipe-prods MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]
                         If `--recipe-vars` is specified, mask the versions found within the recipe variables YAML
                         file for the specified products, such that the largest version of the package already installed on
@@ -604,7 +606,8 @@ products. `product_vars.yaml` is provided by HPE and the values are intended as 
 
 Site variables, typically specified in a `site_vars.yaml` file, allow the administrator to override values provided by recipe
 variables, including global default entries and product-specific entries. HPE does not provide a `site_vars.yaml` file as it is
-strictly for site use cases.
+strictly for site use cases. See the text at the top of the HPE-provided `product_vars.yaml` file for details on which override
+values can be specified in `site_vars.yaml`.
 
 If both files are used and specific variables are defined in both files, the values specified in the site variables file takes
 precedence.
@@ -633,7 +636,7 @@ variables, and the values used are provided by the recipe variables and/or site 
 
 The following are examples of workflows for installing and upgrading product content using `iuf`.
 
-- [Upgrade All Products Provided in a HPC CSM Software Recipe](workflows/upgrade_all_products.md)
+- [Install or Upgrade All Products Provided in a HPC CSM Software Recipe](workflows/upgrade_all_products.md)
 
 ## Troubleshooting
 
@@ -647,6 +650,8 @@ The following actions may be useful if errors are encountered when executing `iu
   1. Display all workflows for an IUF activity by specifying the activity identifier, e.g. `activity=admin-230126`, in the Argo UI `LABELS` filter.
 - If an error is associated with a script invoked by a product's [stage hook](#stages-and-hooks), the script can be found in the expanded product distribution file located in the media directory (`iuf -m MEDIA_DIR`). Examine the
   `hooks` entry in the product's `iuf-product-manifest.yaml` file in the media directory for the path to the script.
+- If log output in the Argo UI is overwhelming, it can be filtered by specifying a value such as `^INFO|^NOTICE|^WARNING|^ERROR` in the `Filter (regexp)...` text field.
+- If an Argo workflow cannot be found in the Argo UI, select `all` from the `results per page` dropdown list at the bottom of the page listing the Argo workflows.
 - If the source of the error can not be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and hooks](#stages-and-hooks) section
   of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the
   workflow and debug the issue.
