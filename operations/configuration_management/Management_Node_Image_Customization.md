@@ -82,8 +82,12 @@ The Cray command line interface must be configured on the node where the command
     * If not doing a CSM upgrade, and if the image to be modified is the image currently booted on an NCN, then identify the image
       by examining the boot parameters used to boot the NCN in question.
 
-      > Note that even after a CSM install is completed, all of the management NCNs except for `ncn-m001` will have been booted from the
-      > PIT node. For such nodes, this method will not work, because their boot parameters will be pointing to the PIT node rather than to S3.
+      > Notes:
+      >
+      > * Even after a CSM install is completed, all of the management NCNs except for `ncn-m001` will have been booted from the
+      >   PIT node. For such nodes, this method will not work, because their boot parameters will be pointing to the PIT node rather than to S3.
+      > * This method will not work for nodes which are booted from disk, only for nodes which booted over the network. Network boots are the default
+      >   behavior, but disk boots may be necessary in special cases.
 
       1. Set the `BOOTED_NCN` variable to the hostname of the NCN that is booted using the image that is to be modified.
 
