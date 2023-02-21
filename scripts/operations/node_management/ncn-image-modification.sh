@@ -127,14 +127,14 @@ function usage() {
 
 }
 
-function usage_exit
+function usage_exit()
 {
     echo "ERROR: $*" >&2
     usage
     exit 1
 }
 
-function err_exit
+function err_exit()
 {
     echo "ERROR: $*" >&2
     exit 1
