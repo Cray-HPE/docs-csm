@@ -86,7 +86,7 @@ Set variables for all of the image artifact files: `IMS_ROOTFS_FILENAME`, `IMS_I
 
    ```bash
    NCN_IMS_IMAGE_UPLOAD_SCRIPT=$(rpm -ql docs-csm | grep ncn-ims-image-upload[.]sh)
-   echo "$NCN_IMS_IMAGE_UPLOAD_SCRIPT}"
+   echo "${NCN_IMS_IMAGE_UPLOAD_SCRIPT}"
    ```
 
 1. (`ncn-mw#`) Register the new NCN image in IMS.
