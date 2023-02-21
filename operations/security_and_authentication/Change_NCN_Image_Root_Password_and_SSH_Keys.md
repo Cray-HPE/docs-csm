@@ -230,12 +230,12 @@ This step updates the entries in BSS for the NCNs to use the new images.
       for xname in "${K8S_XNAMES[@]}"; do
          echo "${xname}"
          cray bss bootparameters list --name "${xname}" --format json > "bss_${xname}.json" &&
-            sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/${K8S_IMS_ID}\([\"/[:space:]]\)@/${NEW_K8S_IMS_ID}\1@g" "bss_${xname}.json" &&
-            kernel=$(cat "bss_${xname}.json" | jq '.[]  .kernel') &&
-            initrd=$(cat "bss_${xname}.json" | jq '.[]  .initrd') &&
-            params=$(cat "bss_${xname}.json" | jq '.[]  .params') &&
-            cray bss bootparameters update --initrd "${initrd}" --kernel "${kernel}" --params "${params}" --hosts "${xname}" --format json ||
-            echo "ERROR updating BSS for ${xname}"
+         sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/${K8S_IMS_ID}\([\"/[:space:]]\)@/${NEW_K8S_IMS_ID}\1@g" "bss_${xname}.json" &&
+         kernel=$(cat "bss_${xname}.json" | jq -r '.[]  .kernel') &&
+         initrd=$(cat "bss_${xname}.json" | jq -r '.[]  .initrd') &&
+         params=$(cat "bss_${xname}.json" | jq -r '.[]  .params') &&
+         cray bss bootparameters update --initrd "${initrd}" --kernel "${kernel}" --params "${params}" --hosts "${xname}" --format json ||
+         echo "ERROR updating BSS for ${xname}"
       done
       ```
 
@@ -257,12 +257,12 @@ This step updates the entries in BSS for the NCNs to use the new images.
       for xname in "${CEPH_XNAMES[@]}"; do
          echo "${xname}"
          cray bss bootparameters list --name "${xname}" --format json > "bss_${xname}.json" &&
-            sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/${CEPH_IMS_ID}\([\"/[:space:]]\)@/${NEW_CEPH_IMS_ID}\1@g" "bss_${xname}.json" &&
-            kernel=$(cat "bss_${xname}.json" | jq '.[]  .kernel') &&
-            initrd=$(cat "bss_${xname}.json" | jq '.[]  .initrd') &&
-            params=$(cat "bss_${xname}.json" | jq '.[]  .params') &&
-            cray bss bootparameters update --initrd "${initrd}" --kernel "${kernel}" --params "${params}" --hosts "${xname}" --format json ||
-            echo "ERROR updating BSS for ${xname}"
+         sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/${CEPH_IMS_ID}\([\"/[:space:]]\)@/${NEW_CEPH_IMS_ID}\1@g" "bss_${xname}.json" &&
+         kernel=$(cat "bss_${xname}.json" | jq -r '.[]  .kernel') &&
+         initrd=$(cat "bss_${xname}.json" | jq -r '.[]  .initrd') &&
+         params=$(cat "bss_${xname}.json" | jq -r '.[]  .params') &&
+         cray bss bootparameters update --initrd "${initrd}" --kernel "${kernel}" --params "${params}" --hosts "${xname}" --format json ||
+         echo "ERROR updating BSS for ${xname}"
       done
       ```
 
