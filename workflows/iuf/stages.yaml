@@ -83,14 +83,17 @@ stages:
         static-parameters: {} # any parameters that will be supplied statically to this operation.
         required-manifest-attributes:
           - content.vcs
+        include-default-product-in-site-params: true # this operation wants to receive site_params.products.default in supplied global_params
 
   - name: update-cfs-config
     type: global
     operations:
       - name: update-management-cfs-config
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        include-default-product-in-site-params: true # this operation wants to receive site_params.products.default in supplied global_params
       - name: update-managed-cfs-config
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        include-default-product-in-site-params: true # this operation wants to receive site_params.products.default in supplied global_params
 
   - name: deploy-product
     type: product
@@ -105,8 +108,10 @@ stages:
     operations:
       - name: prepare-management-images
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        include-default-product-in-site-params: true
       - name: prepare-managed-images
         static-parameters: {} # any parameters that will be supplied statically to this operation.
+        include-default-product-in-site-params: true
 
   - name: management-nodes-rollout
     type: global
