@@ -119,9 +119,9 @@ pipeline {
                                     RELEASE_FOLDER = ""
                                 }
                                 ADDITIONAL_VERSIONS = ("${env.ADDITIONAL_VERSIONS}" == "null") ? [] : ["${env.ADDITIONAL_VERSIONS}"]
-                                sles_version_parts = "${sleVersion}".tokenize('.')
-                                sles_major = "${sles_version_parts[0]}"
-                                sles_minor = "${sles_version_parts[1]}"
+                                def sles_version_parts = "${sleVersion}".tokenize('.')
+                                def sles_major = "${sles_version_parts[0]}"
+                                def sles_minor = "${sles_version_parts[1]}"
                                 publishCsmRpms(
                                         additionalVersions: ADDITIONAL_VERSIONS,
                                         arch: "noarch",
