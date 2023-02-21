@@ -28,20 +28,20 @@ set -eo pipefail
 
 unset CRAY_FORMAT
 
-function err_exit
+function err_exit()
 {
     echo "ERROR: $*" >&2
     exit 1
 }
 
-function nonblank_arg_required
+function nonblank_arg_required()
 {
     # $1 $2 ... current command line arguments
     [[ $# -ge 2 ]] || err_exit "'$1' parameter requires an argument"
     [[ -n $2 ]] || err_exit "Argument to '$1' parameter may not be empty"
 }
 
-function file_exists_nonempty
+function file_exists_nonempty()
 {
     # $1 $2 ... current command line arguments
     nonblank_arg_required "$@"

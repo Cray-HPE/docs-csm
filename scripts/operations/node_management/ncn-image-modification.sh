@@ -41,10 +41,9 @@ SUPPLIED_HASH="${SQUASHFS_ROOT_PW_HASH:-""}"
 TIMEZONE=""
 TZ_ONLY="no"
 
-function tz_only
+function tz_only()
 {
     [[ ${TZ_ONLY} == yes ]]
-    return $?
 }
 
 function cleanup() {
@@ -174,7 +173,7 @@ function process_args() {
                 ;;
             -b)
                 # Check for mutually exclusive combinations
-                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-d cannot be specified with -b"
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-b cannot be specified with -d"
                 [[ ${TZ_ONLY} != yes ]] || usage_exit "-b cannot be specified with -Z"
 
                 SSH_KEYGEN_ARGS+=("-b $2")
@@ -183,7 +182,7 @@ function process_args() {
                 ;;
             -C)
                 # Check for mutually exclusive combinations
-                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-d cannot be specified with -C"
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-C cannot be specified with -d"
                 [[ ${TZ_ONLY} != yes ]] || usage_exit "-C cannot be specified with -Z"
 
                 # ensure the comment is quoted in case it contains spaces
@@ -193,7 +192,7 @@ function process_args() {
                 ;;
             -d)
                 # Check for mutually exclusive combinations
-                [[ ${#SSH_KEYGEN_ARGS[*]} -eq 0 ]] || usage_exit "-d cannot be specified along with ssk-keygen arguments"
+                [[ ${#SSH_KEYGEN_ARGS[*]} -eq 0 ]] || usage_exit "-d cannot be specified along with ssh-keygen arguments"
                 [[ ${TZ_ONLY} != yes ]] || usage_exit "-d cannot be specified with -Z"
 
                 SSH_KEY_DIR=$2
@@ -211,7 +210,7 @@ function process_args() {
                 ;;
             -N)
                 # Check for mutually exclusive combinations
-                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-d cannot be specified with -N"
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-N cannot be specified with -d"
                 [[ ${TZ_ONLY} != yes ]] || usage_exit "-N cannot be specified with -Z"
 
                 # escape quotes in case passphrase is empty
@@ -233,7 +232,7 @@ function process_args() {
                 ;;
             -t)
                 # Check for mutually exclusive combinations
-                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-d cannot be specified with -t"
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-t cannot be specified with -d"
                 [[ ${TZ_ONLY} != yes ]] || usage_exit "-t cannot be specified with -Z"
 
                 KEYTYPE=$2
@@ -252,9 +251,9 @@ function process_args() {
                 ;;
             -Z)
                 # Check for mutually exclusive arguments
-                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-d cannot be specified with -Z"
-                [[ ${#SSH_KEYGEN_ARGS[*]} -eq 0 ]] || usage_exit "-Z cannot be specified along with ssk-keygen arguments"
-                [[ ${CHANGE_PASSWORD} == no ]] || usage_exit "-p cannot be specified with -Z"
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-Z cannot be specified with -d"
+                [[ ${#SSH_KEYGEN_ARGS[*]} -eq 0 ]] || usage_exit "-Z cannot be specified along with ssh-keygen arguments"
+                [[ ${CHANGE_PASSWORD} == no ]] || usage_exit "-Z cannot be specified with -p"
 
                 TIMEZONE="$2"
                 TZ_ONLY="yes"
