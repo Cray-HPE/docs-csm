@@ -26,7 +26,6 @@
 set -eo pipefail
 test -n "$DEBUG" && set -x
 
-
 # Globals
 CHANGE_PASSWORD="no"
 CLEANUP_INVOKED="no"
@@ -40,7 +39,11 @@ SSH_KEY_DIR=""
 START_DIR=$PWD
 SUPPLIED_HASH="${SQUASHFS_ROOT_PW_HASH:-""}"
 TIMEZONE=""
+TZ_ONLY="no"
 
+function tz_only() {
+    [[ ${TZ_ONLY} == yes ]]
+}
 
 function cleanup() {
     local squashfs_root
@@ -68,20 +71,18 @@ function cleanup() {
     cd "$START_DIR"
 }
 
-
 function err_report() {
     echo "Error on line $1"
     cleanup
 }
 
-
 # it's a trap!
 trap 'err_report $LINENO' ERR TERM HUP INT
 trap 'cleanup' EXIT
 
-
 function usage() {
     echo -e "Usage: $(basename "$0") [-p] [-d dir] [ -z timezone] [-k kubernetes-squashfs-file] [-s storage-squashfs-file] [ssh-keygen arguments]\n"
+    echo -e "Usage: $(basename "$0") [ -Z timezone] [-k kubernetes-squashfs-file] [-s storage-squashfs-file]\n"
     echo    "       This script semi-automates the process of changing the timezone, root"
     echo    "       password, and adding new ssh keys for the root user to the NCN squashfs"
     echo -e "       image(s).\n"
@@ -106,6 +107,7 @@ function usage() {
     echo -e "                      being prompted.\n"
     echo    "       -z timezone    By default the timezone on NCNs is UTC. Use this option to"
     echo -e "                      override.\n"
+    echo -e "       -Z timezone    Same as -z, except SSH keys and passwords are not modified in the image."
     echo -e "SUPPORTED SSH-KEYGEN ARGUMENTS\n"
     echo    "       The following ssh-keygen(1) arguments are supported by this script:"
     echo    "       [-b bits] [-t dsa | ecdsa | ecdsa-sk | ed25519 | ed25519-sk | rsa]"
@@ -124,24 +126,21 @@ function usage() {
 
 }
 
-
-function preflight_sanity() {
-    if [ "$(whoami)" != "root" ]; then
-        echo "ERROR: the script must be run by the root user"
-        exit 1
-    fi
-
-    if ! command -v ssh-keygen >& /dev/null; then
-        echo "ERROR: ssh-keygen was not found on the system"
-        exit 1
-    fi
-
-    if ! command -v mksquashfs >& /dev/null; then
-        echo "ERROR: mksquashfs was not found on the system"
-        exit 1
-    fi
+function usage_exit() {
+    echo "ERROR: $*" >&2
+    usage
+    exit 1
 }
 
+function err_exit() {
+    echo "ERROR: $*" >&2
+    exit 1
+}
+
+function preflight_sanity() {
+    [ "$(whoami)" == "root" ] || err_exit "the script must be run by the root user"
+    command -v mksquashfs >& /dev/null || err_exit "mksquashfs was not found on the system"
+}
 
 function verify_ssh_keys() {
     local key_dir=$1
@@ -155,53 +154,47 @@ function verify_ssh_keys() {
     for key in $private_keys; do
         touch "$TMPDIR"/empty-file
         # we're only looking for malformed keys here vs ensuring private & public keys match, etc.
-        if ! ssh-keygen -Y sign -f "$key" -n file "$TMPDIR"/empty-file; then
-            echo "ERROR: unable to verify private key: $key"
-            exit 1
-        fi
+        ssh-keygen -Y sign -f "$key" -n file "$TMPDIR"/empty-file || err_exit "unable to verify private key: $key"
     done
 }
-
 
 function process_args() {
     while [[ $# -gt 0 ]]; do
         case $1 in
             -a)
+                # Technically this is mutually exclusive with -Z, but practically -Z kind of implies -a anyway,
+                # so the behavior should match what the person wants anyway. Therefore, not checking for that
+                # combination.
                 MODIFY_AUTHORIZED_KEYS="no"
                 shift # past argument
                 ;;
             -b)
-                if [ -n "$SSH_KEY_DIR" ]; then
-                    echo "-d cannot be specified with -b"
-                    usage
-                    exit 1
-                fi
+                # Check for mutually exclusive combinations
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-b cannot be specified with -d"
+                [[ ${TZ_ONLY} != yes ]] || usage_exit "-b cannot be specified with -Z"
+
                 SSH_KEYGEN_ARGS+=("-b $2")
                 shift # past argument
                 shift # past value
                 ;;
             -C)
-                if [ -n "$SSH_KEY_DIR" ]; then
-                    echo "-d cannot be specified with -C"
-                    usage
-                    exit 1
-                fi
+                # Check for mutually exclusive combinations
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-C cannot be specified with -d"
+                [[ ${TZ_ONLY} != yes ]] || usage_exit "-C cannot be specified with -Z"
+
                 # ensure the comment is quoted in case it contains spaces
                 SSH_KEYGEN_ARGS+=("-C \"$2\"")
                 shift # past argument
                 shift # past value
                 ;;
             -d)
-                if [ ${#SSH_KEYGEN_ARGS[*]} -ne 0 ]; then
-                    echo "-d cannot be specified along with ssk-keygen arguments"
-                    usage
-                    exit 1
-                fi
+                # Check for mutually exclusive combinations
+                [[ ${#SSH_KEYGEN_ARGS[*]} -eq 0 ]] || usage_exit "-d cannot be specified along with ssh-keygen arguments"
+                [[ ${TZ_ONLY} != yes ]] || usage_exit "-d cannot be specified with -Z"
+
                 SSH_KEY_DIR=$2
-                if ! test -d "$SSH_KEY_DIR"; then
-                    echo "ERROR: directory $SSH_KEY_DIR not found"
-                    exit 1
-                fi
+                [[ -d ${SSH_KEY_DIR} ]] || usage_exit "directory not found or not a directory: ${SSH_KEY_DIR}"
+
                 # no longer using TMPDIR for keys
                 KEY_SOURCE=$SSH_KEY_DIR
                 verify_ssh_keys "$KEY_SOURCE"
@@ -213,11 +206,10 @@ function process_args() {
                 exit 0
                 ;;
             -N)
-                if [ -n "$SSH_KEY_DIR" ]; then
-                    echo "-d cannot be specified with -N"
-                    usage
-                    exit 1
-                fi
+                # Check for mutually exclusive combinations
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-N cannot be specified with -d"
+                [[ ${TZ_ONLY} != yes ]] || usage_exit "-N cannot be specified with -Z"
+
                 # escape quotes in case passphrase is empty
                 SSH_KEYGEN_ARGS+=("-N \"$2\"")
                 shift # past argument
@@ -229,22 +221,39 @@ function process_args() {
                 shift # past value
                 ;;
             -p)
+                # Check for mutually exclusive combinations
+                [[ ${TZ_ONLY} != yes ]] || usage_exit "-p cannot be specified with -Z"
+
                 CHANGE_PASSWORD="yes"
                 shift # past argument
                 ;;
             -t)
-                if [ -n "$SSH_KEY_DIR" ]; then
-                    echo "-d cannot be specified with -t"
-                    usage
-                    exit 1
-                fi
+                # Check for mutually exclusive combinations
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-t cannot be specified with -d"
+                [[ ${TZ_ONLY} != yes ]] || usage_exit "-t cannot be specified with -Z"
+
                 KEYTYPE=$2
                 SSH_KEYGEN_ARGS+=("-t $2")
                 shift # past argument
                 shift # past value
                 ;;
             -z)
+                # Technically this is mutually exclusive with -Z, but practically -Z kind of implies -z anyway,
+                # so the behavior should match what the person wants anyway. Therefore, not checking for that
+                # combination.
+
                 TIMEZONE="$2"
+                shift # past argument
+                shift # past value
+                ;;
+            -Z)
+                # Check for mutually exclusive arguments
+                [[ -z ${SSH_KEY_DIR} ]] || usage_exit "-Z cannot be specified with -d"
+                [[ ${#SSH_KEYGEN_ARGS[*]} -eq 0 ]] || usage_exit "-Z cannot be specified along with ssh-keygen arguments"
+                [[ ${CHANGE_PASSWORD} == no ]] || usage_exit "-Z cannot be specified with -p"
+
+                TIMEZONE="$2"
+                TZ_ONLY="yes"
                 shift # past argument
                 shift # past value
                 ;;
@@ -262,18 +271,24 @@ function process_args() {
         fi
     fi
 
-    if [ -z "$SSH_KEY_DIR" ] && [ ${#SSH_KEYGEN_ARGS[*]} -eq 0 ]; then
-        echo "ERROR: refusing to create new images without ssh keys. Please use the -d option"
-        echo "       or supply ssh-keygen arguments on the command line."
-        usage
-        exit 1
-    fi
+    # Some things only need to be done if not in TZ-only mode
+    if ! tz_only ; then
 
-    if [ -n "$KEYTYPE" ]; then
-        SSH_KEYGEN_ARGS+=("-f $KEY_SOURCE/id_$KEYTYPE")
+        command -v ssh-keygen >& /dev/null || err_exit "ssh-keygen was not found on the system"
+
+        if [ -z "$SSH_KEY_DIR" ] && [ ${#SSH_KEYGEN_ARGS[*]} -eq 0 ]; then
+            echo "ERROR: refusing to create new images without ssh keys. Please use the -d option"
+            echo "       or supply ssh-keygen arguments on the command line."
+            usage
+            exit 1
+        fi
+
+        if [ -n "$KEYTYPE" ]; then
+            SSH_KEYGEN_ARGS+=("-f $KEY_SOURCE/id_$KEYTYPE")
+        fi
+
     fi
 }
-
 
 function verify_and_unsquash() {
     local squash
@@ -295,7 +310,6 @@ function verify_and_unsquash() {
     done
 }
 
-
 function update_etc_shadow() {
     local squashfs_root=$1
     local seconds_per_day=$(( 60*60*24 ))
@@ -303,7 +317,6 @@ function update_etc_shadow() {
 
     sed -i "/^root:/c\root:$SUPPLIED_HASH:$days_since_1970::::::" "$squashfs_root"/etc/shadow
 }
-
 
 function set_timezone() {
     local squashfs_root
@@ -331,7 +344,7 @@ function set_timezone() {
     fi
 }
 
-
+# Technically, setup ssh and passwords
 function setup_ssh() {
     local name
     local squash
@@ -374,7 +387,6 @@ function setup_ssh() {
     done
 }
 
-
 function create_new_squashfs() {
     local name
     local new_name
@@ -413,7 +425,11 @@ fi
 preflight_sanity
 process_args "$@"
 verify_and_unsquash
-setup_ssh
+
+if ! tz_only; then
+    setup_ssh
+fi
+
 set_timezone
 create_new_squashfs
 cleanup
