@@ -51,7 +51,7 @@ This page provides information on the Linux kernel in the NCN.
   * [`quiet`](#quiet)
   * [`crashkernel`](#crashkernel)
   * [`log_buf_len`](#logbuflen)
-  * [`split_lock_detect`](#split_lock_detect)
+  * [`split_lock_detect`](#splitlockdetect)
   * [`rd.retry`](#rdretry)
   * [`rd.shell`](#rdshell)
   * [`xname`](#xname)
