@@ -469,7 +469,7 @@ can decide how to apply the new content to the NCN storage nodes by following **
 
   1. APPLY CFS CONFIGURATION --- TODO
 
-  1. IUF currently does not manage the rebuild or NCN storage nodes. NCN storage nodes can be rebuilt manually into the new image by setting the CFS config and reubilding the NCN storage nodes.
+  1. IUF currently does not manage the rebuild or NCN storage nodes. NCN storage nodes can be rebuilt manually into the new image by setting the CFS configuration and rebuilding the NCN storage nodes.
       1. TODO set CFS CONFIG and IMAGE
       1. Follow the instructions for manually rebuilding NCN storage nodes starting at [Prepare Storage Nodes](../../node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md).
 
