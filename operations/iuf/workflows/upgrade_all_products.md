@@ -362,13 +362,13 @@ Once this step has completed:
 ### Execute the IUF `management-nodes-rollout` stage
 
 This section describes how to update software on management nodes. It describes how to test a new image and CFS configuration on a single "canary node" first before rolling it out to the other management nodes. Modify the procedure
-as necessary to accommodate site preferences for rebuilding management nodes. The images and CFS configurations used are created by the `prepare-images` stage; see the `prepare-images`
-[Artifacts created](../stages/prepare_images.md#artifacts-created) section for details on how to query the images and CFS configurations.
+as necessary to accommodate site preferences for rebuilding management nodes. The images and CFS configurations used are created by the `prepare-images` and `update-cfs-config` stages respectively; see the `prepare-images`
+[Artifacts created](../stages/prepare_images.md#artifacts-created) section for details on how to query the images and CFS configurations and [update-cfs-config](../stages/update_cfs_config.md) section for details about how the CFS configuration is updated.
 
 **`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
-**`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN management nodes. They names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
+**`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
 #### NCN worker nodes
@@ -439,7 +439,7 @@ Once this step has completed:
 
 #### NCN master nodes
 
-Unlike NCN worker nodes, NCN master nodes do not contain kernel module content from non-CSM products. However, userspace non-CSM product content is still provided on NCN master nodes and thus the `prepare-images` stage creates a
+Unlike NCN worker nodes, NCN master nodes do not contain kernel module content from non-CSM products. However, userspace non-CSM product content is still provided on NCN master nodes and thus the `prepare-images` and `update-cfs-config` stages create a
 new image and CFS configuration for NCN master nodes. The CFS configuration layers ensure the non-CSM product content is applied correctly for both image customization and node personalization scenarios. As a result, the administrator
 can decide how to apply the new content to the NCN master nodes by following **one** of the following procedures:
 
@@ -463,7 +463,15 @@ Once this step has completed:
 
 #### NCN storage nodes
 
-IUF currently does not manage the rebuild or NCN storage nodes. Follow the instructions in [Stage 1 - Ceph image upgrade](../../../upgrade/Stage_1.md) to rebuild the NCN storage nodes.
+Unlike NCN worker nodes, NCN storage nodes do not contain kernel module content from non-CSM products. However, userspace non-CSM product content is still provided on NCN storage nodes and thus the `prepare-images` and `update-cfs-config` stages create a
+new image and CFS configuration for NCN storage nodes. The CFS configuration layers ensure the non-CSM product content is applied correctly for both image customization and node personalization scenarios. As a result, the administrator
+can decide how to apply the new content to the NCN storage nodes by following **one** of the following procedures:
+
+  1. APPLY CFS CONFIGURATION --- TODO
+
+  1. IUF currently does not manage the rebuild or NCN storage nodes. NCN storage nodes can be rebuilt manually into the new image by setting the CFS config and reubilding the NCN storage nodes.
+      1. TODO set CFS CONFIG and IMAGE
+      1. Follow the instructions for manually rebuilding NCN storage nodes starting at [Prepare Storage Nodes](../../node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md).
 
 Once this step has completed:
 
