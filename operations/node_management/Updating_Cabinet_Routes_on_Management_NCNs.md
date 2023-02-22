@@ -77,13 +77,13 @@ This procedure will use config from System Layout Service (SLS) to set up the pr
     {
         "user-data": {
             "write_files": [{
-                "content": $(jq -n --rawfile file ifroute-bond0.nmn0 '$file'),
+                "content": $(jq -n --rawfile file /etc/sysconfig/network/ifroute-bond0.nmn0 '$file'),
                 "owner": "root:root",
                 "path": "/etc/sysconfig/network/ifroute-bond0.nmn0",
                 "permissions": "0644"
             },
             {
-                "content": $(jq -n --rawfile file ifroute-bond0.hmn0 '$file'),
+                "content": $(jq -n --rawfile file /etc/sysconfig/network/ifroute-bond0.hmn0 '$file'),
                 "owner": "root:root",
                 "path": "/etc/sysconfig/network/ifroute-bond0.hmn0",
                 "permissions": "0644"
