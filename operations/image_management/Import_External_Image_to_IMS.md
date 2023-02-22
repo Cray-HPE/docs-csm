@@ -2,7 +2,11 @@
 
 The Image Management Service \(IMS\) is typically used to build images from IMS recipes and customize Images that are already known to IMS.
 However, it is sometimes the case that an image is built using a mechanism other than by IMS and needs to be added to IMS. In these cases,
-the following procedure can be used to add this external image to IMS and upload the image's artifact(s) to the Simple Storage Service (S3).
+the following procedure can be used to add this external image to IMS and upload the image's artifacts to the Simple Storage Service (S3).
+
+An automated tool is available to help the specific case of starting with image artifacts for a
+[Non-Compute Node (NCN)](../../glossary.md#non-compute-node-ncn) that are not yet in S3 or IMS. For more information, see
+[Import an NCN Image to IMS](Import_NCN_Image_to_IMS.md).
 
 * [Prerequisites](#prerequisites)
 * [Limitations](#limitations)
@@ -29,8 +33,6 @@ the following procedure can be used to add this external image to IMS and upload
   * An image root file is required.
   * Optionally, additional image artifacts may be specified including a kernel, `initrd`, and kernel parameters file.
 
-* A token providing S3 credentials has been generated.
-
 ## Limitations
 
 * The commands in this procedure must be run as the `root` user.
@@ -49,8 +51,8 @@ for example, for NCN boot images. If the actual set of image artifacts differs f
 
     IMS requires that an image's root filesystem is in SquashFS format. Select one of the following options based on the current state of the image root being used:
 
+    * If the image being added meets the above requirements, then skip the rest of this section and proceed to the next step.
     * If the image being added is in `tgz` format, then refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.md).
-    * If the image being added meets the above requirements, then proceed to [Create image record in IMS](#2-create-image-record-in-ims).
     * If the image root is in a format other than `tgz` or SquashFS, then convert the image root to `tgz`/SquashFS before continuing.
 
 ### 2. Set helper variables
