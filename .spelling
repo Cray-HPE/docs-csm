@@ -69,6 +69,7 @@
 802.3cd/bs
 8325-23C
 8325-48Y8C
+8325-32C
 ACLs
 airgapped
 Alertmanager
@@ -566,6 +567,11 @@ SuSE
 sysfs
 syslog
 SystemD
+sw-edge-001
+sw-edge-002
+sw-spine-00x
+sw-25g01
+sw-25g02
 TCP
 teardown
 timeframes
@@ -649,6 +655,11 @@ upgrader's
 uppercase
 uptimes
 URIs
+u12
+u13
+u21
+u22
+u37
 v1
 v1.0
 V1.0.0
@@ -702,6 +713,8 @@ XL675d
 x8000
 xname
 xnames
+x3000
+x8000
 XtraDB
 Yum
 zeroization
