@@ -94,17 +94,16 @@ spec:
                     fi
                     
                     # check gitea VCS
-                    tmpdir=$(mktemp -d)
-                    pushd $tmpdir > /dev/null
-                    gp=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} 2> /dev/null | base64 --decode)
-                    if ! git clone --depth 1 https://crayvcs:"${gp}"@api-gw-service-nmn.local/vcs/cray/cos-config-management.git &> /dev/null; then
-                      echo "ERROR VCS is not operational. This check will fail if there are not valid SSL certificates located at '/var/lib/ca-certificates'."
+                    vcs_user=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+                    vcs_pass=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+                    vcs_vers=$(curl -s https://api-gw-service-nmn.local/vcs/api/v1/version -u ${vcs_user}:${vcs_pass} | jq -r '. | .version')
+
+                    if [[ -z $vcs_vers ]]; then
+                      echo "ERROR VCS is not operational. This check will fail if VCS is unable to return the api version."
                       error_flag=1
                     else
                       echo "INFO VCS is operational."
                     fi
-                    popd > /dev/null
-                    rm -rf $tmpdir
                     
                     # Check IMS
                     if ! cray ims images list > /dev/null; then
