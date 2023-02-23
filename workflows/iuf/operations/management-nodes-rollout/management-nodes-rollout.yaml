@@ -436,6 +436,8 @@ spec:
                   value: "{{tasks.move-to-next-set.outputs.result}}"
                 - name: limit
                   value: "{{inputs.parameters.limit}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
     - name: process-sets
       inputs:
         parameters:
