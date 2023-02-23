@@ -2,7 +2,7 @@
 
 In BOS V2 it is possible to stage changes when creating a session.  These changes will not immediately take effect, and will instead be applied when the `applystaged` endpoint is called.
 
-This is a BOS V2 feature only.  For suggestions on working around this in V1, see [Stage Changes Without BOS](#Stage-Changes-Without-BOS).
+This is a BOS V2 feature only.  For suggestions on working around this in V1, see [Stage Changes Without BOS](#stage-changes-without-bos).
 
 ## Creating a staged session
 
@@ -11,7 +11,7 @@ Creating a staged session is no different than creating a normal session, with o
 (`ncn-mw#`)
 
 ```bash
-cray bos v2 sessions create --template-name TEMPLATE_NAME --operation Boot --staged True --format json
+cray bos v2 sessions create --template-name TEMPLATE_NAME --operation boot --stage True --format json
 ```
 
 This creates a new BOS session that can be managed and monitored as normal, but rather than updating the component's desired state, the desired state information will be stored in a `staged_state` field.
