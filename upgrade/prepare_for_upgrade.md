@@ -143,4 +143,4 @@ command.
 ## Preparation completed
 
 After completing the above steps, proceed to
-[Upgrade Management Nodes and CSM Services](README.md#3-upgrade-management-nodes-and-csm-services).
+[Upgrade Management Nodes and CSM Services](README.md#2-upgrade-management-nodes-and-csm-services).
