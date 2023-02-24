@@ -1,4 +1,4 @@
-# Troubleshoot HEALTH_ERR Module `devicehealth` has failed table Device already exists
+# Troubleshoot `HEALTH_ERR` Module `devicehealth` has failed table Device already exists
 
 In the event that a `ceph health detail` or a `ceph -s` shows the below command then please follow the below procedure to fix the issue.
 
@@ -11,8 +11,8 @@ Error Message:
 
 ## Procedure
 
-1. Stop the ceph mgr services via systemd on `ncn-s001, ncn-s002, and ncn-s003`.
-   1. Find the systemd unit name.
+1. Stop the Ceph mgr services via `systemd` on `ncn-s001`, `ncn-s002`, and `ncn-s003`.
+   1. Find the `systemd` unit name.
       1. On each node listed above run the following:
 
          ```bash
@@ -29,8 +29,8 @@ Error Message:
 
    3. Repeat for each node listed in step 1.
 
-2. Remove the ceph pool containing the corrupt table.
-   1. The following commands will be executed once from ncn-s001, ncn-s002, or ncn-s003.
+2. Remove the Ceph pool containing the corrupt table.
+   1. The following commands will be executed once from `ncn-s001`, `ncn-s002`, or `ncn-s003`.
    2. Set flag to allow pool deletion.
 
       ```bash
@@ -51,8 +51,8 @@ Error Message:
       ncn-s001:~ # ceph config set mon mon_allow_pool_delete false
       ```
 
-3. Start the ceph mgr services via systemd on `ncn-s001, ncn-s002, and ncn-s003`.
-   1. Find the systemd unit name.
+3. Start the Ceph mgr services via `systemd` on `ncn-s001`, `ncn-s002`, and `ncn-s003`.
+   1. Find the `systemd` unit name.
       1. On each node listed above run the following:
 
          ```bash
@@ -69,7 +69,7 @@ Error Message:
 
    3. Repeat for each node listed in step 1.
 
-4. Verify ceph mgr is operational.
+4. Verify Ceph mgr is operational.
    1. Verify the .mgr pool was automatically created.
 
       ```bash
@@ -100,8 +100,8 @@ Error Message:
       ```
 
    3. Additional verification steps.
-      1. Run the following from either a master node or ncn-s001/2/3.
-         1. Fetch the ceph prometheus endpoint.
+      1. Run the following from either a master node, or on one of the following: `ncn-s001`, `ncn-s002`, or `ncn-s003`.
+         1. Fetch the Ceph Prometheus endpoint.
 
             ```bash
             ncn-s001:~ # ceph mgr services
