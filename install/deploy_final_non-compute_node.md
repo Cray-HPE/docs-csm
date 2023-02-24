@@ -16,7 +16,7 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
 1. [Reboot](#4-reboot)
 1. [Enable NCN disk wiping safeguard](#5-enable-ncn-disk-wiping-safeguard)
 1. [Configure DNS and NTP on each BMC](#6-configure-dns-and-ntp-on-each-bmc)
-1. [Next topic](#8-next-topic)
+1. [Next topic](#7-next-topic)
 
 ## 1. Required services
 
@@ -514,17 +514,6 @@ However, the commands in this section are all run **on** `ncn-m001`.
     done ; echo "Configuration completed on all NCN BMCs"
     ```
 
-## 7. Create and Mount an `rbd` Device
-
-  1. Create the `rbd` device for subsequent installs and upgrades:
-
-     ```bash
-     tar xvf /usr/share/doc/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/; \
-     source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate; \
-     /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001; \
-     deactivate
-     ```
-
-## 8. Next topic
+## 7. Next topic
 
 After completing this procedure, the next step is to [Configure Administrative Access](README.md#5-configure-administrative-access).

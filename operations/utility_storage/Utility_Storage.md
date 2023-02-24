@@ -27,8 +27,8 @@ Adjust Ceph cluster
 
 - [Adding a Ceph Node to the Ceph Cluster](Add_Ceph_Node.md)
 - [Add Ceph OSDs](Add_Ceph_OSDs.md)
-- [Shrink the Ceph Cluster](Remove_Ceph_Node.md): remove a ceph node
-- [Shrink Ceph OSDs](Shrink_Ceph_OSDs.md): remove OSDs from a ceph cluster
+- [Shrink the Ceph Cluster](Remove_Ceph_Node.md): remove a Ceph node
+- [Shrink Ceph OSDs](Shrink_Ceph_OSDs.md): remove OSDs from a Ceph cluster
 - [Adjust Ceph Pool Quotas](Adjust_Ceph_Pool_Quotas.md)
 - [Alternate Storage Pools](Alternate_Storage_Pools.md)
 
@@ -51,9 +51,8 @@ Ceph related operations
 Ceph tools' usage documentation
 
 - [Ceph Orchestrator Usage](Ceph_Orchestrator_Usage.md)
-- [CSM RBD Tool Usage](CSM_rbd_tool_Usage.md)
 - [Ceph Service Check Script Usage](Ceph_Service_Check_Script_Usage.md)
-- [cubs_tool Usage](Cubs_tool_Usage.md)
+- [`cubs_tool` Usage](Cubs_tool_Usage.md)
 
 ## Storage troubleshooting references
 
@@ -66,7 +65,7 @@ Ceph tools' usage documentation
 RGW
 
 - [Troubleshoot if RGW Health Check Fails](Troubleshoot_RGW_Health_Check_Fail.md)
-- [Troubleshoot an Unresponsive Rados-Gateway (radosgw) S3 Endpoint](Troubleshoot_an_Unresponsive_S3_Endpoint.md)
+- [Troubleshoot an Unresponsive Rados-Gateway (`radosgw`) S3 Endpoint](Troubleshoot_an_Unresponsive_S3_Endpoint.md)
 
 OSD
 

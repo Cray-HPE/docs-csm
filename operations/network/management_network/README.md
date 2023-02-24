@@ -26,6 +26,9 @@ products.
 
 ## Contents
 
+* [Adding EX2500 cabinet to CSM management network](hardware/ex2500.md)
+* [Aruba edge switch cabling guide](edge_switch_cabling_guide.md)
+* [Aruba split cables](aruba_split_cables.md)
 * [Adding Switch Admin Password to Vault](#adding-switch-admin-password-to-vault)
 * [Switch configuration states](#switch-configuration-states)
 * [Starting points](#starting-points)
