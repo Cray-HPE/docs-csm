@@ -29,13 +29,13 @@ A minimum size[^1] is denoted for each disk
 | Minimum Size (bytes) | Quantity | Purpose                    | NCN Role(s)                                      |
 |---------------------:|---------:|:---------------------------|:-------------------------------------------------|
 |       `375809638400` |  `2`[^2] | Operating System RAID[^3]  | `k8s-masters`, `k8s-workers`, and `storage-ceph` |
-|       `375809638400` |      `1` | `etcd`                     | `k8s-masters`                                    |                                    
-|      `1048576000000` |      `1` | `containerd` and `kubelet` | `k8s-workers`                                    |                                    
+|       `375809638400` |      `1` | `etcd`                     | `k8s-masters`                                    |
+|      `1048576000000` |      `1` | `containerd` and `kubelet` | `k8s-workers`                                    |
 
-> ***NOTE*** storage-ceph nodes require disks for CEPH OSDs; we recommend using 6x `1.92TiB` disks
+> ***NOTE*** Storage-CEPH nodes require disks for CEPH OSDs; we recommend using `6x` `1.92TiB` disks
 > for this purpose. It is important to note that neither the quantity nor a minimum size is enforced
-> for these disks, the storage-ceph installer will consume any and all disks that do not have a
-> partition table and that are locally attached to the ceph node.
+> for these disks, the Storage-CEPH installer will consume any and all disks that do not have a
+> partition table and that are locally attached to the node.
 
 [^1]: Size is compared using `-ge` (`>=`); a disk must be equal or larger to the minimum size for it
 to be applicable for the denoted purpose.

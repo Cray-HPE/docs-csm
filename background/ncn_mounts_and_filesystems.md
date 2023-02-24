@@ -12,8 +12,8 @@ reference information for these disks, their partition tables, and their managem
     * [`losetup` command](#losetup-command)
     * [`lsblk` command](#lsblk-command)
   * [Persistent directories](#persistent-directories)
-    * [Layering: Upper and lower directory](#layering--upper-and-lower-directory)
-    * [Layering: Real world example](#layering--real-world-example)
+    * [Layering: Upper and lower directory](#layering-upper-and-lower-directory)
+    * [Layering: Real world example](#layering-real-world-example)
   * [OverlayFS control](#overlayfs-control)
     * [Reset toggles](#reset-toggles)
     * [Reset on next boot](#reset-on-next-boot)
@@ -190,7 +190,7 @@ drwxr-xr-x 8 root root  76 Oct 13 16:52 var
 
 > Remember: `/run/overlayfs` is a symbolic link to the real disk `/run/initramfs/overlayfs/*`.
 
-#### Layering: Upper and lower directory
+#### Layering Upper and lower directory
 
 The file system the user is working on is really two layered file systems (overlays).
 
@@ -202,7 +202,7 @@ The file system the user is working on is really two layered file systems (overl
 > and opaque (removing a directory in the upper layer hides it in the lower layer). For details, see
 > [Overlay Filesystem: `inode` properties](https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html#inode-properties).
 
-#### Layering: Real world example
+#### Layering Real world example
 
 Take `/root` for example.
 
