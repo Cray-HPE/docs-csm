@@ -69,7 +69,14 @@ make sure that the following conditions are met:
 
 ### Storage node
 
-See [Prepare storage nodes](Prepare_Storage_Nodes.md) to begin storage node rebuild.
+Follow each step below:
+
+1. [Prepare storage nodes](Prepare_Storage_Nodes.md)
+1. [Identify Nodes and Update Metadata](Identify_Nodes_and_Update_Metadata.md)
+1. [Power Cycle and Rebuild Nodes](Power_Cycle_and_Rebuild_Nodes.md)
+1. [Validate Boot Loader](Validate_Boot_Loader.md)
+1. [Re-add Storage Node to Ceph](Re-add_Storage_Node_to_Ceph.md)
+1. [Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md)
 
 ## Validation
 
