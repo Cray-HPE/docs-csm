@@ -53,7 +53,7 @@ make sure that the following conditions are met:
 
 - No single rebuild request should include all of the worker nodes that have DVS running on them.
 
-- When upgrading worker nodes which are running DVS, it is not recommended to simultaneously reboot compute nodes. This is to avoid restarting DVS clients and servers at the same time.
+- When rebuilding worker nodes which are running DVS, it is not recommended to simultaneously reboot compute nodes. This is to avoid restarting DVS clients and servers at the same time.
 
 ##### Example
 
