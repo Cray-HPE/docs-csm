@@ -12,4 +12,4 @@ Perform the following steps **on `ncn-m001`**.
 
 ## Next Step
 
-If this is a storage node rebuild, proceed to the next step to [Re-add Storage Node to Ceph](Re-add_Storage_Node_to_Ceph.md). Otherwise, return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
+If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.
