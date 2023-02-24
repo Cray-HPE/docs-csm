@@ -35,6 +35,6 @@ Use this procedure to finish validating the success of a rebuilt NCN(s).
    /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
-## Next step
+## Next Step
 
 Return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
