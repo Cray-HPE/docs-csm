@@ -505,7 +505,9 @@ RSAv2
 Rsyslog
 Runbook
 S-8000
+S-8003
 S-8024
+S-8025
 S-8031
 S-8052
 sC
@@ -775,6 +777,12 @@ rollout
 - operations/iuf/stages/management_nodes_rollout.md
 rollout
 rollouts
+
+- operations/iuf/workflows/upgrade_all_products.md
+200Gbps
+rollout
+unlabeled
+userspace
 
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer

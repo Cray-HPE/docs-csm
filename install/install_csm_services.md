@@ -2,25 +2,30 @@
 
 This procedure will install CSM applications and services into the CSM Kubernetes cluster.
 
-> **`NOTE`** Check the information in [Known issues](#known-issues) before starting this procedure to be warned about possible problems.
+> **`NOTE`** Check the information in [Known issues](#known-issues) before starting this procedure
+> to be warned about possible problems.
 
 1. [Install CSM services](#1-install-csm-services)
 1. [Create base BSS global boot parameters](#2-create-base-bss-global-boot-parameters)
-1. [Adding Switch Admin Password to Vault](#Adding-switch-admin-password-to-vault)
-1. [Wait for everything to settle](#3-wait-for-everything-to-settle)
+1. [Adding Switch Admin Password to Vault](#3-adding-switch-admin-password-to-vault)
+1. [Wait for everything to settle](#4-wait-for-everything-to-settle)
 1. [Next topic](#next-topic)
 1. [Known issues](#known-issues)
-   1. [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
-   1. [`Setup Nexus` known issues](#setup-nexus-known-issues)
+    1. [`Deploy CSM Applications and Services` known issues](#deploy-csm-applications-and-services-known-issues)
+    1. [`Setup Nexus` known issues](#setup-nexus-known-issues)
 
 ## 1. Install CSM services
 
-> **`NOTE`**: During this step, only on systems with only three worker nodes (typically Testing and  Development Systems (TDS)), the `customizations.yaml` file will be
-> automatically edited to lower pod CPU requests for some services, in order to better facilitate scheduling on smaller systems. See the file
-> `${CSM_PATH}/tds_cpu_requests.yaml` for these settings. This file can be modified with different values (prior to executing the
-> `yapl` command below), if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml`
-> and tuning for specific systems, see
-> [Post-Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
+> **`NOTE`**: During this step, only on systems with only three worker nodes (typically Testing and
+> Development Systems (TDS)), the `customizations.yaml` file will be automatically edited to lower
+> pod
+> CPU requests for some services, in order to better facilitate scheduling on smaller systems. See
+> the
+> file `${CSM_PATH}/tds_cpu_requests.yaml` for these settings. This file can be modified with
+> different values (prior to executing the `yapl` command below), if other settings are desired in
+> the `customizations.yaml` file for this system. For more information about
+> modifying `customizations.yaml` and tuning for specific systems,
+> see [Post-Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
 
 1. (`pit#`) Install YAPL.
 
@@ -39,12 +44,17 @@ This procedure will install CSM applications and services into the CSM Kubernete
    > **`NOTE`**
    >
    > * This command may take up to 90 minutes to complete.
-   > * If any errors are encountered, then potential fixes should be displayed where the error occurred.
-   > * Output is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . To show the output in the terminal, append
-   >   the `--console-output execute` argument to the `yapl` command.
-   > * The `yapl` command can safely be rerun. By default, it will skip any steps which were previously completed successfully. To force it to
-   >   rerun all steps regardless of what was previously completed, append the `--no-cache` argument to the `yapl` command.
-   > * The order of the `yapl` command arguments is important. The syntax is `yapl -f install.yaml [--console-output] execute [--no-cache]`.
+   > * If any errors are encountered, then potential fixes should be displayed where the error
+       occurred.
+   > * Output is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . To show
+       the output in the terminal, append the `--console-output execute` argument to the `yapl`
+       command.
+   > * The `yapl` command can safely be rerun. By default, it will skip any steps which were
+       previously completed successfully. To force it to rerun all steps regardless of what was
+       previously completed, append the `--no-cache`
+       argument to the `yapl` command.
+   > * The order of the `yapl` command arguments is important. The syntax
+       is `yapl -f install.yaml [--console-output] execute [--no-cache]`.
 
 ## 2. Create base BSS global boot parameters
 
@@ -97,42 +107,58 @@ This procedure will install CSM applications and services into the CSM Kubernete
    kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
    ```
 
-## 3.  Adding Switch Admin Password to Vault
+## 3. Adding Switch Admin Password to Vault
 
-This is required for some of our automated tests.
+If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
+tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the
+state of the switch. This step is not required to configure the management network. If Vault is
+unavailable, this step can be temporarily skipped. Any automated tests that depend on the switch
+credentials being in Vault will fail until they are added.
 
-If CSM has been installed and Vault is running, add the switch credentials into Vault.
-Certain tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the state of the switch.
-This step is not required to configure the management network.
-If Vault is unavailable, this step can be temporarily skipped.
-Any automated tests that depend on the switch credentials being in Vault will fail until they are added.
+First, write the switch admin password to the `SWITCH_ADMIN_PASSWORD` variable if it isn't already
+set.
 
-Run the following commands to add switch admin password to Vault.
+```bash
+read -s SWITCH_ADMIN_PASSWORD
+```
+
+Once the `SWITCH_ADMIN_PASSWORD` variable is set, run the following commands to add the switch admin
+password to Vault.
 
 ```bash
 VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
 alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
-vault kv put secret/net-creds/switch_admin admin=SWITCH_ADMIN_PASSWORD'
+vault kv put secret/net-creds/switch_admin admin=$SWITCH_ADMIN_PASSWORD
 ```
+
+Note: The use of `read -s` is a convention used throughout this documentation which allows for the
+user input of secrets without echoing them to the terminal or saving them in history.
 
 ## 4. Wait for everything to settle
 
-Wait **at least 15 minutes** to let the various Kubernetes resources initialize and start before proceeding with the rest of the install.
-Because there are a number of dependencies between them, some services are not expected to work immediately after the install script completes.
+Wait **at least 15 minutes** to let the various Kubernetes resources initialize and start before
+proceeding with the rest of the install.
+Because there are a number of dependencies between them, some services are not expected to work
+immediately after the install script completes.
 
-1. After having waited until services are healthy (run `kubectl get po -A | grep -v 'Completed\|Running'` to see which pods may still be `Pending`), take a manual backup of all Etcd clusters.
-These clusters are automatically backed up every 24 hours, but not until the clusters have been up that long.
-Taking a manual backup enables restoring from backup later in this install process if needed.
+1. After having waited until services are healthy (
+   run `kubectl get po -A | grep -v 'Completed\|Running'` to see which pods may still be `Pending`),
+   take a manual backup of all Etcd clusters.
+   These clusters are automatically backed up every 24 hours, but not until the clusters have been
+   up that long.
+   Taking a manual backup enables restoring from backup later in this install process if needed.
 
    ```bash
    /usr/share/doc/csm/scripts/operations/etcd/take-etcd-manual-backups.sh post_install
    ```
 
-1. The next step is to validate CSM health before redeploying the final NCN. See [Validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
+1. The next step is to validate CSM health before redeploying the final NCN.
+   See [Validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
 
 ## Next Topic
 
-After installing CSM, proceed to [validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
+After installing CSM, proceed
+to [validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
 
 ## Known issues
 
@@ -159,8 +185,10 @@ The following error may occur during the `Deploy CSM Applications and Services` 
    sls-s3-credentials   Opaque   7      28d
    ```
 
-1. (`pit#`) Check for running `sonar-sync` jobs. If there are no `sonar-sync` jobs, then wait for one to complete. The `sonar-sync` `CronJob` is responsible
-   for copying the `sls-s3-credentials` secret from the `default` namespace to the `services` namespace.
+1. (`pit#`) Check for running `sonar-sync` jobs. If there are no `sonar-sync` jobs, then wait for
+   one to complete. The `sonar-sync` `CronJob` is responsible
+   for copying the `sls-s3-credentials` secret from the `default` namespace to the `services`
+   namespace.
 
    ```bash
    kubectl -n services get pods -l cronjob-name=sonar-sync
@@ -191,4 +219,5 @@ The following error may occur during the `Deploy CSM Applications and Services` 
 
 ### `Setup Nexus` known issues
 
-Known potential issues along with suggested fixes are listed in [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md).
+Known potential issues along with suggested fixes are listed
+in [Troubleshoot Nexus](../operations/package_repository_management/Troubleshoot_Nexus.md).
