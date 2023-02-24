@@ -70,6 +70,8 @@ cray cfs components update --state '[]' <XNAME>
 
 ## Stage 2.2 - Worker node image upgrade
 
+> **`NOTE`** It is not recommended to reboot compute nodes at the same time as workers nodes with DVS servers are being upgraded. This is to avoid restarting DVS clients and servers at the same time.
+
 There are two options available for upgrading worker nodes.
 
 ### Option 1 - Serial upgrade
