@@ -238,28 +238,16 @@ This script can be run on any NCN which is configured to access the Kubernetes c
 A successful execution will exit with return code 0 and will have output similar to the following:
 
 ```text
-Reading in file '/root/.ssh/id_rsa'
-Reading in file '/root/.ssh/id_rsa.pub'
+Reading in SSH private key from '/root/.ssh/id_rsa' file
+Reading in SSH public key from '/root/.ssh/id_rsa.pub' file
 Reading in file '/etc/shadow'
 Found root user line in /etc/shadow
-
 Initializing Kubernetes client
-
-Getting Vault token from vault/cray-vault-unseal-keys Kubernetes secret
-
-Examining Kubernetes cray-vault service to determine URL for Vault API endpoint of secret/csm/users/root
-
-Writing SSH keys and root password hash to secret/csm/users/root in Vault
-Making POST request to http://10.18.232.40:8200/v1/secret/csm/users/root
-Response status code = 204
-
-Read back secrets from Vault to verify that the values were correctly saved
-Making GET request to http://10.18.232.40:8200/v1/secret/csm/users/root
-Response status code = 200
-
-Validating that Vault contents match what was written to it
-All secrets successfully written to Vault
-
+Making GET request to http://10.22.183.206:8200/v1/secret/csm/users/root
+Writing updated CSM root secret to Vault
+Making POST request to http://10.22.183.206:8200/v1/secret/csm/users/root
+Making GET request to http://10.22.183.206:8200/v1/secret/csm/users/root
+Secrets read back from Vault match desired values
 SUCCESS
 ```
 
