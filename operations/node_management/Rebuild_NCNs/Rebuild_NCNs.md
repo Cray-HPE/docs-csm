@@ -53,6 +53,8 @@ make sure that the following conditions are met:
 
 - No single rebuild request should include all of the worker nodes that have DVS running on them.  For High Availability, DVS requires at least two workers running DVS and CPS at all times.
 
+- It is not recommended to reboot compute nodes at the same time as workers nodes with DVS servers are being rebuilt. This is to avoid restarting DVS clients and servers at the same time.
+
 ##### Example
 
 (`ncn-m001#`) An example of a single request to rebuild multiple worker nodes simultaneously:
