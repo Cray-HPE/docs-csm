@@ -72,7 +72,9 @@ done
 if update_cpc; then
 
     [[ -n ${CSM_RELEASE} ]] || err_exit "\$CSM_RELEASE is not specified"
-    [[ -n ${PITDATA} || -f /etc/pit-release ]] || err_exit "\$PITDATA is not specified"
+    if [[ -n ${PITDATA} ]] && [[ -f /etc/pit-release ]]; then
+        err_exit "\$PITDATA is not specified"
+    fi
     [[ -n ${CSM_ARTI_DIR} || -n ${CSM_PATH} ]] || err_exit "One of \$CSM_ARTI_DIR or \$CSM_PATH must be set to the path of unpacked CSM tarball"
 
     CSM_TARBALL=${CSM_ARTI_DIR:-$CSM_PATH}
@@ -157,7 +159,7 @@ if update_cpc; then
     if [[ -f /etc/pit-release ]]; then
         FM=$(jq -r '."Global"."meta-data"."first-master-hostname"' < "${PITDATA}"/configs/data.json)
 
-        # shellcheck disable=SC2090
+        # shellcheck disable=SC2090,SC2086
         ssh "${FM}" ${PODMAN_RUN} >& /dev/null
     else
         podman run --rm --name ncn-cpc \
