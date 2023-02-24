@@ -123,14 +123,119 @@ spec:
                 - name: scriptContent
                   value: |
                     /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true || /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -A true -v true
+          - name: change-ceph-config
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    echo "This step will remove mgr/cephadm/container_image_base if is set in the ceph configuration."
+                    if [[ -n $(ceph config get mgr | grep "mgr/cephadm/container_image_base") ]]; then
+                      ceph config rm mgr mgr/cephadm/container_image_base
+                    fi
           {{- range $index,$value := .TargetNcns}}
-          - name: upgrade-{{$value}}
+          {{ if eq $index 0 }}
+          - name: upload-ceph-images-to-nexus
             templateRef:
               name: ssh-template
               template: shell-script
             dependencies: 
               - check-ceph-ro-key
               - pre-upgrade-ceph-health-check
+              - change-ceph-config
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    ts=$(echo $RANDOM | md5sum | head -c 20; echo)
+                    cat <<'EOF' > "/tmp/${ts}.sh"
+                    m001_ip=$(host ncn-m001 | awk '{ print $NF }')
+                    ssh-keygen -R ncn-m001 -f ~/.ssh/known_hosts > /dev/null 2>&1
+                    ssh-keygen -R ${m001_ip} -f ~/.ssh/known_hosts > /dev/null 2>&1
+                    ssh-keyscan -H "ncn-m001,${m001_ip}" >> ~/.ssh/known_hosts
+                    nexus_username=$(ssh ncn-m001 kubectl get secret -n nexus nexus-admin-credential -o json | jq '.data.username' | tr -d '"' | base64 --decode)
+                    nexus_password=$(ssh ncn-m001 kubectl get secret -n nexus nexus-admin-credential -o json | jq '.data.password' | tr -d '"' | base64 --decode)
+                    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+                    function upload_image() {
+                        # get local image and nexus image location
+                        name=$1
+                        prefix=$2
+                        to_configure=$3
+                        local_image=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON $name '.[] | select(.daemon_type == $DAEMON) | .container_image_name' | tr -d '"' | sort -u | tail -1)
+                        # if sha in image then remove and use version
+                        if [[ $local_image == *"@sha"* ]]; then
+                            without_sha=${local_image%"@sha"*}
+                            version=$(ceph --name client.ro orch ps --format json | jq --arg DAEMON $name '.[] | select(.daemon_type == $DAEMON) | .version' | tr -d '"' | sort -u)
+                            if [[ $version != "v"* ]]; then version="v""$version"; fi
+                            local_image="$without_sha"":""$version"
+                        fi
+                        nexus_location="${prefix}""$(echo "$local_image" | rev | cut -d "/" -f1 | rev)"
+
+                        # push images to nexus, point to nexus and run upgrade
+                        echo "Pushing image: $local_image to $nexus_location"
+                        podman pull $local_image
+                        podman tag $local_image $nexus_location
+                        podman push --creds $nexus_username:$nexus_password $nexus_location
+
+                        # set global container and write image if mgr
+                        if [[ $name == "mgr" ]]; then
+                          for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+                            ssh $storage_node ${ssh_options} "ceph config set global container_image $nexus_location"
+                            ssh ncn-m001 "echo $nexus_location > /tmp/ceph_global_container_image.txt"
+                            if [[ $? == 0 ]]; then
+                              break
+                            fi
+                          done
+                        else
+                          for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+                              ssh $storage_node ${ssh_options} "ceph config set mgr $to_configure $nexus_location"
+                              if [[ $? == 0 ]]; then
+                                break
+                              fi
+                          done
+                        fi
+                    }
+                    prometheus_prefix="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/prometheus/"
+                    upload_image "prometheus" $prometheus_prefix "mgr/cephadm/container_image_prometheus"
+                    upload_image "node-exporter" $prometheus_prefix "mgr/cephadm/container_image_node_exporter"
+                    upload_image "alertmanager" $prometheus_prefix "mgr/cephadm/container_image_alertmanager"
+                    # mgr and grafana have this prfix
+                    ceph_prefix="registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/"
+                    upload_image "grafana" $ceph_prefix "mgr/cephadm/container_image_grafana"
+                    upload_image "mgr" $ceph_prefix "mgr/cephadm/container_image"
+                    EOF
+                    chmod +x /tmp/${ts}.sh
+                    scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /tmp/${ts}.sh {{$value}}:/tmp/${ts}.sh
+                    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{$value}} "/tmp/${ts}.sh"
+          - name: pull-ceph-image-in-nexus
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies: 
+              - upload-ceph-images-to-nexus
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    nexus_image=$(cat /tmp/ceph_global_container_image.txt)
+                    pdsh -w $(ceph orch host ls --format=json|jq -r '.[].hostname' | sort -u |  tr -t '\n' ',') "podman pull $nexus_image"
+          {{ end }}
+          - name: upgrade-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies: 
+              {{ if eq $index 0 }}
+              - pull-ceph-image-in-nexus
+              {{ end }}
               # each upgrade depends on previous upgrade action and success
               {{ if ne $index 0 }}
               - check-ceph-health-{{ index $.TargetNcns (add $index -1) }}
@@ -138,7 +243,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
                     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-ceph-nodes.sh {{$value}}
@@ -194,3 +299,80 @@ spec:
                       echo "$RESULT"
                       exit 7
                     fi
+          - name: run-ceph-upgrade
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              - update-bss
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    echo "This step repoints ceph to use the image stored in Nexus."
+                    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+                    nexus_location=$(cat /tmp/ceph_global_container_image.txt)
+                    ceph orch upgrade start --image $nexus_location
+                    echo "Waiting for upgrade to complete..."
+                    sleep 10
+                    int=0
+                    success=false
+                    while [[ $int -lt 100 ]] && ! $success; do
+                        if [[ -n $(ceph orch upgrade status --format json | jq '.message' | grep Error) ]]; then
+                          echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+                          exit 1
+                        fi
+                        if [[ $(ceph orch upgrade status --format json | jq '.in_progress') != "true" ]]; then
+                          echo "Upgrade complete"
+                          success=true
+                          break
+                        else
+                          int=$(( $int + 1 ))
+                          sleep 10
+                        fi
+                    done
+                    if ! $success; then
+                      echo "Error completing 'ceph orch upgrade'. Check upgrade status by running 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+                      exit 1
+                    fi
+          - name: check-ceph-config
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              - run-ceph-upgrade
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    if [[ $(ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")|.value' | wc -l) -gt 1 ]]; then
+                      echo "ERROR  the ceph config has more that one value for container_image set."
+                      echo "Look at the following output from ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")'"
+                      ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")'
+                      echo "There should only be one item and its section should be 'global'"
+                      echo
+                      echo "Troubleshoot this failure by investigating following items."
+                      echo "Run 'ceph -s' and 'ceph health detail'"
+                      echo "All ceph mon,mgr,mds,crash,rgw,osd daemons should be running the same image. Check this by running 'podman ps' on storage nodes."
+                      echo "Look at the ceph upgrade status by running 'ceph orch upgrade status' and check that it is not running and does not have an error."
+                      exit 1
+                    else
+                      echo "Ceph config check succeeded."
+                    fi
+          - name: ceph-health-check
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              - run-ceph-upgrade
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true

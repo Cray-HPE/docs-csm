@@ -256,4 +256,4 @@ Check the status of Ceph.
 
 ## Next Step
 
-Proceed to the next step to [Identify Nodes and Update Metadata](Identify_Nodes_and_Update_Metadata.md). Otherwise, return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
+If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.
