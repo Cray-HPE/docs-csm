@@ -12,7 +12,9 @@ The install/upgrade workflow comprises the following procedures:
 
 - [Prepare for the install or upgrade](#prepare-for-the-install-or-upgrade)
 - [Product delivery](#product-delivery)
-  - [Execute the IUF `process-media`, `pre-install-check`, and `deliver-product` stages](#execute-the-iuf-process-media-pre-install-check-and-deliver-product-stages)
+  - [Execute the IUF `process-media` and `pre-install-check` stages](#execute-the-iuf-process-media-and-pre-install-check-stages)
+  - [Update `customizations.yaml`](#update-customizationsyaml)
+  - [Execute the IUF `deliver-product` stage](#execute-the-iuf-deliver-product-stage)
   - [Perform manual product delivery operations](#perform-manual-product-delivery-operations)
 - [Configuration](#configuration)
   - [Execute the IUF `update-vcs-config` stage](#execute-the-iuf-update-vcs-config-stage)
@@ -84,27 +86,53 @@ Once this step has completed:
 
 This section ensures the product content is loaded onto the system and available for later steps in the workflow.
 
-### Execute the IUF `process-media`, `pre-install-check`, and `deliver-product` stages
+### Execute the IUF `process-media` and `pre-install-check` stages
 
-1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `process-media`, `pre-install-check`,
-or `deliver-product` stages.
+1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `process-media` or `pre-install-check` stages.
 
-1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-e` to execute the [`process-media`](../stages/process_media.md), [`pre-install-check`](../stages/pre_install_check.md), and
-   [`deliver-product`](../stages/deliver_product.md) stages. Perform the upgrade using product content found in `${MEDIA_DIR}`.
+1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-e` to execute the [`process-media`](../stages/process_media.md) and [`pre-install-check`](../stages/pre_install_check.md) stages. Perform the upgrade
+   using product content found in `${MEDIA_DIR}`.
 
-    (`ncn-m001#`) Execute the `process-media`, `pre-install-check`, and `deliver-product` stages.
+    (`ncn-m001#`) Execute the `process-media` and `pre-install-check` stages.
 
     ```bash
-    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -e deliver-product
+    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -e pre-install-check
     ```
 
 Once this step has completed:
 
 - Product content has been extracted from the product distribution files in `${MEDIA_DIR}`
 - Pre-install checks have been performed for CSM and all products found in `${MEDIA_DIR}`
+- Per-stage product hooks have executed for the `process-media` and `pre-install-check` stages
+
+### Update `customizations.yaml`
+
+**`NOTE`** This section is only relevant for initial install workflows. Skip to the [next section](#execute-the-iuf-deliver-product-stage) if performing an upgrade.
+
+Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products. Refer to the
+"Install and Upgrade Framework" section of both the Slurm and PBS product documents to determine the actions that need to be performed to update `customizations.yaml`.
+
+Once this step has completed:
+
+- The `customizations.yaml` file has been updated per product documentation.
+
+### Execute the IUF `deliver-product` stage
+
+1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `deliver-product` stage.
+
+1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-r` to execute the [`deliver-product`](../stages/deliver_product.md) stage. Perform the upgrade using product content found in `${MEDIA_DIR}`.
+
+    (`ncn-m001#`) Execute the `deliver-product` stage.
+
+    ```bash
+    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -r deliver-product
+    ```
+
+Once this step has completed:
+
 - Product content for all products found in `${MEDIA_DIR}` has been uploaded to the system
 - Product content uploaded to the system has been recorded in the product catalog
-- Per-stage product hooks have executed for the `process-media`, `pre-install-check`, and `deliver-product` stages
+- Per-stage product hooks have executed for the `deliver-product` stage
 
 ### Perform manual product delivery operations
 
@@ -118,8 +146,8 @@ with the workflow.
     compute and application node images.
   - **Instructions:** See the "IUF Stage Details for COS" section of _HPE Cray Operating System Installation Guide CSM on HPE Cray EX Systems (S-8025)_ for references to the installation procedures.
 - **Content:** Third-party programming environment software
-  - **Description:** The Cray Programming Environment (CPE) provides the `install-3p.sh` script to upload third-party programming environment software to Nexus. The programming environment software is used later in the workflow when
-    creating CPE configurations and building CPE images.
+  - **Description:** The Cray Programming Environment (CPE) provides the `install-3p.sh` and `cpe-custom-img.sh` scripts to upload third-party programming environment software to Nexus and build images. The programming environment
+    software is used later in the workflow when creating CPE configurations.
   - **Instructions:** See the "CPE Install and Upgrade Framework usage" section of _HPE CPE Installation Guide CSM on HPE Cray EX Systems (S-8003)_ for references to the installation procedures.
 
 Once this step has completed:
@@ -373,7 +401,7 @@ remember to include these workflows.
 
 #### NCN worker nodes
 
-NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow. This section describes how to test a new image and CFS configuration on a single "canary node" first before
+NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow. This section describes how to test a new image and CFS configuration on a single "canary node" (`ncn-w001`) first before
 rolling it out to the other NCN worker nodes. Modify the procedure as necessary to accommodate site preferences for rebuilding NCN worker nodes. Since the default node target for the `management-nodes-rollout` is `Management_Worker`
 nodes, the `--limit-management-rollout` argument is not used in the instructions below.
 
@@ -382,11 +410,17 @@ nodes, the `--limit-management-rollout` argument is not used in the instructions
 1. Use `kubectl` to label all NCN worker nodes but one with `iuf-prevent-rollout=true` to ensure `management-nodes-rollout` only rebuilds a single NCN worker node. This node is referred to as the "canary node" in the remainder of
 this section.
 
-    (`ncn-m001#`) Label a NCN to prevent it from rebuilding. Replace the example value of `${XNAME}` with the appropriate value. **Repeat this step for all but one NCN worker node (the canary node).**
+    (`ncn-m001#`) Label a NCN to prevent it from rebuilding. Replace the example value of `${HOSTNAME}` with the appropriate value. **Repeat this step for all but one NCN worker node (the canary node).**
 
     ```bash
-    XNAME=x3000c0s29b1n0
-    kubectl label node "${XNAME}" --overwrite iuf-prevent-rollout=true
+    HOSTNAME=ncn-w002
+    kubectl label nodes "${HOSTNAME}" --overwrite iuf-prevent-rollout=true
+    ```
+
+    (`ncn-m001#`) Verify the IUF node labels are present on the desired node.
+
+    ```bash
+    kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
 
 1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on the unlabeled canary node. This will rebuild the canary node with the new CFS configuration and image built in
@@ -402,18 +436,18 @@ previous steps of the workflow.
 
 1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from all NCN worker nodes and apply it to the canary node to prevent it from unnecessarily rebuilding again.
 
-    (`ncn-m001#`) Remove a label from a NCN to allow it to rebuild. Replace the example value of `${XNAME}` with the appropriate value. **Repeat this step for all NCN worker nodes except for the canary node.**
+    (`ncn-m001#`) Remove a label from a NCN to allow it to rebuild. Replace the example value of `${HOSTNAME}` with the appropriate value. **Repeat this step for all NCN worker nodes except for the canary node.**
 
     ```bash
-    XNAME=x3000c0s29b1n0
-    kubectl label node "${XNAME}" --overwrite iuf-prevent-rollout-
+    HOSTNAME=ncn-w002
+    kubectl label nodes "${HOSTNAME}" --overwrite iuf-prevent-rollout-
     ```
 
-    (`ncn-m001#`) Label the canary node to prevent it from rebuilding. Replace the example value of `${XNAME}` with the xname of the canary node.
+    (`ncn-m001#`) Label the canary node to prevent it from rebuilding. Replace the example value of `${HOSTNAME}` with the hostname of the canary node.
 
     ```bash
-    XNAME=x3000c0s29b1n0
-    kubectl label node "${XNAME}" --overwrite iuf-prevent-rollout=true
+    HOSTNAME=ncn-w001
+    kubectl label nodes "${HOSTNAME}" --overwrite iuf-prevent-rollout=true
     ```
 
 1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on all remaining NCN worker nodes. This will rebuild the nodes with the new CFS configuration and
@@ -425,11 +459,11 @@ image built in previous steps of the workflow.
     iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout
     ```
 
-1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node. Replace the example value of `${XNAME}` with the xname of the canary node.
+1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node. Replace the example value of `${HOSTNAME}` with the hostname of the canary node.
 
     ```bash
-    XNAME=x3000c0s29b1n0
-    kubectl label node "${XNAME}" --overwrite iuf-prevent-rollout-
+    HOSTNAME=ncn-w001
+    kubectl label nodes "${HOSTNAME}" --overwrite iuf-prevent-rollout-
     ```
 
 Once this step has completed:
