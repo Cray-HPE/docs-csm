@@ -123,4 +123,4 @@ This is automated as part of the install, but administrators may have to regener
 
 ## Next Step
 
-Proceed to the next step to perform [Storage Node Validation](Post_Rebuild_Storage_Node_Validation.md). Otherwise, return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
+If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.

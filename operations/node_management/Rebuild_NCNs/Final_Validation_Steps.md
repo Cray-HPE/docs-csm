@@ -25,7 +25,7 @@ Use this procedure to finish validating the success of a rebuilt NCN(s).
      as part of an install yet, this can be ignored.
 
    * If `configurationStatus` is `failed`, then see
-     [Troubleshoot Ansible Play Failures in CFS Sessions](../../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md) for how to analyze the pod logs
+     [Troubleshoot Failed CFS Sessions](../../configuration_management/Troubleshoot_CFS_Session_Failed.md) for how to analyze the pod logs
      from `cray-cfs` in order to determine why the configuration may not have completed.
 
 1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
@@ -35,6 +35,6 @@ Use this procedure to finish validating the success of a rebuilt NCN(s).
    /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
-## Next step
+## Next Step
 
 Return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
