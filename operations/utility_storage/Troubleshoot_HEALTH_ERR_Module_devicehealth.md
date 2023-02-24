@@ -27,8 +27,6 @@ Error Message:
          ncn-s001:~ # systemctl stop ceph-660ccbec-a6c1-11ed-af32-b8599ff91d22@mgr.ncn-s001.xufexf
          ```
 
-   3. Repeat for each node listed in step 1.
-
 2. Remove the Ceph pool containing the corrupt table.
    1. The following commands will be executed once from `ncn-s001`, `ncn-s002`, or `ncn-s003`.
    2. Set flag to allow pool deletion.
@@ -66,8 +64,6 @@ Error Message:
          ```bash
          ncn-s001:~ # systemctl start ceph-660ccbec-a6c1-11ed-af32-b8599ff91d22@mgr.ncn-s001.xufexf
          ```
-
-   3. Repeat for each node listed in step 1.
 
 4. Verify Ceph mgr is operational.
    1. Verify the .mgr pool was automatically created.
@@ -118,7 +114,7 @@ Error Message:
             }
             ```
 
-         1. Curl against the endpoint to dump metrics.
+         2. Curl against the endpoint to dump metrics.
 
             ```bash
             ncn-s001:~ # curl -s http://10.252.1.11:9283/metrics
