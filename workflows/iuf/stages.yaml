@@ -79,7 +79,7 @@ stages:
   - name: update-vcs-config
     type: product
     operations:
-      - name: update-working-branch
+      - name: vcs-update-working-branch
         static-parameters: {} # any parameters that will be supplied statically to this operation.
         required-manifest-attributes:
           - content.vcs
