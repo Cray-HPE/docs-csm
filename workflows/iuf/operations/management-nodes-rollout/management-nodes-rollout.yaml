@@ -35,8 +35,6 @@ spec:
   entrypoint: main
   templates:
     - name: main
-      parallelism: 1
-      failFast: true
       metrics:
         prometheus:
         - name: operation_counter
@@ -184,29 +182,40 @@ spec:
                         index=$(( $index + 1 ))
                         set="${set},""$node"
                         if [[ $index -eq $rebuild_set_size ]]; then
-                          output="${output},"$(printf '{"set":"%s"}' "${set#?}")
+                          output="${output} ${set#?}"
                           index=0
                           set=""
                         fi
                       done
                       if [[ -n $set ]]; then
-                        output="${output},""$(printf {"set":"%s"} "${set#?}")"
+                        output="${output} ${set#?}"
                       fi
-                      echo "[""${output#?}""]"
+                      echo "${output#?}"
                     else
-                      echo '[{"INFO":  "Not rebuilding worker nodes because Management_Worker was not in --limit-management-rollout"}]'
+                      echo 'none'
                     fi
-          - name: rebuild-worker-nodes
+          - name: process-worker-rebuild-sets
             dependencies:
               - get-worker-rebuild-sets
+            template: process-sets
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{tasks.get-worker-rebuild-sets.outputs.result}}"
+          - name: rebuild-worker-nodes
+            dependencies:
+              - process-worker-rebuild-sets
             template: rebuild-set-of-workers
             arguments:
               parameters:
-                - name: nodes
-                  value: "{{item}}"
+                - name: sets
+                  value: "{{tasks.process-worker-rebuild-sets.outputs.parameters.sets}}"
+                - name: counter
+                  value: "0"
+                - name: limit
+                  value: "{{tasks.process-worker-rebuild-sets.outputs.parameters.num_sets}}"
                 - name: global_params
                   value: "{{inputs.parameters.global_params}}"
-            withParam: "{{tasks.get-worker-rebuild-sets.outputs.result}}"
           - name: rebuild-m002
             dependencies:
               - rebuild-worker-nodes
@@ -367,7 +376,9 @@ spec:
     - name: rebuild-set-of-workers
       inputs:
         parameters:
-          - name: nodes
+          - name: sets
+          - name: counter
+          - name: limit
           - name: global_params
       dag:
         tasks:
@@ -386,10 +397,10 @@ spec:
                     echo "NOTICE  Not rebuilding worker nodes because 'Management_Worker' was not in --limit-management-rollout"
                     exit 0
                   fi
-                  echo "NOTICE  rebuild: {{inputs.parameters.nodes}}"
-                  rebuild_set="{{inputs.parameters.nodes}}"
-                  rebuild_set=${rebuild_set#"{set:"}
-                  rebuild_set=${rebuild_set%"}"}
+                  sets="{{inputs.parameters.sets}}"
+                  set_array=($sets)
+                  current_count="{{inputs.parameters.counter}}"
+                  rebuild_set=${set_array[$current_count]}
                   if [[ -z $rebuild_set ]]; then
                     echo "NOTICE  this step recieved no nodes to rebuild. Continuing without rebuilding any worker nodes"
                     exit 0
@@ -404,6 +415,62 @@ spec:
                   echo "INFO  using image: $image"
                   echo "INFO  using cfs-configuration: $configuration"
                   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --image-id $image --desired-cfs-conf $configuration
+          - name: move-to-next-set
+            template: move-to-next-set
+            dependencies:
+              - rebuild-set
+            arguments:
+              parameters:
+                - name: count
+                  value: "{{inputs.parameters.counter}}"
+          - name: continue
+            dependencies:
+              - move-to-next-set
+            template: rebuild-set-of-workers
+            when: "{{tasks.move-to-next-set.outputs.result}} < {{inputs.parameters.limit}}"
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{inputs.parameters.sets}}"
+                - name: counter
+                  value: "{{tasks.move-to-next-set.outputs.result}}"
+                - name: limit
+                  value: "{{inputs.parameters.limit}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+    - name: process-sets
+      inputs:
+        parameters:
+          - name: sets
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh]
+        source: |
+          #!/bin/sh
+          sets="{{inputs.parameters.sets}}"
+          echo $sets > /tmp/sets
+          num_sets=$(echo $sets | wc -w)
+          echo $num_sets > /tmp/num_sets
+      outputs:
+        parameters:
+          - name: sets
+            valueFrom:
+              path: "/tmp/sets"
+          - name: num_sets
+            valueFrom:
+              path: "/tmp/num_sets"
+    - name: move-to-next-set
+      inputs:
+        parameters:
+          - name: count
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh]
+        source: |
+          #!/bin/sh
+          current_count="{{inputs.parameters.count}}"
+          counter=$(($current_count + 1 ))
+          echo $counter
     - name: prom-metrics
       inputs:
         parameters:

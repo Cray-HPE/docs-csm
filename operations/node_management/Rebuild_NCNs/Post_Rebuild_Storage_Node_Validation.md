@@ -87,4 +87,4 @@ Skip this section if a master or worker node was rebuilt.
 
 ## Next Step
 
-Return to the main [Rebuild NCNs](Rebuild_NCNs.md#validation) page.
+If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.
