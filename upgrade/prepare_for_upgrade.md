@@ -33,21 +33,24 @@ Reference [Nexus Export and Restore Procedure](../operations/package_repository_
 
 ## Adding Switch Admin Password to Vault
 
-This is required for some of our automated tests.
+<!-- markdownlint-disable-next-line MD013 MD026 -->
+If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the state of the switch. This step is not required to configure the management network. If Vault is unavailable, this step can be temporarily skipped. Any automated tests that depend on the switch credentials being in Vault will fail until they are added.
 
-If CSM has been installed and Vault is running, add the switch credentials into Vault.
-Certain tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the state of the switch.
-This step is not required to configure the management network.
-If Vault is unavailable, this step can be temporarily skipped.
-Any automated tests that depend on the switch credentials being in Vault will fail until they are added.
+First, write the switch admin password to the `SWITCH_ADMIN_PASSWORD` variable if it isn't already set.
 
-Run the following commands to add switch admin password to Vault.
+```bash
+read -s SWITCH_ADMIN_PASSWORD
+```
+
+Once the `SWITCH_ADMIN_PASSWORD` variable is set, run the following commands to add the switch admin password to Vault.
 
 ```bash
 VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
 alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
-vault kv put secret/net-creds/switch_admin admin=SWITCH_ADMIN_PASSWORD'
+vault kv put secret/net-creds/switch_admin admin=$SWITCH_ADMIN_PASSWORD
 ```
+
+Note: The use of `read -s` is a convention used throughout this documentation which allows for the user input of secrets without echoing them to the terminal or saving them in history.
 
 ## Start typescript
 
