@@ -10,46 +10,48 @@ and CFS configurations. Manual operations are documented for procedures that are
 
 The install/upgrade workflow comprises the following procedures:
 
-- [Prepare for the install or upgrade](#prepare-for-the-install-or-upgrade)
-- [Product delivery](#product-delivery)
-  - [Execute the IUF `process-media` and `pre-install-check` stages](#execute-the-iuf-process-media-and-pre-install-check-stages)
-  - [Update `customizations.yaml`](#update-customizationsyaml)
-  - [Execute the IUF `deliver-product` stage](#execute-the-iuf-deliver-product-stage)
-  - [Perform manual product delivery operations](#perform-manual-product-delivery-operations)
-- [Configuration](#configuration)
-  - [Execute the IUF `update-vcs-config` stage](#execute-the-iuf-update-vcs-config-stage)
-  - [Perform manual product configuration operations](#perform-manual-product-configuration-operations)
-- [Image preparation](#image-preparation)
-  - [Execute the IUF `update-cfs-config` and `prepare-images` stages](#execute-the-iuf-update-cfs-config-and-prepare-images-stages)
-  - [Manually prepare additional images](#manually-prepare-additional-images)
-    - [UAI images](#uai-images)
-- [Backup](#backup)
-  - [Slingshot Fabric Manager](#slingshot-fabric-manager)
-- [Management rollout](#management-rollout)
-  - [Execute the IUF `deploy-product` and `post-install-service-check` stages](#execute-the-iuf-deploy-product-and-post-install-service-check-stages)
-  - [Manual configuration of the Slingshot Fabric Manager](#manual-configuration-of-the-slingshot-fabric-manager)
-  - [Perform Slingshot switch firmware updates](#perform-slingshot-switch-firmware-updates)
-  - [Update management host firmware (FAS)](#update-management-host-firmware-fas)
-  - [Execute the IUF `management-nodes-rollout` stage](#execute-the-iuf-management-nodes-rollout-stage)
-    - [NCN worker nodes](#ncn-worker-nodes)
-    - [NCN master nodes](#ncn-master-nodes)
-    - [NCN storage nodes](#ncn-storage-nodes)
-  - [Update management host Slingshot NIC firmware](#update-management-host-slingshot-nic-firmware)
-- [Managed rollout](#managed-rollout)
-  - [Update managed host firmware (FAS)](#update-managed-host-firmware-fas)
-  - [Execute the IUF `managed-nodes-rollout` stage](#execute-the-iuf-managed-nodes-rollout-stage)
-    - [Compute nodes](#compute-nodes)
-    - [Application nodes](#application-nodes)
-  - [Update managed host Slingshot NIC firmware](#update-managed-host-slingshot-nic-firmware)
-  - [Execute the IUF `post-install-check` stage](#execute-the-iuf-post-install-check-stage)
-- [Conclusion](#conclusion)
+- [1. Prepare for the install or upgrade](#1-prepare-for-the-install-or-upgrade)
+- [2. Product delivery](#2-product-delivery)
+  - [2.1 Execute the IUF `process-media` and `pre-install-check` stages](#21-execute-the-iuf-process-media-and-pre-install-check-stages)
+  - [2.2 Update `customizations.yaml`](#22-update-customizationsyaml)
+  - [2.3 Execute the IUF `deliver-product` stage](#23-execute-the-iuf-deliver-product-stage)
+  - [2.4 Perform manual product delivery operations](#24-perform-manual-product-delivery-operations)
+- [3. Configuration](#3-configuration)
+  - [3.1 Populate admin directory with files defining site preferences](#31-populate-admin-directory-with-files-defining-site-preferences)
+  - [3.2 Execute the IUF `update-vcs-config` stage](#32-execute-the-iuf-update-vcs-config-stage)
+  - [3.3 Perform manual product configuration operations](#33-perform-manual-product-configuration-operations)
+- [4. Image preparation](#4-image-preparation)
+  - [4.1 Execute the IUF `update-cfs-config` and `prepare-images` stages](#41-execute-the-iuf-update-cfs-config-and-prepare-images-stages)
+  - [4.2 Manually prepare additional images](#42-manually-prepare-additional-images)
+    - [4.2.1 UAI images](#421-uai-images)
+- [5. Backup](#5-backup)
+  - [5.1 Slingshot Fabric Manager](#51-slingshot-fabric-manager)
+- [6. Management rollout](#6-management-rollout)
+  - [6.1 Execute the IUF `deploy-product` and `post-install-service-check` stages](#61-execute-the-iuf-deploy-product-and-post-install-service-check-stages)
+  - [6.2 Manual configuration of the Slingshot Fabric Manager](#62-manual-configuration-of-the-slingshot-fabric-manager)
+  - [6.3 Perform Slingshot switch firmware updates](#63-perform-slingshot-switch-firmware-updates)
+  - [6.4 Update management host firmware (FAS)](#64-update-management-host-firmware-fas)
+  - [6.5 Execute the IUF `management-nodes-rollout` stage](#65-execute-the-iuf-management-nodes-rollout-stage)
+    - [6.5.1 NCN worker nodes](#651-ncn-worker-nodes)
+    - [6.5.2 NCN master nodes](#652-ncn-master-nodes)
+    - [6.5.3 NCN storage nodes](#653-ncn-storage-nodes)
+  - [6.6 Update management host Slingshot NIC firmware](#66-update-management-host-slingshot-nic-firmware)
+- [7. Managed rollout](#7-managed-rollout)
+  - [7.1 Update managed host firmware (FAS)](#71-update-managed-host-firmware-fas)
+  - [7.2 Execute the IUF `managed-nodes-rollout` stage](#72-execute-the-iuf-managed-nodes-rollout-stage)
+    - [7.2.1 Compute nodes](#721-compute-nodes)
+    - [7.2.2 Application nodes](#722-application-nodes)
+  - [7.3 Update managed host Slingshot NIC firmware](#73-update-managed-host-slingshot-nic-firmware)
+  - [7.4 Execute the IUF `post-install-check` stage](#74-execute-the-iuf-post-install-check-stage)
+- [8. Conclusion](#8-conclusion)
 
-## Prepare for the install or upgrade
+## 1. Prepare for the install or upgrade
 
 This section defines environment variables and directory content that is used throughout the workflow.
 
 **`NOTE`** The following step uses the `iuf activity` command to demonstrate how to record operations within an IUF activity. While `iuf` automatically records all `iuf run` operations within an IUF activity, any other
 administrative operation can also be recorded within an IUF activity by using `iuf activity` in this manner. The remainder of the workflow will not use `iuf activity`, deferring to the administrator to use it as they desire.
+`iuf activity` does not **need** to be used in this step, but the rest of the operations in the step are required.
 
 1. Create timestamped media, activity, and administrator directories on `ncn-m001`. Copy all distribution files from the HPC CSM Software Recipe to the media directory, utilizing `iuf activity` to record the time spent downloading
 media and associate it with activity `${ACTIVITY_NAME}`.
@@ -66,10 +68,9 @@ media and associate it with activity `${ACTIVITY_NAME}`.
     (`ncn-m001#`) Create a typescript, set environment variables for the workflow, and populate the media directory with product content.
 
     ```bash
-    script -af iuf.$(date +%Y%m%d_%H%M%S).txt
-    DATE=`date +%Y%m%d%H%M%S`
-    ACTIVITY_NAME=update-products-"${DATE}"
-    MEDIA_DIR=/etc/cray/upgrade/csm/"${ACTIVITY_NAME}"
+    script -af iuf-install.$(date +%Y%m%d_%H%M%S).txt
+    ACTIVITY_NAME=update-products
+    MEDIA_DIR=/etc/cray/upgrade/csm/media/"${ACTIVITY_NAME}"
     ACTIVITY_DIR=/etc/cray/upgrade/csm/iuf/"${ACTIVITY_NAME}"
     ADMIN_DIR=/etc/cray/upgrade/csm/admin
     mkdir -p "${ACTIVITY_DIR}" "${MEDIA_DIR}" "${ADMIN_DIR}"
@@ -82,11 +83,11 @@ Once this step has completed:
 
 - Product content has been uploaded to `${MEDIA_DIR}`
 
-## Product delivery
+## 2. Product delivery
 
 This section ensures the product content is loaded onto the system and available for later steps in the workflow.
 
-### Execute the IUF `process-media` and `pre-install-check` stages
+### 2.1 Execute the IUF `process-media` and `pre-install-check` stages
 
 1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `process-media` or `pre-install-check` stages.
 
@@ -105,7 +106,7 @@ Once this step has completed:
 - Pre-install checks have been performed for CSM and all products found in `${MEDIA_DIR}`
 - Per-stage product hooks have executed for the `process-media` and `pre-install-check` stages
 
-### Update `customizations.yaml`
+### 2.2 Update `customizations.yaml`
 
 **`NOTE`** This section is only relevant for initial install workflows. Skip to the [next section](#execute-the-iuf-deliver-product-stage) if performing an upgrade.
 
@@ -116,7 +117,7 @@ Once this step has completed:
 
 - The `customizations.yaml` file has been updated per product documentation.
 
-### Execute the IUF `deliver-product` stage
+### 2.3 Execute the IUF `deliver-product` stage
 
 1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `deliver-product` stage.
 
@@ -134,7 +135,7 @@ Once this step has completed:
 - Product content uploaded to the system has been recorded in the product catalog
 - Per-stage product hooks have executed for the `deliver-product` stage
 
-### Perform manual product delivery operations
+### 2.4 Perform manual product delivery operations
 
 **`NOTE`** This subsection is optional and can be skipped if third-party GPU and/or programming environment software is not needed.
 
@@ -154,7 +155,7 @@ Once this step has completed:
 
 - Third-party software has been uploaded to Nexus
 
-## Configuration
+## 3. Configuration
 
 This section ensures product configuration have been defined, customized, and is available for later steps in the workflow.
 
@@ -164,56 +165,57 @@ used when performing future IUF operations unrelated to this workflow.
 **`NOTE`** The following steps assume `${ADMIN_DIR}` is empty. If this is not the case, i.e. `${ADMIN_DIR}` has been populated by previous IUF workflows, ensure the content in `${ADMIN_DIR}` is up to date with the latest content
 provided by the HPC CSM Software Recipe release content being installed. This may involve merging new content provided in the latest branch of the `hpc-csm-software-recipe` repository in VCS with the existing content in `${ADMIN_DIR}`.
 
-### Populate `${ADMIN_DIR}` with files defining site preferences
+### 3.1 Populate admin directory with files defining site preferences
 
 1. Change directory to `${ADMIN_DIR}`
+
+    (`ncn-m001#`) Change directory
 
     ```bash
     cd ${ADMIN_DIR}
     ```
 
-1. Follow the instructions in [Accessing `sat bootprep` Files](../../configuration_management/Accessing_Sat_Bootprep_Files.md) to check out content from the `hpc-csm-software-recipe` repository and switch to the branch named for the
-HPC CSM Software Recipe release being installed/upgraded. When complete, the contents of `${ADMIN_DIR}` should look similar to this:
+1. Copy the `sat bootprep` and `product_vars.yaml` files from the uncompressed HPC CSM Software Recipe distribution file in the media directory to the current directory.
 
-    (`ncn-m001#`) List contents of `${ADMIN_DIR}`
+    (`ncn-m001#`) Copy `sat bootprep` and `product_vars.yaml` files
 
     ```bash
-    ls *
-    product_vars.yaml
+    cp "${MEDIA_DIR}"/hpc-csm-software-recipe-*/vcs/product_vars.yaml .
+    cp "${MEDIA_DIR}"/hpc-csm-software-recipe-*/vcs/bootprep/*.yaml .
+    ```
 
-    bootprep:
-    compute-and-uan-bootprep.yaml  management-bootprep.yaml
+    (`ncn-m001#`) List contents of `${ADMIN_DIR}` to verify content is present
+
+    ```bash
+    ls
+    compute-and-uan-bootprep.yaml  management-bootprep.yaml  product_vars.yaml
     ```
 
 1. Edit the `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files to account for any site deviations from the default values. For example:
-    - Comment out the `shs-mellanox_install-integration-{{shs.version}}` CFS configuration layers and uncomment the `shs-cassini_install-integration-{{shs.version}}` CFS configuration layers
-    - Uncomment the `gpu-{{recipe.version}}` CFS configuration layer and `gpu-image` image definition
-    - Etc.
+    - Comment out the `slurm-site` CFS configuration layer and uncomment the `pbs-site` CFS configuration layer in `compute-and-uan-bootprep.yaml` if PBS is the preferred workload manager
+    - Uncomment the `gpu-{{recipe.version}}` CFS configuration layer and `gpu-image` image definition in `compute-and-uan-bootprep.yaml` if the system has GPU hardware
+    - Comment out any CFS configuration layers in `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files for products that are not needed on the system
+    - Any other changes needed to reflect site preferences
 
 1. Create a `site_vars.yaml` file in `${ADMIN_DIR}`. This file will contain key/value pairs for any configuration changes that should override the HPE-provided `product_vars.yaml` content. For example:
-    - Add a `default` section containing a `network_type: "cassini"` entry to define the desired Slingshot network type used when executing CFS configurations later in the workflow
-    - Add a `suffix` entry to the `default` section to append a string to the names of CFS configuration, image, and BOS session template artifacts created during the workflow for easy identification from other artifacts
-    - Etc.
+    - Add a `default` section containing a `network_type: "cassini"` entry to designate that Cassini is the desired Slingshot network type to be used when executing CFS configurations later in the workflow
+    - Add a `suffix` entry to the `default` section to append a string to the names of CFS configuration, image, and BOS session template artifacts created during the workflow to make them easy to identify
+    - Any other changes needed to reflect site preferences
 
-    (`ncn-m001#`) Display the contents of an example `site_vars.yaml` file
+    (`ncn-m001#`) Display the contents of an **example** `site_vars.yaml` file
 
     ```bash
     cat site_vars.yaml
     default:
       network_type: "cassini"
-      suffix: "test01"
+      suffix: "-test01"
     ```
 
-    When complete, the contents of `${ADMIN_DIR}` should look similar to this:
-
-    (`ncn-m001#`) List contents of `${ADMIN_DIR}`
+    (`ncn-m001#`) List contents of `${ADMIN_DIR}` to verify content is present
 
     ```bash
-    ls *
-    product_vars.yaml  site_vars.yaml
-
-    bootprep:
-    compute-and-uan-bootprep.yaml  management-bootprep.yaml
+    ls
+    compute-and-uan-bootprep.yaml  management-bootprep.yaml  product_vars.yaml  site_vars.yaml
     ```
 
 Once this step has completed:
@@ -221,7 +223,7 @@ Once this step has completed:
 - `${ADMIN_DIR}` is populated with `product_vars.yaml`, `site_vars.yaml`, and `sat bootprep` input files
 - The aforementioned configuration files have been updated to reflect site preferences
 
-### Execute the IUF `update-vcs-config` stage
+### 3.2 Execute the IUF `update-vcs-config` stage
 
 **`NOTE`** Additional arguments are available to control the behavior of the `update-vcs-config` stage, for example `-rv`. See the [`update-vcs-config` stage
 documentation](../stages/update_vcs_config.md) for details and adjust the examples below if necessary.
@@ -234,7 +236,7 @@ file found in `${ADMIN_DIR}`.
     (`ncn-m001#`) Execute the `update-vcs-config` stage.
 
     ```bash
-    iuf -a ${ACTIVITY_NAME} run --site-vars "${ADMIN_DIR}/site_vars.yaml" --bpcd "${ADMIN_DIR}" -r update-vcs-config
+    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r update-vcs-config
     ```
 
 Once this step has completed:
@@ -242,7 +244,7 @@ Once this step has completed:
 - Product configuration content has been merged to VCS branches as described in the [update-vcs-config stage documentation](../stages/update_vcs_config.md)
 - Per-stage product hooks have executed for the `update-vcs-config` stage
 
-### Perform manual product configuration operations
+### 3.3 Perform manual product configuration operations
 
 Some products must be manually configured prior to the creation of CFS configurations and images. The "Install and Upgrade Framework" section of each individual product's installation documentation will refer to instructions for product-specific
 configuration, if any. The following highlights some of the areas that most often require manual configuration changes **but is not intended to be a comprehensive list.** Note that many of the configuration changes are only
@@ -253,8 +255,7 @@ required for initial installation scenarios.
   - CPE
   - Slingshot Host Software
   - UAN
-- Workload Managers
-  - Update settings for Slurm or PBS installation via `update-customizations.sh`
+  - Slurm and PBS workload managers
 - Initial install configuration changes (not required for upgrade scenarios)
   - SAT
     - Configure SAT authentication via `sat auth`
@@ -271,14 +272,14 @@ Once this step has completed:
 
 - Product configuration has been completed
 
-## Image preparation
+## 4. Image preparation
 
 This section creates CFS configurations and bootable images that will be used by later steps in the workflow.
 
 Before proceeding, ensure any site customizations to product content stored in VCS have been made per [Perform manual product configuration operations](#perform-manual-product-configuration-operations) to ensure CFS configurations
 and images are created with the correct content and configuration values.
 
-### Execute the IUF `update-cfs-config` and `prepare-images` stages
+### 4.1 Execute the IUF `update-cfs-config` and `prepare-images` stages
 
 **`NOTE`** Additional arguments are available to control the behavior of the `update-cfs-config` and `prepare-images` stages, for example `-bc`, `-bm`, and `-rv`. See the [`update-cfs-config` stage
 documentation](../stages/update_cfs_config.md) and the [`prepare-images` stage documentation](../stages/prepare_images.md) for details and adjust the examples below if necessary.
@@ -292,7 +293,7 @@ documentation](../stages/update_cfs_config.md) and the [`prepare-images` stage d
     (`ncn-m001#`) Execute the `update-cfs-config` and `prepare-images` stages.
 
     ```bash
-    iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" --bpcd "${ADMIN_DIR}" -r update-cfs-config prepare-images
+    iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r update-cfs-config prepare-images
     ```
 
 1. Inspect the newly-created management NCN and managed node images, CFS configurations, and BOS session templates to ensure they are correct before continuing with the next steps of the workflow. The artifacts can be identified
@@ -305,9 +306,9 @@ Once this step has completed:
 - New BOS session templates have been created to boot managed compute and application (UAN, etc.) nodes with the new images and CFS configurations
 - Per-stage product hooks have executed for the `update-cfs-config` and `prepare-images` stages
 
-### Manually prepare additional images
+### 4.2 Manually prepare additional images
 
-#### UAI images
+#### 4.2.1 UAI images
 
 If User Access Instances are utilized on the system, refer to one of the following documents for details on how to build updated UAI images with new product content.
 
@@ -320,13 +321,13 @@ Once this step has completed:
 
 - New UAI images have been created
 
-## Backup
+## 5. Backup
 
 **`NOTE`** This section is only relevant for upgrade workflows. Skip to the [next section](#management-rollout) if performing an initial install.
 
 This section describes procedures that backup critical state in case it becomes necessary to fall back to previous configurations and software.
 
-### Slingshot Fabric Manager
+### 5.1 Slingshot Fabric Manager
 
 It is recommended to create a backup of the Slingshot Fabric Manager prior to proceeding with the workflow. Refer to the "Backup and Restore Operation of Fabric Configuration" section in the _Slingshot Operations Guide for Customers_
 for details on how to perform this operation.
@@ -335,11 +336,11 @@ Once this step has completed:
 
 - Slingshot Fabric Manager content has been backed up
 
-## Management rollout
+## 6. Management rollout
 
 This section updates the software running on management NCNs.
 
-### Execute the IUF `deploy-product` and `post-install-service-check` stages
+### 6.1 Execute the IUF `deploy-product` and `post-install-service-check` stages
 
 1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `deploy-product` or
 `post-install-service-check` stages.
@@ -358,7 +359,7 @@ Once this step has completed:
 - Validation scripts have executed to verify the health of the product microservices
 - Per-stage product hooks have executed for the `deploy-product` and `post-install-service-check` stages
 
-### Manual configuration of the Slingshot Fabric Manager
+### 6.2 Manual configuration of the Slingshot Fabric Manager
 
 **`NOTE`** This section is only relevant for initial install workflows. Skip to the [next section](#perform-slingshot-switch-firmware-updates) if performing an upgrade.
 
@@ -371,7 +372,7 @@ Once this step has completed:
 
 - The Slingshot Fabric Manager is configured
 
-### Perform Slingshot switch firmware updates
+### 6.3 Perform Slingshot switch firmware updates
 
 Instructions to perform Slingshot switch firmware updates are provided in the "Upgrade Slingshot Switch Firmware on HPE Cray EX" section of the  _Slingshot Operations Guide for Customers_.
 
@@ -379,7 +380,7 @@ Once this step has completed:
 
 - Slingshot switch firmware has been updated
 
-### Update management host firmware (FAS)
+### 6.4 Update management host firmware (FAS)
 
 Refer to [Update Firmware with FAS](../../firmware/Update_Firmware_with_FAS.md) for details on how to upgrade the firmware on management nodes.
 
@@ -387,7 +388,7 @@ Once this step has completed:
 
 - Host firmware has been updated on management nodes
 
-### Execute the IUF `management-nodes-rollout` stage
+### 6.5 Execute the IUF `management-nodes-rollout` stage
 
 This section describes how to update software on management nodes. It describes how to test a new image and CFS configuration on a single "canary node" first before rolling it out to the other management nodes. Modify the procedure
 as necessary to accommodate site preferences for rebuilding management nodes. The images and CFS configurations used are created by the `prepare-images` and `update-cfs-config` stages respectively; see the `prepare-images`
@@ -399,7 +400,7 @@ as necessary to accommodate site preferences for rebuilding management nodes. Th
 **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
-#### NCN worker nodes
+#### 6.5.1 NCN worker nodes
 
 NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow. This section describes how to test a new image and CFS configuration on a single "canary node" (`ncn-w001`) first before
 rolling it out to the other NCN worker nodes. Modify the procedure as necessary to accommodate site preferences for rebuilding NCN worker nodes. Since the default node target for the `management-nodes-rollout` is `Management_Worker`
@@ -471,7 +472,7 @@ Once this step has completed:
 - Management NCN worker nodes have been rebuilt with the image and CFS configuration created in previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-#### NCN master nodes
+#### 6.5.2 NCN master nodes
 
 Unlike NCN worker nodes, NCN master nodes do not contain kernel module content from non-CSM products. However, userspace non-CSM product content is still provided on NCN master nodes and thus the `prepare-images` and `update-cfs-config` stages create a
 new image and CFS configuration for NCN master nodes. The CFS configuration layers ensure the non-CSM product content is applied correctly for both image customization and node personalization scenarios. As a result, the administrator
@@ -495,7 +496,7 @@ Once this step has completed:
   of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage if the master nodes were rebuilt
 
-#### NCN storage nodes
+#### 6.5.3 NCN storage nodes
 
 Unlike NCN worker nodes, NCN storage nodes do not contain kernel module content from non-CSM products. However, userspace non-CSM product content is still provided on NCN storage nodes and thus the `prepare-images` and `update-cfs-config` stages create a
 new image and CFS configuration for NCN storage nodes. The CFS configuration layers ensure the non-CSM product content is applied correctly for both image customization and node personalization scenarios. As a result, the administrator
@@ -512,7 +513,7 @@ Once this step has completed:
 - All management NCN storage nodes have either been rebuilt with the image and CFS configuration created in previous steps of this workflow or have had their CFS configuration updated to the CFS configuration created in previous steps
   of this workflow
 
-### Update management host Slingshot NIC firmware
+### 6.6 Update management host Slingshot NIC firmware
 
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the  _Slingshot Operations Guide for Customers_ for details on how to update NIC firmware on management nodes.
 
@@ -522,11 +523,11 @@ Once this step has completed:
 - Service checks have been run to verify product microservices are executing as expected
 - Per-stage product hooks have executed for the `deploy-product` and `post-install-service-check` stages
 
-## Managed rollout
+## 7. Managed rollout
 
 This section updates the software running on managed compute and application (UAN, etc.) nodes.
 
-### Update managed host firmware (FAS)
+### 7.1 Update managed host firmware (FAS)
 
 Refer to [Update Firmware with FAS](../../firmware/Update_Firmware_with_FAS.md) for details on how to upgrade the firmware on managed nodes.
 
@@ -534,7 +535,7 @@ Once this step has completed:
 
 - Host firmware has been updated on managed nodes
 
-### Execute the IUF `managed-nodes-rollout` stage
+### 7.2 Execute the IUF `managed-nodes-rollout` stage
 
 This section describes how to update software on managed nodes. It describes how to test a new image and CFS configuration on a single "canary node" first before rolling it out to the other managed nodes. Modify the procedure
 as necessary to accommodate site preferences for rebooting managed nodes. If the system has heterogeneous nodes, it may be desirable to repeat this process with multiple canary nodes, one for each distinct node configuration.
@@ -544,7 +545,7 @@ images and CFS configurations.
 **`NOTE`** Additional arguments are available to control the behavior of the `managed-nodes-rollout` stage. See the [`managed-nodes-rollout` stage documentation](../stages/managed_nodes_rollout.md) for details and adjust the
 examples below if necessary.
 
-#### Compute nodes
+#### 7.2.1 Compute nodes
 
 1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `managed-nodes-rollout` stage.
 
@@ -573,7 +574,7 @@ Once this step has completed:
 - Managed compute nodes have been rebooted to the images and CFS configurations created in previous steps of this workflow
 - Per-stage product hooks have executed for the `managed-nodes-rollout` stage
 
-#### Application nodes
+#### 7.2.2 Application nodes
 
 Since applications nodes are not managed by workload managers, the IUF `managed-nodes-rollout` stage cannot reboot them in a controlled manner via the `-mrs stage` argument. The IUF `managed-nodes-rollout` stage can reboot application
 nodes using the `-mrs reboot` argument, but an immediate reboot of application nodes is likely to be disruptive to users and overall system health and is not recommended. Administrators should determine the best approach for rebooting
@@ -584,7 +585,7 @@ Once this step has completed:
 - Managed application (UAN, etc.) nodes have been rebooted to the images and CFS configurations created in previous steps of this workflow
 - Per-stage product hooks have executed for the `managed-nodes-rollout` stage if IUF `managed-nodes-rollout` procedures were used to perform the reboots
 
-### Update managed host Slingshot NIC firmware
+### 7.3 Update managed host Slingshot NIC firmware
 
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the  _Slingshot Operations Guide for Customers_ for details on how to update NIC firmware on managed nodes.
 
@@ -592,7 +593,7 @@ Once this step has completed:
 
 - Slingshot NIC firmware has been updated on managed nodes
 
-### Execute the IUF `post-install-check` stage
+### 7.4 Execute the IUF `post-install-check` stage
 
 1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `post-install-check` stage.
 
@@ -608,7 +609,7 @@ Once this step has completed:
 
 - Per-stage product hooks have executed for the `post-install-check` stage to verify product software is executing as expected
 
-## Conclusion
+## 8. Conclusion
 
 The install/upgrade workflow is now complete. Exit the typescript session started at the beginning of the procedure.
 
