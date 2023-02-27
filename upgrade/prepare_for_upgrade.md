@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Prepare for Upgrade
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system
@@ -5,7 +6,8 @@ first.
 
 - [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
 - [Export Nexus data](#export-nexus-data)
-- [Adding Switch Admin Password to Vault](#Adding-switch-admin-password-to-vault)
+- [Adding Switch Admin Password to Vault](#adding-switch-admin-password-to-vault)
+- [Ensure SNMP is Configured on the Management Network Switches](#ensure-snmp-is-configured-on-the-management-network-switches)
 - [Start typescript](#start-typescript)
 - [Running sessions](#running-sessions)
 - [Health validation](#health-validation)
@@ -63,6 +65,17 @@ vault kv put secret/net-creds/switch_admin admin=$SWITCH_ADMIN_PASSWORD
 
 Note: The use of `read -s` is a convention used throughout this documentation which allows for the
 user input of secrets without echoing them to the terminal or saving them in history.
+
+## Ensure SNMP is Configured on the Management Network Switches
+<!-- snmp-authentication-tag -->
+<!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
+<!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
+
+The REDS Hardware Discovery process depends on SNMP being configured on the management network switches.  CANU does not configure SNMP by default so the SNMP settings need to be added manually.  It's critical that the credentials on the switches match the credentials stored in Vault and in the related sealed secret in customizations.yaml.  At a minimum, [verify that SNMP has been configured](../operations/network/management_network/configure_snmp.md) on the management network switches before continuing.
+
+More information about configuring SNMP on the management switches can be found in the vendor specific switch documentation.  Links to these pages, and other SNMP information related to REDS Hardware Discovery and the Prometheus SNMP Exporter, [can be found on the Prometheus SNMP Exporter page.](../operations/network/management_network/snmp_exporter_configs.md)
+
+Be sure to return here once you have verified that SNMP is properly configured on the management network switches.
 
 ## Start typescript
 
