@@ -12,3 +12,4 @@ CSM Automatic Network Utility (CANU) is a tool used to generate/validate/test th
 * [Generate full network configuration](using_canu_to_generate_full_network_config.md)
 * [Uninstall CANU](uninstall_canu.md)
 * [CANU Validation Error](canu_validation_error.md)
+* [Using CANU Custom Configs](custom_config.md)

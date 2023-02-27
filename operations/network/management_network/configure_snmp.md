@@ -1,12 +1,28 @@
+<!-- markdownlint-disable MD013 -->
+<!-- snmp-authentication-tag -->
+<!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
+<!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
 # Configure SNMP
 
-SNMP configuration is required for hardware discovery of the HPE Cray EX system.
+## A Note About SNMP
 
-These are examples only; verify SNMP credentials before applying this configuration.
+SNMP configuration is required for hardware discovery of the HPE Cray EX system.  It is also used for configuration of the Prometheus SNMP Exporter.  
 
-For more information on SNMP credentials, see [Change SNMP Credentials on Leaf-BMC Switches](../../security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) and [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md).
+A good summary of all of the SNMP touchpoints and procedures can be found on the [SNMP Exporter Configs](./snmp_exporter_configs.md) page, including
 
-## Dell SNMP
+* Updating Vault with the SNMP credentials
+* Updating customizations.yaml with SNMP sealed secrets
+* Updating the SNMP configuration on the management network switches
+
+ If the REDS Hardware Discovery or the Prometheus SNMP Exporter are not working correctly, the [SNMP Exporter Configs](./snmp_exporter_configs.md) page should be reviewed.  The various SNMP use cases in the system depend on SNMP being properly configured on the management network switches and the stored credentials matching configuration stored in both Vault and customizations.yaml.
+
+## Examples
+
+ The following are examples only; verify SNMP credentials before applying this configuration.
+
+### Dell SNMP
+
+Find Dell specific documentation in the [Dell Management Docs](./dell/README.md)
 
 ```console
 conf t
@@ -15,10 +31,22 @@ conf t
    snmp-server view cray-reds-view 1.3.6.1.2 included
 ```
 
-## Aruba SNMP
+### Aruba SNMP
+
+Find Aruba specific documentation in the [Aruba Management Docs](./aruba/README.md).
 
 ```console
 conf t
    snmp-server vrf default
    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
+```
+
+### Mellanox SNMP
+
+Note: REDS Hardware Discovery only scans leaf switches and Mellanox switches are only used as spines.  As such, SNMP on the Mellanox switches is only used by the Prometheus SNMP Exporter.
+
+Find Mellanox specific documentation in the [Mellanox Management Docs](./mellanox/README.md)
+
+```console
+# Refer to the offical Mellanox documentation for examples on configuring SNMP
 ```
