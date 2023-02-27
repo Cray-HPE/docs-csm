@@ -49,6 +49,7 @@ The following IUF topics are discussed in the sections below.
 - [Product workflows](#product-workflows)
 - [Troubleshooting](#troubleshooting)
 - [Recovering from failures](#recovering-from-failures)
+- [Install and Upgrade Observability Framework](#install-and-upgrade-observability-framework)
 
 ## Limitations
 
@@ -707,3 +708,11 @@ If an error is encountered while executing `iuf run`, `iuf` will attempt to comp
   - Remove the undesired product from the IUF media directory.
   - Add the new release of the product to the IUF media directory.
   - Execute `iuf run` using a **new** activity identifier but otherwise use the same arguments specified previously in order to re-run the install or upgrade process.
+
+## Install and Upgrade Observability Framework
+
+The Install and Upgrade Observability Framework includes assertions for Goss health checks, as well as metrics and dashboards for health checks.
+The framework also includes a unified consistent method to automatically track Time to Install (TTI) and Time to Upgrade (TTU), as well as error and pattern counts across clusters and product streams.
+The Install and Upgrade Observability Framework is automatically deployed and configured in the CSM environment.
+
+For more information on the observability framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).
