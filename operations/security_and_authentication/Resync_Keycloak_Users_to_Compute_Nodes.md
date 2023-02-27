@@ -1,13 +1,13 @@
 # Re-Sync Keycloak Users to Compute Nodes
 
-Resubmit the `keycloak-users-localize` job and run the `keycloak-users-compute.yml` Ansible play to synchronize the users and groups from Keycloak to the compute nodes.
+Resubmit the `keycloak-users-localize` job and run `keycloak-group-sync.sh` and `keycloak-passwd-sync.sh` to synchronize the users and groups from Keycloak to the compute nodes.
 This procedure alters the `/etc/passwd` and `/etc/group` files used on compute nodes.
 
 Use this procedure to quickly synchronize changes made in Keycloak to the compute nodes.
 
 ## Prerequisites
 
-The COS product must be installed.
+The Slurm or PBS product must be installed.
 
 ## Procedure
 
@@ -58,39 +58,17 @@ The COS product must be installed.
 
 1. (`ncn-mw#`) Synchronize the users and groups from Keycloak to the compute nodes.
 
-    1. Get the `crayvcs` password for pushing the changes.
+    By default, the users and groups are synchronized to compute nodes daily at midnight.
 
-        ```bash
-        kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
-        ```
+    To synchronize immediately, run these scripts from the compute nodes:
 
-    1. Checkout content from the `cos-config-management` VCS repository.
+    ```bash
+    pdsh -w <computes> /usr/local/sbin/keycloak-group-sync.sh
+    pdsh -w <computes> /usr/local/sbin/keycloak-passwd-sync.sh
+    ```
 
-        ```bash
-        git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
-        cd cos-config-management
-        git checkout integration
-        ```
+    Or, reboot the compute nodes with the Boot Orchestration Service \(BOS\).
 
-    1. Create the `group_vars/Compute/keycloak.yaml` file.
-
-        The file should contain the following contents:
-
-        ```yaml
-        ---
-        keycloak_config_computes: True
-        ```
-
-    1. Push the changes to VCS with the `crayvcs` username.
-
-        ```bash
-        git add group_vars/Compute/keycloak.yaml
-        git commit -m "Configure keycloak on computes"
-        git push origin integration
-        ```
-
-    1. Do a reboot of the compute nodes with the Boot Orchestration Service \(BOS\).
-
-        ```bash
-        cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
-        ```
+    ```bash
+    cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
+    ```
