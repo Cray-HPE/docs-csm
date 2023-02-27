@@ -442,6 +442,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
+        "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
         "${locOfScript}/util/upgrade-cray-nls.sh"
 
     } >> "${LOG_FILE}" 2>&1
