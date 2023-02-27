@@ -1,8 +1,10 @@
 # Utility Storage
 
-- [Overview](#overview)
-- [Storage tools and information references](#storage-tools-and-information-references)
-- [Storage troubleshooting references](#storage-troubleshooting-references)
+- [Utility Storage](#utility-storage)
+  - [Overview](#overview)
+    - [Key Concepts](#key-concepts)
+  - [Storage tools and information references](#storage-tools-and-information-references)
+  - [Storage troubleshooting references](#storage-troubleshooting-references)
 
 ## Overview
 
@@ -52,7 +54,7 @@ Ceph tools' usage documentation
 
 - [Ceph Orchestrator Usage](Ceph_Orchestrator_Usage.md)
 - [Ceph Service Check Script Usage](Ceph_Service_Check_Script_Usage.md)
-- [`cubs_tool` Usage](Cubs_tool_Usage.md)
+- [`cubs_tool.py` Usage](Cubs_tool_Usage.md)
 
 ## Storage troubleshooting references
 
@@ -76,6 +78,7 @@ Ceph Health
 
 - [Troubleshoot Large Object Map Objects in Ceph Health](Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
 - [Troubleshoot Failure to Get Ceph Health](Troubleshoot_Failure_to_Get_Ceph_Health.md)
+- [Troubleshoot HEALTH ERR Module `devicehealth`](Troubleshoot_HEALTH_ERR_Module_devicehealth.md)
 
 Other
 
