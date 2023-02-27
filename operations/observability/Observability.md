@@ -2,51 +2,53 @@
 
 ## Overview
 
-The Install and Upgrade Observability Framework includes Goss tests health check results in visual Grafana dashboard providing key insights into the health of an HPC from the simple components to the functional and aggregate view of health.
+The Install and Upgrade Observability Framework collects Goss test health check results and presents them in a visual Grafana dashboard, providing key insights into the health of the system.
 
-The automated Time to Install(TTI) and Time to upgrade(TTU) provides us the time and other important details for each portion of the HPC install like when and on what machine a given command was run.
-This allows us to dynamically capture and store in a file how long the commands/scripts were running, as well what inactivity time was there from the user, as well as how much debug time.
+The automated Time to Install (TTI) and Time to Upgrade (TTU) provide the time and other important details for each portion of the HPC install, such as when and on what machine a given command was run.
 
-Instead of remembering to notate and record in excel and confluence pages the time spend in actual work, debug, wait time and total time at multiple parts of install for all the product streams, the automated observability time tracking will do this for us.
+For install of each product stream, the observability framework records the time spent in actual work, debugging, and waiting, as well as the total duration.
 
 The following is a list of the most important features of the framework:
 
-- Established a consistent framework for health checks/validation, metrics, and reporting for all product streams for install and upgrade observability.
-  - Inside-out Views
-    - Timing dashboard view that lets us focus on a single operation, and from that operation zoom out to the total product installation details.
-    - Goss test dashboard view that lets us focus on a single test, and from that test zoom out to the total product test details.
-  - Outside-in Views
-    - Timing dashboard view that shows total product details, and from that we can zoom in to focus on single operation installation details.
-    - Goss test dashboard view that shows total product test details, and from that we can zoom in to focus on single test details.
+- Provides a consistent framework for health checks/validation, metrics, and reporting for all product stream  installs and upgrades.
+  - Inside-out views
+    - Timing dashboard view that focuses on a single operation, and from that operation an administrator can zoom out to view the total product installation details.
+    - Goss test dashboard view that focuses on a single test, and from that test an administrator can zoom out to view the total product test details.
+  - Outside-in views
+    - Timing dashboard view that shows total product details, and from that view an administrator can zoom in to focus on details of a single installation operation.
+    - Goss test dashboard view that shows total product test details, and from that view an administrator can zoom in to focus on details of a single test.
   - Product stream health
 
 - Drill down health dashboard with roll up.
-  - Aggregate checks - Problem/OK counts across each product stream.
-  - Functional checks - Product stream functional Goss suites for key areas.
-    For example, REST APIs, micro-services, Kubernetes, network, and database health for the specific product stream.
-  - Granular checks - Individual Goss tests for component level health checks within a functional area of a given product stream.
-    For example, management switch configuration verification, routing table checks on OS, gateway tests, and Container Network Interface (CNI) tests.
+  - Aggregate checks
+    - Problem/OK counts across each product stream.
+  - Functional checks
+    - Product stream functional Goss suites for key areas.
+    - For example: REST APIs, micro-services, Kubernetes, network, and database health for the specific product stream.
+  - Granular checks
+    - Individual Goss tests for component level health checks within a functional area of a given product stream.
+    - For example: management switch configuration verification, routing table checks on the OS, gateway tests, and Container Network Interface (CNI) tests.
 
 - Boot, install, and upgrade duration monitoring.
   This does automatic calculation and reporting of both the time a given section of install/upgrade has taken, as well as metrics on Goss test successes and failures.
 
-- Time, node, product stream, capacity, and other dimensions based health and performance insight.
+- Ability to view health and duration information across different dimensions such as time, node, product stream, capacity, and others.
 
 - Multi-interval continuous health checks.
-  This defines and implements regular scheduled health checks to occur both during and after the installation and upgrade.
-  We can select the appropriate time interval in the Grafana dashboard to check the results for past six hours, a day, and a week.
+  This defines and implements periodic scheduled health checks to occur both during and after the installation or upgrade.
+  The Grafana dashboard also allows administrators to view results only for specific time periods -- the past six hours, a day, or a week.
 
-- Automate the Observability framework , installation, and configuration of the components involved in the Install and Upgrade Observability Framework in a CSM environment.
+- The framework is automatically configured and run in CSM, even during installation and upgrade of CSM itself.
 
-- The automatic generation of configurable Grafana dashboards that provide key insights and Key Performance Indicators (KPIs).
-  These dashboards show the frequency of errors across the complex systems, include panels to visualize the outliers, and provide a way to identify the trends in the complex system across different dimensions.
+- The framework includes configurable Grafana dashboards that provide key insights and Key Performance Indicators (KPIs).
+  These dashboards show the frequency of errors across the system, include panels to visualize the outliers, and help to identify trends across different dimensions.
 
 The following IUF topics are discussed in the following subsections.
 
-- [Automation of Observability Framework](#automation-of-observability-framework)
-  - [Features](#observability-framework-features)
-  - [Observability workflow](#observability-workflow)
-  - [`systemd` services](#systemd-services)
+- [Observability Framework during CSM installs](#observability-framework-during-csm-installs)
+  - [Overview](#overview-of-observability-framework-on-pit-node)
+  - [Observability workflow](#observability-framework-workflow-on-pit-node)
+  - [`systemd` services](#observability-framework-systemd-services-on-pit-node)
 - [IUF timing dashboard](#iuf-timing-dashboard)
   - [Features](#timing-dashboard-features)
   - [Prometheus metrics using Argo workflow](#prometheus-metrics-using-argo-workflow)
@@ -62,25 +64,33 @@ The following IUF topics are discussed in the following subsections.
   - [Features](#error-dashboards-features)
   - [Error dashboards](#error-dashboards)
 
-## Automation of Observability Framework
+## Observability Framework during CSM installs
 
-Grok-exporter, Prometheus, and Grafana are instantiated automatically on the PIT node.
+The Observability Framework is available during CSM installs once the PIT node is booted and initially configured.
 
-### Observability framework features
+### Overview of Observability Framework on PIT node
 
-- Three different services for Prometheus, grok-exporter, and Grafana will be automatically running as a part of PIT node installation.
-- Prometheus, grok-exporter, and Grafana containers are deployed with services initially on the PIT node for monitoring before other products are installed.
+- Three different services (Prometheus, grok-exporter, and Grafana) are automatically started on the PIT node as part of its initial configuration.
+  These services provide monitoring before other products are installed.
 - Grok-exporter parses the unstructured data from the log files and creates Prometheus metrics.
 - Prometheus is used as a time-series database for capturing the metrics.
 - All the Grafana dashboards automatically load up.
 
-### Observability workflow
+### Observability Framework workflow on PIT node
 
-![Observability framework workflow](../../img/operations/AutomationFrameworkWorkflow.png "Observability framework workflow")
+![Observability Framework workflow on PIT node](../../img/operations/AutomationFrameworkWorkflow.png "Observability Framework workflow on PIT node")
 
-### `systemd` services
+### Observability Framework `systemd` services on PIT node
 
-Running status of the PIT observability services: grok-exporter, Prometheus, and Grafana.
+#### Check grok-exporter service
+
+(`pit#`) Run the following command in order to show the status of the grok-exporter service.
+
+```bash
+systemctl status grok-exporter.service
+```
+
+Example output of the service running properly on a PIT node:
 
 ```text
 ● grok-exporter.service - Grok-exporter
@@ -104,6 +114,16 @@ Jan 25 00:04:36 redbull-pit grok-exporter[22381]: Starting server on http://redb
 Jan 25 00:04:36 redbull-pit systemd[1]: Started Grok-exporter.
 ```
 
+#### Check Prometheus service
+
+(`pit#`) Run the following command in order to show the status of the Prometheus service.
+
+```bash
+systemctl status prometheus.service
+```
+
+Example output of the service running properly on a PIT node:
+
 ```text
 ● prometheus.service - Prometheus
      Loaded: loaded (/usr/lib/systemd/system/prometheus.service; enabled; vendor preset: disabled)
@@ -125,6 +145,16 @@ Jan 25 03:06:09 redbull-pit prometheus[25680]: ts=2023-01-25T03:06:09.242Z calle
 Jan 25 05:00:09 redbull-pit prometheus[25680]: ts=2023-01-25T05:00:09.261Z caller=compact.go:519 level=info component=tsdb msg="write block" mint=1674612007>
 Jan 25 05:00:09 redbull-pit prometheus[25680]: ts=2023-01-25T05:00:09.263Z caller=head.go:840 level=info component=tsdb msg="Head GC completed" duration=1.7
 ```
+
+#### Check Grafana service
+
+(`pit#`) Run the following command in order to show the status of the Grafana service.
+
+```bash
+systemctl status grafana.service
+```
+
+Example output of the service running properly on a PIT node:
 
 ```text
 ● grafana.service - Grafana
@@ -177,14 +207,14 @@ Metrics that are captured for the stage:
 - stage start time (the earliest start time of the all the operations in the stage)
 - stage end time (the latest end time of the all the operations in the stage)
 - stage duration (the difference between the stage end time and stage start time)
-- stage status (status is marked as succeeded if all the operations' statuses are succeeded and vice versa)
+- stage status (status is marked as succeeded if all the operations' statuses are succeeded, otherwise it is marked as failed)
 
 Metrics that are captured for the product:
 
 - product name
 - product start time (start time of the process-media stage)
 - product end time (start time of the post-install-check stage)
-- product status (status is marked as succeeded if all the stages' statuses are succeeded and vice versa)
+- product status (status is marked as succeeded if all the stages' statuses are succeeded, otherwise it is marked as failed)
 
 ### Timing dashboard
 
@@ -192,10 +222,10 @@ Metrics that are captured for the product:
 - Dashboard calculates the execution time for the install/upgrade of any product, stage, and operation.
 - The status of the install/upgrade for product, stage, and operation are failed or succeeded.
 - There is a dropdown for selection of the product, stage, and operation. By default all are selected.
-  The framework defines and implements regular scheduled health checks to occur both during installation and upgrade, as well as after the installation or upgrade has been completed.
-  The frequency can be determined by administrator by running the tests over a period of time and selecting the appropriate time interval in the Grafana dashboard to check the results for past six hours, a day, and a week.
+  The framework defines and implements periodic scheduled health checks to occur both during and after installation or upgrade.
+  The Grafana dashboard also allows administrators to view results only for specific time periods -- the past six hours, a day, or a week.
 - Separate sections are created in the dashboard to see the details of product, stage, and operation.
-- There is a graph showing the duration for each stage and operation is added.
+- The graph shows the duration for each stage and operation.
 
 ![IUF timing dashboard](../../img/operations/TimingDashboard.png "Timing Dashboard")
 
@@ -205,20 +235,14 @@ Metrics that are captured for the product:
 
 The observability tooling monitors the logs for Goss tests run by using the automated scripts. These scripts are regularly run during install/upgrade. For each Goss test, metrics are generated on its duration and success or failure.
 
-This framework provides a set of quantifiable metrics used to create a visual Grafana health dashboard of all environments. This provides administrators with insight on which tests fail most, or which clusters have the most problems.
+This framework provides a set of quantifiable metrics used to create a visual Grafana health dashboard of all environments. This provides administrators with insight on which areas are experiencing problems.
 
 Trend analysis of this data in Grafana across different dimensions may point out statistically where the highest frequency of issues occurs.
 It also provides administrators an at-a-glance dashboard where they can visually see the complete system health. This includes the option to drill down from the aggregate view of the environment to the functional areas or the components.
 
 Goss test logs are scraped using grok-exporter and visualized on Grafana using captured data.
-[`csm-testing` repository](https://github.com/Cray-HPE/csm-testing/tree/main/goss-testing/) contains all of the tests, suites, and scripts to execute these Goss tests.
-Automated scripts run the Goss tests in batches. These batches are based on functionality or the check performed in CSM.
 
-A single Goss test is a YAML file and a collection of these Goss tests can be used together by adding them in another YAML file, called a test suite. These suites can be invoked through the CSM-provided scripts to get a log file with results for the tests.
-
-For example, a Goss test to validate expected Kubernetes nodes exists using the `kubectl` command based on node names pulled from `/etc/hosts` file. The log files generated from automated scripts that run a set of test suites are used.
-
-In order to run the automated scripts, use the complete path of the script. For example, `/opt/cray/tests/install/ncn/automated/ncn-healthcheck`.
+Goss tests are contained in YAML file. A YAML file containing a list of Goss test files is called a test suite. These suites are run through the CSM-provided scripts to get a log file with results for the tests.
 
 ### Workflow
 
@@ -226,20 +250,34 @@ In order to run the automated scripts, use the complete path of the script. For 
 
 ### Log file format
 
-Individual lines of logs are in the following format for each node or PIT node, test name, and source:
+Individual lines of logs are in the following format for each node, test name, and source:
 
 ```json
-{"log_timestamp": "20230118_094205.821955", "Product": "CSM", "log_script": "print_goss_json_results.py", "log_message": "Test result", "Description": "Validates that 'cray --version' is available and executes successfully on the local system.", "Execution Time (nanoseconds)": 1312368478, "Execution Time (seconds)": 1.312368478, "Node": "ncn-m001", "Result Code": 0, "Result String": "PASS", "Source": "http://ncn-m001.hmn:8997/ncn-healthcheck-master", "Test Name": "Command 'cray --version' Available", "Test Summary": "Command: command_available_1_cray_version: exit-status: matches expectation: [0]"}
+{
+  "log_timestamp": "20230118_094205.821955",
+  "Product": "CSM",
+  "log_script": "print_goss_json_results.py",
+  "log_message": "Test result",
+  "Description": "Validates that 'cray --version' is available and executes successfully on the local system.",
+  "Execution Time (nanoseconds)": 1312368478,
+  "Execution Time (seconds)": 1.312368478,
+  "Node": "ncn-m001",
+  "Result Code": 0,
+  "Result String": "PASS",
+  "Source": "http://ncn-m001.hmn:8997/ncn-healthcheck-master",
+  "Test Name": "Command 'cray --version' Available",
+  "Test Summary": "Command: command_available_1_cray_version: exit-status: matches expectation: [0]"
+}
 ```
 
 ### Grok-exporter deployment, service, and service-monitor
 
 Grok-exporter is deployed on all of the Kubernetes master nodes, by using node affinity in its deployment.
-The service for the grok-exporter is accessible at port `9144`. Service-monitor implementation is for Prometheus to access the metrics that are created by the grok-exporter.
+As background information, the service for the grok-exporter is accessible at port `9144` and service-monitor implementation is for Prometheus to access the metrics that are created by the grok-exporter.
 
 ### Configuration file for the grok-exporter
 
-The configuration file for the grok-exporter parses the Goss test log files and creates metrics from them.
+The configuration file for the grok-exporter provides instructions on how to parse the Goss test log files and creates metrics from them.
 grok-exporter version 3 configuration is used for this task and to match log expressions with regular expressions.
 
 The following is an example configuration passed to the grok-exporter to get metrics:
@@ -276,11 +314,12 @@ data:
 
 ### Prometheus metrics and Grafana dashboard
 
-After the preceding steps the `goss_tests` metrics are seen in Prometheus when Goss tests are run. Using these metrics, Grafana dashboards are created to shows the Goss tests details visually.
+After the preceding steps the `goss_tests` metrics are seen in Prometheus when Goss tests are run. Using these metrics,
+Grafana dashboards are created to shows the Goss tests details visually.
 
 Goss test dashboard features:
 
-- The dashboard has a dropdown for product, suite, and tests.
+- The dashboard has a dropdown for products, suites, and tests.
 - By default, all products, suites, and tests are selected for overall Goss tests result.
 - The overall product result, total number of the products, products passed, products failed, and its execution time is seen.
 - Suite results and test results are seen from the dashboard.
@@ -300,7 +339,7 @@ This includes, but is not limited to, regular expression patterns to match and g
 - Automate Grafana dashboards with error and failure message during CSM upgrade and install.
 - Create dashboard for issues comparison across multiple dimensions and clusters.
 - Monitor ConMan logs from the PIT node.
-- Grok-exporter parses the log files.
+- Parse log files with grok-exporter.
 - Create the Trend, Error, and Alert frequency dashboard.
 
 ### Error dashboards
