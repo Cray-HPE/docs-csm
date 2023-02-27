@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Prepare `site init`
 
 These procedures guide administrators through setting up the `site-init`
@@ -401,7 +402,7 @@ with system-specific customizations.
    The Prometheus SNMP exporter needs to be configured with a list of management network switches to scrape metrics from in
    order to populate the System Health Service Grafana dashboards.
 
-   See [Prometheus SNMP Exporter](../operations/network/management_network/snmp_exporter_configs.md) for more information.
+   Note that for the Prometheus SNMP exporter to work, SNMP needs to be configured on the management switches and the username and password need to match both Vault and the matching sealed secret in customizations.yaml.  See the [Prometheus SNMP Exporter](../operations/network/management_network/snmp_exporter_configs.md) page for more information and review the [Adding SNMP Credentials to the System](../operations/network/management_network/snmp_exporter_configs.md#adding-snmp-credentials-to-the-system) section for links to the relevant procedures.
 
 1. (`pit#`) Load the `zeromq` container image required by Sealed Secret Generators.
 
