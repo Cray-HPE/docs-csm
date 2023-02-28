@@ -442,6 +442,8 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
+        "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
+        rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
         "${locOfScript}/util/upgrade-cray-nls.sh"
 
     } >> "${LOG_FILE}" 2>&1
