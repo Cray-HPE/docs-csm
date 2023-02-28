@@ -119,6 +119,8 @@ If a previous `rbd` mount is detected at `/etc/cray/upgrade/csm`, that content w
      Done! /etc/cray/upgrade/csm is mounted as a cephfs share!
      ```
 
+   **NOTE**: ***The following steps are not part of the upgrade procedure**, but rather informative about how to access data from previous upgrades stored on an `rbd` device*:
+
    - After completing the CSM upgrade, all master nodes will automatically mount the new `cephfs` file share at `/etc/cray/upgrade/csm`.
 The content from a previous `rbd` device is still available, and can be accessed by executing the following steps:
 
