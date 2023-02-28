@@ -7,7 +7,11 @@ Relevant Configuration
 Configure a new SNMPv3 user (Minimum 8 characters for passwords)
 
 ```
-switch(config)# snmp-server user admin v3 enable
+switch(config)# snmp-server user testuser v3 capability admin
+switch(config)# snmp-server user testuser v3 enable
+switch(config)# snmp-server user testuser v3 enable sets
+switch(config)# snmp-server user testuser v3 encrypted auth md5 xxxxxxx priv des xxxxxxx
+switch(config)# snmp-server user testuser v3 require-privacy
 ```
 
 Show Commands to Validate Functionality
