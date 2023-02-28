@@ -165,6 +165,42 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="REDEPLOY_FAIlED_CEPH_DAEMONS"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${target_ncn}"
+        ssh_keys_done=1
+    fi
+    # perform a ceph orch deploy of failed daemons
+    for daemon in $(ceph orch ps | grep ${target_ncn} | grep -v 'running' | awk '{ print $1}'); do
+        ceph orch daemon redeploy $daemon
+    done
+    int=0
+    while [[ $int -lt 10 ]]; do
+        if [[ $(ceph orch ps | grep ${target_ncn} | grep -v 'running' | wc -l) -eq 0 ]]; then
+            break
+        fi
+        sleep 30
+        int=$(($int + 1))
+    done
+    if [[ $(ceph orch ps | grep ${target_ncn} | grep -v 'running' | wc -l) -gt 0 ]]; then
+      ceph mgr fail
+      sleep 60
+      if [[ $(ceph orch ps | grep ${target_ncn} | grep -v 'running' | wc -l) -gt 0 ]]; then
+        ceph orch ps ${target_ncn}
+        echo "ERROR some ceph daemons on ${target_ncn} have failed to start. Look at 'ceph health detail' for more information."
+        exit 1
+      fi
+    fi
+    } >> ${LOG_FILE} 2>&1
+    record_state "${state_name}" ${target_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="POST_CEPH_IMAGE_UPGRADE_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
