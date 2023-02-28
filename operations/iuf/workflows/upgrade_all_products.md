@@ -478,18 +478,18 @@ Unlike NCN worker nodes, NCN master nodes do not contain kernel module content f
 new image and CFS configuration for NCN master nodes. The CFS configuration layers ensure the non-CSM product content is applied correctly for both image customization and node personalization scenarios. As a result, the administrator
 can decide how to apply the new content to the NCN master nodes by following **one** of the following procedures:
 
-1. Rebuild the NCN master nodes (rebooting to the new image and CFS configuration)
-
-   If this procedure is used, follow the procedure documented in [NCN worker nodes](#ncn-worker-nodes) to rebuild the master nodes. For all invocations of `iuf run -r management-nodes-rollout`, also specify
-   `--limit-management-rollout Management_Master` to limit the rebuild operations to the NCN master nodes.
-
-   **`NOTE`** the `management-nodes-rollout` stage currently does not rebuild `ncn-m001`. Follow the instructions in [Stage 2.3 - `ncn-m001` upgrade](../../../upgrade/Stage_2.md#stage-23---ncn-m001-upgrade) to rebuild `ncn-m001` outside of IUF.
-
 1. Update the CFS configuration (applying the new CFS configuration to the existing node without rebuilding)
 
    If this procedure is used, update the CFS configuration for all of the NCN master nodes by following the instructions documented in
    [Update a CFS Configuration](../../configuration_management/Update_a_CFS_Configuration.md#update-a-cfs-configuration).
 
+1. Rebuild the NCN master nodes (rebooting to the new image and CFS configuration)
+
+   If this procedure is used, follow the procedure documented in [NCN worker nodes](#ncn-worker-nodes) to rebuild the master nodes. For all invocations of `iuf run -r management-nodes-rollout`, also specify
+   `--limit-management-rollout Management_Master` to limit the rebuild operations to the NCN master nodes.
+
+   **`NOTE`** the `management-nodes-rollout` stage currently does not rebuild `ncn-m001`. Follow the instructions in [management-nodes-rollout](../stages/management_nodes_rollout.md#manually-rebuild-ncns-with-specific-image-and-cfs-configuration) to rebuild`ncn-m001` outside of IUF.
+   
 Once this step has completed:
 
 - Management NCN master nodes have either been rebuilt with the image and CFS configuration created in previous steps of this workflow or have had their CFS configuration updated to the CFS configuration created in previous steps
@@ -506,7 +506,7 @@ can decide how to apply the new content to the NCN storage nodes by following **
 
   1. IUF currently does not manage the rebuild or NCN storage nodes. NCN storage nodes can be rebuilt manually into the new image by setting the CFS configuration and rebuilding the NCN storage nodes.
       1. TODO set CFS CONFIG and IMAGE
-      1. Follow the instructions for manually rebuilding NCN storage nodes starting at [Prepare Storage Nodes](../../node_management/Rebuild_NCNs/Prepare_Storage_Nodes.md).
+      1. Follow the instructions for manually rebuilding NCN storage nodes in [management-nodes-rollout](../stages/management_nodes_rollout.md#manually-rebuild-ncns-with-specific-image-and-cfs-configuration).
 
 Once this step has completed:
 

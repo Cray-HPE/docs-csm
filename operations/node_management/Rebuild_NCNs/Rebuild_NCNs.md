@@ -66,6 +66,9 @@ make sure that the following conditions are met:
 ```bash
 /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
 ```
+> **`NOTES:`**
+- This script should be run from ncn-m002 when rebuilding ncn-m001.
+- This script should be run from ncn-m001 when rebuilding ncn-m002 or ncn-m003.
 
 ### Storage node
 
