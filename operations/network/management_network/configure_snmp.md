@@ -48,5 +48,9 @@ Note: REDS Hardware Discovery only scans leaf switches and Mellanox switches are
 Find Mellanox specific documentation in the [Mellanox Management Docs](./mellanox/README.md)
 
 ```console
-# Refer to the offical Mellanox documentation for examples on configuring SNMP
+    snmp-server user testuser v3 capability admin
+    snmp-server user testuser v3 enable
+    snmp-server user testuser v3 enable sets
+    snmp-server user testuser v3 encrypted auth md5 xxxxxxx priv des xxxxxxx
+    snmp-server user testuser v3 require-privacy
 ```

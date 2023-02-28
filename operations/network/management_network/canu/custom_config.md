@@ -25,6 +25,8 @@ sw-spine-001:  |
         vlan access 7
         spanning-tree bpdu-guard
         spanning-tree port-type admin-edge
+    snmp-server vrf default
+    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 sw-spine-002:  |
     ip route 0.0.0.0/0 10.103.15.189
     interface 1/1/36
@@ -32,12 +34,16 @@ sw-spine-002:  |
         ip address 10.103.15.190/30
         exit
     system interface-group 3 speed 10g
+    snmp-server vrf default
+    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 sw-leaf-bmc-001:  |
     interface 1/1/20
         no routing
         vlan access 4
         spanning-tree bpdu-guard
         spanning-tree port-type admin-edge
+    snmp-server vrf default
+    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 ```
 
 Mellanox/Dell
@@ -50,6 +56,11 @@ sw-spine-001:  |
     interface ethernet 1/1 ip address 10.102.255.14/30 primary
     interface ethernet 1/1 dcb priority-flow-control mode on force
     ip route vrf default 0.0.0.0/0 10.102.255.13
+    snmp-server user testuser v3 capability admin
+    snmp-server user testuser v3 enable
+    snmp-server user testuser v3 enable sets
+    snmp-server user testuser v3 encrypted auth md5 xxxxxxx priv des xxxxxxx
+    snmp-server user testuser v3 require-privacy
 sw-spine-002:  |
     interface ethernet 1/16 speed 10G force
     interface ethernet 1/16 description "sw-spine01-1/16"
@@ -57,6 +68,11 @@ sw-spine-002:  |
     interface ethernet 1/16 ip address 10.102.255.34/30 primary
     interface ethernet 1/16 dcb priority-flow-control mode on force
     ip route vrf default 0.0.0.0/0 10.102.255.33
+    snmp-server user testuser v3 capability admin
+    snmp-server user testuser v3 enable
+    snmp-server user testuser v3 enable sets
+    snmp-server user testuser v3 encrypted auth md5 xxxxxxx priv des xxxxxxx
+    snmp-server user testuser v3 require-privacy
 sw-leaf-bmc-001:  |
     interface ethernet1/1/12
       description sw-leaf-bmc-001:12==>cn003:2
@@ -76,6 +92,9 @@ sw-leaf-bmc-001:  |
         ip access-group cmn-can in
         ip access-group cmn-can out
         ip ospf 2 area 0.0.0.0
+    snmp-server group cray-reds-group 3 noauth read cray-reds-view
+    snmp-server user testuser cray-reds-group 3 auth md5 xxxxxxxx priv des xxxxxxx
+    snmp-server view cray-reds-view 1.3.6.1.2 included
 ```
 
 To generate switch configuration with custom config injection.
