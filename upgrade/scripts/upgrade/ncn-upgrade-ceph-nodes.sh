@@ -174,7 +174,7 @@ if [[ $state_recorded == "0" ]]; then
         ssh_keygen_keyscan "${target_ncn}"
         ssh_keys_done=1
     fi
-    # perform a ceph orch reconfig of daemons
+    # perform a ceph orch deploy of failed daemons
     for daemon in $(ceph orch ps | grep ${target_ncn} | grep -v 'running' | awk '{ print $1}'); do
         ceph orch daemon redeploy $daemon
     done
