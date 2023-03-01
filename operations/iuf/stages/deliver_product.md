@@ -40,6 +40,20 @@ Artifacts will be uploaded to the following locations based on entries specified
 | VCS Content                   | `vcs`                             |
 | IMS Images and Recipes        | `ims`                             |
 
+The following table describes upload behavior when the artifact being uploaded already exists on the system.
+
+| Artifact                      | Upload Behavior                                          |
+| ----------------------------- | ---------------------------------                        |
+| S3 Content                    | overwrite existing artifact                              |
+| S3 Loftsman Manifests         | overwrite existing artifact                              |
+| Nexus Docker Registries       | new artifact uploaded with same tag as previous artifact |
+| Nexus Helm Chart Repositories | skip upload                                              |
+| Nexus RPM Blob Stores         | update existing blob store with new definition           |
+| Nexus RPM Repositories        | update existing repository with new definition           |
+| Nexus RPMs                    | skip upload                                              |
+| VCS Content                   | skip upload                                              |
+| IMS Images and Recipes        | skip upload                                              |
+
 ## Example
 
 (`ncn-m001#`) Execute the `deliver-product` stage for activity `admin-230127`.

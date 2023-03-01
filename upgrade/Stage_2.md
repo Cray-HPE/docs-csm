@@ -12,7 +12,6 @@
     - [Restrictions](#restrictions)
     - [Example](#example)
 - [Stage 2.3 - `ncn-m001` upgrade](#stage-23---ncn-m001-upgrade)
-  - [Remap `rbd` device from `ncn-m001` to `ncn-m002`](#remap-rbd-device-from-ncn-m001-to-ncn-m002)
   - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
   - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
   - [Move to `ncn-m002`](#move-to-ncn-m002)
@@ -70,6 +69,8 @@ cray cfs components update --state '[]' <XNAME>
 
 ## Stage 2.2 - Worker node image upgrade
 
+> **`NOTE`** When upgrading worker nodes which are running DVS, it is not recommended to simultaneously reboot compute nodes. This is to avoid restarting DVS clients and servers at the same time.
+
 There are two options available for upgrading worker nodes.
 
 ### Option 1 - Serial upgrade
@@ -114,20 +115,6 @@ make sure that the following conditions are met:
 By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrade process so far, `ncn-m001`
 has been the "stable node" -- that is, the node from which the other nodes were upgraded. At this point, the
 upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to allow the upgrade of `ncn-m001`.
-
-### Remap `rbd` device from `ncn-m001` to `ncn-m002`
-
-1. (`ncn-m001#`) Remap the CSM release `rbd` device to `ncn-m002`.
-
-    This device was created in [Stage 0.1 - Prepare assets](Stage_0_Prerequisites.md#stage-01---prepare-assets).
-
-    ```bash
-    source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-    python /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
-    deactivate
-    ```
-
-    **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m002`.
 
 ### Stop typescript on `ncn-m001`
 
