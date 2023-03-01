@@ -1,4 +1,3 @@
-<!-- markdownlint-disable MD013 -->
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
@@ -14,7 +13,10 @@ A good summary of all of the SNMP touchpoints and procedures can be found on the
 * Updating customizations.yaml with SNMP sealed secrets
 * Updating the SNMP configuration on the management network switches
 
- If the REDS Hardware Discovery or the Prometheus SNMP Exporter are not working correctly, the [SNMP Exporter Configs](./snmp_exporter_configs.md) page should be reviewed.  The various SNMP use cases in the system depend on SNMP being properly configured on the management network switches and the stored credentials matching configuration stored in both Vault and customizations.yaml.
+If the REDS Hardware Discovery or the Prometheus SNMP Exporter are not working correctly,
+the [SNMP Exporter Configs](./snmp_exporter_configs.md) page should be reviewed. The various SNMP use cases in the
+system depend on SNMP being properly configured on the management network switches and the stored credentials matching
+configuration stored in both Vault and customizations.yaml.
 
 ## Examples
 
@@ -43,7 +45,8 @@ conf t
 
 ### Mellanox SNMP
 
-Note: REDS Hardware Discovery only scans leaf switches and Mellanox switches are only used as spines.  As such, SNMP on the Mellanox switches is only used by the Prometheus SNMP Exporter.
+> ***NOTE*** REDS Hardware Discovery only scans leaf switches and Mellanox switches are only used as spines. As such,
+> SNMP on the Mellanox switches is only used by the Prometheus SNMP Exporter.
 
 Find Mellanox specific documentation in the [Mellanox Management Docs](./mellanox/README.md)
 
