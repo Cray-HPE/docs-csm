@@ -110,7 +110,7 @@ kubectl get Workflows -n argo | grep 'ncn-lifecycle-rebuild' | grep 'Fail'
 
 1. (`ncn-m#`) Delete the failed workflow.
 ```bash
-kubectl delete Workflows -n argo FAILED_WORKFLOW
+kubectl delete workflows -n argo FAILED_WORKFLOW
 ```
 
 After deleting the failed workflow, a new worker rebuild workflow can be restarted. 
