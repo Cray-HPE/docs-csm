@@ -157,6 +157,6 @@ sw-spine-001 [mlag-domain: standby] # show running-config | include snmp
    snmp-server user testuser v3 capability admin
    snmp-server user testuser v3 enable
    snmp-server user testuser v3 enable sets
-   snmp-server user testuser v3 encrypted auth md5 0xf6dc2611aa8345d94093aeadcee46237 priv des 0xe1ce5020ae68d45ff05a8df248d5683f
+   snmp-server user testuser v3 encrypted auth md5 xxxxxx priv des xxxxxx
    snmp-server user testuser v3 require-privacy
 ```
