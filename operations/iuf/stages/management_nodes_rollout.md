@@ -80,7 +80,7 @@ the node type that is desired to be manually rebuilt (Management_Master, Managem
 1. Next, follow the node rebuild instructions per node type.
 - Rebuild worker nodes
 
-    Worker nodes are automatically rebuilt using argo workflows. If rebuilding multiple worker nodes at once, see [this page](../../node_management/Rebuild_NCNs/Rebuild_NCNs.md#restrictions) for restrictions.
+    Worker nodes are automatically rebuilt using Argo workflows. If rebuilding multiple worker nodes at once, see [this page](../../node_management/Rebuild_NCNs/Rebuild_NCNs.md#restrictions) for restrictions.
 
     (`ncn-m001#`) Rebuild worker node.
 
