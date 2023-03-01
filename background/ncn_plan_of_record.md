@@ -1,78 +1,71 @@
 # Plan of Record
 
-This document outlines the hardware necessary to meet CSM's Plan of Record (PoR). This serves as the **minimum, necessary** pieces required per each server in the management plane.
+This document outlines the hardware necessary to meet CSM's Plan of Record (PoR). This serves as the
+**minimum, necessary** pieces required per each server in the management plane.
 
-1. If the system's NICs do not align to the PoR NICs outlined below (e.g. Onboard NICs are used instead of PCIe), then follow [Customize PCIe Hardware](../operations/node_management/Customize_PCIe_Hardware.md) before booting the NCN(s).
-1. If there are more disks than what is listed below in the PoR for disks, then follow [Customize Disk Hardware](../operations/node_management/Customize_Disk_Hardware.md) before booting the NCN(s).
+1. If the system's NICs do not align to the PoR NICs outlined below (e.g. Onboard NICs are used
+   instead of PCIe), then
+   follow [Customize PCIe Hardware](../operations/node_management/Customize_PCIe_Hardware.md) before
+   booting the NCN(s).
+1. If there are more disks than what is listed below in the PoR for disks, then
+   follow [Customize Disk Hardware](../operations/node_management/Customize_Disk_Hardware.md) before
+   booting the NCN(s).
 
 ## Table of Contents
 
 * [Non-Compute Nodes](#non-compute-nodes)
-  * [Masters NCNs](#masters-ncns)
-    * [Disks](#master-disks)
-    * [NICs](#master-nics)
-  * [Workers NCNs](#workers-ncns)
-    * [Disks](#worker-disks)
-    * [NICs](#worker-nics)
-  * [Storage NCNs](#storage-ncns)
-    * [Disks](#storage-disks)
-    * [NICs](#storage-nics)
+  * [Disks](#disks)
+  * [NICs](#nics)
+    * [Kubernetes Masters](#kubernetes-masters)
+    * [Kubernetes Workers](#kubernetes-workers)
+    * [Storage-CEPH](#storage-ceph)
 
 ## Non-Compute Nodes
 
-> **`NOTE:`** Several components below are necessary to provide redundancy in the event of hardware failure.
+### Disks
 
-Any of the disks may be used over the following buses:
+A minimum size[^1] is denoted for each disk
 
-* SAS
-* SATA
-* NVME
+| Minimum Size (bytes) | Quantity | Purpose                    | NCN Role(s)                                      |
+|---------------------:|---------:|:---------------------------|:-------------------------------------------------|
+|       `375809638400` |  `2`[^2] | Operating System RAID[^3]  | `k8s-masters`, `k8s-workers`, and `storage-ceph` |
+|       `375809638400` |      `1` | `etcd`                     | `k8s-masters`                                    |
+|      `1048576000000` |      `1` | `containerd` and `kubelet` | `k8s-workers`                                    |
 
-> ***NOTE*** USB is implicitly excluded during disk selection and wiping. The NCN's deployment code will wipe all disks if they are a RAID or in the above list.
-> The manual wipes will exclude USB, but it is recommended to verify that the manual wipes are actually doing so.
+> ***NOTE*** Storage-CEPH nodes require disks for CEPH OSDs; we recommend using `6x` `1.92TiB` disks
+> for this purpose. It is important to note that neither the quantity nor a minimum size is enforced
+> for these disks, the Storage-CEPH installer will consume any and all disks that do not have a
+> partition table and that are locally attached to the node.
 
-The OS disks are chosen by selecting the smallest disks. Two disks are used for OS disks by default.
+[^1]: Size is compared using `-ge` (`>=`); a disk must be equal or larger to the minimum size for it
+to be applicable for the denoted purpose.
+[^2]: The number of disks needed is configurable,
+see [`metal.disks`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#metaldisks)
+[^3]: The RAID is configurable,
+see [`metal.md-level`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#metalmd-level)
 
-The number of OS disks can be modified by the [`metal.disks` kernel parameter](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.md#metaldisks).
+### NICs
 
-### Masters NCNs
-
-#### Master Disks
-
-* *Operating System:* `2x` SSDs of equal size that are at least `500GiB` (`524288000000` bytes)
-* *ETCD:* `1x` SSD that is at least `500GiB` (`524288000000 bytes`) (This disk will be fully encrypted with LUKS2)
-
-#### Master NICs
+#### Kubernetes Masters
 
 > **`NOTE:`** The 2nd port on each card is unused/empty (reserved for future use).
 
-* *Management Network:* `2x` PCIe cards, with 1 or 2 heads/ports each for a total of 4 ports split between two PCIe cards
+* *Management Network:* `2x` PCIe cards, with 1 or 2 heads/ports each for a total of 4 ports split
+  between two PCIe cards
 
-### Workers NCNs
+#### Kubernetes Workers
 
-#### Worker Disks
+> **`NOTE:`** There is no PCIe redundancy for the management network for worker NCNs. The only
+> redundancy set up for workers is port redundancy.
 
-* *Operating System:* `2x` SSDs of equal size that are at least `500GiB` (524288000000 bytes)
-* *Ephemeral:* `1x` SSD larger than or equal to `1TiB` (`1048576000000` bytes)
+* *Management Network:* `1x` PCIe card with 2 heads/ports for a total of 2 ports dedicated to a
+  single PCIe card
+* *High-Speed Network:* `1x` PCIe card capable of `100Gbps` (e.g. ConnectX-5 or Cassini), with 1 or
+  2 heads/ports
 
-#### Worker NICs
-
-> **`NOTE:`** There is no PCIe redundancy for the management network for worker NCNs. The only redundancy set up for workers is port redundancy.
-
-* *Management Network:* `1x` PCIe card with 2 heads/ports for a total of 2 ports dedicated to a single PCIe card
-* *High-Speed Network:* `1x` PCIe card capable of `100Gbps` (e.g. ConnectX-5 or Cassini), with 1 or 2 heads/ports
-
-### Storage NCNs
-
-#### Storage Disks
-
-* *Operating System:* `2x` SSDs of equal size that are at least `500GiB` (`524288000000 bytes`)
-* *CEPH:* `8x` SSDs of any size
-
-> **`NOTE:`** Any available disk that is not consumed by the operating system will be used for CEPH, but a node needs a minimum of 8 disks for making an ideal CEPH pool for CSM.
-
-#### Storage NICs
+### Storage-CEPH
 
 > **`NOTE:`** The 2nd port on each card is filled but not configured (reserved for future use).
 
-* *Management Network:* `2x` PCIe cards, each with two heads/ports for a total of four ports split between two PCIe cards
+* *Management Network:* `2x` PCIe cards, each with two heads/ports for a total of four ports split
+  between two PCIe cards

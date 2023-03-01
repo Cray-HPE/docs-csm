@@ -19,8 +19,7 @@ reference information for these disks, their partition tables, and their managem
     * [Reset on next boot](#reset-on-next-boot)
     * [Reset on every boot](#reset-on-every-boot)
     * [Re-sizing the persistent overlay](#re-sizing-the-persistent-overlay)
-    * [Thin overlay feature](#thin-overlay-feature)
-* [`metalfs`](#metalfs)
+* [`metalfs`](#metalfs-service)
 * [Old/retired FS labels](#oldretired-fs-labels)
 
 ## Disk layout quick-reference tables
@@ -112,14 +111,8 @@ losetup -a
 Example output:
 
 ```text
-/dev/loop1: [0025]:74858 (/run/initramfs/thin-overlay/meta)
-/dev/loop2: [0025]:74859 (/run/initramfs/thin-overlay/data)
 /dev/loop0: [2430]:100 (/run/initramfs/live/LiveOS/filesystem.squashfs)
 ```
-
-The "thin overlay" is the transient space the system uses behind the scenes to allow data to be in RAM as it is written to disk.
-The "thin" part of the overlay is the magic; using thin overlays means that the kernel will automatically clear free blocks.
-For more details, see [Thin overlay feature](#thin-overlay-feature).
 
 #### `lsblk` command
 
@@ -134,10 +127,6 @@ Example output:
 ```text
 NAME                MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
 loop0                 7:0    0   3.8G  1 loop  /run/rootfsbase
-loop1                 7:1    0    30G  0 loop
-└─live-overlay-pool 254:2    0   300G  0 dm
-loop2                 7:2    0   300G  0 loop
-└─live-overlay-pool 254:2    0   300G  0 dm
 sda                   8:0    1 447.1G  0 disk
 ├─sda1                8:1    1   476M  0 part
 │ └─md127             9:127  0   476M  0 raid1
@@ -201,7 +190,7 @@ drwxr-xr-x 8 root root  76 Oct 13 16:52 var
 
 > Remember: `/run/overlayfs` is a symbolic link to the real disk `/run/initramfs/overlayfs/*`.
 
-#### Layering: Upper and lower directory
+#### Layering Upper and lower directory
 
 The file system the user is working on is really two layered file systems (overlays).
 
@@ -213,7 +202,7 @@ The file system the user is working on is really two layered file systems (overl
 > and opaque (removing a directory in the upper layer hides it in the lower layer). For details, see
 > [Overlay Filesystem: `inode` properties](https://www.kernel.org/doc/html/latest/filesystems/overlayfs.html#inode-properties).
 
-#### Layering: Real world example
+#### Layering Real world example
 
 Take `/root` for example.
 
@@ -357,24 +346,7 @@ rd.live.overlay.size=307200
 rd.live.overlay.size=1000000
 ```
 
-#### Thin overlay feature
-
-The persistent OverlayFS leverages newer "thin" overlays. These "thin" overlays support discards, and that will
-free blocks that are not claimed by the file system. This means that memory is freed/released
-when the file system no longer claims it.
-
-Thin overlays can be disabled, and instead classic DM Snapshots can be used to manage the overlay. This
-will use more RAM. It is not recommended, because `dmraid` is not included in the `initrd`.
-
-```bash
-# Enable (default)
-rd.live.overlay.thin=1
-
-# Disable (not recommended; undesirable RAM waste)
-rd.live.overlay.thin=0
-```
-
-## `metalfs`
+## `metalfs` Service
 
 The `metalfs` `systemd` service will try to mount any metal-created partitions.
 
