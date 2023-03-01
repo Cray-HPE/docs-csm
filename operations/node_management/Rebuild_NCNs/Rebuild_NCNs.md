@@ -68,7 +68,7 @@ make sure that the following conditions are met:
 ```
 > **`NOTES:`**
 - This script should be run from `ncn-m002` when rebuilding `ncn-m001`.
-- This script should be run from ncn-m001 when rebuilding ncn-m002 or ncn-m003.
+- This script should be run from `ncn-m001` when rebuilding `ncn-m002` or `ncn-m003`.
 
 ### Storage node
 
