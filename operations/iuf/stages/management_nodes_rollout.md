@@ -105,7 +105,7 @@ To delete a failed Argo workflow, complete the following steps.
 
 (`ncn-m#`) List failed worker rebuild workflows.
 ```bash
-kubectl get Workflows -n argo | grep 'ncn-lifecycle-rebuild' | grep 'Fail'
+kubectl get workflows -n argo | grep 'ncn-lifecycle-rebuild' | grep 'Fail'
 ```
 
 1. (`ncn-m#`) Delete the failed workflow.
