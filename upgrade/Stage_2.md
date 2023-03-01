@@ -183,9 +183,12 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
    ```bash
    scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
-   csi_rpm=$(find "/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/" -name 'cray-site-init*.rpm') &&
-       scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm &&
-       rpm -Uvh --force "${csi_rpm}" /root/docs-csm-latest.noarch.rpm
+   SLES_VERSION=$(awk -F= '/VERSION_ID/{gsub(/["]/,"");printf($NF)}' /etc/os-release)
+   SLES_MAJOR=$(echo -n $SLES_VERSION | awk -F. '{print $1}')
+   SLES_MINOR=$(echo -n $SLES_VERSION | awk -F. '{print $NF}')
+   zypper --plus-repo="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-${SLES_MAJOR}sp${SLES_MINOR}" --no-gpg-checks install -y cray-site-init
+   scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm &&
+       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
    ```
 
 ### Upgrade `ncn-m001`
