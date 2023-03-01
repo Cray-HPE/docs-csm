@@ -1,4 +1,3 @@
-<!-- markdownlint-disable MD013 -->
 # Prepare for Upgrade
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system
@@ -71,9 +70,16 @@ user input of secrets without echoing them to the terminal or saving them in his
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
 
-The REDS Hardware Discovery process depends on SNMP being configured on the management network switches.  CANU does not configure SNMP by default so the SNMP settings need to be added manually.  It's critical that the credentials on the switches match the credentials stored in Vault and in the related sealed secret in customizations.yaml.  At a minimum, [verify that SNMP has been configured](../operations/network/management_network/configure_snmp.md) on the management network switches before continuing.
+The REDS Hardware Discovery process depends on SNMP being configured on the management network switches. CANU does not
+configure SNMP by default so the SNMP settings need to be added manually. It's critical that the credentials on the
+switches match the credentials stored in Vault and in the related sealed secret in customizations.yaml. At a
+minimum, [verify that SNMP has been configured](../operations/network/management_network/configure_snmp.md) on the
+management network switches before continuing.
 
-More information about configuring SNMP on the management switches can be found in the vendor specific switch documentation.  Links to these pages, and other SNMP information related to REDS Hardware Discovery and the Prometheus SNMP Exporter, [can be found on the Prometheus SNMP Exporter page.](../operations/network/management_network/snmp_exporter_configs.md)
+More information about configuring SNMP on the management switches can be found in the vendor specific switch
+documentation. Links to these pages, and other SNMP information related to REDS Hardware Discovery and the Prometheus
+SNMP Exporter, can be found on the
+[Prometheus SNMP Exporter page.](../operations/network/management_network/snmp_exporter_configs.md)
 
 Be sure to return here once you have verified that SNMP is properly configured on the management network switches.
 

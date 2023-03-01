@@ -1,9 +1,11 @@
-<!-- markdownlint-disable MD013 -->
 # Generate Switch Configs Including Custom Configurations
 
-Pass in a switch config file that CANU will inject into the generated config. A use case would be to add custom site connections. This config file will overwrite previously generate config.
+Pass in a switch config file that CANU will inject into the generated config. A use case would be to add custom site
+connections. This config file will overwrite previously generate config.
 
-The custom-config file type is YAML and a single file can be used for multiple switches. You will need to specify the switch name and what config inject. The custom-config feature is using the hierarchical configuration library, documentation can be [found here](https://netdevops.io/hier_config/).
+The custom-config file type is YAML and a single file can be used for multiple switches. You will need to specify the
+switch name and what config inject. The custom-config feature is using the hierarchical configuration library,
+documentation can be [found here](https://netdevops.io/hier_config/).
 
 Custom config file examples:
 
@@ -99,27 +101,56 @@ sw-leaf-bmc-001:  |
 
 To generate switch configuration with custom config injection.
 
-```text
-canu generate switch config --csm 1.2 -a full --shcd FILENAME.xlsx --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES --corners J14,T44,J14,T48,J14,T24,J14,T23 --sls-file SLS_FILE --name sw-spine-001 --custom-config CUSTOM_CONFIG_FILE.yaml
+> ***NOTE*** The `--corners` and `--tabs` arguments are often provided in the SHCD Excel file. The example below uses
+> example values.
+
+```bash
+canu generate switch config \
+    --csm CSM_VERSION \
+    -a full \
+    --shcd FILENAME.xlsx \
+    --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES \
+    --corners J14,T44,J14,T48,J14,T24,J14,T23 \
+    --sls-file SLS_FILE \
+    --name sw-spine-001 \
+    --custom-config CUSTOM_CONFIG_FILE.yaml
 ```
 
 ## Generate Network Config
 
 CANU can also generate switch config for all the switches on a network.
 
-In order to generate network config, a valid SHCD or CCJ must be passed in and system variables must be read in from either CSI output or the SLS API. The instructions are exactly the same as the above `generate Switch Config](#generate-switch-config)` except there will not be a hostname and a folder must be specified for config output using the `--folder FOLDERNAME` flag.
+In order to generate network config, a valid SHCD or CCJ must be passed in and system variables must be read in from
+either CSI output or the SLS API. The instructions are exactly the same as the
+above `generate Switch Config](#generate-switch-config)` except there will not be a hostname and a folder must be
+specified for config output using the `--folder FOLDERNAME` flag.
 
 To generate switch config from a CCJ paddle run:
 
-```text
-canu generate network config --csm 1.2 --ccj paddle.json --sls-file SLS_FILE --folder FOLDERNAME
+```bash
+canu generate network config \
+    --csm CSM_RELEASE \
+    --ccj paddle.json \
+    --sls-file SLS_FILE \
+    --folder FOLDERNAME
 ```
 
 To generate switch config from SHCD run:
 
-```text
-canu generate network config --csm 1.2 -a full --shcd FILENAME.xlsx --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES --corners J14,T44,J14,T48,J14,T24,J14,T23 --sls-file SLS_FILE --folder switch_config
+```bash
+canu generate network config \
+    --csm CSM_RELEASE \
+    -a full \
+    --shcd FILENAME.xlsx \
+    --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES \
+    --corners J14,T44,J14,T48,J14,T24,J14,T23 \
+    --sls-file SLS_FILE \
+    --folder switch_config
+```
 
+Example output from the above command:
+
+```text
 sw-spine-001 Config Generated
 sw-spine-002 Config Generated
 sw-leaf-001 Config Generated
@@ -133,14 +164,25 @@ sw-leaf-bmc-001 Config Generated
 
 ## Generate Network Config With Custom Config Injection
 
-This option allows extension and maintenance of switch configurations beyond plan-of-record. A YAML file expresses custom configurations across the network and these configurations are merged with the plan-of-record configurations.
+This option allows extension and maintenance of switch configurations beyond plan-of-record. A YAML file expresses
+custom configurations across the network and these configurations are merged with the plan-of-record configurations.
 
-**WARNING:** Extreme diligence should be used applying custom configurations which override plan-of-record generated configurations. Custom configurations will overwrite generated configurations! Override/overwrite is by design to support and document cases where site-interconnects demand "non-standard" configurations or a bug must be worked around.
+> ***WARNING:*** Extreme diligence should be used applying custom configurations which override plan-of-record generated
+configurations. Custom configurations will overwrite generated configurations! Override/overwrite is by design to
+support and document cases where site-interconnects demand "non-standard" configurations or a bug must be worked around.
 
 The instructions are exactly the same as Generate Switch Config with Custom Config Injection
 
 To generate network configuration with custom config injection run
 
-```text
-canu generate network config --csm 1.2 -a full --shcd FILENAME.xlsx --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES --corners J14,T44,J14,T48,J14,T24,J14,T23 --sls-file SLS_FILE --folder switch_config --custom-config CUSTOM_CONFIG_FILE.yaml
+```bash
+canu generate network config \
+    --csm 1.2 \
+    -a full \
+    --shcd FILENAME.xlsx \
+    --tabs INTER_SWITCH_LINKS,NON_COMPUTE_NODES,HARDWARE_MANAGEMENT,COMPUTE_NODES \
+    --corners J14,T44,J14,T48,J14,T24,J14,T23 \
+    --sls-file SLS_FILE \
+    --folder switch_config \
+    --custom-config CUSTOM_CONFIG_FILE.yaml
 ```
