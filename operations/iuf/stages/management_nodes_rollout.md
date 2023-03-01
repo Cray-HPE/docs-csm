@@ -55,7 +55,7 @@ The `-cmrp` argument limits the percentage of worker nodes rolled out in paralle
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the following parameters.
 
     - Assume 10 worker nodes (`ncn-w001` through `ncn-w010`)
-    - `limit-management-rollout=[Managment_Worker Management_Master]` 
+    - `-limit-management-rollout [Managment_Worker Management_Master]` 
     -  `-cmrp 35`
     - `ncn-w004` and `ncn-m002` are labeled with `iuf-prevent-rollout=true` 
 
