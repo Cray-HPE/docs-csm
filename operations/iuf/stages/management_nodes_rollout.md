@@ -6,7 +6,7 @@ that node. IUF will account for the necessary minimum number of critical softwar
 **`NOTE`** `management-nodes-rollout` currently does not rebuild management NCN storage nodes or `ncn-m001`. These nodes can be personalized with the CFS configuration created in the [update-cfs-config](update_cfs_config.md) or they can be manually rebuilt into the new customized image, both options have the same result. 
 
 - To personalize managment storage nodes or management master nodes, follow the instructions for `management-nodes-rollout` in the [upgrade all products documentation](../workflows/upgrade_all_products.md#652-ncn-master-nodes).
-- To manually rebuild ths NCNs, then proceed to [manually rebuild NCNs with specific image and CFS configuration](#manually-rebuild-ncns-with-specific-image-and-cfs-configuration).
+- To manually rebuild the NCNs, proceed to [Manually rebuild NCNs with specific image and CFS configuration](#manually-rebuild-ncns-with-specific-image-and-cfs-configuration).
 
 `management-nodes-rollout` details are explained in the following sections:
 
