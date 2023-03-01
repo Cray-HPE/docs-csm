@@ -30,8 +30,8 @@ CLI configuration needs to be authorized for administrative actions.
 
 There are two options to proceed with `cray` CLI authentication:
 
-- [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-Keycloak-account)
-- [Manual configuration](#manual configuration)
+- [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
+- [Manual configuration](#manual-configuration)
 
 ### Automatic configuration using temporary Keycloak account
 
