@@ -101,7 +101,7 @@ In the case where it is necessary to start an entirely new worker rebuild workfl
 
 To delete a failed Argo workflow, complete the following steps.
 
-1. Get the name of the failed workflow. All worker rebuild workflows start with `ncn-lifecycle-rebuild`. The name of the worker rebuild workflow can be found in the argo UI or by searching workflows in kubernetes with the following command.
+1. Get the name of the failed workflow. All worker rebuild workflows start with `ncn-lifecycle-rebuild`. The name of the worker rebuild workflow can be found in the Argo UI or by searching workflows in Kubernetes with the following command.
 
 (`ncn-m#`) List failed worker rebuild workflows.
 ```bash
