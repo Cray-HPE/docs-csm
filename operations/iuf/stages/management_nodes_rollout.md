@@ -50,7 +50,7 @@ The `cmrp` parameter limits the percentage of worker nodes rolled out in paralle
     iuf -a admin-230127 run --limit-management-rollout Management_Worker -r management-nodes-rollout
     ```
 
-    Expected Behavior: All NCN worker nodes will rebuilt. Each set of worker nodes that is being rebuilt, should contin 20% of total number of worker nodes. For example, if there are 10 total worker nodes, then 2 should be rebuilt at a time. 
+    Expected behavior: All NCN worker nodes will rebuilt. Each set of worker nodes that is being rebuilt will contain 20% of the total number of worker nodes. For example, if there are 10 total worker nodes, then 2 will be rebuilt at a time. 
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the following parameters.
 
