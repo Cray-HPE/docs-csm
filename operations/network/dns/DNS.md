@@ -40,7 +40,7 @@ ExternalDNS creates DNS records for services that are intended to be accessible 
 
 Kubernetes Services annotated with `external-dns.alpha.kubernetes.io/hostname` have DNS records created.
 
-Starting with CSM version 1.1 these DNS records are created in the PowerDNS server. Earlier versions of CSM used a dedicated CoreDNS server for ExternalDNS.
+Starting with CSM version 1.2 these DNS records are created in the PowerDNS server. Earlier versions of CSM used a dedicated CoreDNS server for ExternalDNS.
 
 > Only DNS A records are created as ExternalDNS currently does not support the creation of the PTR records required for reverse lookup.
 
