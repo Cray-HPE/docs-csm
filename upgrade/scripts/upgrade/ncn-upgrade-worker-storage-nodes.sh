@@ -39,6 +39,7 @@ zapOsds=false
 workflowType=""
 imageId=""
 desiredCfsConfig=""
+labels=""
 
 function usage() {
     echo "CSM ncn worker and storage upgrade script"
@@ -105,6 +106,11 @@ while [[ $# -gt 0 ]]; do
         ;;
     --desired-cfs-conf)
         desiredCfsConfig="$2"
+        shift # past argument
+        shift # past value
+        ;;
+    --labels)
+        labels="$2"
         shift # past argument
         shift # past value
         ;;
@@ -206,7 +212,8 @@ function createWorkflowPayload() {
 "hosts": ${jsonArray},
 "switchPassword": "${SW_ADMIN_PASSWORD}",
 "imageId": "${imageId}",
-"desiredCfsConfig": "${desiredCfsConfig}"
+"desiredCfsConfig": "${desiredCfsConfig}",
+"labels": "${labels}"
 }
 EOF
     fi
@@ -220,7 +227,8 @@ EOF
 "zapOsds": ${zapOsds},
 "workflowType": "${workflowType}",
 "imageId": "${imageId}",
-"desiredCfsConfig": "${desiredCfsConfig}"
+"desiredCfsConfig": "${desiredCfsConfig}",
+"labels": "${labels}"
 }
 EOF
     fi
