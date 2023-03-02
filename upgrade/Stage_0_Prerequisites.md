@@ -86,73 +86,57 @@ after a break, always be sure that a typescript is running before proceeding.
          rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
          ```
 
-1. (`ncn-m001#`) Create and mount an `rbd` device where the CSM release tarball can be stored.
+1. (`ncn-m001#`) Run the script to create a `cephfs` file share at `/etc/cray/upgrade/csm`.
 
-   This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m001`. This mount is available to stage content for the install/upgrade process.
+   - This script creates a new `cephfs` file share, and  will unmount the `rbd` device that may have been used in a previous version of CSM (if detected).
+Running this script is a one time step needed only on the master node the upgrade is being initiated on (`ncn-m001`).
+If a previous `rbd` mount is detected at `/etc/cray/upgrade/csm`, that content will be remounted and available at `/mnt/csm-1.3-rbd`.
 
-   > For more information about the tool used in this procedure, including troubleshooting information, see
-   > [CSM RBD Tool Usage](../operations/utility_storage/CSM_rbd_tool_Usage.md).
+     ```bash
+     /usr/share/doc/csm/scripts/mount-cephfs-share.sh
+     ```
 
-   1. Initialize the Python virtual environment.
+     Expected output looks similar to the following:
 
-      ```bash
-      tar xvf /usr/share/doc/csm/scripts/csm_rbd_tool.tar.gz -C /opt/cray/csm/scripts/
-      ```
+     ```text
+     Found previous CSM release rbd mount, moving to /mnt/csm-1.3-rbd...
+     Unmounting /etc/cray/upgrade/csm...
+     Replacing /etc/cray/upgrade/csm with /mnt/csm-1.3-rbd in /etc/fstab...
+     Mounting /mnt/csm-1.3-rbd to preserve previous upgrade content...
+     Found s3fs mount at /var/lib/admin-tools, removing...
+     Unmounting /var/lib/admin-tools...
+     Removing /var/lib/admin-tools from /etc/fstab...
+     Creating admin-tools ceph fs share...
+     Sleeping for five seconds waiting for 3 running mds.admin-tools daemons...
+     Sleeping for five seconds waiting for 3 running mds.admin-tools daemons...
+     Sleeping for five seconds waiting for 3 running mds.admin-tools daemons...
+     Found 3 running mds.admin-tools daemons -- continuing...
+     Creating admin-tools keyring...
+     [client.admin-tools]
+        key = <REDACTED>
+     export auth(key=<REDACTED>
+     Adding fstab entry for cephfs share...
+     Done! /etc/cray/upgrade/csm is mounted as a cephfs share!
+     ```
 
-   1. Check if the `rbd` device already exists.
+   **NOTE**: ***The following steps are not part of the upgrade procedure**, but rather informative about how to access data from previous upgrades stored on an `rbd` device*:
 
-      ```bash
-      source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-      /usr/share/doc/csm/scripts/csm_rbd_tool.py --status
-      ```
+   - After completing the CSM upgrade, all master nodes will automatically mount the new `cephfs` file share at `/etc/cray/upgrade/csm`.
+The content from a previous `rbd` device is still available, and can be accessed by executing the following steps:
 
-      - Expected output if `rbd` device does not exist:
+     ```bash
+     mkdir -pv /mnt/csm-1.3-rbd
+     rbd map csm_admin_pool/csm_scratch_img
+     mount /dev/rbd0 /mnt/csm-1.3-rbd
+     ```
 
-         ```text
-         Pool csm_admin_pool does not exist
-         Pool csm_admin_pool exists: False
-         RBD device exists None
-         ```
+   - If at some point the previous upgrade's artifacts are no longer needed that were stored in an `rbd` mount, the following steps can be followed to remove the `rbd`:
 
-      - Example output if `rbd` device already exists and is mounted on `ncn-m002`:
-
-         ```text
-         [{"id":"0","pool":"csm_admin_pool","namespace":"","name":"csm_scratch_img","snap":"-","device":"/dev/rbd0"}]
-         Pool csm_admin_pool exists: True
-         RBD device exists True
-         RBD device mounted at - ncn-m002.nmn:/etc/cray/upgrade/csm
-         ```
-
-   1. Perform one of the following options based on the output of the status check.
-
-      - The `rbd` device does not exist.
-
-         1. Create and map the `rbd` device.
-
-            ```bash
-            /usr/share/doc/csm/scripts/csm_rbd_tool.py --pool_action create --rbd_action create --target_host ncn-m001
-            deactivate
-            ```
-
-      - The `rbd` device exists.
-
-         1. Move the device to `ncn-m001`, if necessary.
-
-            This step is not necessary if the status output indicated that the device is already mounted on `ncn-m001`.
-
-            ```bash
-            /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m001
-            deactivate
-            ```
-
-         1. Remove leftover state file from a previous CSM upgrade, if necessary.
-
-            **IMPORTANT:** If upgrading from a CSM version that had previously mounted this `rbd` device, then the `/etc/cray/upgrade/csm/myenv`
-            file must be removed before proceeding with this upgrade, because it contains information from the previous upgrade.
-
-            ```bash
-            [[ -f /etc/cray/upgrade/csm/myenv ]] && rm -f /etc/cray/upgrade/csm/myenv
-            ```
+     ```bash
+     ceph config set mon mon_allow_pool_delete true
+     ceph osd pool rm csm_admin_pool csm_admin_pool --yes-i-really-really-mean-it
+     ceph config set mon mon_allow_pool_delete false
+     ```
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
 

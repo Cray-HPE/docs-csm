@@ -12,7 +12,6 @@
     - [Restrictions](#restrictions)
     - [Example](#example)
 - [Stage 2.3 - `ncn-m001` upgrade](#stage-23---ncn-m001-upgrade)
-  - [Remap `rbd` device from `ncn-m001` to `ncn-m002`](#remap-rbd-device-from-ncn-m001-to-ncn-m002)
   - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
   - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
   - [Move to `ncn-m002`](#move-to-ncn-m002)
@@ -70,6 +69,8 @@ cray cfs components update --state '[]' <XNAME>
 
 ## Stage 2.2 - Worker node image upgrade
 
+> **`NOTE`** When upgrading worker nodes which are running DVS, it is not recommended to simultaneously reboot compute nodes. This is to avoid restarting DVS clients and servers at the same time.
+
 There are two options available for upgrading worker nodes.
 
 ### Option 1 - Serial upgrade
@@ -114,20 +115,6 @@ make sure that the following conditions are met:
 By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrade process so far, `ncn-m001`
 has been the "stable node" -- that is, the node from which the other nodes were upgraded. At this point, the
 upgrade procedure pivots to use `ncn-m002` as the new "stable node", in order to allow the upgrade of `ncn-m001`.
-
-### Remap `rbd` device from `ncn-m001` to `ncn-m002`
-
-1. (`ncn-m001#`) Remap the CSM release `rbd` device to `ncn-m002`.
-
-    This device was created in [Stage 0.1 - Prepare assets](Stage_0_Prerequisites.md#stage-01---prepare-assets).
-
-    ```bash
-    source /opt/cray/csm/scripts/csm_rbd_tool/bin/activate
-    python /usr/share/doc/csm/scripts/csm_rbd_tool.py --rbd_action move --target_host ncn-m002
-    deactivate
-    ```
-
-    **IMPORTANT:** This mounts the `rbd` device at `/etc/cray/upgrade/csm` on `ncn-m002`.
 
 ### Stop typescript on `ncn-m001`
 
@@ -196,9 +183,12 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
    ```bash
    scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
-   csi_rpm=$(find "/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/" -name 'cray-site-init*.rpm') &&
-       scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm &&
-       rpm -Uvh --force "${csi_rpm}" /root/docs-csm-latest.noarch.rpm
+   SLES_VERSION=$(awk -F= '/VERSION_ID/{gsub(/["]/,"");printf($NF)}' /etc/os-release)
+   SLES_MAJOR=$(echo -n $SLES_VERSION | awk -F. '{print $1}')
+   SLES_MINOR=$(echo -n $SLES_VERSION | awk -F. '{print $NF}')
+   zypper --plus-repo="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-${SLES_MAJOR}sp${SLES_MINOR}" --no-gpg-checks install -y cray-site-init
+   scp ncn-m001:/root/docs-csm-*.noarch.rpm /root/docs-csm-latest.noarch.rpm &&
+       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
    ```
 
 ### Upgrade `ncn-m001`
