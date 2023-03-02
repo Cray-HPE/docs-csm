@@ -276,7 +276,7 @@ Once this step has completed:
 
 This section creates CFS configurations and bootable images that will be used by later steps in the workflow.
 
-Before proceeding, ensure any site customizations to product content stored in VCS have been made per [Perform manual product configuration operations](#perform-manual-product-configuration-operations) to ensure CFS configurations
+Before proceeding, ensure any site customizations to product content stored in VCS have been made per [Perform manual product configuration operations](#33-perform-manual-product-configuration-operations) to ensure CFS configurations
 and images are created with the correct content and configuration values.
 
 ### 4.1 Execute the IUF `update-cfs-config` and `prepare-images` stages
@@ -361,7 +361,7 @@ Once this step has completed:
 
 ### 6.2 Manual configuration of the Slingshot Fabric Manager
 
-**`NOTE`** This section is only relevant for initial install workflows. Skip to the [next section](#perform-slingshot-switch-firmware-updates) if performing an upgrade.
+**`NOTE`** This section is only relevant for initial install workflows. Skip to the [next section](#63-perform-slingshot-switch-firmware-updates) if performing an upgrade.
 
 Instructions to configure the Slingshot Fabric Manager are provided in the "Slingshot Installation in a Kubernetes Orchestrated Container Environment" section of the _Slingshot Operations Guide for Customers_. Follow all
 subsections beginning with "Configure Fabric Manager" and ending with "Verify Fabric Manager version".
@@ -602,7 +602,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
     1. Verify that the `Master and storage node xnames` are correct. These are the `xnames` that will be configured.
 
     1. Get the CFS configuration created during `prepare-images` and `update-cfs-config` stages.
-    Follow the instructions in [prepare-images](prepare_images.md#artifacts-created) to get the artifacts for `management-node-images`.
+    Follow the instructions in [prepare-images](../stages/prepare_images.md#artifacts-created) to get the artifacts for `management-node-images`.
     Get the value for `configuration` for any management node image (`configuration_group_name` is  `Management_Storage`,`Management_Storage`, `Management_Storage`). The `configuration` is the same for all management nodes.
     This `configuration` value will be used in the next step.
 
@@ -610,7 +610,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 
         ```bash
         CFS_CONFIG_NAME=configuration
-        ``` 
+        ```
 
     1. (`ncn-m#`) Configure NCN master nodes and NCN storage nodes.
 

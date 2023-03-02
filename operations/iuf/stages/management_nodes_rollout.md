@@ -8,7 +8,7 @@ An node image upgrade is only used during `management-nodes-rollout` if CSM is b
 IUF will account for the necessary minimum number of critical software instances running on the nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
 
 **`NOTE`** `management-nodes-rollout` has a different procedure depending on whether or not CSM is being upgraded.
-The two procedures differ in the handleing of NCN storage nodes and NCN master nodes.
+The two procedures differ in the handeling of NCN storage nodes and NCN master nodes.
 If CSM is not being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded and will be updated by the CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md).
 If CSM is being upgraded, then NCN storage nodes and NCN master nodes will upgraded.
 Both procedures use the same steps for rebuilding/upgrading NCN worker nodes.
@@ -91,7 +91,7 @@ Expected behavior:
 ## Manually upgrade or rebuild NCN worker node with specific image and CFS configuration
 
 The upgrade and rebuild procedure for NCN worker nodes is the same. This section applies to both NCN worker node upgrades and NCN worker node rebuilds.
-The words 'rebuild' and 'upgrade' are exchangable in this section.
+The words 'rebuild' and 'upgrade' are exchangeable in this section.
 
 1. Get the image and CFS configuration created during `prepare-images` and `update-cfs-config` stages.
 Follow the instructions in [prepare-images](prepare_images.md#artifacts-created) to get the artifacts for `management-node-images`. For the image with the `configuration_group_name` matching
