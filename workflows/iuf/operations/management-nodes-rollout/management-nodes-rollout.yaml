@@ -145,9 +145,149 @@ spec:
                         echo "NOTICE found image:$image in IMS for Management_Master rebuild"
                       fi
                     fi
-          - name: get-worker-rebuild-sets
+          - name: upgrade-m002
             dependencies:
               - verify-images-and-configuration
+            templateRef:
+              name: iuf-base-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
+                    if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then 
+                      echo "NOTICE  Not upgrading ncn-m002 nodes because 'Management_Master' was not in --limit-management-rollout"
+                      exit 0
+                    fi
+                    labeled_nodes=$(kubectl get nodes --selector='iuf-prevent-rollout=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
+                    if [[ -n $(echo $labeled_nodes | grep ncn-m002) ]]; then
+                      echo "NOTICE  ncn-m002 is labeled with 'iuf-prevent-rollout=true' which means it will not be rebuilt"
+                      exit 0
+                    fi
+                    master_nodes=$(kubectl get node --selector='node-role.kubernetes.io/master' --no-headers=true | awk '{print $1}' | tr "\n", " ")
+                    if [[ -z $(echo $master_nodes | grep ncn-m002) ]]; then 
+                      echo "ERROR  ncn-m002 was not found in kubernetes master nodes. The search was via kubectl get node --selector='node-role.kubernetes.io/master'"
+                      exit 1
+                    fi
+                    
+                    echo "NOTICE  updating CFS config on ncn-m002"
+                    TARGET_NCN=ncn-m002
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
+                    configuration=$(echo $update_cfs_conf_ouput | jq '.configurations[].name' | tr -d '"')
+                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${configuration}"
+
+                    echo "NOTICE  updating boot-image in BSS on ncn-m002"
+                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    IMAGE_ID=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
+                    image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
+                    image_manifest_str=${image_manifest_str#*s3://}
+                    bucket="$( cut -d '/' -f 1 <<< "$image_manifest_str" )"
+                    bucket_rm="${bucket}/"
+                    path=${image_manifest_str#*${bucket_rm}}
+                    path=${path%?}
+                    temp_file="/tmp/$(echo $RANDOM | md5sum | head -c 21; echo).json"
+                    cray artifacts get $bucket $path $temp_file
+                    metal_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.rootfs.squashfs") | .path ' < $temp_file)
+                    echo "INFO  Setting metal.server image to: $metal_image"
+                    kernel_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.kernel") | .path ' < $temp_file)
+                    kernel_image=$(echo "$kernel_image" | tr -d '"')
+                    echo "INFO Setting kernel image to: $kernel_image"
+                    initrd_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.initrd") | .path ' < $temp_file)
+                    initrd_image=$(echo "$initrd_image" | tr -d '"')
+                    echo "INFO  Setting initrd image to: $initrd_image"
+                    METAL_SERVER=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' \
+                    | awk -F 'metal.server=' '{print $2}' \
+                    | awk -F ' ' '{print $1}')
+                    NEW_METAL_SERVER=$metal_image
+                    PARAMS=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' | \
+                        sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+                        tr -d \")
+                    cray bss bootparameters update --hosts "${TARGET_XNAME}" \
+                      --kernel $kernel_image \
+                      --initrd $initrd_image \
+                      --params "${PARAMS}"
+
+                    export TERM=linux
+                    echo "NOTICE  upgrading ncn-m002"
+                    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m002
+          - name: upgrade-m003
+            dependencies:
+              - upgrade-m002
+            templateRef:
+              name: iuf-base-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
+                    if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then 
+                      echo "NOTICE  Not upgrading ncn-m003 nodes because 'Management_Master' was not in --limit-management-rollout"
+                      exit 0
+                    fi
+                    labeled_nodes=$(kubectl get nodes --selector='iuf-prevent-rollout=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
+                    if [[ -n $(echo $labeled_nodes | grep ncn-m003) ]]; then
+                      echo "NOTICE  ncn-m003 is labeled with 'iuf-prevent-rollout=true' which means it will not be rebuilt"
+                      exit 0
+                    fi
+                    master_nodes=$(kubectl get node --selector='node-role.kubernetes.io/master' --no-headers=true | awk '{print $1}' | tr "\n", " ")
+                    if [[ -z $(echo $master_nodes | grep ncn-m003) ]]; then 
+                      echo "ERROR  ncn-m003 was not found in kubernetes master nodes. The search was via kubectl get node --selector='node-role.kubernetes.io/master'"
+                      exit 1
+                    fi
+                    
+                    echo "NOTICE  updating CFS config on ncn-m003"
+                    TARGET_NCN=ncn-m003
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
+                    configuration=$(echo $update_cfs_conf_ouput | jq '.configurations[].name' | tr -d '"')
+                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${configuration}"
+
+                    echo "NOTICE  updating boot-image in BSS on ncn-m003"
+                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    IMAGE_ID=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
+                    image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
+                    image_manifest_str=${image_manifest_str#*s3://}
+                    bucket="$( cut -d '/' -f 1 <<< "$image_manifest_str" )"
+                    bucket_rm="${bucket}/"
+                    path=${image_manifest_str#*${bucket_rm}}
+                    path=${path%?}
+                    temp_file="/tmp/$(echo $RANDOM | md5sum | head -c 21; echo).json"
+                    cray artifacts get $bucket $path $temp_file
+                    metal_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.rootfs.squashfs") | .path ' < $temp_file)
+                    echo "INFO  Setting metal.server image to: $metal_image"
+                    kernel_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.kernel") | .path ' < $temp_file)
+                    kernel_image=$(echo "$kernel_image" | tr -d '"')
+                    echo "INFO Setting kernel image to: $kernel_image"
+                    initrd_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.initrd") | .path ' < $temp_file)
+                    initrd_image=$(echo "$initrd_image" | tr -d '"')
+                    echo "INFO  Setting initrd image to: $initrd_image"
+                    METAL_SERVER=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' \
+                    | awk -F 'metal.server=' '{print $2}' \
+                    | awk -F ' ' '{print $1}')
+                    NEW_METAL_SERVER=$metal_image
+                    PARAMS=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' | \
+                        sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
+                        tr -d \")
+                    cray bss bootparameters update --hosts "${TARGET_XNAME}" \
+                      --kernel $kernel_image \
+                      --initrd $initrd_image \
+                      --params "${PARAMS}"
+
+                    export TERM=linux
+                    echo "NOTICE  upgrading ncn-m003"
+                    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m003
+          - name: get-worker-rebuild-sets
+            dependencies:
+              - upgrade-m003
             templateRef:
               name: ssh-template
               template: shell-script
@@ -216,149 +356,9 @@ spec:
                   value: "{{tasks.process-worker-rebuild-sets.outputs.parameters.num_sets}}"
                 - name: global_params
                   value: "{{inputs.parameters.global_params}}"
-          - name: rebuild-m002
-            dependencies:
-              - rebuild-worker-nodes
-            templateRef:
-              name: iuf-base-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"
-                - name: scriptContent
-                  value: |
-                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
-                    if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then 
-                      echo "NOTICE  Not rebuilding ncn-m002 nodes because 'Management_Master' was not in --limit-management-rollout"
-                      exit 0
-                    fi
-                    labeled_nodes=$(kubectl get nodes --selector='iuf-prevent-rollout=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
-                    if [[ -n $(echo $labeled_nodes | grep ncn-m002) ]]; then
-                      echo "NOTICE  ncn-m002 is labeled with 'iuf-prevent-rollout=true' which means it will not be rebuilt"
-                      exit 0
-                    fi
-                    master_nodes=$(kubectl get node --selector='node-role.kubernetes.io/master' --no-headers=true | awk '{print $1}' | tr "\n", " ")
-                    if [[ -z $(echo $master_nodes | grep ncn-m002) ]]; then 
-                      echo "ERROR  ncn-m002 was not found in kubernetes master nodes. The search was via kubectl get node --selector='node-role.kubernetes.io/master'"
-                      exit 1
-                    fi
-                    
-                    echo "NOTICE  updating CFS config on ncn-m002"
-                    TARGET_NCN=ncn-m002
-                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
-                    configuration=$(echo $update_cfs_conf_ouput | jq '.configurations[].name' | tr -d '"')
-                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${configuration}"
-
-                    echo "NOTICE  updating boot-image in BSS on ncn-m002"
-                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                    IMAGE_ID=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
-                    image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
-                    image_manifest_str=${image_manifest_str#*s3://}
-                    bucket="$( cut -d '/' -f 1 <<< "$image_manifest_str" )"
-                    bucket_rm="${bucket}/"
-                    path=${image_manifest_str#*${bucket_rm}}
-                    path=${path%?}
-                    temp_file="/tmp/$(echo $RANDOM | md5sum | head -c 21; echo).json"
-                    cray artifacts get $bucket $path $temp_file
-                    metal_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.rootfs.squashfs") | .path ' < $temp_file)
-                    echo "INFO  Setting metal.server image to: $metal_image"
-                    kernel_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.kernel") | .path ' < $temp_file)
-                    kernel_image=$(echo "$kernel_image" | tr -d '"')
-                    echo "INFO Setting kernel image to: $kernel_image"
-                    initrd_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.initrd") | .path ' < $temp_file)
-                    initrd_image=$(echo "$initrd_image" | tr -d '"')
-                    echo "INFO  Setting initrd image to: $initrd_image"
-                    METAL_SERVER=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' \
-                    | awk -F 'metal.server=' '{print $2}' \
-                    | awk -F ' ' '{print $1}')
-                    NEW_METAL_SERVER=$metal_image
-                    PARAMS=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' | \
-                        sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-                        tr -d \")
-                    cray bss bootparameters update --hosts "${TARGET_XNAME}" \
-                      --kernel $kernel_image \
-                      --initrd $initrd_image \
-                      --params "${PARAMS}"
-
-                    export TERM=linux
-                    echo "NOTICE  rebuilding ncn-m002"
-                    /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
-          - name: rebuild-m003
-            dependencies:
-              - rebuild-m002
-            templateRef:
-              name: iuf-base-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"
-                - name: scriptContent
-                  value: |
-                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
-                    if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then 
-                      echo "NOTICE  Not rebuilding ncn-m003 nodes because 'Management_Master' was not in --limit-management-rollout"
-                      exit 0
-                    fi
-                    labeled_nodes=$(kubectl get nodes --selector='iuf-prevent-rollout=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
-                    if [[ -n $(echo $labeled_nodes | grep ncn-m003) ]]; then
-                      echo "NOTICE  ncn-m003 is labeled with 'iuf-prevent-rollout=true' which means it will not be rebuilt"
-                      exit 0
-                    fi
-                    master_nodes=$(kubectl get node --selector='node-role.kubernetes.io/master' --no-headers=true | awk '{print $1}' | tr "\n", " ")
-                    if [[ -z $(echo $master_nodes | grep ncn-m003) ]]; then 
-                      echo "ERROR  ncn-m003 was not found in kubernetes master nodes. The search was via kubectl get node --selector='node-role.kubernetes.io/master'"
-                      exit 1
-                    fi
-                    
-                    echo "NOTICE  updating CFS config on ncn-m003"
-                    TARGET_NCN=ncn-m003
-                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
-                    configuration=$(echo $update_cfs_conf_ouput | jq '.configurations[].name' | tr -d '"')
-                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${configuration}"
-
-                    echo "NOTICE  updating boot-image in BSS on ncn-m003"
-                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                    IMAGE_ID=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
-                    image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
-                    image_manifest_str=${image_manifest_str#*s3://}
-                    bucket="$( cut -d '/' -f 1 <<< "$image_manifest_str" )"
-                    bucket_rm="${bucket}/"
-                    path=${image_manifest_str#*${bucket_rm}}
-                    path=${path%?}
-                    temp_file="/tmp/$(echo $RANDOM | md5sum | head -c 21; echo).json"
-                    cray artifacts get $bucket $path $temp_file
-                    metal_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.rootfs.squashfs") | .path ' < $temp_file)
-                    echo "INFO  Setting metal.server image to: $metal_image"
-                    kernel_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.kernel") | .path ' < $temp_file)
-                    kernel_image=$(echo "$kernel_image" | tr -d '"')
-                    echo "INFO Setting kernel image to: $kernel_image"
-                    initrd_image=$(jq '.artifacts | map({"path": .link.path, "type": .type}) | .[] | select( .type == "application/vnd.cray.image.initrd") | .path ' < $temp_file)
-                    initrd_image=$(echo "$initrd_image" | tr -d '"')
-                    echo "INFO  Setting initrd image to: $initrd_image"
-                    METAL_SERVER=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' \
-                    | awk -F 'metal.server=' '{print $2}' \
-                    | awk -F ' ' '{print $1}')
-                    NEW_METAL_SERVER=$metal_image
-                    PARAMS=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' | \
-                        sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-                        tr -d \")
-                    cray bss bootparameters update --hosts "${TARGET_XNAME}" \
-                      --kernel $kernel_image \
-                      --initrd $initrd_image \
-                      --params "${PARAMS}"
-
-                    export TERM=linux
-                    echo "NOTICE  rebuilding ncn-m003"
-                    /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m003
           - name: end-operation
             dependencies:
-              - rebuild-m003
+              - rebuild-worker-nodes
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template
