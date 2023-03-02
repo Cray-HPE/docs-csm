@@ -397,7 +397,7 @@ as necessary to accommodate site preferences for rebuilding management nodes. Th
 **`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
-**Important** There is a different procedure for  `management-nodes-rollout` depending on whether or not CSM is being upgraded.
+**IMPORTANT** There is a different procedure for  `management-nodes-rollout` depending on whether or not CSM is being upgraded.
 The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded and will be updated by the CFS configuration
 created in [update-cfs-config](../stages/update_cfs_config.md).
 If CSM is being upgraded, the NCN storage nodes and NCN master nodes will be upgraded.

@@ -59,7 +59,7 @@ If not performing a CSM upgrade, then NCN master nodes should not be upgraded an
 This is not the main path that IUF uses for rebuilding/upgrading NCN worker nodes. See the [NCN worker node section](../workflows/upgrade_all_products.md#653-ncn-worker-nodes) of `management-nodes-rollout` instructions in
 `upgrade all products` documentation for the main path. If for some reason, NCN worker nodes need to be rebuilt or upgraded outside of IUF, this procedure should be followed.
 
-The upgrade and rebuild procedure for NCN worker nodes is the same. This section applies to both NCN worker node upgrades and NCN worker node rebuilds.
+The upgrade and rebuild procedures for NCN worker nodes are identical. This section applies to both NCN worker node upgrades and NCN worker node rebuilds.
 The words 'rebuild' and 'upgrade' are exchangeable in this section.
 
 1. Get the image and CFS configuration created during `prepare-images` and `update-cfs-config` stages.
@@ -77,13 +77,13 @@ Follow the instructions in [prepare-images](prepare_images.md#artifacts-created)
 ## Action needed if a worker rebuild fails
 
 In general, worker node rebuilds should complete successfully before starting another rebuild.
-The node can get into a bad state if it has been partially rebuilt and then it is attempted to restart the rebuild on that same node.
+A worker node can get into a bad state if it has been partially rebuilt and an attempt is made to restart the rebuild on that same node.
 As a result, it is not possible to start another worker node rebuild if there is an existing incomplete worker node rebuild workflow, where "incomplete" means it has stopped before successfully completing the full workflow.
 If there is an incomplete workflow and it is attempted to start another worker rebuild workflow,
 the first, incomplete worker rebuild workflow will continue and no new workflow will be created.
 
-In the case where it is necessary to start an entirely new worker rebuild workflow after a previous worker rebuild workflow failed, then the failed workflow must be deleted from Kubernetes.
-**Warning** that deleting a workflow will delete information about the state of that workflow and the steps that have been completed.
+If it is necessary to start an entirely new worker rebuild workflow after a previous worker rebuild workflow failed, the failed workflow must be deleted from Kubernetes first.
+**WARNING** Deleting a workflow will delete information about the state of that workflow and the steps that have been completed.
 Deleting a partially complete workflow should be done cautiously and only if needed.
 
 To delete a failed Argo workflow, complete the following steps.
