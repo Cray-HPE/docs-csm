@@ -567,7 +567,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001` in t
     section of [Management node image customizations](../../configuration_management/Management_Node_Image_Customization.md).
     Set `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` for `Management_Master` found in the second step.
 
-    1. (`ncn-m002#`) Upgrade `ncn-m001`. It is **important** to execute this from **`ncn-m002`**.
+    1. (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
         ```bash
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
