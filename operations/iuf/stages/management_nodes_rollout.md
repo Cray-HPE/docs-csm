@@ -151,14 +151,14 @@ when following the [upgrade all products documentation](../workflows/upgrade_all
 
 1. (`ncn-mw#`) Determine the xnames for the NCNs which are being upgrade.
 
-    * Get a comma-separated list of all storage NCN xnames:
+    - Get a comma-separated list of all storage NCN xnames:
 
         ```bash
         cray hsm state components list --role Management --subrole Storage --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")'
         ```
 
-    * Get the xname for `ncn-m001`:
+    - Get the xname for `ncn-m001`:
 
         > In this example, the xname for `ncn-w001` is being found.
 
