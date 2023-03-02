@@ -419,7 +419,7 @@ Follow the steps below to upgrade all management nodes.
 1. Get the image-id and CFS configuration created during `prepare-images` and `update-cfs-config` stages.
 Follow the instructions in [prepare-images](../stages/prepare_images.md#artifacts-created) to get the artifacts for `management-node-images`. For the images with the `configuration_group_name` matching
 `Management_Master` and `Management_Storage`, get the values for `final_image_id` and `configuration`.
-These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
+These values will be needed when upgrading NCN storage nodes and `ncn-m001` in the following steps.
 
 1. NCN storage node upgrade
 
@@ -453,7 +453,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
 
     1. Set the image in BSS on all storage nodes by following the [Update NCN boot parameters](../../configuration_management/Management_Node_Image_Customization.md#4-update-ncn-boot-parameters)
     section of [Management node image customizations](../../configuration_management/Management_Node_Image_Customization.md).
-    Set `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` for `Management_Storage` found in the second step.
+    Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` value for `Management_Storage` found in step 2 above.
 
     1. (`ncn-m#`) Upgrade one NCN storage node.
 
@@ -567,7 +567,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
     section of [Management node image customizations](../../configuration_management/Management_Node_Image_Customization.md).
     Set `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` for `Management_Master` found in the second step.
 
-    1. (`ncn-m002#`) Upgrade `ncn-m001`. It is **important** to execute this from **`ncn-m002`**.
+    1. (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
         ```bash
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
