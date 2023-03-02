@@ -6,14 +6,15 @@ by workload manager software. The `-mrs reboot` argument will reboot all compute
 
 `managed-nodes-rollout` details are explained in the following sections:
 
-- [Impact](#impact)
-- [Input](#input)
-- [Execution details](#execution-details)
-- [Example](#example)
+- [`managed-nodes-rollout`](#managed-nodes-rollout)
+  - [Impact](#impact)
+  - [Input](#input)
+  - [Execution details](#execution-details)
+  - [Example](#example)
 
 ## Impact
 
-The `managed-nodes-rollout` stage changes the running state of the system.
+The `managed-nodes-rollout` stage changes the running state of the system. Which uses BOS V2 session templates to reboot the specified compute/application nodes.
 
 ## Input
 
@@ -29,6 +30,17 @@ The following arguments are most often used with the `managed-nodes-rollout` sta
 
 The code executed by this stage exists within IUF. See the `managed-nodes-rollout` entry in `/usr/share/doc/csm/workflows/iuf/stages.yaml` and the corresponding files in `/usr/share/doc/csm/workflows/iuf/operations/`
 for details on the commands executed.
+
+`managed-nodes-rollout` iuf operation is deemed successful if all the initiated BOS V2 sessions are started and completed successfully. Success is defined such that the nodes were able to reboot with the BOS session templates however,
+it does not guarantee the component fully configured properly. It is important to carefully read the IUF stdout during this operation, as a scenario where the reboot was done but the configuration failed on some nodes is possible.
+
+```
+INFO Session 9769d735-4037-4500-b008-00067b4822ad: 0% components succeeded, 100% components failed
+ERROR cfs configuration failed: {'count': 8, 'list': 'x3000c0s29b2n0,x3000c0s29b4n0,x3000c0s31b2n0,x3000c0s29b3n0,x3000c0s31b4n0,x3000c0s31b3n0,x3000c0s31b1n0,x3000c0s29b1n0'}
+```
+
+From the perspective of `managed-nodes-rollout` this would mean operation success and IUF will report it as such. To further debug why the configuration failed on the specified
+nodes see [Configuration Sessions](/operations/configuration_management/Configuration_Sessions.md)
 
 See [Rolling Upgrades Using BOS](../../boot_orchestration/Rolling_Upgrades.md) for details on rebooting managed compute and application nodes with BOS V2.
 
