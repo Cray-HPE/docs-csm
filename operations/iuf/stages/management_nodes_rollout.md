@@ -116,7 +116,7 @@ Incomplete meaning it has stopped before successfully completing the full workfl
 the first, incomplete worker rebuild workflow will continue and no new workflow will be created.
 
 If it is necessary to start an entirely new worker rebuild workflow after a previous worker rebuild workflow failed, the failed workflow must be deleted from Kubernetes first.
-**Warning** that deleting a workflow will delete information about the state of that workflow and the steps that have been completed.
+**WARNING** Deleting a workflow will delete information about the state of that workflow and the steps that have been completed.
 Deleting a partially complete workflow should be done cautiously and only if needed.
 
 To delete a failed Argo workflow, complete the following steps.
