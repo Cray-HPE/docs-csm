@@ -32,6 +32,7 @@ See [CSM Automatic Network Utility (CANU)](../canu/README.md)
 * [Secure Shell (SSH)](ssh.md)
 * [Remote Logging](remote_logging.md)
 * [SNMPv2c Community](snmp-community.md)
+* [SNMPv3 Users](snmpv3_users.md)
 * [System images](system_images.md)
 
 ### Layer One Features
