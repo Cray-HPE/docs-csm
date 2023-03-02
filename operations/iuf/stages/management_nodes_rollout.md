@@ -110,7 +110,7 @@ Follow the instructions in [prepare-images](prepare_images.md#artifacts-created)
 ## Action needed if a worker rebuild fails
 
 In general, worker node rebuilds should complete successfully before starting another rebuild.
-The node can get into a bad state if it has been partially rebuilt and then it is attempted to restart the rebuild on that same node.
+A worker node can get into a bad state if it has been partially rebuilt and an attempt is made to restart the rebuild on that same node.
 In order to prevent this from happening, it is not possible to start another worker node rebuild if there is an incomplete worker node rebuild workflow.
 Incomplete meaning it has stopped before successfully completing the full workflow. If there is an incomplete workflow and it is attempted to start another worker rebuild workflow,
 the first, incomplete worker rebuild workflow will continue and no new workflow will be created.
