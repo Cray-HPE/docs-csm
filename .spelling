@@ -761,8 +761,8 @@ zeroize
 1000BASE-T
 1000BASE-ZX
 100BASE-FX
-100g
 100GbE
+100g
 100m
 10g
 10km
@@ -777,9 +777,9 @@ zeroize
 2-ports
 200GbE
 220m
-25g
 25Gb
 25GbE
+25g
 2km
 2x
 2x50GbE
@@ -825,18 +825,15 @@ zeroize
 850nm
 8p
 9300-32D
-BiDi
 BLc
+BiDi
 Cat5e
 Cat6A
 DWDM SFP-10G-T
-eDR4
-eSR
-eSR4
 GigE
-Mmf
 MPO-12
 MPO-16
+Mmf
 Pwr2Prt
 Q1000BASE-T
 Q28-100G-BIDI
@@ -867,9 +864,12 @@ SFP-10G-T
 SFP-10G-ZR
 SR SFP-10G
 Sr4
-twinax
 USR SFP-10G
 Xcvr
+eDR4
+eSR
+eSR4
+twinax
 
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
