@@ -90,7 +90,7 @@ Expected behavior:
 
 ## Manually upgrade or rebuild NCN worker node with specific image and CFS configuration
 
-The upgrade and rebuild procedure for NCN worker nodes is the same. This section applies to both NCN worker node upgrades and NCN worker node rebuilds.
+The upgrade and rebuild procedures for NCN worker nodes are identical. This section applies to both NCN worker node upgrades and NCN worker node rebuilds.
 The words 'rebuild' and 'upgrade' are exchangeable in this section.
 
 1. Get the image and CFS configuration created during `prepare-images` and `update-cfs-config` stages.
