@@ -115,7 +115,7 @@ As a result, it is not possible to start another worker node rebuild if there is
 Incomplete meaning it has stopped before successfully completing the full workflow. If there is an incomplete workflow and it is attempted to start another worker rebuild workflow,
 the first, incomplete worker rebuild workflow will continue and no new workflow will be created.
 
-In the case where it is necessary to start an entirely new worker rebuild workflow after a previous worker rebuild workflow failed, then the failed workflow must be deleted from Kubernetes.
+If it is necessary to start an entirely new worker rebuild workflow after a previous worker rebuild workflow failed, the failed workflow must be deleted from Kubernetes first.
 **Warning** that deleting a workflow will delete information about the state of that workflow and the steps that have been completed.
 Deleting a partially complete workflow should be done cautiously and only if needed.
 
