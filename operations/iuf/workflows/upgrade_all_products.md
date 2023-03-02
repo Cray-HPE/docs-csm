@@ -419,7 +419,7 @@ Follow the steps below to upgrade all management nodes.
 1. Get the image-id and CFS configuration created during `prepare-images` and `update-cfs-config` stages.
 Follow the instructions in [prepare-images](../stages/prepare_images.md#artifacts-created) to get the artifacts for `management-node-images`. For the images with the `configuration_group_name` matching
 `Management_Master` and `Management_Storage`, get the values for `final_image_id` and `configuration`.
-These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
+These values will be needed when upgrading NCN storage nodes and `ncn-m001` in the following steps.
 
 1. NCN storage node upgrade
 
