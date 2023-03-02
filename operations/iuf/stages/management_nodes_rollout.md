@@ -2,9 +2,7 @@
 
 The `management-nodes-rollout` stage performs a controlled update of management NCNs by configuring them with a new CFS configuration and/or rebuilding or upgrading them to a new image.
 A rebuild is a reboot operation that clears the persistent OverlayFS file system on that node.
-An upgrade is similar to a rebuild, but an upgrade does not wipe all information off of a node which is important
-specifically for NCN master and NCN storage nodes.
-An node image upgrade is only used during `management-nodes-rollout` if CSM is being upgraded.
+An upgrade is similar to a rebuild, but for NCN storage nodes and NCN master nodes, an upgrade does not wipe all information off of a node.
 IUF will account for the necessary minimum number of critical software instances running on the nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
 
 **`NOTE`** `management-nodes-rollout` has a different procedure depending on whether or not CSM is being upgraded.
@@ -19,9 +17,9 @@ See [6.5 Execute the IUF `management-nodes-rollout` stage](../workflows/upgrade_
 - [Impact](#impact)
 - [Input](#input)
 - [Execution details](#execution-details)
-- [Examples](#examples)
-- [Manually upgrade or rebuild NCN worker node with specific image and CFS configuration](#manually-upgrade-or-rebuild-ncn-worker-node-with-specific-image-and-cfs-configuration)
+- [Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF](#manually-upgrade-or-rebuild-ncn-worker-node-with-specific-image-and-cfs-configuration-outside-of-iuf)
 - [Action needed if a worker rebuild fails](#action-needed-if-a-worker-rebuild-fails)
+- [Examples](#examples)
 
 ## Impact
 
@@ -55,40 +53,11 @@ For example, if there are 15 worker nodes and `-cmrp 33` is specified, then 5 wo
 `-limit-management-rollout Management_Master` only needs to be specified when performing a CSM upgrade. This will upgrade `ncn-m002` and `ncn-m003` serially. This should be done before NCN worker nodes are upgraded.
 If not performing a CSM upgrade, then NCN master nodes should not be upgraded and should be configured with the CFS configuration created during the [update-cfs-config](../stages/update_cfs_config.md) stage.
 
-## Examples
+## Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF
 
-(`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the default concurrent management rollout percentage and limiting the operation to `Management_Worker` nodes.
-
-```bash
-iuf -a admin-230127 run --limit-management-rollout Management_Worker -r management-nodes-rollout
-```
-
-Expected behavior: All NCN worker nodes will be rebuilt. Each set of worker nodes that is being rebuilt will contain 20% of the total number of worker nodes. For example, if there are 10 total worker nodes, then 2 will be rebuilt at a time.
-
----
-
-(`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the following parameters. Upgrading the NCN master nodes as shown, should only be done if CSM is being upgraded.
-
-- Assume 10 worker nodes (`ncn-w001` through `ncn-w010`)
-- `-limit-management-rollout [Managment_Worker Management_Master]`
-- `-cmrp 35`
-- `ncn-w004` is labeled with `iuf-prevent-rollout=true`
-
-First, label `ncn-w004` and `ncn-m002` with `iuf-prevent-rollout=true`. Then execute the following command.
-
-```bash
-iuf -a admin-230127 run --limit-management-rollout Management_Worker Management_Master  --cmrp 33 -r management-nodes-rollout
-```
-
-Expected behavior:
-
-1. `ncn-m002` will be upgraded
-1. `ncn-m003` will be upgraded
-1. Worker nodes `ncn-w001,ncn-w002,ncn-w003` will be upgraded
-1. Worker nodes `ncn-w005,ncn-w006,ncn-w007` will be upgraded
-1. Worker nodes `ncn-w008,ncn-w009,ncn-w010` will be upgraded
-
-## Manually upgrade or rebuild NCN worker node with specific image and CFS configuration
+**NOTE** This section describes how to manually rebuild/upgrade a worker node outside of IUF with the image and CFS configuration created through IUF.
+This is not the main path that IUF uses for rebuilding/upgrading NCN worker nodes. See the [NCN worker node section](../workflows/upgrade_all_products.md#653-ncn-worker-nodes) of `management-nodes-rollout` instructions in
+`upgrade all products` documentation for the main path. If for some reason, NCN worker nodes need to be rebuilt or upgraded outside of IUF, this procedure should be followed.
 
 The upgrade and rebuild procedure for NCN worker nodes is the same. This section applies to both NCN worker node upgrades and NCN worker node rebuilds.
 The words 'rebuild' and 'upgrade' are exchangeable in this section.
@@ -97,9 +66,7 @@ The words 'rebuild' and 'upgrade' are exchangeable in this section.
 Follow the instructions in [prepare-images](prepare_images.md#artifacts-created) to get the artifacts for `management-node-images`. For the image with the `configuration_group_name` matching
 `Management_Worker`, get the values for `final_image_id` and `configuration`.
 
-1. Upgrade/rebuild worker nodes
-
-    Worker nodes are automatically rebuilt using Argo workflows. If rebuilding multiple worker nodes at once, see [this page](../../node_management/Rebuild_NCNs/Rebuild_NCNs.md#restrictions) for restrictions.
+1. Upgrade/rebuild worker nodes. Worker nodes are automatically rebuilt using Argo workflows. If rebuilding multiple worker nodes at once, see [this page](../../node_management/Rebuild_NCNs/Rebuild_NCNs.md#restrictions) for restrictions.
 
     (`ncn-m001#`) Rebuild worker node.
 
@@ -111,8 +78,8 @@ Follow the instructions in [prepare-images](prepare_images.md#artifacts-created)
 
 In general, worker node rebuilds should complete successfully before starting another rebuild.
 The node can get into a bad state if it has been partially rebuilt and then it is attempted to restart the rebuild on that same node.
-In order to prevent this from happening, it is not possible to start another worker node rebuild if there is an incomplete worker node rebuild workflow.
-Incomplete meaning it has stopped before successfully completing the full workflow. If there is an incomplete workflow and it is attempted to start another worker rebuild workflow,
+As a result, it is not possible to start another worker node rebuild if there is an existing incomplete worker node rebuild workflow, where "incomplete" means it has stopped before successfully completing the full workflow.
+If there is an incomplete workflow and it is attempted to start another worker rebuild workflow,
 the first, incomplete worker rebuild workflow will continue and no new workflow will be created.
 
 In the case where it is necessary to start an entirely new worker rebuild workflow after a previous worker rebuild workflow failed, then the failed workflow must be deleted from Kubernetes.
@@ -136,3 +103,36 @@ To delete a failed Argo workflow, complete the following steps.
     ```
 
     After deleting the failed workflow, a new worker rebuild workflow can be restarted.
+
+## Examples
+
+(`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the default concurrent management rollout percentage and limiting the operation to `Management_Worker` nodes.
+
+```bash
+iuf -a admin-230127 run --limit-management-rollout Management_Worker -r management-nodes-rollout
+```
+
+Expected behavior: All NCN worker nodes will be rebuilt. Each set of worker nodes that is being rebuilt will contain 20% of the total number of worker nodes. For example, if there are 10 total worker nodes, then 2 will be rebuilt at a time.
+
+---
+
+(`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the following parameters. Upgrading the NCN master nodes as shown, should only be done if CSM is being upgraded.
+
+- Assume 10 worker nodes (`ncn-w001` through `ncn-w010`)
+- `-limit-management-rollout [Managment_Worker Management_Master]`
+- `-cmrp 33`
+- `ncn-w004` is labeled with `iuf-prevent-rollout=true`
+
+First, label `ncn-w004` with `iuf-prevent-rollout=true`. Then execute the following command.
+
+```bash
+iuf -a admin-230127 run --limit-management-rollout Management_Worker Management_Master  --cmrp 33 -r management-nodes-rollout
+```
+
+Expected behavior:
+
+1. `ncn-m002` will be upgraded
+1. `ncn-m003` will be upgraded
+1. Worker nodes `ncn-w001,ncn-w002,ncn-w003` will be upgraded
+1. Worker nodes `ncn-w005,ncn-w006,ncn-w007` will be upgraded
+1. Worker nodes `ncn-w008,ncn-w009,ncn-w010` will be upgraded
