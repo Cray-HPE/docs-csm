@@ -8,8 +8,8 @@ After the RPM has been installed, the documentation will be available at `/usr/s
 
 - [Download and extract CSM product release](#download-and-extract-csm-product-release)
 - [Apply patch to CSM release](#apply-patch-to-csm-release)
-  - [Prerequisites](#apply-patch-to-csm-release-prerequisites)
-  - [Procedure](#apply-patch-to-csm-release-procedure)
+    - [Prerequisites](#apply-patch-to-csm-release-prerequisites)
+    - [Procedure](#apply-patch-to-csm-release-procedure)
 - [Check for latest documentation](#check-for-latest-documentation)
 - [Check for field notices about hotfixes](#check-for-field-notices-about-hotfixes)
 

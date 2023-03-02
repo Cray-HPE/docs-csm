@@ -97,7 +97,7 @@ This migration is performed offline for data security. The running SLS file is f
 migration script is run and a new, migrated output file is created.
 
 1. Migrate switch naming (in order): `leaf` to `leaf-bmc`, and `agg` to `leaf`.
-1. Remove `api-gateway` entries from HMLB subnets for CSM 1.2 security.
+1. Remove `api-gateway` entries from HMNLB subnets for CSM 1.2 security.
 1. Remove `kubeapi-vip` reservations for all networks except NMN.
 1. Create the new BICAN "toggle" network.
 1. Migrate the existing CAN to CMN.
