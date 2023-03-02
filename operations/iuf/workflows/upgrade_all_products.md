@@ -463,7 +463,8 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001` in t
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001 --upgrade
         ```
 
-    1. (`ncn-m#`) Verify that the storage node booted and is configured correctly. The CFS configuration can be checked will the command below using the `xname` of the node that was upgraded.
+    1. (`ncn-m#`) Verify that the storage node booted and is configured correctly. The CFS configuration can be
+    verified with the command below using the `xname` of the node that was upgraded instead of the example value `x3000c0s13b0n0`.
 
         ```bash
         XNAME=x3000c0s13b0n0
@@ -522,10 +523,10 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001` in t
         kubectl get nodes --show-labels | grep iuf-prevent-rollout
         ```
 
-    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m003`. This will rebuild the `ncn-m002` with the new CFS configuration and image built in
+    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m003`. This will rebuild `ncn-m003` with the new CFS configuration and image built in
     previous steps of the workflow.
 
-        (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m002`.
+        (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m003`.
 
         ```bash
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Master
