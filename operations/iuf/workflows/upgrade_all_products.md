@@ -471,7 +471,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001` in t
         cray cfs components describe ${XNAME}
         ```
 
-        It is expected that `configurationStatus` is `configured`. If it is `pending`, then wait for the status to be `configured`.
+        The desired value for `configurationStatus` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
 
     1. (`ncn-m#`) Upgrade the remaining storage nodes. This will upgrade them serially.
 
