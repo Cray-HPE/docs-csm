@@ -27,21 +27,11 @@ Identify pods that are hitting resource limits in order to increase the resource
        Example output:
 
        ```text
-       Checking cray-externaldns-coredns-58b5f8494-c45kh
-
-       Checking cray-externaldns-coredns-58b5f8494-pjvz6
-
-       Checking cray-externaldns-etcd-2kn7w6gnsx
-
-       Checking cray-externaldns-etcd-88x4drpv27
-
-       Checking cray-externaldns-etcd-sbnbph52vh
-
-       Checking cray-externaldns-external-dns-5bb8765896-w87wb
-       *** CPU throttling: ***
-       nr_periods 1127304
-       nr_throttled 473554
-       throttled_time 71962850825439
+       Checking cray-externaldns-external-dns-6988c5d5c5-795lb
+       *** CPU throttling for containerid 76f45c4c18bf8ee6d4f777a602430e021c2a0d0e024380d22341414ca25ccffd: ***
+       nr_periods 6066669
+       nr_throttled 23725
+       throttled_time 61981768066252
        ```
 
     1. (`ncn-mw#`) Call the script without a parameter to evaluate all pods.

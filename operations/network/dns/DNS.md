@@ -44,7 +44,7 @@ and Customer High-Speed Network (CHN). For example, `grafana.cmn.wasp.dev.cray.c
 
 Kubernetes Services annotated with `external-dns.alpha.kubernetes.io/hostname` have DNS records created.
 
-Starting with CSM version 1.1 these DNS records are created in the PowerDNS server. Earlier versions of CSM used a dedicated CoreDNS server for ExternalDNS.
+Starting with CSM version 1.2 these DNS records are created in the PowerDNS server. Earlier versions of CSM used a dedicated CoreDNS server for ExternalDNS.
 
 > Only DNS A records are created as ExternalDNS currently does not support the creation of the PTR records required for reverse lookup.
 
