@@ -1,12 +1,16 @@
 # `management-nodes-rollout`
 
-The `management-nodes-rollout` stage performs a controlled rebuild of the management NCNs in order to reboot them to a new image and configuration. A rebuild is a reboot operation that clears the persistent OverlayFS file system on
-that node. IUF will account for the necessary minimum number of critical software instances running on the nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
-
+The `management-nodes-rollout` stage performs a controlled update of management NCNs by configuring them with a new CFS configuration and/or rebuilding or upgrading them to a new image.
+A rebuild is a reboot operation that clears the persistent OverlayFS file system on that node.
+An upgrade is similar to a rebuild, but an upgrade does not wipe all information off of a node which is important
+specifically for NCN master and NCN storage nodes.
+An node image upgrade is only used during `management-nodes-rollout` if CSM is being upgraded.
+IUF will account for the necessary minimum number of critical software instances running on the nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
 
 **`NOTE`** `management-nodes-rollout` has a different procedure depending on whether or not CSM is being upgraded.
-The two procedures differ in whether or not the NCN storage nodes and NCN master nodes are upgraded. If CSM is not being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded and will be updated by the CFS configuration
-created in [update-cfs-config](../stages/update_cfs_config.md).
+The two procedures differ in the handleing of NCN storage nodes and NCN master nodes.
+If CSM is not being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded and will be updated by the CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md).
+If CSM is being upgraded, then NCN storage nodes and NCN master nodes will upgraded.
 Both procedures use the same steps for rebuilding/upgrading NCN worker nodes.
 See [6.5 Execute the IUF `management-nodes-rollout` stage](../workflows/upgrade_all_products.md#65-execute-the-iuf-management-nodes-rollout-stage) in the `upgrade all products documentation` for more information.
 
@@ -40,7 +44,7 @@ for details on the commands executed.
 
 There are two methods administrators can use to avoid rollouts on specific NCN management nodes: by specifying the `--limit-management-rollout` argument for specifying which group(s) of nodes should be rebuilt or by using `kubectl` to label nodes with `iuf-prevent-rollout=true`.
 
-When NCN worker nodes are being rebuilt, an additional Argo workflow will execute in addition to the standard IUF Argo workflows. It will include the string `ncn-lifecycle-rebuild` in its name.
+When NCN worker nodes are being rebuilt/upgraded and when NCN storage nodes are being upgraded, an additional Argo workflow will execute in addition to the standard IUF Argo workflows. It will include the string `ncn-lifecycle-rebuild` in its name.
 
 The `-cmrp` argument limits the percentage of worker nodes rolled out in parallel. The worker node rebuild can coordinate rebuilding multiple worker nodes at once.
 It starts by rebuilding one worker node. Once that node has been removed from the system, the workflow checks if it is safe to rebuild the next worker node based on what services are running in the system.
@@ -48,8 +52,8 @@ If it is safe, it will proceed to rebuild the next node, partially in parallel w
 The `-cmrp` parameter selects the percentage of worker nodes that the worker node rebuild should coordinate rebuilding at one time.
 For example, if there are 15 worker nodes and `-cmrp 33` is specified, then 5 worker nodes will be rebuilt at once and with as much parallelization as possible given the state of the system.
 
-NCN master nodes, `ncn-m002` and `ncn-m003`, are rolled out serially. NCN master node rebuilds do not launch an additional Argo workflow.
-If the `management-nodes-rollout` is executed with argument `-limit-management-rollout [Managment_Worker Management_Master]`, then `ncn-m002` and `ncn-m003` will be rebuilt in serial after the NCN worker nodes have been rebuilt.
+`-limit-management-rollout Management_Master` only needs to be specified when performing a CSM upgrade. This will upgrade `ncn-m002` and `ncn-m003` serially. This should be done before NCN worker nodes are upgraded.
+If not performing a CSM upgrade, then NCN master nodes should not be upgraded and should be configured with the CFS configuration created during the [update-cfs-config](../stages/update_cfs_config.md) stage.
 
 ## Examples
 
@@ -63,7 +67,7 @@ Expected behavior: All NCN worker nodes will be rebuilt. Each set of worker node
 
 ---
 
-(`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the following parameters.
+(`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the following parameters. Upgrading the NCN master nodes as shown, should only be done if CSM is being upgraded.
 
 - Assume 10 worker nodes (`ncn-w001` through `ncn-w010`)
 - `-limit-management-rollout [Managment_Worker Management_Master]`
@@ -86,6 +90,9 @@ Expected behavior:
 
 ## Manually upgrade or rebuild NCN worker node with specific image and CFS configuration
 
+The upgrade and rebuild procedure for NCN worker nodes is the same. This section applies to both NCN worker node upgrades and NCN worker node rebuilds.
+The words 'rebuild' and 'upgrade' are exchangable in this section.
+
 1. Get the image and CFS configuration created during `prepare-images` and `update-cfs-config` stages.
 Follow the instructions in [prepare-images](prepare_images.md#artifacts-created) to get the artifacts for `management-node-images`. For the image with the `configuration_group_name` matching
 `Management_Worker`, get the values for `final_image_id` and `configuration`.
@@ -106,7 +113,7 @@ In general, worker node rebuilds should complete successfully before starting an
 The node can get into a bad state if it has been partially rebuilt and then it is attempted to restart the rebuild on that same node.
 In order to prevent this from happening, it is not possible to start another worker node rebuild if there is an incomplete worker node rebuild workflow.
 Incomplete meaning it has stopped before successfully completing the full workflow. If there is an incomplete workflow and it is attempted to start another worker rebuild workflow,
-the first, incomplete worker rebuild workflow will continue and no workflow will be created.
+the first, incomplete worker rebuild workflow will continue and no new workflow will be created.
 
 In the case where it is necessary to start an entirely new worker rebuild workflow after a previous worker rebuild workflow failed, then the failed workflow must be deleted from Kubernetes.
 **Warning** that deleting a workflow will delete information about the state of that workflow and the steps that have been completed.
@@ -116,7 +123,7 @@ To delete a failed Argo workflow, complete the following steps.
 
 1. Get the name of the failed workflow. All worker rebuild workflows start with `ncn-lifecycle-rebuild`. The name of the worker rebuild workflow can be found in the Argo UI or by searching workflows in Kubernetes with the following command.
 
-    (`ncn-m#`) List failed worker rebuild workflows.
+    (`ncn-m#`) List failed worker rebuild workflows. Note that NCN storage upgrade workflows will also contain `ncn-lifecycle-rebuild` in their name and may be present in this list.
 
     ```bash
     kubectl get workflows -n argo | grep 'ncn-lifecycle-rebuild' | grep 'Fail'

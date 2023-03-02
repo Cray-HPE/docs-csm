@@ -108,7 +108,7 @@ Once this step has completed:
 
 ### 2.2 Update `customizations.yaml`
 
-**`NOTE`** This section is only relevant for initial install workflows. Skip to the [next section](#execute-the-iuf-deliver-product-stage) if performing an upgrade.
+**`NOTE`** This section is only relevant for initial install workflows. Skip to the [next section](#23-execute-the-iuf-deliver-product-stage) if performing an upgrade.
 
 Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products. Refer to the
 "Install and Upgrade Framework" section of both the Slurm and PBS product documents to determine the actions that need to be performed to update `customizations.yaml`.
@@ -323,7 +323,7 @@ Once this step has completed:
 
 ## 5. Backup
 
-**`NOTE`** This section is only relevant for upgrade workflows. Skip to the [next section](#management-rollout) if performing an initial install.
+**`NOTE`** This section is only relevant for upgrade workflows. Skip to the [next section](#6-management-rollout) if performing an initial install.
 
 This section describes procedures that backup critical state in case it becomes necessary to fall back to previous configurations and software.
 
@@ -398,10 +398,11 @@ as necessary to accommodate site preferences for rebuilding management nodes. Th
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
 **Important** There is a different procedure for  `management-nodes-rollout` depending on whether or not CSM is being upgraded.
-The two procedures differ in whether or not the NCN storage nodes and NCN master nodes are upgraded. If CSM is not being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded and will be updated by the CFS configuration
+The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded and will be updated by the CFS configuration
 created in [update-cfs-config](../stages/update_cfs_config.md).
+If CSM is being upgraded, the NCN storage nodes and NCN master nodes will be upgraded.
 Both procedures use the same steps for rebuilding/upgrading NCN worker nodes.
-Select **one** of the following procedures based on whether or not CSM is being upgraded. 
+Select **one** of the following procedures based on whether or not CSM is being upgraded.
 
 - [Management-nodes-rollout with CSM upgrade](#651-management-nodes-rollout-with-csm-upgrade)
 - [Management-nodes-rollout with no CSM upgrade](#652-management-nodes-rollout-with-no-csm-upgrade)
@@ -409,14 +410,14 @@ Select **one** of the following procedures based on whether or not CSM is being 
 #### 6.5.1 Management-nodes-rollout with CSM upgrade
 
 All management nodes will need to be upgraded to a new image because CSM is being upgraded. NCN master nodes, excluding `ncn-m001`, and NCN worker nodes can be upgraded with IUF.
-NCN storage nodes and `ncn-m001` will be upgraded with a manual command.
+NCN storage nodes and `ncn-m001` will be upgraded with manual commands.
 This section describes how to test a new image and CFS configuration on a single "canary node" for NCN master nodes and NCN worker nodes first before rolling it out to the other NCN master nodes and NCN worker nodes.
 Follow the steps below to upgrade all management nodes.
 
 1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `management-nodes-rollout` stage.
 
 1. Get the image-id and CFS configuration created during `prepare-images` and `update-cfs-config` stages.
-Follow the instructions in [prepare-images](prepare_images.md#artifacts-created) to get the artifacts for `management-node-images`. For the images with the `configuration_group_name` matching
+Follow the instructions in [prepare-images](../stages/prepare_images.md#artifacts-created) to get the artifacts for `management-node-images`. For the images with the `configuration_group_name` matching
 `Management_Master` and `Management_Storage`, get the values for `final_image_id` and `configuration`.
 These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
 
@@ -424,7 +425,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
 
     1. Set the CFS configuration on all storage nodes.
 
-        1. (`ncn-m#`) Set CFS_CONFIG_NAME to be the value for `configuration` found for `Management_Storage` nodes in the previous step.
+        1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to be the value for `configuration` found for `Management_Storage` nodes in the previous step.
 
             ```bash
             CFS_CONFIG_NAME=configuration
@@ -469,7 +470,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
         cray cfs components describe $XNAME
         ```
 
-        It is expected that `configurationStatus` is `configured`. If it is `pending`, then wait and re-check the status.
+        It is expected that `configurationStatus` is `configured`. If it is `pending`, then wait for the status to be `configured`.
 
     1. (`ncn-m#`) Upgrade the remaining storage nodes. This will upgrade them serially.
 
@@ -481,7 +482,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
 
 1. NCN master node upgrade (`ncn-m002` and `ncn-m003`)
 
-    1. Use `kubectl` to label `ncn-m003` node with `iuf-prevent-rollout=true` to ensure `management-nodes-rollout` only rebuilds a single NCN master node.
+    1. Use `kubectl` to label `ncn-m003` node with `iuf-prevent-rollout=true` to ensure `management-nodes-rollout` only rebuilds a single NCN master node, `ncn-m002`.
 
         (`ncn-m001#`) Label `ncn-m003` to prevent it from rebuilding.
 
@@ -520,7 +521,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
         ```bash
         kubectl get nodes --show-labels | grep iuf-prevent-rollout
         ```
-    
+
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m003`. This will rebuild the `ncn-m002` with the new CFS configuration and image built in
     previous steps of the workflow.
 
@@ -532,7 +533,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
 
 1. NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [6.5.3 NCN worker nodes](#653-ncn-worker-nodes). Then return to this procedure to complete the next step.
 
-1. Rebuild `ncn-m001`.
+1. Upgrade `ncn-m001`.
 
     1. Set the CFS configuration on `ncn-m001`.
 
@@ -542,14 +543,14 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
             CFS_CONFIG_NAME=configuration
             ```
 
-        1. (`ncn-m#`) Get `ncn-m001` xname.
+        1. (`ncn-m#`) Get the `xname` of `ncn-m001`.
 
             ```bash
             XNAME=$(ssh ncn-m001 'cat /etc/cray/xname')
             echo $XNAME
             ```
 
-        1. (`ncn-m#`) Set the configuration on all storage nodes.
+        1. (`ncn-m#`) Set the CFS configuration on `ncn-m001`.
 
             ```bash
             /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
@@ -561,7 +562,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
               ```bash
               All components updated successfully.
               ```
-    
+
     1. Set the image in BSS on `ncn-m001` by following the [Update NCN boot parameters](../../configuration_management/Management_Node_Image_Customization.md#4-update-ncn-boot-parameters)
     section of [Management node image customizations](../../configuration_management/Management_Node_Image_Customization.md).
     Set `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` for `Management_Master` found in the second step.
@@ -574,10 +575,9 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
 
 All management nodes have now been upgraded now. Continue to the next section [6.6 Update management host Slingshot NIC firmware](#66-update-management-host-slingshot-nic-firmware).
 
-
 #### 6.5.2 Management-nodes-rollout with no CSM upgrade
 
-This is the procedure to rollout managemenet nodes if CSM is not being upgraded. NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow.
+This is the procedure to rollout management nodes if CSM is not being upgraded. NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow.
 Unlike NCN worker nodes, NCN master nodes and storage nodes do not contain kernel module content from non-CSM products. However, userspace non-CSM product content is still provided on NCN master nodes and storage nodes and thus the `prepare-images` and `update-cfs-config`
 stages create a new image and CFS configuration for NCN master nodes and storage nodes. The CFS configuration layers ensure the non-CSM product content is applied correctly for both
 image customization and node personalization scenarios. As a result, the administrator
@@ -588,7 +588,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 
 1. Configure NCN master and NCN storage nodes.
 
-    1. (`ncn-m#`) Get the XNAMES for all NCN master and NCN storage nodes in a comma seperated list.
+    1. (`ncn-m#`) Get the XNAMES for all NCN master and NCN storage nodes in a comma separated list.
 
         ```bash
         MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
@@ -608,9 +608,9 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 
     1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to be the value for `configuration` found in the previous step.
 
-            ```bash
-            CFS_CONFIG_NAME=configuration
-            ``` 
+        ```bash
+        CFS_CONFIG_NAME=configuration
+        ``` 
 
     1. (`ncn-m#`) Configure NCN master nodes and NCN storage nodes.
 
