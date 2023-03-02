@@ -392,7 +392,7 @@ Once this step has completed:
 
 This section describes how to update software on management nodes. It describes how to test a new image and CFS configuration on a single "canary node" first before rolling it out to the other management nodes. Modify the procedure
 as necessary to accommodate site preferences for rebuilding management nodes. The images and CFS configurations used are created by the `prepare-images` and `update-cfs-config` stages respectively; see the `prepare-images`
-[Artifacts created](../stages/prepare_images.md#artifacts-created) section for details on how to query the images and [update-cfs-config](../stages/update_cfs_config.md) section for details about how the CFS configuration is updated.
+[Artifacts created](../stages/prepare_images.md#artifacts-created) section for details on how to query the images and CFS configurations and see [update-cfs-config](../stages/update_cfs_config.md) section for details about how the CFS configuration is updated.
 
 **`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
@@ -435,7 +435,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
 
             ```bash
             XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-            echo $XNAMES
+            echo "${XNAMES}"
             ```
 
         1. (`ncn-m#`) Set the configuration on all storage nodes.
@@ -463,11 +463,11 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001 --upgrade
         ```
 
-    1. Verify that the storage node booted and is configured correctly. The CFS configuration can be checked will the command below using the `xname` of the node that was upgraded.
+    1. (`ncn-m#`) Verify that the storage node booted and is configured correctly. The CFS configuration can be checked will the command below using the `xname` of the node that was upgraded.
 
         ```bash
         XNAME=x3000c0s13b0n0
-        cray cfs components describe $XNAME
+        cray cfs components describe ${XNAME}
         ```
 
         It is expected that `configurationStatus` is `configured`. If it is `pending`, then wait for the status to be `configured`.
@@ -573,7 +573,12 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001`.
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
         ```
 
-All management nodes have now been upgraded now. Continue to the next section [6.6 Update management host Slingshot NIC firmware](#66-update-management-host-slingshot-nic-firmware).
+Once this step has completed:
+
+- All management NCNS have been upgraded to the image and CFS configuration created in the previous steps of this workflow
+- Per-stage product hooks have executed for the `management-nodes-rollout` stage
+
+Continue to the next section [6.6 Update management host Slingshot NIC firmware](#66-update-management-host-slingshot-nic-firmware).
 
 #### 6.5.2 Management-nodes-rollout with no CSM upgrade
 
@@ -588,7 +593,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 
 1. Configure NCN master and NCN storage nodes.
 
-    1. (`ncn-m#`) Get the XNAMES for all NCN master and NCN storage nodes in a comma separated list.
+    1. (`ncn-m#`) Get the `xnames` for all NCN master and NCN storage nodes in a comma separated list.
 
         ```bash
         MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
@@ -612,7 +617,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
         CFS_CONFIG_NAME=configuration
         ```
 
-    1. (`ncn-m#`) Configure NCN master nodes and NCN storage nodes.
+    1. (`ncn-m#`) Apply the CFS configuration to NCN master nodes and NCN storage nodes.
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
@@ -625,7 +630,13 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
           Configuration complete. 9 component(s) completed successfully.  0 component(s) failed.
           ```
 
-All management nodes have now been rebuilt or updated via CFS configuration. Continue to the next section [6.6 Update management host Slingshot NIC firmware](#66-update-management-host-slingshot-nic-firmware).
+Once this step has completed:
+
+- Management NCN worker nodes have been rebuilt with the image and CFS configuration created in previous steps of this workflow
+- Management NCN storage and NCN master nodes have be updated with the CFS configuration created in the previous steps of this workflow.
+- Per-stage product hooks have executed for the `management-nodes-rollout` stage
+
+Continue to the next section [6.6 Update management host Slingshot NIC firmware](#66-update-management-host-slingshot-nic-firmware).
 
 #### 6.5.3 NCN worker nodes
 
@@ -701,6 +712,8 @@ Once this step has completed:
 
 - Management NCN worker nodes have been rebuilt with the image and CFS configuration created in previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
+
+Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step. Return to [Management-nodes-rollout with CSM upgrade](#651-management-nodes-rollout-with-csm-upgrade) or [Management-nodes-rollout with no CSM upgrade](#652-management-nodes-rollout-with-no-csm-upgrade).
 
 ### 6.6 Update management host Slingshot NIC firmware
 
