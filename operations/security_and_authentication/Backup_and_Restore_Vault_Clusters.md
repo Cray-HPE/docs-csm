@@ -9,7 +9,7 @@ For more information on Velero, refer to the [external Velero documentation](htt
 
 - [Prerequisites](#prerequisites)
 - [View backup schedules and completed backups](#view-backup-schedules-and-completed-backups)
-- [Restore from a backup](#restore-from a-backup)
+- [Restore from a backup](#restore-from-a-backup)
 
 ## Prerequisites
 
