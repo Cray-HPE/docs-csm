@@ -74,10 +74,6 @@ This procedure requires root privileges.
     cray-cps-etcd-gvlql48gwk                1/1     Running   0        8d    10.40.0.89    ncn-w003   <none>          <none>
     cray-cps-etcd-wsvhmp4f7p                1/1     Running   0        8d    10.42.0.64    ncn-w002   <none>          <none>
 
-    cray-externaldns-etcd-7skqmr825d        1/1     Running   0        20h   10.47.0.119   ncn-w001   <none>          <none>
-    cray-externaldns-etcd-gm2s7nkjgl        1/1     Running   0        8d    10.42.0.13    ncn-w002   <none>          <none>
-    cray-externaldns-etcd-ttnchdrwjl        1/1     Running   0        8d    10.40.0.22    ncn-w003   <none>          <none>
-
     cray-fas-etcd-29qcrd8qdt                1/1     Running   0        20h   10.47.0.102   ncn-w001   <none>          <none>
     cray-fas-etcd-987c87m4mv                1/1     Running   0        8d    10.40.0.66    ncn-w003   <none>          <none>
     cray-fas-etcd-9fxbzkzrsv                1/1     Running   0        8d    10.42.0.43    ncn-w002   <none>          <none>
@@ -144,8 +140,6 @@ This procedure requires root privileges.
         ### cray-cps-etcd-fp4kfsf799 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
         ### cray-cps-etcd-g6gz9vmmdn Etcd Database Check: ###
-        PASS:  OK foo fooCheck 1
-        ### cray-externaldns-etcd-2vnb5t4657 Etcd Database Check: ###
         PASS:  OK foo fooCheck 1
 
         [...]

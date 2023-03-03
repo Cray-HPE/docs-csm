@@ -38,8 +38,6 @@ For example, a cluster's database `NOSPACE` alarm is set when database storage s
         ### cray-cps-etcd-8hpztfkjdp Alarms Set: ###
         ### cray-cps-etcd-fp4kfsf799 Alarms Set: ###
         ### cray-cps-etcd-g6gz9vmmdn Alarms Set: ###
-        ### cray-externaldns-etcd-2vnb5t4657 Alarms Set: ###
-        ### cray-externaldns-etcd-sc4b88ptg2 Alarms Set: ###
 
         [...]
         ```
