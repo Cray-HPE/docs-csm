@@ -20,7 +20,7 @@ See [6.5 Execute the IUF `management-nodes-rollout` stage](../workflows/upgrade_
 - [Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF](#manually-upgrade-or-rebuild-ncn-worker-node-with-specific-image-and-cfs-configuration-outside-of-iuf)
 - [Action needed if a worker rebuild fails](#action-needed-if-a-worker-rebuild-fails)
 - [Examples](#examples)
-- [Set NCN boot image for NCN master and NCN storage nodes](#set-ncn-boot-image-for-ncn-master-and-ncn-storage-nodes)
+- [Set NCN boot image for NCN master and NCN storage nodes](#set-ncn-boot-image-for-ncn-m001-and-ncn-storage-nodes)
 
 ## Impact
 
