@@ -452,7 +452,7 @@ These values will be needed when upgrading NCN storage nodes and `ncn-m001` in t
               ```
 
     1. Set the image in BSS on all storage nodes by following the [Set NCN boot image for NCN master and NCN storage nodes](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-master-and-ncn-storage-nodes)
-    section of [Management nodes rollout stage documentaion](../stages/management_nodes_rollout.md).
+    section of the [Management nodes rollout stage documentation](../stages/management_nodes_rollout.md).
     Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` value for `Management_Storage` found in step 2 above.
 
     1. (`ncn-m#`) Upgrade one NCN storage node.
