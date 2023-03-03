@@ -143,13 +143,13 @@ Expected behavior:
 These steps should be followed when upgrading NCN storage nodes and `ncn-m001` during [Management-nodes-rollout with CSM upgrade](../workflows/upgrade_all_products.md#651-management-nodes-rollout-with-csm-upgrade)
 when following the [upgrade all products documentation](../workflows/upgrade_all_products.md).
 
-1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [Management-nodes-rollout with CSM upgrade](../workflows/upgrade_all_products.md#651-management-nodes-rollout-with-csm-upgrade) in the `upgrade all products documentation`.
+1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [Management-nodes-rollout with CSM upgrade](../workflows/upgrade_all_products.md#651-management-nodes-rollout-with-csm-upgrade) in the [upgrade all products documentation](../workflows/upgrade_all_products.md).
 
     ```bash
     IMS_RESULTANT_IMAGE_ID=final_image_id
     ```
 
-1. (`ncn-mw#`) Determine the xnames for the NCNs which are being upgrade.
+1. (`ncn-mw#`) Determine the xnames for the NCNs which are being upgraded. These will be used in the next step.
 
     - Get a comma-separated list of all storage NCN xnames:
 
