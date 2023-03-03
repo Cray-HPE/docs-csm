@@ -138,7 +138,7 @@ Expected behavior:
 1. Worker nodes `ncn-w005,ncn-w006,ncn-w007` will be upgraded
 1. Worker nodes `ncn-w008,ncn-w009,ncn-w010` will be upgraded
 
-## Set NCN boot image for NCN master and NCN storage nodes
+## Set NCN boot image for `ncn-m001` and NCN storage nodes
 
 These steps should be followed when upgrading NCN storage nodes and `ncn-m001` during [Management-nodes-rollout with CSM upgrade](../workflows/upgrade_all_products.md#651-management-nodes-rollout-with-csm-upgrade)
 when following the [upgrade all products documentation](../workflows/upgrade_all_products.md).
@@ -160,15 +160,12 @@ when following the [upgrade all products documentation](../workflows/upgrade_all
 
     - Get the xname for `ncn-m001`:
 
-        > In this example, the xname for `ncn-w001` is being found.
-
         ```bash
         ssh ncn-m001 cat /etc/cray/xname
         ```
 
-1. (`ncn-mw#`) Update boot parameters for an NCN.
-
-    Perform the following procedure **for each xname** being upgraded.
+1. (`ncn-mw#`) Update boot parameters for an NCN. Perform the following procedure **for each xname** being upgraded
+(each xname identified in the previous step).
 
     1. Get the existing `metal.server` setting for the xname of the node of interest.
 
@@ -184,7 +181,7 @@ when following the [upgrade all products documentation](../workflows/upgrade_all
 
         1. Set the path to the artifacts in S3.
 
-            **NOTE:** This uses the `IMS_RESULTANT_IMAGE_ID` variable set in an earlier step.
+            **NOTE** This uses the `IMS_RESULTANT_IMAGE_ID` variable set in an earlier step.
 
             ```bash
             S3_ARTIFACT_PATH="boot-images/${IMS_RESULTANT_IMAGE_ID}"
