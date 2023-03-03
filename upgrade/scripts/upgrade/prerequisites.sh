@@ -442,9 +442,25 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
+        "${locOfScript}/util/upgrade-cray-nls.sh"
+        # CASMINST-6040 - need to wait for hooks.cray-nls.hpe.com crd to be created
+        # before uploading rebuild workflow templates which use hooks
+        echo "Wait for hooks.cray-nls.hpe.com crd to be created"
+        set +e
+        counter=0
+        until kubectl get crd hooks.cray-nls.hpe.com
+        do
+            counter=$((counter+1))
+            sleep 5
+            # wait up to 90 seconds
+            if [[ ${counter} -gt 18 ]]; then
+                echo "failed to find hooks.cray-nls.hpe.com crd"
+                exit 1
+            fi
+        done
+        set -e
         "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
         rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
-        "${locOfScript}/util/upgrade-cray-nls.sh"
 
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
