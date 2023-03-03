@@ -149,7 +149,7 @@ when following the [upgrade all products documentation](../workflows/upgrade_all
     IMS_RESULTANT_IMAGE_ID=final_image_id
     ```
 
-1. (`ncn-mw#`) Determine the xnames for the NCNs which are being upgrade.
+1. (`ncn-mw#`) Determine the xnames for the NCNs which are being upgraded. These will be used in the next step.
 
     - Get a comma-separated list of all storage NCN xnames:
 
