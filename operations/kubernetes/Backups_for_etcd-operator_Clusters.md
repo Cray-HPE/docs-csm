@@ -13,7 +13,6 @@ The following services are backed up daily \(one week of backups retained\) as p
 - Boot Orchestration Service \(BOS\)
 - Boot Script Service \(BSS\)
 - Compute Rolling Upgrade Service \(CRUS\)
-- External DNS
 - Firmware Action Service \(FAS\)
 - User Access Service \(UAS\)
 
