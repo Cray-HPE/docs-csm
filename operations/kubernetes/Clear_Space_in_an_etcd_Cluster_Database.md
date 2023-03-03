@@ -180,7 +180,6 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
         Defragging cray-crus-etcd-228mdpm2h6
         Defragging cray-crus-etcd-hldtxr6f9s
         Defragging cray-crus-etcd-sfsckpv4vw
-        Defragging cray-externaldns-etcd-6l772b2cdv
 
         [...]
         ```
