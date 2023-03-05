@@ -213,8 +213,9 @@ options:
                         numbers (0-9), periods (.), and dashes (-). Can also be set via the IUF_ACTIVITY environment
                         variable.
   -c CONCURRENCY, --concurrency CONCURRENCY
-                        Run Argo processes concurrently. Defaults to a fully concurrent model. To use at most N
-                        threads, specify `concurrency N`.
+                        During stage processing Argo runs workflow steps in parallel. By default up to 10 steps will be
+                        executed simultaneously. Use `--concurrency N` to decrease the limit to N. Increasing this limit
+                        is not recommended.
   -b BASE_DIR, --base-dir BASE_DIR
                         Base directory for state and log file directories. Defaults to ${RBD_BASE_DIR}/iuf/[activity],
                         where ${RBD_BASE_DIR} is /etc/cray/upgrade/csm.
@@ -304,7 +305,7 @@ See the [resume](#resume) and [restart](#restart) sections for details on how to
 The following arguments may be specified when invoking `iuf run`:
 
 ```text
-usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE] [-r RUN_STAGES [RUN_STAGES ...]] [-s SKIP_STAGES [SKIP_STAGES ...]]
+usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE] [-r RUN_STAGES [RUN_STAGES ...]] [-s SKIP_STAGES [SKIP_STAGES ...]] [-f]
                [-bc BOOTPREP_CONFIG_MANAGED] [-bm BOOTPREP_CONFIG_MANAGEMENT] [-bpcd BOOTPREP_CONFIG_DIR] [-rv RECIPE_VARS]
                [-sv SITE_VARS] [-mrs {reboot,stage}] [-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE]
                [--limit-managed-rollout LIMIT_MANAGED_ROLLOUT [LIMIT_MANAGED_ROLLOUT ...]]
@@ -323,6 +324,7 @@ options:
                         Run the specified stages only. This argument is not compatible with `-b`, `-e`, or `-s`.
   -s SKIP_STAGES [SKIP_STAGES ...], --skip-stages SKIP_STAGES [SKIP_STAGES ...]
                         Skip the execution of the specified stages.
+  -f, --force           Force re-execution of stage operations.
   -bc BOOTPREP_CONFIG_MANAGED, --bootprep-config-managed BOOTPREP_CONFIG_MANAGED
                         `sat bootprep` config file for managed (compute and
                         application) nodes.  Note the path is relative to $PWD, unless an
@@ -407,19 +409,20 @@ These [examples](examples/iuf_resume.md) highlight common use cases of `iuf resu
 
 #### `restart`
 
-The `restart` subcommand is specified by the administrator to restart a previously aborted or failed IUF session for a given activity. Specifically, it re-executes the most recent IUF session executed via `iuf run`. All stages
-specified by the most recent `iuf run` will be re-executed, regardless of whether they succeeded or failed during the previous invocation of `iuf run`. Any Argo step that executed successfully for the previous invocation will be
-skipped if possible; the Argo UI will display the step, but the corresponding log file for the step will contain a message if the step operations were skipped.
+The `restart` subcommand is specified by the administrator to restart a previously aborted or failed IUF session for a given activity. Specifically, it re-executes the most recent IUF session executed via `iuf run`. Any Argo step
+that executed successfully for the previous invocation will be skipped if possible; the Argo UI will display the step, but the corresponding log file for the step will contain a message if the step operations were skipped. If the `-f`
+argument is specified, all stages specified by the most recent `iuf run` will be re-executed, regardless of whether they succeeded or failed during the previous invocation of `iuf run`.
 
 The following arguments may be specified when invoking `iuf restart`:
 
 ```text
-usage: iuf restart [-h]
+usage: iuf restart [-h] [-f]
 
 Restart a previously aborted or failed IUF session for a given activity.
 
 options:
   -h, --help  show this help message and exit
+  -f, --force  Force all operations to be re-executed irrespective if they have been successful in the past.
 ```
 
 These [examples](examples/iuf_restart.md) highlight common use cases of `iuf restart`.
@@ -641,7 +644,8 @@ variables, and the values used are provided by the recipe variables and/or site 
 ## Re-executing stages of an IUF session
 
 It is possible to re-execute stages of an IUF session by specifying `iuf run` with the desired stage and other `iuf` arguments. If no changes were made to the product distribution files in the media directory, `iuf run` will
-re-execute any Argo steps that failed during the previous invocation of `iuf run`. Any Argo steps that previously executed successfully will be skipped if possible.
+re-execute any Argo steps that failed during the previous invocation of `iuf run`. Any Argo steps that previously executed successfully will be skipped if possible. If the `-f` argument is specified, all Argo steps will be
+re-executed, regardless of whether they succeeded or failed during the previous invocation of `iuf run`.
 
 ### Removing a product from an IUF session
 
