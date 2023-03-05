@@ -24,5 +24,4 @@ activity: admin-230126
 command line: iuf -a admin-230126 -m admin-230126/media run --site-vars /mnt/developer/admin/admin_site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/iuf/hpc-csm-software-recipe-23.1.18/vcs -r deliver-product
 log dir: /etc/cray/upgrade/csm/iuf/admin-230126/log
 media dir: /opt/cray/iuf/admin-230126/media
-ran stages: process-media pre-install-check deliver-product update-vcs-config
 ```
