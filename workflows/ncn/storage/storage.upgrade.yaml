@@ -123,6 +123,17 @@ spec:
                 - name: scriptContent
                   value: |
                     /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true || /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -A true -v true
+          - name: patch-ceph-runcmd
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |          
+                    python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
           - name: change-ceph-config
             templateRef:
               name: ssh-template
@@ -147,6 +158,7 @@ spec:
               - check-ceph-ro-key
               - pre-upgrade-ceph-health-check
               - change-ceph-config
+              - patch-ceph-runcmd
             arguments:
               parameters:
                 - name: dryRun
@@ -228,7 +240,7 @@ spec:
                     nexus_image=$(cat /tmp/ceph_global_container_image.txt)
                     pdsh -w $(ceph orch host ls --format=json|jq -r '.[].hostname' | sort -u |  tr -t '\n' ',') "podman pull $nexus_image"
           {{ end }}
-          - name: upgrade-{{$value}}
+          - name: remove-local-ceph-images-{{$value}}
             templateRef:
               name: ssh-template
               template: shell-script
@@ -240,6 +252,62 @@ spec:
               {{ if ne $index 0 }}
               - check-ceph-health-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    # set maintenance mode on target_ncn
+                    TARGET_NCN={{$value}}
+                    if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
+                      echo "$TARGET_NCN is already in maintenance mode"
+                    else
+                      echo "Setting ceph maintenance mode on $TARGET_NCN"
+                      ceph orch host maintenance enter $TARGET_NCN --force
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR setting maintenance mode on $TARGET_NCN"
+                        exit 1
+                      fi
+                    fi
+                    # remove local images on target_ncn
+                    echo "Removing local images on $TARGET_NCN"
+                    ssh $TARGET_NCN podman rmi --all -f
+                    #exit maintenance mode on target_ncn
+                    if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
+                      echo "$TARGET_NCN is in maintenance mode. Exiting maintence mode now."
+                      ceph orch host maintenance exit $TARGET_NCN
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR exiting maintenance mode on $TARGET_NCN"
+                        exit 1
+                      fi
+                    else
+                      echo "$TARGET_NCN is not in maintenance mode. Nothing to do."
+                    fi
+          - name: pull-ceph-images-from-nexus-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies: 
+              - remove-local-ceph-images-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    target_ncn={{$value}}
+                    for container in "container_image_prometheus" "container_image_node_exporter" "container_image_alertmanager" "container_image_grafana"; do
+                        image=$(ceph config get mgr mgr/cephadm/${container})
+                        ssh ${target_ncn} podman pull $image
+                    done
+                    ssh ${target_ncn} podman pull $(cat /tmp/ceph_global_container_image.txt)
+          - name: upgrade-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies: 
+              - pull-ceph-images-from-nexus-{{$value}}
             arguments:
               parameters:
                 - name: dryRun
