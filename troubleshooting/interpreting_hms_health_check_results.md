@@ -589,7 +589,7 @@ kubectl rollout restart -n services deployment cray-power-control
 kubectl rollout status -n services deployment cray-power-control
 ```
 
-Afther PCS has been restarted successfully, the test can be executed again.
+After PCS has been restarted successfully, the test can be executed again.
 
 ### `hsm_discovery_status_test.sh`
 
