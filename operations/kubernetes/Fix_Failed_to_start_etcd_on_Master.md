@@ -19,7 +19,7 @@ This procedure provides steps to recover from this issue.
     etcdctl --endpoints https://127.0.0.1:2379 --cert /etc/kubernetes/pki/etcd/peer.crt --key /etc/kubernetes/pki/etcd/peer.key --cacert /etc/kubernetes/pki/etcd/ca.crt member list
     ```
 
-    Example output from healthy master node (assuming run from m002):
+    Example output from healthy master node (assuming run from `ncn-m002`):
 
     ```text
     60a0d077eb0db20f, started, ncn-m001, https://10.252.1.4:2380, https://10.252.1.4:2379,https://127.0.0.1:2379, false
@@ -27,14 +27,14 @@ This procedure provides steps to recover from this issue.
     c0d7b0944e709721, started, ncn-m002, https://10.252.1.5:2380, https://10.252.1.5:2379,https://127.0.0.1:2379, false
     ```
 
-    Example output from ***unhealthy*** master node (assuming run from m001):
+    Example output from ***unhealthy*** master node (assuming run from `ncn-m001`):
 
     ```text
     {"level":"warn","ts":"2023-03-06T17:44:25.725Z","logger":"etcd-client","caller":"v3/retry_interceptor.go:62","msg":"retrying of unary invoker failed","target":"etcd-endpoints://0xc00022e000/#initially=[https://127.0.0.1:2379]","attempt":0,"error":"rpc error: code = DeadlineExceeded desc = latest balancer error: last connection error: connection error: desc = \"transport: Error while dialing dial tcp 127.0.0.1:2379: connect: connection refused\""}
     Error: context deadline exceeded
     ```
 
-    Given the above, `ncn-m001` is unhealthy, and the remainder of these steps provide an example of how to remove and re-add ncn-m001 back into the etcd cluster.
+    Given the above, `ncn-m001` is unhealthy, and the remainder of these steps provide an example of how to remove and re-add `ncn-m001` back into the etcd cluster.
 
 1. Stop etcd on the unhealthy NCN (`ncn-m001` is used as an example):
 
@@ -44,7 +44,7 @@ This procedure provides steps to recover from this issue.
 
 1. Remove and re-add the unhealthy member from the cluster ***on a healthy NCN*** (`ncn-m002` in this example):
 
-   Determine the `member id`, `name` (same as NCN name) and `peer-urls` from current member list from output above:
+   Determine the `member id`, `name` (same as NCN name), and `peer-urls` from current member list from output above:
 
     ```text
     60a0d077eb0db20f, started, ncn-m001, https://10.252.1.4:2380, https://10.252.1.4:2379,https://127.0.0.1:2379, false
