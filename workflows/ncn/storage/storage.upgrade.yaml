@@ -301,7 +301,7 @@ spec:
                         image=$(ceph config get mgr mgr/cephadm/${container})
                         ssh ${target_ncn} podman pull $image
                     done
-                    ssh ${target_ncn} podman pull $(cat /tmp/ceph_global_container_image.txt)
+                    ssh ${target_ncn} podman pull "$(cat /tmp/ceph_global_container_image.txt)"
           - name: upgrade-{{$value}}
             templateRef:
               name: ssh-template
