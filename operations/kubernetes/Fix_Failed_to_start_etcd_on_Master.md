@@ -60,7 +60,7 @@ This procedure provides steps to recover from this issue.
 
     Example output:
 
-    ```bash
+    ```text
     Member 60a0d077eb0db20f removed from cluster f1c6e6ee71e931c3
     ```
 
@@ -70,7 +70,7 @@ This procedure provides steps to recover from this issue.
 
     Example output:
 
-    ```bash
+    ```text
     Member be55f20f284cbc1b added to cluster f1c6e6ee71e931c3
     
     ETCD_NAME="ncn-m001"
