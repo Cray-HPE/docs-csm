@@ -115,7 +115,7 @@ if [[ $state_recorded == "0" ]]; then
         image=$(ceph config get mgr mgr/cephadm/${container})
         ssh ${target_ncn} podman pull $image
     done
-    ssh ${target_ncn} podman pull $(cat /tmp/ceph_global_container_image.txt)
+    ssh ${target_ncn} podman pull "$(cat /tmp/ceph_global_container_image.txt)"
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
