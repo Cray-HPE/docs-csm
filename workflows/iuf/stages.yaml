@@ -78,6 +78,8 @@ stages:
 
   - name: update-vcs-config
     type: product
+    process-product-variants-sequentially: true # this stage wants to make sure all products with the same name (but different versions)
+                                                #  are processed sequentially, not in parallel, to avoid operational race conditions
     operations:
       - name: vcs-update-working-branch
         static-parameters: {} # any parameters that will be supplied statically to this operation.
