@@ -530,11 +530,15 @@ cachedir: .pytest_cache
 rootdir: /src/app, configfile: pytest.ini
 plugins: allure-pytest-2.12.0, tavern-1.23.1
 collecting ... collected 31 items
+
 ...
+
 api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for all components FAILED [ 35%]
 api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node FAILED [ 38%]
 api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a NodeBMC FAILED [ 41%]
+
 ...
+
 Errors:
 E   tavern.util.exceptions.TestFailError: Test 'Retrieve the power-status for all components' failed:
     - Error calling validate function '<function validate_pykwalify at 0x7faad66450d0>':
@@ -545,7 +549,9 @@ E   tavern.util.exceptions.TestFailError: Test 'Retrieve the power-status for al
             raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
         pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
          - Type 'seq' has size of '0', less than min limit '1'. Path: '/status'.: Path: '/'>
+
 ...
+
 E   tavern.util.exceptions.TestFailError: Test 'Retrieve the power-status for the target Node' failed:
     - Error calling validate function '<function validate_pykwalify at 0x7faad66450d0>':
         Traceback (most recent call last):
@@ -557,7 +563,9 @@ E   tavern.util.exceptions.TestFailError: Test 'Retrieve the power-status for th
          - Enum '' does not exist. Path: '/status/0/powerState' Enum: ['on', 'off', 'undefined'].
          - Enum '' does not exist. Path: '/status/0/managementState' Enum: ['available', 'unavailable'].
          - required.novalue : '/status/0/supportedPowerTransitions'.: Path: '/'>
+
 ...
+
 E   tavern.util.exceptions.TestFailError: Test 'Retrieve the power-status for the target NodeBMC' failed:
     - Error calling validate function '<function validate_pykwalify at 0x7faad66450d0>':
         Traceback (most recent call last):
@@ -569,7 +577,9 @@ E   tavern.util.exceptions.TestFailError: Test 'Retrieve the power-status for th
          - Enum '' does not exist. Path: '/status/0/powerState' Enum: ['on', 'off', 'undefined'].
          - Enum '' does not exist. Path: '/status/0/managementState' Enum: ['available', 'unavailable'].
          - required.novalue : '/status/0/supportedPowerTransitions'.: Path: '/'>
+
 ...
+
 =========================== short test summary info ============================
 FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for all components
 FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node
