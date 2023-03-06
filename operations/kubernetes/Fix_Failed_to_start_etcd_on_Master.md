@@ -21,7 +21,7 @@ This procedure provides steps to recover from this issue.
 
     Example output from healthy master node (assuming run from m002):
 
-    ```bash
+    ```text
     60a0d077eb0db20f, started, ncn-m001, https://10.252.1.4:2380, https://10.252.1.4:2379,https://127.0.0.1:2379, false
     b0dd65d7036d6932, started, ncn-m003, https://10.252.1.6:2380, https://10.252.1.6:2379,https://127.0.0.1:2379, false
     c0d7b0944e709721, started, ncn-m002, https://10.252.1.5:2380, https://10.252.1.5:2379,https://127.0.0.1:2379, false
@@ -29,7 +29,7 @@ This procedure provides steps to recover from this issue.
 
     Example output from ***unhealthy*** master node (assuming run from m001):
 
-    ```bash
+    ```text
     {"level":"warn","ts":"2023-03-06T17:44:25.725Z","logger":"etcd-client","caller":"v3/retry_interceptor.go:62","msg":"retrying of unary invoker failed","target":"etcd-endpoints://0xc00022e000/#initially=[https://127.0.0.1:2379]","attempt":0,"error":"rpc error: code = DeadlineExceeded desc = latest balancer error: last connection error: connection error: desc = \"transport: Error while dialing dial tcp 127.0.0.1:2379: connect: connection refused\""}
     Error: context deadline exceeded
     ```
@@ -46,7 +46,7 @@ This procedure provides steps to recover from this issue.
 
    Determine the `member id`, `name` (same as NCN name) and `peer-urls` from current member list from output above:
 
-    ```bash
+    ```text
     60a0d077eb0db20f, started, ncn-m001, https://10.252.1.4:2380, https://10.252.1.4:2379,https://127.0.0.1:2379, false
     ^^^^^^^^^^^^^^^^           ^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
        member id                 name          peer-urls
@@ -87,7 +87,7 @@ This procedure provides steps to recover from this issue.
 
     Example output:
 
-    ```bash
+    ```text
     c0d7b0944e709721, started, ncn-m002, https://10.252.1.5:2380, https://10.252.1.5:2379,https://127.0.0.1:2379, false
     b0dd65d7036d6932, started, ncn-m003, https://10.252.1.6:2380, https://10.252.1.6:2379,https://127.0.0.1:2379, false
     be55f20f284cbc1b, unstarted, , https://10.252.1.4:2380, , false
@@ -120,7 +120,7 @@ This procedure provides steps to recover from this issue.
 
    Example output:
 
-   ```bash
+   ```text
    b0dd65d7036d6932, started, ncn-m003, https://10.252.1.6:2380, https://10.252.1.6:2379,https://127.0.0.1:2379, false
    be55f20f284cbc1b, started, ncn-m001, https://10.252.1.4:2380, https://10.252.1.4:2379,https://127.0.0.1:2379, false
    c0d7b0944e709721, started, ncn-m002, https://10.252.1.5:2380, https://10.252.1.5:2379,https://127.0.0.1:2379, false
