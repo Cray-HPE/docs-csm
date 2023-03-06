@@ -575,7 +575,7 @@ FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status f
 OK
 ```
 
-These failures occur because PCS has not populated it ETCD cluster with data yet.
+These failures occur because PCS has not populated its ETCD cluster with data yet.
 
 `(ncn-mw#)` Restarting the PCS pods will resolve this issue.
 
