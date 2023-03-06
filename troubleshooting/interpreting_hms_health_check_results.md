@@ -1,22 +1,28 @@
 # Interpreting HMS Health Check Results
 
-- [Introduction](#introduction)
-- [Prerequisites](#prerequisites)
-- [Overview](#overview)
-- [Execution](#execution)
-- [Failure analysis](#failure-analysis)
-  - [Smoke test failure](#smoke-test-failure)
-  - [Functional test failure](#functional-test-failure)
-- [Tavern output](#tavern-output)
-- [Additional troubleshooting](#additional-troubleshooting)
-  - [`run_hms_ct_tests.sh`](#run_hms_ct_testssh)
-    - [`cray-hms-smd-test-functional`](#cray-hms-smd-test-functional)
-    - [`cray-hms-firmware-action-test-functional`](#cray-hms-firmware-action-test-functional)
-  - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
-    - [`HTTPsGetFailed`](#httpsgetfailed)
-    - [`ChildVerificationFailed`](#childverificationfailed)
-    - [`DiscoveryStarted`](#discoverystarted)
-- [Install blocking vs. Non-blocking failures](#install-blocking-vs-non-blocking-failures)
+- [Interpreting HMS Health Check Results](#interpreting-hms-health-check-results)
+  - [Introduction](#introduction)
+  - [Prerequisites](#prerequisites)
+  - [Overview](#overview)
+  - [Execution](#execution)
+  - [Failure analysis](#failure-analysis)
+    - [Smoke test failure](#smoke-test-failure)
+    - [Functional test failure](#functional-test-failure)
+  - [Tavern output](#tavern-output)
+  - [Additional troubleshooting](#additional-troubleshooting)
+    - [`run_hms_ct_tests.sh`](#run_hms_ct_testssh)
+      - [`cray-hms-smd-test-functional`](#cray-hms-smd-test-functional)
+        - [`test_components.tavern.yaml` and `test_hardware.tavern.yaml`](#test_componentstavernyaml-and-test_hardwaretavernyaml)
+        - [`test_components.tavern.yaml`](#test_componentstavernyaml)
+      - [`cray-hms-firmware-action-test-functional`](#cray-hms-firmware-action-test-functional)
+        - [`test_actions.tavern.yaml`](#test_actionstavernyaml)
+      - [`cray-power-control-test-functional`](#cray-power-control-test-functional)
+        - [`test_power-status.tavern.yaml`](#test_power-statustavernyaml)
+    - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
+      - [`HTTPsGetFailed`](#httpsgetfailed)
+      - [`ChildVerificationFailed`](#childverificationfailed)
+      - [`DiscoveryStarted`](#discoverystarted)
+  - [Install blocking vs. Non-blocking failures](#install-blocking-vs-non-blocking-failures)
 
 ## Introduction
 
@@ -506,6 +512,98 @@ FAILED test_actions.tavern.yaml::Ensure that the BMC firmware can be updated wit
 ```
 
 Test failures due to no healthy BMCs in HSM can be safely ignored if the BMCs in the system are intentionally powered off, such as during system shutdown and power off testing.
+
+#### `cray-power-control-test-functional`
+
+This job executes the tests for the Power Control Service (PCS).
+
+##### `test_power-status.tavern.yaml`
+
+The following is an example of a failed test execution due to PCS not having
+any data in its ETCD storage:
+
+```text
+Running tavern tests...
+============================= test session starts ==============================
+platform linux -- Python 3.9.16, pytest-7.1.2, pluggy-1.0.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /src/app, configfile: pytest.ini
+plugins: allure-pytest-2.12.0, tavern-1.23.1
+collecting ... collected 31 items
+
+...
+
+api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for all components FAILED [ 35%]
+api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node FAILED [ 38%]
+api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a NodeBMC FAILED [ 41%]
+
+...
+
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Retrieve the power-status for all components' failed:
+    - Error calling validate function '<function validate_pykwalify at 0x7faad66450d0>':
+        Traceback (most recent call last):
+          File "/usr/lib/python3.9/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.9/site-packages/pykwalify/core.py", line 194, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Type 'seq' has size of '0', less than min limit '1'. Path: '/status'.: Path: '/'>
+
+...
+
+E   tavern.util.exceptions.TestFailError: Test 'Retrieve the power-status for the target Node' failed:
+    - Error calling validate function '<function validate_pykwalify at 0x7faad66450d0>':
+        Traceback (most recent call last):
+          File "/usr/lib/python3.9/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.9/site-packages/pykwalify/core.py", line 194, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum '' does not exist. Path: '/status/0/powerState' Enum: ['on', 'off', 'undefined'].
+         - Enum '' does not exist. Path: '/status/0/managementState' Enum: ['available', 'unavailable'].
+         - required.novalue : '/status/0/supportedPowerTransitions'.: Path: '/'>
+
+...
+
+E   tavern.util.exceptions.TestFailError: Test 'Retrieve the power-status for the target NodeBMC' failed:
+    - Error calling validate function '<function validate_pykwalify at 0x7faad66450d0>':
+        Traceback (most recent call last):
+          File "/usr/lib/python3.9/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.9/site-packages/pykwalify/core.py", line 194, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum '' does not exist. Path: '/status/0/powerState' Enum: ['on', 'off', 'undefined'].
+         - Enum '' does not exist. Path: '/status/0/managementState' Enum: ['available', 'unavailable'].
+         - required.novalue : '/status/0/supportedPowerTransitions'.: Path: '/'>
+
+...
+
+=========================== short test summary info ============================
+FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for all components
+FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node
+FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a NodeBMC
+=================== 3 failed, 28 passed in 60.51s (0:01:00) ====================
+2023-03-02 19:36:17,060 FAIL
+OK
+```
+
+These failures occur because PCS has not populated its ETCD cluster with data yet.
+
+`(ncn-mw#)` Restarting the PCS pods will resolve this issue.
+
+```bash
+kubectl rollout restart -n services deployment cray-power-control
+```
+
+`(ncn-mw#)` Monitor the restart.
+
+```bash
+kubectl rollout status -n services deployment cray-power-control
+```
+
+After PCS has been restarted successfully, the test can be executed again.
 
 ### `hsm_discovery_status_test.sh`
 
