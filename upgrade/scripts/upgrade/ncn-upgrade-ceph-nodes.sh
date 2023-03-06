@@ -110,7 +110,12 @@ if [[ $state_recorded == "0" ]]; then
     ssh_keys_done=1
     scp ./${target_ncn}-ceph.tgz $target_ncn:/
     ssh ${target_ncn} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
-    ssh ${target_ncn} '/srv/cray/scripts/common/pre-load-images.sh'
+    # pull container images from nexus
+    for container in "container_image_prometheus" "container_image_node_exporter" "container_image_alertmanager" "container_image_grafana"; do
+        image=$(ceph config get mgr mgr/cephadm/${container})
+        ssh ${target_ncn} podman pull $image
+    done
+    ssh ${target_ncn} podman pull $(cat /tmp/ceph_global_container_image.txt)
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
