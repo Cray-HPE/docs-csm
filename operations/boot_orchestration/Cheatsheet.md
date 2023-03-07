@@ -60,6 +60,7 @@ cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Re
 ```
 
 (`ncn-mw#`) Monitor the overall boot progress of a single node:
+
 ```bash
 watch "cray bos v2 components describe <node's xname>"
 ```

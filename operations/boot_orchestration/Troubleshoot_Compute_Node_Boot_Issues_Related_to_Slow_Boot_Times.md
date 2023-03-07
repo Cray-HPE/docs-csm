@@ -3,7 +3,9 @@
 > **`NOTE`** This section is for BOS V1 only.  BOS V2 does not use CAPMC, nor does it have BOA. However, the steps
 > outlined below allow for similar debugging slow steps within CFS initiated sessions.
 
-Inspect BOS, the Boot Orchestration Agent \(BOA\) job logs, and the Configuration Framework Service \(CFS\) job logs to obtain information that is critical for boot troubleshooting. Use this procedure to determine why compute nodes are booting slower than expected.
+Inspect BOS, the Boot Orchestration Agent \(BOA\) job logs, and the Configuration Framework Service \(CFS\) job logs to
+obtain information that is critical for boot troubleshooting. Use this procedure to determine why compute nodes are
+booting slower than expected.
 
 ### Prerequisites
 
@@ -53,7 +55,6 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         2019-11-12 02:15:15,938 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
 
         [...]
-
         ```
 
 2.  View the CFS logs related to the boot job.
@@ -81,7 +82,6 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         ncn-customization-ncn-w002-uai-hosts-unload    cfs-095cce88-1925-4625-a611-ae19d9976a60   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-unload.yml   4d6h
         ncn-customization-ncn-w003-uai-hosts-load      cfs-6b3fdebd-ab2b-4751-b29f-436ff2893569   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-load.yml     4d6h
         ncn-customization-ncn-w003-uai-hosts-unload    cfs-d94ebbe6-6b61-4f78-9dc4-fd24576d32dd   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-unload.yml   4d6h
-
         ```
 
         If multiple BOA jobs exist, describe the CFS sessions and look at the configuration, as well as which components are included. It is unlikely, but a single session may contain components from multiple separate BOS sessions if they both request the same configuration for different components at around the same time.
@@ -152,4 +152,3 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         ```
 
 Use the data returned in the BOA and CFS logs to determine the underlying issue for slow boot times.
-

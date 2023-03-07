@@ -22,13 +22,13 @@ session = ""
 If a node has been booted with BOS as part of a boot or reboot operation, and the node was powered on, but has not
 begun configuring, the node may be stuck in early initialization (Failure to `iPXE` chain, network setup issues, failure to
 obtain a root filesystem, or other dracut module specific issues). In this case, it is best to connect to the node's
-console logs to obtain specific information about the failed node. To learn more about ConMan, refer to 
-[ConMan](../conman/ConMan.md). A node's console data can be accessed through its log file, as described in 
-[Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md)). This information can also be accessed by connecting 
+console logs to obtain specific information about the failed node. To learn more about ConMan, refer to
+[ConMan](../conman/ConMan.md). A node's console data can be accessed through its log file, as described in
+[Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md)). This information can also be accessed by connecting
 to the node's console with `ipmitool`. Refer to online documentation to learn more about using ipmitool.
 
 If the node has booted into a multi-user target phase, but BOS has not completed booting the node, the node may have
-encountered a configuration error. A similar set of records for configuration for a given node can be obtained from 
+encountered a configuration error. A similar set of records for configuration for a given node can be obtained from
 [CFS](../configuration_management) endpoint for the same hardware component.
 
 (`ncn-mw#`) Verify the configuration status of a CFS component of the same name
@@ -47,5 +47,6 @@ lastUpdated = "2023-03-02T13:58:05Z"
 playbook = "site.yml"
 sessionName = "batcher-2df030b8-1bc5-4afb-ac29-df93815473f2"
 ```
+
 Here, `sessionName` corresponds to the CFS session that is acting on the CFS component(`x3000c0s1b0n0`), and not the BOS
-session. 
+session.
