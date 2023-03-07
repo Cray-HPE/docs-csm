@@ -22,7 +22,7 @@
 ---
 cleanup: null
 format: raw
-name: csm-1.3.1-embedded
+name: csm-0.0.0-embedded
 online: true
 storage:
   blobStoreName: csm
@@ -33,7 +33,7 @@ type: hosted
 format: raw
 group:
   memberNames:
-  - csm-1.3.1-embedded
+  - csm-0.0.0-embedded
 name: csm-embedded
 online: true
 storage:

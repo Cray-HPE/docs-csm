@@ -38,6 +38,7 @@ if [[ -z "${RELEASE_VERSION}" ]] || [[ -z "${ROOTDIR}" ]]; then
 fi
 
 BUILDDIR="$(dirname "${BASH_SOURCE[0]}")"
+TEMPLATEDIR="${BUILDDIR}/repo_templates"
 source "${ROOTDIR}/lib/version.sh"
 source "${ROOTDIR}/lib/install.sh"
 
@@ -83,6 +84,11 @@ done
 podman_run_flags+=(--dns "$(kubectl get -n services service cray-dns-unbound-udp-nmn -o jsonpath='{.status.loadBalancer.ingress[0].ip}')")
 
 load-install-deps
+
+# Update repository names based on the release version
+sed -e "s/-0.0.0/-${RELEASE_VERSION}/g" "${TEMPLATEDIR}/embedded-repository.yaml" \
+> "${BUILDDIR}/embedded-repository.yaml"
+
 
 # Setup Nexus
 nexus-setup repositories "${BUILDDIR}/embedded-repository.yaml"
