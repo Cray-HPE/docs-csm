@@ -20,16 +20,23 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 ---
-name: csm-0.0.0-embedded
+cleanup: null
 format: raw
+name: csm-1.3.1-embedded
+online: true
 storage:
   blobStoreName: csm
+  strictContentTypeValidation: false
+  writePolicy: ALLOW_ONCE
+type: hosted
 ---
-name: csm-embedded
 format: raw
-storage:
-  blobStoreName: csm
-type: group
 group:
   memberNames:
-  - csm-0.0.0-embedded
+  - csm-1.3.1-embedded
+name: csm-embedded
+online: true
+storage:
+  blobStoreName: csm
+  strictContentTypeValidation: false
+type: group
