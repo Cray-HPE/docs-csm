@@ -24,7 +24,7 @@ either using an automated script, or manually one at a time.
 
 ### Automated export procedure
 
-1. (`ncn-mw`) The `ims-import-export.py`script will create a subdirectory of the current directory named `ims-import-export-data` 
+1. (`ncn-mw`) The `ims-import-export.py`script will create a subdirectory of the current directory named `ims-import-export-data`
    containing information about the recipes and images that are registered with IMS.
 
    ```bash
