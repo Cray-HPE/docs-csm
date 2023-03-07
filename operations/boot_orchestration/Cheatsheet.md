@@ -34,7 +34,6 @@ cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Re
 
 ### Single node commands (v2)
 
-
 (`ncn-mw#`) Boot a single node:
 
 ```bash

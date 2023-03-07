@@ -13,9 +13,9 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
 ### Procedure
 
-1.  View the BOA logs.
+1. View the BOA logs.
 
-    1.  Find the BOA job from the boot session.
+    1. Find the BOA job from the boot session.
 
         The output of the command below is organized by the creation time of the BOA job with the most recent one listed last.
 
@@ -31,7 +31,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         boa-a365b6a2-3614-4b53-9b6b-df0f4485e25d-nbcdb              0/2     Completed   0        2m43s
         ```
 
-    2.  Watch the log from BOA job.
+    2. Watch the log from BOA job.
 
         ```bash
         kubectl logs -n services -f -c boa BOA_JOB_ID
@@ -57,11 +57,13 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         [...]
         ```
 
-2.  View the CFS logs related to the boot job.
+2. View the CFS logs related to the boot job.
 
-    1.  Find the most recent CFS jobs.
+    1. Find the most recent CFS jobs.
 
-        There may be more than one job if multiple components are being configured. If there are multiple different BOA jobs running, check the BOA logs first to find the timestamp value when CFS was updated. Expect a delay of a couple minutes after the CFS session starts depending on the `cfs-batcher` settings.
+        There may be more than one job if multiple components are being configured. If there are multiple different BOA
+jobs running, check the BOA logs first to find the timestamp value when CFS was updated. Expect a delay of a couple
+minutes after the CFS session starts depending on the `cfs-batcher` settings.
 
         ```bash
         kubectl -n services get cfs
@@ -84,13 +86,15 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         ncn-customization-ncn-w003-uai-hosts-unload    cfs-d94ebbe6-6b61-4f78-9dc4-fd24576d32dd   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-unload.yml   4d6h
         ```
 
-        If multiple BOA jobs exist, describe the CFS sessions and look at the configuration, as well as which components are included. It is unlikely, but a single session may contain components from multiple separate BOS sessions if they both request the same configuration for different components at around the same time.
+        If multiple BOA jobs exist, describe the CFS sessions and look at the configuration, as well as which components
+are included. It is unlikely, but a single session may contain components from multiple separate BOS sessions if they
+both request the same configuration for different components at around the same time.
 
         ```bash
         kubectl -n services describe cfs SESSION_NAME
         ```
 
-    2.  Find the pods for the CFS job.
+    2. Find the pods for the CFS job.
 
         ```bash
         kubectl -n services get pods | grep JOB_NAME
@@ -102,7 +106,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         cfs-1628cf85-e847-49af-891c-1b7655d8056d-29ntt      0/4     Completed   0     4d11h
         ```
 
-    3.  View the log from the CFS job.
+    3. View the log from the CFS job.
 
         ```bash
         kubectl -n services logs POD_NAME ansible

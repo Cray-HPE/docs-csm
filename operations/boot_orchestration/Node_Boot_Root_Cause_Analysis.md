@@ -1,6 +1,7 @@
 # Node Boot Root Cause Analysis
 
-The first step in debugging compute node boot-related issues is to determine the underlying cause, and the stage that the issue was encountered at.
+The first step in debugging compute node boot-related issues is to determine the underlying cause, and the stage that
+the issue was encountered at.
 
 BOS v2 implements rich, per-component records for underlying actions that have been applied as part of BOS session
 provisioning. Often, it is helpful to observe the set of operations that BOS has enacted on behalf of a session as they
@@ -11,7 +12,6 @@ next steps, can be viewed through the BOS v2 component information for the affec
 
 ```bash
 cray bos v2 components describe x3000c0s1b0n0
-ncn-m001:~ # cray bos v2 components describe x3000c0s1b0n0
 enabled = false
 error = ""
 id = "x3000c0s1b0n0"
@@ -25,7 +25,7 @@ obtain a root filesystem, or other dracut module specific issues). In this case,
 console logs to obtain specific information about the failed node. To learn more about ConMan, refer to
 [ConMan](../conman/ConMan.md). A node's console data can be accessed through its log file, as described in
 [Access Compute Node Logs](../conman/Access_Compute_Node_Logs.md)). This information can also be accessed by connecting
-to the node's console with `ipmitool`. Refer to online documentation to learn more about using ipmitool.
+to the node's console with `ipmitool`. Refer to online documentation to learn more about using `ipmitool`.
 
 If the node has booted into a multi-user target phase, but BOS has not completed booting the node, the node may have
 encountered a configuration error. A similar set of records for configuration for a given node can be obtained from
