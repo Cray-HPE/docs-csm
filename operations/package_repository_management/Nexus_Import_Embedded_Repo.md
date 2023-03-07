@@ -10,16 +10,18 @@ This procedure describes how to manually install the "embedded repo" into Nexus.
 
 **Prerequisites:**
 
-1. The CSM version is required and will be provided as the 1st parameter to the import script, described below.
+1. The CSM_RELEASE version is required and will be provided as the 1st parameter to the import script.
+Example: CSM_RELEASE="1.3.1"
 
-1. It is necessary to have an extracted copy of the CSM release tarball available at a known path in order to proceed. This path will be provided as the 2nd parameter to the import script, described below.
+1. It is necessary to have an extracted copy of the CSM release tarball available at a known path in order to proceed. This path will be provided as the 2nd parameter to the import script.
+Example: PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT="/mnt/pitdata/csm-1.3.1"
 
 Run the following command on a master node:
 
 (`ncn-m#`)
 
 ```bash
-/usr/share/doc/csm/operations/nexus/setup-embedded-repository.sh $RELEASE_VERSION $PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT
+/usr/share/doc/csm/scripts/operations/nexus/setup-embedded-repository.sh $CSM_RELEASE $PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT
 ```
 
 On the success, the above command will report:
@@ -34,5 +36,5 @@ In order to access the packages in the embedded repo, it is necessary to add the
 (`ncn-m#`)
 
 ```bash
-        zypper ar https://packages.local/repository/csm-${RELEASE_VERSION}-embedded csm-embedded
+zypper ar https://packages.local/repository/csm-${CSM_RELEASE}-embedded csm-embedded
 ```
