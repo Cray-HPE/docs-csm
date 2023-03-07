@@ -50,4 +50,6 @@ For a list of all features with an announced removal target, see [Removals](intr
 
 ## Known issues
 
+* UAIs use a default route that sends outbound packets over the CMN, this will be addressed in a future release so that the default route uses the CAN/CHN.
+
 ### Security vulnerability exceptions in CSM 1.4
