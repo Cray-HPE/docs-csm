@@ -177,7 +177,6 @@ DVS-specific
 eBGP
 eC
 Elasticsearch
-etag
 etcd
 EX
 exascale
@@ -652,6 +651,16 @@ Lorem
 # To allow Site Init
 Init
 
+- operations/image_management/IMS_export_import.md
+etag
+etags
+
+- operations/network/dns/DNS.md
+ExternalDNS
+
+- operations/network/dns/Manage_the_DNS_Unbound_Resolver.md
+ExternalDNS
+
 - operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md
 LoadBalancer
 
@@ -689,12 +698,6 @@ Admin
 
 - operations/system_management_health/Configure_Prometheus_Alerta_Alert_Notifications.md
 Alerta
-
-- operations/network/dns/DNS.md
-ExternalDNS
-
-- operations/network/dns/Manage_the_DNS_Unbound_Resolver.md
-ExternalDNS
 
 - RELEASE_NOTES.md
 5.x
