@@ -334,8 +334,6 @@ fi
 sleep 20
 
 # poll
-declare -A alreadyInProgress
-declare -A alreadySucceeded
 while true; do
     labelSelector="node-type=${nodeType}"
     res_file="$(mktemp)"
