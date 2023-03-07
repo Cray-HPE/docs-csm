@@ -240,11 +240,8 @@ spec:
                     nexus_image=$(cat /tmp/ceph_global_container_image.txt)
                     pdsh -w $(ceph orch host ls --format=json|jq -r '.[].hostname' | sort -u |  tr -t '\n' ',') "podman pull $nexus_image"
           {{ end }}
-          - name: remove-local-ceph-images-{{$value}}
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            dependencies: 
+          - name: enter-ceph-orch-maintenance-mode-{{$value}}
+            dependencies:
               {{ if eq $index 0 }}
               - pull-ceph-image-in-nexus
               {{ end }}
@@ -252,38 +249,40 @@ spec:
               {{ if ne $index 0 }}
               - check-ceph-health-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
+            templateRef:
+              name: ssh-template
+              template: shell-script
             arguments:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
-                    # set maintenance mode on target_ncn
                     TARGET_NCN={{$value}}
                     if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
                       echo "$TARGET_NCN is already in maintenance mode"
                     else
-                      echo "Setting ceph maintenance mode on $TARGET_NCN"
                       ceph orch host maintenance enter $TARGET_NCN --force
                       if [[ $? -ne 0 ]]; then
                         echo "ERROR setting maintenance mode on $TARGET_NCN"
                         exit 1
                       fi
                     fi
+          - name: remove-local-ceph-images-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies: 
+              - enter-ceph-orch-maintenance-mode-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
                     # remove local images on target_ncn
                     echo "Removing local images on $TARGET_NCN"
                     ssh $TARGET_NCN podman rmi --all -f
-                    #exit maintenance mode on target_ncn
-                    if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
-                      echo "$TARGET_NCN is in maintenance mode. Exiting maintence mode now."
-                      ceph orch host maintenance exit $TARGET_NCN
-                      if [[ $? -ne 0 ]]; then
-                        echo "ERROR exiting maintenance mode on $TARGET_NCN"
-                        exit 1
-                      fi
-                    else
-                      echo "$TARGET_NCN is not in maintenance mode. Nothing to do."
-                    fi
           - name: pull-ceph-images-from-nexus-{{$value}}
             templateRef:
               name: ssh-template
@@ -302,12 +301,79 @@ spec:
                         ssh ${target_ncn} podman pull $image
                     done
                     ssh ${target_ncn} podman pull "$(cat /tmp/ceph_global_container_image.txt)"
+          - name: "exit-ceph-orch-maintenance-mode"
+            dependencies:
+              - pull-ceph-images-from-nexus-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
+                      echo "$TARGET_NCN is in maintenance mode. Exiting maintence mode now."
+                      ceph orch host maintenance exit $TARGET_NCN
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR exiting maintenance mode on $TARGET_NCN"
+                        exit 1
+                      fi
+                    else
+                      echo "$TARGET_NCN is not in maintenance mode. Nothing to do."
+                    fi
+          {{ if eq $index 0 }}
+          - name: repoint-ceph-to-nexus
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              - exit-ceph-orch-maintenance-mode
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    echo "This step repoints ceph to use the image stored in Nexus. It runs the command 'ceph orch upgrade' to do this."
+                    nexus_location=$(cat /tmp/ceph_global_container_image.txt)
+                    ceph orch upgrade start --image $nexus_location
+                    echo "Waiting for upgrade to complete..."
+                    sleep 10
+                    int=0
+                    success=false
+                    while [[ $int -lt 100 ]] && ! $success; do
+                        if [[ -n $(ceph orch upgrade status --format json | jq '.message' | grep Error) ]]; then
+                          echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+                          exit 1
+                        fi
+                        if [[ $(ceph orch upgrade status --format json | jq '.in_progress') != "true" ]]; then
+                          echo "Upgrade complete"
+                          success=true
+                          break
+                        else
+                          int=$(( $int + 1 ))
+                          sleep 10
+                        fi
+                    done
+                    if ! $success; then
+                      echo "Error completing 'ceph orch upgrade'. Check upgrade status by running 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+                      exit 1
+                    fi
+          {{ end }}
           - name: upgrade-{{$value}}
             templateRef:
               name: ssh-template
               template: shell-script
             dependencies: 
-              - pull-ceph-images-from-nexus-{{$value}}
+              {{ if eq $index 0 }}
+              - repoint-ceph-to-nexus
+              {{ end }}
+              {{ if ne $index 0 }}
+              - exit-ceph-orch-maintenance-mode
+              {{ end }}
             arguments:
               parameters:
                 - name: dryRun
@@ -366,44 +432,6 @@ spec:
                       echo "BSS metadata was not successfully updated. Output:"
                       echo "$RESULT"
                       exit 7
-                    fi
-          - name: run-ceph-upgrade
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            dependencies:
-              - update-bss
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"  
-                - name: scriptContent
-                  value: |
-                    echo "This step repoints ceph to use the image stored in Nexus."
-                    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-                    nexus_location=$(cat /tmp/ceph_global_container_image.txt)
-                    ceph orch upgrade start --image $nexus_location
-                    echo "Waiting for upgrade to complete..."
-                    sleep 10
-                    int=0
-                    success=false
-                    while [[ $int -lt 100 ]] && ! $success; do
-                        if [[ -n $(ceph orch upgrade status --format json | jq '.message' | grep Error) ]]; then
-                          echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
-                          exit 1
-                        fi
-                        if [[ $(ceph orch upgrade status --format json | jq '.in_progress') != "true" ]]; then
-                          echo "Upgrade complete"
-                          success=true
-                          break
-                        else
-                          int=$(( $int + 1 ))
-                          sleep 10
-                        fi
-                    done
-                    if ! $success; then
-                      echo "Error completing 'ceph orch upgrade'. Check upgrade status by running 'ceph orch upgrade status' from ncn-s00[1/2/3]."
-                      exit 1
                     fi
           - name: check-ceph-config
             templateRef:
