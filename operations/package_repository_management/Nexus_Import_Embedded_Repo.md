@@ -9,9 +9,9 @@ This procedure describes how to manually install the "embedded repo" into Nexus.
 
 **Prerequisites:**
 
-1. The CSM $RELEASE_VERSION is required and will be provided as the 1st parameter to the import script, described below.
+1. The CSM version is required and will be provided as the 1st parameter to the import script, described below.
 
-1. It is necessary to have an extracted copy of the CSM release tarball available at a known path in order to proceed. This path will be provided as the 2nd paramter to the import script, described below.
+1. It is necessary to have an extracted copy of the CSM release tarball available at a known path in order to proceed. This path will be provided as the 2nd parameter to the import script, described below.
 
 Run the following command on a master node:
 
@@ -28,7 +28,7 @@ setup-embedded-repository.sh: OK
 
 ## Using the Embedded Repo
 
-In order to access the packages in the embedded repo, it is necessary to add the repository to zypper on each of the NCNs it will be accessed from. A simple "zypper ar" command is all that is needed:
+In order to access the packages in the embedded repo, it is necessary to add the repository to `zypper` on each of the NCNs it will be accessed from. 
 
 (`ncn-m#`)
 
