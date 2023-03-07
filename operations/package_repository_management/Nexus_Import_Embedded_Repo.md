@@ -2,7 +2,8 @@
 
 The "embedded repo" is the complete set of packages installed on the Kubernetes and Storage Ceph NCN images,
 as well as the packages found on the PIT ISO.
-The list of installed packages in these images is queried when building each CSM release tarball, and a repo is created from that list and included in the CSM release tarball. 
+The list of installed packages in these images is queried when building each CSM release tarball,
+and a repo is created from that list and included in the CSM release tarball.
 This procedure describes how to manually install the "embedded repo" into Nexus.
 
 ## Manually import the Embedded Repository into Nexus
