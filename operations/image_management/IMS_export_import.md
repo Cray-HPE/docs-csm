@@ -109,7 +109,7 @@ either using an automated script, or manually one at a time.
 
    - Image ID
    - Image Name
-   - Recipe Link Path
+   - Image Link Path
 
 1. (`ncn-mw`) For each image to be exported, use the `cray artifacts` CLI to download the image artifacts from Ceph S3.
 
@@ -479,7 +479,7 @@ Using the image information previously noted, for each image to be restored, per
 1. (`ncn-mw`) View the manifest in S3.
 
    ```bash
-   cray artifacts describe ims ${NEW_IMAGE_ID}/manifest.json --format json
+   cray artifacts describe boot-images ${NEW_IMAGE_ID}/manifest.json --format json
    ```
 
    Example output:
@@ -511,5 +511,5 @@ Using the image information previously noted, for each image to be restored, per
 
    ```bash
    cray ims images update "${NEW_IMAGE_ID}" --link-etag "${MANIFEST_ETAG}" \
-     --link-type s3 --link-path "s3://ims/${NEW_IMAGE_ID}/manifest.json"
+     --link-type s3 --link-path "s3://boot-images/${NEW_IMAGE_ID}/manifest.json"
    ```
