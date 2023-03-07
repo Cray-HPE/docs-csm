@@ -328,7 +328,7 @@ fi
 if [ "${numOfUnsucceededWorkflows}" -eq 0 ]; then
     # create a new workflow
     workflow=$(createRebuildWorkflow)
-    echo "NOTICE - Create workflow: ${workflow}"
+    echo "NOTICE - Create workflow: ${workflow}. Please see the workflow ${workflow} in the Argo UI to see detailed logs"
 fi
 
 if [[ -z "${workflow}" ]]; then
