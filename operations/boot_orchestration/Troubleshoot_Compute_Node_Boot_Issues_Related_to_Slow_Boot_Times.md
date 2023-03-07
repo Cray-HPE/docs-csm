@@ -7,7 +7,7 @@ Inspect BOS, the Boot Orchestration Agent \(BOA\) job logs, and the Configuratio
 obtain information that is critical for boot troubleshooting. Use this procedure to determine why compute nodes are
 booting slower than expected.
 
-### Prerequisites
+## Prerequisites
 
 A boot session has been created with the Boot Orchestration Service \(BOS\).
 
@@ -25,7 +25,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         Example output:
 
-        ```
+        ```bash
         boa-e3c845be-3092-4807-a0c9-272bf0e15896-7pnl4              0/2     Completed   0        3d
         boa-c740f74d-f5af-41f3-a71b-1a3fc00cbe7a-k5hdw              0/2     Completed   0        2d12h
         boa-a365b6a2-3614-4b53-9b6b-df0f4485e25d-nbcdb              0/2     Completed   0        2m43s
@@ -39,7 +39,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         Example output:
 
-        ```
+        ```bash
         2019-11-12 02:14:27,771 - DEBUG   - cray.boa - BOA starting
 
         2019-11-12 02:14:28,786 - DEBUG   - cray.boa - Boot Agent Image: acad2b43-dff5-483d-a392-8b1b1f91a60c Nodes: x5000c1s1b1n0, x3000c0s35b2n0, x5000c1s3b1n1, x3000c0s35b3n0, x5000c1s0b1n0, x5000c1s3b0n1, x5000c1s2b0n0, x5000c1s3b1n0, x5000c1s1b1n1, x5000c1s2b0n1, x3000c0s35b1n0, x5000c1s3b0n0, x5000c1s0b1n1, x5000c1s1b0n0, x5000c1s2b1n0, x5000c1s1b0n1, x5000c1s2b1n1 created.
@@ -71,7 +71,7 @@ minutes after the CFS session starts depending on the `cfs-batcher` settings.
 
         Example output:
 
-        ```
+        ```bash
         NAME                                           JOB                                        STATUS    SUCCEEDED   REPOSITORY CLONE URL                                               BRANCH   COMMIT                                     PLAYBOOK                            AGE
         066bc062-7fc3-11ea-970e-a4bf0138f2ba           cfs-1628cf85-e847-49af-891c-1b7655d8056d   complete   true        https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              site.yml                            4d10h
         3c3758a8-7fd9-11ea-a365-a4bf0138f2ba           cfs-05420ebf-fbbc-4d3a-a0af-a840e379fe12   complete   true        https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              site.yml                            4d8h
@@ -102,7 +102,7 @@ both request the same configuration for different components at around the same 
 
         Example output:
 
-        ```
+        ```bash
         cfs-1628cf85-e847-49af-891c-1b7655d8056d-29ntt      0/4     Completed   0     4d11h
         ```
 
@@ -114,7 +114,7 @@ both request the same configuration for different components at around the same 
 
         Example output:
 
-        ```
+        ```bash
         Inventory available
           % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                          Dload  Upload   Total   Spent    Left  Speed
