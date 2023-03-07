@@ -74,7 +74,7 @@ spec:
                     BOOTPREP_FILE_PATH="{{=jsonpath(inputs.parameters.global_params, '$.input_params.bootprep_config_managed')}}"
                     if [[ -z "$BOOTPREP_FILE_PATH" ]]; then
                       echo "INFO No bootprep file provided. Skipping operation." 1>&2
-                      echo "{}"
+                      echo "skipped"
                       exit 0
                     fi
 
