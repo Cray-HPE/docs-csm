@@ -10,11 +10,11 @@ This procedure describes how to manually install the "embedded repo" into Nexus.
 
 **Prerequisites:**
 
-1. The CSM_RELEASE version is required and will be provided as the 1st parameter to the import script.
-Example: CSM_RELEASE="1.3.1"
+1. The `CSM_RELEASE` version is required and will be provided as the 1st parameter to the import script.
+Example: `CSM_RELEASE="1.3.1"`
 
 1. It is necessary to have an extracted copy of the CSM release tarball available at a known path in order to proceed. This path will be provided as the 2nd parameter to the import script.
-Example: PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT="/mnt/pitdata/csm-1.3.1"
+Example: `PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT="/mnt/pitdata/csm-1.3.1"`
 
 Run the following command on a master node:
 
