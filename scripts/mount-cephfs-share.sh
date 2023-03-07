@@ -88,6 +88,8 @@ function wait_for_running_daemons() {
 
 function create-admin-tools-cephfs-share {
   if [[ "$(ceph fs status admin-tools --format json-pretty 2>/dev/null|jq -r .clients[].fs)" != "admin-tools" ]]; then
+    echo "Setting cephfs 'enable_multiple' flag to true..."
+    ceph fs flag set enable_multiple true
     echo "Creating admin-tools ceph fs share..."
     ceph config generate-minimal-conf > /etc/ceph/new_ceph.conf
     cp /etc/ceph/new_ceph.conf /etc/ceph/ceph.conf
