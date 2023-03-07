@@ -26,5 +26,8 @@ setup-embedded-repository.sh: OK
 
 In order to access the packages in the embedded repo, it is necessary to add the repository to zypper on each of the NCNs it will be accessed from. A simple "zypper ar" command is all that is needed:
 
-(`ncn-m#`) zypper ar https://packages.local/repository/csm-${RELEASE_VERSION}-embedded csm-embedded
+(`ncn-m#`) 
 
+```bash
+        zypper ar https://packages.local/repository/csm-${RELEASE_VERSION}-embedded csm-embedded
+```
