@@ -1,0 +1,14 @@
+---
+name: csm-0.0.0-embedded
+format: raw
+storage:
+  blobStoreName: csm
+---
+name: csm-embedded
+format: raw
+storage:
+  blobStoreName: csm
+type: group
+group:
+  memberNames:
+  - csm-0.0.0-embedded
