@@ -34,7 +34,7 @@ cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Re
 
 ### Single node commands (v2)
 
-(`ncn-mw#`) Boot a single node:
+c
 
 ```bash
 cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
@@ -56,6 +56,11 @@ cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Sh
 
 ```bash
 cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Reboot --staged True --limit <node's xname>
+```
+
+(`ncn-mw#`) Monitor the overall boot progress of a single node:
+```bash
+watch "cray bos v2 components describe <node's xname>"
 ```
 
 ## BOS v1 commands

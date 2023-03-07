@@ -1,5 +1,8 @@
 # Troubleshoot Compute Node Boot Issues Related to Slow Boot Times
 
+> **`NOTE`** This section is for BOS V1 only.  BOS V2 does not use CAPMC, nor does it have BOA. However, the steps
+> outlined below allow for similar debugging slow steps within CFS initiated sessions.
+
 Inspect BOS, the Boot Orchestration Agent \(BOA\) job logs, and the Configuration Framework Service \(CFS\) job logs to obtain information that is critical for boot troubleshooting. Use this procedure to determine why compute nodes are booting slower than expected.
 
 ### Prerequisites
