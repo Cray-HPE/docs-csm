@@ -10,7 +10,9 @@ The "embedded repo" is the complete set of packages installed on the Kubernetes 
 
 1. It is necessary to have an extracted copy of the CSM release tarball available at a known path in order to proceed. This path will be provided as the 2nd paramter to the import script, described below.
 
-(`ncn-m#`) Run the following command on a master node:
+Run the following command on a master node:
+
+(`ncn-m#`) 
 
 ```bash
 /usr/share/doc/csm/operations/nexus/setup-embedded-repository.sh $RELEASE_VERSION $PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT
