@@ -313,22 +313,22 @@ fi
 # shellcheck disable=SC2046
 if $retry && [ "${numOfUnsucceededWorkflows}" -eq 1 ]; then
     workflow=$(echo "${unsucceededWorkflows[0]}" | grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*')
-    echo "Retry workflow: ${workflow}"
+    echo "DEBUG - Retry workflow: ${workflow}"
     retryRebuildWorkflow "${workflow}"
 fi
 
 if [ "${numOfUnsucceededWorkflows}" -eq 0 ]; then
     # create a new workflow
     workflow=$(createRebuildWorkflow)
-    echo "Create workflow: ${workflow}"
+    echo "NOTICE - Create workflow: ${workflow}. Please see the workflow ${workflow} in the Argo UI to see detailed logs"
 fi
 
 if [[ -z "${workflow}" ]]; then
     echo
-    echo "No workflow to pull, something is wrong"
+    echo "ERROR - No workflow to pull, something is wrong"
 else 
     echo
-    echo "Poll status of: ${workflow}"
+    echo "DEBUG - Poll status of: ${workflow}"
 fi
 
 sleep 20
@@ -356,21 +356,21 @@ while true; do
         fi
 
         if [[ "${phase}" == "Failed" ]]; then
-            echo "Workflow in Failed state, Retry ..."
+            echo "WARNING - Workflow in Failed state, Retry ..."
             retryRebuildWorkflow "$workflow"
         fi
 
         if [[ "${phase}" == "Error" ]]; then
-            echo "Workflow in Error state, Retry ..."
+            echo "WARNING - Workflow in Error state, Retry ..."
             retryRebuildWorkflow "$workflow"
         fi
         runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " < "${res_file}")
         succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")
         clear
-        printf "\n%s\n" "Succeeded:"
-        echo "  ${succeededSteps}" | awk -F'.' '{print $2" -  "$3}'
-        printf "%s\n" "${phase}:"
-        echo "  ${runningSteps}"  | awk -F'.' '{print $2" -  "$3}'
+        printf "\n%s\n" "INFO - Succeeded:"
+        echo "INFO - ${succeededSteps}" | awk -F'.' '{print $2" -  "$3}'
+        printf "%s\n" "INFO - ${phase}:"
+        echo "INFO - ${runningSteps}"  | awk -F'.' '{print $2" -  "$3}'
         sleep 10
     fi
 done
