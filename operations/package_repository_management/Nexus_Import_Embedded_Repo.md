@@ -26,8 +26,10 @@ Run the following command on a master node:
 
 On the success, the above command will report:
 
-\+ Nexus setup complete
+```bash
++ Nexus setup complete
 setup-embedded-repository.sh: OK
+```
 
 ## Using the Embedded Repo
 
