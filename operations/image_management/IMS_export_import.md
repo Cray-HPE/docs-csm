@@ -165,7 +165,7 @@ either using an automated script, or manually one at a time.
       }
       ```
 
-   1. Download each of the images referenced in the manifest file.
+   1. Download each of the artifacts referenced in the manifest file.
 
       ```bash
       cray artifacts get boot-images "${IMAGE_ID}/rootfs" "images/${IMAGE_ID}/rootfs"
