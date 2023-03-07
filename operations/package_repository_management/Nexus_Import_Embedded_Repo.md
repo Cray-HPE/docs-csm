@@ -13,7 +13,7 @@ The "embedded repo" is the complete set of packages installed on the Kubernetes 
 (`ncn-m#`) Run the following command on a master node:
 
 ```bash
-/usr/share/doc/csm/operations/nexus/setup-embedded-repository.sh $RELEASE_VERSION $PATH_TO_EXTRACTED_CSM_TARBALL_CONTENT
+/usr/share/doc/csm/operations/nexus/setup-embedded-repository.sh $RELEASE_VERSION $PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT
 ```
 
 On the success, the above command will report:
