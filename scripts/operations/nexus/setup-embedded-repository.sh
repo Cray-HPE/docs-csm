@@ -9,9 +9,9 @@ set -exo pipefail
 #2 ROOTDIR of extracted CSM tarball
 
 #RELEASE_VERSION
-local RELEASE_VERSION="$1"
+RELEASE_VERSION="$1"
 #ROOTDIR is the root directory of the extracted CSM release tarball
-local ROOTDIR="$2"
+ROOTDIR="$2"
 
 if [ -z "${RELEASE_VERSION}" -o -z "${ROOTDIR}" ]; then
     echo "usage: setup-embedded-repository.sh \$RELEASE_VERSION \$PATH_TO_EXTRACTED_CSM_TARBALL_CONTENT"
