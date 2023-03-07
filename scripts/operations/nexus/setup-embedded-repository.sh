@@ -33,7 +33,7 @@ RELEASE_VERSION="$1"
 ROOTDIR="$2"
 
 if [[ -z "${RELEASE_VERSION}" ]] || [[ -z "${ROOTDIR}" ]]; then
-    echo "usage: setup-embedded-repository.sh \$RELEASE_VERSION \$PATH_TO_EXTRACTED_CSM_TARBALL_CONTENT"
+    echo "usage: setup-embedded-repository.sh \$RELEASE_VERSION \$PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT"
     exit 1
 fi
 
