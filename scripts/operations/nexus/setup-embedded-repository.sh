@@ -24,16 +24,16 @@
 set -exo pipefail
 
 #two required inputs
-#1 RELEASE_VERSION
+#1 CSM_RELEASE
 #2 ROOTDIR of extracted CSM tarball
 
-#RELEASE_VERSION
-RELEASE_VERSION="$1"
+#CSM_RELEASE
+CSM_RELEASE="$1"
 #ROOTDIR is the root directory of the extracted CSM release tarball
 ROOTDIR="$2"
 
-if [[ -z "${RELEASE_VERSION}" ]] || [[ -z "${ROOTDIR}" ]]; then
-    echo "usage: setup-embedded-repository.sh \$RELEASE_VERSION \$PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT"
+if [[ -z "${CSM_RELEASE}" ]] || [[ -z "${ROOTDIR}" ]]; then
+    echo "usage: setup-embedded-repository.sh \$CSM_RELEASE \$PATH_TO_ROOT_OF_EXTRACTED_CSM_TARBALL_CONTENT"
     exit 1
 fi
 
@@ -86,7 +86,7 @@ podman_run_flags+=(--dns "$(kubectl get -n services service cray-dns-unbound-udp
 load-install-deps
 
 # Update repository names based on the release version
-sed -e "s/-0.0.0/-${RELEASE_VERSION}/g" "${TEMPLATEDIR}/embedded-repository.yaml" \
+sed -e "s/-0.0.0/-${CSM_RELEASE}/g" "${TEMPLATEDIR}/embedded-repository.yaml" \
 > "${BUILDDIR}/embedded-repository.yaml"
 
 
@@ -94,7 +94,7 @@ sed -e "s/-0.0.0/-${RELEASE_VERSION}/g" "${TEMPLATEDIR}/embedded-repository.yaml
 nexus-setup repositories "${BUILDDIR}/embedded-repository.yaml"
 
 # Upload repository contents
-nexus-upload raw "${ROOTDIR}/rpm/embedded" "csm-${RELEASE_VERSION}-embedded"
+nexus-upload raw "${ROOTDIR}/rpm/embedded" "csm-${CSM_RELEASE}-embedded"
 
 clean-install-deps
 
