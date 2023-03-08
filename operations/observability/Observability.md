@@ -311,9 +311,7 @@ Goss test dashboard features:
 ## Error dashboard
 
 Error dashboards provide key glance at-a-insights about what is broken and needs attention.
-
-The automatic generation of the desired Prometheus grok-exporter configuration is based upon passing in a set of regular expression patterns to detect.
-This includes, but is not limited to, regular expression patterns to match and generate metrics on phases of manual administrator steps, as well as phases of installation scripts and automation.
+Error dashboards have data such as total count of errors, warnings, failure, not responding, pool allocation failed, DHCP errors, etc across all the ncns during csm installation process. 
 
 ### Error dashboards features
 
