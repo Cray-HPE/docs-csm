@@ -317,11 +317,11 @@ This includes, but is not limited to, regular expression patterns to match and g
 
 ### Error dashboards features
 
-- Automate Grafana dashboards with error and failure message during CSM upgrade and install.
-- Create dashboard for issues comparison across multiple dimensions and clusters.
-- Monitor ConMan logs from the PIT node.
-- Parse log files with grok-exporter.
-- Create the Trend, Error, and Alert frequency dashboard.
+- The error dashboards provide the ability to examine errors in the cluster across multiple dimensions.
+- The error dashboards pull in information from a variety of sources, including the following:
+  - Error and failures encountered during upgrades and installs.
+  - ConMan logs on the PIT node.
+  - Goss test logs.
 
 ### Error dashboards
 
