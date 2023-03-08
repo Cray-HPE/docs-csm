@@ -118,7 +118,7 @@ customizations.yaml in the previous [Create Baseline System Customization](./pre
 of the install matches the SNMP password configured on the management network switches.
 
 If the passwords do not match, either update customizations.yaml to match the switches or change the switches to match
- customizations.yaml.  Procedures with both options can be found on the [Configure SNMP](../operations/network/management_network/configure_snmp.md) page.
+ customizations.yaml.  Procedures for both options can be found on the [Configure SNMP](../operations/network/management_network/configure_snmp.md) page.
 
 Note that while the [Cray Automated Networking Utility (CANU)](../operations/network/management_network/canu/index.md) will
 typically not overwrite SNMP settings that are manually applied to the management switches, there are certain cases
