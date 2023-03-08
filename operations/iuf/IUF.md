@@ -409,9 +409,9 @@ These [examples](examples/iuf_resume.md) highlight common use cases of `iuf resu
 
 #### `restart`
 
-The `restart` subcommand is specified by the administrator to restart a previously aborted or failed IUF session for a given activity. Specifically, it re-executes the most recent IUF session executed via `iuf run`. Any Argo step
-that executed successfully for the previous invocation will be skipped if possible; the Argo UI will display the step, but the corresponding log file for the step will contain a message if the step operations were skipped. If the `-f`
-argument is specified, all stages specified by the most recent `iuf run` will be re-executed, regardless of whether they succeeded or failed during the previous invocation of `iuf run`.
+Run the `restart` subcommand to restart a previously aborted or failed IUF session. This re-executes the most recent IUF session executed via `iuf run`. Any Argo step that already executed successfully is skipped if possible; the
+Argo UI displays the step, but the corresponding log file will contain a message if the step operations were skipped. If the `-f` argument is specified, all stages specified by the most recent `iuf run` will be re-executed, regardless
+of whether they succeeded or failed during the previous invocation of `iuf run`.
 
 The following arguments may be specified when invoking `iuf restart`:
 
@@ -650,19 +650,19 @@ re-executed, regardless of whether they succeeded or failed during the previous 
 ### Removing a product from an IUF session
 
 If the administrator wants to remove a product from the IUF session, they must re-execute `iuf run` for the `process-media` stage with the product distribution file and uncompressed content removed from the media directory. This
-removes knowledge of that product from the existing IUF activity.
+removes references to that product from the existing IUF activity.
 
 If any previously-executed stages performed operations with that product, it may be necessary to re-execute them as well to remove artifacts or metadata related to the product, e.g. to remove CFS configuration layers and rebuild
 images without that product present.
 
 ### Adding a product to an IUF session
 
-If the administrator wants to add a new product (or new version of an existing product) to the IUF session, they must re-execute `iuf run` for the `process-media` stage with the new product distribution file added to the media
-directory. This adds knowledge of that product to the existing IUF activity. If the new product is being used in place of a different version of the product, remove the previous version of the product distribution file and
-uncompressed content from the media directory at the same time the new version is added.
+To add a new product (or new version of an existing product) to the IUF session, re-execute `iuf run` for the `process-media` stage with the new product distribution file added to the media directory. This adds knowledge of that
+product to the existing IUF activity. If the new product is being used in place of a different version of the product, remove the previous version of the product distribution file and uncompressed content from the media directory
+at the same time the new version is added.
 
-If any previously-executed stages performed operations with the old version of the product, it may be necessary to re-execute them as well to remove artifacts or metadata related to the old version of the product, e.g. to remove
-CFS configuration layers and rebuild images to ensure only the new version of the product is present.
+If previously executed stages performed operations using the old product version, re-execute them to remove artifacts or metadata related to the old version of the product, e.g. to remove CFS configuration layers and rebuild images
+to ensure only the new version of the product is present.
 
 ## Product workflows
 
