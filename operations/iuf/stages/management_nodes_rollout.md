@@ -1,7 +1,7 @@
 # `management-nodes-rollout`
 
 The `management-nodes-rollout` stage performs a controlled update of management NCNs by configuring them with a new CFS configuration and/or rebuilding or upgrading them to a new image.
-A "rebuild" is a reboot operation that clears the persistent OverlayFS file system on that node.
+A "rebuild" is a reboot operation that clears the persistent OverlayFS file system on that node, i.e. all data on node-local storage will be discarded.
 An "upgrade" is similar to a rebuild, but it intentionally does not clear all information off of NCN storage and master nodes.
 IUF will account for the necessary minimum number of critical software instances running on the nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
 
