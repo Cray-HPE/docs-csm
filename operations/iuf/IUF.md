@@ -43,6 +43,9 @@ The following IUF topics are discussed in the sections below.
   - [Log files](#log-files)
 - [Site and recipe variables](#site-and-recipe-variables)
 - [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
+- [Re-executing stages of an IUF session](#re-executing-stages-of-an-iuf-session)
+  - [Removing a product from an IUF session](#removing-a-product-from-an-iuf-session)
+  - [Adding a product to an IUF session](#adding-a-product-to-an-iuf-session)
 - [Product workflows](#product-workflows)
 - [Troubleshooting](#troubleshooting)
 - [Recovering from failures](#recovering-from-failures)
@@ -59,6 +62,8 @@ The following IUF topics are discussed in the sections below.
 - The `management-nodes-rollout` stage currently does not reboot management NCN storage nodes or `ncn-m001`. These nodes must be rebuilt using non-IUF methods described in the appropriate sections of the CSM documentation.
 - If the `iuf run` subcommand ends unexpectedly before the Argo workflow it created completes, there is no CLI option to reconnect to the Argo workflow and continue displaying status. It is recommended the administrator
   monitors progress via the Argo workflow UI and/or IUF log files in this scenario.
+- It is currently not possible to add or remove product distribution files to an in progress IUF session without first re-executing the `process-media` stage and then re-executing any other stages required for that product. See
+  [Re-executing stages of an IUF session](#re-executing-stages-of-an-iuf-session) for details.
 
 ## Initial install and upgrade workflows
 
@@ -204,12 +209,13 @@ options:
                         options also specified. The file is named via the `-i` argument. The command exits once the
                         file has been created.
   -a ACTIVITY, --activity ACTIVITY
-                        Activity name. Must be a unique identifier. Activity names must only contain lowercase letters (a-z),
+                        Activity name. Must be a unique identifier. Activity names must contain only lowercase letters (a-z),
                         numbers (0-9), periods (.), and dashes (-). Can also be set via the IUF_ACTIVITY environment
                         variable.
   -c CONCURRENCY, --concurrency CONCURRENCY
-                        Run Argo processes concurrently. Defaults to a fully concurrent model. To use at most N
-                        threads, specify `concurrency N`.
+                        During stage processing Argo runs workflow steps in parallel. By default up to 10 steps will be
+                        executed simultaneously. Use `--concurrency N` to decrease the limit to N. Increasing this limit
+                        is not recommended.
   -b BASE_DIR, --base-dir BASE_DIR
                         Base directory for state and log file directories. Defaults to ${RBD_BASE_DIR}/iuf/[activity],
                         where ${RBD_BASE_DIR} is /etc/cray/upgrade/csm.
@@ -299,7 +305,7 @@ See the [resume](#resume) and [restart](#restart) sections for details on how to
 The following arguments may be specified when invoking `iuf run`:
 
 ```text
-usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE] [-r RUN_STAGES [RUN_STAGES ...]] [-s SKIP_STAGES [SKIP_STAGES ...]]
+usage: iuf run [-h] [-b BEGIN_STAGE] [-e END_STAGE] [-r RUN_STAGES [RUN_STAGES ...]] [-s SKIP_STAGES [SKIP_STAGES ...]] [-f]
                [-bc BOOTPREP_CONFIG_MANAGED] [-bm BOOTPREP_CONFIG_MANAGEMENT] [-bpcd BOOTPREP_CONFIG_DIR] [-rv RECIPE_VARS]
                [-sv SITE_VARS] [-mrs {reboot,stage}] [-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE]
                [--limit-managed-rollout LIMIT_MANAGED_ROLLOUT [LIMIT_MANAGED_ROLLOUT ...]]
@@ -318,6 +324,7 @@ options:
                         Run the specified stages only. This argument is not compatible with `-b`, `-e`, or `-s`.
   -s SKIP_STAGES [SKIP_STAGES ...], --skip-stages SKIP_STAGES [SKIP_STAGES ...]
                         Skip the execution of the specified stages.
+  -f, --force           Force re-execution of stage operations.
   -bc BOOTPREP_CONFIG_MANAGED, --bootprep-config-managed BOOTPREP_CONFIG_MANAGED
                         `sat bootprep` config file for managed (compute and
                         application) nodes.  Note the path is relative to $PWD, unless an
@@ -402,18 +409,20 @@ These [examples](examples/iuf_resume.md) highlight common use cases of `iuf resu
 
 #### `restart`
 
-The `restart` subcommand is specified by the administrator to restart a previously aborted or failed IUF session for a given activity. Specifically, it re-executes the most recent IUF session executed via `iuf run`. All stages
-of the IUF session will be re-executed, regardless of whether they succeeded or failed during the previous invocation of `iuf run`.
+Run the `restart` subcommand to restart a previously aborted or failed IUF session. This re-executes the most recent IUF session executed via `iuf run`. Any Argo step that already executed successfully is skipped if possible; the
+Argo UI displays the step, but the corresponding log file will contain a message if the step operations were skipped. If the `-f` argument is specified, all stages specified by the most recent `iuf run` will be re-executed, regardless
+of whether they succeeded or failed during the previous invocation of `iuf run`.
 
 The following arguments may be specified when invoking `iuf restart`:
 
 ```text
-usage: iuf restart [-h]
+usage: iuf restart [-h] [-f]
 
 Restart a previously aborted or failed IUF session for a given activity.
 
 options:
   -h, --help  show this help message and exit
+  -f, --force  Force all operations to be re-executed irrespective if they have been successful in the past.
 ```
 
 These [examples](examples/iuf_restart.md) highlight common use cases of `iuf restart`.
@@ -632,6 +641,29 @@ HPE provides management NCN and managed node `sat bootprep` configuration files 
 CFS configuration, image, and BOS session template definitions. The administrator may customize the files as needed. The files include
 variables, and the values used are provided by the recipe variables and/or site variables files specified when running `iuf run`.
 
+## Re-executing stages of an IUF session
+
+It is possible to re-execute stages of an IUF session by specifying `iuf run` with the desired stage and other `iuf` arguments. If no changes were made to the product distribution files in the media directory, `iuf run` will
+re-execute any Argo steps that failed during the previous invocation of `iuf run`. Any Argo steps that previously executed successfully will be skipped if possible. If the `-f` argument is specified, all Argo steps will be
+re-executed, regardless of whether they succeeded or failed during the previous invocation of `iuf run`.
+
+### Removing a product from an IUF session
+
+If the administrator wants to remove a product from the IUF session, they must re-execute `iuf run` for the `process-media` stage with the product distribution file and uncompressed content removed from the media directory. This
+removes references to that product from the existing IUF activity.
+
+If any previously-executed stages performed operations with that product, it may be necessary to re-execute them as well to remove artifacts or metadata related to the product, e.g. to remove CFS configuration layers and rebuild
+images without that product present.
+
+### Adding a product to an IUF session
+
+To add a new product (or new version of an existing product) to the IUF session, re-execute `iuf run` for the `process-media` stage with the new product distribution file added to the media directory. This adds knowledge of that
+product to the existing IUF activity. If the new product is being used in place of a different version of the product, remove the previous version of the product distribution file and uncompressed content from the media directory
+at the same time the new version is added.
+
+If previously executed stages performed operations using the old product version, re-execute them to remove artifacts or metadata related to the old version of the product, e.g. to remove CFS configuration layers and rebuild images
+to ensure only the new version of the product is present.
+
 ## Product workflows
 
 The following are examples of workflows for installing and upgrading product content using `iuf`.
@@ -650,7 +682,7 @@ The following actions may be useful if errors are encountered when executing `iu
   1. Display all workflows for an IUF activity by specifying the activity identifier, e.g. `activity=admin-230126`, in the Argo UI `LABELS` filter.
 - If an error is associated with a script invoked by a product's [stage hook](#stages-and-hooks), the script can be found in the expanded product distribution file located in the media directory (`iuf -m MEDIA_DIR`). Examine the
   `hooks` entry in the product's `iuf-product-manifest.yaml` file in the media directory for the path to the script.
-- If log output in the Argo UI is overwhelming, it can be filtered by specifying a value such as `^INFO|^NOTICE|^WARNING|^ERROR` in the `Filter (regexp)...` text field.
+- If Argo UI log output is too verbose, filter it by specifying a value such as `^INFO|^NOTICE|^WARNING|^ERROR` in the `Filter (regexp)...` text field.
 - If an Argo workflow cannot be found in the Argo UI, select `all` from the `results per page` dropdown list at the bottom of the page listing the Argo workflows.
 - If the source of the error can not be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and hooks](#stages-and-hooks) section
   of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the
