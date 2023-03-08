@@ -293,6 +293,7 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
 1. (`pit#`) Wait for the node to boot, acquire its hostname (`ncn-m001`), and run `cloud-init`.
 
     > **`NOTE`** If the node has PXE boot issues, such as getting PXE errors or not pulling the `ipxe.efi` binary, see [PXE boot troubleshooting](troubleshooting_pxe_boot.md).
+    If the node comes up and indicates `Failed to start etcd` -- see [Fix `Failed to start etcd` on Master NCN](../operations/kubernetes/Fix_Failed_to_start_etcd_on_Master.md).
 
 1. (`external#`) Once `cloud-init` has completed successfully, log in and start a typescript (the IP address used here is the one noted for `ncn-m002` in an earlier step).
 
@@ -517,3 +518,5 @@ However, the commands in this section are all run **on** `ncn-m001`.
 ## 7. Next topic
 
 After completing this procedure, the next step is to [Configure Administrative Access](README.md#5-configure-administrative-access).
+
+> **`NOTE`** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
