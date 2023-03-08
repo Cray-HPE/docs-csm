@@ -285,6 +285,7 @@ spec:
                   value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
+                    TARGET_NCN={{$value}}
                     # remove local images on target_ncn
                     echo "Removing local images on $TARGET_NCN"
                     ssh $TARGET_NCN podman rmi --all -f
