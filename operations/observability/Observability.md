@@ -328,7 +328,7 @@ This includes, but is not limited to, regular expression patterns to match and g
 Dashboards tracking different types of errors during install/upgrade.
 
 - Frequency of message about known issues dashboard
-- CSM environments install progress dashboard
+- CSM install progress dashboard
 - USB Device error tracking dashboard
 - Boot PXE error tracking dashboard
 - Boot DHCP error tracking dashboard
