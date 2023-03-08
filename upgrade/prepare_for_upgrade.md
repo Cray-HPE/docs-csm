@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 -->
 # Prepare for Upgrade
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system
@@ -70,16 +71,27 @@ user input of secrets without echoing them to the terminal or saving them in his
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
 
-The REDS Hardware Discovery process depends on SNMP being configured on the management network switches. CANU does not
-configure SNMP by default so the SNMP settings need to be added manually. It's critical that the credentials on the
-switches match the credentials stored in Vault and in the related sealed secret in customizations.yaml. At a
-minimum, [verify that SNMP has been configured](../operations/network/management_network/configure_snmp.md) on the
-management network switches before continuing.
+To ensure proper operation of the REDS Hardware Discovery process, and the Prometheus SNMP Exporter, validate that
+SNMP is enabled on the management network switches.  Additionally, validate that the SNMP credentials on the
+switches match the credentials stored in Vault, and in customizations.yaml (stored as a sealed secret).  If an
+[SNMP custom config](../operations/network/management_network/canu/custom_config.md) was used with CANU when generating the management network switch configurations,
+that custom config should also be checked to ensure it uses the same credentials as Vault and customizations.yaml.
+
+This check is recommended to avoid failure scenarios that can impact the ability to add new hardware to the system.
+It's not uncommon for CSM upgrades to be paired with system maintenance such as hardware layout changes, expansion,
+or management network upgrades.  If management network switches are reconfigured or new switches are added, and a
+custom CANU config with SNMP settings was not used, it's possible that an admin may unknowingly push new switch
+configs that omit SNMP.  If in the process of fixing SNMP, and admin then adds SNMP credentials to the switches
+that do not match what is stored in Vault and customizations.yaml, the resulting REDS and Prometheus errors can be
+difficult to diagnose and resolve.
+
+It is recommended that CANU custom configuration files be stored in a version controlled repository so that they
+can be re-used for future management network maintenance.
 
 More information about configuring SNMP on the management switches can be found in the vendor specific switch
-documentation. Links to these pages, and other SNMP information related to REDS Hardware Discovery and the Prometheus
-SNMP Exporter, can be found on the
-[Prometheus SNMP Exporter page.](../operations/network/management_network/snmp_exporter_configs.md)
+documentation.  Links to these pages, and other SNMP information related to REDS Hardware Discovery and the
+Prometheus SNMP Exporter, [can be found on the Configure SNMP page.](../operations/network/management_network/configure_snmp.md).  This page contains links
+to procedures for working with Vault, sealed secrets in customizations.yaml, and more.
 
 Be sure to return here once you have verified that SNMP is properly configured on the management network switches.
 
@@ -162,4 +174,4 @@ command.
 ## Preparation completed
 
 After completing the above steps, proceed to
-[Upgrade Management Nodes and CSM Services](README.md#2-upgrade-management-nodes-and-csm-services).
+[Upgrade Management Nodes and CSM Services](README.md#3-upgrade-management-nodes-and-csm-services).
