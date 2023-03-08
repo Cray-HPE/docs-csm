@@ -1,9 +1,9 @@
 # Node Boot Root Cause Analysis
 
-The first step in debugging compute node boot-related issues is to determine the underlying cause, and the stage that
+The first step in debugging compute node boot-related issues is to determine the underlying cause and the stage that
 the issue was encountered at.
 
-BOS v2 implements rich, per-component records for underlying actions that have been applied as part of BOS session
+BOS v2 provides rich, per-component records for underlying actions that have been applied as part of BOS session
 provisioning. Often, it is helpful to observe the set of operations that BOS has enacted on behalf of a session as they
 apply to a single failing node. The records of operations that have been applied for a node, as well as the intended
 next steps, can be viewed through the BOS v2 component information for the affected hardware.
@@ -19,6 +19,9 @@ session = ""
 [snip]
 ```
 
+This command coupled with the Linux `watch` command are an often used way to get continued updates on the most recent
+actions applied to the node.
+
 If a node has been booted with BOS as part of a boot or reboot operation, and the node was powered on, but has not
 begun configuring, the node may be stuck in early initialization (Failure to `iPXE` chain, network setup issues, failure to
 obtain a root filesystem, or other dracut module specific issues). In this case, it is best to connect to the node's
@@ -29,7 +32,8 @@ to the node's console with `ipmitool`. Refer to online documentation to learn mo
 
 If the node has booted into a multi-user target phase, but BOS has not completed booting the node, the node may have
 encountered a configuration error. A similar set of records for configuration for a given node can be obtained from
-[CFS](../configuration_management) endpoint for the same hardware component.
+[CFS](../configuration_management) endpoint for the same hardware component. In this case, BOS will indicate the
+component status is `configuring`, and further querying information from CFS for the same component may be in order.
 
 (`ncn-mw#`) Verify the configuration status of a CFS component of the same name
 
