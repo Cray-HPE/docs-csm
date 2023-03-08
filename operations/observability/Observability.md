@@ -180,54 +180,36 @@ Feb 08 23:06:38 redbull-pit grafana[82549]: logger=http.server t=2023-02-08T23:0
 
 ## IUF timing dashboard
 
+The IUF Timing dashboard provides timing information for installs and upgrades.
+
 ### Timing dashboard features
 
-- Use Argo workflows to collect the install/upgrade timing details.
-- Create Argo workflows to get metrics from the details available.
-- Generate Prometheus install/upgrade timing metrics.
-- Create Grafana dashboard using Prometheus metrics.
-
-### Prometheus metrics using Argo workflow
-
-The start time and end time can be obtained as Prometheus labels for the operations using Argo metrics implementation. The time stamp is recorded at the beginning and end of each operation.
-
-Metrics that are captured for the operations:
-
-- start time
-- end time
-- duration
-- status
-- product name
-- product version
-
-Metrics that are captured for the stage:
-
-- stage name
-- stage type
-- stage start time (the earliest start time of the all the operations in the stage)
-- stage end time (the latest end time of the all the operations in the stage)
-- stage duration (the difference between the stage end time and stage start time)
-- stage status (status is marked as succeeded if all the operations' statuses are succeeded, otherwise it is marked as failed)
-
-Metrics that are captured for the product:
-
-- product name
-- product start time (start time of the process-media stage)
-- product end time (start time of the post-install-check stage)
-- product status (status is marked as succeeded if all the stages' statuses are succeeded, otherwise it is marked as failed)
-
-### Timing dashboard
-
 - Dynamic top-down and bottom-up dashboard to track install/upgrade status of any product, stage, and operation.
-- Dashboard calculates the execution time for the install/upgrade of any product, stage, and operation.
-- The status of the install/upgrade for product, stage, and operation are failed or succeeded.
-- There is a dropdown for selection of the product, stage, and operation. By default all are selected.
-  The framework defines and implements periodic scheduled health checks to occur both during and after installation or upgrade.
-  The Grafana dashboard also allows administrators to view results only for specific time periods -- the past six hours, a day, or a week.
-- Separate sections are created in the dashboard to see the details of product, stage, and operation.
-- The graph shows the duration for each stage and operation.
+- Dashboard calculates the duration for the install/upgrade of any product, stage, and operation.
 
 ![IUF timing dashboard](../../img/operations/TimingDashboard.png "Timing Dashboard")
+
+### Collected timing metrics
+
+- Operation timing metrics
+  - Start time
+  - End time
+  - Duration
+  - Status
+  - Product name
+  - Product version
+- Stage timing metrics
+  - Stage name
+  - Stage type
+  - Stage start time (the earliest start time of the all the operations in the stage)
+  - Stage end time (the latest end time of the all the operations in the stage)
+  - Stage duration (the difference between the stage end time and stage start time)
+  - Stage status (status is marked as succeeded if all the operations' statuses are succeeded, otherwise it is marked as failed)
+- Product timing metrics
+  - Product name
+  - Product start time (start time of the process-media stage)
+  - Product end time (start time of the post-install-check stage)
+  - Product status (status is marked as succeeded if all the stages' statuses are succeeded, otherwise it is marked as failed)
 
 ## Goss tests for PIT and NCN
 
