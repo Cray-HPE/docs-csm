@@ -23,12 +23,14 @@
 #
 
 import argparse
+import datetime
 import json
 import logging
 import os
 import subprocess
 import sys
 import tempfile
+import uuid
 from os import path
 from urllib.parse import urlparse
 
@@ -120,6 +122,10 @@ class S3Url:
         return self._parsed.geturl()
 
 
+def get_timestamp_string():
+    return str(datetime.datetime.now().astimezone())
+
+
 def safe_list_get(lst, idx, default):
     """
     https://stackoverflow.com/questions/5125619/why-doesnt-list-have-safe-get-method-like-dictionary
@@ -193,6 +199,7 @@ def export_ims_recipes(args):
         with open(path.join(args.import_export_root, export_file), 'w') as outfile:
             json.dump(
                 {
+                    'timestamp': get_timestamp_string(),
                     'version': '1.0',
                     'records': export_data
                 },
@@ -290,6 +297,7 @@ def export_ims_images(args):
         with open(path.join(args.import_export_root, export_file), 'w') as outfile:
             json.dump(
                 {
+                    'timestamp': get_timestamp_string(),
                     'version': '1.0',
                     'records': export_data
                 },
@@ -636,6 +644,20 @@ def import_ims_artifacts(args):
 
         for old_image_id, new_image_id in image_map.items():
             LOGGER.info(f'The IMS image {old_image_id} was imported as {new_image_id}')
+
+        # Record mappings of old IMS IDs to new ones
+        id_map_file = path.join(os.getcwd(), f'ims-id-maps-post-import-{uuid.uuid4().hex}.json')
+        with open(id_map_file, 'w') as outfile:
+            json.dump(
+                {
+                    'timestamp': get_timestamp_string(),
+                    'id_maps': {
+                        "images": image_map,
+                        "recipes": recipe_map
+                    }
+                },
+                outfile)
+        LOGGER.info(f'Recorded mapping from old IMS image and recipe IDs to new IDs in {id_map_file}')
 
     except ImsImportExportBaseError as ims_exc:
         LOGGER.warning('Error importing IMS data', exc_info=ims_exc)
