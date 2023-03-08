@@ -301,7 +301,7 @@ spec:
                         ssh ${target_ncn} podman pull $image
                     done
                     ssh ${target_ncn} podman pull "$(cat /tmp/ceph_global_container_image.txt)"
-          - name: "exit-ceph-orch-maintenance-mode"
+          - name: "exit-ceph-orch-maintenance-mode-{{$value}}"
             dependencies:
               - pull-ceph-images-from-nexus-{{$value}}
             templateRef:
@@ -330,7 +330,7 @@ spec:
               name: ssh-template
               template: shell-script
             dependencies:
-              - exit-ceph-orch-maintenance-mode
+              - exit-ceph-orch-maintenance-mode-{{$value}}
             arguments:
               parameters:
                 - name: dryRun
@@ -372,7 +372,7 @@ spec:
               - repoint-ceph-to-nexus
               {{ end }}
               {{ if ne $index 0 }}
-              - exit-ceph-orch-maintenance-mode
+              - exit-ceph-orch-maintenance-mode-{{$value}}
               {{ end }}
             arguments:
               parameters:
@@ -437,8 +437,6 @@ spec:
             templateRef:
               name: ssh-template
               template: shell-script
-            dependencies:
-              - run-ceph-upgrade
             arguments:
               parameters:
                 - name: dryRun
@@ -463,8 +461,6 @@ spec:
             templateRef:
               name: ssh-template
               template: shell-script
-            dependencies:
-              - run-ceph-upgrade
             arguments:
               parameters:
                 - name: dryRun
