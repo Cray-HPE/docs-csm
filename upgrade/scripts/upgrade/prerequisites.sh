@@ -24,6 +24,15 @@
 #
 
 set -e
+# CASMPET-6390 - detect unexpected hostname before continuing
+if [[ $(hostname) == "ncn-m002" ]]; then
+    echo "WARN: running prerequisites.sh on ncn-m002..."
+elif [[ $(hostname) != "ncn-m001" ]]; then
+    echo "ERROR: unexpected hostname $(hostname)"
+    echo "You should only run prerequisites.sh from ncn-m001 or ncn-m002"
+    exit 1
+fi
+
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . "${locOfScript}/../common/upgrade-state.sh"
 . "${locOfScript}/../common/ncn-common.sh" "$(hostname)"

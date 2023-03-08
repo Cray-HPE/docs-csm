@@ -518,3 +518,5 @@ However, the commands in this section are all run **on** `ncn-m001`.
 ## 7. Next topic
 
 After completing this procedure, the next step is to [Configure Administrative Access](README.md#5-configure-administrative-access).
+
+> **`NOTE`** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
