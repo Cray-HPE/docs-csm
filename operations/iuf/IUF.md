@@ -3,7 +3,7 @@
 ## Overview
 
 The Install and Upgrade Framework (IUF) provides a CLI and API which automates operations required to install, upgrade
- and deploy non-CSM product content onto an HPE Cray EX system. These products are documented in the
+and deploy non-CSM product content onto an HPE Cray EX system. These products are documented in the
 _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_.
 Each product distribution includes an `iuf-product-manifest.yaml` file which IUF uses to determine what operations are needed to
 install, upgrade, and deploy the product. IUF operates on all of the product distribution files found in a single
@@ -18,7 +18,7 @@ information associated with an install or upgrade.
 
 IUF utilizes [Argo workflows](../argo/Using_Argo_Workflows.md) to execute and parallelize IUF operations and to provide
 visibility into the status of the operations through the [Argo UI](../argo/Using_the_Argo_UI.md). The `iuf` CLI invokes
-Argo workflows based on the subcommand specified. The Argo workflows are not controlled by `iuf` once they has been created, but
+Argo workflows based on the subcommand specified. The Argo workflows are not controlled by `iuf` once they have been created, but
 `iuf` does display status to the administrator as the Argo workflows execute.
 
 The following IUF topics are discussed in the sections below.
@@ -54,12 +54,12 @@ The following IUF topics are discussed in the sections below.
 
 - `iuf` must be executed from `ncn-m001`.
 - While IUF enables non-interactive deployment of product software, it does not automatically configure the software beyond merging new VCS release branch content to customer working branches. For example, if a product requires
-  manual configuration, the administrator must stop IUF execution after the `update-vcs-config` stage, perform the manual configurations steps, and then resume with the next IUF stage (`update-cfs-config`).
+  manual configuration, the administrator must stop IUF execution after the `update-vcs-config` stage, perform the manual configuration steps, and then resume with the next IUF stage (`update-cfs-config`).
 - IUF leverages `sat bootprep` for CFS configuration and image creation. It is intended to be used with the configuration files provided in the HPC CSM Software Recipe and requires the administrator to verify and customize
   those configurations to their specific needs. Note that `sat` capabilities used by IUF rely on BOS V2.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
-- The `management-nodes-rollout` stage currently does not reboot management NCN storage nodes or `ncn-m001`. These nodes must be rebuilt using non-IUF methods described in the appropriate sections of the CSM documentation.
+- The `management-nodes-rollout` stage currently does not reboot management storage nodes or `ncn-m001`. These nodes must be rebuilt using non-IUF methods described in the appropriate sections of the CSM documentation.
 - If the `iuf run` subcommand ends unexpectedly before the Argo workflow it created completes, there is no CLI option to reconnect to the Argo workflow and continue displaying status. It is recommended the administrator
   monitors progress via the Argo workflow UI and/or IUF log files in this scenario.
 - It is currently not possible to add or remove product distribution files to an in progress IUF session without first re-executing the `process-media` stage and then re-executing any other stages required for that product. See
@@ -167,7 +167,7 @@ one or more products. This information is also provided by the `iuf list-stages`
 | [management-nodes-rollout](stages/management_nodes_rollout.md)     | Rolling reboot or live update of management nodes                                        |
 | [deploy-product](stages/deploy_product.md)                         | Deploy services to system                                                                |
 | [post-install-service-check](stages/post_install_service_check.md) | Perform post-install checks of processed services                                        |
-| [managed-nodes-rollout](stages/managed_nodes_rollout.md)           | Rolling reboot or live update of managed nodes nodes                                     |
+| [managed-nodes-rollout](stages/managed_nodes_rollout.md)           | Rolling reboot or live update of managed nodes                                     |
 | [post-install-check](stages/post_install_check.md)                 | Perform post-install checks                                                              |
 
 The `process-media` stage must be run at least once for a given activity before any of the other stages can be run. This is required because `process-media` associates the product content being installed or upgraded with an
@@ -175,7 +175,7 @@ activity identifier and that information is used for all other stages.
 
 ## `iuf` CLI
 
-The `iuf` command line interface is used to invoke all IUF operations. The `iuf` command provides the following subcommands.
+The `iuf` command-line interface is used to invoke all IUF operations. The `iuf` command provides the following subcommands.
 
 | Subcommand  | Description                                              |
 | ----------- | -------------------------------------------------------- |
@@ -243,7 +243,7 @@ As described in the [Output and log files](#output-and-log-files) section, the `
 specified in the input file. If an input file is used in addition to `iuf` arguments, the `iuf` arguments take precedence. The name of an entries in the input file corresponds to the long form name of the `iuf` argument with
 hyphens replaced by underscores.
 
-The following in an example of a partial `iuf` input file. The first section displays global arguments and values and the following sections display subcommand arguments and values.
+The following is an example of a partial `iuf` input file. The first section displays global arguments and values and the following sections display subcommand arguments and values.
 
 ```yaml
 global:
@@ -684,7 +684,7 @@ The following actions may be useful if errors are encountered when executing `iu
   `hooks` entry in the product's `iuf-product-manifest.yaml` file in the media directory for the path to the script.
 - If Argo UI log output is too verbose, filter it by specifying a value such as `^INFO|^NOTICE|^WARNING|^ERROR` in the `Filter (regexp)...` text field.
 - If an Argo workflow cannot be found in the Argo UI, select `all` from the `results per page` dropdown list at the bottom of the page listing the Argo workflows.
-- If the source of the error can not be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and hooks](#stages-and-hooks) section
+- If the source of the error cannot be determined by the previous methods, details on the underlying commands executed by an IUF stage can be found in the IUF `workflows` directory. The [Stages and hooks](#stages-and-hooks) section
   of this document includes links to descriptions of each stage. Each of those descriptions includes an **Execution Details** section describing how to find the appropriate code in the IUF `workflows` directory to understand the
   workflow and debug the issue.
 - If an Argo step fails, Argo will attempt to re-execute the step. If the retry succeeds, the failed step will still be displayed, colored red, in the Argo UI alongside the successful retry step, colored green. Although the failed
