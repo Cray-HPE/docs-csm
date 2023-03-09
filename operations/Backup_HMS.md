@@ -5,8 +5,10 @@
 Create a directory for the contents to reside.
 
 ```bash
-mkdir backup
-cd backup
+BACKUPDIR=hms-backup
+BACKUPDIR="hms-backup_`date '+%Y-%m-%d_%H-%M-%S'`"
+mkdir $BACKUPDIR
+cd $BACKUPDIR
 ```
 
 ## HSM
@@ -131,7 +133,7 @@ Create a backup of the etcd database
 ```bash
 SERVICE=cray-bss
 BACKUP_NAME=$SERVICE-etcd-backup_`date '+%Y-%m-%d_%H-%M-%S'`
-JOB=`kubectl exec -it -n operators  $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') -c util -- create_backup $SERVICE $BACKUP_NAME`;echo $JOB
+JOB=$(kubectl exec -it -n operators  $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') -c util -- create_backup $SERVICE $BACKUP_NAME | cut -d " " -f 1); echo $JOB
 ```
 
 Wait for the job to be completed by checking the status:
@@ -152,4 +154,11 @@ Create a backup of the BSS Boot Parameters:
 ```bash
 cray bss bootparameters list --format json > cray-bss-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
 ls -la
+```
+
+## Create Tar file
+
+```bash
+cd ..
+tar -czvf $BACKUPDIR.tar.gz $BACKUPDIR
 ```
