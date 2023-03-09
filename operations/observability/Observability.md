@@ -311,7 +311,7 @@ Goss test dashboard features:
 ## Error dashboard
 
 Error dashboards provide key glance at-a-insights about what is broken and needs attention.
-Error dashboards have data such as total count of errors, warnings, failure, not responding, pool allocation failed, DHCP errors, etc across all the ncns during csm installation process. 
+Error dashboards have data such as total count of errors, warnings, failure, not responding, pool allocation failed, DHCP errors, etc across all the `ncns` during `csm` installation process.
 
 ### Error dashboards features
 
