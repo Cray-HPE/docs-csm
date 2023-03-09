@@ -123,6 +123,22 @@ spec:
                 - name: scriptContent
                   value: |
                     /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true || /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -A true -v true
+          - name: patch-ceph-runcmd
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |      
+                    export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                              -d client_id=admin-client \
+                              -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                              https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    
+                    python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
           - name: change-ceph-config
             templateRef:
               name: ssh-template
@@ -147,6 +163,7 @@ spec:
               - check-ceph-ro-key
               - pre-upgrade-ceph-health-check
               - change-ceph-config
+              - patch-ceph-runcmd
             arguments:
               parameters:
                 - name: dryRun
@@ -228,17 +245,140 @@ spec:
                     nexus_image=$(cat /tmp/ceph_global_container_image.txt)
                     pdsh -w $(ceph orch host ls --format=json|jq -r '.[].hostname' | sort -u |  tr -t '\n' ',') "podman pull $nexus_image"
           {{ end }}
-          - name: upgrade-{{$value}}
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            dependencies: 
+          - name: enter-ceph-orch-maintenance-mode-{{$value}}
+            dependencies:
               {{ if eq $index 0 }}
               - pull-ceph-image-in-nexus
               {{ end }}
               # each upgrade depends on previous upgrade action and success
               {{ if ne $index 0 }}
               - check-ceph-health-{{ index $.TargetNcns (add $index -1) }}
+              {{ end }}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
+                      echo "$TARGET_NCN is already in maintenance mode"
+                    else
+                      ceph orch host maintenance enter $TARGET_NCN --force
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR setting maintenance mode on $TARGET_NCN"
+                        exit 1
+                      fi
+                    fi
+          - name: remove-local-ceph-images-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies: 
+              - enter-ceph-orch-maintenance-mode-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    # remove local images on target_ncn
+                    echo "Removing local images on $TARGET_NCN"
+                    ssh $TARGET_NCN podman rmi --all -f
+          - name: pull-ceph-images-from-nexus-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies: 
+              - remove-local-ceph-images-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    target_ncn={{$value}}
+                    for container in "container_image_prometheus" "container_image_node_exporter" "container_image_alertmanager" "container_image_grafana"; do
+                        image=$(ceph config get mgr mgr/cephadm/${container})
+                        ssh ${target_ncn} podman pull $image
+                    done
+                    ssh ${target_ncn} podman pull "$(cat /tmp/ceph_global_container_image.txt)"
+          - name: "exit-ceph-orch-maintenance-mode-{{$value}}"
+            dependencies:
+              - pull-ceph-images-from-nexus-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN={{$value}}
+                    if [[ -n $(ceph health detail | grep "$TARGET_NCN is in maintenance") ]]; then
+                      echo "$TARGET_NCN is in maintenance mode. Exiting maintence mode now."
+                      ceph orch host maintenance exit $TARGET_NCN
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR exiting maintenance mode on $TARGET_NCN"
+                        exit 1
+                      fi
+                    else
+                      echo "$TARGET_NCN is not in maintenance mode. Nothing to do."
+                    fi
+          {{ if eq $index 0 }}
+          - name: repoint-ceph-to-nexus
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              - exit-ceph-orch-maintenance-mode-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: scriptContent
+                  value: |
+                    echo "This step repoints ceph to use the image stored in Nexus. It runs the command 'ceph orch upgrade' to do this."
+                    nexus_location=$(cat /tmp/ceph_global_container_image.txt)
+                    ceph orch upgrade start --image $nexus_location
+                    echo "Waiting for upgrade to complete..."
+                    sleep 10
+                    int=0
+                    success=false
+                    while [[ $int -lt 100 ]] && ! $success; do
+                        if [[ -n $(ceph orch upgrade status --format json | jq '.message' | grep Error) ]]; then
+                          echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+                          exit 1
+                        fi
+                        if [[ $(ceph orch upgrade status --format json | jq '.in_progress') != "true" ]]; then
+                          echo "Upgrade complete"
+                          success=true
+                          break
+                        else
+                          int=$(( $int + 1 ))
+                          sleep 10
+                        fi
+                    done
+                    if ! $success; then
+                      echo "Error completing 'ceph orch upgrade'. Check upgrade status by running 'ceph orch upgrade status' from ncn-s00[1/2/3]."
+                      exit 1
+                    fi
+          {{ end }}
+          - name: upgrade-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies: 
+              {{ if eq $index 0 }}
+              - repoint-ceph-to-nexus
+              {{ end }}
+              {{ if ne $index 0 }}
+              - exit-ceph-orch-maintenance-mode-{{$value}}
               {{ end }}
             arguments:
               parameters:
@@ -299,50 +439,10 @@ spec:
                       echo "$RESULT"
                       exit 7
                     fi
-          - name: run-ceph-upgrade
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            dependencies:
-              - update-bss
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"  
-                - name: scriptContent
-                  value: |
-                    echo "This step repoints ceph to use the image stored in Nexus."
-                    ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-                    nexus_location=$(cat /tmp/ceph_global_container_image.txt)
-                    ceph orch upgrade start --image $nexus_location
-                    echo "Waiting for upgrade to complete..."
-                    sleep 10
-                    int=0
-                    success=false
-                    while [[ $int -lt 100 ]] && ! $success; do
-                        if [[ -n $(ceph orch upgrade status --format json | jq '.message' | grep Error) ]]; then
-                          echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
-                          exit 1
-                        fi
-                        if [[ $(ceph orch upgrade status --format json | jq '.in_progress') != "true" ]]; then
-                          echo "Upgrade complete"
-                          success=true
-                          break
-                        else
-                          int=$(( $int + 1 ))
-                          sleep 10
-                        fi
-                    done
-                    if ! $success; then
-                      echo "Error completing 'ceph orch upgrade'. Check upgrade status by running 'ceph orch upgrade status' from ncn-s00[1/2/3]."
-                      exit 1
-                    fi
           - name: check-ceph-config
             templateRef:
               name: ssh-template
               template: shell-script
-            dependencies:
-              - run-ceph-upgrade
             arguments:
               parameters:
                 - name: dryRun
@@ -367,8 +467,6 @@ spec:
             templateRef:
               name: ssh-template
               template: shell-script
-            dependencies:
-              - run-ceph-upgrade
             arguments:
               parameters:
                 - name: dryRun
