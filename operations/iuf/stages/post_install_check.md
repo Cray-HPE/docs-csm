@@ -1,6 +1,6 @@
 # `post-install-check`
 
-The `post-install-check` stage validates that the managed compute and application nodes deployed by the preceding `managed-node-rollout` stage are executing correctly. It primarily executes pre- and post-stage hook scripts
+The `post-install-check` stage validates that the managed compute and application nodes deployed by the preceding `managed-nodes-rollout` stage are executing correctly. It primarily executes pre- and post-stage hook scripts
 provided by products in their `iuf-product-manifest.yaml` file.
 
 `post-install-check` details are explained in the following sections:
