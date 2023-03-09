@@ -263,6 +263,22 @@ if [[ ${target_ncn} == "ncn-s001" ]]; then
     fi
 fi
 
+state_name="POST_CEPH_UPGRADE_IMAGE_PRELOAD"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
+    if [[ $ssh_keys_done == "0" ]]; then
+        ssh_keygen_keyscan "${target_ncn}"
+        ssh_keys_done=1
+    fi
+    ssh ${target_ncn} '/srv/cray/scripts/common/pre-load-images.sh'
+    } >> ${LOG_FILE} 2>&1
+    record_state "${state_name}" ${target_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 cat <<EOF
 
 NOTE:
