@@ -651,6 +651,9 @@ Lorem
 # To allow Site Init
 Init
 
+- operations/boot_orchestration/BOS_export_import.md
+Redis
+
 - operations/image_management/IMS_export_import.md
 etag
 etags
