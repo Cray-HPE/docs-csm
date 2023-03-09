@@ -40,3 +40,28 @@ In order to access the packages in the embedded repo, it is necessary to add the
 ```bash
 zypper ar https://packages.local/repository/csm-${CSM_RELEASE}-embedded csm-embedded
 ```
+
+## Using the Embedded Repo for NCN image customization and node personalization
+
+In order to make the embedded repo available during NCN image customization and node personalization the `csm-config-management`
+repository in Gitea needs a modification.
+
+(`ncn-m#`)
+
+1. Clone the `csm-config-management` repository
+
+    ```bash
+    VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
+    VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
+    git clone "https://${VCS_USER}:${VCS_PASS}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+    ```
+
+1. Add the following lines to the `vars/csm_repos.yml` file in the `csm-config-management` repository:
+
+    ```yaml
+    - name: csm-embedded
+      description: "CSM Embedded NCN Packages (added by Ansible)"
+      repo: https://packages.local/repository/csm-embedded
+    ```
+
+1. Commit and push the change.
