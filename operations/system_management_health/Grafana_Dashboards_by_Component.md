@@ -52,7 +52,7 @@ The panels interact with configured data sources, including the following:
 - Service
 - Workload
 
-## IUF Dashboard
+## IUF
 
 - Product
 - Stage
