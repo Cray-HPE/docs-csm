@@ -305,6 +305,8 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
     These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
     The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets.
 
+    1. Setup the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations needed while restoring the Keycloak database. See [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md).
+
     1. List the available backups.
 
         ```bash
@@ -334,6 +336,13 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
         ```bash
         ncn-mw# cray artifacts get postgres-backup "${DUMPFILE_SRC}" "${DUMPFILE}"
         ncn-mw# cray artifacts get postgres-backup "${MANIFEST}" "${MANIFEST}"
+        ```
+
+    1. Unset the `CRAY_CREDENTIALS` environment variable:
+
+        ```bash
+        unset CRAY_CREDENTIALS
+        rm /tmp/setup-token.json
         ```
 
 1. Set helper variables.
