@@ -1,4 +1,4 @@
-# Backups for etcd-operator Clusters
+# Backups for Etcd Clusters Running in Kubernetes
 
 Backups are periodically created for etcd clusters. These backups are stored in the Ceph Rados Gateway \(S3\). Not all services are backed up automatically.
 Services that are not backed up automatically will need to be manually rediscovered if the cluster is unhealthy.
@@ -19,45 +19,34 @@ The following services are backed up daily \(one week of backups retained\) as p
 In the example below, the backups for BSS are listed.
 
 ```bash
-kubectl exec -it -n operators \
-    $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
-    -c boto3 -- list_backups cray-bss
+/opt/cray/platform-utils/etcd/etcd-util.sh list_backups cray-bss
 ```
 
 Example output:
 
 ```text
-cray-bss/etcd.backup_v1450_2020-01-30-20:44:41
-cray-bss/etcd.backup_v4183_2020-02-01-20:45:48
-cray-bss/etcd.backup_v5771_2020-02-02-20:45:48
-cray-bss/etcd.backup_v7210_2020-02-03-20:45:48
+cray-bss/db-2023-03-08_23-00
+cray-bss/db-2023-03-09_00-00
+cray-bss/db-2023-03-09_01-00
 ```
 
 (`ncn-mw#`) To view all available backups across all projects:
 
 ```bash
-kubectl exec -it -n operators \
-    $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
-    -c boto3 -- list_backups ""
+/opt/cray/platform-utils/etcd/etcd-util.sh list_backups -
 ```
 
 Example output:
 
 ```text
-bare-metal/etcd-backup-2020-02-03-14-40-07.tar.gz
-bare-metal/etcd-backup-2020-02-03-14-50-03.tar.gz
-bare-metal/etcd-backup-2020-02-03-15-00-10.tar.gz
-bare-metal/etcd-backup-2020-02-03-15-10-06.tar.gz
-bare-metal/etcd-backup-2020-02-03-15-30-05.tar.gz
-bare-metal/etcd-backup-2020-02-03-15-40-01.tar.gz
-bare-metal/etcd-backup-2020-02-03-15-50-08.tar.gz
-cray-bos/etcd.backup_v1200_2020-02-03-20:45:48
-cray-bos/etcd.backup_v240_2020-01-30-20:44:34
-cray-bos/etcd.backup_v480_2020-01-31-20:44:34
-cray-bos/etcd.backup_v720_2020-02-01-20:45:48
-cray-bos/etcd.backup_v960_2020-02-02-20:45:48
-cray-bss/etcd.backup_v1450_2020-01-30-20:44:41
-cray-bss/etcd.backup_v4183_2020-02-01-20:45:48
+cray-bss/etcd.backup_v4508_2023-03-08-01:00:03
+cray-crus/etcd.backup_v1_2023-03-08-01:00:03
+cray-fas/etcd.backup_v2963_2023-03-08-01:00:04
+cray-bss/etcd.backup_v8828_2023-03-09-01:00:03
+cray-crus/etcd.backup_v1_2023-03-09-01:00:04
+cray-bos/db-2023-03-09_18-00
+bare-metal/etcd-backup-2023-03-09-18-10-02.tar.gz
+bare-metal/etcd-backup-2023-03-09-18-20-02.tar.gz
 
 [...]
 ```

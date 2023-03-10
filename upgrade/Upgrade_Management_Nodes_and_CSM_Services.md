@@ -28,7 +28,6 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 - [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
 - [Stage 2 - Kubernetes Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
-- [Stage 4 - Ceph Upgrade](Stage_4.md)
 - [Validate CSM health](../operations/validate_csm_health.md)
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
@@ -68,7 +67,7 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 - Back-ups for `etcd-operator` Clusters
 
    After upgrading, if health checks indicate that Etcd pods are not in a healthy/running state, recovery procedures may be needed. See
-   [Backups for `etcd-operator` Clusters](../operations/kubernetes/Backups_for_etcd-operator_Clusters.md) for these procedures.
+   [Backups for `etcd-operator` Clusters](../operations/kubernetes/Backups_for_Etcd_Clusters_Running_in_Kubernetes.md) for these procedures.
 
 - Recovering from Postgres database issues
 

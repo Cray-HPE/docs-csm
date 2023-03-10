@@ -42,11 +42,11 @@ documentation (`S-8031`) for instructions on how to acquire a SAT authentication
 
    1. Determine which etcd clusters must be backed up and if they are healthy.
 
-      Review [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
+      Review [Check the Health of etcd Clusters](../kubernetes/Check_the_Health_of_etcd_Clusters.md).
 
    1. Backup etcd clusters.
 
-      See [Backups for etcd-operator Clusters](../kubernetes/Backups_for_etcd-operator_Clusters.md).
+      See [Backups for Etcd Clusters Running in Kubernetes](../kubernetes/Backups_for_Etcd_Clusters_Running_in_Kubernetes.md).
 
 1. (`ncn-mw#`) Check the status of NCN no wipe settings.
 
