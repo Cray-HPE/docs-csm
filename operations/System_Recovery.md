@@ -212,7 +212,7 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
    1. Wait for the resources to terminate
 
       ```bash
-      watch "kubectl get pods -n services | grep keycloak | grep -v "keycloak-users-localize\|keycloak-vcs-user"
+      watch "kubectl get pods -n services | grep keycloak | grep -v 'keycloak-users-localize\|keycloak-vcs-user'"
       ```
 
      Example output:
