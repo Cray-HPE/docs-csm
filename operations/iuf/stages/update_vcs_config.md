@@ -37,10 +37,10 @@ product, product version, and branch values used by IUF when executing stages su
 
 The following describes how `update-vcs-config` determines how to create or merge VCS content to the customer branch:
 
-- If no customer branch has been specified, `update-vcs-config` with display a warning, perform no operations, and exits without error. While it is valid not to specify a customer branch in certain cases, the administrator should
+- If no customer branch has been specified, `update-vcs-config` displays a warning, performs no operations, and exits without error. While it is valid not to specify a customer branch in certain cases, the administrator should
   verify that this is the desired behavior and that the VCS configuration and the corresponding CFS configurations to be used in the `update-cfs-config` stage match and are valid.
 - If the specified customer branch exists, the content from the pristine branch will be merged into the customer branch.
-- If the specified customer branch does not exist, `update-vcs-config` will attempt to identify branches that matches the pattern of the customer branch, select the matching branch with the most recent version, and consider it the
+- If the specified customer branch does not exist, `update-vcs-config` will attempt to identify branches that match the pattern of the customer branch, select the matching branch with the most recent version, and consider it the
   previous customer branch. The specified customer branch will be branched from the previous customer branch, and the content from the pristine branch will be merged into the specified customer branch.
 - If the specified customer branch does not exist and a previous customer branch cannot be identified, the specified customer branch will be branched from the pristine branch.
 

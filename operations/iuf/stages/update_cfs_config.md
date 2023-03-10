@@ -26,8 +26,8 @@ The following arguments are most often used with the `update-cfs-config` stage. 
 | Input                                         | `iuf` Argument                   | Description                                                                                           |
 | --------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | Activity                                      | `-a ACTIVITY`                    | Activity created for the install or upgrade operations                                                |
-| Managed `sat bootprep` configuration files    | `-bc BOOTPREP_CONFIG_MANAGED`    | List of `sat bootprep` configuration files used for managed images                                    |
-| Management `sat bootprep` configuration files | `-bm BOOTPREP_CONFIG_MANAGEMENT` | List of `sat bootprep` configuration files used for management NCN images                             |
+| Managed `sat bootprep` configuration files    | `-bc BOOTPREP_CONFIG_MANAGED`    | The `sat bootprep` configuration file used for managed nodes                                          |
+| Management `sat bootprep` configuration files | `-bm BOOTPREP_CONFIG_MANAGEMENT` | The `sat bootprep` configuration file used for management nodes                                       |
 | `sat bootprep` configuration directory        | `-bpcd BOOTPREP_CONFIG_DIR`      | Directory containing `sat bootprep` configuration files and recipe variables                          |
 | Recipe variables                              | `-rv RECIPE_VARS`                | Path to YAML file containing recipe variables provided by HPE                                         |
 | Site variables                                | `-sv SITE_VARS`                  | Path to YAML file containing site defaults and any overrides                                          |
