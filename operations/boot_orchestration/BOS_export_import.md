@@ -113,24 +113,11 @@ BOS session templates can also be manually exported and imported onto a given sy
             "type": "s3"
           }
         },
-        "boot_sets": {
-          "uan": {
-            "boot_ordinal": 2,
-            "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=nmn0:dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 spire_join_token=${SPIRE_JOIN_TOKEN}",
-            "network": "nmn",
-            "node_list": [
-              "x3000c0s15b0n0"
-            ],
-            "path": "s3://boot-images/c23f3d5e-223a-4fb9-b305-0c2be8e63615/manifest.json",
-            "rootfs_provider": "cpss3",
-            "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-            "type": "s3"
-          }
-        },
         "cfs": {
           "configuration": "uan-config-2.0.0"
         },
-        "enable_cfs": true
+        "enable_cfs": true,
+        "name": "uan-sessiontemplate-2.0.27"
       }
       ```
 
