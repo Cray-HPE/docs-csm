@@ -317,7 +317,7 @@ Error dashboards have data such as total counts of errors, warnings, and failure
 
 - The error dashboards provide the ability to examine errors in the cluster across multiple dimensions.
 - The error dashboards pull in information from a variety of sources, including the following:
-  - Error and failures encountered during upgrades and installs.
+  - Errors and failures encountered during upgrades and installs.
   - ConMan logs on the PIT node.
   - Goss test logs.
 
