@@ -122,7 +122,7 @@ Expected behavior: All NCN worker nodes will be rebuilt. Each set of worker node
 (`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the following parameters. Upgrading the NCN master nodes as shown, should only be done if CSM is being upgraded.
 
 - Assume 10 worker nodes (`ncn-w001` through `ncn-w010`)
-- `-limit-management-rollout [Management_Worker Management_Master]`
+- `--limit-management-rollout Management_Worker Management_Master`
 - `-cmrp 33`
 - `ncn-w004` is labeled with `iuf-prevent-rollout=true`
 
@@ -145,7 +145,7 @@ Expected behavior:
 These steps should be followed when upgrading NCN storage nodes and `ncn-m001` during [Management-nodes-rollout with CSM upgrade](../workflows/upgrade_all_products.md#651-management-nodes-rollout-with-csm-upgrade)
 when following the [upgrade all products documentation](../workflows/upgrade_all_products.md).
 
-1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [Management-nodes-rollout with CSM upgrade](../workflows/upgrade_all_products.md#651-management-nodes-rollout-with-csm-upgrade) in the [upgrade all products documentation](../workflows/upgrade_all_products.md).
+1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [`management-nodes-rollout` with CSM upgrade](../workflows/upgrade_all_products.md#651-management-nodes-rollout-with-csm-upgrade) in the [upgrade all products documentation](../workflows/upgrade_all_products.md).
 
     ```bash
     IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
