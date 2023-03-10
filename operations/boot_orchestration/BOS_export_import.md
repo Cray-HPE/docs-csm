@@ -90,12 +90,8 @@ BOS session templates can also be manually exported and imported onto a given sy
 
    1. Write the contents of the session template to a file in the export directory created earlier.
 
-      > This command strips the `name` field from the session template, because the name is stored in the name of the JSON file itself,
-      > and because that field must be stripped before doing the import.
-
       ```bash
       cray bos v2 sessiontemplate describe "${BOS_TEMPLATE_NAME}" --format json |
-          jq 'del(.name)' |
           tee "${BOS_EXPORT_DIR}/${BOS_TEMPLATE_NAME}.json"
       ```
 
