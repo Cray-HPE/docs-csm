@@ -1,0 +1,88 @@
+# Upgrade
+
+The following workflow describes an upgrade procedure for CSM as well as all non-CSM product
+content provided via a HPC CSM Software Recipe release. The steps documented here alternate
+between CSM upgrade instructions unrelated to IUF and non-CSM product upgrade instructions managed
+by IUF.
+
+All stages of `iuf` are executed in this workflow: all of the new product software provided in the
+recipe release is deployed and all management NCNs and managed compute and application nodes are
+rebooted to new images and CFS configurations. Manual operations are documented for procedures that
+are not currently managed by IUF.
+
+The upgrade workflow comprises the following procedures which must be executed in the order shown.
+
+1. CSM preparation, Stage 0.1, and Stage 0.2
+
+   Read the _Important Notes_ section of the
+   [CSM 1.3.0 or later to 1.4.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
+   documentation and then follow these CSM instructions in order:
+
+   1. [Prepare for Upgrade](../../../upgrade/prepare_for_upgrade.md)
+   1. [Stage 0.1 - Prepare assets](../../../upgrade/Stage_0_Prerequisites.md#stage-01---prepare-assets)
+   1. [Stage 0.2 - Prerequisites](../../../upgrade/Stage_0_Prerequisites.md#stage-02---prerequisites)
+
+1. Download product media and prepare for IUF upgrade
+
+   Follow the IUF [Prepare for the install or upgrade](preparation.md) instructions
+
+1. Product Delivery
+
+   Follow the IUF [Product delivery](product_delivery.md) instructions
+
+1. Configuration
+
+   Follow the IUF [Configuration](configuration.md) instructions
+
+1. Image preparation
+
+   Follow the IUF [Image preparation](image_preparation.md) instructions
+
+1. CSM Stage 0.4
+
+   Follow the CSM
+   [Stage 0.4 - Backup workload manager data](../../../upgrade/Stage_0_Prerequisites.md#stage-04---backup-workload-manager-data)
+   instructions
+
+1. Backup
+
+   Follow the IUF [Backup](backup.md) instructions
+
+1. Management Rollout
+
+   Follow the IUF [Management rollout](management_rollout.md) instructions
+
+   **`UNRESOLVED ISSUE`** Does IUF cover all of the following [Stage 1](../../../upgrade/Stage_1.md)
+   steps?
+
+   1. [Ensure that `rbd` stats monitoring is enabled](../../../upgrade/Stage_1.md#ensure-that-rbd-stats-monitoring-is-enabled)
+
+   **`UNRESOLVED ISSUE`** Does IUF cover all of the following [Stage 2](../../../upgrade/Stage_2.md)
+   steps?
+
+   1. [Backup artifacts on `ncn-m001`](../../../upgrade/Stage_2.md#backup-artifacts-on-ncn-m001)?
+   1. [Stage 2.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_2.md#stage-24---upgrade-weave-and-multus)
+   1. [Stage 2.5 - `coredns` anti-affinity](../../../upgrade/Stage_2.md#stage-25---coredns-anti-affinity)
+   1. [Stage 2.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_2.md#stage-26---complete-kubernetes-upgrade)
+
+1. CSM Stage 3 and CSM health validation
+
+   Follow these CSM instructions in order:
+
+   1. [Stage 3 - CSM Service Upgrades](../../../upgrade/Stage_3.md)
+   1. [Validate CSM Health](../../../upgrade/README.md#3-validate-csm-health)
+   1. [Check and Update Firmware](../../../upgrade/README.md#4-check-and-update-firmware)
+
+1. Deploy product
+
+   Follow these IUF instructions in order:
+
+   1. [Deploy product](deploy_product.md)
+   1. [Validate deployment](validate_deployment.md)
+
+1. Managed rollout
+
+   Follow the IUF [Managed rollout](managed_rollout.md) instructions
+
+The upgrade workflow is now complete. Exit any typescript sessions created during the upgrade
+procedure and remove any installation artifacts, if desired.
