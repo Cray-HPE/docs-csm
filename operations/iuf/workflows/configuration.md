@@ -29,14 +29,16 @@ provided by the HPC CSM Software Recipe release content being installed. This ma
 
     ```bash
     cp "${MEDIA_DIR}"/hpc-csm-software-recipe-*/vcs/product_vars.yaml .
-    cp "${MEDIA_DIR}"/hpc-csm-software-recipe-*/vcs/bootprep/*.yaml .
+    cp -r "${MEDIA_DIR}"/hpc-csm-software-recipe-*/vcs/bootprep .
     ```
 
-    (`ncn-m001#`) List contents of `${ADMIN_DIR}` to verify content is present
+    (`ncn-m001#`) Examine the contents of `${ADMIN_DIR}` to verify the expected content is present
 
     ```bash
-    ls
-    compute-and-uan-bootprep.yaml  management-bootprep.yaml  product_vars.yaml
+    find . -type f
+    ./bootprep/management-bootprep.yaml
+    ./bootprep/compute-and-uan-bootprep.yaml
+    ./product_vars.yaml
     ```
 
 1. Edit the `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files to account for any site deviations from the default values. For example:
