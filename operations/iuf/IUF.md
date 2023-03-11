@@ -46,7 +46,6 @@ The following IUF topics are discussed in the sections below.
 - [Re-executing stages of an IUF session](#re-executing-stages-of-an-iuf-session)
   - [Removing a product from an IUF session](#removing-a-product-from-an-iuf-session)
   - [Adding a product to an IUF session](#adding-a-product-to-an-iuf-session)
-- [Product workflows](#product-workflows)
 - [Troubleshooting](#troubleshooting)
 - [Recovering from failures](#recovering-from-failures)
 
@@ -67,15 +66,12 @@ The following IUF topics are discussed in the sections below.
 
 ## Initial install and upgrade workflows
 
-The time at which IUF stages are executed in an initial install or upgrade workflow depends on whether CSM itself is also being installed or upgraded in addition to non-CSM products. This table describes the different use cases
-and tasks performed.
+There are two separate workflows that utilize IUF when installing or upgrading non-CSM product content on a Cray EX system.
 
-| Operation       | Content          | Tasks |
-| --------------- | ---------------- | ----- |
-| initial install | CSM and products | Install CSM, **ignoring** any IUF stages embedded in the CSM installation documentation. Then execute all IUF stages to install product content with CSM fully functional. |
-| initial install | products only    | Execute IUF stages to install non-CSM product content |
-| upgrade         | CSM and products | Upgrade CSM, **including** any IUF stages embedded in the CSM installation documentation |
-| upgrade         | products only    | Execute IUF stages to upgrade non-CSM product content |
+1. The IUF [Initial Install](workflows/initial_install.md) workflow is used in either of the following scenarios:
+   - An initial install of the system is being performed, including CSM and non-CSM products
+   - An initial install or upgrade is being performed **with non-CSM product content only**. In this scenario, the first step ("Perform an install of CSM") is skipped and all other steps are performed.
+1. The IUF [Upgrade](workflows/upgrade.md) workflow is used when an upgrade is being performed **with CSM and non-CSM product content**
 
 ## Activities
 
@@ -663,12 +659,6 @@ at the same time the new version is added.
 
 If previously executed stages performed operations using the old product version, re-execute them to remove artifacts or metadata related to the old version of the product, e.g. to remove CFS configuration layers and rebuild images
 to ensure only the new version of the product is present.
-
-## Product workflows
-
-The following are examples of workflows for installing and upgrading product content using `iuf`.
-
-- [Install or Upgrade All Products Provided in a HPC CSM Software Recipe](workflows/upgrade_all_products.md)
 
 ## Troubleshooting
 

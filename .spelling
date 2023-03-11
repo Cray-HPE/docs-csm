@@ -589,6 +589,7 @@ remediated
 remediates
 remediating
 respawns
+rollout
 routable
 sC
 sC-ToR
@@ -904,15 +905,11 @@ SESSIONID
 unexecuted
 
 - operations/iuf/stages/managed_nodes_rollout.md
-rollout
+200Gbps
 
 - operations/iuf/stages/management_nodes_rollout.md
-rollout
-rollouts
-
-- operations/iuf/workflows/upgrade_all_products.md
 200Gbps
-rollout
+rollouts
 unlabeled
 userspace
 
