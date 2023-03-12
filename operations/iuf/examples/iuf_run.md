@@ -26,10 +26,10 @@ iuf -a admin-230126 run -r update-vcs-config -rv ./recipe_vars.yaml -sv ./site_v
 
 ---
 
-(`ncn-m001#`) Execute the `prepare-images` stage for activity `admin-230126` using the HPE-provided `sat bootprep` input and recipe variables files in `./hpc-csm-software-recipe-23.1.18/vcs` and site variables `./site_vars.yaml`.
+(`ncn-m001#`) Execute the `prepare-images` stage for activity `admin-230126` using the HPE-provided `sat bootprep` input and recipe variables files in `/etc/cray/upgrade/csm/admin` and site variables `/etc/cray/upgrade/csm/admin/site_vars.yaml`.
 
 ```bash
-iuf -a admin-230126 run -r prepare-images -bpcd ./hpc-csm-software-recipe-23.1.18/vcs -sv ./site_vars.yaml
+iuf -a admin-230126 run -r prepare-images -bpcd /etc/cray/upgrade/csm/admin -sv /etc/cray/upgrade/csm/admin/site_vars.yaml
 ```
 
 ---

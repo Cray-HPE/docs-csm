@@ -365,6 +365,6 @@ Once this step has completed:
 
 ## 5. Next steps
 
-- If performing an initial install, return to [Initial install](initial_install.md) to continue the install.
+- If performing an initial install or an upgrade of non-CSM products only, return to the IUF [Initial install](initial_install.md) workflow to continue the install.
 
-- If performing an upgrade, return to [Upgrade](upgrade.md) to continue the upgrade.
+- If performing an upgrade that includes upgrading CSM, return to the IUF [Upgrade](upgrade.md) workflow to continue the upgrade.

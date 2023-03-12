@@ -19,4 +19,4 @@ Once this step has completed:
 
 ## 2. Next steps
 
-- Return to [Upgrade](upgrade.md) to continue the upgrade.
+- Return to the IUF [Upgrade](upgrade.md) workflow to continue the upgrade.

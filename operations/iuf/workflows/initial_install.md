@@ -54,5 +54,5 @@ shown.
 
    Follow the IUF [Managed rollout](managed_rollout.md) instructions
 
-The initial install workflow is now complete. Exit any typescript sessions created during the
+The IUF initial install workflow is now complete. Exit any typescript sessions created during the
 install procedure and remove any installation artifacts, if desired.

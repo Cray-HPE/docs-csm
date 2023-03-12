@@ -84,5 +84,5 @@ The upgrade workflow comprises the following procedures which must be executed i
 
    Follow the IUF [Managed rollout](managed_rollout.md) instructions
 
-The upgrade workflow is now complete. Exit any typescript sessions created during the upgrade
+The IUF upgrade workflow is now complete. Exit any typescript sessions created during the upgrade
 procedure and remove any installation artifacts, if desired.
