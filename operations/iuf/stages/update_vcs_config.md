@@ -139,9 +139,8 @@ for details on the commands executed.
 
 ## Example
 
-(`ncn-m001#`) Execute the `update-vcs-config` stage for activity `admin-230127` using the specified `site_vars.yaml` file and the `product_vars.yaml` file found in the `hpc-csm-software-recipe-23.05.0/vcs` directory of the
-23.05.0 HPC CSM Software Recipe distribution file.
+(`ncn-m001#`) Execute the `update-vcs-config` stage for activity `admin-230127` using the `/etc/cray/upgrade/csm/admin/site_vars.yaml` file and the `product_vars.yaml` file found in the `/etc/cray/upgrade/csm/admin` directory.
 
 ```bash
-iuf -a admin-230127 run -sv ./site_vars.yaml -bpcd ./hpc-csm-software-recipe-23.05.0/vcs -r update-vcs-config
+iuf -a admin-230127 run -sv /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin -r update-vcs-config
 ```

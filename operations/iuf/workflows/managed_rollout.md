@@ -4,8 +4,9 @@ This section updates the software running on managed compute and application (UA
 
 - [1. Update managed host firmware (FAS)](#1-update-managed-host-firmware-fas)
 - [2. Execute the IUF `managed-nodes-rollout` stage](#2-execute-the-iuf-managed-nodes-rollout-stage)
-  - [2.1 Compute nodes](#21-compute-nodes)
-  - [2.2 Application nodes](#22-application-nodes)
+  - [2.1 LNet router nodes and gateway nodes](#21-lnet-router-nodes-and-gateway-nodes)
+  - [2.2 Compute nodes](#22-compute-nodes)
+  - [2.3 Application nodes](#23-application-nodes)
 - [3. Update managed host Slingshot NIC firmware](#3-update-managed-host-slingshot-nic-firmware)
 - [4. Execute the IUF `post-install-check` stage](#4-execute-the-iuf-post-install-check-stage)
 - [5. Next steps](#5-next-steps)
@@ -28,7 +29,21 @@ images and CFS configurations.
 **`NOTE`** Additional arguments are available to control the behavior of the `managed-nodes-rollout` stage. See the [`managed-nodes-rollout` stage documentation](../stages/managed_nodes_rollout.md) for details and adjust the
 examples below if necessary.
 
-### 2.1 Compute nodes
+### 2.1 LNet router nodes and gateway nodes
+
+LNet router nodes or gateway nodes should be upgraded before rebooting compute nodes to new images and CFS configurations. Since LNet routers and gateway nodes are examples of application nodes, the instructions in this section
+are the same as in [2.3 Application nodes](#23-application-nodes).
+
+Since LNet router nodes and gateway nodes are not managed by workload managers, the IUF `managed-nodes-rollout` stage cannot reboot them in a controlled manner via the `-mrs stage` argument. The IUF `managed-nodes-rollout` stage
+can reboot LNet router and gateway nodes using the `-mrs reboot` argument, but an immediate reboot of the nodes is likely to be disruptive to users and overall system health and is not recommended. Administrators should determine
+the best approach for rebooting LNet router and gateway nodes outside of IUF that aligns with site preferences.
+
+Once this step has completed:
+
+- Managed LNet router and gateway nodes (if any) have been rebooted to the images and CFS configurations created in previous steps of this workflow
+- Per-stage product hooks have executed for the `managed-nodes-rollout` stage if IUF `managed-nodes-rollout` procedures were used to perform the reboots
+
+### 2.2 Compute nodes
 
 1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `managed-nodes-rollout` stage.
 
@@ -57,7 +72,10 @@ Once this step has completed:
 - Managed compute nodes have been rebooted to the images and CFS configurations created in previous steps of this workflow
 - Per-stage product hooks have executed for the `managed-nodes-rollout` stage
 
-### 2.2 Application nodes
+### 2.3 Application nodes
+
+**`NOTE`** If LNet router or gateway nodes were upgraded in the [2.1 LNet router nodes and gateway nodes](#21-lnet-router-nodes-and-gateway-nodes) section, there is no need to upgrade them again in this section. Follow the
+instructions in this section to upgrade any remaining applications (UANs, etc.) that have not been upgraded yet.
 
 Since applications nodes are not managed by workload managers, the IUF `managed-nodes-rollout` stage cannot reboot them in a controlled manner via the `-mrs stage` argument. The IUF `managed-nodes-rollout` stage can reboot application
 nodes using the `-mrs reboot` argument, but an immediate reboot of application nodes is likely to be disruptive to users and overall system health and is not recommended. Administrators should determine the best approach for rebooting
@@ -94,6 +112,6 @@ Once this step has completed:
 
 ## 5. Next steps
 
-- If performing an initial install, return to [Initial install](initial_install.md) to continue the install.
+- If performing an initial install or an upgrade of non-CSM products only, return to the IUF [Initial install](initial_install.md) workflow to continue the install.
 
-- If performing an upgrade, return to [Upgrade](upgrade.md) to continue the upgrade.
+- If performing an upgrade that includes upgrading CSM, return to the IUF [Upgrade](upgrade.md) workflow to continue the upgrade.

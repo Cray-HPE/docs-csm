@@ -28,7 +28,8 @@ documentation](../stages/update_cfs_config.md) and the [`prepare-images` stage d
     ```
 
 1. Inspect the newly-created management NCN and managed node images, CFS configurations, and BOS session templates to ensure they are correct before continuing with the next steps of the workflow. The artifacts can be identified
-by examining the Kubernetes ConfigMap associated with the activity. See the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation for instructions and examples.
+by examining the output from `iuf run` or by examining the Kubernetes ConfigMap associated with the activity. See the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation for
+instructions and examples.
 
 Once this step has completed:
 
@@ -54,6 +55,6 @@ Once this step has completed:
 
 ## 3. Next steps
 
-- If performing an initial install, return to [Initial install](initial_install.md) to continue the install.
+- If performing an initial install or an upgrade of non-CSM products only, return to the IUF [Initial install](initial_install.md) workflow to continue the install.
 
-- If performing an upgrade, return to [Upgrade](upgrade.md) to continue the upgrade.
+- If performing an upgrade that includes upgrading CSM, return to the IUF [Upgrade](upgrade.md) workflow to continue the upgrade.
