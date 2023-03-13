@@ -325,7 +325,7 @@ Error dashboards have data such as total counts of errors, warnings, and failure
 
 Dashboards tracking different types of errors during install/upgrade.
 
-- Frequency of message about known issues dashboard
+- Frequency of messages about known issues dashboard
 - CSM install progress dashboard
 - USB Device error tracking dashboard
 - Boot PXE error tracking dashboard
