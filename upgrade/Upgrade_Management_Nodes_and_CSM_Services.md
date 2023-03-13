@@ -28,7 +28,6 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 - [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
 - [Stage 2 - Kubernetes Upgrade](Stage_2.md)
 - [Stage 3 - CSM Services Upgrade](Stage_3.md)
-- [Stage 4 - Ceph Upgrade](Stage_4.md)
 - [Validate CSM health](../operations/validate_csm_health.md)
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
