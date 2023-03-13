@@ -4,7 +4,7 @@
 
 The Install and Upgrade Observability Framework collects Goss test health check results and presents them in a visual Grafana dashboard, providing key insights into the health of the system.
 
-The automated Time to Install (TTI) and Time to Upgrade (TTU) provide the time and other important details for each portion of the HPC install, such as when and on what machine a given command was run.
+The automated Time to Install (TTI) and Time to Upgrade (TTU) features provide the time and other important details for each portion of the CSM install, such as when and on what machine a given command was run.
 
 For installs of each product stream, the observability framework records the time spent executing the install, debugging, waiting, as well as the total time duration.
 
@@ -19,7 +19,7 @@ The following is a list of the most important features of the framework:
     - Goss test dashboard view that shows total product test details, and from that view an administrator can zoom in to focus on details of a single test.
   - Product stream health
 
-- Drill down health dashboard with roll up.
+- Drill down health dashboard with roll up summary of health checks.
   - Aggregate checks
     - Problem/OK counts across each product stream.
   - Functional checks
@@ -179,12 +179,11 @@ Feb 08 23:06:38 redbull-pit grafana[82549]: logger=http.server t=2023-02-08T23:0
 
 ## IUF timing dashboard
 
-The IUF Timing dashboard provides timing information for installs and upgrades.
+The IUF timing dashboard provides timing information for installs and upgrades.
 
 ### Timing dashboard features
 
-- Dynamic top-down and bottom-up dashboard to track install/upgrade status of any product, stage, and operation.
-- Dashboard calculates the duration for the install/upgrade of any product, stage, and operation.
+- A dynamic top-down and bottom-up dashboard that tracks install/upgrade status and duration for any product, stage, and operation.
 
 ![IUF timing dashboard](../../img/operations/TimingDashboard.png "Timing Dashboard")
 
@@ -254,7 +253,8 @@ Log file entries for each node, test name, and source are stored in the followin
 ### Grok-exporter deployment, service, and service-monitor
 
 Grok-exporter is deployed on all of the Kubernetes master nodes using Kubernetes node affinity.
-As background information, the service for the grok-exporter is accessible at port `9144` and service-monitor implementation is for Prometheus to access the metrics that are created by the grok-exporter.
+As background information, the service for the grok-exporter is accessible at port `9144`.
+The service-monitor implementation is for Prometheus to access the metrics that are created by the grok-exporter.
 
 ### Configuration file for the grok-exporter
 
@@ -295,12 +295,11 @@ data:
 
 ### Prometheus metrics and Grafana dashboard
 
-After the preceding steps the `goss_tests` metrics are seen in Prometheus when Goss tests are run. Using these metrics,
-Grafana dashboards are created to shows the Goss tests details visually.
+The `goss_tests` metrics are displayed in Prometheus whenever Goss tests are run. Grafana dashboard is created and use these metrics to display the Goss test details visually.
 
 Goss test dashboard features:
 
-- The dashboard has a dropdown for products, suites, and tests.
+- The dashboard has a dropdown menu for products, suites, and tests.
 - By default, all products, suites, and tests are selected for overall Goss test results.
 - The overall product result, total number of products, products passed, products failed, and execution time is displayed.
 - Suite results and test results are displayed on the dashboard.
@@ -327,7 +326,7 @@ Dashboards tracking different types of errors during install/upgrade.
 
 - Frequency of messages about known issues dashboard
 - CSM install progress dashboard
-- USB Device error tracking dashboard
+- USB device error tracking dashboard
 - Boot PXE error tracking dashboard
 - Boot DHCP error tracking dashboard
 
