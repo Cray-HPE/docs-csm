@@ -258,7 +258,7 @@ As background information, the service for the grok-exporter is accessible at po
 
 ### Configuration file for the grok-exporter
 
-The configuration file for the grok-exporter provides instructions on how to parse the Goss test log files and creates metrics from them.
+The configuration file for the grok-exporter provides instructions on how to parse the Goss test log files and create metrics from them.
 grok-exporter version 3 configuration is used for this task and to match log expressions with regular expressions.
 
 The following is an example configuration passed to the grok-exporter to get metrics:
