@@ -91,8 +91,10 @@ yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-
 if [[ -n "$(yq r "$c" "spec.kubernetes.services.cray-keycloak.keycloak.keycloak")" ]]; then
   yq r "$c" 'spec.kubernetes.services.cray-keycloak.keycloak.keycloak' | yq p - 'spec.kubernetes.services.cray-keycloak.keycloak' | yq m -i "$c" -
   yq d -i "$c" 'spec.kubernetes.services.cray-keycloak.keycloak.keycloak'
-  yq w -i "$c" 'spec.kubernetes.services.cray-keycloak.keycloak.contextPath' "$(yq r "$c" 'spec.kubernetes.services.cray-keycloak.keycloak.basepath')"
-  yq d -i "$c" 'spec.kubernetes.services.cray-keycloak.keycloak.basepath'
+  if [[ -n "$(yq r "$c" "spec.kubernetes.services.cray-keycloak.keycloak.basepath")" ]]; then
+    yq w -i "$c" 'spec.kubernetes.services.cray-keycloak.keycloak.contextPath' "$(yq r "$c" 'spec.kubernetes.services.cray-keycloak.keycloak.basepath')"
+    yq d -i "$c" 'spec.kubernetes.services.cray-keycloak.keycloak.basepath'
+  fi
 fi
 
 # cray-hms-hmcollector
