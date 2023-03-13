@@ -35,7 +35,7 @@ encountered a configuration error. A similar set of records for configuration fo
 [CFS](../configuration_management) endpoint for the same hardware component. In this case, BOS will indicate the
 component status is `configuring`, and further querying information from CFS for the same component may be in order.
 
-(`ncn-mw#`) Verify the configuration status of a CFS component of the same name
+(`ncn-mw#`) Verify the configuration status of a CFS component of the same name.
 
 ```bash
 cray cfs components describe x3000c0s1b0n0
