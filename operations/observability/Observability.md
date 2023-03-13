@@ -231,7 +231,7 @@ Goss tests are contained in YAML file. A YAML file containing a list of Goss tes
 
 ### Log file format
 
-Individual lines of logs are in the following format for each node, test name, and source:
+Log file entries for each node, test name, and source are stored in the following format:
 
 ```json
 {
