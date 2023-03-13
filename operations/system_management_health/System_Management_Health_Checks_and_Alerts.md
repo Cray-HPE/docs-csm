@@ -12,19 +12,19 @@ Similar to Prometheus metrics, alerts use labels to identify a particular dimens
 
 ### Check Active Alerts from NCNs
 
-Prometheus includes the /api/v1/alerts endpoint, which returns a JSON object containing the active alerts. From a non-compute node \(NCN\), can connect to sysmgmt-health/cray-sysmgmt-health-promet-prometheus directly and bypass service authentication and authorization.
+Prometheus includes the /api/v1/alerts endpoint, which returns a JSON object containing the active alerts. From a non-compute node \(NCN\), can connect to sysmgmt-health/cray-sysmgmt-health-kube-p-prometheus directly and bypass service authentication and authorization.
 
 Obtain the cluster IP address:
 
 ```bash
-kubectl -n sysmgmt-health get svc cray-sysmgmt-health-promet-prometheus
+kubectl -n sysmgmt-health get svc cray-sysmgmt-health-kube-p-prometheus
 ```
 
 Example output:
 
 ```
 NAME                                    TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-cray-sysmgmt-health-promet-prometheus   ClusterIP   10.16.201.80   <none>        9090/TCP   2d6h
+cray-sysmgmt-health-kube-p-prometheus   ClusterIP   10.16.201.80   <none>        9090/TCP   2d6h
 ```
 
 Get active alerts, which includes `KubeletTooManyPods` if it is going off:
