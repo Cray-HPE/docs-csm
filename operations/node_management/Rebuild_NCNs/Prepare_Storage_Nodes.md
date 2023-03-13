@@ -12,6 +12,9 @@ When rebuilding a node, make sure that `/srv/cray/scripts/common/storage-ceph-cl
 
    ```bash
    NODE=ncn-s00n
+   ```
+
+   ```bash
    XNAME=$(ssh $NODE cat /etc/cray/xname)
    ```
 
