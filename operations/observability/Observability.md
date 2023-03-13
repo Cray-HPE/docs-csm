@@ -6,7 +6,7 @@ The Install and Upgrade Observability Framework collects Goss test health check 
 
 The automated Time to Install (TTI) and Time to Upgrade (TTU) provide the time and other important details for each portion of the HPC install, such as when and on what machine a given command was run.
 
-For install of each product stream, the observability framework records the time spent in actual work, debugging, and waiting, as well as the total duration.
+For installs of each product stream, the observability framework records the time spent executing the install, debugging, waiting, as well as the total time duration.
 
 The following is a list of the most important features of the framework:
 
