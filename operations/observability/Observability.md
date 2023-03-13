@@ -302,7 +302,7 @@ Goss test dashboard features:
 
 - The dashboard has a dropdown for products, suites, and tests.
 - By default, all products, suites, and tests are selected for overall Goss test results.
-- The overall product result, total number of the products, products passed, products failed, and its execution time is seen.
+- The overall product result, total number of products, products passed, products failed, and execution time is displayed.
 - Suite results and test results are seen from the dashboard.
 - Node-wise test results are seen with failed nodes, passed nodes, and the suite/test description.
 
