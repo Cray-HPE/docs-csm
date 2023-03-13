@@ -8,7 +8,7 @@ provisioning. Often, it is helpful to observe the set of operations that BOS has
 apply to a single failing node. The records of operations that have been applied for a node, as well as the intended
 next steps, can be viewed through the BOS v2 component information for the affected hardware.
 
-(`ncn-mw#`) Verify the status of a BOS component
+(`ncn-mw#`) Verify the status of a BOS component.
 
 ```bash
 cray bos v2 components describe x3000c0s1b0n0
