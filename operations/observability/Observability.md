@@ -30,7 +30,7 @@ The following is a list of the most important features of the framework:
     - For example: management switch configuration verification, routing table checks on the OS, gateway tests, and Container Network Interface (CNI) tests.
 
 - Boot, install, and upgrade duration monitoring.
-  This does automatic calculation and reporting of both the time a given section of install/upgrade has taken, as well as metrics on Goss test successes and failures.
+  This does automatic calculating and reporting of the time a given section of install/upgrade has taken as well as metrics on Goss test successes and failures.
 
 - Ability to view health and duration information across different dimensions such as time, node, product stream, capacity, and others.
 
