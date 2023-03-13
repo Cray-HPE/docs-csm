@@ -24,7 +24,7 @@ The following is a list of the most important features of the framework:
     - Problem/OK counts across each product stream.
   - Functional checks
     - Product stream functional Goss suites for key areas.
-    - For example: REST APIs, micro-services, Kubernetes, network, and database health for the specific product stream.
+    - For example: REST API, micro-service, Kubernetes, network, and database health checks for a specific product stream.
   - Granular checks
     - Individual Goss tests for component level health checks within a functional area of a given product stream.
     - For example: management switch configuration verification, routing table checks on the OS, gateway tests, and Container Network Interface (CNI) tests.
