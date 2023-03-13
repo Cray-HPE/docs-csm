@@ -712,7 +712,7 @@ If an error is encountered while executing `iuf run`, `iuf` will attempt to comp
 ## Install and Upgrade Observability Framework
 
 The Install and Upgrade Observability Framework includes assertions for Goss health checks, as well as metrics and dashboards for health checks.
-The framework also includes a unified consistent method to automatically track Time to Install (TTI) and Time to Upgrade (TTU), as well as error and pattern counts across clusters and product streams.
+The framework also includes a unified consistent method to automatically track Time to Install (TTI) and Time to Upgrade (TTU), as well as error and pattern counts across all nodes and product streams.
 The Install and Upgrade Observability Framework is automatically deployed and configured in the CSM environment.
 
 For more information on the Install and Upgrade Observability Framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).
