@@ -14,7 +14,7 @@ BOS depends on each of the following services to complete its tasks:
 
 - Boot Script Service \(BSS\) - Stores the configuration information that is used to boot each hardware component. Nodes consult BSS for their boot artifacts and boot parameters when nodes boot or reboot.
 - Configuration Framework Service \(CFS\) - BOA launches CFS to apply configuration to the nodes in its boot sets \(node personalization\).
-- Power Control Service \(PCS\) - Used to power nodes on and off, as well as query current power status
+- Power Control Service \(PCS\) - Used to power nodes on and off, as well as query current power status.
 - Hardware State Manager \(HSM\) - Tracks the state of each node and what groups and roles nodes are included in.
 
 ## Use the BOS Cray CLI commands
