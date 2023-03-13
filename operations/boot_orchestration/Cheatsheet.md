@@ -37,7 +37,7 @@ cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Re
 (`ncn-mw#`) Boot a single node:
 
 ```bash
-cray bos v2 session create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
+cray bos v2 sessions create --template-name SESSION_TEMPLATE_NAME --operation Boot --limit <node's xname>
 ```
 
 (`ncn-mw#`) Reboot a single node:
