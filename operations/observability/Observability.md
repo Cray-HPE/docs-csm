@@ -73,7 +73,7 @@ The Observability Framework is available during CSM installs once the PIT node i
   These services provide monitoring before other products are installed.
 - Grok-exporter parses the unstructured data from the log files and creates Prometheus metrics.
 - Prometheus is used as a time-series database for capturing the metrics.
-- All the Grafana dashboards automatically load up.
+- All Grafana dashboards are automatically configured.
 
 ### Observability Framework workflow on PIT node
 
