@@ -253,7 +253,7 @@ Log file entries for each node, test name, and source are stored in the followin
 
 ### Grok-exporter deployment, service, and service-monitor
 
-Grok-exporter is deployed on all of the Kubernetes master nodes, by using node affinity in its deployment.
+Grok-exporter is deployed on all of the Kubernetes master nodes using Kubernetes node affinity.
 As background information, the service for the grok-exporter is accessible at port `9144` and service-monitor implementation is for Prometheus to access the metrics that are created by the grok-exporter.
 
 ### Configuration file for the grok-exporter
