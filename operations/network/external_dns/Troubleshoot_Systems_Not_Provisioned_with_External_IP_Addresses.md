@@ -39,17 +39,17 @@ The Customer Management Network \(CMN\) is not supported on the system.
 
 2. Lookup the cluster IP and port for service.
 
-    The example below is for the `cray-sysmgmt-health-promet-prometheus` service.
+    The example below is for the `cray-sysmgmt-health-kube-p-prometheus` service.
 
     ```bash
-    kubectl -n sysmgmt-health get service cray-sysmgmt-health-promet-prometheus
+    kubectl -n sysmgmt-health get service cray-sysmgmt-health-kube-p-prometheus
     ```
 
     Example output:
 
     ```console
     NAME                                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-    cray-sysmgmt-health-promet-prometheus   ClusterIP   10.25.124.159   <none>        9090/TCP   23h
+    cray-sysmgmt-health-kube-p-prometheus   ClusterIP   10.25.124.159   <none>        9090/TCP   23h
     ```
 
 3. Setup port forwarding from a laptop or workstation to access the service.

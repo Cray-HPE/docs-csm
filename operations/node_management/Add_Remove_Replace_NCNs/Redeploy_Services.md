@@ -180,7 +180,7 @@ Redeploy `sysmgmt-health` to pick up any changes for storage node endpoints.
 
     ```bash
     kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | 
-              yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
+              yq r - 'spec.charts.(name==cray-sysmgmt-health).values.kube-prometheus-stack.prometheus.prometheusSpec.resources'
     ```
 
     Example output:
@@ -197,7 +197,7 @@ Redeploy `sysmgmt-health` to pick up any changes for storage node endpoints.
 1. Determine the current retention settings.
 
     ```bash
-    kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.retention'
+    kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.kube-prometheus-stack.prometheus.prometheusSpec.retention'
     ```
 
     Example output:
@@ -219,7 +219,7 @@ Redeploy `sysmgmt-health` to pick up any changes for storage node endpoints.
           version: $SYSMGMT_VERSION
           namespace: sysmgmt-health
           values:
-            prometheus-operator:
+            kube-prometheus-stack:
               prometheus:
                 prometheusSpec:
                   resources:

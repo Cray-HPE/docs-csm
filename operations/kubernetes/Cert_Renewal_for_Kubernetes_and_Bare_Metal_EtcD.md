@@ -550,8 +550,8 @@ Run the following steps from a master node.
    1. Restart Prometheus.
 
       ```bash
-      kubectl rollout restart -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-promet-prometheus
-      kubectl rollout status -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-promet-prometheus
+      kubectl rollout restart -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-kube-p-prometheus
+      kubectl rollout status -n sysmgmt-health statefulSet/prometheus-cray-sysmgmt-health-kube-p-prometheus
       ```
 
       Example output:
@@ -564,8 +564,8 @@ Run the following steps from a master node.
    1. Check for any `tls` errors from the active Prometheus targets. No errors are expected.
 
       ```bash
-      PROM_IP=$(kubectl get services -n sysmgmt-health cray-sysmgmt-health-promet-prometheus -o json | jq -r '.spec.clusterIP')
-      curl -s http://${PROM_IP}:9090/api/v1/targets | jq -r '.data.activeTargets[] | select(."scrapePool" == "sysmgmt-health/cray-sysmgmt-health-promet-kube-etcd/0")' | grep lastError | sort -u
+      PROM_IP=$(kubectl get services -n sysmgmt-health cray-sysmgmt-health-kube-p-prometheus -o json | jq -r '.spec.clusterIP')
+      curl -s http://${PROM_IP}:9090/api/v1/targets | jq -r '.data.activeTargets[] | select(."scrapePool" == "sysmgmt-health/cray-sysmgmt-health-kube-p-kube-etcd/0")' | grep lastError | sort -u
       ```
 
       Example output:
