@@ -21,6 +21,7 @@ There are some different API responses in BOS v2 as well:
 
 - Listing sessions in BOS v2 results in full session records rather than just a list of the current session names.
 - The session status endpoint has also changed significantly. See [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md) for more information on the session status endpoint.
+- BOS v2 leverages the Power Control Service (PCS).
 
 ## Upgrading from v1 to v2
 
