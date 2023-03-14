@@ -26,7 +26,7 @@ The following steps are structured to be executed on one node at a time. However
     ```yaml
     ntp-servers:
       - ncn-m001
-      - time.nist.gov
+      - example.upstream.ntp.server
     ntp-timezone: UTC
     ```
 
