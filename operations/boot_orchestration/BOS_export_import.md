@@ -1,66 +1,157 @@
-# BOS - Exporting and Importing for System Recovery or in the case of a fresh install
+# BOS - Exporting and Importing
 
-## BOS Session Templates
+- [Prerequisites](#prerequisites)
+- [BOS session templates](#bos-session-templates)
+  - [Automated procedures](#automated-procedures)
+    - [Export](#automated-session-template-export)
+    - [Import](#automated-session-template-import)
+  - [Manual procedures](#manual-procedures)
+    - [Export](#manually-export-a-session-template)
+    - [Import](#manually-import-a-session-template)
+- [BOS database PVCs](#bos-database-pvcs)
+
+## Prerequisites
+
+- Ensure that the `cray` command line interface (CLI) is authenticated and configured to talk to system management services.
+  - See [Configure the Cray CLI](../configure_cray_cli.md).
+- In order to use the automated procedures, the latest CSM documentation RPM must be installed on the node where the procedure is being performed.
+  - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+
+## BOS session templates
 
 The primary BOS data that should be saved is the BOS session template. BOS session templates can be exported and later imported.
 
-### Automatically export/import BOS session templates
+- [Automated procedures](#automated-procedures)
+- [Manual procedures](#manual-procedures)
 
-Product specified session templates can be re-installed using their associated Helm charts. This recreates the session template data within BOS.
-Existing BOS session templates can be backed up and restored using the automated scripts. See scripts/operations/system_recovery/export_bos_sessiontemplates.sh and scripts/operations/system_recovery/import_bos_sessiontemplates.sh
-To export BOS session templates, simply run the script scripts/operations/system_recovery/export_bos_sessiontemplates.sh. Copy the archive file it outputs to a safe location.
-To import the BOS session templates, run the scripts/operations/system_recovery/import_bos_sessiontemplates.sh providing as input the archive file that was created by the export_bos_sessiontemplates.sh script.
+### Automated procedures
 
-BOS session templates can also be manually exported and imported onto a given system using the Cray CLI tool. For each session template that you wish to export, use `cray bos sessiontemplate describe` cli. For example:
+Product-specified session templates can be re-installed using their associated Helm charts. This recreates the session template data within BOS.
+Existing BOS session templates can be backed up and restored using automated scripts.
 
-### Manually export any session template as needed
+- [Export](#automated-session-template-export)
+- [Import](#automated-session-template-import)
 
-```bash
-cray bos sessiontemplate describe uan-sessiontemplate-2.0.27 --format json > ~/uan-sessiontemplate-2.0.27.json
-cat ~/uan-sessiontemplate-2.0.27.json
-{
-  "boot_sets": {
-    "uan": {
-      "boot_ordinal": 2,
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=nmn0:dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "network": "nmn",
-      "node_list": [
-        "x3000c0s15b0n0"
-      ],
-      "path": "s3://boot-images/c23f3d5e-223a-4fb9-b305-0c2be8e63615/manifest.json",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "type": "s3"
-    }
-  },
-  "boot_sets": {
-    "uan": {
-      "boot_ordinal": 2,
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=nmn0:dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "network": "nmn",
-      "node_list": [
-        "x3000c0s15b0n0"
-      ],
-      "path": "s3://boot-images/c23f3d5e-223a-4fb9-b305-0c2be8e63615/manifest.json",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "type": "s3"
-    }
-  },
-  "cfs": {
-    "configuration": "uan-config-2.0.0"
-  },
-  "enable_cfs": true,
-  "name": "uan-sessiontemplate-2.0.27"
-}
-```
+#### Automated session template export
 
-### Import/restore any session template as needed
+1. (`ncn-mw#`) Run the following script to perform the export of all BOS session templates.
 
-```bash
-cray bos sessiontemplate create --file ~/uan-sessiontemplate-2.0.27.json --name uan-sessiontemplate-2.0.27
-```
+   ```bash
+   /usr/share/doc/csm/scripts/operations/system_recovery/export_bos_sessiontemplates.sh
+   ```
 
-## BOS Database PVCs
+1. Copy the archive file it outputs to a safe location.
 
-Since the release BOS V2, it is not recommended that the BOS redis database be saved and restored. This database contains the desired state of components. If a system is in recovery and all of the compute nodes shut down, restoring the database will restore BOS' desired state for the components. BOS will attempt to move these compute nodes into that desired state. This may mean attempting to boot compute nodes to the previous desired state, which may contain old, stale state, such as stale compute images. It is better to let BOS recreate the databases from scratch. Then, apply the desired state to the components with the latest up to date state.
+#### Automated session template import
+
+1. Copy the file generated by the export script on the node where the import procedure is being performed.
+
+1. (`ncn-mw#`) Run the following script to perform the import of all BOS session templates.
+
+   > Modify the following example command to specify the path to the output file from the automated export script.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/system_recovery/import_bos_sessiontemplates.sh /root/bos-session-templates.tgz
+   ```
+
+### Manual procedures
+
+BOS session templates can also be manually exported and imported onto a given system using the Cray CLI tool.
+
+- [Export](#manually-export-a-session-template)
+- [Import](#manually-import-a-session-template)
+
+#### Manually export a session template
+
+1. (`ncn-mw#`) Create a directory to store the exported BOS session templates.
+
+   > Modify the following command to specify the desired directory path.
+
+   ```bash
+   BOS_EXPORT_DIR="/root/bos-session-templates-manual-export-$(date +%Y%m%d%H%M%S)"
+   mkdir -pv "${BOS_EXPORT_DIR}"
+   ```
+
+1. (`ncn-mw#`) List all BOS session templates on the system.
+
+   ```bash
+   cray bos v2 sessiontemplates list
+   ```
+
+1. (`ncn-mw#`) For each session template that you wish to export, perform the following steps.
+
+   1. Record the name of the template to be exported.
+
+      > Modify the following command to specify the name of the BOS session template to be exported.
+
+      ```bash
+      BOS_TEMPLATE_NAME="uan-sessiontemplate-2.0.27"
+      ```
+
+   1. Write the contents of the session template to a file in the export directory created earlier.
+
+      ```bash
+      cray bos v2 sessiontemplate describe "${BOS_TEMPLATE_NAME}" --format json |
+          tee "${BOS_EXPORT_DIR}/${BOS_TEMPLATE_NAME}.json"
+      ```
+
+      Example output:
+
+      ```json
+      {
+        "boot_sets": {
+          "uan": {
+            "boot_ordinal": 2,
+            "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=nmn0:dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 spire_join_token=${SPIRE_JOIN_TOKEN}",
+            "network": "nmn",
+            "node_list": [
+              "x3000c0s15b0n0"
+            ],
+            "path": "s3://boot-images/c23f3d5e-223a-4fb9-b305-0c2be8e63615/manifest.json",
+            "rootfs_provider": "cpss3",
+            "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
+            "type": "s3"
+          }
+        },
+        "cfs": {
+          "configuration": "uan-config-2.0.0"
+        },
+        "enable_cfs": true,
+        "name": "uan-sessiontemplate-2.0.27"
+      }
+      ```
+
+1. Copy the contents of the export directory to a safe location.
+
+#### Manually import a session template
+
+1. (`ncn-mw#`) Copy the contents of the export directory (created from the manual export procedure) to the node where the import procedure is being performed.
+
+   Set the `BOS_EXPORT_DIR` variable to the path to this directory.
+
+   > Modify the following command to specify the actual path to the directory.
+
+   ```bash
+   BOS_EXPORT_DIR=/root/bos-session-templates-manual-export-20230309121244
+   ```
+
+1. (`ncn-mw#`) For each BOS session template to be imported, perform the following steps:
+
+   1. Record the name of the template to be imported.
+
+      > Modify the following command to specify the name of the BOS session template to be exported.
+
+      ```bash
+      BOS_TEMPLATE_NAME="uan-sessiontemplate-2.0.27"
+      ```
+
+   1. Import the session template into BOS.
+
+      ```bash
+      cray bos v2 sessiontemplate create --file "${BOS_EXPORT_DIR}/${BOS_TEMPLATE_NAME}.json" --name "${BOS_TEMPLATE_NAME}"
+      ```
+
+## BOS database PVCs
+
+Since the release of BOS V2, it is recommended not to save or restore the BOS Redis database. Instead, let BOS automatically recreate the databases from scratch.
+Restoring the database can result in undesired activity, such as node boots or reboots.
