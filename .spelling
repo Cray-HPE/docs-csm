@@ -439,6 +439,7 @@ re-architecting
 reauthentication
 Redbook
 Redfish
+Redis
 Redstone
 reestablished
 remediate
@@ -650,9 +651,6 @@ Lorem
 - introduction/site_survey.md
 # To allow Site Init
 Init
-
-- operations/boot_orchestration/BOS_export_import.md
-Redis
 
 - operations/image_management/IMS_export_import.md
 etag
