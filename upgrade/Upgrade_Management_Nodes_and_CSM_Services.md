@@ -67,7 +67,7 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 - Back-ups for `etcd-operator` Clusters
 
    After upgrading, if health checks indicate that Etcd pods are not in a healthy/running state, recovery procedures may be needed. See
-   [Backups for `etcd-operator` Clusters](../operations/kubernetes/Backups_for_etcd-operator_Clusters.md) for these procedures.
+   [Backups for `etcd-operator` Clusters](../operations/kubernetes/Backups_for_Etcd_Clusters_Running_in_Kubernetes.md) for these procedures.
 
 - Recovering from Postgres database issues
 

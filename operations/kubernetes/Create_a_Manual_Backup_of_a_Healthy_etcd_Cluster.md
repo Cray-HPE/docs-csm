@@ -8,38 +8,37 @@ The commands in this procedure can be run on any master node \(`ncn-mXXX`\) or w
 
 ## Prerequisites
 
-A healthy etcd cluster is available on the system. See [Check the Health and Balance of etcd Clusters](Check_the_Health_and_Balance_of_etcd_Clusters.md).
+A healthy etcd cluster is available on the system. See [Check the Health of etcd Clusters](Check_the_Health_of_etcd_Clusters.md).
 
 ## Procedure
 
 1. Create a backup for the desired etcd cluster.
 
-    The example below is backing up the etcd cluster for the Boot Orchestration Service \(BOS\). The returned backup name (`cray-bos-etcd-cluster-manual-backup-25847`) will be used in the next step.
+    The example below is backing up the etcd cluster for the Boot Orchestration Service \(BOS\) named `wednesday-manual-backup`.
 
     ```bash
-    kubectl exec -it -n operators \
-                $(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}') \
-                -c util -- create_backup cray-bos wednesday-manual-backup
+    /opt/cray/platform-utils/etcd/etcd-util.sh create_backup cray-bos wednesday-manual-backup
     ```
 
     Example output:
 
     ```text
-    etcdbackup.etcd.database.coreos.com/cray-bos-etcd-cluster-manual-backup-25847 created
+    Taking snapshot from cray-bos-bitnami-etcd-0...
+    Pushing newly created snapshot /snapshots/cray-bos-bitnami-etcd/db-2023-03-10_23-38 to S3 as wednesday-manual-backup for cray-bos
+    upload: snapshots/cray-bos-bitnami-etcd/db-2023-03-10_23-38 to s3://etcd-backup/cray-bos/wednesday-manual-backup
     ```
 
-1. Check the status of the backup using the name returned in the output of the previous step.
+1. Verify the newly created backup is available in S3:
 
     ```bash
-    kubectl -n services get BACKUP_NAME -o yaml
+    /opt/cray/platform-utils/etcd/etcd-util.sh list_backups cray-bos
     ```
 
     Example output:
 
-    ```yaml
-      status:
-        etcdRevision: 1
-        etcdVersion: 3.3.8
-        lastSuccessDate: "2020-01-13T21:38:47Z"
-        succeeded: true
+    ```text
+    cray-bos/db-2023-03-10_21-00
+    cray-bos/db-2023-03-10_22-00
+    cray-bos/db-2023-03-10_23-00
+    cray-bos/wednesday-manual-backup
     ```
