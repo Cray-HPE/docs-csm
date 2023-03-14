@@ -475,28 +475,22 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ncn-m002-mgmt ncn-m003-mgmt ncn-s001-mgmt ncn-s002-mgmt ncn-s003-mgmt ncn-w001-mgmt ncn-w002-mgmt ncn-w003-mgmt
     ```
 
-1. (`ncn-m001#`) Get the DNS server IP address for the NMN.
-
-    ```bash
-    NMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-nmn | awk '{ print $4 }'); echo ${NMN_DNS}
-    ```
-
-    Example output:
-
-    ```text
-    10.92.100.225
-    ```
-
 1. (`ncn-m001#`) Get the DNS server IP address for the HMN.
 
     ```bash
-    HMN_DNS=$(kubectl get services -n services -o wide | grep cray-dns-unbound-udp-hmn | awk '{ print $4 }'); echo ${HMN_DNS}
+    HMN_DNS=$(kubectl get services -n services -o wide | awk /cray-dns-unbound-udp-hmn/'{printf "%s%s", sep, $4; sep=","} END{print ""}'); echo ${HMN_DNS}
     ```
 
-    Example output:
+    Example output for a single DNS server:
 
     ```text
     10.94.100.225
+    ```
+
+    Example output for multiple DNS servers:
+
+    ```text
+    10.94.100.225,10.94.100.224,10.94.100.223
     ```
 
 1. (`ncn-m001#`) Run the following to loop through all of the BMCs (except `ncn-m001-mgmt`) and apply the desired settings.
@@ -507,7 +501,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
         /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${BMC}" -S -n
         echo
         echo "${BMC}: Configuring DNS on the BMC using data from unbound"
-        /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${BMC}" -D "${NMN_DNS},${HMN_DNS}" -d
+        /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${BMC}" -D "${HMN_DNS}" -d
         echo
         echo "${BMC}: Showing settings"
         /opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H "${BMC}" -s
