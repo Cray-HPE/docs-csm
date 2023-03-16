@@ -118,6 +118,8 @@ or `Management_Storage`. These values will be needed when upgrading NCN storage 
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s002,ncn-s003,ncn-s004 --upgrade
         ```
 
+    1. Follow the steps documented in [Ensure that `rbd` stats monitoring is enabled](../../../upgrade/Stage_1.md#ensure-that-rbd-stats-monitoring-is-enabled)
+
 1. Perform the NCN master node upgrade on `ncn-m002` and `ncn-m003`.
 
     1. Use `kubectl` to label `ncn-m003` with `iuf-prevent-rollout=true` to ensure `management-nodes-rollout` only rebuilds the single NCN master node `ncn-m002`.
@@ -173,6 +175,8 @@ or `Management_Storage`. These values will be needed when upgrading NCN storage 
 
 1. Upgrade `ncn-m001`.
 
+    1. Follow the steps documented in [Backup artifacts on `ncn-m001`](../../../upgrade/Stage_2.md#backup-artifacts-on-ncn-m001)
+
     1. Set the CFS configuration on `ncn-m001`.
 
         1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to be the value for `configuration` found for `Management_Master` nodes in the the second step.
@@ -210,6 +214,12 @@ or `Management_Storage`. These values will be needed when upgrading NCN storage 
         ```bash
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
         ```
+
+1. Follow the steps documented in [Stage 2.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_2.md#stage-24---upgrade-weave-and-multus)
+
+1. Follow the steps documented in [Stage 2.5 - `coredns` anti-affinity](../../../upgrade/Stage_2.md#stage-25---coredns-anti-affinity)
+
+1. Follow the steps documented in [Stage 2.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_2.md#stage-26---complete-kubernetes-upgrade).
 
 Once this step has completed:
 
@@ -280,6 +290,9 @@ Continue to the next section [4. Update management host Slingshot NIC firmware](
 NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow. This section describes how to test a new image and CFS configuration on a single canary node (`ncn-w001`) first before
 rolling it out to the other NCN worker nodes. Modify the procedure as necessary to accommodate site preferences for rebuilding NCN worker nodes. Since the default node target for the `management-nodes-rollout` is `Management_Worker`
 nodes, the `--limit-management-rollout` argument is not used in the instructions below.
+
+The images and CFS configurations used are created by the `prepare-images` and `update-cfs-config` stages respectively; see the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation
+for details on how to query the images and CFS configurations and see the [update-cfs-config](../stages/update_cfs_config.md) documentation for details about how the CFS configuration is updated.
 
 **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.

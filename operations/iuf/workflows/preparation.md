@@ -2,28 +2,24 @@
 
 This section defines environment variables and directory content that is used throughout the workflow.
 
-**`NOTE`** The following step uses the `iuf activity` command to demonstrate how to record operations within an IUF activity. While `iuf` automatically records all `iuf run` operations within an IUF activity, any other
-administrative operation can also be recorded within an IUF activity by using `iuf activity` in this manner. The remainder of the workflow will not use `iuf activity`, deferring to the administrator to use it as they desire.
-`iuf activity` does not **need** to be used in this step, but the rest of the operations in the step are required.
-
 - [1. Prepare for the install or upgrade](#1-prepare-for-the-install-or-upgrade)
-- [2. Next steps](#2-next-steps)
+- [2. Use of `iuf activity`](#2-use-of-iuf-activity)
+- [3. Next steps](#3-next-steps)
 
 ## 1. Prepare for the install or upgrade
 
-1. Create timestamped media, activity, and administrator directories on `ncn-m001`. Copy all distribution files from the HPC CSM Software Recipe to the media directory, utilizing `iuf activity` to record the time spent downloading
-media and associate it with activity `${ACTIVITY_NAME}`.
+1. Create timestamped media, activity, and administrator directories on `ncn-m001`.
 
     The following environment variables are used throughout the workflow:
 
-    | Name               | Path                                           | Description                                                                               |
+    | Name               | Recommended Value                              | Description                                                                               |
     | ------------------ | ---------------------------------------------- | ----------------------------------------------------------------------------------------- |
-    | `${ACTIVITY_NAME}` | n/a                                            | String identifier for the IUF activity and the `iuf -a` argument for all `iuf` commands   |
+    | `${ACTIVITY_NAME}` | Use a short descriptor for the activity        | String identifier for the IUF activity and the `iuf -a` argument for all `iuf` commands   |
     | `${MEDIA_DIR}`     | `/etc/cray/upgrade/csm/"${ACTIVITY_NAME}"`     | Directory containing product distribution files                                           |
     | `${ACTIVITY_DIR}`  | `/etc/cray/upgrade/csm/iuf/"${ACTIVITY_NAME}"` | Directory containing IUF activity logs and state                                          |
-    | `${ADMIN_DIR}`     | `/etc/cray/upgrade/csm/admin`                  | Directory containing files that define site preferences for IUF, e.g. `product_vars.yaml` |
+    | `${ADMIN_DIR}`     | `/etc/cray/upgrade/csm/admin`                  | Directory containing files that define default values and site preferences for IUF, e.g. `product_vars.yaml` and `site_vars.yaml` |
 
-    (`ncn-m001#`) Create a typescript, set environment variables for the workflow, and populate the media directory with product content.
+    (`ncn-m001#`) Create a typescript and set environment variables that will be used later in the install or upgrade workflow. The example value of `${ACTIVITY_NAME}` can be changed as needed.
 
     ```bash
     script -af iuf-install.$(date +%Y%m%d_%H%M%S).txt
@@ -32,16 +28,30 @@ media and associate it with activity `${ACTIVITY_NAME}`.
     ACTIVITY_DIR=/etc/cray/upgrade/csm/iuf/"${ACTIVITY_NAME}"
     ADMIN_DIR=/etc/cray/upgrade/csm/admin
     mkdir -p "${ACTIVITY_DIR}" "${MEDIA_DIR}" "${ADMIN_DIR}"
-    iuf -a "${ACTIVITY_NAME}" activity --create --comment "downloading product media" in_progress
-    <copy HPC CSM Software Recipe content to "${MEDIA_DIR}">
-    iuf -a "${ACTIVITY_NAME}" activity --create --comment "download complete" waiting_admin
     ```
 
 Once this step has completed:
 
-- Product content has been uploaded to `${MEDIA_DIR}`
+- Environment variables have been set and required IUF directories have been created
 
-## 2. Next steps
+## 2. Use of `iuf activity`
+
+**`NOTE`** This section is informational only. There are no operations to perform.
+
+IUF can record time spent performing operations associated with an IUF activity. While `iuf` automatically records all `iuf run` operations within an IUF activity, any other administrative operations can also be recorded within an
+IUF activity by using [`iuf activity`](../IUF.md#activity). The following example shows how to record the time spent downloading HPE software and associate it with an IUF activity:
+
+(`ncn-m001#`) Example use of `iuf activity` to record time spent downloading media
+
+```bash
+iuf -a "${ACTIVITY_NAME}" activity --create --comment "downloading product media" in_progress
+<download HPE product media>
+iuf -a "${ACTIVITY_NAME}" activity --create --comment "download complete" waiting_admin
+```
+
+The install and upgrade workflow instructions will not use `iuf activity` in this manner, deferring to the administrator to use it as desired.
+
+## 3. Next steps
 
 - If performing an initial install or an upgrade of non-CSM products only, return to the IUF [Initial install](initial_install.md) workflow to continue the install.
 

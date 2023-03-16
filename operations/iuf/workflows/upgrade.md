@@ -1,9 +1,8 @@
 # Upgrade
 
-The following workflow describes an upgrade procedure for CSM as well as all non-CSM product
-content provided via a HPC CSM Software Recipe release. The steps documented here alternate
-between CSM upgrade instructions unrelated to IUF and non-CSM product upgrade instructions managed
-by IUF.
+The following workflow describes an upgrade procedure for CSM and all non-CSM product content
+provided via a HPC CSM Software Recipe release. These steps alternate between CSM upgrade
+instructions unrelated to IUF and non-CSM product upgrade instructions managed by IUF.
 
 All stages of `iuf` are executed in this workflow: all of the new product software provided in the
 recipe release is deployed and all management NCNs and managed compute and application nodes are
@@ -22,9 +21,12 @@ The upgrade workflow comprises the following procedures which must be executed i
    1. [Stage 0.1 - Prepare assets](../../../upgrade/Stage_0_Prerequisites.md#stage-01---prepare-assets)
    1. [Stage 0.2 - Prerequisites](../../../upgrade/Stage_0_Prerequisites.md#stage-02---prerequisites)
 
-1. Download product media and prepare for IUF upgrade
+1. Prepare for the upgrade procedure and download product media
 
-   Follow the IUF [Prepare for the install or upgrade](preparation.md) instructions
+   1. Follow the IUF [Prepare for the install or upgrade](preparation.md) instructions to set
+      environment variables used during the upgrade process
+
+   1. Download the desired HPE product media defined by the HPC CSM Software Recipe to `${MEDIA_DIR}`, which was defined in the previous step
 
 1. Product Delivery
 
@@ -51,19 +53,6 @@ The upgrade workflow comprises the following procedures which must be executed i
 1. Management Rollout
 
    Follow the IUF [Management rollout](management_rollout.md) instructions
-
-   **`UNRESOLVED ISSUE`** Does IUF cover all of the following [Stage 1](../../../upgrade/Stage_1.md)
-   steps?
-
-   1. [Ensure that `rbd` stats monitoring is enabled](../../../upgrade/Stage_1.md#ensure-that-rbd-stats-monitoring-is-enabled)
-
-   **`UNRESOLVED ISSUE`** Does IUF cover all of the following [Stage 2](../../../upgrade/Stage_2.md)
-   steps?
-
-   1. [Backup artifacts on `ncn-m001`](../../../upgrade/Stage_2.md#backup-artifacts-on-ncn-m001)?
-   1. [Stage 2.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_2.md#stage-24---upgrade-weave-and-multus)
-   1. [Stage 2.5 - `coredns` anti-affinity](../../../upgrade/Stage_2.md#stage-25---coredns-anti-affinity)
-   1. [Stage 2.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_2.md#stage-26---complete-kubernetes-upgrade)
 
 1. CSM Stage 3 and CSM health validation
 

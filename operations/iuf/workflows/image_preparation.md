@@ -19,7 +19,7 @@ documentation](../stages/update_cfs_config.md) and the [`prepare-images` stage d
 `prepare-images` stages.
 
 1. Invoke `iuf run` with `-r` to execute the [`update-cfs-config`](../stages/update_cfs_config.md) and [`prepare-images`](../stages/prepare_images.md) stages. Use site variables from the `site_vars.yaml` file found in
-`${ADMIN_DIR}`, recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`, and `sat bootprep` input files found in `${ADMIN_DIR}`.
+`${ADMIN_DIR}`, recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`, and `sat bootprep` input files found in `${ADMIN_DIR}/bootprep`.
 
     (`ncn-m001#`) Execute the `update-cfs-config` and `prepare-images` stages.
 

@@ -589,6 +589,7 @@ remediates
 remediating
 respawns
 rollout
+rollouts
 routable
 sC
 sC-ToR
@@ -918,7 +919,6 @@ unexecuted
 
 - operations/iuf/stages/management_nodes_rollout.md
 200Gbps
-rollouts
 unlabeled
 userspace
 

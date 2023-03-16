@@ -1,9 +1,8 @@
 # Initial Install
 
-The following workflow describes the initial install procedure. The steps documented here are to be
-followed after an initial install of CSM. They can also be followed whenever new non-CSM product
-content is made available for upgrade via a HPC CSM Software Recipe release and there is no need to
-upgrade CSM itself.
+This workflow describes the initial install procedure. Follow these steps after an initial install
+of CSM. Also follow them when new, non-CSM product content becomes available for upgrade via a HPC
+CSM Software Recipe release.
 
 All stages of `iuf` are executed in this workflow: all of the new product software provided in the
 recipe release is deployed and all management NCNs and managed compute and application nodes are
@@ -19,9 +18,12 @@ shown.
 
    Follow the [Cray System Management Install](../../../install/README.md) instructions
 
-1. Download product media, etc.
+1. Prepare for the install procedure and download product media
 
-   Follow the IUF [Prepare for the install or upgrade](preparation.md) instructions
+   1. Follow the IUF [Prepare for the install or upgrade](preparation.md) instructions to set
+      environment variables used during the install process
+
+   1. Download the desired HPE product media defined by the HPC CSM Software Recipe to `${MEDIA_DIR}`, which was defined in the previous step
 
 1. Product Delivery
 

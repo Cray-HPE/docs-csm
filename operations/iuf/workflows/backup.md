@@ -1,6 +1,6 @@
 # Backup
 
-This section describes procedures that backup critical state in case it becomes necessary to fall back to previous configurations and software.
+This section describes procedures that back up critical state in case it becomes necessary to fall back to previous configurations and software.
 
 - [1. Backup](#1-backup)
   - [1.1 Slingshot Fabric Manager](#11-slingshot-fabric-manager)
@@ -10,7 +10,7 @@ This section describes procedures that backup critical state in case it becomes 
 
 ### 1.1 Slingshot Fabric Manager
 
-It is recommended to create a backup of the Slingshot Fabric Manager prior to proceeding with the workflow. Refer to the "Backup and Restore Operation of Fabric Configuration" section in the _Slingshot Operations Guide for Customers_
+Create a backup of the Slingshot Fabric Manager prior to proceeding with the workflow. Refer to the "Backup and Restore Operation of Fabric Configuration" section in the _Slingshot Operations Guide for Customers_
 for details on how to perform this operation.
 
 Once this step has completed:
