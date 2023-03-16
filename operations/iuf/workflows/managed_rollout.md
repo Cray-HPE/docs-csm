@@ -54,17 +54,18 @@ referred to as the "canary node" in the remainder of this section. Use `--limit-
 
     ```bash
     XNAME=x3000c0s29b1n0
-    iuf -a "${ACTIVITY_NAME}" -r managed-nodes-rollout --limit-managed-rollout "${XNAME}" -mrs reboot
+    iuf -a "${ACTIVITY_NAME}" run -r managed-nodes-rollout --limit-managed-rollout "${XNAME}" -mrs reboot
     ```
 
 1. Verify the canary node booted successfully with the desired image and CFS configuration.
 
-1. Invoke `iuf run` with `-r` to execute the [`managed-nodes-rollout`](../stages/managed_nodes_rollout.md) stage on all nodes, rebooting the nodes in the default staged manner in conjunction with the workload manager.
+1. Invoke `iuf run` with `-r` to execute the [`managed-nodes-rollout`](../stages/managed_nodes_rollout.md) stage on all nodes, rebooting the nodes in the default staged manner in conjunction with the workload manager. If an
+immediate reboot of compute nodes is desired instead, add `-mrs reboot` to the `iuf run` command.
 
     (`ncn-m001#`) Execute the `managed-nodes-rollout` stage.
 
     ```bash
-    iuf -a "${ACTIVITY_NAME}" -r managed-nodes-rollout
+    iuf -a "${ACTIVITY_NAME}" run -r managed-nodes-rollout
     ```
 
 Once this step has completed:

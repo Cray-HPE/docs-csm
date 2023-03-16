@@ -71,8 +71,8 @@ There are two separate workflows that utilize IUF when installing or upgrading n
 
 1. The IUF [Initial Install](workflows/initial_install.md) workflow is used in either of the following scenarios:
    - An initial install of the system is being performed, including CSM and non-CSM products
-   - An initial install or upgrade is being performed **with non-CSM product content only**. In this scenario, the first step ("Perform an install of CSM") is skipped and all other steps are performed.
-1. The IUF [Upgrade](workflows/upgrade.md) workflow is used when an upgrade is being performed **with CSM and non-CSM product content**
+   - An initial install or upgrade is being performed **with non-CSM products only**. In this scenario, the first step ("Perform an install of CSM") is skipped and all other steps are performed.
+1. The IUF [Upgrade](workflows/upgrade.md) workflow is used when an upgrade is being performed **with CSM and non-CSM products**
 
 ## Activities
 
@@ -494,7 +494,7 @@ These [examples](examples/iuf_activity.md) highlight common use cases of `iuf ac
 
 #### `list-activities`
 
-The `list-activities` subcommand displays all activities present on the system, i.e. present in Argo.
+The `list-activities` subcommand displays all activities present on the system.
 
 The following arguments may be specified when invoking `iuf list-activities`:
 
@@ -679,8 +679,8 @@ Multiple options are available if the administrator decides to continue the inst
 If the administrator wants to remove a product from the IUF session, they must re-execute `iuf run` for the `process-media` stage with the product distribution file and uncompressed content removed from the media directory. This
 removes references to that product from the existing IUF activity.
 
-If any previously executed stages performed operations with that product, re-execute them to remove artifacts or metadata related to the product, e.g. to remove CFS configuration layers and rebuild images without that product
-present.
+If any previously executed stages performed operations with the removed product, re-execute them. It may be necessary to perform manual operations as well, e.g. modifying the `sat bootprep` input files used to create images in
+order to remove references to the product.
 
 The administrator can then execute any remaining stages that did not complete due to the initial failure.
 
@@ -690,8 +690,8 @@ To add a new version of an existing product to the IUF session, re-execute `iuf 
 existing IUF activity. If the new product is being used in place of a different version of the product, remove the previous version of the product distribution file and uncompressed content from the media directory at the same
 time the new version is added.
 
-If any previously executed stages performed operations with the old product version, re-execute them to remove artifacts or metadata related to the old version of the product, e.g. to remove CFS configuration layers and rebuild
-images to ensure only the new version of the product is present.
+If any previously executed stages performed operations with the removed product, re-execute them. It may be necessary to perform manual operations as well, e.g. modifying the `sat bootprep` input files used to create images in
+order to remove references to the product.
 
 The administrator can then execute any remaining stages that did not complete due to the initial failure.
 

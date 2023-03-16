@@ -1,6 +1,6 @@
 # Configuration
 
-This section ensures product configuration have been defined, customized, and is available for later steps in the workflow.
+This section ensures product configuration has been defined, customized, and is available for later steps in the workflow.
 
 This workflow uses `${ADMIN_DIR}` to retain files that define site preferences for IUF. `${ADMIN_DIR}` is defined separately from `${ACTIVITY_DIR}` and `${MEDIA_DIR}` based on the assumption that the files in `${ADMIN_DIR}` will be
 used when performing future IUF operations unrelated to this workflow.
@@ -39,6 +39,11 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
 
     ```bash
     find . -type f
+    ```
+
+    Example output:
+
+    ```text
     ./bootprep/management-bootprep.yaml
     ./bootprep/compute-and-uan-bootprep.yaml
     ./product_vars.yaml
@@ -55,21 +60,40 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
     - Add a `suffix` entry to the `default` section to append a string to the names of CFS configuration, image, and BOS session template artifacts created during the workflow to make them easy to identify
     - Any other changes needed to reflect site preferences
 
-    (`ncn-m001#`) Display the contents of an **example** `site_vars.yaml` file
+    1. <create a `site_vars.yaml` file  with desired key/value pairs >
 
-    ```bash
-    cat site_vars.yaml
-    default:
-      network_type: "cassini"
-      suffix: "-test01"
-    ```
+    2. Ensure the `site_vars.yaml` file contents are formatted correctly. The following text is an example for verification purposes only.
 
-    (`ncn-m001#`) List contents of `${ADMIN_DIR}` to verify content is present
+       (`ncn-m001#`) Display the contents of an **example** `site_vars.yaml` file
 
-    ```bash
-    ls
-    compute-and-uan-bootprep.yaml  management-bootprep.yaml  product_vars.yaml  site_vars.yaml
-    ```
+       ```bash
+       cat site_vars.yaml
+       ```
+
+       Example output:
+
+       ```text
+       default:
+         network_type: "cassini"
+         suffix: "-test01"
+       ```
+
+    3. Ensure the expected files are present in the admin directory after performing the steps in this section.
+
+       (`ncn-m001#`) Examine the contents of `${ADMIN_DIR}` to verify the expected content is present
+
+       ```bash
+       find . -type f
+       ```
+
+       Example output:
+
+       ```text
+       ./bootprep/management-bootprep.yaml
+       ./bootprep/compute-and-uan-bootprep.yaml
+       ./product_vars.yaml
+       ./site_vars.yaml
+       ```
 
 Once this step has completed:
 
@@ -78,8 +102,8 @@ Once this step has completed:
 
 ## 2. Execute the IUF `update-vcs-config` stage
 
-The `update-vcs-config` stage performs a variety of update operations for each product being installed that provides a configuration management repository in VCS. It ensures new product configuration content has been uploaded to
-VCS in a pristine branch and attempts to merge the new product configuration content into a corresponding customer branch.
+For each product that uploaded Ansible configuration content to a configuration management VCS repository, the `update-vcs-config` stage attempts to merge the pristine branch of the configuration management repository into a
+corresponding customer working branch.
 
 ### 2.1 Prerequisites
 
@@ -120,7 +144,7 @@ VCS in a pristine branch and attempts to merge the new product configuration con
     ... and an upgrade to Slurm `integration-1.2.10` is being performed, then a new working branch should be created and the workaround should be reverted from the new branch:
 
     ```bash
-    ncn-m001:/mnt/admin/cfg/slurm-config-management# branch integration-1.2.10
+    ncn-m001:/mnt/admin/cfg/slurm-config-management# git branch integration-1.2.10
     ncn-m001:/mnt/admin/cfg/slurm-config-management# git checkout integration-1.2.10
     ncn-m001:/mnt/admin/cfg/slurm-config-management# git revert 133d5fc815aafd502d3aca07961524e4f9eab445
     ncn-m001:/mnt/admin/cfg/slurm-config-management# git push
@@ -151,7 +175,7 @@ Once this step has completed:
 
 ## 3. Perform manual product configuration operations
 
-Some products must be manually configured prior to the creation of CFS configurations and images. The "Install and Upgrade Framework" section of each individual product's installation documentation will refer to instructions for product-specific
+Some products must be manually configured prior to the creation of CFS configurations and images. The "Install and Upgrade Framework" section of each individual product's installation documentation contains instructions for product-specific
 configuration, if any. The following highlights some of the areas that most often require manual configuration changes **but is not intended to be a comprehensive list.** Note that many of the configuration changes are only
 required for initial installation scenarios.
 
