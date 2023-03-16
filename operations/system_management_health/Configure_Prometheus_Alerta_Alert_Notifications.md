@@ -26,11 +26,11 @@ This procedure can be performed on any master or worker NCN.
         kind: Secret
         metadata:
           labels:
-            app: prometheus-operator-alertmanager
-            chart: prometheus-operator-9.3.1
+            app: kube-prometheus-stack-alertmanager
+            chart: kube-prometheus-stack-45.1.1
             heritage: Tiller
             release: cray-sysmgmt-health
-          name: alertmanager-cray-sysmgmt-health-promet-alertmanager
+          name: alertmanager-cray-sysmgmt-health-kube-p-alertmanager
           namespace: sysmgmt-health
         type: Opaque
         ```

@@ -66,7 +66,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
    ```yaml
    datasource: default
    namespace: sysmgmt-health
-   pod: prometheus-cray-sysmgmt-health-promet-prometheus-0
+   pod: prometheus-cray-sysmgmt-health-kube-p-prometheus-0
    ```
 
 ### CPU throttling
@@ -150,28 +150,28 @@ Trial and error may be needed to determine what is best for a given system at sc
 
    If number of NCNs are less than 20, then
 
-1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources`.
+1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources`.
 
    ```bash
-   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu' --style=double '2'
-   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.memory' '15Gi'
-   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.cpu' --style=double '6'
-   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.memory' '30Gi'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu' --style=double '2'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory' '15Gi'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.cpu' --style=double '6'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory' '30Gi'
    ```
 
 If number of NCNs are greater than 20, then
 
    ```bash
-   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu' --style=double '6'
-   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.memory' '50Gi'
-   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.cpu' --style=double '12'
-   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.memory' '60Gi'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.cpu' --style=double '6'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.requests.memory' '50Gi'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.cpu' --style=double '12'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources.limits.memory' '60Gi'
    ```
 
 1. (`ncn#`) Check that the customization file has been updated.
 
    ```bash
-   yq read customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources'
+   yq read customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.resources'
    ```
 
    Example output:
@@ -213,7 +213,7 @@ If number of NCNs are greater than 20, then
 1. (`ncn#`) Check that the manifest file contains the desired resource settings.
 
    ```bash
-   yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
+   yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.kube-prometheus-stack.prometheus.prometheusSpec.resources'
    ```
 
    Example output:
@@ -235,23 +235,23 @@ If number of NCNs are greater than 20, then
 
 1. Verify that the pod restarts and that the desired resources have been applied.
 
-   1. (`ncn#`) Watch the `prometheus-cray-sysmgmt-health-promet-prometheus-0` pod restart.
+   1. (`ncn#`) Watch the `prometheus-cray-sysmgmt-health-kube-p-prometheus-0` pod restart.
 
       ```bash
-      watch "kubectl get pods -n sysmgmt-health -l prometheus=cray-sysmgmt-health-promet-prometheus"
+      watch "kubectl get pods -n sysmgmt-health -l prometheus=cray-sysmgmt-health-kube-p-prometheus"
       ```
 
-      It may take about 10 minutes for the `prometheus-cray-sysmgmt-health-promet-prometheus-0` pod to terminate.
+      It may take about 10 minutes for the `prometheus-cray-sysmgmt-health-kube-p-prometheus-0` pod to terminate.
       It can be forced deleted if it remains in the terminating state:
 
       ```bash
-      kubectl delete pod prometheus-cray-sysmgmt-health-promet-prometheus-0 --force --grace-period=0 -n sysmgmt-health
+      kubectl delete pod prometheus-cray-sysmgmt-health-kube-p-prometheus-0 --force --grace-period=0 -n sysmgmt-health
       ```
 
    1. (`ncn#`) Verify that the resource changes are in place.
 
       ```bash
-      kubectl get pod prometheus-cray-sysmgmt-health-promet-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
+      kubectl get pod prometheus-cray-sysmgmt-health-kube-p-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
       ```
 
 1. (`ncn#`) **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
@@ -639,7 +639,7 @@ Refer to the note at the end of this section for more details.
 
 ### Prometheus PVC resize
 
-Increase the PVC volume size associated with `prometheus-cray-sysmgmt-health-promet-prometheus` cluster in the `sysmgmt-health` namespace.
+Increase the PVC volume size associated with `prometheus-cray-sysmgmt-health-kube-p-prometheus` cluster in the `sysmgmt-health` namespace.
 This example is based on what was needed for a system with more than 20 non compute nodes (NCNs). The PVC size can only ever be increased.
 
 1. (`ncn#`) Get the current cached customizations.
@@ -654,16 +654,16 @@ This example is based on what was needed for a system with more than 20 non comp
    kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
    ```
 
-1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage`.
+1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage`.
 
    ```bash
-   yq write -i customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage' '300Gi'
+   yq write -i customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage' '300Gi'
    ```
 
 1. (`ncn#`) Check that the customization file has been updated.
 
    ```bash
-   yq read customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage'
+   yq read customizations.yaml  'spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.resources.requests.storage'
 
    300Gi
    ```
@@ -696,7 +696,7 @@ This example is based on what was needed for a system with more than 20 non comp
 1. (`ncn#`) Check that the manifest file contains the desired storage size setting.
 
    ```bash
-   yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.storageSpec.resources'
+   yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.kube-prometheus-stack.prometheus.prometheusSpec.storageSpec.resources'
    ```
 
    Example output:
@@ -718,7 +718,7 @@ This example is based on what was needed for a system with more than 20 non comp
 1. (`ncn#`) Verify that the increased volume size has been applied.
 
    ```bash
-   watch "kubectl get pvc -n sysmgmt-health prometheus-cray-sysmgmt-health-promet-prometheus-db-prometheus-cray-sysmgmt-health-promet-prometheus-0"
+   watch "kubectl get pvc -n sysmgmt-health prometheus-cray-sysmgmt-health-kube-p-prometheus-db-prometheus-cray-sysmgmt-health-kube-p-prometheus-0"
    ```
 
    Example output:
@@ -726,7 +726,7 @@ This example is based on what was needed for a system with more than 20 non comp
    ```text
    NAME                                                                                                     STATUS   VOLUME
    CAPACITY   ACCESS MODES   STORAGECLASS           AGE
-   prometheus-cray-sysmgmt-health-promet-prometheus-db-prometheus-cray-sysmgmt-health-promet-prometheus-0   Bound    pvc-bcb8f4f1-fb84-4b48-95c7-63508ef18962
+   prometheus-cray-sysmgmt-health-kube-p-prometheus-db-prometheus-cray-sysmgmt-health-kube-p-prometheus-0   Bound    pvc-bcb8f4f1-fb84-4b48-95c7-63508ef18962
    200Gi      RWO            k8s-block-replicated   3d2h
    ```
 

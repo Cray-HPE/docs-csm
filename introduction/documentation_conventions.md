@@ -18,6 +18,7 @@ This outlines conventions and standards that are used in this documentation.
 - [Ability to pause and resume procedures](#ability-to-pause-and-resume-procedures)
   - [Bad example](#bad-example)
   - [Good example](#good-example)
+- [Templates](#templates)
 
 ## Markdown format
 
@@ -266,3 +267,7 @@ The steps in this section require that the [Other cool things](#other-cool-thing
 1. Do more things.
 
 1. Do even more things.
+
+## Templates
+
+The `introduction/templates` folder supplies copy-paste boilerplate markdown examples.

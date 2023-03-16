@@ -21,6 +21,16 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+
+# Kubernetes Lexicons
+# NOTE: This list is in-progress of being scrubbed, see MTL-2106.
+Alertmanager
+DaemonSet
+DaemonSets
+StatefulSet
+StatefulSets
+
+
 1.0.x
 1.6.x
 100GBASE-CR2
@@ -74,7 +84,6 @@ AOS-CX
 API
 APIs
 ASICs
-Alertmanager
 Ansible
 Antero
 Argo
@@ -321,6 +330,7 @@ Rados
 Rados-Gateway
 Redbook
 Redfish
+Redis
 Redstone
 RemoteISO
 Restic
@@ -863,6 +873,10 @@ initramFS
 bs
 # To allow Site Init
 Init
+
+- operations/observability/Observability.md
+IaC
+KPIs
 
 - install/collecting_ncn_mac_addresses.md
 # To allow Site Init

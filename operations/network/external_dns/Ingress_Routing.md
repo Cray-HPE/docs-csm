@@ -50,7 +50,7 @@ spec:
         exact: prometheus.cmn.SYSTEM_DOMAIN_NAME
     route:
     - destination:
-        host: cray-sysmgmt-health-promet-prometheus
+        host: cray-sysmgmt-health-kube-p-prometheus
         port:
           number: 9090
 

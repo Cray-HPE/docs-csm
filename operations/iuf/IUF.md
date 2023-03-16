@@ -49,6 +49,7 @@ The following IUF topics are discussed in the sections below.
   - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
   - [Addressing the issue by adding a new version of a product](#addressing-the-issue-by-adding-a-new-version-of-a-product)
 - [Troubleshooting](#troubleshooting)
+- [Install and Upgrade Observability Framework](#install-and-upgrade-observability-framework)
 
 ## Limitations
 
@@ -714,3 +715,11 @@ The following actions may be useful if errors are encountered when executing `iu
   workflow and debug the issue.
 - If an Argo step fails, Argo will attempt to re-execute the step. If the retry succeeds, the failed step will still be displayed, colored red, in the Argo UI alongside the successful retry step, colored green. Although the failed
   step is still displayed, it did not affect the success of the overall workflow and can be ignored.
+
+## Install and Upgrade Observability Framework
+
+The Install and Upgrade Observability Framework includes assertions for Goss health checks, as well as metrics and dashboards for health checks.
+The framework also includes a unified consistent method to automatically track Time to Install (TTI) and Time to Upgrade (TTU), as well as error and pattern counts across all nodes and product streams.
+The Install and Upgrade Observability Framework is automatically deployed and configured in the CSM environment.
+
+For more information on the Install and Upgrade Observability Framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).

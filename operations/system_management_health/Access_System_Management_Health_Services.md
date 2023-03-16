@@ -45,7 +45,7 @@ Authorities is planned for a future release.
 
 URL: `https://prometheus.cmn.SYSTEM_DOMAIN_NAME/`
 
-Central Prometheus instance scrapes metrics from Kubernetes, Ceph, and the hosts (part of `prometheus-operator` Helm chart).
+Central Prometheus instance scrapes metrics from Kubernetes, Ceph, and the hosts (part of `kube-prometheus-stack` Helm chart).
 
 Prometheus generates alerts based on metrics and reports them to the Alertmanager. The 'Alerts' link at the top of the page will show all of the inactive, pending, and firing alerts on the system.
 Clicking on any of the alerts will expand them, enabling users to use the 'Labels' data to discern the details of the alert. The details will also show the state of the alert, how long it has been

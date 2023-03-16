@@ -465,7 +465,7 @@ Verify that the Lustre file system is available from the management cluster.
 
 1. Check the status and health of `etcd` clusters.
 
-    See [Check the Health and Balance of etcd Clusters](../kubernetes/Check_the_Health_and_Balance_of_etcd_Clusters.md).
+    See [Check the Health of etcd Clusters](../kubernetes/Check_the_Health_of_etcd_Clusters.md).
 
 ### Check `cronjobs`
 

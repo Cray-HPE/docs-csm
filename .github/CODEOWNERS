@@ -77,6 +77,9 @@ Jenkinsfile.github                                       @Cray-HPE/csm-devops
 # IUF Items
 /operations/iuf/                                         @Cray-HPE/IUF
 
+#Observability Items
+/operations/observability                                @Cray-HPE/cray-monitoring
+
 # Include SSI on these CSM items.
 /install/                                                @Cray-HPE/docs-csm-reviewers @Cray-HPE/metal @Cray-HPE/ssi-reviewers
 /operations/                                             @Cray-HPE/docs-csm-reviewers @Cray-HPE/ssi-reviewers
