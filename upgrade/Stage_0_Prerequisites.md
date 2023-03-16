@@ -16,7 +16,7 @@ Stage 0 has several critical procedures which prepare the environment and verify
   - [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
   - [Stage 0.3 - Customize the new NCN image and update NCN personalization configurations](#stage-03---customize-the-new-ncn-image-and-update-ncn-personalization-configurations)
     - [Standard upgrade](#standard-upgrade)
-    - [CSM-only system upgrade](#csm-only-system-upgrade)
+    - [CSM-only system upgrade](#csm---only-system-upgrade)
   - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
   - [Stop typescript](#stop-typescript)
   - [Stage completed](#stage-completed)
