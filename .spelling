@@ -866,6 +866,10 @@ bs
 # To allow Site Init
 Init
 
+- operations/observability/Observability.md
+IaC
+KPIs
+
 - install/collecting_ncn_mac_addresses.md
 # To allow Site Init
 Init
