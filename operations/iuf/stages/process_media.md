@@ -33,8 +33,8 @@ for details on the commands executed.
 
 ## Example
 
-(`ncn-m001#`) Execute the `process-media` stage with product distribution content found in `/opt/cray/iuf/admin/`, creating an activity named `admin-230127` in the process.
+(`ncn-m001#`) Execute the `process-media` stage with product distribution content found in `/etc/cray/upgrade/csm/media/admin-230127`, creating an activity named `admin-230127` in the process.
 
 ```bash
-iuf -a admin-230127 -m /opt/cray/iuf/admin/ run -r process-media
+iuf -a admin-230127 -m /etc/cray/upgrade/csm/media/admin-230127 run -r process-media
 ```

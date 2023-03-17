@@ -4,6 +4,11 @@
 
 ```bash
 iuf -a admin-230126 list-stages
+```
+
+Example output:
+
+```text
 +----------------------------+---------------------------------------------------------------------------------------+-----------+----------+
 | Stage                      | Description                                                                           | Status    | Duration |
 +----------------------------+---------------------------------------------------------------------------------------+-----------+----------+
@@ -21,7 +26,8 @@ iuf -a admin-230126 list-stages
 +----------------------------+---------------------------------------------------------------------------------------+-----------+----------+
 Stage Summary
 activity: admin-230126
-command line: iuf -a admin-230126 -m admin-230126/media run --site-vars /mnt/developer/admin/admin_site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/iuf/hpc-csm-software-recipe-23.1.18/vcs -r deliver-product
+command line: iuf -a admin-230126 -m /etc/cray/upgrade/csm/media/admin-230126 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/admin -r deliver-product
 log dir: /etc/cray/upgrade/csm/iuf/admin-230126/log
-media dir: /opt/cray/iuf/admin-230126/media
+media dir: /etc/cray/upgrade/csm/media/admin-230126
+state dir: /etc/cray/upgrade/csm/iuf/admin-230126/state
 ```
