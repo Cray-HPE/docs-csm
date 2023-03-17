@@ -21,9 +21,8 @@ Once the CSM installation has completed, other product streams for the HPE Cray 
 A major feature of CSM 1.2.x is the Bifurcated CAN (BICAN).
 The BICAN is designed to separate administrative network traffic from user network traffic.
 More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
-Review the BICAN summary before continuing with the CSM 1.2.x install.
-
-Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) page.
+Review the BICAN summary before continuing with the CSM install.
+For detailed BICAN documentation, see [BICAN technical details](../operations/network/management_network/bican_technical_details.md).
 
 ## Topics
 
@@ -44,12 +43,19 @@ Detailed BICAN documentation can be found on the [BICAN technical details](../op
 1. [Prepare compute nodes](#prepare_compute_nodes)
 1. [Apply security hardening](#apply_security_hardening)
 1. [Next topic](#next_topic)
-1. [Troubleshooting installation problems](#troubleshooting_installation)
 
 The topics in this chapter need to be done as part of an ordered procedure so are shown here with numbered topics.
 
-**Note**: If problems are encountered during the installation, some topics have their own [troubleshooting sections found in the operations index](../operations/index.md)
-sections, but there is also a [general troubleshooting topic](#troubleshooting_installation).
+<a name="troubleshooting_installation"></a>
+
+## Troubleshooting installation problems
+
+The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and
+switches for the HPE Cray EX system.
+
+For additional installation-specific troubleshooting information, see
+[Troubleshooting Installation Problems](troubleshooting_installation.md).
+Some topics also have supplementary troubleshooting sections listed in the CSM [Operations index](../operations/index.md).
 
 ## Details
 
@@ -253,11 +259,3 @@ sections, but there is also a [general troubleshooting topic](#troubleshooting_i
       been fully installed and configured.
       Refer to the [`HPE Cray EX System Software Getting Started Guide (S-8000) 22.07`](http://www.hpe.com/support/ex-gsg-042120221040) on the HPE Customer Support Center
       for more information on other product streams to be installed and configured after CSM.
-   <a name="troubleshooting_installation"></a>
-
-   1. Troubleshooting installation problems
-
-      The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and
-      switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install
-      for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
-      See [Troubleshooting Installation Problems](troubleshooting_installation.md).
