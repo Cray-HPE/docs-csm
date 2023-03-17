@@ -1,7 +1,7 @@
 # Upgrade
 
 The following workflow describes an upgrade procedure for CSM and all non-CSM product content
-provided via a HPC CSM Software Recipe release. These steps alternate between CSM upgrade
+provided via an HPC CSM Software Recipe release. These steps alternate between CSM upgrade
 instructions unrelated to IUF and non-CSM product upgrade instructions managed by IUF.
 
 All stages of `iuf` are executed in this workflow: all of the new product software provided in the

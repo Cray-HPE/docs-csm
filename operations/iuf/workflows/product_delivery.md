@@ -47,7 +47,7 @@ Once this step has completed:
     (`ncn-m001#`) Execute the `deliver-product` stage.
 
     ```bash
-    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -r deliver-product
+    iuf -a ${ACTIVITY_NAME} run -r deliver-product
     ```
 
 Once this step has completed:

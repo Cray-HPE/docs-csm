@@ -1,7 +1,7 @@
 # Initial Install
 
 This workflow describes the initial install procedure. Follow these steps after an initial install
-of CSM. Also follow them when new, non-CSM product content becomes available for upgrade via a HPC
+of CSM. Also follow them when new, non-CSM product content becomes available for upgrade via an HPC
 CSM Software Recipe release.
 
 All stages of `iuf` are executed in this workflow: all of the new product software provided in the

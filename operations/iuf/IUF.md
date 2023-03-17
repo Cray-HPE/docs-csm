@@ -269,7 +269,7 @@ activity:
 (`ncn-m001#`) An input file populated with default values can be created by using `iuf -w`:
 
 ```bash
-iuf -a admin-230127 -m admin-230127/media -i /tmp/default-input-file -w
+iuf -a admin-230127 -i /tmp/default-input-file -w
 ```
 
 Example output:
@@ -549,7 +549,7 @@ information and monitoring capabilities. The lines prefixed with `BEGIN:` and `F
 (`ncn-m001#`) Example of `iuf` command and output.
 
 ```bash
-iuf -a admin-230127 -m /etc/cray/upgrade/csm/media/admin-230127 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/admin -e update-vcs-config
+iuf -a admin-230127 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/admin -e update-vcs-config
 ```
 
 Example output:
