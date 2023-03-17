@@ -1,8 +1,8 @@
-# Prepare for Upgrade
+# Prepare For Upgrade
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.
 
-1. Graceful Shutdown of Workloads affected by CSM Upgrade
+1. Gracefully shutdown workloads affected by CSM upgrade.
 
    **Warning:** Although it is expected that compute nodes and application nodes will continue to provide their services
    without interruption when the management nodes and services are being upgraded by CSM, it is important to
@@ -51,7 +51,8 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
     1. Ensure that these services do not have any sessions in progress.
 
-        > This SAT command has `shutdown` as one of the command line options, but it will not start a shutdown process on the system.
+        > This SAT command has `shutdown` as one of the command line options, but it will not start a
+        > shutdown process on the system.
 
         ```bash
         ncn-m001# sat bootsys shutdown --stage session-checks
@@ -73,7 +74,8 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         No active sessions exist. It is safe to proceed with the shutdown procedure.
         ```
 
-        If active sessions are running, then either wait for them to complete or shut down, cancel, or delete them.
+        If active sessions are running, then either wait for them to complete, or shut down, cancel, or
+        delete them.
 
     1. Coordinate with the site to prevent new sessions from starting in these services.
 
@@ -88,11 +90,9 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
    application workloads. However, **it is recommended to do this test if possible**, because it validates that boot services
    are still working properly.
 
-   * If upgrading **from CSM 1.0 (Shasta 1.5)**, then follow the [Validate CSM Health](../operations/validate_csm_health.md) procedures.
-
-   * If upgrading **from CSM 0.9 (Shasta 1.4)**, then see the
-     [CSM Install Validation and Health Checks](https://github.com/Cray-HPE/docs-csm/blob/release/0.9/008-CSM-VALIDATION.md) procedures
-     **`in the CSM 0.9 documentation`**. The validation procedures in the CSM 1.0 documentation are not all intended to work on CSM 0.9.
+   **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the
+   documentation for the **`CURRENT`** CSM version on the system. The validation procedures in the CSM
+   documentation are only intended to work with that specific version of CSM.
 
 1. Validate Lustre Health
 
