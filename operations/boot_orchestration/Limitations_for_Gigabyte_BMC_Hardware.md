@@ -1,6 +1,6 @@
 # BOS Limitations for Gigabyte BMC Hardware
 
-> **`NOTE`** This section is for BOS V1 only.  BOS V2 does not use CAPMC.
+> **`NOTE`** This section is for BOS V1 only. BOS V2 does not use CAPMC.
 
 Special steps need to be taken when using the Boot Orchestration Service \(BOS\) to boot, reboot, or shutdown Gigabyte hardware.
 Gigabyte hardware treats power off and power on requests as successful, regardless of if actually successfully completed.
