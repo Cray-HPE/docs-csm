@@ -33,7 +33,7 @@ configurations that are intended to take precedence over configurations generate
 If the Prometheus SNMP Exporter or REDS hardware discovery emit errors related to SNMP authentication, then an administrator should:
 
 * Validate that the correct SNMP credential key/value pairs exist in Vault (see information above).
-* [Validate that the SNMP credential sealed secrets in customizations.yaml match Vault](../../security_and_authentication/Manage_Sealed_Secrets.md#fix-an-incorrect-value-in-a-sealed-secret)
+* [Validate that the SNMP credential sealed secrets in `customizations.yaml` match Vault](../../security_and_authentication/Manage_Sealed_Secrets.md#fix-an-incorrect-value-in-a-sealed-secret)
   and the credentials stored on the management switches.
 * Validate that the SNMP credentials configured on the management switches match the credentials stored in Vault (see information above).
 
