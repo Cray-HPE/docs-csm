@@ -1,16 +1,22 @@
 # Troubleshoot Compute Node Boot Issues Related to Slow Boot Times
 
-Inspect BOS, the Boot Orchestration Agent \(BOA\) job logs, and the Configuration Framework Service \(CFS\) job logs to obtain information that is critical for boot troubleshooting. Use this procedure to determine why compute nodes are booting slower than expected.
+> **`NOTE`** This section is for BOS V1 only. BOS V2 does not use CAPMC, nor does it have BOA. However, the steps
+> outlined below allow for similar debugging of slow steps within CFS-initiated sessions.
 
-### Prerequisites
+Inspect BOS, the Boot Orchestration Agent \(BOA\) job logs, and the Configuration Framework Service \(CFS\) job logs to
+obtain information that is critical for boot troubleshooting. Use this procedure to determine why compute nodes are
+booting slower than expected.
 
-A boot session has been created with the Boot Orchestration Service \(BOS\).
+## Prerequisites
 
-### Procedure
+- A boot session has been created with the Boot Orchestration Service \(BOS\).
+- The Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
-1.  View the BOA logs.
+## Procedure
 
-    1.  Find the BOA job from the boot session.
+1. (`ncn-mw#`) View the BOA logs.
+
+    1. Find the BOA job from the boot session.
 
         The output of the command below is organized by the creation time of the BOA job with the most recent one listed last.
 
@@ -20,13 +26,13 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         Example output:
 
-        ```
+        ```text
         boa-e3c845be-3092-4807-a0c9-272bf0e15896-7pnl4              0/2     Completed   0        3d
         boa-c740f74d-f5af-41f3-a71b-1a3fc00cbe7a-k5hdw              0/2     Completed   0        2d12h
         boa-a365b6a2-3614-4b53-9b6b-df0f4485e25d-nbcdb              0/2     Completed   0        2m43s
         ```
 
-    2.  Watch the log from BOA job.
+    1. Watch the log from BOA job.
 
         ```bash
         kubectl logs -n services -f -c boa BOA_JOB_ID
@@ -34,7 +40,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         Example output:
 
-        ```
+        ```text
         2019-11-12 02:14:27,771 - DEBUG   - cray.boa - BOA starting
 
         2019-11-12 02:14:28,786 - DEBUG   - cray.boa - Boot Agent Image: acad2b43-dff5-483d-a392-8b1b1f91a60c Nodes: x5000c1s1b1n0, x3000c0s35b2n0, x5000c1s3b1n1, x3000c0s35b3n0, x5000c1s0b1n0, x5000c1s3b0n1, x5000c1s2b0n0, x5000c1s3b1n0, x5000c1s1b1n1, x5000c1s2b0n1, x3000c0s35b1n0, x5000c1s3b0n0, x5000c1s0b1n1, x5000c1s1b0n0, x5000c1s2b1n0, x5000c1s1b0n1, x5000c1s2b1n1 created.
@@ -50,14 +56,15 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         2019-11-12 02:15:15,938 - INFO    - cray.boa.smd.wait_for_nodes - Waiting 5 seconds for 17 nodes to be in state: Ready
 
         [...]
-
         ```
 
-2.  View the CFS logs related to the boot job.
+1. (`ncn-mw#`) View the CFS logs related to the boot job.
 
-    1.  Find the most recent CFS jobs.
+    1. Find the most recent CFS jobs.
 
-        There may be more than one job if multiple components are being configured. If there are multiple different BOA jobs running, check the BOA logs first to find the timestamp value when CFS was updated. Expect a delay of a couple minutes after the CFS session starts depending on the `cfs-batcher` settings.
+        There may be more than one job if multiple components are being configured. If there are multiple different CFS
+        jobs running, check CFS first to find the timestamp value when CFS was updated. Expect a delay of a couple
+        minutes after the CFS session starts depending on the `cfs-batcher` settings.
 
         ```bash
         kubectl -n services get cfs
@@ -65,7 +72,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         Example output:
 
-        ```
+        ```text
         NAME                                           JOB                                        STATUS    SUCCEEDED   REPOSITORY CLONE URL                                               BRANCH   COMMIT                                     PLAYBOOK                            AGE
         066bc062-7fc3-11ea-970e-a4bf0138f2ba           cfs-1628cf85-e847-49af-891c-1b7655d8056d   complete   true        https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              site.yml                            4d10h
         3c3758a8-7fd9-11ea-a365-a4bf0138f2ba           cfs-05420ebf-fbbc-4d3a-a0af-a840e379fe12   complete   true        https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              site.yml                            4d8h
@@ -78,16 +85,17 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         ncn-customization-ncn-w002-uai-hosts-unload    cfs-095cce88-1925-4625-a611-ae19d9976a60   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-unload.yml   4d6h
         ncn-customization-ncn-w003-uai-hosts-load      cfs-6b3fdebd-ab2b-4751-b29f-436ff2893569   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-load.yml     4d6h
         ncn-customization-ncn-w003-uai-hosts-unload    cfs-d94ebbe6-6b61-4f78-9dc4-fd24576d32dd   complete   false       https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git   master                                              cray-ncn-customization-unload.yml   4d6h
-
         ```
 
-        If multiple BOA jobs exist, describe the CFS sessions and look at the configuration, as well as which components are included. It is unlikely, but a single session may contain components from multiple separate BOS sessions if they both request the same configuration for different components at around the same time.
+        If multiple CFS jobs exist, describe the CFS sessions and look at the configuration, as well as which components
+        are included. It is unlikely, but a single session may contain components from multiple separate BOS sessions if they
+        both request the same configuration for different components at around the same time.
 
         ```bash
-        kubectl -n services describe cfs SESSION_NAME
+        cray cfs sessions describe SESSION_NAME
         ```
 
-    2.  Find the pods for the CFS job.
+    1. Find the pods for the CFS job.
 
         ```bash
         kubectl -n services get pods | grep JOB_NAME
@@ -95,11 +103,11 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         Example output:
 
-        ```
+        ```text
         cfs-1628cf85-e847-49af-891c-1b7655d8056d-29ntt      0/4     Completed   0     4d11h
         ```
 
-    3.  View the log from the CFS job.
+    1. View the log from the CFS pod.
 
         ```bash
         kubectl -n services logs POD_NAME ansible
@@ -107,7 +115,7 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
 
         Example output:
 
-        ```
+        ```text
         Inventory available
           % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                          Dload  Upload   Total   Spent    Left  Speed
@@ -149,4 +157,3 @@ A boot session has been created with the Boot Orchestration Service \(BOS\).
         ```
 
 Use the data returned in the BOA and CFS logs to determine the underlying issue for slow boot times.
-
