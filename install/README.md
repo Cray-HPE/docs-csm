@@ -17,8 +17,7 @@ Introduced in CSM 1.2, a major feature of CSM is the Bifurcated CAN (BICAN).
 The BICAN is designed to separate administrative network traffic from user network traffic.
 More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
 Review the BICAN summary before continuing with the CSM install.
-
-Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) page.
+For detailed BICAN documentation, see [BICAN technical details](../operations/network/management_network/bican_technical_details.md).
 
 ## Topics
 
@@ -229,4 +228,4 @@ See [Security Hardening](../operations/CSM_product_management/Apply_Security_Har
 Prior to the upgrade it is recommended that a Nexus export is taken. This is not a required step but highly recommend to protect the data in Nexus.
 If there is no maintenance period available then this step should be skipped until after the upgrade process.
 
-Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
+See [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.

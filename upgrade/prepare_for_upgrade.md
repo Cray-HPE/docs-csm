@@ -1,9 +1,10 @@
-# Prepare for Upgrade
+# Prepare For Upgrade
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.
 
 - [Reduced resiliency during upgrade](#reduced-resiliency-during-upgrade)
 - [Export Nexus data](#export-nexus-data)
+- [Disable encryption for upgrade if enabled](#disable-encryption-for-upgrade-if-enabled)
 - [Start typescript](#start-typescript)
 - [Running sessions](#running-sessions)
 - [Health validation](#health-validation)
@@ -25,8 +26,9 @@ then quorum would be lost.
 
 **Warning:** This process can take multiple hours where Nexus is unavailable and should be done during scheduled maintenance periods.
 
-Prior to the upgrade it is recommended that a Nexus export is taken. This is not a required step but highly recommend to protect the data in Nexus.
-If there is no maintenance period available then this step should be skipped until after the upgrade process.
+Prior to the upgrade it is recommended that a Nexus export is taken. This is not a required step but
+highly recommend to protect the data in Nexus.
+If there is no maintenance period available, then skip this step until after the upgrade process.
 
 Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
 
@@ -34,9 +36,9 @@ Reference [Nexus Export and Restore Procedure](../operations/package_repository_
 
 While it is possible to upgrade with Kubernetes encryption enabled, disabling encryption is recommended for the duration of the upgrade if it has been enabled.
 
-Reference the [Kubernetes Encryption](../operations/kubernetes/encryption/README.md) for details.
+See [Kubernetes Encryption](../operations/kubernetes/encryption/README.md) for details.
 
-Once the upgrade is complete encryption can be turned back on.
+Once the upgrade is complete, then encryption can be turned back on.
 
 ## Start typescript
 
@@ -44,13 +46,13 @@ Once the upgrade is complete encryption can be turned back on.
 
 1. (`ncn-m001#`) Start a typescript.
 
-    ```bash
-    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).prepare_for_upgrade.txt
-    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
-    ```
+   ```bash
+   script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).prepare_for_upgrade.txt
+   export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
+   ```
 
-If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
-after a break, always be sure that a typescript is running before proceeding.
+If additional shells are opened during this procedure, then record those with typescripts as well.
+When resuming a procedure after a break, always be sure that a typescript is running before proceeding.
 
 ## Running sessions
 
@@ -58,29 +60,31 @@ BOS, CFS, CRUS, FAS, and NMD sessions should not be started or underway during t
 
 1. (`ncn-m001#`) Ensure that these services do not have any sessions in progress.
 
-    > This SAT command has `shutdown` as one of the command line options, but it will not start a shutdown process on the system.
+   > This SAT command has `shutdown` as one of the command line options, but it will not start a
+   > shutdown process on the system.
 
-    ```bash
-    sat bootsys shutdown --stage session-checks
-    ```
+   ```bash
+   sat bootsys shutdown --stage session-checks
+   ```
 
     Example output:
 
-    ```text
-    Checking for active BOS sessions.
-    Found no active BOS sessions.
-    Checking for active CFS sessions.
-    Found no active CFS sessions.
-    Checking for active CRUS upgrades.
-    Found no active CRUS upgrades.
-    Checking for active FAS actions.
-    Found no active FAS actions.
-    Checking for active NMD dumps.
-    Found no active NMD dumps.
-    No active sessions exist. It is safe to proceed with the shutdown procedure.
-    ```
+   ```text
+   Checking for active BOS sessions.
+   Found no active BOS sessions.
+   Checking for active CFS sessions.
+   Found no active CFS sessions.
+   Checking for active CRUS upgrades.
+   Found no active CRUS upgrades.
+   Checking for active FAS actions.
+   Found no active FAS actions.
+   Checking for active NMD dumps.
+   Found no active NMD dumps.
+   No active sessions exist. It is safe to proceed with the shutdown procedure.
+   ```
 
-    If active sessions are running, then either wait for them to complete or shut down, cancel, or delete them.
+   If active sessions are running, then either wait for them to complete, or shut down, cancel, or
+   delete them.
 
 1. Coordinate with the site to prevent new sessions from starting in these services.
 
@@ -92,8 +96,9 @@ BOS, CFS, CRUS, FAS, and NMD sessions should not be started or underway during t
 
     Run the CSM health checks to ensure that everything is working properly before the upgrade starts.
 
-    **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the documentation for the **`CURRENT`** CSM version on
-    the system. The validation procedures in the CSM documentation are only intended to work with that specific version of CSM.
+   **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the
+   documentation for the **`CURRENT`** CSM version on the system. The validation procedures in the CSM
+   documentation are only intended to work with that specific version of CSM.
 
 1. Validate Lustre health.
 
