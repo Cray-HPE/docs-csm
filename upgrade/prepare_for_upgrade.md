@@ -1,4 +1,4 @@
-# Prepare for Upgrade
+# Prepare For Upgrade
 
 Before beginning an upgrade to a new version of CSM, there are a few things to do on the system first.
 
@@ -47,7 +47,8 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
     1. Ensure that these services do not have any sessions in progress.
 
-        > This SAT command has `shutdown` as one of the command line options, but it will not start a shutdown process on the system.
+        > This SAT command has `shutdown` as one of the command line options, but it will not start a
+        > shutdown process on the system.
 
         ```bash
         ncn-m001# sat bootsys shutdown --stage session-checks
@@ -69,7 +70,8 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
         No active sessions exist. It is safe to proceed with the shutdown procedure.
         ```
 
-        If active sessions are running, then either wait for them to complete or shut down, cancel, or delete them.
+        If active sessions are running, then either wait for them to complete, or shut down, cancel, or
+        delete them.
 
     1. Coordinate with the site to prevent new sessions from starting in these services.
 
@@ -79,8 +81,9 @@ Before beginning an upgrade to a new version of CSM, there are a few things to d
 
     Run the CSM health checks to ensure that everything is working properly before the upgrade starts.
 
-    **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the documentation for the **`CURRENT`** CSM version on
-    the system. The validation procedures in the CSM documentation are not all intended to work on previous versions of CSM.
+    **`IMPORTANT`**: See the `CSM Install Validation and Health Checks` procedures in the
+    documentation for the **`CURRENT`** CSM version on the system. The validation procedures in the CSM
+    documentation are only intended to work with that specific version of CSM.
 
 1. Validate Lustre Health
 

@@ -3,6 +3,10 @@
 Rebuild a master, worker, or storage non-compute node (NCN). Use this procedure in the event that a node has a hardware failure,
 or some other issue with the node has occurred that warrants rebuilding the node.
 
+- [Prerequisites](#prerequisites)
+- [Procedure](#procedure)
+- [Validation](#validation)
+
 ## Prerequisites
 
 The system is fully installed and has transitioned off of the LiveCD.
@@ -22,7 +26,11 @@ ncn# echo $XNAME
 
 Only follow the steps in the section for the node type that is being rebuilt.
 
-***NOTE*** After rebuilding an NCN, kernel dump will need to be fixed. See [Kernel Dump Hotfix](../../../scripts/hotfixes/kdump/README.md) for more information.
+***NOTE*** After rebuilding an NCN, kernel dump will need to be fixed. See [Kernel Dump Hotfix](../../../scripts/workarounds/kdump/README.md) for more information.
+
+- [Worker node](#worker-node)
+- [Master node](#master-node)
+- [Storage node](#storage-node)
 
 ### Worker node
 
@@ -39,13 +47,15 @@ Only follow the steps in the section for the node type that is being rebuilt.
 
 ### Master node
 
+Run `ncn-rebuild-master-nodes.sh` from a master node that is not the one being rebuilt.
+
 ```bash
-ncn# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
+ncn-m# /usr/share/doc/csm/upgrade/1.2/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
 ```
 
 ### Storage node
 
-See [Prepare storage nodes](Prepare_Storage_Nodes.md).
+See [Prepare Storage Nodes](Prepare_Storage_Nodes.md).
 
 ## Validation
 
