@@ -12,7 +12,12 @@
 This test requires that the Cray CLI is configured on nodes where the test is executed.
 See [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface).
 
-The following test can be run on any Kubernetes node (any master or worker node, but **not** on the PIT node).
+This test can be run on any Kubernetes NCN (any master or worker NCN, but **not** the PIT node).
+When run on a Kubernetes master NCN, the TFTP file transfer subtest is omitted. However, that TFTP subtest is
+run on a worker NCN as part of the Goss NCN health checks.
+
+(`ncn-mw#`) The following command runs the entire SMS test suite (with the possible exception of the TFTP file
+transfer subtest, as noted in the previous paragraph).
 
 ```bash
 /usr/local/bin/cmsdev test -q all
