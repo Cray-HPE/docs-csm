@@ -165,7 +165,7 @@ file found in `${ADMIN_DIR}`.
     (`ncn-m001#`) Execute the `update-vcs-config` stage.
 
     ```bash
-    iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r update-vcs-config
+    iuf -a ${ACTIVITY_NAME} run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r update-vcs-config
     ```
 
 Once this step has completed:

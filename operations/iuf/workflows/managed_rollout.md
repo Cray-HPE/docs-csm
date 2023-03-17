@@ -78,7 +78,7 @@ Once this step has completed:
 **`NOTE`** If LNet router or gateway nodes were upgraded in the [2.1 LNet router nodes and gateway nodes](#21-lnet-router-nodes-and-gateway-nodes) section, there is no need to upgrade them again in this section. Follow the
 instructions in this section to upgrade any remaining applications (UANs, etc.) that have not been upgraded yet.
 
-Since applications nodes are not managed by workload managers, the IUF `managed-nodes-rollout` stage cannot reboot them in a controlled manner via the `-mrs stage` argument. The IUF `managed-nodes-rollout` stage can reboot application
+Since application nodes are not managed by workload managers, the IUF `managed-nodes-rollout` stage cannot reboot them in a controlled manner via the `-mrs stage` argument. The IUF `managed-nodes-rollout` stage can reboot application
 nodes using the `-mrs reboot` argument, but an immediate reboot of application nodes is likely to be disruptive to users and overall system health and is not recommended. Administrators should determine the best approach for rebooting
 application nodes outside of IUF that aligns with site preferences.
 
@@ -89,7 +89,7 @@ Once this step has completed:
 
 ## 3. Update managed host Slingshot NIC firmware
 
-If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the  _Slingshot Operations Guide for Customers_ for details on how to update NIC firmware on managed nodes.
+If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _Slingshot Operations Guide for Customers_ for details on how to update NIC firmware on managed nodes.
 
 Once this step has completed:
 
