@@ -17,8 +17,7 @@ Introduced in CSM 1.2, a major feature of CSM is the Bifurcated CAN (BICAN).
 The BICAN is designed to separate administrative network traffic from user network traffic.
 More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
 Review the BICAN summary before continuing with the CSM install.
-
-Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) page.
+For detailed BICAN documentation, see [BICAN technical details](../operations/network/management_network/bican_technical_details.md).
 
 ## Topics
 
@@ -31,8 +30,8 @@ shown here with numbered topics.
     1. [Import CSM tarball](#3-import-csm-tarball)
     1. [Create system configuration](#4-create-system-configuration)
     1. [Configure management network switches](#5-configure-management-network-switches)
-        1. [Ensure SNMP is Configured on the Management Network Switches](#ensure-snmp-is-configured-on-the-management-network-switches)
-        1. [Configure the Management Network with CANU](#configure-the-management-network-with-canu)
+        1. [Ensure SNMP is configured on the management network switches](#ensure-snmp-is-configured-on-the-management-network-switches)
+        1. [Configure the management network with CANU](#configure-the-management-network-with-canu)
 1. [Installation](#installation)
     1. [Deploy management nodes](#1-deploy-management-nodes)
     1. [Install CSM services](#2-install-csm-services)
@@ -90,7 +89,7 @@ See [Create system configuration](pre-installation.md#3-create-system-configurat
 
 ### 5. Configure management network switches
 
-#### Ensure SNMP is Configured on the Management Network Switches
+#### Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
@@ -98,60 +97,66 @@ See [Create system configuration](pre-installation.md#3-create-system-configurat
 <!-- markdownlint-disable-next-line MD036 MD026 -->
 **IMPORTANT**
 
-The REDS Hardware Discovery process, and the Prometheus SNMP Exporter, depend on SNMP.
-To ensure these services function correctly, the SNMP settings in the system should be
-validated to ensure that the management network switches have SNMP enabled and that the
-SNMP credentials configured on the switches match the credentials stored in Vault and
-customizations.yaml
+The REDS hardware discovery process and the Prometheus SNMP Exporter depend on SNMP.
+To ensure that these services function correctly, validate the SNMP settings in the system to ensure
+that the management network switches have SNMP enabled and that the SNMP credentials configured on the
+switches match the credentials stored in Vault and `customizations.yaml`.
 
-If SNMP is misconfigured, REDS Hardware Discovery and the Prometheus SNMP Exporter may
-fail to operate correctly.  More information about configuring SNMP on the management
-switches can be found in the vendor specific switch documentation.  Links to these pages,
-and other SNMP information related to REDS Hardware Discovery and the Prometheus SNMP
-Exporter, [can be found on the Configure SNMP page.](../operations/network/management_network/configure_snmp.md).
+If SNMP is misconfigured, then REDS hardware discovery and the Prometheus SNMP Exporter may
+fail to operate correctly. For more information, see
+[Configure SNMP](../operations/network/management_network/configure_snmp.md).
 
-##### When the Management Network is Already Configured
+##### When the management network is already configured
 
-If CSM is being installed to an environment that already has a working management network
-(such as during a reinstall), validate that the SNMP credentials seeded into
-customizations.yaml in the previous [Create Baseline System Customization](./prepare_site_init.md#3-create-baseline-system-customizations) step
+If CSM is being installed to an environment that already has a working management network (such as during a
+reinstall), then validate that the SNMP credentials seeded into `customizations.yaml` in the previous
+[Create Baseline System Customization](prepare_site_init.md#3-create-baseline-system-customizations) step
 of the install matches the SNMP password configured on the management network switches.
 
-If the passwords do not match, either update customizations.yaml to match the switches or change the switches to match
- customizations.yaml.  Procedures for both options can be found on the [Configure SNMP](../operations/network/management_network/configure_snmp.md) page.
+If the passwords do not match, then either update `customizations.yaml` to match the switches, or change the
+switches to match `customizations.yaml`. For procedures for either option, see
+[Configure SNMP](../operations/network/management_network/configure_snmp.md).
 
-Note that while the [Cray Automated Networking Utility (CANU)](../operations/network/management_network/canu/index.md) will
-typically not overwrite SNMP settings that are manually applied to the management switches, there are certain cases
-where SNMP configuration can be over-written or lost (such as when resetting and reconfiguration a switch from
-factory defaults).  To persist the SNMP settings a [CANU custom configuration](../operations/network/management_network/canu/custom_config.md) should
-be used.  CANU custom configuration files are used to persist site management network configurations that are
+Note: While the [Cray Automated Networking Utility (CANU)](../operations/network/management_network/canu/README.md)
+will typically not overwrite SNMP settings that are manually applied to the management switches, there are certain
+cases where SNMP configuration can be over-written or lost (such as when resetting and reconfiguring a switch from
+factory defaults). To persist the SNMP settings, see
+[CANU Custom Configuration](../operations/network/management_network/canu/custom_config.md).
+CANU custom configuration files are used to persist site management network configurations that are
 intended to take precedence over configurations generated by CANU.
 
-##### When the Management Network Has Not Been Configured
+##### When the management network has not been configured
 
-Create a [CANU custom configuration](../operations/network/management_network/canu/custom_config.md) that configures SNMP on the management network switches,
-using the same credentials that were previously used in the [Create Baseline System Customization](./prepare_site_init.md#3-create-baseline-system-customizations)
-page of the installation.  This custom config should be used with CANU in the next step of the install.
+Create a [CANU custom configuration](../operations/network/management_network/canu/custom_config.md) that
+configures SNMP on the management network switches, using the same credentials that were previously used in
+the [Create Baseline System Customization](prepare_site_init.md#3-create-baseline-system-customizations)
+page of the installation. Use this custom configuration with CANU in the next step of the install.
 
-It's recommended that the custom config be stored in a version control repository along with other configuration assets
-from the CSM install.
+Store the custom configuration in a version control repository along with other configuration assets from
+the CSM install.
 
-See the [Configure SNMP](../operations/network/management_network/configure_snmp.md) page for more information about configuring SNMP in CSM.
+See [Configure SNMP](../operations/network/management_network/configure_snmp.md) for more information about
+configuring SNMP in CSM.
 
-#### Configure the Management Network with CANU
+#### Configure the management network with CANU
 
 At this point external connectivity has been established, and either bare-metal configurations can
 be installed or new/updated configurations can be applied.
 
-Most installations will require the following three tasks, although this may vary from system to system depending on site-specific settings and procedures.
+Most installations will require the following three tasks, although this may vary depending on
+site-specific settings and procedures.
 
-1. Custom CANU configs should be created and stored in version control (at a minimum, an SNMP config should be created - see the previous SNMP steps above)
-1. Network configuration generated by CANU should be applied to the management switches
-    1. CANU can also be used to generate a new network configuration and report on the differences between it and the running switch configuration (useful when reinstalling CSM)
+1. Create custom CANU configurations and store them in version control.
+   At a minimum, create an SNMP configuration; see the SNMP section earlier on this page.
+1. Apply the CANU-generated network configuration to the management switches.
+   CANU can also be used to generate a new network configuration and report on the differences between it
+   and the running switch configuration (useful when reinstalling CSM).
 
-See the [Management Network User Guide](../operations/network/management_network/README.md) for information on next steps for a variety of network configuration scenarios.
+See [Management Network User Guide](../operations/network/management_network/README.md) for information on next steps
+for a variety of network configuration scenarios.
 
-Note that the configuration of the management network is an advanced task that may require the help of a networking subject matter expert.
+Note that the configuration of the management network is an advanced task that may require the help of a networking
+subject matter expert.
 
 ## Installation
 
@@ -292,4 +297,4 @@ See [Kubernetes Encryption](../operations/kubernetes/encryption/README.md).
 Prior to the upgrade it is recommended that a Nexus export is taken. This is not a required step but highly recommend to protect the data in Nexus.
 If there is no maintenance period available then this step should be skipped until after the upgrade process.
 
-Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
+See [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
