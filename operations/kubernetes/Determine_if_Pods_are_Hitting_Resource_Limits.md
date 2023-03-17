@@ -14,7 +14,7 @@ Identify pods that are hitting resource limits in order to increase the resource
 
 ## Procedure
 
-1. Use the `/opt/cray/platform-utils/detect_cpu_throttling.sh` script to determine if any pods are being CPU throttled _(this script is installed on master and worker NCNs)_.  The script can be used in two different ways:
+1. Use the `/opt/cray/platform-utils/detect_cpu_throttling.sh` script to determine if any pods are being CPU throttled _(this script is installed on master and worker NCNs)_. The script can be used in two different ways:
 
     1. (`ncn-mw#`) Pass in a substring of the desired pod names.
 
