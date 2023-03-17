@@ -52,9 +52,10 @@ spec:
 
     echo
 
-    pods=( "nexus" "ipxe" "kea" "cray-cfs-api-db" )
-    for pod in ${pods[@]};do
-      podName=$(kubectl get pods --all-namespaces | awk '{print $2}' | grep $pod)
+    containerNames=( "nexus" "ipxe" "kea" "cray-cfs-api-db" )
+    for containerName in ${containerNames[@]};do
+      # get pod name by container name
+      podName=$(kubectl get pods -A -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.phase}{"\t"}{range .spec.containers[*]}{.name}{"\t"}{end}{"\n"}{end}' | grep -E "^[^[:space:]]+[[:space:]]+Running[[:space:]]+.*${containerName}.*$" | cut -f1)
       if [[ -z $podName ]];then
         echo "Couldn't not find pod: $pod"
         echo "something is wrong"
