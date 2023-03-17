@@ -12,7 +12,7 @@ the same steps for rebuilding/upgrading NCN worker nodes.
 
 1. If CSM **is** being upgraded, then NCN storage master nodes will be upgraded with a new image and CFS configuration.
 
-See the [6.5 Execute the IUF `management-nodes-rollout` stage](../workflows/upgrade_all_products.md#65-execute-the-iuf-management-nodes-rollout-stage) documentation for more information.
+See the [3. Execute the IUF `management-nodes-rollout` stage](../workflows/management_rollout.md#3-execute-the-iuf-management-nodes-rollout-stage) documentation for more information.
 
 `management-nodes-rollout` details are explained in the following sections:
 
@@ -142,10 +142,11 @@ Expected behavior:
 
 ## Set NCN boot image for `ncn-m001` and NCN storage nodes
 
-These steps should be followed when upgrading NCN storage nodes and `ncn-m001` during [Management-nodes-rollout with CSM upgrade](../workflows/upgrade_all_products.md#651-management-nodes-rollout-with-csm-upgrade)
-when following the [upgrade all products documentation](../workflows/upgrade_all_products.md).
+Follow these steps when upgrading NCN storage nodes and `ncn-m001` during [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
+when following the IUF [Initial Install](../workflows/initial_install.md) or IUF [Upgrade](../workflows/upgrade.md) documentation.
 
-1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [`management-nodes-rollout` with CSM upgrade](../workflows/upgrade_all_products.md#651-management-nodes-rollout-with-csm-upgrade) in the [upgrade all products documentation](../workflows/upgrade_all_products.md).
+1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade) in the IUF
+[Initial Install](../workflows/initial_install.md) or IUF [Upgrade](../workflows/upgrade.md) documentation.
 
     ```bash
     IMS_RESULTANT_IMAGE_ID=<value of final_image_id>

@@ -37,19 +37,18 @@ The following IUF topics are discussed in the sections below.
     - [resume](#resume)
     - [restart](#restart)
     - [activity](#activity)
+    - [list-activities](#list-activities)
     - [list-stages](#list-stages)
 - [Output and log files](#output-and-log-files)
   - [`iuf` output](#iuf-output)
   - [Log files](#log-files)
 - [Site and recipe variables](#site-and-recipe-variables)
 - [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
-- [Re-executing stages of an IUF session](#re-executing-stages-of-an-iuf-session)
-  - [Removing a product from an IUF session](#removing-a-product-from-an-iuf-session)
-  - [Adding a product to an IUF session](#adding-a-product-to-an-iuf-session)
-- [Product workflows](#product-workflows)
-- [Troubleshooting](#troubleshooting)
 - [Recovering from failures](#recovering-from-failures)
-- [Install and Upgrade Observability Framework](#install-and-upgrade-observability-framework)
+  - [Addressing the issue without changing products](#addressing-the-issue-without-changing-products)
+  - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
+  - [Addressing the issue by adding a new version of a product](#addressing-the-issue-by-adding-a-new-version-of-a-product)
+- [Troubleshooting](#troubleshooting)
 
 ## Limitations
 
@@ -60,23 +59,20 @@ The following IUF topics are discussed in the sections below.
   those configurations to their specific needs. Note that `sat` capabilities used by IUF rely on BOS V2.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
-- The `management-nodes-rollout` stage currently does not reboot management storage nodes or `ncn-m001`. These nodes must be rebuilt using non-IUF methods described in the appropriate sections of the CSM documentation.
+- The `management-nodes-rollout` stage currently does not automatically upgrade management storage nodes or `ncn-m001`. These nodes must be upgraded using non-IUF methods described in the IUF documentation.
 - If the `iuf run` subcommand ends unexpectedly before the Argo workflow it created completes, there is no CLI option to reconnect to the Argo workflow and continue displaying status. It is recommended the administrator
   monitors progress via the Argo workflow UI and/or IUF log files in this scenario.
 - It is currently not possible to add or remove product distribution files to an in progress IUF session without first re-executing the `process-media` stage and then re-executing any other stages required for that product. See
-  [Re-executing stages of an IUF session](#re-executing-stages-of-an-iuf-session) for details.
+  [Recovering from failures](#recovering-from-failures) for details.
 
 ## Initial install and upgrade workflows
 
-The time at which IUF stages are executed in an initial install or upgrade workflow depends on whether CSM itself is also being installed or upgraded in addition to non-CSM products. This table describes the different use cases
-and tasks performed.
+There are two separate workflows that utilize IUF when installing or upgrading non-CSM product content on a Cray EX system.
 
-| Operation       | Content          | Tasks |
-| --------------- | ---------------- | ----- |
-| initial install | CSM and products | Install CSM, **ignoring** any IUF stages embedded in the CSM installation documentation. Then execute all IUF stages to install product content with CSM fully functional. |
-| initial install | products only    | Execute IUF stages to install non-CSM product content |
-| upgrade         | CSM and products | Upgrade CSM, **including** any IUF stages embedded in the CSM installation documentation |
-| upgrade         | products only    | Execute IUF stages to upgrade non-CSM product content |
+1. The IUF [Initial Install](workflows/initial_install.md) workflow is used in either of the following scenarios:
+   - An initial install of the system is being performed, including CSM and non-CSM products
+   - An initial install or upgrade is being performed **with non-CSM products only**. In this scenario, the first step ("Perform an install of CSM") is skipped and all other steps are performed.
+1. The IUF [Upgrade](workflows/upgrade.md) workflow is used when an upgrade is being performed **with CSM and non-CSM products**
 
 ## Activities
 
@@ -86,6 +82,8 @@ variable; for more details, see `iuf -h`.  The activity will be created automati
 
 IUF provides operational metrics associated with an activity (e.g. the time duration of each stage executed). Users can also create annotations for an activity, e.g. to note that an operation has been paused, to note that time was
 spent debugging an issue, etc. `iuf` subcommands can be invoked to display a summary of actions, annotations, and metrics associated with an activity.
+
+IUF activities can be displayed by using the [`iuf list-activities`](#list-activities) subcommand.
 
 The following example shows history and status information associated with the `admin-230127` activity:
 
@@ -178,14 +176,15 @@ activity identifier and that information is used for all other stages.
 
 The `iuf` command-line interface is used to invoke all IUF operations. The `iuf` command provides the following subcommands.
 
-| Subcommand  | Description                                              |
-| ----------- | -------------------------------------------------------- |
-| run         | Initiates execution of IUF operations                    |
-| abort       | Abort an IUF session                                     |
-| resume      | Resume a previously aborted or failed IUF session        |
-| restart     | Restart the most recently aborted or failed IUF session  |
-| activity    | Display IUF activity details, annotate IUF activity      |
-| list-stages | Display stages and status for a given IUF activity       |
+| Subcommand      | Description                                              |
+| --------------- | -------------------------------------------------------- |
+| run             | Initiates execution of IUF operations                    |
+| abort           | Abort an IUF session                                     |
+| resume          | Resume a previously aborted or failed IUF session        |
+| restart         | Restart the most recently aborted or failed IUF session  |
+| activity        | Display IUF activity details, annotate IUF activity      |
+| list-activities | List all activities present on the system                |
+| list-stages     | Display stages and status for a given IUF activity       |
 
 ### Global arguments
 
@@ -196,7 +195,7 @@ The following shows the global arguments available.
 ```text
 usage: iuf [-h] [-i INPUT_FILE] [-w] [-a ACTIVITY] [-c CONCURRENCY] [-b BASE_DIR] [-s STATE_DIR] [-m MEDIA_DIR]
            [--log-dir LOG_DIR] [-l {CRITICAL,ERROR,WARNING,INFO,DEBUG,TRACE}] [-v]
-           {run,activity,list-stages|ls,resume,restart,abort} ...
+           {run,activity,list-stages|ls,resume,restart,abort,list-activities|la} ...
 
 The CSM Install and Upgrade Framework (IUF) CLI.
 
@@ -235,7 +234,7 @@ options:
   -v, --verbose         generate more verbose messages
 
 subcommands:
-  {run,activity,list-stages|ls,resume,restart,abort}
+  {run,activity,list-stages|ls,resume,restart,abort,list-activities|la}
 ```
 
 ### Input file
@@ -270,7 +269,7 @@ activity:
 (`ncn-m001#`) An input file populated with default values can be created by using `iuf -w`:
 
 ```bash
-iuf -a admin-230127 -m admin-230127/media -i /tmp/default-input-file -w
+iuf -a admin-230127 -i /tmp/default-input-file -w
 ```
 
 Example output:
@@ -493,6 +492,23 @@ options:
 
 These [examples](examples/iuf_activity.md) highlight common use cases of `iuf activity`.
 
+#### `list-activities`
+
+The `list-activities` subcommand displays all activities present on the system.
+
+The following arguments may be specified when invoking `iuf list-activities`:
+
+```bash
+usage: iuf list-activities [-h]
+
+List all IUF activities stored in argo.
+
+options:
+  -h, --help  show this help message and exit
+```
+
+These [examples](examples/iuf_list_activities.md) highlight common use cases of `iuf list-activities`.
+
 #### `list-stages`
 
 The `list-stages` subcommand displays the stages for a given activity, the status of each stage, and the time spent in each stage.
@@ -533,7 +549,7 @@ information and monitoring capabilities. The lines prefixed with `BEGIN:` and `F
 (`ncn-m001#`) Example of `iuf` command and output.
 
 ```bash
-iuf -a admin-230127 -m admin-230127/media run --site-vars /opt/cray/iuf/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/iuf/hpc-csm-software-recipe-23.1.18/vcs -e update-vcs-config
+iuf -a admin-230127 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml --bootprep-config-dir /etc/cray/upgrade/csm/admin -e update-vcs-config
 ```
 
 Example output:
@@ -642,34 +658,42 @@ HPE provides management NCN and managed node `sat bootprep` configuration files 
 CFS configuration, image, and BOS session template definitions. The administrator may customize the files as needed. The files include
 variables, and the values used are provided by the recipe variables and/or site variables files specified when running `iuf run`.
 
-## Re-executing stages of an IUF session
+## Recovering from failures
 
-It is possible to re-execute stages of an IUF session by specifying `iuf run` with the desired stage and other `iuf` arguments. If no changes were made to the product distribution files in the media directory, `iuf run` will
-re-execute any Argo steps that failed during the previous invocation of `iuf run`. Any Argo steps that previously executed successfully will be skipped if possible. If the `-f` argument is specified, all Argo steps will be
-re-executed, regardless of whether they succeeded or failed during the previous invocation of `iuf run`.
+If an error is encountered while executing `iuf run`, `iuf` will attempt to complete the current stage for the other products involved. The following are strategies to recover from failures once the underlying issue has been
+resolved.
 
-### Removing a product from an IUF session
+### Addressing the issue without changing products
+
+Multiple options are available if the administrator decides to continue the install or upgrade without changing the products being installed or upgraded:
+
+- [`iuf resume`](#resume) can be used to re-execute the most recent `iuf run` command and continue from where the failures were encountered.
+- [`iuf restart`](#restart) can be used to re-execute the most recent `iuf run` command from the beginning of the earliest stage specified. Only failed or previously unexecuted Argo steps will be executed unless the `-f`
+  argument is specified, which forces all Argo steps to be re-executed, regardless of whether they succeeded or failed during the previous invocation of `iuf run`.
+- [`iuf run`](#run) can be used to re-execute stages of an IUF session with new `iuf` arguments. If no changes were made to the product distribution files in the media directory, `iuf run` will re-execute any Argo steps that failed
+  during the previous invocation of `iuf run`. Any Argo steps that previously executed successfully will be skipped if possible. If the `-f` argument is specified, all Argo steps will be re-executed, regardless of whether they
+  succeeded or failed during the previous invocation of `iuf run`.
+
+### Addressing the issue by removing a product
 
 If the administrator wants to remove a product from the IUF session, they must re-execute `iuf run` for the `process-media` stage with the product distribution file and uncompressed content removed from the media directory. This
 removes references to that product from the existing IUF activity.
 
-If any previously-executed stages performed operations with that product, it may be necessary to re-execute them as well to remove artifacts or metadata related to the product, e.g. to remove CFS configuration layers and rebuild
-images without that product present.
+If any previously executed stages performed operations with the removed product, re-execute them. It may be necessary to perform manual operations as well, e.g. modifying the `sat bootprep` input files used to create images in
+order to remove references to the product.
 
-### Adding a product to an IUF session
+The administrator can then execute any remaining stages that did not complete due to the initial failure.
 
-To add a new product (or new version of an existing product) to the IUF session, re-execute `iuf run` for the `process-media` stage with the new product distribution file added to the media directory. This adds knowledge of that
-product to the existing IUF activity. If the new product is being used in place of a different version of the product, remove the previous version of the product distribution file and uncompressed content from the media directory
-at the same time the new version is added.
+### Addressing the issue by adding a new version of a product
 
-If previously executed stages performed operations using the old product version, re-execute them to remove artifacts or metadata related to the old version of the product, e.g. to remove CFS configuration layers and rebuild images
-to ensure only the new version of the product is present.
+To add a new version of an existing product to the IUF session, re-execute `iuf run` for the `process-media` stage with the new product distribution file added to the media directory. This adds knowledge of that product to the
+existing IUF activity. If the new product is being used in place of a different version of the product, remove the previous version of the product distribution file and uncompressed content from the media directory at the same
+time the new version is added.
 
-## Product workflows
+If any previously executed stages performed operations with the removed product, re-execute them. It may be necessary to perform manual operations as well, e.g. modifying the `sat bootprep` input files used to create images in
+order to remove references to the product.
 
-The following are examples of workflows for installing and upgrading product content using `iuf`.
-
-- [Install or Upgrade All Products Provided in a HPC CSM Software Recipe](workflows/upgrade_all_products.md)
+The administrator can then execute any remaining stages that did not complete due to the initial failure.
 
 ## Troubleshooting
 
@@ -690,29 +714,3 @@ The following actions may be useful if errors are encountered when executing `iu
   workflow and debug the issue.
 - If an Argo step fails, Argo will attempt to re-execute the step. If the retry succeeds, the failed step will still be displayed, colored red, in the Argo UI alongside the successful retry step, colored green. Although the failed
   step is still displayed, it did not affect the success of the overall workflow and can be ignored.
-
-## Recovering from failures
-
-If an error is encountered while executing `iuf run`, `iuf` will attempt to complete the current stage for the other products involved, if any. The following are strategies to recover from stage failures once the issue has been addressed.
-
-- If an error was encountered and the administrator decides to continue the install or upgrade with all of the same products, execute `iuf run` using the same activity identifier and arguments specified previously. If some IUF stages
-  completed successfully before the error occurred, use `iuf run -b` to begin at the stage that previously failed since it is not
-  necessary to re-run the IUF stages that completed successfully.
-- If an error was encountered with a specific product and the administrator decides to continue the install or upgrade without that product:
-  - Remove the undesired product from the IUF media directory.
-  - Execute `iuf run` using a **new** activity identifier but otherwise use the same arguments specified previously. If some IUF stages completed successfully before the error occurred:
-    - Execute `iuf run` with `-b process-media` to associate the product media with the new activity.
-    - Execute `iuf run -b` to begin at the stage that previously failed since it is not necessary to re-run the IUF stages that completed successfully. If the only product that failed that stage was the one removed from the media
-      directory, start with the next stage rather than re-running the stage that previously failed.
-- If an error was encountered with a specific product and the administrator obtains a new release of that product:
-  - Remove the undesired product from the IUF media directory.
-  - Add the new release of the product to the IUF media directory.
-  - Execute `iuf run` using a **new** activity identifier but otherwise use the same arguments specified previously in order to re-run the install or upgrade process.
-
-## Install and Upgrade Observability Framework
-
-The Install and Upgrade Observability Framework includes assertions for Goss health checks, as well as metrics and dashboards for health checks.
-The framework also includes a unified consistent method to automatically track Time to Install (TTI) and Time to Upgrade (TTU), as well as error and pattern counts across all nodes and product streams.
-The Install and Upgrade Observability Framework is automatically deployed and configured in the CSM environment.
-
-For more information on the Install and Upgrade Observability Framework, refer to [Install and Upgrade Observability Framework](../observability/Observability.md).

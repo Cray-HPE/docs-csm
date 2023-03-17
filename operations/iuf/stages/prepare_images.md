@@ -34,8 +34,8 @@ The following arguments are most often used with the `prepare-images` stage. See
 
 ## Artifacts created
 
-The artifacts created by the `prepare-images` stage can found by examining a Kubernetes ConfigMap associated with the IUF activity specified when executing the `prepare-images` stage. The following examples show how to find the
-management node and managed node artifacts.
+The artifacts created by the `prepare-images` stage can found by examining the output from `iuf run` or by examining a Kubernetes ConfigMap associated with the IUF activity specified when executing the `prepare-images` stage.
+The following examples show how to find the management node and managed node artifacts from the ConfigMap.
 
 (`ncn-m001#`) Examine the activity ConfigMap to identify the management node images and CFS configurations created by `prepare-images`.
 
@@ -152,9 +152,9 @@ See the [HPE Cray EX System Admin Toolkit (SAT) Guide](https://cray-hpe.github.i
 
 ## Example
 
-(`ncn-m001#`) Execute the `prepare-images` stage for activity `admin-230127` using the specified `site_vars.yaml` file and the managed and management `sat bootprep` configuration files and the `product_vars.yaml` configuration file
-found in the `hpc-csm-software-recipe-23.05.0/vcs` directory of the 23.05.0 HPC CSM Software Recipe distribution file.
+(`ncn-m001#`) Execute the `prepare-images` stage for activity `admin-230127` using the `/etc/cray/upgrade/csm/admin/site_vars.yaml` file and the managed and management `sat bootprep` configuration files and the `product_vars.yaml` configuration file
+found in the `/etc/cray/upgrade/csm/admin` directory.
 
 ```bash
-iuf -a admin-230127 run -sv ./site_vars.yaml -bpcd ./hpc-csm-software-recipe-23.05.0/vcs -r prepare-images
+iuf -a admin-230127 run -sv /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin -r prepare-images
 ```
