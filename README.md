@@ -44,25 +44,14 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 
 1. [Install CSM](install/README.md)
 
-   This chapter provides an order list of procedures which can be used for CSM software installation or reinstall
-   that indicate when to do operational tasks as part of the installation workflow. Updating software is in another chapter.
-   Installation of the CSM product stream has many steps in multiple procedures which should be done in a
-   specific order. Information about the HPE Cray EX system and the site is used to prepare the configuration
-   payload. The initial node used to bootstrap the installation process is called the PIT node because the
-   Pre-Install Toolkit is installed there. Once the management network switches have been configured, the other
-   management nodes can be deployed with an operating system and the software to create a Kubernetes cluster
-   utilizing Ceph storage. The CSM services provide essential software infrastructure including the API gateway
-   and many micro-services with REST APIs for managing the system. Once administrative access has been configured,
-   the installation of CSM software and nodes can be validated with health checks before doing operational tasks
-   like the check and update of firmware on system components or the preparation of compute nodes.
+   This chapter provides an ordered list of procedures to follow when performing an initial install
+   or a reinstall of CSM software. See the separate "Upgrade CSM" chapter for upgrade procedures.
 
 1. [Upgrade CSM](upgrade/README.md)
 
-   This chapter provides an order list of procedures which can be used to update CSM software that indicate when
-   to do operational tasks as part of the software upgrade workflow. There are procedures to prepare the
-   HPE Cray system for the upgrade, and update the management network, the management nodes, and the CSM services.
-   After the upgrade of CSM software, the CSM health checks are used to validate the system before doing any other
-   operational tasks like the check and update of firmware on system components.
+   This chapter provides an ordered list of procedures which can be used to update CSM software that
+   indicate when to do operational tasks as part of the software upgrade workflow. See the separate
+   "Install CSM" chapter for initial install and reinstall procedures.
 
 1. [CSM Operational Activities](operations/README.md)
 
