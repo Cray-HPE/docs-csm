@@ -19,4 +19,5 @@ Once this step has completed:
 
 ## 2. Next steps
 
-- Return to the IUF [Upgrade](upgrade.md) workflow to continue the upgrade.
+- Return to the [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
+  workflow to continue the upgrade.
