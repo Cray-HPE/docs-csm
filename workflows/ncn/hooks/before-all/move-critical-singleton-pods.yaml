@@ -52,24 +52,20 @@ spec:
 
     echo
 
-    containerNames=( "nexus" "ipxe" "kea" "cray-cfs-api-db" )
-    for containerName in ${containerNames[@]};do
-      # get pod name by container name
-      podName=$(kubectl get pods -A -o=jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.phase}{"\t"}{range .spec.containers[*]}{.name}{"\t"}{end}{"\n"}{end}' | grep -E "^[^[:space:]]+[[:space:]]+Running[[:space:]]+.*${containerName}.*$" | cut -f1)
-      if [[ -z $podName ]];then
-        echo "Couldn't not find pod: $pod"
-        echo "something is wrong"
-        exit 1
-      fi                 
-      
-      currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
-      if [[ "$nodeMoveTo" != "$currentNode" ]]; then
-        echo "Move Pod: $podName to Node: $nodeMoveTo"
-        /opt/cray/platform-utils/move_pod.sh $podName $nodeMoveTo > /dev/null
-      fi
+    criticalPodLables=( "app=nexus" "app.kubernetes.io/name=cray-ipxe" "app.kubernetes.io/name=cray-dhcp-kea" "app.kubernetes.io/name=cray-cfs-api-db" )
+    for label in ${criticalPodLables[@]};do
+      pods=($(kubectl get pods -A -l ${label} -o custom-columns=:.metadata.name))
+      # we may have multiple pods matched with the lable
+      # move all of them instead of failing the script
+      for podName in ${pods[@]};do
+        currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
+        ns=$(kubectl get po -A | grep $podName | awk '{print $1}')
+        if [[ "$nodeMoveTo" != "$currentNode" ]]; then
+          echo "Move Pod: $podName to Node: $nodeMoveTo"
+          /opt/cray/platform-utils/move_pod.sh $podName $nodeMoveTo > /dev/null
+        fi
 
-      podName=$(kubectl get pods --all-namespaces | awk '{print $2}' | grep $pod)
-      ns=$(kubectl get po -A | grep $podName | awk '{print $1}')
-      kubectl wait --for=condition=ready pod $podName -n $ns --timeout=5m
+        kubectl wait --for=condition=ready pod $podName -n $ns --timeout=5m
+      done
     done
   templateRefName: ssh-template
