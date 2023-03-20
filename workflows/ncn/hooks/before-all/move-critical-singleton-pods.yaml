@@ -56,16 +56,19 @@ spec:
     for label in ${criticalPodLables[@]};do
       pods=($(kubectl get pods -A -l ${label} -o custom-columns=:.metadata.name))
       # we may have multiple pods matched with the lable
-      # move all of them instead of failing the script
-      for podName in ${pods[@]};do
-        currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
-        ns=$(kubectl get po -A | grep $podName | awk '{print $1}')
-        if [[ "$nodeMoveTo" != "$currentNode" ]]; then
-          echo "Move Pod: $podName to Node: $nodeMoveTo"
-          /opt/cray/platform-utils/move_pod.sh $podName $nodeMoveTo > /dev/null
-        fi
+      # log error and exit on matching multiple pods
+      if [[ ${#pods[@]} -ne 1 ]]; then
+        echo "ERROR: label: ${label} matches zero/multiple pods"
+        exit 1
+      fi
+      podName=${pods[0]}
+      currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
+      ns=$(kubectl get po -A | grep $podName | awk '{print $1}')
+      if [[ "$nodeMoveTo" != "$currentNode" ]]; then
+        echo "Move Pod: $podName to Node: $nodeMoveTo"
+        /opt/cray/platform-utils/move_pod.sh $podName $nodeMoveTo > /dev/null
+      fi
 
-        kubectl wait --for=condition=ready pod $podName -n $ns --timeout=5m
-      done
+      kubectl wait --for=condition=ready pod $podName -n $ns --timeout=5m
     done
   templateRefName: ssh-template
