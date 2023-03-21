@@ -79,9 +79,9 @@ Master node rebuilds require that the environment varaibles `CSM_RELEASE`,  `CSM
 (`ncn-m#`) Set `CSM_RELEASE`,  `CSM_REL_NAME`, and `CSM_ARTI_DIR` environment variables. Replace `1.4.0` with the correct CSM release version:
 
 ```bash
-CSM_RELEASE=1.4.0
-CSM_REL_NAME=csm-${CSM_RELEASE}
-CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
+export CSM_RELEASE=1.4.0
+export CSM_REL_NAME=csm-${CSM_RELEASE}
+export CSM_ARTI_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}"
 ```
 
 (`ncn-m#`) Rebuild the desired master node. Replace `ncn-m002` with the desired node to rebuild:
