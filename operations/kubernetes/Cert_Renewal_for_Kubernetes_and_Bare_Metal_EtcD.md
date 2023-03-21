@@ -9,7 +9,7 @@ This document will help walk through the process of renewing the certificates.
   The overall command syntax is the same; the only difference is whether or not the command structure includes `alpha`.
 - The node referenced in this document as `ncn-m` is the master node selected to renew the certificates on.
 - This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes. Make sure to update any commands that run on multiple nodes accordingly.
-- If you are updating the Kubernetes certificates then the Spire Intermediate CA is most likely expired or near its expiration date. You will also want to follow the instructions found in [Update Spire Intermediate CA Certificate](../spire/Update_Spire_Intermediate_CA_Certificate.md).
+- If updating the Kubernetes certificates, then the Spire Intermediate CA is most likely expired or near its expiration date. Follow the instructions found in [Update Spire Intermediate CA Certificate](../spire/Update_Spire_Intermediate_CA_Certificate.md).
 
 Procedures for Certificate Renewal:
 
