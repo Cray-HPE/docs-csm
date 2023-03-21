@@ -19,15 +19,20 @@ documentation for detailed information about API options and features.
 The `cray capmc` command (see `--help`) can be used to control power to
 specific components by specifying the component NID, component name (xname), or group.
 
-- [Power control and query by xname](#power-control-and-query-by-xname)
-  - [Controllable components](#controllable components)
-  - [Power capping](#power-capping)
-  - [Power control and query by NID](#power-control-and-query-by-nid)
-  - [Power control and query by group](#power-control-and-query-by-group)
-- [Node energy](#node-energy)
-  - [System monitor](#system-monitor)
-  - [Others](#others)
-- [Deprecated interfaces](#deprecated-interfaces)
+- [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
+  - [Power control and query by xname](#power-control-and-query-by-xname)
+    - [Controllable components](#controllable-components)
+      - [Air-cooled cabinets](#air-cooled-cabinets)
+      - [Liquid-cooled cabinets](#liquid-cooled-cabinets)
+      - [Naming convention](#naming-convention)
+        - [Examples of valid xnames](#examples-of-valid-xnames)
+    - [Power capping](#power-capping)
+  - [Deprecated interfaces](#deprecated-interfaces)
+    - [Power control and query by NID](#power-control-and-query-by-nid)
+    - [Power control and query by group](#power-control-and-query-by-group)
+  - [Node energy](#node-energy)
+    - [System monitor](#system-monitor)
+    - [Others](#others)
 
 ## Power control and query by xname
 
@@ -105,6 +110,13 @@ node type has its own power capping capabilities.
 modules, compute blades, and any non-compute nodes (NCNs) in air-cooled
 cabinets.
 
+## Deprecated interfaces
+
+The following APIs have been deprecated.
+
+See the [CAPMC Deprecation Notice](../../introduction/deprecated_features/CAPMC_Deprecation_Notice.md) for
+more information.
+
 ### Power control and query by NID
 
 Use the interfaces from [Power control and query by xname](#power-control-and-query-by-xname):
@@ -144,8 +156,3 @@ Use the System Monitoring Application (SMA) Grafana instance:
 - `get_node_rules`
 - `emergency_power_off`
 - `get_nid_map`
-
-## Deprecated interfaces
-
-See the [CAPMC Deprecation Notice](../../introduction/deprecated_features/CAPMC_Deprecation_Notice.md) for
-more information
