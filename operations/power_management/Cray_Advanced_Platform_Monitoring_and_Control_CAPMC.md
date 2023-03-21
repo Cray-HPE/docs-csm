@@ -115,7 +115,7 @@ cabinets.
 The following APIs have been deprecated.
 
 See the [CAPMC Deprecation Notice](../../introduction/deprecated_features/CAPMC_Deprecation_Notice.md) for
-more information
+more information.
 
 ### Power control and query by NID
 
