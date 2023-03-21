@@ -13,8 +13,10 @@ and BMC/controller passwords.
 1. [Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
 1. [Lock management nodes](#3-lock-management-nodes)
 1. [Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
-1. [Configure non-compute nodes with CFS](#5-configure-non-compute-nodes-with-cfs)
-1. [Proceed to next topic](#6-proceed-to-next-topic)
+1. [Set up passwordless SSH](#5-set-up-passwordless-ssh)
+1. [Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
+1. [Configure management nodes with CFS](#7-configure-management-nodes-with-cfs)
+1. [Proceed to next topic](#8-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
@@ -101,17 +103,67 @@ on the BMC for node power down or node power up.
 
 See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).
 
-## 5. Configure non-compute nodes with CFS
+## 5. Set up passwordless SSH
 
-Non-compute Nodes (NCN) need to be configured after booting for administrative access, security, and other
+See [Set up passwordless SSH](../operations/CSM_product_management/Set_Up_Passwordless_SSH.md)
+for the procedure to configure passwordless SSH between management nodes and from management nodes
+to managed nodes.
+
+This procedure sets up resources in Kubernetes (a Kubernetes Secret and ConfigMap) which are later
+applied to the management nodes using CFS node personalization in section
+[7. Configure management nodes with CFS](#7-configure-management-nodes-with-cfs) below.
+
+## 6. Configure the root password and SSH keys in Vault
+
+See [Configure the `root` password and SSH keys in Vault](../operations/CSM_product_management/Configure_the_root_Password_and_SSH_Keys_in_Vault.md)
+for the procedure to configure the `root` password and SSH keys in Vault.
+
+This procedure writes the `root` password hash and SSH keys to Vault which are later
+applied to the management nodes using CFS node personalization in section
+[7. Configure management nodes with CFS](#7-configure-management-nodes-with-cfs) below.
+
+## 7. Configure management nodes with CFS
+
+Management nodes need to be configured after booting for administrative access, security, and other
 purposes. The [Configuration Framework Service (CFS)](../operations/configuration_management/Configuration_Management.md)
-is used to apply post-boot configuration in a decoupled, layered manner. Individual software products including
-CSM provide one or more layers of configuration in a process called "NCN personalization".
+is used to apply post-boot configuration in a decoupled, layered manner. Individual software products
+provide one or more layers included in a CFS configuration. The CFS configuration is applied to components,
+including management nodes, during post-boot node personalization.
 
-See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).
+The procedure here creates a CFS configuration that contains only the layer provided by the CSM product and
+then applies that configuration to the management nodes.
 
-## 6. Proceed to next topic
+1. (`ncn-m001#`) Set the variable `CSM_RELEASE` to the CSM release version.
 
-After completing the operational procedures above which configure administrative access, the next step is to validate the health of management nodes and CSM services.
+    For example:
+
+    ```bash
+    CSM_RELEASE="1.4.0"
+    ```
+
+1. (`ncn-m001#`) Run the `apply_csm_configuration.sh` script/
+
+    This script creates a new CFS configuration named `management-csm-${CSM_RELEASE}`
+    and applies it to the management node components in CFS, enables them,
+    and clears their state and error count. It then waits for all the management nodes
+    to complete their configuration.
+
+    ```bash
+    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+        --config-name "management-csm-${CSM_RELEASE}" --clear-state
+    ```
+
+    Successful output will end with a message similar to the following:
+
+    ```text
+    Configuration complete. 9 component(s) completed successfully.  0 component(s) failed.
+    ```
+
+    The number reported should match the number of management nodes in the system. If there are failures, see [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md).
+
+## 8. Proceed to next topic
+
+After completing the operational procedures above which configure administrative access, the next
+step is to validate the health of management nodes and CSM services.
 
 See [Validate CSM Health](README.md#6-validate-csm-health).
