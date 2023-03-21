@@ -36,7 +36,7 @@
 
     1. If any typescript files are on different NCNs, then copy them to `/root` on `ncn-m002`.
 
-    1. Create tar file containing the logs and typescript files.
+    1. Create a `tar` file containing the logs and typescript files.
 
         > If any typescript file names are not of the form `csm_upgrade.*.txt`, then append their names
         > to the following `tar` command in order to include them.
@@ -46,7 +46,7 @@
         tar -czvf "/root/${TARFILE}" /root/csm_upgrade.*.txt /root/output.log
         ```
 
-    1. Upload the tar file into S3.
+    1. Upload the `tar` file into S3.
 
         This step requires that the Cray Command Line Interface is configured on the node. This should have already
         been done on `ncn-m002` during the upgrade process. If needed, see [Configure the Cray CLI](../operations/configure_cray_cli.md).

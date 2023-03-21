@@ -14,9 +14,10 @@ Stage 0 has several critical procedures which prepare the environment and verify
     - [Direct download](#direct-download)
     - [Manual copy](#manual-copy)
   - [Stage 0.2 - Prerequisites](#stage-02---prerequisites)
-  - [Stage 0.3 - Customize the new NCN image and update NCN personalization configurations](#stage-03---customize-the-new-ncn-image-and-update-ncn-personalization-configurations)
-    - [Standard upgrade](#standard-upgrade)
-    - [CSM-only system upgrade](#csm-only-system-upgrade)
+  - [Stage 0.3 - Update management node CFS configuration and customize worker node image](#stage-03---update-management-node-cfs-configuration-and-customize-worker-node-image)
+    - [Option 1: Upgrade of CSM and additional products](#option-1-upgrade-of-csm-and-additional-products)
+    - [Option 2: Upgrade of CSM on system with additional products](#option-2-upgrade-of-csm-on-system-with-additional-products)
+    - [Option 3: Upgrade of CSM on CSM-only system](#option-3-upgrade-of-csm-on-csm-only-system)
   - [Stage 0.4 - Backup workload manager data](#stage-04---backup-workload-manager-data)
   - [Stop typescript](#stop-typescript)
   - [Stage completed](#stage-completed)
@@ -73,7 +74,7 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
    export http_proxy=http://example.proxy.net:80
    ```
 
-1. (`ncn-m001#`) Run the script.  
+1. (`ncn-m001#`) Run the script.
    **NOTE** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
 
    > The `prepare-assets.sh` script will delete the CSM tarball (after expanding it) in order to free up space.
@@ -186,57 +187,258 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
    git push
    ```
 
-## Stage 0.3 - Customize the new NCN image and update NCN personalization configurations
+1. If performing an upgrade of CSM and additional HPE Cray EX software products using the IUF,
+   return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+   procedure. Otherwise, if performing an upgrade of only CSM, proceed to Stage 0.3.
 
-There are two possible scenarios. Follow the procedure for the scenario that is applicable to the upgrade being performed.
+## Stage 0.3 - Update management node CFS configuration and customize worker node image
 
-While the names are similar, image customization is different than node personalization. Image customization is the
-process of using Ansible stored in VCS in conjunction with the CFS and IMS microservices to customize an image before
-it is booted. Node personalization is the process of using Ansible stored in VCS in conjunction with the CFS and IMS
-microservices to personalize a node after it has booted.
+This stage updates a CFS configuration used to perform node personalization and image customization
+of management nodes. It also applies that CFS configuration to the management nodes and customizes
+the worker node image, if necessary.
 
-- [Standard upgrade](#standard-upgrade) - Upgrading CSM on a system that has products installed other than CSM.
-- [CSM-only system upgrade](#csm-only-system-upgrade) - Upgrading CSM only on a CSM-only system **no other products installed or being upgraded**.
+Image customization is the process of using Ansible stored in VCS in conjunction with the CFS and
+IMS microservices to customize an image before it is booted. Node personalization is the process of
+using Ansible stored in VCS in conjunction with the CFS and IMS microservices to personalize a node
+after it has booted.
 
-### Standard upgrade
+There are several options for this stage. Use the option which applies to the current upgrade
+scenario.
 
-In most cases, administrators will be performing a standard upgrade and not a CSM-only system upgrade.
-In the standard upgrade, the new worker NCN images must be customized, and all NCNs must have their personalization configurations updated in CFS.
+- [Option 1: Upgrade of CSM and additional products](#option-1-upgrade-of-csm-and-additional-products)
+- [Option 2: Upgrade of CSM on system with additional products](#option-2-upgrade-of-csm-on-system-with-additional-products)
+- [Option 3: Upgrade of CSM on CSM-only system](#option-3-upgrade-of-csm-on-csm-only-system)
 
-**NOTE:** For the standard upgrade, it will not be possible to rebuild NCNs on the current, pre-upgraded CSM version after performing these steps. Rebuilding NCNs will become the same thing as upgrading them.
+### Option 1: Upgrade of CSM and additional products
 
-1. Prepare the pre-boot worker NCN image customizations.
+If performing an upgrade of CSM and additional HPE Cray EX software products, this stage
+should not be performed. Instead, the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+procedure should be followed as described in the first option of the [Upgrade CSM](../upgrade/README.md) procedure,
+[Option 1: Upgrade CSM with additional HPE Cray EX software products](../upgrade/README.md#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
 
-    This will ensure that the CFS configuration layers are applied to perform image customization for the worker NCNs.
-    See [Worker Image Customization](../operations/configuration_management/Worker_Image_Customization.md).
+That procedure will perform the appropriate steps to create a CFS configuration for management nodes
+and perform management node image customization during the
+[Image Preparation](../operations/iuf/workflows/image_preparation.md) step.
 
-1. Prepare the post-boot NCN personalizations.
+### Option 2: Upgrade of CSM on system with additional products
 
-    This will ensure that the appropriate CFS configuration layers are applied when performing post-boot node personalization of the master, storage, and worker NCNs.
-    See [NCN Node Personalization](../operations/configuration_management/NCN_Node_Personalization.md).
+Use this alternative if performing an upgrade of only CSM on a system which has additional HPE Cray
+EX software products installed. This upgrade scenario is uncommon in production environments.
+Generally, if performing an upgrade of CSM, you will also be performing an upgrade of additional HPE
+Cray EX software products as part of an HPC CSM software recipe upgrade. In that case, follow the
+scenario described above for [Upgrade of CSM and additional products](#option-1-upgrade-of-csm-and-additional-products).
 
-Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data), skipping the [CSM-only system upgrade](#csm-only-system-upgrade) subsection below.
+In order to follow this procedure, you will need to know the name of the IUF activity used to
+perform the initial installation of the HPE Cray EX software products. See the
+[Activities](../operations/iuf/IUF.md#activities) section of the IUF documentation for more
+information on IUF activities. See [`list-activities`](../operations/iuf/IUF.md#list-activities)
+for information about listing the IUF activities on the system. The first step provides an
+example showing how to find the IUF activity.
 
-### CSM-only system upgrade
+1. (`ncn-m001#`) Find the IUF activity used for the most recent install of the system.
 
-This upgrade scenario is extremely uncommon in production environments.
+   ```bash
+   iuf list-activities
+   ```
 
-1. (`ncn-m001#`) Generate a new CFS configuration for the NCNs.
+   This will output a list of IUF activity names. For example, if only a single install has been
+   performed on this system of the 22.04 recipe, the output may show a single line like this:
 
-    This script will also leave CFS disabled for the NCNs. CFS will automatically be re-enabled on them as they are rebooted during the upgrade.
+   ```text
+   22.04-recipe-install
+   ```
 
-    > The configuration name in the following command (`management-0.0`) is deliberately used to distinguish this from the CFS configurations created during
-    > standard upgrade, where the `0.0` would instead be the CSM recipe version.
+1. (`ncn-m001#`) Record the most recent IUF activity name and directory in environment variables.
 
-    ```bash
-    /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh --no-enable --config-name management-0.0
-    ```
+   ```bash
+   export ACTIVITY_NAME="22.04-recipe-install"
+   export ACTIVITY_DIR="/etc/cray/upgrade/csm/iuf/${ACTIVITY_NAME}"
+   ```
 
-    Successful output should end with the following line:
+1. (`ncn-m001#`) Record the media directory used for this activity in an environment variable.
 
-    ```text
-    All components updated successfully.
-    ```
+   ```bash
+   export MEDIA_DIR="$(yq r "${ACTIVITY_DIR}/state/stage_hist.yaml" 'summary.media_dir')"
+   echo "${MEDIA_DIR}"
+   ```
+
+   This should display a path to a media directory. For example:
+
+   ```text
+   /etc/cray/upgrade/csm/media/22.04-recipe-install
+   ```
+
+1. (`ncn-m001#`) Create a directory for the `sat bootprep` input files and the `session_vars.yaml` file.
+
+   This example uses a directory under the RBD mount used by the IUF:
+
+   ```bash
+   export BOOTPREP_DIR="/etc/cray/upgrade/csm/admin/bootprep-csm-${CSM_RELEASE}"
+   mkdir -pv "${BOOTPREP_DIR}"
+   ```
+
+1. (`ncn-m001#`) Copy the `sat bootprep` input file for management nodes into the directory.
+
+   It is possible that the file name will differ from `management-bootprep.yaml` if a different
+   file was used during the IUF activity.
+
+   ```bash
+   cp -v "${MEDIA_DIR}/.bootprep-${ACTIVITY_NAME}/management-bootprep.yaml" "${BOOTPREP_DIR}"
+   ```
+
+1. (`ncn-m001#`) Copy the `session_vars.yaml` file into the directory.
+
+   ```bash
+   cp -v "${ACTIVITY_DIR}/state/session_vars.yaml" "${BOOTPREP_DIR}"
+   ```
+
+1. (`ncn-m001#`) Modify the CSM version in the copied `session_vars.yaml`:
+
+   ```bash
+   yq w -i "${BOOTPREP_DIR}/session_vars.yaml" 'csm.version' "${CSM_RELEASE}"
+   ```
+
+1. (`ncn-m001#`) Update the `working_branch` if one is used for the CSM product.
+
+   By default, a `working_branch` is not used for the CSM product. Check if there is a
+   `working_branch` specified for CSM:
+
+   ```bash
+   yq r "${BOOTPREP_DIR}/session_vars.yaml" 'csm.working_branch'
+   ```
+
+   If this produces no output, a `working_branch` is not in use for the CSM product, and this step
+   can be skipped. Otherwise, it shows the name of the working branch. For example:
+
+   ```text
+   integration-1.4.0
+   ```
+
+   In this case, be sure to manually update the version string in the working branch to match the
+   new working branch. Then check it again. For example:
+
+   ```bash
+   yq w -i "${BOOTPREP_DIR}/session_vars.yaml" 'csm.working_branch' "integration-${CSM_RELEASE}"
+   yq r "${BOOTPREP_DIR}/session_vars.yaml" 'csm.working_branch'
+   ```
+
+   This should output the name of the new CSM working branch.
+
+1. (`ncn-m001#`) Modify the `default.suffix` value in the copied `session_vars.yaml`:
+
+   As long as the `sat bootprep` input file uses `{{default.suffix}}` in the names of the CFS
+   configurations and IMS images, this will ensure new CFS configurations and IMS images are created
+   with different names from the ones created in the IUF activity.
+
+   ```bash
+   yq w -i -- "${BOOTPREP_DIR}/session_vars.yaml" 'default.suffix' "-csm-${CSM_RELEASE}"
+   ```
+
+1. (`ncn-m001#`) Change directory to the `BOOTPREP_DIR` and run `sat bootprep`.
+
+   This will create a CFS configuration for management nodes, and it will use that CFS configuration
+   to customize the images for the master, worker, and storage management nodes.
+
+   ```bash
+   cd "${BOOTPREP_DIR}"
+   sat bootprep run --vars-file session_vars.yaml management-bootprep.yaml
+   ```
+
+1. Gather the CFS configuration name, and the IMS image names from the output of `sat bootprep`.
+
+   `sat bootprep` will print a report summarizing the CFS configuration and IMS images it created.
+   For example:
+
+   ```text
+   ################################################################################
+   CFS configurations
+   ################################################################################
+   +-----------------------------+
+   | name                        |
+   +-----------------------------+
+   | management-22.4.0-csm-x.y.z |
+   +-----------------------------+
+   ################################################################################
+   IMS images
+   ################################################################################
+   +-----------------------------+--------------------------------------+--------------------------------------+-----------------------------+----------------------------+
+   | name                        | preconfigured_image_id               | final_image_id                       | configuration               | configuration_group_names  |
+   +-----------------------------+--------------------------------------+--------------------------------------+-----------------------------+----------------------------+
+   | master-secure-kubernetes    | c1bcaf00-109d-470f-b665-e7b37dedb62f | a22fb912-22be-449b-a51b-081af2d7aff6 | management-22.4.0-csm-x.y.z | Management_Master          |
+   | worker-secure-kubernetes    | 8b1343c4-1c39-4389-96cb-ccb2b7fb4305 | 241822c3-c7dd-44f8-98ca-0e7c7c6426d5 | management-22.4.0-csm-x.y.z | Management_Worker          |
+   | storage-secure-storage-ceph | f3dd7492-c4e5-4bb2-9f6f-8cfc9f60526c | 79ab3d85-274d-4d01-9e2b-7c25f7e108ca | management-22.4.0-csm-x.y.z | Management_Storage         |
+   +-----------------------------+--------------------------------------+--------------------------------------+-----------------------------+----------------------------+
+   ```
+
+   Save the name of the CFS configuration:
+
+   ```bash
+   export CFS_CONFIG_NAME="management-22.4.0-csm-x.y.z"
+   ```
+
+   Save the name of the IMS images from the `final_image_id` column:
+
+   ```bash
+   export MASTER_IMAGE_ID="a22fb912-22be-449b-a51b-081af2d7aff6"
+   export WORKER_IMAGE_ID="241822c3-c7dd-44f8-98ca-0e7c7c6426d5"
+   export STORAGE_IMAGE_ID="79ab3d85-274d-4d01-9e2b-7c25f7e108ca"
+   ```
+
+1. Assign the images to the management nodes in BSS.
+
+   Perform the procedure in [4. Update management node boot parameters](../operations/configuration_management/Management_Node_Image_Customization.md#4-update-management-node-boot-parameters)
+   for master, worker, and storage nodes.
+
+   Note that the procedure must be followed three times: once for master nodes with
+   `MASTER_IMAGE_ID`, once for worker nodes with `WORKER_IMAGE_ID`, and once for storage nodes with
+   `STORAGE_IMAGE_ID`.
+
+   Do not proceed to the next steps in the linked procedure. Return here when finished with the
+   single step that updates the management node boot parameters.
+
+1. Assign the CFS configuration to the management nodes.
+
+   This command deliberately only sets the desired configuration of the components in CFS. It
+   disables the components and does not clear their configuration states or error counts. When the
+   nodes are rebooted to their new images later in the CSM upgrade, they will automatically be
+   enabled in CFS, and node personalization will occur.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+       --no-config-change --config-name "${CFS_CONFIG_NAME}" --no-enable --no-clear-err
+   ```
+
+   Successful output will end with the following:
+
+   ```text
+   All components updated successfully.
+   ```
+
+Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data).
+
+### Option 3: Upgrade of CSM on CSM-only system
+
+Use this alternative if performing an upgrade of CSM on a CSM-only system with no other HPE Cray EX
+software products installed. This upgrade scenario is extremely uncommon in production environments.
+
+1. (`ncn-m001#`) Generate a new CFS configuration for the management nodes.
+
+   This script creates a new CFS configuration that includes the CSM version in its name and
+   applies it to the management nodes. This leaves the management node components in CFS disabled.
+   They will be automatically enabled when they are rebooted at a later stage in the upgrade.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+       --no-enable --config-name management-${CSM_RELEASE}
+   ```
+
+   Successful output should end with the following line:
+
+   ```text
+   All components updated successfully.
+   ```
+
+Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data).
 
 ## Stage 0.4 - Backup workload manager data
 

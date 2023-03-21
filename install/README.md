@@ -4,7 +4,7 @@ This page will guide an administrator through installing Cray System Management 
 HPE Cray EX system. Fresh-installations on bare-metal or re-installations of CSM must follow
 this guide in order.
 
-## Bifurcated CAN Notice
+## Bifurcated CAN notice
 
 The Bifurcated CAN (BICAN) is a major feature introduced in CSM 1.2. The BICAN is designed to
 separate administrative network traffic from user network traffic. More information can be found
@@ -12,7 +12,7 @@ on the [BICAN summary page](../operations/network/management_network/bican_techn
 Review the BICAN summary before continuing with the CSM install. For detailed BICAN documentation,
 see [BICAN technical details](../operations/network/management_network/bican_technical_details.md).
 
-## High-level overview of CSM Install
+## High-level overview of CSM install
 
 In the [Pre-installation](#pre-installation) section of the install, information about the HPE Cray
 EX system and the site is used to prepare the configuration payload. An initial node called the PIT
@@ -218,8 +218,8 @@ Now that all of the CSM services have been installed and the final NCN has been 
 can be prepared. This may include configuring Keycloak with a local Keycloak account or confirming that Keycloak
 is properly federating LDAP or another Identity Provider (IdP), initializing the `cray` CLI for administrative
 commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by
-PCS/CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs
-(node controllers) for nodes in liquid-cooled cabinets.
+PCS/CAPMC, creating a CFS configuration for management nodes and applying it with node personalization, and
+configuring the node BMCs (node controllers) for nodes in liquid-cooled cabinets.
 
 See [Configure Administrative Access](configure_administrative_access.md).
 
@@ -300,10 +300,9 @@ See [Kubernetes Encryption](../operations/kubernetes/encryption/README.md).
 
 ### 2. Export Nexus data
 
-**Warning:** This process can take multiple hours where Nexus is unavailable and should be done during scheduled maintenance periods.
+**Warning:** This process can take multiple hours where Nexus is unavailable.
 
-Prior to the upgrade it is recommended that a Nexus export is taken. This is not a required step but highly recommend to protect the data in Nexus.
-If there is no maintenance period available then this step should be skipped until after the upgrade process.
+After the install, it is recommended that a Nexus export is taken. This is not a required step but highly recommend to protect the data in Nexus.
 
 See [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
 

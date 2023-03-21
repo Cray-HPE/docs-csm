@@ -20,7 +20,6 @@ are not currently managed by IUF.
 The upgrade workflow comprises the following procedures which must be executed in the order shown.
 
 1. CSM preparation, Stage 0.1, and Stage 0.2
-
    Read the _Important Notes_ section of the
    [CSM 1.3.0 or later to 1.4.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation and then follow only these CSM instructions in order:
