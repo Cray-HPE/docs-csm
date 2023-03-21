@@ -74,7 +74,7 @@ make sure that the following conditions are met:
 
 ### Master node
 
-Master node rebuilds require that the environment varaibles `CSM_RELEASE`,  `CSM_REL_NAME`, and `CSM_ARTI_DIR` be set on the node where the rebuild script is executed.
+Master node rebuilds require that the environment variables `CSM_RELEASE`,  `CSM_REL_NAME`, and `CSM_ARTI_DIR` be set on the node where the rebuild script is executed.
 
 (`ncn-m#`) Set `CSM_RELEASE`,  `CSM_REL_NAME`, and `CSM_ARTI_DIR` environment variables. Replace `1.4.0` with the correct CSM release version:
 
