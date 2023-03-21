@@ -49,9 +49,12 @@ Existing BOS session templates can be backed up and restored using automated scr
 1. (`ncn-mw#`) Run the following script to perform the import of all BOS session templates.
 
    > Modify the following example command to specify the path to the output file from the automated export script.
+   > The file may be a JSON file or a `tgz` file, depending on when the backup was made. Either format will work
+   > in this restore procedure.
 
    ```bash
-   /usr/share/doc/csm/scripts/operations/system_recovery/import_bos_sessiontemplates.sh /root/bos-session-templates.tgz
+   /usr/share/doc/csm/scripts/operations/system_recovery/import_bos_sessiontemplates.sh \
+        /root/bos-session-templates-20230321201329.json
    ```
 
 ### Manual procedures
@@ -91,7 +94,7 @@ BOS session templates can also be manually exported and imported onto a given sy
    1. Write the contents of the session template to a file in the export directory created earlier.
 
       ```bash
-      cray bos v2 sessiontemplate describe "${BOS_TEMPLATE_NAME}" --format json |
+      cray bos v2 sessiontemplates describe "${BOS_TEMPLATE_NAME}" --format json |
           tee "${BOS_EXPORT_DIR}/${BOS_TEMPLATE_NAME}.json"
       ```
 
@@ -143,13 +146,43 @@ BOS session templates can also be manually exported and imported onto a given sy
 
       ```bash
       BOS_TEMPLATE_NAME="uan-sessiontemplate-2.0.27"
+      BOS_TEMPLATE_FILE="${BOS_EXPORT_DIR}/${BOS_TEMPLATE_NAME}.json"
+      ```
+
+   1. Determine the BOS version of the session template.
+
+      ```bash
+      /usr/share/doc/csm/scripts/operations/system_recovery/bos_session_template_version.py "${BOS_TEMPLATE_FILE}"
+      ```
+
+      Example output:
+
+      ```text
+      Template 'uan-sessiontemplate-2.0.27' is BOS version 2
       ```
 
    1. Import the session template into BOS.
 
-      ```bash
-      cray bos v2 sessiontemplate create --file "${BOS_EXPORT_DIR}/${BOS_TEMPLATE_NAME}.json" --name "${BOS_TEMPLATE_NAME}"
-      ```
+      The command to do this varies depending on the BOS version found in the previous step.
+
+      - BOS version 1
+
+         ```bash
+         cray bos v1 sessiontemplate create --file "${BOS_TEMPLATE_FILE}" \
+                                            --name "${BOS_TEMPLATE_NAME}"
+         ```
+
+         If successful, the command will output the name of the created session template.
+
+      - BOS version 2
+
+         ```bash
+         cray bos v2 sessiontemplates create \
+                --file <(jq 'del(.name)' "${BOS_TEMPLATE_FILE}") \
+                "${BOS_TEMPLATE_NAME}" --format json
+         ```
+
+         If successful, the command will output the entire session template in JSON.
 
 ## BOS database PVCs
 
