@@ -8,7 +8,7 @@ This procedure should only be performed if absolutely required. Some reasons for
 
 1. Compute nodes were added to SLS with incorrect NID numbering, missing node entries, and/or extra node entries.
 
-2. Compute nodes were permanently moved, removed, or reprovisioned and there is a desire to remove NID numbering gaps.
+2. Compute nodes were permanently moved, removed, or re-provisioned and there is a desire to remove NID numbering gaps.
 
 The example in this procedure removes NID gaps from 2 cabinets of compute nodes that were a result of incorrect numbering in SLS.
 
@@ -331,7 +331,8 @@ This can be fixed by:
     * Include `x1001` in the include list to include it in the new NID block.
     * Run `defragment_nids.py` to first move the computes nodes in `x1001` to another NID block then rerun `defragment_nids.py` for the compute nodes in cabinets `x1000` and `x1002`.
 
-2. Computes nodes in cabinet `x1000` where specified in the include list so the new NID block is 1000-1100 but `x1000c1b0n0` is a UAN that was given the NID 1000. This would create a conflict so `defragment_nids.py` will return an error. This can be fixed by:
+2. Computes nodes in cabinet `x1000` where specified in the include list so the new NID block is 1000-1100 but `x1000c1b0n0` is a UAN that was given the NID 1000. This would create a conflict so `defragment_nids.py` will return an error.
+This can be fixed by:
 
     * Changing the starting NID for the new NID block (e.g., 1001).
     * Manually change the NID of the UAN in HSM and SLS then rerun `defragment_nids.py` for the nodes in `x1000`.
