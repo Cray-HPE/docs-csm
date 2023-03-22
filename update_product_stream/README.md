@@ -142,13 +142,13 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
 
 > ***NOTE:*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints. Using http proxies in any way other than the following examples will cause many failures in subsequent steps.
 
-1. Check the version of the currently installed CSM documentation.
+1. Check the version of the currently installed CSM documentation and CSM library.
 
    ```bash
-   rpm -q docs-csm
+   rpm -q docs-csm libcsm
    ```
 
-1. Download and upgrade the latest documentation RPM.
+1. Download and upgrade the latest documentation RPM and CSM library.
 
    - Without proxy:
 
@@ -165,10 +165,34 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
    If this machine does not have internet access with or without a proxy, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
 
    ```bash
-   wget https://release.algol60.net/csm-1.3/docs-csm/docs-csm-latest.noarch.rpm -O docs-csm-latest.noarch.rpm
-   scp docs-csm-latest.noarch.rpm ncn-m001:/root
+   rpm -Uvh --force "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
+   SLES_VERSION=$(awk -F= '/VERSION_ID/{gsub(/["]/,"");printf($NF)}' /etc/os-release)
+   SLES_MAJOR=$(echo -n $SLES_VERSION | awk -F. '{print $1}')
+   SLES_MINOR=$(echo -n $SLES_VERSION | awk -F. '{print $NF}')
+   rpm -Uvh --force "https://release.algol60.net/lib/sle-${SLES_MAJOR}sp${SLES_MINOR}/libcsm-latest.noarch.rpm"
+   ```
+
+   With https proxy:
+
+   ```bash
+   rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
+   SLES_VERSION=$(awk -F= '/VERSION_ID/{gsub(/["]/,"");printf($NF)}' /etc/os-release)
+   SLES_MAJOR=$(echo -n $SLES_VERSION | awk -F. '{print $1}')
+   SLES_MINOR=$(echo -n $SLES_VERSION | awk -F. '{print $NF}')
+   rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 "https://release.algol60.net/lib/sle-${SLES_MAJOR}sp${SLES_MINOR}/libcsm-latest.noarch.rpm"
+   ```
+
+   If this machine does not have direct internet access, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
+
+   ```bash
+   curl -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
+   SLES_VERSION=$(ssh ncn-m001 awk -F= '/VERSION_ID/{gsub(/["]/,"");printf($NF)}' /etc/os-release)
+   SLES_MAJOR=$(echo -n $SLES_VERSION | awk -F. '{print $1}')
+   SLES_MINOR=$(echo -n $SLES_VERSION | awk -F. '{print $NF}')
+   curl -O "https://release.algol60.net/lib/sle-${SLES_MAJOR}sp${SLES_MINOR}/libcsm-latest.noarch.rpm"
+   scp docs-csm-latest.noarch.rpm libcsm-latest.noarch.rpm ncn-m001:/root
    ssh ncn-m001
-   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm /root/libcsm-latest.noarch.rpm
    ```
 
 1. Repeat the first step in this procedure to display the version of the CSM documentation after the update.
