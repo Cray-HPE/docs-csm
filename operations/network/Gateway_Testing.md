@@ -109,11 +109,11 @@ The following steps must be performed on the system where the test is to be run:
 
    There are two options for doing this:
 
-   - Install the `docs-csm` RPM.
+   - Install the `docs-csm` and `libcsm` RPMs.
 
       See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
-   - Copy over the following files from a system where the `docs-csm` RPM is installed:
+   - Copy over the following files from a system where the `docs-csm` and `libcsm` RPMs are installed:
 
       - `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test.py`
       - `/usr/share/doc/csm/scripts/operations/gateway-test/gateway-test-defn.yaml`
