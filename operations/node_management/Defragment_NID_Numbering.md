@@ -71,7 +71,7 @@ This list always gets expanded to include all compute nodes contained by the spe
 
     Example (summarized) output:
 
-    ```bash
+    ```json
     {
       "Description": "NID Defragmentation Report",
       "StartingNID": 1000,
@@ -226,7 +226,7 @@ This list always gets expanded to include all compute nodes contained by the spe
 
     Example output if `--output text` is specified:
 
-    ```bash
+    ```text
     NID Defragmentation Report
     =================
     Starting NID: 1000
@@ -294,7 +294,7 @@ Carry out the _Procedure To Perform After CSM Defragmentation of Compute Node Id
 
 The `defragment_nids.py` script checks for HSM discovery errors on the specified nodes before proceeding. It will return an error if any are found. For example:
 
-```bash
+```json
 {
     "Message": "Discovery errors detected.",
     "Severity": "Error",
@@ -314,7 +314,7 @@ Alternately, if these issues are known and will not affect the desired resulting
 
 The `defragment_nids.py` script checks for nodes with NIDs that fall within the specified NID block that are not specified in the include list. An example of this error is:
 
-```bash
+```json
 {
     "Message": "There is an unexpected node NID in the requested NID range, 1000-1100",
     "Severity": "Error",
