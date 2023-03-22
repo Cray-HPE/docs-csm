@@ -1,4 +1,4 @@
-# Upgrade SLS Offline from CSM 1.0.x to CSM 1.2
+# Upgrade SLS Offline from CSM 1.0 to CSM 1.2
 
 ## Abstract
 

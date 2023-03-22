@@ -100,7 +100,7 @@ Once added to CSI, names and IP addresses use the standard CSM data flow, end up
 - The CHN requires a small change in CSI to add this network.
 - Will automatically use the DNS infrastructure from previous CSM install.
 - Name aliases can be added, changed, and removed via the API to SLS and become available in DNS automatically.
-DNS tooling for this was released in Shasta v1.4 with [SLS](../../README.md#system-layout-service-sls).
+DNS tooling for this was released in Shasta `v1.4` with [SLS](../../README.md#system-layout-service-sls).
 
 #### 2.3.2 When naming occurs
 

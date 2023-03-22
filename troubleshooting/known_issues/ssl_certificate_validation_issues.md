@@ -89,7 +89,7 @@ Required-by: canu, kubernetes, requests
 
 If this points to a local directory or is a different version then `2018.1.18`
 then uninstall this `certifi` package in order to trust the
-platform CA. The following command shows the expected output on a CSM v1.3
+platform CA. The following command shows the expected output on a CSM 1.3
 system.
 
 ```console

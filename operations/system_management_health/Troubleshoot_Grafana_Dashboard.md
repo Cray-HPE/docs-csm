@@ -10,7 +10,7 @@ General Grafana dashboard troubleshooting topics
 ## Ceph - OSD Overview Dashboard: 3 panels not found
 
 This means that the `cray-sysmgmt-health` pie chart plugin is not installed.
-If the system is not airgapped, then it can be installed by commenting out or removing the plugins property in `customizations.yaml`.
+If the system is not air-gapped, then it can be installed by commenting out or removing the plugins property in `customizations.yaml`.
 This will be fixed in a future release.
 
 (`ncn-mw#`) Command to extract `customizations.yaml` from the `site-init` secret.

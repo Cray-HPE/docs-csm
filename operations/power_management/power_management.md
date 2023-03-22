@@ -2,7 +2,7 @@
 
 HPE Cray System Management \(CSM\) software manages and controls power out-of-band through Redfish APIs. Note that power management features are "asynchronous," in that the client must determine whether the component status has changed after a power management API call returns.
 
-In-band power management features are not supported in v1.4.
+In-band power management features are not supported in `v1.4`.
 
 HPE supports Slurm as a workload manager which reports job energy usage and records it in the ITDB for system accounting purposes.
 
@@ -23,4 +23,3 @@ The blade-level and node-level accumulated energy telemetry is point-in-time pow
 Rack systems support 2 intelligent power distribution units \(iPDUs\). The power/energy telemetry, temperature, and humidity measurements \(supported by optional probes\), are accessible through the iPDU HTTP interface.
 
 Node-level accumulated energy data is point-in-time power and accumulated energy data collected via Redfish through the server BMC.
-

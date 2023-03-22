@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document guides an administrator through the upgrade of Cray Systems Management from v1.3 to v1.4. When upgrading a system, follow this top-level file
+This document guides an administrator through the upgrade of Cray Systems Management from `v1.3` to `v1.4`. When upgrading a system, follow this top-level file
 from top to bottom. The content on this top-level page is meant to be terse. For additional reference material on the upgrade processes and scripts
 mentioned explicitly on this page, see [resource material](resource_material/README.md).
 

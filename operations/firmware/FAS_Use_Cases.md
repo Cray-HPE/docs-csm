@@ -1099,7 +1099,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
 Prerequisites:
 
-* The system is running HPE Cray EX release v1.4 or higher.
+* The system is running HPE Cray EX release `v1.4` or higher.
 * A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#liquid-cooled-nodes-update-procedures).
   * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
   * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.

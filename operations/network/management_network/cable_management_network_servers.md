@@ -94,7 +94,7 @@ SHCD Example
 
 * Dual `10/25Gb` card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection if the customer supports `10/25Gb`.
 * If the customer does not support `10/25Gb` speeds (or connection type) and requires RJ45 copper or `1Gb`, then a new and separate card will be installed on `ncn-m001` and that card will provide site connectivity.
-* Another possibility (non-HPE hardware mainly) is that a built-in `1Gb` port will be used if available (similar to Shasta v1.3 PoR on Gigabyte hardware).
+* Another possibility (non-HPE hardware mainly) is that a built-in `1Gb` port will be used if available (similar to Shasta `v1.3` PoR on Gigabyte hardware).
 
 ### HPE Storage Node Cabling
 
@@ -226,7 +226,7 @@ SHCD Example
 
 ![Diagram of Gigabyte Worker Node Cabling](../../../img/network/Gigaintel_Worker.png)
 
-> **`NOTE`**: Cabling of `ncn-w001` has changed in Shasta v1.4. Please see `ncn-m001` note below.
+> **`NOTE`**: Cabling of `ncn-w001` has changed in Shasta `v1.4`. Please see `ncn-m001` note below.
 
 ### Master Node Cabling
 

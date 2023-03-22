@@ -74,7 +74,7 @@ The output will be in this format:
 
 ### 2.1 Confirm `/etc/resolv.conf`
 
-- For the Shasta v1.4/ CSM 0.9 and newer release(s) the `/etc/resolv.conf` should contain the following in-order:
+- For the Shasta `v1.4` / CSM 0.9 and newer release(s) the `/etc/resolv.conf` should contain the following in-order:
 
 1. `/etc/resolv.conf` should only contain `cray-dns-unbound` service IP.
 
