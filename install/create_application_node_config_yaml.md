@@ -15,7 +15,7 @@ The `application_node_config.yaml` file can be constructed from information from
 
 ## Background
 
-### SHCD and hmn_connections.json
+### SHCD and `hmn_connections.json`
 
 The HMN tab of the SHCD describes the air-cooled hardware present in the system and how these devices are connected to the Hardware Management Network (HMN). This information is required by CSM to perform hardware discovery and geolocation of air-cooled hardware in the system. The HMN tab may contain other hardware that is not managed by CSM, but is connected to the HMN.
 
@@ -29,9 +29,9 @@ The source name is the name of the device that is being connected to the HMN net
 
 Example SHCD row from HMN tab with column headers representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
 
-| Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
-| ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
-| uan01    | x3000      | u19            |       |              | -     | j3         | sw-smn01          | x3000      | u14            | -     | j37        |
+| Source \(J20\) | Rack \(K20\) | Location \(L20\) | \(M20\) | Parent \(N20\) | \(O20\) | Port \(P20\) | Destination \(Q20\) | Rack \(R20\) | Location \(S20\) | \(T20\) | Port \(U20\) |
+|:--------------:|:------------:|:----------------:|:-------:|:--------------:|:--------:|:-----------:|:-------------------:|:------------:|:----------------:|:-------:|:------------:|
+| `uan01`        | `x3000`      | `u19`            |         |                | -        | `j3`        | `sw-smn01`          | `x3000`      | `u14`            | -       | `j37`        |
 
 Example `hmn_connections.json` row representing an application node with SourceName `uan01` in cabinet `x3000` in slot 19. Its BMC is connected to port 37 of the management leaf switch in x3000 in slot 14.
 
@@ -61,19 +61,19 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
     If the `hmn_connections.json` file is not available, then use the HMN tab of SHCD spreadsheet. This table is equivalent to the [example hmn_connections.json output](#what-is-a-source-name) below.
 
-    | Source (J20) | Rack (K20) | Location (L20) | (M20) | Parent (N20) | (O20) | Port (P20) | Destination (Q20) | Rack (R20) | Location (S20) | (T20) | Port (U20) |
-    | ------------ | ---------- | -------------- | ----- | ------------ | ----- | ---------- | ----------------- | ---------- | -------------- | ----- | ---------- |
-    | gateway01    | x3000      | u29            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j42        |
-    | login02      | x3000      | u28            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j43        |
-    | lnet01       | x3000      | u27            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j41        |
-    | vn01         | x3000      | u25            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j40        |
-    | uan01        | x3000      | u23            |       |              | -     | j3         | sw-smn01          | x3000      | u32            | -     | j39        |
+   | Source \(J20\) | Rack \(K20\) | Location \(L20\) | \(M20\) | Parent \(N20\) | \(O20\) | Port \(P20\) | Destination \(Q20\) | Rack \(R20\) | Location \(S20\) | \(T20\) | Port \(U20\) |
+   |:--------------:|:------------:|:----------------:|:-------:|:--------------:|:-------:|:------------:|:-------------------:|:------------:|:----------------:|:-------:|:------------:|
+   | `gateway01`    | `x3000`      | `u29`            |         |                | -       | `j3`         | `sw-smn01`          | `x3000`      | `u32`            | -       | `j42`        |
+   | `login02`      | `x3000`      | `u28`            |         |                | -       | `j3`         | `sw-smn01`          | `x3000`      | `u32`            | -       | `j43`        |
+   | `lnet01`       | `x3000`      | `u27`            |         |                | -       | `j3`         | `sw-smn01`          | `x3000`      | `u32`            | -       | `j41`        |
+   | `vn01`         | `x3000`      | `u25`            |         |                | -       | `j3`         | `sw-smn01`          | `x3000`      | `u32`            | -       | `j40`        |
+   | `uan01`        | `x3000`      | `u23`            |         |                | -       | `j3`         | `sw-smn01`          | `x3000`      | `u32`            | -       | `j39`        |
 
     If the `hmn_connections.json` file is available, then the following command can be used to show the HMN rows that are application nodes.
 
     ```bash
-    cat hmn_connections.json | jq -rc '.[] | select(.Source |
-      test("^((mn|wn|sn|nid|cn|cn\\-|pdu)\\d+|.*(cmc|rcm|kvm|door).*|x\\d+p\\d*|sw-.+|columbia$)"; "i") | not)'
+    jq -rc '.[] | select(.Source |
+      test("^((mn|wn|sn|nid|cn|cn\\-|pdu)\\d+|.*(cmc|rcm|kvm|door).*|x\\d+p\\d*|sw-.+|columbia$)"; "i") | not)' hmn_connections.json
     ```
 
         Example `hmn_connections.json` output:
@@ -111,11 +111,11 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
     By default, the `csi config init` command will use the following SubRoles for application nodes:
 
-    Prefix | HSM SubRole
-    ------ | -----------
-    uan    | UAN
-    ln     | UAN
-    gn     | Gateway
+    | Prefix | HSM SubRole |
+    | ------ | ----------- |
+    | `uan`  | UAN         |
+    | `ln`   | UAN         |
+    | `gn`   | Gateway     |
 
     If there are no additional prefixes in the SHCD or no desire to use a different HSM SubRole than the default, then this `prefix_hsm_subroles` field does not need any data populated.
 
@@ -184,4 +184,3 @@ Example `hmn_connections.json` row representing an application node with SourceN
       x3113c0s25b0n0: ["visualization01", "vn02"]
       x3113c0s23b0n0: ["uan01"]
     ```
-
