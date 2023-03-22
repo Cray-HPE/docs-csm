@@ -8,7 +8,7 @@ compute blades. Even though both Antero and Windom blades both have 4 nodes, the
 
 SLS has NIDS only allocated for nodes `b0n0`, `b0n1`, `b1n0`, `b1n1` on a compute node blade. On a Antero blade the nodes `b0n2`, `b0n3` will have automatically assigned NIDs that are not contiguous with the NIDs on nodes `b0n0` and `b0n1`.
 
-It is important to note the nodes `b0n2` and `b0n3` on a Antero blade are functional, but do not have NIDs in contiguous range with its peers. 
+It is important to note the nodes `b0n2` and `b0n3` on a Antero blade are functional, but do not have NIDs in contiguous range with its peers.
 
 ## How to identify NIDs on Antero blades
 
@@ -93,5 +93,4 @@ To work around this issue the appropriate NID values for nodes `b0n2` and `n0n3`
 
 ## Correcting the NID Numbering
 
-Optionally, during a system maintanence window, the Antero node NID numbering can be corrected by following the [Defragment NID Numbering](../../operations/node_management/Defragment_NID_Numbering.md) procedure.
-
+Optionally, during a system maintenance window, the Antero node NID numbering can be corrected by following the [Defragment NID Numbering](../../operations/node_management/Defragment_NID_Numbering.md) procedure.
