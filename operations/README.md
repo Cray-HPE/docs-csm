@@ -546,6 +546,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 - [Replace a Compute Blade Using SAT](node_management/Replace_a_Compute_Blade_Using_SAT.md)
 - [Update the Gigabyte Node BIOS Time](node_management/Update_the_Gigabyte_Node_BIOS_Time.md)
 - [S3FS Usage Guidelines](node_management/S3FS_Usage_and_Guidelines.md)
+- [Defragment NID Numbering](node_management/Defragment_NID_Numbering.md)
 
 ## Network
 

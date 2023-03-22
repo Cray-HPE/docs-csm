@@ -10,7 +10,7 @@ SLS has NIDS only allocated for nodes `b0n0`, `b0n1`, `b1n0`, `b1n1` on a comput
 
 It is important to note the nodes `b0n2` and `b0n3` on a Antero blade are functional, but do not have NIDs in contiguous range with its peers.
 
-## How to identity NIDs on Antero blades
+## How to identify NIDs on Antero blades
 
 To work around this issue the appropriate NID values for nodes `b0n2` and `n0n3` on Antero blades need to be supplied to Work Load Manager (WLM) when launch jobs. The following commands are some examples to determine the NIDs in use for Antero blades.
 
@@ -90,3 +90,7 @@ To work around this issue the appropriate NID values for nodes `b0n2` and `n0n3`
     | x9000c3s0b0n3 | Compute | 147474595 |
     +---------------+---------+-----------+
     ```
+
+## Correcting the NID Numbering
+
+Optionally, during a system maintenance window, the Antero node NID numbering can be corrected by following the [Defragment NID Numbering](../../operations/node_management/Defragment_NID_Numbering.md) procedure.
