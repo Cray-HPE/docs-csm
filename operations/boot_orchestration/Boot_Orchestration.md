@@ -20,7 +20,7 @@ BOS depends on each of the following services to complete its tasks:
 ## Use the BOS Cray CLI commands
 
 BOS commands are available using the Cray CLI.
-For ease of use, BOS can be used without specifying the version and will default to v1. However, explicitly specifying the version in scripts or documentation
+For ease of use, BOS can be used without specifying the version and will default to v2. However, explicitly specifying the version in scripts or documentation
 is **highly recommended**, because the default BOS version for the CLI may change in the future.
 
 (`ncn-mw#`) API information, including the default API version, can be found with the following command:
