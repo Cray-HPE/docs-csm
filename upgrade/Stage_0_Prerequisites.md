@@ -44,47 +44,8 @@ after a break, always be sure that a typescript is running before proceeding.
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. (`ncn-m001#`) Install the latest `docs-csm` RPM.
-
-   - If `ncn-m001` has internet access, then use the following commands to download and install the latest documentation.
-
-      > **Important:** The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why these commands copy it there.  
-      > ***NOTE:*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
-      Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
-
-      - Without proxy:
-
-        ```bash
-        wget https://release.algol60.net/csm-1.4/docs-csm/docs-csm-latest.noarch.rpm \
-          -O /root/docs-csm-latest.noarch.rpm &&
-        rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-        ```
-
-      - With https proxy:
-
-        ```bash
-        https_proxy=https://example.proxy.net:443 wget https://release.algol60.net/csm-1.4/docs-csm/docs-csm-latest.noarch.rpm \
-          -O /root/docs-csm-latest.noarch.rpm &&
-        rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-        ```
-
-   - Otherwise, use the following procedure to download and install the latest documentation.
-
-      1. Download the latest `docs-csm` RPM to an external system and copy it to `ncn-m001`.
-
-         See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
-
-      1. (`ncn-m001#`) Copy the documentation RPM to `/root` and install it.
-
-         > **Important:**
-         >
-         > - Replace the `PATH_TO_DOCS_RPM` below with the location of the RPM on `ncn-m001`.
-         > - The upgrade scripts expect the `docs-csm` RPM to be located at `/root/docs-csm-latest.noarch.rpm`; that is why this command copies it there.
-
-         ```bash
-         cp PATH_TO_DOCS_RPM /root/docs-csm-latest.noarch.rpm &&
-         rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
-         ```
+1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs, see the short procedure in
+   [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
 1. (`ncn-m001#`) Run the script to create a `cephfs` file share at `/etc/cray/upgrade/csm`.
 
