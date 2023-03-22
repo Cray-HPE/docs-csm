@@ -185,7 +185,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
     1. Determine the first Kubernetes master.
 
         ```bash
-        FM=$(cat "${PITDATA}"/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
+        FM=$(jq -r '."Global"."meta-data"."first-master-hostname"' "${PITDATA}"/configs/data.json)
         echo ${FM}
         ```
 
@@ -250,7 +250,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
     > was completed, `PITDATA` should be defined in the users environment before continuing.
 
     ```bash
-    FM=$(cat "${PITDATA}"/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
+    FM=$(jq -r '."Global"."meta-data"."first-master-hostname"' "${PITDATA}"/configs/data.json)
     echo ${FM}
     ```
 
