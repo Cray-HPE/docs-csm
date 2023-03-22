@@ -121,7 +121,7 @@ The following requirements must be met on the system where the procedure is bein
     wget "${ENDPOINT}/csm-${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
     ```
 
-1. Uncompress the patch.
+1. Decompress the patch.
 
    ```bash
    gunzip -v "csm-${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"

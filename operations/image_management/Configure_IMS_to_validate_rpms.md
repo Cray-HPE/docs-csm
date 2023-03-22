@@ -191,7 +191,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     cray artifacts get ims recipes/1aab3dbb-a654-4c84-b820-a293bd4ab2b4/recipe.tar.gz recipe.tar.gz
     ```
 
-1. Uncompress the recipe archive into a temporary directory.
+1. Decompress the recipe archive into a temporary directory.
 
     ```bash
     mkdir -v recipe

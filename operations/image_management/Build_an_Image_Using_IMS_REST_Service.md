@@ -184,7 +184,7 @@ The commands in this procedure must be run as the `root` user.
 
     Use `kubectl` and the returned pod name from the previous step to retrieve this information.
 
-    The `fetch-recipe` container is responsible for fetching the recipe archive from S3 and uncompressing the recipe.
+    The `fetch-recipe` container is responsible for fetching the recipe archive from S3 and decompressing the recipe.
 
     ```bash
     kubectl -n ims logs -f $POD -c fetch-recipe

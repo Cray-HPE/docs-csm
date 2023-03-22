@@ -26,7 +26,7 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
     cd ${ADMIN_DIR}
     ```
 
-1. Copy the `sat bootprep` and `product_vars.yaml` files from the uncompressed HPC CSM Software Recipe distribution file in the media directory to the current directory.
+1. Copy the `sat bootprep` and `product_vars.yaml` files from the decompressed HPC CSM Software Recipe distribution file in the media directory to the current directory.
 
     (`ncn-m001#`) Copy `sat bootprep` and `product_vars.yaml` files
 

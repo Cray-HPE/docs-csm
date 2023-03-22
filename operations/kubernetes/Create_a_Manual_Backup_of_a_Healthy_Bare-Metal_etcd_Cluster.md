@@ -196,7 +196,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     etcd-backup-2022-09-15-20-34-13.tar.gz
     ```
 
-1. Uncompress the backup file and extract `etcd-dump.bin` file.
+1. Decompress the backup file and extract `etcd-dump.bin` file.
 
     ```bash
     gunzip "${BACKUP_NAME}.tar.gz"

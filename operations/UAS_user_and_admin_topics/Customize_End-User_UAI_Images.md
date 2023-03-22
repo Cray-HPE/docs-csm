@@ -95,7 +95,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
         (cd `pwd`/mount; tar --xattrs --xattrs-include='*' --exclude="99-slingshot-network.conf" -cf "../$ST_ID.tar" .) 2> /dev/null
         ```
 
-        This may take several minutes. Notice that this does not create a compressed tarball. Using an uncompressed format makes it possible to add files if needed once the tarball is made.
+        This may take several minutes. Notice that this does not create a compressed tarball. Using an decompressed format makes it possible to add files if needed once the tarball is made.
         It also makes the procedure run slightly faster. Warnings related to `xattr` can be ignored; the resulting tarball should still result in a functioning UAI container image.
 
     1. (`ncn-mw#`) Check that the tarball contains `./usr/bin/uai-ssh.sh`.

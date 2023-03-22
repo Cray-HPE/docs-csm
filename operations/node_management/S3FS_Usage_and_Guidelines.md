@@ -13,8 +13,8 @@ S3FS is being deployed as tool to provide temporary relief of space usage as wel
 
 * For long term storage of code, test images, test rpms, or tar files.
   * This is ONLY meant to provide temporary relief. Exercising a vigilant practice of cleaning up unused files should be enforced.
-* As a landing point to uncompress tar files.
-  * This will put unnecessary load on the storage cluster as uncompressing a tar file will require a lot of reads and writes back to the object storage endpoints.
+* As a landing point to decompress tar files.
+  * This will put unnecessary load on the storage cluster as decompressing a tar file will require a lot of reads and writes back to the object storage endpoints.
   * Running programs from the S3FS mount point.
     * Although this can be done but will eat into memory for long running programs and may not perform properly.
 

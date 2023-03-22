@@ -682,7 +682,7 @@ Multiple options are available if the administrator decides to continue the inst
 
 ### Addressing the issue by removing a product
 
-If the administrator wants to remove a product from the IUF session, they must re-execute `iuf run` for the `process-media` stage with the product distribution file and uncompressed content removed from the media directory. This
+If the administrator wants to remove a product from the IUF session, they must re-execute `iuf run` for the `process-media` stage with the product distribution file and decompressed content removed from the media directory. This
 removes references to that product from the existing IUF activity.
 
 If any previously executed stages performed operations with the removed product, re-execute them. It may be necessary to perform manual operations as well, e.g. modifying the `sat bootprep` input files used to create images in
@@ -693,7 +693,7 @@ The administrator can then execute any remaining stages that did not complete du
 ### Addressing the issue by adding a new version of a product
 
 To add a new version of an existing product to the IUF session, re-execute `iuf run` for the `process-media` stage with the new product distribution file added to the media directory. This adds knowledge of that product to the
-existing IUF activity. If the new product is being used in place of a different version of the product, remove the previous version of the product distribution file and uncompressed content from the media directory at the same
+existing IUF activity. If the new product is being used in place of a different version of the product, remove the previous version of the product distribution file and decompressed content from the media directory at the same
 time the new version is added.
 
 If any previously executed stages performed operations with the removed product, re-execute them. It may be necessary to perform manual operations as well, e.g. modifying the `sat bootprep` input files used to create images in

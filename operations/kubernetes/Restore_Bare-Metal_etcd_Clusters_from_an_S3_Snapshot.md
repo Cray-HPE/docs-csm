@@ -53,7 +53,7 @@ This procedure can be run on any master NCN.
 
 1. (`ncn-m#`) Download the snapshot and copy it to all NCN master nodes.
 
-    1. Retrieve the backup from S3 and uncompress it.
+    1. Retrieve the backup from S3 and decompress it.
 
         ```bash
         mkdir /tmp/etcd_restore
