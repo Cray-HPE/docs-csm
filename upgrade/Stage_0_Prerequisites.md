@@ -44,7 +44,7 @@ after a break, always be sure that a typescript is running before proceeding.
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs, see the short procedure in
+1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs. See the short procedure in
    [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
 1. Follow either the [Direct download](#direct-download) or [Manual copy](#manual-copy) procedure.
