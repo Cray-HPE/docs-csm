@@ -179,7 +179,7 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
 1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
 
-   > A later stage of the upgrade expects the `docs-csm` and `libcsm` RPMs to be located at `/root/` on `ncn-m002`; that is why this command copies it there.
+   > A later stage of the upgrade expects the `docs-csm` and `libcsm` RPMs to be located at `/root/` on `ncn-m002`; that is why this command copies them there.
 
    ```bash
    scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
