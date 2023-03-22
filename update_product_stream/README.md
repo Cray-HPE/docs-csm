@@ -166,30 +166,22 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
 
    ```bash
    rpm -Uvh --force "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
-   SLES_VERSION=$(awk -F= '/VERSION_ID/{gsub(/["]/,"");printf($NF)}' /etc/os-release)
-   SLES_MAJOR=$(echo -n $SLES_VERSION | awk -F. '{print $1}')
-   SLES_MINOR=$(echo -n $SLES_VERSION | awk -F. '{print $NF}')
-   rpm -Uvh --force "https://release.algol60.net/lib/sle-${SLES_MAJOR}sp${SLES_MINOR}/libcsm-latest.noarch.rpm"
+   rpm -Uvh --force "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm"
    ```
 
    With https proxy:
 
    ```bash
    rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
-   SLES_VERSION=$(awk -F= '/VERSION_ID/{gsub(/["]/,"");printf($NF)}' /etc/os-release)
-   SLES_MAJOR=$(echo -n $SLES_VERSION | awk -F. '{print $1}')
-   SLES_MINOR=$(echo -n $SLES_VERSION | awk -F. '{print $NF}')
-   rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 "https://release.algol60.net/lib/sle-${SLES_MAJOR}sp${SLES_MINOR}/libcsm-latest.noarch.rpm"
+   rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm"
    ```
 
    If this machine does not have direct internet access, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
 
    ```bash
    curl -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
-   SLES_VERSION=$(ssh ncn-m001 awk -F= '/VERSION_ID/{gsub(/["]/,"");printf($NF)}' /etc/os-release)
-   SLES_MAJOR=$(echo -n $SLES_VERSION | awk -F. '{print $1}')
-   SLES_MINOR=$(echo -n $SLES_VERSION | awk -F. '{print $NF}')
-   curl -O "https://release.algol60.net/lib/sle-${SLES_MAJOR}sp${SLES_MINOR}/libcsm-latest.noarch.rpm"
+   SLES_VERSION=$(ssh ncn-m001 'awk -F= '\''/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}'\'' /etc/os-release')
+   curl -O "https://release.algol60.net/lib/sle-${SLES_VERSION}/libcsm-latest.noarch.rpm"
    scp docs-csm-latest.noarch.rpm libcsm-latest.noarch.rpm ncn-m001:/root
    ssh ncn-m001
    rpm -Uvh --force /root/docs-csm-latest.noarch.rpm /root/libcsm-latest.noarch.rpm
