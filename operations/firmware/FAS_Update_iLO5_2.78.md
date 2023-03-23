@@ -68,7 +68,7 @@ This will run a dryrun on the system, to update the firmware, use the `--overrid
 
 ### Using a `json` file and running from the Cray CLI
 
-Using the imageID from the output (in the example '6fc274ee-6e7c-4b99-8954-4f0f31f03a18')
+Using the `imageID` from the output (in the example `6fc274ee-6e7c-4b99-8954-4f0f31f03a18`)
 create a `json` file:
 
 ```json
