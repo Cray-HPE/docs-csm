@@ -151,28 +151,35 @@ Using http proxies in any way other than the following examples will cause many 
 
 1. Download and upgrade the latest documentation RPM and CSM library.
 
-   Without proxy:
+    - Without proxy:
+
+        ```bash
+        wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" -O /root/docs-csm-latest.noarch.rpm
+        wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" -O libcsm-latest.noarch.rpm 
+        ```
+
+    - With https proxy:
+
+        ```bash
+        https_proxy=https://example.proxy.net:443 wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" \
+            -O /root/docs-csm-latest.noarch.rpm
+        https_proxy=https://example.proxy.net:443 wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" \
+            -O /root/libcsm-latest.noarch.rpm
+        ```
+
+    - If this machine does not have direct internet access, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
+
+        ```bash
+        curl -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
+        SLES_VERSION=$(ssh ncn-m001 'awk -F= '\''/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}'\'' /etc/os-release')
+        curl -O "https://release.algol60.net/lib/sle-${SLES_VERSION}/libcsm-latest.noarch.rpm"
+        scp docs-csm-latest.noarch.rpm libcsm-latest.noarch.rpm ncn-m001:/root
+        ssh ncn-m001
+        ```
+
+1. Install the documentation RPM and CSM library.
 
    ```bash
-   rpm -Uvh --force "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
-   rpm -Uvh --force "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm"
-   ```
-
-   With https proxy:
-
-   ```bash
-   rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
-   rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm"
-   ```
-
-   If this machine does not have direct internet access, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
-
-   ```bash
-   curl -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
-   SLES_VERSION=$(ssh ncn-m001 'awk -F= '\''/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}'\'' /etc/os-release')
-   curl -O "https://release.algol60.net/lib/sle-${SLES_VERSION}/libcsm-latest.noarch.rpm"
-   scp docs-csm-latest.noarch.rpm libcsm-latest.noarch.rpm ncn-m001:/root
-   ssh ncn-m001
    rpm -Uvh --force /root/docs-csm-latest.noarch.rpm /root/libcsm-latest.noarch.rpm
    ```
 
