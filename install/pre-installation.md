@@ -385,7 +385,7 @@ These variables will need to be set for many procedures within the CSM installat
 
 ### 2.1 Download CSM tarball
 
-1. Download and install the latest documentation and scripts RPMs, see [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation)
+1. Download and install the latest documentation and scripts RPMs, see [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
 1. (`pit#`) Download the CSM tarball
 
