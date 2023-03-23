@@ -1,8 +1,8 @@
-# Update iLO 5 firmware above v2.78
+# Update iLO 5 firmware above `v2.78`
 
-This procedure is only required if the current version if iLO 5 is below v2.78.
+This procedure is only required if the current version if iLO 5 is below `v2.78`.
 
-iLO 5 versions above v2.78 are larger than 32MB in size.  iLO 5 versions prior to v2.78 will only accept 32MB size binary files.  iLO 5 v2.78 removed this restriction.  To upgrade to a version after v2.78, iLO 5 must first be update to v2.78.
+iLO 5 versions above `v2.78` are larger than 32MB in size.  iLO 5 versions prior to `v2.78` will only accept 32MB size binary files.  iLO 5 `v2.78` removed this restriction.  To upgrade to a version after `v2.78`, iLO 5 must first be update to `v2.78`.
 
 ## Find Image Id for iLO 5 version 2.78
 
@@ -46,16 +46,16 @@ example output:
 
 If more than one image is returned, use the image record with the largest semantic firmware version.
 
-If no image record is returned, the v2.78 FAS RPM needs to be downloaded and loaded into FAS
+If no image record is returned, the `v2.78` FAS RPM needs to be downloaded and loaded into FAS
 using the [Load Firmware from RPM or ZIP file](FAS_Admin_Procedures.md#load-firmware-from-rpm-or-zip-file) procedure.
 
 ## Upgrade iLO 5 firmware to version 2.78
 
-Firmware can be updated using the FAS Update Script OR using a json file and running FAS from the Cray CLI.
+Firmware can be updated using the FAS Update Script OR using a `json` file and running FAS from the Cray CLI.
 
 ### [Using the FAS Update Script](FASUpdate_Script.md)
 
-Using the imageID from the output (in the example '6fc274ee-6e7c-4b99-8954-4f0f31f03a18')
+Using the `imageID` from the output (in the example `6fc274ee-6e7c-4b99-8954-4f0f31f03a18`)
 run the FAS Update Script (`ncn-mw#`).
 
 ```bash
@@ -66,10 +66,10 @@ You can update select xnames using the `--xnames XNAMES` option
 
 This will run a dryrun on the system, to update the firmware, use the `--overrideDryun true` option
 
-### Using a json file and running from the Cray CLI
+### Using a `json` file and running from the Cray CLI
 
 Using the imageID from the output (in the example '6fc274ee-6e7c-4b99-8954-4f0f31f03a18')
-create a json file:
+create a `json` file:
 
 ```json
 {
@@ -101,7 +101,7 @@ create a json file:
 }
 ```
 
-Create a FAS actions using the created json file (`ncn-mw#`).
+Create a FAS actions using the created `json` file (`ncn-mw#`).
 
 ```bash
 cray fas actions create ilo5v278.json
