@@ -26,9 +26,8 @@ the number of storage and worker nodes.
 1. [Deploy management nodes](#2-deploy-management-nodes)
     1. [Deploy storage NCNs](#21-deploy-storage-ncns)
     1. [Deploy Kubernetes NCNs](#22-deploy-kubernetes-ncns)
-    1. [Configure `kubectl` on the PIT](#23-configure-kubectl-on-the-pit)
-    1. [Run Ceph Latency Repair Script](#24-run-ceph-latency-repair-script)
-    1. [Check LVM on Kubernetes NCNs](#25-check-lvm-on-kubernetes-ncns)
+    1. [Run Ceph Latency Repair Script](#23-run-ceph-latency-repair-script)
+    1. [Check LVM on Kubernetes NCNs](#24-check-lvm-on-kubernetes-ncns)
 1. [Cleanup](#3-cleanup)
 1. [Validate deployment](#4-validate-deployment)
 1. [Next topic](#next-topic)
@@ -62,7 +61,7 @@ Preparation of the environment must be done before attempting to deploy the mana
 
 1. (`pit#`) If the NCNs are HPE hardware, then ensure that DCMI/IPMI is enabled.
 
-    This will enable `ipmitool` usage with the BMCs.
+    This will enable `ipmitool` usage with the the BMCs.
 
     ```bash
     /root/bin/bios-baseline.sh
@@ -188,7 +187,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
     1. Determine the first Kubernetes master.
 
         ```bash
-        FM=$(jq -r '."Global"."meta-data"."first-master-hostname"' "${PITDATA}"/configs/data.json)
+        FM=$(cat "${PITDATA}"/configs/data.json | jq -r '."Global"."meta-data"."first-master-hostname"')
         echo ${FM}
         ```
 
@@ -244,43 +243,30 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
     > **NOTE:** To exit a conman console, press `&` followed by a `.` (e.g. keystroke `&.`)
 
-### 2.3 Configure `kubectl` on the PIT
-
-1. (`pit#`) This was done in a previous step, but if the user is resuming/starting here then the first master needs to be
-    redefined.
-
-    > ***NOTE*** This requires that the [set reusable environment variables](./pre-installation.md#15-set-reusable-environment-variables) step
-    > was completed, `PITDATA` should be defined in the users environment before continuing.
-
-    ```bash
-    FM=$(jq -r '."Global"."meta-data"."first-master-hostname"' "${PITDATA}"/configs/data.json)
-    echo ${FM}
-    ```
-
 1. (`pit#`) Copy the Kubernetes configuration file from the first master node to the LiveCD.
 
    This will allow `kubectl` to work from the PIT node.
 
-    ```bash
-    mkdir -v ~/.kube
-    scp "${FM}.nmn:/etc/kubernetes/admin.conf" ~/.kube/config
-    ```
+   ```bash
+   mkdir -v ~/.kube
+   scp "${FM}.nmn:/etc/kubernetes/admin.conf" ~/.kube/config
+   ```
 
 1. (`pit#`) Ensure that the working directory is the `prep` directory.
 
-    ```bash
-    cd "${PITDATA}/prep"
-    ```
+   ```bash
+   cd "${PITDATA}/prep"
+   ```
 
 1. (`pit#`) Check cabling.
 
     See [SHCD check cabling guide](../operations/network/management_network/validate_cabling.md).
 
-### 2.4 Run Ceph Latency Repair Script
+### 2.3 Run Ceph Latency Repair Script
 
 Ceph can begin to exhibit latency over time unless OSDs are restarted and some OSD memory settings are changed. It is recommended to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md).
 
-### 2.5 Check LVM on Kubernetes NCNs
+### 2.4 Check LVM on Kubernetes NCNs
 
 Run the following command on the PIT node to validate that the expected LVM labels are present on disks on the master and worker nodes.
 

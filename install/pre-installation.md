@@ -432,8 +432,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        > ***NOTE*** This installs necessary scripts for deployment checks, as well as the offline manual.
 
        ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-              --no-gpg-checks install -y docs-csm libcsm
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp2/" --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-15sp3/" \
+              --no-gpg-checks install -y docs-csm
        ```
 
    1. Update `cray-site-init`.

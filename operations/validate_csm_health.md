@@ -439,11 +439,11 @@ being tested as this will cause some tests to fail.
 
    There are two options for doing this:
 
-    - Install the `docs-csm` and `libcsm` RPMs.
+    - Install the `docs-csm` RPM.
 
       See [Check for Latest Documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
-    - Copy over the following folder from a system where the `docs-csm` and `libcsm` RPMs are installed:
+    - Copy over the following folder from a system where the `docs-csm` RPM is installed:
 
         - `/usr/share/doc/csm/scripts/operations/pyscripts`
 
