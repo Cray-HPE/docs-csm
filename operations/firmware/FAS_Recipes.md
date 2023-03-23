@@ -158,7 +158,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **`NOTE`** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#compute-node-bios-workaround-for-hpe-cray-ex425) procedure.
 
-### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA
+### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA (AccFPGA0)
 
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
@@ -200,12 +200,78 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 }
 ```
 
+### (Cray) Device Type: `NodeBMC` | Target: Management Ethernet
+
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+
+```json
+{
+"stateComponentFilter": {
+
+    "deviceTypes": [
+      "nodeBMC"    ]
+  },
+"inventoryHardwareFilter": {
+    "manufacturer": "cray"
+    },
+"targetFilter": {
+    "targets": [
+      "Node0.ManagementEthernet",
+      "Node1.ManagementEthernet"
+    ]
+  },
+"command": {
+    "version": "latest",
+    "tag": "default",
+    "overrideDryrun": false,
+    "restoreNotPossibleOverride": true,
+    "timeLimit": 1000,
+    "description": "Dryrun upgrade of Node Management Ethernet"
+  }
+}
+```
+
+### (Cray) Device Type: `NodeBMC` | Target: AccVBIOS
+
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+
+```json
+{
+"stateComponentFilter": {
+
+    "deviceTypes": [
+      "nodeBMC"    ]
+  },
+"inventoryHardwareFilter": {
+    "manufacturer": "cray"
+    },
+"targetFilter": {
+    "targets": [
+      "Node0.AccVBIOS"
+    ]
+  },
+"command": {
+    "version": "latest",
+    "tag": "default",
+    "overrideDryrun": false,
+    "restoreNotPossibleOverride": true,
+    "timeLimit": 1000,
+    "description": "Dryrun upgrade of Node AccVBIOS"
+  }
+}
+```
+
 ## Manufacturer: HPE
 
 ### (HPE) Device Type: `NodeBMC` | Target: iLO 5 (BMC)
 
 > **`NOTE`** This is a collection of various FAS recipes for performing updates.
 > For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+
+> **`NOTE`** Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
+> See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
 
 ```json
 {

@@ -27,7 +27,7 @@ The following procedures are included in this section:
 
 > **`NOTE`** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
-## Update Liquid-Cooled Nodes BMC, FPGA, and Node BIOS
+## Update Liquid-Cooled Nodes BMC, FPGA, Management Ethernet, AccVBIOS, and Node BIOS
 
 Update firmware for a liquid-cooled node controller \(nC\) using FAS.
 This section includes templates for JSON files that can be used and the procedure for running the update.
@@ -97,6 +97,67 @@ If the nodes are not off when the update command is issued, the update will get 
     "restoreNotPossibleOverride": true,
     "timeLimit": 1000,
     "description": "Dryrun upgrade of Node Redstone FPGA"
+  }
+}
+```
+
+#### Manufacturer: Cray | Device Type: `NodeBMC` | Target: Management Ethernet
+
+> **IMPORTANT:** The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
+
+```json
+{
+"stateComponentFilter": {
+
+    "deviceTypes": [
+      "nodeBMC"    ]
+  },
+"inventoryHardwareFilter": {
+    "manufacturer": "cray"
+    },
+"targetFilter": {
+    "targets": [
+      "Node0.ManagementEthernet",
+      "Node1.ManagementEthernet"
+    ]
+  },
+"command": {
+    "version": "latest",
+    "tag": "default",
+    "overrideDryrun": false,
+    "restoreNotPossibleOverride": true,
+    "timeLimit": 1000,
+    "description": "Dryrun upgrade of Node Management Ethernet"
+  }
+}
+```
+
+#### Manufacturer: Cray | Device Type: `NodeBMC` | Target: AccVBIOS
+
+> **IMPORTANT:** The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
+
+```json
+{
+"stateComponentFilter": {
+
+    "deviceTypes": [
+      "nodeBMC"    ]
+  },
+"inventoryHardwareFilter": {
+    "manufacturer": "cray"
+    },
+"targetFilter": {
+    "targets": [
+      "Node0.AccVBIOS"
+    ]
+  },
+"command": {
+    "version": "latest",
+    "tag": "default",
+    "overrideDryrun": false,
+    "restoreNotPossibleOverride": true,
+    "timeLimit": 1000,
+    "description": "Dryrun upgrade of Node Management Ethernet"
   }
 }
 ```
@@ -588,6 +649,9 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 #### Manufacturer: HPE | Device Type: Compute `NodeBMC` | Target: `iLO 5` aka BMC
 
+> **`NOTE`** Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
+> See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
+
 ```json
 {
 "stateComponentFilter": {
@@ -660,6 +724,9 @@ Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
 the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
 the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
 or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
+
+> **`NOTE`** Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
+> See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -923,6 +990,9 @@ Make sure you have waited for the current firmware to be updated before starting
 
 #### Manufacturer: HPE | Device Type: NCN `NodeBMC` | Target: `iLO 5` aka BMC
 
+> **`NOTE`** Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
+> See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
+
 ```json
 {
 "stateComponentFilter": {
@@ -998,6 +1068,9 @@ the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
 the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
 or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
 The script flag `--xnames x1,x2` can be used to limit the updates to certain xnames
+
+> **`NOTE`** Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
+> See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc) for more information.
