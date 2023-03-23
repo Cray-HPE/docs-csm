@@ -1,8 +1,8 @@
-#! /bin/sh
+#!/usr/bin/bash
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -24,28 +24,20 @@
 #
 
 ################################################################################
-# This script exports all existing BOS session templates.
-# Specifically, it creates an archive file containing a JSON file for each
-# session template. These files can be used to re-create the session templates.
-#
-# The name of the archive file is defined in the ARCHIVE variable.
+# This script exports all existing BOS session templates as a list in a JSON
+# file. This file can be used to re-create the session templates.
 ################################################################################
-ARCHIVE="bos-session-templates.tgz"
+ARCHIVE="bos-session-templates-$(date +%Y%m%d%H%M%S).json"
 
-if [ -e ${ARCHIVE} ]; then
-    echo "Error archive file '${ARCHIVE}' already exists!";
-    exit 1;
-fi
+err_exit()
+{
+    echo "ERROR: $*" >&2
+    exit 1
+}
 
-# Create a JSON file for each session template
-TMPDIR=`mktemp -d` || exit 1;
-for st in $(cray bos v2 sessiontemplates list --format json | jq .[].name|tr -d \"); do
-    cray bos v2 sessiontemplates describe $st --format json > ${TMPDIR}/${st}.json;
-done
+[[ ! -e ${ARCHIVE} ]] || err_exit "Archive file '${ARCHIVE}' already exists!"
 
-# Store the JSON files in an archive
-tar --create --file ${ARCHIVE} -v -z -C ${TMPDIR} . 1>/dev/null
-echo "BOS session templates stored in archive: ${ARCHIVE}"
-
-# Clean up
-rm -rf $TMPDIR
+# Write all of the session templates to the file
+cray bos v2 sessiontemplates list --format json > "${ARCHIVE}" || 
+    err_exit "Command failed: cray bos v2 sessiontemplates list --format json"
+echo "BOS session templates stored in file: ${ARCHIVE}"
