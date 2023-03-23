@@ -103,8 +103,6 @@ If the nodes are not off when the update command is issued, the update will get 
 
 #### Manufacturer: Cray | Device Type: `NodeBMC` | Target: Management Ethernet
 
-> **IMPORTANT:** The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
-
 ```json
 {
 "stateComponentFilter": {
@@ -133,8 +131,6 @@ If the nodes are not off when the update command is issued, the update will get 
 ```
 
 #### Manufacturer: Cray | Device Type: `NodeBMC` | Target: `AccVBIOS`
-
-> **IMPORTANT:** The Nodes themselves must be powered **on** in order to update the firmware of the Redstone FPGA on the nodes.
 
 ```json
 {
