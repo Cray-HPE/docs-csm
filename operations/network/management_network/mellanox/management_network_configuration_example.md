@@ -231,7 +231,7 @@ B E    10.101.8.113/32 [200/0] via 10.101.10.10, Vlan2
                                via 192.168.75.1, Ethernet2/1
 ```
 
-Example of how BGP routes would look like in the switch located in Highspeed network.
+Example of how BGP routes would look like in the switch located inigh-speednetwork.
 
 ```
 sw-spine-001 [standalone: master] # show ip bgp vrf CAN summary

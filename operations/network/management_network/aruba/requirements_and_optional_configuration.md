@@ -5,7 +5,7 @@ There are several ways to connect an HPE Cray EX system directly to a campus net
 Requirements and optional configuration:
 
 * System needs to be completely installed and running
-* The edge router  should be cabled either to the management network or Highspeed network switch
+* The edge router  should be cabled either to the management network origh-speednetwork switch
 * An IP address range on the management or high-speed network switch that is routable to the campus network
 * Other configuration items that may be required to facilitate remote connectivity:
 	* Configuration may require a new LAG

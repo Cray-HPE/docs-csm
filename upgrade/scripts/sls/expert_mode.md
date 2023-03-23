@@ -30,7 +30,7 @@ The upgrader requires only two inputs:
 
 * SLS input file: This is a file extract of SLS to be upgraded.
 * Bifurcated CAN path for non-administrator traffic: Selection of CAN or CHN, depending on whether user traffic (users running jobs, not administrators) will access the system over
-  the management network CAN or the highspeed network (CHN).
+  the management network CAN or thehigh-speednetwork (CHN).
 
 An example of this would be:
 

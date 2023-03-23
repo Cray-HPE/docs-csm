@@ -4,7 +4,7 @@
 
 Relevant Configuration
 
-Enable Ip routing
+Enable IP routing
 
 ```
 switch(config)# ip routing
@@ -39,4 +39,3 @@ Expected Results
 * Step 3: The output of the show commands looks correct.
 
 [Back to Index](../README.md)
-

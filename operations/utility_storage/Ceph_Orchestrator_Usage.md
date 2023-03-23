@@ -1,6 +1,6 @@
 # Ceph Orchestrator Usage
 
-The Ceph orchestrator provides a centralized interface for the management of the Ceph cluster. It orchestrates ceph-mgr modules that interface with external orchestration services.
+The Ceph orchestrator provides a centralized interface for the management of the Ceph cluster. It orchestrates `ceph-mgr` modules that interface with external orchestration services.
 
 Refer to the external [Ceph documentation](https://docs.ceph.com/en/latest/mgr/orchestrator/) for more information.
 
@@ -28,7 +28,7 @@ ceph config set mgr mgr/cephadm/log_to_cluster_level debug
 ceph -W cephadm --watch-debug
 ```
 
-> **`NOTE`** For use with orchestration tasks, this can be typically run from a node running the ceph mon process. In most cases, this is ncn-s00(1/2/3). There may be cases where a cephadm is run locally on a host and it will be more efficient to tail `/var/log/ceph/cephadm.log`.
+> **`NOTE`** For use with orchestration tasks, this can be typically run from a node running the ceph mon process. In most cases, this is the first three storage nodes. There may be cases where a `cephadm` is run locally on a host and it will be more efficient to tail `/var/log/ceph/cephadm.log`.
 
 ## Usage Examples
 
@@ -105,9 +105,9 @@ rgw.site1.zone1.ncn-s002.wqrzoa  ncn-s002  running (5h)  5m ago     5h   15.2.8 
 rgw.site1.zone1.ncn-s003.tzkxya  ncn-s003  running (5h)  5m ago     5h   15.2.8   registry.local/ceph/ceph:v15.2.8                 5553b0cb212c  c67d75adc620
 ```
 
-**`FILTERS:`** Apply filters by adding any or all of [--hostname <hostname> --service_name <service_name> --daemon_type <daemon_type> --daemon_id <daemon_id>].
+**`FILTERS:`** Apply filters by adding any or all of `[--hostname <hostname> --service_name <service_name> --daemon_type <daemon_type> --daemon_id <daemon_id>]`.
 
-### Ceph Daemon start|stop|restart|reconfig
+### Ceph Daemon `start|stop|restart|reconfig`
 
 > **`NOTE`** The service name is from `ceph orch ps` **NOT** `ceph orch ls`.
 
@@ -224,7 +224,7 @@ Add daemon(s):
 ceph orch daemon add [mon|mgr|rbd-mirror|crash|alertmanager|grafana|node-exporter|prometheus] [<placement>]
 ```
 
-Start iscsi daemon(s):
+Start iSCSI daemon(s):
 
 ```bash
 ceph orch daemon add iscsi <pool> <api_user> <api_password> [<trusted_ip_list>] [<placement>]
@@ -244,7 +244,7 @@ ceph orch daemon add nfs <svc_id> <pool> [<namespace>] [<placement>]
 
 Create an OSD service:
 
-Either --svc_arg=host:drives
+Either `--svc_arg=host:drives`
 
 ```bash
 ceph orch daemon add osd [<svc_arg>]
@@ -268,7 +268,7 @@ Remove specific daemon(s):
 ceph orch daemon rm <names>... [--force]
 ```
 
-Start, stop, restart, (redeploy,) or reconfig a specific daemon:
+Start, stop, restart, (redeploy) or reconfigure a specific daemon:
 
 ```bash
 ceph orch daemon start|stop|restart|reconfig <name>
@@ -280,7 +280,7 @@ List devices on a host:
 ceph orch device ls [<hostname>...] [plain|json|json-pretty|yaml] [--refresh] [--wide]
 ```
 
-Zap (erase!) a device so it can be re-used:
+Zap (erase!) a device allowing it to be re-used:
 
 ```bash
 ceph orch device zap <hostname> <path> [--force]
@@ -382,7 +382,7 @@ Select orchestrator module backend:
 ceph orch set backend <module_name>
 ```
 
-Start, stop, restart, redeploy, or reconfig an entire service (i.e. all daemons):
+Start, stop, restart, redeploy, or reconfigure an entire service (i.e. all daemons):
 
 ```bash
 ceph orch start|stop|restart|redeploy|reconfig <service_name>

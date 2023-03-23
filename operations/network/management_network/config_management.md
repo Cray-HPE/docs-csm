@@ -22,7 +22,7 @@ Maximum number of checkpoints:
 1. Maximum user checkpoints: 32
 1. Maximum system checkpoints: 32
 
-#### Save the current configuration into a checkpoint (needs be done when in both CSM1.0 and CSM1.2)
+#### Save the current configuration into a checkpoint (needs be done when in both CSM 1.0 and CSM 1.2)
 
 1. Save the configuration to a checkpoint.
 

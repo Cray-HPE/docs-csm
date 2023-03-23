@@ -62,7 +62,7 @@ Details of the Customer High Speed Network(CHN) and the Customer Management Netw
 
 ## 2 Customer High Speed Network (CHN)
 
-Access to system resources from the customer site over the High Speed Network (HSN) is provided by the Customer Highspeed Network (CHN).
+Access to system resources from the customer site over the High Speed Network (HSN) is provided by the Customerigh-speedNetwork (CHN).
 As can be seen in the diagram above, traffic ingress from the site for the CHN is over the edge routers.
 Typically, these are a pair of Arista switches which provide other HSN access -- for ClusterStor, for example.
 

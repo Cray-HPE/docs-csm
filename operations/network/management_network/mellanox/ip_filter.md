@@ -1,4 +1,4 @@
-# Ip filter
+# IP filter
 
 There are two types of malicious traffic that can be received from external sources to the data center:
 
