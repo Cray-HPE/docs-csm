@@ -3,6 +3,7 @@
 The following steps provide instructions to boot the Pre-Install Live ISo and create seedfiles for CSM installation.
 
 ## Topics
+
 1. [Create the Bootable Media](#create-the-bootable-media)
 1. [Boot the LiveCD](#boot-the-livecd)
 1. [Booting the Master node using Bootable USB](#boot-the-livecd)
@@ -19,7 +20,7 @@ To create the bootable LiveCD image use `dd` command. Before creating the media,
 
 1. (`external#`) Download the LiveCD ISO.
 
-   ```
+   ```bash
    wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/sgi/dist.engr/test/stout727/iso-latest-sles15sp4-x86_64/cm-admin-install-1.9-sles15sp4-x86_64.iso
    ```
 
@@ -42,7 +43,7 @@ To create the bootable LiveCD image use `dd` command. Before creating the media,
    ```
 
    In the previous example, the `ATA` devices are the internal disks and the other two devices are the USB drives.
-   
+
    Set a variable pointing to the USB device:
 
    ```bash
@@ -53,7 +54,7 @@ To create the bootable LiveCD image use `dd` command. Before creating the media,
 
    Burn the LiveCD ISO on USB device using `dd` command in the following format:
 
-   ```
+   ```bash
    #dd if=$PWD/cm-admin-install-1.9-sles15sp4-x86_64.iso of=$USB bs=4M oflag=sync status=progress
    ```
 
@@ -63,27 +64,29 @@ At this point, image is ready and system can be booted from the USB drive.
 
 Some systems will boot the USB device automatically, if no other OS exists (bare-metal). Otherwise the administrator may need to use the `BIOS Boot Selection menu` to choose the USB device (Option 1).
 
-If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then admin can use  `efibootmgr` to set the boot order to be the USB device (Option 2). See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-order) page for more information about how to set the boot order to have the USB device first.
+If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then admin can use  `efibootmgr` to set the boot order to be the USB device (Option 2). 
+See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-order) page for more information about how to set the boot order to have the USB device first.
 
 1. _Option 1_ : Boot LiveCD ISO image using `BIOS Boot Selection menu`
 
    1. Reboot the server.
+
    1. Press F6 until the following screen appears.
 
       ![alt text](../../img/install/01.png)
+
    1. Select the bootable device.
 
       ![alt text](../../img/install/02.png)
 
 1. _Option 2_ : Boot the LiveCD ISO image using `efibootmgr` (This option has not been tested).
-      
+
    >__Note:__ UEFI booting must be enabled in order for the system to find the USB device's EFI bootloader.
 
-        
    1. (`external#`) Confirm that the IPMI credentials work for the BMC by checking the power status.
-         
+
          Set the `BMC` variable to the hostname or IP address of the BMC of the PIT node.
-  
+
          ```bash
            USERNAME=root
            BMC=eniac-ncn-m001-mgmt
@@ -92,16 +95,17 @@ If an administrator has the node booted with an operating system which will next
            ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power status
          ```
 
-        >__Note:__ The `read -s` command is used to prevent the credentials from being displayed on the screen or recorded in the shell history.
+         >__Note:__ The `read -s` command is used to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    1. (`external#`) Power the NCN on and connect to the IPMI console.
 
-      >__Note:__ The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects the primary removable media. This step instructs the user to power off the node to ensure the BIOS has the best chance at finding the USB via a cold boot.
-      
+      >__Note:__ The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects the primary removable media. 
+This step instructs the user to power off the node to ensure the BIOS has the best chance at finding the USB via a cold boot.
+
       ```bash
       ipmitool chassis bootdev
       ```
-      
+
       ```text
          Received a response with unexpected ID 0 vs. 1
          bootdev <device> [clear-cmos=yes|no]
@@ -153,31 +157,33 @@ If an administrator has the node booted with an operating system which will next
 ## Post Boot configuration 
 
    1. Set the SITE LAN.
-   
+
       To configure the sitelan open a command line terminal and run the following command:
 
       `172.30.54.111` and `eno1` are examples of IP address and network device names.
 
-      ```
+      ```bash
       ifconfig eno1 172.30.54.111 netmask 255.255.240.0 
       ip route add default via <gateway ip> dev eno1
       ```
 
       ![alt text](../../img/install/05.png)
-      
+
       Now this server can be accessed from the external servers using `ssh`. Login to the machine using following command:
 
-      ```
+      ```bash
       (external)#  ssh root@172.30.54.111
       ```
 
    1. Set the hostname.
-      ```
+
+      ```bash
            hostnamectl set-hostname starlord
       ```
 
    1. Set the timezone.
-      ```
+
+      ```bash
           timedatectl set-timezone Asia/Kolkata
       ```
 
@@ -185,20 +191,20 @@ If an administrator has the node booted with an operating system which will next
 
       1.  For Mellanox spine switches.
 
-          1. Access the mellanox switch using Ip address or using minicom. \
+          1. Access the mellanox switch using IP address or using minicom.
 
-            ```
+             ```bash
               ssh admin@10.1.0.2
              ```
 
-             ```
+             ```bash
               minicom -b 115200 -D /dev/ttyUSB1
              ```
              >__Note:__ Device name and Ip may vary.
 
           1. Login to the switch using the switch credentials. Login prompt for Mellanox switch is as follows:
 
-             ```
+             ```text
              Welcome to minicom 2.7.1
 
              OPTIONS: I18n
@@ -218,7 +224,7 @@ If an administrator has the node booted with an operating system which will next
 
           1. Create blank/empty configuration file.
 
-             ``` 
+             ```bash
              sw-spine01 [standalone: master] > enable
              sw-spine01 [standalone: master] # configure terminal
              sw-spine01 [standalone: master] (config) # configuration new hpcm_blank1
@@ -230,13 +236,13 @@ If an administrator has the node booted with an operating system which will next
 
           1. Configure the switch settings.
 
-             ```
+             ```bash
              sw-spine01 [standalone: master] > enable
              sw-spine01 [standalone: master] # configure terminal
              ```
              Copy and paste network settings [from here](hpcm_switch_conf_spine_001_starlord.md) and save those configurations as "hpcm_blank1" using the following command:
 
-             ``` 
+             ```bash
              sw-spine01 [standalone: master] # configuration write
              ```
 
@@ -246,7 +252,7 @@ If an administrator has the node booted with an operating system which will next
 
           1. Access the leaf switch using minicom. Here we assume `/dev/ttyUSB3` is leaf switch.
 
-             ``` 
+             ```bash
              minicom -b 115200 -D /dev/ttyUSB1
              ```
 
@@ -254,7 +260,7 @@ If an administrator has the node booted with an operating system which will next
   
           1. Access the leaf switch using minicom. Here we assume `/dev/ttyUSB3` is leaf switch.
 
-	        ```
+	      ```text
               Welcome to minicom 2.7.1
 
               OPTIONS: I18n
@@ -295,12 +301,11 @@ If an administrator has the node booted with an operating system which will next
 
               %Warning : Default password for admin account should be changed to secure the system
               sw-leaf01#
-
-             ```
+	      ```
           
           1. Clean up the existing configuration and reboot the switch.
 
-             ```
+             ```bash
                sw-leaf01# delete startup-configuration
                Proceed to delete startup-configuration [confirm yes/no(default)]:yes
                sw-leaf01# reload
@@ -311,14 +316,14 @@ If an administrator has the node booted with an operating system which will next
 
           1. Re-login to the switch.
 
-             ```
+             ```bash
               sw-leaf01# configure terminal
               sw-leaf01(config)#
              ```
 
              Copy and paste the configuration [from here](hpcm_switch_conf_leaf_starlord.md) and save the configuration using the following command: 
 
-             ```
+             ```bash
               sw-leaf01(config)# write memory
              ```
 
@@ -328,7 +333,7 @@ If an administrator has the node booted with an operating system which will next
 
       Run the following command.
 
-      ```
+      ```bash
       /usr/lib/YaST2/startup/YaST2.Firstboot
       ```
 
@@ -386,13 +391,13 @@ If an administrator has the node booted with an operating system which will next
 
             Download the SLES15-SP4 ISO.
 
-            ```
+            ```bash
             wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/novell/sles/15sp4/x86_64/latest/SLE-15-SP4-Full-x86_64-GM-Media1.iso
             ```
 
             Add the `sles15 sp4` repo  using `cm repo` command.
 
-            ``` 
+            ```bash
             cm repo add SLE-15-SP4-Full-x86_64-GM-Media1.iso
             ```
 
@@ -400,25 +405,25 @@ If an administrator has the node booted with an operating system which will next
 
             Download `cm media iso`. 
 
-            ``` 
+            ```bash
             wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/sgi/dist.engr/test/stout727/iso-latest-sles15sp4-x86_64/cm-1.9-cd1-media-sles15sp4-x86_64.iso
             ```
 
             Add the cluster manager repo using `cm repo` command.
 
-            ``` 
+            ```bash
             cm repo add cm-1.9-cd1-media-sles15sp4-x86_64.iso
             ```
 
          1. List the repos.
 
-            ```
+            ```bash
             cm repo show
             ```
 
             Expected Output:
 
-            ```
+            ```text
             Cluster-Manager-1.9-sles15sp4-x86_64 : /opt/clmgr/repos/cm/Cluster-Manager-1.9-sles15sp4-x86_64
             SLE-15-SP4-Full-x86_64 : /opt/clmgr/repos/distro/sles15sp4-x86_64
             ```
@@ -427,14 +432,16 @@ If an administrator has the node booted with an operating system which will next
 
             Run the following commands and activate repos. 
 
-            ```
+            ```bash
             cm repo select SLE-15-SP4-Full-x86_64
             cm repo select Cluster-Manager-1.9-sles15sp4-x86_64
             ```
 
 
    1. Run configure-cluster command. 
-      1. ```
+      1. Run the following command:
+
+         ```bash
          configure-cluster
          ```
       1. Configuring the House network Interface.
@@ -493,7 +500,7 @@ If an administrator has the node booted with an operating system which will next
 
             ![alt text](../../img/install/common_installer_1.PNG)
 
-            Select Head Network and click Ok.
+            Select Head Network and click OK.
 
             ![alt text](../../img/install/common_installer_2.PNG)
 
@@ -567,7 +574,7 @@ If an administrator has the node booted with an operating system which will next
 
          1. Management Switch : Discovery of management switches has to be performed by manually creating configuration files. The management switch file should be in a specific format. Here is the example of switch configuration file:
                
-               ```
+               ```text
                [discover]
                temponame=mgmtsw0, mgmt_net_name=head, mgmt_net_macs="b8:59:9f:68:8a:00", mgmt_net_interfaces="eth0", transport=udpcast, redundant_mgmt_network=yes, net=head/head-bmc, type=spine, ice=yes, console_device=ttyS1, architecture=x86_64, discover_skip_switchconfig=yes, mgmt_net_ip=10.1.0.2
                temponame=mgmtsw1, mgmt_net_name=head, mgmt_net_macs="b8:59:9f:68:94:00", mgmt_net_interfaces="eth0", transport=udpcast, redundant_mgmt_network=yes, net=head/head-bmc, type=spine, ice=yes, console_device=ttyS1, architecture=x86_64, discover_skip_switchconfig=yes, mgmt_net_ip=10.1.0.3
@@ -576,26 +583,26 @@ If an administrator has the node booted with an operating system which will next
    
                Perform switch discovery.
 
-               ```
+               ```bash
                cm node add -c mswitch.conf
                ```
    
          1. For PDU : Create the PDU configuration file. Here is the example of a PSU in configuration file format. 
                
-               ```
+               ```text
                [discover]
                internal_name=pdu-x3000-001, mgmt_bmc_net_name=head-bmc, geolocation="cold isle 4 rack 1 B power",mgmt_bmc_net_macs=00:0a:9c:62:04:ee,hostname1=pdu-x3000-001, pdu_protocol="snmp/admn"
                ```
 
                Perform PDU discovery.
 
-               ```
+               ```bash
                cm node add -c pdus.conf
                ```
 
          1. For Fabric Switch: Use cm controller add to perform discovery. Add only River cabinent fabric switches
 
-            ```
+            ```bash
             cm controller add -c sw-hsn-x3000-001 -t external_switch -m 00:40:a6:82:f7:5f -u root -p initial0
             ```
 
@@ -603,7 +610,7 @@ If an administrator has the node booted with an operating system which will next
  
             For gigabyte server. 
 
-            ```
+            ```bash
             cm controller add -c SubRack001-cmc -t gigabyte -m  b4:2e:99:b8:da:03 -u root -p initial0
             ```
 
@@ -618,7 +625,7 @@ If an administrator has the node booted with an operating system which will next
          > - Ensure all the river components are powered on, dhcp is enabled on bmc and only one switch out of the available spine switch.
          >
          > - If there are multiple mellanox spine switches then there should be only 1 spine switch with active port connection to NCNs. On other switches, connections to NCNs should be disabled till all nodes have been booted with HPCM Images.
-         >  ```
+         >  ```bash
          >  ssh admin@<ip-addr>
          >  enable
          >  configure terminal
@@ -632,53 +639,60 @@ If an administrator has the node booted with an operating system which will next
             
             The management nodes, worker nodes, storage nodes, UANs and CNs can be auto discovered using the following command:
 
-            ```
+            ```bash
             cm node discover enable 
             ```
-            >__Note:__ If there are any intel nodes run below command
-            >```  
+
+            >__Note:__ If there are any intel nodes run the following command:
+            >
+            >```bash 
             >sed -i '226s/ipmitool lan print/ipmitool lan print 3/g' /opt/clmgr/tools/cm_pxe_status
             >```
-         1. Check the power status and pxe status.
-            > Note: Check all the river node BMC's are leased with an IP
 
-            Check power status of the nodes
-            ```
+         1. Check the power status and pxe status.
+
+            > Note: Verify if all the river node BMCs are leased with an IP.
+
+            Check the power status of nodes.
+
+            ```bash
             cm node discover status | grep BMC  > temp.txt
 		      for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power status; done
             ```
-            Check if all the nodes Bootorder set to pxe
-            ``` 
+
+            Check if all the node's bootorder is set to `pxe`.
+
+            ```bash
             for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 chassis bootdev; done
             ```
-            Set the Boot order to pxe and reboot the nodes
 
-            ```
+            Set the Boot order to `pxe` and reboot the nodes.
+
+            ```bash
             for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 chassis bootdev pxe; done
             for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power on; done
             for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power reset; done
             ```
 
+         1. Wait for the discovery process to detect desired hardware components, check the status of discovered hardware using the following command.
 
-         1. Wait for discovery process to detect desired hardware components check the status of discovered hardware using following command.
-
-            ```
+            ```bash
             cm node discover status
             ```
 
-            And wait till we get data of  the discovered nodes in "Detected server MAC info" section. For example, 
+            And wait till we get data of the discovered nodes in "Detected server MAC info" section. For example, 
 
             ![alt text](../../img/install/34.png)
 
-         1. Create node configuration  definition file.
+         1. Create node configuration definition file.
 
-            ```
+            ```bash
             cm node discover mkconfig -o "mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0" nodes.conf
             ```
 
             Example content of `nodes.conf`:
 
-            ```
+            ```text
             [discover]
             internal_name=service1, hostname1=node1, mgmt_bmc_net_macs=b4:2e:99:3b:70:88, mgmt_net_macs=b8:59:9f:1d:da:1e, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
             internal_name=service2, hostname1=node2, mgmt_bmc_net_macs=b4:2e:99:3b:70:04, mgmt_net_macs=b8:59:9f:34:89:26, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
@@ -696,7 +710,7 @@ If an administrator has the node booted with an operating system which will next
 
          1. Add discovered nodes, set image for the discovered nodes.
 
-            ```
+            ```bash
             cm node discover add nodes.conf
             cinstallman --assign-image --image sles15sp4 --kernel <kernel version> --node '*'
             cinstallman --set-rootfs tmpfs --node '*'
@@ -707,21 +721,23 @@ If an administrator has the node booted with an operating system which will next
 
          1. Stop the auto-discovery process and power on all nodes.
 
-            ```
+            ```bash
             cm node discover disable
             cm power status -n '*'
             cm power on -n '*'
             ```
-            __NOTE:__ Power on the nodes when 'cm power status -n '*'' lists all the nodes. if there is any errors rerun the command
+
+            __NOTE:__ Power on the nodes when 'cm power status -n '*'' lists all the nodes. if there are any errors rerun the command.
+
             1. Check the status of nodes.
 
-            ```
+            ```bash
             cm power status -n '*'
             ```
 
             Example output (expected):
 
-            ```
+            ```text
             node1        : BOOTED
             node2        : BOOTED
             node3        : BOOTED
@@ -742,61 +758,74 @@ If an administrator has the node booted with an operating system which will next
 	
 ## Seed File generation
 
-   Here's the stepwise procedure to generate seedfiles.
+    Here's the stepwise procedure to generate seedfiles.
 
    1. Generate Paddle File
-      To generate the paddle file using the Canu Validate tool, follow link [Validate SHCD](../../operations/network/management_network/validate_shcd.md)
+      To generate the paddle file using the Canu Validate tool, follow link [Validate SHCD](../../operations/network/management_network/validate_shcd.md).
+
       Example Command:
-      ```
+
+      ```bash
       canu validate shcd --shcd CrayInc-ShastaRiver-Groot-RevE12.xlsx --architecture V1 --tabs 40G_10G,NMN,HMN --corners I12,Q38,I13,Q21,J20,   U38 --json --out cabling.json
       ```
-   1. Store SHCD Data in CVT Database 
-      ```
+
+   1. Store SHCD Data in CVT Database.
+
+      ```bash
       cm cvt parse shcd --canu_json_file cabling.json
       ```
+
       Example output:
+
       ![store SHCD data](../../img/install/parse_shcd.PNG)
 
    1. Create [`cabinets.yaml`](../create_cabinets_yaml.md) (Manually).
 
-   1. Capture hardware inventory and generate seedfiles and paadlefile
+   1. Capture hardware inventory and generate seedfiles and paadlefile.
 
-      The following command stores the inventory of nodes and switches (fabric and management) in the database and generates the seedfiles and paadlefile
+      The following command stores the inventory of nodes and switches (fabric and management) in the database and generates the seedfiles and paadlefile:
 
-      ```
+      ```bash
       cnodes | grep node >>nodelist
       pdsh -w^nodelist /opt/clmgr/scripts/cluster-config-verification-tool/create_bond0.sh
       cm cvt config create -t all --mgmt_username 'uname' --mgmt_password 'passwd' --architecture '<architecture>'
       ```
+
       __NOTE:__ The seedfiles and paddle file will be generated in the present working directory.
 
    1. Save the generated seed files (`switch_metadata.csv`, `application_node_config.yaml`, `hmn_connections.json`, `ncn_metadata.csv`), paddlefile (`cvt-ccj.json`) and `cvt.json`. The seed files (or configuration payload files) and paddlefile will be used later during the CSM installation process so they can be saved/backed up in a persistent storage.
 
 ## Compare the SHCD Data with CVT Inventory Data(Optional)
 
-   1. Display the list of generated snapshot IDs
-      ```
+   1. Display the list of generated snapshot IDs.
+
+      ```bash
       cm cvt shcd compare --list
       ```
+
       Sample Output:
       ![List CVT inventory](../../img/install/list_inventory.png)
 
-   1. Compare the CVT and SHCD snapshots
+   1. Compare the CVT and SHCD snapshots.
 
-      ```
+      ```bash
       cm cvt shcd compare --shcd_id c4b166df-7678-4484-8762-87104de8d117 --cvt_id 84e208e3-7b0d-4ce5-9a03-95bee60714d8
       ```
+
       In the previous command, `--shcd_id` accepts the snapshot ID created while inserting into SHCD_DATA table and `--cvt_id` accepts the snapshot ID created while inserting into Management Inventory tables.
       
       Sample Output:
       ![Compare SHCD data](../../img/install/compare_shcd-cvt.png)
 
-      In the previous output, wherever there is a difference in the data found, the left hand side is the data from SHCD and the right hand side is the data from CVT (SHCD => CVT). Under the Result column `Found in CVT Data` implies the data is present only in the CVT inventory and not found in the SHCD data, `Not Found in CVT Data` implies the data is present only in the SHCD data and not found in the CVT inventory. And the Difference Found is resulted along with the display of the mismatch found between both the data.
+      In the previous output, wherever there is a difference in the data found, the left hand side is the data from SHCD and the right hand side is the data from CVT (SHCD => CVT). 
+      Under the Result column `Found in CVT Data` implies the data is present only in the CVT inventory and not found in the SHCD data, `Not Found in CVT Data` implies the data is present only in the SHCD data and not found in the CVT inventory. 
+      And the Difference Found is resulted along with the display of the mismatch found between both the data.
 
 ## Stop HPCM services
 
 Run the following commands to stop HPCM services:
-   ```
+
+   ```bash
    systemctl stop clmgr-power
    systemctl stop grafana-server.service
    systemctl stop aiops-mlflow.service
@@ -806,7 +835,7 @@ Run the following commands to stop HPCM services:
 
 1. If the amount of memory on the booted system is low, then cleanup step can be performed by removing the downloaded ISO files and deleting the images.
 
-   ```
+   ```bash
    rm *.iso 
    cm image delete -i sles15sp4
    cm repo del Cluster-Manager-1.9-sles15sp4-x86_64
