@@ -169,17 +169,17 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
 
 1. (`ncn-mw#`) Verify that a backup of the Keycloak Postgres data exists.
 
-   1. Verify a completed backup exists.
+   1. List the Postgres logical backups by date.
 
       ```bash
-      cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("keycloak"))'
+      cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/keycloak")) | "\(.LastModified) \(.Key)"'
       ```
 
       Example output:
 
       ```text
-      keycloak-postgres-2022-09-14T02:10:05.manifest
-      keycloak-postgres-2022-09-14T02:10:05.psql
+      2023-03-23T02:10:11.158000+00:00 spilo/keycloak-postgres/ed8f6691-9da7-4662-aa67-9c786fa961ee/logical_backups/1679537409.sql.gz
+      2023-03-24T02:10:12.689000+00:00 spilo/keycloak-postgres/ed8f6691-9da7-4662-aa67-9c786fa961ee/logical_backups/1679623811.sql.gz
       ```
 
 1. (`ncn-mw#`) Uninstall the chart and wait for the resources to terminate.
@@ -292,17 +292,17 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
 
 1. (`ncn-mw#`) Verify that a backup of the Spire Postgres data exists.
 
-   1. Verify a completed backup exists.
+   1. List the Postgres logical backups by date.
 
       ```bash
-      cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("spire"))'
+      cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/spire")) | "\(.LastModified) \(.Key)"'
       ```
 
       Example output:
 
       ```text
-      spire-postgres-2022-09-14T03:10:04.manifest
-      spire-postgres-2022-09-14T03:10:04.psql
+      2023-03-23T16:00:10.360000+00:00 spilo/spire-postgres/f5d7952e-b049-4bcf-ba7f-6357898bd617/logical_backups/1679676609.sql.gz
+      2023-03-24T16:00:11.010220+00:00 spilo/spire-postgres/f5d7952e-b049-4bcf-ba7f-6357898bd617/logical_backups/1679677088.sql.gz
       ```
 
 1. (`ncn-mw#`) Uninstall the chart and wait for the resources to terminate.
