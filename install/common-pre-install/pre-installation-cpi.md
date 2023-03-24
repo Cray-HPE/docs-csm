@@ -15,7 +15,7 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [Customize `system_config.yaml`](#32-customize-system_configyaml)
     1. [Run CSI](#33-run-csi)
     1. [Prepare Site Init](#34-prepare-site-init)
-    1. [Configure Management Network](#35-configure-management-network) 
+    1. [Configure Management Network](#35-configure-management-network)
     1. [Initialize the LiveCD](#36-initialize-the-livecd)
 1. [Next topic](#next-topic)
 
@@ -24,7 +24,7 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
 Before proceeding, ensure that other NCNs are powered off and their BMC's IP source is set to DHCP and external connectivity is working.
 
 DHCP and external connectivity is required to download csm tar ball.
- 
+
 > **NOTE:** Each step denotes where its commands must run; `external#` refers to a server that is **not** the Cray, whereas `pit# or gamora#` refers to the LiveCD itself.
 
 ### 1.1 Setup site network
@@ -66,25 +66,26 @@ On the first login, configure and verify the sitelink, DNS and gateway IP addres
       ```bash
       SYSTEM_NAME=<system name>
       ```
-      
+
    1. Set network device files.
 
         1. Download and extract the contents of network file template tarball from [here](files/network_template.tar.gz), extract the contents.
-         
+
          ```bash
             tar -xzvf network_template.tar.gz
          ```
-         
+
         1. Delete existing network settings and copy the extracted files  to `/etc/sysconfig/network/`
 
          ```bash
             rm -rf /etc/sysconfig/network/*
             cp -r $PWD/network/* /etc/sysconfig/network/
          ```
-    
+
    1. (`pit#`) Run the `csi-setup-lan0.sh` script to set up the site link and set the hostname.
 
       > **NOTE:**
+      >
       > - Use `ipmi sol` session or `conman` session while performing this step as ssh session may disconnect.
       > - All of the `/root/bin/csi-*` scripts can be run without parameters to display usage statements.
       > - The hostname is auto-resolved based on reverse DNS.
@@ -99,7 +100,7 @@ On the first login, configure and verify the sitelink, DNS and gateway IP addres
    wicked ifstatus --verbose lan0
    ```
 
-   > **NOTE:** 
+   > **NOTE:**
    >
    > - The output from the above command must say `leases: ipv4 static granted`.
    >
@@ -107,22 +108,23 @@ On the first login, configure and verify the sitelink, DNS and gateway IP addres
 
 ### 1.2 Prepare the data partition
 
-1. Populate the `/etc/fstab` as - 
+1. Populate the `/etc/fstab` as follows:
 
-   ```
+   ```bash
     LABEL=PITDATA  /var/www/ephemeral               ext4      noauto,noatime                0 2
     tmpfs          /var/lib/containers/storage      tmpfs     auto,nodev,nosuid,size=64g     0 0
-   ``` 
-   Ensure that `tmpfs` is large enough as ~31GB data will be placed in `/var/lib/containers/storage` during install csm services step. Incase `tmpfs` is small, then use -
-
    ```
+
+   Ensure that `tmpfs` is large enough as almost 31 GB of data will be placed in `/var/lib/containers/storage` during install csm services step. Incase `tmpfs` is small, then use the following command:
+
+   ```bash
     LABEL=PITDATA  /var/www/ephemeral               ext4      noauto,noatime                0 2
     /dev/sda1          /var/lib/containers/storage      ext4     defaults     0 0
-   ``` 
-       
+   ```
+
 1. Create following directories - 
 
-   ```
+   ```bash
      mkdir -p /var/www/ephemeral
      mkdir -p /var/lib/containers/storage
      mount -a
@@ -215,7 +217,7 @@ These variables will need to be set for many procedures within the CSM installat
    TIMESTAMP=20221013160829
    EOF
    ```
-   
+
 1. (`pit#`) Print information about the booted PIT image for logging purposes.
 
    Having this information in the typescript can be helpful if problems are encountered during the install.
@@ -277,6 +279,7 @@ These variables will need to be set for many procedures within the CSM installat
       ```bash
       scp "<external-server>:/<path>/csm-${CSM_RELEASE}.tar.gz" /var/www/ephemeral/
       ```
+
 ### 2.2 Import tarball assets
 
 If resuming at this stage, the `CSM_RELEASE` and `PITDATA` variables are already set
@@ -306,12 +309,12 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
        ```bash
        zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks update -y cray-site-init
-       ``` 
+       ```
 
    1. Install `iuf-cli`.
-       
+
        > **NOTE** This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../../operations/iuf/IUF.md).
-       
+
        ```bash
        zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y iuf-cli
        ```
@@ -326,7 +329,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
 1. (`pit#`) Install/update the RPMs and configuration files necessary for CSM installation
 
-   1. Install following rpms -
+   1. Install the required rpms using the following command:
+
       ```bash
           rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP3/x86_64/product/python3-simplejson-3.17.2-1.10.x86_64.rpm
           rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/python3-jmespath-0.9.3-1.21.noarch.rpm
@@ -343,13 +347,13 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
       Download the tarball from [here](files/dhcp_http.tar.gz) and extract in present working directory.
 
-      ```
+      ```bash
        tar -xf dhcp_http.tar.gz
       ``` 
 
    1. Update the `apache2` and `dnsmasq` configuration as follows:
 
-     ```
+     ```bash
        cp -r dnsmasq/dnsmasq.conf  /etc/dnsmasq.conf
        cp -r apache2/* /etc/apache2/ 
        cp -r  conman/conman.conf /etc/conman.conf
@@ -359,9 +363,9 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
      (Optional) uncomment `tftp_secure` entry in `dnsmasq.conf` file.
 
-   1. Stop following services -
+   1. Stop the following services: `clmgr-power`, `dhcpd`, and `named`.
 
-     ```
+     ```bash
        systemctl  stop clmgr-power 
        systemctl  stop dhcpd  
        systemctl  stop named
@@ -370,9 +374,10 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    1. If `ping dcldap3.us.cray.com` does not work then add following entry in `/etc/hosts`
 
-      ```
+      ```bash
          172.30.12.37    dcldap3.us.cray.com
       ```
+
 1. (`pit#`) Get the artifact versions.
 
    ```bash
@@ -434,7 +439,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    ```
 
    Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
-   
+
    ```text
    = PIT Identification = COPY/CUT START =======================================
    VERSION=1.6.0
@@ -481,22 +486,24 @@ Run the following steps before starting any of the system configuration procedur
 1. Verify if `cabinets.yaml` config file has not been created (manually).
 
    If `cabinets.yaml` config file has not been created, create the `cabinets.yaml` using the following step, else skip the following step.
-      
+
       (`pit#`)
       1. Create remaining seedfiles,  unless they already exist from a previous installation.
          - [Create `cabinets.yaml`](../create_cabinets_yaml.md)
-   
+
 1. (`pit#`) Assuming all seedfiles are under `$HOME/seedfiles` directory, copy the generated files under `${PITDATA}/prep` directory.
+
    ```bash
    cp $HOME/seedfiles/* "${PITDATA}/prep"
    ```
+
 1. (`pit#`) Confirm that the following files exist.
 
    ```bash
    ls -l "${PITDATA}"/prep/{application_node_config.yaml,cabinets.yaml,hmn_connections.json,ncn_metadata.csv,switch_metadata.csv}
    ```
 
-   Expected output may look like:
+   Expected output look similar to the following example:
 
    ```text
    -rw-r--r-- 1 root root  146 Jun  6 00:12 /var/www/ephemeral/prep/application_node_config.yaml
@@ -540,8 +547,10 @@ Run the following steps before starting any of the system configuration procedur
    ```bash
    csi config init
    ```
+
    Expected Output:
-   ```
+
+   ```text
         2022/09/29 06:40:15 Using config file: /var/www/ephemeral/prep/system_config.yaml
         2022/09/29 06:40:15 Using application node config: /var/www/ephemeral/prep/application_node_config.yaml
         2022/09/29 06:40:15 SLS Cabinet Map
@@ -607,7 +616,7 @@ Run the following steps before starting any of the system configuration procedur
 
 Follow the [Prepare Site Init](../prepare_site_init.md) procedure.
 
-### 3.5 Configure Management Network 
+### 3.5 Configure Management Network
 
 Follow  [Configure management network switches](README.md#6-configure-management-network-switches).
 
@@ -617,19 +626,19 @@ Follow  [Configure management network switches](README.md#6-configure-management
 
 > **NOTE:** If starting an installation at this point, ensure to copy the previous `prep` directory back onto the system.
 
-
 1. (`pit#`) Initialize the PIT.
 
    >  **NOTE:** This step restarts network interface , so this step can be performed from ipmi sol / conman session.
 
    The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
-   
+
    ```bash
    /root/bin/pit-init.sh
    ```
 
-1.  Setup `tftp` boot  directory and  restart `dnsmasq`.
-    ```
+1. Setup `tftp` boot  directory and  restart `dnsmasq`.
+
+    ```bash
      mkdir -p /srv/tftpboot/boot/
      cp -r /var/www/boot/* /srv/tftpboot/boot/
      systemctl restart dnsmasq
@@ -658,8 +667,9 @@ Follow  [Configure management network switches](README.md#6-configure-management
    cd $HOME && /root/bin/set-sqfs-links.sh
    ```
 
-   Expected Output - 
-   ```
+   Expected Output:
+
+   ```text
         Resolving images to boot ...
         Images resolved
         Kubernetes Boot Selection:
@@ -680,31 +690,37 @@ Follow  [Configure management network switches](README.md#6-configure-management
         /var/www is ready.
    ```
 
-   Goto `/var/www` and create additional symlinks - 
+   Goto `/var/www` and create additional symlinks as follows:
 
-   ``` 
+   ```bash
    cp -r /var/www/ncn-* /srv/tftpboot/
    mkdir /srv/tftpboot/ephemeral
    cp -r /var/www/ephemeral/data/ /srv/tftpboot/ephemeral/
    ```
 
-   Start conman service
-   ```
+   Start conman service.
+
+   ```bash
    systemctl start conman.service
    ```
 
 1. (`pit#`) Verify that the LiveCD is ready by running the preflight tests.
 
    Run the following command to make the kubectl binary executable:
-   ```
+
+   ```bash
    chmod +x /usr/bin/kubectl
    ```
-   Run preflight tests
+
+   Run preflight tests.
+
    ```bash
    csi pit validate --livecd-preflight
    ```
-   Expected Output - 
-   ```
+
+   Expected Output:
+
+   ```text
         Running LiveCD preflight checks (may take a few minutes to complete)...
         Writing full output to /opt/cray/tests/install/logs/print_goss_json_results/20220929_101501.528062-22314-Z7D4bWt9/out
 
@@ -718,9 +734,8 @@ Follow  [Configure management network switches](README.md#6-configure-management
         PASSED
    ```
 
-   If any tests fail, they need to be investigated. After actions have been taken to rectify the tests
-   (for example, editing configuration or CSI inputs), then restart from the beginning of the
-   [Initialize the LiveCD](#35-initialize-the-livecd) procedure.
+   If any tests fail, they need to be investigated.
+   After actions have been taken to rectify the tests (for example, editing configuration or CSI inputs), then restart from the beginning of the [Initialize the LiveCD](#36-initialize-the-livecd) procedure.
 
 1. Save the `prep` directory for re-use.
 
@@ -729,19 +744,26 @@ Follow  [Configure management network switches](README.md#6-configure-management
 
 ## TBD
 
-1. Grant necessary privileges by running the following command
+1. Grant necessary privileges by running the following command:
+
    ```
    sed -i 's/podman run/podman run --privileged/g' /usr/share/doc/csm/install/scripts/csm_services/steps/1.initialize_bootstrap_registry.yaml
    ```
+
 1. Check if there are any processes attached to port 5000 by running the following command:
+
    ```
    netstat -tlnp | grep 5000
    ```
+
    If there is a process attached to port 5000, kill it using the kill command.
+
    ```
    kill -9 <pid>
    ```
-   Restart Nexus 
+
+   Restart the Nexus.
+
    ```
    systemctl restart nexus.service
    ```
