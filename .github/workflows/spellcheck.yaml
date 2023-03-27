@@ -21,25 +21,27 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Check Links
+name: Markdown spellcheck
 
 on:
   pull_request:
 
 jobs:
-  markdown-link-check:
+  spellcheck:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v18.7
+      uses: tj-actions/changed-files@v35
       with:
         files: "**/*.md"
         files_ignore: ".github/**/*"
 
-    - uses: docker://ghcr.io/tcort/markdown-link-check:3.9.3
+    - uses: docker://tmaier/markdown-spellcheck:latest
+      env:
+          FORCE_COLOR: "1"
       with:
-        args: "--config .github/config/markdown_link.json ${{ steps.changed-files.outputs.all_changed_files }}"
-
+        entrypoint: mdspell
+        args: ${{ steps.changed-files.outputs.all_changed_files }} -r -a -n
