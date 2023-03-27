@@ -34,6 +34,11 @@ function move-rbd-mount {
     if mountpoint ${upgrade_dir} > /dev/null 2>&1; then
       echo "Unmounting ${upgrade_dir}..."
       umount ${upgrade_dir}
+      if [[ "$?" -ne 0 ]]; then
+        echo "ERROR: CSM rbd device failed to unmount! The above error should be"
+        echo "       investigated/addressed, then re-run this script."
+        exit 1
+      fi
     else
       echo "${upgrade_dir} is not mounted, no need to unmount."
     fi
@@ -106,6 +111,7 @@ function create-admin-tools-cephfs-share {
   if ! grep "mds_namespace=admin-tools" ${fstab} > /dev/null; then
     echo "Adding fstab entry for cephfs share..."
     mon_ips=$(ceph mon dump -f json-pretty 2>/dev/null|jq -r '[.mons[].public_addrs.addrvec[] | select(.type == "v1") | .addr] | join(",")')
+    echo "" >> ${fstab}
     echo "${mon_ips}:/ /etc/cray/upgrade/csm ceph _netdev,name=admin-tools,relatime,defaults,mount_timeout=60,noauto,mds_namespace=admin-tools 1 1" >> ${fstab}
   else
     echo "fstab entry for cephfs already present..."
