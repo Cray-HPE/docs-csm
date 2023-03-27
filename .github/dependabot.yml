@@ -1,10 +1,6 @@
 # MIT License
 #
-<<<<<<<< HEAD:scripts/operations/nexus/repo_templates/embedded-repository.yaml
-# (C) Copyright [2023] Hewlett Packard Enterprise Development LP
-========
 # (C) Copyright 2023 Hewlett Packard Enterprise Development LP
->>>>>>>> 6b3ee47a7d4 (Auto-update GitHub Action Plugins (#3517)):.github/dependabot.yml
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,29 +19,6 @@
 # OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
-<<<<<<<< HEAD:scripts/operations/nexus/repo_templates/embedded-repository.yaml
----
-cleanup: null
-format: raw
-name: csm-0.0.0-embedded
-online: true
-storage:
-  blobStoreName: csm
-  strictContentTypeValidation: false
-  writePolicy: ALLOW_ONCE
-type: hosted
----
-format: raw
-group:
-  memberNames:
-  - csm-0.0.0-embedded
-name: csm-embedded
-online: true
-storage:
-  blobStoreName: csm
-  strictContentTypeValidation: false
-type: group
-========
 #
 # To get started with Dependabot version updates, you'll need to specify which
 # package ecosystems to update and where the package manifests are located.
@@ -63,4 +36,3 @@ updates:
     labels:
       - "github_actions"
       - "dependencies"
->>>>>>>> 6b3ee47a7d4 (Auto-update GitHub Action Plugins (#3517)):.github/dependabot.yml
