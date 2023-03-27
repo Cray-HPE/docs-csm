@@ -21,28 +21,24 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Check Spelling
-
+name: shellcheck
 on:
   pull_request:
 
 jobs:
-  markdown-spell-check:
+  shellcheck:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v18.7
+      uses: tj-actions/changed-files@v35
       with:
-        files: "**/*.md"
+        files: "**/*.sh"
         files_ignore: ".github/**/*"
 
-    - uses: docker://tmaier/markdown-spellcheck:latest
-      id: markdown-spellcheck
-      env:
-          FORCE_COLOR: "1"
+    - uses: docker://koalaman/shellcheck:stable
+      if: ${{ steps.changed-files.outputs.all_changed_files }}
       with:
-        entrypoint: mdspell
-        args: ${{ steps.changed-files.outputs.all_changed_files }} -r -a -n
+        args: --severity=warning --color=always ${{ steps.changed-files.outputs.all_changed_files }}

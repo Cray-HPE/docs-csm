@@ -21,7 +21,29 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-exclude: 
-  - main
-  - release/*
-delete_closed_pr: true
+name: Markdown stylecheck
+
+on:
+  pull_request:
+
+jobs:
+  style-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Get changed files
+      id: changed-files
+      uses: tj-actions/changed-files@v35
+      with:
+        files: "**/*.md"
+        files_ignore: ".github/**/*"
+
+    - uses: docker://ghcr.io/igorshubovych/markdownlint-cli:v0.31.1
+      with:
+        args: "--config .github/config/markdown_style.yaml ${{ steps.changed-files.outputs.all_changed_files }}"
+
+    - name: Check for illegal ASCII
+      id: illegal-ascii
+      run: |
+        ./runLint.sh
