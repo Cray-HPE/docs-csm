@@ -284,19 +284,19 @@ Refer to the note at the end of this section for more details.
    kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
    ```
 
-1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.spire.cray-service.sqlCluster.resources`.
+1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.spire.cray-postgresql.sqlCluster.resources`.
 
    ```bash
-   yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.cpu' --style=double '4'
-   yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.memory' '4Gi'
-   yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.cpu' --style=double '8'
-   yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.memory' '8Gi'
+   yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-postgresql.sqlCluster.resources.requests.cpu' --style=double '4'
+   yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-postgresql.sqlCluster.resources.requests.memory' '4Gi'
+   yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-postgresql.sqlCluster.resources.limits.cpu' --style=double '8'
+   yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-postgresql.sqlCluster.resources.limits.memory' '8Gi'
    ```
 
 1. (`ncn#`) Check that the customization file has been updated.
 
    ```bash
-   yq read customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources'
+   yq read customizations.yaml 'spec.kubernetes.services.spire.cray-postgresql.sqlCluster.resources'
    ```
 
    Example output:
@@ -338,7 +338,7 @@ Refer to the note at the end of this section for more details.
 1. (`ncn#`) Check that the manifest file contains the desired resource settings.
 
    ```bash
-   yq read manifest.yaml 'spec.charts.(name==spire).values.cray-service.sqlCluster.resources'
+   yq read manifest.yaml 'spec.charts.(name==spire).values.cray-postgresql.sqlCluster.resources'
    ```
 
    Example output:
@@ -402,17 +402,17 @@ the same procedure as above can be used with the following changes:
 * `cray-sls-postgres`
 
   * Get the current cached manifest ConfigMap from: `loftsman-core-services`
-  * Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.resources`
+  * Resource path: `spec.kubernetes.services.cray-hms-sls.cray-postgresql.sqlCluster.resources`
 
 * `cray-smd-postgres`
 
   * Get the current cached manifest ConfigMap from: `loftsman-core-services`
-  * Resource path: `spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.resources`
+  * Resource path: `spec.kubernetes.services.cray-hms-smd.cray-postgresql.sqlCluster.resources`
 
 * `gitea-vcs-postgres`
 
   * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
-  * Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.resources`
+  * Resource path: `spec.kubernetes.services.gitea.cray-postgresql.sqlCluster.resources`
 
 ### Scale `cray-bss` service
 
@@ -540,16 +540,16 @@ Refer to the note at the end of this section for more details.
    kubectl get cm -n loftsman loftsman-core-services -o jsonpath='{.data.manifest\.yaml}'  > core-services.yaml
    ```
 
-1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.volumeSize`.
+1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-hms-smd.cray-postgresql.sqlCluster.volumeSize`.
 
    ```bash
-   yq write -i customizations.yaml 'spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.volumeSize' '100Gi'
+   yq write -i customizations.yaml 'spec.kubernetes.services.cray-hms-smd.cray-postgresql.sqlCluster.volumeSize' '100Gi'
    ```
 
 1. (`ncn#`) Check that the customization file has been updated.
 
    ```bash
-   yq read customizations.yaml 'spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.volumeSize'
+   yq read customizations.yaml 'spec.kubernetes.services.cray-hms-smd.cray-postgresql.sqlCluster.volumeSize'
 
    100Gi
    ```
@@ -582,7 +582,7 @@ Refer to the note at the end of this section for more details.
 1. (`ncn#`) Check that the manifest file contains the desired volume size setting.
 
    ```bash
-   yq read manifest.yaml 'spec.charts.(name==cray-hms-smd).values.cray-service.sqlCluster.volumeSize'
+   yq read manifest.yaml 'spec.charts.(name==cray-hms-smd).values.cray-postgresql.sqlCluster.volumeSize'
 
    100Gi
    ```
@@ -625,17 +625,17 @@ Refer to the note at the end of this section for more details.
 * `cray-sls-postgres`
 
   * Get the current cached manifest ConfigMap from: `loftsman-core-services`
-  * Resource path: `spec.kubernetes.services.cray-hms-sls.cray-service.sqlCluster.volumeSize`
+  * Resource path: `spec.kubernetes.services.cray-hms-sls.cray-postgresql.sqlCluster.volumeSize`
 
 * `gitea-vcs-postgres`
 
   * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
-  * Resource path: `spec.kubernetes.services.gitea.cray-service.sqlCluster.volumeSize`
+  * Resource path: `spec.kubernetes.services.gitea.cray-postgresql.sqlCluster.volumeSize`
 
 * `spire-postgres`
 
   * Get the current cached manifest ConfigMap from: `loftsman-sysmgmt`
-  * Resource path: `spec.kubernetes.services.spire.cray-service.sqlCluster.volumeSize`
+  * Resource path: `spec.kubernetes.services.spire.cray-postgresql.sqlCluster.volumeSize`
 
 ### Prometheus PVC resize
 
