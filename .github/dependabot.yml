@@ -1,0 +1,66 @@
+# MIT License
+#
+<<<<<<<< HEAD:scripts/operations/nexus/repo_templates/embedded-repository.yaml
+# (C) Copyright [2023] Hewlett Packard Enterprise Development LP
+========
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+>>>>>>>> 6b3ee47a7d4 (Auto-update GitHub Action Plugins (#3517)):.github/dependabot.yml
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+<<<<<<<< HEAD:scripts/operations/nexus/repo_templates/embedded-repository.yaml
+---
+cleanup: null
+format: raw
+name: csm-0.0.0-embedded
+online: true
+storage:
+  blobStoreName: csm
+  strictContentTypeValidation: false
+  writePolicy: ALLOW_ONCE
+type: hosted
+---
+format: raw
+group:
+  memberNames:
+  - csm-0.0.0-embedded
+name: csm-embedded
+online: true
+storage:
+  blobStoreName: csm
+  strictContentTypeValidation: false
+type: group
+========
+#
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    # Look for `.github/workflows` in the `root` directory
+    directory: "/"
+    # Check for updates once a week
+    schedule:
+      interval: "weekly"
+    labels:
+      - "github_actions"
+      - "dependencies"
+>>>>>>>> 6b3ee47a7d4 (Auto-update GitHub Action Plugins (#3517)):.github/dependabot.yml
