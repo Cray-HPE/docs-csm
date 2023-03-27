@@ -702,7 +702,7 @@ the cluster and operator.
     NAMESPACE=services
     ```
 
-1. (`ncn-mw#`) Scale the service to 0.
+1. (`ncn-mw#`) Scale the service to 0. (for different services this may be a `statefulset` instead of a `deployment`).
 
     ```bash
     kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=0
@@ -718,7 +718,7 @@ the cluster and operator.
     done
     ```
 
-1. (`ncn-mw#`) Scale the service back to 1 (for different services this may be to 3).
+1. (`ncn-mw#`) Scale the service back to 1 (for different services this may be `--replicas=3`).
 
     ```bash
     kubectl scale deployment ${CLIENT} -n ${NAMESPACE} --replicas=1
