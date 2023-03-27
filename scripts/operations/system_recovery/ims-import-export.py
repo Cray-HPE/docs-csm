@@ -459,7 +459,7 @@ def import_ims_recipe(recipe, recipes_path):
             result = json.loads(subprocess.check_output(command))
             LOGGER.debug(result)
 
-            return new_recipe['id']
+            return new_recipe['id'], new_recipe_link_etag
 
     except ImsImportExportRecoverableError:
         # TODO
@@ -467,18 +467,21 @@ def import_ims_recipe(recipe, recipes_path):
     except subprocess.CalledProcessError as call_proc_exc:
         LOGGER.warning(f'An error was encountered while importing IMS image {recipe["id"]}.', exc_info=call_proc_exc)
 
-    return None
+    return None, None
 
 
 def import_ims_recipes(args):
     def _import_v1_0_recipes(recipes):
-
         for recipe in recipes:
-            new_recipe_id = import_ims_recipe(recipe, recipes_path)
+            old_recipe_etag = recipe['link']['etag']
+            new_recipe_id, new_recipe_etag = import_ims_recipe(recipe, recipes_path)
             if new_recipe_id and new_recipe_id != recipe['id']:
                 imported_recipes[recipe['id']] = new_recipe_id
+                if old_recipe_etag and new_recipe_etag != old_recipe_etag:
+                    imported_recipe_etags[old_recipe_etag] = new_recipe_etag
 
     imported_recipes = {}
+    imported_recipe_etags = {}
     LOGGER.info(f'Importing recipes')
     recipes_path = path.join(args.import_export_root, 'recipes')
     with open(path.join(args.import_export_root, 'recipes.json')) as infile:
@@ -487,7 +490,7 @@ def import_ims_recipes(args):
             '1.0': _import_v1_0_recipes
         }.get(import_json['version'])(import_json['records'])
 
-    return imported_recipes
+    return imported_recipes, imported_recipe_etags
 
 
 def image_exists(image):
@@ -602,7 +605,7 @@ def import_ims_image(image, images_path):
                 result = json.loads(subprocess.check_output(command))
                 LOGGER.debug(result)
 
-                return new_image['id']
+                return new_image['id'], new_image_manifest_json_link_etag
             finally:
                 os.remove(tmp_manifest_path)
 
@@ -612,17 +615,21 @@ def import_ims_image(image, images_path):
     except subprocess.CalledProcessError as call_proc_exc:
         LOGGER.warning(f'An error was encountered while importing IMS image {image["id"]}.', exc_info=call_proc_exc)
 
-    return None
+    return None, None
 
 
 def import_ims_images(args):
     def _import_v1_0_images(images):
         for image in images:
-            new_image_id = import_ims_image(image, images_path)
+            old_image_etag = image['link']['etag']
+            new_image_id, new_image_etag = import_ims_image(image, images_path)
             if new_image_id and new_image_id != image['id']:
                 imported_images[image['id']] = new_image_id
+                if old_image_etag and new_image_etag != old_image_etag:
+                    imported_image_etags[old_image_etag] = new_image_etag
 
     imported_images = {}
+    imported_image_etags = {}
     LOGGER.info(f'Importing images')
     images_path = path.join(args.import_export_root, 'images')
     with open(path.join(args.import_export_root, 'images.json')) as infile:
@@ -631,33 +638,41 @@ def import_ims_images(args):
             '1.0': _import_v1_0_images
         }.get(import_json['version'])(import_json['records'])
 
-    return imported_images
+    return imported_images, imported_image_etags
 
 
 def import_ims_artifacts(args):
     try:
-        recipe_map = import_ims_recipes(args)
-        image_map = import_ims_images(args)
+
+        recipe_map, recipe_etag_map = import_ims_recipes(args)
+        image_id_map, image_etag_map = import_ims_images(args)
+
+        etag_map = recipe_etag_map
+        etag_map.update(image_etag_map)
 
         for old_recipe_id, new_recipe_id in recipe_map.items():
             LOGGER.info(f'The IMS recipe {old_recipe_id} was imported as {new_recipe_id}')
 
-        for old_image_id, new_image_id in image_map.items():
+        for old_image_id, new_image_id in image_id_map.items():
             LOGGER.info(f'The IMS image {old_image_id} was imported as {new_image_id}')
 
-        # Record mappings of old IMS IDs to new ones
+        for old_etag, new_etag in etag_map.items():
+            LOGGER.info(f'The S3 artifact with etag {old_etag} was imported with etag {new_etag}')
+
+        # Record mappings of old IMS IDs and S3 etags to new ones
         id_map_file = path.join(os.getcwd(), f'ims-id-maps-post-import-{uuid.uuid4().hex}.json')
         with open(id_map_file, 'w') as outfile:
             json.dump(
                 {
-                    'timestamp': get_timestamp_string(),
+                    'etag_map': etag_map,
                     'id_maps': {
-                        "images": image_map,
+                        "images": image_id_map,
                         "recipes": recipe_map
-                    }
+                    },
+                    'timestamp': get_timestamp_string()
                 },
                 outfile)
-        LOGGER.info(f'Recorded mapping from old IMS image and recipe IDs to new IDs in {id_map_file}')
+        LOGGER.info(f'Recorded mapping from old to new IMS IDs and S3 etags in {id_map_file}')
 
     except ImsImportExportBaseError as ims_exc:
         LOGGER.warning('Error importing IMS data', exc_info=ims_exc)
