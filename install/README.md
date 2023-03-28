@@ -1,23 +1,39 @@
 # Cray System Management Install
 
 This page will guide an administrator through installing Cray System Management (CSM) on an
-HPE Cray EX system.
+HPE Cray EX system. Fresh-installations on bare-metal or re-installations of CSM must follow
+this guide in order.
 
-The CSM services provide essential software infrastructure including the API gateway
-and many micro-services with REST APIs for managing the system.
+## Bifurcated CAN notice
 
-Fresh-installations on bare-metal or re-installations of CSM must follow this guide in procedural
-order.
+The Bifurcated CAN (BICAN) is a major feature introduced in CSM 1.2. The BICAN is designed to
+separate administrative network traffic from user network traffic. More information can be found
+on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
+Review the BICAN summary before continuing with the CSM install. For detailed BICAN documentation,
+see [BICAN technical details](../operations/network/management_network/bican_technical_details.md).
 
-After completing an installation, the CSM product's installed state will need to be validated
-with various health checks before operational tasks or other product installs (such as
-Slingshot) can commence.
+## High-level overview of CSM install
 
-Introduced in CSM 1.2, a major feature of CSM is the Bifurcated CAN (BICAN).
-The BICAN is designed to separate administrative network traffic from user network traffic.
-More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
-Review the BICAN summary before continuing with the CSM install.
-For detailed BICAN documentation, see [BICAN technical details](../operations/network/management_network/bican_technical_details.md).
+In the [Pre-installation](#pre-installation) section of the install, information about the HPE Cray
+EX system and the site is used to prepare the configuration payload. An initial node called the PIT
+node is then set up to bootstrap the installation process. It is called the PIT node because the
+Pre-Install Toolkit is installed there. The management network switches are also configured in this
+section.
+
+In the [Installation](#installation) section of the install, the other management nodes are deployed
+with an operating system and the software required to create a Kubernetes cluster utilizing Ceph
+storage. The CSM services are then deployed in the Kubernetes cluster to provide essential software
+infrastructure including the API gateway and many micro-services with REST APIs for managing the
+system. Administrative access is then configured, and the health of the system is validated before
+proceeding with operational tasks like checking and updating firmware on system components and
+preparing compute nodes.
+
+The [Post-installation](#post-installation) section covers tasks which are performed after the
+main install procedure is completed.
+
+The final section, [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
+describes how to install additional HPE Cray EX software products using the Install and Upgrade
+Framework (IUF).
 
 ## Topics
 
@@ -43,14 +59,14 @@ shown here with numbered topics.
     1. [Upload Olympus BMC recovery firmware into TFTP server](#8-upload-olympus-bmc-recovery-firmware-into-tftp-server)
     1. [Update firmware with FAS](#9-update-firmware-with-fas)
     1. [Prepare compute nodes](#10-prepare-compute-nodes)
-    1. [Next topic](#11-next-topic)
-    1. [Troubleshooting installation problems](#12-troubleshooting-installation-problems)
+    1. [Troubleshooting installation problems](#11-troubleshooting-installation-problems)
 1. [Post-installation](#post-installation)
-    1. [Kubernetes encryption](#13-kubernetes-encryption)
-    1. [Export Nexus data](#14-export-nexus-data)
+    1. [Kubernetes encryption](#1-kubernetes-encryption)
+    1. [Export Nexus data](#2-export-nexus-data)
+1. [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
 
 > **`NOTE`** If problems are encountered during the installation,
-> [Troubleshooting installation problems](#12-troubleshooting-installation-problems) and
+> [Troubleshooting installation problems](#11-troubleshooting-installation-problems) and
 > [Cray System Management (CSM) Administration Guide](../operations/README.md) will offer assistance.
 
 ## Pre-installation
@@ -160,7 +176,7 @@ subject matter expert.
 
 ## Installation
 
-## 1. Deploy management nodes
+### 1. Deploy management nodes
 
 The first nodes to deploy are the NCNs. These will host CSM services that are required for deploying the rest of the supercomputer.
 
@@ -202,8 +218,8 @@ Now that all of the CSM services have been installed and the final NCN has been 
 can be prepared. This may include configuring Keycloak with a local Keycloak account or confirming that Keycloak
 is properly federating LDAP or another Identity Provider (IdP), initializing the `cray` CLI for administrative
 commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by
-PCS/CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs
-(node controllers) for nodes in liquid-cooled cabinets.
+PCS/CAPMC, creating a CFS configuration for management nodes and applying it with node personalization, and
+configuring the node BMCs (node controllers) for nodes in liquid-cooled cabinets.
 
 See [Configure Administrative Access](configure_administrative_access.md).
 
@@ -265,15 +281,7 @@ These compute node types require preparation:
 
 See [Prepare Compute Nodes](prepare_compute_nodes.md).
 
-### 11. Next topic
-
-After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
-been fully installed and configured.
-Refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
-on the HPE Customer Support Center for more information on other product streams
-to be installed and configured after CSM.
-
-### 12. Troubleshooting installation problems
+### 11. Troubleshooting installation problems
 
 The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and
 switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install
@@ -283,18 +291,27 @@ See [Troubleshooting Installation Problems](troubleshooting_installation.md).
 
 ## Post-Installation
 
-### 13. Kubernetes encryption
+### 1. Kubernetes encryption
 
 As an optional post installation task, encryption of Kubernetes secrets may be enabled. This enables
 at rest encryption of data in the `etcd` database used by Kubernetes.
 
 See [Kubernetes Encryption](../operations/kubernetes/encryption/README.md).
 
-### 14. Export Nexus data
+### 2. Export Nexus data
 
-**Warning:** This process can take multiple hours where Nexus is unavailable and should be done during scheduled maintenance periods.
+**Warning:** This process can take multiple hours where Nexus is unavailable.
 
-Prior to the upgrade it is recommended that a Nexus export is taken. This is not a required step but highly recommend to protect the data in Nexus.
-If there is no maintenance period available then this step should be skipped until after the upgrade process.
+After the install, it is recommended that a Nexus export is taken. This is not a required step but highly recommend to protect the data in Nexus.
 
 See [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
+
+## Installation of additional HPE Cray EX software products
+
+Once installation of CSM has been completed, additional HPE Cray EX software products can be installed
+via the Install and Upgrade Framework (IUF).
+
+See the [Install or upgrade additional products with IUF](../operations/iuf/workflows/install_or_upgrade_additional_products_with_iuf.md)
+procedure to continue with the installation of additional HPE Cray EX software products.
+
+For additional information on the IUF, see [Install and Upgrade Framework](../operations/iuf/IUF.md).

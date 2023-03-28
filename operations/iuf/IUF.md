@@ -70,10 +70,14 @@ The following IUF topics are discussed in the sections below.
 
 There are two separate workflows that utilize IUF when installing or upgrading non-CSM product content on a Cray EX system.
 
-1. The IUF [Initial Install](workflows/initial_install.md) workflow is used in either of the following scenarios:
+1. The [Install or upgrade additional products with IUF](workflows/install_or_upgrade_additional_products_with_iuf.md)
+   workflow is used in either of the following scenarios:
    - An initial install of the system is being performed, including CSM and non-CSM products
-   - An initial install or upgrade is being performed **with non-CSM products only**. In this scenario, the first step ("Perform an install of CSM") is skipped and all other steps are performed.
-1. The IUF [Upgrade](workflows/upgrade.md) workflow is used when an upgrade is being performed **with CSM and non-CSM products**
+   - An initial install or upgrade is being performed **with non-CSM products only**. In this
+     scenario, the first step ("Perform an install of CSM") is skipped and all other steps are
+     performed.
+1. The [Upgrade CSM and additional products with IUF](workflows/upgrade_csm_and_additional_products_with_iuf.md)
+   workflow is used when an upgrade is being performed **with CSM and non-CSM products**.
 
 ## Activities
 

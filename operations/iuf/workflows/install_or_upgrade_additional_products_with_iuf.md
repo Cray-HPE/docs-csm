@@ -1,10 +1,16 @@
-# Initial Install
+# Install or upgrade additional products with IUF
 
-This workflow describes the initial install procedure. Follow these steps after an initial install
-of CSM. Also follow them when new, non-CSM product content becomes available for upgrade via an HPC
-CSM Software Recipe release.
+This procedure is used to accomplish either of the following:
 
-All stages of `iuf` are executed in this workflow: all of the new product software provided in the
+- Initial installation of additional HPE Cray EX software products on an HPE Cray EX system on which
+  CSM is already installed.
+- Upgrade of additional HPE Cray EX software products when CSM itself is not being upgraded.
+
+This procedure is _not_ used to perform an upgrade of CSM and additional HPE Cray EX software
+products. See [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
+for that procedure.
+
+All stages of `iuf` are executed in this procedure. All of the new product software provided in the
 recipe release is deployed and all management NCNs and managed compute and application nodes are
 rebooted to new images and CFS configurations. Manual operations are documented for procedures that
 are not currently managed by IUF.
@@ -14,7 +20,7 @@ shown.
 
 1. Perform an install of CSM
 
-   **`NOTE`** This step can be skipped if CSM is already installed.
+   **`NOTE`** Skip this step if CSM is already installed.
 
    Follow the [Cray System Management Install](../../../install/README.md) instructions
 
