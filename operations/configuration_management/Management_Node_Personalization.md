@@ -31,7 +31,7 @@ for more information on the CFS Batcher.
 
 This procedure has a scripted option and a manual option. Use the scripted option if possible.
 
-The following prerequisites must be met in order to run this procedure:
+### Prerequisites to re-run node personalization on management nodes
 
 - The Cray CLI must be configured and authenticated.
   - See [Configure the Cray CLI](../configure_cray_cli.md).
@@ -121,7 +121,7 @@ to reconfigure these components.
 See [Configuration Management with the CFS Batcher](./Configuration_Management_with_the_CFS_Batcher.md)
 for more information on the CFS Batcher.
 
-The following prerequisites must be met in order to run this procedure:
+### Prerequisites to re-run node personalization on a specific management node
 
 - The Cray CLI must be configured and authenticated.
   - See [Configure the Cray CLI](../configure_cray_cli.md).
