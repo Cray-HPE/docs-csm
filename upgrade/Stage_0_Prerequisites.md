@@ -41,8 +41,7 @@ after a break, always be sure that a typescript is running before proceeding.
 1. (`ncn-m001#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   CSM_RELEASE=1.4.0
-   CSM_REL_NAME=csm-${CSM_RELEASE}
+   export CSM_RELEASE=1.4.0
    ```
 
 1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs. See the short procedure in
@@ -109,9 +108,9 @@ The content from a previous `rbd` device is still available, and can be accessed
 
 1. (`ncn-m001#`) Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
 
-   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}${CSM_REL_NAME}.tar.gz`
+   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}/csm-${CSM_RELAESE}.tar.gz`
 
-   **NOTE** This step is optional for Cray/HPE internal installs, if `ncn-m001` can reach the internet.
+   > ***NOTE*** This step is optional for Cray/HPE internal installs, if `ncn-m001` can reach the internet.
 
    ```bash
    ENDPOINT=https://put.the/url/here/
@@ -155,7 +154,7 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
 1. (`ncn-m001#`) Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m001`.
 
    ```bash
-   CSM_TAR_PATH=/path/to/${CSM_REL_NAME}.tar.gz
+   CSM_TAR_PATH=/path/to/csm-${CSM_RELEASE}.tar.gz
    ```
 
 1. (`ncn-m001#`) Run the script.
