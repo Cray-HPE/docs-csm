@@ -583,10 +583,50 @@ To restore Slurm data from backup, follow sections
 *10.3.13 Restore Slurm Spool Directory from Backup* in the
 **HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)**.
 
+After restoring Slurm data from backup, check that the procedure was successful.
+
+1. (`uan#`) Check the accounting records.
+
+   ```bash
+   sacct -S <date>
+   ```
+
+1. (`uan#`) Check queued jobs.
+
+    ```bash
+   squeue
+   ```
+
+1. (`uan#`) Check node states.
+
+   ```bash
+   sinfo
+   ```
+
 ### PBS
 
 To restore PBS Professional data from backup, follow section
 *10.7.7 Restore PBS home directory from backup* in the
 **HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)**.
+
+After restoring PBS data from backup, check that the procedure was successful.
+
+1. (`uan#`) Check the accounting records.
+
+   ```bash
+   qstat -x
+   ```
+
+1. (`uan#`) Check queued jobs.
+
+   ```bash
+   qstat
+   ```
+
+1. (`uan#`) Check node states.
+
+   ```bash
+   pbsnodes -a
+   ```
 
 ## System recovery after fresh install
