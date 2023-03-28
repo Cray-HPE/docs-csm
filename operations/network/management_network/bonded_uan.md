@@ -15,7 +15,7 @@ There are two ways to implement bonded UAN configuration.
 
 This is the primary configuration for bonded UAN.
 
-Notice that `sw-spine-002` does not have `lacp fallback` enabled.  This allows the UAN to boot over the first interface and avoids PXE/BSS issues.
+Notice that `sw-spine-002` does NOT have `lacp fallback` enabled.  This allows the UAN to boot over the first interface and avoids PXE/BSS issues.  If `lacp fallback` is enabled on the secondary switch there will be booting issues.
 
 ```yaml
 sw-spine-001: |
@@ -53,6 +53,7 @@ sw-spine-002: |
 ## 1GB or 10GB Bonded UAN
 
 This is using a pair of Aruba 8360 switches as `sw-leaf-bmc`.
+The `system-mac` NEEDS to be unique across the system.  This should NOT match any other `system-mac` on the system.
 
 ```yaml
 sw-leaf-bmc-001: |
