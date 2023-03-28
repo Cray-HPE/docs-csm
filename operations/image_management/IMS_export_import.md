@@ -34,10 +34,16 @@ either using an automated script, or manually one at a time.
    Expected output:
 
    ```text
+   INFO:__main__:Exporting IMS data to /root/ims-import-export-data
    INFO:__main__:Exporting recipes
-   ...
+   
+   ... lines omitted ...
+   
    INFO:__main__:Exporting images
-   ...
+   
+   ... lines omitted ...
+   
+   INFO:__main__:IMS data exported to /root/ims-import-export-data
    INFO:__main__:DONE!!
    ```
 
@@ -194,6 +200,7 @@ script when the data was exported.
 Example output:
 
 ```text
+INFO:__main__:Importing IMS data from /root/ims-import-export-data
 INFO:__main__:Importing recipes
 
 ... lines omitted ...
@@ -202,12 +209,13 @@ INFO:__main__:Importing images
 
 ... lines omitted ...
 
-INFO:__main__:Recorded mapping from old IMS image and recipe IDs to new IDs in /root/tmp/ims-id-maps-post-import-8179d3e86cff46cd9399512bf37f0f18.json
+INFO:__main__:Recorded mapping from old to new IMS IDs and S3 etags in /root/ims-import-export-data/ims-id-maps-post-import-12f86451ce7c49d79e345bee42cc8586.json
+INFO:__main__:IMS data imported from /root/ims-import-export-data
 INFO:__main__:DONE!!
 ```
 
-Make a note of the filename containing the IMS ID mappings -- it is displayed near the end of the script output. In the above example, it is
-`/root/tmp/ims-id-maps-post-import-8179d3e86cff46cd9399512bf37f0f18.json`.
+Make a note of the filename containing the IMS ID and S3 etag mappings -- it is displayed near the end of the script output. In the above example, it is
+`/root/ims-import-export-data/ims-id-maps-post-import-12f86451ce7c49d79e345bee42cc8586.json`.
 
 It is important to retain this mapping file for later reference. In particular, its contents will
 be needed in order to update data in other services, such as BOS and BSS. Save this file in a safe location.
@@ -216,12 +224,13 @@ be needed in order to update data in other services, such as BOS and BSS. Save t
 
 Using the recipe information previously noted, for each recipe to be restored, perform the following steps:
 
-1. (`ncn-mw#`) Record the old IMS ID of the recipe to be restored.
+1. (`ncn-mw#`) Record the old IMS ID and S3 etag of the recipe to be restored.
 
-   This ID is obtained from the exported data. For example:
+   These are obtained from the exported data. For example:
 
    ```bash
    OLD_RECIPE_ID=1dd47f2f-aa37-4f17-9e9c-4e17a3675a92
+   OLD_RECIPE_ETAG=a97508dae40af15f6db737c250540e51
    ```
 
 1. (`ncn-mw#`) Create a new IMS recipe record.
@@ -300,6 +309,17 @@ Using the recipe information previously noted, for each recipe to be restored, p
    RECIPE_ETAG=dd95e38bf328dd31d83d661877df8fcf
    ```
 
+1. (`ncn-mw#`) Record the mapping of the old etag to the new one, if the value has changed.
+
+   This example appends the old etag and new etag to a text file in the current directory. This exact method need not be used,
+   but it is important to record the mapping from the old etags to the new etags, for later reference. Save this mapping information
+   in a safe location.
+
+   ```bash
+   [[ ${OLD_RECIPE_ETAG} != ${RECIPE_ETAG} ]] && \
+     echo "${OLD_RECIPE_ETAG} ${RECIPE_ETAG}" | tee -a ims-recipe-etag-map-post-import.txt
+   ```
+
 1. (`ncn-mw#`) Update the IMS recipe record with the Ceph S3 location of the recipe archive
 
    ```bash
@@ -311,12 +331,13 @@ Using the recipe information previously noted, for each recipe to be restored, p
 
 Using the image information previously noted, for each image to be restored, perform the following steps:
 
-1. (`ncn-mw#`) Record the old IMS ID of the image to be restored.
+1. (`ncn-mw#`) Record the old IMS ID and S3 etag of the image to be restored.
 
-   This ID is obtained from the exported data. For example:
+   These are obtained from the exported data. For example:
 
    ```bash
-   ${OLD_IMAGE_ID}=0f1acea4-2bf1-4931-ac19-ce3c484af540
+   OLD_IMAGE_ID=0f1acea4-2bf1-4931-ac19-ce3c484af540
+   OLD_MANIFEST_ETAG=48893b8a7483869e43e8274c4dbb11c3
    ```
 
 1. (`ncn-mw#`) Create a new IMS image record.
@@ -533,12 +554,23 @@ Using the image information previously noted, for each image to be restored, per
    }
    ```
 
-1. (`ncn-mw#`) Record the new S3 etag of the manifest in S3.
+1. (`ncn-mw#`) Record the new S3 etag of the manifest.
 
    This value is found in the output of the command in the previous step.
 
    ```bash
    MANIFEST_ETAG=ab3ffecdd1299bbda6c373824c9d0870
+   ```
+
+1. (`ncn-mw#`) Record the mapping of the old etag to the new one, if the value has changed.
+
+   This example appends the old etag and new etag to a text file in the current directory. This exact method need not be used,
+   but it is important to record the mapping from the old etags to the new etags, for later reference. In particular, this information will
+   be needed in order to update data in other services, such as BOS and BSS. Save this mapping information in a safe location.
+
+   ```bash
+   [[ ${OLD_MANIFEST_ETAG} != ${MANIFEST_ETAG} ]] && \
+     echo "${OLD_MANIFEST_ETAG} ${MANIFEST_ETAG}" | tee -a ims-image-etag-map-post-import.txt
    ```
 
 1. (`ncn-mw#`) Update the IMS image record with the Ceph S3 location of the manifest.
