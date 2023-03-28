@@ -8,7 +8,7 @@ This procedure is applicable for the following types of standard rack nodes:
 * Dual node chassis (Apollo 6500 XL645d, etc...)
 * Quad dense node chassis (Gigabyte compute node chassis)
 
-## Perquisites
+## Prerequisites
 
 * The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 * Knowledge of whether Data Virtualization Service (DVS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
