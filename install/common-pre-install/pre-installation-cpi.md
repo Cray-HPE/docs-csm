@@ -122,7 +122,7 @@ On the first login, configure and verify the sitelink, DNS and gateway IP addres
     /dev/sda1          /var/lib/containers/storage      ext4     defaults     0 0
    ```
 
-1. Create following directories - 
+1. Create the required directories using the following command:
 
    ```bash
      mkdir -p /var/www/ephemeral
@@ -349,7 +349,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
       ```bash
        tar -xf dhcp_http.tar.gz
-      ``` 
+      ```
 
    1. Update the `apache2` and `dnsmasq` configuration as follows:
 
@@ -746,25 +746,25 @@ Follow  [Configure management network switches](README.md#6-configure-management
 
 1. Grant necessary privileges by running the following command:
 
-   ```
+   ```bash
    sed -i 's/podman run/podman run --privileged/g' /usr/share/doc/csm/install/scripts/csm_services/steps/1.initialize_bootstrap_registry.yaml
    ```
 
 1. Check if there are any processes attached to port 5000 by running the following command:
 
-   ```
+   ```bash
    netstat -tlnp | grep 5000
    ```
 
    If there is a process attached to port 5000, kill it using the kill command.
 
-   ```
+   ```bash
    kill -9 <pid>
    ```
 
    Restart the Nexus.
 
-   ```
+   ```bash
    systemctl restart nexus.service
    ```
 
