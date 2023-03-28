@@ -10,6 +10,8 @@ The following workflows are available:
   * [Keycloak](#keycloak)
   * [Spire](#spire)
   * [Nexus](#nexus)
+  * [Slurm](#slurm)
+  * [PBS](#pbs)
 * [System recovery after fresh install](#system-recovery-after-fresh-install)
 
 ## Prerequisites
@@ -573,5 +575,18 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
 1. (`ncn-mw#`) Restore the critical data.
 
    See [Nexus Export and Restore](package_repository_management/Nexus_Export_and_Restore.md)
+
+### Slurm
+
+To restore Slurm data from backup, follow sections
+*10.3.11 Restore Slurm Accounting Database from Backup* and
+*10.3.13 Restore Slurm Spool Directory from Backup* in the
+**HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)**.
+
+### PBS
+
+To restore PBS Professional data from backup, follow section
+*10.7.7 Restore PBS home directory from backup* in the
+**HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX Systems (S-8003)**.
 
 ## System recovery after fresh install
