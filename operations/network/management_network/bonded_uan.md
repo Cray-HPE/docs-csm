@@ -1,7 +1,7 @@
 # Bonded UAN Configuration
 
-This document shows how to configure the manangement network when bonded UANs are used.
-These configurations should be implemented via the [custom_config](canu/custom_config.md) feature in CANU.
+This document shows how to configure the management network when bonded UANs are used.
+These configurations should be implemented via the [custom configuration](canu/custom_config.md) feature in CANU.
 There are two ways to implement bonded UAN configuration.
 
 1. [25GB Bonded UAN Configuration](#25gb-bonded-uan-configuration) (typically used)
