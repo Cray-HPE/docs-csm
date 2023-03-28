@@ -68,10 +68,17 @@ after a break, always be sure that a typescript is running before proceeding.
 CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
 The http proxy variables must be `unset` after the desired artifacts are downloaded. Failure to unset the http proxy variables after downloading artifacts will cause many failures in subsequent steps.
 
-   ```bash
-   export https_proxy=https://example.proxy.net:443
-   export http_proxy=http://example.proxy.net:80
-   ```
+    - Secured:
+
+       ```bash
+       export https_proxy=https://example.proxy.net:443
+       ```
+
+    - Unsecured:
+
+       ```bash
+       export http_proxy=http://example.proxy.net:80
+       ```
 
 1. (`ncn-m001#`) Run the script.
    **NOTE** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
@@ -88,6 +95,9 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
 
    ```bash
    unset https_proxy
+   ```
+
+   ```bash
    unset http_proxy
    ```
 
