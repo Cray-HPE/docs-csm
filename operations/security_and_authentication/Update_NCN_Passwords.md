@@ -97,7 +97,8 @@ location is `secret/csm/users/root password=...`.
 
 Use the following procedure with the `rotate-pw-mgmt-nodes.yml` playbook to **only** change the root password on NCNs.
 This is a quick alternative to running a full management NCN personalization, as documented in the
-[Configure Non-Compute Nodes with CFS](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md) procedure.
+[Re-run node personalization on management nodes procedure](../configuration_management/Management_Node_Personalization.md#re-run-node-personalization-on-management-nodes)
+in the [Management Node Personalization](../configuration_management/Management_Node_Personalization.md) topic.
 
 1. (`ncn-mw#`) Create a CFS configuration layer to run the password change Ansible playbook.
 
