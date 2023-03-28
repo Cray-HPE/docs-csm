@@ -649,12 +649,12 @@ def import_ims_artifacts(args):
         LOGGER.info(f'Importing IMS data from {args.import_export_root}')
         etag_map = {}
         recipe_map = import_ims_recipes(args, etag_map=etag_map)
-        image_id_map = import_ims_images(args, etag_map=etag_map)
+        image_map = import_ims_images(args, etag_map=etag_map)
 
         for old_recipe_id, new_recipe_id in recipe_map.items():
             LOGGER.info(f'The IMS recipe {old_recipe_id} was imported as {new_recipe_id}')
 
-        for old_image_id, new_image_id in image_id_map.items():
+        for old_image_id, new_image_id in image_map.items():
             LOGGER.info(f'The IMS image {old_image_id} was imported as {new_image_id}')
 
         for old_etag, new_etag in etag_map.items():
@@ -667,7 +667,7 @@ def import_ims_artifacts(args):
                 {
                     'etag_map': etag_map,
                     'id_maps': {
-                        "images": image_id_map,
+                        "images": image_map,
                         "recipes": recipe_map
                     },
                     'timestamp': get_timestamp_string()
