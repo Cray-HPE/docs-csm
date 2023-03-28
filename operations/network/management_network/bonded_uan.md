@@ -4,7 +4,7 @@ This document shows how to configure the management network when bonded UANs are
 These configurations should be implemented via the [custom configuration](canu/custom_config.md) feature in CANU.
 There are two ways to implement bonded UAN configuration.
 
-1. [25GB Bonded UAN Configuration](#25gb-bonded-uan-configuration) (typically used)
+1. [25GB Bonded UAN Configuration](#25gb-bonded-uan-configuration) (Most commonly used)
     - The only difference between this configuration and the default configuration is that OCP & PCIe port 1 are in a bond.
     - These connections are plugged into a spine (TDS) or leaf (FULL) switch.
 2. [1GB or 10GB Bonded UAN](#1gb-or-10gb-bonded-uan) (Not commonly used)
