@@ -155,7 +155,7 @@ This procedure will add a liquid-cooled blades from an HPE Cray EX system.
 
     1. Create an `eth_interfaces` file that contains the interface IDs for the `Node Maintenance Network` entries for the destination blade location.
         If there has not been a blade previously in the destination location there may not be any Ethernet Interfaces to delete from HSM.
-        The `blade_query.sh` script from the perquisites section can help determine the IDs for the HSM Ethernet Interfaces associated with the blade if any.
+        The `blade_query.sh` script from the prerequisites section can help determine the IDs for the HSM Ethernet Interfaces associated with the blade if any.
         It is expected that if a blade has not been populated in the slot before that no HSM Ethernet Interfaces IDs would be found.
 
         ```bash
