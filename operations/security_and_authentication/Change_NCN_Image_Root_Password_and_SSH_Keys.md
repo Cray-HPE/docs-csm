@@ -23,7 +23,7 @@ All of the commands in this procedure are intended to be run on a single master 
 
 In order to modify the `root` user password and/or SSH keys, first the desired values must be set in Vault. Then the
 [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
-apply these changed values to the running management nodes via node personalization.
+applies these changed values to the running management nodes via node personalization.
 
 Note that this procedure does not change the `root` user password or SSH keys in the management node
 images. If the management nodes are rebuilt from their images, they will use the SSH keys and `root`

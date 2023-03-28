@@ -38,7 +38,7 @@ See [Validate CSM Health During Upgrade](Validate_CSM_Health_During_Upgrade.md).
 
 Check and update firmware if not already at the correct versions.
 Make sure the latest version of the HPE Cray EX HPC Firmware Pack (HFP) has been installed.
-Follow the procedures for updating firmware with the Firmware Actions Service (FAS) document
+Follow the procedures for updating firmware with the Firmware Action Service (FAS) document
 [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
 
 ## 5. Upgrade complete
