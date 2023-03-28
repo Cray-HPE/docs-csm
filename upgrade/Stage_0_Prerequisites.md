@@ -125,6 +125,9 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
 
    ```bash
    read -s SW_ADMIN_PASSWORD
+   ```
+
+   ```bash
    export SW_ADMIN_PASSWORD
    ```
 
