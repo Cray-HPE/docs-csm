@@ -24,8 +24,8 @@ shown here with numbered topics.
     1. [Prepare compute nodes](#10-prepare-compute-nodes)
     1. [Next topic](#11-next-topic)
     - [Troubleshooting installation problems](#troubleshooting-installation-problems)
-1. [Post-installation](#post-installation)
-    1. [Kubernetes encryption](#12-encryption)
+1. [Post-Installation](#post-installation)
+    1. [Kubernetes encryption](#12-kubernetes-encryption)
     1. [Export Nexus data](#13-export-nexus-data)
 
 > **`NOTE`** If problems are encountered during the installation,
@@ -79,53 +79,69 @@ See [Deploy Management Nodes](../deploy_non-compute_nodes.md).
 
 ### 2. Install CSM services
 
-Now that deployment of management nodes is complete with initialized Ceph storage and a running Kubernetes cluster on all worker and master nodes, except the PIT node, the CSM services can be installed. The Nexus repository will be populated with artifacts; containerized CSM services will be installed; and a few other configuration steps will be taken.
+Now that deployment of management nodes is complete with initialized Ceph storage and a running Kubernetes cluster on all worker and master nodes, except the PIT node,
+the CSM services can be installed. The Nexus repository will be populated with artifacts; containerized CSM services will be installed; and a few other configuration steps will be taken.
 
 See [Install CSM Services](../install_csm_services.md).
 
 ### 3. Validate CSM health before final NCN deployment
 
-After installing all of the CSM services, now validate the health of the management nodes and all CSM services. The reason to do it now is that if there are any problems detected with the core infrastructure or the nodes, it is easy to rewind the installation to [Deploy management nodes](#1-deploy-management-nodes), because the final NCN has not yet been deployed. In addition, deploying the final NCN successfully requires several CSM services to be working properly.
+After installing all of the CSM services, now validate the health of the management nodes and all CSM services. The reason to do it now is that if there are any
+problems detected with the core infrastructure or the nodes, it is easy to rewind the installation to [Deploy management nodes](#1-deploy-management-nodes), because
+the final NCN has not yet been deployed. In addition, deploying the final NCN successfully requires several CSM services to be working properly.
 
 See [Validate CSM Health](../../operations/validate_csm_health.md).
 
 ### 4. Deploy final NCN
 
-Now that all CSM services have been installed and the CSM health checks completed, with the possible exception of Booting the CSM Barebones Image and the UAS/UAI tests, the PIT has served its purpose and the final NCN can be deployed. The node used for the PIT will be rebooted, this node will be the final NCN to deploy in the CSM install.
+Now that all CSM services have been installed and the CSM health checks completed, with the possible exception of Booting the CSM Barebones Image and the UAS/UAI tests, the PIT has served its purpose and the final NCN can be deployed.
+The node used for the PIT will be rebooted, this node will be the final NCN to deploy in the CSM install.
 
 See [Deploy Final NCN](../deploy_final_non-compute_node.md).
 
 ### 5. Configure administrative access
 
-Now that all of the CSM services have been installed and the final NCN has been deployed, administrative access can be prepared. This may include configuring Keycloak with a local Keycloak account or confirming that Keycloak is properly federating LDAP or another Identity Provider (IdP), initializing the `cray` CLI for administrative commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by PCS/CAPMC, configuring the CSM layer of configuration by CFS in NCN personalization, and configuring the node BMCs (node controllers) for nodes in liquid-cooled cabinets.
+Now that all of the CSM services have been installed and the final NCN has been deployed, administrative access can be prepared. This may include configuring Keycloak
+with a local Keycloak account or confirming that Keycloak is properly federating LDAP or another Identity Provider (IdP), initializing the `cray` CLI for
+administrative commands, locking the management nodes from accidental actions such as firmware updates by FAS or power actions by PCS/CAPMC, configuring the CSM layer
+of configuration by CFS in NCN personalization, and configuring the node BMCs (node controllers) for nodes in liquid-cooled cabinets.
 
 See [Configure Administrative Access](../configure_administrative_access.md).
 
 ### 6. Validate CSM health
 
-Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed, and administrative access has been enabled, the health of the management nodes and all CSM services should be validated. There are no exceptions to running the tests--all can be run now.
+Now that all management nodes have joined the Kubernetes cluster, CSM services have been installed, and administrative access has been enabled, the health of the
+management nodes and all CSM services should be validated. There are no exceptions to running the tests--all can be run now.
 
-This CSM health validation can also be run at other points during the system lifecycle, such as when replacing a management node, checking the health after a management node has rebooted because of a crash, as part of doing a full system power down or power up, or after other types of system maintenance.
+This CSM health validation can also be run at other points during the system lifecycle, such as when replacing a management node, checking the health after a
+management node has rebooted because of a crash, as part of doing a full system power down or power up, or after other types of system maintenance.
 
 See [Validate CSM Health](../../operations/validate_csm_health.md).
 
 ### 7. Configure Prometheus alert notifications
 
-Now that CSM has been installed and health has been validated, if the system management health monitoring tools (specifically Prometheus) are found to be useful, then email notifications can be configured for specific alerts defined in Prometheus. Prometheus upstream documentation can be leveraged for an [Alert Notification Template Reference](https://prometheus.io/docs/alerting/latest/notifications/) as well as [Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/). Currently supported notification types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
+Now that CSM has been installed and health has been validated, if the system management health monitoring tools (specifically Prometheus) are found to be useful, then
+email notifications can be configured for specific alerts defined in Prometheus.
+Prometheus upstream documentation can be leveraged for an [Alert Notification Template Reference](https://prometheus.io/docs/alerting/latest/notifications/) as well as
+[Notification Template Examples](https://prometheus.io/docs/alerting/latest/notification_examples/). Currently supported notification types include Slack, Pager Duty, email, or a custom integration via a generic webhook interface.
 
-See [Configure Prometheus Email Alert Notifications](../../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md) for an example configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
+See [Configure Prometheus Email Alert Notifications](../../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
+for an example configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
 
 ### 8. Upload Olympus BMC recovery firmware into TFTP server
 
-> **IMPORTANT:** Before Firmware can be updated the HPC Firmware Pack (HFP) must be installed  refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000) on the HPE Customer Support Center for more information about how to install the HPE Cray EX HPC Firmware Pack (HFP) product.
+> **IMPORTANT:** Before Firmware can be updated the HPC Firmware Pack (HFP) must be installed  refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
+>on the HPE Customer Support Center for more information about how to install the HPE Cray EX HPC Firmware Pack (HFP) product.
 
-The Olympus hardware needs to have recovery firmware loaded to the `cray-tftp` server in case the BMC loses its firmware. The BMCs are configured to load a recovery firmware from a TFTP server. This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
+The Olympus hardware needs to have recovery firmware loaded to the `cray-tftp` server in case the BMC loses its firmware. The BMCs are configured to load a recovery firmware from a TFTP server.
+This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
 
 See [Load Olympus BMC Recovery Firmware into TFTP server](../../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).
 
 ## 9. Update firmware with FAS
 
-Now that all management nodes and CSM services have been validated as healthy, the firmware on other components in the system can be checked and updated. The Firmware Action Service (FAS) communicates with many devices on the system. FAS can be used to update the firmware for all of the devices it communicates with at once, or specific devices can be targeted for a firmware update.
+Now that all management nodes and CSM services have been validated as healthy, the firmware on other components in the system can be checked and updated. The Firmware Action Service (FAS) communicates with many devices on the system.
+FAS can be used to update the firmware for all of the devices it communicates with at once, or specific devices can be targeted for a firmware update.
 
 See [Update Firmware with FAS](../../operations/firmware/Update_Firmware_with_FAS.md)
 
@@ -142,13 +158,17 @@ See [Prepare Compute Nodes](../prepare_compute_nodes.md).
 
 ### 11. Next topic
 
-After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has been fully installed and configured. Refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000) on the HPE Customer Support Center for more information on other product streams to be installed and configured after CSM.
+After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has been fully installed and configured.
+Refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000) on the HPE Customer Support Center for more information on other product streams to be installed and configured after CSM.
 
 ### Troubleshooting installation problems
 
-The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and switches for the HPE Cray EX system. The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
+The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and switches for the HPE Cray EX system.
+The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
 
 See [Troubleshooting Installation Problems](../troubleshooting_installation.md).
+
+## Post-Installation
 
 ### 12. Kubernetes encryption
 
