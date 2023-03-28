@@ -154,6 +154,9 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
    >
    > ```bash
    > read -s NEXUS_PASSWORD
+   > ```
+   >
+   > ```bash
    > export NEXUS_PASSWORD
    > ```
    >
