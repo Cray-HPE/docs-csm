@@ -5,7 +5,6 @@
 Create a directory for the contents to reside.
 
 ```bash
-BACKUPDIR=hms-backup
 BACKUPDIR="hms-backup_`date '+%Y-%m-%d_%H-%M-%S'`"
 mkdir $BACKUPDIR
 cd $BACKUPDIR
