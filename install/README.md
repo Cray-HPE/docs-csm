@@ -309,7 +309,7 @@ See [Nexus Export and Restore Procedure](../operations/package_repository_manage
 ## Installation of additional HPE Cray EX software products
 
 Once installation of CSM has been completed, additional HPE Cray EX software products can be installed
-via the Install and Upgrade Framework.
+via the Install and Upgrade Framework (IUF).
 
 See the [Install or upgrade additional products with IUF](../operations/iuf/workflows/install_or_upgrade_additional_products_with_iuf.md)
 procedure to continue with the installation of additional HPE Cray EX software products.

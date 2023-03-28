@@ -73,7 +73,7 @@ keys.
                 --public-key-file "${PUBLIC_KEY_FILE}" --private-key-file "${PRIVATE_KEY_FILE}"
         ```
 
-    - Manually provide custom SSH keys
+    - Manually provide custom SSH keys.
 
         The keys stored in Kubernetes can be updated directly.
 

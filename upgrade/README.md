@@ -1,7 +1,7 @@
 # Upgrade CSM
 
-There are several alternative procedures to perform an upgrade Cray Systems Management (CSM)
-software. Choose the appropriate alternative from the sections below.
+There are several alternative procedures to perform an upgrade of Cray Systems Management (CSM)
+software. Choose the appropriate procedure from the sections below.
 
 ## Option 1: Upgrade CSM with additional HPE Cray EX software products
 

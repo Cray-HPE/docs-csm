@@ -13,7 +13,7 @@ This procedure is referenced from operational procedures that occur after CSM in
 
 * [Prerequisites](#prerequisites)
 * [Procedure](#procedure)
-    1. [Determine management node image ID](#1-determine-management-node-image-id))
+    1. [Determine management node image ID](#1-determine-management-node-image-id)
     1. [Find or create a CFS configuration](#2-find-or-create-a-cfs-configuration)
     1. [Run the CFS image customization session](#3-run-the-cfs-image-customization-session)
     1. [Update management node boot parameters](#4-update-management-node-boot-parameters)

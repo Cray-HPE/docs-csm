@@ -141,7 +141,7 @@ then applies that configuration to the management nodes.
     CSM_RELEASE="1.4.0"
     ```
 
-1. (`ncn-m001#`) Run the `apply_csm_configuration.sh` script/
+1. (`ncn-m001#`) Run the `apply_csm_configuration.sh` script.
 
     This script creates a new CFS configuration named `management-csm-${CSM_RELEASE}`
     and applies it to the management node components in CFS, enables them,

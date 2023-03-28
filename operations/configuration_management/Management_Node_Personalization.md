@@ -106,7 +106,7 @@ node components at once. This causes CFS to reconfigure these components.
         cray cfs components update --error-count 0 --state '[]' --format json "${xname}" && let COUNT+=1 || FAILED+=" ${xname}"
     done ; \
     echo "Cleared CFS state on ${COUNT} nodes" ; \
-    [[ -z ${FAILED} ]] && echo "No errors" || echo "ERROR: There were errors clearing the CFS state for the following nodes:${xname}"
+    [[ -z ${FAILED} ]] && echo "No errors" || echo "ERROR: There were errors clearing the CFS state for the following nodes:${FAILED}"
     ```
 
 ## Re-run node personalization on a specific management node
