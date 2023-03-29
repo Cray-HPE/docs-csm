@@ -1,6 +1,6 @@
-# Boot Pre-Install Live ISO and Generate Seedfiles
+# Boot Pre-Install Live ISO and Generate Seed Files
 
-The following steps provide instructions to boot the Pre-Install Live ISo and create seedfiles for CSM installation.
+The following steps provide instructions to boot the Pre-Install Live ISO and create seed files for CSM installation.
 
 ## Topics
 
@@ -73,11 +73,11 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
    1. Press F6 until the following screen appears.
 
-      ![alt text](../../img/install/01.png)
+      ![Press F6](../../img/install/01.png)
 
    1. Select the bootable device.
 
-      ![alt text](../../img/install/02.png)
+      ![Bootable Device](../../img/install/02.png)
 
 1. _Option 2_ : Boot the LiveCD ISO image using `efibootmgr` (This option has not been tested).
 
@@ -144,13 +144,13 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
       1. From the GRUB menu, select "CM Live" option.
 
-         ![alt text](../../img/install/03.png)
+         ![CM Live](../../img/install/03.png)
 
       2. Now a series of input prompts will appear. Provide the responses per the following example:
 
-         ![alt text](../../img/install/04.png)
+         ![Input prompts](../../img/install/04.png)
 
-         >__Note:__ You might have to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after "Loading initrd...".
+         >__Note:__ You might have to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after `Loading initrd...`.
 
          Once the system boots up the OS successfully, provide username and password as `root/cmdefault` to log in to the system.
 
@@ -158,7 +158,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
    1. Set the SITE LAN.
 
-      To configure the sitelan open a command line terminal and run the following command:
+      To configure `sitelan` open a command line terminal and run the following command:
 
       `172.30.54.111` and `eno1` are examples of IP address and network device names.
 
@@ -167,7 +167,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
       ip route add default via <gateway ip> dev eno1
       ```
 
-      ![alt text](../../img/install/05.png)
+      ![SITE LAN](../../img/install/05.png)
 
       Now this server can be accessed from the external servers using `ssh`. Login to the machine using following command:
 
@@ -191,7 +191,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
       1. For Mellanox spine switches.
 
-          1. Access the mellanox switch using IP address or using minicom.
+          1. Access the Mellanox switch using IP address or using Minicom.
 
              ```bash
               ssh admin@10.1.0.2
@@ -201,7 +201,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
               minicom -b 115200 -D /dev/ttyUSB1
              ```
 
-             >__Note:__ Device name and Ip may vary.
+             >__Note:__ Device name and IP may vary.
 
           1. Login to the switch using the switch credentials. Login prompt for Mellanox switch is as follows:
 
@@ -332,9 +332,9 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
       >__Note:__ Incase the spine and/or leaf switches are from Aruba then following document an be referred for the configuration in the following link: https://hpedia.osp.hpe.com/wiki/Setting_up_Aruba_Switches_with_HPCM.
 
-   1. Running the YaST First boot.
+   1. Running YaST First boot.
 
-      Run the following command.
+      Run the following command:
 
       ```bash
       /usr/lib/YaST2/startup/YaST2.Firstboot
@@ -342,29 +342,29 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
          1. Select language and keyboard layout.
 
-            YaST menu can be navigated using TAB keys. Select appropriate language and keyboard layout and click Next.
+            YaST menu can be navigated using tab key. Select appropriate language and keyboard layout and click Next.
 
-            ![alt text](../../img/install/06.png)
+            ![YaST menu](../../img/install/06.png)
 
          1. Accepting the Licence Agreement.
 
             Use spacebar key to accept the licence agreement and click Next.
 
-            ![alt text](../../img/install/07.png)
+            ![Licence agreement](../../img/install/07.png)
 
-         1. Configuring sitelan network using YaST menu.
+         1. Configuring `sitelan` network using YaST menu.
 
-            ![alt text](../../img/install/08.png)
+            ![Configure Site Lan](../../img/install/08.png)
 
-            Fill out the IP Address, Subnet Mask, Hostname (FQDN) fields and click Next.
+            Fill out the `IP Address`, `Subnet Mask`, `Hostname (FQDN)` fields and click Next.
 
-            ![alt text](../../img/install/09.png)
+            ![Fill out](../../img/install/09.png)
 
          1. Setting the hostname.
 
             Select the "Hostname/DNS" menu, fill the Static Hostname field and click Next.
 
-            ![alt text](../../img/install/10.png)
+            ![Hostname](../../img/install/10.png)
 
          1. Setting the gateway.
 
@@ -372,23 +372,25 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
          1. Setting the timezone.
 
-            ![alt text](../../img/install/11.png)
+            Select the applicable timezone from the options and click Next.
+
+            ![Timezone](../../img/install/11.png)
 
          1. Skip the user creation.
 
-            Select skip user creation and click Next.
+            Select Skip User Creation and click Next.
 
-            ![alt text](../../img/install/12.png)
+            ![Skip](../../img/install/12.png)
 
          1. Set the root password.
 
             Fill out the root password.
 
-            ![alt text](../../img/install/13.png)
+            ![Root Password](../../img/install/13.png)
 
-            After setting root user's password, YaST First boot configuration will Finish.
+            After setting root user's password, YaST First boot configuration will be complete. Click on Finish.
 
-            ![alt text](../../img/install/14.png)
+            ![Finish](../../img/install/14.png)
 
          1. Creating the `sles15 sp4` distro repo.
 
@@ -574,7 +576,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
       1. Manual discovery method.
 
          In this method,  the administrator has to collect  data of components and perform manual discovery.
-         Management Switches, Fabric Switches, PDU and subrack CMCs are the components for which manual discovery method has to be performed. The procedure and the sequence is described as follows:
+         Management Switches, Fabric Switches, PDU and sub rack CMCs are the components for which manual discovery method has to be performed. The procedure and the sequence is described as follows:
 
          1. Management Switch : Discovery of management switches has to be performed by manually creating configuration files. The management switch file should be in a specific format. Here is the example of switch configuration file:
 
@@ -763,10 +765,10 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
 ## Seed File generation
 
-The stepwise procedure to generate seedfiles is as follows:
+The stepwise procedure to generate seed files is as follows:
 
    1. Generate Paddle File
-      To generate the paddle file using the Canu Validate tool, follow link [Validate SHCD](../../operations/network/management_network/validate_shcd.md).
+      To generate the paddle file using the CANU Validate tool, follow link [Validate SHCD](../../operations/network/management_network/validate_shcd.md).
 
       Example Command:
 
@@ -786,9 +788,9 @@ The stepwise procedure to generate seedfiles is as follows:
 
    1. Create [`cabinets.yaml`](../create_cabinets_yaml.md) (Manually).
 
-   1. Capture hardware inventory and generate seedfiles and paadlefile.
+   1. Capture hardware inventory and generate seed files and paadlefile.
 
-      The following command stores the inventory of nodes and switches (fabric and management) in the database and generates the seedfiles and paadlefile:
+      The following command stores the inventory of nodes and switches (fabric and management) in the database and generates the seed files and paadle file:
 
       ```bash
       cnodes | grep node >>nodelist
@@ -796,10 +798,10 @@ The stepwise procedure to generate seedfiles is as follows:
       cm cvt config create -t all --mgmt_username 'uname' --mgmt_password 'passwd' --architecture '<architecture>'
       ```
 
-      __NOTE:__ The seedfiles and paddle file will be generated in the present working directory.
+      __NOTE:__ The seed files and paddle file will be generated in the present working directory.
 
-   1. Save the generated seed files (`switch_metadata.csv`, `application_node_config.yaml`, `hmn_connections.json`, `ncn_metadata.csv`), paddlefile (`cvt-ccj.json`) and `cvt.json`.
-   The seedfiles (or configuration payload files) and paddlefile will be used later during the CSM installation process so they can be saved/backed up in a persistent storage.
+   1. Save the generated seed files (`switch_metadata.csv`, `application_node_config.yaml`, `hmn_connections.json`, `ncn_metadata.csv`), paddle file (`cvt-ccj.json`) and `cvt.json`.
+   The seed files (or configuration payload files) and paddle file will be used later during the CSM installation process so they can be saved/backed up in a persistent storage.
 
 ## Compare the SHCD Data with CVT Inventory Data(Optional)
 
