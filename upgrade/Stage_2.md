@@ -174,7 +174,6 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
    ```bash
    source /etc/cray/upgrade/csm/myenv
-   echo "${CSM_REL_NAME}"
    ```
 
 1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
@@ -183,7 +182,7 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
    ```bash
    scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
-   zypper --plus-repo="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
+   zypper --plus-repo="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
    scp ncn-m001:/root/*.noarch.rpm /root/ &&
        rpm -Uvh --force /root/docs-csm-latest.noarch.rpm /root/libcsm-latest.noarch.rpm
    ```

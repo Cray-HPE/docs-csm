@@ -41,8 +41,7 @@ after a break, always be sure that a typescript is running before proceeding.
 1. (`ncn-m001#`) Set the `CSM_RELEASE` variable to the **target** CSM version of this upgrade.
 
    ```bash
-   CSM_RELEASE=1.4.0
-   CSM_REL_NAME=csm-${CSM_RELEASE}
+   export CSM_RELEASE=1.4.0
    ```
 
 1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs. See the short procedure in
@@ -57,9 +56,9 @@ after a break, always be sure that a typescript is running before proceeding.
 
 1. (`ncn-m001#`) Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
 
-   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}${CSM_REL_NAME}.tar.gz`
+   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}/csm-${CSM_RELAESE}.tar.gz`
 
-   **NOTE** This step is optional for Cray/HPE internal installs, if `ncn-m001` can reach the internet.
+   > ***NOTE*** This step is optional for Cray/HPE internal installs, if `ncn-m001` can reach the internet.
 
    ```bash
    ENDPOINT=https://put.the/url/here/
@@ -69,10 +68,17 @@ after a break, always be sure that a typescript is running before proceeding.
 CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
 The http proxy variables must be `unset` after the desired artifacts are downloaded. Failure to unset the http proxy variables after downloading artifacts will cause many failures in subsequent steps.
 
-   ```bash
-   export https_proxy=https://example.proxy.net:443
-   export http_proxy=http://example.proxy.net:80
-   ```
+    - Secured:
+
+       ```bash
+       export https_proxy=https://example.proxy.net:443
+       ```
+
+    - Unsecured:
+
+       ```bash
+       export http_proxy=http://example.proxy.net:80
+       ```
 
 1. (`ncn-m001#`) Run the script.
    **NOTE** For Cray/HPE internal installs, if `ncn-m001` can reach the internet, then the `--endpoint` argument may be omitted.
@@ -89,6 +95,9 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
 
    ```bash
    unset https_proxy
+   ```
+
+   ```bash
    unset http_proxy
    ```
 
@@ -103,7 +112,7 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
 1. (`ncn-m001#`) Set the `CSM_TAR_PATH` variable to the full path to the CSM `tar` file on `ncn-m001`.
 
    ```bash
-   CSM_TAR_PATH=/path/to/${CSM_REL_NAME}.tar.gz
+   CSM_TAR_PATH=/path/to/csm-${CSM_RELEASE}.tar.gz
    ```
 
 1. (`ncn-m001#`) Run the script.
@@ -126,6 +135,9 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
 
    ```bash
    read -s SW_ADMIN_PASSWORD
+   ```
+
+   ```bash
    export SW_ADMIN_PASSWORD
    ```
 
@@ -142,6 +154,9 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
    >
    > ```bash
    > read -s NEXUS_PASSWORD
+   > ```
+   >
+   > ```bash
    > export NEXUS_PASSWORD
    > ```
    >
