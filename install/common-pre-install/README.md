@@ -6,6 +6,7 @@ The topics in this chapter need to be done as part of an ordered procedure so ar
 shown here with numbered topics.
 
 [Prerequisites](#prerequisites)
+
 1. [Pre-installation](#pre-installation)  
     1. [Boot Pre-Install Live ISO and Seedfiles Generation](#1-boot-pre-install-live-iso-and-seedfiles-generation)
     1. [Preparing for a re-installation](#2-preparing-for-a-re-installation)
@@ -37,17 +38,17 @@ The following must be verified before starting the Pre-installation procedure:
 
 - Ensure all the River Node BMCs are reachable and is set to DHCP mode. Refer to [Set node BMCs to DHCP](../re-installation.md#set-node-bmcs-to-dhcp).
 
-  >**Note:** For baremetal installation these settings will be default.
+  >**Note:** For Baremetal installation these settings will be default.
 
 - Ensure that list of Management Switch IP address configured on `vlan1` is available, this need to be shared or will require serial console to the switches.
 
 - Verify if the SHCD Document is available with xnames of server.
 
-- Collect ip address of admin node, site dns, gateway ip, and proxy details, and ensure all these IPs are reachable from admin node.
+- Collect IP address of admin node, site DNS, gateway IP, and proxy details, and ensure all these IPs are reachable from admin node.
 
 - Verify and ensure you have access to admin node and BMC.
 
-- Verify and ensure you are able to download the `SLE-15-SP4-Full-x86_64` and `cm-admin-install-1.8-sles15sp4-x86_64.iso` ISO files and csm tarball.
+- Verify and ensure you are able to download the `SLE-15-SP4-Full-x86_64` and `cm-admin-install-1.8-sles15sp4-x86_64.iso` ISO files and CSM tarball.
 
 - Verify and ensure a minimum of 64GB memory is available for the admin node.
 
@@ -59,7 +60,7 @@ Fresh-installations may start at the [Boot installation environment](#3-boot-ins
 
 ### 1. Boot Pre-Install Live ISO and Seedfiles Generation
 
-This section will guide the administrator through installing HPCM to generate seedfiles. The seedfiles will be used later in step of the CSM installation.
+This section will guide the administrator through installing HPCM to generate seedfiles. The seedfiles will be used later in the step of the CSM installation.
 
 See [Boot Pre-Install Live ISO and Seedfiles Generation](hpcm_installation-cpi.md).
 
@@ -180,7 +181,8 @@ for an example configuration of an email alert notification for the Postgres rep
 Now that all management nodes and CSM services have been validated as healthy, the firmware on other components in the system can be checked and updated. The Firmware Action Service (FAS) communicates with many devices on the system.
 FAS can be used to update the firmware for all of the devices it communicates with at once, or specific devices can be targeted for a firmware update.
 
-> **IMPORTANT:** Before FAS can be used to update firmware, refer to the _HPE Cray EX System Software Getting Started Guide S-8000_ on the [HPE Customer Support Center](https://www.hpe.com/support/ex-gsg) for more information about how to install the HPE Cray EX HPC Firmware Pack (HFP) product.
+> **IMPORTANT:** Before FAS can be used to update firmware, refer to the _HPE Cray EX System Software Getting Started Guide S-8000_ on the
+[HPE Customer Support Center](https://www.hpe.com/support/ex-gsg) for more information about how to install the HPE Cray EX HPC Firmware Pack (HFP) product.
 The installation of HFP will inform FAS of the newest firmware available. Once FAS is aware that new firmware is available, then see [Update Firmware with FAS](../../operations/firmware/Update_Firmware_with_FAS.md).
 
 ### 9. Prepare compute nodes
