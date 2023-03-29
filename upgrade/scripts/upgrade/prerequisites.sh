@@ -588,6 +588,22 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# CASMTRIAGE-5115 - csm-config Ansible content in 1.4 requires a 1.4 version of the CFS image inventory builder
+state_name="UPGRADE_CFS_INVENTORY_IMAGE"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+
+    kubectl -n services get cm cray-cfs-operator-config -o yaml | sed -e "s/cray-cfs-operator:[0-9].[0-9]*.[0-9]/cray-cfs-operator:1.17.1/g" | kubectl replace -f -
+    kubectl -n services rollout restart deployment/cray-cfs-operator
+
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
