@@ -52,20 +52,20 @@ state of the switch. This step is not required to configure the management netwo
 unavailable, this step can be temporarily skipped. Any automated tests that depend on the switch
 credentials being in Vault will fail until they are added.
 
-First, write the switch admin password to the `SWITCH_ADMIN_PASSWORD` variable if it isn't already
+First, write the switch admin password to the `SW_ADMIN_PASSWORD` variable if it isn't already
 set.
 
 ```bash
-read -s SWITCH_ADMIN_PASSWORD
+read -s SW_ADMIN_PASSWORD
 ```
 
-Once the `SWITCH_ADMIN_PASSWORD` variable is set, run the following commands to add the switch admin
+Once the `SW_ADMIN_PASSWORD` variable is set, run the following commands to add the switch admin
 password to Vault.
 
 ```bash
 VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
 alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
-vault kv put secret/net-creds/switch_admin admin=$SWITCH_ADMIN_PASSWORD
+vault kv put secret/net-creds/switch_admin admin=$SW_ADMIN_PASSWORD
 ```
 
 Note: The use of `read -s` is a convention used throughout this documentation which allows for the
