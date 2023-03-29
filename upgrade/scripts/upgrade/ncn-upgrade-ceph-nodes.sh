@@ -122,7 +122,7 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
-state_name="REDEPLOY_CEPH"
+state_name="RE_ADD_HOST_TO_CEPH"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
@@ -133,8 +133,37 @@ if [[ $state_recorded == "0" ]]; then
     ceph cephadm get-pub-key > ~/ceph.pub
     ssh-copy-id -f -i ~/ceph.pub root@${target_ncn}
     ceph orch host add ${target_ncn}
+    } >> ${LOG_FILE} 2>&1
+    record_state "${state_name}" ${target_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
+state_name="REDEPLOY_CEPH_DAEMONS"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    {
     sleep 20
-    for s in $(ceph orch ps | grep ${target_ncn} | awk '{print $1}'); do  ceph orch daemon redeploy $s; done    
+    nexus_image=$(cat /tmp/ceph_global_container_image_with_sha.txt)
+    ceph config set global container_image ${nexus_image}
+    for daemon in "mon" "mgr" "osd" "mds" "crash" "rgw"; do
+        if [[ -n $(ceph orch ps ${target_ncn} | awk '{print $1}' | grep $daemon) ]]; then
+            daemons_to_restart=$(ceph orch ps ${target_ncn} | awk '{print $1}' | grep $daemon)
+            for each in $daemons_to_restart; do
+                ceph orch daemon redeploy $each --image $nexus_image
+            done
+        fi
+    done
+    for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
+        if [[ -n $(ceph orch ps ${target_ncn} | awk '{print $1}' | grep $daemon) ]]; then
+            daemons_to_restart=$(ceph orch ps ${target_ncn} | awk '{print $1}' | grep $daemon)
+            for each in $daemons_to_restart; do
+                ceph orch daemon redeploy $each
+            done
+        fi
+    done
+    sleep 90
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
@@ -261,22 +290,6 @@ if [[ ${target_ncn} == "ncn-s001" ]]; then
     else
         echo "====> ${state_name} has been completed"
     fi
-fi
-
-state_name="POST_CEPH_UPGRADE_IMAGE_PRELOAD"
-state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
-if [[ $state_recorded == "0" ]]; then
-    echo "====> ${state_name} ..."
-    {
-    if [[ $ssh_keys_done == "0" ]]; then
-        ssh_keygen_keyscan "${target_ncn}"
-        ssh_keys_done=1
-    fi
-    ssh ${target_ncn} '/srv/cray/scripts/common/pre-load-images.sh'
-    } >> ${LOG_FILE} 2>&1
-    record_state "${state_name}" ${target_ncn}
-else
-    echo "====> ${state_name} has been completed"
 fi
 
 cat <<EOF
