@@ -108,6 +108,8 @@ if [[ $state_recorded == "0" ]]; then
     {
     ssh_keygen_keyscan "${target_ncn}"
     ssh_keys_done=1
+    # remove old ceph daemons
+    ssh ${target_ncn} podman rmi --all --force
     scp ./${target_ncn}-ceph.tgz $target_ncn:/
     ssh ${target_ncn} 'cd /; tar -xvf ./$(hostname)-ceph.tgz; rm /$(hostname)-ceph.tgz'
     # pull container images from nexus
