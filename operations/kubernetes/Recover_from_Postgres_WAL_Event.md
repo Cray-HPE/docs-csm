@@ -88,7 +88,7 @@ The following example is based on `cray-smd-postgres`.
     ```
 
     ```text
-    psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
+    psql (14.7 (Ubuntu 14.7-1.pgdg18.04+1), server 11.19 (Ubuntu 11.19-1.pgdg18.04+1))
     Type "help" for help.
 
     postgres=#   <----- success!!  Type \q
@@ -121,7 +121,7 @@ The following example is based on `cray-smd-postgres`.
     ```
 
     ```text
-    psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
+    psql (14.7 (Ubuntu 14.7-1.pgdg18.04+1), server 11.19 (Ubuntu 11.19-1.pgdg18.04+1))
     Type "help" for help.
 
     postgres=#   <----- success!!  Type \q
@@ -292,7 +292,7 @@ The following example is based on `cray-smd-postgres`, where the `postgresql` `c
     Expected output:
 
     ```text
-    psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
+    psql (14.7 (Ubuntu 14.7-1.pgdg18.04+1), server 11.19 (Ubuntu 11.19-1.pgdg18.04+1))
     Type "help" for help.
 
     postgres=#   <----- success!!  Type \q

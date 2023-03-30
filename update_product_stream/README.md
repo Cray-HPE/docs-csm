@@ -22,31 +22,41 @@ be downloaded and extracted.
 
 1. Download the CSM software release tarball.
 
+    ```bash
+    ENDPOINT=URL_SERVER_Hosting_tarball
+    ```
+
+    ```bash
+    CSM_RELEASE=x.y.z
+    ```
+
    > ***NOTE:*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
 Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
 
    - Without proxy:
 
      ```bash
-     ENDPOINT=URL_SERVER_Hosting_tarball
-     CSM_RELEASE=x.y.z
      wget "${ENDPOINT}/csm-${CSM_RELEASE}.tar.gz"
      ```
 
    - With https proxy:
 
      ```bash
-     ENDPOINT=URL_SERVER_Hosting_tarball
-     CSM_RELEASE=x.y.z
-     https_proxy=https://example.proxy.net:443 wget "${ENDPOINT}/csm-${CSM_RELEASE}.tar.gz"
+     https_proxy=https://example.proxy.net:443
+     ```
+
+     ```bash
+     wget "${ENDPOINT}/csm-${CSM_RELEASE}.tar.gz"
      ```
 
    - With http proxy:
 
      ```bash
-     ENDPOINT=URL_SERVER_Hosting_tarball
-     CSM_RELEASE=x.y.z
-     http_proxy=http://example.proxy.net:80 wget "${ENDPOINT}/csm-${CSM_RELEASE}.tar.gz"
+     http_proxy=http://example.proxy.net:80
+     ```
+
+     ```bash
+     wget "${ENDPOINT}/csm-${CSM_RELEASE}.tar.gz"
      ```
 
 1. Extract the release distribution.
@@ -92,15 +102,24 @@ The following requirements must be met on the system where the procedure is bein
 
 1. Download the compressed CSM software package patch file.
 
-   The file name will be of the form `csm-x.y.z-x.z.a.patch.gz`.
-   Be sure to modify the following example with the appropriate values.
+    The file name will be of the form `csm-x.y.z-x.z.a.patch.gz`.
+    Be sure to modify the following example with the appropriate values.
 
-   ```bash
-   ENDPOINT=URL_SERVER_Hosting_tarball
-   CSM_RELEASE=x.y.z
-   PATCH_RELEASE=x.z.a
-   wget "${ENDPOINT}/csm-${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
-   ```
+    ```bash
+    ENDPOINT=URL_SERVER_Hosting_tarball
+    ```
+
+    ```bash
+    CSM_RELEASE=x.y.z
+    ```
+
+    ```bash
+    PATCH_RELEASE=x.z.a
+    ```
+
+    ```bash
+    wget "${ENDPOINT}/csm-${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
+    ```
 
 1. Uncompress the patch.
 
@@ -141,35 +160,51 @@ This tarball can now be used in place of the original CSM software release tarba
 Acquire the latest documentation RPM. This may include updates, corrections, and enhancements that were not available until after the software release.
 
 > ***NOTE:*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
-Using http proxies in any way other than the following examples will cause many failures in subsequent steps.
+> Using http proxies in any way other than the following examples will cause many failures in subsequent steps.
 
-1. Check the version of the currently installed CSM documentation.
+1. Check the version of the currently installed CSM documentation and CSM library.
 
    ```bash
-   rpm -q docs-csm
+   rpm -q docs-csm libcsm
    ```
 
-1. Download and upgrade the latest documentation RPM.
+1. Download and upgrade the latest documentation RPM and CSM library.
 
-   Without proxy:
+    - Without proxy:
+
+        ```bash
+        wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" -O /root/docs-csm-latest.noarch.rpm
+        wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" -O libcsm-latest.noarch.rpm 
+        ```
+
+    - With https proxy:
+
+        ```bash
+        https_proxy=https://example.proxy.net:443   
+        ```
+
+        ```bash
+        wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" \
+            -O /root/docs-csm-latest.noarch.rpm
+        wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" \
+            -O /root/libcsm-latest.noarch.rpm
+        ```
+
+    - If this machine does not have direct internet access, then this RPM will need to be externally downloaded and
+      copied to the system. This example copies it to `ncn-m001`.
+
+        ```bash
+        curl -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
+        SLES_VERSION=$(ssh ncn-m001 'awk -F= '\''/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}'\'' /etc/os-release')
+        curl -O "https://release.algol60.net/lib/sle-${SLES_VERSION}/libcsm-latest.noarch.rpm"
+        scp docs-csm-latest.noarch.rpm libcsm-latest.noarch.rpm ncn-m001:/root
+        ssh ncn-m001
+        ```
+
+1. Install the documentation RPM and CSM library.
 
    ```bash
-   rpm -Uvh --force "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
-   ```
-
-   With https proxy:
-
-   ```bash
-   rpm -Uvh --force --httpproxy https://example.proxy.net --httpport 443 "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
-   ```
-
-   If this machine does not have direct internet access, then this RPM will need to be externally downloaded and copied to the system. This example copies it to `ncn-m001`.
-
-   ```bash
-   wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" -O docs-csm-latest.noarch.rpm
-   scp docs-csm-latest.noarch.rpm ncn-m001:/root
-   ssh ncn-m001
-   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+   rpm -Uvh --force /root/docs-csm-latest.noarch.rpm /root/libcsm-latest.noarch.rpm
    ```
 
 1. Repeat the first step in this procedure to display the version of the CSM documentation after the update.

@@ -1,10 +1,18 @@
-# Upgrade
+# Upgrade CSM and additional products with IUF
 
-The following workflow describes an upgrade procedure for CSM and all non-CSM product content
-provided via an HPC CSM Software Recipe release. These steps alternate between CSM upgrade
-instructions unrelated to IUF and non-CSM product upgrade instructions managed by IUF.
+This procedure is used when performing an upgrade of Cray System Management (CSM) along with
+additional HPE Cray EX software products at the same time. This procedure would be used when
+upgrading from one HPC CSM Software Recipe release to another.
 
-All stages of `iuf` are executed in this workflow: all of the new product software provided in the
+This procedure streamlines the rollout of new images to management nodes. These images are based
+on the new images provided by the CSM product and customized by the additional HPE Cray EX software
+products, including the Cray Operating System (COS) and Slingshot Host Software (SHS).
+
+The steps in this procedure alternate between CSM upgrade instructions that do not utilize the IUF
+and instructions for upgrading additional HPE Cray EX software products whose installation is
+managed by the IUF.
+
+All stages of `iuf` are executed in this procedure. All of the new product software provided in the
 recipe release is deployed and all management NCNs and managed compute and application nodes are
 rebooted to new images and CFS configurations. Manual operations are documented for procedures that
 are not currently managed by IUF.
@@ -12,10 +20,9 @@ are not currently managed by IUF.
 The upgrade workflow comprises the following procedures which must be executed in the order shown.
 
 1. CSM preparation, Stage 0.1, and Stage 0.2
-
    Read the _Important Notes_ section of the
    [CSM 1.3.0 or later to 1.4.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
-   documentation and then follow these CSM instructions in order:
+   documentation and then follow only these CSM instructions in order:
 
    1. [Prepare for Upgrade](../../../upgrade/prepare_for_upgrade.md)
    1. [Stage 0.1 - Prepare assets](../../../upgrade/Stage_0_Prerequisites.md#stage-01---prepare-assets)
@@ -59,8 +66,8 @@ The upgrade workflow comprises the following procedures which must be executed i
    Follow these CSM instructions in order:
 
    1. [Stage 3 - CSM Service Upgrades](../../../upgrade/Stage_3.md)
-   1. [Validate CSM Health](../../../upgrade/README.md#3-validate-csm-health)
-   1. [Check and Update Firmware](../../../upgrade/README.md#4-check-and-update-firmware)
+   1. [Validate CSM Health During Upgrade](../../../upgrade/Validate_CSM_Health_During_Upgrade.md)
+   1. [Update Firmware with FAS](../../firmware/Update_Firmware_with_FAS.md)
 
 1. Deploy product
 

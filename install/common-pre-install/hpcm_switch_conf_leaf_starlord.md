@@ -1,6 +1,6 @@
-Copy the text from here:
+# Copy the text from here
 
-```
+```text
 ! Version 10.5.1.4
 ! Last configuration change at Mar  06 12:09:16 2023
 !
