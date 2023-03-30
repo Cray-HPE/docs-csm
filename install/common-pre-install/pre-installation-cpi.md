@@ -14,7 +14,7 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [Generate topology files](#31-generate-topology-files)
     1. [Customize `system_config.yaml`](#32-customize-system_configyaml)
     1. [Run CSI](#33-run-csi)
-    1. [Prepare Site Init](#34-prepare-site-init)
+    1. [Prepare `site init`](#34-prepare-site-init)
     1. [Configure Management Network](#35-configure-management-network)
     1. [Initialize the LiveCD](#36-initialize-the-livecd)
 1. [Next topic](#next-topic)
@@ -23,15 +23,15 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
 
 Before proceeding, ensure that other NCNs are powered off and their BMC's IP source is set to DHCP and external connectivity is working.
 
-DHCP and external connectivity is required to download csm tar ball.
+DHCP and external connectivity is required to download CSM tar ball.
 
 > **NOTE:** Each step denotes where its commands must run; `external#` refers to a server that is **not** the Cray, whereas `pit# or gamora#` refers to the LiveCD itself.
 
 ### 1.1 Setup site network
 
-On the first login, configure and verify the sitelink, DNS and gateway IP addresses.
+On the first login, configure and verify the site-link, DNS and gateway IP addresses.
 
-1. (`pit#`) Configure the site-link (`lan0`), DNS, and gateway IP addresses. (Optional) Also, at this stage, you can change the admin node password to "initial0".
+1. (`pit#`) Configure the site-link (`lan0`), DNS, and gateway IP addresses. (Optional) Also, at this stage, you can change the admin node password to `initial0`.
 
    1. Set `site_ip` variable.
 
@@ -86,7 +86,7 @@ On the first login, configure and verify the sitelink, DNS and gateway IP addres
 
       > **NOTE:**
       >
-      > - Use `ipmi sol` session or `conman` session while performing this step as ssh session may disconnect.
+      > - Use `ipmi sol` session or `conman` session while performing this step as SSH session may disconnect.
       > - All of the `/root/bin/csi-*` scripts can be run without parameters to display usage statements.
       > - The hostname is auto-resolved based on reverse DNS.
 
@@ -115,7 +115,7 @@ On the first login, configure and verify the sitelink, DNS and gateway IP addres
     tmpfs          /var/lib/containers/storage      tmpfs     auto,nodev,nosuid,size=64g     0 0
    ```
 
-   Ensure that `tmpfs` is large enough as almost 31 GB of data will be placed in `/var/lib/containers/storage` during install csm services step. Incase `tmpfs` is small, then use the following command:
+   Ensure that `tmpfs` is large enough as almost 31 GB of data will be placed in `/var/lib/containers/storage` during the install CSM services step. If `tmpfs` is small, to increase the `tmpfs` capacity use the following command:
 
    ```bash
     LABEL=PITDATA  /var/www/ephemeral               ext4      noauto,noatime                0 2
@@ -329,7 +329,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
 1. (`pit#`) Install/update the RPMs and configuration files necessary for CSM installation
 
-   1. Install the required rpms using the following command:
+   1. Install the required RPMs using the following command:
 
       ```bash
           rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP3/x86_64/product/python3-simplejson-3.17.2-1.10.x86_64.rpm
@@ -488,10 +488,10 @@ Run the following steps before starting any of the system configuration procedur
    If `cabinets.yaml` config file has not been created, create the `cabinets.yaml` using the following step, else skip the following step.
 
       (`pit#`)
-      1. Create remaining seedfiles,  unless they already exist from a previous installation.
+      1. Create remaining seed files,  unless they already exist from a previous installation.
          - [Create `cabinets.yaml`](../create_cabinets_yaml.md)
 
-1. (`pit#`) Assuming all seedfiles are under `$HOME/seedfiles` directory, copy the generated files under `${PITDATA}/prep` directory.
+1. (`pit#`) Assuming all seed files are under `$HOME/seedfiles` directory, copy the generated files under `${PITDATA}/prep` directory.
 
    ```bash
    cp $HOME/seedfiles/* "${PITDATA}/prep"
@@ -612,15 +612,15 @@ Run the following steps before starting any of the system configuration procedur
         ]
    ```
 
-### 3.4 Prepare Site Init
+### 3.4 Prepare `site init`
 
-Follow the [Prepare Site Init](../prepare_site_init.md) procedure.
+Follow the [Prepare `site init`](../prepare_site_init.md) procedure.
 
 ### 3.5 Configure Management Network
 
 Follow  [Configure management network switches](README.md#6-configure-management-network-switches).
 
-> **NOTE:** The generated paddle file can be used as input to the canu command to configure the switches.
+> **NOTE:** The generated paddle file can be used as input to the CANU command to configure the switches.
 
 ### 3.6 Initialize the LiveCD
 
@@ -628,7 +628,7 @@ Follow  [Configure management network switches](README.md#6-configure-management
 
 1. (`pit#`) Initialize the PIT.
 
-   >  **NOTE:** This step restarts network interface , so this step can be performed from ipmi sol / conman session.
+   >  **NOTE:** This step restarts the network interface, so this step can be performed from `ipmi sol` or `conman` session.
 
    The `pit-init.sh` script will prepare the PIT server for deploying NCNs.
 
@@ -690,7 +690,7 @@ Follow  [Configure management network switches](README.md#6-configure-management
         /var/www is ready.
    ```
 
-   Goto `/var/www` and create additional symlinks as follows:
+   Go to `/var/www` and create additional symlinks as follows:
 
    ```bash
    cp -r /var/www/ncn-* /srv/tftpboot/
@@ -706,7 +706,7 @@ Follow  [Configure management network switches](README.md#6-configure-management
 
 1. (`pit#`) Verify that the LiveCD is ready by running the preflight tests.
 
-   Run the following command to make the kubectl binary executable:
+   Run the following command to make the `kubectl` binary executable:
 
    ```bash
    chmod +x /usr/bin/kubectl

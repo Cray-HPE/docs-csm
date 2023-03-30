@@ -131,10 +131,10 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
    1. (`external#`) Power the server on.
 
-           ```bash
-           ipmitool -I lanplus -U "${username}" -E -H "${BMC}" chassis power on
-           ipmitool -I lanplus -U "${username}" -E -H "${BMC}" sol activate
-           ```
+      ```bash
+      ipmitool -I lanplus -U "${username}" -E -H "${BMC}" chassis power on
+      ipmitool -I lanplus -U "${username}" -E -H "${BMC}" sol activate
+      ```
 
 ## Booting the Master node using Bootable USB
 
@@ -191,11 +191,15 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
       1. For Mellanox spine switches.
 
-          1. Access the Mellanox switch using IP address or using Minicom.
+          1. Access the Mellanox switch using IP address or Minicom.
+
+             Example 1 (using IP address):
 
              ```bash
               ssh admin@10.1.0.2
              ```
+
+             Example 2 (using Minicom):
 
              ```bash
               minicom -b 115200 -D /dev/ttyUSB1
@@ -332,7 +336,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
       >__Note:__ Incase the spine and/or leaf switches are from Aruba then following document an be referred for the configuration in the following link: https://hpedia.osp.hpe.com/wiki/Setting_up_Aruba_Switches_with_HPCM.
 
-   1. Running YaST First boot.
+   1. Running YaST-Firstboot.
 
       Run the following command:
 
@@ -788,9 +792,9 @@ The stepwise procedure to generate seed files is as follows:
 
    1. Create [`cabinets.yaml`](../create_cabinets_yaml.md) (Manually).
 
-   1. Capture hardware inventory and generate seed files and paadlefile.
+   1. Capture hardware inventory and generate seed files and paddle file.
 
-      The following command stores the inventory of nodes and switches (fabric and management) in the database and generates the seed files and paadle file:
+      The following command stores the inventory of nodes and switches (fabric and management) in the database and generates the seed files and paddle file:
 
       ```bash
       cnodes | grep node >>nodelist
