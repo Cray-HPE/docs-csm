@@ -3,8 +3,8 @@
 Pass in a switch config file that CANU will inject into the generated config. A use case would be to add custom site
 connections. This config file will overwrite previously generate config.
 
-The custom-config file type is YAML and a single file can be used for multiple switches. You will need to specify the
-switch name and what config inject. The custom-config feature is using the hierarchical configuration library,
+The custom config file type is YAML and a single file can be used for multiple switches. You will need to specify the
+switch name and what config inject. The custom config feature is using the hierarchical configuration library,
 documentation can be [found here](https://netdevops.io/hier_config/).
 
 Custom config file examples:
