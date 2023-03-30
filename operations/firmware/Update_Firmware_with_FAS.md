@@ -54,12 +54,12 @@ The following table describes the hardware items that can have their firmware up
 Table 1. Upgradable Firmware Items
 
 | **Manufacturer** | **Type**     | **Target**                                                                          |
-| ---------------- | ------------ | ----------------------------------------------------------------------------------- |
-| Cray             | `nodeBMC`    | `BMC`, `Node0.BIOS`,  `Node1.BIOS`,  `Recovery`, `Node1.AccFPGA0`, `Node0.AccFPGA0` |
-| Cray             | `chassisBMC` | `BMC`, `Recovery`                                                                   |
-| Cray             | `routerBMC`  | `BMC`, `Recovery`                                                                   |
-| Gigabyte         | `nodeBMC`    | `BMC`, `BIOS`                                                                       |
-| HPE              | `nodeBMC`    | `iLO 5`, `System ROM` ,`Redundant System ROM`                                       |
+| ---------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Cray             | `nodeBMC`    | `BMC`, `Node0.BIOS`,  `Node1.BIOS`,  `Recovery`, `Node1.AccFPGA0`, `Node0.AccFPGA0`, `Node0.AccVBIOS`, `Node0.ManagementEthernet`, `Node1.ManagementEthernet` |
+| Cray             | `chassisBMC` | `BMC`, `Recovery`                                                                                                                                       |
+| Cray             | `routerBMC`  | `BMC`, `Recovery`                                                                                                                                       |
+| Gigabyte         | `nodeBMC`    | `BMC`, `BIOS`                                                                                                                                           |
+| HPE              | `nodeBMC`    | `iLO 5`, `System ROM` ,`Redundant System ROM`                                                                                                           |
 
 ## Order of operations
 

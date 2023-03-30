@@ -23,15 +23,19 @@ All of the commands in this procedure are intended to be run on a single master 
 
 In order to modify the `root` user password and/or SSH keys, first the desired values must be set in Vault. Then the
 [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
-is used to take these values from Vault and make the changes to the running NCNs and/or the NCN images.
+applies these changed values to the running management nodes via node personalization.
+
+Note that this procedure does not change the `root` user password or SSH keys in the management node
+images. If the management nodes are rebuilt from their images, they will use the SSH keys and `root`
+user password from the image until node personalization completes via CFS.
 
 1. Set the desired password and SSH keys in Vault.
 
-   See [Configure the root password and SSH keys in Vault](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#2-configure-the-root-password-and-ssh-keys-in-vault).
+   See [Configure the root password and SSH keys in Vault](../CSM_product_management/Configure_the_root_Password_and_SSH_Keys_in_Vault.md).
 
-1. Make the changes on the running NCNs (if desired) using node personalization.
+1. Make the changes on the running management nodes using node personalization.
 
-   See [NCN Node Personalization](../configuration_management/NCN_Node_Personalization.md).
+   See [Management Node Personalization](../configuration_management/Management_Node_Personalization.md#re-run-node-personalization-on-management-nodes).
 
 1. Make the changes to the NCN images (if desired).
 

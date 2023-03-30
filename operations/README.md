@@ -48,9 +48,7 @@ Important procedures for configuring, managing, and validating the CSM environme
 - [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
 - [Configure the Cray Command Line Interface (Cray CLI)](configure_cray_cli.md)
 - [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
-- [Configure Non-Compute Nodes with CFS](CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md)
 - [Configure CSM Packages with CFS](CSM_product_management/Configure_CSM_Packages_with_CFS.md)
-- [Perform NCN Personalization](CSM_product_management/Perform_NCN_Personalization.md)
 - [Access the LiveCD USB Device After Reboot](../install/livecd/Access_LiveCD_USB_Device_After_Reboot.md)
 - [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
 - [Validate Signed RPMs](CSM_product_management/Validate_Signed_RPMs.md)
@@ -230,10 +228,9 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
 - [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
   - [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
 - [CFS Key Management](configuration_management/CFS_Key_Management.md)
-- Management NCN personalization and image customization
-  - [NCN Node Personalization](configuration_management/NCN_Node_Personalization.md)
+- Management node personalization and image customization
+  - [Management Node Personalization](configuration_management/Management_Node_Personalization.md)
   - [Management Node Image Customization](configuration_management/Management_Node_Image_Customization.md)
-  - [Worker Image Customization](configuration_management/Worker_Image_Customization.md)
 
 ## Kubernetes
 
@@ -539,6 +536,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 - [Replace a Compute Blade Using SAT](node_management/Replace_a_Compute_Blade_Using_SAT.md)
 - [Update the Gigabyte Node BIOS Time](node_management/Update_the_Gigabyte_Node_BIOS_Time.md)
 - [S3FS Usage Guidelines](node_management/S3FS_Usage_and_Guidelines.md)
+- [Defragment NID Numbering](node_management/Defragment_NID_Numbering.md)
 
 ## Network
 

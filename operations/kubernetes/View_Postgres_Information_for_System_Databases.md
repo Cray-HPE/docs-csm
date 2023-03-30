@@ -17,8 +17,6 @@ This procedure requires administrative privileges.
     Example output:
 
     ```text
-    Defaulting container name to postgres.
-    Use 'kubectl describe pod/cray-smd-postgres-0 -n services' to see all of the containers in this pod.
 
      ____        _ _
     / ___| _ __ (_) | ___
@@ -50,7 +48,7 @@ This procedure requires administrative privileges.
     Example output:
 
     ```text
-    psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
+    psql (14.7 (Ubuntu 14.7-1.pgdg18.04+1), server 11.19 (Ubuntu 11.19-1.pgdg18.04+1))
     Type "help" for help.
 
     postgres=#
@@ -89,7 +87,7 @@ This procedure requires administrative privileges.
     Example output:
 
     ```text
-    psql (12.2 (Ubuntu 12.2-1.pgdg18.04+1), server 11.7 (Ubuntu 11.7-1.pgdg18.04+1))
+    psql (14.7 (Ubuntu 14.7-1.pgdg18.04+1), server 11.19 (Ubuntu 11.19-1.pgdg18.04+1))
     You are now connected to database "hmsds" as user "postgres".
     hmsds=#
     ```
