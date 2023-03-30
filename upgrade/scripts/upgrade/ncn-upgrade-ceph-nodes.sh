@@ -163,7 +163,7 @@ if [[ $state_recorded == "0" ]]; then
             done
         fi
     done
-    sleep 90
+    sleep 120
     } >> ${LOG_FILE} 2>&1
     record_state "${state_name}" ${target_ncn}
 else
