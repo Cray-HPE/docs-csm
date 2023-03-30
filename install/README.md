@@ -18,7 +18,7 @@ The BICAN is designed to separate administrative network traffic from user netwo
 More information can be found on the [BICAN summary page](../operations/network/management_network/bican_technical_summary.md).
 Review the BICAN summary before continuing with the CSM install.
 
-Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) page.
+Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) pages.
 
 Install Cray System Management by using one of the following options:
 
