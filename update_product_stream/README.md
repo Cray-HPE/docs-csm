@@ -180,13 +180,12 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
     - With https proxy:
 
         ```bash
-        https_proxy=https://example.proxy.net:443   
+        https_proxy=https://example.proxy.net:443 wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" \
+            -O /root/docs-csm-latest.noarch.rpm
         ```
 
         ```bash
-        wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" \
-            -O /root/docs-csm-latest.noarch.rpm
-        wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" \
+        https_proxy=https://example.proxy.net:443 wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" \
             -O /root/libcsm-latest.noarch.rpm
         ```
 
