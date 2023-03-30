@@ -8,7 +8,7 @@ shown here with numbered topics.
 [Prerequisites](#prerequisites)
 
 1. [Pre-installation](#pre-installation)  
-    1. [Boot Pre-Install Live ISO and Seedfiles Generation](#1-boot-pre-install-live-iso-and-seedfiles-generation)
+    1. [Boot Pre-Install Live ISO and Seed Files Generation](#1-boot-pre-install-live-iso-and-seed-files-generation)
     1. [Preparing for a re-installation](#2-preparing-for-a-re-installation)
     1. [Boot installation environment](#3-boot-installation-environment)
     1. [Import CSM tarball](#4-import-csm-tarball)
@@ -38,7 +38,7 @@ The following must be verified before starting the Pre-installation procedure:
 
 - Ensure all the River Node BMCs are reachable and is set to DHCP mode. Refer to [Set node BMCs to DHCP](../re-installation.md#set-node-bmcs-to-dhcp).
 
-  >**Note:** For Baremetal installation these settings will be default.
+  >**Note:** For bare-metal installation these settings will be default.
 
 - Ensure that list of Management Switch IP address configured on `vlan1` is available, this need to be shared or will require serial console to the switches.
 
@@ -58,11 +58,11 @@ This section will guide the administrator through creating and setting up the Cr
 
 Fresh-installations may start at the [Boot installation environment](#3-boot-installation-environment) section. Re-installations will have other steps to complete in the [Preparing for a re-installation](#2-preparing-for-a-re-installation) section.
 
-### 1. Boot Pre-Install Live ISO and Seedfiles Generation
+### 1. Boot Pre-Install Live ISO and Seed Files Generation
 
-This section will guide the administrator through installing HPCM to generate seedfiles. The seedfiles will be used later in the step of the CSM installation.
+This section will guide the administrator through installing HPCM to generate seed files. The seed files will be used later in the step of the CSM installation.
 
-See [Boot Pre-Install Live ISO and Seedfiles Generation](hpcm_installation-cpi.md).
+See [Boot Pre-Install Live ISO and Seed Files Generation](hpcm_installation-cpi.md).
 
 ### 2. Preparing for a re-installation
 
