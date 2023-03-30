@@ -37,6 +37,9 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
 
    ```bash
    read -s SW_ADMIN_PASSWORD
+   ```
+
+   ```bash
    export SW_ADMIN_PASSWORD
    ```
 
