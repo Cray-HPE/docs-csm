@@ -194,14 +194,28 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
 1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
 
-   > A later stage of the upgrade expects the `docs-csm` and `libcsm` RPMs to be located at `/root/` on `ncn-m002`; that is why this command copies them there.
+    > A later stage of the upgrade expects the `docs-csm` and `libcsm` RPMs to be located at `/root/` on `ncn-m002`;
+    > that is why this command copies them there.
 
-   ```bash
-   scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
-   zypper --plus-repo="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
-   scp ncn-m001:/root/*.noarch.rpm /root/ &&
-       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm /root/libcsm-latest.noarch.rpm
-   ```
+   - Install `csi` and `docs-csm`.
+
+       ```bash
+       scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
+       zypper --plus-repo="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/${CSM_RELEASE}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
+       scp ncn-m001:/root/*.noarch.rpm /root/
+       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+       ```
+
+   - Install `libcsm`.
+
+       > ***NOTE*** Since `libcsm` depends on versions of Python relative to what is included in the SLES service packs,
+       > it needs to be pulled from its respective repository.
+       > Optionally, one can go through the [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation)
+       > guide again, but from `ncn-m002`.
+
+       ```bash
+       zypper -n in -y --repo csm-sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release) libcsm
+       ```
 
 ### Upgrade `ncn-m001`
 
