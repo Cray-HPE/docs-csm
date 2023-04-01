@@ -209,12 +209,14 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
    - Install `libcsm`.
 
        > ***NOTE*** Since `libcsm` depends on versions of Python relative to what is included in the SLES service packs,
-       > it needs to be pulled from its respective repository.
-       > Optionally, one can go through the [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation)
+       > then in the event that `ncn-m002` is running a newer SLES distro a new `libcsm` must be downloaded. This will
+       > often be the case when jumping to a new CSM minor version (e.g. CSM 1.3 to CSM 1.4).
+       > e.g. if `ncn-m001` is running SLES15SP3, and `ncn-m002` is running SLES15SP4 then the SLES15SP4 `libcsm` is needed.
+       > Follow the [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation)
        > guide again, but from `ncn-m002`.
 
        ```bash
-       zypper -n in -y --repo csm-sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release) libcsm
+       rpm -Uvh --force /root/libcsm-latest.noarch.rpm
        ```
 
 ### Upgrade `ncn-m001`
