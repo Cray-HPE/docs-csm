@@ -38,6 +38,6 @@ err_exit()
 [[ ! -e ${ARCHIVE} ]] || err_exit "Archive file '${ARCHIVE}' already exists!"
 
 # Write all of the session templates to the file
-cray bos v2 sessiontemplates list --format json > "${ARCHIVE}" || 
+cray bos v2 sessiontemplates list --format json > "${ARCHIVE}" ||
     err_exit "Command failed: cray bos v2 sessiontemplates list --format json"
 echo "BOS session templates stored in file: ${ARCHIVE}"
