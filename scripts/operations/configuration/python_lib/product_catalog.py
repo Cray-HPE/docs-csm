@@ -23,13 +23,16 @@
 #
 """Shared Python function library: Cray product catalog"""
 
+import copy
+import subprocess
 import traceback
-from typing import Dict, ItemsView
+from typing import Dict, ItemsView, List, Tuple
 
 import logging
 import packaging.version
 import yaml
 
+from . import api_requests
 from . import common
 from . import k8s
 
@@ -37,11 +40,12 @@ from .types import JSONObject
 
 K8S_NAMESPACE = "services"
 K8S_CONFIG_MAP_NAME = "cray-product-catalog"
+CPC_UPDATE_IMAGE = "artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update"
 
 # Used for type hinting
 ProductVersionMap = Dict[str, JSONObject]
 ProductCatalogMap = Dict[str, ProductVersionMap]
-
+NameIdTupleList = List[Tuple[str, str]]
 
 def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> None:
     """
@@ -78,12 +82,11 @@ def parse_product_yaml(label: str, yaml_string: str) -> JSONObject:
             f"YAML data from {label} has an unexpected format", exc)
 
 
-def get_latest_version(product_version_map: ProductVersionMap,
-                       strict_versioning: bool = False,
-                       ignore_invalid_versions: bool = True) -> str:
+def get_latest_version_from_list(version_string_list: List[str],
+                                 strict_versioning: bool = False,
+                                 ignore_invalid_versions: bool = True) -> str:
     """
-    Given a product version map from the product catalog, sort the version strings
-    and return the latest one.
+    Given a list of version strings, sort them and return the latest one.
 
     If strict_versioning is false, then the generic packaging.version.parse() function will be
     used to parse the version strings. Otherwise the packaging.versions.Version() constructor will
@@ -94,12 +97,11 @@ def get_latest_version(product_version_map: ProductVersionMap,
 
     Returns None if there are no valid version strings.
     """
-    all_version_strings = list(product_version_map.keys())
-    logging.debug("get_latest_version: strict_versioning = %s, ignore_invalid_versions=%s, "
-                  "all_version_strings=%s", strict_versioning, ignore_invalid_versions,
-                  all_version_strings)
-    version_object_to_string = dict()
-    for version_string in all_version_strings:
+    logging.debug("get_latest_version_from_list: strict_versioning = %s, "
+                  "ignore_invalid_versions=%s, version_string_list=%s", strict_versioning,
+                  ignore_invalid_versions, version_string_list)
+    version_object_to_string = {}
+    for version_string in version_string_list:
         try:
             if strict_versioning:
                 version_object = packaging.version.Version(version_string)
@@ -108,21 +110,30 @@ def get_latest_version(product_version_map: ProductVersionMap,
             version_object_to_string[version_object] = version_string
         except packaging.version.InvalidVersion as exc:
             if ignore_invalid_versions:
-                logging.debug("get_latest_version: Ignoring invalid version string '%s'",
+                logging.debug("get_latest_version_from_list: Ignoring invalid version string '%s'",
                               version_string)
                 continue
-            log_error_raise_exception(
-                f"Invalid product version string in Cray product catalog: '{version_string}'", exc)
+            log_error_raise_exception(f"Invalid product version string: '{version_string}'", exc)
     if not version_object_to_string:
-        logging.debug("get_latest_version: No valid version strings found")
+        logging.debug("get_latest_version_from_list: No valid version strings found")
         return None
     sorted_version_objects = sorted(version_object_to_string.keys())
     latest_version_object = sorted_version_objects[-1]
     # return corresponding string
     latest_version_string = version_object_to_string[latest_version_object]
     logging.debug(
-        "get_latest_version: latest_version_string = '%s'", latest_version_string)
+        "get_latest_version_from_list: latest_version_string = '%s'", latest_version_string)
     return latest_version_string
+
+
+def get_latest_version(product_version_map: ProductVersionMap, *args, **kwargs) -> str:
+    """
+    Given a product version map from the product catalog, sort the version strings
+    and return the latest one, using the get_latest_version_from_list function.
+    All additional arguments are passed on to the get_latest_version_from_list function.
+    """
+    return get_latest_version_from_list(version_string_list=list(product_version_map.keys()),
+                                        *args, **kwargs)
 
 
 class ProductCatalog:
@@ -135,8 +146,17 @@ class ProductCatalog:
         """
         if k8s_client is None:
             k8s_client = k8s.Client()
-        self.data = k8s_client.get_config_map_data(name=K8S_CONFIG_MAP_NAME,
-                                                   namespace=K8S_NAMESPACE)
+        self.k8s_client = k8s_client
+        self.refresh_data()
+
+
+    def refresh_data(self):
+        """
+        Load the config map data from K8s
+        """
+        self.data = self.k8s_client.get_config_map_data(name=K8S_CONFIG_MAP_NAME,
+                                                        namespace=K8S_NAMESPACE)
+
 
     def get_items(self) -> ItemsView:
         """
@@ -160,7 +180,7 @@ class ProductCatalog:
         label = f"{K8S_NAMESPACE}/{K8S_CONFIG_MAP_NAME} Kubernetes configmap"
         # This could be done in a single return / dictionary construction, but the following is
         # more readable for those unfamiliar with the code, I think.
-        installed_products_map = dict()
+        installed_products_map = {}
         for product_name, product_yaml in self.get_items():
             installed_products_map[product_name] = parse_product_yaml(
                 label=f"'{product_name}' entry in {label}", yaml_string=product_yaml)
@@ -179,7 +199,7 @@ class ProductCatalog:
                 return parse_product_yaml(label=f"'{requested_product_name}' entry in {label}",
                                           yaml_string=product_yaml)
         # Return an empty mapping if no versions are installed
-        return dict()
+        return {}
 
     def get_installed_csm_versions(self) -> ProductVersionMap:
         """
@@ -208,3 +228,116 @@ class ProductCatalog:
         CSM-specific wrapper for get_latest_cfs_information
         """
         return self.get_latest_cfs_information("csm")
+
+
+    def update_product_images_recipes(self, product_name: str, product_version: str,
+                                      image_name_ids: NameIdTupleList = None,
+                                      recipe_name_ids: NameIdTupleList = None) -> None:
+        """
+        Verifies that the specified product and version are in the product catalog.
+        Updates the 'images' and 'recipes' fields of the specified version of the specified product,
+        using the latest version of the cray-product-catalog-update tool.
+        """       
+        installed_product_map = self.get_installed_products()
+        if product_name not in installed_product_map:
+            log_error_raise_exception(
+                f"update_product_images_recipes: Product '{product_name}' not in product catalog")
+        if product_version not in installed_product_map[product_name]:
+            log_error_raise_exception(f"update_product_images_recipes: Version '{product_version}'"
+                                      f" of product '{product_name}' not in product catalog")
+        latest_cpc_update_version = get_latest_cpc_update_version()
+        # First, copy in contents of this product version.
+        # Newer versions of cray product catalog updater will merge the changes, but to be safe
+        # here, we will do the merge ourselves.
+        update_content = copy.deepcopy(installed_product_map[product_name][product_version])
+        def merge_fields(images_or_recipes: str, ir_name_ids: NameIdTupleList) -> None:
+            """
+            Update the update_content data based on the images/recipes in the ir_name_ids list.
+            """
+            # If there is no images/recipes data currently, just add the new content.
+            # This should never be the case for the current way this method is being used.
+            if not ir_name_ids:
+                # No changes being made, so no updates to do.
+                return
+            if images_or_recipes not in update_content or not update_content[images_or_recipes]:
+                update_content[images_or_recipes] = { ir_name: { "id": ir_id }
+                                                      for ir_name, ir_id in ir_name_ids }
+                return
+            # There is existing images/recipes data. In this case, modify just the changed parts.
+            for ir_name, ir_id in ir_name_ids:
+                try:
+                    update_content[images_or_recipes][ir_name]["id"] = ir_id
+                except KeyError:
+                    update_content[images_or_recipes][ir_name] = { "id": ir_id }
+        merge_fields("images", image_name_ids)
+        merge_fields("recipes", recipe_name_ids)
+        # rstrip is to remove trailing newline that yaml adds
+        yaml_content_string = yaml.dump(update_content, default_flow_style=True).rstrip()
+        podman_cmd = ("podman run --rm --name ncn-cpc --user root -e KUBECONFIG=/.kube/admin.conf "
+                      "-e VALIDATE_SCHEMA=true -v /etc/kubernetes:/.kube:ro").split()
+        podman_cmd.extend(["-e", f"PRODUCT={product_name}",
+                           "-e", f"PRODUCT_VERSION={product_version}",
+                           "-e", f"YAML_CONTENT_STRING={yaml_content_string}",
+                           f"registry.local/{CPC_UPDATE_IMAGE}:{latest_cpc_update_version}"])
+        subprocess.run(podman_cmd, check=True)
+        self.refresh_data()
+
+
+def get_latest_cpc_update_version() -> str:
+    """
+    Queries Nexus to find the latest version of the following Docker image:
+    artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update
+
+    Returns a string with the latest version.
+    Returns None if no versions are found.
+    Raises an exception if there are errors.
+    """
+    nexus_search_url = "https://packages.local/service/rest/v1/search"
+    search_params = { "repository": "registry", "format": "docker", "name": CPC_UPDATE_IMAGE }
+    version_list = []
+
+    while True:
+        resp = api_requests.get_retry_validate(expected_status_codes=200, url=nexus_search_url,
+                                               add_api_token=False, params=search_params)
+        if not resp.text:
+            log_error_raise_exception("Nexus search response had 200 status but empty body")
+        response_object = resp.json()
+        try:
+            items = response_object["items"]
+        except KeyError as exc:
+            log_error_raise_exception(
+                f"Nexus search response had 200 status but no 'items' field: {response_object}",
+                exc)
+        except TypeError as exc:
+            log_error_raise_exception(
+                f"Nexus search response had 200 status but unexpected type: {exc}", exc)
+        if not isinstance(items, list):
+            log_error_raise_exception("Nexus search response had 200 status but 'items' field is "
+                                      f"type {type(items)}, not list")
+
+        for item in items:
+            try:
+                item_version = item["version"]
+            except KeyError as exc:
+                log_error_raise_exception(f"Nexus component has no 'version' field: {item}", exc)
+            if not isinstance(item_version, str):
+                log_error_raise_exception(
+                    f"Nexus component has non-string (type {type(item)}) 'version' field: {item}",
+                    exc)
+            version_list.append(item_version)
+
+        try:
+            continuation_token = response_object["continuationToken"]
+        except KeyError:
+            continuation_token = None
+        if continuation_token:
+            # Make another request to get the next page of responses
+            search_params["continuationToken"] = continuation_token
+            continue
+        # Continuation token is None or not set, so no more responses to get
+        break
+
+    if not version_list:
+        # No versions found
+        return None
+    return get_latest_version_from_list(version_list)
