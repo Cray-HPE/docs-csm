@@ -119,6 +119,14 @@ to resolve potential problems and then try running `setup-nexus.sh` again. Note 
 report `FAIL` when uploading duplicate assets. This is okay as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits
 with status code `0`.
 
+## Upgrade CANU
+
+CANU must be at version `1.7.1` or greater for this CSM patch release. New features were delivered in [CANU 1.7.0](https://github.com/Cray-HPE/canu/releases/tag/1.7.0) and a critical bug fixed in [CANU 1.7.1](https://github.com/Cray-HPE/canu/releases/tag/1.7.1).  Update CANU, adjusting the `pdsh` node ranges for the node type and counts on your system.
+
+```bash
+pdsh -f 1 -w ncn-m00[1-3],ncn-w00[1-3] "zypper install -y canu
+```
+
 ## Upgrade services
 
 Run `upgrade.sh` to deploy upgraded CSM applications and services:
