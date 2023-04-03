@@ -63,6 +63,8 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..."
     {
     scp ncn-s001:/srv/cray/scripts/common/csi-configuration.sh /tmp/csi-configuration.sh
+    pool=$(ceph fs ls --format json-pretty|jq -r '.[] | select(. "name" == "cephfs") | .data_pools[]')
+    sed -i "s/.*ceph fs ls.*/         pool: $pool/" /tmp/csi-configuration.sh
     mkdir -p /srv/cray/tmp
     . /tmp/csi-configuration.sh
     create_ceph_rbd_1.2_csi_configmap
