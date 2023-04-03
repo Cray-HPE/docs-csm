@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,35 +23,8 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-max_latency="${1:-100}"
-seconds_sustained_latency="${2:-10}"
-osd_memory_target_gb="${3:-6}"
+osd_memory_target_gb="${1:-6}"
 osd_memory_target_bytes=$((osd_memory_target_gb * 1024 * 1024 * 1024))
-max_total_latency=$((max_latency * seconds_sustained_latency))
-num_osds_with_latency=0
-max_osds_with_latency=2
-
-function check_osd_for_sustained_latency() {
-  local osd=$1
-  local cnt=0
-  local total_latency=0
-  while true; do
-    if [[ "$cnt" -lt "$seconds_sustained_latency" ]]; then
-      tmp_latency=$(ceph osd perf | awk '{print $1,$2}' | grep "^${osd}[[:space:]]" | awk '{print $2}')
-      total_latency=$((total_latency+tmp_latency))
-      sleep 1
-    else
-      if [[ "$total_latency" -gt "$max_total_latency" ]]; then
-         echo "WARNING: osd.${osd} average latency exceeds ${max_latency}ms over ${seconds_sustained_latency} seconds"
-         num_osds_with_latency=$((num_osds_with_latency+1))
-      else
-         echo "INFO: no latency detected for osd.${osd}"
-      fi
-      break
-    fi
-    cnt=$((cnt+1))
-  done
-}
 
 function wait_for_health_ok() {
   local num_attempts=$1
@@ -148,27 +121,13 @@ function set_memory_target_settings() {
   ceph config set osd osd_memory_target ${osd_memory_target_bytes}
 }
 
-function check_osds_for_latency() {
+function repair_ceph_latency() {
   set_memory_target_settings
-  for osd in $(ceph osd ls)
-  do
-    check_osd_for_sustained_latency ${osd}
-    if [ $num_osds_with_latency -ge $max_osds_with_latency ]; then
-      echo "WARNING: found ${max_osds_with_latency} osds with latency, proceeding with restarts..."
-      restart_osds
-      break
-    fi
-  done
-
+  restart_osds
   echo "INFO: failing active manager to another node one final time."
   ceph mgr fail
-
-  if [ $num_osds_with_latency -lt $max_osds_with_latency ]; then
-    echo "SUCCESS: found fewer than ${max_osds_with_latency} osds with latency exceeding ${max_latency}ms over ${seconds_sustained_latency} seconds."
-  else
-    echo "SUCCESS: all restarts complete."
-  fi
+  echo "SUCCESS: all restarts complete."
 }
 
 wait_for_health_ok 60 # 5 minutes max
-check_osds_for_latency
+repair_ceph_latency
