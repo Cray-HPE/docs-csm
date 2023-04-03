@@ -115,10 +115,10 @@ cd "$CSM_DISTDIR"
 
 ## Update test suite packages
 
-Update the `csm-testing` and `goss-servers` RPMs on the NCNs, adjusting the `pdsh` node ranges for the node type and counts on your system.
+Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
 
 ```bash
-pdsh -f 1 -w ncn-m00[1-3],ncn-w00[1-3],ncn-s00[1-3] "zypper install -y csm-testing goss-servers"
+pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y csm-testing goss-servers'
 ```
 
 ## Verification
