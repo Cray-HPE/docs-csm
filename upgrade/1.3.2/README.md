@@ -15,6 +15,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.2`, follow the procedures descr
 1. [Preparation](#preparation)
 1. [Update `customizations.yaml`](#update-customizationsyaml)
 1. [Setup Nexus](#setup-nexus)
+1. [Upgrade CANU](#upgrade-canu)
 1. [Upgrade services](#upgrade-services)
 1. [Verification](#verification)
 1. [Complete upgrade](#complete-upgrade)
