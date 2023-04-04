@@ -585,22 +585,23 @@ To restore Slurm data from backup, follow sections
 
 After restoring Slurm data from backup, check that the procedure was successful.
 
-1. (`uan#`) Check the accounting records.
+1. (`uan#`) Check that accounting records were successfully restored. Use a start date from before the backup was taken.
 
    ```bash
-   sacct -S <date>
+   sacct -a -S <date>
    ```
 
-1. (`uan#`) Check queued jobs.
+1. (`uan#`) Check that the job queue was successfully restored.
 
     ```bash
    squeue
    ```
 
-1. (`uan#`) Check node states.
+1. (`uan#`) Check that node states were successfully restored.
 
    ```bash
    sinfo
+   sinfo --list-reasons
    ```
 
 ### PBS
@@ -611,19 +612,19 @@ To restore PBS Professional data from backup, follow section
 
 After restoring PBS data from backup, check that the procedure was successful.
 
-1. (`uan#`) Check the accounting records.
+1. (`uan#`) Check that accounting records were successfully restored.
 
    ```bash
    qstat -x
    ```
 
-1. (`uan#`) Check queued jobs.
+1. (`uan#`) Check that queued jobs were successfully restored.
 
    ```bash
    qstat
    ```
 
-1. (`uan#`) Check node states.
+1. (`uan#`) Check that node states were successfully restored.
 
    ```bash
    pbsnodes -a
