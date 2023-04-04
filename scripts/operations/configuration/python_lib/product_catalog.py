@@ -237,7 +237,7 @@ class ProductCatalog:
         Verifies that the specified product and version are in the product catalog.
         Updates the 'images' and 'recipes' fields of the specified version of the specified product,
         using the latest version of the cray-product-catalog-update tool.
-        """       
+        """
         installed_product_map = self.get_installed_products()
         if product_name not in installed_product_map:
             log_error_raise_exception(
