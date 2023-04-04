@@ -175,7 +175,8 @@ or `Management_Storage`. These values will be needed when upgrading NCN storage 
 
 1. Upgrade `ncn-m001`.
 
-    1. Follow the steps documented in [Stage 2.3 - `ncn-m001` upgrade](../../../upgrade/Stage_2.md#stage-23---ncn-m001-upgrade). **Stop** before performing the specific [upgrade `ncn-m001`](../../../upgrade/Stage_2.md#upgrade-ncn-m001) step and return to this document.
+    1. Follow the steps documented in [Stage 2.3 - `ncn-m001` upgrade](../../../upgrade/Stage_2.md#stage-23---ncn-m001-upgrade).
+    **Stop** before performing the specific [upgrade `ncn-m001`](../../../upgrade/Stage_2.md#upgrade-ncn-m001) step and return to this document.
 
     1. Set the CFS configuration on `ncn-m001`.
 
