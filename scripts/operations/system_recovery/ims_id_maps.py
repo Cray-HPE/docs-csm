@@ -44,7 +44,7 @@ class ImsIdEtagMaps(NamedTuple):
 class ImsIdMapFileFormatError(Exception):
     pass
 
-def apply_string_replacements(target_string: str, replacements: StringMap) -> str:
+def apply_string_replacements(target_string: str, *replacements: StringMap) -> str:
     """
     Applies the specified replacements to the target string, and returns the result (which
     may just be the original string, in the case that no matches were found). The replacements
@@ -56,9 +56,10 @@ def apply_string_replacements(target_string: str, replacements: StringMap) -> st
     underway -- the assumption is that the strings being replaced will not run afoul of this.
     If they do, behavior is not predictable.
     """
+    all_replacements = ChainMap(*replacements)
     new_string = target_string
     # Do replacements starting with longest strings first, in case some are substrings of others
-    for key, value in sorted(replacements.items(), key=lambda kv: len(kv[0]), reverse=True):
+    for key, value in sorted(all_replacements.items(), key=lambda kv: len(kv[0]), reverse=True):
         new_string = new_string.replace(key, value)
     return new_string
 
@@ -71,9 +72,6 @@ def update_session_template(session_template: BosSessionTemplate,
     See the apply_string_replacements function for details and caveats about how the replacements
     are done.
     """
-    combined_replacements = ChainMap(replacements.etags, replacements.image_ids,
-                                     replacements.recipe_ids)
-
     def update_boot_sets(boot_sets: BosSessionTemplateBootSets) -> BosSessionTemplateBootSets:
         """
         Return a copy of the BOS session template boot sets with the specified replacements made to
@@ -83,7 +81,9 @@ def update_session_template(session_template: BosSessionTemplate,
         for bs_name, bs_data in boot_sets.items():
             # For a boot set, it is possible that the name of the boot set itself contains
             # an IMS ID or S3 etag.
-            new_bs_name = apply_string_replacements(bs_name, combined_replacements)
+            new_bs_name = apply_string_replacements(bs_name, replacements.etags,
+                                                    replacements.image_ids,
+                                                    replacements.recipe_ids)
 
             # For the boot set data, the fields which may require replacement are:
             # path (image IDs only), etag (etag only), kernel_parameters (image IDs only)
@@ -114,7 +114,9 @@ def update_session_template(session_template: BosSessionTemplate,
             continue
         if not st_key in { "description", "name" }:
             continue
-        new_session_template[st_key] = apply_string_replacements(st_value, combined_replacements)
+        new_session_template[st_key] = apply_string_replacements(st_value, replacements.etags,
+                                                                 replacements.image_ids,
+                                                                 replacements.recipe_ids)
 
     return new_session_template
 
