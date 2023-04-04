@@ -5,6 +5,7 @@
 
 - [Stage 1 - Ceph image upgrade](#stage-1---ceph-image-upgrade)
   - [Start typescript](#start-typescript)
+  - [Run Ceph Latency Repair Script](#run-ceph-latency-repair-script)
   - [Argo workflows](#argo-workflows)
   - [Storage node image upgrade](#storage-node-image-upgrade)
   - [Ensure that `rbd` stats monitoring is enabled](#ensure-that-rbd-stats-monitoring-is-enabled)
@@ -24,6 +25,10 @@
 
 If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
 after a break, always be sure that a typescript is running before proceeding.
+
+## Run Ceph Latency Repair Script
+
+Ceph can begin to exhibit latency over time when upgrading the cluster from previous versions. It is recommended to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md).
 
 ## Argo workflows
 

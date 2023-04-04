@@ -27,6 +27,7 @@ the number of storage and worker nodes.
     1. [Deploy storage NCNs](#21-deploy-storage-ncns)
     1. [Deploy Kubernetes NCNs](#22-deploy-kubernetes-ncns)
     1. [Configure `kubectl` on the PIT](#23-configure-kubectl-on-the-pit)
+    1. [Run Ceph Latency Repair Script](#24-run-ceph-latency-repair-script)
 1. [Validate deployment](#3-validate-deployment)
 1. [Next topic](#next-topic)
 
@@ -262,6 +263,10 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
     mkdir -v ~/.kube
     scp "${FM}.nmn:/etc/kubernetes/admin.conf" ~/.kube/config
     ```
+
+### 2.4 Run Ceph Latency Repair Script
+
+Ceph can begin to exhibit latency over time unless OSDs are restarted and some OSD memory settings are changed. It is recommended to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md).
 
 ## 3. Validate deployment
 
