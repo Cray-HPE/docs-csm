@@ -232,7 +232,7 @@ Continue to the next section [4. Update management host Slingshot NIC firmware](
 ### 3.2 `management-nodes-rollout` without CSM upgrade
 
 This is the procedure to rollout management nodes if CSM is not being upgraded. NCN worker node images contain kernel module content from non-CSM products and need to be rebuilt as part of the workflow.
-Unlike NCN worker nodes, NCN master nodes and storage nodes do not contain kernel module content from non-CSM products. However, userspace non-CSM product content is still provided on NCN master nodes and storage nodes and thus the `prepare-images` and `update-cfs-config`
+Unlike NCN worker nodes, NCN master nodes and storage nodes do not contain kernel module content from non-CSM products. However, user-space non-CSM product content is still provided on NCN master nodes and storage nodes and thus the `prepare-images` and `update-cfs-config`
 stages create a new image and CFS configuration for NCN master nodes and storage nodes. The CFS configuration layers ensure the non-CSM product content is applied correctly for both
 image customization and node personalization scenarios. As a result, the administrator
 can update NCN master and storage nodes using CFS configuration only.
@@ -316,7 +316,7 @@ this section and the steps are documented with `ncn-w001` as the canary node.
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
 
-1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on the unlabeled canary node. This will rebuild the canary node with the new CFS configuration and image built in
+1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on the canary node. This will rebuild the canary node with the new CFS configuration and image built in
 previous steps of the workflow.
 
     (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN worker node.
