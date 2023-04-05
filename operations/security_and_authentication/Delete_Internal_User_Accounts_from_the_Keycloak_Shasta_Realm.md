@@ -20,8 +20,10 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
     See [Access the Keycloak User Management UI](Access_the_Keycloak_User_Management_UI.md).
 
-1. Navigate to the `Users` tab.
+1. Navigate to the `Users` tab under the `Manage` section on the left.
 
 1. Search for the username or ID of the account that is being deleted.
 
-1. Click the `Delete` button in the `Actions` column of the table to remove the desired account.
+1. Select the user or users that are being deleted by the checkbox to the left of the username.
+
+1. Click the `Delete` button in the header of the table to remove the desired account or accounts.

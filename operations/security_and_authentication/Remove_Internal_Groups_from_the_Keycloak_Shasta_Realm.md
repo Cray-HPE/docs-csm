@@ -22,6 +22,6 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
 1. Search for the group and select the group in the groups table.
 
-1. Click the `Delete` button at the top of the table.
+1. Click the three dots on the header of the table and select the `Delete` button.
 
 Once the groups are removed from Keycloak, follow the instructions in [Re-Sync Keycloak Users to Compute Nodes](Resync_Keycloak_Users_to_Compute_Nodes.md) to update the groups on the compute nodes.

@@ -723,10 +723,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Log in to the Keycloak UI using the `admin` user and the password obtained in the previous step.
 
       The Keycloak UI URL is typically similar to the following: `https://auth.cmn.<system_name>/keycloak`
+  
+   1. Ensure that the selected `Realm` is `Shasta`, and not `Master`
 
    1. Click on the `Users` tab in the navigation pane on the left.
 
-   1. Click on the `View all users` button and verify that the LDAP users appear in the table.
+   1. Page through the users and verify that the LDAP users appear in the table.
 
    1. Verify that a token can be retrieved from Keycloak using an LDAP user/password.
 
