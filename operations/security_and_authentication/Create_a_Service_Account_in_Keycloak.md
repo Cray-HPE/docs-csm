@@ -76,7 +76,7 @@ Follow the steps in only one of the following sections, depending on if it is pr
    1. Click on the role called `shasta admin`.
 
    1. Click the **Assign** button.
-   
+
    1. Click on the **Save** button.
 
 ### Use the Keycloak REST API

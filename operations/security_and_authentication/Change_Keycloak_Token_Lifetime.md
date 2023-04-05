@@ -31,7 +31,7 @@ Note: The default value for these settings is 365 days.
     1. Change the following options to the appropriate lifetime values:
        - `SSO Session Idle`
        - `SSO Session Max`
-    1. Click `Save` at the bottom of the page.       
+    1. Click `Save` at the bottom of the page.
 
     ![Global Token Lifetime Options](../../img/operations/Keycloak_Global_Token_Lifetime.png)
     ![Global Session Lifetime Options](../../img/operations/Keycloak_Global_Session_Lifetime.png)

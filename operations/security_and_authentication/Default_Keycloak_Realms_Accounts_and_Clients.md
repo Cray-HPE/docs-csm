@@ -42,8 +42,8 @@ Users authenticate to Keycloak on behalf of a client. Keycloak clients own confi
 - `system-pxe-client`
   - The `system-pxe-client` client is used by the `cray-ipxe` service to communicate with `cray-bss` to prepare boot scripts and other boot-related content.
 - `system-nexus-client`
-   - The `system-nexus-client` client is used by the `cray-nexus` service to login to Nexus with Keycloak users. The `system-nexus-client` has two roles created for
-   autorization: `nx-admin` and `nx-anonymous` that can be added to any account to give permissions to that user in Nexus.
+  - The `system-nexus-client` client is used by the `cray-nexus` service to login to Nexus with Keycloak users. The `system-nexus-client` has two roles created for
+  authorization: `nx-admin` and `nx-anonymous` that can be added to any account to give permissions to that user in Nexus.
 
 ### Public clients
 
