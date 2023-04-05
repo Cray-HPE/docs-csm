@@ -8,6 +8,7 @@ The following steps provide instructions to boot the Pre-Install Live ISO and cr
 1. [Boot the LiveCD](#boot-the-livecd)
 1. [Booting the Master node using Bootable USB](#boot-the-livecd)
 1. [Post Boot Configuration](#post-boot-configuration)
+1. [Import CSM tarball](#import-csm-tarball)
 1. [Seed File generation](#seed-file-generation)
 1. [Compare the SHCD Data with CVT Inventory Data](#compare-the-shcd-data-with-cvt-inventory-dataoptional)
 1. [Stop HPCM services](#stop-hpcm-services)
@@ -191,7 +192,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
       1. For Mellanox spine switches.
 
-          1. Access the Mellanox switch using IP address or Minicom.
+          1. Access the Mellanox switch using `IP address` or `Minicom`.
 
              Example 1 (using IP address):
 
@@ -336,7 +337,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
       >__Note:__ Incase the spine and/or leaf switches are from Aruba then following document an be referred for the configuration in the following link: https://hpedia.osp.hpe.com/wiki/Setting_up_Aruba_Switches_with_HPCM.
 
-   1. Running YaST-Firstboot.
+   1. Running `YaST-Firstboot`.
 
       Run the following command:
 
@@ -766,6 +767,218 @@ This step instructs the user to power off the node to ensure the BIOS has the be
             __NOTE:__ We need to wait at this step till all nodes report status as "BOOTED". Now the ports to all the NCNs can be enabled on switches.
 
          1. Create a Bond Network
+
+## Import CSM tarball
+
+### Download CSM tarball
+
+1. (`pit#`) Download the CSM tarball
+
+   - From Cray using `curl`:
+
+      > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
+      > - CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints. Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
+
+      Without proxy:
+
+      ```bash
+      curl -C - -f -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
+        "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
+      ```
+
+      With HTTPS proxy:
+
+      ```bash
+      https_proxy=https://example.proxy.net:443 curl -C - -f -o "/var/www/ephemeral/csm-${CSM_RELEASE}.tar.gz" \
+        "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/csm/csm-${CSM_RELEASE}.tar.gz"
+      ```
+
+   - `scp` from the external server:
+
+      ```bash
+      scp "<external-server>:/<path>/csm-${CSM_RELEASE}.tar.gz" /var/www/ephemeral/
+      ```
+
+### Import tarball assets
+
+If resuming at this stage, the `CSM_RELEASE` and `PITDATA` variables are already set
+in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) step.
+
+1. (`pit#`) Extract the tarball.
+
+   ```bash
+   tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
+   ```
+
+1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
+
+   > **NOTE** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
+
+   1. Install `docs-csm`.
+
+      > **NOTE** This installs necessary scripts for deployment checks, as well as the offline manual.
+
+       ```bash
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y docs-csm
+       ```
+
+   1. Update `cray-site-init`.
+
+       > **NOTE** This provides `csi`, a tool for creating and managing configurations, as well as orchestrating the [handoff and deploy of the final non-compute node](../deploy_final_non-compute_node.md).
+
+       ```bash
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks update -y cray-site-init
+       ```
+
+   1. Install `iuf-cli`.
+
+       > **NOTE** This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../../operations/iuf/IUF.md).
+
+       ```bash
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y iuf-cli
+       ```
+
+   1. Install `csm-testing` RPM.
+
+       > **NOTE** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
+
+       ```bash
+        zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y csm-testing
+       ```
+
+1. (`pit#`) Install/update the RPMs and configuration files necessary for CSM installation
+
+   1. Install the required RPMs using the following command:
+
+      ```bash
+          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP3/x86_64/product/python3-simplejson-3.17.2-1.10.x86_64.rpm
+          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/python3-jmespath-0.9.3-1.21.noarch.rpm
+          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP3/x86_64/product/python3-python-dateutil-2.8.1-1.24.noarch.rpm
+          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/python3-botocore-1.21.7-37.4.1.noarch.rpm
+          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/python3-s3transfer-0.5.0-9.4.1.noarch.rpm
+          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/python3-botocore-1.21.7-37.4.1.noarch.rpm
+          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/python3-boto3-1.18.7-23.4.1.noarch.rpm
+          rpm -ivh  /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-HPC/15-SP2/x86_64/product/conman-0.3.0-1.42.x86_64.rpm
+          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Public-Cloud/15-SP2/x86_64/update/python3-colorama-0.4.4-5.4.1.noarch.rpm
+      ```
+
+   1. Update `dnsmasq`, `apache2` configuration files.
+
+      Download the tarball from [here](files/dhcp_http.tar.gz) and extract in present working directory.
+
+      ```bash
+       tar -xf dhcp_http.tar.gz
+      ```
+
+   1. Update the `apache2` and `dnsmasq` configuration as follows:
+
+     ```bash
+       cp -r dnsmasq/dnsmasq.conf  /etc/dnsmasq.conf
+       cp -r apache2/* /etc/apache2/ 
+       cp -r  conman/conman.conf /etc/conman.conf
+       cp -r logrotate/conman /etc/logrotate.d/conman
+       cp -r kubectl/kubectl /usr/bin/
+     ```
+
+     (Optional) uncomment `tftp_secure` entry in `dnsmasq.conf` file.
+
+   1. Stop the following services: `clmgr-power`, `dhcpd`, and `named`.
+
+     ```bash
+       systemctl  stop clmgr-power 
+       systemctl  stop dhcpd  
+       systemctl  stop named
+       systemctl restart apache2
+     ```
+
+   1. If `ping dcldap3.us.cray.com` does not work then add following entry in `/etc/hosts`
+
+      ```bash
+         172.30.12.37    dcldap3.us.cray.com
+      ```
+
+1. (`pit#`) Get the artifact versions.
+
+   ```bash
+   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
+   echo "${KUBERNETES_VERSION}"
+   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
+   echo "${CEPH_VERSION}"
+   ```
+
+1. (`pit#`) Copy the NCN images from the expanded tarball.
+
+   > **NOTE** This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
+
+   ```bash
+   mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
+   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${KUBERNETES_VERSION}"
+   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${CEPH_VERSION}"
+   ```
+
+1. (`pit#`) Modify the NCN images with SSH keys and `root` passwords.
+
+   The following substeps provide the most commonly used defaults for this process. For more advanced options, see
+   [Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
+
+   1. Generate SSH keys.
+
+       > **NOTE** The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
+
+       ```bash
+       ssh-keygen -N "" -t rsa
+       ```
+
+   1. Export the password hash for `root` that is needed for the `ncn-image-modification.sh` script.
+
+       This will set the NCN `root` user password to be the same as the `root` user password on the PIT.
+
+       ```bash
+       export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
+       ```
+
+   1. Inject these into the NCN images by running `ncn-image-modification.sh` from the CSM documentation RPM.
+
+       ```bash
+       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
+       echo "${NCN_MOD_SCRIPT}"
+       "${NCN_MOD_SCRIPT}" -p \
+          -d /root/.ssh \
+          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+       ```
+
+1. (`pit#`) Log the currently installed PIT packages.
+
+   Having this information in the typescript can be helpful if problems are encountered during the install.
+   This command was run once in a previous step -- running it again now is intentional.
+
+   ```bash
+   /root/bin/metalid.sh
+   ```
+
+   Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
+
+   ```text
+   = PIT Identification = COPY/CUT START =======================================
+   VERSION=1.6.0
+   TIMESTAMP=20220504161044
+   HASH=g10e2532
+   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
+   CRAY-Site-Init build signature...
+   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
+   Build Time     : 2022-05-02T20:21:46Z
+   Go Version     : go1.16.10
+   Git Version    : v1.9.13-29-g0915d59f
+   Platform       : linux/amd64
+   App. Version   : 1.17.1
+   metal-ipxe-2.2.6-1.noarch
+   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
+   metal-basecamp-1.1.12-1.x86_64
+   pit-init-1.2.20-1.noarch
+   pit-nexus-1.1.4-1.x86_64
+   = PIT Identification = COPY/CUT END =========================================
+   ```
 
 ## Seed File generation
 
