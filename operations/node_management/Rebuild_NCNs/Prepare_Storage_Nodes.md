@@ -194,9 +194,7 @@ Check the status of Ceph.
         client:   8.7 KiB/s rd, 353 KiB/s wr, 3 op/s rd, 53 op/s wr
     ```
 
-5. Remove Ceph OSDs.
-
-   **IMPORTANT:** Only do this step if you are fully wiping the node.  In some cases the rebuild may not require the OSDs to be wiped.
+5. Remove Ceph OSDs
 
    The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
