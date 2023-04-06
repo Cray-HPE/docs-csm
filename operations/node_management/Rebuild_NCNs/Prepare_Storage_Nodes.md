@@ -198,23 +198,23 @@ Check the status of Ceph.
 
    The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
-   ```bash
-   ceph osd tree down
-   ```
+     ```bash
+     ceph osd tree down
+     ```
 
-   Example output:
+    Example output:
 
-   ```bash
-   ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
-   -1         62.87758  root default
-   -7         20.95853      host ncn-s003
-    1    ssd   3.49309          osd.1        down   1.00000  1.00000
-    4    ssd   3.49309          osd.4        down   1.00000  1.00000
-    8    ssd   3.49309          osd.8        down   1.00000  1.00000
-    11   ssd   3.49309          osd.11       down   1.00000  1.00000
-    14   ssd   3.49309          osd.14       down   1.00000  1.00000
-    17   ssd   3.49309          osd.17       down   1.00000  1.00000
-   ```
+    ```bash
+     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+     -1         62.87758  root default
+     -7         20.95853      host ncn-s003
+      1    ssd   3.49309          osd.1        down   1.00000  1.00000
+      4    ssd   3.49309          osd.4        down   1.00000  1.00000
+      8    ssd   3.49309          osd.8        down   1.00000  1.00000
+      11   ssd   3.49309          osd.11       down   1.00000  1.00000
+      14   ssd   3.49309          osd.14       down   1.00000  1.00000
+      17   ssd   3.49309          osd.17       down   1.00000  1.00000
+     ```
 
    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
   
