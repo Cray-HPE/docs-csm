@@ -32,7 +32,7 @@ and then set new credentials. The script can be run either interactively (no env
 1. (`ncn-mw#`) Set environment variable containing the switch `admin` user password for the management switches in the system.
 
     ```bash
-    read -s SWITCH_ADMIN_PASSWORD
+    read -s SW_ADMIN_PASSWORD
     ```
 
 1. (`ncn-mw#`) Update SNMP credentials (desired SNMP user ID and authentication and privacy passwords) on leaf-BMC switches. The SNMP user IDs and passwords are not shown.
@@ -42,7 +42,7 @@ and then set new credentials. The script can be run either interactively (no env
    ```bash
    SNMPNEWUSER=testuser \
              SNMPAUTHPW=$SNMP_AUTH_PASS SNMPPRIVPW=$SNMP_PRIV_PASS \
-             SNMPMGMTPW=$SWITCH_ADMIN_PASSWORD \
+             SNMPMGMTPW=$SW_ADMIN_PASSWORD \
              /opt/cray/csm/scripts/hms_verification/leaf_switch_snmp_creds.sh
    ```
 

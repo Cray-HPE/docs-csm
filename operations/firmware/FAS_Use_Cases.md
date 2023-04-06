@@ -27,7 +27,7 @@ The following procedures are included in this section:
 
 > **`NOTE`** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
-## Update Liquid-Cooled Nodes BMC, FPGA, and Node BIOS
+## Update Liquid-Cooled Nodes BMC, FPGA, Management Ethernet, `AccVBIOS`, and Node BIOS
 
 Update firmware for a liquid-cooled node controller \(nC\) using FAS.
 This section includes templates for JSON files that can be used and the procedure for running the update.
@@ -101,6 +101,63 @@ If the nodes are not off when the update command is issued, the update will get 
 }
 ```
 
+#### Manufacturer: Cray | Device Type: `NodeBMC` | Target: Management Ethernet
+
+```json
+{
+"stateComponentFilter": {
+
+    "deviceTypes": [
+      "nodeBMC"    ]
+  },
+"inventoryHardwareFilter": {
+    "manufacturer": "cray"
+    },
+"targetFilter": {
+    "targets": [
+      "Node0.ManagementEthernet",
+      "Node1.ManagementEthernet"
+    ]
+  },
+"command": {
+    "version": "latest",
+    "tag": "default",
+    "overrideDryrun": false,
+    "restoreNotPossibleOverride": true,
+    "timeLimit": 1000,
+    "description": "Dryrun upgrade of Node Management Ethernet"
+  }
+}
+```
+
+#### Manufacturer: Cray | Device Type: `NodeBMC` | Target: `AccVBIOS`
+
+```json
+{
+"stateComponentFilter": {
+
+    "deviceTypes": [
+      "nodeBMC"    ]
+  },
+"inventoryHardwareFilter": {
+    "manufacturer": "cray"
+    },
+"targetFilter": {
+    "targets": [
+      "Node0.AccVBIOS"
+    ]
+  },
+"command": {
+    "version": "latest",
+    "tag": "default",
+    "overrideDryrun": false,
+    "restoreNotPossibleOverride": true,
+    "timeLimit": 1000,
+    "description": "Dryrun upgrade of Node Management Ethernet"
+  }
+}
+```
+
 #### Manufacturer: Cray | Device Type : `NodeBMC` | Target : `NodeBIOS`
 
 There are two nodes that must be updated on each BMC; these have the targets `Node0.BIOS` and `Node1.BIOS`.
@@ -108,7 +165,7 @@ The targets can be run in the same action (as shown in the example) or run separ
 On larger systems, it is recommended to run as two actions one after each other as the output will be shorter.
 
 > **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require.
-See [Update Liquid-Cooled Node Firmware](#update-liquid-cooled-nodes-bmc-fpga-and-node-bios) for more information.
+See [Update Liquid-Cooled Node Firmware](#liquid-cooled-nodes-update-procedures) for more information.
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes.
 The BMC will still have power and will perform the update.
 If nodes are not off when the update command is issued, it will report as a failed update.
@@ -588,6 +645,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 #### Manufacturer: HPE | Device Type: Compute `NodeBMC` | Target: `iLO 5` aka BMC
 
+> **IMPORTANT:**
+> Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
+> See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
+
 ```json
 {
 "stateComponentFilter": {
@@ -660,6 +721,10 @@ Use the file `gigabyte_nodeBMC_BMC.json` for Gigabyte Node BMC updates,
 the file `gigabyte_nodeBMC_BIOS.json` for Gigabyte Node BIOS updates,
 the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
 or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
+
+> **IMPORTANT:**
+> Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
+> See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
@@ -923,6 +988,10 @@ Make sure you have waited for the current firmware to be updated before starting
 
 #### Manufacturer: HPE | Device Type: NCN `NodeBMC` | Target: `iLO 5` aka BMC
 
+> **IMPORTANT:**
+> Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
+> See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
+
 ```json
 {
 "stateComponentFilter": {
@@ -999,6 +1068,10 @@ the file `hpe_nodeBMC_iLO5.json` for HPE Node iLO 5 updates,
 or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
 The script flag `--xnames x1,x2` can be used to limit the updates to certain xnames
 
+> **IMPORTANT:**
+> Updating to iLO 5 version above 2.78 requires an install of 2.78 first.
+> See [FAS Update iLO 5 to 2.78](FAS_Update_iLO5_2.78.md)
+
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
    See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc) for more information.
 1. Run a `dryrun` for all NCNs first to determine which NCNs and targets need updating.
@@ -1027,7 +1100,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 Prerequisites:
 
 * The system is running HPE Cray EX release v1.4 or higher.
-* A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#update-liquid-cooled-nodes-bmc-fpga-and-node-bios).
+* A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#liquid-cooled-nodes-update-procedures).
   * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
   * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
 * The hardware model reported by Redfish is `wnc-rome`, which is now designated as `HPE CRAY EX425`.

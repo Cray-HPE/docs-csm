@@ -73,8 +73,9 @@ skip any updates.
 ## Procedure: Apply root SSH keys to NCNs (standalone)
 
 Use the following procedure with the `rotate-ssh-keys-mgmt-nodes.yml` playbook to **only** change the root SSH keys on NCNs.
-This is a quick alternative to running a full management NCN personalization, as documented in the
-[Configure Non-Compute Nodes with CFS](../CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md) procedure.
+This is a quick alternative to running a full management node personalization, as documented in the
+[Re-run node personalization on management nodes procedure](../configuration_management/Management_Node_Personalization.md#re-run-node-personalization-on-management-nodes)
+in the [Management Node Personalization](../configuration_management/Management_Node_Personalization.md) topic.
 
 1. (`ncn-mw#`) Create a CFS configuration layer to run the SSH key change Ansible playbook.
 

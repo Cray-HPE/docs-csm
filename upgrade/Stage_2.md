@@ -174,19 +174,38 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 
    ```bash
    source /etc/cray/upgrade/csm/myenv
-   echo "${CSM_REL_NAME}"
    ```
 
 1. (`ncn-m002#`) Copy artifacts from `ncn-m001`.
 
-   > A later stage of the upgrade expects the `docs-csm` and `libcsm` RPMs to be located at `/root/` on `ncn-m002`; that is why this command copies them there.
+    > A later stage of the upgrade expects the `docs-csm` and `libcsm` RPMs to be located at `/root/` on `ncn-m002`;
+    > that is why this command copies them there.
 
-   ```bash
-   scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
-   zypper --plus-repo="/etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
-   scp ncn-m001:/root/*.noarch.rpm /root/ &&
-       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm /root/libcsm-latest.noarch.rpm
-   ```
+   - Install `csi` and `docs-csm`.
+
+       ```bash
+       scp ncn-m001:/root/csm_upgrade.pre_m001_reboot_artifacts.*.tgz /root
+       zypper --plus-repo="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)" --no-gpg-checks install -y cray-site-init
+       scp ncn-m001:/root/*.noarch.rpm /root/
+       rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+       ```
+
+   - Install `libcsm`.
+
+       > ***NOTE*** Since `libcsm` depends on versions of Python relative to what is included in the SLES service packs,
+       > then in the event that `ncn-m002` is running a newer SLES distro a new `libcsm` must be downloaded. This will
+       > often be the case when jumping to a new CSM minor version (e.g. CSM 1.3 to CSM 1.4).
+       > e.g. if `ncn-m001` is running SLES15SP3, and `ncn-m002` is running SLES15SP4 then the SLES15SP4 `libcsm` is needed.
+       > Follow the [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation)
+       > guide again, but from `ncn-m002`.
+
+       ```bash
+       rpm -Uvh --force /root/libcsm-latest.noarch.rpm
+       ```
+
+    If this step was executed as a result of the [`management-nodes-rollout` with CSM upgrade](../operations/iuf/workflows/management_rollout.md#management-nodes-rollout-with-csm-upgrade)
+    instructions, return to that procedure and continue with the next step.
+    Otherwise, if performing an upgrade of only CSM, proceed to the next step.
 
 ### Upgrade `ncn-m001`
 
