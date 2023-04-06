@@ -574,7 +574,10 @@ organizers
 organizes
 organizing
 osd
+osd*
+osd.*
 osds
+osds*
 oversubscription
 passthrough
 passwordless
