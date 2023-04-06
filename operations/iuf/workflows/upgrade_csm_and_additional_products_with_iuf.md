@@ -61,11 +61,11 @@ The upgrade workflow comprises the following procedures which must be executed i
 
    Follow the IUF [Management rollout](management_rollout.md) instructions
 
-1. CSM Stage 3 and CSM health validation
+1. CSM Stage 2 and CSM health validation
 
    Follow these CSM instructions in order:
 
-   1. [Stage 3 - CSM Service Upgrades](../../../upgrade/Stage_3.md)
+   1. [Stage 2 - CSM Service Upgrades](../../../upgrade/Stage_2.md)
    1. [Validate CSM Health During Upgrade](../../../upgrade/Validate_CSM_Health_During_Upgrade.md)
    1. [Update Firmware with FAS](../../firmware/Update_Firmware_with_FAS.md)
 

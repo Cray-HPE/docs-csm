@@ -254,6 +254,10 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
    git push
    ```
 
+1. (`ncn-m001#`) Run Ceph Latency Repair Script.
+
+   Ceph can begin to exhibit latency over time when upgrading the cluster from previous versions. It is recommended to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md).
+
 1. If performing an upgrade of CSM and additional HPE Cray EX software products using the IUF,
    return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
    procedure. Otherwise, if performing an upgrade of only CSM, proceed to Stage 0.3.
@@ -519,4 +523,4 @@ For any typescripts that were started during this stage, stop them with the `exi
 
 ## Stage completed
 
-This stage is completed. Continue to [Stage 1 - Ceph image upgrade](Stage_1.md).
+This stage is completed. Continue to [Stage 1 - Kubernetes Upgrade](Stage_1.md).
