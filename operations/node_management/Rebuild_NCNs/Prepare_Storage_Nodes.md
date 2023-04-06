@@ -206,7 +206,7 @@ Check the status of Ceph.
   
   Example output:
 
-  ```text
+  ```shell
   ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
   -1         62.87758  root default
   -7         20.95853      host ncn-s003
