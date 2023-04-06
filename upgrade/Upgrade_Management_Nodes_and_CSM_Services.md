@@ -29,7 +29,7 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 - [Stage 2 - CSM Services Upgrade](Stage_2.md)
 - [Validate CSM health](../operations/validate_csm_health.md)
 
-> **NOTE:** Storage nodes are not upgraded as part of the CSM-1.3 to CSM-1.4 upgrade.
+> **NOTE:** Storage nodes are not upgraded as part of the CSM 1.3 to CSM 1.4 upgrade.
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 
