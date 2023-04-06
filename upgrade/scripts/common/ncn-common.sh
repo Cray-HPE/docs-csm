@@ -42,11 +42,6 @@ if [[ -z ${CSM_ARTI_DIR} ]]; then
     rc=$((rc+1))
 fi
 
-if [[ -z ${CSM_REL_NAME} ]]; then
-    echo "ERROR: CSM_REL_NAME environment variable is not set and must be present in /etc/cray/upgrade/csm/myenv."
-    rc=$((rc+1))
-fi
-
 if [ "${rc}" -gt 0 ]; then
   return $rc
 fi
@@ -124,7 +119,7 @@ function check_sls_health() {
             echo "Sleeping 5 seconds and retrying"
             sleep 5
         fi
-    
+
         # The liveness endpoint should return 204 on success
         if [[ $(curl -iskH "Authorization: Bearer $TOKEN" https://api-gw-service-nmn.local/apis/sls/v1/liveness | head -1 | awk '{ print $2 }') != 204 ]]; then
             echo "WARNING: SLS liveness check failed." 1>&2

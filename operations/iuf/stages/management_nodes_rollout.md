@@ -143,10 +143,11 @@ Expected behavior:
 ## Set NCN boot image for `ncn-m001` and NCN storage nodes
 
 Follow these steps when upgrading NCN storage nodes and `ncn-m001` during [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
-when following the IUF [Initial Install](../workflows/initial_install.md) or IUF [Upgrade](../workflows/upgrade.md) documentation.
+when following the procedures in
+[Install or upgrade additional products with IUF](../workflows/install_or_upgrade_additional_products_with_iuf.md)
+or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_additional_products_with_iuf.md).
 
-1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade) in the IUF
-[Initial Install](../workflows/initial_install.md) or IUF [Upgrade](../workflows/upgrade.md) documentation.
+1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade).
 
     ```bash
     IMS_RESULTANT_IMAGE_ID=<value of final_image_id>

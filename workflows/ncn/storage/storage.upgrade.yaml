@@ -230,7 +230,7 @@ spec:
                     chmod +x /tmp/${ts}.sh
                     scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null /tmp/${ts}.sh {{$value}}:/tmp/${ts}.sh
                     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{$value}} "/tmp/${ts}.sh"
-          - name: pull-ceph-image-in-nexus
+          - name: pull-ceph-image-in-nexus-all-storage-nodes
             templateRef:
               name: ssh-template
               template: shell-script
@@ -243,17 +243,10 @@ spec:
                 - name: scriptContent
                   value: |
                     nexus_image=$(cat /tmp/ceph_global_container_image.txt)
-                    pdsh -w $(ceph orch host ls --format=json|jq -r '.[].hostname' | sort -u |  tr -t '\n' ',') "podman pull $nexus_image"
-          {{ end }}
+                    pdsh -S -w $(ceph orch host ls --format=json|jq -r '.[].hostname' | sort -u |  tr -t '\n' ',') "podman pull $nexus_image"
           - name: enter-ceph-orch-maintenance-mode-{{$value}}
             dependencies:
-              {{ if eq $index 0 }}
-              - pull-ceph-image-in-nexus
-              {{ end }}
-              # each upgrade depends on previous upgrade action and success
-              {{ if ne $index 0 }}
-              - check-ceph-health-{{ index $.TargetNcns (add $index -1) }}
-              {{ end }}
+              - pull-ceph-image-in-nexus-all-storage-nodes
             templateRef:
               name: ssh-template
               template: shell-script
@@ -289,7 +282,7 @@ spec:
                     # remove local images on target_ncn
                     echo "Removing local images on $TARGET_NCN"
                     ssh $TARGET_NCN podman rmi --all -f
-          - name: pull-ceph-images-from-nexus-{{$value}}
+          - name: save-sha-value-from-nexus-{{$value}}
             templateRef:
               name: ssh-template
               template: shell-script
@@ -302,6 +295,30 @@ spec:
                 - name: scriptContent
                   value: |
                     target_ncn={{$value}}
+                    image=$"$(cat /tmp/ceph_global_container_image.txt)"
+                    ssh ${target_ncn} podman pull $image
+                    image_with_sha=$(ssh ${target_ncn} podman inspect $image | jq '.[] | .RepoDigests' | \
+                        grep -o "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph@sha256.*" | tr -d '"')
+                    if [[ $(echo $image_with_sha | wc -w) -gt 1 ]]; then
+                       echo " ERROR The podman image: $image on $target_ncn should only have a single RepoDigest entry which cooresponds to image in nexus."
+                       exit 1
+                    else
+                       echo $image_with_sha > /tmp/ceph_global_container_image_with_sha.txt
+                    fi
+          - name: load-images-{{$value}}
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies: 
+              - save-sha-value-from-nexus-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    target_ncn={{$value}}
+                    ssh ${target_ncn} /srv/cray/scripts/common/pre-load-images.sh
                     for container in "container_image_prometheus" "container_image_node_exporter" "container_image_alertmanager" "container_image_grafana"; do
                         image=$(ceph config get mgr mgr/cephadm/${container})
                         ssh ${target_ncn} podman pull $image
@@ -309,7 +326,7 @@ spec:
                     ssh ${target_ncn} podman pull "$(cat /tmp/ceph_global_container_image.txt)"
           - name: "exit-ceph-orch-maintenance-mode-{{$value}}"
             dependencies:
-              - pull-ceph-images-from-nexus-{{$value}}
+              - load-images-{{$value}}
             templateRef:
               name: ssh-template
               template: shell-script
@@ -330,44 +347,6 @@ spec:
                     else
                       echo "$TARGET_NCN is not in maintenance mode. Nothing to do."
                     fi
-          {{ if eq $index 0 }}
-          - name: repoint-ceph-to-nexus
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            dependencies:
-              - exit-ceph-orch-maintenance-mode-{{$value}}
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"  
-                - name: scriptContent
-                  value: |
-                    echo "This step repoints ceph to use the image stored in Nexus. It runs the command 'ceph orch upgrade' to do this."
-                    nexus_location=$(cat /tmp/ceph_global_container_image.txt)
-                    ceph orch upgrade start --image $nexus_location
-                    echo "Waiting for upgrade to complete..."
-                    sleep 10
-                    int=0
-                    success=false
-                    while [[ $int -lt 100 ]] && ! $success; do
-                        if [[ -n $(ceph orch upgrade status --format json | jq '.message' | grep Error) ]]; then
-                          echo "Error: there was an issue with the upgrade. Run 'ceph orch upgrade status' from ncn-s00[1/2/3]."
-                          exit 1
-                        fi
-                        if [[ $(ceph orch upgrade status --format json | jq '.in_progress') != "true" ]]; then
-                          echo "Upgrade complete"
-                          success=true
-                          break
-                        else
-                          int=$(( $int + 1 ))
-                          sleep 10
-                        fi
-                    done
-                    if ! $success; then
-                      echo "Error completing 'ceph orch upgrade'. Check upgrade status by running 'ceph orch upgrade status' from ncn-s00[1/2/3]."
-                      exit 1
-                    fi
           {{ end }}
           - name: upgrade-{{$value}}
             templateRef:
@@ -375,10 +354,10 @@ spec:
               template: shell-script
             dependencies: 
               {{ if eq $index 0 }}
-              - repoint-ceph-to-nexus
+              - exit-ceph-orch-maintenance-mode-{{$value}}
               {{ end }}
               {{ if ne $index 0 }}
-              - exit-ceph-orch-maintenance-mode-{{$value}}
+              - check-ceph-health-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
             arguments:
               parameters:
@@ -438,30 +417,6 @@ spec:
                       echo "BSS metadata was not successfully updated. Output:"
                       echo "$RESULT"
                       exit 7
-                    fi
-          - name: check-ceph-config
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"  
-                - name: scriptContent
-                  value: |
-                    if [[ $(ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")|.value' | wc -l) -gt 1 ]]; then
-                      echo "ERROR  the ceph config has more that one value for container_image set."
-                      echo "Look at the following output from ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")'"
-                      ceph config dump --format json-pretty|jq '.[]|select(.name == "container_image")'
-                      echo "There should only be one item and its section should be 'global'"
-                      echo
-                      echo "Troubleshoot this failure by investigating following items."
-                      echo "Run 'ceph -s' and 'ceph health detail'"
-                      echo "All ceph mon,mgr,mds,crash,rgw,osd daemons should be running the same image. Check this by running 'podman ps' on storage nodes."
-                      echo "Look at the ceph upgrade status by running 'ceph orch upgrade status' and check that it is not running and does not have an error."
-                      exit 1
-                    else
-                      echo "Ceph config check succeeded."
                     fi
           - name: ceph-health-check
             templateRef:

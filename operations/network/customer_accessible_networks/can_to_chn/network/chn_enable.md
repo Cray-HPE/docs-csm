@@ -433,7 +433,8 @@ Add CHN to `customizations.yaml`
 
    `configurationStatus` should change from `pending` to `configured` once NCN personalization completes successfully.
 
-For more information on managing NCN personalization, see [Perform NCN Personalization](../../../../CSM_product_management/Perform_NCN_Personalization.md).
+For more information on management node personalization, see
+[Management Node Personalization](../../../../configuration_management/Management_Node_Personalization.md).
 
 ### Migrate CSM services (MetalLB)
 

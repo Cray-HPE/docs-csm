@@ -175,13 +175,13 @@ if [ ! -z $nexus_new_cpu_request ]; then
   echo ""
 fi
 
-crayMetallbDeployed=$(kubectl get pods -n metallb-system | grep cray-metallb-speaker | wc -l)
+crayMetallbDeployed=$(kubectl get pods -n metallb-system | grep metallb-speaker | wc -l)
 if [[ $crayMetallbDeployed -ne 0 ]]; then
   if [ ! -z $cray_metallb_speaker_new_cpu_request ]; then
-    current_req=$(kubectl get daemonset cray-metallb-speaker -n metallb-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "speaker") | .resources.requests.cpu')
+    current_req=$(kubectl get daemonset metallb-speaker -n metallb-system -o json | jq -r '.spec.template.spec.containers[] | select(.name== "speaker") | .resources.requests.cpu')
     echo "Patching nexus deployment with new cpu request of $cray_metallb_speaker_new_cpu_request (from $current_req)"
-    kubectl patch daemonset cray-metallb-speaker -n metallb-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_metallb_speaker_new_cpu_request\" }]"
-    kubectl rollout status daemonset -n metallb-system cray-metallb-speaker
+    kubectl patch daemonset metallb-speaker -n metallb-system --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_metallb_speaker_new_cpu_request\" }]"
+    kubectl rollout status daemonset -n metallb-system metallb-speaker
     echo ""
   fi
 fi
