@@ -74,10 +74,10 @@ On the first login, configure and verify the site-link, DNS and gateway IP addre
 
         1. Delete existing network settings and copy the extracted files to `/etc/sysconfig/network/`.
 
-         ```bash
+            ```bash
             rm -rf /etc/sysconfig/network/*
             cp -r $PWD/network/* /etc/sysconfig/network/
-         ```
+            ```
 
    1. (`pit#`) Run the `csi-setup-lan0.sh` script to set up the site link and set the hostname.
 
