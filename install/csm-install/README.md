@@ -143,7 +143,7 @@ See [Load Olympus BMC Recovery Firmware into TFTP server](../../operations/firmw
 Now that all management nodes and CSM services have been validated as healthy, the firmware on other components in the system can be checked and updated. The Firmware Action Service (FAS) communicates with many devices on the system.
 FAS can be used to update the firmware for all of the devices it communicates with at once, or specific devices can be targeted for a firmware update.
 
-See [Update Firmware with FAS](../../operations/firmware/Update_Firmware_with_FAS.md)
+See [Update Firmware with FAS](../../operations/firmware/Update_Firmware_with_FAS.md).
 
 ### 10. Prepare compute nodes
 
