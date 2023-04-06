@@ -196,29 +196,29 @@ Check the status of Ceph.
 
 5. Remove Ceph OSDs.
 
-**IMPORTANT:** Only do this step if you are fully wiping the node.  In some cases the rebuild may not require the OSDs to be wiped.
+   **IMPORTANT:** Only do this step if you are fully wiping the node.  In some cases the rebuild may not require the OSDs to be wiped.
 
-  The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
+   The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
-  ```bash
-  ceph osd tree down
-  ```
-  
-  Example output:
+   ```bash
+   ceph osd tree down
+   ```
 
-  ```shell
-  ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
-  -1         62.87758  root default
-  -7         20.95853      host ncn-s003
-   1    ssd   3.49309          osd.1        down   1.00000  1.00000
-   4    ssd   3.49309          osd.4        down   1.00000  1.00000
-   8    ssd   3.49309          osd.8        down   1.00000  1.00000
-   11   ssd   3.49309          osd.11       down   1.00000  1.00000
-   14   ssd   3.49309          osd.14       down   1.00000  1.00000
-   17   ssd   3.49309          osd.17       down   1.00000  1.00000
-  ```
+   Example output:
 
-  1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
+   ```text
+   ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+   -1         62.87758  root default
+   -7         20.95853      host ncn-s003
+    1    ssd   3.49309          osd.1        down   1.00000  1.00000
+    4    ssd   3.49309          osd.4        down   1.00000  1.00000
+    8    ssd   3.49309          osd.8        down   1.00000  1.00000
+    11   ssd   3.49309          osd.11       down   1.00000  1.00000
+    14   ssd   3.49309          osd.14       down   1.00000  1.00000
+    17   ssd   3.49309          osd.17       down   1.00000  1.00000
+   ```
+
+   1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
   
        By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
        This will result in OSDs that no longer exist appearing to be down.
