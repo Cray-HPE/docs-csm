@@ -196,6 +196,8 @@ Check the status of Ceph.
 
 5. Remove Ceph OSDs
 
+   **IMPORTANT:** Before proceeding please ensure you are doing a rebuild that requires OSD wipes. Storage node rebuilds that are done on an active node do not require the OSD removal.  Some examples are rebuilds to get some a custom patched image.
+
    The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
      ```bash
