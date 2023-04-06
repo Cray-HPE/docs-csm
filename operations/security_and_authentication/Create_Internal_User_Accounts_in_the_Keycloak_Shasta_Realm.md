@@ -63,7 +63,7 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
     1. Click the `Assign Role` button.
 
-    1. Click on the dropdown for `Filter by realm roles` and select `Filter by clients`
+    1. Click on the dropdown for `Filter by realm roles` and select `Filter by clients`.
 
     1. Select the assigned role either `shasta admin` or `shasta user`.
 

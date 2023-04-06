@@ -36,11 +36,11 @@ Follow the steps in only one of the following sections, depending on if it is pr
 
    ![Keycloak client details](../../img/operations/Keycloak_Client_Details.png)
 
-   1. Click on `Capability config` on the right side under `Jump to section`
+   1. Click on `Capability config` on the right side under `Jump to section`.
 
    1. Change `Client authentication` to `on`.
 
-   1. Change `Service accounts role` to `On`
+   1. Change `Service accounts role` to `On`.
 
    1. Change `Stand Flow Enabled` to `OFF`.
 
@@ -55,15 +55,15 @@ Follow the steps in only one of the following sections, depending on if it is pr
 
    1. Switch to the **Client scopes** tab for the new client.
 
-   1. Click the entry that ends in `-dedicated`
+   1. Click the entry that ends in `-dedicated`.
 
-      In the image above, the example entry is `my-test-client-dedicated`
+      In the image above, the example entry is `my-test-client-dedicated`.
 
    1. Click on `Add mapper` then on `By configuration`.
 
    1. Change the `Mapper Type` to `Hardcoded Role`.
 
-   1. A table will pop up and then click on `Hardcoded Role`
+   1. A table will pop up, and then click on `Hardcoded Role`.
 
    1. Enter a name.
 
@@ -71,7 +71,7 @@ Follow the steps in only one of the following sections, depending on if it is pr
 
    1. Click on `Select Role`.
 
-   1. Click on the dropdown that says `Filter by realm roles` and select `Filter by clients`
+   1. Click on the dropdown that says `Filter by realm roles` and select `Filter by clients`.
 
    1. Click on the role called `shasta admin`.
 

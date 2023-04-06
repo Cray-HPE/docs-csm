@@ -74,7 +74,7 @@ Access to the Keycloak UI is needed.
 
     1. Enter `RSA - CLI` for the `New Name` type.
 
-    1. Click on `Duplicate`
+    1. Click on `Duplicate`.
 
     1. Click the `Add Step` button in the table header.
 
