@@ -35,12 +35,15 @@ Users authenticate to Keycloak on behalf of a client. Keycloak clients own confi
 - `admin-client`
   - The `admin-client` client represents a service account that is used during the install to register the services with the API gateway. The secret for this account is
     generated during the software installation process.
-- `gatekeeper`
-  - The `gatekeeper` client is used by the `keycloak-gatekeeper` to authenticate web UIs using OAUTH.
+- `oauth2-proxy-*`
+  - The `oauth2-proxy-*` clients are used by the `oauth2-proxies` to authenticate web UIs using OAUTH.
 - `system-compute-client`
   - The `system-compute-client` client is used by the Cray Operating System \(COS\) for compute nodes and some NCN services for boot orchestration and management.
 - `system-pxe-client`
   - The `system-pxe-client` client is used by the `cray-ipxe` service to communicate with `cray-bss` to prepare boot scripts and other boot-related content.
+- `system-nexus-client`
+  - The `system-nexus-client` client is used by the `cray-nexus` service to login to Nexus with Keycloak users. The `system-nexus-client` has two roles created for
+  authorization: `nx-admin` and `nx-anonymous` that can be added to any account to give permissions to that user in Nexus.
 
 ### Public clients
 

@@ -7,43 +7,44 @@ Note: The default value for these settings is 365 days.
 
 ## Procedure
 
-Log in to Keycloak with the default admin credentials.
+1. Log in to Keycloak with the default admin credentials.
 
-Point a browser at `https://auth.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing `SYSTEM_DOMAIN_NAME` with the actual NCN's DNS name.
+    1. Retrieve the `admin` user's password for Keycloak.
 
-The following is an example URL for a system: `https://auth.cmn.system1.us.cray.com/keycloak/admin`
+       ```bash
+       kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
+       ```
 
-Use the following admin login credentials:
+    1. Log in to the Keycloak UI using the `admin` user and the password obtained in the previous step.
 
-- Username: `admin`
-- The password can be obtained with the following command:
+       The Keycloak UI URL is typically similar to the following: `https://auth.cmn.<system_name>/keycloak`
 
-```bash
-kubectl get secret -n services keycloak-master-admin-auth \
-        --template={{.data.password}} | base64 --decode
-```
+1. Change Global Token Lifetime Values
 
-### Change Global Token Lifetime Values
+    1. Select `Realm Settings` under `Configure` on the left of the `admin` page.
+    1. Select the `Tokens` tab.
+    1. Change the following options to the appropriate lifetime values:
+       - `Access Token Lifespan`
+       - `Access Token Lifespan for Implicit Flow`
+    1. Click `Save` at the bottom of the page.
+    1. Select the `Sessions` tab.
+    1. Change the following options to the appropriate lifetime values:
+       - `SSO Session Idle`
+       - `SSO Session Max`
+    1. Click `Save` at the bottom of the page.
 
-1. Select `Realm Settings` under `Configure` on the left of the `admin` page.
-1. Select the `Tokens` tab.
-1. Change the following options to the appropriate lifetime values:
-   - `SSO Session Idle`
-   - `SSO Session Max`
-   - `Access Token Lifespan`
-   - `Access Token Lifespan for Implicit Flow`
-1. Click `Save` at the bottom of the page.
+    ![Global Token Lifetime Options](../../img/operations/Keycloak_Global_Token_Lifetime.png)
+    ![Global Session Lifetime Options](../../img/operations/Keycloak_Global_Session_Lifetime.png)
 
-![Global Token Lifetime Options](../../img/operations/Keycloak_Global_Token_Lifetime.png)
+1. Change A Specific Client's Token Lifetime
 
-### Change A Specific Client's Token Lifetime
+    1. Select `Clients` under `Manage` on the left of the `admin` page.
+    1. Select the client that you wish to change the token lifetime for.
+    1. Select the `Advanced` tab.
+    1. Go to the `Advanced Settings` section.
+    1. Change the `Access Token Lifespan` to the appropriate lifetime value.
+    1. Click `Save` at the bottom of the page.
 
-1. Select `Clients` under `Configure` on the left of the `admin` page.
-1. Select the client that you wish to change the token lifetime for.
-1. Expand `Advanced Settings`.
-1. Change the `Access Token Lifespan` to the appropriate lifetime value.
-1. Click `Save` at the bottom of the page.
+    ![Client Settings](../../img/operations/Keycloak_Client_Settings.png)
 
-![Client Settings](../../img/operations/Keycloak_Client_Settings.png)
-
-![Client Token Lifetime Options](../../img/operations/Keycloak_Client_Token_Lifetime.png)
+    ![Client Token Lifetime Options](../../img/operations/Keycloak_Client_Token_Lifetime.png)
