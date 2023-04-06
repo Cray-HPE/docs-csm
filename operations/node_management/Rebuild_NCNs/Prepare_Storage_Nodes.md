@@ -157,7 +157,7 @@ Check the status of Ceph.
 
 4. Check the status of the Ceph cluster:
 
-    ```screen
+    ```bash
     ceph -s
     ```
 
@@ -233,7 +233,7 @@ Check the status of Ceph.
 
         Example Output:
 
-        ```screen
+        ```text
         destroyed osd.1
         purged osd.1
         destroyed osd.4
