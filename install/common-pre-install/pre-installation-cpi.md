@@ -547,7 +547,7 @@ Follow  [Configure management network switches](README.md#6-configure-management
    kill -9 <pid>
    ```
 
-   Restart the Nexus.
+   Restart Nexus.
 
    ```bash
    systemctl restart nexus.service
