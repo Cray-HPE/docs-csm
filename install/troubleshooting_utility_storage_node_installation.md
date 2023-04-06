@@ -2,14 +2,15 @@
 
 ## Topics
 
-- [`ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'](#ncn-s001-console-is-stuck-'Sleeping-for-five-seconds-waiting-ceph-to-be-healthy)
+- [`ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'](#ncn-s001-console-is-stuck-'Sleeping-for-five-seconds-waiting-ceph-to-be-healthy...)
 
 ## Details
 
 ### `ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'
 
 > **NOTES:**
-> It can be appropriate for `ncn-s001` to wait with this message for a while. To check if Ceph osds are still coming up, run `ceph -s` and check the number of osds. After a couple minutes, run `ceph -s` again and see if there are more osds. If osds are still increasing, then continue to wait.
+> It can be appropriate for `ncn-s001` to wait with this message for a while. To check if Ceph OSDs are still coming up, run `ceph -s` and check the number of OSDs.
+After a couple minutes, run `ceph -s` again and see if there are more OSDs. If OSDs are still increasing, then continue to wait.
 
 1. (`ncn-s001`) Check Ceph health.
 
@@ -39,4 +40,5 @@
    enabled application 'mgr' on pool '.mgr'
    ```
 
-3. If Ceph health does not show the warning above, then most likely the storage node install will finish after waiting longer. Other ceph troubleshooting procedures are in the [troubleshooting section](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) of the [utility storage documentation](../operations/utility_storage/Utility_Storage.md).
+3. If Ceph health does not show the warning above, then most likely the storage node install will finish after waiting longer. Other Ceph troubleshooting procedures are in the
+[troubleshooting section](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) of the [utility storage documentation](../operations/utility_storage/Utility_Storage.md).
