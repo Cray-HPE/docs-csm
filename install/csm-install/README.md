@@ -163,7 +163,7 @@ Refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://
 
 ### Troubleshooting installation problems
 
-The installation of the Cray System Management (CSM) product requires knowledge of the various nodes and switches for the HPE Cray EX system.
+The installation of the CSM product requires knowledge of the various nodes and switches for the HPE Cray EX system.
 The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
 
 See [Troubleshooting Installation Problems](../troubleshooting_installation.md).
