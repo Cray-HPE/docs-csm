@@ -12,6 +12,9 @@ When rebuilding a node, make sure that `/srv/cray/scripts/common/storage-ceph-cl
 
    ```bash
    NODE=ncn-s00n
+   ```
+
+   ```bash
    XNAME=$(ssh $NODE cat /etc/cray/xname)
    ```
 
@@ -47,30 +50,11 @@ When rebuilding a node, make sure that `/srv/cray/scripts/common/storage-ceph-cl
 
 Upload Ceph container images into nexus.
 
-1. (`ncn-m001#`) Copy `/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh` to **the node being rebuilt** and execute it.
+1. Logged into one of (`ncn-s00[1/2/3]`), execute the `upload_ceph_images_to_nexus.sh`.
 
-    ```bash
-    scp /usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh ${NODE}:/srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-    ssh $NODE /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-    ```
-
-1. (`ncn-s00[1/2/3]#`) After running the script, run the following command to check for errors or completion of the `ceph orch upgrade` command run in the script.
-
-    ```bash
-    ceph orch upgrade status
-    ```
-
-    Expected output:
-
-    ```bash
-    {
-    "target_image": null,
-    "in_progress": false,
-    "services_complete": [],
-    "progress": null,
-    "message": ""
-    }
-    ```
+   ```bash
+   /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
+   ```
 
 Check the status of Ceph.
 
@@ -107,32 +91,37 @@ Check the status of Ceph.
     14   ssd   3.49309          osd.14         up   1.00000  1.00000
     17   ssd   3.49309          osd.17         up   1.00000  1.00000
 
-1. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
+2. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
 
-    (`ncn-s#`) On the node being rebuilt, run:
+    From `(ncn-s00[1/2/3])`, run:
 
     ```bash
-    for service in $(cephadm ls |jq -r '.[].systemd_unit'); do systemctl stop $service; systemctl disable $service; done
+    ceph orch maintenance enter <storage node hostname being rebuilt>
     ```
 
     Example output:
 
     ```screen
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@rgw.site1.ncn-s003.iibwgo.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.14.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.1.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@mds.cephfs.ncn-s003.ijrnef.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.17.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.11.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@crash.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@mgr.ncn-s003.gasosn.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@mon.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@node-exporter.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.8.service.
-    Removed /etc/systemd/system/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6.target.wants/ceph-4c9e9d74-a208-11ed-b008-98039bb427f6@osd.4.service.
+    ncn-s001:~ # ceph orch host maintenance enter ncn-s003 --force
+    Daemons for Ceph cluster 5f79a490-c281-11ed-b6ec-fa163e741e89 stopped on host ncn-s003. Host ncn-s003 moved to maintenance mode
     ```
 
-1. Re-check the OSD status, weight, and location:
+    **IMPORTANT**: The --force flag is used to bypass warnings.  These pertain to ceph services which can handle failures like rgw.  
+    * ***IF*** the command returns any lines with an **ALERT** status then please follow the output to remedy.  
+      * Typically this will be something like the active MGR process is on that node and you have to fail it over first.  
+
+    Example:
+
+    ```screen
+    ncn-s001:~ # ceph orch host maintenance enter ncn-s003
+    WARNING: Stopping 1 out of 1 daemons in Alertmanager service. Service will not be operational with no daemons left. At least 1 daemon must be running to guarantee service.
+    ALERT: Cannot stop active Mgr daemon, Please switch active Mgrs with 'ceph mgr fail ncn-s003.ydycwn'
+    WARNING: Removing RGW daemons can cause clients to lose connectivity.
+    ```
+
+    In this example our warnings for RGW and Alertmanager would be ignored by passing the `--force` flag.  The Alert for active MGR will need to be addressed with the provided command `ceph mgr fail ncn-s003.ydycwn`
+
+3. Re-check the OSD status, weight, and location:
 
     ```bash
     ceph osd tree
@@ -166,9 +155,9 @@ Check the status of Ceph.
     17   ssd   3.49309          osd.17       down   1.00000  1.00000
     ```
 
-1. Check the status of the Ceph cluster:
+4. Check the status of the Ceph cluster:
 
-    ```screen
+    ```bash
     ceph -s
     ```
 
@@ -178,6 +167,7 @@ Check the status of Ceph.
       cluster:
         id:     4c9e9d74-a208-11ed-b008-98039bb427f6
         health: HEALTH_WARN
+                1 host is in maintenance mode           <-------- Expect this line.
                 1/3 mons down, quorum ncn-s001,ncn-s002
                 6 osds down
                 1 host (6 osds) down
@@ -204,17 +194,19 @@ Check the status of Ceph.
         client:   8.7 KiB/s rd, 353 KiB/s wr, 3 op/s rd, 53 op/s wr
     ```
 
-1. Remove Ceph OSDs.
+5. Remove Ceph OSDs
 
-    The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
+   **IMPORTANT:** Before proceeding please ensure you are doing a rebuild that requires OSD wipes. Storage node rebuilds that are done on an active node do not require the OSD removal.  Some examples are rebuilds to get some a custom patched image.
 
-     ```screen
+   The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
+
+     ```bash
      ceph osd tree down
      ```
 
-     Example output:
+    Example output:
 
-     ```text
+    ```bash
      ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
      -1         62.87758  root default
      -7         20.95853      host ncn-s003
@@ -226,35 +218,36 @@ Check the status of Ceph.
       17   ssd   3.49309          osd.17       down   1.00000  1.00000
      ```
 
-    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
+   1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
+  
        By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
        This will result in OSDs that no longer exist appearing to be down.
 
-        The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
+       The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
 
-        This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
+       This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
 
-        ```bash
-        for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
-        ```
+       ```bash
+       for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
+       ```
 
-        Example Output:
+       Example Output:
 
-        ```screen
-        destroyed osd.1
-        purged osd.1
-        destroyed osd.4
-        purged osd.4
-        destroyed osd.6
-        purged osd.6
-        destroyed osd.11
-        purged osd.11
-        destroyed osd.14
-        purged osd.14
-        destroyed osd.17
-        purged osd.17
-        ```
+       ```bash
+       destroyed osd.1
+       purged osd.1
+       destroyed osd.4
+       purged osd.4
+       destroyed osd.6
+       purged osd.6
+       destroyed osd.11
+       purged osd.11
+       destroyed osd.14
+       purged osd.14
+       destroyed osd.17
+       purged osd.17
+       ```
 
 ## Next Step
 
-Proceed to the next step to [Identify Nodes and Update Metadata](Identify_Nodes_and_Update_Metadata.md). Otherwise, return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
+If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.
