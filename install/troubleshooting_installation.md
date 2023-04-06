@@ -34,7 +34,7 @@ See [Restart network services and interfaces on NCNs](../operations/node_managem
 
 ## Utility storage node installation troubleshooting
 
-Rarely, a Ceph osd pool fails to enable an application. If cloud-init on `ncn-s001` is stuck 'Sleeping for five seconds waiting Ceph to be healthy...', then it may be needed to manually enable the Ceph pool application.
+Rarely, a Ceph osd pool fails to enable an application. If cloud-init on `ncn-s001` is stuck 'Sleeping for five seconds waiting Ceph to be healthy...', then it may be neccessary to manually enable the Ceph pool application.
 
 See [Troubleshooting Utility Storage Node Installation](troubleshooting_utility_storage_node_installation.md).
 
