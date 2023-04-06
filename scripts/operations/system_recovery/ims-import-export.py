@@ -32,7 +32,14 @@ import sys
 import tempfile
 import uuid
 from os import path
+from typing import Dict
 from urllib.parse import urlparse
+
+# Ugly temporary hack to get the product_catalog module from a different path.
+# This will go away as the helper modules make their way into libcsm
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","configuration"))
+
+import update_product_catalog_ims_ids
 
 LOGGER = logging.getLogger(__name__)
 ch = logging.StreamHandler()
@@ -675,6 +682,12 @@ def import_ims_artifacts(args):
                 outfile)
         LOGGER.info(f'Recorded mapping from old to new IMS IDs and S3 etags in {id_map_file}')
         LOGGER.info(f'IMS data imported from {args.import_export_root}')
+
+        # If any image or recipe IDs changed, update the product catalog if needed
+        if image_map or recipe_map:
+            LOGGER.info('Updating IMS IDs in Cray Product Catalog')
+            update_product_catalog_ims_ids.update_product_catalog(image_map, recipe_map)
+
     except ImsImportExportBaseError as ims_exc:
         LOGGER.warning('Error importing IMS data', exc_info=ims_exc)
         return False
