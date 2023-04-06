@@ -68,9 +68,9 @@ On the first login, configure and verify the site-link, DNS and gateway IP addre
 
         1. Download and extract the contents of network file template tarball from [here](files/network_template.tar.gz), extract the contents.
 
-         ```bash
+            ```bash
             tar -xzvf network_template.tar.gz
-         ```
+            ```
 
         1. Delete existing network settings and copy the extracted files to `/etc/sysconfig/network/`.
 
