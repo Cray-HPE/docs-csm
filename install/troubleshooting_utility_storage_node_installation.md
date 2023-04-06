@@ -2,7 +2,7 @@
 
 ## Topics
 
-- [`ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'](#ncn-s001-console-is-stuck-'Sleeping-for-five-seconds-waiting-ceph-to-be-healthy...)
+- [`ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'](#ncn-s001-console-is-stuck-sleeping-for-five-seconds-waiting-ceph-to-be-healthy)
 
 ## Details
 
