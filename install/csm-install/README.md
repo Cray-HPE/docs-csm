@@ -45,7 +45,7 @@ If one is reinstalling a system, the existing cluster needs to be wiped and powe
 See [Prepare Management Nodes](../re-installation.md), and then come back and proceed
 to the [Pre-Installation](#pre-installation) guide.
 
-These steps walk the user through properly setting up a Cray supercomputer for an installation.
+These steps walk the user through properly setting up an HPE Cray supercomputer for an installation.
 
 See [Pre-installation](../pre-installation.md).
 
