@@ -446,6 +446,7 @@ cdu0sw02
 cec0
 center
 centers
+ceph
 channeled
 checkmark
 cleanup
@@ -571,6 +572,7 @@ organizer
 organizers
 organizes
 organizing
+osd
 oversubscription
 passthrough
 passwordless

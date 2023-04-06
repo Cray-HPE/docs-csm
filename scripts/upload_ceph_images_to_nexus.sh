@@ -115,7 +115,7 @@ function wait_for_osd() {
     #
     if [[ "$cnt" -eq 6 ]]; then
       echo "INFO: Restarting active mgr daemon to kick things along..."
-      #shellcheck disable=SC2046
+      # shellcheck disable=SC2046
       ceph mgr fail $(ceph mgr dump | jq -r .active_name)
       cnt=$((cnt+1))
       continue
@@ -203,6 +203,8 @@ for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
   daemons_to_restart=$(ceph --name client.ro orch ps | awk '{print $1}' | grep $daemon)
   for each in $daemons_to_restart; do
     for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+        # shellcheck disable=SC2086
+        # shellcheck disable=SC2029
         if ssh ${storage_node} ${ssh_options} "ceph orch daemon redeploy $each"; then
           break
         fi
@@ -232,11 +234,14 @@ function upload_image() {
     podman tag "$local_image" "$nexus_location"
     podman push --creds "$nexus_username":"$nexus_password" "$nexus_location"
     for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+        # shellcheck disable=SC2086
+        # shellcheck disable=SC2029
         if [[ $(ssh ${storage_node} ${ssh_options} "ceph config set mgr $to_configure $nexus_location") ]]; then
           break
         fi
     done
     for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+        # shellcheck disable=SC2086
         if [[ $(ssh ${storage_node} ${ssh_options} "ceph config rm mgr mgr/cephadm/container_image_base ") ]]; then
           break
         fi
@@ -247,11 +252,13 @@ function redeploy_ceph_services(){
 # restart daemons
 for node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
   enter_maintenance_mode
+  # shellcheck disable=SC2086
   ssh ${node} ${ssh_options} "podman rmi --all --force"
   exit_maintenance_mode
   for daemon in "mon" "mgr" "osd" "mds" "crash" "rgw"; do
     daemons_to_restart=$(ceph --name client.ro orch ps "$node"| awk '{print $1}' | grep $daemon)
     for each in $daemons_to_restart; do
+      #shellcheck disable=SC2086
       if [[ $(hostname) = @("ncn-s001"|"ncn-s002"|"ncn-s003") ]]; then
 	 ceph config set global container_image ${nexus_location}
 	 ceph orch daemon redeploy "$each" --image "$nexus_location"
@@ -266,10 +273,12 @@ done
 }
 
 function enter_maintenance_mode() {
+  # shellcheck disable=SC2076
   if [[ $(ceph mgr stat|jq -r '.active_name') =~ "$node" ]]; then
     echo "Active Ceph mgr process detected on $node.  Failing the Ceph mgr process to another node."
     ceph mgr fail
   fi
+  # shellcheck disable=SC2076
   until [[ ! "$(ceph mgr stat|jq -r '.active_name')" =~ "$node" ]]; do
     echo "waiting for mgr to fail over"
     sleep 10
@@ -277,6 +286,7 @@ function enter_maintenance_mode() {
   echo "entering mainenance mode for $node"
   ceph orch host maintenance enter "$node" --force
   counter=0
+  # shellcheck disable=SC2086
   until [[ "$(ceph orch host ls $node --format json-pretty|jq -r '.[].status')" == "maintenance" ]]; do
     echo "Waiting for node $node to enter maintenance mode."
     (( counter ++ ))
@@ -289,8 +299,10 @@ function enter_maintenance_mode() {
 }
 
 function exit_maintenance_mode() {
-  echo "exiting maintenance mode for $node"
+  echo "exiting maintenance mode for ${node}"
+  # shellcheck disable=SC2086
   if [[ "$(ceph orch host maintenance exit $node)" ]]; then
+    # shellcheck disable=SC2086
     until [[ "$(ceph orch host ls $node --format json-pretty|jq -r '.[].status')" != "maintenance" ]]; do
       echo "Waiting for node $node to exit maintenance mode."
       sleep 15
