@@ -9,6 +9,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.2`, follow the procedures descr
 
 * Fixed a scale issue with the `/v1/hardware` API in the System Layout Service (SLS) causing the service to become deadlocked.
 * Updated the `hms-hmcollector` to be accessible at the hostname `hmcollector.hmnlb.$SYSTEM_NAME.$SITE_DOMAIN`, in addition to its IP address `10.94.100.71`.
+TEST
 
 ## Steps
 
