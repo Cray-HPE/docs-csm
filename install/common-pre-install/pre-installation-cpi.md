@@ -541,7 +541,7 @@ Follow  [Configure management network switches](README.md#6-configure-management
    netstat -tlnp | grep 5000
    ```
 
-   If there is a process attached to port 5000, kill it using the kill command.
+   If there is a process attached to port 5000, kill it using the `kill` command.
 
    ```bash
    kill -9 <pid>
