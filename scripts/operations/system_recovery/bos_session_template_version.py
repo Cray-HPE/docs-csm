@@ -23,87 +23,22 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
+"""
+This module takes a JSON file containing session templates and reports their BOS versions.
+A template name can be specified to filter the results to just the specified template.
+"""
+
 import argparse
 import json
 import sys
-from typing import Any, Dict, List, Union
+from typing import List, Union
 
-BosSessionTemplate = Dict[str, Any]
+from bos_session_templates import BosSessionTemplate, \
+                                  InvalidBosSessionTemplate, \
+                                  get_session_template_version
 
-class InvalidBosSessionTemplate(Exception):
-    pass
-
-def get_session_template_v1_fields(session_template: BosSessionTemplate) -> List[str]:
-    """
-    Returns a list of the v1-specific fields found in the session template. List is empty if none
-    are found.
-
-    According to the BOS API spec (https://github.com/Cray-HPE/bos/blob/develop/api/openapi.yaml.in),
-    the fields found only in v1 templates are:
-    cfs_url
-    cfs_branch
-
-    cfs.clone_url
-    cfs.branch
-    cfs.commit
-    cfs.playbook
-
-    boot_sets[].boot_ordinal
-    boot_sets[].shutdown_ordinal
-    boot_sets[].network
-    """
-    v1_fields = { "cfs_url", "cfs_branch" }
-    v1_cfs_fields = { "clone_url", "branch", "commit", "playbook" }
-    v1_bootsets_fields = { "boot_ordinal", "shutdown_ordinal", "network" }
-
-    fields_found = v1_fields.intersection(session_template.keys())
-    if "cfs" in session_template:   
-        for field in v1_cfs_fields.intersection(session_template["cfs"].keys()):
-            fields_found.add(f"cfs.{field}")
-    if "boot_sets" in session_template:
-        for bootset in session_template["boot_sets"].values():
-            for field in v1_bootsets_fields.intersection(bootset.keys()):
-                fields_found.add(f"boot_sets[].{field}")
-
-    return sorted(list(fields_found))
-
-def get_session_template_v2_fields(session_template: BosSessionTemplate) -> List[str]:
-    """
-    Returns a list of the v2-specific fields found in the session template. List is empty is none are found.
-    According to the BOS API spec (https://github.com/Cray-HPE/bos/blob/develop/api/openapi.yaml.in),
-    the only v2-specified field is:
-    boot_sets[].cfs
-    """
-    fields_found = list()
-    if "boot_sets" in session_template:
-        if any("cfs" in bootset for bootset in session_template["boot_sets"].values()):
-            fields_found.append("boot_sets[].cfs")
-    return fields_found
-
-def get_session_template_version(session_template: BosSessionTemplate) -> int:
-    """
-    If the specified session template contains BOS v1-specific fields and no v2-specific fields,
-    returns 1.
-    If it contains v2-specific fields and no v1-specific fields, returns 2.
-    If it contains neither, returns 2.
-    If it contains both, raises an exception.
-
-    
-    """
-    try:
-        v1_fields_found = get_session_template_v1_fields(session_template)
-        if not v1_fields_found:
-            return 2
-        v2_fields_found = get_session_template_v2_fields(session_template)
-        if v2_fields_found:
-            raise InvalidBosSessionTemplate(
-                f"Invalid session template; has both v1-exclusive ({', '.join(v1_fields_found)}) "
-                f"and v2-exclusive ({', '.join(v2_fields_found)}) fields.")
-    except TypeError as exc:
-        raise InvalidBosSessionTemplate(f"Session template has invalid format: {exc}") from exc
-    return 1
-
-def print_names_versions(session_template_list: List[BosSessionTemplate], template_name_filter: Union[str, None]) -> bool:
+def print_names_versions(session_template_list: List[BosSessionTemplate],
+                         template_name_filter: Union[str, None]) -> bool:
     """
     If name not specified, print the name and version of every template in the list.
     If name specified, only do so if the name matches.
@@ -133,19 +68,23 @@ def print_names_versions(session_template_list: List[BosSessionTemplate], templa
 def main() -> bool:
     """
     Parses the command line arguments, does the stuff.
-    
+
     Arguments:
     [--name <session_template_name>] <input.json>
 
-    If the input file contains a single session template, then the script will output its name and version.
-    If the input file contains a list of session templates, then the script will output the name and version of each.
-    If the name argument is specified, it will filter the output to only the specified session template name (if found).
+    If the input file contains a single session template, then the script will output its name and
+    version.
+    If the input file contains a list of session templates, then the script will output the name
+    and version of each.
+    If the name argument is specified, it will filter the output to only the specified session
+    template name (if found).
     Returns True if no errors. Returns False if errors, or if no matching templates found.
     """
-    parser = argparse.ArgumentParser(
-        description="Display names and BOS versions of BOS session templates contained in a JSON file")
-    parser.add_argument("--name", type=str, metavar="session_template_name", required=False, 
-                        help="Only output information on specified session template (if found in file)")
+    parser = argparse.ArgumentParser(description="Display names and BOS versions of BOS session"
+                                                 " templates contained in a JSON file")
+    parser.add_argument("--name", type=str, metavar="session_template_name", required=False,
+                        help="Only output information on specified session template "
+                             "(if found in file)")
     parser.add_argument("json_filename", type=argparse.FileType('r'),
                         help="JSON file containing session template or list of session templates")
     parsed_args = parser.parse_args()
@@ -154,7 +93,7 @@ def main() -> bool:
     if isinstance(file_contents, dict):
         return print_names_versions([file_contents], parsed_args.name)
     return print_names_versions(file_contents, parsed_args.name)
- 
+
 if __name__ == '__main__':
     if main():
         sys.exit(0)
