@@ -206,7 +206,7 @@ Check the status of Ceph.
 
    Example output:
 
-   ```text
+   ```bash
    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
    -1         62.87758  root default
    -7         20.95853      host ncn-s003
@@ -223,30 +223,30 @@ Check the status of Ceph.
        By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
        This will result in OSDs that no longer exist appearing to be down.
 
-        The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
+       The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
 
-        This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
+       This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
 
-        ```bash
-        for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
-        ```
+       ```bash
+       for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
+       ```
 
-        Example Output:
+       Example Output:
 
-        ```text
-        destroyed osd.1
-        purged osd.1
-        destroyed osd.4
-        purged osd.4
-        destroyed osd.6
-        purged osd.6
-        destroyed osd.11
-        purged osd.11
-        destroyed osd.14
-        purged osd.14
-        destroyed osd.17
-        purged osd.17
-        ```
+       ```bash
+       destroyed osd.1
+       purged osd.1
+       destroyed osd.4
+       purged osd.4
+       destroyed osd.6
+       purged osd.6
+       destroyed osd.11
+       purged osd.11
+       destroyed osd.14
+       purged osd.14
+       destroyed osd.17
+       purged osd.17
+       ```
 
 ## Next Step
 
