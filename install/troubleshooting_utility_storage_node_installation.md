@@ -1,85 +1,52 @@
 # Utility Storage Installation Troubleshooting
 
-If there is a failure in the creation of Ceph storage on the utility storage nodes for one of these scenarios,
-the Ceph storage might need to be reinitialized.
-
 ## Topics
 
-- [Scenario 1](#scenario-1-shasta-14-only) (Shasta v1.4 only)
-- [Scenario 2](#scenario-2-shasta-15-only) (Shasta v1.5 only)
+- [`ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'](#ncn-s001-console-is-stuck-sleeping-for-five-seconds-waiting-ceph-to-be-healthy)
+- [Ceph install failed](#ceph-install-failed)
 
 ## Details
 
-### Scenario 1 (Shasta 1.4 only)
+### `ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'
 
-**`IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY)`:** If the Ceph install failed, check the following:
+> **NOTES:**
+> It can be appropriate for `ncn-s001` to wait with this message for a while. To check if Ceph OSDs are still coming up, run `ceph -s` and check the number of OSDs.
+After a couple minutes, run `ceph -s` again and see if there are more OSDs. If OSDs are still increasing, then continue to wait.
 
-```bash
-ceph osd tree
-ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
--1       83.83459 root default
--5       27.94470     host ncn-s001
- 0   ssd  3.49309         osd.0         up  1.00000 1.00000
- 4   ssd  3.49309         osd.4         up  1.00000 1.00000
- 6   ssd  3.49309         osd.6         up  1.00000 1.00000
- 8   ssd  3.49309         osd.8         up  1.00000 1.00000
-10   ssd  3.49309         osd.10        up  1.00000 1.00000
-12   ssd  3.49309         osd.12        up  1.00000 1.00000
-14   ssd  3.49309         osd.14        up  1.00000 1.00000
-16   ssd  3.49309         osd.16        up  1.00000 1.00000
--3       27.94470     host ncn-s002
- 1   ssd  3.49309         osd.1       down  1.00000 1.00000
- 3   ssd  3.49309         osd.3       down  1.00000 1.00000
- 5   ssd  3.49309         osd.5       down  1.00000 1.00000
- 7   ssd  3.49309         osd.7       down  1.00000 1.00000
- 9   ssd  3.49309         osd.9       down  1.00000 1.00000
-11   ssd  3.49309         osd.11      down  1.00000 1.00000
-13   ssd  3.49309         osd.13      down  1.00000 1.00000
-15   ssd  3.49309         osd.15      down  1.00000 1.00000
--7       27.94519     host ncn-s003                            <--- node where the issue exists
- 2   ssd 27.94519         osd.2       down  1.00000 1.00000    <--- the problematic VG
-```
-
-1. SSH to the node(s) where the issue exists.
-
-1. (`ncn-s#`) Run the following commands on the nodes:
+1. (`ncn-s001`) Check Ceph health.
 
    ```bash
-   systemctl stop ceph-osd.target
-   vgremove -f --select 'vg_name=~ceph*' # This will take a little bit of time, so do not panic
-   for i in {g..n}; do sgdisk --zap-all /dev/sd$i; done
+   ceph health detail
+   ceph -s
    ```
 
-   This will vary node to node. Use `lsblk` to identify all drives available to Ceph.
-
-1. (`ncn-s#`) Manually create OSDs on the problematic nodes.
+2. If Ceph health shows the following health warning
 
    ```bash
-   for i in {g..n}; do ceph-volume lvm create --data /dev/sd$i  --bluestore; done
+   HEALTH_WARN 1 pool(s) do not have an application enabled
+   [WRN] POOL_APP_NOT_ENABLED: 1 pool(s) do not have an application enabled
+      application not enabled on pool '.mgr'
+      use 'ceph osd pool application enable <pool-name> <app-name>', where <app-name> is 'cephfs', 'rbd', 'rgw', or freeform for custom applications. 
    ```
 
-   > **`NOTE`** The remaining steps must be run from `ncn-s001`.
-
-1. Verify the `/etc/cray/ceph` directory is empty. If there are any files there, then delete them.
-
-1. Put in safeguard.
-
-   - Edit `/srv/cray/scripts/metal/lib.sh`
-   - Comment out the below lines
+   (`ncn-s001`) Then enable the `.mgr` pool with the following command.
 
    ```bash
-   if [ $wipe == 'yes' ]; then
-     ansible osds -m shell -a "vgremove -f --select 'vg_name=~ceph*'"
-   fi
+   ceph osd pool application enable .mgr mgr
    ```
 
-1. (`ncn-s001#`) Run the `cloud-init` script.
+   Expected output:
 
    ```bash
-   /srv/cray/scripts/common/storage-ceph-cloudinit.sh
+   enabled application 'mgr' on pool '.mgr'
    ```
 
-### Scenario 2 (Shasta 1.5 only)
+3. If Ceph health does not show the warning above, then most likely the storage node install will finish after waiting longer. Other Ceph troubleshooting procedures are in the
+[troubleshooting section](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) of the [utility storage documentation](../operations/utility_storage/Utility_Storage.md).
+
+### Ceph install failed
+
+If there is a failure in the creation of Ceph storage on the utility storage nodes for the following scenario, the Ceph storage might need to be reinitialized.
 
 **IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY):** If the Ceph install failed, check the following:
 
