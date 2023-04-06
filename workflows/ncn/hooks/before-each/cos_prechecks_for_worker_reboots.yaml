@@ -1,0 +1,51 @@
+#
+# MIT License
+#
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: cray-nls.hpe.com/v1
+kind: Hook
+metadata:
+  name: cos_prechecks_for_worker_reboots
+  labels:
+    before-each: "true"
+spec:
+  scriptContent: |
+    TARGET_NCN={{inputs.parameters.targetNcn}}
+    SSH_OPT="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    SSH_OPT="${SSH_OPT} -o ConnectTimeout=10"
+    # Note: this file path cannot change without coordinated changes to the COS
+    # product stream
+    file_path=/opt/cray/shasta/cos/bin/prechecks_for_worker_reboots
+    # Check for remote installation, gracefully handling non-existence as COS
+    # may not be installed yet (or this functionality may be deprecated).
+    has_file=$(ssh ${SSH_OPT} ${TARGET_NCN} find ${file_path} || true)
+    if [[ -z ${has_file} ]]; then
+        # double check that we can generally ssh to TARGET_NCN
+        ssh ${SSH_OPT} ${TARGET_NCN} hostname
+        # 'hostname' failure triggers 'set -e' (established in calling context)
+        echo "cannot find ${file_path} on ${TARGET_NCN}"
+        exit 0
+    fi
+    # remotely execute the file using its exit code as our own
+    ssh ${SSH_OPT} ${TARGET_NCN} ${file_path}
+    exit $?
+  templateRefName: ssh-template
