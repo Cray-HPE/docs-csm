@@ -34,8 +34,8 @@ See [Restart network services and interfaces on NCNs](../operations/node_managem
 
 ## Utility storage node installation troubleshooting
 
-Sometimes a large OSD can be created which is a concatenation of multiple devices, instead of one OSD per device. In this case,
-the Ceph storage might need to be reinitialized.
+Rarely, a Ceph OSD pool fails to enable an application. If `cloud-init` on `ncn-s001` is stuck 'Sleeping for five seconds waiting Ceph to be healthy...',
+then it may be necessary to manually enable the Ceph pool application.
 
 See [Troubleshooting Utility Storage Node Installation](troubleshooting_utility_storage_node_installation.md).
 
