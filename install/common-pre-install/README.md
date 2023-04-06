@@ -42,7 +42,7 @@ The following must be verified before starting the Pre-installation procedure:
 
 - Ensure that list of Management Switch IP address configured on `vlan1` is available, this need to be shared or will require serial console to the switches.
 
-- Verify if the SHCD Document is available with xnames of server.
+- Verify if the SHCD document is available with the component names (xnames) of server.
 
 - Collect IP address of admin node, site DNS, gateway IP, and proxy details, and ensure all these IPs are reachable from admin node.
 
