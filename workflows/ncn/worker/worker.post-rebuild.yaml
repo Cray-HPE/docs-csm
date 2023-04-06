@@ -36,6 +36,7 @@ tasks:
             ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{ `{{inputs.parameters.targetNcn}}` }} \
               -t "SW_ADMIN_PASSWORD='{{.SwitchPassword}}' \
                   GOSS_BASE=/opt/cray/tests/install/ncn \
+                  TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }} \
                   goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-worker.yaml \
                     --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate \
                     --retry-timeout 1h"
