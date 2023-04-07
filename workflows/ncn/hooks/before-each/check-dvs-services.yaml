@@ -1,0 +1,104 @@
+#
+# MIT License
+#
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: cray-nls.hpe.com/v1
+kind: Hook
+metadata:
+  name: check-dvs-services
+  labels:
+    before-each: "true"
+spec:
+  scriptContent: |
+    TARGET_NCN={{inputs.parameters.targetNcn}}
+    SSH_OPT="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    # Cover a fresh install case where CSM is installed, but COS is not yet
+    # installed by checking if DVS is loaded on the target
+    lsmod_out=$(ssh ${SSH_OPT} ${TARGET_NCN} lsmod || true)
+    if ! [[ -z ${lsmod_out} ]]; then
+        # verify we obtained legitimate output from lsmod by checking its header
+        if [[ "Module Size Used by" == $(echo "${lsmod_out}" | head -n 1 | tr -s " ") ]]; then
+            dvs_loaded=$(echo "${lsmod_out}" | grep -w ^dvs || true)
+            if [[ -z ${dvs_loaded} ]]; then
+                # if DVS is not loaded, we won't make things worse by rebooting the node
+                echo "INFO: dvs module is not loaded on the TARGET_NCN: ${TARGET_NCN}"
+                exit 0
+            fi
+        else
+            echo "WARNING: unexpected output for lsmod from TARGET_NCN: ${TARGET_NCN}"
+        fi
+    else
+        # maybe we could not ssh to TARGET_NCN, but DVS might still be operable...
+        echo "WARNING: could not obtain lsmod output from TARGET_NCN: ${TARGET_NCN}"
+    fi
+    # Cover the upgrade case, where we always need to have 2+ workers running CPS/DVS
+    # obtain map: worker_xnames <--> hostname_aliases
+    token=$(curl -k -s -S -d grant_type=client_credentials \
+        -d client_id=admin-client \
+        -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    q_str="extra_properties.Role=Management&extra_properties.SubRole=Worker"
+    q_url="https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?${q_str}"
+    ncn_cache=$(curl -s -k -H "Authorization: Bearer ${token}" "${q_url}")
+    # identify candidate DVS servers, excluding the target
+    target_xname=$(echo ${ncn_cache} | \
+        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+    candidate_xnames=$(cray hsm state components list \
+        --role Management --subrole Worker --state Ready --format json | \
+        jq -r '.Components[] | .ID' | sort | uniq)
+    candidate_xnames=$(echo ${candidate_xnames} ${target_xname} | \
+        tr " " "\n" | sort | uniq -u | tr "\n" " ")
+    echo "INFO: detected dvs/cps redundancy candidates: ${candidate_xnames}"
+    # put each candidate through a validation gauntlet; increase count on success
+    count=0 # XXX: consider an associative array (vs. a count) for extensibility
+    cps_pods=$(kubectl get pods -Ao wide | grep cps-cm-pm | tr -s " ")
+    for candidate_xname in ${candidate_xnames}; do
+        echo "INFO: validating candidate: ${candidate_xname}..."
+        candidate_ncn=$(echo ${ncn_cache} | \
+            jq ".[] | select(.Xname==\"${candidate_xname}\")" | \
+            jq -r ".ExtraProperties.Aliases[] | select(.|test(\"^ncn-w\\\d{3}$\"))")
+        if [[ "1" != $(echo ${candidate_ncn} | wc -w) ]]; then
+            echo "WARNING: could not find an ncn hostname for ${candidate_xname}"
+            continue
+        else
+            echo "INFO: ${candidate_xname} has ncn hostname: ${candidate_ncn}"
+        fi
+        dvs_loaded=$(ssh ${SSH_OPT} ${candidate_ncn} lsmod | grep -w ^dvs || true)
+        if [[ -z ${dvs_loaded} ]]; then
+            echo "WARNING: dvs module is not loaded on ${candidate_ncn}"
+            continue
+        fi
+        has_cps_pod=$(echo "${cps_pods}" | grep -w ${candidate_ncn} | \
+            grep -w Running || true)
+        if [[ -z ${has_cps_pod} ]]; then
+            echo "WARNING: cps pod is not running on ${candidate_ncn}"
+            continue
+        fi
+        echo "INFO: ${candidate_ncn} has dvs/cps loaded/running"
+        ((count=count+1))
+    done
+    # FAIL (return non-0) if count < 2
+    if [[ ${count} -lt 2 ]]; then
+        echo "ERROR: HA requires at least 2 other cps/dvs servers, but we only detected ${count}"
+        exit 1
+    fi
+  templateRefName: ssh-template
