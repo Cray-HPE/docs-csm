@@ -9,7 +9,7 @@ Perform the following steps **on `ncn-m001`**.
     /opt/cray/tests/install/ncn/scripts/check_bootloader.sh
     '
     ```
-    
+
     If the script fails because of 'Host key verification' failures, then follow the documentation to [Apply root SSH keys to NCNs](../../security_and_authentication/SSH_Keys.md#procedure-apply-root-ssh-keys-to-ncns-standalone).
 
 ## Next Step
