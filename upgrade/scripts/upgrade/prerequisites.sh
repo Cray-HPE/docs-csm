@@ -362,7 +362,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     done
 
     set -e
-    } >> "${LOG_FILE}" 2>&1    
+    } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
@@ -373,11 +373,20 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
-        echo "ERROR: docs-csm-latest.noarch.rpm is missing under: /root -- halting..."
+    error=0
+    packages=( docs-csm libcsm )
+    for package in "${packages[@]}"; do
+        if [[ ! -f /root/${package}-latest.noarch.rpm ]]; then
+            echo >&2 "ERROR: ${package}-latest.noarch.rpm is missing under: /root"
+            error=1
+        else
+            cp "/root/${package}-latest.noarch.rpm" "${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/"
+        fi
+    done
+    if [ "${error}" -ne 0 ]; then
+        echo >&2 "ERROR: one or more expected packages were missing under: /root -- halting..."
         exit 1
     fi
-    cp /root/docs-csm-latest.noarch.rpm ${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
@@ -426,8 +435,8 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     nexus-cred-check () {
         pod=$(kubectl get pods -n nexus --selector app=nexus -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep -v nexus-init);
         kubectl -n nexus exec -it $pod -c nexus -- curl -i -sfk -u "admin:${NEXUS_PASSWORD:=$(kubectl get secret -n nexus nexus-admin-credential --template '{{.data.password}}' | base64 -d)}" \
-         -H "accept: application/json" -X GET http://nexus/service/rest/beta/security/user-sources >/dev/null 2>&1; 
-    } 
+         -H "accept: application/json" -X GET http://nexus/service/rest/beta/security/user-sources >/dev/null 2>&1;
+    }
     if ! nexus-cred-check; then
         echo "Nexus password is incorrect. Please set NEXUS_PASSWORD and try again."
         exit 1
@@ -542,7 +551,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    
+
     upgrade_csm_chart cray-hms-bss sysmgmt.yaml
 
     } >> "${LOG_FILE}" 2>&1
@@ -578,7 +587,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     if [ -f "$artdir/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs" ]; then
         ceph_done=1
     fi
-    
+
     if [ ${k8s_done} = 1 ] && [ ${ceph_done} = 1 ]; then
         echo "Already ran $NCN_IMAGE_MOD_SCRIPT, skipping re-run."
     else
@@ -594,8 +603,8 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/rootfs" "$artdir/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}.squashfs"
     cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/initrd" "$artdir/kubernetes/initrd.img-${KUBERNETES_VERSION}.xz"
     cray artifacts create boot-images "k8s/${KUBERNETES_VERSION}/kernel" "$artdir"/kubernetes/*.kernel
-    cray artifacts create boot-images "ceph/${CEPH_VERSION}/rootfs" "$artdir/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs" 
-    cray artifacts create boot-images "ceph/${CEPH_VERSION}/initrd" "$artdir/storage-ceph/initrd.img-${CEPH_VERSION}.xz" 
+    cray artifacts create boot-images "ceph/${CEPH_VERSION}/rootfs" "$artdir/storage-ceph/secure-storage-ceph-${CEPH_VERSION}.squashfs"
+    cray artifacts create boot-images "ceph/${CEPH_VERSION}/initrd" "$artdir/storage-ceph/initrd.img-${CEPH_VERSION}.xz"
     cray artifacts create boot-images "ceph/${CEPH_VERSION}/kernel" "$artdir"/storage-ceph/*.kernel
     set +o pipefail
 
@@ -769,7 +778,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    
+
     cray bss bootparameters list --format json > "bss-backup-$(date +%Y-%m-%d).json"
 
     backupBucket="config-data"
@@ -779,7 +788,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
         backupBucket="vbis"
     fi
     set -e
-    
+
     cray artifacts create "${backupBucket}" "bss-backup-$(date +%Y-%m-%d).json" "bss-backup-$(date +%Y-%m-%d).json"
 
     } >> "${LOG_FILE}" 2>&1
@@ -904,7 +913,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
             # Make sure it is actually disabled
             echo "Verifying that CFS is now disabled on ${xname}"
-            set -o pipefail            
+            set -o pipefail
             cray cfs components describe "${xname}" --format json | jq '.enabled' | grep "^false$"
             set +o pipefail
         done
@@ -920,4 +929,3 @@ rm -f /root/.ssh/config
 test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
 
 ok_report
-
