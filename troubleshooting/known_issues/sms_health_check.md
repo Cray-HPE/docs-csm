@@ -23,7 +23,8 @@ transfer subtest, as noted in the previous paragraph).
 /usr/local/bin/cmsdev test -q all
 ```
 
-- The `cmsdev` tool logs to `/opt/cray/tests/cmsdev.log`
+- The `cmsdev` tool logs to `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`
+  - This is a change in CSM 1.4. In prior CSM release, the log file location was `/opt/cray/tests/cmsdev.log`
 - The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
   - The same amount of data is written to the log file in either case.
 
@@ -40,7 +41,7 @@ transfer subtest, as noted in the previous paragraph).
   - After remediating a test failure for a particular service, just that single service test can be rerun by replacing
     `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
 
-Additional test execution details can be found in `/opt/cray/tests/cmsdev.log`.
+Additional test execution details can be found in `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`.
 
 ## 3.3 Known issues with SMS tests
 
