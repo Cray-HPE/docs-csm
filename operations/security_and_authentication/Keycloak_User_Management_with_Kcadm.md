@@ -54,7 +54,7 @@ kc-find-user(){
 
   kubectl -n services exec cray-keycloak-0 -c keycloak -- sh -c "
     echo 'Looking for the Keycloak user: $1' &&
-    ./opt/jboss/keycloak/bin/kcadm.sh get users -r shasta -q username='$1' --no-config \
+    ./opt/keycloak/bin/kcadm.sh get users -r shasta -q username='$1' --no-config \
         --server http://localhost:8080/keycloak --realm master --user admin \
         --client admin-cli --password '$MAA'"
 }
@@ -170,7 +170,7 @@ kc-set-local-user-password(){
 
   kubectl -n services exec cray-keycloak-0 -c keycloak -- sh -c "
     echo 'Resetting password for the Keycloak user: $1' &&
-    ./opt/jboss/keycloak/bin/kcadm.sh set-password -r shasta --username '$1' \
+    ./opt/keycloak/bin/kcadm.sh set-password -r shasta --username '$1' \
         --new-password '$KC_USER_NEWPASSWD' --no-config --server http://localhost:8080/keycloak \
         --realm master --user admin --client admin-cli --password '$MAA'"
 }
@@ -235,19 +235,19 @@ kc-create-local-cli-user(){
 
   kubectl -n services exec cray-keycloak-0 -c keycloak -- sh -c "
     echo 'Creating the Keycloak user: $1' &&
-    ./opt/jboss/keycloak/bin/kcadm.sh create users -r shasta -s enabled=true -s username='$1' \
+    ./opt/keycloak/bin/kcadm.sh create users -r shasta -s enabled=true -s username='$1' \
         --no-config --server http://localhost:8080/keycloak --realm master --user admin \
         --client admin-cli --password '$MAA' &&
     echo 'Resetting password for the Keycloak user: $1' &&
-    ./opt/jboss/keycloak/bin/kcadm.sh set-password -r shasta --username '$1' \
+    ./opt/keycloak/bin/kcadm.sh set-password -r shasta --username '$1' \
         --new-password '$KC_USER_NEWPASSWD' --no-config --server http://localhost:8080/keycloak \
         --realm master --user admin --client admin-cli --password '$MAA' &&
     echo 'Adding the Cray client admin role to the user: $1' &&
-    ./opt/jboss/keycloak/bin/kcadm.sh add-roles -r shasta --uusername '$1' --cclientid cray \
+    ./opt/keycloak/bin/kcadm.sh add-roles -r shasta --uusername '$1' --cclientid cray \
         --rolename admin --no-config --server http://localhost:8080/keycloak --realm master \
         --user admin --client admin-cli --password '$MAA' &&
     echo 'Adding the Shasta client admin role to the user: $1' &&
-    ./opt/jboss/keycloak/bin/kcadm.sh add-roles -r shasta --uusername '$1' --cclientid shasta \
+    ./opt/keycloak/bin/kcadm.sh add-roles -r shasta --uusername '$1' --cclientid shasta \
         --rolename admin --no-config --server http://localhost:8080/keycloak --realm master \
         --user admin --client admin-cli --password '$MAA'"
 }
@@ -312,7 +312,7 @@ kc-delete-local-user(){
 
   kubectl -n services exec cray-keycloak-0 -c keycloak -- sh -c "
     echo 'Deleting the Keycloak user UUID: $1' &&
-    ./opt/jboss/keycloak/bin/kcadm.sh delete 'users/$1' -r shasta --no-config \
+    ./opt/keycloak/bin/kcadm.sh delete 'users/$1' -r shasta --no-config \
         --server http://localhost:8080/keycloak --realm master --user admin \
         --client admin-cli --password '$MAA'"
 }

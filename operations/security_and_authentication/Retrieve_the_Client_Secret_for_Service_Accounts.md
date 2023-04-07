@@ -26,13 +26,13 @@ Follow the steps in only one of the sections below:
 
     See [Access the Keycloak User Management UI](Access_the_Keycloak_User_Management_UI.md) for more information.
 
-1. Click on `Clients` under the `Configure` header of the navigation panel on the left side of the page.
+1. Click on `Clients` under the `Manage` header of the navigation panel on the left side of the page.
 
 1. Click on the ID for the target client in the `Clients` table.
 
 1. Switch to the `Credentials` tab.
 
-1. Save the client secret stored in the `Secret` field.
+1. Save the client secret stored in the `Client Secret` field.
 
     > **NOTE**: If the `Secret` field is empty hit the `Regenerate Secret` button to get the client secret.
 

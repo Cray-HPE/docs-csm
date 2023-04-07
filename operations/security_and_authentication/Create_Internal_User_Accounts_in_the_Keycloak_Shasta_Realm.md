@@ -20,25 +20,23 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
     See [Access the Keycloak User Management UI](Access_the_Keycloak_User_Management_UI.md) for more information.
 
+1. Click on `Users` under the `Manage` section on the left side of the window.
+
 1. Click the `Add User` button.
 
 1. Enter the user name and other attributes as required.
 
-1. Click the `Save` button.
+1. Click the `Create` button.
 
-1. In the `Credentials` tab, enter a password for the user and change the temporary option from `ON` to `OFF`.
+1. In the `Credentials` tab, click `Set password`.
 
-1. Click the `Reset Password` button.
+1. Turn off the `Temporary` selector.
 
-1. Click the red `Change Password` button on the `Change Password` page.
-
-1. Remove `Update Password` from the `Required User Actions` and on the user `Details` tab.
-
-    This step allows the user to authenticate and get a token without first needing to change the administrator-supplied password.
-    It does not prevent the user from changing the password. It is also acceptable to leave this setting, which means a password reset in Keycloak
-    will be required before making a token request with this user account.
+1. Enter the password and repeat it again in the confirmation.
 
 1. Click the `Save` button.
+
+1. Click the red `Save Password` button.
 
 1. Create a user and group ID for this user.
 
@@ -46,7 +44,7 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
     1. Add the attribute name to the `Key` column and its value to the `Value` column.
 
-    1. Click the `Add` button.
+    1. Click the `Save` button.
 
     1. Click the `Save` button at the bottom once both the `uid` and `gid` attributes have been added.
 
@@ -63,17 +61,21 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
 1. Click on the `Role Mappings` tab to grant the user authority.
 
-    1. Click the `Client Roles` button.
+    1. Click the `Assign Role` button.
 
-    1. Select `Shasta`.
+    1. Click on the dropdown for `Filter by realm roles` and select `Filter by clients`.
 
-    1. Set the assigned role to either `admin` or `user`.
+    1. Select the assigned role either `shasta admin` or `shasta user`.
+
+    1. Assign any other roles as needed per site such as `system-nexus-client nx-admin`.
+
+    1. Click `Assign` to assign the roles to the user.
 
 1. Verify that the user account has been created in the `Shasta` realm.
 
     This can be verified by performing one or more of the following checks:
 
-    - Ensure that the new user is listed under `Manage Users` on the `Administration Console` page.
+    - Ensure that the new user is listed under `Users` on the `Administration Console` page.
     - Retrieve a token for the user.
     - Log in to the Keycloak `Shasta` realm as the new user.
       - This verifies the account's validity and allows the user to reset their password.
