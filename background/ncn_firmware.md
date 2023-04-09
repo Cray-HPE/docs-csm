@@ -19,7 +19,7 @@ The entries in this table may change as new features are added, bug fixes are ad
 
 | Board Manufacturer         | Board Model                    | BIOS Version                                 | Firmware Version      |
 | :------------------------- | :----------------------------- | :------------------------------------------- | :-------------------- |
-| Cray Inc                   | `R272-Z30-00`                  | `C33`                                        | `12.84.17`
+| Cray Inc                   | `R272-Z30-00`                  | `C37`                                        | `12.84.17`
 | HPE                        | `ProLiant DL325 Gen10 Plus`    | `A43 v1.38 (10/30/2020)`                     | `iLO 5 v2.44`
 | HPE                        | `ProLiant DL325 Gen10 Plus v2` | `A43 v1.38 (10/30/2020)`                     | `iLO 5 v2.44`
 | Intel Corporation          | `S2600WFT`                     | `SE5C620.86B.02.01.0012.C0001.070720200218`  | `2.48.89b32e0d`
