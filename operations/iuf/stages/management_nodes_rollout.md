@@ -149,7 +149,13 @@ when following the procedures in
 or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_additional_products_with_iuf.md).
 Additionally, these steps can be followed if NCN storage nodes are being upgraded with the [Upgrade NCN storage nodes into the customized image](#upgrade-ncn-storage-nodes-into-the-customized-image) directions.
 
-1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade).
+Only follow the below steps for the nodes being upgraded, for `ncn-m001` or NCN storage nodes.
+
+1. Get the image ID and CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
+[`prepare-images` Artifacts created](prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` with a
+`configuration_group_name` value matching `Management_Master` or `Management_Storage`, whichever node type is being upgraded. These values will be used in the following steps.
+
+1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in the previous step.
 
     ```bash
     IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
