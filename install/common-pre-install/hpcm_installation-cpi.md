@@ -663,7 +663,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
          1. Check the power status and pxe status.
 
-            > Note: Verify if all the river node BMCs are leased with an IP.
+            > __Note:__ Verify if all the river node BMCs are leased with an IP.
 
             Check the power status of nodes.
 
@@ -802,7 +802,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 ### Import tarball assets
 
 If resuming at this stage, the `CSM_RELEASE` and `PITDATA` variables are already set
-in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) step.
+in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) step.
 
 1. (`pit#`) Extract the tarball.
 
@@ -812,11 +812,11 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
 1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
 
-   > **NOTE** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
+   > __NOTE:__ `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
 
    1. Install `docs-csm`.
 
-      > **NOTE** This installs necessary scripts for deployment checks, as well as the offline manual.
+      > __NOTE:__ This installs necessary scripts for deployment checks, as well as the offline manual.
 
        ```bash
        zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y docs-csm
@@ -824,7 +824,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    1. Update `cray-site-init`.
 
-       > **NOTE** This provides `csi`, a tool for creating and managing configurations, as well as orchestrating the [handoff and deploy of the final non-compute node](../deploy_final_non-compute_node.md).
+       > __NOTE:__ This provides `csi`, a tool for creating and managing configurations, as well as orchestrating the [handoff and deploy of the final non-compute node](../deploy_final_non-compute_node.md).
 
        ```bash
        zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks update -y cray-site-init
@@ -832,7 +832,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    1. Install `iuf-cli`.
 
-       > **NOTE** This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../../operations/iuf/IUF.md).
+       > __NOTE:__ This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../../operations/iuf/IUF.md).
 
        ```bash
        zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y iuf-cli
@@ -840,7 +840,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    1. Install `csm-testing` RPM.
 
-       > **NOTE** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
+       > __NOTE:__ This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
 
        ```bash
         zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y csm-testing
@@ -908,7 +908,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
 1. (`pit#`) Copy the NCN images from the expanded tarball.
 
-   > **NOTE** This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
+   > __NOTE:__ This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
 
    ```bash
    mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
@@ -923,7 +923,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    1. Generate SSH keys.
 
-       > **NOTE** The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
+       > __NOTE:__ The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
 
        ```bash
        ssh-keygen -N "" -t rsa
@@ -957,7 +957,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    /root/bin/metalid.sh
    ```
 
-   Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
+   Expected output looks similar to the following (the versions in the example below may differ). There should be __no__ errors.
 
    ```text
    = PIT Identification = COPY/CUT START =======================================
