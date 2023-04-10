@@ -14,9 +14,10 @@ Watch `ceph -s` and run the `ceph_join_cluster.sh` script.
    watch ceph -s
    ```
 
-1. (`ncn-s#`) **On the node being rebuilt**, execute the `ceph_join_cluster.sh` script.
+1. (`ncn-s#`) **On the node being rebuilt**, copy `ceph_join_cluster.sh` from `ncn-m001` and execute it.
 
    ```bash
+   scp ncn-m001:/usr/share/doc/csm/scripts/join_ceph_cluster.sh /srv/cray/scripts/common/join_ceph_cluster.sh
    /srv/cray/scripts/common/join_ceph_cluster.sh
    ```
 
