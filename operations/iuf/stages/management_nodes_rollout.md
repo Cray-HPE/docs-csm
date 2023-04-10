@@ -297,7 +297,7 @@ These values will be needed when upgrading the NCN storage nodes in the followin
         ```
 
     1. (ncn-m001#) Run the following commands to enable the rbd stats collection on Ceph pools.
-        
+
         ```bash
         ceph config set mgr mgr/prometheus/rbd_stats_pools "kube,smf"
         ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600
