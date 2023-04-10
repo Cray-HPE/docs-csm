@@ -8,7 +8,8 @@ New HPE nodes ship with with IPMI access disabled by default. In order for CSM t
 
 ## Procedure
 
-1. (`ncn#`) Set up an environment variable with the hostname or IP address of the BMC where IPMI needs to be enabled. If coming from the [Add Worker, Storage, or Master NCNs](Add_Remove_Replace_NCNs.md#add-worker-storage-or-master-ncns)
+1. (`ncn#`) Set up an environment variable with the hostname or IP address of the BMC where IPMI needs to be enabled. If coming from the
+  [Add Worker, Storage, or Master NCNs](Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-worker-storage-or-master-ncns)
   procedure, then the IP address should already be stored in the `BMC_IP` environment variable.
 
     - Hostname:
