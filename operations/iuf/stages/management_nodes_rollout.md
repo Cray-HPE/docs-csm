@@ -22,7 +22,8 @@ See the [3. Execute the IUF `management-nodes-rollout` stage](../workflows/manag
 - [Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF](#manually-upgrade-or-rebuild-ncn-worker-node-with-specific-image-and-cfs-configuration-outside-of-iuf)
 - [Action needed if a worker rebuild fails](#action-needed-if-a-worker-rebuild-fails)
 - [Examples](#examples)
-- [Set NCN boot image for NCN master and NCN storage nodes](#set-ncn-boot-image-for-ncn-m001-and-ncn-storage-nodes)
+- [Set NCN boot image for NCN master or NCN storage nodes](#set-ncn-boot-image-for-ncn-m001-or-ncn-storage-nodes)
+- [Upgrade NCN storage nodes into the customized image](#upgrade-ncn-storage-nodes-into-the-customized-image)
 
 ## Impact
 
@@ -140,14 +141,21 @@ Expected behavior:
 1. Worker nodes `ncn-w005,ncn-w006,ncn-w007` will be upgraded
 1. Worker nodes `ncn-w008,ncn-w009,ncn-w010` will be upgraded
 
-## Set NCN boot image for `ncn-m001` and NCN storage nodes
+## Set NCN boot image for `ncn-m001` or NCN storage nodes
 
-Follow these steps when upgrading NCN storage nodes and `ncn-m001` during [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
+Follow these steps when upgrading `ncn-m001` during [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
 when following the procedures in
 [Install or upgrade additional products with IUF](../workflows/install_or_upgrade_additional_products_with_iuf.md)
 or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_additional_products_with_iuf.md).
+Additionally, these steps can be followed if NCN storage nodes are being upgraded with the [Upgrade NCN storage nodes into the customized image](#upgrade-ncn-storage-nodes-into-the-customized-image) directions.
 
-1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade).
+Only follow the below steps for the nodes being upgraded, for `ncn-m001` or NCN storage nodes.
+
+1. Get the image ID and CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
+[`prepare-images` Artifacts created](prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` with a
+`configuration_group_name` value matching `Management_Master` or `Management_Storage`, whichever node type is being upgraded. These values will be used in the following steps.
+
+1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found in the previous step.
 
     ```bash
     IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
@@ -155,17 +163,17 @@ or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_a
 
 1. (`ncn-mw#`) Determine the xnames for the NCNs which are being upgraded. These will be used in the next step.
 
+    - Get the xname for `ncn-m001`:
+
+        ```bash
+        ssh ncn-m001 cat /etc/cray/xname
+        ```
+
     - Get a comma-separated list of all storage NCN xnames:
 
         ```bash
         cray hsm state components list --role Management --subrole Storage --type Node --format json |
           jq -r '.Components | map(.ID) | join(",")'
-        ```
-
-    - Get the xname for `ncn-m001`:
-
-        ```bash
-        ssh ncn-m001 cat /etc/cray/xname
         ```
 
 1. (`ncn-mw#`) Update boot parameters for an NCN. Perform the following procedure **for each xname** being upgraded
@@ -217,4 +225,89 @@ or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_a
             --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
             --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
             --params "${PARAMS}"
+        ```
+
+## Upgrade NCN storage nodes into the customized image
+
+For the CSM upgrade from CSM 1.3 to CSM 1.4, the NCN storage node image does not change so there is no need to 'upgrade' to the customized storage image.
+The NCN storage nodes should not be 'upgraded'. Instead, they should be personalized by following the procedure in [management-nodes-rollout documentation](../workflows/management_rollout.md#3-execute-the-iuf-management-nodes-rollout-stage)
+for [personalizing storage nodes](../workflows/management_rollout.md#34-ncn-storage-nodes).
+
+However, the image is provided and is customized during the [prepare images](./prepare_images.md) stage.
+The following steps can be followed if it is desired to 'upgrade' the storage nodes into this image.
+Note that personalizing the NCN storage nodes has the same result as performing this node rollout.
+
+1. Get the image ID and CFS configuration created for NCN storage nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
+[`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the value for `final_image_id` and
+`configuration` for the image with a `configuration_group_name` value matching `Management_Storage`.
+These values will be needed when upgrading the NCN storage nodes in the following steps.
+
+1. Perform the NCN storage node upgrades.
+
+    1. Set the CFS configuration on all storage nodes.
+
+        1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to be the value for `configuration` found for `Management_Storage` nodes in the previous step.
+
+            ```bash
+            CFS_CONFIG_NAME=<appropriate configuration value>
+            ```
+
+        1. (`ncn-m#`) Get all NCN storage node xnames.
+
+            ```bash
+            XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+            echo "${XNAMES}"
+            ```
+
+        1. (`ncn-m#`) Set the configuration on all storage nodes.
+
+            ```bash
+            /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${XNAMES}" --no-enable --no-clear-err
+            ```
+
+            The expected output is:
+
+              ```bash
+              All components updated successfully.
+              ```
+
+    1. Set the image in BSS for all storage nodes by following the [Set NCN boot image for `ncn-m001` and NCN storage nodes](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001-and-ncn-storage-nodes)
+    section of this document.
+    Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` value for `Management_Storage` found in step 2 above.
+
+    1. (`ncn-m#`) Upgrade one NCN storage node (`ncn-s001`).
+
+        **NOTE** This creates an additional, separate Argo workflow for rebuilding a NCN storage node. The Argo workflow name will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI, remember to include these workflows.
+
+        ```bash
+        /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001 --upgrade
+        ```
+
+    1. (`ncn-m#`) Verify that the storage node booted and is configured correctly. The CFS configuration can be
+    verified with the command below using the xname of the node that was upgraded instead of the example value `x3000c0s13b0n0`.
+
+        ```bash
+        XNAME=x3000c0s13b0n0
+        cray cfs components describe "${XNAME}"
+        ```
+
+        The desired value for `configurationStatus` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
+
+    1. (`ncn-m#`) Upgrade the remaining storage nodes serially.
+
+        **NOTE** This creates an additional, separate Argo workflow for upgrading NCN storage nodes. The Argo workflow name will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI, remember to include these workflows.
+
+        The remaining storage nodes should be specified in a comma seperated list.
+        This example is upgrading `ncn-s002,ncn-s003,ncn-s004`. This should be changed based on the number of storage nodes on a system.
+
+        ```bash
+        /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s002,ncn-s003,ncn-s004 --upgrade
+        ```
+
+    1. (ncn-m001#) Run the following commands to enable the rbd stats collection on Ceph pools.
+
+        ```bash
+        ceph config set mgr mgr/prometheus/rbd_stats_pools "kube,smf"
+        ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600
         ```
