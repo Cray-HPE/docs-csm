@@ -22,7 +22,7 @@ See the [3. Execute the IUF `management-nodes-rollout` stage](../workflows/manag
 - [Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF](#manually-upgrade-or-rebuild-ncn-worker-node-with-specific-image-and-cfs-configuration-outside-of-iuf)
 - [Action needed if a worker rebuild fails](#action-needed-if-a-worker-rebuild-fails)
 - [Examples](#examples)
-- [Set NCN boot image for NCN master and NCN storage nodes](#set-ncn-boot-image-for-ncn-m001-and-ncn-storage-nodes)
+- [Set NCN boot image for NCN master or NCN storage nodes](#set-ncn-boot-image-for-ncn-m001-or-ncn-storage-nodes)
 - [Upgrade NCN storage nodes into the customized image](#upgrade-ncn-storage-nodes-into-the-customized-image)
 
 ## Impact
@@ -141,7 +141,7 @@ Expected behavior:
 1. Worker nodes `ncn-w005,ncn-w006,ncn-w007` will be upgraded
 1. Worker nodes `ncn-w008,ncn-w009,ncn-w010` will be upgraded
 
-## Set NCN boot image for `ncn-m001` and NCN storage nodes
+## Set NCN boot image for `ncn-m001` or NCN storage nodes
 
 Follow these steps when upgrading `ncn-m001` during [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
 when following the procedures in
@@ -230,14 +230,14 @@ Only follow the below steps for the nodes being upgraded, for `ncn-m001` or NCN 
 ## Upgrade NCN storage nodes into the customized image
 
 For the CSM upgrade from CSM 1.3 to CSM 1.4, the NCN storage node image does not change so there is no need to 'upgrade' to the customized storage image.
-The NCN storage nodes should not be 'upgraded' and instead should be personalized by following the procedure in [management-nodes-rollout documentation](../workflows/management_rollout.md#3-execute-the-iuf-management-nodes-rollout-stage)
+The NCN storage nodes should not be 'upgraded'. Instead, they should be personalized by following the procedure in [management-nodes-rollout documentation](../workflows/management_rollout.md#3-execute-the-iuf-management-nodes-rollout-stage)
 for [personalizing storage nodes](../workflows/management_rollout.md#34-ncn-storage-nodes).
 
 However, the image is provided and is customized during the [prepare images](./prepare_images.md) stage.
 The following steps can be followed if it is desired to 'upgrade' the storage nodes into this image.
 Note that personalizing the NCN storage nodes has the same result as performing this node rollout.
 
-1. Get the image ID and CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
+1. Get the image ID and CFS configuration created for NCN storage nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
 [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the value for `final_image_id` and
 `configuration` for the image with a `configuration_group_name` value matching `Management_Storage`.
 These values will be needed when upgrading the NCN storage nodes in the following steps.
@@ -297,6 +297,9 @@ These values will be needed when upgrading the NCN storage nodes in the followin
     1. (`ncn-m#`) Upgrade the remaining storage nodes serially.
 
         **NOTE** This creates an additional, separate Argo workflow for upgrading NCN storage nodes. The Argo workflow name will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI, remember to include these workflows.
+
+        The remaining storage nodes should be specified in a comma seperated list.
+        This example is upgrading `ncn-s002,ncn-s003,ncn-s004`. This should be changed based on the number of storage nodes on a system.
 
         ```bash
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s002,ncn-s003,ncn-s004 --upgrade

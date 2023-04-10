@@ -148,7 +148,7 @@ Follow the steps below to upgrade NCN master and worker nodes and to personalize
               All components updated successfully.
               ```
 
-    1. Set the image in BSS for `ncn-m001` by following the [Set NCN boot image for `ncn-m001` and NCN storage nodes](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001-and-ncn-storage-nodes)
+    1. Set the image in BSS for `ncn-m001` by following the [Set NCN boot image for `ncn-m001` and NCN storage nodes](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001-or-ncn-storage-nodes)
     section of the [Management nodes rollout stage documentation](../stages/management_nodes_rollout.md).
     Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` for `Management_Master` found in the previous step.
 
@@ -208,7 +208,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_XNAMES --clear-state
+        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${MASTER_XNAMES}" --clear-state
         ```
 
         The expected output is:
@@ -310,7 +310,7 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
 
 > **`NOTE`**
 > A customized image is created for NCN storage nodes during the prepare images stage. That image is the same image that is running on NCN storage nodes so there is no need to 'upgrade' into that image.
-> However, if it is desired to rollout the NCN storage nodes into the customized, this can be done by following [upgrade NCN storage nodes into the customized image](../stages/management_nodes_rollout.md#upgrade-ncn-storage-nodes-into-the-customized-image).
+> However, if it is desired to rollout the NCN storage nodes with the customized image, this can be done by following [upgrade NCN storage nodes into the customized image](../stages/management_nodes_rollout.md#upgrade-ncn-storage-nodes-into-the-customized-image).
 > This is not the recommended procedure. It is recommended to personalize the NCN storage nodes by following the steps below.
 
 1. Personalize NCN storage nodes.
@@ -319,7 +319,7 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
 
         ```bash
         STORAGE_XNAMES=$(cray hsm state components list --role Management --subrole Storage --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-        echo "Storage node xnames: $STORAGE_XNAMES"
+        echo "Storage node xnames: ${STORAGE_XNAMES}"
         ```
 
     1. Get the CFS configuration created for management nodes during the `update-cfs-config` stage. Follow the instructions in the
@@ -332,11 +332,11 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
         CFS_CONFIG_NAME=<appropriate configuration value>
         ```
 
-    1. (`ncn-m#`) Apply the CFS configuration to NCN master nodes and NCN storage nodes.
+    1. (`ncn-m#`) Apply the CFS configuration to NCN storage nodes.
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $STORAGE_XNAMES --clear-state
+        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${STORAGE_XNAMES}" --clear-state
         ```
 
         The expected output is:
