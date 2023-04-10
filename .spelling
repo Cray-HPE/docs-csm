@@ -447,6 +447,7 @@ cdu0sw02
 cec0
 center
 centers
+ceph
 channeled
 checkmark
 cleanup
@@ -572,6 +573,11 @@ organizer
 organizers
 organizes
 organizing
+osd
+osd*
+osd.*
+osds
+osds*
 oversubscription
 passthrough
 passwordless
@@ -611,6 +617,8 @@ shutoff
 singlemode
 site-routable
 specialty
+ssd
+ssds
 standalone
 startup
 subnetting
