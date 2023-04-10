@@ -74,7 +74,7 @@ Follow the steps below to upgrade NCN master and worker nodes and to personalize
         kubectl get nodes --show-labels | grep iuf-prevent-rollout
         ```
 
-    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m002`. This will rebuild `ncn-m002` with the 
+    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m002`. This will rebuild `ncn-m002` with the
     new CFS configuration and image built in previous steps of the workflow.
 
         (`ncn-m001#`) Execute the `management-nodes-rollout` stage with `ncn-m002`.
@@ -309,7 +309,7 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
 ## 3.4 Personalize NCN Storage Nodes
 
 > **`NOTE`**
-> A customized image is created for NCN storage nodes during the prepae images stage. That image is the same image that is running on NCN storage nodes so there is no need to 'upgrade' into that image. 
+> A customized image is created for NCN storage nodes during the prepare images stage. That image is the same image that is running on NCN storage nodes so there is no need to 'upgrade' into that image.
 > However, if it is desired to rollout the NCN storage nodes into the customized, this can be done by following [upgrade NCN storage nodes into the customized image](../stages/management_nodes_rollout.md#upgrade-ncn-storage-nodes-into-the-customized-image).
 > This is not the recommended procedure. It is recommended to personalize the NCN storage nodes by following the steps below.
 
@@ -323,7 +323,8 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
         ```
 
     1. Get the CFS configuration created for management nodes during the `update-cfs-config` stage. Follow the instructions in the
-        [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the value for `configuration` for images with a `configuration_group_name` value matching `Management_Storage`. This value will be needed in the following step.
+        [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created)
+        documentation to get the value for `configuration` for images with a `configuration_group_name` value matching `Management_Storage`. This value will be needed in the following step.
 
     1. (`ncn-m#`) Set `CFS_CONFIG_NAME` to the value for `configuration` found in the previous step.
 

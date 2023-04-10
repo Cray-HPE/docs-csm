@@ -232,7 +232,9 @@ The following steps can be followed if it is desired to 'upgrade' the storage no
 Note that personalizing the NCN storage nodes has the same result as performing this node rollout.
 
 1. Get the image ID and CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
-[`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the value for `final_image_id` and `configuration` for the image with a `configuration_group_name` value matching `Management_Storage`. These values will be needed when upgrading the NCN storage nodes in the following steps.
+[`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the value for `final_image_id` and
+`configuration` for the image with a `configuration_group_name` value matching `Management_Storage`.
+These values will be needed when upgrading the NCN storage nodes in the following steps.
 
 1. Perform the NCN storage node upgrades.
 
