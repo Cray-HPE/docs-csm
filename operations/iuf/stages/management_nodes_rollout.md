@@ -296,4 +296,9 @@ These values will be needed when upgrading the NCN storage nodes in the followin
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s002,ncn-s003,ncn-s004 --upgrade
         ```
 
-    1. Follow the steps documented in [Ensure that `rbd` stats monitoring is enabled](../../../upgrade/Stage_1.md#ensure-that-rbd-stats-monitoring-is-enabled) CHANGE THIS
+    1. (ncn-m001#) Run the following commands to enable the rbd stats collection on Ceph pools.
+        
+        ```bash
+        ceph config set mgr mgr/prometheus/rbd_stats_pools "kube,smf"
+        ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600
+        ```
