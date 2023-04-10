@@ -309,7 +309,7 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
 ## 3.4 Personalize NCN Storage Nodes
 
 > **`NOTE`**
-> A customized image is created for NCN storage nodes during the prepare images stage. That image is the same image that is running on NCN storage nodes so there is no need to 'upgrade' into that image.
+> A customized image is created for NCN storage nodes during the prepare images stage. For the upgrade from CSM 1.3 to CSM 1.4, that image is the same image that is running on NCN storage nodes so there is no need to 'upgrade' into that image.
 > However, if it is desired to rollout the NCN storage nodes into the customized, this can be done by following [upgrade NCN storage nodes into the customized image](../stages/management_nodes_rollout.md#upgrade-ncn-storage-nodes-into-the-customized-image).
 > This is not the recommended procedure. It is recommended to personalize the NCN storage nodes by following the steps below.
 
