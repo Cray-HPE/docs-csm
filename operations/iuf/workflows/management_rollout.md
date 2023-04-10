@@ -192,7 +192,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 
         ```bash
         MASTER_XNAMES=$(cray hsm state components list --role Management --subrole Master --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
-        echo "Master node xnames: $MASTER_XNAMES"
+        echo "Master node xnames: ${MASTER_XNAMES}"
         ```
 
     1. Get the CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created)
