@@ -4,6 +4,10 @@ This procedure is used when performing an upgrade of Cray System Management (CSM
 additional HPE Cray EX software products at the same time. This procedure would be used when
 upgrading from one HPC CSM Software Recipe release to another.
 
+This procedure is _not_ used to perform an initial install or upgrade of HPE Cray EX software products
+when CSM itself is not being upgraded.  See
+[Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md) for that procedure.
+
 This procedure streamlines the rollout of new images to management nodes. These images are based
 on the new images provided by the CSM product and customized by the additional HPE Cray EX software
 products, including the Cray Operating System (COS) and Slingshot Host Software (SHS).
@@ -67,7 +71,6 @@ The upgrade workflow comprises the following procedures which must be executed i
 
    1. [Stage 3 - CSM Service Upgrades](../../../upgrade/Stage_3.md)
    1. [Validate CSM Health During Upgrade](../../../upgrade/Validate_CSM_Health_During_Upgrade.md)
-   1. [Update Firmware with FAS](../../firmware/Update_Firmware_with_FAS.md)
 
 1. Deploy product
 

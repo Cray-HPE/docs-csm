@@ -65,7 +65,7 @@ ceph config set mgr mgr/prometheus/rbd_stats_pools "kube,smf"
 ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600
 ```
 
-If this step was executed as a result of the [`management-nodes-rollout` with CSM upgrade](#operations/iuf/workflows/management_rollout.md#management-nodes-rollout-with-csm-upgrade)
+If this step was executed as a result of the [`management-nodes-rollout` with CSM upgrade](../operations/iuf/workflows/management_rollout.md#management-nodes-rollout-with-csm-upgrade)
 instructions, return to that procedure and continue with the next step. Otherwise, proceed to the next step.
 
 ## Stop typescript
