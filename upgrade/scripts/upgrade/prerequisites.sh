@@ -711,7 +711,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         NEW_METAL_SERVER="s3://boot-images/${K8S_IMS_IMAGE_ID}/rootfs"
         PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' | \
             sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-            sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
             tr -d \")
 
         cray bss bootparameters update --hosts "${xname}" \
@@ -726,7 +725,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         NEW_METAL_SERVER="s3://boot-images/${STORAGE_IMS_IMAGE_ID}/rootfs"
         PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' | \
             sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-            sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
             tr -d \")
 
         cray bss bootparameters update --hosts "${xname}" \
