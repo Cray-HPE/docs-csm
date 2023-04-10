@@ -1,4 +1,4 @@
-# IMS - Exporting and Importing for System Recovery or in the case of a fresh install
+# Export and Importing IMS Data
 
 IMS recipe and image data, including associated artifacts stored in Ceph S3, can be exported and imported
 either using an automated script, or manually one at a time.
