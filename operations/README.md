@@ -77,6 +77,7 @@ Build and customize image recipes with the Image Management Service (IMS).
   - [Convert TGZ Archives to SquashFS Images](image_management/Convert_TGZ_Archives_to_SquashFS_Images.md)
 - [Delete or Recover Deleted IMS Content](image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 - [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
+- [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
 
 ## Boot orchestration
 
@@ -106,6 +107,7 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
   - [Troubleshoot UAN Boot Issues](boot_orchestration/Troubleshoot_UAN_Boot_Issues.md)
   - [Troubleshoot Booting Nodes with Hardware Issues](boot_orchestration/Troubleshoot_Booting_Nodes_with_Hardware_Issues.md)
 - [BOS Options](boot_orchestration/Options.md)
+- [Exporting and Importing BOS Data](boot_orchestration/Exporting_and_Importing_BOS_Data.md)
 - [Rolling Upgrades using BOS](boot_orchestration/Rolling_Upgrades.md)
 - [BOS Limitations for Gigabyte BMC Hardware](boot_orchestration/Limitations_for_Gigabyte_BMC_Hardware.md)
 - [Compute Node Boot Sequence](boot_orchestration/Compute_Node_Boot_Sequence.md)
@@ -226,6 +228,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
   - [Use a Custom `ansible-cfg` File](configuration_management/Use_a_Custom_ansible-cfg_File.md)
   - [Enable Ansible Profiling](configuration_management/Enable_Ansible_Profiling.md)
 - [CFS Global Options](configuration_management/CFS_Global_Options.md)
+- [Exporting and Importing CFS Data](configuration_management/Exporting_and_Importing_CFS_Data.md)
 - [Version Control Service \(VCS\)](configuration_management/Version_Control_Service_VCS.md)
   - [Git Operations](configuration_management/Git_Operations.md)
   - [VCS Branching Strategy](configuration_management/VCS_Branching_Strategy.md)
