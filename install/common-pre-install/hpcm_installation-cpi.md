@@ -335,7 +335,8 @@ This step instructs the user to power off the node to ensure the BIOS has the be
               sw-leaf01(config)# write memory
              ```
 
-      >__Note:__ If the switches are from Aruba, then see "Using Aruba Switches" section in [HPE Performance Cluster Manager Installation Guide for Clusters Without Leader Nodes](https://www.hpe.com/support/hpcm-inst-no-leaders-006) for procedure to configure the Aruba switches.
+      >__Note:__ If the switches are from Aruba, then see "Using Aruba Switches" section in 
+      >[HPE Performance Cluster Manager Installation Guide for Clusters Without Leader Nodes](https://www.hpe.com/support/hpcm-inst-no-leaders-006) for procedure to configure the Aruba switches.
 
    1. Running `YaST-Firstboot`.
 
@@ -583,8 +584,8 @@ This step instructs the user to power off the node to ensure the BIOS has the be
          In this method,  the administrator has to collect  data of components and perform manual discovery.
          Management Switches, Fabric Switches, PDU and sub rack CMCs are the components for which manual discovery method has to be performed. The procedure and the sequence is described as follows:
 
-         1. Management Switch : Discovery of management switches has to be performed by manually creating configuration files. The management switch file should be in a specific format. 
-         
+         1. Management Switch : Discovery of management switches has to be performed by manually creating configuration files. The management switch file should be in a specific format.
+
             Example of switch configuration file:
 
                ```text
@@ -600,8 +601,8 @@ This step instructs the user to power off the node to ensure the BIOS has the be
                cm node add -c mswitch.conf
                ```
 
-         1. For PDU : Create the PDU configuration file. 
-         
+         1. For PDU : Create the PDU configuration file.
+
             Example of a PSU in configuration file format.
 
                ```text
@@ -816,7 +817,7 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
 
 1. To install all the dependency packages run the `csm_dep_install.sh` using the following command:
 
-   ```
+   ```bash
    sh csm_dep_install.sh  ${PITDATA}
    ```
 
