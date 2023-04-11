@@ -56,15 +56,15 @@ shown here with numbered topics.
     1. [Configure administrative access](#5-configure-administrative-access)
     1. [Validate CSM health](#6-validate-csm-health)
     1. [Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-    1. [Prepare compute nodes](#10-prepare-compute-nodes)
-    1. [Troubleshooting installation problems](#11-troubleshooting-installation-problems)
+    1. [Prepare compute nodes](#8-prepare-compute-nodes)
+    1. [Troubleshooting installation problems](#9-troubleshooting-installation-problems)
 1. [Post-installation](#post-installation)
     1. [Kubernetes encryption](#1-kubernetes-encryption)
     1. [Export Nexus data](#2-export-nexus-data)
 1. [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
 
 > **`NOTE`** If problems are encountered during the installation,
-> [Troubleshooting installation problems](#11-troubleshooting-installation-problems) and
+> [Troubleshooting installation problems](#9-troubleshooting-installation-problems) and
 > [Cray System Management (CSM) Administration Guide](../operations/README.md) will offer assistance.
 
 ## Pre-installation
