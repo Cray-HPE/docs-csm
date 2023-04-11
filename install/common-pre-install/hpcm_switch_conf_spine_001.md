@@ -1,4 +1,4 @@
-# Configuration of Spine Switch-1
+# Configuration of Spine Switch 01
 
 Copy the following text for `sw-spine01` configuration:
 
