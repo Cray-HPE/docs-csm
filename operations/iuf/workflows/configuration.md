@@ -184,7 +184,7 @@ required for initial installation scenarios.
 
 - COS
   - Configure DVS and LNet with appropriate Slingshot settings
-  - Configure DVS and LNet for use on application nodes
+  - Configure DVS and LNet for use on application nodes (this is a new procedure for this release)
   - Enable site-specific file system mounts
   - Set the COS root password in HashiCorp Vault
 - UAN
