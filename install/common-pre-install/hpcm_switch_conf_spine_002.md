@@ -1,4 +1,9 @@
-# Copy the text from here
+# Configuration of Spine Switch 02
+
+Copy the following text for `sw-spine02` configuration:
+
+> __Note:__ The username and password must be updated accordingly.
+
 
 ```text
 ##
@@ -140,8 +145,8 @@ no mlag shutdown
 ##
 ## Local user account configuration
 ##
-   username admin password 7 $6$CdPIvLwq$tCdPNpjbM8rE6.In9aQ0ROczUaypu2NKpuqj5GHWtyw2xbUVh9TQXlDSDzEwq2x.154HhW61PZxgwk2/rpa9i/
-   username monitor password 7 $6$03o2sb1l$x7.Dk9PWgntEflpTI3d6rdRSrhHWUxwTLnPphNDCNOYXl8hw1.E8mhTP4KP3gShP7vCFKdvOQaQD8NMybS1lH0
+   username [ADMIN] password [PASSWORD]
+   username [MONITOR] password [PASSWORD]
 
 ##
 ## AAA remote server configuration
