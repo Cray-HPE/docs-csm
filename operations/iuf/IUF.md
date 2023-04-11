@@ -591,10 +591,10 @@ INFO              BEGIN: preflight-checks(0)
 
 ### Log files
 
-IUF stores detailed information in log files which are stored on a Ceph block device typically mounted at `/etc/cray/upgrade/`. The default log file directory location can be overridden with the `iuf -b` and `iuf --log-dir`
+IUF stores detailed information in log files which are stored on a Ceph block device typically mounted at `/etc/cray/upgrade/csm/`. The default log file directory location can be overridden with the `iuf -b` and `iuf --log-dir`
 options (see `iuf -h` for details).
 
-Log files are organized by activity identifiers, for example `admin-230127`. The top-level `state` directory contains information internal to the implementation of IUF and is most often uninteresting to the administrator.
+Log files are organized by activity identifiers, for example `admin-230127`. The top-level `state` directory contains information internal to the implementation of IUF and is inessential to the administrator.
 The content in the top-level `log` directory contains information about the operations executed while installing, upgrading and deploying product software and will likely be useful if a problem occurs. The following
 describes the contents of the files in the `log` directory for an activity:
 
@@ -639,7 +639,7 @@ Site variables, typically specified in a `site_vars.yaml` file, allow the admini
 variables, including global default entries and product-specific entries. HPE does not provide a `site_vars.yaml` file as it is
 strictly for site use cases. See the text at the top of the HPE-provided `product_vars.yaml` file for details on which override
 values can be specified in `site_vars.yaml`. The `site_vars.yaml` file must reside on the Ceph block device typically mounted at
-`/etc/cray/upgrade/`.
+`/etc/cray/upgrade/csm/`.
 
 If both files are used and specific variables are defined in both files, the values specified in the site variables file takes
 precedence.

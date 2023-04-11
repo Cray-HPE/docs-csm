@@ -243,6 +243,11 @@ Generally, if performing an upgrade of CSM, you will also be performing an upgra
 Cray EX software products as part of an HPC CSM software recipe upgrade. In that case, follow the
 scenario described above for [Upgrade of CSM and additional products](#option-1-upgrade-of-csm-and-additional-products).
 
+The following subsection shows how to use IUF input files to perform `sat bootprep` operations, in this
+case to assign images and configurations to management nodes.
+
+#### Using `sat bootprep` with IUF generated input files
+
 In order to follow this procedure, you will need to know the name of the IUF activity used to
 perform the initial installation of the HPE Cray EX software products. See the
 [Activities](../operations/iuf/IUF.md#activities) section of the IUF documentation for more
