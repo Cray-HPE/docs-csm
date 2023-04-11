@@ -84,7 +84,7 @@ See [Import CSM tarball](../pre-installation.md#2-import-csm-tarball).
 
 ### 4. Create system configuration
 
-See [Create system configuration](.../pre-installation.md#3-create-system-configuration).
+See [Create system configuration](../pre-installation.md#3-create-system-configuration).
 
 ### 5. Configure management network switches
 
