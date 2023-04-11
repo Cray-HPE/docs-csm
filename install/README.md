@@ -64,7 +64,7 @@ shown here with numbered topics.
 1. [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
 
 > **`NOTE`** If problems are encountered during the installation,
-> [Troubleshooting installation problems](#11-troubleshooting-installation-problems) and
+> [Troubleshooting installation problems](#9-troubleshooting-installation-problems) and
 > [Cray System Management (CSM) Administration Guide](../operations/README.md) will offer assistance.
 
 ## Pre-installation
