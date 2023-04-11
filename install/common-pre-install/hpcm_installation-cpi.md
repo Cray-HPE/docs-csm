@@ -80,9 +80,9 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
       ![Bootable Device](../../img/install/02.png)
 
-1. _Option 2_ : Boot the LiveCD ISO image using `efibootmgr` (This option has not been tested).
+1. _Option 2_ : Boot the LiveCD ISO image using `efibootmgr`.
 
-   >__Note:__ UEFI booting must be enabled in order for the system to find the USB device's EFI bootloader.
+   >__Note:__ For the system to find the USB device's EFI bootloader, UEFI booting must be enabled.
 
    1. (`external#`) Confirm that the IPMI credentials work for the BMC by checking the power status.
 
@@ -179,7 +179,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
    1. Set the hostname.
 
       ```bash
-           hostnamectl set-hostname starlord
+           hostnamectl set-hostname system_name
       ```
 
    1. Set the timezone.
@@ -248,13 +248,13 @@ This step instructs the user to power off the node to ensure the BIOS has the be
              sw-spine01 [standalone: master] # configure terminal
              ```
 
-             Copy and paste network settings [from here](hpcm_switch_conf_spine_001_starlord.md) and save those configurations as "hpcm_blank1" using the following command:
+             Copy and paste network settings [from here](hpcm_switch_conf_spine_001.md) and save those configurations as "hpcm_blank1" using the following command:
 
              ```bash
              sw-spine01 [standalone: master] # configuration write
              ```
 
-             Exit from the switch1 and repeat the procedure for spine `switch2`. The `switch2` settings can be copied [from here](hpcm_switch_conf_spine_002_starlord.md).
+             Exit from the switch1 and repeat the procedure for spine `switch2`. The `switch2` settings can be copied [from here](hpcm_switch_conf_spine_002.md).
 
       1. For leaf switches (Dell).
 
@@ -329,13 +329,13 @@ This step instructs the user to power off the node to ensure the BIOS has the be
               sw-leaf01(config)#
              ```
 
-             Copy and paste the configuration [from here](hpcm_switch_conf_leaf_starlord.md) and save the configuration using the following command:
+             Copy and paste the configuration [from here](hpcm_switch_conf_leaf.md) and save the configuration using the following command:
 
              ```bash
               sw-leaf01(config)# write memory
              ```
 
-      >__Note:__ Incase the spine and/or leaf switches are from Aruba then following document an be referred for the configuration in the following link: https://hpedia.osp.hpe.com/wiki/Setting_up_Aruba_Switches_with_HPCM.
+      >__Note:__ If the switches are from Aruba, then see "Using Aruba Switches" section in [HPE Performance Cluster Manager Installation Guide for Clusters Without Leader Nodes](https://www.hpe.com/support/hpcm-inst-no-leaders-006) for procedure to configure the Aruba switches.
 
    1. Running `YaST-Firstboot`.
 
@@ -583,7 +583,9 @@ This step instructs the user to power off the node to ensure the BIOS has the be
          In this method,  the administrator has to collect  data of components and perform manual discovery.
          Management Switches, Fabric Switches, PDU and sub rack CMCs are the components for which manual discovery method has to be performed. The procedure and the sequence is described as follows:
 
-         1. Management Switch : Discovery of management switches has to be performed by manually creating configuration files. The management switch file should be in a specific format. Here is the example of switch configuration file:
+         1. Management Switch : Discovery of management switches has to be performed by manually creating configuration files. The management switch file should be in a specific format. 
+         
+            Example of switch configuration file:
 
                ```text
                [discover]
@@ -598,7 +600,9 @@ This step instructs the user to power off the node to ensure the BIOS has the be
                cm node add -c mswitch.conf
                ```
 
-         1. For PDU : Create the PDU configuration file. Here is the example of a PSU in configuration file format.
+         1. For PDU : Create the PDU configuration file. 
+         
+            Example of a PSU in configuration file format.
 
                ```text
                [discover]
@@ -611,13 +615,13 @@ This step instructs the user to power off the node to ensure the BIOS has the be
                cm node add -c pdus.conf
                ```
 
-         1. For Fabric Switch: Use cm controller add to perform discovery. Add only River cabinent fabric switches
+         1. For Fabric Switch: To perform discovery use `cm controller add` command. Add only River cabinent fabric switches.
 
             ```bash
             cm controller add -c sw-hsn-x3000-001 -t external_switch -m 00:40:a6:82:f7:5f -u root -p initial0
             ```
 
-         1. For CMC : Use cm controller add to perform discovery.
+         1. For CMC : To perform discovery use `cm controller add` command.
 
             For gigabyte server.
 
@@ -629,13 +633,13 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
       1. Auto-discovery method.
 
-         Management, worker, storage nodes, UANs will be auto discovered and the procedure is described as follows -
+         Management, worker, storage nodes, UANs will be auto discovered and the procedure is described as follows:
 
          >__Note:__
          >
-         > - Ensure all the river components are powered on, dhcp is enabled on bmc and only one switch out of the available spine switch.
+         > - Ensure all the river components are powered on and `dhcp` is enabled on bmc and on only one switch out of the available spine switch.
          >
-         > - If there are multiple mellanox spine switches then there should be only 1 spine switch with active port connection to NCNs. On other switches, connections to NCNs should be disabled till all nodes have been booted with HPCM Images.
+         > - If there are multiple Mellanox spine switches, then there should be only one spine switch with an active port connection to NCNs. On other switches, connections to NCNs should be disabled until all nodes have been booted with HPCM images.
          >
          >  ```bash
          >  ssh admin@<ip-addr>
@@ -668,7 +672,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
             Check the power status of nodes.
 
             ```bash
-            cm node discover status | grep BMC  > temp.txt
+            cm node discover status | grep client-hostname  > temp.txt
             for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power status; done
             ```
 
@@ -699,25 +703,25 @@ This step instructs the user to power off the node to ensure the BIOS has the be
          1. Create node configuration definition file.
 
             ```bash
-            cm node discover mkconfig -o "mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0" nodes.conf
+            cm node discover mkconfig -o "mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]" nodes.conf
             ```
 
             Example content of `nodes.conf`:
 
             ```text
             [discover]
-            internal_name=service1, hostname1=node1, mgmt_bmc_net_macs=b4:2e:99:3b:70:88, mgmt_net_macs=b8:59:9f:1d:da:1e, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service2, hostname1=node2, mgmt_bmc_net_macs=b4:2e:99:3b:70:04, mgmt_net_macs=b8:59:9f:34:89:26, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service3, hostname1=node3, mgmt_bmc_net_macs=b4:2e:99:3b:70:94, mgmt_net_macs=b8:59:9f:34:89:2e, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service4, hostname1=node4, mgmt_bmc_net_macs=b4:2e:99:3b:70:f8, mgmt_net_macs=b8:59:9f:1d:d7:f2, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service5, hostname1=node5, mgmt_bmc_net_macs=b4:2e:99:3b:70:9c, mgmt_net_macs=98:03:9b:b4:27:62, mgmt_net_interfaces="enp66s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service6, hostname1=node6, mgmt_bmc_net_macs=b4:2e:99:3b:70:20, mgmt_net_macs=98:03:9b:bb:a8:94, mgmt_net_interfaces="enp66s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service7, hostname1=node7, mgmt_bmc_net_macs=b4:2e:99:be:19:f5, mgmt_net_macs=b4:2e:99:be:19:f3, mgmt_net_interfaces="eno1", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service8, hostname1=node8, mgmt_bmc_net_macs=b4:2e:99:be:1a:71, mgmt_net_macs=b4:2e:99:be:1a:6f, mgmt_net_interfaces="eno1", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service9, hostname1=node9, mgmt_bmc_net_macs=b4:2e:99:be:1a:39, mgmt_net_macs=b4:2e:99:be:1a:37, mgmt_net_interfaces="eno1", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service10, hostname1=node10, mgmt_bmc_net_macs=b4:2e:99:be:24:ed, mgmt_net_macs=b4:2e:99:be:24:eb, mgmt_net_interfaces="eno1", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service11, hostname1=node11, mgmt_bmc_net_macs=b4:2e:99:3b:70:f0, mgmt_net_macs=b8:59:9f:34:88:ea, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
-            internal_name=service12, hostname1=node12, mgmt_bmc_net_macs=b4:2e:99:3b:70:10, mgmt_net_macs=b8:59:9f:1d:d8:c2, mgmt_net_interfaces="enp66s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=root, bmc_password=initial0
+            internal_name=service1, hostname1=node1, mgmt_bmc_net_macs=b4:2e:99:3b:70:88, mgmt_net_macs=b8:59:9f:1d:da:1e, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service2, hostname1=node2, mgmt_bmc_net_macs=b4:2e:99:3b:70:04, mgmt_net_macs=b8:59:9f:34:89:26, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service3, hostname1=node3, mgmt_bmc_net_macs=b4:2e:99:3b:70:94, mgmt_net_macs=b8:59:9f:34:89:2e, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service4, hostname1=node4, mgmt_bmc_net_macs=b4:2e:99:3b:70:f8, mgmt_net_macs=b8:59:9f:1d:d7:f2, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service5, hostname1=node5, mgmt_bmc_net_macs=b4:2e:99:3b:70:9c, mgmt_net_macs=98:03:9b:b4:27:62, mgmt_net_interfaces="enp66s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service6, hostname1=node6, mgmt_bmc_net_macs=b4:2e:99:3b:70:20, mgmt_net_macs=98:03:9b:bb:a8:94, mgmt_net_interfaces="enp66s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service7, hostname1=node7, mgmt_bmc_net_macs=b4:2e:99:be:19:f5, mgmt_net_macs=b4:2e:99:be:19:f3, mgmt_net_interfaces="eno1", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service8, hostname1=node8, mgmt_bmc_net_macs=b4:2e:99:be:1a:71, mgmt_net_macs=b4:2e:99:be:1a:6f, mgmt_net_interfaces="eno1", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service9, hostname1=node9, mgmt_bmc_net_macs=b4:2e:99:be:1a:39, mgmt_net_macs=b4:2e:99:be:1a:37, mgmt_net_interfaces="eno1", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service10, hostname1=node10, mgmt_bmc_net_macs=b4:2e:99:be:24:ed, mgmt_net_macs=b4:2e:99:be:24:eb, mgmt_net_interfaces="eno1", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service11, hostname1=node11, mgmt_bmc_net_macs=b4:2e:99:3b:70:f0, mgmt_net_macs=b8:59:9f:34:88:ea, mgmt_net_interfaces="enp65s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
+            internal_name=service12, hostname1=node12, mgmt_bmc_net_macs=b4:2e:99:3b:70:10, mgmt_net_macs=b8:59:9f:1d:d8:c2, mgmt_net_interfaces="enp66s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
             ```
 
          1. Add discovered nodes, set image for the discovered nodes.
@@ -739,7 +743,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
             cm power on -n '*'
             ```
 
-            __NOTE:__ Power on the nodes when 'cm power status -n '*'' lists all the nodes. if there are any errors rerun the command.
+            __NOTE:__ Power on the nodes when 'cm power status -n '*'' lists all the nodes. If there are any errors rerun the command.
 
             1. Check the status of nodes.
 
@@ -810,57 +814,13 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
    tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
    ```
 
-1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
+1. To install all the dependency packages run the `csm_dep_install.sh` using the following command:
 
-   > __NOTE:__ `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
+   ```
+   sh csm_dep_install.sh  ${PITDATA}
+   ```
 
-   1. Install `docs-csm`.
-
-      > __NOTE:__ This installs necessary scripts for deployment checks, as well as the offline manual.
-
-       ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y docs-csm
-       ```
-
-   1. Update `cray-site-init`.
-
-       > __NOTE:__ This provides `csi`, a tool for creating and managing configurations, as well as orchestrating the [handoff and deploy of the final non-compute node](../deploy_final_non-compute_node.md).
-
-       ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks update -y cray-site-init
-       ```
-
-   1. Install `iuf-cli`.
-
-       > __NOTE:__ This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../../operations/iuf/IUF.md).
-
-       ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y iuf-cli
-       ```
-
-   1. Install `csm-testing` RPM.
-
-       > __NOTE:__ This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
-
-       ```bash
-        zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \ --no-gpg-checks install -y csm-testing
-       ```
-
-1. (`pit#`) Install/update the RPMs and configuration files necessary for CSM installation
-
-   1. Install the required RPMs using the following command:
-
-      ```bash
-          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP3/x86_64/product/python3-simplejson-3.17.2-1.10.x86_64.rpm
-          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/product/python3-jmespath-0.9.3-1.21.noarch.rpm
-          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP3/x86_64/product/python3-python-dateutil-2.8.1-1.24.noarch.rpm
-          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/python3-botocore-1.21.7-37.4.1.noarch.rpm
-          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/python3-s3transfer-0.5.0-9.4.1.noarch.rpm
-          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/python3-botocore-1.21.7-37.4.1.noarch.rpm
-          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Basesystem/15-SP2/x86_64/update/python3-boto3-1.18.7-23.4.1.noarch.rpm
-          rpm -ivh  /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-HPC/15-SP2/x86_64/product/conman-0.3.0-1.42.x86_64.rpm
-          rpm -ivh /var/www/ephemeral/csm-1.3.0/rpm/embedded/suse/SLE-Module-Public-Cloud/15-SP2/x86_64/update/python3-colorama-0.4.4-5.4.1.noarch.rpm
-      ```
+   > __Note:__ `${PITDATA}` is the path of the folder where the CSM tarball is extracted in the preceding step.
 
    1. Update `dnsmasq`, `apache2` configuration files.
 
@@ -1011,7 +971,7 @@ The stepwise procedure to generate seed files is as follows:
 
       ```bash
       cnodes | grep node >>nodelist
-      pdsh -w^nodelist /opt/clmgr/scripts/cluster-config-verification-tool/create_bond0.sh
+      pdsh -w^nodelist /opt/clmgr/cluster-config-verification-tool/scripts/create_bond0.sh
       cm cvt config create -t all --mgmt_username 'uname' --mgmt_password 'passwd' --architecture '<architecture>'
       ```
 
