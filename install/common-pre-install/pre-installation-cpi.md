@@ -14,6 +14,7 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [Prepare `site init`](#24-prepare-site-init)
     1. [Configure Management Network](#25-configure-management-network)
     1. [Initialize the LiveCD](#26-initialize-the-livecd)
+1. [Initialize Nexus](#3-initialize-nexus)
 1. [Next topic](#next-topic)
 
 ## 1. Boot installation environment
@@ -22,7 +23,7 @@ Before proceeding, ensure that other NCNs are powered off and their BMC's IP sou
 
 DHCP and external connectivity is required to download CSM tar ball.
 
-> **NOTE:** Each step denotes where its commands must run; `external#` refers to a server that is **not** the Cray, whereas `pit# or gamora#` refers to the LiveCD itself.
+> **NOTE:** Each step denotes where its commands must run; `external#` refers to a server that is **not** the Cray, whereas `pit#` refers to the LiveCD itself.
 
 ### 1.1 Setup site network
 
@@ -308,7 +309,7 @@ Run the following steps before starting any of the system configuration procedur
       csi config init empty
       ```
 
-   - Otherwise, copy the existing `system_config.yaml` file into the working directory and proceed to the [Run CSI](#33-run-csi) step.
+   - Otherwise, copy the existing `system_config.yaml` file into the working directory and proceed to the [Run CSI](#23-run-csi) step.
 
 1. (`pit#`) Edit the `system_config.yaml` file with the appropriate values.
 
@@ -343,29 +344,29 @@ Run the following steps before starting any of the system configuration procedur
         2022/09/29 06:40:15             x3000
         {"level":"info","ts":1664433615.2577472,"msg":"Beginning SLS configuration generation."}
         2022/09/29 06:40:15 WARNING (Not Fatal): Couldn't find switch port for NCN: x3000c0s1b0
-        2022/09/29 06:40:15 wrote 24725 bytes to /var/www/ephemeral/prep/gamora/sls_input_file.json
-        2022/09/29 06:40:15 wrote 2342 bytes to /var/www/ephemeral/prep/gamora/customizations.yaml
+        2022/09/29 06:40:15 wrote 24725 bytes to /var/www/ephemeral/prep/system_name/sls_input_file.json
+        2022/09/29 06:40:15 wrote 2342 bytes to /var/www/ephemeral/prep/system_name/customizations.yaml
         2022/09/29 06:40:15 Generating Installer Node (PIT) interface configurations for: ncn-m001
-        2022/09/29 06:40:15 wrote 509 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0
-        2022/09/29 06:40:15 wrote 376 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-lan0
-        2022/09/29 06:40:15 wrote 1030 bytes to /var/www/ephemeral/prep/gamora/pit-files/config
-        2022/09/29 06:40:15 wrote 24 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifroute-lan0
-        2022/09/29 06:40:15 wrote 335 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0.hmn0
-        2022/09/29 06:40:15 wrote 335 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0.nmn0
-        2022/09/29 06:40:15 wrote 39 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifroute-bond0.nmn0
-        2022/09/29 06:40:15 wrote 336 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0.can0
-        2022/09/29 06:40:15 wrote 335 bytes to /var/www/ephemeral/prep/gamora/pit-files/ifcfg-bond0.cmn0
-        2022/09/29 06:40:15 wrote 320 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/CMN.conf
-        2022/09/29 06:40:15 wrote 572 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/HMN.conf
-        2022/09/29 06:40:15 wrote 572 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/NMN.conf
-        2022/09/29 06:40:15 wrote 540 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/MTL.conf
-        2022/09/29 06:40:15 wrote 324 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/CAN.conf
-        2022/09/29 06:40:15 wrote 8917 bytes to /var/www/ephemeral/prep/gamora/dnsmasq.d/statics.conf
-        2022/09/29 06:40:15 wrote 1226 bytes to /var/www/ephemeral/prep/gamora/conman.conf
-        2022/09/29 06:40:15 wrote 894 bytes to /var/www/ephemeral/prep/gamora/metallb.yaml
-        2022/09/29 06:40:15 wrote 60609 bytes to /var/www/ephemeral/prep/gamora/basecamp/data.json
+        2022/09/29 06:40:15 wrote 509 bytes to /var/www/ephemeral/prep/system_name/pit-files/ifcfg-bond0
+        2022/09/29 06:40:15 wrote 376 bytes to /var/www/ephemeral/prep/system_name/pit-files/ifcfg-lan0
+        2022/09/29 06:40:15 wrote 1030 bytes to /var/www/ephemeral/prep/system_name/pit-files/config
+        2022/09/29 06:40:15 wrote 24 bytes to /var/www/ephemeral/prep/system_name/pit-files/ifroute-lan0
+        2022/09/29 06:40:15 wrote 335 bytes to /var/www/ephemeral/prep/system_name/pit-files/ifcfg-bond0.hmn0
+        2022/09/29 06:40:15 wrote 335 bytes to /var/www/ephemeral/prep/system_name/pit-files/ifcfg-bond0.nmn0
+        2022/09/29 06:40:15 wrote 39 bytes to /var/www/ephemeral/prep/system_name/pit-files/ifroute-bond0.nmn0
+        2022/09/29 06:40:15 wrote 336 bytes to /var/www/ephemeral/prep/system_name/pit-files/ifcfg-bond0.can0
+        2022/09/29 06:40:15 wrote 335 bytes to /var/www/ephemeral/prep/system_name/pit-files/ifcfg-bond0.cmn0
+        2022/09/29 06:40:15 wrote 320 bytes to /var/www/ephemeral/prep/system_name/dnsmasq.d/CMN.conf
+        2022/09/29 06:40:15 wrote 572 bytes to /var/www/ephemeral/prep/system_name/dnsmasq.d/HMN.conf
+        2022/09/29 06:40:15 wrote 572 bytes to /var/www/ephemeral/prep/system_name/dnsmasq.d/NMN.conf
+        2022/09/29 06:40:15 wrote 540 bytes to /var/www/ephemeral/prep/system_name/dnsmasq.d/MTL.conf
+        2022/09/29 06:40:15 wrote 324 bytes to /var/www/ephemeral/prep/system_name/dnsmasq.d/CAN.conf
+        2022/09/29 06:40:15 wrote 8917 bytes to /var/www/ephemeral/prep/system_name/dnsmasq.d/statics.conf
+        2022/09/29 06:40:15 wrote 1226 bytes to /var/www/ephemeral/prep/system_name/conman.conf
+        2022/09/29 06:40:15 wrote 894 bytes to /var/www/ephemeral/prep/system_name/metallb.yaml
+        2022/09/29 06:40:15 wrote 60609 bytes to /var/www/ephemeral/prep/system_name/basecamp/data.json
 
-        ===== gamora Installation Summary =====
+        ===== [system_name] Installation Summary =====
 
         Installation Node: ncn-m001
         Customer Management: 10.102.5.0/25 GW: 10.102.5.1
@@ -483,7 +484,7 @@ Follow  [Configure management network switches](README.md#6-configure-management
    cp -r /var/www/ephemeral/data/ /srv/tftpboot/ephemeral/
    ```
 
-   Start conman service.
+   Start `conman` service.
 
    ```bash
    systemctl start conman.service
@@ -509,7 +510,7 @@ Follow  [Configure management network switches](README.md#6-configure-management
         Running LiveCD preflight checks (may take a few minutes to complete)...
         Writing full output to /opt/cray/tests/install/logs/print_goss_json_results/20220929_101501.528062-22314-Z7D4bWt9/out
 
-        Reading test results for node gamora-ncn-m001-pit (suites/livecd-preflight-tests.yaml)
+        Reading test results for node system_name-ncn-m001-pit (suites/livecd-preflight-tests.yaml)
 
         Checking test results
         Only errors will be printed to the screen
@@ -520,14 +521,14 @@ Follow  [Configure management network switches](README.md#6-configure-management
    ```
 
    If any tests fail, they need to be investigated.
-   After actions have been taken to rectify the tests (for example, editing configuration or CSI inputs), then restart from the beginning of the [Initialize the LiveCD](#36-initialize-the-livecd) procedure.
+   After actions have been taken to rectify the tests (for example, editing configuration or CSI inputs), then restart from the beginning of the [Initialize the LiveCD](#26-initialize-the-livecd) procedure.
 
 1. Save the `prep` directory for re-use.
 
    This needs to be copied off the system and either stored in a secure location or in a secured Git repository.
    There are secrets in this directory that should not be accidentally exposed.
 
-## TBD
+## 3. Initialize Nexus
 
 1. Grant necessary privileges by running the following command:
 
