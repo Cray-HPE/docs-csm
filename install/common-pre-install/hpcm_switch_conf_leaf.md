@@ -1,4 +1,4 @@
-# Configuration of Leaf Switch BMC-001
+# Configuration of Leaf Switch 001
 
 Copy the following text for `sw-leaf-bmc-001` configuration:
 
