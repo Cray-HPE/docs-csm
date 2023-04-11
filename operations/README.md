@@ -649,8 +649,8 @@ stream to update firmware on other components.
 - [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
 - [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
 
-- [Updating Firmware on m001](firmware/Updateing_Firmware_m001.md)
-- [Updating Firmware without FAS](firmware/Updateing_Firmware_without_FAS.md)
+- [Updating Firmware on `m001`](firmware/Updating_Firmware_m001.md)
+- [Updating Firmware without FAS](firmware/Updating_Firmware_without_FAS.md)
 
 ## User Access Service (UAS)
 
