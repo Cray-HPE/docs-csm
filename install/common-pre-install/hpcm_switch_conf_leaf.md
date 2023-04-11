@@ -1,4 +1,8 @@
-# Copy the text from here
+# Configuration of Leaf Switch BMC-001
+
+Copy the following text for `sw-leaf-bmc-001` configuration:
+
+> __Note:__ The username and password must be updated accordingly.
 
 ```text
 ! Version 10.5.1.4
@@ -10,8 +14,8 @@ hostname sw-leaf-bmc-001
 iscsi enable
 iscsi target port 860
 iscsi target port 3260
-system-user linuxadmin password $6$5DdOHYg5$JCE1vMSmkQOrbh31U74PIPv7lyOgRmba1IxhkYibppMXs1KM4Y.gbTPcxyMP/PHUkMc5rdk/ZLv9Sfv3ALtB61
-username admin password $6$q9QBeYjZ$jfxzVqGhkxX3smxJSH9DDz7/3OJc6m5wjF8nnLD7/VKx8SloIhp4NoGZs0I/UNwh8WVuxwfd9q4pWIgNs5BKH. role sysadmin priv-lvl 15
+system-user [LINUXADMIN] password [PASSWORD]
+username [ADMIN] password [PASSWORD]
 aaa authentication login default local
 aaa authentication login console local
 !
