@@ -335,7 +335,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
               sw-leaf01(config)# write memory
              ```
 
-      >__Note:__ If the switches are from Aruba, then see "Using Aruba Switches" section in 
+      >__Note:__ If the switches are from Aruba, then see "Using Aruba Switches" section in
       >[HPE Performance Cluster Manager Installation Guide for Clusters Without Leader Nodes](https://www.hpe.com/support/hpcm-inst-no-leaders-006) for procedure to configure the Aruba switches.
 
    1. Running `YaST-Firstboot`.
