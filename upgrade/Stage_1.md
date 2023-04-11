@@ -5,7 +5,7 @@
 
 - [Stage 1 - Ceph image upgrade](#stage-1---ceph-image-upgrade)
   - [Start typescript](#start-typescript)
-    - [Run Ceph Latency Repair Script](#run-ceph-latency-repair-script)
+  - [Run Ceph Latency Repair Script](#run-ceph-latency-repair-script)
   - [Apply boot order workaround](#apply-boot-order-workaround)
   - [Upload Ceph container images to Nexus](#upload-ceph-container-images-to-nexus)
   - [Argo workflows](#argo-workflows)
