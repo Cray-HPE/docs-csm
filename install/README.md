@@ -12,29 +12,6 @@ on the [BICAN summary page](../operations/network/management_network/bican_techn
 Review the BICAN summary before continuing with the CSM install. For detailed BICAN documentation,
 see [BICAN technical details](../operations/network/management_network/bican_technical_details.md).
 
-## High-level overview of CSM install
-
-In the [Pre-installation](#pre-installation) section of the install, information about the HPE Cray
-EX system and the site is used to prepare the configuration payload. An initial node called the PIT
-node is then set up to bootstrap the installation process. It is called the PIT node because the
-Pre-Install Toolkit is installed there. The management network switches are also configured in this
-section.
-
-In the [Installation](#installation) section of the install, the other management nodes are deployed
-with an operating system and the software required to create a Kubernetes cluster utilizing Ceph
-storage. The CSM services are then deployed in the Kubernetes cluster to provide essential software
-infrastructure including the API gateway and many micro-services with REST APIs for managing the
-system. Administrative access is then configured, and the health of the system is validated before
-proceeding with operational tasks like checking and updating firmware on system components and
-preparing compute nodes.
-
-The [Post-installation](#post-installation) section covers tasks which are performed after the
-main install procedure is completed.
-
-The final section, [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
-describes how to install additional HPE Cray EX software products using the Install and Upgrade
-Framework (IUF).
-
 Detailed BICAN documentation can be found on the [BICAN technical details](../operations/network/management_network/bican_technical_details.md) pages.
 
 Install Cray System Management by using one of the following options:
