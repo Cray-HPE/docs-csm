@@ -4,7 +4,6 @@ Copy the following text for `sw-spine02` configuration:
 
 > __Note:__ The username and password must be updated accordingly.
 
-
 ```text
 ##
 ## Running database "hpcm230223-10"
