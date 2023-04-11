@@ -56,7 +56,7 @@ shown here with numbered topics.
 1. [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
 
 > **`NOTE:`** If problems are encountered during the installation,
-> [Troubleshooting installation problems](#troubleshooting-installation-problems) and
+> [Troubleshooting installation problems](#10-troubleshooting-installation-problems) and
 > [Cray System Management (CSM) Administration Guide](../../operations/README.md) will offer assistance.
 
 ## Prerequisites
@@ -288,7 +288,6 @@ Prior to the upgrade it is recommended that a Nexus export is taken. This is not
 If there is no maintenance period available then this step should be skipped until after the upgrade process.
 
 See [Nexus Export and Restore Procedure](../../operations/package_repository_management/Nexus_Export_and_Restore.md) for details.
-
 
 ## Installation of additional HPE Cray EX software products
 
