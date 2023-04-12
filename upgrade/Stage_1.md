@@ -7,6 +7,7 @@
   - [Start typescript](#start-typescript)
   - [Run Ceph Latency Repair Script](#run-ceph-latency-repair-script)
   - [Apply boot order workaround](#apply-boot-order-workaround)
+  - [Upload Ceph container images to Nexus](#upload-ceph-container-images-to-nexus)
   - [Argo workflows](#argo-workflows)
   - [CSM Upgrade requirement for upgrades staying within a CSM release version](#csm-upgrade-requirement-for-upgrades-staying-within-a-csm-release-version)
   - [Storage node image upgrade](#storage-node-image-upgrade)
@@ -39,6 +40,17 @@ Ceph can begin to exhibit latency over time when upgrading the cluster from prev
 ```bash
 /usr/share/doc/csm/scripts/workarounds/boot-order/run.sh
 ```
+
+## Upload Ceph container images to Nexus
+
+Upload Ceph container images into nexus.
+
+1. Logged into one of (`ncn-s00[1/2/3]`), copy `upload_ceph_images_to_nexus.sh` from `ncn-m001` and execute it.
+
+   ```bash
+   scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
+   /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
+   ```
 
 ## Argo workflows
 
