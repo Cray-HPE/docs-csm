@@ -1,4 +1,4 @@
-# BOS - Exporting and Importing
+# Export and Importing BOS Data
 
 - [Prerequisites](#prerequisites)
 - [BOS session templates](#bos-session-templates)

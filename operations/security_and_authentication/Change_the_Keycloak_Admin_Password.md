@@ -6,26 +6,20 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 
 ## Procedure
 
-1. Log in to Keycloak with the default admin credentials.
+1. Retrieve the `admin` user's password for Keycloak.
 
-    Point a browser at `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing SYSTEM\_DOMAIN\_NAME with the actual NCN's DNS name.
+   ```bash
+   kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
+   ```
 
-    The following is an example URL for a system: `auth.cmn.system1.us.cray.com/keycloak/admin`
+1. Log in to the Keycloak UI using the `admin` user and the password obtained in the previous step.
 
-    Use the following admin login credentials:
-
-    - Username: `admin`
-    - The password can be obtained with the following command:
-
-    ```bash
-    kubectl get secret -n services keycloak-master-admin-auth \
-                 --template={{.data.password}} | base64 --decode
-    ```
+   The Keycloak UI URL is typically similar to the following: `https://auth.cmn.<system_name>/keycloak`
 
 1. Click the `Admin` drop-down menu in the upper-right corner of the page.
-1. Select `Manage Account`.
-1. Click the `Password` tab on the left side of the page.
-1. Enter the existing password, new password and confirmation, and then click `Save`.
+1. Select `Signing in`, under `Account security`.
+1. Click the `Update` button on the left side of the page.
+1. Enter the new password and confirmation, and then click `Submit`.
 1. Log on to `ncn-w001`.
 1. Run `git clone https://github.com/Cray-HPE/csm.git`.
 1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to your desired working directory, and run the following commands from that work directory (not the `utils` directory).

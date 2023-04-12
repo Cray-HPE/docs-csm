@@ -46,7 +46,8 @@ This procedure is applicable in the following situations:
     echo $EXPECTED_ROOT_PASSWORD
     ```
 
-1. (`ncn-mw#`) Set an environment variable containing the hostname or current IP address of the BMC. If coming from the [Add Worker, Storage, or Master NCNs](../node_management/Add_Remove_Replace_NCNs.md#add-worker-storage-or-master-ncns)
+1. (`ncn-mw#`) Set an environment variable containing the hostname or current IP address of the BMC. If coming from the
+    [Add Worker, Storage, or Master NCNs](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-worker-storage-or-master-ncns)
     procedure, then the IP address should already be stored in the `BMC_IP` environment variable.
 
     - Via hostname:

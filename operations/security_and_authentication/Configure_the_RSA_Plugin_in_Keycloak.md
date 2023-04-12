@@ -20,15 +20,17 @@ Access to the Keycloak UI is needed.
 
 1. Click on the `Flows` tab.
 
-1. Click the dropdown button in the table header and switch to `Browser`.
+1. Click on the `Browser` flow.
 
-    1. Click the `Copy` button in the table header.
+    1. Click the `Actions` dropdown and click on duplicate.
 
     1. Enter `RSA - Browser` for the `New Name` type.
 
-    1. Click the `Add execution` button in the table header.
+    1. Click on `Duplicate`
 
-    1. Switch the `Provider` to `RSA` and click `Save`.
+    1. Click the `Add Step` button in the table header.
+
+    1. Search `RSA` and click on the `RSA` then click add.
 
     1. Update the `Requirement` field.
 
@@ -36,6 +38,9 @@ Access to the Keycloak UI is needed.
 
         |Field|Requirement|
         |-----|-----------|
+        |`Cookie`|`Alternative`|
+        |`Kerberos`|`Disabled`|
+        |`Identity Provider Redirector`|`Alternative`|
         |`RSA - Browser Forms`|`REQUIRED`|
         |`Username Password Form`|`REQUIRED`|
         |`RSA - Browser - Conditional OTP`|`CONDITIONAL`|
@@ -43,7 +48,7 @@ Access to the Keycloak UI is needed.
         |`OTP Form`|`DISABLED`|
         |`RSA`|`REQUIRED`|
 
-    1. Click the `Actions` dropdown on the `RSA` line of the table, then select `Config`.
+    1. Click the `Gear` icon on the `RSA` line of the table.
 
     1. Enter the different configuration options:
 
@@ -63,17 +68,19 @@ Access to the Keycloak UI is needed.
 
 1. Return to the `Flows` tab on the `Authentication` page.
 
-1. Click the dropdown button in the table header and switch to `Direct Grant`.
+1. Click on the `Direct Grant` flow.
 
-    1. Click the `Copy` button in the table header.
+    1. Click the `Actions` dropdown and click on duplicate.
 
     1. Enter `RSA - CLI` for the `New Name` type.
 
-    1. Click the `Add execution` button in the table header.
+    1. Click on `Duplicate`.
 
-    1. Switch the `Provider` to `RSA - CLI` and click `Save`.
+    1. Click the `Add Step` button in the table header.
 
-    1. Update the `Requirement` field.
+    1. Click the `Add Step` button in the table header.
+
+    1. Search `RSA` and click on the `RSA-CLI` then click add.
 
         Set the table values to the following:
 
@@ -84,13 +91,29 @@ Access to the Keycloak UI is needed.
 
     1. Click `Save`.
 
-1. Switch to the `Bindings` tab in the `Authentication` page.
+1. Return to the `Flows` tab on the `Authentication` page.
 
-    1. Change `Browser Flow` to `RSA - Browser`.
+    1. Click on the `RSA - Browser` flow.
 
-    1. Change `Direct Grant Flow` to `RSA - CLI`.
+    1. Click the `Actions` dropdown and click on `Bind flow`.
 
-    1. Click `Save`.
+    1. Choose the `Browser flow` from the dropdown and click `Save`.
+
+    1. Return to the `Flows` tab on the `Authentication` page.
+
+    1. Click on the `RSA - CLI` flow.
+
+    1. Click the `Actions` dropdown and click on `Bind flow`.
+
+    1. Choose the `Direct grant flow` from the dropdown and click `Save`.
+
+1. Switch to the `Relm Settings` under then `Configure` header of the navigation area on the left side of the page.
+
+    1. Go to the `Themes` tab.
+
+    1. Under the `Login theme` dropdown select `shasta-rsa`.
+
+    1. Click on `Save`.
 
 ## Verification
 

@@ -180,22 +180,32 @@ Acquire the latest documentation RPM. This may include updates, corrections, and
     - With https proxy:
 
         ```bash
-        https_proxy=https://example.proxy.net:443   
+        https_proxy=https://example.proxy.net:443 wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" \
+            -O /root/docs-csm-latest.noarch.rpm
         ```
 
         ```bash
-        wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" \
-            -O /root/docs-csm-latest.noarch.rpm
-        wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" \
+        https_proxy=https://example.proxy.net:443 wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" \
             -O /root/libcsm-latest.noarch.rpm
         ```
 
     - If this machine does not have direct internet access, then this RPM will need to be externally downloaded and
-      copied to the system. This example copies it to `ncn-m001`.
+      copied to the system.
+
+        - If the node receiving `libcsm` is reachable, use this to resolve the SLES version:
+
+            ```bash
+            SLES_VERSION=$(ssh ncn-m001 'awk -F= '\''/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}'\'' /etc/os-release')
+            ```
+
+        - If the node receiving `libcsm` is unreachable, set the SLES version of that node by hand:
+
+            ```bash
+            SLES_VERSION=15sp4
+            ```
 
         ```bash
         curl -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
-        SLES_VERSION=$(ssh ncn-m001 'awk -F= '\''/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}'\'' /etc/os-release')
         curl -O "https://release.algol60.net/lib/sle-${SLES_VERSION}/libcsm-latest.noarch.rpm"
         scp docs-csm-latest.noarch.rpm libcsm-latest.noarch.rpm ncn-m001:/root
         ssh ncn-m001

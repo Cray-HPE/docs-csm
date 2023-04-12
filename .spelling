@@ -47,6 +47,7 @@ StatefulSets
 1TiB
 2-chassis
 2.0.0.L
+200Gbps
 200GBASE-CR4
 200GBASE-DR4
 200GBASE-SR4
@@ -372,6 +373,7 @@ SharePoint
 Shasta
 Skopeo
 Slurm
+slurm.conf
 Sonatype
 Sonexion
 SpectrumScale
@@ -446,6 +448,7 @@ cdu0sw02
 cec0
 center
 centers
+ceph
 channeled
 checkmark
 cleanup
@@ -571,6 +574,11 @@ organizer
 organizers
 organizes
 organizing
+osd
+osd*
+osd.*
+osds
+osds*
 oversubscription
 passthrough
 passwordless
@@ -610,6 +618,8 @@ shutoff
 singlemode
 site-routable
 specialty
+ssd
+ssds
 standalone
 startup
 subnetting
@@ -908,7 +918,7 @@ Lorem
 # To allow Site Init
 Init
 
-- operations/image_management/IMS_export_import.md
+- operations/image_management/Exporting_and_Importing_IMS_Data.md
 etag
 etags
 

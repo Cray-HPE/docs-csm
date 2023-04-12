@@ -38,6 +38,13 @@ function deployNLS() {
     yq w -i ${BUILDDIR}/iufnls.yaml "metadata.name" "iufnls"
     yq d -i ${BUILDDIR}/iufnls.yaml "spec.sources"
 
+    for c in $(kubectl get crd |grep argo | cut -d' ' -f1)
+    do
+      kubectl label --overwrite crd $c app.kubernetes.io/managed-by="Helm"
+      kubectl annotate --overwrite crd $c meta.helm.sh/release-name="cray-nls"
+      kubectl annotate --overwrite crd $c meta.helm.sh/release-namespace="argo"
+    done
+
     loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path ${BUILDDIR}/iufnls.yaml
 }
 

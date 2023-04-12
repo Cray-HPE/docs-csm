@@ -361,7 +361,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     done
 
     set -e
-    } >> "${LOG_FILE}" 2>&1    
+    } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
@@ -372,12 +372,20 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-
-    if [[ ! -f /root/docs-csm-latest.noarch.rpm ]]; then
-        echo "ERROR: docs-csm-latest.noarch.rpm is missing under: /root -- halting..."
+    error=0
+    packages=( docs-csm libcsm )
+    for package in "${packages[@]}"; do
+        if [[ ! -f /root/${package}-latest.noarch.rpm ]]; then
+            echo >&2 "ERROR: ${package}-latest.noarch.rpm is missing under: /root"
+            error=1
+        else
+            cp /root/${package}-latest.noarch.rpm "${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp4/"
+        fi
+    done
+    if [ "${error}" -ne 0 ]; then
+        echo >&2 "ERROR: one or more expected packages were missing under: /root -- halting..."
         exit 1
     fi
-    cp /root/docs-csm-latest.noarch.rpm "${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp4/"
 
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
@@ -431,8 +439,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         pod=$(kubectl get pods -n nexus --selector app=nexus -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep -v nexus-init);
         kubectl -n nexus exec -it "${pod}" -c nexus -- curl -i -sfk -u \
             "admin:${NEXUS_PASSWORD:=$(kubectl get secret -n nexus nexus-admin-credential --template '{{.data.password}}' | base64 -d)}" \
-            -H "accept: application/json" -X GET http://nexus/service/rest/beta/security/user-sources >/dev/null 2>&1; 
-    } 
+            -H "accept: application/json" -X GET http://nexus/service/rest/beta/security/user-sources >/dev/null 2>&1;
+    }
     if ! nexus-cred-check; then
         echo "Nexus password is incorrect. Please set NEXUS_PASSWORD and try again."
         exit 1
@@ -505,6 +513,20 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="UPGRADE_DRYDOCK"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+
+    upgrade_csm_chart cray-drydock platform.yaml
+
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPGRADE_KYVERNO"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
@@ -550,7 +572,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    
+
     upgrade_csm_chart cray-hms-bss sysmgmt.yaml
 
     } >> "${LOG_FILE}" 2>&1
@@ -564,7 +586,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    
+
     upgrade_csm_chart cray-tftp sysmgmt.yaml
 
     } >> "${LOG_FILE}" 2>&1
@@ -577,7 +599,7 @@ state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    
+
     upgrade_csm_chart cray-tftp-pvc sysmgmt.yaml
 
     } >> "${LOG_FILE}" 2>&1
@@ -671,7 +693,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         NEW_METAL_SERVER="s3://boot-images/${K8S_IMS_IMAGE_ID}/rootfs"
         PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' | \
             sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-            sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
             tr -d \")
 
         cray bss bootparameters update --hosts "${xname}" \
@@ -686,7 +707,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         NEW_METAL_SERVER="s3://boot-images/${STORAGE_IMS_IMAGE_ID}/rootfs"
         PARAMS=$(cray bss bootparameters list --hosts "${xname}" --format json | jq '.[] |."params"' | \
             sed "/metal.server/ s|${METAL_SERVER}|${NEW_METAL_SERVER}|" | \
-            sed "s/metal.no-wipe=1/metal.no-wipe=0/" | \
             tr -d \")
 
         cray bss bootparameters update --hosts "${xname}" \
@@ -1000,7 +1020,7 @@ if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
 
             # Make sure it is actually disabled
             echo "Verifying that CFS is now disabled on ${xname}"
-            set -o pipefail            
+            set -o pipefail
             cray cfs components describe "${xname}" --format json | jq '.enabled' | grep "^false$"
             set +o pipefail
         done

@@ -23,9 +23,11 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
 1. Click the `Groups` text in the `Manage` section in the navigation area on the left side of the screen.
 
-1. Click the `New` button in the groups table header.
+1. Click the `Create Group` button in the groups table header.
 
 1. Provide a unique name for the new group and click the `Save` button.
+
+1. Click on the group you wish to manage.
 
 1. Navigate to the `Attributes` tab.
 
@@ -35,7 +37,7 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
     1. Set the `Value` to the name of the group.
 
-    1. Click the `Add` button on the row.
+    1. Click the `Save` button on the bottom.
 
 1. Add the `gidNumber` attribute.
 
@@ -43,9 +45,7 @@ kubectl get secret -n services keycloak-master-admin-auth --template={{.data.pas
 
     1. Set the `Value` to the `gidNumber` of the group.
 
-    1. Click the `Add` button on the row.
-
-1. Click the `Save` button at the bottom of the page.
+    1. Click the `Save` button on the bottom.
 
 Once the groups are added to Keycloak, add users to the groups and follow the instructions in
 [Re-Sync Keycloak Users to Compute Nodes](Resync_Keycloak_Users_to_Compute_Nodes.md) in order to update the groups on the compute nodes.

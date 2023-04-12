@@ -38,6 +38,8 @@ tasks:
             if ! cray bss bootparameters list --hosts $TARGET_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
               echo "${TARGET_NCN} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
               exit 1
+            else
+              echo "Successfully found ${TARGET_NCN} NTP data is present in BSS."
             fi
   - name: "get-bootscript-last-access-timestamp"
     dependencies:

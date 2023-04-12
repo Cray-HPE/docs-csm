@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -24,10 +24,11 @@
 #
 
 ################################################################################
-# This script exports all existing BOS session templates as a list in a JSON
-# file. This file can be used to re-create the session templates.
+# This script exports all CFS data into JSON files. These files are then
+# compressed into an tgz archive.
 ################################################################################
-ARCHIVE="bos-session-templates-$(date +%Y%m%d%H%M%S).json"
+
+ARCHIVE_PREFIX="cfs-export-$(date +%Y%m%d%H%M%S)"
 
 err_exit()
 {
@@ -35,9 +36,24 @@ err_exit()
     exit 1
 }
 
-[[ ! -e ${ARCHIVE} ]] || err_exit "Archive file '${ARCHIVE}' already exists!"
+run_cmd()
+{
+    "$@" || err_exit "Command failed with return code $?: $*"
+}
 
-# Write all of the session templates to the file
-cray bos v2 sessiontemplates list --format json > "${ARCHIVE}" ||
-    err_exit "Command failed: cray bos v2 sessiontemplates list --format json"
-echo "BOS session templates stored in file: ${ARCHIVE}"
+ARCHIVE_DIR=$(run_cmd mktemp -p /tmp -d "${ARCHIVE_PREFIX}-XXX")
+
+# Export the CFS components, configurations, options, and sessions
+# The session data is not likely to be something that would be restored from a backup,
+# but retaining the historical data may be useful in some situations.
+for OBJECT in components configurations options sessions ; do
+    echo "Exporting CFS ${OBJECT}..."
+    run_cmd cray cfs "${OBJECT}" list --format json > "${ARCHIVE_DIR}/${OBJECT}.json"
+done
+
+# Compress the results
+echo "Creating compressed archive of exported data..."
+ARCHIVE_FILE=$(run_cmd mktemp "${ARCHIVE_DIR}XXX.tgz")
+ARCHIVE_DIR_BASENAME=$(run_cmd basename "${ARCHIVE_DIR}")
+run_cmd tar --remove-files -C /tmp -czf "${ARCHIVE_FILE}" "${ARCHIVE_DIR_BASENAME}"
+echo "SUCCESS: CFS data stored in file: ${ARCHIVE_FILE}"
