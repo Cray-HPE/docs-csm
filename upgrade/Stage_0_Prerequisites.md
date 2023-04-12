@@ -517,6 +517,10 @@ To prevent any possibility of losing workload manager configuration data or file
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
 
+If performing an upgrade of CSM and additional HPE Cray EX software products using the IUF,
+return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+procedure. Otherwise, if performing an upgrade of only CSM, proceed to the next step.
+
 ## Stop typescript
 
 For any typescripts that were started during this stage, stop them with the `exit` command.
