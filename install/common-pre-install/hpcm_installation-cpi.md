@@ -27,7 +27,7 @@ To create the bootable LiveCD image use `dd` command. Before creating the media,
 
 1. (`external#`) Identify the USB device.
 
-   >__Note:__ This example shows the USB device is `/dev/sdd` on the host.
+   >__NOTE:__ This example shows the USB device is `/dev/sdd` on the host.
 
    ```bash
    lsscsi
@@ -82,7 +82,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
 1. _Option 2_ : Boot the LiveCD ISO image using `efibootmgr`.
 
-   >__Note:__ For the system to find the USB device's EFI bootloader, UEFI booting must be enabled.
+   >__NOTE:__ For the system to find the USB device's EFI bootloader, UEFI booting must be enabled.
 
    1. (`external#`) Confirm that the IPMI credentials work for the BMC by checking the power status.
 
@@ -96,11 +96,11 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
            ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power status
          ```
 
-         >__Note:__ The `read -s` command is used to prevent the credentials from being displayed on the screen or recorded in the shell history.
+         >__NOTE:__ The `read -s` command is used to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    1. (`external#`) Power the NCN on and connect to the IPMI console.
 
-      >__Note:__ The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects the primary removable media.
+      >__NOTE:__ The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects the primary removable media.
 This step instructs the user to power off the node to ensure the BIOS has the best chance at finding the USB via a cold boot.
 
       ```bash
@@ -151,7 +151,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
          ![Input prompts](../../img/install/04.png)
 
-         >__Note:__ You might have to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after `Loading initrd...`.
+         >__NOTE:__ You might have to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after `Loading initrd...`.
 
          Once the system boots up the OS successfully, provide username and password as `root/cmdefault` to log in to the system.
 
@@ -206,7 +206,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
               minicom -b 115200 -D /dev/ttyUSB1
              ```
 
-             >__Note:__ Device name and IP may vary.
+             >__NOTE:__ Device name and IP may vary.
 
           1. Login to the switch using the switch credentials. Login prompt for Mellanox switch is as follows:
 
@@ -264,7 +264,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
              minicom -b 115200 -D /dev/ttyUSB1
              ```
 
-             >__Note:__ Device name may vary.
+             >__NOTE:__ Device name may vary.
   
           1. Access the leaf switch using minicom. Here we assume `/dev/ttyUSB3` is leaf switch.
 
@@ -335,7 +335,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
               sw-leaf01(config)# write memory
              ```
 
-      >__Note:__ If the switches are from Aruba, then see "Using Aruba Switches" section in
+      >__NOTE:__ If the switches are from Aruba, then see "Using Aruba Switches" section in
       >[HPE Performance Cluster Manager Installation Guide for Clusters Without Leader Nodes](https://www.hpe.com/support/hpcm-inst-no-leaders-006) for procedure to configure the Aruba switches.
 
    1. Running `YaST-Firstboot`.
@@ -636,7 +636,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
          Management, worker, storage nodes, UANs will be auto discovered and the procedure is described as follows:
 
-         >__Note:__
+         >__NOTE:__
          >
          > - Ensure all the river components are powered on and `dhcp` is enabled on bmc and on only one switch out of the available spine switch.
          >
@@ -660,7 +660,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
             cm node discover enable 
             ```
 
-            >__Note:__ If there are any intel nodes run the following command:
+            >__NOTE:__ If there are any intel nodes run the following command:
             >
             >```bash
             >sed -i '226s/ipmitool lan print/ipmitool lan print 3/g' /opt/clmgr/tools/cm_pxe_status
@@ -668,7 +668,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
          1. Check the power status and pxe status.
 
-            > __Note:__ Verify if all the river node BMCs are leased with an IP.
+            > __NOTE:__ Verify if all the river node BMCs are leased with an IP.
 
             Check the power status of nodes.
 
@@ -734,7 +734,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
             cm node refresh netboot -n '*'
             ```
 
-            __NOTE:__ Kernel version can be obtained from `cinstallman --show-default-image` command.
+            >__NOTE:__ Kernel version can be obtained from `cinstallman --show-default-image` command.
 
          1. Stop the auto-discovery process and power on all nodes.
 
@@ -744,7 +744,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
             cm power on -n '*'
             ```
 
-            __NOTE:__ Power on the nodes when 'cm power status -n '*'' lists all the nodes. If there are any errors rerun the command.
+            >__NOTE:__ Power on the nodes when 'cm power status -n '*'' lists all the nodes. If there are any errors rerun the command.
 
             1. Check the status of nodes.
 
@@ -769,7 +769,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
             node12       : BOOTED
             ```
 
-            __NOTE:__ We need to wait at this step till all nodes report status as "BOOTED". Now the ports to all the NCNs can be enabled on switches.
+            >__NOTE:__ We need to wait at this step till all nodes report status as "BOOTED". Now the ports to all the NCNs can be enabled on switches.
 
          1. Create a Bond Network
 
@@ -821,7 +821,7 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
    sh csm_dep_install.sh  ${PITDATA}
    ```
 
-   > __Note:__ `${PITDATA}` is the path of the folder where the CSM tarball is extracted in the preceding step.
+   >__Note:__ `${PITDATA}` is the path of the folder where the CSM tarball is extracted in the preceding step.
 
    1. Update `dnsmasq`, `apache2` configuration files.
 
@@ -869,7 +869,7 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
 
 1. (`pit#`) Copy the NCN images from the expanded tarball.
 
-   > __NOTE:__ This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
+   >__NOTE:__ This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
 
    ```bash
    mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
@@ -884,7 +884,7 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
 
    1. Generate SSH keys.
 
-       > __NOTE:__ The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
+       >__NOTE:__ The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
 
        ```bash
        ssh-keygen -N "" -t rsa
@@ -976,7 +976,7 @@ The stepwise procedure to generate seed files is as follows:
       cm cvt config create -t all --mgmt_username 'uname' --mgmt_password 'passwd' --architecture '<architecture>'
       ```
 
-      __NOTE:__ The seed files and paddle file will be generated in the present working directory.
+      >__NOTE:__ The seed files and paddle file will be generated in the present working directory.
 
    1. Save the generated seed files (`switch_metadata.csv`, `application_node_config.yaml`, `hmn_connections.json`, `ncn_metadata.csv`), paddle file (`cvt-ccj.json`) and `cvt.json`.
    The seed files (or configuration payload files) and paddle file will be used later during the CSM installation process so they can be saved/backed up in a persistent storage.
