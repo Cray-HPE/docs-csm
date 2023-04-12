@@ -267,7 +267,7 @@ Run the following steps before starting any of the system configuration procedur
 
 ### 2.1 Generate topology files
 
-> **Note:** The following seed files are auto-generated with the common pre-installer `application_node_config.yaml` ,`hmn_connections.json` ,`ncn_metadata.csv` ,`switch_metadata.csv`. See [Seed file generation](hpcm_installation-cpi.md#seed-file-generation).
+> **NOTE:** The following seed files are auto-generated with the common pre-installer `application_node_config.yaml` ,`hmn_connections.json` ,`ncn_metadata.csv` ,`switch_metadata.csv`. See [Seed file generation](hpcm_installation-cpi.md#seed-file-generation).
 
 1. Verify if `cabinets.yaml` config file has not been created (manually).
 
@@ -444,7 +444,7 @@ Follow  [Configure management network switches](README.md#6-configure-management
 
 1. (`pit#`) Setup links to the boot artifacts extracted from the CSM tarball.
 
-   > **NOTES**
+   > **NOTE:**
    >
    > - This will also set all the BMCs to DHCP.
    > - Changing into the `$HOME` directory ensures the proper operation of the script.
