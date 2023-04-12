@@ -55,10 +55,12 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
     - Comment out any CFS configuration layers in `compute-and-uan-bootprep.yaml` and `management-bootprep.yaml` files for products that are not needed on the system
     - Any other changes needed to reflect site preferences
 
-1. Create a `site_vars.yaml` file in `${ADMIN_DIR}`. This file will contain key/value pairs for any configuration changes that should override the HPE-provided `product_vars.yaml` content. For example:
+1. Create a `site_vars.yaml` file in `${ADMIN_DIR}`. This file will contain key/value pairs for any configuration changes that should override entries in the `default` section of the HPE-provided `product_vars.yaml` file.
+   There are comments at the top of the `product_vars.yaml` file that describe the variables and related details. The following are a few examples of `site_vars.yaml` changes:
     - Add a `default` section containing a `network_type: "cassini"` entry to designate that Cassini is the desired Slingshot network type to be used when executing CFS configurations later in the workflow
     - Add a `suffix` entry to the `default` section to append a string to the names of CFS configuration, image, and BOS session template artifacts created during the workflow to make them easy to identify
-    - Any other changes needed to reflect site preferences
+
+   Additional information on `site_vars.yaml` files can be found in the [Site and recipe variables](../IUF.md#site-and-recipe-variables) and [`update-vcs-config`](../stages/update_vcs_config.md) sections.
 
     1. <create a `site_vars.yaml` file  with desired key/value pairs >
 
@@ -176,26 +178,29 @@ Once this step has completed:
 ## 3. Perform manual product configuration operations
 
 Some products must be manually configured prior to the creation of CFS configurations and images. The "Install and Upgrade Framework" section of each individual product's installation documentation contains instructions for product-specific
-configuration, if any. The following highlights some of the areas that most often require manual configuration changes **but is not intended to be a comprehensive list.** Note that many of the configuration changes are only
+configuration, if any. Major changes may also be documented in the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_.
+The following highlights some of the areas that require manual configuration changes **but is not intended to be a comprehensive list.** Note that many of the configuration changes are only
 required for initial installation scenarios.
 
-- Products that most often require site customizations to Ansible content in VCS
-  - COS
-  - CPE
-  - Slingshot Host Software
-  - UAN
-  - Slurm and PBS workload managers
-- Initial install configuration changes (not required for upgrade scenarios)
-  - SAT
-    - Configure SAT authentication via `sat auth`
-    - Generate SAT S3 credentials
-    - Configure system revision information via `sat setrev`
-  - SDU
-    - Configure SDU via `sdu setup`
-  - COS
-    - Set the COS root password in HashiCorp Vault
-  - UAN
-    - Set the UAN root password in HashiCorp Vault
+- COS
+  - Configure DVS and LNet with appropriate Slingshot settings
+  - Configure DVS and LNet for use on application nodes (this is a new procedure for this release)
+  - Enable site-specific file system mounts
+  - Set the COS root password in HashiCorp Vault
+- UAN
+  - Enable CAN, LDAP, and set MOTD
+  - Move DVS and LNet settings to COS branch
+  - Set the UAN root password in HashiCorp Vault
+- SHS
+  - Update release information in `group_vars` (done for each product release)
+- CPE
+  - Enable previous CPE versions or alternate 3rd party products (optional, done for each product release)
+- SDU
+  - Configure SDU via `sdu setup`
+- SAT
+  - Configure SAT authentication via `sat auth`
+  - Generate SAT S3 credentials
+  - Configure system revision information via `sat setrev`
 
 Once this step has completed:
 
