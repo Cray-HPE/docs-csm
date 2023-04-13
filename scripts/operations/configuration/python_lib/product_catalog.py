@@ -35,14 +35,14 @@ from . import api_requests
 from . import common
 from . import k8s
 
-from .types import JSONObject
+from .types import JsonObject
 
 K8S_NAMESPACE = "services"
 K8S_CONFIG_MAP_NAME = "cray-product-catalog"
 CPC_UPDATE_IMAGE = "artifactory.algol60.net/csm-docker/stable/cray-product-catalog-update"
 
 # Used for type hinting
-ProductVersionMap = Dict[str, JSONObject]
+ProductVersionMap = Dict[str, JsonObject]
 ProductCatalogMap = Dict[str, ProductVersionMap]
 NameIdTupleList = List[Tuple[str, str]]
 
@@ -61,7 +61,7 @@ def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> N
     raise common.ScriptException(msg) from parent_exception
 
 
-def parse_product_yaml(label: str, yaml_string: str) -> JSONObject:
+def parse_product_yaml(label: str, yaml_string: str) -> JsonObject:
     """
     Converts the YAML string for a product catalog product entry into its
     dictionary form. Raises an exception if there are problems.

@@ -32,7 +32,7 @@ from . import api_requests
 from . import common
 from . import k8s
 
-from .types import JSONDecodeError, JSONObject
+from .types import JSONDecodeError, JsonObject
 
 K8S_NAMESPACE = "vault"
 K8S_SECRET_NAME = "cray-vault-unseal-keys"
@@ -116,7 +116,7 @@ def get_api_url(k8s_client: k8s.CoreV1API) -> str:
         f"No 'http-api-port' port found for {service_label}")
 
 
-def get_secret_data_from_response(api_response: api_requests.ApiResponse) -> JSONObject:
+def get_secret_data_from_response(api_response: api_requests.ApiResponse) -> JsonObject:
     """
     This is used to parse an API response to a Vault read request and extract the
     secret data (a JSON object). That data is returned. An exception is raised if
@@ -163,7 +163,7 @@ class Vault():
         """
         return f"{self.api_url}/v1/secret/{secret_key}"
 
-    def get_api_request_headers(self, additional_headers: JSONObject = None) -> JSONObject:
+    def get_api_request_headers(self, additional_headers: JsonObject = None) -> JsonObject:
         """
         Return the headers to use for Vault API requests. If additional_headers are
         provided, the function returns a dictionary of the default headers updated using
@@ -233,7 +233,7 @@ class Vault():
         self.api_delete(
             url=secret_url, expected_status_codes=API_STATUS_OK_EMPTY)
 
-    def get_secret(self, secret_key: str, must_exist: bool = False) -> JSONObject:
+    def get_secret(self, secret_key: str, must_exist: bool = False) -> JsonObject:
         """
         Retrieves the Vault secret with the specified key and returns its contents.
         The must_exist argument governs whether a 404 response status code results
@@ -259,7 +259,7 @@ class Vault():
         # Return the secret data from the response
         return get_secret_data_from_response(resp)
 
-    def write_secret(self, secret_key: str, secret_data: JSONObject) -> None:
+    def write_secret(self, secret_key: str, secret_data: JsonObject) -> None:
         """
         Writes the specified secret data to Vault using the specified secret key.
         Raises an exception if anything goes wrong.
@@ -276,7 +276,7 @@ class Vault():
         """
         self.delete_secret(secret_key=CSM_ROOT_SECRET_KEY)
 
-    def get_csm_root_secret(self, **kwargs) -> JSONObject:
+    def get_csm_root_secret(self, **kwargs) -> JsonObject:
         """
         Wrapper function that supplies the CSM root secret key to get_secret()
         """
