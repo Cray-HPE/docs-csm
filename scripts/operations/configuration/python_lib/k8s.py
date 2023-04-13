@@ -32,7 +32,7 @@ import kubernetes.client.api
 import kubernetes.config
 
 from . import common
-from .types import JSONObject
+from .types import JsonObject
 
 # To help for type hinting in other modules
 CoreV1API = kubernetes.client.api.core_v1_api.CoreV1Api
@@ -93,7 +93,7 @@ def get_api_client() -> CoreV1API:
         log_error_raise_exception("Error obtaining Kubernetes API client", exc)
 
 
-def get_data_field(k8s_object, label: str) -> JSONObject:
+def get_data_field(k8s_object, label: str) -> JsonObject:
     """
     Returns the data field from the specified object. Raises an exception (using the
     provided label) if there is a problem.
@@ -124,7 +124,7 @@ class Client:
             log_error_raise_exception(
                 f"Error retrieving {configmap_label}", exc)
 
-    def get_config_map_data(self, name: str, namespace: str) -> JSONObject:
+    def get_config_map_data(self, name: str, namespace: str) -> JsonObject:
         """
         Calls get_config_map function, then extracts the data field from the response.
         """
@@ -143,7 +143,7 @@ class Client:
         except Exception as exc:
             log_error_raise_exception(f"Error retrieving {secret_label}", exc)
 
-    def get_secret_data(self, name: str, namespace: str) -> JSONObject:
+    def get_secret_data(self, name: str, namespace: str) -> JsonObject:
         """
         Calls get_secret function, then extracts the data field from the response.
         """
