@@ -34,7 +34,7 @@ import requests
 
 from . import common
 from . import k8s
-from .types import JSONDecodeError
+from .types import JsonObject, JSONDecodeError
 
 
 ADMIN_CLIENT_SECRET_NAME = "admin-client-auth"
@@ -212,3 +212,43 @@ def put_retry_validate(**kwargs) -> ApiResponse:
     Wrapper function for retry_request_validate_status for PUT requests.
     """
     return retry_request_validate_status(request_method=requests.put, **kwargs)
+
+
+def retry_request_validate_status_return_json(**kwargs) -> JsonObject:
+    """
+    Wrapper function for retry_request_validate_status that returns the decoded
+    JSON instead of the response itself
+    """
+    resp = retry_request_validate_status(**kwargs)
+    try:
+        return resp.json()
+    except JSONDecodeError as exc:
+        log_error_raise_exception("Response from API had unexpected format", exc)
+
+
+def get_retry_validate_return_json(**kwargs) -> JsonObject:
+    """
+    Wrapper function for retry_request_validate_status_return_json for GET requests.
+    """
+    return retry_request_validate_status_return_json(request_method=requests.get, **kwargs)
+
+
+def patch_retry_validate_return_json(**kwargs) -> JsonObject:
+    """
+    Wrapper function for retry_request_validate_status_return_json for PATCH requests.
+    """
+    return retry_request_validate_status_return_json(request_method=requests.patch, **kwargs)
+
+
+def post_retry_validate_return_json(**kwargs) -> JsonObject:
+    """
+    Wrapper function for retry_request_validate_status_return_json for POST requests.
+    """
+    return retry_request_validate_status_return_json(request_method=requests.post, **kwargs)
+
+
+def put_retry_validate_return_json(**kwargs) -> JsonObject:
+    """
+    Wrapper function for retry_request_validate_status_return_json for PUT requests.
+    """
+    return retry_request_validate_status_return_json(request_method=requests.put, **kwargs)
