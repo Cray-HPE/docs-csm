@@ -374,13 +374,13 @@ if [[ $state_recorded == "0" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     error=0
-    packages=( docs-csm libcsm )
+    packages=( docs-csm )
     for package in "${packages[@]}"; do
         if [[ ! -f /root/${package}-latest.noarch.rpm ]]; then
             echo >&2 "ERROR: ${package}-latest.noarch.rpm is missing under: /root"
             error=1
         else
-            cp "/root/${package}-latest.noarch.rpm" "${CSM_ARTI_DIR}/rpm/cray/csm/sle-15sp2/"
+            cp "/root/${package}-latest.noarch.rpm" "${CSM_ARTI_DIR}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/"
         fi
     done
     if [ "${error}" -ne 0 ]; then
