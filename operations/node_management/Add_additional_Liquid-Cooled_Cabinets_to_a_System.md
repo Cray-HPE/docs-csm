@@ -1,4 +1,4 @@
-# Add additional Liquid-Cooled Cabinets to a System
+# Add Additional Liquid-Cooled Cabinets to a System
 
 This top level procedure outlines the process for adding additional liquid-cooled cabinets to a currently installed system.
 
