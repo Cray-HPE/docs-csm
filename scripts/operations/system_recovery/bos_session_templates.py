@@ -26,9 +26,16 @@
 Module to provide BOS session template functions
 """
 
-from typing import Dict, List, Union
+import os
+import sys
 
-JsonObject = Union[str, int, float, list, dict, bool, None]
+from typing import Dict, List
+
+# Ugly temporary hack to get modules from a different path.
+# This will go away as the helper modules make their way into libcsm
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","configuration"))
+from python_lib.types import JsonObject
+
 BosSessionTemplate = Dict[str, JsonObject]
 BosSessionTemplateBootSets = Dict[str, JsonObject]
 
