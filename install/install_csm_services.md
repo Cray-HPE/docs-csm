@@ -39,6 +39,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
    >
    > * This command may take up to 90 minutes to complete.
    > * If any errors are encountered, then potential fixes should be displayed where the error occurred.
+   > * If you are prompted for a password, this is the password for the PIT node (ncn-m001). Enter the password to continue.
    > * Output is redirected to `/usr/share/doc/csm/install/scripts/csm_services/yapl.log` . To show the output in the terminal, append
    >   the `--console-output execute` argument to the `yapl` command.
    > * The `yapl` command can safely be rerun. By default, it will skip any steps which were previously completed successfully. To force it to
