@@ -684,6 +684,9 @@ preconfig
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
 lockout-tagout
 
+- operations/README.md
+Alerta
+
 - operations/security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md
 # To allow System Admin Toolkit
 Admin
