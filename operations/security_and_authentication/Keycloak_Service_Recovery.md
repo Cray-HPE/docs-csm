@@ -8,6 +8,7 @@ The following covers redeploying the Keycloak service and restoring the data.
 - All activities required for site maintenance are complete.
 - A backup or export of the data already exists.
 - The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+- The Cray CLI has been configured on the node where the procedure is being performed. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Service recovery for Keycloak
 
@@ -53,7 +54,7 @@ The following covers redeploying the Keycloak service and restoring the data.
       release "cray-keycloak" uninstalled
       ```
 
-   1. Wait for the resources to terminate
+   1. Wait for the resources to terminate.
 
       ```bash
       watch "kubectl get pods -n services | grep keycloak | grep -v 'keycloak-users-localize\|keycloak-vcs-user'"
@@ -89,7 +90,7 @@ The following covers redeploying the Keycloak service and restoring the data.
 
       Example output:
 
-      ```text
+      ```yaml
             version: 3.3.1
       ```
 
@@ -130,4 +131,4 @@ The following covers redeploying the Keycloak service and restoring the data.
 
 1. (`ncn-mw#`) Restore the critical data.
 
-   See [Restore Postgres for Keycloak](../kubernetes/Restore_Postgres.md#restore-postgres-for-keycloak)
+   See [Restore Postgres for Keycloak](../kubernetes/Restore_Postgres.md#restore-postgres-for-keycloak).
