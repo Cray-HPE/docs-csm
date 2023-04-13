@@ -2,7 +2,7 @@
 
 The table below provides links to the recovery procedures available for critical services.
 
-| Service   |  Recovery Procedures |
+| Service   |  Recovery procedures |
 |:----------|:--------------------|
 | Vault     | [Vault Service Recovery](../security_and_authentication/Vault_Service_Recovery.md)    |
 | Keycloak  | [Keycloak Service Recovery](../security_and_authentication/Keycloak_Service_Recovery.md) |

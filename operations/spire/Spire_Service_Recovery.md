@@ -8,6 +8,7 @@ The following covers redeploying the Spire service and restoring the data.
 - All activities required for site maintenance are complete.
 - A backup or export of the data already exists.
 - The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+- The Cray CLI has been configured on the node where the procedure is being performed. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Service recovery for Spire
 
@@ -53,34 +54,43 @@ The following covers redeploying the Spire service and restoring the data.
       release "spire" uninstalled
       ```
 
-   1. Wait for the resources to terminate, delete the PVCs and cleanup spire-agent before reinstalling the chart.
+   1. Wait for the resources to terminate, delete the PVCs, and clean up `spire-agent` before reinstalling the chart.
 
-      ```bash
-      watch "kubectl get pods -n spire"
-      ```
+      1. Verify that no Spire pods are running.
 
-      Example output:
+         ```bash
+         watch "kubectl get pods -n spire"
+         ```
 
-      ```text
-      No resources found in spire namespace.
-      ```
+         Example output:
 
-      ```bash
-      kubectl get pvc -n spire | grep spire-data-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
-      ```
+         ```text
+         No resources found in spire namespace.
+         ```
 
-      Example output:
+      1. Delete the Spire PVCs.
 
-      ```text
-      persistentvolumeclaim "spire-data-spire-server-0" deleted
-      persistentvolumeclaim "spire-data-spire-server-1" deleted
-      persistentvolumeclaim "spire-data-spire-server-2" deleted
-      ```
+         ```bash
+         kubectl get pvc -n spire | grep spire-data-spire-server | awk '{print $1}' | xargs kubectl delete -n spire pvc
+         ```
 
-      ```bash
-      for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do ssh "${ncn}" systemctl stop spire-agent; \
-          ssh "${ncn}" rm /root/spire/data/svid.key /root/spire/agent_svid.der /root/spire/bundle.der; done
-      ```
+         Example output:
+
+         ```text
+         persistentvolumeclaim "spire-data-spire-server-0" deleted
+         persistentvolumeclaim "spire-data-spire-server-1" deleted
+         persistentvolumeclaim "spire-data-spire-server-2" deleted
+         ```
+
+      1. Clean up `spire-agent`.
+
+         ```bash
+         for ncn in $(kubectl get nodes -o name | cut -d'/' -f2); do
+             echo "Cleaning up NCN ${ncn}"
+             ssh "${ncn}" systemctl stop spire-agent
+             ssh "${ncn}" rm -v /root/spire/data/svid.key /root/spire/agent_svid.der /root/spire/bundle.der
+         done
+         ```
 
 1. (`ncn-mw#`) Redeploy the chart and wait for the resources to start.
 
@@ -106,7 +116,7 @@ The following covers redeploying the Spire service and restoring the data.
 
       Example output:
 
-      ```text
+      ```yaml
             version: 2.6.0
       ```
 
@@ -168,4 +178,4 @@ The following covers redeploying the Spire service and restoring the data.
 
 1. (`ncn-mw#`) Restore the critical data.
 
-   See [Restore Postgres for Spire](../kubernetes/Restore_Postgres.md#restore-postgres-for-spire)
+   See [Restore Postgres for Spire](../kubernetes/Restore_Postgres.md#restore-postgres-for-spire).

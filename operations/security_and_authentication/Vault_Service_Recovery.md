@@ -13,7 +13,7 @@ The following covers redeploying the Vault service and restoring the data.
 
 1. (`ncn-mw#`) Verify that a backup of the Vault data exists.
 
-   1. Verify a completed backup exists.
+   1. Verify that a completed backup exists.
 
       ```bash
       velero get backup | grep vault-daily-backup | grep -i completed
@@ -54,39 +54,45 @@ The following covers redeploying the Vault service and restoring the data.
       release "cray-vault" uninstalled
       ```
 
-   1. Wait for the resources to terminate, delete PVCs and delete the `cray-vault-unseal-keys`.
+   1. Wait for the resources to terminate, delete the PVCs, and delete the `cray-vault-unseal-keys` Kubernetes secret.
 
-      ```bash
-      watch "kubectl get pods -n vault -l vault_cr=cray-vault"
-      ```
+      1. Verify that no Vault pods are running.
 
-      Example output:
+         ```bash
+         watch "kubectl get pods -n vault -l vault_cr=cray-vault"
+         ```
 
-      ```text
-      No resources found in vault namespace.
-      ```
+         Example output:
 
-      ```bash
-      kubectl get pvc -n vault -l vault_cr=cray-vault --no-headers=true | awk '{print $1}' | xargs kubectl delete -n vault pvc
-      ```
+         ```text
+         No resources found in vault namespace.
+         ```
 
-      Example output:
+      1. Delete the Vault PVCs.
 
-      ```text
-      persistentvolumeclaim "vault-raft-cray-vault-0" deleted
-      persistentvolumeclaim "vault-raft-cray-vault-1" deleted
-      persistentvolumeclaim "vault-raft-cray-vault-2" deleted
-      ```
+         ```bash
+         kubectl get pvc -n vault -l vault_cr=cray-vault --no-headers=true | awk '{print $1}' | xargs kubectl delete -n vault pvc
+         ```
 
-      ```bash
-      kubectl delete secret cray-vault-unseal-keys -n vault
-      ```
+         Example output:
 
-      Example output:
+         ```text
+         persistentvolumeclaim "vault-raft-cray-vault-0" deleted
+         persistentvolumeclaim "vault-raft-cray-vault-1" deleted
+         persistentvolumeclaim "vault-raft-cray-vault-2" deleted
+         ```
 
-      ```text
-      secret "cray-vault-unseal-keys" deleted
-      ```
+      1. Delete the `cray-vault-unseal-keys` Kubernetes secret.
+
+         ```bash
+         kubectl delete secret cray-vault-unseal-keys -n vault
+         ```
+
+         Example output:
+
+         ```text
+         secret "cray-vault-unseal-keys" deleted
+         ```
 
 1. (`ncn-mw#`) Redeploy the chart and wait for the resources to start.
 
@@ -112,7 +118,7 @@ The following covers redeploying the Vault service and restoring the data.
 
       Example output:
 
-      ```text
+      ```yaml
             version: 1.3.1
       ```
 
@@ -148,4 +154,4 @@ The following covers redeploying the Vault service and restoring the data.
 
 1. (`ncn-mw#`) Restore the critical data.
 
-   See [Restore from a backup](../security_and_authentication/Backup_and_Restore_Vault_Clusters.md#restore-from-a-backup)
+   See [Restore from a backup](Backup_and_Restore_Vault_Clusters.md#restore-from-a-backup).
