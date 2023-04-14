@@ -14,7 +14,7 @@ The following covers redeploying the Spire service and restoring the data.
 
 1. (`ncn-mw#`) Verify that a backup of the Spire Postgres data exists.
 
-   1. Verify a completed backup exists.
+   1. Verify that a completed backup exists.
 
       ```bash
       cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("spire"))'
