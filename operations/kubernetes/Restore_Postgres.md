@@ -26,8 +26,8 @@ In the event that the Spire Postgres cluster must be rebuilt and the data restor
 
     * If a manual dump of the database was taken, then check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
-    These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-    The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets.
+      These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
+      The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
 
     1. List the available Postgres logical backups by date.
 
@@ -96,7 +96,7 @@ In the event that the Spire Postgres cluster must be rebuilt and the data restor
 1. (`ncn-mw#`) Create a new single instance Spire Postgres cluster.
 
     ```bash
-    cp postgres-cr.json postgres-orig-cr.json
+    cp -v postgres-cr.json postgres-orig-cr.json
     jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
     kubectl create -f postgres-cr.json
     ```
@@ -281,8 +281,6 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
 ### Restore Postgres for Keycloak: Prerequisites
 
 * A dump of the database exists.
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-  * See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ### Restore Postgres for Keycloak: Procedure
 
@@ -290,10 +288,13 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
 
     * If a manual dump of the database was taken, then check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
-    These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-    The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets.
+      These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
+      The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
 
-    1. Setup the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations needed while restoring the Keycloak database. See [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md).
+    1. Set and export the `CRAY_CREDENTIALS` environment variable.
+
+       This will permit simple CLI operations that are needed while restoring the Keycloak database.
+       See [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md).
 
     1. List the available Postgres logical backups by date.
 
@@ -321,11 +322,12 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
         cray artifacts get postgres-backup "${BACKUP}" "./${DUMPFILE}"
         ```
 
-    1. Unset the `CRAY_CREDENTIALS` environment variable:
+    1. Unset the `CRAY_CREDENTIALS` environment variable.
 
         ```bash
         unset CRAY_CREDENTIALS
-        rm /tmp/setup-token.json
+        rm -v /tmp/setup-token.json
+        ```
 
 1. (`ncn-mw#`) Set helper variables.
 
@@ -368,7 +370,7 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
 1. (`ncn-mw#`) Create a new single instance Keycloak Postgres cluster.
 
     ```bash
-    cp postgres-cr.json postgres-orig-cr.json
+    cp -v postgres-cr.json postgres-orig-cr.json
     jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
     kubectl create -f postgres-cr.json
     ```
@@ -619,8 +621,8 @@ In the event that the VCS Postgres cluster must be rebuilt and the data restored
 
     * If a manual dump of the database was taken, then check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
-    These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-    The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the .manifest file contains the secrets.
+      These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
+      The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
 
     1. List the available backups.
 
@@ -690,7 +692,7 @@ In the event that the VCS Postgres cluster must be rebuilt and the data restored
 1. (`ncn-mw#`) Create a new single instance VCS Postgres cluster.
 
     ```bash
-    cp postgres-cr.json postgres-orig-cr.json
+    cp -v postgres-cr.json postgres-orig-cr.json
     jq '.spec.numberOfInstances = 1' postgres-orig-cr.json > postgres-cr.json
     kubectl create -f postgres-cr.json
     ```
