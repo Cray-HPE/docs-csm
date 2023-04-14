@@ -670,12 +670,16 @@ See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list 
 stream to update firmware on other components.
 
 - [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md)
+- [Using the `FASUpdate` Script](firmware/FASUpdate_Script.md)
 - [FAS CLI](firmware/FAS_CLI.md)
 - [FAS Filters](firmware/FAS_Filters.md)
+- [FAS Recipes and Procedures](firmware/FAS_Use_Cases.md)
 - [FAS Recipes](firmware/FAS_Recipes.md)
 - [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
-- [FAS Use Cases](firmware/FAS_Use_Cases.md)
 - [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
+
+- [Updating Firmware on `m001`](firmware/Updating_Firmware_m001.md)
+- [Updating Firmware without FAS](firmware/Updating_Firmware_without_FAS.md)
 
 ## User Access Service (UAS)
 
