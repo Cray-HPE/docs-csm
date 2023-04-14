@@ -1,20 +1,27 @@
-# HSM Discovery StoreFailed Error
+# HSM Discovery `StoreFailed` Error
 
-This problem occurs when hardware exists in a system across multiple BMCs that have bogus non-empty values for serial numbers and those BMCs are being discovered at the same time. This causes the same non-unique FRUID to be generated for that hardware. Concurrent discovery of theses BMCs causes database deadlocks to occur and causes HSM discovery for most of those BMCs to fail with 'StoreFailed'.
+This problem occurs when hardware exists in a system across multiple BMCs that have bogus non-empty values for serial numbers and those BMCs are being discovered at the same time. This causes the same non-unique FRUID to be generated for that hardware.
+Concurrent discovery of theses BMCs causes database deadlocks to occur and causes HSM discovery for most of those BMCs to fail with `StoreFailed`.
 
 ## Known Causes
 
-One of the known types of hardware to cause this is Castle nodes with HBM. In this case, a non-unique FRUID is generated because the empty DIMM slots do not include the redfish `Status` struct showing it is `Absent` and the `SerialNumber` field shows up as a non-empty string, "NO DIMM". Because it isn't reporting `Absent`, HSM thinks it is populated and creates a FRU entry for it. Because the `SerialNumber` redfish field is non-empty, HSM creates a FRUID for the FRU entry where HSM would have otherwise just created a unique bogus FRUID. The FRUID that gets created for all empty DIMMs ends up being the same, `Memory.Unknown.NODIMM.NODIMM`.
+One of the known types of hardware to cause this is Castle nodes with HBM.
+In this case, a non-unique FRUID is generated because the empty DIMM slots do not include the redfish `Status` field showing it is `Absent` and the `SerialNumber` field shows up as a non-empty string, "NO DIMM".
+Because it isn't reporting `Absent`, HSM thinks it is populated and creates a FRU entry for it.
+Because the `SerialNumber` redfish field is non-empty, HSM creates a FRUID for the FRU entry where HSM would have otherwise just created a unique bogus FRUID.
+The FRUID that gets created for all empty DIMM slots end up being the same, `Memory.Unknown.NODIMM.NODIMM`.
 
-## Fixes
+## Workarounds
 
 ### Wait For it to Clear Up
 
-This issue will clear itself up after a while if left alone if the hms-discovery cron job is enabled.
+This issue will clear itself up after a while if left alone if the `hms-discovery` cron job is enabled.
 
-The discovery cron job will periodically run and restart HMS discovery on any BMCs that previously failed. When running concurrent discoveries on the problem BMCs, some of them will succeed while the others will experience a database deadlock and fail again with `StoreFailed`. So eventually, all BMCs will get successfully discovered.
+The discovery cron job will periodically run and restart HMS discovery on any BMCs that previously failed.
+When running concurrent discoveries on the problem BMCs, some of them will succeed while the others will experience a database deadlock and fail again with `StoreFailed`. So eventually, all BMCs will get successfully discovered.
 
-The amount of time it will take to clear itself up is very difficult to estimate and depends heavily on the number of BMCs with the same troublesome hardware. It also depends on the varying speeds of discovery calls to the hardware and if HSM will reach the storage stage of discovery for multiple BMCs at around the same time. It could take anywhere from 5mins to 20+ hours to fully clear itself up.
+The amount of time it will take to clear itself up is very difficult to estimate and depends heavily on the number of BMCs with the same troublesome hardware.
+It also depends on the varying speeds of discovery calls to the hardware and if HSM will reach the storage stage of discovery for multiple BMCs at around the same time. It could take anywhere from 5 mins to 20+ hours to fully clear itself up.
 
 ### Manually Re-discover
 
@@ -67,7 +74,7 @@ To potentially speed up the process, you can manually re-discover the BMCs. To d
 
 7. If there are still some BMCs with `StoreFailed`, repeat steps 3-6 until there are none.
 
-8. Restart the hms-discovery cron job
+8. Restart the `hms-discovery` cron job
 
     ```bash
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
@@ -78,6 +85,7 @@ To potentially speed up the process, you can manually re-discover the BMCs. To d
     ```bash
     kubectl get cronjobs.batch -n services hms-discovery
     ```
+
     Example output:
 
     ```text
@@ -89,7 +97,8 @@ To potentially speed up the process, you can manually re-discover the BMCs. To d
 
 This patch is only for cases involving Castle nodes with HBM.
 
-There is a patched SMD container image available in artifactory for CSM releases 1.3.2 and on. For CSM 1.3 it is `cray-smd:1.58.3`. For later CSM versions, `cray-smd:2.7.0`. For this example, we will use `cray-smd:1.58.3`. This example assumes you have the patched container image in tarball form in at `/tmp/cray-smd_1.58.3.tar`.
+There is a patched SMD container image available in `artifactory` for CSM releases 1.3.2 and on. For CSM 1.3 it is `cray-smd:1.58.3`. For later CSM versions, `cray-smd:2.7.0`. For this example, we will use `cray-smd:1.58.3`.
+This example assumes you have the patched container image in tarball form in at `/tmp/cray-smd_1.58.3.tar`.
 
 1. Get Nexus credentials.
 
@@ -110,13 +119,14 @@ There is a patched SMD container image available in artifactory for CSM releases
     podman push --creds $NEXUS_USERNAME:$NEXUS_PASSWORD localhost/cray-smd:1.58.3 docker://registry.local/artifactory.algol60.net/csm-docker/stable/cray-smd:1.58.3
     ```
 
-4. Modify the image being used by the cray-smd deployment.
+4. Modify the image being used by the `cray-smd` deployment.
 
     ```bash
     kubectl edit deployments -n services cray-smd
     ```
 
     Change the image to:
+
     ```text
     image: registry.local/artifactory.algol60.net/csm-docker/stable/cray-smd:1.58.3
     ```
