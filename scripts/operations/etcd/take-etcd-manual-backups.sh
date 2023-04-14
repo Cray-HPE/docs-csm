@@ -40,12 +40,12 @@ context - Description of when the backups are being taken (e.g. 'post_install').
 
 backup_clusters() {
   context=$1
-  etcd_clusters_to_backup=$(kubectl get configmap -n operators etcd-backup-restore-config -o json | jq -r '.data."clusters.txt"' | awk -F "." '{print $1}')
-  for cluster in $etcd_clusters_to_backup
-  do
+  clusters=$(kubectl get statefulsets.apps -A | grep bitnami-etcd | awk '{print $2}')
+  for c in $clusters; do
+    short_name=$(echo $c | awk 'BEGIN{FS=OFS="-"}{NF--; NF--; print}')
     backup_name=$(echo "$context.backup_$(date +%Y-%m-%d-%H:%M:%S)")
-    echo "Creating manual etcd backup for '$cluster' named '$backup_name'."
-    kubectl exec -it -n operators "$(kubectl get pod -n operators | grep etcd-backup-restore | head -1 | awk '{print $1}')" -c util -- create_backup $cluster $backup_name
+    echo "Creating manual etcd backup for '$short_name' named '$backup_name'."
+    /opt/cray/platform-utils/etcd/etcd-util.sh create_backup ${short_name} ${backup_name}
   done
 }
 

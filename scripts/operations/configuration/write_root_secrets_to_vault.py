@@ -43,7 +43,7 @@ import traceback
 from python_lib import args
 from python_lib import common
 from python_lib import logger
-from python_lib.types import JSONObject
+from python_lib.types import JsonObject
 from python_lib.vault import Vault
 
 
@@ -151,7 +151,7 @@ def pub_ssh_key_file(file_name: str) -> str:
         value_validator=lambda s: args.validate_string(s, min_length=256))
 
 
-def update_secret_fields(secret: JSONObject, field_changes: JSONObject) -> JSONObject:
+def update_secret_fields(secret: JsonObject, field_changes: JsonObject) -> JsonObject:
     """
     Takes the current CSM root secret values (secret) and determines the desired new CSM root secret
     values. Returns a dictionary of the new values.
@@ -174,7 +174,7 @@ def update_secret_fields(secret: JSONObject, field_changes: JSONObject) -> JSONO
     return updated_secret
 
 
-def compare_root_secrets(secret_written: JSONObject, secret_read: JSONObject) -> None:
+def compare_root_secrets(secret_written: JsonObject, secret_read: JsonObject) -> None:
     """
     Compare the secret we wrote to what we read back. If there are any differences,
     log them and raise an exception.
@@ -219,7 +219,7 @@ def compare_root_secrets(secret_written: JSONObject, secret_read: JSONObject) ->
     logging.info("Secrets read back from Vault match desired values")
 
 
-def update_root_secret_in_vault(field_changes: JSONObject) -> None:
+def update_root_secret_in_vault(field_changes: JsonObject) -> None:
     """
     Write the SSH keys and passwords to the csm root secret in Vault.
     If the result is that the secret no longer contains any data, it is deleted from Vault.
@@ -271,7 +271,7 @@ def update_root_secret_in_vault(field_changes: JSONObject) -> None:
     return
 
 
-def parse_args() -> JSONObject:
+def parse_args() -> JsonObject:
     """
     Parses the command line arguments.
     Returns a dictionary mapping secret field names to the value they should be

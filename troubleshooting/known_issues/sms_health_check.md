@@ -5,7 +5,6 @@
 1. [Known issues with SMS tests](#33-known-issues-with-sms-tests)
 
    - [Cray CLI](#cray-cli)
-   - [Etcd-restores](#etcd-restores)
 
 ## 3.1 SMS test execution
 
@@ -49,17 +48,3 @@ Additional test execution details can be found in `/opt/cray/tests/install/logs/
 
 Some of the subtests may fail if the Cray CLI is not configured on the management NCN where `cmsdev` is executed.
 See [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface).
-
-### Etcd restores
-
-If an Etcd restore has been performed on one of the SMS services (such as BOS), then the first Etcd pod that
-comes up after the restore will not have a PVC (Persistent Volume Claim) attached to it (until the pod is restarted).
-The Etcd cluster is in a healthy state at this point, but the SMS health checks will detect the above condition and
-may report test failures similar to the following:
-
-```text
-ERROR (run tag 1khv7-bos): persistentvolumeclaims "cray-bos-etcd-ncchqgnczg" not found
-```
-
-In this case, these errors can be ignored, or the pod with the same name as the PVC mentioned in the output can be restarted
-(as long as the other two Etcd pods are healthy).

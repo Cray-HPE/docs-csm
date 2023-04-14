@@ -31,13 +31,16 @@ from typing import Dict, List, Union
 
 from . import api_requests
 from . import common
-from .types import JSONDecodeError
+from .types import JsonObject, JSONDecodeError
 
 CFS_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/cfs"
 CFS_V2_BASE_URL = f"{CFS_BASE_URL}/v2"
+CFS_V2_COMPS_URL = f"{CFS_V2_BASE_URL}/components"
 CFS_V2_CONFIGS_URL = f"{CFS_V2_BASE_URL}/configurations"
+CFS_V2_OPTIONS_URL = f"{CFS_V2_BASE_URL}/options"
 CFS_V2_SESSIONS_URL = f"{CFS_V2_BASE_URL}/sessions"
 
+CfsOptions = Dict[str, Union[bool, int, str]]
 
 def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None] = None) -> None:
     """
@@ -54,57 +57,51 @@ def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None]
     raise common.ScriptException(msg) from parent_exception
 
 
-def get_session(session_name: str, expected_to_exist: bool = True) -> Union[dict, None]:
+# CFS component functions
+
+
+def list_components() -> List[JsonObject]:
     """
-    Queries CFS for the specified session and returns it. Throws an exception if it
-    is not found, unless expected_to_exist is set to False, in which case None is
-    returned.
+    Queries CFS to list all components, and returns the list.
     """
-    request_kwargs = {"url": f"{CFS_V2_SESSIONS_URL}/{session_name}",
+    request_kwargs = {"url": CFS_V2_COMPS_URL,
                       "add_api_token": True,
                       "expected_status_codes": {200}}
-
-    if not expected_to_exist:
-        request_kwargs["expected_status_codes"].add(404)
-
-    resp = api_requests.get_retry_validate(**request_kwargs)
-    if resp.status_code == 404:
-        # This will only happen if expected_to_exist is set to False and the session
-        # was not found. In this case, return None.
-        return None
-
-    try:
-        return resp.json()
-    except JSONDecodeError as exc:
-        log_error_raise_exception("Response from CFS has unexpected format", exc)
+    return api_requests.get_retry_validate_return_json(**request_kwargs)
 
 
-def create_dynamic_session(session_name: str, config_name: str,
-                           xname_limit: Union[List[str], None] = None) -> dict:
+def update_component_desired_config(comp_id: str, config_name: str) -> JsonObject:
     """
-    Creates a CFS session of dynamic type with the specified name, running the specified
-    CFS configuration. By default this will be run on all applicable nodes, based on
-    the Ansible inventory and the node types defined in the Ansible play. This can be
-    limited by specifying a list of xnames.
-
-    The CFS session entry is returned if successful. Otherwise an exception is raised.
+    Updates the specified component to use the specified configuration.
+    Returns the updated component.
     """
-    request_kwargs = {"url": CFS_V2_SESSIONS_URL,
-                      "json": {"name": session_name, "configurationName": config_name},
+    # Even though it does not follow convention for patch operations,
+    # the status code when successful is 200
+    request_kwargs = {"url": f"{CFS_V2_COMPS_URL}/{comp_id}",
+                      "add_api_token": True,
+                      "expected_status_codes": {200},
+                      "json": { "desiredConfig": config_name }}
+    return api_requests.patch_retry_validate_return_json(**request_kwargs)
+
+
+# CFS configuration functions
+
+def create_configuration(config_name: str, layers: List[Dict[str, str]]) -> JsonObject:
+    """
+    Creates or updates a CFS configuration with the specified name and layers.
+    The layers should be dictionaries with the following fields set:
+        cloneUrl, commit, name, playbook
+
+    The CFS configuration is returned if successful. Otherwise an exception is raised.
+    """
+    request_kwargs = {"url": f"{CFS_V2_CONFIGS_URL}/{config_name}",
+                      "json": {"layers": layers},
                       "add_api_token": True,
                       "expected_status_codes": {200}}
-    if xname_limit:
-        request_kwargs["json"]["ansibleLimit"] = ",".join(xname_limit)
-
-    resp = api_requests.post_retry_validate(**request_kwargs)
-
-    try:
-        return resp.json()
-    except JSONDecodeError as exc:
-        log_error_raise_exception("Response from CFS has unexpected format", exc)
+    return api_requests.put_retry_validate_return_json(**request_kwargs)
 
 
-def get_configuration(config_name: str, expected_to_exist: bool = True) -> Union[dict, None]:
+def get_configuration(config_name: str, expected_to_exist: bool = True) -> Union[JsonObject, None]:
     """
     Queries CFS for the specified configuration and returns it. Throws an exception if it
     is not found, unless expected_to_exist is set to False, in which case None is
@@ -124,27 +121,92 @@ def get_configuration(config_name: str, expected_to_exist: bool = True) -> Union
         return None
 
     try:
-        return resp.json()
+        json_object =  resp.json()
     except JSONDecodeError as exc:
         log_error_raise_exception("Response from CFS has unexpected format", exc)
+    return json_object
 
 
-def create_configuration(config_name: str, layers: List[Dict[str, str]]) -> dict:
+def list_configurations() -> List[JsonObject]:
     """
-    Creates a CFS configuration with the specified name and layers.
-    The layers should be dictionaries with the following fields set:
-        cloneUrl, commit, name, playbook
-
-    The CFS configuration is returned if successful. Otherwise an exception is raised.
+    Queries CFS to list all configurations, and returns the list.
     """
-    request_kwargs = {"url": f"{CFS_V2_CONFIGS_URL}/{config_name}",
-                      "json": {"layers": layers},
+    request_kwargs = {"url": CFS_V2_CONFIGS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    return api_requests.get_retry_validate_return_json(**request_kwargs)
+
+
+# CFS options functions
+
+
+def list_options() -> CfsOptions:
+    """
+    Queries CFS for a dictionary of all options, and returns that dictionary.
+    """
+    request_kwargs = {"url": CFS_V2_OPTIONS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    return api_requests.get_retry_validate_return_json(**request_kwargs)
+
+
+def update_options(new_options: CfsOptions) -> CfsOptions:
+    """
+    Updates all of the specified options to the specified values in CFS.
+    Returns the new total set of CFS options.
+    """
+    # Even though it does not follow convention for patch operations,
+    # the status code when successful is 200
+    request_kwargs = {"url": CFS_V2_OPTIONS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200},
+                      "json": new_options}
+    return api_requests.patch_retry_validate_return_json(**request_kwargs)
+
+
+# CFS session functions
+
+
+def create_dynamic_session(session_name: str, config_name: str,
+                           xname_limit: Union[List[str], None] = None) -> JsonObject:
+    """
+    Creates a CFS session of dynamic type with the specified name, running the specified
+    CFS configuration. By default this will be run on all applicable nodes, based on
+    the Ansible inventory and the node types defined in the Ansible play. This can be
+    limited by specifying a list of xnames.
+
+    The CFS session entry is returned if successful. Otherwise an exception is raised.
+    """
+    request_kwargs = {"url": CFS_V2_SESSIONS_URL,
+                      "json": {"name": session_name, "configurationName": config_name},
+                      "add_api_token": True,
+                      "expected_status_codes": {200}}
+    if xname_limit:
+        request_kwargs["json"]["ansibleLimit"] = ",".join(xname_limit)
+    return api_requests.post_retry_validate_return_json(**request_kwargs)
+
+
+def get_session(session_name: str, expected_to_exist: bool = True) -> Union[JsonObject, None]:
+    """
+    Queries CFS for the specified session and returns it. Throws an exception if it
+    is not found, unless expected_to_exist is set to False, in which case None is
+    returned.
+    """
+    request_kwargs = {"url": f"{CFS_V2_SESSIONS_URL}/{session_name}",
                       "add_api_token": True,
                       "expected_status_codes": {200}}
 
-    resp = api_requests.put_retry_validate(**request_kwargs)
+    if not expected_to_exist:
+        request_kwargs["expected_status_codes"].add(404)
+
+    resp = api_requests.get_retry_validate(**request_kwargs)
+    if resp.status_code == 404:
+        # This will only happen if expected_to_exist is set to False and the session
+        # was not found. In this case, return None.
+        return None
 
     try:
-        return resp.json()
+        json_object = resp.json()
     except JSONDecodeError as exc:
         log_error_raise_exception("Response from CFS has unexpected format", exc)
+    return json_object
