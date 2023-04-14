@@ -10,7 +10,9 @@
     "targetFilter": {
         "targets": [
           "Node0.ManagementEthernet",
-          "Node1.ManagementEthernet"
+          "Node1.ManagementEthernet",
+          "Node2.ManagementEthernet",
+          "Node3.ManagementEthernet"
         ]
     },
     "command": {
