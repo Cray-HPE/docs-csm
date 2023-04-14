@@ -15,7 +15,7 @@ The following covers redeploying the Keycloak service and restoring the data.
 
    1. Set and export the `CRAY_CREDENTIALS` environment variable.
 
-      This will permit simple CLI operations that are needed while restoring the Keycloak database.
+      This will permit simple CLI operations that are needed for the command in the next step.
       See [Authenticate an Account with the Command Line](Authenticate_an_Account_with_the_Command_Line.md).
 
    1. Verify that a completed backup exists.
@@ -31,7 +31,7 @@ The following covers redeploying the Keycloak service and restoring the data.
       keycloak-postgres-2022-09-14T02:10:05.psql
       ```
 
-   1. Unset the `CRAY_CREDENTIALS` environment variable.
+   1. Unset the `CRAY_CREDENTIALS` environment variable and remove the temporary token file.
 
       ```bash
       unset CRAY_CREDENTIALS

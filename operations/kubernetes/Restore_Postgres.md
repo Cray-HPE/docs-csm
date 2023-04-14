@@ -314,7 +314,7 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
 
     1. Set and export the `CRAY_CREDENTIALS` environment variable.
 
-       This will permit simple CLI operations that are needed while restoring the Keycloak database.
+       This will permit simple CLI operations that are needed to obtain the Keycloak backup file.
        See [Authenticate an Account with the Command Line](../security_and_authentication/Authenticate_an_Account_with_the_Command_Line.md).
 
     1. List the available backups.
@@ -348,7 +348,7 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
         cray artifacts get postgres-backup "${MANIFEST}" "${MANIFEST}"
         ```
 
-    1. Unset the `CRAY_CREDENTIALS` environment variable.
+    1. Unset the `CRAY_CREDENTIALS` environment variable and remove the temporary token file.
 
         ```bash
         unset CRAY_CREDENTIALS
