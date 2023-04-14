@@ -24,7 +24,7 @@ are not currently managed by IUF.
 The upgrade workflow comprises the following procedures. The diagram visualizes the workflow and
 the steps below it provide detailed instructions which must be executed in the order shown.
 
-![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_15_04142023.png)
+![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_14_04142023.png)
 
 1. CSM preparation, Stage 0.1, and Stage 0.2
    Read the _Important Notes_ section of the
