@@ -27,7 +27,7 @@ In the event that the Spire Postgres cluster must be rebuilt and the data restor
     * If a manual dump of the database was taken, then check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
       These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-      The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
+      The `cray artifacts` CLI can be used to list and download the files. Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
 
     1. List the available Postgres logical backups by date.
 
@@ -289,7 +289,7 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
     * If a manual dump of the database was taken, then check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
       These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-      The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
+      The `cray artifacts` CLI can be used to list and download the files. Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
 
     1. Set and export the `CRAY_CREDENTIALS` environment variable.
 
@@ -622,7 +622,7 @@ In the event that the VCS Postgres cluster must be rebuilt and the data restored
     * If a manual dump of the database was taken, then check that the dump file exists in a location off the Postgres cluster. It will be needed in the steps below.
     * If the database is being automatically backed up, then the most recent version of the dump and the secrets should exist in the `postgres-backup` S3 bucket.
       These will be needed in the steps below. List the files in the `postgres-backup` S3 bucket and if the files exist, download the dump and secrets out of the S3 bucket.
-      The `cray artifacts` CLI can be used list and download the files. Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
+      The `cray artifacts` CLI can be used to list and download the files. Note that the `.psql` file contains the database dump and the `.manifest` file contains the secrets.
 
     1. List the available backups.
 
