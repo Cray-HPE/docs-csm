@@ -13,6 +13,11 @@ The following covers redeploying the Keycloak service and restoring the data.
 
 1. (`ncn-mw#`) Verify that a backup of the Keycloak Postgres data exists.
 
+   1. Set and export the `CRAY_CREDENTIALS` environment variable.
+
+      This will permit simple CLI operations that are needed for the command in the next step.
+      See [Authenticate an Account with the Command Line](Authenticate_an_Account_with_the_Command_Line.md).
+
    1. List the Postgres logical backups by date.
 
       ```bash
@@ -24,6 +29,13 @@ The following covers redeploying the Keycloak service and restoring the data.
       ```text
       2023-03-23T02:10:11.158000+00:00 spilo/keycloak-postgres/ed8f6691-9da7-4662-aa67-9c786fa961ee/logical_backups/1679537409.sql.gz
       2023-03-24T02:10:12.689000+00:00 spilo/keycloak-postgres/ed8f6691-9da7-4662-aa67-9c786fa961ee/logical_backups/1679623811.sql.gz
+      ```
+
+   1. Unset the `CRAY_CREDENTIALS` environment variable and remove the temporary token file.
+
+      ```bash
+      unset CRAY_CREDENTIALS
+      rm -v /tmp/setup-token.json
       ```
 
 1. (`ncn-mw#`) Uninstall the chart and wait for the resources to terminate.
@@ -53,7 +65,7 @@ The following covers redeploying the Keycloak service and restoring the data.
       release "cray-keycloak" uninstalled
       ```
 
-   1. Wait for the resources to terminate
+   1. Wait for the resources to terminate.
 
       ```bash
       watch "kubectl get pods -n services | grep keycloak | grep -v 'keycloak-users-localize\|keycloak-vcs-user'"
@@ -89,7 +101,7 @@ The following covers redeploying the Keycloak service and restoring the data.
 
       Example output:
 
-      ```text
+      ```yaml
             version: 3.3.1
       ```
 
@@ -130,4 +142,4 @@ The following covers redeploying the Keycloak service and restoring the data.
 
 1. (`ncn-mw#`) Restore the critical data.
 
-   See [Restore Postgres for Keycloak](../kubernetes/Restore_Postgres.md#restore-postgres-for-keycloak)
+   See [Restore Postgres for Keycloak](../kubernetes/Restore_Postgres.md#restore-postgres-for-keycloak).
