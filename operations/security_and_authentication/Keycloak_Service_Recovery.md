@@ -8,13 +8,17 @@ The following covers redeploying the Keycloak service and restoring the data.
 - All activities required for site maintenance are complete.
 - A backup or export of the data already exists.
 - The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../update_product_stream/index.md#check-for-latest-documentation).
-- The Cray CLI has been configured on the node where the procedure is being performed. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Service recovery for Keycloak
 
 1. (`ncn-mw#`) Verify that a backup of the Keycloak Postgres data exists.
 
-   1. Verify a completed backup exists.
+   1. Set and export the `CRAY_CREDENTIALS` environment variable.
+
+      This will permit simple CLI operations that are needed while restoring the Keycloak database.
+      See [Authenticate an Account with the Command Line](Authenticate_an_Account_with_the_Command_Line.md).
+
+   1. Verify that a completed backup exists.
 
       ```bash
       cray artifacts list postgres-backup --format json | jq -r '.artifacts[].Key | select(contains("keycloak"))'
@@ -25,6 +29,13 @@ The following covers redeploying the Keycloak service and restoring the data.
       ```text
       keycloak-postgres-2022-09-14T02:10:05.manifest
       keycloak-postgres-2022-09-14T02:10:05.psql
+      ```
+
+   1. Unset the `CRAY_CREDENTIALS` environment variable.
+
+      ```bash
+      unset CRAY_CREDENTIALS
+      rm -v /tmp/setup-token.json
       ```
 
 1. (`ncn-mw#`) Uninstall the chart and wait for the resources to terminate.
