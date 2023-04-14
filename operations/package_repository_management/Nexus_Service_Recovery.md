@@ -13,7 +13,7 @@ The following covers redeploying the Nexus service and restoring the data.
 
 1. (`ncn-mw#`) Verify that an export of the Nexus PVC data exists.
 
-   1. Verify the `nexus-bak` PVC exists.
+   1. Verify that the `nexus-bak` PVC exists.
 
       ```bash
       kubectl get pvc -n nexus nexus-bak
@@ -55,25 +55,29 @@ The following covers redeploying the Nexus service and restoring the data.
 
    1. Wait for the resources to terminate and delete the `nexus-data` PVC if it still exists. **Do not delete the `nexus-bak` PVC.**
 
-      ```bash
-      watch "kubectl get pods -n nexus -l app=nexus"
-      ```
+      1. Verify that no Nexus pods are running.
 
-      Example output:
+         ```bash
+         watch "kubectl get pods -n nexus -l app=nexus"
+         ```
 
-      ```text
-      No resources found in nexus namespace.
-      ```
+         Example output:
 
-      ```bash
-      kubectl delete pvc nexus-data -n nexus 
-      ```
+         ```text
+         No resources found in nexus namespace.
+         ```
 
-      Example output:
+      1. Delete the `nexus-data` PVC if it still exists.
 
-      ```text
-      persistentvolumeclaim "nexus-data" deleted
-      ```
+         ```bash
+         kubectl delete pvc nexus-data -n nexus 
+         ```
+
+         Example output:
+
+         ```text
+         persistentvolumeclaim "nexus-data" deleted
+         ```
 
 1. (`ncn-mw#`) Redeploy the chart and wait for the resources to start.
 
@@ -99,7 +103,7 @@ The following covers redeploying the Nexus service and restoring the data.
 
       Example output:
 
-      ```text
+      ```yaml
             version: 0.6.0
       ```
 
@@ -132,4 +136,4 @@ The following covers redeploying the Nexus service and restoring the data.
 
 1. (`ncn-mw#`) Restore the critical data.
 
-   See [Nexus Export and Restore](../package_repository_management/Nexus_Export_and_Restore.md)
+   See [Nexus Export and Restore](Nexus_Export_and_Restore.md).
