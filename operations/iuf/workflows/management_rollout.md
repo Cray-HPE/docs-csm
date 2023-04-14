@@ -109,6 +109,20 @@ Follow the steps below to upgrade NCN master and worker nodes and to personalize
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Master
         ```
 
+    1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from `ncn-m002`.
+
+        (`ncn-m001#`) Remove label from `ncn-m002`.
+
+        ```bash
+        kubectl label nodes "ncn-m002" --overwrite iuf-prevent-rollout-
+        ```
+
+        (`ncn-m001#`) Verify the IUF node label is no longer set on `ncn-m002`.
+
+        ```bash
+        kubectl get nodes --show-labels | grep iuf-prevent-rollout
+        ```
+
 1. Perform the NCN worker node upgrade. To upgrade worker nodes, follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Upgrade `ncn-m001`.

@@ -34,6 +34,36 @@ from typing import Callable, List
 TEXT_FILE_TYPE = argparse.FileType('rt', encoding="utf-8")
 
 
+def readable_directory(directory_string: str) -> str:
+    """
+    Validates that the string is the path to a readable directory.
+    If so, returns the directory string.
+    Raises an ArgumentTypeError if not.
+    """
+    if not os.path.exists(directory_string):
+        raise argparse.ArgumentTypeError(f"Directory does not exist: '{directory_string}'")
+    if not os.path.isdir(directory_string):
+        raise argparse.ArgumentTypeError(f"Exists but is not a directory: '{directory_string}'")
+    if not os.access(directory_string, os.R_OK):
+        raise argparse.ArgumentTypeError(f"Directory exists but is not readable: '{directory_string}'")
+    return directory_string
+
+
+def readable_file(filepath_string: str) -> str:
+    """
+    Validates that the string is the path to a readable file.
+    If so, returns the filepath string.
+    Raises an ArgumentTypeError if not.
+    """
+    if not os.path.exists(filepath_string):
+        raise argparse.ArgumentTypeError(f"File does not exist: '{filepath_string}'")
+    if not os.path.isfile(filepath_string):
+        raise argparse.ArgumentTypeError(f"Exists but is not a regular file: '{filepath_string}'")
+    if not os.access(filepath_string, os.R_OK):
+        raise argparse.ArgumentTypeError(f"File exists but is not readable: '{filepath_string}'")
+    return filepath_string
+
+
 def get_text_file_contents(file_name: str,
                            value_validator: Callable = None) -> str:
     """
