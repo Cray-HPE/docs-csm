@@ -220,6 +220,7 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
+   
 1. Update `canu` RPM.
 
    > ***NOTE*** This package provides a network device configuration and firmware utility.
