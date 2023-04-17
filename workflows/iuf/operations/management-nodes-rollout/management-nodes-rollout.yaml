@@ -107,7 +107,7 @@ spec:
                       if [[ $? -ne 0 ]]; then
                         exit 1 # could not find the desired cfs configuration
                       else
-                        echo "NOTICE found CFS configuration:$config in CFS"
+                        echo "NOTICE found CFS configuration:$config in CFS for 'Management_Worker' nodes"
                       fi
 
                       # Check image exists
@@ -133,7 +133,7 @@ spec:
                       if [[ $? -ne 0 ]]; then
                         exit 1 # could not find the desired cfs configuration
                       else
-                        echo "NOTICE found CFS configuration:$config in CFS"
+                        echo "NOTICE found CFS configuration:$config in CFS for 'Management_Master' nodes"
                       fi
 
                       # Check image exists
