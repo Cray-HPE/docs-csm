@@ -35,7 +35,7 @@ import os
 import sys
 from typing import Dict, List
 
-from bos_cli import create_session_template
+from bos_cli import create_session_template, list_session_templates
 from bos_session_templates import BosError, \
                                   BosSessionTemplate, \
                                   InvalidBosSessionTemplate, \
@@ -62,10 +62,12 @@ def print_err(msg: str) -> None:
     print_stderr(f"ERROR: {msg}")
 
 def import_session_template(template_name: str, template_record: SessionTemplateRecord,
-                            ims_id_map: ImsIdEtagMaps) -> None:
+                            ims_id_map: ImsIdEtagMaps,
+                            current_session_templates: List[BosSessionTemplate]) -> None:
     """
     Creates the BOS session template in BOS. If ims_id_map is specified, it is used to replace any
-    IMS IDs found in the template before the import.
+    IMS IDs found in the template before the import. If a BOS session template already exists with
+    the same name, the import will not happen and a message will be printed to that effect.
     Raises BosError if there are problems.
     """
     bos_vstring = f"v{template_record.bos_version}"
@@ -79,7 +81,18 @@ def import_session_template(template_name: str, template_record: SessionTemplate
             template_name = template_to_create["name"]
             print(f"After IMS ID and S3 etag update, new template name is '{template_name}'")
 
-    print("Creating BOS session template")
+    for template in current_session_templates:
+        if template_name != template["name"]:
+            continue
+        if template == template_to_create:
+            print(f"Session template with name '{template_name}' and identical contents already "
+                  "exists in BOS -- skipping import.")
+        else:
+            print(f"Session template with name '{template_name}' but DIFFERENT contents already "
+                  "exists in BOS -- skipping import.")
+        return
+
+    print(f"Creating BOS session template '{template_name}'")
     create_session_template(template_to_create, template_record.bos_version)
 
 def validate_and_record_template(session_template_records: Dict[str, SessionTemplateRecord],
@@ -207,8 +220,11 @@ def main() -> None:
             raise BosError(str(exc)) from exc
         print(f"Loaded {len(ims_id_map)} IMS ID mappings from IMS ID map file")
 
+    # Get list of current BOS session templates on system
+    current_session_templates = list_session_templates()
+
     for template_name, record in session_template_records.items():
-        import_session_template(template_name, record, ims_id_map)
+        import_session_template(template_name, record, ims_id_map, current_session_templates)
 
 if __name__ == '__main__':
     try:

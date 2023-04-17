@@ -88,4 +88,4 @@ If a session is not starting, then see [Troubleshoot CFS Sessions Failing to Sta
 
 If a session is starting but not completing, then see [Troubleshoot CFS Session Failing to Complete](Troubleshoot_CFS_Session_Failing_to_Complete.md).
 
-If a session completed but did not succeed, then see [Troubleshoot Ansible Play Failures in CFS Sessions](#Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md).
+If a session completed but did not succeed, then see [Troubleshoot Failed CFS Sessions](Troubleshoot_CFS_Session_Failed.md).

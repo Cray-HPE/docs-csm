@@ -1,0 +1,23 @@
+{
+    "inventoryHardwareFilter": {
+        "manufacturer": "cray"
+    },
+    "stateComponentFilter": {
+        "deviceTypes": [
+          "nodeBMC"
+        ]
+    },
+    "targetFilter": {
+        "targets": [
+          "Node3.BIOS"
+        ]
+    },
+    "command": {
+        "version": "latest",
+        "tag": "default",
+        "overrideDryrun": false,
+        "restoreNotPossibleOverride": true,
+        "timeLimit": 1000,
+        "description": "Upgrade of Node3 BIOS"
+    }
+}

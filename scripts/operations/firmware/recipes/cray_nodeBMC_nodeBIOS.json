@@ -10,7 +10,9 @@
     "targetFilter": {
         "targets": [
           "Node0.BIOS",
-          "Node1.BIOS"
+          "Node1.BIOS",
+          "Node2.BIOS",
+          "Node3.BIOS"
         ]
     },
     "command": {

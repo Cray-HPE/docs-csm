@@ -1,4 +1,4 @@
-# Add additional Air-Cooled Cabinets to a System
+# Add Additional Air-Cooled Cabinets to a System
 
 This procedure adds one or more air-cooled cabinets and all associated hardware within the cabinet except for management NCNs.
 

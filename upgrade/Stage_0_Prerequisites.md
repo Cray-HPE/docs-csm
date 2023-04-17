@@ -243,6 +243,11 @@ Generally, if performing an upgrade of CSM, you will also be performing an upgra
 Cray EX software products as part of an HPC CSM software recipe upgrade. In that case, follow the
 scenario described above for [Upgrade of CSM and additional products](#option-1-upgrade-of-csm-and-additional-products).
 
+The following subsection shows how to use IUF input files to perform `sat bootprep` operations, in this
+case to assign images and configurations to management nodes.
+
+#### Using `sat bootprep` with IUF generated input files
+
 In order to follow this procedure, you will need to know the name of the IUF activity used to
 perform the initial installation of the HPE Cray EX software products. See the
 [Activities](../operations/iuf/IUF.md#activities) section of the IUF documentation for more
@@ -460,6 +465,10 @@ Continue on to [Stage 0.4](#stage-04---backup-workload-manager-data).
 To prevent any possibility of losing workload manager configuration data or files, a backup is required. Execute all backup procedures (for the workload manager in use) located in
 the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting backup data should be stored in a safe location off of the system.
+
+If performing an upgrade of CSM and additional HPE Cray EX software products using the IUF,
+return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+procedure. Otherwise, if performing an upgrade of only CSM, proceed to the next step.
 
 ## Stop typescript
 
