@@ -44,10 +44,8 @@ shown here with numbered topics.
     1. [Configure administrative access](#5-configure-administrative-access)
     1. [Validate CSM health](#6-validate-csm-health)
     1. [Configure Prometheus alert notifications](#7-configure-prometheus-alert-notifications)
-    1. [Upload Olympus BMC recovery firmware into TFTP server](#8-upload-olympus-bmc-recovery-firmware-into-tftp-server)
-    1. [Update firmware with FAS](#9-update-firmware-with-fas)
-    1. [Prepare compute nodes](#10-prepare-compute-nodes)
-    1. [Troubleshooting installation problems](#11-troubleshooting-installation-problems)
+    1. [Prepare compute nodes](#8-prepare-compute-nodes)
+    1. [Troubleshooting installation problems](#9-troubleshooting-installation-problems)
 1. [Post-Installation](#post-installation)
     1. [Kubernetes encryption](#1-kubernetes-encryption)
     1. [Export Nexus data](#2-export-nexus-data)
@@ -218,26 +216,9 @@ Prometheus upstream documentation can be leveraged for an [Alert Notification Te
 See [Configure Prometheus Email Alert Notifications](../../operations/system_management_health/Configure_Prometheus_Email_Alert_Notifications.md)
 for an example configuration of an email alert notification for the Postgres replication alerts that are defined on the system.
 
-### 8. Upload Olympus BMC recovery firmware into TFTP server
+### 8. Prepare compute nodes
 
-> **IMPORTANT:** Before Firmware can be updated the HPC Firmware Pack (HFP) must be installed  refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
->on the HPE Customer Support Center for more information about how to install the HPE Cray EX HPC Firmware Pack (HFP) product.
-
-The Olympus hardware needs to have recovery firmware loaded to the `cray-tftp` server in case the BMC loses its firmware. The BMCs are configured to load a recovery firmware from a TFTP server.
-This procedure does not modify any BMC firmware, but only stages the firmware on the TFTP server for download in the event it is needed.
-
-See [Load Olympus BMC Recovery Firmware into TFTP server](../../operations/firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md).
-
-## 9. Update firmware with FAS
-
-Now that all management nodes and CSM services have been validated as healthy, the firmware on other components in the system can be checked and updated. The Firmware Action Service (FAS) communicates with many devices on the system.
-FAS can be used to update the firmware for all of the devices it communicates with at once, or specific devices can be targeted for a firmware update.
-
-See [Update Firmware with FAS](../../operations/firmware/Update_Firmware_with_FAS.md).
-
-### 10. Prepare compute nodes
-
-After completion of the firmware update with FAS, compute nodes can be prepared. Some compute node types have special preparation steps, but most compute nodes are ready to be used now.
+Some compute node types have special preparation steps, but most compute nodes are ready to be used now.
 
 These compute node types require preparation:
 
@@ -246,7 +227,7 @@ These compute node types require preparation:
 
 See [Prepare Compute Nodes](../prepare_compute_nodes.md).
 
-### 11. Troubleshooting installation problems
+### 9. Troubleshooting installation problems
 
 The installation of the CSM product requires knowledge of the various nodes and switches for the HPE Cray EX system.
 The procedures in this section should be referenced during the CSM install for additional information on system hardware, troubleshooting, and administrative tasks related to CSM.
