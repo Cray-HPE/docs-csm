@@ -335,7 +335,7 @@ def main():
 
     args = parser.parse_args()
 
-    ## Provide 2 version strings to accomdate better output checking
+    ## Provide 2 version strings to accommodate better output checking
 
     if args.version is not None:
       if args.version.startswith('v'):

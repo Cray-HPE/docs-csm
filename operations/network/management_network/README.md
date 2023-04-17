@@ -53,7 +53,7 @@ state of the switch. This step is not required to configure the management netwo
 unavailable, this step can be temporarily skipped. Any automated tests that depend on the switch
 credentials being in Vault will fail until they are added.
 
-First, write the switch admin password to the `SW_ADMIN_PASSWORD` variable if it isn't already
+First, write the switch admin password to the `SW_ADMIN_PASSWORD` variable if it is not already
 set.
 
 ```bash

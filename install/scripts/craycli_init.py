@@ -433,7 +433,7 @@ def checkSsh(host):
         child.expect("#")
     elif idx==2:
         # should not have exited yet
-        msg = "Should not have recieved EOF from ssh"
+        msg = "Should not have received EOF from ssh"
         LOGGER.warning(  f"{host}: " + msg)
         return MSG_SSH_ERROR, msg
     elif idx==3:
