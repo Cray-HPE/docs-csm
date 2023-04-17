@@ -28,8 +28,7 @@
 # This script exports all CFS data into JSON files. These files are then
 # compressed into an tgz archive.
 #
-# Usage: export_cfs_data.sh [--no-sessions] [--no-configs] [--no-comps]
-#                           [--no-options] [directory_to_create_archive_in]
+# Usage: export_cfs_data.sh [directory_to_create_archive_in]
 #
 # If no directory is specified, the archive will be created in the current
 # directory.
