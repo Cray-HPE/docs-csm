@@ -32,7 +32,7 @@ import logging
 from typing import Dict, Tuple
 
 from python_lib import product_catalog
-from python_lib.types import JSONObject
+from python_lib.types import JsonObject
 
 LOGGER = logging.getLogger(__name__)
 ch = logging.StreamHandler()
@@ -69,7 +69,7 @@ def parse_args() -> Tuple[IdChangeMap, IdChangeMap]:
         "PROGRAMMING LOGIC ERROR: Unable to determine type of IMS ID to replace")
 
 def get_name_id_replacements(product_name: str, product_version: str,
-                             product_version_details: JSONObject, images_or_recipes: str,
+                             product_version_details: JsonObject, images_or_recipes: str,
                              id_change_map: IdChangeMap) -> product_catalog.NameIdTupleList:
     """
     Looks at the specified product version entry from the Cray Product Catalog.

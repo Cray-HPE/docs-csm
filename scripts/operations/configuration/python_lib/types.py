@@ -23,16 +23,19 @@
 #
 """Shared Python function library: Type hints"""
 
-from typing import Any, Dict, Union
+from typing import Dict, List, Union
 
 from packaging.version import LegacyVersion, Version
 import simplejson.errors
 
 # A simplified type hint to use for JSON objects
-JSONObject = Dict[str, Any]
+JsonObject = Union[str, int, float, list, dict, bool, None]
+JsonDict = Dict[str, JsonObject]
+JsonList = List[JsonObject]
 
 # A generic version type that covers both Version and LegacyVersion
 GenericVersion = Union[LegacyVersion, Version]
 
-# So we can catch exceptions decoding JSON
+# So we can catch exceptions decoding JSON. This way if the JSON module
+# changes what it throws, we only need to change it here.
 JSONDecodeError = simplejson.errors.JSONDecodeError
