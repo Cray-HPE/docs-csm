@@ -430,7 +430,42 @@ Restoring connectivity, resolving configuration issues, or restarting the releva
 
 ##### `test_components.tavern.yaml`
 
-These tests include checks for healthy BMC states in HSM.
+These tests include checks for healthy node states and flags in HSM.
+
+Hardware problems may cause `Warning` flags to be set for nodes in HSM.
+
+The following is an example of a failed test execution due to an unexpected flag set for a node in HSM:
+
+```text
+Running tavern tests...
+============================= test session starts ==============================
+platform linux -- Python 3.9.16, pytest-7.1.2, pluggy-1.0.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /src/app, configfile: pytest.ini
+plugins: allure-pytest-2.12.0, tavern-1.23.1
+collecting ... collected 37 items
+...
+test_components.tavern.yaml::Ensure that we can conduct a query for all Nodes in the Component collection FAILED [ 21%]
+...
+Errors:
+E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all Nodes' failed:
+    - Error calling validate function '<function validate_pykwalify at 0x7f26a6e13820>':
+        Traceback (most recent call last):
+          File "/usr/lib/python3.9/site-packages/tavern/schemas/files.py", line 106, in verify_generic
+            verifier.validate()
+          File "/usr/lib/python3.9/site-packages/pykwalify/core.py", line 194, in validate
+            raise SchemaError(u"Schema validation failed:\n - {error_msg}.".format(
+        pykwalify.errors.SchemaError: <SchemaError: error code 2: Schema validation failed:
+         - Enum 'Warning' does not exist. Path: '/Components/7/Flag' Enum: ['OK'].: Path: '/'>
+...
+=========================== short test summary info ============================
+FAILED api/1-non-disruptive/test_components.tavern.yaml::Ensure that we can conduct a query for all Nodes in the Component collection
+======================== 1 failed, 36 passed in 47.99s =========================
+```
+
+Test failures due to flags other than `OK` set for nodes in HSM do not prevent CSM installations or upgrades from proceeding. It is safe to postpone the investigation and resolution of these failures until after the CSM installation or upgrade has completed.
+
+These tests also include checks for healthy BMC states in HSM.
 
 The following is an example of a failed test execution due to an unexpected BMC state in HSM:
 
@@ -618,4 +653,4 @@ The following types of HMS test failures should **not** be considered blocking f
 
 - Failures because of hardware issues on individual nodes (alerts or warning flags set in HSM)
 
-It is typically safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation or upgrade has completed.
+It is safe to postpone the investigation and resolution of non-blocking failures until after the CSM installation or upgrade has completed.
