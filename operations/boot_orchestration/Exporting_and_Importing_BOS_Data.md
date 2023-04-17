@@ -34,10 +34,10 @@ Existing BOS session templates can be backed up and restored using automated scr
 
 #### Automated session template export
 
-1. (`ncn-mw#`) Run the following script to perform the export of all BOS session templates.
+1. (`ncn-mw#`) Run the following script to perform the export of all BOS data (including session templates).
 
    ```bash
-   /usr/share/doc/csm/scripts/operations/system_recovery/export_bos_sessiontemplates.sh
+   /usr/share/doc/csm/scripts/operations/system_recovery/export_bos_data.sh
    ```
 
 1. Copy the archive file it outputs to a safe location.
@@ -49,12 +49,12 @@ Existing BOS session templates can be backed up and restored using automated scr
 1. (`ncn-mw#`) Run the following script to perform the import of all BOS session templates.
 
    > Modify the following example command to specify the path to the output file from the automated export script.
-   > The file may be a JSON file or a `tgz` file, depending on when the backup was made. Either format will work
-   > in this restore procedure.
+   > The file may be a JSON file or a `tgz` file, depending on when the backup was made, because the BOS export tools
+   > have had multiple versions. Any file produced by any version of these tools will work as input for this restore procedure.
 
    ```bash
    /usr/share/doc/csm/scripts/operations/system_recovery/import_bos_sessiontemplates.sh \
-        /root/bos-session-templates-20230321201329.json
+        /root/bos-export-20230417181409-oK4WMw.tgz
    ```
 
 ### Manual procedures
