@@ -98,23 +98,18 @@ spec:
                     if [[ -n $(echo $limit_management_nodes | grep 'Management_Master') ]]; then rebuild_masters=true; fi
 
                     prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                    update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
-
-                    # check config
-                    configuration=$(echo $update_cfs_conf_ouput | jq '.configurations[].name' | tr -d '"')
-                    if [[ -z $configuration ]]; then echo "ERROR  no CFS configuration was recieved from update-cfs-config stage"; exit 1; fi
-                    if [[ $(echo $configuration | wc -l) -gt 1 ]]; then 
-                      echo "ERROR  more than 1 configruation was recieved. There must be exactly 1 CFS configuration to for a rebuild"
-                      echo "ERROR  CFS configurations recieved: $configuration"; exit 1
-                    fi
-                    cray cfs configurations describe "$configuration" > /dev/null
-                    if [[ $? -ne 0 ]]; then
-                      exit 1 # could not find the desired cfs configuration
-                    else
-                      echo "NOTICE found CFS configuration:$configuration in CFS"
-                    fi
 
                     if $rebuild_workers; then
+                      # Check config exists
+                      config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].configuration' | tr -d '"')
+                      if [[ -z $config ]]; then echo "ERROR  no CFS configuration was recieved for 'Management_Worker' from prepare images stage"; exit 1; fi
+                      cray cfs configurations describe "$config" > /dev/null
+                      if [[ $? -ne 0 ]]; then
+                        exit 1 # could not find the desired cfs configuration
+                      else
+                        echo "NOTICE found CFS configuration:$config in CFS"
+                      fi
+
                       # Check image exists
                       image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].final_image_id' | tr -d '"')
                       if [[ -z $image ]]; then echo "ERROR  no image was recieved for 'Management_Worker' from prepare images stage"; exit 1; fi
@@ -131,6 +126,16 @@ spec:
                     fi
 
                     if $rebuild_masters; then
+                      # Check config exists
+                      config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
+                      if [[ -z $config ]]; then echo "ERROR  no CFS configuration was recieved for 'Management_Master' from prepare images stage"; exit 1; fi
+                      cray cfs configurations describe "$config" > /dev/null
+                      if [[ $? -ne 0 ]]; then
+                        exit 1 # could not find the desired cfs configuration
+                      else
+                        echo "NOTICE found CFS configuration:$config in CFS"
+                      fi
+
                       # Check image exists
                       image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
                       if [[ -z $image ]]; then echo "ERROR  no image was recieved for 'Management_Master' from prepare images stage"; exit 1; fi
@@ -182,12 +187,11 @@ spec:
                     TARGET_NCN=ncn-m002
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
-                    configuration=$(echo $update_cfs_conf_ouput | jq '.configurations[].name' | tr -d '"')
-                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${configuration}"
+                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
+                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${config}"
 
                     echo "NOTICE  updating boot-image in BSS on ncn-m002"
-                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
                     IMAGE_ID=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
                     image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
                     image_manifest_str=${image_manifest_str#*s3://}
@@ -257,12 +261,11 @@ spec:
                     TARGET_NCN=ncn-m003
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                       jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
-                    configuration=$(echo $update_cfs_conf_ouput | jq '.configurations[].name' | tr -d '"')
-                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${configuration}"
+                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
+                    cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${config}"
 
                     echo "NOTICE  updating boot-image in BSS on ncn-m003"
-                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
                     IMAGE_ID=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
                     image_manifest_str=$(cray ims images describe $IMAGE_ID --format json | jq '.link.path')
                     image_manifest_str=${image_manifest_str#*s3://}
@@ -417,8 +420,7 @@ spec:
                   fi
                   prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
                   image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].final_image_id' | tr -d '"')
-                  update_cfs_conf_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["update-cfs-config"].global["update-management-cfs-config"]["sat-bootprep-run"].script_stdout')
-                  configuration=$(echo $update_cfs_conf_ouput | jq '.configurations[].name' | tr -d '"')
+                  configuration=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].configuration' | tr -d '"')
 
                   export TERM=linux
                   echo "NOTICE  starting rebuild of $rebuild_set"
