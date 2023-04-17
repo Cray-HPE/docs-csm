@@ -57,7 +57,7 @@ Using `http_proxy` or `https_proxy` in any way other than the following examples
 
 1. Update `canu` RPM.
 
-   > ***NOTE*** This package provides a network device configuration and firmware utility. 
+   > ***NOTE*** This package provides a network device configuration and firmware utility.
 
    ```bash
    cp csm-${CSM_RELEASE}/rpm/cray/csm/sle-15sp4/x86_64/canu-*.rpm csm-${CSM_RELEASE}/rpm/cray/csm/sle-15sp3/x86_64
