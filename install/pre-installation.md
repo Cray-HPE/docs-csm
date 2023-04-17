@@ -448,14 +448,6 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
               --no-gpg-checks install -y csm-testing
        ```
 
-   1. Update `canu` RPM.
-
-       > ***NOTE*** This package provides a network device configuration and firmware utility.
-
-       ```bash
-       cp ${CSM_PATH}/rpm/cray/csm/sle-15sp4/x86_64/canu-*.rpm ${CSM_PATH}/rpm/cray/csm/sle-15sp3/x86_64
-       ```
-
 1. (`pit#`) Get the artifact versions.
 
    ```bash
