@@ -49,7 +49,7 @@ function usage() {
     echo "-f|--force          Remove failed worker or storage rebuild/upgrade workflow and create a new one  (default: ${force})"
     echo "--base-url          Specify base url (default: ${baseUrl})"
     echo "--dry-run           Print out steps of workflow instead of running steps (default: ${dryRun})"
-    echo "--upgrade           Perfrom a node upgrade. This only needs to be specified when upgrading storage nodes."
+    echo "--upgrade           Perform a node upgrade. This only needs to be specified when upgrading storage nodes."
     echo "--image-id          The image-id that a worker node should be booted into when a node is rebuilt. This is optional."
     echo "--zap-osds          Zap osds. Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt. (This can only be used with storage rebuilds)."
     echo "--desired-cfs-conf  The desired cfs config worker node should be booted into when a node is rebuilt. This is optional."

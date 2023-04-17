@@ -1,6 +1,6 @@
 # MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright [2022-2023] Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -509,7 +509,7 @@ def migrate_can_to_cmn(networks, preserve=None, overrides=None):
         overrides,
     )
 
-    click.echo("    Cleaning up remnant CAN switch reservations in boostrap_dhcp")
+    click.echo("    Cleaning up remnant CAN switch reservations in bootstrap_dhcp")
     network = networks.get(destination_network_name)
     if network is None:
         return

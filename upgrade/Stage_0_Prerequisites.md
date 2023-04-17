@@ -108,7 +108,7 @@ The content from a previous `rbd` device is still available, and can be accessed
 
 1. (`ncn-m001#`) Set the `ENDPOINT` variable to the URL of the directory containing the CSM release `tar` file.
 
-   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}/csm-${CSM_RELAESE}.tar.gz`
+   In other words, the full URL to the CSM release `tar` file must be `${ENDPOINT}/csm-${CSM_RELEASE}.tar.gz`
 
    > ***NOTE*** This step is optional for Cray/HPE internal installs, if `ncn-m001` can reach the internet.
 

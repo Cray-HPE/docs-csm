@@ -138,7 +138,7 @@ The log output for migration/converting the existing CAN to the new CMN looks li
         Remaining subnets: ['10.103.11.48/29', '10.103.11.56/30']
         Applying supernet hack to network_hardware
         Applying supernet hack to bootstrap_dhcp
-        Cleaning up remnant CAN switch reservations in boostrap_dhcp
+        Cleaning up remnant CAN switch reservations in bootstrap_dhcp
 ```
 
 That is quite a bit of output, but some critical points are:
@@ -225,7 +225,7 @@ The focus of the process that follows will be on the CMN IP address allocations.
 
 1. The task is to map named subnets into IP subnet ranges based on required and desired constraints, and develop `--cmn-subnet-override` parameters from the mapping.
 
-    * Another immediate constraint is to preserve NCN IP addresses for the CAN as it is transformed into the CMN. NCNs are in the `boostrap_dhcp` subnet and review of SLS data confirms
+    * Another immediate constraint is to preserve NCN IP addresses for the CAN as it is transformed into the CMN. NCNs are in the `bootstrap_dhcp` subnet and review of SLS data confirms
       that NCNs were previously in a range that fits into the new `Remaining subnet` of `10.103.11.0/27`.
     * Generally another desired constraint is to make the service IP address pool allocated to `metallb_address_pool` as large as possible. After removing NCNs from the previous step, the next
       largest subnet is `10.103.11.64/26`; this will be assigned to `metallb_address_pool`.
@@ -281,7 +281,7 @@ The focus of the process that follows will be on the CMN IP address allocations.
         Remaining subnets: ['10.103.11.48/29', '10.103.11.56/30']
         Applying supernet hack to network_hardware
         Applying supernet hack to bootstrap_dhcp
-        Cleaning up remnant CAN switch reservations in boostrap_dhcp
+        Cleaning up remnant CAN switch reservations in bootstrap_dhcp
     ```
 
 After review, the allocations for CMN IP addresses in this run are as prescribed. A similar expert override process can be followed if a CAN is desired rather than a CMN.

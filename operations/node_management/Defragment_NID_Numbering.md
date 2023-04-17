@@ -6,22 +6,21 @@ It is recommended that the system be taken down for maintenance while performing
 
 This procedure should only be performed if absolutely required. Some reasons for needing to perform this procedure include:
 
-1. Compute nodes were added to SLS with incorrect NID numbering, missing node entries, and/or extra node entries.
-
-2. Compute nodes were permanently moved, removed, or re-provisioned and there is a desire to remove NID numbering gaps.
+* Compute nodes were added to SLS with incorrect NID numbering, missing node entries, and/or extra node entries.
+* Compute nodes were permanently moved, removed, or re-provisioned and there is a desire to remove NID numbering gaps.
 
 The example in this procedure removes NID gaps from 2 cabinets of compute nodes that were a result of incorrect numbering in SLS.
 
 ## Topics
 
 * [Prerequisites](#prerequisites)
-* [Defragment NID Script Functionality and Limitations](#defragment-nid-script-functionality-and-limitations)
-* [NID Defragmentation Procedure](#nid-defragmentation-procedure)
-  * [Step 1: Run the Defragmentation Script](#step-1-run-the-defragmentation-script)
-  * [Step 2: Perform Reload of DVS/LNet Service](#step-2-perform-reload-of-dvslnet-service)
+* [Defragment NID script functionality and limitations](#defragment-nid-script-functionality-and-limitations)
+* [NID defragmentation procedure](#nid-defragmentation-procedure)
+  * [Step 1: Run the defragmentation script](#step-1-run-the-defragmentation-script)
+  * [Step 2: Perform reload of DVS/LNet service](#step-2-perform-reload-of-dvslnet-service)
 * [Troubleshooting](#troubleshooting)
-  * [Discovery Errors](#discovery-errors)
-  * [Invalid NID Range](#invalid-nid-range)
+  * [Discovery errors](#discovery-errors)
+  * [Invalid NID range](#invalid-nid-range)
 
 ## Prerequisites
 
@@ -29,13 +28,14 @@ The example in this procedure removes NID gaps from 2 cabinets of compute nodes 
 * Chassis-level entries exist in the System Layout Service (SLS) and are correct for all Mountain and Hill chassis.
 * All compute nodes are powered off.
 
-## Defragment NID Script Functionality and Limitations
+## Defragment NID script functionality and limitations
 
 In the process of defragmenting NIDs, the `defragment_nids.py` script will:
 
 * Update the NID numbers for compute node entries in HSM.
 * Update/create SLS compute node entries with correct NID numbering and aliases.
-* Remove node entries from HSM that were not previously removed due to missed blade swap procedure steps. This includes associated entries under `/State/Components`, `/Inventory/ComponentEndpoints`, `/Inventory/Hardware`, and `/Inventory/EthernetInterfaces`.
+* Remove node entries from HSM that were not previously removed due to missed blade swap procedure steps. This includes associated entries
+  under `/State/Components`, `/Inventory/ComponentEndpoints`, `/Inventory/Hardware`, and `/Inventory/EthernetInterfaces`.
 * Remove SLS node entries with conflicting NIDs that are not in HSM.
 * Correct the _Class_ designation of compute nodes in HSM.
 
@@ -43,30 +43,34 @@ Limitations of the `defragment_nids.py` script:
 
 * Only affects compute nodes.
 * HSM node entries are only removed if the "leftover" nodes are of a different model than the existing nodes in the same slot.
-* SLS node entries that don't exist in HSM are only removed if their NID falls within the specified NID block.
+* SLS node entries that do not exist in HSM are only removed if their NID falls within the specified NID block.
 
-## NID Defragmentation Procedure
+## NID defragmentation procedure
 
-### Step 1: Run the Defragmentation Script
+### Step 1: Run the defragmentation script
 
-1. Choose the starting NID for the NID block (e.g., 1000).
+1. (`ncn-mw#`) Choose the starting NID for the NID block (e.g., 1000).
 
     ```bash
-        export NID_START=1000
+    export NID_START=1000
     ```
 
-2. Choose the components to include in the NID block (e.g., `x1000`,`x3000`). This can be specified at cabinet (`x#`), chassis (`x#c#`), slot (`x#c#s#`), or even node level (`x#c#s#b#n#`).
-This list always gets expanded to include all compute nodes contained by the specified parent components.
+1. (`ncn-mw#`) Choose the components to include in the NID block (e.g., `x1000`,`x3000`).
+
+    This can be specified at cabinet (`x#`), chassis (`x#c#`), slot (`x#c#s#`), or even node level (`x#c#s#b#n#`).
+    This list always gets expanded to include all compute nodes contained by the specified parent components.
 
     ```bash
-        export INCLUDE_LIST=x1000,x3000
+    export INCLUDE_LIST=x1000,x3000
     ```
 
-3. Run `defragment_nids.py`.
-**NOTE:** You can do a dryrun of `defragment_nids.py` to print out a report of what will happen without affecting the system's NID numbering by specifying `--dryrun`.
+1. Run `defragment_nids.py`.
+
+    **NOTE:** Administrators can do a dryrun of `defragment_nids.py` to print out a report of what will happen without affecting the system's NID numbering
+    by specifying `--dryrun`.
 
     ```bash
-        /usr/share/doc/csm/scripts/operations/node_management/defragment_nids.py --start ${NID_START} --include ${INCLUDE_LIST} | jq .
+    /usr/share/doc/csm/scripts/operations/node_management/defragment_nids.py --start ${NID_START} --include ${INCLUDE_LIST} | jq .
     ```
 
     Example (summarized) output:
@@ -282,15 +286,17 @@ This list always gets expanded to include all compute nodes contained by the spe
         x1000c0s2b0n1,x1000c0s2b1n1
     ```
 
-### Step 2: Perform Reload of DVS/LNet Service
+### Step 2: Perform reload of DVS/LNet service
 
-DVS node maps on NCN worker nodes and gateway nodes have entries of compute nodes that include their NIDs. Thus, the NID defragmentation process will impact the NCN worker and gateway nodes.
+DVS node maps on NCN worker nodes and gateway nodes have entries of compute nodes that include their NIDs. Because of that, the
+NID defragmentation process will impact the NCN worker and gateway nodes.
 
-Carry out the _Procedure To Perform After CSM Defragmentation of Compute Node Identifiers_ documented in publication _HPE Cray Operating System Administration Guide: CSM on HPE Cray EX Systems_.
+Carry out the _Procedure To Perform After CSM Defragmentation of Compute Node Identifiers_ documented in publication
+_HPE Cray Operating System Administration Guide: CSM on HPE Cray EX Systems_.
 
 ## Troubleshooting
 
-### Discovery Errors
+### Discovery errors
 
 The `defragment_nids.py` script checks for HSM discovery errors on the specified nodes before proceeding. It will return an error if any are found. For example:
 
@@ -302,7 +308,7 @@ The `defragment_nids.py` script checks for HSM discovery errors on the specified
 }
 ```
 
-To continue with the NID defragmentation you must first debug any discovery errors such that all specified components have a discovery status of `DiscoverOK` in HSM.
+To continue with the NID defragmentation an administrator must first debug any discovery errors such that all specified components have a discovery status of `DiscoverOK` in HSM.
 
 See [Troubleshoot Issues with Redfish Endpoint Discovery](Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md) for debugging discovery issues.
 
@@ -310,7 +316,7 @@ Alternately, if these issues are known and will not affect the desired resulting
 
 **Warning:** Continuing through discovery errors may result in incorrect NID numbering if HSM's inventory data for those nodes is missing or incorrect.
 
-### Invalid NID Range
+### Invalid NID range
 
 The `defragment_nids.py` script checks for nodes with NIDs that fall within the specified NID block that are not specified in the include list. An example of this error is:
 
@@ -324,18 +330,19 @@ The `defragment_nids.py` script checks for nodes with NIDs that fall within the 
 
 These might be NCNs and UANs or compute nodes that were not covered by the specified include list. Here are some scenarios and how to fix them:
 
-1. Computes nodes in cabinets `x1000` and `x1002` where specified in the include list so the new NID block is 1000-1100 but the compute nodes in cabinet `x1001` have NIDs 1090-1140. This would create a conflict so `defragment_nids.py` will return an error.
-This can be fixed by:
+* Computes nodes in cabinets `x1000` and `x1002` were specified in the include list, so the new NID block is 1000-1100, but the compute nodes in cabinet `x1001` have NIDs 1090-1140.
+  This would create a conflict so `defragment_nids.py` will return an error. This can be fixed by:
 
-    * Changing the starting NID for the new NID block (e.g., 1200).
-    * Include `x1001` in the include list to include it in the new NID block.
-    * Run `defragment_nids.py` to first move the computes nodes in `x1001` to another NID block then rerun `defragment_nids.py` for the compute nodes in cabinets `x1000` and `x1002`.
+  * Change the starting NID for the new NID block (e.g., 1200).
+  * Include `x1001` in the include list to include it in the new NID block.
+  * Run `defragment_nids.py` to first move the computes nodes in `x1001` to another NID block then rerun `defragment_nids.py` for the compute nodes in cabinets `x1000` and `x1002`.
 
-2. Computes nodes in cabinet `x1000` where specified in the include list so the new NID block is 1000-1100 but `x1000c1b0n0` is a UAN that was given the NID 1000. This would create a conflict so `defragment_nids.py` will return an error.
-This can be fixed by:
+* Computes nodes in cabinet `x1000` were specified in the include list, so the new NID block is 1000-1100, but `x1000c1b0n0` is a UAN that was given the NID 1000.
+  This would create a conflict so `defragment_nids.py` will return an error. This can be fixed by:
 
-    * Changing the starting NID for the new NID block (e.g., 1001).
-    * Manually change the NID of the UAN in HSM and SLS then rerun `defragment_nids.py` for the nodes in `x1000`.
+  * Change the starting NID for the new NID block (e.g., 1001).
+  * Manually change the NID of the UAN in HSM and SLS then rerun `defragment_nids.py` for the nodes in `x1000`.
 
-3. Computes nodes in cabinet `x1000` where specified in the include list so the new NID block is 1000-1100 but `x3000c0b0n0` is an NCN that was given the NID 1000. This would create a conflict so `defragment_nids.py` will return an error.
-It is not recommended to try and change the NID of an NCN. The best course of action is to change the starting NID for the new NID block.
+* Computes nodes in cabinet `x1000` were specified in the include list, so the new NID block is 1000-1100, but `x3000c0b0n0` is an NCN that was given the NID 1000.
+  This would create a conflict so `defragment_nids.py` will return an error. It is not recommended to try and change the NID of an NCN. The best course of action is to
+  change the starting NID for the new NID block.
