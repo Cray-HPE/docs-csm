@@ -221,6 +221,14 @@ The http proxy variables must be `unset` after the desired artifacts are downloa
    /usr/share/doc/csm/upgrade/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --tarball-file "${CSM_TAR_PATH}"
    ```
 
+1. Update `canu` RPM.
+
+   > ***NOTE*** This package provides a network device configuration and firmware utility.
+
+   ```bash
+   cp /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp4/x86_64/canu-*.rpm /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp3/x86_64/
+   ```
+
 ## Stage 0.2 - Prerequisites
 
 1. (`ncn-m001#`) Set the `SW_ADMIN_PASSWORD` environment variable.
