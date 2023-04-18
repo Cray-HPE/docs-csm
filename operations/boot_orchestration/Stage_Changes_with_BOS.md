@@ -35,12 +35,13 @@ When using the API, components should be provided as a list of xnames.
 curl -X POST -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json"  --data '{"xnames":["x3000c0s19b1n0","x3000c0s19b2n0"]}' https://api-gw-service-nmn.local/apis/bos/v2/applystaged
 ```
 
-When called, any staged data for the given components will be moved to the desired state, clearing out the staged state data.
+When called, any staged data for the given components will be moved to the desired state.
 In addition BOS will check for the associated session in order to determine what kind of operation to apply.  This allows users to stage any operation, including shutdowns.
 
 If for some reason a session that was used to stage data is deleted before `applystaged` is called for the associated components, it will no longer be possible to apply the staged state since BOS will not be able to determine which operation should be taken.
 
-By default staged data will not be cleared when `applystaged` is called, allowing users to call the endpoint multiple times.  This behavior can be changed via the [Options](Options.md) endpoint.
+By default staged data will not be cleared when `applystaged` is called, allowing users to call the endpoint multiple times.  This behavior can be changed via the [Options](Options.md) endpoint so that the staged data is cleared \
+when `applystaged` is called.
 
 ## Stage Changes Without BOS
 
