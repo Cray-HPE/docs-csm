@@ -52,7 +52,9 @@ NCN storage nodes and `ncn-m001` will be upgraded with manual commands.
 This section describes how to test a new image and CFS configuration on a single canary node for NCN master nodes and NCN worker nodes first before rolling it out to the other NCN master nodes and NCN worker nodes.
 Follow the steps below to upgrade all management nodes.
 
-1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `management-nodes-rollout` stage.
+1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
+section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
+Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. Get the image ID and CFS configuration created for management nodes during the `prepare-images` and `update-cfs-config` stages. Follow the instructions in the
 [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation to get the values for `final_image_id` and `configuration` for images with a `configuration_group_name` value matching `Management_Master`
@@ -252,7 +254,9 @@ image customization and node personalization scenarios. As a result, the adminis
 can update NCN master and storage nodes using CFS configuration only.
 Follow the following steps to complete the `management-nodes-rollout` stage.
 
-1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `management-nodes-rollout` stage.
+1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
+section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
+Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. Rebuild the NCN worker nodes. Follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
@@ -312,7 +316,9 @@ for details on how to query the images and CFS configurations and see the [updat
 **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
-1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `management-nodes-rollout` stage.
+1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
+section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
+Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. Use `kubectl` to label all NCN worker nodes but one with `iuf-prevent-rollout=true` to ensure `management-nodes-rollout` only rebuilds a single NCN worker node. This node is referred to as the canary node in the remainder of
 this section and the steps are documented with `ncn-w001` as the canary node.

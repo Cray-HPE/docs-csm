@@ -15,8 +15,9 @@ and images are created with the correct content and configuration values.
 **`NOTE`** Additional arguments are available to control the behavior of the `update-cfs-config` and `prepare-images` stages, for example `-bc`, `-bm`, and `-rv`. See the [`update-cfs-config` stage
 documentation](../stages/update_cfs_config.md) and the [`prepare-images` stage documentation](../stages/prepare_images.md) for details and adjust the examples below if necessary.
 
-1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `update-cfs-config` or
-`prepare-images` stages.
+1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
+section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `update-cfs-config` or `prepare-images` stages.
+Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. Invoke `iuf run` with `-r` to execute the [`update-cfs-config`](../stages/update_cfs_config.md) and [`prepare-images`](../stages/prepare_images.md) stages. Use site variables from the `site_vars.yaml` file found in
 `${ADMIN_DIR}`, recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`, and `sat bootprep` input files found in `${ADMIN_DIR}/bootprep`.
