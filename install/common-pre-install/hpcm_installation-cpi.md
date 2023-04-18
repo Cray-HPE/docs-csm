@@ -4,20 +4,20 @@ The following steps provide instructions to boot the Pre-Install Live ISO and cr
 
 ## Topics
 
-1. [Create the Bootable Media](#create-the-bootable-media)
+1. [Create the bootable media](#create-the-bootable-media)
 1. [Boot the LiveCD](#boot-the-livecd)
-1. [Booting the Master node using Bootable USB](#boot-the-livecd)
-1. [Post Boot Configuration](#post-boot-configuration)
+1. [Booting the master node using bootable USB](#boot-the-livecd)
+1. [Post-boot configuration](#post-boot-configuration)
 1. [Import CSM tarball](#import-csm-tarball)
-1. [Seed File generation](#seed-file-generation)
-1. [Compare the SHCD Data with CVT Inventory Data](#compare-the-shcd-data-with-cvt-inventory-dataoptional)
+1. [Seed file generation](#seed-file-generation)
+1. [Compare the SHCD data with CVT inventory data](#compare-the-shcd-data-with-cvt-inventory-data-optional)
 1. [Stop HPCM services](#stop-hpcm-services)
-1. [CleanUp (Optional)](#cleanup-optional)
-1. [Next Topic](#next-topic)
+1. [Cleanup](#cleanup-optional)
+1. [Next topic](#next-topic)
 
-## Create the Bootable Media
+## Create the bootable media
 
-To create the bootable LiveCD image use `dd` command. Before creating the media, identify which device will be used for it. If you already have the bootable media with LiveCD image ready, skip to [Boot the LiveCD](#boot-the-livecd).
+To create the bootable LiveCD image use `dd` command. Before creating the media, identify which device will be used for it. If the bootable media with LiveCD image is already prepared, then skip to [Boot the LiveCD](#boot-the-livecd).
 
 1. (`external#`) Download the LiveCD ISO.
 
@@ -45,18 +45,18 @@ To create the bootable LiveCD image use `dd` command. Before creating the media,
 
    In the previous example, the `ATA` devices are the internal disks and the other two devices are the USB drives.
 
-   Set a variable pointing to the USB device:
+1. (`external#`) Set a variable pointing to the USB device:
 
    ```bash
    USB=/dev/sd<disk_letter>
    ```
 
-1. Format the USB device.
+1. (`external#`) Format the USB device.
 
    Burn the LiveCD ISO on USB device using `dd` command in the following format:
 
    ```bash
-   #dd if=$PWD/cm-admin-install-1.9-sles15sp4-x86_64.iso of=$USB bs=4M oflag=sync status=progress
+   dd "if=${PWD}/cm-admin-install-1.9-sles15sp4-x86_64.iso" "of=${USB}" bs=4M oflag=sync status=progress
    ```
 
 At this point, image is ready and system can be booted from the USB drive.
@@ -68,7 +68,7 @@ Some systems will boot the USB device automatically, if no other OS exists (bare
 If an administrator has the node booted with an operating system which will next be rebooting into the LiveCD, then admin can use  `efibootmgr` to set the boot order to be the USB device (Option 2).
 See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-order) page for more information about how to set the boot order to have the USB device first.
 
-1. _Option 1_ : Boot LiveCD ISO image using `BIOS Boot Selection menu`
+- _Option 1_ : Boot LiveCD ISO image using `BIOS Boot Selection menu`
 
    1. Reboot the server.
 
@@ -80,7 +80,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
       ![Bootable Device](../../img/install/02.png)
 
-1. _Option 2_ : Boot the LiveCD ISO image using `efibootmgr`.
+- _Option 2_ : Boot the LiveCD ISO image using `efibootmgr`.
 
    >__NOTE:__ For the system to find the USB device's EFI bootloader, UEFI booting must be enabled.
 
@@ -89,19 +89,19 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
          Set the `BMC` variable to the hostname or IP address of the BMC of the PIT node.
 
          ```bash
-           USERNAME=root
-           BMC=eniac-ncn-m001-mgmt
-           read -r -s -p "${BMC} ${USERNAME} password: " IPMI_PASSWORD
-           export IPMI_PASSWORD
-           ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power status
+         USERNAME=root
+         BMC=eniac-ncn-m001-mgmt
+         read -r -s -p "${BMC} ${USERNAME} password: " IPMI_PASSWORD
+         export IPMI_PASSWORD
+         ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power status
          ```
 
          >__NOTE:__ The `read -s` command is used to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    1. (`external#`) Power the NCN on and connect to the IPMI console.
 
-      >__NOTE:__ The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects the primary removable media.
-This step instructs the user to power off the node to ensure the BIOS has the best chance at finding the USB via a cold boot.
+      >__NOTE:__ The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects
+      > the primary removable media. This step instructs the user to power off the node to ensure the BIOS has the best chance at finding the USB via a cold boot.
 
       ```bash
       ipmitool chassis bootdev
@@ -122,8 +122,8 @@ This step instructs the user to power off the node to ensure the BIOS has the be
       ```
 
       ```bash
-      ipmitool -I lanplus -U "${username}" -E -H "${BMC}" chassis bootdev floppy options=efiboot
-      ipmitool -I lanplus -U "${username}" -E -H "${BMC}" chassis power off
+      ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis bootdev floppy options=efiboot
+      ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power off
       ```
 
    1. Insert the USB stick into a recommended USB3 port.
@@ -133,82 +133,90 @@ This step instructs the user to power off the node to ensure the BIOS has the be
    1. (`external#`) Power the server on.
 
       ```bash
-      ipmitool -I lanplus -U "${username}" -E -H "${BMC}" chassis power on
-      ipmitool -I lanplus -U "${username}" -E -H "${BMC}" sol activate
+      ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power on
+      ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" sol activate
       ```
 
-## Booting the Master node using Bootable USB
+## Booting the master node using bootable USB
 
    1. After selecting the boot device, GRUB menu will show up.
 
-   1. Select the CM Live option from GRUB prompt.
+   1. Select the `CM Live` option from GRUB prompt.
 
-      1. From the GRUB menu, select "CM Live" option.
+      1. From the GRUB menu, select `CM Live` option.
 
          ![CM Live](../../img/install/03.png)
 
-      2. Now a series of input prompts will appear. Provide the responses per the following example:
+      1. A series of input prompts will appear. Provide the responses per the following example:
 
          ![Input prompts](../../img/install/04.png)
 
-         >__NOTE:__ You might have to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after `Loading initrd...`.
+         >__NOTE:__ It may be necessary to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after `Loading initrd...`.
 
-         Once the system boots up the OS successfully, provide username and password as `root/cmdefault` to log in to the system.
+         Once the system boots up the OS successfully, provide username and password as `root`/`cmdefault` to log in to the system.
 
-## Post Boot configuration
+## Post-boot configuration
 
-   1. Set the SITE LAN.
+   1. (`pit#`) Set the site LAN.
 
       To configure `sitelan` open a command line terminal and run the following command:
 
       `172.30.54.111` and `eno1` are examples of IP address and network device names.
 
       ```bash
-      ifconfig eno1 172.30.54.111 netmask 255.255.240.0 
+      ifconfig eno1 172.30.54.111 netmask 255.255.240.0
       ip route add default via <gateway ip> dev eno1
       ```
 
       ![SITE LAN](../../img/install/05.png)
 
-      Now this server can be accessed from the external servers using `ssh`. Login to the machine using following command:
+      Now this server can be accessed from the external servers.
+
+   1. (`external#`) Log in to the machine using `ssh`.
 
       ```bash
-      (external)#  ssh root@172.30.54.111
+      ssh root@172.30.54.111
       ```
 
-   1. Set the hostname.
+   1. (`pit#`) Set the hostname.
+
+      > Modify the following command to specify the desired hostname.
 
       ```bash
-           hostnamectl set-hostname system_name
+      hostnamectl set-hostname system_name
       ```
 
-   1. Set the timezone.
+   1. (`pit#`) Set the timezone.
+
+      > Modify the following command to specify the desired timezone.
 
       ```bash
-          timedatectl set-timezone Asia/Kolkata
+      timedatectl set-timezone Asia/Kolkata
       ```
 
-   1. Configure Management Switches.
+   1. Configure the management switches.
 
-      1. For Mellanox spine switches.
+      - For Mellanox spine switches.
 
-          1. Access the Mellanox switch using `IP address` or `Minicom`.
+          1. (`pit#`) Access the Mellanox switch using `ssh` or `minicom`.
 
-             Example 1 (using IP address):
+             >__NOTE:__ The following are example commands; the actual device name and IP address may vary.
 
-             ```bash
-              ssh admin@10.1.0.2
-             ```
+             - Example 1 (using `ssh` to its IP address):
 
-             Example 2 (using Minicom):
+                ```bash
+                ssh admin@10.1.0.2
+                ```
 
-             ```bash
-              minicom -b 115200 -D /dev/ttyUSB1
-             ```
+             - Example 2 (using `minicom`):
 
-             >__NOTE:__ Device name and IP may vary.
+                ```bash
+                minicom -b 115200 -D /dev/ttyUSB1
+                ```
 
-          1. Login to the switch using the switch credentials. Login prompt for Mellanox switch is as follows:
+          1. Log in to the switch using the switch credentials.
+
+             The login prompt for Mellanox switch looks similar to the following:
 
              ```text
              Welcome to minicom 2.7.1
@@ -228,365 +236,390 @@ This step instructs the user to power off the node to ensure the BIOS has the be
              sw-spine01 [standalone: master] >
              ```
 
-          1. Create blank/empty configuration file.
+          1. (`sw-spine01#`) Create blank/empty configuration file.
 
-             ```bash
-             sw-spine01 [standalone: master] > enable
-             sw-spine01 [standalone: master] # configure terminal
-             sw-spine01 [standalone: master] (config) # configuration new hpcm_blank1
-             sw-spine01 [standalone: master] (config) # configuration switch-to hpcm_blank1
+             ```text
+             enable
+             configure terminal
+             configuration new hpcm_blank1
+             configuration switch-to hpcm_blank1
              ```
 
-             Click Yes, if the switch asks for reboot.
+             If the switch prompts for reboot, then give an affirmative response. After the reboot, log back
+             into the switch and perform the next steps. If no reboot is required, just proceed to the next step.
 
-             Login to the switch and perform the next steps.
+          1. (`sw-spine01#`) Configure the switch settings.
 
-          1. Configure the switch settings.
+             1. Enter configuration mode.
 
-             ```bash
-             sw-spine01 [standalone: master] > enable
-             sw-spine01 [standalone: master] # configure terminal
-             ```
+                ```text
+                enable
+                configure terminal
+                ```
 
-             Copy and paste network settings [from here](hpcm_switch_conf_spine_001.md) and save those configurations as "hpcm_blank1" using the following command:
+             1. Copy and paste the network settings from [Configuration of Spine Switch 01](hpcm_switch_conf_spine_001.md).
 
-             ```bash
-             sw-spine01 [standalone: master] # configuration write
-             ```
+             1. Save those settings as `hpcm_blank1`.
 
-             Exit from the switch1 and repeat the procedure for spine `switch2`. The `switch2` settings can be copied [from here](hpcm_switch_conf_spine_002.md).
+                ```text
+                configuration write
+                ```
 
-      1. For leaf switches (Dell).
+          1. Exit from the first spine switch and repeat the procedure for the second spine switch.
 
-          1. Access the leaf switch using minicom. Here we assume `/dev/ttyUSB3` is leaf switch.
+             The settings for the second spine switch can be copied from [Configuration of Spine Switch 02](hpcm_switch_conf_spine_002.md).
+
+      - For leaf switches (Dell).
+
+          1. (`pit#`) Access the leaf switch using minicom.
+
+             This example assumes that `/dev/ttyUSB3` is leaf switch.
 
              ```bash
              minicom -b 115200 -D /dev/ttyUSB1
              ```
 
              >__NOTE:__ Device name may vary.
-  
-          1. Access the leaf switch using minicom. Here we assume `/dev/ttyUSB3` is leaf switch.
 
-          ```text
-              Welcome to minicom 2.7.1
+             The login message will look similar to the following:
 
-              OPTIONS: I18n
-              Port /dev/ttyUSB3, 16:48:45
+             ```text
+             Welcome to minicom 2.7.1
 
-              Press CTRL-A Z for help on special keys
+             OPTIONS: I18n
+             Port /dev/ttyUSB3, 16:48:45
 
-
-              Debian GNU/Linux 9 sw-leaf01 ttyS0
-
-              Dell EMC Networking Operating System (OS10)
-
-              sw-leaf01 login: admin
-              Password:
-              Last login: Fri Nov  4 17:02:37 UTC 2022 from 172.23.0.1 on pts/0
-              Linux sw-leaf01 4.9.189 #1 SMP Debian 4.9.189-3+deb9u2 x86_64
-
-              The programs included with the Debian GNU/Linux system are free software;
-              the exact distribution terms for each program are described in the
-              individual files in /usr/share/doc/*/copyright.
-
-              Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-              permitted by applicable law.
+             Press CTRL-A Z for help on special keys
 
 
-              -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-              -*         Dell EMC  Network Operating System (OS10)           *-
-              -*                                                             *-
-              -* Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.   *-
-              -*                                                             *-
-              -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+             Debian GNU/Linux 9 sw-leaf01 ttyS0
 
-              This product is protected by U.S. and international copyright and
-              intellectual property laws. Dell EMC and the Dell EMC logo are
-              trademarks of Dell Inc. in the United States and/or other
-              jurisdictions. All other marks and names mentioned herein may be
-              trademarks of their respective companies.
+             Dell EMC Networking Operating System (OS10)
 
-              %Warning : Default password for admin account should be changed to secure the system
-              sw-leaf01#
-          ```
+             sw-leaf01 login: admin
+             Password:
+             Last login: Fri Nov  4 17:02:37 UTC 2022 from 172.23.0.1 on pts/0
+             Linux sw-leaf01 4.9.189 #1 SMP Debian 4.9.189-3+deb9u2 x86_64
 
-          1. Clean up the existing configuration and reboot the switch.
+             The programs included with the Debian GNU/Linux system are free software;
+             the exact distribution terms for each program are described in the
+             individual files in /usr/share/doc/*/copyright.
 
-             ```bash
-               sw-leaf01# delete startup-configuration
-               Proceed to delete startup-configuration [confirm yes/no(default)]:yes
-               sw-leaf01# reload
-               System configuration has been modified. Save? [yes/no]:no
-               Continuing without saving system configuration
-               Proceed to reboot the system? [confirm yes/no]:yes
+             Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+             permitted by applicable law.
+
+
+             -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+             -*         Dell EMC  Network Operating System (OS10)           *-
+             -*                                                             *-
+             -* Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.   *-
+             -*                                                             *-
+             -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+             This product is protected by U.S. and international copyright and
+             intellectual property laws. Dell EMC and the Dell EMC logo are
+             trademarks of Dell Inc. in the United States and/or other
+             jurisdictions. All other marks and names mentioned herein may be
+             trademarks of their respective companies.
+
+             %Warning : Default password for admin account should be changed to secure the system
+             sw-leaf01#
              ```
 
-          1. Re-login to the switch.
+          1. (`sw-leaf01#`) Clean up the existing configuration and reboot the switch.
 
-             ```bash
-              sw-leaf01# configure terminal
-              sw-leaf01(config)#
-             ```
+             1. Delete the configuration.
 
-             Copy and paste the configuration [from here](hpcm_switch_conf_leaf.md) and save the configuration using the following command:
+                ```text
+                delete startup-configuration
+                ```
 
-             ```bash
-              sw-leaf01(config)# write memory
-             ```
+                When prompted, enter `yes` to delete the configuration.
 
-      >__NOTE:__ If the switches are from Aruba, then see "Using Aruba Switches" section in
-      >[HPE Performance Cluster Manager Installation Guide for Clusters Without Leader Nodes](https://www.hpe.com/support/hpcm-inst-no-leaders-006) for procedure to configure the Aruba switches.
+             1. Reboot the switch.
 
-   1. Running `YaST-Firstboot`.
+                ```text
+                reload
+                ```
 
-      Run the following command:
+                When prompted to save the modified configuration, enter `no`.
+                When prompted to proceed with the reboot, enter `yes`.
+
+          1. Log back in to the switch.
+
+          1. (`sw-leaf01#`) Configure the switch settings.
+
+             1. Enter configuration mode.
+
+             ```text
+              configure terminal
+              ```
+
+             1. Copy and paste the network settings from [Configuration of Leaf Switch 001](hpcm_switch_conf_leaf.md).
+
+             1. Save those settings.
+
+                ```text
+                write memory
+                ```
+
+      - For Aruba switches.
+
+         See the "Using Aruba Switches" section in [HPE Performance Cluster Manager Installation Guide for Clusters Without Leader Nodes](https://www.hpe.com/support/hpcm-inst-no-leaders-006)
+         for the procedure to configure the Aruba switches.
+
+   1. (`pit#`) Run `YaST-Firstboot`.
+
+      1. Run `YaST-Firstboot`.
+
+         ```bash
+         /usr/lib/YaST2/startup/YaST2.Firstboot
+         ```
+
+      1. Select language and keyboard layout.
+
+         YaST menu can be navigated using the tab key. Select appropriate language and keyboard layout and select `Next`.
+
+         ![YaST menu](../../img/install/06.png)
+
+      1. Accept the licence agreement.
+
+         Use the spacebar key to accept the licence agreement and select `Next`.
+
+         ![Licence agreement](../../img/install/07.png)
+
+      1. Configure the `sitelan` network using the YaST menu.
+
+         ![Configure Site Lan](../../img/install/08.png)
+
+         Fill out the `IP Address`, `Subnet Mask`, `Hostname (FQDN)` fields and select `Next`.
+
+         ![Fill out](../../img/install/09.png)
+
+      1. Set the hostname.
+
+         Select the `Hostname/DNS` menu, fill the `Static Hostname` field, and select `Next`.
+
+         ![Hostname](../../img/install/10.png)
+
+      1. Set the gateway.
+
+         Navigate to the `Routing` tab from the UI and enter the gateway information.
+
+      1. Set the timezone.
+
+         Select the applicable timezone from the options and select `Next`.
+
+         ![Timezone](../../img/install/11.png)
+
+      1. Skip the user creation.
+
+         Select `Skip User Creation` and select `Next`.
+
+         ![Skip](../../img/install/12.png)
+
+      1. Set the root password.
+
+         Fill out the root password.
+
+         ![Root Password](../../img/install/13.png)
+
+         After setting root user's password, the YaST First boot configuration will be complete. Select `Finish`.
+
+         ![Finish](../../img/install/14.png)
+
+   1. (`pit#`) Create the SLES15 SP4 repository.
+
+      1. Download the SLES15 SP4 ISO.
+
+         ```bash
+         wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/novell/sles/15sp4/x86_64/latest/SLE-15-SP4-Full-x86_64-GM-Media1.iso
+         ```
+
+      1. Add the `sles15 sp4` repository.
+
+         ```bash
+         cm repo add SLE-15-SP4-Full-x86_64-GM-Media1.iso
+         ```
+
+   1. (`pit#`) Create the cluster manager repository.
+
+      1. Download the cluster manager ISO.
+
+         ```bash
+         wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/sgi/dist.engr/test/stout727/iso-latest-sles15sp4-x86_64/cm-1.9-cd1-media-sles15sp4-x86_64.iso
+         ```
+
+      1. Add the cluster manager repository.
+
+         ```bash
+         cm repo add cm-1.9-cd1-media-sles15sp4-x86_64.iso
+         ```
+
+   1. (`pit#`) List the repositories.
 
       ```bash
-      /usr/lib/YaST2/startup/YaST2.Firstboot
+      cm repo show
       ```
 
-         1. Select language and keyboard layout.
+      Expected output should resemble the following:
 
-            YaST menu can be navigated using tab key. Select appropriate language and keyboard layout and click Next.
+      ```text
+      Cluster-Manager-1.9-sles15sp4-x86_64 : /opt/clmgr/repos/cm/Cluster-Manager-1.9-sles15sp4-x86_64
+      SLE-15-SP4-Full-x86_64 : /opt/clmgr/repos/distro/sles15sp4-x86_64
+      ```
 
-            ![YaST menu](../../img/install/06.png)
+   1. Select and activate the repositories.
 
-         1. Accepting the Licence Agreement.
+      ```bash
+      cm repo select SLE-15-SP4-Full-x86_64
+      cm repo select Cluster-Manager-1.9-sles15sp4-x86_64
+      ```
 
-            Use spacebar key to accept the licence agreement and click Next.
+   1. Configure the cluster.
 
-            ![Licence agreement](../../img/install/07.png)
-
-         1. Configuring `sitelan` network using YaST menu.
-
-            ![Configure Site Lan](../../img/install/08.png)
-
-            Fill out the `IP Address`, `Subnet Mask`, `Hostname (FQDN)` fields and click Next.
-
-            ![Fill out](../../img/install/09.png)
-
-         1. Setting the hostname.
-
-            Select the "Hostname/DNS" menu, fill the Static Hostname field and click Next.
-
-            ![Hostname](../../img/install/10.png)
-
-         1. Setting the gateway.
-
-            Navigate to the Routing tab from the UI and enter the gateway information.
-
-         1. Setting the timezone.
-
-            Select the applicable timezone from the options and click Next.
-
-            ![Timezone](../../img/install/11.png)
-
-         1. Skip the user creation.
-
-            Select Skip User Creation and click Next.
-
-            ![Skip](../../img/install/12.png)
-
-         1. Set the root password.
-
-            Fill out the root password.
-
-            ![Root Password](../../img/install/13.png)
-
-            After setting root user's password, YaST First boot configuration will be complete. Click on Finish.
-
-            ![Finish](../../img/install/14.png)
-
-         1. Creating the `sles15 sp4` distro repo.
-
-            Download the SLES15-SP4 ISO.
-
-            ```bash
-            wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/novell/sles/15sp4/x86_64/latest/SLE-15-SP4-Full-x86_64-GM-Media1.iso
-            ```
-
-            Add the `sles15 sp4` repo  using `cm repo` command.
-
-            ```bash
-            cm repo add SLE-15-SP4-Full-x86_64-GM-Media1.iso
-            ```
-
-         1. Creating the cluster manager repo.
-
-            Download `cm media iso`.
-
-            ```bash
-            wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/sgi/dist.engr/test/stout727/iso-latest-sles15sp4-x86_64/cm-1.9-cd1-media-sles15sp4-x86_64.iso
-            ```
-
-            Add the cluster manager repo using `cm repo` command.
-
-            ```bash
-            cm repo add cm-1.9-cd1-media-sles15sp4-x86_64.iso
-            ```
-
-         1. List the repos.
-
-            ```bash
-            cm repo show
-            ```
-
-            Expected Output:
-
-            ```text
-            Cluster-Manager-1.9-sles15sp4-x86_64 : /opt/clmgr/repos/cm/Cluster-Manager-1.9-sles15sp4-x86_64
-            SLE-15-SP4-Full-x86_64 : /opt/clmgr/repos/distro/sles15sp4-x86_64
-            ```
-
-         1. Select and activate the repo.
-
-            Run the following commands and activate repos.
-
-            ```bash
-            cm repo select SLE-15-SP4-Full-x86_64
-            cm repo select Cluster-Manager-1.9-sles15sp4-x86_64
-            ```
-
-   1. Run configure-cluster command.
-      1. Run the following command:
+      1. (`pit#`) Run `configure-cluster`.
 
          ```bash
          configure-cluster
          ```
 
-      1. Configuring the House network Interface.
+      1. Configure the House network interface.
 
-         Select House Network Interface from the list of network interfaces.
+         Select the House network interface from the list of network interfaces.
 
          ![alt text](../../img/install/15.png)
 
-      1. Configuring the management and BMC net interface.
+      1. Configure the Management/BMC network interface.
 
-         Select the Management/BMC interface from the list of network interfaces.
+         1. Select the Management/BMC network interface from the list of network interfaces.
 
-         ![alt text](../../img/install/16.png)
+            ![alt text](../../img/install/16.png)
 
-         Select No as we don't need separate network interfaces for BMC and Management network.
+         1. Select `No` because separate network interfaces for BMC and Management network are not needed.
 
-         ![alt text](../../img/install/17.png)
+            ![alt text](../../img/install/17.png)
 
-         Select LACP as network bonding type.
+         1. Select LACP as network bonding type.
 
-         ![alt text](../../img/install/18.png)
+            ![alt text](../../img/install/18.png)
 
-      1. Select the Initial Setup Menu from the Main Menu.
+      1. Select the `Initial Setup Menu` from the main menu.
 
          ![alt text](../../img/install/19.png)
 
-      1. Skip the repo selection menu (Repo manager).
+      1. Skip the repository selection menu (`Repo manager`).
 
-         We skip this option as required repos were installed using "cm repo add" commands.
+         This is skipped because the required repositories were already installed using the `cm repo add` commands.
 
          ![alt text](../../img/install/20.png)
 
-         Select the Install and Configure Admin Cluster Software option.
+      1. Select the `Install and Configure Admin Cluster Software` option.
 
          ![alt text](../../img/install/21.png)
 
-         Select and configure the network settings:  
+      1. Select and configure the network settings.
 
-            Select the Network Settings menu option.
+         1. Select the `Network Settings` menu option.
 
             ![alt text](../../img/install/22.png)
 
-            Select Yes as we have already configured NTP and timezone settings.
+         1. Select `Yes` because the NTP and timezone settings have already been configured.
 
             ![alt text](../../img/install/23.png)
 
-            Start the network and database initialization by clicking OK.
+         1. Start the network and database initialization by selecting `OK`.
 
             ![alt text](../../img/install/24.png)
 
-            Select the List and Adjust Subnet Addresses.
+         1. Select `List and Adjust Subnet Addresses`.
 
             ![alt text](../../img/install/25.png)
 
-            Click OK on the following prompt.
+         1. Select `OK` at the following prompt.
 
             ![alt text](../../img/install/common_installer_1.PNG)
 
-            Select Head Network and click OK.
+         1. Select `head Network` and select `OK`.
 
             ![alt text](../../img/install/common_installer_2.PNG)
 
-            Change Subnet, Netmask, Gateway and vlan for head network
+         1. Change the subnet, netmask, gateway and VLAN for the `head` network.
 
             ![alt text](../../img/install/common_installer_3.PNG)
 
-            Click OK on the following prompt.
+         1. Select `OK` at the following prompt.
 
             ![alt text](../../img/install/common_installer_4.PNG)
 
-            Select Head-bmc Network and click Ok.
+         1. Select `head-bmc Network` and select `OK`.
 
             ![alt text](../../img/install/common_installer_5.PNG)
 
-            Change Subnet, Netmask, Gateway and vlan for head-bmc network.
+         1. Change the subnet, netmask, gateway and VLAN for the `head-bmc` network.
 
             ![alt text](../../img/install/common_installer_6.PNG)
 
-            Click OK on the following prompt.
+         1. Select `OK` at the following prompt.
 
             ![alt text](../../img/install/common_installer_7.PNG)
 
-            Select Back on the following prompt.
+         1. Select `Back` at the following prompt.
 
             ![alt text](../../img/install/common_installer_8.PNG)
 
-            Select Back on the following prompt.
+         1. Select `Back` at the following prompt.
 
             ![alt text](../../img/install/common_installer_9.PNG)
 
-         Select the Perform Initial Admin Node Infrastructure Setup.
+      1. Select the `Perform Initial Admin Node Infrastructure Setup`.
 
-            ![alt text](../../img/install/26.png)
+         ![alt text](../../img/install/26.png)
 
-            Perform initial cluster setup by clicking OK.
+      1. Perform initial cluster setup by selecting `OK`.
 
-            ![alt text](../../img/install/27.png)
+         ![alt text](../../img/install/27.png)
 
-            Domain Search Path input field will be populated by default. Click OK.  
+      1. The `Domain Search Path` input field will be populated by default. Select `OK`.
 
-            ![alt text](../../img/install/28.png)
+         ![alt text](../../img/install/28.png)
 
-            Leave the Resolver IP fields empty and click OK.
+      1. Leave the `Resolver IP` fields empty and select `OK`.
 
-            ![alt text](../../img/install/29.png)
+         ![alt text](../../img/install/29.png)
 
-            Click OK on the following prompt.
+      1. Select `OK` at the following prompt.
 
-            ![alt text](../../img/install/30.png)
+         ![alt text](../../img/install/30.png)
 
-            Select Yes and click OK option. This step will copy ssh configuration from current node to the image . Image will be created in next step.
+      1. Select `Yes` and select `OK` option.
 
-            ![alt text](../../img/install/31.png)
+         This step will copy the SSH configuration from current node to the image. The image will be created in next step.
 
-            Select the "default" image creation option and click OK.
+         ![alt text](../../img/install/31.png)
 
-            ![alt text](../../img/install/32.png)
+      1. Select the `default` image creation option and select `OK`.
 
-            Once the following prompt appears , click OK, and quit the configure-cluster process.
+         ![alt text](../../img/install/32.png)
 
-            ![alt text](../../img/install/33.png)
+      1. Once the following prompt appears , select `OK`, and quit the `configure-cluster` process.
 
-   1. Perform the cluster component discovery using `cm` commands.
+         ![alt text](../../img/install/33.png)
 
-      The cluster component discovery has to be performed using auto discovery and manual process.
+   1. (`pit#`) Perform the cluster component discovery using `cm` commands.
 
-      1. Manual discovery method.
+      The cluster component discovery has to be performed using both a manual process and an automatic process.
 
-         In this method,  the administrator has to collect  data of components and perform manual discovery.
-         Management Switches, Fabric Switches, PDU and sub rack CMCs are the components for which manual discovery method has to be performed. The procedure and the sequence is described as follows:
+      1. Perform manual discovery.
 
-         1. Management Switch : Discovery of management switches has to be performed by manually creating configuration files. The management switch file should be in a specific format.
+         Management switches, fabric switches, PDUs, and sub-rack CMCs are the components for which the manual discovery has to be performed.
+         The administrator must collect component data and perform manual discovery by following these steps:
 
-            Example of switch configuration file:
+         1. Discover management switches.
+
+            1. Create a configuration file for the management switches.
+
+               The management switch file must be in a specific format. Example of switch configuration file:
 
                ```text
                [discover]
@@ -595,113 +628,118 @@ This step instructs the user to power off the node to ensure the BIOS has the be
                temponame=mgmtsw2, mgmt_net_name=head, mgmt_net_macs="e4:f0:04:4e:1a:ec", mgmt_net_interfaces="eth0", transport=udpcast, redundant_mgmt_network=yes, net=head/head-bmc, type=leaf, ice=yes, console_device=ttyS1, architecture=x86_64, discover_skip_switchconfig=yes, mgmt_net_ip=10.1.0.4
                ```
 
-               Perform switch discovery.
+            1. Perform switch discovery.
 
                ```bash
                cm node add -c mswitch.conf
                ```
 
-         1. For PDU : Create the PDU configuration file.
+         1. Discover PDUs.
 
-            Example of a PSU in configuration file format.
+            1. Create the PDU configuration file.
+
+               Example of a PSU in configuration file format.
 
                ```text
                [discover]
                internal_name=pdu-x3000-001, mgmt_bmc_net_name=head-bmc, geolocation="cold isle 4 rack 1 B power",mgmt_bmc_net_macs=00:0a:9c:62:04:ee,hostname1=pdu-x3000-001, pdu_protocol="snmp/admn"
                ```
 
-               Perform PDU discovery.
+            1. Perform PDU discovery.
 
                ```bash
                cm node add -c pdus.conf
                ```
 
-         1. For Fabric Switch: To perform discovery use `cm controller add` command. Add only River cabinent fabric switches.
+         1. Discover fabric switche.
+
+            Use the `cm controller add` command. Add only River cabinet fabric switches.
 
             ```bash
             cm controller add -c sw-hsn-x3000-001 -t external_switch -m 00:40:a6:82:f7:5f -u root -p initial0
             ```
 
-         1. For CMC : To perform discovery use `cm controller add` command.
+         1. Discover CMCs.
 
-            For gigabyte server.
+            Use the `cm controller add` command. An example for a Gigabyte server:
 
             ```bash
             cm controller add -c SubRack001-cmc -t gigabyte -m  b4:2e:99:b8:da:03 -u root -p initial0
             ```
 
-         1. For CEC : TBD.
+         1. Discover CECs.
 
-      1. Auto-discovery method.
+            __This information is not yet available.__
 
-         Management, worker, storage nodes, UANs will be auto discovered and the procedure is described as follows:
+      1.Perform automatic discovery.
+
+         Management nodes, UANs, and CNs will be automatically discovered by the following procedure:
 
          >__NOTE:__
          >
-         > - Ensure all the river components are powered on and `dhcp` is enabled on bmc and on only one switch out of the available spine switch.
+         > - Ensure that all the River components are powered on, DHCP is enabled on the BMCs, and the BMCs are each on only one switch out of the available spine switches.
          >
          > - If there are multiple Mellanox spine switches, then there should be only one spine switch with an active port connection to NCNs. On other switches, connections to NCNs should be disabled until all nodes have been booted with HPCM images.
          >
-         >  ```bash
-         >  ssh admin@<ip-addr>
-         >  enable
-         >  configure terminal
-         >  interface ethernet 1/2-1/9
-         >  shutdown
-         >  ```
+         >   (`spine-sw#`) The connection can be disabled by connecting to the switch using `ssh` and running commands similar to the following:
          >
-         > Once all the NCN's are booted enable all the ports by running `no shutdown` command.
+         >   ```text
+         >   enable
+         >   configure terminal
+         >   interface ethernet 1/2-1/9
+         >   shutdown
+         >   ```
+         >
+         >   Once all the NCNs are booted, enable all the ports by running a corresponding `no shutdown` command on the switch.
 
-         1. Enable auto-discovery process.
-
-            The management nodes, worker nodes, storage nodes, UANs and CNs can be auto discovered using the following command:
-
-            ```bash
-            cm node discover enable 
-            ```
-
-            >__NOTE:__ If there are any intel nodes run the following command:
-            >
-            >```bash
-            >sed -i '226s/ipmitool lan print/ipmitool lan print 3/g' /opt/clmgr/tools/cm_pxe_status
-            >```
-
-         1. Check the power status and pxe status.
-
-            > __NOTE:__ Verify if all the river node BMCs are leased with an IP.
-
-            Check the power status of nodes.
+         1. If there are any Intel nodes, then run the following command.
 
             ```bash
-            cm node discover status | grep client-hostname  > temp.txt
-            for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power status; done
+            sed -i '226s/ipmitool lan print/ipmitool lan print 3/g' /opt/clmgr/tools/cm_pxe_status
             ```
 
-            Check if all the node's bootorder is set to `pxe`.
+         1. Enable the auto-discovery process.
 
             ```bash
-            for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 chassis bootdev; done
+            cm node discover enable
             ```
 
-            Set the Boot order to `pxe` and reboot the nodes.
+         1. Check the power status and PXE status.
 
-            ```bash
-            for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 chassis bootdev pxe; done
-            for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power on; done
-            for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power reset; done
-            ```
+            > __NOTE:__ Verify if all the River node BMCs are leased with an IP address.
 
-         1. Wait for the discovery process to detect desired hardware components, check the status of discovered hardware using the following command.
+            1. Check the power status of nodes.
+
+               ```bash
+               cm node discover status | grep client-hostname  > temp.txt
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power status; done
+               ```
+
+            1. Check if all the node's bootorder is set to `pxe`.
+
+               ```bash
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 chassis bootdev; done
+               ```
+
+            1. Set the boot order to `pxe` and reboot the nodes.
+
+               ```bash
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 chassis bootdev pxe; done
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power on; done
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power reset; done
+               ```
+
+         1. Wait for the discovery process to detect desired hardware components, then check the status of discovered hardware using the following command.
 
             ```bash
             cm node discover status
             ```
 
-            And wait till we get data of the discovered nodes in "Detected server MAC info" section. For example,
+            Repeat this until there is data of the discovered nodes in the `Detected server MAC info` section. For example:
 
             ![alt text](../../img/install/34.png)
 
-         1. Create node configuration definition file.
+         1. Create the node configuration definition file.
 
             ```bash
             cm node discover mkconfig -o "mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]" nodes.conf
@@ -725,7 +763,7 @@ This step instructs the user to power off the node to ensure the BIOS has the be
             internal_name=service12, hostname1=node12, mgmt_bmc_net_macs=b4:2e:99:3b:70:10, mgmt_net_macs=b8:59:9f:1d:d8:c2, mgmt_net_interfaces="enp66s0f0np0", mgmt_bmc_net_name=head-bmc, mgmt_net_name=head, redundant_mgmt_network=yes, switch_mgmt_network=yes, dhcp_bootfile=grub2, conserver_logging=yes, conserver_ondemand=no, root_type=disk, console_device=ttyS0, tpm_boot=no, mgmt_net_bonding_master=bond0, disk_bootloader=no, mgmtsw=mgmtsw0, predictable_net_names=yes, transport=udpcast, baud_rate=115200, bmc_username=[USERNAME], bmc_password=[PASSWORD]
             ```
 
-         1. Add discovered nodes, set image for the discovered nodes.
+         1. Add discovered nodes and set images for the discovered nodes.
 
             ```bash
             cm node discover add nodes.conf
@@ -736,23 +774,33 @@ This step instructs the user to power off the node to ensure the BIOS has the be
 
             >__NOTE:__ Kernel version can be obtained from `cinstallman --show-default-image` command.
 
-         1. Stop the auto-discovery process and power on all nodes.
+         1. Stop the automatic discovery process.
 
             ```bash
             cm node discover disable
-            cm power status -n '*'
-            cm power on -n '*'
             ```
 
-            >__NOTE:__ Power on the nodes when 'cm power status -n '*'' lists all the nodes. If there are any errors rerun the command.
-
-            1. Check the status of nodes.
+         1. Wait for all of the nodes to be ready.
 
             ```bash
             cm power status -n '*'
             ```
 
-            Example output (expected):
+            Do not proceed until this command lists all of the nodes. If there are any errors, then rerun the command.
+
+         1. Power on all nodes.
+
+            ```bash
+            cm power on -n '*'
+            ```
+
+         1. Check the status of nodes.
+
+            ```bash
+            cm power status -n '*'
+            ```
+
+            Expected output will resemble the following:
 
             ```text
             node1        : BOOTED
@@ -769,9 +817,9 @@ This step instructs the user to power off the node to ensure the BIOS has the be
             node12       : BOOTED
             ```
 
-            >__NOTE:__ We need to wait at this step till all nodes report status as "BOOTED". Now the ports to all the NCNs can be enabled on switches.
+            Repeat this step until all nodes report their status as `BOOTED`. At this point, all ports to the NCNs should be enabled on the switches.
 
-         1. Create a Bond Network
+         1. Create a bond network.
 
 ## Import CSM tarball
 
@@ -782,7 +830,8 @@ This step instructs the user to power off the node to ensure the BIOS has the be
    - From Cray using `curl`:
 
       > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
-      > - CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints. Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
+      > - CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints.
+      >   Using `http_proxy` or `https_proxy` in any way other than the following examples will cause many failures in subsequent steps.
 
       Without proxy:
 
@@ -815,7 +864,7 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
    tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
    ```
 
-1. To install all the dependency packages run the `csm_dep_install.sh` using the following command:
+1. To install all the dependency packages, run the `csm_dep_install.sh` using the following command:
 
    ```bash
    sh csm_dep_install.sh  ${PITDATA}
@@ -823,39 +872,39 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
 
    >__Note:__ `${PITDATA}` is the path of the folder where the CSM tarball is extracted in the preceding step.
 
-   1. Update `dnsmasq`, `apache2` configuration files.
+   1. Update `dnsmasq` and `apache2` configuration files.
 
-      Download the tarball from [here](files/dhcp_http.tar.gz) and extract in present working directory.
+      Download the tarball from [here](files/dhcp_http.tar.gz) and extract it in the current working directory.
 
       ```bash
-       tar -xf dhcp_http.tar.gz
+      tar -xf dhcp_http.tar.gz
       ```
 
-   1. Update the `apache2` and `dnsmasq` configuration as follows:
+   1. Update the `apache2` and `dnsmasq` configurations as follows:
 
      ```bash
-       cp -r dnsmasq/dnsmasq.conf  /etc/dnsmasq.conf
-       cp -r apache2/* /etc/apache2/ 
-       cp -r  conman/conman.conf /etc/conman.conf
-       cp -r logrotate/conman /etc/logrotate.d/conman
-       cp -r kubectl/kubectl /usr/bin/
+     cp -rv dnsmasq/dnsmasq.conf  /etc/dnsmasq.conf
+     cp -rv apache2/* /etc/apache2/
+     cp -rv  conman/conman.conf /etc/conman.conf
+     cp -rv logrotate/conman /etc/logrotate.d/conman
+     cp -rv kubectl/kubectl /usr/bin/
      ```
 
-     (Optional) uncomment `tftp_secure` entry in `dnsmasq.conf` file.
+     (Optional) Uncomment the `tftp_secure` entry in the `dnsmasq.conf` file.
 
    1. Stop the following services: `clmgr-power`, `dhcpd`, and `named`.
 
      ```bash
-       systemctl  stop clmgr-power 
-       systemctl  stop dhcpd  
-       systemctl  stop named
-       systemctl restart apache2
+     systemctl stop clmgr-power
+     systemctl stop dhcpd
+     systemctl stop named
+     systemctl restart apache2
      ```
 
-   1. If `ping dcldap3.us.cray.com` does not work then add following entry in `/etc/hosts`
+   1. If `ping dcldap3.us.cray.com` does not work, then add the following entry in `/etc/hosts`.
 
-      ```bash
-         172.30.12.37    dcldap3.us.cray.com
+      ```text
+      172.30.12.37    dcldap3.us.cray.com
       ```
 
 1. (`pit#`) Get the artifact versions.
@@ -941,94 +990,98 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
    = PIT Identification = COPY/CUT END =========================================
    ```
 
-## Seed File generation
+## Seed file generation
 
-The stepwise procedure to generate seed files is as follows:
+The procedure to generate seed files is as follows:
 
-   1. Generate Paddle File
-      To generate the paddle file using the CANU Validate tool, follow link [Validate SHCD](../../operations/network/management_network/validate_shcd.md).
+1. (`pit#`) Generate paddle file.
 
-      Example Command:
+   To generate the paddle file using the CANU Validate tool, see [Validate SHCD](../../operations/network/management_network/validate_shcd.md).
 
-      ```bash
-      canu validate shcd --shcd CrayInc-ShastaRiver-Groot-RevE12.xlsx --architecture V1 --tabs 40G_10G,NMN,HMN --corners I12,Q38,I13,Q21,J20,   U38 --json --out cabling.json
-      ```
+   Example command:
 
-   1. Store SHCD Data in CVT Database.
+   ```bash
+   canu validate shcd --shcd CrayInc-ShastaRiver-Groot-RevE12.xlsx --architecture V1 --tabs 40G_10G,NMN,HMN --corners I12,Q38,I13,Q21,J20,   U38 --json --out cabling.json
+   ```
 
-      ```bash
-      cm cvt parse shcd --canu_json_file cabling.json
-      ```
+1. (`pit#`) Store SHCD Data in CVT Database.
 
-      Example output:
+   ```bash
+   cm cvt parse shcd --canu_json_file cabling.json
+   ```
 
-      ![store SHCD data](../../img/install/parse_shcd.PNG)
+   Example output:
 
-   1. Create [`cabinets.yaml`](../create_cabinets_yaml.md) (Manually).
+   ![store SHCD data](../../img/install/parse_shcd.PNG)
 
-   1. Capture hardware inventory and generate seed files and paddle file.
+1. Create [`cabinets.yaml`](../create_cabinets_yaml.md) (manually).
 
-      The following command stores the inventory of nodes and switches (fabric and management) in the database and generates the seed files and paddle file:
+1. (`pit#`) Capture hardware inventory and generate seed files and paddle file.
 
-      ```bash
-      cnodes | grep node >>nodelist
-      pdsh -w^nodelist /opt/clmgr/cluster-config-verification-tool/scripts/create_bond0.sh
-      cm cvt config create -t all --mgmt_username 'uname' --mgmt_password 'passwd' --architecture '<architecture>'
-      ```
+   The following command stores the inventory of nodes and switches (fabric and management) in the database and generates the seed files and paddle file:
 
-      >__NOTE:__ The seed files and paddle file will be generated in the present working directory.
+   ```bash
+   cnodes | grep node >>nodelist
+   pdsh -w^nodelist /opt/clmgr/cluster-config-verification-tool/scripts/create_bond0.sh
+   cm cvt config create -t all --mgmt_username 'uname' --mgmt_password 'passwd' --architecture '<architecture>'
+   ```
 
-   1. Save the generated seed files (`switch_metadata.csv`, `application_node_config.yaml`, `hmn_connections.json`, `ncn_metadata.csv`), paddle file (`cvt-ccj.json`) and `cvt.json`.
-   The seed files (or configuration payload files) and paddle file will be used later during the CSM installation process so they can be saved/backed up in a persistent storage.
+   >__NOTE:__ The seed files and paddle file will be generated in the current working directory.
 
-## Compare the SHCD Data with CVT Inventory Data(Optional)
+1. Save the generated seed files (`switch_metadata.csv`, `application_node_config.yaml`, `hmn_connections.json`, `ncn_metadata.csv`), paddle file (`cvt-ccj.json`), and `cvt.json`.
 
-   1. Display the list of generated snapshot IDs.
+   The seed files (or configuration payload files) and paddle file will be used later during the CSM installation process, so they should be saved/backed up in a persistent storage.
 
-      ```bash
-      cm cvt shcd compare --list
-      ```
+## Compare the SHCD data with CVT inventory data (optional)
 
-      Sample Output:
-      ![List CVT inventory](../../img/install/list_inventory.png)
+1. (`pit#`) Display the list of generated snapshot IDs.
 
-   1. Compare the CVT and SHCD snapshots.
+   ```bash
+   cm cvt shcd compare --list
+   ```
 
-      ```bash
-      cm cvt shcd compare --shcd_id c4b166df-7678-4484-8762-87104de8d117 --cvt_id 84e208e3-7b0d-4ce5-9a03-95bee60714d8
-      ```
+   Example output:
 
-      In the previous command, `--shcd_id` accepts the snapshot ID created while inserting into SHCD_DATA table and `--cvt_id` accepts the snapshot ID created while inserting into Management Inventory tables.
+   ![List CVT inventory](../../img/install/list_inventory.png)
 
-      Sample Output:
-      ![Compare SHCD data](../../img/install/compare_shcd-cvt.png)
+1. (`pit#`) Compare the CVT and SHCD snapshots.
 
-      In the previous output, wherever there is a difference in the data found, the left hand side is the data from SHCD and the right hand side is the data from CVT (SHCD => CVT).
-      Under the Result column `Found in CVT Data` implies the data is present only in the CVT inventory and not found in the SHCD data, `Not Found in CVT Data` implies the data is present only in the SHCD data and not found in the CVT inventory.
-      And the Difference Found is resulted along with the display of the mismatch found between both the data.
+   ```bash
+   cm cvt shcd compare --shcd_id c4b166df-7678-4484-8762-87104de8d117 --cvt_id 84e208e3-7b0d-4ce5-9a03-95bee60714d8
+   ```
+
+   In the previous command, `--shcd_id` accepts the snapshot ID created while inserting into `SHCD_DATA` table and `--cvt_id` accepts the snapshot ID created while inserting into Management Inventory tables.
+
+   Example output:
+
+   ![Compare SHCD data](../../img/install/compare_shcd-cvt.png)
+
+   In the previous output, wherever there is a difference in the data found, the left hand side is the data from SHCD and the right hand side is the data from CVT (SHCD => CVT).
+   Under the Result column `Found in CVT Data` implies the data is present only in the CVT inventory and not found in the SHCD data, `Not Found in CVT Data` implies the data is present only in the SHCD data and not found in the CVT inventory.
+   And the Difference Found is resulted along with the display of the mismatch found between both the data.
 
 ## Stop HPCM services
 
-Run the following commands to stop HPCM services:
+(`pit#`) Run the following commands to stop HPCM services:
 
-   ```bash
-   systemctl stop clmgr-power
-   systemctl stop grafana-server.service
-   systemctl stop aiops-mlflow.service
-   ```
+```bash
+systemctl stop clmgr-power
+systemctl stop grafana-server.service
+systemctl stop aiops-mlflow.service
+```
 
-## CleanUp (Optional)
+## Cleanup (optional)
 
-1. If the amount of memory on the booted system is low, then cleanup step can be performed by removing the downloaded ISO files and deleting the images.
+(`pit#`) If the amount of memory on the booted system is low, then this cleanup step can be performed to remove the downloaded ISO files and delete the images.
 
-   ```bash
-   rm *.iso 
-   cm image delete -i sles15sp4
-   cm repo del Cluster-Manager-1.9-sles15sp4-x86_64
-   cm repo del SLE-15-SP4-Full-x86_64    
-   ```
+```bash
+rm -v *.iso
+cm image delete -i sles15sp4
+cm repo del Cluster-Manager-1.9-sles15sp4-x86_64
+cm repo del SLE-15-SP4-Full-x86_64
+```
 
-   These steps can help reclaim ~40 GB of space in the `tmpfs/overlay` partition.
+These steps can help reclaim ~40 GB of space in the `tmpfs/overlay` partition.
 
 ## Next topic
 

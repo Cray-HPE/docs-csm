@@ -260,7 +260,7 @@ def get_options_to_change(options_to_import: cfs.CfsOptions,
 
 def change_options(option_data: cfs.CfsOptions, option_names_to_change: List[str]) -> None:
     """
-    Create a dicitonary mapping the specified options to be changed to the new values that
+    Create a dictionary mapping the specified options to be changed to the new values that
     they should have. Then update the CFS options accordingly.
     """
     if not option_names_to_change:

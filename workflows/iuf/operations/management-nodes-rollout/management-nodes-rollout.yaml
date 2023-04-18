@@ -102,7 +102,7 @@ spec:
                     if $rebuild_workers; then
                       # Check config exists
                       config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].configuration' | tr -d '"')
-                      if [[ -z $config ]]; then echo "ERROR  no CFS configuration was recieved for 'Management_Worker' from prepare images stage"; exit 1; fi
+                      if [[ -z $config ]]; then echo "ERROR  no CFS configuration was received for 'Management_Worker' from prepare images stage"; exit 1; fi
                       cray cfs configurations describe "$config" > /dev/null
                       if [[ $? -ne 0 ]]; then
                         exit 1 # could not find the desired cfs configuration
@@ -112,10 +112,10 @@ spec:
 
                       # Check image exists
                       image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].final_image_id' | tr -d '"')
-                      if [[ -z $image ]]; then echo "ERROR  no image was recieved for 'Management_Worker' from prepare images stage"; exit 1; fi
+                      if [[ -z $image ]]; then echo "ERROR  no image was received for 'Management_Worker' from prepare images stage"; exit 1; fi
                       if [[ $(echo $image | wc -l) -gt 1 ]]; then 
-                        echo "ERROR  more than 1 image was recieved for Management_Worker nodes. Must be exactly 1 image to rebuild"
-                        echo "ERROR  Images recieved: $image"; exit 1
+                        echo "ERROR  more than 1 image was received for Management_Worker nodes. Must be exactly 1 image to rebuild"
+                        echo "ERROR  Images received: $image"; exit 1
                       fi
                       cray ims images describe "$image" > /dev/null
                       if [[ $? -ne 0 ]]; then
@@ -128,7 +128,7 @@ spec:
                     if $rebuild_masters; then
                       # Check config exists
                       config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
-                      if [[ -z $config ]]; then echo "ERROR  no CFS configuration was recieved for 'Management_Master' from prepare images stage"; exit 1; fi
+                      if [[ -z $config ]]; then echo "ERROR  no CFS configuration was received for 'Management_Master' from prepare images stage"; exit 1; fi
                       cray cfs configurations describe "$config" > /dev/null
                       if [[ $? -ne 0 ]]; then
                         exit 1 # could not find the desired cfs configuration
@@ -138,10 +138,10 @@ spec:
 
                       # Check image exists
                       image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
-                      if [[ -z $image ]]; then echo "ERROR  no image was recieved for 'Management_Master' from prepare images stage"; exit 1; fi
+                      if [[ -z $image ]]; then echo "ERROR  no image was received for 'Management_Master' from prepare images stage"; exit 1; fi
                       if [[ $(echo $image | wc -l) -gt 1 ]]; then 
-                        echo "ERROR  more than 1 image was recieved for Management_Master nodes. Must be exactly 1 image to rebuild"
-                        echo "ERROR  Images recieved: $image"; exit 1
+                        echo "ERROR  more than 1 image was received for Management_Master nodes. Must be exactly 1 image to rebuild"
+                        echo "ERROR  Images received: $image"; exit 1
                       fi
                       cray ims images describe "$image" > /dev/null
                       if [[ $? -ne 0 ]]; then
@@ -415,7 +415,7 @@ spec:
                   current_count="{{inputs.parameters.counter}}"
                   rebuild_set=${set_array[$current_count]}
                   if [[ -z $rebuild_set ]]; then
-                    echo "NOTICE  this step recieved no nodes to rebuild. Continuing without rebuilding any worker nodes"
+                    echo "NOTICE  this step received no nodes to rebuild. Continuing without rebuilding any worker nodes"
                     exit 0
                   fi
                   prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
