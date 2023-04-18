@@ -35,7 +35,8 @@ This procedure requires administrative privileges.
 1. Delete the SSH keys in a `cray-console-node` pod.
 
     ```bash
-    kubectl -n services exec -it cray-console-node-0 -- rm -v /var/log/console/conman.key /var/log/console/conman.key.pub
+    kubectl -n services exec -it cray-console-node-0 -c cray-console-node \
+        -- rm -v /var/log/console/conman.key /var/log/console/conman.key.pub
     ```
 
 1. Restart the `cray-console-operator` pod.
