@@ -15,8 +15,10 @@ recipe release is deployed and all management NCNs and managed compute and appli
 rebooted to new images and CFS configurations. Manual operations are documented for procedures that
 are not currently managed by IUF.
 
-The initial install workflow comprises the following procedures which must be executed in the order
-shown.
+The initial install workflow comprises the following procedures. The diagram shows the workflow and
+the steps below it provide detailed instructions which must be executed in the order shown.
+
+![Install or upgrade additional products with IUF](../../../img/operations/iuf_initial_install_workflow_14_04142023.png)
 
 1. Perform an install of CSM
 
