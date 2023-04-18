@@ -1,40 +1,49 @@
 <!-- markdownlint-disable MD013 -->
-# Transceivers and cables
+# Transceivers and Cables
 
-The intent of this guide is to help you choose correct cabling and transceivers for Shasta management network. However you should only use this guideline to what is supported, as the networking vendors may change supported devices without notification or change required software version to run a "new" type of transceiver or DAC cable.
+The intent of this guide is to help administrators choose correct cabling and transceivers for Shasta management network. It is not
+intended to be a "how to" guide on system cabling.
 
-Also the intent of this guide is not to provide you "how-to" cable your system but to depict the supported devices.
+NOTE: Networking vendors may change supported devices or required software versions without notification.
 
-## Helpful tips for navigating the cabling guide
+## Tips for navigating the cabling guide
 
 The supported transceivers are broken down by vendor and have direct links to vendor sites for more information.
 
-To check what transceivers would typically be used in an installation, please refer to the following guide:
-
-[Transceiver examples guide](transceiver_example.md)
+To check what transceivers would typically be used in an installation, see [Transceiver examples guide](transceiver_example.md).
 
 ## Vendors
 
-* Aruba
-* Mellanox
-* DELL
+* [Aruba](#aruba)
+* [Mellanox](#mellanox)
+* [Dell](#dell)
 
 ### Aruba
 
-To get most up to date of supported transceivers, DAC cables, please go to Aruba support portal and search for "Transceiver guide":
+For the most up-to-date information on supported transceivers and DAC cables, search for "Transceiver guide" on the
+[Aruba support portal](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches).
 
-[Aruba support portal](https://asp.arubanetworks.com/downloads;products=Aruba%20Switches)
-
-While Aruba does support "third-party" transceivers with 'allow-unsupported-transceiver' command not all vendors are created equal and some transceivers may not work. For example we have seen in the field that transceivers from ENET do not work with Aruba switches.
+While Aruba does support third-party transceivers with the `allow-unsupported-transceiver` command, some
+transceivers may not work. For example, it has been reported from the field that transceivers from ENET do not work with Aruba switches.
 
 #### JL635A Aruba 8325-48Y8C 48p 25G 8p 100G Switch
 
-Supports 48 ports of 1G/10G/25GbE (SFP/SFP+/SFP28) and 8 ports of 40G/100GbE (QSFP+/QSFP28) [optional 1GBASE-T and 10GBASE-T transceivers, 4x10G and 4x25G breakout cables]
+Supports 48 ports of 1G/10G/25GbE (SFP/SFP+/SFP28) and 8 ports of 40G/100GbE (QSFP+/QSFP28) \[optional 1GBASE-T and 10GBASE-T transceivers, 4x10G and 4x25G breakout cables\].
 
-NOTE: In this particular model, the interfaces are organised into interface groups of 12 ports each. And the default speed setting is 25Gb. If you have mix of devices with different port speeds 1,10 vs 25 for example you need to choose which port block you want to have setup to support 10g devices and all 12 ports in that block are set with that speed so you cannot for example put 10G server and 25G server on group 1.
+NOTE: In this particular model, the interfaces are organized into interface groups of 12 ports each. The default speed setting is 25Gb.
+If there is a mix of devices with different port speeds, then the administrator must choose which port groups will support 10G devices;
+all 12 ports in that group will be set with that speed. This means that it is not possible, for example, to put both a 10G device and
+a 25Gb device in the same group.
 
-```bash
-8325# sh system interface-group
+(`sw#`) The port groups and speeds can be displayed by running the following command on the switch.
+
+```text
+sh system interface-group
+```
+
+Example output:
+
+```text
 ------------------------------------------------
 Group  Speed  Member Ports      Mismatched Ports
 ------------------------------------------------
@@ -44,14 +53,14 @@ Group  Speed  Member Ports      Mismatched Ports
 4      25g    1/1/37-1/1/48
 ```
 
-#### 1G Transceivers
+##### JL635A Aruba 8325-48Y8C: 1G Transceivers
 
 * Aruba 1G SFP LC SX 500m MMF Transceiver (J4858D)
 * Aruba 1G SFP LC LX 10km SMF Transceiver (J4859D)
 * Aruba 1G SFP LC LH 70km SMF Transceiver (J4860D)
 * Aruba 1G SFP RJ45 T 100m Cat5e Transceiver (J8177D)
 
-#### 10G Transceivers and Cables
+##### JL635A Aruba 8325-48Y8C: 10G Transceivers and cables
 
 * Aruba 10G SFP+ LC SR 300m MMF Transceiver (J9150D)
 * Aruba 10G SFP+ LC LR 10km SMF Transceiver (J9151E)
@@ -60,7 +69,7 @@ Group  Speed  Member Ports      Mismatched Ports
 * Aruba 10G SFP+ to SFP+ 1m Direct Attach Copper Cable (J9281D)
 * Aruba 10G SFP+ to SFP+ 3m Direct Attach Copper Cable (J9283D)
 
-#### 25G Transceivers and Cables
+##### JL635A Aruba 8325-48Y8C: 25G Transceivers and cables
 
 * Aruba 25G SFP28 LC SR 100m MMF Transceiver (JL484A)
 * Aruba 25G SFP28 LC eSR 400m MMF Transceiver (JL485A)
@@ -72,7 +81,7 @@ Group  Speed  Member Ports      Mismatched Ports
 * Aruba 25G SFP28 to SFP28 7m Active Optical Cable (R0M45A)
 * Aruba 25G SFP28 to SFP28 15m Active Optical Cable (R0Z21A)
 
-#### 40G Transceivers and Cables
+##### JL635A Aruba 8325-48Y8C: 40G Transceivers and cables
 
 * Aruba 40G QSFP+ LC BiDi 150m MMF Transceiver (JL308A)
 * HPE X142 40G QSFP+ MPO SR4 Transceiver (JH231A)
@@ -87,7 +96,7 @@ Group  Speed  Member Ports      Mismatched Ports
 * Aruba 40G QSFP+ to QSFP+ 30m Active Optical Cable (R0Z24A)
 * HPE QSFP+ to 4xSFP+ 3m Breakout Direct Attach Cable (721064-B21)
 
-#### 100G Transceivers and Cables
+##### JL635A Aruba 8325-48Y8C: 100G Transceivers and cables
 
 * Aruba 100G QSFP28 MPO SR4 MMF Transceiver (JL309A)
 * Aruba 100G QSFP28 LC LR4 SMF Transceiver (JL310A)
@@ -100,10 +109,10 @@ Group  Speed  Member Ports      Mismatched Ports
 
 #### JL720A 8360-48XT4C Switch
 
-48 ports of 100M/1GbE/10GBASE-T
-4 ports of 40GbE/100GbE (QSFP+/QSFP28)
+* 48 ports of 100M/1GbE/10GBASE-T
+* 4 ports of 40GbE/100GbE (QSFP+/QSFP28)
 
-#### 40G Transceivers and cables
+##### JL720A 8360-48XT4C: 40G Transceivers and cables
 
 * Aruba 40G QSFP+ LC BiDi 150m MMF XCVR (JL308A)
 * HPE X142 40G QSFP+ MPO SR4 Transceiver (JH231A)
@@ -116,7 +125,7 @@ Group  Speed  Member Ports      Mismatched Ports
 * HPE (Compute) QSFP+ to 4xSFP+ 3m Breakout Direct Attach Cable (721064-B21)
 * HPE (Compute) HPE BLc QSFP+ to 4x10G SFP+ AOC 15m Opt (721076-B21)
 
-#### 100G Transceivers and cables
+##### JL720A 8360-48XT4C: 100G Transceivers and cables
 
 * Aruba 100G QSFP28 MPO SR4 MMF Transceiver (JL309A)
 * Aruba 100G QSFP28 LC LR4 SMF Transceiver (JL310A)
@@ -134,7 +143,7 @@ Group  Speed  Member Ports      Mismatched Ports
 
 (48) 10/100/1000 BASE-T ports, (4) 1/10/25/50G SFP ports
 
-#### 1G Transceivers and cables
+##### JL762A 6300M: 1G Transceivers and cables
 
 * Aruba 1G SFP LC SX 500m MMF Transceiver (J4858D)
 * Aruba 1G SFP LC LX 10km SMF Transceiver (J4859D)
@@ -144,7 +153,7 @@ Group  Speed  Member Ports      Mismatched Ports
 * Aruba 1G SFP LC LX 10km SMF TAA Transceiver (JL746A)
 * Aruba 1G SFP RJ45 T 100m Cat5e TAA Transceiver (JL747A)
 
-#### 10G Transceivers and cables
+##### JL762A 6300M: 10G Transceivers and cables
 
 * Aruba 10G SFP+ LC SR 300m MMF Transceiver (J9150D)
 * Aruba 10G SFP+ LC LRM 220m MMF Transceiver (J9152D)
@@ -154,17 +163,17 @@ Group  Speed  Member Ports      Mismatched Ports
 * Aruba 10G SFP+ LC SR 300m MMF TAA Transceiver (JL748A)
 * Aruba 10G SFP+ LC LR 10km SMF TAA Transceiver (JL749A)
 
-#### 25G Transceivers and cables
+##### JL762A 6300M: 25G Transceivers and cables
 
 * Aruba 25G SFP28 LC SR 100m MMF Transceiver (JL484A)
 * Aruba 25G SFP28 LC eSR 400m MMF Transceiver (JL485A)
 * Aruba 25G SFP28 LC LR 10km SMF Transceiver (JL486A)
 
-#### 50G Transceivers and cables
+##### JL762A 6300M: 50G Transceivers and cables
 
 * Aruba 50G SFP56 LC SR 100m MMF XCVR (R0M48A)
 
-#### Direct attach cables
+##### JL762A 6300M: Direct attach cables
 
 * Aruba 10G SFP+ to SFP+ 1m Direct Attach Copper Cable
 (J9281D)
@@ -181,9 +190,9 @@ Cable (JL489A)
 
 #### JL636A Aruba 8325-32C 32p 100G Switch
 
-(32) QSFP+/QSFP28 40/100G Transceivers
+32 QSFP+/QSFP28 40/100G Transceivers
 
-#### 40G Transceivers and Cables <!-- markdownlint-disable-line MD024 MD026 -->
+##### JL636A Aruba 8325-32C: 40G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
 
 * Aruba 40G QSFP+ LC BiDi 150m MMF Transceiver (JL308A)
 * HPE X142 40G QSFP+ MPO SR4 Transceiver (JH231A)
@@ -198,7 +207,7 @@ Cable (JL489A)
 * Aruba 40G QSFP+ to QSFP+ 30m Active Optical Cable (R0Z24A)
 * HPE QSFP+ to 4xSFP+ 3m Breakout Direct Attach Cable (721064-B21)
 
-#### 100G Transceivers and Cables <!-- markdownlint-disable-line MD024 MD026 -->
+##### JL636A Aruba 8325-32C: 100G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
 
 * Aruba 100G QSFP28 MPO SR4 MMF Transceiver (JL309A)
 * Aruba 100G QSFP28 LC LR4 SMF Transceiver (JL310A)
@@ -211,14 +220,14 @@ Cable (JL489A)
 
 #### R8Z96A Aruba 9300-32D 32-port 100/200/400G QSFP-DD 2-port 10G Switch
 
-32-ports of 100GbE, 200GbE or 400GbE
-2-ports of 10GbE
+* 32-ports of 100GbE, 200GbE or 400GbE
+* 2-ports of 10GbE
 
-#### 100G Transceivers and Cables <!-- markdownlint-disable-line MD024 MD026 -->
+##### R8Z96A Aruba 9300-32D: 100G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
 
 * R9B63A Aruba 100G QSFP28 LC FR1 SMF 2km Transceiver
 
-#### 200G Transceivers and Cables
+##### R8Z96A Aruba 9300-32D: 200G Transceivers and cables
 
 * R9B60A Aruba 200G QSFP-DD to 2x QSFP28 100G 3m Active Optical Cable
 * R9B58A Aruba 200G QSFP-DD to 2x QSFP28 100G 7m Active Optical Cable
@@ -226,7 +235,7 @@ Cable (JL489A)
 * R9B61A Aruba 200G QSFP-DD to 2x QSFP28 100G 30m Active Optical Cable
 * R9B59A Aruba 200G QSFP-DD to 2x QSFP28 100G 50m Active Optical Cable
 
-#### 400G Transceivers and Cables
+##### R8Z96A Aruba 9300-32D: 400G Transceivers and cables
 
 * R9B45A Aruba 400G QSFP-DD to QSFP-DD 3m Active Optical Cable
 * R9B43A Aruba 400G QSFP-DD to QSFP-DD 7m Active Optical Cable
@@ -236,7 +245,7 @@ Cable (JL489A)
 * R9B41A Aruba 400G QSFP-DD MPO-16 SR8 100m MMF Transceiver
 * R9B42A Aruba 400G QSFP-DD MPO-12 eDR4 2km SMF Transceiver
 
-#### 400G to 200G/100G Splitter cables
+##### R8Z96A Aruba 9300-32D: 400G to 200G/100G splitter cables
 
 * R9B55A Aruba 400G QSFP-DD to 2x QSFP56 200G 3m Active Optical Cable
 * R9B53A Aruba 400G QSFP-DD to 2x QSFP56 200G 7m Active Optical Cable
@@ -255,7 +264,7 @@ Cable (JL489A)
 
 #### SN2100
 
-Supports speeds of 1/10/25/40/50 and 100GbE
+Supports speeds of 1/10/25/40/50 and 100GbE.
 
 * QQSFP28, SFP28 short and long range optics
 * QQSFP28 to QSFP28 DAC cable
@@ -264,11 +273,11 @@ Supports speeds of 1/10/25/40/50 and 100GbE
 * QQSFP AOC
 * Q1000BASE-T and 1000BASE-SX/LX/ZX modules
 
-** Systems limited to 10/40GbE will support modules and cables accordingly
+> Systems limited to 10/40GbE will support modules and cables accordingly.
 
 #### SN2700
 
-Supports speeds of 1/10/25/40/50 and 100GbE
+Supports speeds of 1/10/25/40/50 and 100GbE.
 
 * QSFP28, SFP28 (with QSA) short and long range optics
 * QQSFP28 to QSFP28 DAC Cable
@@ -276,26 +285,26 @@ Supports speeds of 1/10/25/40/50 and 100GbE
 * QQSFP breakout cables 100GbE to 2x50GbE DAC, Optical
 * QQSFP AOC
 
-** Systems limited to 40GbE will support modules and cables accordingly
+> Systems limited to 40GbE will support modules and cables accordingly.
 
 ### Dell
 
 [Dell support portal](https://www.dell.com/support/home/en-us)
 
-### Dell S3048-ON switch series
+#### Dell S3048-ON switch series
 
-### 100m Transceivers and cables
+##### Dell S3048-ON: 100m Transceivers and cables
 
 * Transceiver, SFP, 100BASE-FX, 1310nm wavelength, up to 2km reach
 
-#### 1G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
+##### Dell S3048-ON: 1G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
 
 * Transceiver, SFP, 1000BASE-T
 * Transceiver, SFP, 1000BASE-SX, 850nm wavelength, up to 550m reach
 * Transceiver, SFP, 1000BASE-LX, 1310nm wavelength, up to 10km reach
 * Transceiver, SFP, 1000BASE-ZX, 1550nm wavelength, up to 80km reach
 
-#### 10G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
+##### Dell S3048-ON: 10G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
 
 * Transceiver, SFP+, 10GbE, LRM, 1310nm wavelength, up to 220m reach
 * Transceiver, SFP+, 10GbE, SR, 850nm wavelength, up to 300m reach
@@ -303,7 +312,7 @@ Supports speeds of 1/10/25/40/50 and 100GbE
 * Transceiver, SFP+, 10GbE, ER, 1550nm wavelength, up to 40km reach
 * Transceiver, SFP+, 10GbE, ZR, 1550nm wavelength, up to 80km reach
 
-#### Direct Attach Cables <!-- markdownlint-disable-line MD024 MD026 -->
+##### Dell S3048-ON: Direct attach cables <!-- markdownlint-disable-line MD024 MD026 -->
 
 * Dell EMC Networking cable, SFP+ to SFP+, 10GbE, copper twinax direct attach cable, 0.5m
 * Dell EMC Networking cable, SFP+ to SFP+, 10GbE, copper twinax direct attach cable, 1m
@@ -312,15 +321,15 @@ Supports speeds of 1/10/25/40/50 and 100GbE
 * Dell EMC Networking cable, SFP+ to SFP+, 10GbE, copper twinax direct attach cable, 7m
 * Dell EMC Networking Cable, SFP+ to SFP+, 10GbE, Active Optical Cable, 15m
 
-### Dell S4148T-ON switch series
+#### Dell S4148T-ON switch series
 
 [Dell transceiver guide](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/Dell_EMC_Networking_Optics_Spec_Sheet.pdf)
 
-*48xSFP+
-2xQSFP+
-4xQSFP28
+* 48xSFP+
+* 2xQSFP+
+* 4xQSFP28
 
-#### 10GG Transceivers and cables
+##### Dell S4148T-ON: 10GG Transceivers and cables
 
 * SFP-10G
 * USR SFP-10G
@@ -331,7 +340,7 @@ Supports speeds of 1/10/25/40/50 and 100GbE
 * SFP-10G-T
 * DWDM SFP-10G-T
 
-#### 40GbE Transceivers
+##### Dell S4148T-ON: 40GbE Transceivers
 
 * QSFP-40G-SR4
 * QSFP-40G-ESR4
@@ -342,7 +351,7 @@ Supports speeds of 1/10/25/40/50 and 100GbE
 * QSFP-40G-LR4
 * QSFP-40G-ER4
 
-#### 100G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
+##### Dell S4148T-ON: 100G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
 
 * Q28-100G-FR
 * Q28-100G-SR4
@@ -354,15 +363,15 @@ Supports speeds of 1/10/25/40/50 and 100GbE
 * Q28-100G-ER4-lite
 * Q28-100G-DWDM2
 
-### Dell S4148F-ON switch series
+#### Dell S4148F-ON switch series
 
 [Dell transceiver guide](https://www.delltechnologies.com/asset/en-us/products/networking/technical-support/Dell_EMC_Networking_Optics_Spec_Sheet.pdf)
 
-48xSFP+
-2xQSFP+
-4xQSFP28
+* 48xSFP+
+* 2xQSFP+
+* 4xQSFP28
 
-#### 10GG Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
+##### Dell S4148F-ON: 10GG Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
 
 * SFP-10G
 * USR SFP-10G
@@ -373,7 +382,7 @@ Supports speeds of 1/10/25/40/50 and 100GbE
 * SFP-10G-T
 * DWDM SFP-10G-T
 
-#### 40GbE transceivers <!-- markdownlint-disable-line MD024 MD026 -->
+##### Dell S4148F-ON: 40GbE transceivers <!-- markdownlint-disable-line MD024 MD026 -->
 
 * QSFP-40G-SR4
 * QSFP-40G-ESR4
@@ -384,7 +393,7 @@ Supports speeds of 1/10/25/40/50 and 100GbE
 * QSFP-40G-LR4
 * QSFP-40G-ER4
 
-#### 100G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
+##### Dell S4148F-ON: 100G Transceivers and cables <!-- markdownlint-disable-line MD024 MD026 -->
 
 * Q28-100G-FR
 * Q28-100G-SR4
