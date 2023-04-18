@@ -5,7 +5,9 @@
 
 ## 1. Execute the IUF `deploy-product` stage
 
-1. Refer to the "Install and Upgrade Framework" section of each individual product's installation documentation to determine if any special actions need to be performed outside of IUF for the `deploy-product` stage.
+1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
+section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `deploy-product` stage.
+Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. Invoke `iuf run` with `-r` to execute the [`deploy-product`](../stages/deploy_product.md) stage.
 
