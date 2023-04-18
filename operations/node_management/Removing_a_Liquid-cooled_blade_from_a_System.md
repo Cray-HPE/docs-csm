@@ -145,6 +145,7 @@ The NodeBMC MAC and IP addresses are assigned algorithmically and *must not be d
     ```bash
     for mac in $(cray hsm inventory ethernetInterfaces list --type Node --format json | jq -r --arg CHASSIS_SLOT $CHASSIS_SLOT '.[] | select(.ComponentID | startswith($CHASSIS_SLOT)) | .ID'); do
         echo "Removing $mac from HSM Inventory EthernetInterfaces"
+        cray hsm inventory ethernetInterfaces delete "$mac"
     done
     ```
 
