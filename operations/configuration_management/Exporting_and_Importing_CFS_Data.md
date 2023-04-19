@@ -16,7 +16,7 @@
 1. (`ncn-mw#`) Run the following script to create a backup of the current CFS components, configurations, options, and sessions.
 
    ```bash
-   /usr/share/doc/csm/scripts/operations/system_recovery/export_cfs_data.sh
+   /usr/share/doc/csm/scripts/operations/configuration/export_cfs_data.sh
    ```
 
    Expected output resembles the following:
@@ -66,5 +66,5 @@ criteria listed above.
    > Modify the following example command to specify the path to the output file from the automated export script.
 
    ```bash
-   /usr/share/doc/csm/scripts/operations/system_recovery/import_cfs_data.sh /tmp/cfs-export-20230410170613-Tg0nap.tgz
+   /usr/share/doc/csm/scripts/operations/configuration/import_cfs_data.sh /tmp/cfs-export-20230410170613-Tg0nap.tgz
    ```
