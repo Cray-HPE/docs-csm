@@ -100,8 +100,8 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     err_msg = ""
     ```
 
-7. Bring up the Slingshot Fabric.
-    Refer to the following documentation for more information on how to bring up the Slingshot Fabric:
+7. Verify the Slingshot fabric is up and healthy.
+    Refer to the following documentation for more information on how to verify the health of the Slingshot Fabric:
     * The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
     * The *Slingshot Troubleshooting Guide* PDF.
 
