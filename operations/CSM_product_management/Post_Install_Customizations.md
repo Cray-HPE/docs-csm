@@ -185,14 +185,18 @@ If number of NCNs are greater than 20, then
      memory: 30Gi
    ```
 
-1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data.
+1. Edit the `platform.yaml` to only include the `cray-sysmgmt-health` chart and all its current data, and change the `metadata.name`
+   field to `syshealth`.
+
+   > **NOTE:** If you leave the `metadata.name` field unchanged, it will override the existing cached product manifest so please make sure
+   > to change it to `syshealth` before proceeding.
 
    The resources specified above will be updated in the next step. The version may differ, because this is an example.
 
    ```yaml
    apiVersion: manifests/v1beta1
    metadata:
-     name: platform
+     name: syshealth
    spec:
      charts:
      - name: cray-sysmgmt-health
@@ -310,14 +314,17 @@ Refer to the note at the end of this section for more details.
      memory: 8Gi
    ```
 
-1. Edit the `sysmgmt.yaml` to only include the `spire` chart and all its current data.
+1. Edit the `sysmgmt.yaml` to only include the `spire` chart and all its current data, and change the `metadata.name` field to `spirepg`.
+
+   > **NOTE:** If you leave the `metadata.name` field unchanged, it will override the existing cached product manifest so please make sure
+   > to change it to `spirepg` before proceeding.
 
    The resources specified above will be updated in the next step. The version may differ, because this is an example.
 
    ```yaml
    apiVersion: manifests/v1beta1
    metadata:
-     name: platform
+     name: spirepg
    spec:
      charts:
      - name: spire
@@ -399,6 +406,9 @@ Refer to the note at the end of this section for more details.
 **IMPORTANT:** If `cray-sls-postgres`, `cray-smd-postgres`, or `gitea-vcs-postgres` resources need to be adjusted,
 the same procedure as above can be used with the following changes:
 
+> **NOTE:** When copying bash commands from the above section, please use a YAML file name that matches the corresponding
+> cached manifest ConfigMap to avoid accidentally using a wrong YAML file.
+
 * `cray-sls-postgres`
 
   * Get the current cached manifest ConfigMap from: `loftsman-core-services`
@@ -445,14 +455,17 @@ Trial and error may be needed to determine what is best for a given system at sc
    5
    ```
 
-1. Edit the `sysmgmt.yaml` to only include the `cray-hms-bss` chart and all its current data.
+1. Edit the `sysmgmt.yaml` to only include the `cray-hms-bss` chart and all its current data, and change the `metadata.name` field to `bssrep`.
+
+   > **NOTE:** If you leave the `metadata.name` field unchanged, it will override the existing cached product manifest so please make sure
+   > to change it to `bssrep` before proceeding.
 
    The `replicaCount` specified above will be updated in the next step. The version may differ, because this is an example.
 
    ```yaml
    apiVersion: manifests/v1beta1
    metadata:
-     name: sysmgmt
+     name: bssrep
    spec:
      charts:
      - name: cray-hms-bss
@@ -554,14 +567,17 @@ Refer to the note at the end of this section for more details.
    100Gi
    ```
 
-1. Edit the `core-services.yaml` to only include the `cray-hms-smd` chart and all its current data.
+1. Edit the `core-services.yaml` to only include the `cray-hms-smd` chart and all its current data, and change the `metadata.name` field to `smdpvc`.
+
+   > **NOTE:** If you leave the `metadata.name` field unchanged, it will override the existing cached product manifest so please make sure
+   > to change it to `smdpvc` before proceeding.
 
    The `volumeSize` specified above will be updated in the next step. The version may differ, because this is an example.
 
    ```yaml
    apiVersion: manifests/v1beta1
    metadata:
-     name: core-services
+     name: smdpvc
    spec:
      charts:
      - name: cray-hms-smd
@@ -621,6 +637,9 @@ Refer to the note at the end of this section for more details.
    ```
 
 **IMPORTANT:** If the volume sizes of `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` need to be adjusted, the same procedure as above can be used with the following changes:
+
+> **NOTE:** When copying bash commands from the above section, please use a YAML file name that matches the corresponding
+> cached manifest ConfigMap to avoid accidentally using a wrong YAML file.
 
 * `cray-sls-postgres`
 
