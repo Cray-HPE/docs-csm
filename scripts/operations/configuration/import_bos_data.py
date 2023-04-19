@@ -33,7 +33,7 @@ import json
 import os
 import subprocess
 import sys
-from typing import Dict, List, NamedTuple, Union
+from typing import Dict, List, Union
 
 from python_lib.bos import BosError, BosOptions, update_options
 from python_lib.bos_cli import create_session_template, list_options, list_session_templates
@@ -46,16 +46,8 @@ from python_lib.ims_id_maps import ImsIdEtagMaps, \
                                    load_ims_id_map, \
                                    update_session_template
 
-class SessionTemplateRecord(NamedTuple):
-    """
-    Record of a BOS session template, the JSON file from which it was imported, and its BOS version
-    """
-    template: BosSessionTemplate
-    source_file: str
-    bos_version: int
-
 # Mapping from template name to associated session template record
-SessionTemplateRecordMap = Dict[str, SessionTemplateRecord]
+SessionTemplateMap = Dict[str, BosSessionTemplate]
 
 BOS_EXPORT_TOOL = "/usr/share/doc/csm/scripts/operations/configuration/export_bos_data.sh"
 
@@ -77,7 +69,7 @@ def snapshot_bos_data() -> None:
     """
     subprocess.check_call(BOS_EXPORT_TOOL)
 
-def get_template_to_import(template_name: str, template_record: SessionTemplateRecord,
+def get_template_to_import(template_name: str, template_to_create: BosSessionTemplate,
                            ims_id_map: ImsIdEtagMaps,
                            current_templates: List[BosSessionTemplate]) -> Union[BosSessionTemplate,
                                                                                  None]:
@@ -88,8 +80,7 @@ def get_template_to_import(template_name: str, template_record: SessionTemplateR
     If a BOS session template already exists with the same name, the import will not happen
     and a message will be printed to that effect.
     """
-    bos_vstring = f"v{template_record.bos_version}"
-    print(f"Processing BOS {bos_vstring} session template '{template_name}'")
+    print(f"Processing session template '{template_name}'")
 
     if ims_id_map:
         print("Updating IMS IDs and S3 etags in template (if any)")
@@ -97,8 +88,6 @@ def get_template_to_import(template_name: str, template_record: SessionTemplateR
         if template_name != template_to_create["name"]:
             template_name = template_to_create["name"]
             print(f"After IMS ID and S3 etag update, new template name is '{template_name}'")
-    else:
-        template_to_create = template_record.template
 
     for template in current_templates:
         if template_name != template["name"]:
@@ -113,16 +102,16 @@ def get_template_to_import(template_name: str, template_record: SessionTemplateR
 
     return template_to_create
 
-def get_templates_to_import(session_template_records: SessionTemplateRecordMap,
+def get_templates_to_import(template_name_map: SessionTemplateMap,
                             current_templates: List[BosSessionTemplate],
-                            ims_id_map: ImsIdEtagMaps) -> Dict[str, SessionTemplateRecord]:
+                            ims_id_map: ImsIdEtagMaps) -> SessionTemplateMap:
     """
     Returns all of the session templates that should be created on the system based on the templates
     in the imported data, the IMS ID map (if any), and the current session templates on the system.
     """
-    template_records_to_import = {}
-    for template_name, template_record in session_template_records.items():
-        template_to_import = get_template_to_import(template_name, template_record, ims_id_map,
+    template_import_map = {}
+    for template_name, template in template_name_map.items():
+        template_to_import = get_template_to_import(template_name, template, ims_id_map,
                                                     current_templates)
         if not template_to_import:
             continue
@@ -131,19 +120,17 @@ def get_templates_to_import(session_template_records: SessionTemplateRecordMap,
         # etag replacement) in such a way that it collides with another template we are importing.
         # If this happens, we will import neither template, unless they happen to now be identical.
         template_name_to_import = template_to_import["name"]
-        if template_name_to_import in template_records_to_import:
-            if template_to_import == template_records_to_import[template_name_to_import].template:
+        if template_name_to_import in template_import_map:
+            if template_to_import == template_import_map[template_name_to_import]:
                 continue
             print("After IMS ID/S3 etag replacement, there are two different session templates "
                   f"named '{template_name_to_import}' planned for import. Skipping import of both.")
-            del template_records_to_import[template_name_to_import]
+            del template_import_map[template_name_to_import]
             continue
         # Add this to the import list.
-        template_records_to_import[template_name_to_import] = \
-            SessionTemplateRecord(template=template_to_import,
-                                  source_file=template_record.source_file,
-                                  bos_version=template_record.bos_version)
-    return template_records_to_import
+        template_import_map[template_name_to_import] = template_to_import
+
+    return template_import_map
 
 def get_options_to_change(options_to_import: BosOptions, current_options: BosOptions) -> List[str]:
     """
@@ -180,35 +167,37 @@ def change_options(option_data: BosOptions, option_names_to_change: List[str]) -
         print(f"{opt_name} = {option_updates[opt_name]}")
     update_options(option_updates)
 
-def validate_and_record_template(session_template_records: SessionTemplateRecordMap,
+def validate_and_record_template(name_template_map: SessionTemplateMap,
+                                 template_source_map: Dict[str, str],
                                  session_template: BosSessionTemplate, source_file: str) -> None:
     """
-    Helper function which parses a would-be session template, adding it to session_template_records
-    mapping if it looks good. Raises BosError if there are any problems.
+    Helper function which parses a would-be session template, adding it to name_template_map
+    mapping if it looks good. Also adds a corresponding entry in the template_source_map.
+    Raises BosError if there are any problems.
     """
     try:
         template_name = get_session_template_name(session_template)
     except InvalidBosSessionTemplate as exc:
-        raise BosError(
-            f"Error with session template in {source_file}: {exc}") from exc
-    if template_name in session_template_records:
+        raise BosError(f"Error with session template in {source_file}: {exc}") from exc
+    if template_name in name_template_map:
         # We already have a template with this name. The only way this isn't a problem
         # is if the two templates are identical
-        if session_template_records[template_name].template == session_template:
+        if name_template_map[template_name] == session_template:
             # They are identical, so just skip it.
             return
         raise BosError(f"Two different session templates in {source_file} and"
-            f" {session_template_records[template_name].source_file} both named '{template_name}'")
-    # Determine BOS version of this template
+            f" {template_source_map[template_name]} both named '{template_name}'")
+    # Make sure the BOS version of this template can be determined. We don't care what the version
+    # is yet -- this is just validating that the template isn't so malformed that making this call
+    # provokes an error.
     try:
-        bos_version = get_session_template_version(session_template)
+        get_session_template_version(session_template)
     except InvalidBosSessionTemplate as exc:
-        raise BosError(
-            f"{source_file} contains invalid template '{template_name}': {exc}") from exc
+        raise BosError(f"{source_file} contains invalid template '{template_name}': {exc}") from exc
 
     # Add this template to our records
-    session_template_records[template_name] = SessionTemplateRecord(
-        template=session_template, source_file=source_file, bos_version=bos_version)
+    name_template_map[template_name] = session_template
+    template_source_map[template_name] = source_file
 
 def list_json_files_in_directory(dir_name: str) -> List[str]:
     """
@@ -239,11 +228,12 @@ def validate_json_file(file_name: str) -> None:
         raise BosError(f"Argument exists but is not a regular file: '{file_name}'")
     raise BosError(f"File does not exist: '{file_name}'")
 
-def load_templates_from_import_data(file_or_dir: str) -> SessionTemplateRecordMap:
+def load_templates_from_import_data(file_or_dir: str) -> SessionTemplateMap:
     """
     Loads session templates from JSON file or directory specified on the command line.
-    Returns a mapping from template names to template records.
+    Returns a mapping from template names to templates.
     """
+
     if os.path.isdir(file_or_dir):
         # Find all JSON files in this directory
         print(f"Looking for session template JSON files in directory: '{file_or_dir}'")
@@ -252,23 +242,29 @@ def load_templates_from_import_data(file_or_dir: str) -> SessionTemplateRecordMa
         validate_json_file(file_or_dir)
         json_files = [file_or_dir]
 
-    session_template_records = {}
-    # session_template_records is a mapping from template names to SessionTemplateRecords
+    # Dict mapping template name to the JSON file from which the template was loaded.
+    # Used to provide information in case the same template is found in multiple files.
+    template_source_map = {}
+
+    # Dict mapping template name to the session template
+    name_template_map = {}
 
     for json_file in json_files:
         print(f"Reading session templates from {json_file}")
         with open(json_file, "rt") as jfile:
             file_contents = json.load(jfile)
         if isinstance(file_contents, dict):
-            validate_and_record_template(session_template_records, file_contents, json_file)
+            validate_and_record_template(name_template_map, template_source_map, file_contents,
+                                         json_file)
             continue
         if isinstance(file_contents, list):
             for template in file_contents:
-                validate_and_record_template(session_template_records, template, json_file)
+                validate_and_record_template(name_template_map, template_source_map, template,
+                                             json_file)
             continue
         # Not a list or a dict
         raise BosError(f"Contents of {json_file} not a session template or list of templates")
-    return session_template_records
+    return name_template_map
 
 def main() -> None:
     """
@@ -308,7 +304,7 @@ def main() -> None:
                              "such JSON files")
     parsed_args = parser.parse_args()
 
-    session_template_records = load_templates_from_import_data(parsed_args.file_or_directory)
+    template_name_map = load_templates_from_import_data(parsed_args.file_or_directory)
 
     if parsed_args.options_file is not None:
         print("Reading in BOS options from JSON file")
@@ -331,12 +327,12 @@ def main() -> None:
 
     # Get list of current BOS session templates on system
     current_session_templates = list_session_templates()
-    templates_to_import = get_templates_to_import(session_template_records,
+    template_import_map = get_templates_to_import(template_name_map,
                                                   current_session_templates, ims_id_map)
 
     print("")
     # If there are no changes to make, we are already done
-    if not options_to_change and not templates_to_import:
+    if not options_to_change and not template_import_map:
         print("No updates to be performed.")
         return
 
@@ -349,9 +345,10 @@ def main() -> None:
         change_options(imported_bos_options, options_to_change)
         print("")
 
-    for template_name, template_record in templates_to_import.items():
-        print(f"Importing BOS v{template_record.bos_version} session template '{template_name}'")
-        create_session_template(template_record.template, template_record.bos_version)
+    for template_name, template in template_import_map.items():
+        bos_version = get_session_template_version(template)
+        print(f"Importing BOS v{bos_version} session template '{template_name}'")
+        create_session_template(template, bos_version)
 
     print("")
     # Take a snapshot of the BOS data after we're done
