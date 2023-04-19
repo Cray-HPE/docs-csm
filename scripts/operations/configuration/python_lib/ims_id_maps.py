@@ -32,7 +32,7 @@ import json
 from collections import ChainMap
 from typing import Dict, IO, NamedTuple
 
-from bos_session_templates import BosSessionTemplate, BosSessionTemplateBootSets
+from .bos_session_templates import BosSessionTemplate, BosSessionTemplateBootSets
 
 StringMap = Dict[str, str]
 

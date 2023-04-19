@@ -32,12 +32,7 @@ import sys
 import tempfile
 import uuid
 from os import path
-from typing import Dict
 from urllib.parse import urlparse
-
-# Ugly temporary hack to get the product_catalog module from a different path.
-# This will go away as the helper modules make their way into libcsm
-sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","configuration"))
 
 import update_product_catalog_ims_ids
 
