@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -142,6 +142,9 @@ if [[ $state_recorded == "0" ]]; then
     if [[ "${DELETE_TARBALL_FILE}" != N ]]; then
         rm -rf "${TARBALL_FILE}"
     fi
+
+    #copy the canu RPM into the sle-15sp3 directory
+    cp /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp4/x86_64/canu-*.rpm /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp3/x86_64
 
     # if we have to untar a file, we assume this is a new upgrade
     # remove existing myenv file just in case
