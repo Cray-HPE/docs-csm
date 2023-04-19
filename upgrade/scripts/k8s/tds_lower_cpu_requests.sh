@@ -37,6 +37,7 @@ elasticsearch_master_new_cpu_request=1500m
 cluster_kafka_new_cpu_request=1
 sma_grafana_new_cpu_request=100m
 sma_kibana_new_cpu_request=100m
+sma_dashboards_new_cpu_request=100m
 cluster_zookeeper_new_cpu_request=100m
 cray_smd_new_cpu_request=1
 cray_smd_postgres_new_cpu_request=1
@@ -117,6 +118,17 @@ if [[ $smaKibanaDeployed -ne 0 ]]; then
     echo "Patching sma-kibana deployment with new cpu request of $sma_kibana_new_cpu_request (from $current_req)"
     kubectl patch deployment sma-kibana -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$sma_kibana_new_cpu_request\" }]"
     kubectl rollout status deployment -n services sma-kibana
+    echo ""
+  fi
+fi
+
+smaDashboardsDeployed=$(kubectl get pods -n services | grep sma-dashboards | wc -l)
+if [[ $smaKibanaDeployed -ne 0 ]]; then
+  if [ ! -z $sma_dashboards_new_cpu_request ]; then
+    current_req=$(kubectl get deployment sma-dashboards -n services -o json | jq -r '.spec.template.spec.containers[] | select(.name== "sma-dashboards") | .resources.requests.cpu')
+    echo "Patching sma-dashboards deployment with new cpu request of $sma_dashboards_new_cpu_request (from $current_req)"
+    kubectl patch deployment sma-dashboards -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$sma_dashboards_new_cpu_request\" }]"
+    kubectl rollout status deployment -n services sma-dashboards
     echo ""
   fi
 fi
