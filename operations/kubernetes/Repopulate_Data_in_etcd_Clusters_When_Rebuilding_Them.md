@@ -3,16 +3,17 @@
 When an etcd cluster is not healthy, it needs to be rebuilt. During that process, the pods that rely on etcd clusters lose data.
 That data needs to be repopulated in order for the cluster to go back to a healthy state.
 
-- [Applicable services](#applicable-services)
-- [Prerequisites](#prerequisites)
-- [Procedures](#procedures)
-  - [BOS](#bos)
-  - [BSS](#bss)
-  - [CPS](#cps)
-  - [FAS](#fas)
-  - [HMNFD](#hmnfd)
-  - [MEDS](#meds)
-  - [REDS](#reds)
+- [Repopulate Data in etcd Clusters When Rebuilding Them](#repopulate-data-in-etcd-clusters-when-rebuilding-them)
+  - [Applicable services](#applicable-services)
+  - [Prerequisites](#prerequisites)
+  - [Procedures](#procedures)
+    - [BOS](#bos)
+    - [BSS](#bss)
+    - [CPS](#cps)
+    - [FAS](#fas)
+    - [HMNFD](#hmnfd)
+    - [MEDS](#meds)
+    - [REDS](#reds)
 
 ## Applicable services
 
@@ -106,13 +107,12 @@ Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their St
     rm -rf "${TMPFILE}"
     ```
 
-1. (`ncn-m#`) Resubscribe the NCNs.
+1. (`ncn-m#`) Resubscribe all worker nodes.
 
-    **NOTE:** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
+    **NOTE:** Modify the `-w` arguments in the following commands to reflect the number of worker nodes in the system.
 
     ```bash
     pdsh -w ncn-w00[1-4]-can.local "systemctl restart cray-orca"
-    pdsh -w ncn-s00[1-4]-can.local "systemctl restart cray-orca"
     ```
 
 ### MEDS
