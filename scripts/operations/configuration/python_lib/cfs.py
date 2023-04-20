@@ -24,7 +24,6 @@
 """Shared Python function library: CFS"""
 
 import traceback
-
 import logging
 
 from typing import Dict, List, Union

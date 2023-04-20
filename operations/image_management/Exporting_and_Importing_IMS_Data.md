@@ -28,7 +28,7 @@ either using an automated script, or manually one at a time.
    containing information about the recipes and images that are registered with IMS.
 
    ```bash
-   /usr/share/doc/csm/scripts/operations/system_recovery/ims-import-export.py --export --include-linked-artifacts
+   /usr/share/doc/csm/scripts/operations/configuration/ims-import-export.py --export --include-linked-artifacts
    ```
 
    Expected output:
@@ -194,7 +194,7 @@ import IMS recipes and images that are missing after an upgrade.
 script when the data was exported.
 
 ```bash
-/usr/share/doc/csm/scripts/operations/system_recovery/ims-import-export.py --import
+/usr/share/doc/csm/scripts/operations/configuration/ims-import-export.py --import
 ```
 
 Example output:
