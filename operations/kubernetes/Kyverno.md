@@ -322,6 +322,7 @@ Also, it generates the report of policy violation in respective workloads. The f
     This shows that the mutation policy for the workload was enforced properly.
 
     If there are any discrepancies, look at the detailed policy report to triage the issue.
+    
 ## What is new in HPE CSM v1.4
 
 As part of HPE CSM v1.4, the upstream Baseline profile is made available for the customer.
@@ -353,7 +354,7 @@ The Baseline profile is minimally restrictive and denies the most common vulnera
     restrict-seccomp                 true         audit    true
     restrict-sysctls                 true         audit    true
     ```
-The violations for each of the baseline policy is logged in policyreport, similar to other policies as mentioned in Validation section above.
+The violations for each of the baseline policy is logged in policy report, similar to other policies as mentioned in Validation section above.
 In order to give more insights towards each violation use below mentioned command.
 
 ### Example to list policy violations at pod level.
@@ -389,7 +390,7 @@ In order to give more insights towards each violation use below mentioned comman
     "cray-ceph-csi-cephfs-nodeplugin","DaemonSet","ceph-cephfs","disallow-capabilities","Any capabilities added beyond the allowed list (AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT) are disallowed."
     "cray-ceph-csi-cephfs-nodeplugin","DaemonSet","ceph-cephfs","disallow-privileged-containers","validation error: Privileged mode is disallowed. The fields spec.containers[*].securityContext.privileged and spec.initContainers[*].securityContext.privileged must be unset or set to `false`. Rule autogen-privileged-containers failed at path /spec/template/spec/containers/0/securityContext/privileged/"
     ```
-
+    
 ## Known issues
 
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
