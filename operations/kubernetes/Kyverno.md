@@ -336,9 +336,9 @@ The Baseline profile is minimally restrictive and denies the most common vulnera
 ```bash
 kubectl get clusterpolicy -A
 ```
-    
+
 Example output:
-    
+
 ```text
 NAME                             BACKGROUND   ACTION   READY
 cluster-job-ttl                  true         audit    true
@@ -363,9 +363,9 @@ In order to give more insights towards each violation use below mentioned comman
 ```bash
 kubectl get polr -A -o json | jq -r -c '["Name","kind","Namespace","policy","message"],(.items[].results // [] | map(select(.result=="fail")) | select(. | length > 0) | .[] | select (.resources[0].kind == "Pod") | [.resources[0].name,.resources[0].kind,.resources[0].namespace,.policy,.message]) | @csv'
 ```
-    
+
 Example output:
-    
+
 ```text
 "Name","kind","Namespace","policy","message"
 "hms-discovery-28031310-lnvtf","Pod","services","disallow-capabilities","Any capabilities added beyond the allowed list (AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT) are disallowed."
@@ -380,9 +380,9 @@ Example output:
 ```bash
 kubectl get polr -A -o json | jq -r -c '["Name","kind","Namespace","policy","message"],(.items[].results // [] | map(select(.result=="fail")) | select(. | length > 0) | .[] | select (.resources[0].kind) | [.resources[0].name,.resources[0].kind,.resources[0].namespace,.policy,.message]) | @csv'
 ```
-    
+
 Example output:
-    
+
 ```text
 "Name","kind","Namespace","policy","message"
 "cray-nls","Deployment","argo","disallow-host-path","validation error: HostPath volumes are forbidden. The field spec.volumes[*].hostPath must be unset. Rule autogen-host-path failed at path /spec/template/spec/volumes/4/hostPath/"
