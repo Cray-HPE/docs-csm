@@ -17,7 +17,7 @@ https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/
 ```
 
 The `FASUpdate` Script will be installed in `/usr/share/doc/csm/scripts/operations/firmware`
-Set an alias for the FASUdate.py script to include the path (`ncn-mw#`)
+Set an alias for the `FASUdate.py` script to include the path (`ncn-mw#`)
 
 ```bash
 alias FASUpdate.py=/usr/share/doc/csm/scripts/operations/firmware/FASUpdate.py
