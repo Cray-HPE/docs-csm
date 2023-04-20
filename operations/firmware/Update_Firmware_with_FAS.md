@@ -67,7 +67,7 @@ For each item in the `Hardware Precedence Order`:
 
 1. Complete a dry-run:
 
-   1. `cray fas actions create {jsonfile}`
+   1. `cray fas actions create {jsonfile}` **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
    1. Note the `ActionID`.
    1. Poll the status of the action until the action `state` is `completed`:
       1. `cray fas actions describe {actionID} --format json`
@@ -91,7 +91,7 @@ For each item in the `Hardware Precedence Order`:
 1. If `succeeded` count is greater than zero, then perform a live update.
 
      1. Update the JSON file to set the `overrideDryrun` field to `true`.
-     1. `cray fas actions create {jsonfile}`
+     1. `cray fas actions create {jsonfile}` **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
           1. Note the `ActionID`!
           1. Poll the status of the action until the action `state` is `completed`:
                1. `cray fas actions describe {actionID} --format json`
