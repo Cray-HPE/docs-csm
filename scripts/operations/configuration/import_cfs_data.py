@@ -36,9 +36,6 @@ import subprocess
 import sys
 from typing import Dict, List, NamedTuple, Union
 
-# Ugly temporary hack to get the args module from a different path.
-# This will go away as the helper modules make their way into libcsm
-sys.path.insert(1, os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","configuration"))
 from python_lib import args, cfs
 from python_lib.types import JsonDict, JSONDecodeError
 
@@ -47,7 +44,7 @@ NameObjectMap = Dict[str,JsonDict]
 CMP_JSON = "components.json"
 CFG_JSON = "configurations.json"
 OPT_JSON = "options.json"
-CFS_EXPORT_TOOL = "/usr/share/doc/csm/scripts/operations/system_recovery/export_cfs_data.sh"
+CFS_EXPORT_TOOL = "/usr/share/doc/csm/scripts/operations/configuration/export_cfs_data.sh"
 
 
 class CfsData(NamedTuple):
@@ -245,6 +242,8 @@ def get_options_to_change(options_to_import: cfs.CfsOptions,
 
     The import process should modify any CFS options whose values in the imported data differ from
     the live system.
+
+    Returns a list of the names of the options to be changed.
     """
     options_to_change = [ opt_name for opt_name, opt_value in options_to_import.items()
                             if current_options[opt_name] != opt_value ]
@@ -320,7 +319,7 @@ def main() -> None:
     print("\nExamining CFS configurations...")
     configs_to_create = get_configs_to_create(cfs_data_to_import.configurations,
                                               current_cfs_data.configurations)
-    
+
     print("\nExamining CFS components...")
     comps_to_update = get_comps_to_update(cfs_data_to_import.components,
                                           current_cfs_data.components,

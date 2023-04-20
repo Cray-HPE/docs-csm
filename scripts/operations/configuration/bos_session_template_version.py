@@ -33,9 +33,9 @@ import json
 import sys
 from typing import List, Union
 
-from bos_session_templates import BosSessionTemplate, \
-                                  InvalidBosSessionTemplate, \
-                                  get_session_template_version
+from python_lib.bos_session_templates import BosSessionTemplate, \
+                                             InvalidBosSessionTemplate, \
+                                             get_session_template_version
 
 def print_names_versions(session_template_list: List[BosSessionTemplate],
                          template_name_filter: Union[str, None]) -> bool:
