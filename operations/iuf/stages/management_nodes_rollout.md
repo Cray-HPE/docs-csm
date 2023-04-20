@@ -231,7 +231,7 @@ Only follow the below steps for the nodes being upgraded, for `ncn-m001` or NCN 
 
 For the CSM upgrade from CSM 1.3 to CSM 1.4, the NCN storage node image does not change so there is no need to 'upgrade' to the customized storage image.
 The NCN storage nodes should not be 'upgraded'. Instead, they should be personalized by following the procedure in [management-nodes-rollout documentation](../workflows/management_rollout.md#3-execute-the-iuf-management-nodes-rollout-stage)
-for [personalizing storage nodes](../workflows/management_rollout.md#34-ncn-storage-nodes).
+for [personalizing storage nodes](../workflows/management_rollout.md#34-personalize-ncn-storage-nodes).
 
 However, the image is provided and is customized during the [prepare images](./prepare_images.md) stage.
 The following steps can be followed if it is desired to 'upgrade' the storage nodes into this image.
@@ -272,7 +272,7 @@ These values will be needed when upgrading the NCN storage nodes in the followin
               All components updated successfully.
               ```
 
-    1. Set the image in BSS for all storage nodes by following the [Set NCN boot image for `ncn-m001` and NCN storage nodes](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001-and-ncn-storage-nodes)
+    1. Set the image in BSS for all storage nodes by following the [Set NCN boot image for `ncn-m001` and NCN storage nodes](../stages/management_nodes_rollout.md#set-ncn-boot-image-for-ncn-m001-or-ncn-storage-nodes)
     section of this document.
     Set the `IMS_RESULTANT_IMAGE_ID` variable to the `final_image_id` value for `Management_Storage` found in step 2 above.
 
