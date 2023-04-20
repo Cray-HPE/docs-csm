@@ -33,17 +33,17 @@ import argparse
 import sys
 from typing import NamedTuple
 
-from bos_cli import create_session_template, \
-                    delete_session_template, \
-                    list_session_templates
-from bos_session_templates import BosError, \
-                                  BosSessionTemplate, \
-                                  get_session_template_name, \
-                                  get_session_template_version
-from ims_id_maps import ImsIdEtagMaps, \
-                        ImsIdMapFileFormatError, \
-                        load_ims_id_map, \
-                        update_session_template
+from python_lib.bos import BosError
+from python_lib.bos_cli import create_session_template, \
+                               delete_session_template, \
+                               list_session_templates
+from python_lib.bos_session_templates import BosSessionTemplate, \
+                                             get_session_template_name, \
+                                             get_session_template_version
+from python_lib.ims_id_maps import ImsIdEtagMaps, \
+                                   ImsIdMapFileFormatError, \
+                                   load_ims_id_map, \
+                                   update_session_template
 
 class TemplateNameVersion(NamedTuple):
     template: BosSessionTemplate

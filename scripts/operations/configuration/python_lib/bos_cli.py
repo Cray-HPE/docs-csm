@@ -32,7 +32,8 @@ import tempfile
 
 from typing import List
 
-from bos_session_templates import BosError, BosSessionTemplate
+from .bos import BosError, BosOptions
+from .bos_session_templates import BosSessionTemplate
 
 class BosCliError(BosError):
     pass
@@ -92,6 +93,19 @@ def get_session_template(template_name: str) -> BosSessionTemplate:
         proc = subprocess.run(get_command, stdout=subprocess.PIPE, check=True)
     except subprocess.CalledProcessError as exc:
         raise BosCliError(f"Failed to get template '{template_name}': {exc}") from exc
+    return json.loads(proc.stdout)
+
+def list_options() -> BosOptions:
+    """
+    Wrapper for calling the CLI to list the BOS options.
+    Returns the dict of BOS options.
+    Raises BosCliError on error.
+    """
+    list_command = "cray bos v2 options list --format json"
+    try:
+        proc = subprocess.run(list_command.split(), stdout=subprocess.PIPE, check=True)
+    except subprocess.CalledProcessError as exc:
+        raise BosCliError(f"Failed to list options: {exc}") from exc
     return json.loads(proc.stdout)
 
 def list_session_templates() -> List[BosSessionTemplate]:
