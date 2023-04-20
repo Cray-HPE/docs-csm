@@ -20,6 +20,8 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ### (Cray) Device Type: `ChassisBMC` | Target: BMC
 
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
@@ -119,6 +121,8 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ### (Cray) Device Type: `NodeBMC` | Target: `NodeBIOS`
 
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
@@ -159,6 +163,8 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 > **`NOTE`** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#compute-node-bios-workaround-for-hpe-cray-ex425) procedure.
 
 ### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA (`AccFPGA0`)
+
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
@@ -202,6 +208,8 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ### (Cray) Device Type: `NodeBMC` | Target: Management Ethernet
 
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
@@ -233,6 +241,8 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 ```
 
 ### (Cray) Device Type: `NodeBMC` | Target: `AccVBIOS`
+
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
@@ -266,6 +276,8 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 ## Manufacturer: HPE
 
 ### (HPE) Device Type: `NodeBMC` | Target: iLO 5 (BMC)
+
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
@@ -301,6 +313,8 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 ```
 
 ### (HPE) Device Type: `NodeBMC` | Target: System ROM (BIOS)
+
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
 **`NOTE`** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
@@ -344,8 +358,10 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ### (Gigabyte) Device Type: `NodeBMC` | Target: BMC
 
-> **`NOTE`** This is a collection of various FAS recipes for performing updates.
-> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ```json
 {
@@ -396,8 +412,10 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 ### (Gigabyte) Device Type: `NodeBMC` | Target: BIOS
 
-> **`NOTE`** This is a collection of various FAS recipes for performing updates.
-> For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
+**NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
+
+**`NOTE`** This is a collection of various FAS recipes for performing updates.
+For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ```json
 {

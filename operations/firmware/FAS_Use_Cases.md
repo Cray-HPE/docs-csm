@@ -160,9 +160,9 @@ If the nodes are not off when the update command is issued, the update will get 
 
 #### Manufacturer: Cray | Device Type : `NodeBMC` | Target : `NodeBIOS`
 
-There are two nodes that must be updated on each BMC; these have the targets `Node0.BIOS` and `Node1.BIOS`.
+There may be more than one node that must be updated on each BMC; these have the targets `Node0.BIOS` and `Node1.BIOS`, etc.
 The targets can be run in the same action (as shown in the example) or run separately by only including one target in the action.
-On larger systems, it is recommended to run as two actions one after each other as the output will be shorter.
+On larger systems, it is recommended to run as separate actions one after each other as the output will be shorter.
 
 > **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require.
 See [Update Liquid-Cooled Node Firmware](#liquid-cooled-nodes-update-procedures) for more information.
@@ -209,7 +209,7 @@ or `cray_nodeAccFPGA0.json` (or `cray_node_node0AccFPGA0.json` and `cray_nodeBMC
 
 1. Create a JSON file using one of the example recipes with the command parameters required for updating the firmware or node BIOS.
 
-1. Initiate a dry-run to verify that the firmware can be updated.
+1. Initiate a dry-run to verify that the firmware can be updated. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
     1. (`ncn#`) Create the dry-run session.
 
@@ -279,7 +279,7 @@ or `cray_nodeAccFPGA0.json` (or `cray_node_node0AccFPGA0.json` and `cray_nodeBMC
             [operationSummary.noSolution]
             ```
 
-1. Update the firmware after verifying that the dry-run worked as expected.
+1. Update the firmware after verifying that the dry-run worked as expected. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
     1. Edit the JSON file and update the values so an actual firmware update can be run.
 
@@ -429,7 +429,7 @@ Use the file `cray_chassisBMC_BMC.json` for Chassis BMC updates.
 
 1. Create a JSON file using the example recipe above with the command parameters required for updating the CMM firmware.
 
-1. (`ncn#`) Initiate a dry-run to verify that the firmware can be updated.
+1. (`ncn#`) Initiate a dry-run to verify that the firmware can be updated. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
     1. Create the dry-run session.
 
@@ -510,7 +510,7 @@ Use the file `cray_chassisBMC_BMC.json` for Chassis BMC updates.
         "description":"Update Cray Chassis Management Module controllers"
         ```
 
-    1. (`ncn#`) Run the firmware update.
+    1. (`ncn#`) Run the firmware update. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
         The output `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be displayed.
 
@@ -730,7 +730,7 @@ or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
 
 1. (`ncn#`) Initiate a dry-run to verify that the firmware can be updated.
 
-    1. Create the dry-run session.
+    1. Create the dry-run session. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
         The `overrideDryrun = false` value indicates that the command will do a dry run.
 
@@ -798,7 +798,7 @@ or the file `hpe_nodeBMC_systemRom.json` for HPE Node `System ROM` updates.
             [operationSummary.noSolution]
             ```
 
-1. (`ncn#`) Update the firmware after verifying that the dry-run worked as expected.
+1. (`ncn#`) Update the firmware after verifying that the dry-run worked as expected. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
     1. Edit the JSON file and update the values so an actual firmware update can be run.
 
@@ -1079,13 +1079,13 @@ The script flag `--xnames x1,x2` can be used to limit the updates to certain xna
    > **`NOTE`** Update of `BMC` and `iLO 5` will not affect the nodes.
    1. Unlock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
-   1. Run the FAS action on the NCN.
+   1. Run the FAS action on the NCN. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
    1. Relock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
 1. For each NCN requiring updates to target `BIOS` or `System ROM`:
    1. Unlock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
-   1. Run the FAS action on the NCN.
+   1. Run the FAS action on the NCN. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
    1. Reboot the Node.
       See [Reboot NCNs](../node_management/Reboot_NCNs.md).
    1. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh`.

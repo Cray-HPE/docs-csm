@@ -9,14 +9,19 @@ To update the firmware, first create an authentication token.
 On most systems, this is created with the following command (`ncn-mw#`)
 
 ```bash
-export TOKEN=$(curl -s -S -d grant_type=client_credentials \\
--d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \\
--o jsonpath='{.data.client-secret}' | base64 -d` \\
-https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \\
+export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+-d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
+-o jsonpath='{.data.client-secret}' | base64 -d` \
+https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
 | jq -r '.access_token')
 ```
 
 The `FASUpdate` Script will be installed in `/usr/share/doc/csm/scripts/operations/firmware`
+Set an alias for the `FASUdate.py` script to include the path (`ncn-mw#`)
+
+```bash
+alias FASUpdate.py=/usr/share/doc/csm/scripts/operations/firmware/FASUpdate.py
+```
 
 * [List available action recipes](#list-available-action-recipes)
 * [Performing a FAS update](#performing-a-fas-update)
@@ -69,9 +74,13 @@ FASUpdate.py --list
 Example output:
 
 ```text
-Available files in /root/mbuchmann/recipes:
+Available files in /usr/share/doc/csm/scripts/operations/firmware/recipes:
 cray_chassisBMC_BMC.json
 cray_nodeBMC_BMC.json
+cray_nodeBMC_node0AccFPGA0.json
+cray_nodeBMC_node0BIOS.json
+cray_nodeBMC_node1AccFPGA0.json
+cray_nodeBMC_node1BIOS.json
 cray_nodeBMC_nodeAccFPGA0.json
 cray_nodeBMC_nodeBIOS.json
 cray_routerBMC_BMC.json
@@ -79,10 +88,18 @@ gigabyte_nodeBMC_BIOS.json
 gigabyte_nodeBMC_BMC.json
 hpe_nodeBMC_iLO5.json
 hpe_nodeBMC_systemRom.json
+cray_nodeBMC_node0AccVBIOS.json
+cray_nodeBMC_node0ManagementEthernet.json
+cray_nodeBMC_node1ManagementEthernet.json
+cray_nodeBMC_node2BIOS.json
+cray_nodeBMC_node2ManagementEthernet.json
+cray_nodeBMC_node3BIOS.json
+cray_nodeBMC_node3ManagementEthernet.json
+cray_nodeBMC_nodeManagementEthernet.json
 
-FASUpdate.py --file cray_chassisBMC_BMC.json --watchtime 1
+FASUpdate.py --file cray_chassisBMC_BMC.json --watchtime 15
 
-Recipe filename: /root/mbuchmann/recipes/cray_chassisBMC_BMC.json
+Recipe filename: /usr/share/doc/csm/scripts/operations/firmware/recipes/cray_chassisBMC_BMC.json
 JSON payload to FAS action command:
 {"inventoryHardwareFilter": {"manufacturer": "cray"}, "stateComponentFilter": {"deviceTypes": ["chassisBMC"]}, "targetFilter": {"targets": ["BMC"]}, "command": {"version": "latest", "tag": "default", "overrideDryrun": false, "restoreNotPossibleOverride": true, "timeLimit": 1000, "description": "Upgrade of Cray Chassis Controllers -- Dryrun 10/11/2022 20:37:14"}}
 Action ID: dc47615a-a491-4199-b7a6-b58f5c33f0c2
