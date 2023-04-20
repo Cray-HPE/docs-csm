@@ -129,8 +129,8 @@ Refer to that table and any corresponding product documents before continuing to
 
 1. Upgrade `ncn-m001`.
 
-    1. Follow the steps documented in [Stage 2.3 - `ncn-m001` upgrade](../../../upgrade/Stage_2.md#stage-23---ncn-m001-upgrade).
-    **Stop** before performing the specific [upgrade `ncn-m001`](../../../upgrade/Stage_2.md#upgrade-ncn-m001) step and return to this document.
+    1. Follow the steps documented in [Stage 1.3 - `ncn-m001` upgrade](../../../upgrade/Stage_1.md#stage-13---ncn-m001-upgrade).
+    **Stop** before performing the specific [upgrade `ncn-m001`](../../../upgrade/Stage_1.md#upgrade-ncn-m001) step and return to this document.
 
     1. Set the CFS configuration on `ncn-m001`.
 
@@ -174,11 +174,11 @@ Refer to that table and any corresponding product documents before continuing to
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
         ```
 
-1. Follow the steps documented in [Stage 2.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_2.md#stage-24---upgrade-weave-and-multus)
+1. Follow the steps documented in [Stage 1.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_1.md#stage-14---upgrade-weave-and-multus)
 
-1. Follow the steps documented in [Stage 2.5 - `coredns` anti-affinity](../../../upgrade/Stage_2.md#stage-25---coredns-anti-affinity)
+1. Follow the steps documented in [Stage 1.5 - `coredns` anti-affinity](../../../upgrade/Stage_1.md#stage-15---coredns-anti-affinity)
 
-1. Follow the steps documented in [Stage 2.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_2.md#stage-26---complete-kubernetes-upgrade).
+1. Follow the steps documented in [Stage 1.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_1.md#stage-16---complete-kubernetes-upgrade).
 
 Once this step has completed:
 
