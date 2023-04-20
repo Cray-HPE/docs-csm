@@ -205,8 +205,8 @@ For a list of all features with an announced removal target, see [Removals](intr
 
 * UAIs use a default route that sends outbound packets over the CMN, this will be addressed in a future release so that the default route uses the CAN/CHN.
 
-* On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like `slurm` and services that are backed by `etcd` clusters to exhibit slowness and possible timeouts.
-See [Known Issue: Ceph OSD latency](troubleshooting/known_issues/ceph_osd_latency.md) for a workaround.
+* On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like `slurm` and services that are backed by `etcd` clusters to exhibit slowness and possible timeouts.  It can also cause nexus to start up slowly or fail to initialize properly.
+See [Known Issue: Ceph OSD latency](troubleshooting/known_issues/ceph_osd_latency.md) to execute a repair script which is mandatory toward prevention of this latency condition. 
 
 ### Security vulnerability exceptions in CSM 1.3
 

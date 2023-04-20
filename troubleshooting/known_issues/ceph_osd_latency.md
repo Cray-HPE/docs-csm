@@ -1,7 +1,8 @@
 # Known Issue: Ceph OSD latency
 
-On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like `slurm` and services that are backed by `etcd` clusters to exhibit slowness and possible timeouts.
-In order to determine if this is occurring, run the `ceph osd perf` command on a master node over a period of about ten seconds, and if an OSD consistently shows latency of above `100ms` (as follows), the OSDs exhibiting this latency should be restarted:
+On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like `slurm` and services that are backed by `etcd` clusters to exhibit slowness and possible timeouts.  It can also cause nexus to start up slowly or fail to initialize properly.
+Please note that though this procedure gives guidance on determining if the system is exhibiting ceph latency, it is absolutely necessary that the repair script referenced in the `Fix` section below be run - even if Ceph latency is not detected with the command listed below.   The repair script will correct settings to prevent entry into the Ceph latency state.  It does no harm to run the repair script even if it has been run previously.  There was an earlier version of the repair script that only executed settings if the ceph-latency condition was detected at the time of execution of the script.  This has, since, been corrected.  Re-running the script may be necessary.  Once it has been run, it should not need to be run again.
+In order to determine if the system is experiencing the latency condition, run the `ceph osd perf` command on a master node over a period of about ten seconds, and if an OSD consistently shows latency of above `100ms` (as follows), the OSDs exhibiting this latency should be restarted:
 
 (`ncn-m#`) Run the following command:
 
@@ -108,4 +109,4 @@ ags set
  pgs degraded
 ```
 
-Once the script is complete, `ceph osd perf` should no longer report higher sustained latency numbers.
+Once the script is complete, `ceph osd perf` should no longer report higher sustained latency numbers and settings should be in place to prevent future latency.

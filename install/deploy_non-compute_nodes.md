@@ -278,7 +278,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
 ### 2.4 Run Ceph Latency Repair Script
 
-Ceph can begin to exhibit latency over time unless OSDs are restarted and some OSD memory settings are changed. It is recommended to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md).
+Ceph can begin to exhibit latency over time unless OSDs are restarted and some OSD memory settings are changed. It is mandatory to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md) in order to prevent a Ceph latency condition from occurring.
 
 ### 2.5 Check LVM on Kubernetes NCNs
 

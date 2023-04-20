@@ -31,7 +31,7 @@ after a break, always be sure that a typescript is running before proceeding.
 
 ### Run Ceph Latency Repair Script
 
-Ceph can begin to exhibit latency over time when upgrading the cluster from previous versions. It is recommended to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md).
+Ceph can begin to exhibit latency over time when upgrading the cluster from previous versions. It is mandatory to run the `/usr/share/doc/csm/scripts/repair-ceph-latency.sh` script at [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md) in order to prevent a Ceph latency condition from occurring.
 
 ## Apply boot order workaround
 

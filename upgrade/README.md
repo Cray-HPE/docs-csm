@@ -23,8 +23,8 @@ sections, but there is also a general troubleshooting topic.
 
 - If IMS image creation CFS jobs fail, see [Known Issue: IMS image creation failure](../troubleshooting/known_issues/ims_image_creation_failure.md) for a possible workaround.
 
-- On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like `slurm` and services that are backed by `etcd` clusters to exhibit slowness and possible timeouts.
-See [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md) for a workaround.
+- On some systems, Ceph can begin to exhibit latency over time, and if this occurs it can eventually cause services like `slurm` and services that are backed by `etcd` clusters to exhibit slowness and possible timeouts.  It can also cause nexus to start up slowly or fail to initialize properly.
+Please see [Known Issue: Ceph OSD latency](../troubleshooting/known_issues/ceph_osd_latency.md) for a mandatory one-time workaround needed to correct settings, so as to avoid this latency condition.
 
 ## 1. Prepare for upgrade
 
