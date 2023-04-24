@@ -97,6 +97,28 @@ If an immediate reboot of compute nodes is desired instead, add `-mrs reboot` to
     scontrol reboot nextstate=Resume Reason="IUF Managed Nodes Rollout" nid[000001-000004]
     ```
 
+**WARNING**
+If you have previously [disabled some nodes](../../node_management/Disable_Nodes.md), then running the managed-nodes-rollout stage will appear to hang as it is incorrectly waiting on disabled nodes to complete as well.
+After 100 minutes it will timeout. This issue will be fixed in a future release where disabled nodes will be ignored during a managed-nodes-rollout.
+If you experience a timeout and have disabled nodes in this release, it is most likely that all your other enabled nodes have successfully completed rollout and such nodes are usable immediately, and that the timeout can be ignored.
+
+To check whether the timeout was indeed caused by waiting on disabled nodes, follow this procedure:
+
+(`ncn-m001#`) sat bash
+
+```bash
+(ef637ae8a8b5) sat-container:/sat/share # TotalComputes="$(sat status --filter role=Compute --no-borders --no-headings --fields xname|xargs |wc -w)"
+(ef637ae8a8b5) sat-container:/sat/share # TotalEnabledComputes="$(sat status --filter enabled=True --filter role=Compute --no-borders --no-headings --fields xname|xargs |wc -w)"
+(ef637ae8a8b5) sat-container:/sat/share # ExpectedPercentage=$(bc -l <<< "$TotalEnabledComputes/$TotalComputes*100")
+(ef637ae8a8b5) sat-container:/sat/share # echo "Expected Percentage: ${ExpectedPercentage}"
+(ef637ae8a8b5) sat-container:/sat/share # exit
+logout
+```
+
+Check what percentage was completed from the logs of managed-nodes-rollout.
+Verify that percentage complete equals the ExpectedPercentage from above.
+If the two totals are equal, you can ignore this timeout and move on to the next stage.
+
 Once this step has completed:
 
 - Managed compute nodes have been rebooted to the images and CFS configurations created in previous steps of this workflow
