@@ -241,6 +241,10 @@ Complete the Kubernetes upgrade. This script will restart several pods on each m
 
 > **`NOTE`**: `kubelet` has been upgraded already, ignore the warning to upgrade it.
 
+If the previous three steps were executed as part of the IUF [Management rollout](../operations/iuf/workflows/management_rollout.md)
+procedure, return to the IUF [Management rollout](../operations/iuf/workflows/management_rollout.md) procedure and
+complete the remaining steps. Otherwise, proceed to the following topic.
+
 ### Stop typescript on `ncn-m002`
 
 For any typescripts that were started during this stage on `ncn-m002`, stop them with the `exit` command.
