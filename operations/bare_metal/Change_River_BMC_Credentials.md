@@ -40,7 +40,7 @@ Use the following procedure for each BMC:
 2. Determine which Redfish account is the root account:
 
    ```bash
-   curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts | jq
+   curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountService/Accounts | jq
    ```
 
    Example output:
@@ -77,7 +77,7 @@ Use the following procedure for each BMC:
    - If the account information contains an *etag* entry, note this number, as it will be required when setting the password.
 
    ```bash
-   curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1 | jq
+   curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountService/Accounts/1 | jq
    ```
 
    Example output:
@@ -106,14 +106,13 @@ Use the following procedure for each BMC:
 4. Set the new password for this account. Use the ETAG in the header if needed.
 
    ```bash
-   curl -s -k -u root:<DFLTPW> -H "If-None-Match: 570254F2" -H "Content-Type: application/json" -X PATCH -d '{"Password":"<NEWPW>"}' https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem/Accounts/1
-   linux#
+   curl -s -k -u root:<DFLTPW> -H "If-None-Match: 570254F2" -H "Content-Type: application/json" -X PATCH -d '{"Password":"<NEWPW>"}' https://<BLADENAME_OR_IP>/redfish/v1/AccountService/Accounts/1
    ```
 
 5. Test to be sure the new password works. If the password set operation did not work, then this will fail.
 
    ```bash
-   curl -s -k -u root:<NEWPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountSystem
+   curl -s -k -u root:<NEWPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountService
    ```
 
    Example output:
