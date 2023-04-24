@@ -924,6 +924,9 @@ unexecuted
 unlabeled
 userspace
 
+- operations/iuf/workflows/managed_rollout.md
+ExpectedPercentage
+
 - operations/network/dns/DNS.md
 ExternalDNS
 
