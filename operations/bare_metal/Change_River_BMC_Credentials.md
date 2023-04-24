@@ -107,7 +107,6 @@ Use the following procedure for each BMC:
 
    ```bash
    curl -s -k -u root:<DFLTPW> -H "If-None-Match: 570254F2" -H "Content-Type: application/json" -X PATCH -d '{"Password":"<NEWPW>"}' https://<BLADENAME_OR_IP>/redfish/v1/AccountService/Accounts/1
-   linux#
    ```
 
 5. Test to be sure the new password works. If the password set operation did not work, then this will fail.
