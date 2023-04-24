@@ -24,7 +24,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: management-nodes-rollout
+  name: management-two-master-nodes-rollout
 spec:
   tolerations:
     - key: "node-role.kubernetes.io/master"
@@ -41,7 +41,7 @@ spec:
           help: "Count of step execution by result status"
           labels:
             - key: "opname"
-              value: "management-nodes-rollout"
+              value: "management-two-master-nodes-rollout"
             - key: stage
               value: "management-nodes-rollout"
             - key: type
@@ -288,80 +288,9 @@ spec:
                     export TERM=linux
                     echo "NOTICE  upgrading ncn-m003"
                     /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m003
-          - name: get-worker-rebuild-sets
-            dependencies:
-              - upgrade-m003
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"
-                - name: scriptContent
-                  value: |
-                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
-                    if [[ -n $(echo $limit_management_nodes | grep 'Management_Worker') ]]; then
-                      worker_nodes=$(kubectl get node --selector='!node-role.kubernetes.io/master' --no-headers=true | awk '{print $1}' | tr "\n", " ")
-                      labeled_workers=$(kubectl get nodes --selector='iuf-prevent-rollout=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
-                      for labeled_worker in $labeled_workers; do
-                        worker_nodes=$(echo $worker_nodes | sed s/"$labeled_worker"//)
-                      done
-
-                      # split nodes into sets to rebuild
-                      percent_rollout=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.concurrent_management_rollout_percentage')
-                      number_of_sets=$((100 / $percent_rollout))
-                      if [[ $percent_rollout -lt 100 ]] && [[ $number_of_sets -lt 2 ]]; then
-                        number_of_sets=2   # if 100% is not specified, we do not want only 1 set
-                      fi
-                      array_nodes_to_rebuild=($worker_nodes)
-                      num_nodes_to_rebuild=${#array_nodes_to_rebuild[@]}
-                      rebuild_set_size=$(( $num_nodes_to_rebuild / $number_of_sets ))
-                      if [[ $rebuild_set_size -eq 0 ]]; then rebuild_set_size=1; fi
-                      index=0
-                      set=""
-                      output=""
-                      for node in $worker_nodes; do
-                        index=$(( $index + 1 ))
-                        set="${set},""$node"
-                        if [[ $index -eq $rebuild_set_size ]]; then
-                          output="${output} ${set#?}"
-                          index=0
-                          set=""
-                        fi
-                      done
-                      if [[ -n $set ]]; then
-                        output="${output} ${set#?}"
-                      fi
-                      echo "${output#?}"
-                    else
-                      echo 'none'
-                    fi
-          - name: process-worker-rebuild-sets
-            dependencies:
-              - get-worker-rebuild-sets
-            template: process-sets
-            arguments:
-              parameters:
-                - name: sets
-                  value: "{{tasks.get-worker-rebuild-sets.outputs.result}}"
-          - name: rebuild-worker-nodes
-            dependencies:
-              - process-worker-rebuild-sets
-            template: rebuild-set-of-workers
-            arguments:
-              parameters:
-                - name: sets
-                  value: "{{tasks.process-worker-rebuild-sets.outputs.parameters.sets}}"
-                - name: counter
-                  value: "0"
-                - name: limit
-                  value: "{{tasks.process-worker-rebuild-sets.outputs.parameters.num_sets}}"
-                - name: global_params
-                  value: "{{inputs.parameters.global_params}}"
           - name: end-operation
             dependencies:
-              - rebuild-worker-nodes
+              - upgrade-m003
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template
@@ -376,103 +305,6 @@ spec:
                 value: "{{tasks.start-operation.outputs.result}}"
               - name: opend
                 value: "{{tasks.end-operation.outputs.result}}"
-    - name: rebuild-set-of-workers
-      inputs:
-        parameters:
-          - name: sets
-          - name: counter
-          - name: limit
-          - name: global_params
-      dag:
-        tasks:
-          - name: rebuild-set
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-              - name: dryRun
-                value: "{{$.DryRun}}"
-              - name: scriptContent
-                value: |
-                  limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
-                  if [[ -z $(echo $limit_management_nodes | grep 'Management_Worker') ]]; then
-                    echo "NOTICE  Not rebuilding worker nodes because 'Management_Worker' was not in --limit-management-rollout"
-                    exit 0
-                  fi
-                  sets="{{inputs.parameters.sets}}"
-                  set_array=($sets)
-                  current_count="{{inputs.parameters.counter}}"
-                  rebuild_set=${set_array[$current_count]}
-                  if [[ -z $rebuild_set ]]; then
-                    echo "NOTICE  this step received no nodes to rebuild. Continuing without rebuilding any worker nodes"
-                    exit 0
-                  fi
-                  prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                  image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].final_image_id' | tr -d '"')
-                  configuration=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].configuration' | tr -d '"')
-
-                  export TERM=linux
-                  echo "NOTICE  starting rebuild of $rebuild_set"
-                  echo "INFO  using image: $image"
-                  echo "INFO  using cfs-configuration: $configuration"
-                  /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --image-id $image --desired-cfs-conf $configuration --labels "{activity:{{workflow.labels.activity}},session:{{workflow.labels.session}}}"
-          - name: move-to-next-set
-            template: move-to-next-set
-            dependencies:
-              - rebuild-set
-            arguments:
-              parameters:
-                - name: count
-                  value: "{{inputs.parameters.counter}}"
-          - name: continue
-            dependencies:
-              - move-to-next-set
-            template: rebuild-set-of-workers
-            when: "{{tasks.move-to-next-set.outputs.result}} < {{inputs.parameters.limit}}"
-            arguments:
-              parameters:
-                - name: sets
-                  value: "{{inputs.parameters.sets}}"
-                - name: counter
-                  value: "{{tasks.move-to-next-set.outputs.result}}"
-                - name: limit
-                  value: "{{inputs.parameters.limit}}"
-                - name: global_params
-                  value: "{{inputs.parameters.global_params}}"
-    - name: process-sets
-      inputs:
-        parameters:
-          - name: sets
-      script:
-        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
-        command: [sh]
-        source: |
-          #!/bin/sh
-          sets="{{inputs.parameters.sets}}"
-          echo $sets > /tmp/sets
-          num_sets=$(echo $sets | wc -w)
-          echo $num_sets > /tmp/num_sets
-      outputs:
-        parameters:
-          - name: sets
-            valueFrom:
-              path: "/tmp/sets"
-          - name: num_sets
-            valueFrom:
-              path: "/tmp/num_sets"
-    - name: move-to-next-set
-      inputs:
-        parameters:
-          - name: count
-      script:
-        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
-        command: [sh]
-        source: |
-          #!/bin/sh
-          current_count="{{inputs.parameters.count}}"
-          counter=$(($current_count + 1 ))
-          echo $counter
     - name: prom-metrics
       inputs:
         parameters:
@@ -484,7 +316,7 @@ spec:
             help: "Duration gauge by operation name in seconds"
             labels:
               - key: "opname"
-                value: "management-nodes-rollout"
+                value: "management-two-master-nodes-rollout"
               - key: stage
                 value: "management-nodes-rollout"
               - key: type
