@@ -188,13 +188,12 @@ Resubscribe the compute nodes and any NCNs that use the ORCA daemon for their St
     rm -rf "${TMPFILE}"
     ```
 
-1. (`ncn-m#`) Resubscribe the NCNs.
+1. (`ncn-m#`) Resubscribe all worker nodes.
 
-    **NOTE:** Modify the `-w` arguments in the following commands to reflect the number of worker and storage nodes in the system.
+    **NOTE:** Modify the `-w` arguments in the following commands to reflect the number of worker nodes in the system.
 
     ```bash
     pdsh -w ncn-w00[1-4]-can.local "systemctl restart cray-orca"
-    pdsh -w ncn-s00[1-4]-can.local "systemctl restart cray-orca"
     ```
 
 ### MEDS
