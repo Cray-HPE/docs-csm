@@ -245,7 +245,7 @@ These variables will need to be set for many procedures within the CSM installat
 
 1. (`pit#`) Copy the NCN images from the expanded tarball.
 
-   >__NOTE:__ This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
+   > **NOTE:** This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
 
    ```bash
    mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
@@ -260,7 +260,7 @@ These variables will need to be set for many procedures within the CSM installat
 
    1. Generate SSH keys.
 
-       >__NOTE:__ The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
+       > **NOTE:** The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
 
        ```bash
        ssh-keygen -N "" -t rsa
@@ -294,7 +294,7 @@ These variables will need to be set for many procedures within the CSM installat
    /root/bin/metalid.sh
    ```
 
-   Expected output looks similar to the following (the versions in the example below may differ). There should be __no__ errors.
+   Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
 
    ```text
    = PIT Identification = COPY/CUT START =======================================
