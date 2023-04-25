@@ -58,6 +58,23 @@ The panels interact with configured data sources, including the following:
 - Stage
 - Operation
 
+## Kafka
+
+- Healthcheck
+- System
+- Throughput In/Out
+- Replication
+- Thread utilization
+- Zookeeper
+- Isr Shrinks / Expands
+- Logs size
+- Producer Performance
+- Consumer Performance
+- Fetch Follower Performance
+- Connections
+- Request rate
+- Message Conversion
+
 ## Kea
 
 - DHCP
@@ -102,3 +119,9 @@ The panels interact with configured data sources, including the following:
 
 - Cluster
 - Node
+
+## Zookeeper
+
+- Health Check
+- System
+- Request Latency
