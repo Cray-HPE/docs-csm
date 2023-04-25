@@ -323,13 +323,13 @@ Also, it generates the report of policy violation in respective workloads. The f
 
     If there are any discrepancies, look at the detailed policy report to triage the issue.
 
-## What is new in HPE CSM v1.4
+## What is new in the HPE CSM 1.4 release
 
-As part of HPE CSM v1.4, the upstream Baseline profile is made available for the customer.
+The upstream Baseline profile is now available for customers as part of the HPE CSM 1.4 release.
 
 The Baseline profile is a collection of policies which implement the various levels of Kubernetes [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/).
 
-The Baseline profile is minimally restrictive and denies the most common vulnerabilities. It also follows many of the common security best practices for Pods.
+The Baseline profile is minimally restrictive and denies the most common vulnerabilities. It also follows many of the common security best practices for Kubernetes pods.
 
 [Baseline profile](https://github.com/kyverno/policies/tree/main/pod-security/baseline) consists of 12 policies as listed below.
 
@@ -355,8 +355,8 @@ restrict-seccomp                 true         audit    true
 restrict-sysctls                 true         audit    true
 ```
 
-The violations for each of the baseline policy is logged in policy report, similar to other policies as mentioned in Validation section above.
-In order to give more insights towards each violation use below mentioned command.
+The violations for each of the Baseline policies is logged in a policy report, similar to the other policies mentioned in Validation section above.
+To get more information on each violation, use the following command.
 
 ### Example to list policy violations at pod level
 
