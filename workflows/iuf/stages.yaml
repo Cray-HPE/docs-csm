@@ -118,7 +118,15 @@ stages:
   - name: management-nodes-rollout
     type: global
     operations:
-      - name: management-nodes-rollout
+      - name: info-to-read
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: verify-images-and-configuration
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: management-storage-nodes-rollout
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: management-two-master-nodes-rollout
+        static-parameters: {} # any parameters that will be supplied statically to this operation.
+      - name: management-worker-nodes-rollout
         static-parameters: {} # any parameters that will be supplied statically to this operation.
 
   - name: post-install-service-check

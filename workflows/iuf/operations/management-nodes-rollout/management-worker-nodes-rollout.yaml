@@ -1,0 +1,302 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: management-worker-nodes-rollout
+spec:
+  tolerations:
+    - key: "node-role.kubernetes.io/master"
+      operator: "Exists"
+      effect: "NoSchedule"
+  nodeSelector:
+    kubernetes.io/hostname: ncn-m001
+  entrypoint: main
+  templates:
+    - name: main
+      metrics:
+        prometheus:
+        - name: operation_counter
+          help: "Count of step execution by result status"
+          labels:
+            - key: "opname"
+              value: "management-worker-nodes-rollout"
+            - key: stage
+              value: "management-nodes-rollout"
+            - key: type
+              value: "global"
+            - key: pname
+              value: "global"
+            - key: pversion
+              value: "global"
+            - key: status
+              value: "{{status}}"
+          counter:
+            value: "1"
+      inputs:
+        parameters:
+          - name: auth_token
+          - name: global_params
+      dag:
+        tasks:
+          - name: start-operation
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: INFO-to-read
+            dependencies:
+              - start-operation
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    echo "NOTICE  this stage will not rollout storage nodes or ncn-m001. This will have to be done manually if rolling-out these nodes is desired."
+                    echo "NOTICE  this stage will rollout workers and master nodes according to --limit-management-rollout and the node label iuf-prevent-rollout=true."
+                    echo "NOTICE  check the argo pod logs from each step in the workflow to see what the step is doing."
+          - name: get-worker-rebuild-sets
+            dependencies:
+              - upgrade-m003
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: scriptContent
+                  value: |
+                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
+                    if [[ -n $(echo $limit_management_nodes | grep 'Management_Worker') ]]; then
+                      worker_nodes=$(kubectl get node --selector='!node-role.kubernetes.io/master' --no-headers=true | awk '{print $1}' | tr "\n", " ")
+                      labeled_workers=$(kubectl get nodes --selector='iuf-prevent-rollout=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
+                      for labeled_worker in $labeled_workers; do
+                        worker_nodes=$(echo $worker_nodes | sed s/"$labeled_worker"//)
+                      done
+
+                      # split nodes into sets to rebuild
+                      percent_rollout=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.concurrent_management_rollout_percentage')
+                      number_of_sets=$((100 / $percent_rollout))
+                      if [[ $percent_rollout -lt 100 ]] && [[ $number_of_sets -lt 2 ]]; then
+                        number_of_sets=2   # if 100% is not specified, we do not want only 1 set
+                      fi
+                      array_nodes_to_rebuild=($worker_nodes)
+                      num_nodes_to_rebuild=${#array_nodes_to_rebuild[@]}
+                      rebuild_set_size=$(( $num_nodes_to_rebuild / $number_of_sets ))
+                      if [[ $rebuild_set_size -eq 0 ]]; then rebuild_set_size=1; fi
+                      index=0
+                      set=""
+                      output=""
+                      for node in $worker_nodes; do
+                        index=$(( $index + 1 ))
+                        set="${set},""$node"
+                        if [[ $index -eq $rebuild_set_size ]]; then
+                          output="${output} ${set#?}"
+                          index=0
+                          set=""
+                        fi
+                      done
+                      if [[ -n $set ]]; then
+                        output="${output} ${set#?}"
+                      fi
+                      echo "${output#?}"
+                    else
+                      echo 'none'
+                    fi
+          - name: process-worker-rebuild-sets
+            dependencies:
+              - get-worker-rebuild-sets
+            template: process-sets
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{tasks.get-worker-rebuild-sets.outputs.result}}"
+          - name: rebuild-worker-nodes
+            dependencies:
+              - process-worker-rebuild-sets
+            template: rebuild-set-of-workers
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{tasks.process-worker-rebuild-sets.outputs.parameters.sets}}"
+                - name: counter
+                  value: "0"
+                - name: limit
+                  value: "{{tasks.process-worker-rebuild-sets.outputs.parameters.num_sets}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+          - name: end-operation
+            dependencies:
+              - rebuild-worker-nodes
+            templateRef:
+              name: workflow-template-record-time-template
+              template: record-time-template
+          - name: prom-metrics
+            dependencies:
+              - start-operation
+              - end-operation
+            template: prom-metrics
+            arguments:
+              parameters:
+              - name: opstart
+                value: "{{tasks.start-operation.outputs.result}}"
+              - name: opend
+                value: "{{tasks.end-operation.outputs.result}}"
+    - name: rebuild-set-of-workers
+      inputs:
+        parameters:
+          - name: sets
+          - name: counter
+          - name: limit
+          - name: global_params
+      dag:
+        tasks:
+          - name: rebuild-set
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+              - name: dryRun
+                value: "{{$.DryRun}}"
+              - name: scriptContent
+                value: |
+                  limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
+                  if [[ -z $(echo $limit_management_nodes | grep 'Management_Worker') ]]; then
+                    echo "NOTICE  Not rebuilding worker nodes because 'Management_Worker' was not in --limit-management-rollout"
+                    exit 0
+                  fi
+                  sets="{{inputs.parameters.sets}}"
+                  set_array=($sets)
+                  current_count="{{inputs.parameters.counter}}"
+                  rebuild_set=${set_array[$current_count]}
+                  if [[ -z $rebuild_set ]]; then
+                    echo "NOTICE  this step received no nodes to rebuild. Continuing without rebuilding any worker nodes"
+                    exit 0
+                  fi
+                  prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                  image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].final_image_id' | tr -d '"')
+                  configuration=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].configuration' | tr -d '"')
+
+                  export TERM=linux
+                  echo "NOTICE  starting rebuild of $rebuild_set"
+                  echo "INFO  using image: $image"
+                  echo "INFO  using cfs-configuration: $configuration"
+                  /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --image-id $image --desired-cfs-conf $configuration --labels "{activity:{{workflow.labels.activity}},session:{{workflow.labels.session}}}"
+          - name: move-to-next-set
+            template: move-to-next-set
+            dependencies:
+              - rebuild-set
+            arguments:
+              parameters:
+                - name: count
+                  value: "{{inputs.parameters.counter}}"
+          - name: continue
+            dependencies:
+              - move-to-next-set
+            template: rebuild-set-of-workers
+            when: "{{tasks.move-to-next-set.outputs.result}} < {{inputs.parameters.limit}}"
+            arguments:
+              parameters:
+                - name: sets
+                  value: "{{inputs.parameters.sets}}"
+                - name: counter
+                  value: "{{tasks.move-to-next-set.outputs.result}}"
+                - name: limit
+                  value: "{{inputs.parameters.limit}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+    - name: process-sets
+      inputs:
+        parameters:
+          - name: sets
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh]
+        source: |
+          #!/bin/sh
+          sets="{{inputs.parameters.sets}}"
+          echo $sets > /tmp/sets
+          num_sets=$(echo $sets | wc -w)
+          echo $num_sets > /tmp/num_sets
+      outputs:
+        parameters:
+          - name: sets
+            valueFrom:
+              path: "/tmp/sets"
+          - name: num_sets
+            valueFrom:
+              path: "/tmp/num_sets"
+    - name: move-to-next-set
+      inputs:
+        parameters:
+          - name: count
+      script:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh]
+        source: |
+          #!/bin/sh
+          current_count="{{inputs.parameters.count}}"
+          counter=$(($current_count + 1 ))
+          echo $counter
+    - name: prom-metrics
+      inputs:
+        parameters:
+        - name: opstart
+        - name: opend
+      metrics:
+        prometheus:
+          - name: operation_time
+            help: "Duration gauge by operation name in seconds"
+            labels:
+              - key: "opname"
+                value: "management-worker-nodes-rollout"
+              - key: stage
+                value: "management-nodes-rollout"
+              - key: type
+                value: "global"
+              - key: pdname
+                value: "global"
+              - key: pdversion
+                value: "global"
+              - key: "opstart"
+                value: "{{inputs.parameters.opstart}}"
+              - key: "opend"
+                value: "{{inputs.parameters.opend}}"
+            gauge:
+              value: "{{outputs.parameters.diff-time-value}}"
+      outputs:
+        parameters:
+          - name: diff-time-value
+            globalName: diff-time-value
+            valueFrom:
+              path: /tmp/diff_time.txt
+      container:
+        image: artifactory.algol60.net/csm-docker/stable/docker.io/alpine/git:2.32.0
+        command: [sh, -c]
+        args: ["DIFF_TIME=$(expr {{inputs.parameters.opend}} - {{inputs.parameters.opstart}}); echo $DIFF_TIME; echo $DIFF_TIME > /tmp/diff_time.txt"]
