@@ -111,7 +111,9 @@ spec:
                   value: "{{$.TargetNcns}}"
           {{- range $index,$value := .TargetNcns }}
           - name: add-labels-{{$value}}
-            template: add-labels
+            templateRef: 
+              name: add-labels
+              template: main
             arguments: 
               parameters:
               - name: targetNcn
@@ -233,20 +235,6 @@ spec:
       dag:
         tasks:
 {{ getHooks "before-each" . | indent 8 }}
-    - name: add-labels
-      inputs:
-        parameters:
-          - name: targetNcn
-      resource:
-        action: patch
-        mergeStrategy: json
-        flags:
-          - "node"
-          - "{{ `{{inputs.parameters.targetNcn}}` }}"
-        manifest: |
-          - op: add
-            path: /metadata/labels/cray.nls
-            value: {{ `{{inputs.parameters.targetNcn}}` }}
     - name: drain
       inputs:
         # import ./common.envar.yaml
