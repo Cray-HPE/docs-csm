@@ -128,7 +128,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
    1. Insert the USB stick into a recommended USB3 port.
 
-      __Information:__ USB2 port is also compatible, but USB3 port is recommended as it offers the best performance.
+      __Information:__ `USB2` port is also compatible, but `USB3` port is recommended as it offers the best performance.
 
    1. (`external#`) Power the server on.
 
@@ -508,13 +508,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          ![alt text](../../img/install/19.png)
 
-      1. Skip the repository selection menu (`Repo manager`).
-
-         This is skipped because the required repositories were already installed using the `cm repo add` commands.
-
-         ![alt text](../../img/install/20.png)
-
-      1. Select the `Install and Configure Admin Cluster Software` option.
+      1. Navigate and select the `Install and Configure Admin Cluster Software` option.
 
          ![alt text](../../img/install/21.png)
 
@@ -538,39 +532,39 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          1. Select `OK` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_1.PNG)
+            ![alt text](../../img/install/common_installer_1.png)
 
          1. Select `head Network` and select `OK`.
 
-            ![alt text](../../img/install/common_installer_2.PNG)
+            ![alt text](../../img/install/common_installer_2.png)
 
          1. Change the subnet, netmask, gateway and VLAN for the `head` network.
 
-            ![alt text](../../img/install/common_installer_3.PNG)
+            ![alt text](../../img/install/common_installer_3.png)
 
          1. Select `OK` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_4.PNG)
+            ![alt text](../../img/install/common_installer_4.png)
 
          1. Select `head-bmc Network` and select `OK`.
 
-            ![alt text](../../img/install/common_installer_5.PNG)
+            ![alt text](../../img/install/common_installer_5.png)
 
          1. Change the subnet, netmask, gateway and VLAN for the `head-bmc` network.
 
-            ![alt text](../../img/install/common_installer_6.PNG)
+            ![alt text](../../img/install/common_installer_6.png)
 
          1. Select `OK` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_7.PNG)
+            ![alt text](../../img/install/common_installer_7.png)
 
          1. Select `Back` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_8.PNG)
+            ![alt text](../../img/install/common_installer_8.png)
 
          1. Select `Back` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_9.PNG)
+            ![alt text](../../img/install/common_installer_9.png)
 
       1. Select the `Perform Initial Admin Node Infrastructure Setup`.
 
@@ -819,8 +813,6 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
             Repeat this step until all nodes report their status as `BOOTED`. At this point, all ports to the NCNs should be enabled on the switches.
 
-         1. Create a bond network.
-
 ## Import CSM tarball
 
 ### Download CSM tarball
@@ -872,124 +864,6 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
 
    >__Note:__ `${PITDATA}` is the path of the folder where the CSM tarball is extracted in the preceding step.
 
-   1. Update `dnsmasq` and `apache2` configuration files.
-
-      Download the tarball from [here](files/dhcp_http.tar.gz) and extract it in the current working directory.
-
-      ```bash
-      tar -xf dhcp_http.tar.gz
-      ```
-
-   1. Update the `apache2` and `dnsmasq` configurations as follows:
-
-     ```bash
-     cp -rv dnsmasq/dnsmasq.conf  /etc/dnsmasq.conf
-     cp -rv apache2/* /etc/apache2/
-     cp -rv  conman/conman.conf /etc/conman.conf
-     cp -rv logrotate/conman /etc/logrotate.d/conman
-     cp -rv kubectl/kubectl /usr/bin/
-     ```
-
-     (Optional) Uncomment the `tftp_secure` entry in the `dnsmasq.conf` file.
-
-   1. Stop the following services: `clmgr-power`, `dhcpd`, and `named`.
-
-     ```bash
-     systemctl stop clmgr-power
-     systemctl stop dhcpd
-     systemctl stop named
-     systemctl restart apache2
-     ```
-
-   1. If `ping dcldap3.us.cray.com` does not work, then add the following entry in `/etc/hosts`.
-
-      ```text
-      172.30.12.37    dcldap3.us.cray.com
-      ```
-
-1. (`pit#`) Get the artifact versions.
-
-   ```bash
-   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
-   echo "${KUBERNETES_VERSION}"
-   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
-   echo "${CEPH_VERSION}"
-   ```
-
-1. (`pit#`) Copy the NCN images from the expanded tarball.
-
-   >__NOTE:__ This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
-
-   ```bash
-   mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
-   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${KUBERNETES_VERSION}"
-   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${CEPH_VERSION}"
-   ```
-
-1. (`pit#`) Modify the NCN images with SSH keys and `root` passwords.
-
-   The following substeps provide the most commonly used defaults for this process. For more advanced options, see
-   [Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
-
-   1. Generate SSH keys.
-
-       >__NOTE:__ The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
-
-       ```bash
-       ssh-keygen -N "" -t rsa
-       ```
-
-   1. Export the password hash for `root` that is needed for the `ncn-image-modification.sh` script.
-
-       This will set the NCN `root` user password to be the same as the `root` user password on the PIT.
-
-       ```bash
-       export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
-       ```
-
-   1. Inject these into the NCN images by running `ncn-image-modification.sh` from the CSM documentation RPM.
-
-       ```bash
-       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
-       echo "${NCN_MOD_SCRIPT}"
-       "${NCN_MOD_SCRIPT}" -p \
-          -d /root/.ssh \
-          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
-       ```
-
-1. (`pit#`) Log the currently installed PIT packages.
-
-   Having this information in the typescript can be helpful if problems are encountered during the install.
-   This command was run once in a previous step -- running it again now is intentional.
-
-   ```bash
-   /root/bin/metalid.sh
-   ```
-
-   Expected output looks similar to the following (the versions in the example below may differ). There should be __no__ errors.
-
-   ```text
-   = PIT Identification = COPY/CUT START =======================================
-   VERSION=1.6.0
-   TIMESTAMP=20220504161044
-   HASH=g10e2532
-   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
-   CRAY-Site-Init build signature...
-   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   Build Time     : 2022-05-02T20:21:46Z
-   Go Version     : go1.16.10
-   Git Version    : v1.9.13-29-g0915d59f
-   Platform       : linux/amd64
-   App. Version   : 1.17.1
-   metal-ipxe-2.2.6-1.noarch
-   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   metal-basecamp-1.1.12-1.x86_64
-   pit-init-1.2.20-1.noarch
-   pit-nexus-1.1.4-1.x86_64
-   = PIT Identification = COPY/CUT END =========================================
-   ```
-
 ## Seed file generation
 
 The procedure to generate seed files is as follows:
@@ -1012,7 +886,7 @@ The procedure to generate seed files is as follows:
 
    Example output:
 
-   ![store SHCD data](../../img/install/parse_shcd.PNG)
+   ![store SHCD data](../../img/install/parse_shcd.png)
 
 1. Create [`cabinets.yaml`](../create_cabinets_yaml.md) (manually).
 
