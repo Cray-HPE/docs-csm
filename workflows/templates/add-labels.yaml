@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: add-labels
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: targetNcn
+      resource:
+        action: patch
+        mergeStrategy: json
+        flags:
+          - "node"
+          - "{{inputs.parameters.targetNcn}}"
+        manifest: |
+          - op: add
+            path: /metadata/labels/cray.nls
+            value: {{inputs.parameters.targetNcn}}
