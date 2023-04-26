@@ -168,4 +168,16 @@ tasks:
             done
             # Restore set -e
             set -e
+    - name: "set-bss-no-wipe=1"
+    dependencies:
+      - wait-for-boot
+    templateRef:
+      name: ssh-template
+      template: shell-script
+    arguments:
+      parameters:
+        - name: dryRun
+          value: "{{ `{{inputs.parameters.dryRun}}` }}"
+        - name: targetNcn
+          value: "{{inputs.parameters.dryRun}}"
 {{end}}
