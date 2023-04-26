@@ -176,9 +176,10 @@ spec:
           source_ns="$2"
           destination_name="$3-$RANDOM"
           destination_ns="$4"
-          if kubectl get $item_name -n $source_ns &> /dev/null; then
-            echo "Syncing $item_name from $source_ns to $destination_ns as $destination_name"
-            kubectl get $item_name -n $source_ns -o json | \
+          result=$(kubectl get $item_name -n $source_ns 2>&1)
+          if [ $? -eq 0 ]; then
+            echo "DEBUG  Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+            result=$(kubectl get $item_name -n $source_ns -o json | \
               jq 'del(.metadata.namespace)' | \
               jq 'del(.metadata.creationTimestamp)' | \
               jq 'del(.metadata.resourceVersion)' | \
@@ -187,10 +188,16 @@ spec:
               jq 'del(.metadata.ownerReferences)' | \
               jq 'del(.metadata.name)' | \
               jq '.metadata |= . + {"name":"'$destination_name'"}' | \
-              kubectl apply -n $destination_ns -f -
-              return $?
+              kubectl apply -n $destination_ns -f -)
+              rc=$?
+              if [ $rc -ne 0 ]; then
+                echo "ERROR  Creating IMS S3 secret $destination_name failed in $destination_ns namespace with error - "
+                echo "$result" | sed -e 's/^/ERROR /'
+              fi
+              return $rc
           else
-            echo "Didn't find $item_name in the $source_ns namespace"
+            echo "ERROR  Didn't find $item_name in the $source_ns namespace"
+            echo "$result" | sed -e 's/^/ERROR /'
             return 1
           fi
         }
@@ -299,4 +306,10 @@ spec:
       image: registry.local/artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
       command: [bash]
       source: |
-        kubectl -n argo delete secret/{{inputs.parameters.s3_credentials_secret_name}}
+        s3_secret_name={{inputs.parameters.s3_credentials_secret_name}}
+        echo "DEBUG  Deleting secret $s3_secret_name from argo workspace"
+        result=$(kubectl -n argo delete secret/$s3_secret_name 2>&1)
+        if [ $? -ne 0 ]; then
+          echo "ERROR  Deleting secret $s3_secret_name failed in argo namespace with error - "
+          echo "$result" | sed -e 's/^/ERROR /'
+        fi
