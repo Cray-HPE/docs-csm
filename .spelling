@@ -42,6 +42,7 @@ namespace
 namespaces
 
 # Cray / Hewlett-Packard Enterprise Lexicons
+ActiveMQ
 Antero
 Arista
 BOS
