@@ -48,7 +48,14 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                    -d client_id=admin-client \
+                    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
                   TARGET_NCN={{inputs.parameters.targetNcn}}
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                  
                   if ! cray bss bootparameters list --hosts $TARGET_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
                     echo "${TARGET_NCN} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
                     exit 1
@@ -67,14 +74,14 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
-                  TARGET_NCN={{inputs.parameters.targetNcn}}
-                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
                   TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
                     -d client_id=admin-client \
                     -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                     https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-
+                  TARGET_NCN={{inputs.parameters.targetNcn}}
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                  
                   /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
                   bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
                   -H "Authorization: Bearer ${TOKEN}" \
