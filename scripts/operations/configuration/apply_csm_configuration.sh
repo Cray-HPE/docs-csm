@@ -166,7 +166,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     --ncn-config-file)
       [[ ${CONFIG_CHANGE} == false ]] && usage_err_exit "--ncn-config-file and --no-config-change are mutually exclusive"
-      # Make sure the file exists, is a regular file, is not empty, and 
+      # Make sure the file exists, is a regular file, is not empty, and
       # contains valid JSON data
       [[ -e "$2" ]] || usage_err_exit "NCN config file ($2) does not exist"
       [[ -f "$2" ]] || usage_err_exit "NCN config file ($2) exists but is not a regular file"
@@ -189,7 +189,7 @@ while [[ $# -gt 0 ]]; do
     --no-clear-err)
       NO_CLEAR_ERR="true"
       shift # past argument
-      ;;      
+      ;;
     --no-enable)
       NO_ENABLE="true"
       shift # past argument
@@ -348,18 +348,58 @@ else
     exit 0
 fi
 
-while true; do
-  RESULT=$(cray cfs components list --status pending --ids ${XNAMES} --format json | jq length)
-  if [[ "${RESULT}" -eq 0 ]]; then
-    break
-  fi
-  echo "Waiting for configuration to complete.  ${RESULT} components remaining."
-  sleep 60
+# From: https://stackoverflow.com/questions/53839253/how-can-i-convert-an-array-into-a-comma-separated-string
+join_arr() {
+  local IFS="$1"
+  shift
+  echo "$*"
+}
+# Break up the XNAMES into chunks of XNAME_LIMIT size because the CFS operator
+# cannot handle more than XNAME_LIMIT query parameters.
+XNAME_LIMIT=20
+XNAME_ARRAY=(${XNAME_LIST})
+NUMBER_XNAMES=${#XNAME_ARRAY[@]}
+
+# Wait for nodes to configure
+INDEX=0
+while [[ $INDEX -lt $NUMBER_XNAMES ]]; do
+    SHORT_XNAMES_LIST=${XNAME_ARRAY[@]:$INDEX:$XNAME_LIMIT}
+    SHORT_XNAMES=$(join_arr , ${SHORT_XNAMES_LIST[@]})
+    INDEX=$((INDEX + XNAME_LIMIT))
+    while true; do
+      RESULT=$(cray cfs components list --status pending --ids ${SHORT_XNAMES} --format json | jq length)
+      if [[ "${RESULT}" -eq 0 ]]; then
+        break
+      fi
+      echo "Waiting for configuration to complete.  ${RESULT} components remaining."
+      sleep 60
+    done
 done
 
-CONFIGURED=$(cray cfs components list --status configured --ids ${XNAMES} --format json | jq length)
-FAILED=$(cray cfs components list --status failed --ids ${XNAMES} --format json | jq length)
+# Report the number of nodes that were configured or failed to configure
+INDEX=0
+CONFIGURED=0
+FAILED=0
+while [[ $INDEX -lt $NUMBER_XNAMES ]]; do
+    SHORT_XNAMES_LIST=${XNAME_ARRAY[@]:$INDEX:$XNAME_LIMIT}
+    SHORT_XNAMES=$(join_arr , ${SHORT_XNAMES_LIST[@]})
+    INDEX=$((INDEX + XNAME_LIMIT))
+    NEW_CONFIGURED=$(cray cfs components list --status configured --ids ${SHORT_XNAMES} --format json | jq length)
+    NEW_FAILED=$(cray cfs components list --status failed --ids ${SHORT_XNAMES} --format json | jq length)
+    CONFIGURED=$((CONFIGURED + NEW_CONFIGURED))
+    FAILED=$((FAILED + NEW_FAILED))
+done
 echo "Configuration complete. ${CONFIGURED} component(s) completed successfully.  ${FAILED} component(s) failed."
+
+# Report the nodes which failed to configure.
 if [ "${FAILED}" -ne "0" ]; then
-   echo "The following components failed: $(cray cfs components list --status failed --ids ${XNAMES} --format json | jq -r '. | map(.id) | join(",")')"
+    INDEX=0
+    FAILED_NODES=""
+    while [[ $INDEX -lt $NUMBER_XNAMES ]]; do
+        SHORT_XNAMES_LIST=${XNAME_ARRAY[@]:$INDEX:$XNAME_LIMIT}
+        SHORT_XNAMES=$(join_arr , ${SHORT_XNAMES_LIST[@]})
+        INDEX=$((INDEX + XNAME_LIMIT))
+        FAILED_NODES+=$(cray cfs components list --status failed --ids ${SHORT_XNAMES} --format json | jq -r '. | map(.id) | join(",")')
+    done
+    echo "The following components failed: $FAILED_NODES"
 fi

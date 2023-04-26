@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -121,7 +121,7 @@ function wait_on_dev {
     done
     echo "Nothing is using ${dev}"
 }
-echo 'Removing metalvg since storage nodes do not rebuld with metal.no-wipe=0'
+echo 'Removing metalvg since storage nodes do not rebuild with metal.no-wipe=0'
 systemctl stop ceph.target
 systemctl stop registry.container.service
 wait_on_dev /etc/ceph

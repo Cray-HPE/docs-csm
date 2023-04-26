@@ -44,8 +44,45 @@ after a break, always be sure that a typescript is running before proceeding.
    CSM_REL_NAME=csm-${CSM_RELEASE}
    ```
 
-1. (`ncn-m001#`) Install the latest `docs-csm` and `libcsm` RPMs. See the short procedure in
-   [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
+1. Acquire the latest documentation RPM. This may include updates, corrections, and enhancements that were not available until after the software release.
+
+    > ***NOTE:*** CSM does NOT support the use of proxy servers for anything other than downloading artifacts from external endpoints. Using http proxies in any way other than the following examples will cause many failures in subsequent steps.
+
+   1. Check the version of the currently installed CSM documentation and CSM library.
+
+      ```bash
+      rpm -q docs-csm
+      ```
+
+   1. Download and upgrade the latest documentation RPM and CSM library.
+
+       - Without proxy:
+
+           ```bash
+           wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" -O /root/docs-csm-latest.noarch.rpm
+           ```
+
+       - With https proxy:
+
+           ```bash
+           https_proxy=https://example.proxy.net:443 wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" \
+               -O /root/docs-csm-latest.noarch.rpm
+           ```
+
+       - If this machine does not have direct internet access, then this RPM will need to be externally downloaded and
+         copied to the system.
+
+           ```bash
+           curl -O "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm"
+           scp docs-csm-latest.noarch.rpm ncn-m001:/root
+           ssh ncn-m001
+           ```
+
+   1. Install the documentation RPM.
+
+      ```bash
+      rpm -Uvh --force /root/docs-csm-latest.noarch.rpm
+      ```
 
 1. (`ncn-m001#`) Create and mount an `rbd` device where the CSM release tarball can be stored.
 

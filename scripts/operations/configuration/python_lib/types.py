@@ -1,4 +1,3 @@
-#!/usr/bin/bash
 #
 # MIT License
 #
@@ -22,22 +21,21 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
+"""Shared Python function library: Type hints"""
 
-################################################################################
-# This script exports all existing BOS session templates as a list in a JSON
-# file. This file can be used to re-create the session templates.
-################################################################################
-ARCHIVE="bos-session-templates-$(date +%Y%m%d%H%M%S).json"
+from typing import Dict, List, Union
 
-err_exit()
-{
-    echo "ERROR: $*" >&2
-    exit 1
-}
+from packaging.version import LegacyVersion, Version
+import simplejson.errors
 
-[[ ! -e ${ARCHIVE} ]] || err_exit "Archive file '${ARCHIVE}' already exists!"
+# A simplified type hint to use for JSON objects
+JsonObject = Union[str, int, float, list, dict, bool, None]
+JsonDict = Dict[str, JsonObject]
+JsonList = List[JsonObject]
 
-# Write all of the session templates to the file
-cray bos v2 sessiontemplates list --format json > "${ARCHIVE}" || 
-    err_exit "Command failed: cray bos v2 sessiontemplates list --format json"
-echo "BOS session templates stored in file: ${ARCHIVE}"
+# A generic version type that covers both Version and LegacyVersion
+GenericVersion = Union[LegacyVersion, Version]
+
+# So we can catch exceptions decoding JSON. This way if the JSON module
+# changes what it throws, we only need to change it here.
+JSONDecodeError = simplejson.errors.JSONDecodeError
