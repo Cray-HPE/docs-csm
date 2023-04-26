@@ -9,6 +9,27 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.2`, follow the procedures descr
 
 * Fixed a scale issue with the `/v1/hardware` API in the System Layout Service (SLS) causing the service to become deadlocked.
 * Updated the `hms-hmcollector` to be accessible at the hostname `hmcollector.hmnlb.$SYSTEM_NAME.$SITE_DOMAIN`, in addition to its IP address `10.94.100.71`.
+* Upgraded CANU to `1.7.1` to enable bonded NMN connections for the UANs.
+* Enhanced the security by changing network and Kyverno policies run against MQTT namespace.
+* Fixed DVS issue by creating a helm chart to deploy ActiveMQ, as it requires a MQTT server for their service to function properly and also Istio config change for termination of TLS.
+* Fixed CSM install documentation instructions missing copy of rpm in `/root`.
+* Updated the newly created `libcsm` to be included in the CSM tarball and available via. the GCP distribution endpoint.
+* Fixed the issue where Kyverno prevents `weave-net` `daemonset` from creating pods.
+* Fixed an issue where the NCN health check failed when LDAP server not configured.
+* Fixed an issue where the post CSM install NCN health check partially failed in `goss-k8s-velero-no-failed-backup`.
+* Updated(increased) Kyverno and Kyverno-pre containers memory resources causing critical pods fail to start.
+* Updated `cms-ipxe` to version `1.11.1` to address a change to the LACP settings in support of UAN bonding.
+* Fixed Postgres logs issue preventing it to open logfile `/home/postgres/log/pgqd.log`.
+* Fixed kernel-debug-info to pull in proper/respective debug-info RPM.
+* Fixed Unbound caches negative responses by lowering the value set to unbound configuration parameter.
+* Patched `cray-dhcp-kea 0.10.20`, `cray-dns-powerdns 0.2.7` , `cray-pdns-manager 0.7.4` , `cray-uas-mgr:1.22.0` , `update-uas:1.8.0` to pull in CVE fixes.
+* Updated the rebuild procedure for `ceph_join_cluster.sh` script to only use the one specified.
+* Fixed the CFS image customization failure when trying to customize the worker image.
+* Updated 1.2 and 1.3 CSM documentation repo to include `set_ssh-keys` script.
+* Updated the documentation for customizing worker node images to show Kubernetes path in the URL for `metal.server`.
+* Updated the documentation `Nexus_Import_Embedded_Repo.md` to include instructions for adding the embedded repo to the list of repos that `csm-config-management` configures.
+* Updated the documentation `operations/system_management_health/Prometheus_Kafka_Error.md` on a fresh installs of CSM under 1.2.
+* Fixed the issue `csi config init empty` overwrites existing `system_config.yaml`.
 
 ## Steps
 
