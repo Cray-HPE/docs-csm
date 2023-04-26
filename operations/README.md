@@ -793,6 +793,8 @@ these backups.
   - [Create a Backup of the Spire Postgres Database](spire/Create_a_backup_of_the_Spire_Postgres_Database.md)
   - [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
   - [Spire Service Recovery](spire/Spire_Service_Recovery.md)
+- Version Control Service(VCS)
+  - [Backup and restore data](configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data)
 - Boot Orchestration Service (BOS)
   - [Exporting and Importing BOS Data](boot_orchestration/Exporting_and_Importing_BOS_Data.md)
 - Configuration Management Service (CFS)
