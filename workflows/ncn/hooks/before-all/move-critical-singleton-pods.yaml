@@ -29,11 +29,10 @@ metadata:
     before-all: "true"
 spec:
   scriptContent: |
-    targetNcns="{{inputs.parameters.targetNcns}}"
-    echo "targetNcns: $targetNcns"
-    # example input of targetNcns: [ncn-w001 ncn-w002 ncn-w003]
+    echo "targetNcns: $TARGET_NCNS"
+    # example input of TARGET_NCNS: [ncn-w001 ncn-w002 ncn-w003]
     # remove '[' and ']'
-    targetNcns=${targetNcns:1:-1}
+    targetNcns=${TARGET_NCNS:1:-1}
     # convert to array
     targetNcnsArray=($targetNcns)
     # set last rebuilding worker to nodeMoveTo
