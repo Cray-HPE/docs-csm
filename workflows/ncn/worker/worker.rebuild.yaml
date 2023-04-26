@@ -103,14 +103,12 @@ spec:
         tasks:
           - name: before-all
             templateRef:
-              name: hooks
+              name: before-all-hooks
               template: main
             arguments:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
-                - name: labels
-                  value: "before-all=true"
                 - name: targetNcns
                   value: "{{$.TargetNcns}}"
           {{- range $index,$value := .TargetNcns }}
@@ -130,17 +128,15 @@ spec:
               {{ if ne $index 0 }}
               - drain-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
-            template: before-each
+            templateRef:
+              name: before-each-hooks
+              template: main
             arguments:
               parameters:
-                - name: targetNcn
-                  value: {{$value}}
                 - name: dryRun
                   value: "{{$.DryRun}}"
-                - name: imageId
-                  value: "{{$.ImageId}}"
-                - name: desiredCfsConfig
-                  value: "{{$.DesiredCfsConfig}}"
+                - name: targetNcn
+                  value: "{{$value}}"
           # drain: sync
           #     Only one worker can be drained at a time
           - name: drain-{{$value}}
@@ -183,17 +179,15 @@ spec:
           - name: after-each-{{$value}}
             dependencies:
               - wipe-and-reboot-{{$value}}
-            template: after-each
+            templateRef:
+              name: after-each-hooks
+              template: main
             arguments:
               parameters:
-                - name: targetNcn
-                  value: {{$value}}
                 - name: dryRun
                   value: "{{$.DryRun}}"
-                - name: imageId
-                  value: "{{$.ImageId}}"
-                - name: desiredCfsConfig
-                  value: "{{$.DesiredCfsConfig}}"
+                - name: targetNcn
+                  value: "{{$value}}"
           # post rebuild: parallel
           #     Post rebuild validation can be run in parallel
           - name: post-rebuild-{{$value}}
@@ -212,25 +206,22 @@ spec:
                 value: "{{$.DesiredCfsConfig}}"
           {{- end }}
           - name: after-all
-            template: after-all
             dependencies:
               # each drain depends on previous drain action
               # so we make sure only one node is drained at a time
               {{- range $index,$value := .TargetNcns }}
               - post-rebuild-{{$value}}
               {{- end }}
+            templateRef:
+              name: after-all-hooks
+              template: main
             arguments:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: targetNcns
+                  value: "{{$.TargetNcns}}"
     # reference to individual tasks
-    - name: before-each
-      inputs:
-        # import ./common.envar.yaml
-        {{- include "worker.common.parameters" . | indent 8 }}
-      dag:
-        tasks:
-{{ getHooks "before-each" . | indent 8 }}
     - name: drain
       inputs:
         # import ./common.envar.yaml
@@ -245,13 +236,6 @@ spec:
       dag:
         # import ./worker.wipe-and-reboot.yaml
         {{- include "worker.wipe-and-reboot" . | indent 8 }}
-    - name: after-each
-      inputs:
-        # import ./common.envar.yaml
-        {{- include "worker.common.parameters" . | indent 8 }}
-      dag:
-        tasks:
-{{ getHooks "after-each" . | indent 8 }}
     - name: post-rebuild
       inputs:
         # import ./worker.common.parameters.yaml
@@ -259,10 +243,3 @@ spec:
       dag:
         # import ./worker.post-rebuild.yaml
         {{- include "worker.post-rebuild" . | indent 8 }}
-    - name: after-all
-      inputs:
-        parameters:
-          - name: dryRun
-      dag:
-        tasks:
-{{ getHooks "after-all" . | indent 8 }}

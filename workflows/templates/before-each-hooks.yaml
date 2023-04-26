@@ -24,7 +24,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: hooks
+  name: before-each-hooks
   namespace: argo
 spec:
   entrypoint: main
@@ -32,33 +32,22 @@ spec:
     - name: main
       inputs:
         parameters:
-          - name: labels
           - name: dryRun
           - name: targetNcns
+            value: "targetNcns-NOT-SET"
           - name: targetNcn
             value: "targetNcn-NOT-SET"
       dag:
         tasks:
-        - name: get-hooks-by-label
+        - name: get-before-each-hooks
           inline:
             script:
               image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
               command: [sh]
               source: |
-                kubectl get hooks -n argo -l {{inputs.parameters.labels}} \
-                  -o jsonpath='{.items}'
-          # templateRef:
-          #   name: kubectl-and-curl-template
-          #   template: shell-script
-          # arguments:
-          #   parameters:
-          #     - name: dryRun
-          #       value: "false" # even if dryRun is true, we want to get the hooks
-          #     - name: scriptContent
-          #       value: |
-          #         kubectl get hooks -n argo -l {{inputs.parameters.labels}} -o json > /tmp/hooks.json
-        - name: run-hooks
-          depends: get-hooks-by-label
+                kubectl get hooks -n argo -l before-each=true -o jsonpath='{.items}' | jq -c 'map(del(.metadata.annotations)) | map(del(.metadata.managedFields))'
+        - name: run-before-each-hooks
+          depends: get-before-each-hooks
           templateRef:
             name: ssh-template
             template: shell-script
@@ -70,7 +59,8 @@ spec:
                 value: |
                   export TARGET_NCNS="{{inputs.parameters.targetNcns}}"
                   export TARGET_NCN={{inputs.parameters.targetNcn}}
+                  echo "INFO $TARGET_NCN - Running before-each hook: " {{=jsonpath(item.metadata, '$.name')}}
                   {{=jsonpath(item.spec, '$.scriptContent')}}
-          withParam: "{{tasks.get-hooks-by-label.outputs.result}}"
+          withParam: "{{tasks.get-before-each-hooks.outputs.result}}"
             
       
