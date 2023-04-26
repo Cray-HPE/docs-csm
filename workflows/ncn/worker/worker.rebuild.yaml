@@ -102,11 +102,15 @@ spec:
       dag:
         tasks:
           - name: before-all
-            template: before-all
+            templateRef:
+              name: hooks
+              template: main
             arguments:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+                - name: labels
+                  value: "before-all=true"
                 - name: targetNcns
                   value: "{{$.TargetNcns}}"
           {{- range $index,$value := .TargetNcns }}
@@ -220,14 +224,6 @@ spec:
                 - name: dryRun
                   value: "{{$.DryRun}}"
     # reference to individual tasks
-    - name: before-all
-      inputs:
-        parameters:
-          - name: dryRun
-          - name: targetNcns
-      dag:
-        tasks:
-{{ getHooks "before-all" . | indent 8 }}
     - name: before-each
       inputs:
         # import ./common.envar.yaml
