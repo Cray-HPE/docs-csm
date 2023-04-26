@@ -18,7 +18,7 @@ that the cluster has left.
 ```bash
 kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' |
     awk '{print "Amount of space the Nexus export will take up on cluster: "(($3 * 3)/1048576)" GiB";}' &&
-ceph df | grep 'zone1.rgw.buckets.data' | awk '{ print "Currently used: " $7 $8 ", Max Available " $10 $11;}'
+ceph df | grep 'TOTAL' | awk '{ print "Currently used: " $7 $8 ", Max Available " $10 $11;}'
 ```
 
 The above commands will return the following information:
