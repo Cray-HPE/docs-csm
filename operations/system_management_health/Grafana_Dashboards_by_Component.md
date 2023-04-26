@@ -60,13 +60,13 @@ The panels interact with configured data sources, including the following:
 
 ## Kafka
 
-- Healthcheck
+- Health Check
 - System
 - Throughput In/Out
 - Replication
 - Thread utilization
 - Zookeeper
-- Isr Shrinks / Expands
+- ISR Shrinks / Expands
 - Logs size
 - Producer Performance
 - Consumer Performance
