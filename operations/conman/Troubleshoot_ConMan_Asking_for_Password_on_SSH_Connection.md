@@ -55,7 +55,7 @@ This procedure requires administrative privileges.
     ```
 
     It may take some time to regenerate the keys and get them deployed to the BMCs,
-    but in a while the console connections using SSH should be reestablished. Note
+    but after a while the console connections using SSH should be reestablished. Note
     that it may be worthwhile to determine how the SSH key was modified and
-    establish site procedures to coordinate SSH key use; otherwise they may be
+    establish site procedures to coordinate SSH key use; otherwise, they may be
     overwritten again at a later time.
