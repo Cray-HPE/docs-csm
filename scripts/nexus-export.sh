@@ -25,11 +25,8 @@
 
 set -eo pipefail
 
-usedRGW=$(ceph df -f json | jq '.pools[] | select(.name | contains("rgw.buckets.data")) | .stats.bytes_used' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
-echo  "Gibibytes used in rgw.buckets.data: $usedRGW"
-
-availRGW=$(ceph df -f json | jq '.pools[] | select(.name | contains("rgw.buckets.data")) | .stats.max_avail' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
-echo  "Gibibytes available in rgw.buckets.data: $availRGW"
+availRGW=$(ceph df -f json | jq '.stats.total_avail_bytes' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
+echo  "Gibibytes available in cluster: $availRGW"
 
 usedNexus=$(kubectl exec -n nexus deploy/nexus -c nexus -- df -P /nexus-data | grep '/nexus-data' | awk '{printf "%.0f", ($3/1024/1024)}')
 echo  "Gibibytes used in nexus-data: $usedNexus"
@@ -39,7 +36,7 @@ echo  "Gibibytes available in nexus-data: $availNexus"
 
 echo $usedNexus | awk '{print "Space to be used from backup: ", ($1 * 3)}'
 
-if (( $usedNexus*3 > $availRGW-$usedRGW )); then
+if (( $usedNexus*3 > $availRGW )); then
   echo "Not Enough Space on the Cluster for the Export."
   exit 1
 fi
