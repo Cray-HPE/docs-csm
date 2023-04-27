@@ -379,6 +379,6 @@ while true; do
         printf "%s\n" "INFO - ${phase}:"
         echo "INFO - ${runningSteps}"  | awk -F'.' '{print $2" -  "$3}'
         sleep 10
-        rm -f "${res_file}" 2>&1 /dev/null
     fi
+    rm -f "${res_file}" 2>&1 /dev/null
 done
