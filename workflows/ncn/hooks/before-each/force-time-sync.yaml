@@ -29,6 +29,7 @@ metadata:
     before-each: "true"
 spec:
   scriptContent: |
+    #!/bin/sh
     TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
         -d client_id=admin-client \
         -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \

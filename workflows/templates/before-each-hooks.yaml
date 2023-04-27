@@ -45,7 +45,7 @@ spec:
               image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
               command: [sh]
               source: |
-                kubectl get hooks -n argo -l before-each=true -o jsonpath='{.items}' | jq -c 'map(del(.metadata.annotations)) | map(del(.metadata.managedFields))'
+                kubectl get hooks -n argo -l before-each=true -o jsonpath='{.items}' | jq -c 'map(.metadata.name)'
         - name: run-before-each-hooks
           depends: get-before-each-hooks
           templateRef:
@@ -57,10 +57,13 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
+                  echo "INFO Running before each hook: {{item}}"
                   export TARGET_NCNS="{{inputs.parameters.targetNcns}}"
                   export TARGET_NCN={{inputs.parameters.targetNcn}}
-                  echo "INFO $TARGET_NCN - Running before-each hook: " {{=jsonpath(item.metadata, '$.name')}}
-                  {{=jsonpath(item.spec, '$.scriptContent')}}
+                  randomFile=$(mktemp /tmp/before-each-hook.XXXXXX)
+                  kubectl get hooks/{{item}} -n argo -o jsonpath='{.spec.scriptContent}' > $randomFile
+                  chmod +x $randomFile
+                  $randomFile
           withParam: "{{tasks.get-before-each-hooks.outputs.result}}"
             
       
