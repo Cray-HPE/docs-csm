@@ -252,41 +252,48 @@ function getUnsucceededRebuildWorkflows() {
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
+        rm -f "${res_file}" 2>&1 /dev/null
         exit 1
     fi
     jq -r ".[]? | .name?" < "${res_file}"
+    rm -f "${res_file}" 2>&1 /dev/null
 }
 
 function createRebuildWorkflow() {
-    res_file=$(mktemp)
+    res_file=$(mktemp /tmp/argo-res.XXXXXX)
     http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPOST -H "Authorization: Bearer $(getToken)" -H 'Content-Type: application/json' -d "$(createWorkflowPayload)" "${baseUrl}/apis/nls/v1/ncns/rebuild")
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
+        rm -f "${res_file}" 2>&1 /dev/null
         exit 1
     fi
     local workflow
     workflow=$(grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*' < "${res_file}" )
     echo "${workflow}"
+    rm -f "${res_file}" 2>&1 /dev/null
 }
 
 function deleteRebuildWorkflow() {
-    res_file=$(mktemp)
+    res_file=$(mktemp /tmp/argo-res.XXXXXX)
     http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XDELETE -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}")
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
+        rm -f "${res_file}" 2>&1 /dev/null
         exit 1
     fi
+    rm -f "${res_file}" 2>&1 /dev/null
 }
 
 function retryRebuildWorkflow() {
-    res_file=$(mktemp)
+    res_file=$(mktemp /tmp/argo-res.XXXXXX)
     http_code=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XPUT -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows/${1}/retry" -d '{}')
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
     fi
+    rm -f "${res_file}" 2>&1 /dev/null
 }
 
 printCmdArgs
@@ -336,7 +343,7 @@ sleep 20
 # poll
 while true; do
     labelSelector="node-type=${nodeType}"
-    res_file="$(mktemp)"
+    res_file="$(mktemp /tmp/argo-res.XXXXXX)"
     # Retry the curl command if it fails
     while ! http_status=$(curl -s -o "${res_file}" -w "%{http_code}" -k -XGET -H "Authorization: Bearer $(getToken)" "${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector}") ; do
         echo "WARNING: curl call to ${baseUrl}/apis/nls/v1/workflows?labelSelector=${labelSelector} failed. Retrying after 10 seconds"
@@ -372,5 +379,6 @@ while true; do
         printf "%s\n" "INFO - ${phase}:"
         echo "INFO - ${runningSteps}"  | awk -F'.' '{print $2" -  "$3}'
         sleep 10
+        rm -f "${res_file}" 2>&1 /dev/null
     fi
 done
