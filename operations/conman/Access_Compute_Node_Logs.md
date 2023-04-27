@@ -33,7 +33,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 1. Log on to the pod.
 
     ```bash
-    kubectl exec -it -n services $OP_POD -- sh
+    kubectl exec -it -n services $OP_POD  -c cray-console-operator -- sh
     ```
 
 1. The console log file for each node is labeled with the component name (xname) of that node.
