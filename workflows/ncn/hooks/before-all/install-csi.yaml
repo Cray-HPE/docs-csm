@@ -29,6 +29,7 @@ metadata:
     before-all: "true"
 spec:
   scriptContent: |
+    #!/bin/sh
     source /srv/cray/scripts/metal/metal-lib.sh
     csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp3" \
       | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)

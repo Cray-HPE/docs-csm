@@ -29,6 +29,7 @@ metadata:
     before-all: "true"
 spec:
   scriptContent: |
+    #!/bin/sh
     echo "targetNcns: $TARGET_NCNS"
     # example input of TARGET_NCNS: [ncn-w001 ncn-w002 ncn-w003]
     # remove '[' and ']'

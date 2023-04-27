@@ -29,6 +29,7 @@ metadata:
     before-each: "true"
 spec:
   scriptContent: |
+    #!/bin/sh
     export GOSS_BASE=/opt/cray/tests/install/ncn
     GOSS_ARG="--vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate \
       --retry-timeout 1h \
