@@ -7,9 +7,9 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.3`, follow the procedures descr
 
 ## Bug Fixes and Improvements
 
-* Added monitoring and a grafana dashboard for SMF kafka server and zookeeper metrics in prometheus
-* Fixed auth failure with the keycloak integration into nexus due to a change to the keycloak opa policy which was recently patched.
-* Fixed dvs-mqtt error in the spire server config - note this is only an issue for a customer already running mqtt in their environment.
+* Added monitoring and a `grafana` dashboard for SMF `kafka` server and zookeeper metrics in `prometheus`
+* Fixed authentication failure with the `keycloak` integration into nexus due to a change to the `keycloak` `opa` policy which was recently patched.
+* Fixed `dvs-mqtt` error in the spire server configuration - note this is only an issue for a customer already running `mqtt` in their environment.
 
 ## Steps
 
