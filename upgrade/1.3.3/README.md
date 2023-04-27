@@ -7,9 +7,9 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.3`, follow the procedures descr
 
 ## Bug Fixes and Improvements
 
-* Added monitoring and a `grafana` dashboard for SMF `kafka` server and zookeeper metrics in `prometheus`
-* Fixed authentication failure with the `keycloak` integration into nexus due to a change to the `keycloak` `opa` policy which was recently patched.
-* Fixed `dvs-mqtt` error in the spire server configuration - note this is only an issue for a customer already running `mqtt` in their environment.
+* Added monitoring and a `grafana` dashboard for SMF `kafka` server and zookeeper metrics in `prometheus`.
+* Fixed authentication failure with the `keycloak` integration into Nexus due to a change to the `keycloak` `opa` policy which was recently patched.
+* Fixed `dvs-mqtt` error in the Spire server configuration - note this is only an issue for a customer already running `mqtt` in their environment.
 
 ## Steps
 
@@ -188,10 +188,9 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
 
 ## Complete upgrade
 
-1. Remember to exit the typescript that was started at the beginning of the upgrade.
+Remember to exit the typescript that was started at the beginning of the upgrade.
 
-     ```bash
-     exit
-     ```
+```bash
+exit
 
 It is recommended to save the typescript file for later reference.
