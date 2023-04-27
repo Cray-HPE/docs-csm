@@ -187,8 +187,8 @@ spec:
             destination_ns="$4"
             result=$(kubectl get $item_name -n $source_ns 2>&1)
             if [ $? -eq 0 ]; then
-              echo "DEBUG  Syncing $item_name from $source_ns to $destination_ns as $destination_name"
-              result=$(kubectl get $item_name -n $source_ns -o json | \
+              echo "DEBUG Syncing $item_name from $source_ns to $destination_ns as $destination_name"
+              kubectl get $item_name -n $source_ns -o json | \
                 jq 'del(.metadata.namespace)' | \
                 jq 'del(.metadata.creationTimestamp)' | \
                 jq 'del(.metadata.resourceVersion)' | \
@@ -197,16 +197,16 @@ spec:
                 jq 'del(.metadata.ownerReferences)' | \
                 jq 'del(.metadata.name)' | \
                 jq '.metadata |= . + {"name":"'$destination_name'"}' | \
-                kubectl apply -n $destination_ns -f -)
+                kubectl apply -n $destination_ns -f -
                 rc=$?
                 if [ $rc -ne 0 ]; then
-                  echo "ERROR  Creating secret $destination_name failed in $destination_ns namespace with error - "
-                  echo "$result" | sed -e 's/^/ERROR /'
+                  echo "ERROR Failed to create secret $destination_name in $destination_ns namespace from $item_name in $source_ns namespace"
                 fi
                 return $rc
             else
-              echo "ERROR  Didn't find $item_name in the $source_ns namespace"
-              echo "$result" | sed -e 's/^/ERROR /'
+              echo "ERROR $item_name not found in $source_ns namespace"
+              result=$(echo "$result" | sed -e 's/^/DEBUG /')
+              echo -e "DEBUG <kubectl get $item_name -n $source_ns> failed with\n\n$result"
               return 1
             fi
           }
@@ -309,6 +309,7 @@ spec:
           echo "DEBUG  Deleting secret $vcs_secret_name from argo workspace"
           result=$(kubectl -n argo delete secret/$vcs_secret_name 2>&1)
           if [ $? -ne 0 ]; then
-            echo "ERROR  Deleting secret $vcs_secret_name failed in argo namespace with error - "
-            echo "$result" | sed -e 's/^/ERROR /'
+            result=$(echo "$result" | sed -e 's/^/DEBUG /')
+            echo "ERROR  Deleting secret $vcs_secret_name failed in argo namespace"
+            echo -e "DEBUG <kubectl -n argo delete secret/$vcs_secret_name> failed with\n\n$result"
           fi
