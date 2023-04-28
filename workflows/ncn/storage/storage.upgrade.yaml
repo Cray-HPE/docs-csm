@@ -101,9 +101,9 @@ spec:
                 - name: dryRun
                   value: "{{$.DryRun}}"  
           {{- range $index,$value := .TargetNcns}}
-          - name: before-each
+          - name: before-each-{{$value}}
             templateRef:
-              name: before-each-nodes-storage-workflow
+              name: before-each-node-storage-workflow
               template: main
             dependencies: 
               - before-all
@@ -113,7 +113,7 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: targetNcn
                   value: {{$value}}
-          - name: set-bss-no-wipe=1
+          - name: set-bss-no-wipe-to-1-{{$value}}
             templateRef:
               name: set-no-wipe
               template: set-bss-no-wipe-1-no-wipe-osds
@@ -143,8 +143,8 @@ spec:
               template: main
             dependencies: 
               - backup-ceph-data-{{$value}}
-              - set-bss-no-wipe=1
-              - before-each-nodes-storage-workflow
+              - set-bss-no-wipe-to-1-{{$value}}
+              - before-each-{{$value}}
             arguments:
               parameters:
                 - name: dryRun
@@ -157,6 +157,18 @@ spec:
               template: main
             dependencies: 
               - before-shutdown-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: {{$value}}
+          - name: unset-rd-live-overlay-{{$value}}
+            templateRef:
+              name: rd-live-dir-rd-live-overlay-reset
+              template: unset-rd-live-overlay-reset
+            dependencies: 
+              - reboot-{{$value}}
             arguments:
               parameters:
                 - name: dryRun

@@ -31,7 +31,7 @@ spec:
     - name: backup-ceph-data-for-node-upgrade
       inputs:
         parameters:
-          - name: upgradeType
+          - name: dryRun
           - name: targetNcn
       dag:
         tasks:

@@ -137,14 +137,26 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: targetNcn
                   value: "{{$value}}"
+          - name: shutdown-services-{{$value}}
+            templateRef:
+              name: shutdown-services
+              template: storage-node-full-wipe-services
+            dependencies: 
+              - drain-{{$value}}
+              - before-each-{{$value}}
+              - set-bss-no-wipe-to-0-{{$value}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: "{{$value}}"
           - name: reboot-{{$value}}
             templateRef:
               name: reboot
               template: main
             dependencies: 
-              - drain-{{$value}}
-              - before-each-{{$value}}
-              - set-bss-no-wipe-to-0-{{$value}}
+              - shutdown-services-{{$value}}
             arguments:
               parameters:
                 - name: dryRun

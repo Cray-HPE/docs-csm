@@ -85,22 +85,22 @@ spec:
                         ssh ${target_ncn} podman pull $image
                     done
                     ssh ${target_ncn} podman pull "$(cat /tmp/ceph_global_container_image.txt)"
-          - name: restore-ceph-files
+          - name: restore-ceph-files-for-upgrade
+            when: "{{inputs.parameters.workflowType}} == upgrade"
             dependencies:
               - update-ssh-keys
             template: restore-ceph-files-from-tar
-            when: "{{inputs.parameters.workflowType}} == rebuild"
             arguments:
               parameters:
                 - name: dryRun
                   value: "{{inputs.parameters.dryRun}}"
                 - name: targetNcn
                   value: "{{inputs.parameters.targetNcn}}"
-          - name: restore-ceph-files
+          - name: restore-ceph-files-for-rebuild
+            when: "{{inputs.parameters.workflowType}} == rebuild"
             dependencies:
               - update-ssh-keys
             template: copy-ceph-files-from-storage-node
-            when: "{{inputs.parameters.workflowType}} == upgrade"
             arguments:
               parameters:
                 - name: dryRun
@@ -108,10 +108,7 @@ spec:
                 - name: targetNcn
                   value: "{{inputs.parameters.targetNcn}}"
           - name: add-host
-            dependencies:
-              - copy-ceph-pub
-              - restore-ceph-files
-              - pull-images-from-nexus
+            depends: "copy-ceph-pub && pull-images-from-nexus && (restore-ceph-files-for-upgrade || restore-ceph-files-for-rebuild)"
             templateRef:
               name: ssh-template
               template: shell-script

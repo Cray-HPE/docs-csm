@@ -24,18 +24,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: rd.live.dir-rd.live.overlay.reset
+  name: rd-live-dir-rd-live-overlay-reset
   namespace: argo
 spec:
   templates:
-    - name: set-rd.live.dir-and-rd.live.overlay.reset
+    - name: set-rd-live-dir-and-rd-live-overlay-reset
       inputs:
         parameters:
           - name: targetNcn
           - name: dryRun
       dag:
         tasks:
-          - name: set-rd.live.dir-and-rd.live.overlay.reset-task
+          - name: main
             templateRef:
               name: ssh-template
               template: shell-script
@@ -60,14 +60,14 @@ spec:
                     csi handoff bss-update-param --set rd.live.dir=${CSM_RELEASE} --limit "${TARGET_XNAME}"
                     csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"
                     csi handoff bss-update-param --set rd.live.overlay.reset=1 --limit "${TARGET_XNAME}"
-    - name: unset-rd.live.overlay.reset
+    - name: unset-rd-live-overlay-reset
       inputs:
         parameters:
           - name: targetNcn
           - name: dryRun
       dag:
         tasks:
-          - name: unset-rd.live.overlay.reset-task
+          - name: main
             templateRef:
               name: ssh-template
               template: shell-script

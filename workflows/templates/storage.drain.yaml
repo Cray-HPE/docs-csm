@@ -63,7 +63,7 @@ spec:
                       echo "ERROR did not successfully drain osds from $TARGET_NCN. Manually run 'ceph orch ps $TARGET_NCN' to see what is still running."
                       exit 1
                     fi
-          - name: fail-over-mds
+          - name: fail-over-mds-mgr
             dependencies: 
               - drain
             templateRef:
@@ -76,30 +76,24 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
-                    echo "This will fail over mds if the active cephfs or admin-tool mds daemon is on $TARGET_NCN"
+                    echo "This will fail over mds if the active cephfs or admin-tool mds daemon is on ${TARGET_NCN}."
+                    echo "This will fail over mgr if the active mgr is on ${TARGET_NCN}."
                     active_mds=$(ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name')
-                    for each in $active_mds; do
-                      if [[ -n $(echo $each | grep $TARGET_NCN ) ]]; then
-                        ceph mds fail $each
+                    active_on_target=1
+                    while [[ $active_on_target -ne 0 ]]; do
+                      active_on_target=0
+                      for each in $active_mds; do
+                        if [[ -n $(echo $each | grep $TARGET_NCN ) ]]; then
+                          active_on_target=$(( $active_on_target + 1 ))
+                          ceph mds fail $each
+                        fi
+                      done
+
+                      active_mgr=$(ceph mgr dump | jq -r .active_name)
+                      if [[ -n $(echo $active_mgr | grep $TARGET_NCN) ]]; then
+                        echo "Acitve mgr is $active_mgr"
+                        ceph mgr fail
+                        echo "Failed over mgr"
+                        active_on_target=$(( $active_on_target + 1 ))
                       fi
                     done
-          - name: fail-over-mgr
-            dependencies: 
-              - drain
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{inputs.parameters.dryRun}}"
-                - name: scriptContent
-                  value: |
-                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
-                    echo "This will fail over mgr if the active mgr is on $TARGET_NCN"
-                    active_mgr=$(ceph mgr dump | jq -r .active_name)
-                    echo "Acitve mgr is $active_mgr"
-                    if [[ -n $(echo $active_mgr | grep $TARGET_NCN) ]]; then
-                      ceph mgr fail
-                      echo "Failed over mgr"
-                    fi
