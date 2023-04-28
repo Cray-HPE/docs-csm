@@ -24,24 +24,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: backup-ceph-data
+  name: create-rgw-buckets
   namespace: argo
 spec:
   templates:
-    - name: backup-ceph-data-for-node-upgrade
+    - name: main
       inputs:
         parameters:
           - name: upgradeType
           - name: targetNcn
-      templateRef:
-        name: ssh-template
-        template: shell-script
-      arguments:
-        parameters:
-          - name: dryRun
-            value: "{{inputs.parameters.dryRun}}"
-          - name: scriptContent
-            value: |
-              TARGET_NCN="{{inputs.parameters.targetNcn}}"
-              ssh ${TARGET_NCN} 'systemctl stop ceph.target;sleep 30;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /etc/ceph;systemctl start ceph.target'
-              scp ${TARGET_NCN}:/tmp/${TARGET_NCN}-ceph.tgz .
+      dag:
+        tasks:
+          - name: create-rgw-buckets-task 
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    scp /usr/share/doc/csm/upgrade/scripts/ceph/create_rgw_buckets.sh ${TARGET_NCN}:/tmp
+                    ssh ${TARGET_NCN} '/tmp/create_rgw_buckets.sh'

@@ -29,6 +29,9 @@ metadata:
 spec:
   templates:
     - name: main
+      inputs:
+        - name: dryRun
+        - name: targetNcn
       dag:
         tasks:
           - name: install-csi
@@ -84,52 +87,3 @@ spec:
                     if [[ -z $label_exists ]]; then
                       ceph orch host label add ncn-s002 _admin
                     fi
-          {{- range $index,$value := .TargetNcns}}
-          - name: verify-bss-runcmd
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{inputs.parameters.dryRun}}"
-                - name: scriptContent
-                  value: |
-                    TARGET_NCN={{$value}}
-                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-                      -d client_id=admin-client \
-                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    cloud_init_script=$(cray bss bootparameters list --name ${TARGET_XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd' | grep "storage-ceph-cloudinit.sh") || cloud_init_script=""
-                    if [[ -n $cloud_init_script ]]; then
-                      # fix BSS run command
-                      python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
-                      # verify the run command has been fixed
-                      cloud_init_script=$(cray bss bootparameters list --name ${TARGET_XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd' | grep "storage-ceph-cloudinit.sh")
-                      if [[ -n $cloud_init_script ]]; then
-                        echo "ERROR: There was an issue removing 'storage-ceph-cloudinit.sh' from the BSS run command. Run 'python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py' to fix this manually."
-                        exit 1
-                      fi
-                    else
-                      echo "BSS run command is correct."
-                    fi
-          - name: validate-boot-loader
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{inputs.parameters.dryRun}}"
-                - name: scriptContent
-                  value: |
-                    TARGET_NCN={{$value}}
-                    if [[ ! -f /opt/cray/tests/install/ncn/scripts/check_bootloader.sh ]]; then 
-                      echo "Error: this file is not present /opt/cray/tests/install/ncn/scripts/check_bootloader.sh on ncn-m001."
-                      exit 1
-                    fi
-                    scp /opt/cray/tests/install/ncn/scripts/check_bootloader.sh $TARGET_NCN:/opt/cray/tests/install/ncn/scripts/check_bootloader.sh
-                    ssh $TARGET_NCN '/opt/cray/tests/install/ncn/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
-                    echo "Successfully checked bootloader on $TARGET_NCN and removed /metal/recovery."

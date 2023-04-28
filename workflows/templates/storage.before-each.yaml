@@ -24,11 +24,15 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: before-each-nodes-storage-workflow
+  name: before-each-node-storage-workflow
   namespace: argo
 spec:
   templates:
     - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: targetNcn
       dag:
         tasks:
           - name: verify-bss-runcmd

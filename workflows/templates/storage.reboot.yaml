@@ -46,7 +46,7 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
-                    TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                         jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
                     if ! cray bss bootparameters list --hosts $TARGET_XNAME --format json | jq '.[] |."cloud-init"."user-data".ntp' | grep -q '/etc/chrony.d/cray.conf'; then
@@ -65,9 +65,14 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
-                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                    TARGET_NCN={{inputs.parameters.targetNcn}}
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                         jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    
                     /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
                     bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
                     -H "Authorization: Bearer ${TOKEN}" \
@@ -95,7 +100,13 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
-                    {{- include "common.envar" . | indent 12 }}
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                    TARGET_NCN={{inputs.parameters.targetNcn}}
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")            
                     
                     # Set ncn to pxe boot
                     ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis bootdev pxe options=efiboot
@@ -119,7 +130,14 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
-                    {{- include "common.envar" . | indent 12 }}
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                    TARGET_NCN={{inputs.parameters.targetNcn}}
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    
                     bootscript_last_epoch="{{tasks.get-bootscript-last-access-timestamp.outputs.result}}"
                     
                     # wait for boot
@@ -164,7 +182,14 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
-                    {{- include "common.envar" . | indent 12 }}
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                    TARGET_NCN={{inputs.parameters.targetNcn}}
+                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    
                     # wait random seconds (1-10s) until ssh is working
                     echo "wait for ssh ..."
                     while ! ssh "${TARGET_NCN}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'ls /var/log/cloud-init-output.log'
@@ -183,15 +208,15 @@ spec:
                     done
                     # Restore set -e
                     set -e
-            # - name: set-bss-no-wipe-to-1
-            #   dependencies:
-            #     - wait-for-boot
-            #   templateRef:
-            #     name: set-no-wipe
-            #     template: set-bss-no-wipe-1
-            #   arguments:
-            #     parameters:
-            #       - name: dryRun
-            #         value: "{{inputs.parameters.dryRun}}"
-            #       - name: targetNcn
-            #         value: "{{inputs.parameters.targetNcn}}"
+          - name: set-bss-no-wipe-to-1
+            dependencies:
+              - wait-for-boot
+            templateRef:
+              name: set-no-wipe
+              template: set-bss-no-wipe-1
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: targetNcn
+                  value: "{{inputs.parameters.targetNcn}}"

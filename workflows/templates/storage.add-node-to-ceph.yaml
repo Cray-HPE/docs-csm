@@ -32,8 +32,9 @@ spec:
     - name: main
       inputs:
         parameters:
-          - name: upgradeType
           - name: targetNcn
+          - name: dryRun
+          - name: workflowType
       dag:
         tasks:
           - name: copy-ceph-pub
@@ -43,7 +44,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"
+                  value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
@@ -56,7 +57,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"
+                  value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
@@ -75,7 +76,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"
+                  value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
@@ -84,30 +85,28 @@ spec:
                         ssh ${target_ncn} podman pull $image
                     done
                     ssh ${target_ncn} podman pull "$(cat /tmp/ceph_global_container_image.txt)"
-          {{ if eq {{inputs.parameters.upgradeType}} "rebuild" }}
           - name: restore-ceph-files
             dependencies:
               - update-ssh-keys
             template: restore-ceph-files-from-tar
+            when: "{{inputs.parameters.workflowType}} == rebuild"
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"
+                  value: "{{inputs.parameters.dryRun}}"
                 - name: target_Ncn
                   value: "{{inputs.parameters.targetNcn}}"
-          {{ end }}
-          {{ if eq {{inputs.parameters.upgradeType}} "upgrade" }}
           - name: restore-ceph-files
             dependencies:
               - update-ssh-keys
             template: copy-ceph-files-from-storage-node
+            when: "{{inputs.parameters.workflowType}} == upgrade"
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"
+                  value: "{{inputs.parameters.dryRun}}"
                 - name: targetNcn
                   value: "{{inputs.parameters.targetNcn}}"
-          {{ end }}
           - name: add-host
             dependencies:
               - copy-ceph-pub
@@ -119,7 +118,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"
+                  value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
@@ -127,7 +126,7 @@ spec:
                     sleep 5
                     ceph orch host label rm $TARGET_NCN _no_schedule
           
-    ### Templates referenced by main dag
+    ### Templates referenced by main DAG
     # this is used when a storage node is being rebuilt
     - name: copy-ceph-files-from-storage-node
       inputs:

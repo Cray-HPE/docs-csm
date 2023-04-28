@@ -32,7 +32,7 @@ spec:
     - name: main
       inputs:
         parameters:
-          - name: upgradeType
+          - name: dryRun
           - name: targetNcn
       dag:
         tasks:

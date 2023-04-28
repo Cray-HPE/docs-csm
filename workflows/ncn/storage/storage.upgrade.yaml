@@ -174,7 +174,9 @@ spec:
                 - name: dryRun
                   value: "{{$.DryRun}}"  
                 - name: targetNcn
-                  value: {{$value}}
+                  value: "{{$value}}"
+                - name: workflowType
+                  value: "{{$.WorkflowType}}"
           - name: create-s3-buckets
             templateRef:
               name: create-rgw-buckets
