@@ -30,8 +30,8 @@ spec:
   templates:
     - name: main
       inputs:
-        - name: dryRun
-        - name: targetNcn
+        parameters:
+          - name: dryRun
       dag:
         tasks:
           - name: install-csi

@@ -184,7 +184,7 @@ spec:
           - name: after-rebuild
             templateRef:
               name: post-rebuild
-              template: rescan-ssh-keys
+              template: main
             dependencies:
               # wait for health check of last storage node complete
               - check-ceph-health-{{ with $length := len $.TargetNcns }}{{ index $.TargetNcns (add $length -1) }}{{end}}

@@ -94,7 +94,7 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{inputs.parameters.dryRun}}"
-                - name: target_Ncn
+                - name: targetNcn
                   value: "{{inputs.parameters.targetNcn}}"
           - name: restore-ceph-files
             dependencies:

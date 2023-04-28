@@ -30,8 +30,8 @@ spec:
   templates:
     - name: main
       inputs:
-        - name: targetNcn
-        - name: dryRun
+        parameters:
+          - name: dryRun
       dag:
         tasks:
           - name: rescan-ssh-keys

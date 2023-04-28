@@ -30,8 +30,9 @@ spec:
   templates:
     - name: main
       inputs:
-        - name: targetNcn
-        - name: dryRun
+        parameters:
+          - name: targetNcn
+          - name: dryRun
       dag:
         tasks:
           - name: drain

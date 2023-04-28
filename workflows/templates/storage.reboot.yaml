@@ -36,7 +36,7 @@ spec:
           - name: targetNcn
       dag:
         tasks:
-          - name: "validate-bss-ntp"
+          - name: validate-bss-ntp
             templateRef:
               name: ssh-template
               template: shell-script
@@ -53,7 +53,7 @@ spec:
                       echo "${TARGET_NCN} is missing NTP data in BSS. Please see the procedure which can be found in the 'Known Issues and Bugs' section titled 'Fix BSS Metadata' on the 'Configure NTP on NCNs' page of the CSM documentation."
                       exit 1
                     fi
-          - name: "get-bootscript-last-access-timestamp"
+          - name: get-bootscript-last-access-timestamp
             dependencies:
               - validate-bss-ntp
             templateRef:
@@ -88,7 +88,7 @@ spec:
                       bootscript_last_epoch=0
                       echo $bootscript_last_epoch
                     fi
-          - name: "pxe-boot-node"
+          - name: pxe-boot-node
             dependencies:
               - get-bootscript-last-access-timestamp
             templateRef:
@@ -118,7 +118,7 @@ spec:
                       sleep 20
                     fi
                     ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power on
-          - name: "wait-for-boot"
+          - name: wait-for-boot
             dependencies:
               - pxe-boot-node
             templateRef:
@@ -170,7 +170,7 @@ spec:
                         fi
                         sleep 2
                     done
-          - name: "wait-for-cloud-init"
+          - name: wait-for-cloud-init
             dependencies:
               - wait-for-boot
             templateRef:
@@ -210,7 +210,7 @@ spec:
                     set -e
           - name: set-bss-no-wipe-to-1
             dependencies:
-              - wait-for-boot
+              - wait-for-cloud-init
             templateRef:
               name: set-no-wipe
               template: set-bss-no-wipe-1
