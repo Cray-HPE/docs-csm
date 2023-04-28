@@ -60,6 +60,8 @@ For a list of all features with an announced removal target, see [Removals](intr
   tar -zcf cpe-slurm-23.03-sles15-1.2.10.tar.gz wlm-slurm-1.2.10
   ```
 
+  If a previous installation failed, apply the workaround and re-install with the `iuf run --force` option.
+
 * The PBS installer released in CPE 23.03 (`cpe-pbs-23.03-sles15-1.2.10.tar.gz`) has an issue that causes failures when installed with the IUF. To work around the issue, run the following commands before the IUF `process-media` stage:
 
   ```bash
@@ -67,5 +69,7 @@ For a list of all features with an announced removal target, see [Removals](intr
   sed -i -e 's_-cn$_-cn/_' wlm-pbs-1.2.10/iuf-product-manifest.yaml
   tar -zcf cpe-pbs-23.03-sles15-1.2.10.tar.gz wlm-pbs-1.2.10
   ```
+
+  If a previous installation failed, apply the workaround and re-install with the `iuf run --force` option.
 
 ### Security vulnerability exceptions in CSM 1.4
