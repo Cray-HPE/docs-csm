@@ -24,24 +24,25 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: backup-ceph-data
+  name: post-rebuild
   namespace: argo
 spec:
   templates:
-    - name: backup-ceph-data-for-node-upgrade
+    - name: main
       inputs:
-        parameters:
-          - name: upgradeType
-          - name: targetNcn
-      templateRef:
-        name: ssh-template
-        template: shell-script
-      arguments:
-        parameters:
-          - name: dryRun
-            value: "{{inputs.parameters.dryRun}}"
-          - name: scriptContent
-            value: |
-              TARGET_NCN="{{inputs.parameters.targetNcn}}"
-              ssh ${TARGET_NCN} 'systemctl stop ceph.target;sleep 30;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /etc/ceph;systemctl start ceph.target'
-              scp ${TARGET_NCN}:/tmp/${TARGET_NCN}-ceph.tgz .
+        - name: targetNcn
+        - name: dryRun
+      dag:
+        tasks:
+          - name: rescan-ssh-keys
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+                    grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'

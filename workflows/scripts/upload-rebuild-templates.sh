@@ -57,7 +57,7 @@ function upload_templates {
 
 function upload_storage_rebuild_template {
     kubectl -n argo delete configmap storage-rebuild-workflow-files || true
-    kubectl -n argo create configmap storage-rebuild-workflow-files --from-file="${basedir}/../ncn/storage"
+    kubectl -n argo create configmap storage-rebuild-workflow-files --from-file="${basedir}/../ncn/storage" --from-file="${basedir}/../ncn/templates"
 }
 
 main

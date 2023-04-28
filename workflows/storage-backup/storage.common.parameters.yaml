@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -21,27 +21,8 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate
-metadata:
-  name: backup-ceph-data
-  namespace: argo
-spec:
-  templates:
-    - name: backup-ceph-data-for-node-upgrade
-      inputs:
-        parameters:
-          - name: upgradeType
-          - name: targetNcn
-      templateRef:
-        name: ssh-template
-        template: shell-script
-      arguments:
-        parameters:
-          - name: dryRun
-            value: "{{inputs.parameters.dryRun}}"
-          - name: scriptContent
-            value: |
-              TARGET_NCN="{{inputs.parameters.targetNcn}}"
-              ssh ${TARGET_NCN} 'systemctl stop ceph.target;sleep 30;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /etc/ceph;systemctl start ceph.target'
-              scp ${TARGET_NCN}:/tmp/${TARGET_NCN}-ceph.tgz .
+{{define "storage.common.parameters"}}
+parameters:
+  - name: targetNcn
+  - name: dryRun
+{{end}}

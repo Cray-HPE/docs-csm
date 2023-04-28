@@ -24,41 +24,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: rd.live.dir-rd.live.overlay.reset
+  name: set-no-wipe
   namespace: argo
 spec:
   templates:
-    - name: set-rd.live.dir-and-rd.live.overlay.reset
-      templateRef:
-        name: ssh-template
-        template: shell-script
-      arguments:
-        parameters:
-          - name: dryRun
-            value: "{{inputs.parameters.dryRun}}"
-          - name: scriptContent
-            value: |
-              TARGET_NCN="{{inputs.parameters.targetNcn}}"
-              TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                -d client_id=admin-client \
-                -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
-                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-              TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-              if [[ -z ${CSM_RELEASE} ]]; then
-                  echo 2>& "CSM_RELEASE is not set!"
-                  exit 1
-              fi
-              csi handoff bss-update-param --delete rd.live.dir --limit "${TARGET_XNAME}"
-              csi handoff bss-update-param --set rd.live.dir=${CSM_RELEASE} --limit "${TARGET_XNAME}"
-              csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"
-              csi handoff bss-update-param --set rd.live.overlay.reset=1 --limit "${TARGET_XNAME}"
-    - name: unset-rd.live.overlay.reset
+    - name: set-bss-no-wipe-1
       inputs:
         parameters:
           - name: targetNcn
+          - name: dryRun
       templateRef:
-        name: ssh-template
+        name: kubectl-and-curl-template
         template: shell-script
       arguments:
         parameters:
@@ -67,10 +43,47 @@ spec:
           - name: scriptContent
             value: |
               TARGET_NCN="{{inputs.parameters.targetNcn}}"
-              TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                -d client_id=admin-client \
-                -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
-                https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+              echo "Setting metal.no-wipe=1"
               TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-              csi handoff bss-update-param --delete rd.live.overlay.reset --limit "${TARGET_XNAME}"
+                  jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+              /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
+    - name: set-bss-no-wipe-1-no-wipe-osds
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      templateRef:
+        name: kubectl-and-curl-template
+        template: shell-script
+      arguments:
+        parameters:
+          - name: dryRun
+            value: "{{inputs.parameters.dryRun}}"
+          - name: scriptContent
+            value: |
+              TARGET_NCN="{{inputs.parameters.targetNcn}}"
+              echo "Setting metal.no-wipe=1"
+              TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                  jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+              /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
+              /host_usr_bin/csi handoff bss-update-cloud-init --set meta-data.wipe-ceph-osds=no --limit Global
+    - name: set-bss-no-wipe-0
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      templateRef:
+        name: kubectl-and-curl-template
+        template: shell-script
+      arguments:
+        parameters:
+          - name: dryRun
+            value: "{{inputs.parameters.dryRun}}"
+          - name: scriptContent
+            value: |
+              TARGET_NCN="{{inputs.parameters.targetNcn}}"
+              echo "Setting metal.no-wipe=0"
+              TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                  jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+              /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+    
