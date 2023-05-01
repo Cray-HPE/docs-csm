@@ -145,6 +145,122 @@ Use the `cray hsm locks lock` command to perform locking.
    ```
 
 <a name="how-to-unlock-management-nodes"></a>
+## How To Check For Locked Management Nodes
+
+   > **`NOTE`** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore would not show up in the following command output.
+
+1. Check the lock status of the management nodes and BMCs.
+   ```bash
+   cray hsm state components list --type Node --role Management --format json | \
+      jq -c '.Components[]|.ID' | tr '\n' ',' | sed 's/,$/\n/' | \
+      xargs cray hsm locks status create --format toml --component-ids
+   ```
+
+   Example output:
+
+   ```text
+   [[Components]]
+   ID = "x3000c0s1b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s5b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s4b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s7b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s6b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s3b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s3b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s9b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s8b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s5b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s4b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s7b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s6b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s3b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s3b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s9b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s8b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+   ```
 
 ## How To Unlock Management Nodes
 
