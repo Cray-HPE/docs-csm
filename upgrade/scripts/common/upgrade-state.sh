@@ -157,6 +157,8 @@ function argo_err_report() {
     echo "${caller}"
     echo "${cmd}"
 
+    # in case we have left over temp files
+    rm -f /tmp/argo-res.* > /dev/null 2>&1 
 
     echo
     echo "[ERROR] - Unexpected errors"
