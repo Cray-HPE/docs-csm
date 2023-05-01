@@ -58,6 +58,7 @@ spec:
         parameters:
           - name: auth_token
           - name: global_params
+          - name: dry_run
       dag:
         tasks:
           - name: start-operation
@@ -66,14 +67,14 @@ spec:
               template: record-time-template
           - name: verify-images-and-configuration
             dependencies:
-              - INFO-to-read
+              - start-operation
             templateRef:
               name: ssh-template
               template: shell-script
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"
+                  value: "{{inputs.parameters.dry_run}}"
                 - name: scriptContent
                   value: |
                     rebuild_workers=false

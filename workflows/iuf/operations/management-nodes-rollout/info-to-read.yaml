@@ -58,6 +58,7 @@ spec:
         parameters:
           - name: auth_token
           - name: global_params
+          - name: dry_run
       dag:
         tasks:
           - name: start-operation
@@ -73,7 +74,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"
+                  value: "{{inputs.parameters.dry_run}}"
                 - name: scriptContent
                   value: |
                     echo "NOTICE  this stage will not rollout storage nodes or ncn-m001. This will have to be done manually if rolling-out these nodes is desired."

@@ -58,6 +58,7 @@ spec:
         parameters:
           - name: auth_token
           - name: global_params
+          - name: dry_run
       dag:
         tasks:
           - name: start-operation
