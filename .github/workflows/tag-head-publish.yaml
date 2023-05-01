@@ -1,0 +1,34 @@
+name: Tag Head of Release Branches and Publish docs-csm RPM 
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: '0 5 * * *'
+
+env:
+  ARTIFACTORY_USERNAME: ${{ secrets. ARTIFACTORY_ALGOL60_READONLY_USERNAME }}
+  ARTIFACTORY_TOKEN: ${{ secrets. ARTIFACTORY_ALGOL60_READONLY_TOKEN }}
+
+concurrency:
+  group: tag-and-publish 
+
+jobs:
+  tag-and-publish:
+    runs-on: [self-hosted, self-hosted-small]
+    name: Tag and Publish 
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Check if head is tagged 
+        run: |
+          .github/scripts/upload_to_gcs.sh "${{ github.event.inputs.source }}" "${{ github.event.inputs.destination }}" "${{ github.event.inputs.latest_filename }}"
+
+      - name: Regenerate indexes
+        if: success() || failure()
+        env:
+          DRY_RUN: ${{ ((github.ref == 'refs/heads/main' && github.event.inputs.flip_dry_run_indexes != 'true') ||
+                    (github.ref != 'refs/heads/main' && github.event.inputs.flip_dry_run_indexes == 'true')) && 'false' || 'true' }}
+        run: |
+          sudo pip3 install Mako
+          .github/scripts/generate_index.sh gs://csm-release-public https://release.algol60.net
