@@ -24,12 +24,19 @@ failure.
 
 ## Topics
 
-* [When To Lock Management Nodes](#when-to-lock-management-nodes)
-* [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
-* [How To Lock Management Nodes](#how-to-lock-management-nodes)
-  * [Script](#lock-script)
-  * [Manual Steps](#lock-manual)
-* [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
+- [Lock and Unlock Management Nodes](#lock-and-unlock-management-nodes)
+  - [Topics](#topics)
+  - [When To Lock Management Nodes](#when-to-lock-management-nodes)
+  - [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
+  - [How To Lock Management Nodes](#how-to-lock-management-nodes)
+    - [Script](#script)
+      - [Manual Steps](#manual-steps)
+      - [To lock all nodes (and their BMCs) with the _Management_ role](#to-lock-all-nodes-and-their-bmcs-with-the-management-role)
+      - [To lock single nodes or lists of specific nodes (and their BMCs)](#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs)
+  - [How To Check For Locked Management Nodes](#how-to-check-for-locked-management-nodes)
+  - [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
+    - [To unlock all nodes (and their BMCs) with the _Management_ role](#to-unlock-all-nodes-and-their-bmcs-with-the-management-role)
+    - [To unlock single or lists of specific nodes (and their BMCs)](#to-unlock-single-or-lists-of-specific-nodes-and-their-bmcs)
 
 <a name="when-to-lock-management-nodes"></a>
 
@@ -144,7 +151,7 @@ Use the `cray hsm locks lock` command to perform locking.
    ComponentIDs = [ "x3000c0s6b0n0", "x3000c0s6b0",]
    ```
 
-<a name="how-to-unlock-management-nodes"></a>
+<a name="check-for-management-lock-status"></a>
 ## How To Check For Locked Management Nodes
 
    > **`NOTE`** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore would not show up in the following command output.
@@ -262,6 +269,7 @@ Use the `cray hsm locks lock` command to perform locking.
    ReservationDisabled = false
    ```
 
+<a name="how-to-unlock-management-nodes"></a>
 ## How To Unlock Management Nodes
 
 Use the `cray hsm locks unlock` command to perform unlocking.
