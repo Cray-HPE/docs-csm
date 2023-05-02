@@ -169,8 +169,7 @@ spec:
           echo "INFO Extracting product tarball $media_dir/$tar_filename"
           result=$(gunzip -c $tar_filename | tar -t 2>&1)
           if [ $? -ne 0 ]; then
-            echo "ERROR Provided product tarfile $tar_filename is corrupted"
-            echo "NOTICE Please replace with the valid product tarfile and re-run this 'process-media' stage"
+            echo "ERROR Provided product tarfile $tar_filename is corrupted. Please replace with the valid product tarfile and re-run this 'process-media' stage"
             echo "$result" | sed -e 's/^/DEBUG /'
             exit 1
           fi

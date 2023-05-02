@@ -187,6 +187,6 @@ spec:
         ARRAY=$(echo '{{inputs.parameters.manifest_s3_content}}' | jq -r '[.[] | {"bucket": .bucket, "key": .key}]')
         if [ $? -ne 0 ]; then
           ARRAY="[]"
-          echo "INFO No S3 content found in the manifest for $PRODUCT"
+          echo "INFO No S3 content found in the manifest for $PRODUCT. Nothing to do here"
         fi
         echo "{\"component_versions\": {\"s3\": ${ARRAY}}}" > /tmp/product-content
