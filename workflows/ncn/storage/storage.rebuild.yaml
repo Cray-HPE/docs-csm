@@ -208,37 +208,39 @@ spec:
                   value: |
                     grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
                     grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
-          # - name: update-bss
-          #   templateRef:
-          #     name: ssh-template
-          #     template: shell-script
-          #   dependencies:
-          #     - rescan-ssh-keys
-          #   arguments:
-          #     parameters:
-          #       - name: dryRun
-          #         value: "{{$.DryRun}}"  
-          #       - name: scriptContent
-          #         value: |
-          #           . /usr/share/doc/csm/upgrade/scripts/ceph/lib/update_bss_metadata.sh
-          #           RESULT=$(update_bss_storage)
-          #           # check that result contains success!
-          #           if [[ $RESULT != *"Success!"* ]]
-          #           then
-          #             echo "BSS metadata was not successfully updated. Output:"
-          #             echo "$RESULT"
-          #             exit 7
-          #           fi
-          - name: ceph-health-check
-            dependencies:
-              - after-rebuild
+          - name: update-bss
             templateRef:
               name: ssh-template
               template: shell-script
+            dependencies:
+              - check-ceph-health-{{ with $length := len $.TargetNcns }}{{ index $.TargetNcns (add $length -1) }}{{end}}
             arguments:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"  
                 - name: scriptContent
                   value: |
-                    /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
+                    . /usr/share/doc/csm/upgrade/scripts/ceph/lib/update_bss_metadata.sh
+                    RESULT=$(update_bss_storage)
+                    # check that result contains success!
+                    if [[ $RESULT != *"Success!"* ]]
+                    then
+                      echo "BSS metadata was not successfully updated. Output:"
+                      echo "$RESULT"
+                      exit 7
+                    fi
+          {{- range $index,$value := .TargetNcns}}
+          - name: run-storage-goss-tests
+            dependencies:
+              - after-rebuild
+            templateRef:
+              name: storage-goss-tests
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: "{{$value}}"
+          {{ end }}
+
