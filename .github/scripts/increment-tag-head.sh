@@ -43,7 +43,7 @@ then
       if [ -z "$HEAD_TAG" ]
       then
             echo "head of doc-csm ${DOCS_CSM_BRANCH} is not tagged, creating new tag"
-            #read current tag, parse, increment previous tag and create new tag, and push new tag
+            #read current tag, parse, increment current tag, create new tag, and push new tag
             CURRENT_TAG=$(git describe --tags)                                                                                                                            
             TOKENS=(${CURRENT_TAG//./ })                                                                                                                                  
             CURRENT_PATCH_TOKENS=(${TOKENS[2]//-/ })
