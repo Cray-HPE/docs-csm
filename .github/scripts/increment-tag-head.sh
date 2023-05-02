@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -52,8 +52,9 @@ then
             NEW_TAG=${tokens[0]}.${tokens[1]}.$NEW_PATCH_VERSION
             git tag $NEW_TAG
             git push origin $NEW_TAG
+            echo "head of doc-csm ${DOCS_CSM_BRANCH} is now has new tag ${NEW_TAG}" 
       else
-            echo "head of doc-csm ${DOCS_CSM_BRANCH} is tagged as ${HEAD_TAG}" 
+            echo "head of doc-csm ${DOCS_CSM_BRANCH} is already tagged as ${HEAD_TAG}" 
       fi
       cd ..
 else
