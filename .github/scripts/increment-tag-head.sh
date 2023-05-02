@@ -32,25 +32,32 @@ else
       echo "ERROR: branch to verify in docs-csm repo not specified in arguments"
       exit 1
 fi
-      
-git clone --no-checkout --depth 1 --branch ${DOCS_CSM_BRANCH} https://github.com/Cray-HPE/docs-csm.git
+
+#check if the docs-csm directory is present
 if [ -d "docs-csm" ]
 then
+      #checkout out the requested branch of docs-csm
       cd docs-csm
+      git checkout $DOCS_CSM_BRANCH
       HEAD_TAG=$(git tag --points-at HEAD)
       if [ -z "$HEAD_TAG" ]
       then
-            echo "ERROR: head of doc-csm ${DOCS_CSM_BRANCH} is not tagged, please investigate"
-            cd ..
-            rm -rf docs-csm
-            exit 1
+            echo "head of doc-csm ${DOCS_CSM_BRANCH} is not tagged, creating new tag"
+            #read current tag, parse, increment previous tag and create new tag, and push new tag
+            CURRENT_TAG=$(git describe --tags)                                                                                                                            
+            TOKENS=(${CURRENT_TAG//./ })                                                                                                                                  
+            CURRENT_PATCH_TOKENS=(${TOKENS[2]//-/ })
+            CURRENT_PATCH_VERSION=${CURRENT_PATCH_TOKENS[0]}
+            NEW_PATCH_VERSION=$((CURRENT_PATCH_VERSION + 1))
+            NEW_TAG=${tokens[0]}.${tokens[1]}.$NEW_PATCH_VERSION
+            git tag $NEW_TAG
+            git push origin $NEW_TAG
       else
             echo "head of doc-csm ${DOCS_CSM_BRANCH} is tagged as ${HEAD_TAG}" 
-            cd ..
-            rm -rf docs-csm
       fi
+      cd ..
 else
-      echo "ERROR: Unable to clone ${DOCS_CSM_BRANCH} branch of docs-csm repo, unable to verify head tag"
+      echo "ERROR: docs-csm repo not checked out, unable to determine head tag"
       exit 1 
 fi
 
