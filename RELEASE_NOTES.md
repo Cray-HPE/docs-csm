@@ -11,6 +11,10 @@
 
 ### Networking
 
+### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
+
+### User Application Nodes (UAN)
+
 ### Miscellaneous functionality
 
 ### New hardware support
@@ -32,6 +36,33 @@
 
 ### Documentation enhancements
 
+* Added documentation for 
+  * `IUF` workflows for fresh and upgrade install 
+  * how to increase helm chart deploy timeout
+  
+* Updated documentation for
+  * CSM upgrade `UPGRADE_KYVERNO_POLICY` step failed due to missing "dvs" namespace
+  * Automated sat bootprep usage instead of manual steps for NCN customization and personalization
+  * System recovery procedure for keycloak
+  * Steps to configure SNMP credentials 
+  * Use BOS v2 in prepare-images stage
+  * Keycloak to use CMN LB for administrative tasks
+  * Add cray product catalog module`scripts/operations/configuration/python_lib`
+  * Add NCN squashfs IMS ID/version/name to cray product catalog
+  * Keycloak API upgrade
+  * new name for management NCN CFS configuration
+  * `docs/pit-init` to include arch when referring to artifacts
+  * Master node disk reboot test defaulted to PXE
+  * New protected S3 NCN images
+  * Stage 4 upgrade to include info on automation
+  * Procedure to find Argo logs in S3
+  * CFS usability changes
+  * "NCN Node Personalization" step that modifies CPE/Analytics layers
+  * Ceph troubleshooting page 
+  * User to know cronjobs may need to be restarted after Bare-Metal etcd cluster restore
+  * `hms_verification/verify_hsm_discovery.py` failure to reference SNMP configuration doc
+  * `write_root_secrets_to_vault.py`
+  
 ## Bug fixes
 
 ## Deprecations
@@ -52,5 +83,6 @@ For a list of all features with an announced removal target, see [Removals](intr
 ## Known issues
 
 * UAIs use a default route that sends outbound packets over the CMN, this will be addressed in a future release so that the default route uses the CAN/CHN.
+* Documented known issue with Antero node NIDs
 
 ### Security vulnerability exceptions in CSM 1.4
