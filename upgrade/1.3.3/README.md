@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management (CSM) `v1.3.3` from `v1.3.1` or `v1.3.2`.
+This document guides an administrator through the patch update to Cray Systems Management (CSM) `v1.3.3` from `v1.3.0`, `v1.3.1`, or `v1.3.2`.
 If upgrading from CSM `v1.2.2` directly to `v1.3.3`, follow the procedures described in [Upgrade CSM](../README.md) instead.
 
 ## Bug Fixes and Improvements
@@ -183,7 +183,7 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
    Confirm that the `import_date` reflects the timestamp of the upgrade.
 
    ```bash
-   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.3.2".configuration.import_date'
+   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.3.3".configuration.import_date'
    ```
 
 ## Complete upgrade
