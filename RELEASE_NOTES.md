@@ -9,17 +9,40 @@
 
 ### Monitoring
 
+* Implemented pod monitors to scrape SMF Kafka server and zookeeper Prometheus metrics
+* Created grafana dasboards to monitor the internals of SMF Kafka server and zookeeper
+* 
+
 ### Networking
+### DNS
+
+* Created dns records for all aliases on the NMN
+* 
 
 ### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
+
+* Removed the subPath volumeMount in the multus daemonset
+* Updated `enable_chn.yml` ansible playbook to work during image customization
+* Added dvs-mqtt spire workload
+* Updated spire workload and cray-drydock changes for Artemis MQTT
+* 
 
 ### User Application Nodes (UAN)
 
 ### Miscellaneous functionality
 
+* Increased the VCS Memory limit 
+* Updated BOS V2 the default in SAT
+* Created helm chart to deploy ActiveMQ Artemis + istio config changes
+* libcsm is now available via the GCP distribution endpoint and is included in the CSM tarball
+* Updated csm-tftpd to use `IPXE 1.11.1` image
+* Updated prerequisite script to prevent ncn hostname change 
+
 ### New hardware support
 
 ### Automation improvements
+
+* IUF workflows are created for fresh and upgrade installs.
 
 ### Base platform component upgrades
 
@@ -31,14 +54,21 @@
 ### Security improvements
 
 * IPXE binary name randomization for added security
+* Used CSM-provided alpine base image to resolve Snyk vulnerabilities in cf-gitea-import
+* 
+* 
 
 ### Customer-requested enhancements
+
+* Created dns records for all aliases on the NMN
+* NERSC enablement of bonded NMN connections for the UANs
+* Added csm-embedded repository to all NCNs on install and upgrade
 
 ### Documentation enhancements
 
 * Added documentation for 
   * `IUF` workflows for fresh and upgrade install 
-  * how to increase helm chart deploy timeout
+  * Increasing helm chart deploy timeout
   
 * Updated documentation for
   * CSM upgrade `UPGRADE_KYVERNO_POLICY` step failed due to missing "dvs" namespace
@@ -65,10 +95,20 @@
   
 ## Bug fixes
 
+* Fixed the issue with master taint check that was added to kubernetes-cloudinit.sh isn't being called on "first-master"
+* Fixed cray-product-catalog image path in cray-product-catalog chart
+* Fixed the kyverno issue that prevents weave-net daemonset from creating pods
+* Fixed ncn-healthcheck-master-single test failure when LDAP server not configured
+* Fixed storage node upgrade in loop
+* Fixed DNS timeouts
+
+
+
 ## Deprecations
 
 * [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
 
+CSI: deprecate ipv4-resolvers option
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
 ## Removals
@@ -77,6 +117,7 @@ The following previously deprecated features now have an announced CSM version w
 
 * [BOS](glossary.md#boot-orchestration-service-bos) v1 was deprecated in CSM 1.3, and will be removed in CSM 1.9.
 * [CRUS](glossary.md#compute-rolling-upgrade-service-crus) was deprecated in CSM 1.2, and will be removed in CSM 1.5.
+* Removed the `TRS operator` for fresh installs and on upgrades
 
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
