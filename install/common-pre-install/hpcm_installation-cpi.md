@@ -18,12 +18,14 @@ The following steps provide instructions to boot the Pre-Install Live ISO and cr
 ## Create the bootable media
 
 To create the bootable LiveCD image use `dd` command. Before creating the media, identify which device will be used for it. If the bootable media with LiveCD image is already prepared, then skip to [Boot the LiveCD](#boot-the-livecd).
+ 
+1. (`external#`) Obtain the cluster manager software (HPCM version 1.9) from HPE for all the required ISO files.
 
-1. (`external#`) Download the LiveCD ISO.
+    From the customer portal, you can obtain the cluster manager installation software, including patches and updates,from the following website:
 
-   ```bash
-   wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/sgi/dist.engr/test/stout727/iso-latest-sles15sp4-x86_64/cm-admin-install-1.9-sles15sp4-x86_64.iso
-   ```
+    https://www.hpe.com/downloads/software
+
+    > **Note:** User needs to have a HPE Passport account and its login credentials to access the customer portal website.
 
 1. (`external#`) Identify the USB device.
 
@@ -430,11 +432,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
    1. (`pit#`) Create the SLES15 SP4 repository.
 
-      1. Download the SLES15 SP4 ISO.
-
-         ```bash
-         wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/novell/sles/15sp4/x86_64/latest/SLE-15-SP4-Full-x86_64-GM-Media1.iso
-         ```
+      1. Obtain the SLES15 SP4 ISO from your software vendor. Ensure the `SLE-15-SP4-Full-x86_64-GM-Media1.iso` is downloaded as a part of the package.
 
       1. Add the `sles15 sp4` repository.
 
@@ -444,18 +442,14 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
    1. (`pit#`) Create the cluster manager repository.
 
-      1. Download the cluster manager ISO.
-
-         ```bash
-         wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/sgi/dist.engr/test/stout727/iso-latest-sles15sp4-x86_64/cm-1.9-cd1-media-sles15sp4-x86_64.iso
-         ```
-
+      > **Note:** The cluster manager ISO `cm-1.9-cd1-media-sles15sp4-x86_64.iso` is a part of cluster manager software (HPCM version 1.9) package downloaded in [Create the bootable media](#create-the-bootable-media) section.
+      
       1. Add the cluster manager repository.
 
          ```bash
          cm repo add cm-1.9-cd1-media-sles15sp4-x86_64.iso
          ```
-
+         
    1. (`pit#`) List the repositories.
 
       ```bash
