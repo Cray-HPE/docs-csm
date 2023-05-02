@@ -314,7 +314,7 @@ function enter_maintenance_mode() {
   ceph orch host maintenance enter "$node" --force
   counter=0
   # shellcheck disable=SC2086
-  until [[ "$(ceph orch host ls $node --format json-pretty|jq -r '.[].status')" == "maintenance" ]]; do
+  until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty|jq -r '.[].status')" == "maintenance" ]]; do
     echo "Waiting for node $node to enter maintenance mode."
     (( counter ++ ))
     if [[ $counter -ge 5 ]]; then
@@ -330,7 +330,7 @@ function exit_maintenance_mode() {
   # shellcheck disable=SC2086
   if [[ "$(ceph orch host maintenance exit $node)" ]]; then
     # shellcheck disable=SC2086
-    until [[ "$(ceph orch host ls $node --format json-pretty|jq -r '.[].status')" != "maintenance" ]]; do
+    until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty|jq -r '.[].status')" != "maintenance" ]]; do
       echo "Waiting for node $node to exit maintenance mode."
       sleep 15
     done
