@@ -21,7 +21,8 @@ To create the bootable LiveCD image use `dd` command. Before creating the media,
 
 1. (`external#`) Obtain the cluster manager software (HPCM version 1.9) from HPE for all the required ISO files.
 
-    From the customer portal, you can obtain the cluster manager installation software, including patches and updates,from the following website: https://www.hpe.com/downloads/software
+    Obtain the cluster manager installation software, including patches and updates,from [My HPE Software Center
+](https://www.hpe.com/downloads/software).
 
     > **NOTE:** User needs to have a HPE Passport account and its login credentials to access the customer portal website.
 
