@@ -24,19 +24,19 @@ failure.
 
 ## Topics
 
-- [Lock and Unlock Management Nodes](#lock-and-unlock-management-nodes)
-  - [Topics](#topics)
-  - [When To Lock Management Nodes](#when-to-lock-management-nodes)
-  - [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
-  - [How To Lock Management Nodes](#how-to-lock-management-nodes)
-    - [Script](#script)
-      - [Manual Steps](#manual-steps)
-      - [To lock all nodes (and their BMCs) with the _Management_ role](#to-lock-all-nodes-and-their-bmcs-with-the-management-role)
-      - [To lock single nodes or lists of specific nodes (and their BMCs)](#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs)
-  - [How To Check For Locked Management Nodes](#how-to-check-for-locked-management-nodes)
-  - [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
-    - [To unlock all nodes (and their BMCs) with the _Management_ role](#to-unlock-all-nodes-and-their-bmcs-with-the-management-role)
-    - [To unlock single or lists of specific nodes (and their BMCs)](#to-unlock-single-or-lists-of-specific-nodes-and-their-bmcs)
+* [Lock and Unlock Management Nodes](#lock-and-unlock-management-nodes)
+  * [Topics](#topics)
+  * [When To Lock Management Nodes](#when-to-lock-management-nodes)
+  * [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
+  * [How To Lock Management Nodes](#how-to-lock-management-nodes)
+    * [Script](#script)
+      * [Manual Steps](#manual-steps)
+      * [To lock all nodes (and their BMCs) with the _Management_ role](#to-lock-all-nodes-and-their-bmcs-with-the-management-role)
+      * [To lock single nodes or lists of specific nodes (and their BMCs)](#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs)
+  * [How To Check For Locked Management Nodes](#how-to-check-for-locked-management-nodes)
+  * [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
+    * [To unlock all nodes (and their BMCs) with the _Management_ role](#to-unlock-all-nodes-and-their-bmcs-with-the-management-role)
+    * [To unlock single or lists of specific nodes (and their BMCs)](#to-unlock-single-or-lists-of-specific-nodes-and-their-bmcs)
 
 ## When To Lock Management Nodes
 
@@ -146,6 +146,7 @@ Use the `cray hsm locks lock` command to perform locking.
    > **`NOTE`** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore would not show up in the following command output.
 
 1. Check the lock status of the management nodes and BMCs.
+
    ```bash
    cray hsm state components list --type Node --role Management --format json | \
       jq -c '.Components[]|.ID' | tr '\n' ',' | sed 's/,$/\n/' | \
