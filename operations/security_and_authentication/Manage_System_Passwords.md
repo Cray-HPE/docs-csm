@@ -277,7 +277,7 @@ To adjust the SNMP credentials, perform the following tasks:
 
 ## HPE Cray EX Liquid-Cooled Cabinet Hardware
 
-Change the global default credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs). 
+Change the global default credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs).
 The chassis management module (CMM) controller (cC), node controller (nC), and Slingshot switch controller (sC) are generically referred to as "BMCs" in these procedures.
 
 - See [Change EX Liquid-Cooled Cabinet Global Default Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
@@ -302,5 +302,5 @@ Refer to the following product stream documentation for detailed procedures abou
 
 **Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information.
 
-**User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs. 
+**User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs.
 The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.

@@ -520,6 +520,7 @@ iPXE
 iSCSI
 in_progress
 inband
+init
 keychain
 labeled
 labeler
