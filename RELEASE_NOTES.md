@@ -11,13 +11,16 @@
 
 * Implemented pod monitors to scrape SMF Kafka server and zookeeper Prometheus metrics
 * Created grafana dasboards to monitor the internals of SMF Kafka server and zookeeper
-* 
+* Created service monitor OpenSearch cluster monitoring using Prometheus
+* Created grafana  dashboard for OpenSearch cluster monitoring using Prometheus metrics 
+* Created grafana dashboard to record timing data for each stage in the install/upgrade of shasta products
 
 ### Networking
 ### DNS
 
 * Created dns records for all aliases on the NMN
 * Fixed the URI for PCS inside the service mesh `http://cray-power-control/` without the version
+* Added IMS image ID and CFS configuration name to cray-nls API
 
 ### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
 
@@ -25,7 +28,8 @@
 * Updated `enable_chn.yml` ansible playbook to work during image customization
 * Added dvs-mqtt spire workload
 * Updated spire workload and cray-drydock changes for Artemis MQTT
-* 
+* Fixed velero sub chart kubectl container reference
+* Added `cf-gitea-import 1.8.0` to the 1.4 `index.yaml`
 
 ### User Application Nodes (UAN)
 
@@ -43,13 +47,15 @@
 * Updated goss test to handle post build and rebuild cases for worker mount usage
 * Added `hmcollector.hmnlb.<system-name>.<site-domain>` to collector's virtual service
 * Restored "ll" alias in ncn images
-* 
+* Updated the Cray CLI for BOS with the clear-stage option.
+* Updated OPA rules for PCS
 
 ### New hardware support
 
 ### Automation improvements
 
 * IUF workflows are created for fresh and upgrade installs.
+* Used squashfs scan technique to get pit iso packages list
 
 ### Base platform component upgrades
 
@@ -63,7 +69,12 @@
 * IPXE binary name randomization for added security
 * Used CSM-provided alpine base image to resolve Snyk vulnerabilities in cf-gitea-import
 * Updated openssl for CVE
-* 
+* Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/dckr.io/nfvpe/multus:v3.7`
+* Added platform CA bundle to argo namespace
+* Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/cray-uai-gateway-test:1.8.0`
+* Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/cray-uas-mgr:1.22.0`
+* Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/update-uas:1.8.0`
+* Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/quay.io/cilium/json-mock:v1.3.3`
 
 ### Customer-requested enhancements
 
@@ -114,10 +125,19 @@
 * Fixed NCN health checks failing for Switch BGP test
 * Fixed `set-bmc-ntp-dns.sh` options when BMC name not specified
 * Fixed the Gitea web UI issue that requires logging in twice
+* Fixed the missed ldap cert configuration for Keycloak 4.0.0
+* Fixed the PCS issue /power-status returning invalid managementState of "undefined" for BMC
+* Fixed `cray-sysmgmt-health-grok-exporter` instances to have all master nodes instead of just `m001`
+* Fixed the pit-observability issue failing in a fresh/new PIT instance
+* Fixed the "fabric" and "gitpython" dependencies for systems with `cfs-debug` tool installed
+* Fixed(increased) the hnc replicas for redundancy webhook endpoints
+* Added the missing whitespace from cray CLI CFS usage message
+* Fixed the cps pods not restored during argo ncn rebuilds
 
 ## Deprecations
 
 * [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
+* Deprecated and thus removed CRUS from the CSM manifests 
 
 CSI: deprecate ipv4-resolvers option
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
