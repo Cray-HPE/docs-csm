@@ -35,7 +35,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     Identify the `sessiontemplate` name to use. A full list may be found with the following command:
 
     ```bash
-    cray bos sessiontemplate list --format yaml
+    cray bos v1 sessiontemplate list --format yaml
     ```
 
     Example output:
@@ -73,7 +73,7 @@ See [Configure the Cray CLI](../configure_cray_cli.md).
     Use the `sessiontemplate` name to download a compute node SquashFS from a BOS `sessiontemplate` name:
 
     ```bash
-    ST_ID=$(cray bos sessiontemplate describe $ST_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
+    ST_ID=$(cray bos v1 sessiontemplate describe $ST_NAME --format json | jq -r '.boot_sets.compute.path' | awk -F/ '{print $4}')
 
     cray artifacts get boot-images $ST_ID/rootfs rootfs.squashfs
     ```
