@@ -7,18 +7,18 @@ Non-compute nodes can boot from two sources:
 
 ## Topics
 
-- [NCN Boot Workflow](#ncn-boot-workflow)
-  - [Topics](#topics)
-  - [Determine the current boot order](#determine-the-current-boot-order)
-  - [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
-  - [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
-  - [Set BMCs to DHCP](#set-bmcs-to-dhcp)
-  - [Boot order overview](#boot-order-overview)
-  - [Setting boot order](#setting-boot-order)
-  - [Trimming boot order](#trimming-boot-order)
-  - [Example boot orders](#example-boot-orders)
-  - [Reverting changes](#reverting-changes)
-  - [Locating USB device](#locating-usb-device)
+* [NCN Boot Workflow](#ncn-boot-workflow)
+  * [Topics](#topics)
+  * [Determine the current boot order](#determine-the-current-boot-order)
+  * [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
+  * [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
+  * [Set BMCs to DHCP](#set-bmcs-to-dhcp)
+  * [Boot order overview](#boot-order-overview)
+  * [Setting boot order](#setting-boot-order)
+  * [Trimming boot order](#trimming-boot-order)
+  * [Example boot orders](#example-boot-orders)
+  * [Reverting changes](#reverting-changes)
+  * [Locating USB device](#locating-usb-device)
 
 ## Determine the current boot order
 
