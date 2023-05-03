@@ -34,6 +34,19 @@ target_ncn=$1
 
 ssh_keygen_keyscan $1
 
+# this assumes that CFS has made the CSM repos available on the NCN running this script
+state_name="ENSURE_CSI_IS_INSTALLED"
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
+if [[ $state_recorded == "0" ]]; then
+    echo "====> ${state_name} ..."
+    if ! command -v csi > /dev/null; then
+        zypper --non-interactive install cray-site-init
+    fi
+    record_state "${state_name}" ${target_ncn}
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 # Back up local files and directories used by System Admin Toolkit (SAT)
 state_name="BACKUP_SAT_LOCAL_FILES"
 state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
