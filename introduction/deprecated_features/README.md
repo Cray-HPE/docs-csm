@@ -9,7 +9,7 @@ version for their planned removal, customers are still strongly encouraged to ma
 * [Removals](#removals)
   * [Removals in CSM 1.3](#removals-in-csm-13)
   * [Removals in CSM 1.5](#removals-in-csm-15)
-  * [Removals in CSM 1.9](#removals-in-csm-19)
+  * [Removals in CSM 1.6](#removals-in-csm-16)
 * [Deprecations](#deprecations)
   * [Deprecated in CSM 1.3](#deprecated-in-csm-13)
   * [Deprecated in CSM 1.2](#deprecated-in-csm-12)
@@ -29,7 +29,7 @@ in chronological order.
 
 * [Compute Rolling Upgrade Service (CRUS)](../../glossary.md#compute-rolling-upgrade-service-crus)
 
-### Removals in CSM 1.9
+### Removals in CSM 1.6
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
 
@@ -41,9 +41,8 @@ features are listed first).
 ## Deprecated in CSM 1.3
 
 * [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
-  * It is likely that even prior to BOS v1 being removed from CSM, the [Cray CLI](../../glossary.md#cray-cli-cray) will change its behavior when no
-    version is explicitly specified in BOS commands. Currently it defaults to BOS v1, but it may change to default to BOS v2 even before BOS v1
-    is removed from CSM.
+  * BOS v1 will be removed in CSM 1.6.
+  * The [Cray CLI](../../glossary.md#cray-cli-cray) will change in CSM 1.4 so that it defaults to BOS v2 when no version is explicitly specified in BOS commands.
 * [System Layout Service (SLS)](../../glossary.md#system-layout-service-sls) removed public and private key options from the `loadstate` and `dumpstate` REST API
   * The SLS `loadstate` and `dumpstate` no longer support the option to load or dump credential information. This includes the removal of the `public_key` and
     `private_key` options that were used for encryption and decryption.

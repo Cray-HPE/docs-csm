@@ -449,7 +449,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
 
     ```bash
     BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    cray bos sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
+    cray bos v1 sessiontemplate describe $BOS_TEMPLATE --format json|jq '.boot_sets[] | select(.node_list)'
     ```
 
     * If this query returns empty, then skip to booting the nodes.
@@ -461,7 +461,7 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
        1. Dump the current Session template.
 
           ```bash
-          cray bos sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
+          cray bos v1 sessiontemplate describe $BOS_TEMPLATE --format json > tmp.txt
           ```
 
        1. Edit the `tmp.txt` file, adding the new nodes to the `node_list`.
@@ -483,19 +483,19 @@ Use boot orchestration to power on and boot the nodes. Specify the appropriate B
        1. Create the Session template.
 
           ```bash
-          cray bos sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
+          cray bos v1 sessiontemplate create --file tmp.txt --name $BOS_TEMPLATE
           ```
 
        1. Verify that the Session template contains the additional nodes and the proper name.
 
            ```bash
-           cray bos sessiontemplate describe $BOS_TEMPLATE --format json
+           cray bos v1 sessiontemplate describe $BOS_TEMPLATE --format json
            ```
 
     1. (`ncn#`) Boot the nodes.
 
        ```bash
-       cray bos session create --template-uuid $BOS_TEMPLATE \
+       cray bos v1 session create --template-uuid $BOS_TEMPLATE \
             --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
        ```
 
