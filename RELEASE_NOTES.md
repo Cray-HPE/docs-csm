@@ -17,7 +17,7 @@
 ### DNS
 
 * Created dns records for all aliases on the NMN
-* 
+* Fixed the URI for PCS inside the service mesh `http://cray-power-control/` without the version
 
 ### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
 
@@ -29,6 +29,9 @@
 
 ### User Application Nodes (UAN)
 
+* Created S3 bucket for use with podman (and other user files)
+* 
+
 ### Miscellaneous functionality
 
 * Increased the VCS Memory limit 
@@ -37,6 +40,10 @@
 * libcsm is now available via the GCP distribution endpoint and is included in the CSM tarball
 * Updated csm-tftpd to use `IPXE 1.11.1` image
 * Updated prerequisite script to prevent ncn hostname change 
+* Updated goss test to handle post build and rebuild cases for worker mount usage
+* Added `hmcollector.hmnlb.<system-name>.<site-domain>` to collector's virtual service
+* Restored "ll" alias in ncn images
+* 
 
 ### New hardware support
 
@@ -55,7 +62,7 @@
 
 * IPXE binary name randomization for added security
 * Used CSM-provided alpine base image to resolve Snyk vulnerabilities in cf-gitea-import
-* 
+* Updated openssl for CVE
 * 
 
 ### Customer-requested enhancements
@@ -96,13 +103,17 @@
 ## Bug fixes
 
 * Fixed the issue with master taint check that was added to kubernetes-cloudinit.sh isn't being called on "first-master"
-* Fixed cray-product-catalog image path in cray-product-catalog chart
+* Fixed `cray-product-catalog image` path in cray-product-catalog chart
 * Fixed the kyverno issue that prevents weave-net daemonset from creating pods
-* Fixed ncn-healthcheck-master-single test failure when LDAP server not configured
+* Fixed `ncn-healthcheck-master-single` test failure when LDAP server not configured
 * Fixed storage node upgrade in loop
 * Fixed DNS timeouts
-
-
+* Fixed(increased)Kyverno and Kyverno-pre containers memory resources causing critical pods fail to start
+* Fixed `install-csi` to dynamically get `csm-sle-15spX` version
+* Fixed Argo workflow for worker upgrade failing at csi install
+* Fixed NCN health checks failing for Switch BGP test
+* Fixed `set-bmc-ntp-dns.sh` options when BMC name not specified
+* Fixed the Gitea web UI issue that requires logging in twice
 
 ## Deprecations
 
@@ -118,6 +129,7 @@ The following previously deprecated features now have an announced CSM version w
 * [BOS](glossary.md#boot-orchestration-service-bos) v1 was deprecated in CSM 1.3, and will be removed in CSM 1.9.
 * [CRUS](glossary.md#compute-rolling-upgrade-service-crus) was deprecated in CSM 1.2, and will be removed in CSM 1.5.
 * Removed the `TRS operator` for fresh installs and on upgrades
+* Removed Postgres from CVE
 
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
