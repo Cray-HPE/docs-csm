@@ -44,7 +44,8 @@ Each rack type includes a different set of passwords. During different stages of
 
 > **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
 
-The tables below include the default login credentials for each rack type. These passwords can be changed by going into the console on a given switch and changing it. However, if the user gets locked out attempting to change the password or the configuration gets corrupted for an individual switch, it can wipe out the entire network configuration for the system.
+The tables below include the default login credentials for each rack type. These passwords can be changed by going into the console on a given switch and changing it.
+However, if the user gets locked out attempting to change the password or the configuration gets corrupted for an individual switch, it can wipe out the entire network configuration for the system.
 
 > **`NOTE`** IP addresses can be found from the generated SLS file.
 
@@ -276,7 +277,8 @@ To adjust the SNMP credentials, perform the following tasks:
 
 ## HPE Cray EX Liquid-Cooled Cabinet Hardware
 
-Change the global default credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs). The chassis management module (CMM) controller (cC), node controller (nC), and Slingshot switch controller (sC) are generically referred to as "BMCs" in these procedures.
+Change the global default credential on HPE Cray EX liquid-cooled cabinet embedded controllers (BMCs). 
+The chassis management module (CMM) controller (cC), node controller (nC), and Slingshot switch controller (sC) are generically referred to as "BMCs" in these procedures.
 
 - See [Change EX Liquid-Cooled Cabinet Global Default Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
 
@@ -300,4 +302,5 @@ Refer to the following product stream documentation for detailed procedures abou
 
 **Cray Operating System (COS):** To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information.
 
-**User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs. The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.
+**User Access Node (UAN):** Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs. 
+The "uan_shadow" header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.

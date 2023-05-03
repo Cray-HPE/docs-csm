@@ -604,6 +604,7 @@ preempted
 preemptively
 provisioners
 quiescing
+redis
 re-architecting
 ReadOnly
 reauthentication
@@ -870,6 +871,7 @@ QSFP-40G-SM4
 QSFP-40G-SR4
 QSFP28-QSFP28
 S3048-ON
+S4048T-ON
 S4148F-ON
 S4148T-ON
 SFP-10G
