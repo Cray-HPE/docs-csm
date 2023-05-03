@@ -157,6 +157,7 @@ Cray-HPE
 CrayPort
 Cutoff
 DB-9
+DCS-7060CX-32S
 DHCP
 DNS
 DSAv2
@@ -449,6 +450,7 @@ cec0
 center
 centers
 ceph
+cfgsh
 channeled
 checkmark
 cleanup
@@ -491,6 +493,7 @@ flavored
 flavoring
 flavors
 fulfills
+Glibc
 handoff
 haproxy
 heartbeating
@@ -543,6 +546,7 @@ management-nodes-rollout
 maneuver
 maneuvers
 md65-group
+mgmt
 microservice
 microservices
 milli-CPUs
@@ -568,6 +572,7 @@ noncompute
 noncritical
 nondefault
 nonzero
+nvram
 organize
 organized
 organizer
@@ -600,7 +605,9 @@ preemptively
 provisioners
 quiescing
 re-architecting
+ReadOnly
 reauthentication
+rec
 reestablished
 remediate
 remediated
@@ -632,13 +639,17 @@ subtest
 subtests
 sw-25g01
 sw-25g02
+sw-cdu
 sw-cdu-001
 sw-cdu-002
 sw-cdu-00x
+sw-edge
 sw-edge-001
 sw-edge-002
+sw-leaf
 sw-leaf-bmc
 sw-leaf-bmc
+sw-spine
 sw-spine-001
 sw-spine-001
 sw-spine-002
@@ -696,6 +707,7 @@ u6
 u7
 u8
 u9
+uan_shadow
 un-deprecated
 unconfigured
 uninitialize
@@ -869,6 +881,7 @@ SR SFP-10G
 Sr4
 twinax
 USR SFP-10G
+vcs-user-credentials
 Xcvr
 
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to

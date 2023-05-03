@@ -43,7 +43,7 @@ snmp-server view cray-reds-view 1.3.6.1.2 included
 
 This is for all switches.
 
-### Aruba
+### Aruba Admin Authentication
 
 ```bash
 conf t
@@ -55,7 +55,7 @@ Example output:
 user admin group administrators password plaintext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Dell
+### Dell Admin Authentication
 
 ```bash
 conf t
@@ -68,7 +68,7 @@ system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
 
-### Mellanox
+### Mellanox Admin Authentication
 
 ```bash
 conf t
