@@ -18,18 +18,16 @@ The following steps provide instructions to boot the Pre-Install Live ISO and cr
 ## Create the bootable media
 
 To create the bootable LiveCD image use `dd` command. Before creating the media, identify which device will be used for it. If the bootable media with LiveCD image is already prepared, then skip to [Boot the LiveCD](#boot-the-livecd).
- 
+
 1. (`external#`) Obtain the cluster manager software (HPCM version 1.9) from HPE for all the required ISO files.
 
-    From the customer portal, you can obtain the cluster manager installation software, including patches and updates,from the following website:
+    From the customer portal, you can obtain the cluster manager installation software, including patches and updates,from the following website: https://www.hpe.com/downloads/software
 
-    https://www.hpe.com/downloads/software
-
-    > **Note:** User needs to have a HPE Passport account and its login credentials to access the customer portal website.
+    > **NOTE:** User needs to have a HPE Passport account and its login credentials to access the customer portal website.
 
 1. (`external#`) Identify the USB device.
 
-   >__NOTE:__ This example shows the USB device is `/dev/sdd` on the host.
+   > **NOTE:** This example shows the USB device is `/dev/sdd` on the host.
 
    ```bash
    lsscsi
@@ -84,7 +82,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
 - _Option 2_ : Boot the LiveCD ISO image using `efibootmgr`.
 
-   >__NOTE:__ For the system to find the USB device's EFI bootloader, UEFI booting must be enabled.
+   >**NOTE:** For the system to find the USB device's EFI bootloader, UEFI booting must be enabled.
 
    1. (`external#`) Confirm that the IPMI credentials work for the BMC by checking the power status.
 
@@ -98,11 +96,11 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
          ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power status
          ```
 
-         >__NOTE:__ The `read -s` command is used to prevent the credentials from being displayed on the screen or recorded in the shell history.
+         >**NOTE:** The `read -s` command is used to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    1. (`external#`) Power the NCN on and connect to the IPMI console.
 
-      >__NOTE:__ The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects
+      >**NOTE:** The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects
       > the primary removable media. This step instructs the user to power off the node to ensure the BIOS has the best chance at finding the USB via a cold boot.
 
       ```bash
@@ -130,7 +128,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
    1. Insert the USB stick into a recommended USB3 port.
 
-      __Information:__ `USB2` port is also compatible, but `USB3` port is recommended as it offers the best performance.
+      **Information:** `USB2` port is also compatible, but `USB3` port is recommended as it offers the best performance.
 
    1. (`external#`) Power the server on.
 
@@ -153,7 +151,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          ![Input prompts](../../img/install/04.png)
 
-         >__NOTE:__ It may be necessary to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after `Loading initrd...`.
+         >**NOTE:** It may be necessary to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after `Loading initrd...`.
 
          Once the system boots up the OS successfully, provide username and password as `root`/`cmdefault` to log in to the system.
 
@@ -202,7 +200,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
           1. (`pit#`) Access the Mellanox switch using `ssh` or `minicom`.
 
-             >__NOTE:__ The following are example commands; the actual device name and IP address may vary.
+             >**NOTE:** The following are example commands; the actual device name and IP address may vary.
 
              - Example 1 (using `ssh` to its IP address):
 
@@ -281,7 +279,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
              minicom -b 115200 -D /dev/ttyUSB1
              ```
 
-             >__NOTE:__ Device name may vary.
+             >**NOTE:** Device name may vary.
 
              The login message will look similar to the following:
 
@@ -442,14 +440,14 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
    1. (`pit#`) Create the cluster manager repository.
 
-      > **Note:** The cluster manager ISO `cm-1.9-cd1-media-sles15sp4-x86_64.iso` is a part of cluster manager software (HPCM version 1.9) package downloaded in [Create the bootable media](#create-the-bootable-media) section.
-      
+      > **NOTE:** The cluster manager ISO `cm-1.9-cd1-media-sles15sp4-x86_64.iso` is a part of cluster manager software (HPCM version 1.9) package downloaded in [Create the bootable media](#create-the-bootable-media) section.
+
       1. Add the cluster manager repository.
 
          ```bash
          cm repo add cm-1.9-cd1-media-sles15sp4-x86_64.iso
          ```
-         
+
    1. (`pit#`) List the repositories.
 
       ```bash
@@ -657,13 +655,13 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          1. Discover CECs.
 
-            __This information is not yet available.__
+            **This information is not yet available.**
 
       1.Perform automatic discovery.
 
          Management nodes, UANs, and CNs will be automatically discovered by the following procedure:
 
-         >__NOTE:__
+         >**NOTE:**
          >
          > - Ensure that all the River components are powered on, DHCP is enabled on the BMCs, and the BMCs are each on only one switch out of the available spine switches.
          >
@@ -694,7 +692,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          1. Check the power status and PXE status.
 
-            > __NOTE:__ Verify if all the River node BMCs are leased with an IP address.
+            >**NOTE:** Verify if all the River node BMCs are leased with an IP address.
 
             1. Check the power status of nodes.
 
@@ -760,7 +758,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
             cm node refresh netboot -n '*'
             ```
 
-            >__NOTE:__ Kernel version can be obtained from `cinstallman --show-default-image` command.
+            >**NOTE:** Kernel version can be obtained from `cinstallman --show-default-image` command.
 
          1. Stop the automatic discovery process.
 
@@ -856,7 +854,7 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
    sh csm_dep_install.sh  ${PITDATA}
    ```
 
-   >__Note:__ `${PITDATA}` is the path of the folder where the CSM tarball is extracted in the preceding step.
+   >**NOTE:** `${PITDATA}` is the path of the folder where the CSM tarball is extracted in the preceding step.
 
 ## Seed file generation
 
@@ -894,7 +892,7 @@ The procedure to generate seed files is as follows:
    cm cvt config create -t all --mgmt_username 'uname' --mgmt_password 'passwd' --architecture '<architecture>'
    ```
 
-   >__NOTE:__ The seed files and paddle file will be generated in the current working directory.
+   >**NOTE:** The seed files and paddle file will be generated in the current working directory.
 
 1. Save the generated seed files (`switch_metadata.csv`, `application_node_config.yaml`, `hmn_connections.json`, `ncn_metadata.csv`), paddle file (`cvt-ccj.json`), and `cvt.json`.
 
