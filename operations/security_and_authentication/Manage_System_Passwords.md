@@ -271,7 +271,7 @@ To adjust the SNMP credentials, perform the following tasks:
 
 2. Update the credentials actively being used for existing leaf switches.
 
-   * See [Change SNMP Credentials on Leaf BMC Switches](Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
+   * See For more information on SNMP credentials, see [Configuring SNMP in CSM]( ../../operations/network/management_network/configure_snmp.md)
 
 ### HPE Cray EX Liquid-Cooled Cabinet Hardware
 
