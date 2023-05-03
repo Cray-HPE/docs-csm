@@ -8,7 +8,7 @@ The custom switch configuration is backed up. See [Manual Switch Config](manual_
 
 ## SNMP Configuration
 
-SNMP is currently only used on sw-leaf-bmc switches, these credentials can be retrieved from Vault. More information on SNMP credentials can be found in the [Change SNMP Credentials on Leaf-BMC Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) procedure.
+For more information on SNMP credentials, see [Configuring SNMP in CSM](configure_snmp.md) and [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../../operations/security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
 
 Once these credentials are retrieved from vault, fill in the `xxxxxx` fields below and paste the commands into the switch.
 
