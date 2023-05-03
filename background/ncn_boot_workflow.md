@@ -7,16 +7,18 @@ Non-compute nodes can boot from two sources:
 
 ## Topics
 
-* [Determine the current boot order](#determine-the-current-boot-order)
-* [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
-* [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
-* [Set BMCs to DHCP](#set-bmcs-to-dhcp)
-* [Boot order overview](#boot-order-overview)
-* [Setting boot order](#setting-boot-order)
-* [Trimming boot order](#trimming-boot-order)
-* [Example boot orders](#example-boot-orders)
-* [Reverting changes](#reverting-changes)
-* [Locating USB device](#locating-usb-device)
+- [NCN Boot Workflow](#ncn-boot-workflow)
+  - [Topics](#topics)
+  - [Determine the current boot order](#determine-the-current-boot-order)
+  - [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
+  - [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
+  - [Set BMCs to DHCP](#set-bmcs-to-dhcp)
+  - [Boot order overview](#boot-order-overview)
+  - [Setting boot order](#setting-boot-order)
+  - [Trimming boot order](#trimming-boot-order)
+  - [Example boot orders](#example-boot-orders)
+  - [Reverting changes](#reverting-changes)
+  - [Locating USB device](#locating-usb-device)
 
 ## Determine the current boot order
 
@@ -120,7 +122,7 @@ done
 * `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
 > **NOTE:** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
-> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-image-build/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).
+> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-images/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).
 
 ## Setting boot order
 
