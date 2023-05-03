@@ -34,7 +34,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        If it is unclear what session template is in use, proceed to the next substep.
 
        ```bash
-       cray bos sessiontemplate list
+       cray bos v1 sessiontemplate list
        ```
 
     1. Find the xname with `sat status`.
@@ -68,7 +68,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Find the required `templateUuid` value with BOS.
 
        ```bash
-       cray bos session describe BOS_SESSION | grep templateUuid
+       cray bos v1 session describe BOS_SESSION | grep templateUuid
        ```
 
        Example output:
@@ -80,7 +80,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Determine the list of xnames associated with the desired boot session template.
 
        ```bash
-       cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
+       cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME | egrep "node_list|node_roles_groups|node_groups"
        ```
 
        Example output(s):
@@ -345,13 +345,13 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
         string. Use the following command to delete the BOS database entry.
 
         ```bash
-        cray bos session delete <session ID>
+        cray bos v1 session delete <session ID>
         ```
 
         Example:
 
         ```bash
-        cray bos session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
+        cray bos v1 session delete 0216d2d9-b2bc-41b0-960d-165d2af7a742
         ```
 
 1. Coordinate with the site to prevent new sessions from starting in the services listed.

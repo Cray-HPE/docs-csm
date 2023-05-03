@@ -94,7 +94,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
    ```bash
    BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-   cray bos session create --template-uuid $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
+   cray bos v1 session create --template-uuid $BOS_TEMPLATE --operation shutdown --limit x9000c3s0b0n0,x9000c3s0b0n1,x9000c3s0b1n0,x9000c3s0b1n1
    ```
 
 ### Source: Disable the Redfish endpoints for the nodes
@@ -269,7 +269,7 @@ The hardware management network MAC and IP addresses are assigned algorithmicall
 
     ```bash
     BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    cray bos session create --template-uuid $BOS_TEMPLATE --operation shutdown \
+    cray bos v1 session create --template-uuid $BOS_TEMPLATE --operation shutdown \
             --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 
@@ -709,7 +709,7 @@ The hardware management network NIC MAC addresses for liquid-cooled blades are a
 
     ```bash
     BOS_TEMPLATE=cos-2.0.30-slurm-healthy-compute
-    cray bos session create --template-uuid $BOS_TEMPLATE \
+    cray bos v1 session create --template-uuid $BOS_TEMPLATE \
             --operation reboot --limit x1005c3s0b0n0,x1005c3s0b0n1,x1005c3s0b1n0,x1005c3s0b1n1
     ```
 

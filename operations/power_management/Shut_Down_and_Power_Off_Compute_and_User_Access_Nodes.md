@@ -15,7 +15,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
    Identify the BOS session template names such as `cos-2.0.x`, `uan-slurm`, and choose the appropriate compute and UAN node templates for the shutdown.
 
    ```bash
-   cray bos sessiontemplate list
+   cray bos v1 sessiontemplate list
    ```
 
    Example output:
@@ -39,7 +39,7 @@ System Admin Toolkit (SAT) (S-8031)* product stream documentation for instructio
 1. To display more information about a session template, for example `cos-2.0.x`, use the `describe` option.
 
    ```bash
-   cray bos sessiontemplate describe cos-2.0.x
+   cray bos v1 sessiontemplate describe cos-2.0.x
    ```
 
 1. Use `sat bootsys shutdown` to shut down and power off UANs and compute nodes.
