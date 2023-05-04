@@ -73,5 +73,7 @@ For a list of all features with an announced removal target, see [Removals](intr
     ```
 
   * If a previous installation failed, apply the workaround and re-install with the `iuf run --force` option.
+* The CRUS subcommands are inadvertently missing from the Cray CLI. See
+  [CRUS Subcommands Missing From Cray CLI](troubleshooting/known_issues/CRUS_Subcommands_Missing_From_Cray_CLI.md).
 
 ### Security vulnerability exceptions in CSM 1.4

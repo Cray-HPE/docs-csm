@@ -380,7 +380,7 @@ Successful output ends with a line similar to the following:
 SUCCESS: All 7 service tests passed: bos, cfs, conman, crus, ims, tftp, vcs
 ```
 
-For more details, including known issues and other command line options, see [Software Management Services health checks](../troubleshooting/known_issues/sms_health_check.md).
+For more details, including known issues and other command line options, see [Software Management Services health check](../troubleshooting/known_issues/sms_health_check.md).
 
 ## 4. Gateway health and SSH access checks
 

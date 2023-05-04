@@ -4,6 +4,7 @@
 - [Interpreting `cmsdev` Results](#interpreting-cmsdev-results)
 - [Known issues with SMS tests](#known-issues-with-sms-tests)
   - [Cray CLI](#cray-cli)
+  - [CRUS CLI](#crus-cli)
   - [Etcd-restores](#etcd-restores)
 
 ## SMS test execution
@@ -51,6 +52,17 @@ See the following for more information:
 
 - [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface)
 - [Configure the Cray CLI](../../operations/configure_cray_cli.md)
+
+### CRUS CLI
+
+In CSM 1.4.0, the CRUS subtest of `cmsdev` may fail with an error resembling the following:
+
+```text
+ERROR (run tag KPEqc-crus): CLI command failed (and does not look like a CLI config issue) (crus session list --format json)
+```
+
+This is because of a known issue in CSM 1.4.0 that is fixed in CSM 1.4.1. For more information, see
+[CRUS Subcommands Missing From Cray CLI](CRUS_Subcommands_Missing_From_Cray_CLI.md).
 
 ### Etcd restores
 

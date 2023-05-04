@@ -43,6 +43,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Antero node NID allocation](known_issues/antero_node_NID_allocation.md)
 * [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
+* [CRUS Subcommands Missing From Cray CLI](known_issues/CRUS_Subcommands_Missing_From_Cray_CLI.md)
 * [Software Management Services health check](known_issues/sms_health_check.md)
 
 ## Booting
@@ -65,6 +66,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. See [Deprecated Features](../introduction/deprecated_features/README.md).
 
+* Known issue: [CRUS Subcommands Missing From Cray CLI](known_issues/CRUS_Subcommands_Missing_From_Cray_CLI.md)
 * [Nodes Failing to Upgrade in a CRUS Session](../operations/compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
 * [Failed CRUS Session Because of Unmet Conditions](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
 * [Failed CRUS Session Because of Bad Parameters](../operations/compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
