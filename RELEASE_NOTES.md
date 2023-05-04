@@ -6,6 +6,8 @@
 
 * v1 of Power Control Service (PCS) is active.
 * Cray CLI will default to version 2 (v2) for BOS, if a version is not specified.
+* IUF workflows are created for fresh and upgrade installs.
+* Singular Method for ncn image customization
 
 ### Monitoring
 
@@ -14,6 +16,7 @@
 * Created service monitor OpenSearch cluster monitoring using Prometheus
 * Created grafana  dashboard for OpenSearch cluster monitoring using Prometheus metrics 
 * Created grafana dashboard to record timing data for each stage in the install/upgrade of shasta products
+* Updated Prometheus to v2.41.0, alert manager to v0.25.0, and node-exporter to v1.5.0.
 
 ### Networking
 ### DNS
@@ -21,6 +24,7 @@
 * Created dns records for all aliases on the NMN
 * Fixed the URI for PCS inside the service mesh `http://cray-power-control/` without the version
 * Added IMS image ID and CFS configuration name to cray-nls API
+* Fixed HSN NIC to only count devices that are HSN NICs
 
 ### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
 
@@ -30,6 +34,11 @@
 * Updated spire workload and cray-drydock changes for Artemis MQTT
 * Fixed velero sub chart kubectl container reference
 * Added `cf-gitea-import 1.8.0` to the 1.4 `index.yaml`
+* Added Ceph latency and performance tuning into Ceph image
+* Updated Unbound and Kea to support multiple Unbound loadbalancers
+* Updated Cray-crus to integrate etcd bitnami chart
+* Updated the cilium chart in the k8s image to 1.12.4
+
 
 ### User Application Nodes (UAN)
 
@@ -49,6 +58,9 @@
 * Restored "ll" alias in ncn images
 * Updated the Cray CLI for BOS with the clear-stage option.
 * Updated OPA rules for PCS
+* Added PCS to `run_hms_ct_tests.sh` script
+* LiveCD Packer ISO to improve image builds 
+* Added ARA Plugin to CFS
 
 ### New hardware support
 
@@ -75,6 +87,7 @@
 * Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/cray-uas-mgr:1.22.0`
 * Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/update-uas:1.8.0`
 * Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/quay.io/cilium/json-mock:v1.3.3`
+* Provided artifactory auth to SHASTARELM tools in CSM builds
 
 ### Customer-requested enhancements
 
@@ -133,6 +146,10 @@
 * Fixed(increased) the hnc replicas for redundancy webhook endpoints
 * Added the missing whitespace from cray CLI CFS usage message
 * Fixed the cps pods not restored during argo ncn rebuilds
+* Fixed the issue in automated cray cli script by a change in CMN LB DNS
+* Fixed the build issue when cms-meta-tools upgraded to authenticate to both DST's artifactory as well as CASM's artifactory
+* 
+* 
 
 ## Deprecations
 
@@ -149,7 +166,10 @@ The following previously deprecated features now have an announced CSM version w
 * [BOS](glossary.md#boot-orchestration-service-bos) v1 was deprecated in CSM 1.3, and will be removed in CSM 1.9.
 * [CRUS](glossary.md#compute-rolling-upgrade-service-crus) was deprecated in CSM 1.2, and will be removed in CSM 1.5.
 * Removed the `TRS operator` for fresh installs and on upgrades
-* Removed Postgres from CVE
+* Removed `Postgres` from CVE
+* Removed `opa-gatekeeper` for CSM upgrade support
+* Removed deprecated HSM v1 
+* Removed `/etc/chrony.d/pool.conf` in the pipeline
 
 For a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
