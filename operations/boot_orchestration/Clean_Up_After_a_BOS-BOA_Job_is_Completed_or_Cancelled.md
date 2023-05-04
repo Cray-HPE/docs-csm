@@ -26,7 +26,7 @@ When a session is launched, the following items are created:
     Describe the BOS session to find the name of the BOA job under the attribute `boa_job_name`.
 
     ```bash
-    cray bos session describe --format json BOS_SESSION_ID
+    cray bos v1 session describe --format json BOS_SESSION_ID
     ```
 
     Example output:
@@ -72,7 +72,7 @@ When a session is launched, the following items are created:
 1. (`ncn-mw#`) Delete the etcd entry for the BOS session.
 
     ```bash
-    cray bos session delete BOS_SESSION_ID
+    cray bos v1 session delete BOS_SESSION_ID
     ```
 
 1. Stop CFS from configuring nodes.

@@ -44,7 +44,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
       If it is unclear which session template is in use, proceed to the next substep.
 
       ```bash
-      cray bos sessiontemplate list
+      cray bos v1 sessiontemplate list
       ```
 
    1. (`ncn#`) Find the node xnames with `sat status`.
@@ -83,7 +83,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    1. (`ncn#`) Find the required `templateName` value with BOS.
 
       ```bash
-      cray bos session describe BOS_SESSION --format toml | grep templateName
+      cray bos v1 session describe BOS_SESSION --format toml | grep templateName
       ```
 
       Example output:
@@ -95,7 +95,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
    1. (`ncn#`) Determine the list of xnames associated with the desired boot session template.
 
       ```bash
-      cray bos sessiontemplate describe SESSION_TEMPLATE_NAME --format toml | grep node_list
+      cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME --format toml | grep node_list
       ```
 
       Example output:

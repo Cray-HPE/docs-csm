@@ -227,7 +227,7 @@ As noted below, make sure the S3 path for the manifest matches the S3 path shown
 1. Create the BOS session template using the following file as input:
 
    ```bash
-   cray bos sessiontemplate create --file sessiontemplate.json --name shasta-csm-bare-bones-image
+   cray bos v1 sessiontemplate create --file sessiontemplate.json --name shasta-csm-bare-bones-image
    ```
 
    The expected output is:
@@ -289,7 +289,7 @@ As noted below, make sure the S3 path for the manifest matches the S3 path shown
 (`ncn-mw#`) Create a BOS session to reboot the chosen node using the BOS session template that was just created.
 
 ```bash
-cray bos session create --template-uuid shasta-csm-bare-bones-image --operation reboot --limit "${XNAME}" --format toml
+cray bos v1 session create --template-uuid shasta-csm-bare-bones-image --operation reboot --limit "${XNAME}" --format toml
 ```
 
 Expected output looks similar to the following:

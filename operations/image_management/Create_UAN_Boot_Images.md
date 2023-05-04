@@ -710,7 +710,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     The following command uses the JSON session template file to save a session template in BOS. This step allows administrators to boot UANs by referring to the session template name.
 
     ```bash
-    cray bos sessiontemplate create \
+    cray bos v1 sessiontemplate create \
             --name uan-sessiontemplate-PRODUCT_VERSION \
             --file uan-sessiontemplate-PRODUCT_VERSION.json
     ```
