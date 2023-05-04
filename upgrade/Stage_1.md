@@ -54,7 +54,6 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 
 > If the upgrade is to a new CSM release, e.g. `CSM-1.2.0` to `CSM-1.3.0`, then you will need to run the following to upgrade Ceph. This will upgrade Ceph from `v15.2.15` to `v16.2.9`.
 
-
 1. (`ncn-m001#`) Check that Ceph version `16.2.9` is in Nexus.
 
     ```bash
