@@ -117,10 +117,9 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 
 (`ncn-s001#`) Upload Ceph container images into Nexus and restart daemons so that they use the image in Nexus.
 
-  ```bash
-   scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-   /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-   ```
+```bash
+scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
+/srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
 
 ## Storage node image upgrade
 
