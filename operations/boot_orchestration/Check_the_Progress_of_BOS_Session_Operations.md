@@ -17,7 +17,7 @@ When a Boot Orchestration Service \(BOS\) session is created, it will return a j
 (`ncn-mw#`) For example:
 
 ```bash
-cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot --format toml
+cray bos v1 session create --template-uuid SESSIONTEMPLATE_NAME --operation Boot --format toml
 ```
 
 Example output:

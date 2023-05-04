@@ -696,7 +696,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Reboot with the Boot Orchestration Service (BOS).
 
       ```bash
-      cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
+      cray bos v1 session create --template-uuid BOS_TEMPLATE --operation reboot
       ```
 
 1. Validate that LDAP integration was added successfully.

@@ -34,7 +34,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
       If it is unclear which session template is in use, proceed to the next substep.
 
       ```bash
-      cray bos sessiontemplate list
+      cray bos v1 sessiontemplate list
       ```
 
    1. Find the node xnames with `sat status`. In this example, the target blade is in slot `x9000c3s0`.
@@ -71,7 +71,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    1. Find the required `templateName` value with BOS.
 
       ```bash
-      cray bos session describe BOS_SESSION | grep templateName
+      cray bos v1 session describe BOS_SESSION | grep templateName
       ```
 
       Example output:
@@ -83,7 +83,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    1. Determine the list of xnames associated with the desired boot session template.
 
       ```bash
-      cray bos sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
+      cray bos v1 sessiontemplate describe SESSION_TEMPLATE_NAME | grep node_list
       ```
 
       Example output:
