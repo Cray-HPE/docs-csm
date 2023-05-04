@@ -34,7 +34,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        If it is unclear what session template is in use, proceed to the next substep.
 
        ```bash
-       cray bos sessiontemplate list
+       cray bos sessiontemplates list
        ```
 
     1. Find the xname with `sat status`.
@@ -68,13 +68,13 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     1. Find the required `templateUuid` value with BOS.
 
        ```bash
-       cray bos session describe BOS_SESSION | grep templateUuid
+       cray bos sessions describe BOS_SESSION | grep template_name
        ```
 
        Example output:
 
        ```text
-       templateUuid = "compute-nid1-4-sessiontemplate"
+       template_name = "compute-nid1-4-sessiontemplate"
        ```
 
     1. Determine the list of xnames associated with the desired boot session template.
