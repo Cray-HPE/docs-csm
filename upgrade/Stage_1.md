@@ -54,15 +54,36 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 
 > If the upgrade is to a new CSM release, e.g. `CSM-1.2.0` to `CSM-1.3.0`, then you will need to run the following to upgrade Ceph. This will upgrade Ceph from `v15.2.15` to `v16.2.9`.
 
-Upgrade Ceph to `16.2.9`
 
-1. (`ncn-m001#`) Run Ceph upgrade.
+1. (`ncn-m001#`) Check that Ceph version `16.2.9` is in Nexus.
+
+    ```bash
+    ceph orch upgrade check registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v16.2.9
+    ```
+  
+    Expected output for a successful check should contain `target_digest`, `target_id`, `target_name`. The following is an example :
+
+    ```bash
+    "target_digest": "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph@sha256:a960130143d4feb952d6afc205ffcc0d7d033f78839a38339e46c122646910d5",
+    "target_id": "87b249bff032ea26a91e455c43b7b2feb07e03c1b10bc32885ca9d583fc08236",
+    "target_name": "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v16.2.9"
+    ```
+
+    A failed check will provide the following error:
+
+    ```bash
+    Error EINVAL: host ncn-s001 `cephadm pull` failed: cephadm exited with an error code: 1, stderr:Pulling container image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v16.2.9...
+    ```
+
+    This failure means that the Ceph image with version `16.2.9` is not in Nexus. Verify that the upgrade `prerequisites.sh` script completed successfully. This script uploads images to Nexus.
+
+1. (`ncn-m001#`) Upgrade Ceph to `16.2.9`.
 
    ```bash
    ceph orch upgrade start registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v16.2.9
    ```
 
-2. (`ncn-m001, ncn-s00[1/2/3]#`) Monitor the upgrade.
+1. (`ncn-m001, ncn-s00[1/2/3]#`) Monitor the upgrade.
 
     ```bash
     watch ceph orch upgrade status
@@ -75,7 +96,7 @@ Upgrade Ceph to `16.2.9`
     ceph -W cephadm
     ```
 
-3. Wait for the upgrade to complete. Expected output after a successful upgrade:
+1. Wait for the upgrade to complete. Expected output after a successful upgrade:
 
     ```bash
     ncn-s001:~ # ceph orch upgrade status
@@ -87,8 +108,6 @@ Upgrade Ceph to `16.2.9`
         "message": ""
     }
     ```
-
-
 
 ## CSM Upgrade requirement for upgrades staying within a CSM release version
 
