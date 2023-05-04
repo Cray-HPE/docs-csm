@@ -323,7 +323,7 @@ Also, it generates the report of policy violation in respective workloads. The f
 
     If there are any discrepancies, look at the detailed policy report to triage the issue.
 
-## What is new in the HPE CSM 1.4 release
+## What is new in the HPE CSM 1.4 release and above
 
 The upstream Baseline profile is now available for customers as part of the HPE CSM 1.4 release.
 
