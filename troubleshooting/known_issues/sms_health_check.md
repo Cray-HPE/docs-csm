@@ -1,12 +1,11 @@
 # Software Management Services health checks
 
-1. [SMS test execution](#31-sms-test-execution)
-1. [Interpreting `cmsdev` Results](#32-interpreting-cmsdev-results)
-1. [Known issues with SMS tests](#33-known-issues-with-sms-tests)
+- [SMS test execution](#sms-test-execution)
+- [Interpreting `cmsdev` Results](#interpreting-cmsdev-results)
+- [Known issues with SMS tests](#known-issues-with-sms-tests)
+  - [Cray CLI](#cray-cli)
 
-   - [Cray CLI](#cray-cli)
-
-## 3.1 SMS test execution
+## SMS test execution
 
 This test requires that the Cray CLI is configured on nodes where the test is executed.
 See [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface).
@@ -27,7 +26,7 @@ transfer subtest, as noted in the previous paragraph).
 - The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
   - The same amount of data is written to the log file in either case.
 
-## 3.2 Interpreting `cmsdev` results
+## Interpreting `cmsdev` results
 
 - If all checks are passed, the following will be true:
   - The return code will be zero.
@@ -42,9 +41,12 @@ transfer subtest, as noted in the previous paragraph).
 
 Additional test execution details can be found in `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`.
 
-## 3.3 Known issues with SMS tests
+## Known issues with SMS tests
 
 ### Cray CLI
 
 Some of the subtests may fail if the Cray CLI is not configured on the management NCN where `cmsdev` is executed.
-See [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface).
+See the following for more information:
+
+- [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface)
+- [Configure the Cray CLI](../../operations/configure_cray_cli.md)
