@@ -74,4 +74,6 @@ For any typescripts that were started during this stage, stop them with the `exi
 
 ## Stage completed
 
-This stage is completed. Continue to [Stage 4](Stage_4.md).
+**DO NOT** proceed past this point if the upgrade has not completed and been verified. Contact support for in-depth troubleshooting.
+
+This stage is completed. Proceed to [Validate CSM health](README.md#3-validate-csm-health) on the main upgrade page.
