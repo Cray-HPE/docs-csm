@@ -12,6 +12,7 @@ This page provides information about how to modify a tenant. Modifications that 
 - [Modify the `slurm` operator CR](#modify-the-slurm-operator-cr)
 - [Apply the `slurm` operator CR](#apply-the-slurm-operator-cr)
 - [Modify the Slurm configuration](#modify-the-slurm-configuration)
+- [Update component records in BOS](#update-component-records-in-bos)
 
 ## Modify the existing TAPMS CR
 
@@ -190,4 +191,26 @@ Slurm configuration files.
     ```sh
     SLURMCTLD_POD=$(kubectl get pod -n <namespace> -lapp.kubernetes.io/name=slurmctld -o jsonpath='{.items[0].metadata.name}')
     kubectl exec -n <namespace> ${SLURMCTLD_POD} -c slurmctld -- scontrol reconfigure
+    ```
+
+## Update component records in BOS
+
+Any nodes that are moving from one tenant to another should have their records cleared in BOS.
+Clearing the desired state will have the secondary effect of causing BOS to shutdown the node.
+This prevents a tenant using a node that is booted with another tenant's boot artifact or configuration.
+
+- (`ncn-mw#`) Clear the desired state:
+
+    Repeat this step for each component that moving from one tenant to another.
+
+    ```sh
+    cray bos v2 components update <xname> --enabled true --staged-state-session "" --staged-state-configuration "" --staged-state-boot-artifacts-initrd "" --staged-state-boot-artifacts-kernel-parameters "" --staged-state-boot-artifacts-kernel "" --desired-state-bss-token "" --desired-state-configuration "" --desired-state-boot-artifacts-initrd "" --desired-state-boot-artifacts-kernel-parameters "" --desired-state-boot-artifacts-kernel ""
+    ```
+
+- (`ncn-mw#`) Wait until the component reaches a `stable` state:
+
+    Because the previous step cleared the desired state, the stable state indicates that the component is powered-off.
+
+    ```sh
+    cray bos v2 components describe <xname> --format json | jq .status.status
     ```
