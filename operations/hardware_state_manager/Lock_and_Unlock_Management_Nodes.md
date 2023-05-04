@@ -24,12 +24,19 @@ failure.
 
 ## Topics
 
-* [When To Lock Management Nodes](#when-to-lock-management-nodes)
-* [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
-* [How To Lock Management Nodes](#how-to-lock-management-nodes)
-  * [Script](#script)
-  * [Manual Steps](#manual-steps)
-* [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
+* [Lock and Unlock Management Nodes](#lock-and-unlock-management-nodes)
+  * [Topics](#topics)
+  * [When To Lock Management Nodes](#when-to-lock-management-nodes)
+  * [When To Unlock Management Nodes](#when-to-unlock-management-nodes)
+  * [How To Lock Management Nodes](#how-to-lock-management-nodes)
+    * [Script](#script)
+      * [Manual Steps](#manual-steps)
+      * [To lock all nodes (and their BMCs) with the _Management_ role](#to-lock-all-nodes-and-their-bmcs-with-the-management-role)
+      * [To lock single nodes or lists of specific nodes (and their BMCs)](#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs)
+  * [How To Check For Locked Management Nodes](#how-to-check-for-locked-management-nodes)
+  * [How To Unlock Management Nodes](#how-to-unlock-management-nodes)
+    * [To unlock all nodes (and their BMCs) with the _Management_ role](#to-unlock-all-nodes-and-their-bmcs-with-the-management-role)
+    * [To unlock single or lists of specific nodes (and their BMCs)](#to-unlock-single-or-lists-of-specific-nodes-and-their-bmcs)
 
 ## When To Lock Management Nodes
 
@@ -132,6 +139,124 @@ Use the `cray hsm locks lock` command to perform locking.
 
    [Success]
    ComponentIDs = [ "x3000c0s6b0n0", "x3000c0s6b0",]
+   ```
+
+## How To Check For Locked Management Nodes
+
+   > **`NOTE`** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore would not show up in the following command output.
+
+1. Check the lock status of the management nodes and BMCs.
+
+   ```bash
+   cray hsm state components list --type Node --role Management --format json | \
+      jq -c '.Components[]|.ID' | tr '\n' ',' | sed 's/,$/\n/' | \
+      xargs cray hsm locks status create --format toml --component-ids
+   ```
+
+   Example output:
+
+   ```text
+   [[Components]]
+   ID = "x3000c0s1b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s5b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s4b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s7b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s6b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s3b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s3b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s9b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s8b0n0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s5b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s4b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s7b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s6b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s3b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s3b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s9b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
+
+   [[Components]]
+   ID = "x3000c0s8b0"
+   Locked = true
+   Reserved = false
+   ReservationDisabled = false
    ```
 
 ## How To Unlock Management Nodes
