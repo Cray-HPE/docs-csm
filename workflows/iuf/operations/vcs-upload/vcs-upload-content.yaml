@@ -306,10 +306,10 @@ spec:
         command: [bash]
         source: |
           vcs_secret_name={{inputs.parameters.vcs_user_credentials_secret_name}}
-          echo "DEBUG  Deleting secret $vcs_secret_name from argo workspace"
+          echo "DEBUG Deleting secret $vcs_secret_name from argo workspace"
           result=$(kubectl -n argo delete secret/$vcs_secret_name 2>&1)
           if [ $? -ne 0 ]; then
             result=$(echo "$result" | sed -e 's/^/DEBUG /')
-            echo "ERROR  Deleting secret $vcs_secret_name failed in argo namespace"
+            echo "ERROR Deleting secret $vcs_secret_name failed in argo namespace"
             echo -e "DEBUG <kubectl -n argo delete secret/$vcs_secret_name> failed with\n\n$result"
           fi

@@ -204,13 +204,10 @@ spec:
               return 1
             fi
           }
-          err=0
           sync_item secret/vcs-user-credentials services vcs-user-credentials-argo argo
-          if [ $rc -ne 0 ]; then
-             err=1
-          fi
+          rc=$?
           echo $destination_name >> /tmp/secret_name
-          exit $err
+          exit $rc
 
     ## gitea-update-content ##
     - name: gitea-update-content

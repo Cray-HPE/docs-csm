@@ -109,7 +109,7 @@ spec:
                       manifest_deploy_output=$(loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts 2>&1)
                       if [ $? -ne 0 ]; then
                         manifest_deploy_output=$(echo "$manifest_deploy_output" | sed -e 's/^/ERROR /')
-                        echo "ERROR There was a problem deploying the loftsman manifest ${manifest}."
+                        echo "ERROR There was a problem deploying the loftsman manifest ${manifest}"
                         echo -e "ERROR <loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts> failed with\n\n $manifest_deploy_output"
                         exit_code=1
                       fi
