@@ -8,7 +8,7 @@ The custom switch configuration is backed up. See [Manual Switch Config](manual_
 
 ## SNMP Configuration
 
-SNMP is currently only used on sw-leaf-bmc switches, these credentials can be retrieved from Vault. More information on SNMP credentials can be found in the [Change SNMP Credentials on Leaf-BMC Switches](../../../operations/security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) procedure.
+For more information on SNMP credentials, see [Configuring SNMP in CSM](configure_snmp.md) and [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../../operations/security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
 
 Once these credentials are retrieved from vault, fill in the `xxxxxx` fields below and paste the commands into the switch.
 
@@ -43,7 +43,7 @@ snmp-server view cray-reds-view 1.3.6.1.2 included
 
 This is for all switches.
 
-### Aruba
+### Aruba Admin Authentication
 
 ```bash
 conf t
@@ -55,7 +55,7 @@ Example output:
 user admin group administrators password plaintext xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-### Dell
+### Dell Admin Authentication
 
 ```bash
 conf t
@@ -68,7 +68,7 @@ system-user linuxadmin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 username admin password xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx role sysadmin priv-lvl 15
 ```
 
-### Mellanox
+### Mellanox Admin Authentication
 
 ```bash
 conf t
