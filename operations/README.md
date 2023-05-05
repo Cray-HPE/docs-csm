@@ -309,7 +309,6 @@ Mechanisms used by the system to ensure the security and authentication of inter
   - [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md)
   - [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
   - [Change Air-Cooled Node BMC Credentials](security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md)
-  - [Change SNMP Credentials on Leaf-BMC Switches](security_and_authentication/Change_SNMP_Credentials_on_Leaf_BMC_Switches.md)
   - [Update Default ServerTech PDU Credentials used by the Redfish Translation Service](security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md)
   - [Change Credentials on ServerTech PDUs](security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md)
   - [Add Root Service Account for Gigabyte Controllers](security_and_authentication/Add_Root_Service_Account_for_Gigabyte_Controllers.md)
