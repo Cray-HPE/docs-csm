@@ -1,6 +1,14 @@
 # Cray HNC Manager
 
-Beginning in CSM 1.3, the [HNC controller](https://github.com/kubernetes-sigs/hierarchical-namespaces) is deployed as part of the multi-tenancy solution for namespace management and object propagation.
+* [Overview](#overview)
+* [Terminology](#terminology)
+* [Tenant naming requirements](#tenant-naming-requirements)
+* [`kubectl` HNS plugin](#kubectl-hns-plugin)
+* [Resource propagation](#resource-propagation)
+
+## Overview
+
+The [HNC controller](https://github.com/kubernetes-sigs/hierarchical-namespaces) is deployed as part of the multi-tenancy solution for namespace management and object propagation.
 This controller is deployed in CSM with the `cray-hnc-manager` Helm chart. This HNC controller is only managing the following namespaces related to multi-tenancy:
 
 * `multi-tenancy`
@@ -12,19 +20,12 @@ This controller is deployed in CSM with the `cray-hnc-manager` Helm chart. This 
 Generally, operations for managing tenants do not require interacting explicitly with the HNC controller, aside from the initial configuration.
 This is because `tapms` interacts with the HNC controller programmatically to construct `HNC-specific` namespaces.
 
-## Table of contents
-
-* [Terminology](#terminology)
-* [Tenant Naming Requirements](#tenant-naming-requirements)
-* [`kubectl` HNS plugin](#kubectl-hns-plugin)
-* [Resource Propagation](#resource-propagation)
-
 ## Terminology
 
-* `Hierarchical Namespace Controller`: (`HNC` or `hnc` when abbreviated) The Kubernetes operator which controls hierarchical namespaces.
-* `Hierarchical Namespace(s)`: (`HNS` or `hns` in abbreviation form) The namespaces created and managed by the `HNC`.
+* Hierarchical Namespace Controller (HNC): The Kubernetes operator which controls hierarchical namespaces.
+* Hierarchical Namespaces (HNS): The namespaces created and managed by the HNC.
 
-## Tenant Naming Requirements
+## Tenant naming requirements
 
 In order to ensure that the HNC controller does not manage more namespaces than desired, CSM deploys this controller configured such that only the namespaces listed above are valid namespace names,
 along with tenant-specific namespaces, which are required to have a predictable prefix.
@@ -85,7 +86,7 @@ In order to simplify HNC management CSM NCNs are installed with the `kubectl-hns
       version     Show version of HNC plugin
     ```
 
-## Resource Propagation
+## Resource propagation
 
 * (`ncn-mw#`) By default, `hnc` will propagate the following Kubernetes objects from a parent to child namespace:
 
@@ -104,22 +105,24 @@ In order to simplify HNC management CSM NCNs are installed with the `kubectl-hns
     ```
 
 Note that propagating `Roles` and `RoleBindings` are default behavior for `hnc`.
-If there are `Roles` and `Rolebindings` that should not be propagated to child namespaces, this behavior can be changed by adding a Kubernetes annotation to the object in the parent namespace:
+If there are `Roles` and `Rolebindings` that should not be propagated to child namespaces, this behavior can be changed by adding a
+Kubernetes annotation to the object in the parent namespace:
 
-```text
+```yaml
 propagate.hnc.x-k8s.io/none: "true"
 ```
 
-Adding this annotation to the `metadata->annotations` section of a given Kubernetes resource will disable propagation to any child namespaces for that resource:
+Adding the `propagate.hnc.x-k8s.io/none: "true"` annotation to the `metadata`.`annotations` section of a given Kubernetes resource will disable
+propagation to any child namespaces for that resource:
 
-```text
+```yaml
 apiVersion: v1
 kind: LimitRange
 metadata:
   annotations:
     meta.helm.sh/release-name: cray-drydock
     meta.helm.sh/release-namespace: loftsman
-    propagate.hnc.x-k8s.io/none: "true"        <-------
+    propagate.hnc.x-k8s.io/none: "true"
   creationTimestamp: "2022-08-24T18:47:02Z"
   labels:
     app.kubernetes.io/managed-by: Helm
@@ -153,7 +156,7 @@ spec:
 
 `Infrastructure Administrators` can add and remove the propagation of Kubernetes resources using the `kubectl hns` command.
 
-* (`ncn-mw#`) Configure `HNC` to propagate secrets:
+* (`ncn-mw#`) Configure HNC to propagate secrets:
 
     ```bash
     kubectl hns config set-resource secrets --mode Propagate
@@ -176,7 +179,7 @@ spec:
     * Propagating: secrets (/v1)
     ```
 
-* (`ncn-mw#`) Configure `HNC` to no longer propagate secrets:
+* (`ncn-mw#`) Configure HNC to no longer propagate secrets:
 
     ```bash
     kubectl hns config delete-type --resource secrets
