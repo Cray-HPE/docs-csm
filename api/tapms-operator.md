@@ -1,23 +1,3 @@
----
-title: TAPMS Tenant Status API v1alpha1
-language_tabs:
-  - http: http
-  - shell: shell
-  - python: python
-  - go: go
-language_clients:
-  - http: ""
-  - shell: ""
-  - python: ""
-  - go: ""
-toc_footers: []
-includes: []
-search: true
-highlight_theme: darkula
-headingLevel: 2
-
----
-
 <!-- Generator: Widdershins v4.0.1 -->
 
 <h1 id="tapms-tenant-status-api">TAPMS Tenant Status API v1alpha1</h1>
