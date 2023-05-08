@@ -93,7 +93,7 @@ spec:
                     rc=$?
                     if [ $rc -ne 0 ]; then
                       echo "ERROR Bootprep for management nodes failed. Please refer to the operations > configuration_management > Accessing_Sat_Bootprep_Files section of the CSM documentation and then re-run the 'prepare-images' stage" 1>&2
-                      echo "DEBUG <sat bootprep run --limit images --limit session_templates --overwrite-images --overwrite-templates --vars-file "$VARS_FILE_PATH" --format json --bos-version v2 $MEDIA_DIR/$BOOTPREP_FILE_PATH> failed" 1>&2
+                      echo "ERROR <sat bootprep run --limit images --limit session_templates --overwrite-images --overwrite-templates --vars-file "$VARS_FILE_PATH" --format json --bos-version v2 $MEDIA_DIR/$BOOTPREP_FILE_PATH> failed" 1>&2
                       exit $rc
                     fi
         - - name: end-operation
