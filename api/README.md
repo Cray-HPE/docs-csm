@@ -1,3 +1,4 @@
+# REST API Documentation
  * [Boot Orchestration Service v0.0.0-api](./bos.md)
  * [Boot Script Service v1.0.0](./bss.md)
  * [Cray Advanced Platform Monitoring and Control (CAPMC) v2.0.0](./capmc.md)
@@ -9,7 +10,6 @@
  * [System Configuration Service v0.1](./scsd.md)
  * [System Layout Service v0.1](./sls.md)
  * [Lock & Reservation Service v1.0](./smd.md)
- * [TAPMS Tenant Status API v1alpha1](./spire-server.md)
  * [Cray STS Token Generator v1.0](./sts.md)
  * [TAPMS Tenant Status API v1alpha1](./tapms-operator.md)
  * [User Access Service v1.20.0](./uas-mgr.md)
