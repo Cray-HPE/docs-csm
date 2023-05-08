@@ -148,13 +148,15 @@
 * Fixed the cps pods not restored during argo ncn rebuilds
 * Fixed the issue in automated cray cli script by a change in CMN LB DNS
 * Fixed the build issue when cms-meta-tools upgraded to authenticate to both DST's artifactory as well as CASM's artifactory
-* 
+* Fixed the issue to not support RFC 8357 and Kea should only respond to clients on UDP port 68 
 * 
 
 ## Deprecations
 
 * [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
-* Deprecated and thus removed CRUS from the CSM manifests 
+* Deprecated and removed CRUS from the CSM manifests 
+* Deprecated and removed `v1alpha3` k8s interface
+* Eliminated use of deprecated K8s APIs
 
 CSI: deprecate ipv4-resolvers option
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
