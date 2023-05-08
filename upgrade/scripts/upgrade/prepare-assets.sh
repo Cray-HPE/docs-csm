@@ -144,7 +144,7 @@ if [[ $state_recorded == "0" ]]; then
     fi
 
     #copy the canu RPM into the sle-15sp3 directory, but only for CSM v1.3.2
-    if [[ "$CSM_RELEASE" =~ *1.3.2* ]]; then
+    if [[ "$CSM_RELEASE" == *"1.3.2"* ]]; then
         cp /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp4/x86_64/canu-*.rpm /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp3/x86_64
     fi
 
