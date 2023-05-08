@@ -143,8 +143,10 @@ if [[ $state_recorded == "0" ]]; then
         rm -rf "${TARBALL_FILE}"
     fi
 
-    #copy the canu RPM into the sle-15sp3 directory
-    cp /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp4/x86_64/canu-*.rpm /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp3/x86_64
+    #copy the canu RPM into the sle-15sp3 directory, but only for CSM v1.3.2
+    if [[ $CSM_REL_NAME == "csm-1.3.2" ]]; then
+        cp /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp4/x86_64/canu-*.rpm /etc/cray/upgrade/csm/${CSM_REL_NAME}/tarball/${CSM_REL_NAME}/rpm/cray/csm/sle-15sp3/x86_64
+    fi
 
     # if we have to untar a file, we assume this is a new upgrade
     # remove existing myenv file just in case
