@@ -25,6 +25,7 @@
 * Fixed the URI for PCS inside the service mesh `http://cray-power-control/` without the version
 * Added IMS image ID and CFS configuration name to cray-nls API
 * Fixed HSN NIC to only count devices that are HSN NICs
+* Replaced weave with cilium as `default CNI`
 
 ### Management Nodes (Ceph, Kubernetes Workers, and Kubernetes Managers)
 
@@ -38,12 +39,13 @@
 * Updated Unbound and Kea to support multiple Unbound loadbalancers
 * Updated Cray-crus to integrate etcd bitnami chart
 * Updated the cilium chart in the k8s image to 1.12.4
+* Updated HMCollector to set key in kafka message
+* Installed and configured Kata as part of our K8S Workers
 
 
 ### User Application Nodes (UAN)
 
 * Created S3 bucket for use with podman (and other user files)
-* 
 
 ### Miscellaneous functionality
 
@@ -60,9 +62,15 @@
 * Updated OPA rules for PCS
 * Added PCS to `run_hms_ct_tests.sh` script
 * LiveCD Packer ISO to improve image builds 
+* Created CFS Debugging tool
 * Added ARA Plugin to CFS
+* Moved NCN and LiveCD images to SLES 15 SP4
+* Adopted the newer `manifestgen-1.3.8-1`
+* 
 
 ### New hardware support
+
+* Added TpmState support for Castle hardware to SCSD
 
 ### Automation improvements
 
@@ -88,6 +96,7 @@
 * Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/update-uas:1.8.0`
 * Fixed CVEs in `artifactory.algol60.net/csm-dckr/stable/quay.io/cilium/json-mock:v1.3.3`
 * Provided artifactory auth to SHASTARELM tools in CSM builds
+* Upgraded `vault` from 1.5.5 to 1.12.1 and the `vault operator` to `1.16.0`
 
 ### Customer-requested enhancements
 
@@ -149,6 +158,8 @@
 * Fixed the issue in automated cray cli script by a change in CMN LB DNS
 * Fixed the build issue when cms-meta-tools upgraded to authenticate to both DST's artifactory as well as CASM's artifactory
 * Fixed the issue to not support RFC 8357 and Kea should only respond to clients on UDP port 68 
+* Fixed issue with `node-images` promotions 
+* Mitigated chance of switchport flapping
 * 
 
 ## Deprecations
@@ -157,6 +168,7 @@
 * Deprecated and removed CRUS from the CSM manifests 
 * Deprecated and removed `v1alpha3` k8s interface
 * Eliminated use of deprecated K8s APIs
+* 
 
 CSI: deprecate ipv4-resolvers option
 For a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
