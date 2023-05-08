@@ -13,7 +13,6 @@
 
 * Implemented pod monitors to scrape SMF Kafka server and zookeeper Prometheus metrics
 * Created grafana dasboards to monitor the internals of SMF Kafka server and zookeeper
-* Created service monitor OpenSearch cluster monitoring using Prometheus
 * Created grafana  dashboard for OpenSearch cluster monitoring using Prometheus metrics 
 * Created grafana dashboard to record timing data for each stage in the install/upgrade of shasta products
 * Updated Prometheus to v2.41.0, alert manager to v0.25.0, and node-exporter to v1.5.0.
