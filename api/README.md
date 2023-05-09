@@ -3,6 +3,7 @@
  * [Boot Script Service v1](./bss.md)
  * [Cray Advanced Platform Monitoring and Control (CAPMC) v3](./capmc.md)
  * [Configuration Framework Service v1](./cfs.md)
+ * [Compute Rolling Upgrade Service v1](./crus.md)
  * [Firmware Action Service v1](./firmware-action.md)
  * [Heartbeat Tracker Service v1](./hbtd.md)
  * [Image Management Service v3](./ims.md)
