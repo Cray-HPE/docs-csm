@@ -6,6 +6,7 @@
  * [Compute Rolling Upgrade Service v1](./crus.md)
  * [Firmware Action Service v1](./firmware-action.md)
  * [Heartbeat Tracker Service v1](./hbtd.md)
+ * [HMS Notification Fanout Daemon v1](./hmnfd.md)
  * [Image Management Service v3](./ims.md)
  * [NCN Lifecycle Service v0](./nls.md)
  * [Power Control Service (PCS) v1](./power-control.md)
