@@ -373,11 +373,13 @@ while true; do
         if [[ "${phase}" == "Failed" ]]; then
             echo "WARNING - Workflow in Failed state, Retry ..."
             retryRebuildWorkflow "$workflow"
+            continue
         fi
 
         if [[ "${phase}" == "Error" ]]; then
             echo "WARNING - Workflow in Error state, Retry ..."
             retryRebuildWorkflow "$workflow"
+            continue
         fi
         runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " < "${res_file}")
         succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")
