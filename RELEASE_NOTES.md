@@ -72,7 +72,6 @@
 * Updated CFS log levels to be controlled through an option
 * Optimized the database queries inside of SLS
 
-
 ### New hardware support
 
 * Added `TpmState` support for Castle hardware to SCSD
@@ -114,7 +113,7 @@
 
 ### Documentation enhancements
 
-* Added documentation for 
+* Added documentation for
   * `IUF` workflows for fresh and upgrade install
   * Increasing helm chart deploy timeout
   
