@@ -120,6 +120,23 @@ For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_
 ```bash
 scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
 /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
+```
+
+### Troubleshooting `upload_ceph_images_to_nexus.sh`
+
+If the script is stuck 'Sleeping for five seconds waiting for Ceph to be healthy...' for more than 10 minutes at a time, try manually redeploying Ceph daemons with an 'error' state.
+
+1. (`ncn-s00[1/2/3]#`) Find daemons with an 'error' state.
+
+    ```bash
+    ceph orch ps | grep error
+    ```
+
+2. (`ncn-s00[1/2/3]#`) Redeploy each daemon in an error state. For example, the `daemon_name` could be `mon.ncn-s002`.
+
+    ```bash
+    ceph orch daemon redeploy <daemon_name>
+    ```
 
 ## Storage node image upgrade
 
