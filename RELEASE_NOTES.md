@@ -122,7 +122,7 @@
 
 * Created DNS records for all aliases on the NMN
 * NERSC enableD bonded NMN connections for the UANs
-* Added csm embedded repository to all NCNs on install and upgrade
+* Added CSM embedded repository to all NCNs on install and upgrade
 
 
 ### Documentation enhancements
