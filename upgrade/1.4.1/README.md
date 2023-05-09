@@ -7,7 +7,7 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.1`, follow the procedures descr
 
 ## Bug Fixes and Improvements
 
-* TO-ADD to
+* TO-ADD
 
 ## Steps
 
@@ -118,7 +118,7 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
    kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
    ```
 
-   Example output that includes the new CSM version (`1.3.1`):
+   Example output that includes the new CSM version (`1.4.1`):
 
    ```text
    0.9.2
@@ -133,6 +133,8 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
    1.2.2
    1.3.0
    1.3.1
+   1.4.0
+   1.4.1
    ```
 
 1. Confirm that the product catalog has an accurate timestamp for the CSM upgrade.
@@ -140,7 +142,7 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
    Confirm that the `import_date` reflects the timestamp of the upgrade.
 
    ```bash
-   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.3.1".configuration.import_date'
+   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.4.1".configuration.import_date'
    ```
 
 ## Complete upgrade
