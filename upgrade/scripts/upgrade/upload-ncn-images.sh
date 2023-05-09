@@ -1,0 +1,68 @@
+#!/bin/bash
+
+CSM_ARTI_DIR=${CSM_DISTDIR}
+
+if [[ -z ${CSM_ARTI_DIR} ]]; then
+    echo "CSM_ARTI_DIR environment variable needs to be set and exported. It should be set to the path \
+    of the extracted CSM product release."
+    exit 1
+fi
+
+artdir=${CSM_ARTI_DIR}/images
+SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
+export SQUASHFS_ROOT_PW_HASH
+set -o pipefail
+NCN_IMAGE_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
+set +o pipefail
+
+KUBERNETES_VERSION=$(find "${artdir}/kubernetes" -name 'kubernetes*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
+CEPH_VERSION=$(find "${artdir}/storage-ceph" -name 'storage-ceph*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')
+
+k8s_done=0
+ceph_done=0
+arch="$(uname -i)"
+if [[ -f ${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs ]]; then
+    k8s_done=1
+fi
+if [[ -f ${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs ]]; then
+    ceph_done=1
+fi
+
+if [[ ${k8s_done} = 1 && ${ceph_done} = 1 ]]; then
+    echo "Already ran ${NCN_IMAGE_MOD_SCRIPT}, skipping re-run."
+else
+    rm -f "${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs" "${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
+    DEBUG=1 "${NCN_IMAGE_MOD_SCRIPT}" \
+        -d /root/.ssh \
+        -k "${artdir}/kubernetes/kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs" \
+        -s "${artdir}/storage-ceph/storage-ceph-${CEPH_VERSION}-${arch}.squashfs" \
+        -p
+fi
+
+set -o pipefail
+IMS_UPLOAD_SCRIPT=$(rpm -ql docs-csm | grep ncn-ims-image-upload.sh)
+
+UUID_REGEX='^\{?[A-F0-9a-f]{8}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{4}-[A-F0-9a-f]{12}\}?$'
+
+export IMS_ROOTFS_FILENAME="${artdir}/kubernetes/secure-kubernetes-${KUBERNETES_VERSION}-${arch}.squashfs"
+export IMS_INITRD_FILENAME="${artdir}/kubernetes/initrd.img-${KUBERNETES_VERSION}-${arch}.xz"
+# do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
+resolve_kernel_glob=$(echo ${artdir}/kubernetes/*-${arch}.kernel)
+export IMS_KERNEL_FILENAME=$resolve_kernel_glob
+K8S_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
+[[ -n ${K8S_IMS_IMAGE_ID} ]] && [[ ${K8S_IMS_IMAGE_ID} =~ $UUID_REGEX ]]
+
+export IMS_ROOTFS_FILENAME="${artdir}/storage-ceph/secure-storage-ceph-${CEPH_VERSION}-${arch}.squashfs"
+export IMS_INITRD_FILENAME="${artdir}/storage-ceph/initrd.img-${CEPH_VERSION}-${arch}.xz"
+# do not quote this glob.  bash will add single ticks (') around it, preventing expansion later
+resolve_kernel_glob=$(echo ${artdir}/storage-ceph/*-${arch}.kernel)
+export IMS_KERNEL_FILENAME=$resolve_kernel_glob
+STORAGE_IMS_IMAGE_ID=$($IMS_UPLOAD_SCRIPT)
+[[ -n ${STORAGE_IMS_IMAGE_ID} ]] && [[ ${STORAGE_IMS_IMAGE_ID} =~ $UUID_REGEX ]]
+set +o pipefail
+
+# clean up any previous set values just in case.
+sed -i 's/^export STORAGE_IMS_IMAGE_ID.*//' /etc/cray/upgrade/csm/myenv
+sed -i 's/^export KUBERNETES_IMS_IMAGE_ID.*//' /etc/cray/upgrade/csm/myenv
+echo "export STORAGE_IMS_IMAGE_ID=${STORAGE_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
+echo "export K8S_IMS_IMAGE_ID=${K8S_IMS_IMAGE_ID}" >> /etc/cray/upgrade/csm/myenv
