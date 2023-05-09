@@ -19,15 +19,16 @@ The following steps provide instructions to boot the Pre-Install Live ISO and cr
 
 To create the bootable LiveCD image use `dd` command. Before creating the media, identify which device will be used for it. If the bootable media with LiveCD image is already prepared, then skip to [Boot the LiveCD](#boot-the-livecd).
 
-1. (`external#`) Download the LiveCD ISO.
+1. (`external#`) Obtain the cluster manager software (HPCM version 1.9) from HPE for all the required ISO files.
 
-   ```bash
-   wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/sgi/dist.engr/test/stout727/iso-latest-sles15sp4-x86_64/cm-admin-install-1.9-sles15sp4-x86_64.iso
-   ```
+    Obtain the cluster manager installation software, including patches and updates,from [My HPE Software Center
+](https://www.hpe.com/downloads/software).
+
+    > **NOTE:** User needs to have a HPE Passport account and its login credentials to access the customer portal website.
 
 1. (`external#`) Identify the USB device.
 
-   >__NOTE:__ This example shows the USB device is `/dev/sdd` on the host.
+   > **NOTE:** This example shows the USB device is `/dev/sdd` on the host.
 
    ```bash
    lsscsi
@@ -82,7 +83,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
 - _Option 2_ : Boot the LiveCD ISO image using `efibootmgr`.
 
-   >__NOTE:__ For the system to find the USB device's EFI bootloader, UEFI booting must be enabled.
+   >**NOTE:** For the system to find the USB device's EFI bootloader, UEFI booting must be enabled.
 
    1. (`external#`) Confirm that the IPMI credentials work for the BMC by checking the power status.
 
@@ -96,11 +97,11 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
          ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power status
          ```
 
-         >__NOTE:__ The `read -s` command is used to prevent the credentials from being displayed on the screen or recorded in the shell history.
+         >**NOTE:** The `read -s` command is used to prevent the credentials from being displayed on the screen or recorded in the shell history.
 
    1. (`external#`) Power the NCN on and connect to the IPMI console.
 
-      >__NOTE:__ The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects
+      >**NOTE:** The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect, however it selects
       > the primary removable media. This step instructs the user to power off the node to ensure the BIOS has the best chance at finding the USB via a cold boot.
 
       ```bash
@@ -128,7 +129,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
    1. Insert the USB stick into a recommended USB3 port.
 
-      __Information:__ USB2 port is also compatible, but USB3 port is recommended as it offers the best performance.
+      **Information:** `USB2` port is also compatible, but `USB3` port is recommended as it offers the best performance.
 
    1. (`external#`) Power the server on.
 
@@ -151,7 +152,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          ![Input prompts](../../img/install/04.png)
 
-         >__NOTE:__ It may be necessary to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after `Loading initrd...`.
+         >**NOTE:** It may be necessary to set `console=ttyS0,115200n8` or `console=ttyS1,115200n8` on some systems if the boot logs do not show after `Loading initrd...`.
 
          Once the system boots up the OS successfully, provide username and password as `root`/`cmdefault` to log in to the system.
 
@@ -200,7 +201,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
           1. (`pit#`) Access the Mellanox switch using `ssh` or `minicom`.
 
-             >__NOTE:__ The following are example commands; the actual device name and IP address may vary.
+             >**NOTE:** The following are example commands; the actual device name and IP address may vary.
 
              - Example 1 (using `ssh` to its IP address):
 
@@ -279,7 +280,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
              minicom -b 115200 -D /dev/ttyUSB1
              ```
 
-             >__NOTE:__ Device name may vary.
+             >**NOTE:** Device name may vary.
 
              The login message will look similar to the following:
 
@@ -430,11 +431,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
    1. (`pit#`) Create the SLES15 SP4 repository.
 
-      1. Download the SLES15 SP4 ISO.
-
-         ```bash
-         wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/novell/sles/15sp4/x86_64/latest/SLE-15-SP4-Full-x86_64-GM-Media1.iso
-         ```
+      1. Obtain the SLES15 SP4 ISO from your software vendor. Ensure the `SLE-15-SP4-Full-x86_64-GM-Media1.iso` is downloaded as a part of the package.
 
       1. Add the `sles15 sp4` repository.
 
@@ -444,11 +441,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
    1. (`pit#`) Create the cluster manager repository.
 
-      1. Download the cluster manager ISO.
-
-         ```bash
-         wget http://preserve.eag.rdlabs.hpecorp.net/mirrors/sgi/dist.engr/test/stout727/iso-latest-sles15sp4-x86_64/cm-1.9-cd1-media-sles15sp4-x86_64.iso
-         ```
+      > **NOTE:** The cluster manager ISO `cm-1.9-cd1-media-sles15sp4-x86_64.iso` is a part of cluster manager software (HPCM version 1.9) package downloaded in [Create the bootable media](#create-the-bootable-media) section.
 
       1. Add the cluster manager repository.
 
@@ -508,13 +501,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          ![alt text](../../img/install/19.png)
 
-      1. Skip the repository selection menu (`Repo manager`).
-
-         This is skipped because the required repositories were already installed using the `cm repo add` commands.
-
-         ![alt text](../../img/install/20.png)
-
-      1. Select the `Install and Configure Admin Cluster Software` option.
+      1. Navigate and select the `Install and Configure Admin Cluster Software` option.
 
          ![alt text](../../img/install/21.png)
 
@@ -538,39 +525,39 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          1. Select `OK` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_1.PNG)
+            ![alt text](../../img/install/common_installer_1.png)
 
          1. Select `head Network` and select `OK`.
 
-            ![alt text](../../img/install/common_installer_2.PNG)
+            ![alt text](../../img/install/common_installer_2.png)
 
          1. Change the subnet, netmask, gateway and VLAN for the `head` network.
 
-            ![alt text](../../img/install/common_installer_3.PNG)
+            ![alt text](../../img/install/common_installer_3.png)
 
          1. Select `OK` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_4.PNG)
+            ![alt text](../../img/install/common_installer_4.png)
 
          1. Select `head-bmc Network` and select `OK`.
 
-            ![alt text](../../img/install/common_installer_5.PNG)
+            ![alt text](../../img/install/common_installer_5.png)
 
          1. Change the subnet, netmask, gateway and VLAN for the `head-bmc` network.
 
-            ![alt text](../../img/install/common_installer_6.PNG)
+            ![alt text](../../img/install/common_installer_6.png)
 
          1. Select `OK` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_7.PNG)
+            ![alt text](../../img/install/common_installer_7.png)
 
          1. Select `Back` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_8.PNG)
+            ![alt text](../../img/install/common_installer_8.png)
 
          1. Select `Back` at the following prompt.
 
-            ![alt text](../../img/install/common_installer_9.PNG)
+            ![alt text](../../img/install/common_installer_9.png)
 
       1. Select the `Perform Initial Admin Node Infrastructure Setup`.
 
@@ -669,13 +656,13 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          1. Discover CECs.
 
-            __This information is not yet available.__
+            **This information is not yet available.**
 
       1.Perform automatic discovery.
 
          Management nodes, UANs, and CNs will be automatically discovered by the following procedure:
 
-         >__NOTE:__
+         >**NOTE:**
          >
          > - Ensure that all the River components are powered on, DHCP is enabled on the BMCs, and the BMCs are each on only one switch out of the available spine switches.
          >
@@ -706,7 +693,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          1. Check the power status and PXE status.
 
-            > __NOTE:__ Verify if all the River node BMCs are leased with an IP address.
+            >**NOTE:** Verify if all the River node BMCs are leased with an IP address.
 
             1. Check the power status of nodes.
 
@@ -772,7 +759,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
             cm node refresh netboot -n '*'
             ```
 
-            >__NOTE:__ Kernel version can be obtained from `cinstallman --show-default-image` command.
+            >**NOTE:** Kernel version can be obtained from `cinstallman --show-default-image` command.
 
          1. Stop the automatic discovery process.
 
@@ -818,8 +805,6 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
             ```
 
             Repeat this step until all nodes report their status as `BOOTED`. At this point, all ports to the NCNs should be enabled on the switches.
-
-         1. Create a bond network.
 
 ## Import CSM tarball
 
@@ -870,125 +855,7 @@ in `/etc/environment` from the [Download CSM tarball](#download-csm-tarball) ste
    sh csm_dep_install.sh  ${PITDATA}
    ```
 
-   >__Note:__ `${PITDATA}` is the path of the folder where the CSM tarball is extracted in the preceding step.
-
-   1. Update `dnsmasq` and `apache2` configuration files.
-
-      Download the tarball from [here](files/dhcp_http.tar.gz) and extract it in the current working directory.
-
-      ```bash
-      tar -xf dhcp_http.tar.gz
-      ```
-
-   1. Update the `apache2` and `dnsmasq` configurations as follows:
-
-     ```bash
-     cp -rv dnsmasq/dnsmasq.conf  /etc/dnsmasq.conf
-     cp -rv apache2/* /etc/apache2/
-     cp -rv  conman/conman.conf /etc/conman.conf
-     cp -rv logrotate/conman /etc/logrotate.d/conman
-     cp -rv kubectl/kubectl /usr/bin/
-     ```
-
-     (Optional) Uncomment the `tftp_secure` entry in the `dnsmasq.conf` file.
-
-   1. Stop the following services: `clmgr-power`, `dhcpd`, and `named`.
-
-     ```bash
-     systemctl stop clmgr-power
-     systemctl stop dhcpd
-     systemctl stop named
-     systemctl restart apache2
-     ```
-
-   1. If `ping dcldap3.us.cray.com` does not work, then add the following entry in `/etc/hosts`.
-
-      ```text
-      172.30.12.37    dcldap3.us.cray.com
-      ```
-
-1. (`pit#`) Get the artifact versions.
-
-   ```bash
-   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
-   echo "${KUBERNETES_VERSION}"
-   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
-   echo "${CEPH_VERSION}"
-   ```
-
-1. (`pit#`) Copy the NCN images from the expanded tarball.
-
-   >__NOTE:__ This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
-
-   ```bash
-   mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
-   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${KUBERNETES_VERSION}"
-   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${CEPH_VERSION}"
-   ```
-
-1. (`pit#`) Modify the NCN images with SSH keys and `root` passwords.
-
-   The following substeps provide the most commonly used defaults for this process. For more advanced options, see
-   [Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
-
-   1. Generate SSH keys.
-
-       >__NOTE:__ The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
-
-       ```bash
-       ssh-keygen -N "" -t rsa
-       ```
-
-   1. Export the password hash for `root` that is needed for the `ncn-image-modification.sh` script.
-
-       This will set the NCN `root` user password to be the same as the `root` user password on the PIT.
-
-       ```bash
-       export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
-       ```
-
-   1. Inject these into the NCN images by running `ncn-image-modification.sh` from the CSM documentation RPM.
-
-       ```bash
-       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
-       echo "${NCN_MOD_SCRIPT}"
-       "${NCN_MOD_SCRIPT}" -p \
-          -d /root/.ssh \
-          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
-          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
-       ```
-
-1. (`pit#`) Log the currently installed PIT packages.
-
-   Having this information in the typescript can be helpful if problems are encountered during the install.
-   This command was run once in a previous step -- running it again now is intentional.
-
-   ```bash
-   /root/bin/metalid.sh
-   ```
-
-   Expected output looks similar to the following (the versions in the example below may differ). There should be __no__ errors.
-
-   ```text
-   = PIT Identification = COPY/CUT START =======================================
-   VERSION=1.6.0
-   TIMESTAMP=20220504161044
-   HASH=g10e2532
-   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
-   CRAY-Site-Init build signature...
-   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   Build Time     : 2022-05-02T20:21:46Z
-   Go Version     : go1.16.10
-   Git Version    : v1.9.13-29-g0915d59f
-   Platform       : linux/amd64
-   App. Version   : 1.17.1
-   metal-ipxe-2.2.6-1.noarch
-   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   metal-basecamp-1.1.12-1.x86_64
-   pit-init-1.2.20-1.noarch
-   pit-nexus-1.1.4-1.x86_64
-   = PIT Identification = COPY/CUT END =========================================
-   ```
+   >**NOTE:** `${PITDATA}` is the path of the folder where the CSM tarball is extracted in the preceding step.
 
 ## Seed file generation
 
@@ -1012,7 +879,7 @@ The procedure to generate seed files is as follows:
 
    Example output:
 
-   ![store SHCD data](../../img/install/parse_shcd.PNG)
+   ![store SHCD data](../../img/install/parse_shcd.png)
 
 1. Create [`cabinets.yaml`](../create_cabinets_yaml.md) (manually).
 
@@ -1026,7 +893,7 @@ The procedure to generate seed files is as follows:
    cm cvt config create -t all --mgmt_username 'uname' --mgmt_password 'passwd' --architecture '<architecture>'
    ```
 
-   >__NOTE:__ The seed files and paddle file will be generated in the current working directory.
+   >**NOTE:** The seed files and paddle file will be generated in the current working directory.
 
 1. Save the generated seed files (`switch_metadata.csv`, `application_node_config.yaml`, `hmn_connections.json`, `ncn_metadata.csv`), paddle file (`cvt-ccj.json`), and `cvt.json`.
 

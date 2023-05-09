@@ -46,7 +46,7 @@ V2 Sessions also support several other optional arguments:
 
 Creating a new BOS V1 session requires the following command-line options:
 
-* `--template-name`: Use this option to specify the name value returned in the `cray bos sessiontemplate list` command.
+* `--template-name`: Use this option to specify the name value returned in the `cray bos v1 sessiontemplate list` command.
 * `--operation`: Use this option to indicate if a `boot`, `reboot`, `configure`, or `shutdown` action is being taken.
 
 (`ncn-mw#`): The following is a boot operation:
@@ -176,8 +176,8 @@ Example output:
 }
 ```
 
-**Troubleshooting:** There is a known issue in BOS V1 where some sessions cannot be described using the `cray bos session describe` command.
-The issue with the describe action results in a 404 error, despite the session existing in the output of `cray bos session list` command.
+**Troubleshooting:** There is a known issue in BOS V1 where some sessions cannot be described using the `cray bos v1 session describe` command.
+The issue with the describe action results in a 404 error, despite the session existing in the output of `cray bos v1 session list` command.
 
 ## Delete a Session
 

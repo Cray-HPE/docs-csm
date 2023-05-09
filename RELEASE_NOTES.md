@@ -211,6 +211,31 @@ For a list of all features with an announced removal target, see [Removals](intr
 ## Known issues
 
 * UAIs use a default route that sends outbound packets over the CMN, this will be addressed in a future release so that the default route uses the CAN/CHN.
+
 * Documented known issue with Antero node NIDs
+
+* The Slurm installer released in CPE 23.03 (`cpe-slurm-23.03-sles15-1.2.10.tar.gz`) has an issue that causes failures when installed with the IUF.
+  * (`ncn-m001#`) To work around the issue, run the following commands before the IUF `process-media` stage:
+
+    ```bash
+    tar -xf cpe-slurm-23.03-sles15-1.2.10.tar.gz
+    sed -i -e 's_-cn$_-cn/_' wlm-slurm-1.2.10/iuf-product-manifest.yaml
+    tar -zcf cpe-slurm-23.03-sles15-1.2.10.tar.gz wlm-slurm-1.2.10
+    ```
+
+  * If a previous installation failed, apply the workaround and re-install with the `iuf run --force` option.
+
+* The PBS installer released in CPE 23.03 (`cpe-pbs-23.03-sles15-1.2.10.tar.gz`) has an issue that causes failures when installed with the IUF.
+  * (`ncn-m001#`) To work around the issue, run the following commands before the IUF `process-media` stage:
+
+    ```bash
+    tar -xf cpe-pbs-23.03-sles15-1.2.10.tar.gz
+    sed -i -e 's_-cn$_-cn/_' wlm-pbs-1.2.10/iuf-product-manifest.yaml
+    tar -zcf cpe-pbs-23.03-sles15-1.2.10.tar.gz wlm-pbs-1.2.10
+    ```
+
+  * If a previous installation failed, apply the workaround and re-install with the `iuf run --force` option.
+* The CRUS subcommands are inadvertently missing from the Cray CLI. See
+  [CRUS Subcommands Missing From Cray CLI](troubleshooting/known_issues/CRUS_Subcommands_Missing_From_Cray_CLI.md).
 
 ### Security vulnerability exceptions in CSM 1.4
