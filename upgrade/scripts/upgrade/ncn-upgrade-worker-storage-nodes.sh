@@ -260,9 +260,11 @@ function getUnsucceededRebuildWorkflows() {
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
+        rm -f "${res_file}" > /dev/null 2>&1 || true
         exit 1
     fi
     jq -r ".[]? | .name?" < "${res_file}"
+    rm -f "${res_file}" > /dev/null 2>&1 || true
 }
 
 function createRebuildWorkflow() {
@@ -271,11 +273,13 @@ function createRebuildWorkflow() {
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
+        rm -f "${res_file}" > /dev/null 2>&1 || true
         exit 1
     fi
     local workflow
     workflow=$(grep -o 'ncn-lifecycle-rebuild-[a-z0-9]*' < "${res_file}" )
     echo "${workflow}"
+    rm -f "${res_file}" > /dev/null 2>&1  || true
 }
 
 function deleteRebuildWorkflow() {
@@ -284,8 +288,10 @@ function deleteRebuildWorkflow() {
     if [[ ${http_code} -ne 200 ]]; then
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
+        rm -f "${res_file}" > /dev/null 2>&1 || true 
         exit 1
     fi
+    rm -f "${res_file}" > /dev/null 2>&1 || true 
 }
 
 function retryRebuildWorkflow() {
@@ -295,6 +301,7 @@ function retryRebuildWorkflow() {
         echo "Request Failed, Response code: ${http_code}"
         cat "${res_file}"
     fi
+    rm -f "${res_file}" > /dev/null 2>&1 || true 
 }
 
 printCmdArgs
@@ -366,11 +373,13 @@ while true; do
         if [[ "${phase}" == "Failed" ]]; then
             echo "WARNING - Workflow in Failed state, Retry ..."
             retryRebuildWorkflow "$workflow"
+            continue
         fi
 
         if [[ "${phase}" == "Error" ]]; then
             echo "WARNING - Workflow in Error state, Retry ..."
             retryRebuildWorkflow "$workflow"
+            continue
         fi
         runningSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Running\")  | .name + \"\n  \" " < "${res_file}")
         succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")
@@ -381,4 +390,5 @@ while true; do
         echo "INFO - ${runningSteps}"  | awk -F'.' '{print $2" -  "$3}'
         sleep 10
     fi
+    rm -f "${res_file}" > /dev/null 2>&1 || true
 done
