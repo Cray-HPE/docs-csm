@@ -4,11 +4,12 @@
 
 ## New
 
-* v1 of Power Control Service (PCS) is active.
-* Cray CLI will default to version 2 (v2) for BOS, if a version is not specified.
-* IUF workflows are created for fresh and upgrade installs.
+* v1 of Power Control Service (PCS) is active
+* Cray CLI will default to version 2 (v2) for BOS, if a version is not specified
+* IUF workflows are created for fresh and upgrade installs
 * Singular Method for ncn image customization
 * Updates SLES SP4 Base Image 
+
 
 ### Monitoring
 
