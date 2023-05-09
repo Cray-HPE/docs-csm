@@ -94,7 +94,7 @@ cd "$CSM_DISTDIR"
 It is important to upload NCN images to IMS and to edit the `cray-product-catalog`. This is necessary when updating products
 with IUF. If this step is skipped, IUF will fail when updating or upgrading products in the future.
 
-(`ncn-m001#`) Execute script to upload CSM NCN images and update the cray-product-catalog.
+(`ncn-m001#`) Execute script to upload CSM NCN images and update the `cray-product-catalog`.
 
 ```bash
 /usr/share/doc/csm/upgrade/scripts/upgrade/upload-ncn-images.sh
