@@ -1,6 +1,6 @@
 <!-- Generator: Widdershins v4.0.1 -->
 
-<h1 id="configuration-framework-service">Configuration Framework Service v0000.0000.0000</h1>
+<h1 id="configuration-framework-service">Configuration Framework Service v1</h1>
 
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
@@ -19,10 +19,12 @@ CFS uses a Git version control server running in the management services infrast
   The CFS API allows an administrator to customize the compute and user access nodes
   in the following ways:
 * Customize the bootable images prior to their use on the system. This process is called
+
   image customization. CFS uses IMS to stage images in an ssh container and then modifies
   one or more images using Ansible.
 
 * Customize live nodes during boot or post-boot. This process is called node personalization.
+
   Node personalization involves applying software and/or configuration that differentiates
   a node or a group of nodes from all other groups of nodes.
   This should be used in scenarios where configuration cannot be applied prior to booting

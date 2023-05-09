@@ -1,6 +1,6 @@
 <!-- Generator: Widdershins v4.0.1 -->
 
-<h1 id="firmware-action-service">Firmware Action Service v1.0</h1>
+<h1 id="firmware-action-service">Firmware Action Service v1</h1>
 
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
@@ -3568,7 +3568,7 @@ This operation does not require authentication
 |overrideDryrun|boolean|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the action -<br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|state|string|false|none|The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
 |operationCounts|[OperationCounts](#schemaoperationcounts)|false|none|none|
 |description|string|false|none|none|
 |blockedBy|[string]|false|none|none|
@@ -3834,7 +3834,7 @@ This operation does not require authentication
 |snapshotID|string(uuid)|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the action -<br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|state|string|false|none|The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
 |description|string|false|none|none|
 |operationSummary|[OperationSummary](#schemaoperationsummary)|false|none|none|
 |overrideDryrun|boolean|false|none|none|
@@ -4231,7 +4231,7 @@ This operation does not require authentication
 |snapshotID|string(uuid)|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the action -<br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|state|string|false|none|The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
 |description|string|false|none|none|
 |operationSummary|[OperationDetail](#schemaoperationdetail)|false|none|none|
 |overrideDryrun|boolean|false|none|none|
@@ -4752,7 +4752,7 @@ This operation does not require authentication
 |actionID|string(uuid)|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the operation -<br>  *initial* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - cannot run because another operation is blocking this<br>  *inProgress* - operation started - sent update command<br>  *needsVerifed* - operation was sent update command, waiting for finish to verify<br>  *verifing* - opertion verifing operation<br>  *aborted* - operation was aborted<br>  *noOperation* - operation has nothing to do - already at firmware level<br>  *noSolution* - operation could not find a firmware to flash<br>  *succeeded* - opeartion completed successfully<br>  *failed* - operation failed|
+|state|string|false|none|The state of the operation -<br><br>  *initial* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - cannot run because another operation is blocking this<br>  *inProgress* - operation started - sent update command<br>  *needsVerifed* - operation was sent update command, waiting for finish to verify<br>  *verifing* - opertion verifing operation<br>  *aborted* - operation was aborted<br>  *noOperation* - operation has nothing to do - already at firmware level<br>  *noSolution* - operation could not find a firmware to flash<br>  *succeeded* - opeartion completed successfully<br>  *failed* - operation failed|
 |error|string|false|none|none|
 |xname|string|false|none|none|
 |deviceType|string|false|none|none|
@@ -5394,7 +5394,7 @@ RFC 7807 compliant error payload.  All fields are optional except the 'type' fie
 |actionID|string(uuid)|false|none|none|
 |startTime|string(date-time)|false|none|none|
 |endTime|string(date-time)|false|none|none|
-|state|string|false|none|The state of the action -<br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
+|state|string|false|none|The state of the action -<br><br>  *new* - not yet started<br>  *configured* - configured, but not yet started<br>  *blocked* - configured, but cannot run because another action is executing<br>  *running* - started<br>  *completed* - the action has completed all operations<br>  *abortSignaled* - the action has been instructed to STOP all running operations<br>  *aborted* - the action has stopped all operations|
 
 #### Enumerated Values
 

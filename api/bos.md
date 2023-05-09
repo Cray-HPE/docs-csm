@@ -1,6 +1,6 @@
 <!-- Generator: Widdershins v4.0.1 -->
 
-<h1 id="boot-orchestration-service">Boot Orchestration Service v0.0.0-api</h1>
+<h1 id="boot-orchestration-service">Boot Orchestration Service v2</h1>
 
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
@@ -1486,7 +1486,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[V1Session](#schemav1session)]|false|none|[A Session object<br><br>## Link Relationships<br><br>* self : The session object<br>]|
-|» operation|string|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a K8s Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|» operation|string|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a K8s Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
 |» templateUuid|string(string)|false|none|DEPRECATED - use templateName|
 |» templateName|string(string)|false|none|The name of the Session Template|
 |» job|string|false|read-only|The identity of the k8s job that is created to handle the session.|
@@ -7259,7 +7259,7 @@ A Session object
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|operation|string|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a K8s Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|operation|string|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a K8s Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
 |templateUuid|string(string)|false|none|DEPRECATED - use templateName|
 |templateName|string(string)|false|none|The name of the Session Template|
 |job|string|false|read-only|The identity of the k8s job that is created to handle the session.|
@@ -7692,7 +7692,7 @@ A Session Creation object
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|string|false|none|Name of the session. A uuid name is generated if a name is not provided.|
-|operation|string|true|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
+|operation|string|true|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
 |template_name|string(string)|true|none|The name of the Session Template|
 |limit|string|false|none|A comma separated of nodes, groups or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
 |stage|boolean|false|none|Set to stage a session which will not immediately change the state of any components. The "applystaged" endpoint can be called at a later time to trigger the start of this session.|
@@ -7830,7 +7830,7 @@ A Session object
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|string|false|none|Name of the session.|
-|operation|string|false|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
+|operation|string|false|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
 |template_name|string(string)|false|none|The name of the Session Template|
 |limit|string|false|none|A comma separated of nodes, groups or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
 |stage|boolean|false|none|Set to stage a session which will not immediately change the state of any components. The "applystaged" endpoint can be called at a later time to trigger the start of this session.|
