@@ -122,7 +122,7 @@ scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray
 /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
 ```
 
-### Troubleshooting `upload_ceph_images_to_nexus.sh`:
+### Troubleshooting `upload_ceph_images_to_nexus.sh`
 
 If the script is stuck 'Sleeping for five seconds waiting for Ceph to be healthy...' for more than 10 minutes at a time, try manually redeploying Ceph daemons with an 'error' state.
 
