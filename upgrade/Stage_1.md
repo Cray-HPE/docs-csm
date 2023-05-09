@@ -135,7 +135,7 @@ If the script is stuck 'Sleeping for five seconds waiting for Ceph to be healthy
 2. (`ncn-s00[1/2/3]#`) Redeploy each daemon in an error state. For example, the `daemon_name` could be `mon.ncn-s002`.
 
     ```bash
-    ceph orch daemon redeploy <damon_name>
+    ceph orch daemon redeploy <daemon_name>
     ```
 
 ## Storage node image upgrade
