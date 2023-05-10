@@ -126,7 +126,7 @@
   * Add Cray product catalog module`scripts/operations/configuration/python_lib`
   * Add NCN `squashfs` IMS ID/version/name to Cray product catalog
   * Keycloak API upgrade
-  * new name for management NCN CFS configuration
+  * New name for management NCN CFS configuration
   * `docs/pit-init` to include arch when referring to artifacts
   * Master node disk reboot test defaulted to PXE
   * New protected S3 NCN images
