@@ -240,3 +240,17 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     SNMPPrivPassword    bar2
     SNMPUsername        testuser
     ```
+
+### 1.4 Restart the SNMP backed RTS to pick up the SNMP credential changes
+
+1. Scale the SNMP backed RTS down:
+
+    ```bash
+    kubectl scale deployment cray-hms-rts-snmp -n services --replicas=0
+    ```
+
+1. Scale the SNMP backed RTS up:
+
+    ```bash
+    kubectl scale deployment cray-hms-rts-snmp -n services --replicas=1
+    ```
