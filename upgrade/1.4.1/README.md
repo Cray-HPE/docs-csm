@@ -147,10 +147,10 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
 
 ## Complete upgrade
 
-1. Remember to exit the typescript that was started at the beginning of the upgrade.
+Remember to exit the typescript that was started at the beginning of the upgrade.
 
-     ```bash
-     exit
-     ```
+```bash
+exit
+```
 
 It is recommended to save the typescript file for later reference.

@@ -23,11 +23,13 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-CSM_ARTI_DIR=${CSM_DISTDIR}
+set -u
+
+CSM_ARTI_DIR=${CSM_DISTDIR:-''}
 
 if [[ -z ${CSM_ARTI_DIR} ]]; then
-    echo "CSM_ARTI_DIR environment variable needs to be set and exported. It should be set to the path \
-    of the extracted CSM product release."
+    echo "CSM_DISTDIR environment variable needs to be set and exported. It should be set to the path \
+of the extracted CSM product release."
     exit 1
 fi
 
