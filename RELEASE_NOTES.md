@@ -15,7 +15,7 @@
 * Implemented pod monitors to scrape SMF Kafka server and zookeeper Prometheus metrics
 * Created  dashboards for Kyverno and to monitor Kyverno policy metrics with Prometheus
 * Created Grafana dashboards to monitor the internals of SMF Kafka server and zookeeper
-* Created Grafana  dashboard for `OpenSearch` cluster monitoring using Prometheus metrics
+* Created Grafana dashboard for `OpenSearch` cluster monitoring using Prometheus metrics
 * Created Prometheus Alerts for CPU and Memory usage for NCNs
 * Created Grafana dashboard to record timing data for each stage in the install/upgrade of shasta products
 * Updated Prometheus to `v2.41.0`, alert manager to `v0.25.0`, and node-exporter to `v1.5.0`
