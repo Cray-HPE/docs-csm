@@ -244,7 +244,7 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     Username    root
     ```
 
-### 1.4 Restart the SNMP backed RTS to pick up the global RTS credetial changes
+### 1.4 Restart the SNMP backed RTS to pick up the global RTS credential changes
 
 1. Scale the SNMP backed RTS down:
 
