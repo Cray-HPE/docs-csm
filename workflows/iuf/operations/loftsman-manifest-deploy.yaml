@@ -69,17 +69,27 @@ spec:
                 value: |
                   #!/usr/bin/bash
                   PRODUCT_NAME=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.name')
+                  if [[ -z "$PRODUCT_NAME" ]]; then
+                    echo "ERROR Product name not found in the product manifest. Rerun with valid product tarball from 'process-media' stage"
+                    exit 1
+                  fi
+
                   JSON_CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
                   LOFTSMAN_ENTRIES=$(echo "$JSON_CONTENT" | jq '.content.loftsman | length')
-                  PARENT_PATH=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
-                  PRODUCT_VERSION=$(echo "$JSON_CONTENT" | jq -r '.version')
-                  if [[ "${PRODUCT_VERSION,,}" == "null" ]] || [[ -z "$PRODUCT_VERSION" ]]; then
-                      echo "ERROR product version not found in manifest"
+                  if [[ -z "$LOFTSMAN_ENTRIES" ]]; then
+                      echo "ERROR Cannot access loftsman context for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
                       exit 1
                   fi
 
-                  if [[ -z "$LOFTSMAN_ENTRIES" ]]; then
-                      echo "ERROR Did not receive any loftsman context."
+                  PARENT_PATH=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
+                  if [ ! -d $PARENT_PATH ]; then
+                      echo "ERROR Cannot access product directory for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
+                      exit 1
+                  fi
+
+                  PRODUCT_VERSION=$(echo "$JSON_CONTENT" | jq -r '.version')
+                  if [[ "${PRODUCT_VERSION,,}" == "null" ]] || [[ -z "$PRODUCT_VERSION" ]]; then
+                      echo "ERROR Cannot access product version for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
                       exit 1
                   fi
 
@@ -88,13 +98,19 @@ spec:
                     product_name=$2
                     exit_code=0
 
-                    if ! cray artifacts get config-data argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" /tmp/"$(basename $manifest)"; then
-                      echo "ERROR Could not get argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" from s3. It cannot be deployed because of this."
+                    artifacts_get_output=$(cray artifacts get config-data argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" /tmp/"$(basename $manifest)" 2>&1)
+                    if [ $? -ne 0 ]; then
+                      artifacts_get_output=$(echo "$artifacts_get_output" | sed -e 's/^/DEBUG /')
+                      echo "ERROR Could not deploy product $product_name since artifacts argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" are not available from S3"
+                      echo -e "DEBUG <cray artifacts get config-data argo/loftsman/${product_name}/${PRODUCT_VERSION}/manifests/"$(basename $manifest)" /tmp/"$(basename $manifest)"> failed with\n\n$artifacts_get_output"
                       exit_code=1
                     else
-                      echo "INFO Deploying ${manifest}"
-                      if ! loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts; then
-                        echo "ERROR There was a problem deploying ${manifest}."
+                      echo "INFO Deploying loftman manifest ${manifest}"
+                      manifest_deploy_output=$(loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts 2>&1)
+                      if [ $? -ne 0 ]; then
+                        manifest_deploy_output=$(echo "$manifest_deploy_output" | sed -e 's/^/ERROR /')
+                        echo "ERROR There was a problem deploying the loftsman manifest ${manifest}"
+                        echo -e "ERROR <loftsman ship --manifest-path /tmp/"$(basename $manifest)" --charts-repo https://packages.local/repository/charts> failed with\n\n $manifest_deploy_output"
                         exit_code=1
                       fi
                     fi
@@ -113,7 +129,7 @@ spec:
                     elif [ -f $MANIFEST_PATH ]; then
                       IS_DIR=false
                     else
-                      echo "ERROR Unable to find file or directory: $MANIFEST_PATH. (deploy=${DEPLOY})"
+                      echo "ERROR Unable to find loftsman manifest file or directory $MANIFEST_PATH. Skipped"
                       err=1
                       path_exists=false
                     fi
@@ -125,15 +141,25 @@ spec:
                         echo "INFO Deploying loftsman manifests under $MANIFEST_PATH/"
                         manifest_files=$(ls "${MANIFEST_PATH}"/*.yml "${MANIFEST_PATH}"/*.yaml 2>/dev/null) || true
                         for manifest in $manifest_files; do
-                          deploy_manifest ${manifest} $PRODUCT_NAME
-                          if [[ $? != 0 ]]; then err=1; fi
+                          deploy_output=$(deploy_manifest ${manifest} $PRODUCT_NAME)
+                          if [[ $? != 0 ]]; then
+                            deploy_output=$(echo "$deploy_output" | sed -e 's/^/DEBUG /')
+                            echo "ERROR Unable to deploy manifest $manifest for product $PRODUCT_NAME"
+                            echo -e "DEBUG Loftsman manifest deployment failed with\n\n$deploy_output"
+                            err=1
+                          fi
                         done
                       else
-                        deploy_manifest $MANIFEST_PATH $PRODUCT_NAME
-                        if [[ $? != 0 ]]; then err=1; fi
+                        deploy_output=$(deploy_manifest $MANIFEST_PATH $PRODUCT_NAME)
+                        if [[ $? != 0 ]]; then
+                          deploy_output=$(echo "$deploy_output" | sed -e 's/^/DEBUG /')
+                          echo "ERROR Unable to deploy manifest $MANIFEST_PATH for product $PRODUCT_NAME"
+                          echo -e "DEBUG Loftsman manifest deployment failed with\n\n$deploy_output"
+                          err=1
+                        fi
                       fi
                     else
-                      echo "NOTICE Not deploying argo/loftsman/${PRODUCT_NAME}/${PRODUCT_VERSION}/manifests/$(basename ${MANIFEST}) because loftsman.deploy=${DEPLOY}."
+                      echo "NOTICE Not deploying argo/loftsman/${PRODUCT_NAME}/${PRODUCT_VERSION}/manifests/$(basename ${MANIFEST}) because loftsman deploy flag is not set to 'true/True' in the manifest"
                     fi
                   done
 
