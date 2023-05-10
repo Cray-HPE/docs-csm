@@ -95,18 +95,18 @@ nodes (NCNs) in air cooled cabinets.
 The `/power-status` API in PCS can be used to monitor the Availability/Reachability of all managed hardware.
 PCS periodically reaches out to all managed hardware for status. This includes the following hardware types:
 
-* Chassis
-* ChassisBMC
-* ComputeModule
-* RouterModule
-* NodeBMC
-* RouterBMC
-* Node
-* HSNBoard
-* MgmtSwitch
-* MgmtHLSwitch
-* CDUMgmtSwitch
-* CabinetPDUPowerConnector
+* `Chassis`
+* `ChassisBMC`
+* `ComputeModule`
+* `RouterModule`
+* `NodeBMC`
+* `RouterBMC`
+* `Node`
+* `HSNBoard`
+* `MgmtSwitch`
+* `MgmtHLSwitch`
+* `CDUMgmtSwitch`
+* `CabinetPDUPowerConnector`
 
 PCS will respond with the power status, the manager availability, what power controls are available, and when
 the component's entry was last updated. For example:
