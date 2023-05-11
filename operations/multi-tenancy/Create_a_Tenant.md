@@ -30,16 +30,21 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
       name: vcluster-blue
     spec:
       childnamespaces:
-        - user
-        - slurm
+      - slurm
+      - user
       tenantname: vcluster-blue
       tenantresources:
-        - type: compute
-          hsmgrouplabel: blue
-          enforceexclusivehsmgroups: true
-          xnames:
-            - x0c3s5b0n0
-            - x0c3s6b0n0
+      - enforceexclusivehsmgroups: true
+        hsmgrouplabel: blue
+        type: compute
+        xnames:
+        - x3000c0s19b1n0
+        - x3000c0s19b3n0
+      - enforceexclusivehsmgroups: true
+        hsmgrouplabel: blue
+        type: application
+        xnames:
+        - x3000c0s32b0n0
     ```
 
 ## Apply the TAPMS CR
@@ -71,20 +76,22 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     kind: Tenant
     metadata:
       annotations:
+        kopf.zalando.org/last-handled-configuration: |
+          {"spec":{"childnamespaces":["slurm","user"],"state":"Deployed","tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x3000c0s19b1n0","x3000c0s19b3n0"]},{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"application","xnames":["x3000c0s32b0n0"]}]}}
         kubectl.kubernetes.io/last-applied-configuration: |
-          {"apiVersion":"tapms.hpe.com/v1alpha1","kind":"Tenant","metadata":{"annotations":{},"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["user","slurm"],"tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x0c3s5b0n0","x0c3s6b0n0"]}]}}
-      creationTimestamp: "2022-08-23T18:37:25Z"
+          {"apiVersion":"tapms.hpe.com/v1alpha1","kind":"Tenant","metadata":{"annotations":{"kopf.zalando.org/last-handled-configuration":"{\"spec\":{\"childnamespaces\":[\"user\",\"slurm\"],\"state\":\"Deployed\",\"tenantname\":\"vcluster-test1\",\"tenantresources\":[{\"enforceexclusivehsmgroups\":true,\"hsmgrouplabel\":\"test1\",\"type\":\"compute\",\"xnames\":[\"x3000c0s19b1n0\",\"x3000c0s19b3n0\"]}]}}\n"},"finalizers":["tapms.hpe.com/finalizer"],"generation":3,"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["slurm","user"],"state":"Deployed","tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x3000c0s19b1n0","x3000c0s19b3n0"]},{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"application","xnames":["x3000c0s32b0n0"]}]}}
+      creationTimestamp: "2023-05-11T14:36:12Z"
       finalizers:
       - tapms.hpe.com/finalizer
-      generation: 3
+      generation: 2
       name: vcluster-blue
       namespace: tenants
-      resourceVersion: "3157072"
-      uid: 074b6db1-f504-4e9c-8245-259e9b22d2e6
+      resourceVersion: "134562804"
+      uid: f6ceb492-1e7b-4569-88be-f6b53bfb25fd
     spec:
       childnamespaces:
-      - user
       - slurm
+      - user
       state: Deployed
       tenantname: vcluster-blue
       tenantresources:
@@ -92,20 +99,30 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
         hsmgrouplabel: blue
         type: compute
         xnames:
-        - x0c3s5b0n0
-        - x0c3s6b0n0
+        - x3000c0s19b1n0
+        - x3000c0s19b3n0
+      - enforceexclusivehsmgroups: true
+        hsmgrouplabel: blue
+        type: application
+        xnames:
+        - x3000c0s32b0n0
     status:
       childnamespaces:
-      - vcluster-blue-user
       - vcluster-blue-slurm
+      - vcluster-blue-user
       tenantresources:
       - enforceexclusivehsmgroups: true
         hsmgrouplabel: blue
         type: compute
         xnames:
-        - x0c3s5b0n0
-        - x0c3s6b0n0
-      uuid: 074b6db1-f504-4e9c-8245-259e9b22d2e6
+        - x3000c0s19b1n0
+        - x3000c0s19b3n0
+      - enforceexclusivehsmgroups: true
+        hsmgrouplabel: blue
+        type: application
+        xnames:
+        - x3000c0s32b0n0
+      uuid: f6ceb492-1e7b-4569-88be-f6b53bfb25fd
     ```
 
 - (`ncn-mw#`) The `cray` command can now be used to display the HSM group:
@@ -123,7 +140,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     tags = [ "vcluster-blue",]
 
     [members]
-    ids = [ "x0c3s5b0n0", "x0c3s6b0n0",]
+    ids = [ "x3000c0s19b1n0", "x3000c0s19b3n0", "x3000c0s32b0n0",]
     ```
 
 - (`ncn-mw#`) The following command can now be used to display the namespace tree structure for the tenant:
