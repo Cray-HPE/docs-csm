@@ -18,6 +18,7 @@ Glossary of terms used in CSM documentation.
 * [Content Projection Service (CPS)](#content-projection-service-cps)
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
 * [Cray CLI (`cray`)](#cray-cli-cray)
+* [Cray Security Token Service (STS)](#cray-security-token-service-sts)
 * [Cray Site Init (CSI)](#cray-site-init-csi)
 * [Cray System Management (CSM)](#cray-system-management-csm)
 * [Customer Access Network (CAN)](#customer-access-network-can)
@@ -25,6 +26,7 @@ Glossary of terms used in CSM documentation.
 * [EX Compute Cabinet](#ex-compute-cabinet)
 * [EX TDS Cabinet](#ex-tds-cabinet)
 * [Fabric](#fabric)
+* [Firmware Action Service (FAS)](#firmware-action-service-fas)
 * [Floor Standing CDU](#floor-standing-cdu)
 * [Hardware Management Network (HMN)](#hardware-management-network-hmn)
 * [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon-hmnfd)
@@ -58,6 +60,7 @@ Glossary of terms used in CSM documentation.
 * [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram)
 * [Supply/Return Cutoff Valves](#supply-return-cutoff-valves)
 * [System Admin Toolkit (SAT)](#system-admin-toolkit)
+* [System Configuration Service (SCSD)](#system-configuration-service-scsd)
 * [System Layout Service (SLS)](#system-layout-service)
 * [System Management Network (SMNet)](#system-management-network)
 * [System Management Services (SMS)](#system-management-services-sms)
@@ -193,7 +196,7 @@ The Compute Rolling Upgrade Service (CRUS) upgrades sets of [compute nodes](#com
 set of nodes to be out of service at once. CRUS manages the workload management status of nodes, handling each of the steps
 required to upgrade compute nodes.
 
-See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
+For more information, see [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
 
 **Note:** CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be replaced with BOS V2, which will provide similar functionality.
 
@@ -243,6 +246,10 @@ For more information, see [Cray Advanced Platform Monitoring and Control](operat
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management
 REST APIs into easily usable commands.
 
+## Cray Security Token Service (STS)
+
+The Cray Security Token Service (STS) generates short-lived Ceph S3 credentials.
+
 <a name="cray-site-init"></a>
 
 ## Cray Site Init (CSI)
@@ -284,7 +291,7 @@ and [User Access Nodes (UANs)](#user-access-node-uan) in the system. This allows
 These nodes and services need an IP address that routes to the customer's network in order to be accessed from
 outside the network.
 
-For more information, see [Customer Accessible Networks](operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
+For more information, see [Customer Access Network (CAN)](operations/network/customer_access_network/Customer_Access_Network_CAN.md).
 
 <a name="data-virtualization-service"></a>
 
@@ -304,16 +311,6 @@ with the [Content Projection Service (CPS)](#content-projection-service-cps).
 This Liquid-Cooled [Olympus cabinet](#olympus-cabinet) is a dense compute cabinet that supports 64 compute blades and 64
 [High Speed Network (HSN)](#high-speed-network-hsn) switches.
 
-<a name="image-management-service"></a>
-
-## Image Management Service (IMS)
-
-The Image Management Service (IMS) uses the open source Kiwi-NG tool to build image roots from
-recipes. IMS also uses [CFS](#configuration-framework-service-cfs) to apply image customization for pre-boot
-configuration of the image root. These images are bootable on [compute nodes](#compute-node-cn) and [application nodes](#application-node-an).
-
-For more information, see [Image Management](operations/image_management/Image_Management.md).
-
 ## EX TDS Cabinet
 
 A Liquid-Cooled TDS cabinet is a dense compute cabinet that supports 2-chassis, 16
@@ -324,6 +321,14 @@ compute blades and 16 [High Speed Network (HSN)](#high-speed-network-hsn) switch
 
 The [Slingshot](#slingshot) fabric consists of the switches, cables, ports, topology policy, and
 configuration settings for the Slingshot [High-Speed Network](#high-speed-network-hsn).
+
+## Firmware Action Service (FAS)
+
+The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system.
+FAS interacts with the [Hardware State Manager (HSM)](#hardware-state-manager-hsm), device data, and image data in order to update
+firmware.
+
+For more information, see [Update firmware with FAS](operations/firmware/Update_Firmware_with_FAS.md).
 
 ## Floor Standing CDU
 
@@ -372,6 +377,16 @@ It tracks changes in heartbeats and conveys changes to the [HSM](#hardware-state
 ## High Speed Network (HSN)
 
 The High Speed Network (HSN) in an HPE Cray EX system is based on the [Slingshot](#slingshot) switches.
+
+<a name="image-management-service"></a>
+
+## Image Management Service (IMS)
+
+The Image Management Service (IMS) uses the open source Kiwi-NG tool to build image roots from
+recipes. IMS also uses [CFS](#configuration-framework-service-cfs) to apply image customization for pre-boot
+configuration of the image root. These images are bootable on [compute nodes](#compute-node-cn) and [application nodes](#application-node-an).
+
+For more information, see [Image Management](operations/image_management/Image_Management.md).
 
 ## Kubernetes NCNs
 
@@ -606,6 +621,12 @@ valves are closed during operation, the action automatically causes the [CMMs](#
 
 The System Admin Toolkit (SAT) product provides the `sat` command line interface which interacts with the REST APIs of many services to perform more complex system management tasks.
 
+## System Configuration Service (SCSD)
+
+The System Configuration Service (SCSD) allows administrators to set various [BMC](#baseboard-management-controller-bmc) and
+controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or
+after discovery.
+
 <a name="system-layout-service"></a>
 
 ## System Layout Service (SLS)
@@ -655,7 +676,7 @@ on worker nodes. The UAI provides a single user containerized environment for us
 develop, build, and execute their applications on the HPE Cray EX [compute node](#compute-node-cn). See [UAN](#user-access-node-uan) for another
 way for users to gain access.
 
-For more information, see [User Access Service](operations/UAS_user_and_admin_topics/index.md).
+For more information, see [User Access Service](operations/UAS_user_and_admin_topics/User_Access_Service_UAS.md).
 
 <a name="user-access-node"></a>
 
@@ -676,7 +697,7 @@ Kubernetes worker node. When a user requests a new UAI, the UAS service returns 
 information to the newly created UAI. External access to UAS is routed through a node that hosts
 gateway services.
 
-For more information, see [User Access Service](operations/UAS_user_and_admin_topics/index.md).
+For more information, see [User Access Service](operations/UAS_user_and_admin_topics/User_Access_Service_UAS.md).
 
 <a name="version-control-service"></a>
 
