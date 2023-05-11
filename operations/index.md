@@ -581,7 +581,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 ## Update firmware with FAS
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State
-Managers (HSM), device data, and image data in order to update firmware.
+Manager (HSM), device data, and image data in order to update firmware.
 
 See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list components that are upgradable with FAS. Refer to the HPC Firmware Pack (HFP) product
 stream to update firmware on other components.
@@ -593,6 +593,7 @@ stream to update firmware on other components.
 - [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
 - [FAS Use Cases](firmware/FAS_Use_Cases.md)
 - [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
+- [Updating Firmware on `m001`](firmware/Updating_Firmware_m001.md)
 
 ## User Access Service (UAS)
 
