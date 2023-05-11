@@ -40,6 +40,7 @@ The following administrative topics can be found in this guide:
 - [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
 - [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 - [Backup and recovery](#backup-and-recovery)
+- [Multi-tenancy](#multi-tenancy)
 
 ## CSM product management
 
@@ -81,6 +82,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Configure IMS to Use DKMS](image_management/Configure_IMS_to_Use_DKMS.md)
 - [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
 - [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
+- [IMS API](../api/ims.md)
 
 ## Boot orchestration
 
@@ -112,6 +114,8 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
 - [BOS Options](boot_orchestration/Options.md)
 - [Exporting and Importing BOS Data](boot_orchestration/Exporting_and_Importing_BOS_Data.md)
 - [Rolling Upgrades using BOS](boot_orchestration/Rolling_Upgrades.md)
+- [BOS API](../api/bos.md)
+- [Boot Script Service (BSS) API](../api/bss.md)
 - [BOS Limitations for Gigabyte BMC Hardware](boot_orchestration/Limitations_for_Gigabyte_BMC_Hardware.md)
 - [Compute Node Boot Sequence](boot_orchestration/Compute_Node_Boot_Sequence.md)
   - [Healthy Compute Node Boot Process](boot_orchestration/Healthy_Compute_Node_Boot_Process.md)
@@ -175,6 +179,8 @@ HPE Cray System Management (CSM) software manages and controls power out-of-band
 - [Standard Rack Node Power Management](power_management/Standard_Rack_Node_Power_Management.md)
 - [Ignore Nodes with CAPMC](power_management/Ignore_Nodes_with_CAPMC.md)
 - [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
+- [CAPMC API](../api/capmc.md)
+- [PCS API](../api/power-control.md)
 
 ## Artifact management
 
@@ -200,6 +206,7 @@ administrators to limit the impact on production caused from upgrading compute n
 - [Compute Rolling Upgrade Service (CRUS)](compute_rolling_upgrades/Compute_Rolling_Upgrades.md)
 - [CRUS Workflow](compute_rolling_upgrades/CRUS_Workflow.md)
 - [Upgrade Compute Nodes with CRUS](compute_rolling_upgrades/Upgrade_Compute_Nodes_with_CRUS.md)
+- [CRUS API](../api/crus.md)
 - [Troubleshoot Nodes Failing to Upgrade in a CRUS Session](compute_rolling_upgrades/Troubleshoot_Nodes_Failing_to_Upgrade_in_a_CRUS_Session.md)
 - [Troubleshoot a Failed CRUS Session Because of Unmet Conditions](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Unmet_Conditions.md)
 - [Troubleshoot a Failed CRUS Session Because of Bad Parameters](compute_rolling_upgrades/Troubleshoot_a_Failed_CRUS_Session_Due_to_Bad_Parameters.md)
@@ -246,6 +253,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
 - [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
   - [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
 - [CFS Key Management](configuration_management/CFS_Key_Management.md)
+- [CFS API](../api/cfs.md)
 - [Accessing `sat bootprep` Files](configuration_management/Accessing_Sat_Bootprep_Files.md)
 - Management node personalization and image customization
   - [Management Node Personalization](configuration_management/Management_Node_Personalization.md)
@@ -363,6 +371,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
 - [API Authorization](security_and_authentication/API_Authorization.md)
 - [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 - [Audit Logs](security_and_authentication/Audit_Logs.md)
+- [Cray STS Token Generator API](../api/sts.md)
 
 ## Resiliency
 
@@ -454,6 +463,7 @@ stores information about the network, such as which port on which switch should 
 - [Create a Backup of the SLS Postgres Database](system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md)
 - [Restore SLS Postgres Database from Backup](system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
 - [Restore SLS Postgres without an Existing Backup](system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
+- [SLS API](../api/sls.md)
 
 ## System configuration service
 
@@ -464,6 +474,7 @@ this tool enables parameters to be set before or after discovery. The operations
 - [Configure BMC and Controller Parameters with SCSD](system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
 - [Manage Parameters with the SCSD Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
 - [Set BMC Credentials](system_configuration_service/Set_BMC_Credentials.md)
+- [SCSD API](../api/scsd.md)
 
 ## Hardware State Manager (HSM)
 
@@ -488,6 +499,9 @@ making it available via REST queries and message bus events when changes occur.
 - [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
 - [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 - [Set BMC Management Role](hardware_state_manager/Set_BMC_Management_Role.md)
+- [HSM API](../api/smd.md)
+- [Heartbeat Tracker Daemon (HBTD) API](../api/hbtd.md)
+- [Hardware Management Notification Fanout Daemon (HMNFD) API](../api/hmnfd.md)
 
 ## Hardware Management (HM) collector
 
@@ -568,6 +582,7 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 - [NCN Drive Identification](node_management/NCN_Identify_Drives_Using_ledctl.md)
 - [Manual Wipe Procedures](node_management/Wipe_NCN_Disks.md)
 - [Build NCN Images Locally](node_management/Build_NCN_Images_Locally.md)
+- [NCN Lifecycle Service (NLS) API](../api/nls.md)
 
 ## Network
 
@@ -667,7 +682,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 ## Update firmware with FAS
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State
-Managers (HSM), device data, and image data in order to update firmware.
+Manager (HSM), device data, and image data in order to update firmware.
 
 See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list components that are upgradable with FAS. Refer to the HPC Firmware Pack (HFP) product
 stream to update firmware on other components.
@@ -675,12 +690,12 @@ stream to update firmware on other components.
 - [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md)
 - [Using the `FASUpdate` Script](firmware/FASUpdate_Script.md)
 - [FAS CLI](firmware/FAS_CLI.md)
+- [FAS API](../api/firmware-action.md)
 - [FAS Filters](firmware/FAS_Filters.md)
 - [FAS Recipes and Procedures](firmware/FAS_Use_Cases.md)
 - [FAS Recipes](firmware/FAS_Recipes.md)
 - [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
 - [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
-
 - [Updating Firmware on `m001`](firmware/Updating_Firmware_m001.md)
 - [Updating Firmware without FAS](firmware/Updating_Firmware_without_FAS.md)
 
@@ -690,6 +705,7 @@ The User Access Service \(UAS\) is a containerized service managed by Kubernetes
 a User Access Instance \(UAI\) using the `cray` command. Users can also transfer data between the Cray system and external systems using the UAI.
 
 - [User Access Service (UAS)](UAS_user_and_admin_topics/README.md)
+- [UAS API](../api/uas-mgr.md)
 - [End-User UAIs](UAS_user_and_admin_topics/End_User_UAIs.md)
 - [Special Purpose UAIs](UAS_user_and_admin_topics/Special_Purpose_UAIs.md)
 - [Elements of a UAI](UAS_user_and_admin_topics/Elements_of_a_UAI.md)
@@ -815,3 +831,15 @@ these backups.
 - Workload managers
   - [PBS Service Recovery](System_Recovery/PBS_Service_Recovery.md)
   - [Slurm Service Recovery](System_Recovery/Slurm_Service_Recovery.md)
+
+## Multi-tenancy
+
+- [Multi-tenancy Support](multi-tenancy/Overview.md)
+- [Cray Hierarchical Namespace Controller (HNC) Manager](multi-tenancy/CrayHncManager.md)
+- [Tenant Administrator Configuration](multi-tenancy/TenantAdminConfig.md)
+- [Creating a Tenant](multi-tenancy/Create_a_Tenant.md)
+- [Modifying a Tenant](multi-tenancy/Modify_a_Tenant.md)
+- [Removing a Tenant](multi-tenancy/Remove_a_Tenant.md)
+- [Slurm Operator](multi-tenancy/SlurmOperator.md)
+- [Tenant and Partition Management System (TAPMS) Overview](multi-tenancy/Tapms.md)
+- [TAPMS Tenant Status API](../api/tapms-operator.md)
