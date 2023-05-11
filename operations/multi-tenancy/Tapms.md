@@ -1,9 +1,10 @@
 # TAPMS (Tenant and Partition Management System) Overview
 
-* [Overview](#overview)
-* [Tenant schema](#tenant-schema)
-* [Reconcile operations](#reconcile-operations)
-* [Tenant states](#tenant-states)
+- [TAPMS (Tenant and Partition Management System) Overview](#tapms-tenant-and-partition-management-system-overview)
+  - [Overview](#overview)
+  - [Tenant schema](#tenant-schema)
+  - [Reconcile operations](#reconcile-operations)
+  - [Tenant states](#tenant-states)
 
 ## Overview
 
@@ -19,11 +20,11 @@ See the [Tenant Custom Resource Definition](https://github.com/Cray-HPE/cray-tap
 | ----- | ----------- |
 | `tenantname` | Name of the tenant. See [Tenant naming requirements](CrayHncManager.md#tenant-naming-requirements) for restrictions on tenant naming. |
 | `childnamespaces` | List of namespaces that should be created for the tenant. These namespaces be created with the name specified here, prepended with the required HNC prefix. |
-| `tenantresources`.`type` | Only `compute` is supported in the initial release of `tapms`. |
+| `tenantresources`.`type` | Only `compute` and `application` are supported in the current release of `tapms`. |
 | `tenantresources`.`hsmgrouplabel` | The name of the HSM group label for the `xnames` specified below (mutually exclusive from `hsmpartitionname`). |
 | `tenantresources`.`hsmpartitionname` | The name of the HSM partition to create and assignments for the `xnames` specified below  (mutually exclusive from `hsmgrouplabel`). |
 | `tenantresources`.`enforceexclusivehsmgroups` | If `true`, tenants that share this setting will not be allowed to specify the same `xname` (only appropriate if `hsmgrouplabel` is also specified). |
-| `tenantresources`.`xnames` | List of compute component names (xnames) that this tenant is allowed to use for running jobs. |
+| `tenantresources`.`xnames` | List of compute or application component names (xnames) that this tenant is allowed to use for running jobs. |
 
 ## Reconcile operations
 
