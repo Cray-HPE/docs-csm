@@ -39,6 +39,7 @@ The following administrative topics can be found in this guide:
 - [User Access Service (UAS)](#user-access-service-uas)
 - [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
 - [Backup and recovery](#backup-and-recovery)
+- [Multi-tenancy](#multi-tenancy)
 
 ## CSM product management
 
@@ -665,7 +666,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 ## Update firmware with FAS
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State
-Managers (HSM), device data, and image data in order to update firmware.
+Manager (HSM), device data, and image data in order to update firmware.
 
 See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list components that are upgradable with FAS. Refer to the HPC Firmware Pack (HFP) product
 stream to update firmware on other components.
@@ -677,6 +678,8 @@ stream to update firmware on other components.
 - [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
 - [FAS Use Cases](firmware/FAS_Use_Cases.md)
 - [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
+- [Updating Firmware on `m001`](firmware/Updating_Firmware_m001.md)
+- [Updating Firmware without FAS](firmware/Updating_Firmware_without_FAS.md)
 
 ## User Access Service (UAS)
 
@@ -785,7 +788,6 @@ these backups.
 - Spire
   - [Create a Backup of the Spire Postgres Database](spire/Create_a_backup_of_the_Spire_Postgres_Database.md)
   - [Restore Spire Postgres without a Backup](spire/Restore_Spire_Postgres_without_a_Backup.md)
-  - [Spire Service Recovery](spire/Spire_Service_Recovery.md)
 - Version Control Service (VCS)
   - [Backup and restore data](configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data)
 - Boot Orchestration Service (BOS)
@@ -794,3 +796,14 @@ these backups.
   - [Exporting and Importing CFS Data](configuration_management/Exporting_and_Importing_CFS_Data.md)
 - Image Management Service (IMS)
   - [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
+
+## Multi-tenancy
+
+- [Multi-tenancy Support](multi_tenancy/Overview.md)
+- [Cray Hierarchical Namespace Controller (HNC) Manager](multi_tenancy/CrayHncManager.md)
+- [Tenant Administrator Configuration](multi_tenancy/TenantAdminConfig.md)
+- [Creating a Tenant](multi_tenancy/Create_a_Tenant.md)
+- [Modifying a Tenant](multi_tenancy/Modify_a_Tenant.md)
+- [Removing a Tenant](multi_tenancy/Remove_a_Tenant.md)
+- [Slurm Operator](multi_tenancy/SlurmOperator.md)
+- [Tenant and Partition Management System (TAPMS) Overview](multi_tenancy/Tapms.md)
