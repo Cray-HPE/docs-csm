@@ -58,7 +58,7 @@ ERROR (run tag KPEqc-crus): CLI command failed (and does not look like a CLI con
 
 Until the update Cray CLI RPM is installed, the only workaround is to access CRUS directly using its API.
 For details on how to use the API, see
-[Compute Rolling Upgrade Service v1](../../api/crus.md).
+[Compute Rolling Upgrade Service API](../../api/crus.md).
 
 ## Fix
 
