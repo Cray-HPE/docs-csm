@@ -18,6 +18,7 @@ Glossary of terms used in CSM documentation.
 * [Content Projection Service (CPS)](#content-projection-service-cps)
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
 * [Cray CLI (`cray`)](#cray-cli-cray)
+* [Cray Security Token Service (STS)](#cray-security-token-service-sts)
 * [Cray Site Init (CSI)](#cray-site-init-csi)
 * [Cray System Management (CSM)](#cray-system-management-csm)
 * [Customer Access Network (CAN)](#customer-access-network-can)
@@ -25,6 +26,7 @@ Glossary of terms used in CSM documentation.
 * [EX Compute Cabinet](#ex-compute-cabinet)
 * [EX TDS Cabinet](#ex-tds-cabinet)
 * [Fabric](#fabric)
+* [Firmware Action Service (FAS)](#firmware-action-service-fas)
 * [Floor Standing CDU](#floor-standing-cdu)
 * [Hardware Management Network (HMN)](#hardware-management-network-hmn)
 * [Hardware Management Notification Fanout Daemon (HMNFD)](#hardware-management-notification-fanout-daemon-hmnfd)
@@ -33,9 +35,11 @@ Glossary of terms used in CSM documentation.
 * [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
 * [High Speed Network (HSN)](#high-speed-network-hsn)
 * [Image Management Service (IMS)](#image-management-service-ims)
+* [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 * [Management Nodes](#management-nodes)
 * [Mountain Cabinet](#mountain-cabinet)
 * [Mountain Endpoint Discovery Service (MEDS)](#mountain-endpoint-discovery-service-meds)
+* [NCN Lifecycle Service (NLS)](#ncn-lifecycle-service-nls)
 * [NIC Mezzanine Card (NMC)](#nic-mezzanine-card-nmc)
 * [Node Controller (nC)](#node-controller-nc)
 * [Node Management Network (NMN)](#node-management-network-nmn)
@@ -59,6 +63,7 @@ Glossary of terms used in CSM documentation.
 * [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram-shcd)
 * [Supply/Return Cutoff Valves](#supplyreturn-cutoff-valves)
 * [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
+* [System Configuration Service (SCSD)](#system-configuration-service-scsd)
 * [System Layout Service (SLS)](#system-layout-service-sls)
 * [System Management Network (SMNet)](#system-management-network-smnet)
 * [System Management Services (SMS)](#system-management-services-sms)
@@ -112,12 +117,15 @@ power control ([CAPMC](#cray-advanced-platform-monitoring-and-control-capmc)),
 node status ([HSM](#hardware-state-manager-hsm)),
 and configuration ([CFS](#configuration-framework-service-cfs)).
 
-For more information, see [Boot Orchestration](operations/boot_orchestration/Boot_Orchestration.md).
+* For more information on BOS, see [Boot Orchestration](operations/boot_orchestration/Boot_Orchestration.md).
+* For more information on the BOS API, see [BOS API](api/bos.md).
 
 ## Boot Script Service (BSS)
 
 The Boot Script Service stores the configuration information that is used to boot each hardware
 component. Nodes consult BSS for their boot artifacts and boot parameters when nodes boot or reboot.
+
+For more information on the BSS API, see [BSS API](api/bss.md).
 
 ## Cabinet Cooling Group
 
@@ -175,7 +183,8 @@ The Compute Rolling Upgrade Service (CRUS) upgrades sets of [compute nodes](#com
 set of nodes to be out of service at once. CRUS manages the workload management status of nodes, handling each of the steps
 required to upgrade compute nodes.
 
-See [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
+* For more information on CRUS, see [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
+* For more information on the CRUS API, see [CRUS API](api/crus.md).
 
 > **`NOTES`**
 >
@@ -200,7 +209,8 @@ and is managed by authorized system administrators. CFS provides a scalable
 [Ansible Execution Environment (AEE)](#ansible-execution-environment-aee) for the configuration to be applied with flexible
 inventory and node targeting options.
 
-For more information, see [Configuration Management](operations/configuration_management/Configuration_Management.md).
+* For more information on CFS, see [Configuration Management](operations/configuration_management/Configuration_Management.md).
+* For more information on the CFS API, see [CFS API](api/cfs.md).
 
 ## Content Projection Service (CPS)
 
@@ -218,12 +228,19 @@ node state information, and querying site-specific service usage rules. These co
 software to more intelligently manage system-wide power consumption or configuration parameters. CAPMC is
 replaced by [Power Control Service (PCS)](#power-control-service-pcs).
 
-For more information, see [Cray Advanced Platform Monitoring and Control](operations/power_management/Cray_Advanced_Platform_Monitoring_and_Control_CAPMC.md).
+* For more information on CAPMC, see [Cray Advanced Platform Monitoring and Control](operations/power_management/Cray_Advanced_Platform_Monitoring_and_Control_CAPMC.md).
+* For more information on the CAPMC API, see [CAPMC API](api/capmc.md).
 
 ## Cray CLI (`cray`)
 
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management
 REST APIs into easily usable commands.
+
+## Cray Security Token Service (STS)
+
+The Cray Security Token Service (STS) generates short-lived Ceph S3 credentials.
+
+For more information on the STS API, see [STS Token Generator API](api/sts.md).
 
 ## Cray Site Init (CSI)
 
@@ -278,14 +295,6 @@ with the [Content Projection Service (CPS)](#content-projection-service-cps).
 This Liquid-Cooled [Olympus cabinet](#olympus-cabinet) is a dense compute cabinet that supports 64 compute blades and 64
 [High Speed Network (HSN)](#high-speed-network-hsn) switches.
 
-## Image Management Service (IMS)
-
-The Image Management Service (IMS) uses the open source Kiwi-NG tool to build image roots from
-recipes. IMS also uses [CFS](#configuration-framework-service-cfs) to apply image customization for pre-boot
-configuration of the image root. These images are bootable on [compute nodes](#compute-node-cn) and [application nodes](#application-node-an).
-
-For more information, see [Image Management](operations/image_management/Image_Management.md).
-
 ## EX TDS Cabinet
 
 A Liquid-Cooled TDS cabinet is a dense compute cabinet that supports 2-chassis, 16
@@ -296,6 +305,15 @@ compute blades and 16 [High Speed Network (HSN)](#high-speed-network-hsn) switch
 
 The [Slingshot](#slingshot) fabric consists of the switches, cables, ports, topology policy, and
 configuration settings for the Slingshot [High-Speed Network](#high-speed-network-hsn).
+
+## Firmware Action Service (FAS)
+
+The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system.
+FAS interacts with the [Hardware State Manager (HSM)](#hardware-state-manager-hsm), device data, and image data in order to update
+firmware.
+
+* For more information on FAS, see [Update firmware with FAS](operations/firmware/Update_Firmware_with_FAS.md).
+* For more information on the FAS API, see [FAS API](api/firmware-action.md).
 
 ## Floor Standing CDU
 
@@ -318,18 +336,23 @@ management VLAN is used for customer access and administration of hardware.
 The Hardware Management Notification Fanout Daemon (HMNFD) service receives component state change
 notifications from the [HSM](#hardware-state-manager-hsm). It fans notifications out to subscribers (typically [compute nodes](#compute-node-cn)).
 
+For more information on the HMNFD API, see [HMNFD API](api/hmnfd.md).
+
 ## Hardware State Manager (HSM)
 
 Hardware State Manager (HSM) service monitors and interrogates hardware components in an HPE Cray EX system,
 tracking hardware state and inventory information, and making it available via REST queries and message bus
 events when changes occur.
 
-For more information, see [Hardware State Manager](operations/hardware_state_manager/Hardware_State_Manager.md).
+* For more information on HSM, see [Hardware State Manager](operations/hardware_state_manager/Hardware_State_Manager.md).
+* For more information on the HSM API, see [HSM API](api/smd.md).
 
 ## Heartbeat Tracker Daemon (HBTD)
 
 The Heartbeat Tracker Daemon (HBTD) service listens for heartbeats from components (mainly [compute nodes](#compute-node-cn)).
 It tracks changes in heartbeats and conveys changes to the [HSM](#hardware-state-manager-hsm).
+
+For more information on the HBTD API, see [HBTD API](api/hbtd.md).
 
 ## Hierarchical Namespace Controller (HNC)
 
@@ -340,6 +363,22 @@ For more information, see [Multi-Tenancy Support](operations/multi-tenancy/Overv
 ## High Speed Network (HSN)
 
 The High Speed Network (HSN) in an HPE Cray EX system is based on the [Slingshot](#slingshot) switches.
+
+## Image Management Service (IMS)
+
+The Image Management Service (IMS) uses the open source Kiwi-NG tool to build image roots from
+recipes. IMS also uses [CFS](#configuration-framework-service-cfs) to apply image customization for pre-boot
+configuration of the image root. These images are bootable on [compute nodes](#compute-node-cn) and [application nodes](#application-node-an).
+
+* For more information on IMS, see [Image Management](operations/image_management/Image_Management.md).
+* For more information on the IMS API, see [IMS API](api/ims.md).
+
+## Install and Upgrade Framework (IUF)
+
+The Install and Upgrade Framework (IUF) provides a centralized and consistent method installing and upgrading software on CSM
+systems. It automates large portions of the install/upgrade processes in order to simplify, optimize, and unify them.
+
+The IUF has an API, but it is only intended to be used by the IUF CLI, not directly by administrators.
 
 ## Management Nodes
 
@@ -361,6 +400,15 @@ See [Olympus cabinet](#olympus-cabinet). Some software and documentation refers 
 The [Mountain](#mountain-cabinet) Endpoint Discovery Service (MEDS) manages initial discovery, configuration, and geolocation
 of Redfish-enabled [BMCs](#baseboard-management-controller-bmc) in Liquid-Cooled [Olympus cabinets](#olympus-cabinet). It periodically makes Redfish requests to
 determine if hardware is present or missing.
+
+## NCN Lifecycle Service (NLS)
+
+The NCN Lifecycle Service (NLS) and [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf) services together
+provide automation in the areas of installing and upgrading software on a system, as well as rolling out that software onto nodes as
+part of rebuild workflows. The APIs interact with Argo to orchestrate these workflows, so administrators can use the Argo UI to
+monitor and visualize these automations.
+
+For more information on the NLS API, see [NLS API](api/nls.md).
 
 ## NIC Mezzanine Card (NMC)
 
@@ -408,7 +456,8 @@ on/off [compute nodes](#compute-node-cn) and [application nodes](#application-no
 external software to more intelligently manage system-wide power consumption. PCS is the
 replacement for [CAPMC](#cray-advanced-platform-monitoring-and-control-capmc).
 
-For more information, see [Power Control Service](operations/power_management/Power_Control_Service/Power_Control_Service_PCS.md).
+* For more information on PCS, see [Power Control Service](operations/power_management/Power_Control_Service/Power_Control_Service_PCS.md).
+* For more information on the PCS API, see [PCS API](api/power-control.md).
 
 ## Power Distribution Unit (PDU)
 
@@ -541,13 +590,22 @@ The System Admin Toolkit (SAT) product provides the `sat` command line interface
 
 For more information, see [System Admin Toolkit in CSM](operations/sat/sat_in_csm.md).
 
+## System Configuration Service (SCSD)
+
+The System Configuration Service (SCSD) allows administrators to set various [BMC](#baseboard-management-controller-bmc) and
+controller parameters. These parameters are typically set during discovery, but this tool enables parameters to be set before or
+after discovery.
+
+For more information on the SCSD API, see [SCSD API](api/scsd.md).
+
 ## System Layout Service (SLS)
 
 The System Layout Service (SLS) serves as a "single source of truth" for the system design. It details
 the physical locations of network hardware, [management nodes](#management-nodes), [application nodes](#application-node-an), [compute nodes](#compute-node-cn), and
 cabinets. It also stores information about the network, such as which port on which switch should be connected to each node.
 
-For more information, see [System Layout Service](operations/system_layout_service/System_Layout_Service_SLS.md).
+* For more information on SLS, see [System Layout Service](operations/system_layout_service/System_Layout_Service_SLS.md).
+* For more information on the SLS API, see [SLS API](api/sls.md).
 
 ## System Management Network (SMNet)
 
@@ -571,7 +629,8 @@ System Management Services (SMS) nodes provide access to the entire management c
 
 One component of multi-tenancy support.
 
-For more information, see [Multi-Tenancy Support](operations/multi-tenancy/Overview.md).
+* For more information on TAPMS, see [Multi-Tenancy Support](operations/multi-tenancy/Overview.md).
+* For more information on the TAPMS API, see [TAPMS Tenant Status API](api/tapms-operator.md).
 
 ## Top of Rack Switch Controller (sC-ToR)
 
@@ -603,7 +662,8 @@ Kubernetes worker node. When a user requests a new UAI, the UAS service returns 
 information to the newly created UAI. External access to UAS is routed through a node that hosts
 gateway services.
 
-For more information, see [User Access Service](operations/UAS_user_and_admin_topics/README.md).
+* For more information on UAS, see [User Access Service](operations/UAS_user_and_admin_topics/README.md).
+* For more information on the UAS API, see [UAS API](api/uas-mgr.md).
 
 ## Version Control Service (VCS)
 
