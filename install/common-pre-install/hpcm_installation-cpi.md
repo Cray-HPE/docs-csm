@@ -638,7 +638,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
                cm node add -c pdus.conf
                ```
 
-         1. Discover fabric switche.
+         1. Discover fabric switches.
 
             Use the `cm controller add` command. Add only River cabinet fabric switches.
 
