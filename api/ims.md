@@ -4,106 +4,103 @@
 
 > Scroll down for code samples, example requests and responses. Select a language for code samples from the tabs above or the mobile navigation menu.
 
-The Image Management Service (IMS) creates and customizes boot images which run on compute nodes. A boot image consists of multiple image artifacts including the root file system (rootfs), kernel and initrd. There are optionally additional artifacts such as debug symbols, etc. 
-IMS uses the open source Kiwi-NG tool to build image roots from compressed Kiwi image descriptions (recipes). Kiwi-NG is able to build images based on a variety of different Linux distributions, specifically SUSE, RHEL and their derivatives.
-A user may choose to use the provided recipes or  customize Kiwi recipes to define the image to be built.
-IMS creates and customizes existing boot images and maintains metadata about the images and related artifacts. IMS accesses and stores the recipes, images, and related artifacts in the artifact repository. 
-## Resources 
-### /images 
-  
-  Manipulate ImageRecords, which relate multiple image artifact records together.
+The Image Management Service (IMS) creates and customizes boot images which run on compute nodes. A boot image consists of multiple image artifacts including the root file system (rootfs), kernel, and initrd. There are optionally additional artifacts such as debug symbols, etc.
+IMS uses the open source Kiwi-NG tool to build image roots from compressed Kiwi image descriptions (recipes). Kiwi-NG is able to build images based on a variety of different Linux distributions, specifically SUSE, RHEL, and their derivatives.
+A user may choose to use the provided recipes or customize Kiwi recipes to define the image to be built.
+IMS creates and customizes existing boot images and maintains metadata about the images and related artifacts. IMS accesses and stores the recipes, images, and related artifacts in the artifact repository.
+## Resources
 
-### /jobs  
+  ### /images
 
-  Initiate image creation or customization.  It creates the image which it uploads to 
-  the artifact repository,
-  and maintains associated metadata in IMS for subsequent access. It also customizes a pre-existing
-  image.
+    Manipulate ImageRecords, which relate multiple image artifact records together.
 
-### /public-keys
+  ### /jobs
 
-  Manage the public keys which enable ssh access. 
-  Public-keys are created and uploaded by the
-  administrator to allow access to ssh shells provided
-  by IMS during image creation and customization.
+    Initiate image creation or customization.  It creates the image which it uploads to the
+    artifact repository, and maintains associated metadata in IMS for subsequent access. It
+    also customizes a pre-existing image.
 
-### /recipes 
+  ### /public-keys
 
-  Manipulate the RecipeRecord metadata about the Kiwi-NG recipes 
-  which are stored in the artifact repository. 
-  Recipes themselves define how an image is to be created including the
-  RPMS that will be installed, the RPM repos to use, etc. 
-   
+    Manage the public keys which enable SSH access. Public-keys are created and uploaded by the
+    administrator to allow access to SSH shells provided by IMS during image creation and
+    customization.
+
+  ### /recipes
+
+    Manipulate the RecipeRecord metadata about the Kiwi-NG recipes which are stored in the
+    artifact repository. Recipes themselves define how an image is to be created, including the
+    RPMs that will be installed, the RPM repositories to use, etc.
 
 ## Workflows
 
-  There are two main workflows using the IMS - image creation and image customization.  
-  The IMS /jobs endpoint directs the creation of a new image, or 
-  the customization of an existing image, depending on the POST /jobs request body parameter, job_type.
+  There are two main workflows using the IMS - image creation and image customization.
+  The IMS /jobs endpoint directs the creation of a new image, or the customization of an
+  existing image, depending on the POST /jobs request job_type body parameter.
 
-### Add a New Recipe
-#### GET /recipes 
-   
-  Obtain list of existing recipes which are registered with IMS.
+  ### Add a New Recipe
 
-#### Upload recipe using CLI
-   
-  Upload a new recipe to the artifact repository using the cray artifacts command, if necessary.
-  Refer to Administrator's Guide for instructions.
-  
-#### POST /recipes
+    #### GET /recipes
 
-  Register new recipe with IMS. 
+      Obtain list of existing recipes which are registered with IMS.
 
-### Manage Public Keys
-#### GET /public-keys
+    #### Upload recipe using CLI
 
-  Obtain list of available public-keys.
-   
-#### POST /public-keys
+      Upload a new recipe to the artifact repository using the cray artifacts command, if necessary.
+      Refer to Administrator's Guide for instructions.
 
-  Add a new public-key.
+    #### POST /recipes
 
-### Create a New Image
-  
-#### GET /public-keys
-Get a list of available keys.
-  
-#### GET /recipes
+      Register new recipe with IMS.
 
- Get recipe id.
-  
-  #### POST /jobs
-  
-  Use Kiwi-NG to create a new IMS image and image artifacts from a recipe,
-  Specify job_type "create" in JobRecord. 
-  Request body parameters supply the recipe id and public key id.
-  Upon success,
-  the artifact repository contains the new image and the image artifacts,
-  IMS contains a new ImageRecord - metadata for the new image.
-  During the creation process, IMS may create an ssh shell for
-  administrator interaction with the image for
-  debugging, if necessary.  (enable_debug = true in JobRecord)
+  ### Manage Public Keys
 
-### Modify an Image
-  
-#### GET /public-keys
-Get a list of available keys.
-  
-#### GET /images
-Obtain a list of available images registered in IMS.
-  
-#### POST /jobs
+    #### GET /public-keys
 
-  To create a modified version of an existing IMS image, 
-  specify job_type "customize". Specify the IMS id of the existing image, and
-  public key.  This request creates a copy of the existing image,
-  and then an interactive ssh shell
-  in which to modify the copy of the image.  Upon success,
-  the artifact repository contains the original image and a modified version of it. IMS contains 
-  a new ImageRecord - metadata for the modified image.
-  The original image is still intact.  A user may want to install additional software, 
-  install licenses, change the timezone, add mount points, etc.
+      Obtain list of available public-keys.
+
+    #### POST /public-keys
+
+      Add a new public-key.
+
+  ### Create a New Image
+
+    #### GET /public-keys
+
+      Get a list of available keys.
+
+    #### GET /recipes
+
+      Get recipe ID.
+
+    #### POST /jobs
+
+      Use Kiwi-NG to create a new IMS image and image artifacts from a recipe. Specify job_type
+      "create" in JobRecord. Request body parameters supply the recipe ID and public key ID.
+      Upon success, the artifact repository contains the new image and the image artifacts,
+      IMS contains a new ImageRecord with metadata for the new image. During the creation
+      process, IMS may create an SSH shell for administrator interaction with the image for
+      debugging, if necessary.  (enable_debug = true in JobRecord)
+
+  ### Modify an Image
+
+    #### GET /public-keys
+
+      Get a list of available keys.
+
+    #### GET /images
+
+      Obtain a list of available images registered in IMS.
+
+    #### POST /jobs
+
+      To create a modified version of an existing IMS image, specify job_type "customize".
+      Specify the IMS ID of the existing image, and public key.  This request creates a copy of
+      the existing image, and then an interactive SSH shell in which to modify the copy of the
+      image. Upon success, the artifact repository contains the original image and a modified
+      version of it. IMS contains a new ImageRecord with metadata for the modified image. The
+      original image is still intact.  A user may want to install additional software, install
+      licenses, change the timezone, add mount points, etc.
 
 Base URLs:
 
@@ -178,7 +175,7 @@ func main() {
 
 *List all ImageRecords*
 
-Retrieve a list of ImageRecords indicating images that are registered with IMS. The ImageRecord id is used to associate multiple image artifacts together (kernel, initrd, rootfs (squashfs)).
+Retrieve a list of ImageRecords indicating images that are registered with IMS. The ImageRecord ID is used to associate multiple image artifacts together (kernel, initrd, rootfs (squashfs)).
 
 > Example responses
 
@@ -194,7 +191,8 @@ Retrieve a list of ImageRecords indicating images that are registered with IMS. 
       "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
       "etag": "f04af5f34635ae7c507322985e60c00c-131",
       "type": "s3"
-    }
+    },
+    "arch": "aarch64"
   }
 ]
 ```
@@ -213,13 +211,21 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[ImageRecord](#schemaimagerecord)]|false|none|[An Image Record]|
-|» id|string(uuid)|false|read-only|Unique id of the image.|
+|» id|string(uuid)|false|read-only|Unique ID of the image.|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» name|string|true|none|Name of the image|
 |» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |»» path|string|true|none|Path or location to the artifact in the artifact repository|
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
+|» arch|string|false|none|Target architecture for the recipe.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|aarch64|
+|arch|x86_64|
 
 <aside class="success">
 This operation does not require authentication
@@ -301,7 +307,8 @@ Create a new ImageRecord and register the new image with IMS.
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 ```
 
@@ -316,43 +323,27 @@ Create a new ImageRecord and register the new image with IMS.
 > 201 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "name": "centos7.5_barebones",
-    "link": {
-      "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
-      "etag": "f04af5f34635ae7c507322985e60c00c-131",
-      "type": "s3"
-    }
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "name": "centos7.5_barebones",
+  "link": {
+    "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
+    "etag": "f04af5f34635ae7c507322985e60c00c-131",
+    "type": "s3"
+  },
+  "arch": "aarch64"
+}
 ```
 
 <h3 id="post_v3_image-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A collection of images|Inline|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New image record|[ImageRecord](#schemaimagerecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="post_v3_image-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[ImageRecord](#schemaimagerecord)]|false|none|[An Image Record]|
-|» id|string(uuid)|false|read-only|Unique id of the image.|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» name|string|true|none|Name of the image|
-|» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
-|»» path|string|true|none|Path or location to the artifact in the artifact repository|
-|»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
-|»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 
 <aside class="success">
 This operation does not require authentication
@@ -514,7 +505,7 @@ Retrieve an image by image_id.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|image_id|path|string(uuid)|true|The unique id of an image|
+|image_id|path|string(uuid)|true|The unique ID of an image|
 
 > Example responses
 
@@ -529,7 +520,8 @@ Retrieve an image by image_id.
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 ```
 
@@ -620,7 +612,8 @@ Update an ImageRecord in IMS.
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 ```
 
@@ -629,7 +622,7 @@ Update an ImageRecord in IMS.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[ImagePatchRecord](#schemaimagepatchrecord)|true|Image Patch record|
-|image_id|path|string(uuid)|true|The unique id of an image|
+|image_id|path|string(uuid)|true|The unique ID of an image|
 
 > Example responses
 
@@ -644,7 +637,8 @@ Update an ImageRecord in IMS.
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 ```
 
@@ -652,7 +646,7 @@ Update an ImageRecord in IMS.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An Image record|[ImageRecord](#schemaimagerecord)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Updated Image record|[ImageRecord](#schemaimagerecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Requested resource could not be patched due to conflict.|[ProblemDetails](#schemaproblemdetails)|
@@ -724,13 +718,13 @@ func main() {
 
 *Soft delete ImageRecord by image_id*
 
-Delete an ImageRecord by Id. Deleted images are soft deleted and added to the /deleted/images endpoint. The S3 key for the associated image manifest is renamed.
+Delete an ImageRecord by ID. Deleted images are soft deleted and added to the /deleted/images endpoint. The S3 key for the associated image manifest is renamed.
 
 <h3 id="delete_v3_image-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|image_id|path|string(uuid)|true|The unique id of an image|
+|image_id|path|string(uuid)|true|The unique ID of an image|
 
 > Example responses
 
@@ -837,7 +831,8 @@ Retrieve a list of DeletedImageRecords indicating images that have been deleted 
       "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
       "etag": "f04af5f34635ae7c507322985e60c00c-131",
       "type": "s3"
-    }
+    },
+    "arch": "aarch64"
   }
 ]
 ```
@@ -856,7 +851,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[DeletedImageRecord](#schemadeletedimagerecord)]|false|none|[A Deleted Image Record]|
-|» id|string(uuid)|false|read-only|Unique id of the image.|
+|» id|string(uuid)|false|read-only|Unique ID of the image.|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» deleted|string(date-time)|false|read-only|Time the image record was deleted|
 |» name|string|true|none|Name of the image|
@@ -864,6 +859,14 @@ Status Code **200**
 |»» path|string|true|none|Path or location to the artifact in the artifact repository|
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
+|» arch|string|false|none|Target architecture for the recipe.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|aarch64|
+|arch|x86_64|
 
 <aside class="success">
 This operation does not require authentication
@@ -1136,50 +1139,34 @@ Retrieve deleted image details by using deleted_image_id.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|deleted_image_id|path|string(uuid)|true|The unique id of a deleted image|
+|deleted_image_id|path|string(uuid)|true|The unique ID of a deleted image|
 
 > Example responses
 
 > 200 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "deleted": "2018-07-28T03:26:01.234Z",
-    "name": "centos7.5_barebones",
-    "link": {
-      "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
-      "etag": "f04af5f34635ae7c507322985e60c00c-131",
-      "type": "s3"
-    }
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "deleted": "2018-07-28T03:26:01.234Z",
+  "name": "centos7.5_barebones",
+  "link": {
+    "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
+    "etag": "f04af5f34635ae7c507322985e60c00c-131",
+    "type": "s3"
+  },
+  "arch": "aarch64"
+}
 ```
 
 <h3 id="get_v3_deleted_image-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A deleted image record|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A deleted image record|[DeletedImageRecord](#schemadeletedimagerecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="get_v3_deleted_image-responseschema">Response Schema</h3>
-
-Status Code **200**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string(uuid)|false|read-only|Unique id of the image.|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» deleted|string(date-time)|false|read-only|Time the image record was deleted|
-|» name|string|true|none|Name of the image|
-|» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
-|»» path|string|true|none|Path or location to the artifact in the artifact repository|
-|»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
-|»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 
 <aside class="success">
 This operation does not require authentication
@@ -1252,7 +1239,7 @@ Permanently delete image record associated with deleted_image_id. Associated art
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|deleted_image_id|path|string(uuid)|true|The unique id of a deleted image|
+|deleted_image_id|path|string(uuid)|true|The unique ID of a deleted image|
 
 > Example responses
 
@@ -1361,7 +1348,7 @@ Restore a DeletedImageRecord in IMS.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[DeletedImagePatchRecord](#schemadeletedimagepatchrecord)|true|DeletedImage Patch record|
-|deleted_image_id|path|string(uuid)|true|The unique id of a deleted image|
+|deleted_image_id|path|string(uuid)|true|The unique ID of a deleted image|
 
 > Example responses
 
@@ -1454,7 +1441,7 @@ func main() {
 
 *List all ImageRecords*
 
-Retrieve a list of ImageRecords indicating images that are registered with the IMS. The ImageRecord id is used to associate multiple image artifacts together (kernel, initrd, rootfs (squashfs)).
+Retrieve a list of ImageRecords indicating images that are registered with the IMS. The ImageRecord ID is used to associate multiple image artifacts together (kernel, initrd, rootfs (squashfs)).
 
 > Example responses
 
@@ -1470,7 +1457,8 @@ Retrieve a list of ImageRecords indicating images that are registered with the I
       "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
       "etag": "f04af5f34635ae7c507322985e60c00c-131",
       "type": "s3"
-    }
+    },
+    "arch": "aarch64"
   }
 ]
 ```
@@ -1489,13 +1477,21 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[ImageRecord](#schemaimagerecord)]|false|none|[An Image Record]|
-|» id|string(uuid)|false|read-only|Unique id of the image.|
+|» id|string(uuid)|false|read-only|Unique ID of the image.|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» name|string|true|none|Name of the image|
 |» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |»» path|string|true|none|Path or location to the artifact in the artifact repository|
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
+|» arch|string|false|none|Target architecture for the recipe.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|aarch64|
+|arch|x86_64|
 
 <aside class="success">
 This operation does not require authentication
@@ -1577,7 +1573,8 @@ Create a new ImageRecord and register the new image with IMS.
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 ```
 
@@ -1592,44 +1589,28 @@ Create a new ImageRecord and register the new image with IMS.
 > 201 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "deleted": "2018-07-28T03:26:01.234Z",
-    "name": "centos7.5_barebones",
-    "link": {
-      "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
-      "etag": "f04af5f34635ae7c507322985e60c00c-131",
-      "type": "s3"
-    }
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "deleted": "2018-07-28T03:26:01.234Z",
+  "name": "centos7.5_barebones",
+  "link": {
+    "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
+    "etag": "f04af5f34635ae7c507322985e60c00c-131",
+    "type": "s3"
+  },
+  "arch": "aarch64"
+}
 ```
 
 <h3 id="post_v2_image-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|new image record|Inline|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New image record|[DeletedImageRecord](#schemadeletedimagerecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="post_v2_image-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string(uuid)|false|read-only|Unique id of the image.|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» deleted|string(date-time)|false|read-only|Time the image record was deleted|
-|» name|string|true|none|Name of the image|
-|» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
-|»» path|string|true|none|Path or location to the artifact in the artifact repository|
-|»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
-|»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 
 <aside class="success">
 This operation does not require authentication
@@ -1797,48 +1778,33 @@ Retrieve an image by image_id.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|image_id|path|string(uuid)|true|The unique id of an image|
+|image_id|path|string(uuid)|true|The unique ID of an image|
 
 > Example responses
 
 > 200 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "name": "centos7.5_barebones",
-    "link": {
-      "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
-      "etag": "f04af5f34635ae7c507322985e60c00c-131",
-      "type": "s3"
-    }
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "name": "centos7.5_barebones",
+  "link": {
+    "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
+    "etag": "f04af5f34635ae7c507322985e60c00c-131",
+    "type": "s3"
+  },
+  "arch": "aarch64"
+}
 ```
 
 <h3 id="get_v2_image-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An image record|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An image record|[ImageRecord](#schemaimagerecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="get_v2_image-responseschema">Response Schema</h3>
-
-Status Code **200**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string(uuid)|false|read-only|Unique id of the image.|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» name|string|true|none|Name of the image|
-|» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
-|»» path|string|true|none|Path or location to the artifact in the artifact repository|
-|»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
-|»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 
 <aside class="success">
 This operation does not require authentication
@@ -1919,7 +1885,8 @@ Update an ImageRecord in IMS.
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 ```
 
@@ -1928,7 +1895,7 @@ Update an ImageRecord in IMS.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[ImagePatchRecord](#schemaimagepatchrecord)|true|Image Patch record|
-|image_id|path|string(uuid)|true|The unique id of an image|
+|image_id|path|string(uuid)|true|The unique ID of an image|
 
 > Example responses
 
@@ -1943,7 +1910,8 @@ Update an ImageRecord in IMS.
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 ```
 
@@ -1951,7 +1919,7 @@ Update an ImageRecord in IMS.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|An Image record|[ImageRecord](#schemaimagerecord)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Updated Image record|[ImageRecord](#schemaimagerecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Requested resource could not be patched due to conflict.|[ProblemDetails](#schemaproblemdetails)|
@@ -2030,7 +1998,7 @@ Delete an ImageRecord by image_id.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |cascade|query|boolean|false|If cascade is true, IMS also deletes the linked artifacts in S3. If cascade is false, the linked artifacts in S3 are not affected.|
-|image_id|path|string(uuid)|true|The unique id of an image|
+|image_id|path|string(uuid)|true|The unique ID of an image|
 
 > Example responses
 
@@ -2326,7 +2294,9 @@ Retrieve a list of JobRecords that are registered with IMS
     "enable_debug": true,
     "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
     "build_env_size": 15,
-    "kubernetes_namespace": "default"
+    "kubernetes_namespace": "default",
+    "arch": "aarch64",
+    "require_dkms": false
   }
 ]
 ```
@@ -2345,7 +2315,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[JobRecord](#schemajobrecord)]|false|none|[A Job Record]|
-|» id|string(uuid)|false|read-only|Unique id of the job|
+|» id|string(uuid)|false|read-only|Unique ID of the job|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» job_type|[JobTypes](#schemajobtypes)|true|none|Type of job|
 |» image_root_archive_name|string|true|none|Name to be given to the imageroot artifact (do not include .sqshfs or other extensions)|
@@ -2354,22 +2324,24 @@ Status Code **200**
 |» kernel_parameters_file_name|string|false|none|Name of the kernel-parameters file to extract and upload to the artifact repository from the /boot directory of the image root.|
 |» status|[JobStatuses](#schemajobstatuses)|false|read-only|Status of the job|
 |» artifact_id|string(uuid)|true|none|IMS artifact_id which specifies the recipe (create job_type) or the image (customize job_type) to fetch from the artifact repository.|
-|» public_key_id|string(uuid)|true|none|Public key to use to enable passwordless ssh shells|
+|» public_key_id|string(uuid)|true|none|Public key to use to enable passwordless SSH shells|
 |» kubernetes_job|string|false|read-only|Name of the underlying kubernetes job|
 |» kubernetes_service|string|false|read-only|Name of the underlying kubernetes service|
 |» kubernetes_configmap|string|false|read-only|Name of the underlying kubernetes configmap|
-|» ssh_containers|[[SshContainer](#schemasshcontainer)]|false|none|list of ssh containers used to customize images being built or modified|
-|»» name|string|true|none|Name of the ssh container|
-|»» jail|boolean|true|none|If true, establish an ssh jail, or chroot environment.|
-|»» status|string|false|read-only|Status of the ssh container (pending, establishing, active, complete)|
+|» ssh_containers|[[SshContainer](#schemasshcontainer)]|false|none|List of SSH containers used to customize images being built or modified|
+|»» name|string|true|none|Name of the SSH container|
+|»» jail|boolean|true|none|If true, establish an SSH jail, or chroot environment.|
+|»» status|string|false|read-only|Status of the SSH container (pending, establishing, active, complete)|
 |»» connection_info|object|false|none|none|
 |»»» **additionalProperties**|object|false|none|none|
-|»»»» host|string|false|read-only|IP or host name to use, in combination with the port, to connect to the ssh container|
-|»»»» port|integer|false|read-only|Port to use, in combination with the host, to connect to the ssh container|
+|»»»» host|string|false|read-only|IP or host name to use, in combination with the port, to connect to the SSH container|
+|»»»» port|integer|false|read-only|Port to use, in combination with the host, to connect to the SSH container|
 |» enable_debug|boolean|false|none|Whether to enable debugging of the job|
 |» resultant_image_id|string(uuid)|false|read-only|IMS image ID for the resultant image.|
 |» build_env_size|integer|false|none|Size (in Gb) to allocate for the image root. Default = 15|
 |» kubernetes_namespace|string|false|read-only|Kubernetes namespace where the IMS job resources were created|
+|» arch|string|false|read-only|Target architecture for the recipe.|
+|» require_dkms|boolean|false|none|Whether enable DKMS for the job|
 
 #### Enumerated Values
 
@@ -2385,6 +2357,8 @@ Status Code **200**
 |status|waiting_on_user|
 |status|error|
 |status|success|
+|arch|aarch64|
+|arch|x86_64|
 
 <aside class="success">
 This operation does not require authentication
@@ -2465,7 +2439,7 @@ depending on request body parameter, job_type.
 * Call kiwi-ng, which builds the image root using
   the recipe in artifact repository and accesses packages in zypper/yum repositories.
 * Upload the new image to the artifact repository, and save metadata to IMS - ImageRecord.
-* If there is a failure, establish debug ssh shell, depending on value of enable_debug.  Admin
+* If there is a failure, establish debug SSH shell, depending on value of enable_debug.  Admin
   can inspect image build root.
   **touch /mnt/image/complete** in a non-jailed environment or
   **touch /tmp/complete** in a jailed (chroot) environment to exit.
@@ -2476,7 +2450,7 @@ depending on request body parameter, job_type.
   the ImageRecord to read the Image's manifest.yaml to find the Image's
   root file system (rootfs) artifact.  IMS downloads the rootfs from the artifact
   repository and uncompresses it.
-* IMS creates an ssh environment so admin can inspect and modify the image.
+* IMS creates an SSH environment so admin can inspect and modify the image.
   For example, it may be necessary to modify the timezone, or
   modify the programming environment, etc.
   **touch /mnt/image/complete** in a non-jailed
@@ -2513,7 +2487,8 @@ depending on request body parameter, job_type.
     }
   ],
   "enable_debug": true,
-  "build_env_size": 15
+  "build_env_size": 15,
+  "require_dkms": false
 }
 ```
 
@@ -2562,7 +2537,9 @@ depending on request body parameter, job_type.
   "enable_debug": true,
   "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
   "build_env_size": 15,
-  "kubernetes_namespace": "default"
+  "kubernetes_namespace": "default",
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -2570,7 +2547,7 @@ depending on request body parameter, job_type.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A job record|[JobRecord](#schemajobrecord)|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New job record|[JobRecord](#schemajobrecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
@@ -2758,7 +2735,7 @@ Retrieve JobRecord by job_id
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|job_id|path|string(uuid)|true|The unique id of a job|
+|job_id|path|string(uuid)|true|The unique ID of a job|
 
 > Example responses
 
@@ -2799,7 +2776,9 @@ Retrieve JobRecord by job_id
   "enable_debug": true,
   "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
   "build_env_size": 15,
-  "kubernetes_namespace": "default"
+  "kubernetes_namespace": "default",
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -2895,7 +2874,7 @@ Update a job record. Internal use only. Not for API consumers.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[JobPatchRecord](#schemajobpatchrecord)|true|Image Patch record|
-|job_id|path|string(uuid)|true|The unique id of a job|
+|job_id|path|string(uuid)|true|The unique ID of a job|
 
 > Example responses
 
@@ -2936,7 +2915,9 @@ Update a job record. Internal use only. Not for API consumers.
   "enable_debug": true,
   "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
   "build_env_size": 15,
-  "kubernetes_namespace": "default"
+  "kubernetes_namespace": "default",
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -2944,7 +2925,7 @@ Update a job record. Internal use only. Not for API consumers.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A job record|[JobRecord](#schemajobrecord)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Updated job record|[JobRecord](#schemajobrecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
@@ -3021,7 +3002,7 @@ Delete a job record by job_id. This also deletes the underlying Kubernetes resou
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|job_id|path|string(uuid)|true|The unique id of a job|
+|job_id|path|string(uuid)|true|The unique ID of a job|
 
 > Example responses
 
@@ -3153,7 +3134,9 @@ Retrieve a list of JobRecords that are registered with IMS
     "enable_debug": true,
     "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
     "build_env_size": 15,
-    "kubernetes_namespace": "default"
+    "kubernetes_namespace": "default",
+    "arch": "aarch64",
+    "require_dkms": false
   }
 ]
 ```
@@ -3172,7 +3155,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[JobRecord](#schemajobrecord)]|false|none|[A Job Record]|
-|» id|string(uuid)|false|read-only|Unique id of the job|
+|» id|string(uuid)|false|read-only|Unique ID of the job|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» job_type|[JobTypes](#schemajobtypes)|true|none|Type of job|
 |» image_root_archive_name|string|true|none|Name to be given to the imageroot artifact (do not include .sqshfs or other extensions)|
@@ -3181,22 +3164,24 @@ Status Code **200**
 |» kernel_parameters_file_name|string|false|none|Name of the kernel-parameters file to extract and upload to the artifact repository from the /boot directory of the image root.|
 |» status|[JobStatuses](#schemajobstatuses)|false|read-only|Status of the job|
 |» artifact_id|string(uuid)|true|none|IMS artifact_id which specifies the recipe (create job_type) or the image (customize job_type) to fetch from the artifact repository.|
-|» public_key_id|string(uuid)|true|none|Public key to use to enable passwordless ssh shells|
+|» public_key_id|string(uuid)|true|none|Public key to use to enable passwordless SSH shells|
 |» kubernetes_job|string|false|read-only|Name of the underlying kubernetes job|
 |» kubernetes_service|string|false|read-only|Name of the underlying kubernetes service|
 |» kubernetes_configmap|string|false|read-only|Name of the underlying kubernetes configmap|
-|» ssh_containers|[[SshContainer](#schemasshcontainer)]|false|none|list of ssh containers used to customize images being built or modified|
-|»» name|string|true|none|Name of the ssh container|
-|»» jail|boolean|true|none|If true, establish an ssh jail, or chroot environment.|
-|»» status|string|false|read-only|Status of the ssh container (pending, establishing, active, complete)|
+|» ssh_containers|[[SshContainer](#schemasshcontainer)]|false|none|List of SSH containers used to customize images being built or modified|
+|»» name|string|true|none|Name of the SSH container|
+|»» jail|boolean|true|none|If true, establish an SSH jail, or chroot environment.|
+|»» status|string|false|read-only|Status of the SSH container (pending, establishing, active, complete)|
 |»» connection_info|object|false|none|none|
 |»»» **additionalProperties**|object|false|none|none|
-|»»»» host|string|false|read-only|IP or host name to use, in combination with the port, to connect to the ssh container|
-|»»»» port|integer|false|read-only|Port to use, in combination with the host, to connect to the ssh container|
+|»»»» host|string|false|read-only|IP or host name to use, in combination with the port, to connect to the SSH container|
+|»»»» port|integer|false|read-only|Port to use, in combination with the host, to connect to the SSH container|
 |» enable_debug|boolean|false|none|Whether to enable debugging of the job|
 |» resultant_image_id|string(uuid)|false|read-only|IMS image ID for the resultant image.|
 |» build_env_size|integer|false|none|Size (in Gb) to allocate for the image root. Default = 15|
 |» kubernetes_namespace|string|false|read-only|Kubernetes namespace where the IMS job resources were created|
+|» arch|string|false|read-only|Target architecture for the recipe.|
+|» require_dkms|boolean|false|none|Whether enable DKMS for the job|
 
 #### Enumerated Values
 
@@ -3212,6 +3197,8 @@ Status Code **200**
 |status|waiting_on_user|
 |status|error|
 |status|success|
+|arch|aarch64|
+|arch|x86_64|
 
 <aside class="success">
 This operation does not require authentication
@@ -3292,7 +3279,7 @@ depending on request body parameter, job_type.
 * Call kiwi-ng, which builds the image root using
   the recipe in artifact repository and accesses packages in zypper/yum repositories.
 * Upload the new image to the artifact repository, and save metadata to IMS - ImageRecord.
-* If there is a failure, establish debug ssh shell, depending on value of enable_debug.  Admin
+* If there is a failure, establish debug SSH shell, depending on value of enable_debug.  Admin
   can inspect image build root.
   **touch /mnt/image/complete** in a non-jailed environment or
   **touch /tmp/complete** in a jailed (chroot) environment to exit.
@@ -3303,7 +3290,7 @@ depending on request body parameter, job_type.
   the ImageRecord to read the Image's manifest.yaml to find the Image's
   root file system (rootfs) artifact.  IMS downloads the rootfs from the artifact
   repository and uncompresses it.
-* IMS creates an ssh environment so admin can inspect and modify the image.
+* IMS creates an SSH environment so admin can inspect and modify the image.
   For example, it may be necessary to modify the timezone, or
   modify the programming environment, etc.
   **touch /mnt/image/complete** in a non-jailed
@@ -3340,7 +3327,8 @@ depending on request body parameter, job_type.
     }
   ],
   "enable_debug": true,
-  "build_env_size": 15
+  "build_env_size": 15,
+  "require_dkms": false
 }
 ```
 
@@ -3355,101 +3343,54 @@ depending on request body parameter, job_type.
 > 201 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "job_type": "customize",
-    "image_root_archive_name": "cray-sles12-sp3-barebones",
-    "kernel_file_name": "vmlinuz",
-    "initrd_file_name": "initrd",
-    "kernel_parameters_file_name": "kernel-parameters",
-    "status": "creating",
-    "artifact_id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "public_key_id": "b05c54e3-9fc2-472d-b120-4fd718ff90aa",
-    "kubernetes_job": "cray-ims-46a2731e-a1d0-4f98-ba92-4f78c756bb12-customize",
-    "kubernetes_service": "cray-ims-46a2731e-a1d0-4f98-ba92-4f78c756bb12-service",
-    "kubernetes_configmap": "cray-ims-46a2731e-a1d0-4f98-ba92-4f78c756bb12-configmap",
-    "ssh_containers": [
-      {
-        "name": "customize",
-        "jail": true,
-        "status": "pending",
-        "connection_info": {
-          "property1": {
-            "host": "10.100.20.221",
-            "port": 22
-          },
-          "property2": {
-            "host": "10.100.20.221",
-            "port": 22
-          }
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "job_type": "customize",
+  "image_root_archive_name": "cray-sles12-sp3-barebones",
+  "kernel_file_name": "vmlinuz",
+  "initrd_file_name": "initrd",
+  "kernel_parameters_file_name": "kernel-parameters",
+  "status": "creating",
+  "artifact_id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "public_key_id": "b05c54e3-9fc2-472d-b120-4fd718ff90aa",
+  "kubernetes_job": "cray-ims-46a2731e-a1d0-4f98-ba92-4f78c756bb12-customize",
+  "kubernetes_service": "cray-ims-46a2731e-a1d0-4f98-ba92-4f78c756bb12-service",
+  "kubernetes_configmap": "cray-ims-46a2731e-a1d0-4f98-ba92-4f78c756bb12-configmap",
+  "ssh_containers": [
+    {
+      "name": "customize",
+      "jail": true,
+      "status": "pending",
+      "connection_info": {
+        "property1": {
+          "host": "10.100.20.221",
+          "port": 22
+        },
+        "property2": {
+          "host": "10.100.20.221",
+          "port": 22
         }
       }
-    ],
-    "enable_debug": true,
-    "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
-    "build_env_size": 15,
-    "kubernetes_namespace": "default"
-  }
-]
+    }
+  ],
+  "enable_debug": true,
+  "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
+  "build_env_size": 15,
+  "kubernetes_namespace": "default",
+  "arch": "aarch64",
+  "require_dkms": false
+}
 ```
 
 <h3 id="post_v2_job-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New job record|Inline|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New job record|[JobRecord](#schemajobrecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="post_v2_job-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string(uuid)|false|read-only|Unique id of the job|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» job_type|[JobTypes](#schemajobtypes)|true|none|Type of job|
-|» image_root_archive_name|string|true|none|Name to be given to the imageroot artifact (do not include .sqshfs or other extensions)|
-|» kernel_file_name|string|false|none|Name of the kernel file to extract and upload to the artifact repository from the /boot directory of the image root.|
-|» initrd_file_name|string|false|none|Name of the initrd image file to extract and upload to the artifact repository from the /boot directory of the image root.|
-|» kernel_parameters_file_name|string|false|none|Name of the kernel-parameters file to extract and upload to the artifact repository from the /boot directory of the image root.|
-|» status|[JobStatuses](#schemajobstatuses)|false|read-only|Status of the job|
-|» artifact_id|string(uuid)|true|none|IMS artifact_id which specifies the recipe (create job_type) or the image (customize job_type) to fetch from the artifact repository.|
-|» public_key_id|string(uuid)|true|none|Public key to use to enable passwordless ssh shells|
-|» kubernetes_job|string|false|read-only|Name of the underlying kubernetes job|
-|» kubernetes_service|string|false|read-only|Name of the underlying kubernetes service|
-|» kubernetes_configmap|string|false|read-only|Name of the underlying kubernetes configmap|
-|» ssh_containers|[[SshContainer](#schemasshcontainer)]|false|none|list of ssh containers used to customize images being built or modified|
-|»» name|string|true|none|Name of the ssh container|
-|»» jail|boolean|true|none|If true, establish an ssh jail, or chroot environment.|
-|»» status|string|false|read-only|Status of the ssh container (pending, establishing, active, complete)|
-|»» connection_info|object|false|none|none|
-|»»» **additionalProperties**|object|false|none|none|
-|»»»» host|string|false|read-only|IP or host name to use, in combination with the port, to connect to the ssh container|
-|»»»» port|integer|false|read-only|Port to use, in combination with the host, to connect to the ssh container|
-|» enable_debug|boolean|false|none|Whether to enable debugging of the job|
-|» resultant_image_id|string(uuid)|false|read-only|IMS image ID for the resultant image.|
-|» build_env_size|integer|false|none|Size (in Gb) to allocate for the image root. Default = 15|
-|» kubernetes_namespace|string|false|read-only|Kubernetes namespace where the IMS job resources were created|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|job_type|create|
-|job_type|customize|
-|status|creating|
-|status|fetching_image|
-|status|fetching_recipe|
-|status|waiting_for_repos|
-|status|building_image|
-|status|waiting_on_user|
-|status|error|
-|status|success|
 
 <aside class="success">
 This operation does not require authentication
@@ -3634,7 +3575,7 @@ Retrieve JobRecord by job_id
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|job_id|path|string(uuid)|true|The unique id of a job|
+|job_id|path|string(uuid)|true|The unique ID of a job|
 
 > Example responses
 
@@ -3675,7 +3616,9 @@ Retrieve JobRecord by job_id
   "enable_debug": true,
   "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
   "build_env_size": 15,
-  "kubernetes_namespace": "default"
+  "kubernetes_namespace": "default",
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -3771,7 +3714,7 @@ Update a job record. Internal use only. Not for API consumers.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[JobPatchRecord](#schemajobpatchrecord)|true|Image Patch record|
-|job_id|path|string(uuid)|true|The unique id of a job|
+|job_id|path|string(uuid)|true|The unique ID of a job|
 
 > Example responses
 
@@ -3812,7 +3755,9 @@ Update a job record. Internal use only. Not for API consumers.
   "enable_debug": true,
   "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
   "build_env_size": 15,
-  "kubernetes_namespace": "default"
+  "kubernetes_namespace": "default",
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -3897,7 +3842,7 @@ Delete a job record by job_id. This also deletes the underlying Kubernetes resou
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|job_id|path|string(uuid)|true|The unique id of a job|
+|job_id|path|string(uuid)|true|The unique ID of a job|
 
 > Example responses
 
@@ -4015,7 +3960,9 @@ Retrieve all RecipeRecords that are registered with the IMS.
         "key": "CSM_RELEASE_VERSION",
         "value": "1.0.0"
       }
-    ]
+    ],
+    "arch": "aarch64",
+    "require_dkms": false
   }
 ]
 ```
@@ -4034,7 +3981,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[RecipeRecord](#schemareciperecord)]|false|none|[A Recipe Record]|
-|» id|string(uuid)|false|read-only|Unique id of the recipe|
+|» id|string(uuid)|false|read-only|Unique ID of the recipe|
 |» created|string(date-time)|false|read-only|Time the recipe record was created|
 |» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |»» path|string|true|none|Path or location to the artifact in the artifact repository|
@@ -4046,6 +3993,8 @@ Status Code **200**
 |» template_dictionary|[[RecipeKeyValuePair](#schemarecipekeyvaluepair)]|false|none|List of key/value pairs to be templated into the recipe when building the image.|
 |»» key|string|true|none|Template variable to replace in the IMS recipe|
 |»» value|string|true|none|Value to replace the template variable in the IMS recipe|
+|» arch|string|false|none|Target architecture for the recipe.|
+|» require_dkms|boolean|false|none|Whether to enable DKMS for the job|
 
 #### Enumerated Values
 
@@ -4056,6 +4005,8 @@ Status Code **200**
 |linux_distribution|sles12|
 |linux_distribution|sles15|
 |linux_distribution|centos7|
+|arch|aarch64|
+|arch|x86_64|
 
 <aside class="success">
 This operation does not require authentication
@@ -4146,7 +4097,9 @@ A compressed Kiwi-NG image description is actually stored in the artifact reposi
       "key": "CSM_RELEASE_VERSION",
       "value": "1.0.0"
     }
-  ]
+  ],
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -4161,66 +4114,36 @@ A compressed Kiwi-NG image description is actually stored in the artifact reposi
 > 201 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "link": {
-      "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
-      "etag": "f04af5f34635ae7c507322985e60c00c-131",
-      "type": "s3"
-    },
-    "recipe_type": "kiwi-ng",
-    "linux_distribution": "sles12",
-    "name": "centos7.5_barebones",
-    "template_dictionary": [
-      {
-        "key": "CSM_RELEASE_VERSION",
-        "value": "1.0.0"
-      }
-    ]
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "link": {
+    "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
+    "etag": "f04af5f34635ae7c507322985e60c00c-131",
+    "type": "s3"
+  },
+  "recipe_type": "kiwi-ng",
+  "linux_distribution": "sles12",
+  "name": "centos7.5_barebones",
+  "template_dictionary": [
+    {
+      "key": "CSM_RELEASE_VERSION",
+      "value": "1.0.0"
+    }
+  ],
+  "arch": "aarch64",
+  "require_dkms": false
+}
 ```
 
 <h3 id="post_v3_recipes-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A collection of recipes|Inline|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New Recipe record|[RecipeRecord](#schemareciperecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="post_v3_recipes-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[RecipeRecord](#schemareciperecord)]|false|none|[A Recipe Record]|
-|» id|string(uuid)|false|read-only|Unique id of the recipe|
-|» created|string(date-time)|false|read-only|Time the recipe record was created|
-|» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
-|»» path|string|true|none|Path or location to the artifact in the artifact repository|
-|»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
-|»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
-|» recipe_type|string|true|none|Type of recipe|
-|» linux_distribution|string|true|none|Linux distribution being built|
-|» name|string|true|none|Name of the image|
-|» template_dictionary|[[RecipeKeyValuePair](#schemarecipekeyvaluepair)]|false|none|List of key/value pairs to be templated into the recipe when building the image.|
-|»» key|string|true|none|Template variable to replace in the IMS recipe|
-|»» value|string|true|none|Value to replace the template variable in the IMS recipe|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|recipe_type|kiwi-ng|
-|recipe_type|packer|
-|linux_distribution|sles12|
-|linux_distribution|sles15|
-|linux_distribution|centos7|
 
 <aside class="success">
 This operation does not require authentication
@@ -4374,15 +4297,15 @@ func main() {
 
 `GET /v3/recipes/{recipe_id}`
 
-*Retrieve RecipeRecord by id*
+*Retrieve RecipeRecord by ID*
 
-Retrieve a RecipeRecord by id
+Retrieve a RecipeRecord by ID
 
 <h3 id="get_v3_recipe-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|recipe_id|path|string(uuid)|true|The unique id of a recipe|
+|recipe_id|path|string(uuid)|true|The unique ID of a recipe|
 
 > Example responses
 
@@ -4405,7 +4328,9 @@ Retrieve a RecipeRecord by id
       "key": "CSM_RELEASE_VERSION",
       "value": "1.0.0"
     }
-  ]
+  ],
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -4495,7 +4420,15 @@ Update a RecipeRecord in IMS.
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64",
+  "require_dkms": false,
+  "template_dictionary": [
+    {
+      "key": "CSM_RELEASE_VERSION",
+      "value": "1.0.0"
+    }
+  ]
 }
 ```
 
@@ -4504,7 +4437,7 @@ Update a RecipeRecord in IMS.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[RecipePatchRecord](#schemarecipepatchrecord)|true|Recipe Patch record|
-|recipe_id|path|string(uuid)|true|The unique id of a recipe|
+|recipe_id|path|string(uuid)|true|The unique ID of a recipe|
 
 > Example responses
 
@@ -4527,7 +4460,9 @@ Update a RecipeRecord in IMS.
       "key": "CSM_RELEASE_VERSION",
       "value": "1.0.0"
     }
-  ]
+  ],
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -4535,7 +4470,7 @@ Update a RecipeRecord in IMS.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A Recipe record|[RecipeRecord](#schemareciperecord)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Updated Recipe record|[RecipeRecord](#schemareciperecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Requested resource could not be patched due to conflict.|[ProblemDetails](#schemaproblemdetails)|
@@ -4605,15 +4540,15 @@ func main() {
 
 `DELETE /v3/recipes/{recipe_id}`
 
-*Soft delete a RecipeRecord by id*
+*Soft delete a RecipeRecord by ID*
 
-Delete a RecipeRecord by id. The deleted recipes are soft deleted and added to the /deleted/recipes endpoint. The S3 key for the associated artifact is renamed.
+Delete a RecipeRecord by ID. The deleted recipes are soft deleted and added to the /deleted/recipes endpoint. The S3 key for the associated artifact is renamed.
 
 <h3 id="delete_v3_recipe-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|recipe_id|path|string(uuid)|true|The unique id of a recipe|
+|recipe_id|path|string(uuid)|true|The unique ID of a recipe|
 
 > Example responses
 
@@ -4721,6 +4656,8 @@ Retrieve all DeletedRecipeRecords that are registered with the IMS.
       "type": "s3"
     },
     "recipe_type": "kiwi-ng",
+    "arch": "aarch64",
+    "require_dkms": false,
     "linux_distribution": "sles12",
     "name": "centos7.5_barebones"
   }
@@ -4741,7 +4678,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[DeletedRecipeRecord](#schemadeletedreciperecord)]|false|none|[A Deleted Recipe Record]|
-|» id|string(uuid)|false|read-only|Unique id of the recipe|
+|» id|string(uuid)|false|read-only|Unique ID of the recipe|
 |» created|string(date-time)|false|read-only|Time the recipe record was created|
 |» deleted|string(date-time)|false|read-only|Time the recipe record was deleted|
 |» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
@@ -4749,6 +4686,8 @@ Status Code **200**
 |»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
 |»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
 |» recipe_type|string|true|none|Type of recipe|
+|» arch|string|false|none|Target architecture for the recipe.|
+|» require_dkms|boolean|false|none|Whether to enable DKMS for the job|
 |» linux_distribution|string|true|none|Linux distribution being built|
 |» name|string|true|none|Name of the image|
 
@@ -4758,6 +4697,8 @@ Status Code **200**
 |---|---|
 |recipe_type|kiwi-ng|
 |recipe_type|packer|
+|arch|aarch64|
+|arch|x86_64|
 |linux_distribution|sles12|
 |linux_distribution|sles15|
 |linux_distribution|centos7|
@@ -5025,15 +4966,15 @@ func main() {
 
 `GET /v3/deleted/recipes/{recipe_id}`
 
-*Retrieve DeletedRecipeRecord by id*
+*Retrieve DeletedRecipeRecord by ID*
 
-Retrieve a DeletedRecipeRecord by id
+Retrieve a DeletedRecipeRecord by ID
 
 <h3 id="get_v3_deleted_recipe-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|recipe_id|path|string(uuid)|true|The unique id of a deleted recipe|
+|recipe_id|path|string(uuid)|true|The unique ID of a deleted recipe|
 
 > Example responses
 
@@ -5050,6 +4991,8 @@ Retrieve a DeletedRecipeRecord by id
     "type": "s3"
   },
   "recipe_type": "kiwi-ng",
+  "arch": "aarch64",
+  "require_dkms": false,
   "linux_distribution": "sles12",
   "name": "centos7.5_barebones"
 }
@@ -5125,15 +5068,15 @@ func main() {
 
 `DELETE /v3/deleted/recipes/{recipe_id}`
 
-*Permanently delete a DeletedRecipeRecord by id*
+*Permanently delete a DeletedRecipeRecord by ID*
 
-Permanently delete a DeletedRecipeRecord by id. Associated artifacts are permanently deleted from S3.
+Permanently delete a DeletedRecipeRecord by ID. Associated artifacts are permanently deleted from S3.
 
 <h3 id="delete_v3_deleted_recipe-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|recipe_id|path|string(uuid)|true|The unique id of a deleted recipe|
+|recipe_id|path|string(uuid)|true|The unique ID of a deleted recipe|
 
 > Example responses
 
@@ -5242,7 +5185,7 @@ Restore a DeletedRecipeRecord in IMS.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[DeletedRecipePatchRecord](#schemadeletedrecipepatchrecord)|true|Deleted Recipe Patch record|
-|recipe_id|path|string(uuid)|true|The unique id of a deleted recipe|
+|recipe_id|path|string(uuid)|true|The unique ID of a deleted recipe|
 
 > Example responses
 
@@ -5359,7 +5302,9 @@ Retrieve all RecipeRecords that are registered with the IMS.
         "key": "CSM_RELEASE_VERSION",
         "value": "1.0.0"
       }
-    ]
+    ],
+    "arch": "aarch64",
+    "require_dkms": false
   }
 ]
 ```
@@ -5378,7 +5323,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[RecipeRecord](#schemareciperecord)]|false|none|[A Recipe Record]|
-|» id|string(uuid)|false|read-only|Unique id of the recipe|
+|» id|string(uuid)|false|read-only|Unique ID of the recipe|
 |» created|string(date-time)|false|read-only|Time the recipe record was created|
 |» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |»» path|string|true|none|Path or location to the artifact in the artifact repository|
@@ -5390,6 +5335,8 @@ Status Code **200**
 |» template_dictionary|[[RecipeKeyValuePair](#schemarecipekeyvaluepair)]|false|none|List of key/value pairs to be templated into the recipe when building the image.|
 |»» key|string|true|none|Template variable to replace in the IMS recipe|
 |»» value|string|true|none|Value to replace the template variable in the IMS recipe|
+|» arch|string|false|none|Target architecture for the recipe.|
+|» require_dkms|boolean|false|none|Whether to enable DKMS for the job|
 
 #### Enumerated Values
 
@@ -5400,6 +5347,8 @@ Status Code **200**
 |linux_distribution|sles12|
 |linux_distribution|sles15|
 |linux_distribution|centos7|
+|arch|aarch64|
+|arch|x86_64|
 
 <aside class="success">
 This operation does not require authentication
@@ -5490,7 +5439,9 @@ A compressed Kiwi-NG image description is actually stored in the artifact reposi
       "key": "CSM_RELEASE_VERSION",
       "value": "1.0.0"
     }
-  ]
+  ],
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -5505,65 +5456,36 @@ A compressed Kiwi-NG image description is actually stored in the artifact reposi
 > 201 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "link": {
-      "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
-      "etag": "f04af5f34635ae7c507322985e60c00c-131",
-      "type": "s3"
-    },
-    "recipe_type": "kiwi-ng",
-    "linux_distribution": "sles12",
-    "name": "centos7.5_barebones",
-    "template_dictionary": [
-      {
-        "key": "CSM_RELEASE_VERSION",
-        "value": "1.0.0"
-      }
-    ]
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "link": {
+    "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
+    "etag": "f04af5f34635ae7c507322985e60c00c-131",
+    "type": "s3"
+  },
+  "recipe_type": "kiwi-ng",
+  "linux_distribution": "sles12",
+  "name": "centos7.5_barebones",
+  "template_dictionary": [
+    {
+      "key": "CSM_RELEASE_VERSION",
+      "value": "1.0.0"
+    }
+  ],
+  "arch": "aarch64",
+  "require_dkms": false
+}
 ```
 
 <h3 id="post_v3_recipe-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A recipe record|Inline|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New recipe record|[RecipeRecord](#schemareciperecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="post_v3_recipe-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string(uuid)|false|read-only|Unique id of the recipe|
-|» created|string(date-time)|false|read-only|Time the recipe record was created|
-|» link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
-|»» path|string|true|none|Path or location to the artifact in the artifact repository|
-|»» etag|string|false|none|Opaque identifier used to uniquely identify the artifact in the artifact repository|
-|»» type|string|true|none|Identifier specifying the artifact repository where the artifact is located|
-|» recipe_type|string|true|none|Type of recipe|
-|» linux_distribution|string|true|none|Linux distribution being built|
-|» name|string|true|none|Name of the image|
-|» template_dictionary|[[RecipeKeyValuePair](#schemarecipekeyvaluepair)]|false|none|List of key/value pairs to be templated into the recipe when building the image.|
-|»» key|string|true|none|Template variable to replace in the IMS recipe|
-|»» value|string|true|none|Value to replace the template variable in the IMS recipe|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|recipe_type|kiwi-ng|
-|recipe_type|packer|
-|linux_distribution|sles12|
-|linux_distribution|sles15|
-|linux_distribution|centos7|
 
 <aside class="success">
 This operation does not require authentication
@@ -5723,15 +5645,15 @@ func main() {
 
 `GET /recipes/{recipe_id}`
 
-*Retrieve RecipeRecord by id*
+*Retrieve RecipeRecord by ID*
 
-Retrieve a RecipeRecord by id
+Retrieve a RecipeRecord by ID
 
 <h3 id="get_v2_recipe-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|recipe_id|path|string(uuid)|true|The unique id of a recipe|
+|recipe_id|path|string(uuid)|true|The unique ID of a recipe|
 
 > Example responses
 
@@ -5754,7 +5676,9 @@ Retrieve a RecipeRecord by id
       "key": "CSM_RELEASE_VERSION",
       "value": "1.0.0"
     }
-  ]
+  ],
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -5844,7 +5768,15 @@ Update a RecipeRecord in IMS.
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64",
+  "require_dkms": false,
+  "template_dictionary": [
+    {
+      "key": "CSM_RELEASE_VERSION",
+      "value": "1.0.0"
+    }
+  ]
 }
 ```
 
@@ -5853,7 +5785,7 @@ Update a RecipeRecord in IMS.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[RecipePatchRecord](#schemarecipepatchrecord)|true|Recipe Patch record|
-|recipe_id|path|string(uuid)|true|The unique id of a recipe|
+|recipe_id|path|string(uuid)|true|The unique ID of a recipe|
 
 > Example responses
 
@@ -5876,7 +5808,9 @@ Update a RecipeRecord in IMS.
       "key": "CSM_RELEASE_VERSION",
       "value": "1.0.0"
     }
-  ]
+  ],
+  "arch": "aarch64",
+  "require_dkms": false
 }
 ```
 
@@ -5884,7 +5818,7 @@ Update a RecipeRecord in IMS.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A Recipe record|[RecipeRecord](#schemareciperecord)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Updated Recipe record|[RecipeRecord](#schemareciperecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|Requested resource could not be patched due to conflict.|[ProblemDetails](#schemaproblemdetails)|
@@ -5954,16 +5888,16 @@ func main() {
 
 `DELETE /recipes/{recipe_id}`
 
-*Delete a RecipeRecord by id*
+*Delete a RecipeRecord by ID*
 
-Delete a recipe by id.
+Delete a recipe by ID.
 
 <h3 id="delete_v2_recipe-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |cascade|query|boolean|false|If cascade is true, IMS also deletes the linked artifacts in S3. If cascade is false, the linked artifacts in S3 are not affected.|
-|recipe_id|path|string(uuid)|true|The unique id of a recipe|
+|recipe_id|path|string(uuid)|true|The unique ID of a recipe|
 
 > Example responses
 
@@ -6055,9 +5989,9 @@ func main() {
 
 `GET /v3/public-keys`
 
-*List public ssh keys *
+*List public SSH keys*
 
-Retrieve a list of public ssh keys that are registered with IMS.
+Retrieve a list of public SSH keys that are registered with IMS.
 
 > Example responses
 
@@ -6088,7 +6022,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[PublicKeyRecord](#schemapublickeyrecord)]|false|none|[A Keypair Record]|
-|» id|string(uuid)|false|read-only|Unique id of the image|
+|» id|string(uuid)|false|read-only|Unique ID of the image|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» name|string|true|none|Name of the public key|
 |» public_key|string|true|none|The raw public key|
@@ -6160,61 +6094,46 @@ func main() {
 
 `POST /v3/public-keys`
 
-*Create a new public ssh key record*
+*Create a new public SSH key record*
 
-Create a new public ssh key record. Uploaded by administrator to allow them to access ssh shells that IMS provides.
+Create a new public SSH key record. Uploaded by administrator to allow them to access SSH shells that IMS provides.
 
 > Body parameter
 
 ```json
-[
-  {
-    "name": "Eric's public key",
-    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-  }
-]
+{
+  "name": "Eric's public key",
+  "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
+}
 ```
 
 <h3 id="post_v3_public_key-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|array[object]|true|public key record to create|
+|body|body|[PublicKeyRecord](#schemapublickeyrecord)|true|Public key record to create|
 
 > Example responses
 
 > 201 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "name": "Eric's public key",
-    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "name": "Eric's public key",
+  "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
+}
 ```
 
 <h3 id="post_v3_public_key-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New PublicKey|Inline|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New PublicKey|[PublicKeyRecord](#schemapublickeyrecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="post_v3_public_key-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string(uuid)|false|read-only|Unique id of the image|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» name|string|true|none|Name of the public key|
-|» public_key|string|true|none|The raw public key|
 
 <aside class="success">
 This operation does not require authentication
@@ -6376,41 +6295,28 @@ Retrieve a public key by public_key_id
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|public_key_id|path|string(uuid)|true|The unique id of a public key|
+|public_key_id|path|string(uuid)|true|The unique ID of a public key|
 
 > Example responses
 
 > 200 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "name": "Eric's public key",
-    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "name": "Eric's public key",
+  "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
+}
 ```
 
 <h3 id="get_v3_public_key-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A public key record|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A public key record|[PublicKeyRecord](#schemapublickeyrecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="get_v3_public_key-responseschema">Response Schema</h3>
-
-Status Code **200**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string(uuid)|false|read-only|Unique id of the image|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» name|string|true|none|Name of the public key|
-|» public_key|string|true|none|The raw public key|
 
 <aside class="success">
 This operation does not require authentication
@@ -6477,13 +6383,13 @@ func main() {
 
 *Soft delete public key by public_key_id*
 
-Delete a PublicKeyRecord by Id. Deleted public-keys are soft deleted and added to the /deleted/public-keys endpoint.
+Delete a PublicKeyRecord by ID. Deleted public-keys are soft deleted and added to the /deleted/public-keys endpoint.
 
 <h3 id="delete_v3_public_key-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|public_key_id|path|string(uuid)|true|The unique id of a public key|
+|public_key_id|path|string(uuid)|true|The unique ID of a public key|
 
 > Example responses
 
@@ -6571,9 +6477,9 @@ func main() {
 
 `GET /v3/deleted/public-keys`
 
-*List deleted public ssh keys*
+*List deleted public SSH keys*
 
-Retrieve a list of deleted public ssh keys that are registered with IMS.
+Retrieve a list of deleted public SSH keys that are registered with IMS.
 
 > Example responses
 
@@ -6605,7 +6511,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[DeletedPublicKeyRecord](#schemadeletedpublickeyrecord)]|false|none|[A Deleted Keypair Record]|
-|» id|string(uuid)|false|read-only|Unique id of the image|
+|» id|string(uuid)|false|read-only|Unique ID of the image|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» deleted|string(date-time)|false|read-only|Time the image record was deleted|
 |» name|string|true|none|Name of the public key|
@@ -6882,43 +6788,29 @@ Retrieve a deleted public key by deleted_public_key_id
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|deleted_public_key_id|path|string(uuid)|true|The unique id of a deleted public key|
+|deleted_public_key_id|path|string(uuid)|true|The unique ID of a deleted public key|
 
 > Example responses
 
 > 200 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "deleted": "2018-07-28T03:26:01.234Z",
-    "name": "Eric's public key",
-    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "deleted": "2018-07-28T03:26:01.234Z",
+  "name": "Eric's public key",
+  "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
+}
 ```
 
 <h3 id="get_v3_deleted_public_key-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A deleted public key record|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A deleted public key record|[DeletedPublicKeyRecord](#schemadeletedpublickeyrecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="get_v3_deleted_public_key-responseschema">Response Schema</h3>
-
-Status Code **200**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string(uuid)|false|read-only|Unique id of the image|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» deleted|string(date-time)|false|read-only|Time the image record was deleted|
-|» name|string|true|none|Name of the public key|
-|» public_key|string|true|none|The raw public key|
 
 <aside class="success">
 This operation does not require authentication
@@ -6985,13 +6877,13 @@ func main() {
 
 *Permanently delete public key by deleted_public_key_id*
 
-Permanently delete a DeletedPublicKeyRecord by Id.
+Permanently delete a DeletedPublicKeyRecord by ID.
 
 <h3 id="delete_v3_deleted_public_key-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|deleted_public_key_id|path|string(uuid)|true|The unique id of a deleted public key|
+|deleted_public_key_id|path|string(uuid)|true|The unique ID of a deleted public key|
 
 > Example responses
 
@@ -7100,7 +6992,7 @@ Restore a DeletedPublicKeyRecord in IMS.
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[DeletedPublicKeyPatchRecord](#schemadeletedpublickeypatchrecord)|true|DeletedPublicKey Patch record|
-|deleted_public_key_id|path|string(uuid)|true|The unique id of a deleted public key|
+|deleted_public_key_id|path|string(uuid)|true|The unique ID of a deleted public key|
 
 > Example responses
 
@@ -7191,9 +7083,9 @@ func main() {
 
 `GET /public-keys`
 
-*List public ssh keys *
+*List public SSH keys*
 
-Retrieve a list of public ssh keys that are registered with IMS.
+Retrieve a list of public SSH keys that are registered with IMS.
 
 > Example responses
 
@@ -7224,7 +7116,7 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[PublicKeyRecord](#schemapublickeyrecord)]|false|none|[A Keypair Record]|
-|» id|string(uuid)|false|read-only|Unique id of the image|
+|» id|string(uuid)|false|read-only|Unique ID of the image|
 |» created|string(date-time)|false|read-only|Time the image record was created|
 |» name|string|true|none|Name of the public key|
 |» public_key|string|true|none|The raw public key|
@@ -7296,62 +7188,46 @@ func main() {
 
 `POST /public-keys`
 
-*Create a new public ssh key record*
+*Create a new public SSH key record*
 
-Create a new public ssh key record. Uploaded by administrator to allow them to access ssh shells that IMS provides.
+Create a new public SSH key record. Uploaded by administrator to allow them to access SSH shells that IMS provides.
 
 > Body parameter
 
 ```json
-[
-  {
-    "name": "Eric's public key",
-    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-  }
-]
+{
+  "name": "Eric's public key",
+  "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
+}
 ```
 
 <h3 id="post_v2_public_key-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[PublicKeyRecord](#schemapublickeyrecord)|true|public key record to create|
+|body|body|[PublicKeyRecord](#schemapublickeyrecord)|true|Public key record to create|
 
 > Example responses
 
 > 201 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "name": "Eric's public key",
-    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "name": "Eric's public key",
+  "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
+}
 ```
 
 <h3 id="post_v2_public_key-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New public key|Inline|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New public key|[PublicKeyRecord](#schemapublickeyrecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="post_v2_public_key-responseschema">Response Schema</h3>
-
-Status Code **201**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[PublicKeyRecord](#schemapublickeyrecord)]|false|none|[A Keypair Record]|
-|» id|string(uuid)|false|read-only|Unique id of the image|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» name|string|true|none|Name of the public key|
-|» public_key|string|true|none|The raw public key|
 
 <aside class="success">
 This operation does not require authentication
@@ -7513,41 +7389,28 @@ Retrieve a public key by public_key_id
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|public_key_id|path|string(uuid)|true|The unique id of a public key|
+|public_key_id|path|string(uuid)|true|The unique ID of a public key|
 
 > Example responses
 
 > 200 Response
 
 ```json
-[
-  {
-    "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
-    "created": "2018-07-28T03:26:01.234Z",
-    "name": "Eric's public key",
-    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
-  }
-]
+{
+  "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
+  "created": "2018-07-28T03:26:01.234Z",
+  "name": "Eric's public key",
+  "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABA ... fa6hG9i2SzfY8L6vAVvSE7A2ILAsVruw1Zeiec2IWt"
+}
 ```
 
 <h3 id="get_v2_public_key-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A public key record|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A public key record|[PublicKeyRecord](#schemapublickeyrecord)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Requested resource does not exist. Re-run request with valid ID.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
-
-<h3 id="get_v2_public_key-responseschema">Response Schema</h3>
-
-Status Code **200**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|» id|string(uuid)|false|read-only|Unique id of the image|
-|» created|string(date-time)|false|read-only|Time the image record was created|
-|» name|string|true|none|Name of the public key|
-|» public_key|string|true|none|The raw public key|
 
 <aside class="success">
 This operation does not require authentication
@@ -7620,7 +7483,7 @@ Delete a public key by public_key_id.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|public_key_id|path|string(uuid)|true|The unique id of a public key|
+|public_key_id|path|string(uuid)|true|The unique ID of a public key|
 
 > Example responses
 
@@ -7756,8 +7619,8 @@ This operation does not require authentication
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|host|string|false|read-only|IP or host name to use, in combination with the port, to connect to the ssh container|
-|port|integer|false|read-only|Port to use, in combination with the host, to connect to the ssh container|
+|host|string|false|read-only|IP or host name to use, in combination with the port, to connect to the SSH container|
+|port|integer|false|read-only|Port to use, in combination with the host, to connect to the SSH container|
 
 <h2 id="tocS_SSHConnectionMap">SSHConnectionMap</h2>
 <!-- backwards compatibility -->
@@ -7816,9 +7679,9 @@ This operation does not require authentication
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|true|none|Name of the ssh container|
-|jail|boolean|true|none|If true, establish an ssh jail, or chroot environment.|
-|status|string|false|read-only|Status of the ssh container (pending, establishing, active, complete)|
+|name|string|true|none|Name of the SSH container|
+|jail|boolean|true|none|If true, establish an SSH jail, or chroot environment.|
+|status|string|false|read-only|Status of the SSH container (pending, establishing, active, complete)|
 |connection_info|[SSHConnectionMap](#schemasshconnectionmap)|false|none|none|
 
 <h2 id="tocS_ProblemDetails">ProblemDetails</h2>
@@ -7851,7 +7714,7 @@ An error response for RFC 7807 problem details.
 |instance|string(uri)|false|none|A relative URI reference that identifies the specific occurrence of the problem|
 |status|integer|false|none|HTTP status code|
 |title|string|false|none|Short, human-readable summary of the problem, should not change by occurrence.|
-|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human readable documentation.|
+|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human-readable documentation.|
 
 <h2 id="tocS_PublicKeyRecord">PublicKeyRecord</h2>
 <!-- backwards compatibility -->
@@ -7876,7 +7739,7 @@ A Keypair Record
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string(uuid)|false|read-only|Unique id of the image|
+|id|string(uuid)|false|read-only|Unique ID of the image|
 |created|string(date-time)|false|read-only|Time the image record was created|
 |name|string|true|none|Name of the public key|
 |public_key|string|true|none|The raw public key|
@@ -7905,7 +7768,7 @@ A Deleted Keypair Record
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string(uuid)|false|read-only|Unique id of the image|
+|id|string(uuid)|false|read-only|Unique ID of the image|
 |created|string(date-time)|false|read-only|Time the image record was created|
 |deleted|string(date-time)|false|read-only|Time the image record was deleted|
 |name|string|true|none|Name of the public key|
@@ -7985,7 +7848,9 @@ Key/value pair used to template an IMS recipe
       "key": "CSM_RELEASE_VERSION",
       "value": "1.0.0"
     }
-  ]
+  ],
+  "arch": "aarch64",
+  "require_dkms": false
 }
 
 ```
@@ -7996,13 +7861,15 @@ A Recipe Record
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string(uuid)|false|read-only|Unique id of the recipe|
+|id|string(uuid)|false|read-only|Unique ID of the recipe|
 |created|string(date-time)|false|read-only|Time the recipe record was created|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |recipe_type|string|true|none|Type of recipe|
 |linux_distribution|string|true|none|Linux distribution being built|
 |name|string|true|none|Name of the image|
 |template_dictionary|[[RecipeKeyValuePair](#schemarecipekeyvaluepair)]|false|none|List of key/value pairs to be templated into the recipe when building the image.|
+|arch|string|false|none|Target architecture for the recipe.|
+|require_dkms|boolean|false|none|Whether to enable DKMS for the job|
 
 #### Enumerated Values
 
@@ -8013,6 +7880,8 @@ A Recipe Record
 |linux_distribution|sles12|
 |linux_distribution|sles15|
 |linux_distribution|centos7|
+|arch|aarch64|
+|arch|x86_64|
 
 <h2 id="tocS_DeletedRecipeRecord">DeletedRecipeRecord</h2>
 <!-- backwards compatibility -->
@@ -8032,6 +7901,8 @@ A Recipe Record
     "type": "s3"
   },
   "recipe_type": "kiwi-ng",
+  "arch": "aarch64",
+  "require_dkms": false,
   "linux_distribution": "sles12",
   "name": "centos7.5_barebones"
 }
@@ -8044,11 +7915,13 @@ A Deleted Recipe Record
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string(uuid)|false|read-only|Unique id of the recipe|
+|id|string(uuid)|false|read-only|Unique ID of the recipe|
 |created|string(date-time)|false|read-only|Time the recipe record was created|
 |deleted|string(date-time)|false|read-only|Time the recipe record was deleted|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
 |recipe_type|string|true|none|Type of recipe|
+|arch|string|false|none|Target architecture for the recipe.|
+|require_dkms|boolean|false|none|Whether to enable DKMS for the job|
 |linux_distribution|string|true|none|Linux distribution being built|
 |name|string|true|none|Name of the image|
 
@@ -8058,6 +7931,8 @@ A Deleted Recipe Record
 |---|---|
 |recipe_type|kiwi-ng|
 |recipe_type|packer|
+|arch|aarch64|
+|arch|x86_64|
 |linux_distribution|sles12|
 |linux_distribution|sles15|
 |linux_distribution|centos7|
@@ -8075,7 +7950,15 @@ A Deleted Recipe Record
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64",
+  "require_dkms": false,
+  "template_dictionary": [
+    {
+      "key": "CSM_RELEASE_VERSION",
+      "value": "1.0.0"
+    }
+  ]
 }
 
 ```
@@ -8087,6 +7970,16 @@ Values to update a RecipeRecord with
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
+|arch|string|false|none|Target architecture for the recipe.|
+|require_dkms|boolean|false|none|Whether enable DKMS for the job|
+|template_dictionary|[[RecipeKeyValuePair](#schemarecipekeyvaluepair)]|false|none|List of key/value pairs to be templated into the recipe when building the image.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|aarch64|
+|arch|x86_64|
 
 <h2 id="tocS_ImageRecord">ImageRecord</h2>
 <!-- backwards compatibility -->
@@ -8104,7 +7997,8 @@ Values to update a RecipeRecord with
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 
 ```
@@ -8115,10 +8009,18 @@ An Image Record
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string(uuid)|false|read-only|Unique id of the image.|
+|id|string(uuid)|false|read-only|Unique ID of the image.|
 |created|string(date-time)|false|read-only|Time the image record was created|
 |name|string|true|none|Name of the image|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
+|arch|string|false|none|Target architecture for the recipe.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|aarch64|
+|arch|x86_64|
 
 <h2 id="tocS_DeletedImageRecord">DeletedImageRecord</h2>
 <!-- backwards compatibility -->
@@ -8137,7 +8039,8 @@ An Image Record
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 
 ```
@@ -8148,11 +8051,19 @@ A Deleted Image Record
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string(uuid)|false|read-only|Unique id of the image.|
+|id|string(uuid)|false|read-only|Unique ID of the image.|
 |created|string(date-time)|false|read-only|Time the image record was created|
 |deleted|string(date-time)|false|read-only|Time the image record was deleted|
 |name|string|true|none|Name of the image|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
+|arch|string|false|none|Target architecture for the recipe.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|aarch64|
+|arch|x86_64|
 
 <h2 id="tocS_ImagePatchRecord">ImagePatchRecord</h2>
 <!-- backwards compatibility -->
@@ -8167,7 +8078,8 @@ A Deleted Image Record
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
     "etag": "f04af5f34635ae7c507322985e60c00c-131",
     "type": "s3"
-  }
+  },
+  "arch": "aarch64"
 }
 
 ```
@@ -8179,6 +8091,14 @@ Values to update an ImageRecord with
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |link|[ArtifactLinkRecord](#schemaartifactlinkrecord)|false|none|An Artifact Link Record|
+|arch|string|false|none|Target architecture for the recipe.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|aarch64|
+|arch|x86_64|
 
 <h2 id="tocS_JobRecord">JobRecord</h2>
 <!-- backwards compatibility -->
@@ -8222,7 +8142,9 @@ Values to update an ImageRecord with
   "enable_debug": true,
   "resultant_image_id": "e564cd0a-f222-4f30-8337-62184e2dd86d",
   "build_env_size": 15,
-  "kubernetes_namespace": "default"
+  "kubernetes_namespace": "default",
+  "arch": "aarch64",
+  "require_dkms": false
 }
 
 ```
@@ -8233,7 +8155,7 @@ A Job Record
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string(uuid)|false|read-only|Unique id of the job|
+|id|string(uuid)|false|read-only|Unique ID of the job|
 |created|string(date-time)|false|read-only|Time the image record was created|
 |job_type|[JobTypes](#schemajobtypes)|true|none|Type of job|
 |image_root_archive_name|string|true|none|Name to be given to the imageroot artifact (do not include .sqshfs or other extensions)|
@@ -8242,15 +8164,24 @@ A Job Record
 |kernel_parameters_file_name|string|false|none|Name of the kernel-parameters file to extract and upload to the artifact repository from the /boot directory of the image root.|
 |status|[JobStatuses](#schemajobstatuses)|false|read-only|Status of the job|
 |artifact_id|string(uuid)|true|none|IMS artifact_id which specifies the recipe (create job_type) or the image (customize job_type) to fetch from the artifact repository.|
-|public_key_id|string(uuid)|true|none|Public key to use to enable passwordless ssh shells|
+|public_key_id|string(uuid)|true|none|Public key to use to enable passwordless SSH shells|
 |kubernetes_job|string|false|read-only|Name of the underlying kubernetes job|
 |kubernetes_service|string|false|read-only|Name of the underlying kubernetes service|
 |kubernetes_configmap|string|false|read-only|Name of the underlying kubernetes configmap|
-|ssh_containers|[[SshContainer](#schemasshcontainer)]|false|none|list of ssh containers used to customize images being built or modified|
+|ssh_containers|[[SshContainer](#schemasshcontainer)]|false|none|List of SSH containers used to customize images being built or modified|
 |enable_debug|boolean|false|none|Whether to enable debugging of the job|
 |resultant_image_id|string(uuid)|false|read-only|IMS image ID for the resultant image.|
 |build_env_size|integer|false|none|Size (in Gb) to allocate for the image root. Default = 15|
 |kubernetes_namespace|string|false|read-only|Kubernetes namespace where the IMS job resources were created|
+|arch|string|false|read-only|Target architecture for the recipe.|
+|require_dkms|boolean|false|none|Whether enable DKMS for the job|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|arch|aarch64|
+|arch|x86_64|
 
 <h2 id="tocS_JobPatchRecord">JobPatchRecord</h2>
 <!-- backwards compatibility -->
