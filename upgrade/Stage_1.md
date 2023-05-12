@@ -7,7 +7,6 @@
   - [Start typescript](#start-typescript)
   - [Run Ceph Latency Repair Script](#run-ceph-latency-repair-script)
   - [Apply boot order workaround](#apply-boot-order-workaround)
-  - [Upload Ceph container images to Nexus](#upload-ceph-container-images-to-nexus)
   - [Argo workflows](#argo-workflows)
   - [CSM Upgrade requirement for upgrades staying within a CSM release version](#csm-upgrade-requirement-for-upgrades-staying-within-a-csm-release-version)
   - [Storage node image upgrade](#storage-node-image-upgrade)
@@ -48,79 +47,20 @@ Note that the progress for the current stage will not show up in Argo before the
 
 For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md) and [Using Argo Workflows](../operations/argo/Using_Argo_Workflows.md).
 
-## CSM Upgrade requirement for upgrades to a new CSM release version
-
-**IMPORTANT:**
-
-> If the upgrade is to a new CSM release, e.g. `CSM-1.2.0` to `CSM-1.3.0`, then you will need to run the following to upgrade Ceph. This will upgrade Ceph from `v15.2.15` to `v16.2.9`.
-
-1. (`ncn-m001#`) Check that Ceph version `16.2.9` is in Nexus.
-
-    ```bash
-    ceph orch upgrade check registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v16.2.9
-    ```
-  
-    Expected output for a successful check should contain `target_digest`, `target_id`, `target_name`. The following is an example :
-
-    ```bash
-    "target_digest": "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph@sha256:a960130143d4feb952d6afc205ffcc0d7d033f78839a38339e46c122646910d5",
-    "target_id": "87b249bff032ea26a91e455c43b7b2feb07e03c1b10bc32885ca9d583fc08236",
-    "target_name": "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v16.2.9"
-    ```
-
-    A failed check will provide the following error:
-
-    ```bash
-    Error EINVAL: host ncn-s001 `cephadm pull` failed: cephadm exited with an error code: 1, stderr:Pulling container image registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v16.2.9...
-    ```
-
-    This failure means that the Ceph image with version `16.2.9` is not in Nexus. Verify that the upgrade `prerequisites.sh` script completed successfully. This script uploads images to Nexus.
-
-1. (`ncn-m001#`) Upgrade Ceph to `16.2.9`.
-
-   ```bash
-   ceph orch upgrade start registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v16.2.9
-   ```
-
-1. (`ncn-m001, ncn-s00[1/2/3]#`) Monitor the upgrade.
-
-    ```bash
-    watch ceph orch upgrade status
-    ```
-
-    Other helpful commands for monitoring the status of the upgrade are below.
-
-    ```bash
-    watch ceph orch ps
-    ceph -W cephadm
-    ```
-
-1. Wait for the upgrade to complete. Expected output after a successful upgrade:
-
-    ```bash
-    ncn-s001:~ # ceph orch upgrade status
-    {
-        "target_image": null,
-        "in_progress": false,
-        "services_complete": [],
-        "progress": null,
-        "message": ""
-    }
-    ```
-
 ## CSM Upgrade requirement for upgrades staying within a CSM release version
 
 **IMPORTANT:**
 
-> If the upgrade is staying with a CSM release, e.g. `CSM-1.3.0-rc1` to `CSM-1.3.0-rc2`, then you will need to run the following to point the Ceph cluster to use the Ceph container image stored in Nexus.
+> If the upgrade is staying within a CSM release, e.g. `CSM-1.3.0-rc1` to `CSM-1.3.0-rc2`, then you will need to run the following to point the Ceph cluster to use the Ceph container image stored in Nexus.
 > The issue stems from slightly different `sha` values for the Ceph containers for in-family CSM storage node images which will prevent the Ceph containers from starting.
+> This script uploads local Ceph container images to nexus and restarts all Ceph daemons so they are using the image in Nexus.
 
-(`ncn-s001#`) Upload Ceph container images into Nexus and restart daemons so that they use the image in Nexus.
+(`ncn-s00[1/2/3]#`) Copy `upload_ceph_images_to_nexus.sh` from `ncn-m001` and execute it.
 
-```bash
-scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-/srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
-```
+   ```bash
+   scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
+   /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
+   ```
 
 ### Troubleshooting `upload_ceph_images_to_nexus.sh`
 
