@@ -1,7 +1,7 @@
 # Stage 4 - Ceph Upgrade
 
 **Important:** Ceph does not need to be upgraded if this is an upgrade is staying within a CSM release, e.g. `CSM-1.3.0-rc1` to `CSM-1.3.0-rc2`.
-If this is an upgrade starying within a CSM release, then Ceph is already running `v16.2.9`. See instructions in [stage completed](#stage-completed) for next steps.
+If this is an upgrade staying within a CSM release, then Ceph is already running `v16.2.9`. See instructions in [stage completed](#stage-completed) for next steps.
 
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, then see
 [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
