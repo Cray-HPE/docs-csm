@@ -40,6 +40,7 @@ The following administrative topics can be found in this guide:
 - [System Admin Toolkit (SAT)](#system-admin-toolkit-sat)
 - [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 - [Backup and recovery](#backup-and-recovery)
+- [Multi-tenancy](#multi-tenancy)
 
 ## CSM product management
 
@@ -49,6 +50,8 @@ Important procedures for configuring, managing, and validating the CSM environme
 - [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md)
 - [Configure the Cray Command Line Interface (Cray CLI)](configure_cray_cli.md)
 - [Change Passwords and Credentials](CSM_product_management/Change_Passwords_and_Credentials.md)
+  - [Configure the `root` password and SSH keys in Vault](CSM_product_management/Configure_the_root_Password_and_SSH_Keys_in_Vault.md)
+  - [Set up passwordless SSH](CSM_product_management/Set_Up_Passwordless_SSH.md)
 - [Configure CSM Packages with CFS](CSM_product_management/Configure_CSM_Packages_with_CFS.md)
 - [Access the LiveCD USB Device After Reboot](../install/livecd/Access_LiveCD_USB_Device_After_Reboot.md)
 - [Post-Install Customizations](CSM_product_management/Post_Install_Customizations.md)
@@ -81,6 +84,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Configure IMS to Use DKMS](image_management/Configure_IMS_to_Use_DKMS.md)
 - [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
 - [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
+- [IMS API](../api/ims.md)
 
 ## Boot orchestration
 
@@ -112,6 +116,8 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
 - [BOS Options](boot_orchestration/Options.md)
 - [Exporting and Importing BOS Data](boot_orchestration/Exporting_and_Importing_BOS_Data.md)
 - [Rolling Upgrades using BOS](boot_orchestration/Rolling_Upgrades.md)
+- [BOS API](../api/bos.md)
+- [Boot Script Service (BSS) API](../api/bss.md)
 - [BOS Limitations for Gigabyte BMC Hardware](boot_orchestration/Limitations_for_Gigabyte_BMC_Hardware.md)
 - [Compute Node Boot Sequence](boot_orchestration/Compute_Node_Boot_Sequence.md)
   - [Healthy Compute Node Boot Process](boot_orchestration/Healthy_Compute_Node_Boot_Process.md)
@@ -145,7 +151,9 @@ Additional links to power off sub-procedures provided for reference. Refer to th
 - [Prepare the System for Power Off](power_management/Prepare_the_System_for_Power_Off.md)
 - [Shut Down and Power Off Compute and User Access Nodes](power_management/Shut_Down_and_Power_Off_Compute_and_User_Access_Nodes.md)
 - [Save Management Network Switch Configuration Settings](power_management/Save_Management_Network_Switch_Configurations.md)
-- [Power Off Compute Cabinets](power_management/Power_Off_Compute_Cabinets.md)
+- Power Off Compute Cabinets
+  - [Power Off Compute Cabinets](power_management/Power_Off_Compute_Cabinets.md) using CAPMC
+  - [Power Off Compute Cabinets](power_management/Power_Control_Service/Power_Off_Compute_Cabinets.md) using PCS
 - [Shut Down and Power Off the Management Kubernetes Cluster](power_management/Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md)
 - [Power Off the External Lustre File System](power_management/Power_Off_the_External_Lustre_File_System.md)
 
@@ -158,10 +166,14 @@ Procedures required for a full power on of an HPE Cray EX system.
 Additional links to power on sub-procedures provided for reference. Refer to the main procedure linked above before using any of these sub-procedures:
 
 - [Power On and Start the Management Kubernetes Cluster](power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
-- [Power On Compute Cabinets](power_management/Power_On_Compute_Cabinets.md)
+- Power On Compute Cabinets
+  - [Power On Compute Cabinets](power_management/Power_On_Compute_Cabinets.md) using CAPMC
+  - [Power On Compute Cabinets](power_management/Power_Control_Service/Power_On_Compute_Cabinets.md) using PCS
 - [Power On the External Lustre File System](power_management/Power_On_the_External_Lustre_File_System.md)
 - [Power On and Boot Compute and User Access Nodes](power_management/Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md)
-- [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md)
+- Recover from a Liquid Cooled Cabinet EPO Event
+  - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using CAPMC
+  - [Recover from a Liquid Cooled Cabinet EPO Event](power_management/Power_Control_Service/Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) using PCS
 
 ## Power management
 
@@ -173,8 +185,11 @@ HPE Cray System Management (CSM) software manages and controls power out-of-band
 - [Liquid Cooled Node Power Management](power_management/Liquid_Cooled_Node_Card_Power_Management.md)
   - [User Access to Compute Node Power Data](power_management/User_Access_to_Compute_Node_Power_Data.md)
 - [Standard Rack Node Power Management](power_management/Standard_Rack_Node_Power_Management.md)
+- [Node Card Power Management](power_management/Power_Control_Service/Node_Card_Power_Management.md)
 - [Ignore Nodes with CAPMC](power_management/Ignore_Nodes_with_CAPMC.md)
 - [Set the Turbo Boost Limit](power_management/Set_the_Turbo_Boost_Limit.md)
+- [CAPMC API](../api/capmc.md)
+- [PCS API](../api/power-control.md)
 
 ## Artifact management
 
@@ -235,6 +250,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
 - [Write Ansible Code for CFS](configuration_management/Write_Ansible_Code_for_CFS.md)
   - [Target Ansible Tasks for Image Customization](configuration_management/Target_Ansible_Tasks_for_Image_Customization.md)
 - [CFS Key Management](configuration_management/CFS_Key_Management.md)
+- [CFS API](../api/cfs.md)
 - [Accessing `sat bootprep` Files](configuration_management/Accessing_Sat_Bootprep_Files.md)
 - Management node personalization and image customization
   - [Management Node Personalization](configuration_management/Management_Node_Personalization.md)
@@ -275,8 +291,13 @@ As a result, the system's micro-services are modular, resilient, and can be upda
   - [Disaster Recovery for Postgres](kubernetes/Disaster_Recovery_Postgres.md)
   - [View Postgres Information for System Databases](kubernetes/View_Postgres_Information_for_System_Databases.md)
 - [`containerd`](kubernetes/Containerd.md)
+- [Kubernetes Encryption](kubernetes/encryption/README.md)
 - [Kyverno policy management](kubernetes/Kyverno.md)
+- [Troubleshoot Kyverno configuration manually](security_and_authentication/Troubleshoot_Kyverno_Configuration_manually.md)
 - [Troubleshoot Intermittent HTTP 503 Code Failures](kubernetes/Troubleshoot_Intermittent_503s.md)
+- [TDS Lower CPU Requests](kubernetes/TDS_Lower_CPU_Requests.md)
+- [Fix `Failed to start etcd` on Master NCN](kubernetes/Fix_Failed_to_start_etcd_on_Master.md)
+- [Kubernetes and Bare Metal EtcD Certificate Renewal](kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md)
 
 ## Package repository management
 
@@ -292,6 +313,7 @@ repository management. Nexus hosts the Yum, Docker, raw, and Helm repositories f
 - [Restrict Admin Privileges in Nexus](package_repository_management/Restrict_Admin_Privileges_in_Nexus.md)
 - [Repair Yum Repository Metadata](package_repository_management/Repair_Yum_Repository_Metadata.md)
 - [Nexus Space Cleanup](package_repository_management/Nexus_Space_Cleanup.md)
+- [Troubleshoot Nexus](package_repository_management/Troubleshoot_Nexus.md)
 
 ## Security and authentication
 
@@ -349,8 +371,11 @@ Mechanisms used by the system to ensure the security and authentication of inter
   - [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
   - [Troubleshoot Common Vault Cluster Issues](security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
 - [API Authorization](security_and_authentication/API_Authorization.md)
+- [Retrieve an Authentication Token](security_and_authentication/Retrieve_an_Authentication_Token.md)
 - [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 - [Audit Logs](security_and_authentication/Audit_Logs.md)
+- [Cray STS Token Generator API](../api/sts.md)
+- [Configure root user on HPE iLO BMCs](security_and_authentication/Configure_root_user_on_HPE_iLO_BMCs.md)
 
 ## Resiliency
 
@@ -368,6 +393,7 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 ConMan is a tool used for connecting to remote consoles and collecting console logs. These node logs can then be used for various administrative purposes, such as
 troubleshooting node boot issues.
 
+- [ConMan](conman/ConMan.md)
 - [Access Compute Node Logs](conman/Access_Compute_Node_Logs.md)
 - [Access Console Log Data Via the System Monitoring Framework (SMF)](conman/Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
 - [Manage Node Consoles](conman/Manage_Node_Consoles.md)
@@ -377,6 +403,7 @@ troubleshooting node boot issues.
 - [Troubleshoot ConMan Blocking Access to a Node BMC](conman/Troubleshoot_ConMan_Blocking_Access_to_a_Node_BMC.md)
 - [Troubleshoot ConMan Failing to Connect to a Console](conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 - [Troubleshoot ConMan Asking for Password on SSH Connection](conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
+- [Troubleshoot Console Node Pod Stuck in Terminating State](conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
 
 ## Utility storage
 
@@ -388,6 +415,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Manage Ceph Services](utility_storage/Manage_Ceph_Services.md)
 - [Adjust Ceph Pool Quotas](utility_storage/Adjust_Ceph_Pool_Quotas.md)
 - [Add Ceph OSDs](utility_storage/Add_Ceph_OSDs.md)
+- [Shrink Ceph OSDs](utility_storage/Shrink_Ceph_OSDs.md)
 - [Ceph Health States](utility_storage/Ceph_Health_States.md)
 - [Ceph Deep Scrubs](utility_storage/Ceph_Deep_Scrubs.md)
 - [Ceph Daemon Memory Profiling](utility_storage/Ceph_Daemon_Memory_Profiling.md)
@@ -398,6 +426,9 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Dump Ceph Crash Data](utility_storage/Dump_Ceph_Crash_Data.md)
 - [Identify Ceph Latency Issues](utility_storage/Identify_Ceph_Latency_Issues.md)
 - [Cephadm Reference Material](utility_storage/Cephadm_Reference_Material.md)
+- [Adding a Ceph Node to the Ceph Cluster](utility_storage/Add_Ceph_Node.md)
+- [Shrink the Ceph Cluster](utility_storage/Remove_Ceph_Node.md)
+- [Alternate Storage Pools](utility_storage/Alternate_Storage_Pools.md)
 - [Restore Nexus Data After Data Corruption](utility_storage/Restore_Corrupt_Nexus.md)
 - [Troubleshoot Failure to Get Ceph Health](utility_storage/Troubleshoot_Failure_to_Get_Ceph_Health.md)
 - [Troubleshoot a Down OSD](utility_storage/Troubleshoot_a_Down_OSD.md)
@@ -408,7 +439,13 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Troubleshoot Pods Multi-Attach Error](utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md)
 - [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
 - [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
+- [Troubleshoot Ceph MDS Client Connectivity Issues](utility_storage/Troubleshoot_Ceph_FS_Client_Connectivity_issues.md)
 - [Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client](utility_storage/Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)
+- [Troubleshoot Ceph image with tag:`<none>`](utility_storage/Troubleshoot_ceph_image_with_none_tag.md)
+- [Troubleshoot Ceph Services Not Starting After a Server Crash](utility_storage/Troubleshoot_Ceph_Services_Not_Starting.md)
+- [Troubleshoot `HEALTH_ERR` Module `devicehealth` has failed table Device already exists](utility_storage/Troubleshoot_HEALTH_ERR_Module_devicehealth.md)
+- [Troubleshoot Insufficient Standby MDS Daemons Available](utility_storage/Troubleshoot_Insufficient_Standby_MDS_Daemons_Available.md)
+- [Troubleshoot S3FS Mount Issues](utility_storage/Troubleshoot_S3FS_Mounts.md)
 - [Fixing incorrect number of PG Issues](utility_storage/Troubleshoot_Pools_Have_Many_More_Objects_Per_Pg_Than_Average.md)
 
 ## System management health
@@ -426,6 +463,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [Grafterm](system_management_health/Grafterm.md)
 - [Remove Kiali](system_management_health/Remove_Kiali.md)
 - [`prometheus-kafka-adapter` errors during installation](system_management_health/Prometheus_Kafka_Error.md)
+- [Troubleshoot Prometheus Alerts](system_management_health/Troubleshoot_Prometheus_Alerts.md)
 
 ## System Layout Service (SLS)
 
@@ -442,6 +480,7 @@ stores information about the network, such as which port on which switch should 
 - [Create a Backup of the SLS Postgres Database](system_layout_service/Create_a_Backup_of_the_SLS_Postgres_Database.md)
 - [Restore SLS Postgres Database from Backup](system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
 - [Restore SLS Postgres without an Existing Backup](system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
+- [SLS API](../api/sls.md)
 
 ## System configuration service
 
@@ -452,6 +491,7 @@ this tool enables parameters to be set before or after discovery. The operations
 - [Configure BMC and Controller Parameters with SCSD](system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md)
 - [Manage Parameters with the SCSD Service](system_configuration_service/Manage_Parameters_with_the_scsd_Service.md)
 - [Set BMC Credentials](system_configuration_service/Set_BMC_Credentials.md)
+- [SCSD API](../api/scsd.md)
 
 ## Hardware State Manager (HSM)
 
@@ -476,6 +516,9 @@ making it available via REST queries and message bus events when changes occur.
 - [Restore HSM Postgres from a Backup](hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
 - [Restore HSM Postgres without a Backup](hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
 - [Set BMC Management Role](hardware_state_manager/Set_BMC_Management_Role.md)
+- [HSM API](../api/smd.md)
+- [Heartbeat Tracker Daemon (HBTD) API](../api/hbtd.md)
+- [Hardware Management Notification Fanout Daemon (HMNFD) API](../api/hmnfd.md)
 
 ## Hardware Management (HM) collector
 
@@ -553,9 +596,15 @@ Monitor and manage compute nodes (CNs) and non-compute nodes (NCNs) used in the 
 - [Defragment NID Numbering](node_management/Defragment_NID_Numbering.md)
 - [Repurpose a Compute Node as a UAN](node_management/Repurpose_Compute_as_UAN.md)
 - [Clear Gigabyte CMOS](node_management/clear_gigabyte_cmos.md)
+- [Set Gigabyte Node BMC to Factory Defaults](node_management/Set_Gigabyte_Node_BMC_to_Factory_Defaults.md)
+- [NCN Network Troubleshooting](node_management/NCN_Network_Troubleshooting.md)
 - [NCN Drive Identification](node_management/NCN_Identify_Drives_Using_ledctl.md)
 - [Manual Wipe Procedures](node_management/Wipe_NCN_Disks.md)
 - [Build NCN Images Locally](node_management/Build_NCN_Images_Locally.md)
+- [NCN Lifecycle Service (NLS) API](../api/nls.md)
+- [Enable IPMI access on HPE iLO BMCs](node_management/Enable_ipmi_access_on_HPE_iLO_BMCs.md)
+- [Update the HPE Node BIOS Time](node_management/Update_the_HPE_Node_BIOS_Time.md)
+- [Switch PXE Boot from Onboard NIC to PCIe](node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md)
 
 ## Network
 
@@ -655,7 +704,7 @@ Spire provides the ability to authenticate nodes and workloads, and to securely 
 ## Update firmware with FAS
 
 The Firmware Action Service (FAS) provides an interface for managing firmware versions of Redfish-enabled hardware in the system. FAS interacts with the Hardware State
-Managers (HSM), device data, and image data in order to update firmware.
+Manager (HSM), device data, and image data in order to update firmware.
 
 See [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md) for a list components that are upgradable with FAS. Refer to the HPC Firmware Pack (HFP) product
 stream to update firmware on other components.
@@ -663,14 +712,15 @@ stream to update firmware on other components.
 - [Update Firmware with FAS](firmware/Update_Firmware_with_FAS.md)
 - [Using the `FASUpdate` Script](firmware/FASUpdate_Script.md)
 - [FAS CLI](firmware/FAS_CLI.md)
+- [FAS API](../api/firmware-action.md)
 - [FAS Filters](firmware/FAS_Filters.md)
 - [FAS Recipes and Procedures](firmware/FAS_Use_Cases.md)
 - [FAS Recipes](firmware/FAS_Recipes.md)
 - [FAS Admin Procedures](firmware/FAS_Admin_Procedures.md)
 - [Upload Olympus BMC Recovery Firmware into TFTP Server](firmware/Upload_Olympus_BMC_Recovery_Firmware_into_TFTP_Server.md)
-
 - [Updating Firmware on `m001`](firmware/Updating_Firmware_m001.md)
 - [Updating Firmware without FAS](firmware/Updating_Firmware_without_FAS.md)
+- [Update iLO 5 firmware above `v2.78`](firmware/FAS_Update_iLO5_2.78.md)
 
 ## User Access Service (UAS)
 
@@ -678,6 +728,10 @@ The User Access Service \(UAS\) is a containerized service managed by Kubernetes
 a User Access Instance \(UAI\) using the `cray` command. Users can also transfer data between the Cray system and external systems using the UAI.
 
 - [User Access Service (UAS)](UAS_user_and_admin_topics/README.md)
+- [List UAS Version Information](UAS_user_and_admin_topics/List_UAS_Information.md)
+- [Clear UAS Configuration](UAS_user_and_admin_topics/Reset_the_UAS_Configuration_to_Original_Installed_Settings.md)
+- [UAS Limitations](UAS_user_and_admin_topics/UAS_Limitations.md)
+- [UAS API](../api/uas-mgr.md)
 - [End-User UAIs](UAS_user_and_admin_topics/End_User_UAIs.md)
 - [Special Purpose UAIs](UAS_user_and_admin_topics/Special_Purpose_UAIs.md)
 - [Elements of a UAI](UAS_user_and_admin_topics/Elements_of_a_UAI.md)
@@ -710,9 +764,11 @@ a User Access Instance \(UAI\) using the `cray` command. Users can also transfer
     - [View a UAI Class](UAS_user_and_admin_topics/View_a_UAI_Class.md)
     - [Modify a UAI Class](UAS_user_and_admin_topics/Modify_a_UAI_Class.md)
     - [Delete a UAI Class](UAS_user_and_admin_topics/Delete_a_UAI_Class.md)
+  - [Common UAI Configuration](UAS_user_and_admin_topics/Common_UAI_Config.md)
 - [UAI Management](UAS_user_and_admin_topics/UAI_Management.md)
   - [List UAIs](UAS_user_and_admin_topics/List_UAIs.md)
   - [Creating a UAI](UAS_user_and_admin_topics/Create_a_UAI.md)
+  - [Create a UAI with Additional Ports](UAS_user_and_admin_topics/Create_a_UAI_with_Additional_Ports.md)
   - [Examining a UAI Using a Direct Administrative Command](UAS_user_and_admin_topics/Examine_a_UAI_Using_a_Direct_Administrative_Command.md)
   - [Deleting a UAI](UAS_user_and_admin_topics/Delete_a_UAI.md)
 - [Legacy Mode User-Driven UAI Management](UAS_user_and_admin_topics/Legacy_Mode_User-Driven_UAI_Management.md)
@@ -720,14 +776,19 @@ a User Access Instance \(UAI\) using the `cray` command. Users can also transfer
   - [Create and Use Default UAIs in Legacy Mode](UAS_user_and_admin_topics/Create_and_Use_Default_UAIs_in_Legacy_Mode.md)
   - [List Available UAI Images in Legacy Mode](UAS_user_and_admin_topics/List_Available_UAI_Images_in_Legacy_Mode.md)
   - [Create UAIs From Specific UAI Images in Legacy Mode](UAS_user_and_admin_topics/Create_UAIs_From_Specific_UAI_Images_in_Legacy_Mode.md)
+  - [UAS and UAI Legacy Mode Health Checks](UAS_user_and_admin_topics/UAS_and_UAI_Health_Checks.md)
 - [Broker Mode UAI Management](UAS_user_and_admin_topics/Broker_Mode_UAI_Management.md)
   - [Configure End-User UAI Classes for Broker Mode](UAS_user_and_admin_topics/Configure_End-User_UAI_Classes_for_Broker_Mode.md)
   - [Configure a Broker UAI class](UAS_user_and_admin_topics/Configure_a_Broker_UAI_Class.md)
   - [Start a Broker UAI](UAS_user_and_admin_topics/Start_a_Broker_UAI.md)
   - [Log in to a Broker UAI](UAS_user_and_admin_topics/Log_in_to_a_Broker_UAI.md)
+  - [Broker UAI Resiliency and Load Balancing](UAS_user_and_admin_topics/Setting_Up_Multi-Replica_Brokers.md)
 - [UAI Images](UAS_user_and_admin_topics/UAI_Images.md)
   - [Customize the Broker UAI Image](UAS_user_and_admin_topics/Customize_the_Broker_UAI_Image.md)
   - [Customize End-User UAI Images](UAS_user_and_admin_topics/Customize_End-User_UAI_Images.md)
+  - [UAI Image Customization](UAS_user_and_admin_topics/UAI_Image_Customization.md)
+- [Choosing UAI Resource Settings](UAS_user_and_admin_topics/Choosing_UAI_Resource_Settings.md)
+- [Setting UAI Timeouts](UAS_user_and_admin_topics/Setting_UAI_Timeouts.md)
 - [Troubleshoot UAS Issues](UAS_user_and_admin_topics/Troubleshoot_UAS_Issues.md)
   - [Troubleshoot UAS by Viewing Log Output](UAS_user_and_admin_topics/Troubleshoot_UAS_by_Viewing_Log_Output.md)
   - [Troubleshoot UAIs by Viewing Log Output](UAS_user_and_admin_topics/Troubleshoot_UAIs_by_Viewing_Log_Output.md)
@@ -737,6 +798,8 @@ a User Access Instance \(UAI\) using the `cray` command. Users can also transfer
   - [Troubleshoot Missing or Incorrect UAI Images](UAS_user_and_admin_topics/Troubleshoot_Missing_or_Incorrect_UAI_Images.md)
   - [Troubleshoot UAIs with Administrative Access](UAS_user_and_admin_topics/Troubleshoot_UAIs_with_Administrative_Access.md)
   - [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
+  - [Troubleshoot Broker UAI SSSD Cannot Use `/etc/sssd/sssd.conf`](UAS_user_and_admin_topics/Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
+  - [Troubleshoot UAS / CLI Authentication Issues](UAS_user_and_admin_topics/Troubleshoot_UAI_Authentication_Issues.md)
 
 ## System Admin Toolkit (SAT)
 
@@ -754,6 +817,9 @@ and deploy non-CSM product content onto an HPE Cray EX system. Each product dist
 file which IUF uses to determine what operations are needed to install, upgrade, and deploy the product.
 
 - [Install and Upgrade Framework (IUF)](iuf/IUF.md)
+- [Install and Upgrade Observability Framework](observability/Observability.md)
+- [Using the Argo UI](argo/Using_the_Argo_UI.md)
+- [Using Argo Workflows](argo/Using_Argo_Workflows.md)
 
 ## Backup and recovery
 
@@ -803,3 +869,15 @@ these backups.
 - Workload managers
   - [PBS Service Recovery](System_Recovery/PBS_Service_Recovery.md)
   - [Slurm Service Recovery](System_Recovery/Slurm_Service_Recovery.md)
+
+## Multi-tenancy
+
+- [Multi-tenancy Support](multi-tenancy/Overview.md)
+- [Cray Hierarchical Namespace Controller (HNC) Manager](multi-tenancy/CrayHncManager.md)
+- [Tenant Administrator Configuration](multi-tenancy/TenantAdminConfig.md)
+- [Creating a Tenant](multi-tenancy/Create_a_Tenant.md)
+- [Modifying a Tenant](multi-tenancy/Modify_a_Tenant.md)
+- [Removing a Tenant](multi-tenancy/Remove_a_Tenant.md)
+- [Slurm Operator](multi-tenancy/SlurmOperator.md)
+- [Tenant and Partition Management System (TAPMS) Overview](multi-tenancy/Tapms.md)
+- [TAPMS Tenant Status API](../api/tapms-operator.md)

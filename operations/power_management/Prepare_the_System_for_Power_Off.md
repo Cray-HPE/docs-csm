@@ -245,8 +245,6 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
     Found no active BOS sessions.
     Checking for active CFS sessions.
     Found no active CFS sessions.
-    Checking for active CRUS upgrades.
-    Found no active CRUS upgrades.
     Checking for active FAS actions.
     Found no active FAS actions.
     Checking for active NMD dumps.
