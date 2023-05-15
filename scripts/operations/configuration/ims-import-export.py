@@ -433,6 +433,16 @@ def import_ims_recipe(recipe, recipes_path):
                 '--linux-distribution', recipe['linux_distribution'],
                 '--format', 'json'
             ]
+            # In CSM 1.5, IMS recipes added support for different architectures.
+            # Older recipes may not contain "arch" and "require_dkms" fields. For recipes
+            # which do contain these fields, we need to add these arguments as well.
+            # If the recipe does not contain these fields, we will not specify them, which will
+            # result in them being assigned default values (which is what would have happened to
+            # these recipes had they existed on the system when it was updated to CSM 1.5).
+            if 'arch' in recipe:
+                command.extend(['--arch'], recipe['arch'])
+            if 'require_dkms' in recipe:
+                command.extend(['--require-dkms'], recipe['require_dkms'])
             LOGGER.debug(' '.join(command))
             new_recipe = json.loads(subprocess.check_output(command))
             LOGGER.debug(new_recipe)
