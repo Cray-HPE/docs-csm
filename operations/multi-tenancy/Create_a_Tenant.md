@@ -1,13 +1,15 @@
 # Creating a Tenant
 
-This page provides information about how to create a tenant. This procedure involves creating a Custom Resource Definition (CRD) and then applying the Custom Resource (CR), for both `tapms` and the `slurm` operator.
-
-## Table of contents
-
+- [Overview](#overview)
 - [TAPMS CRD](#tapms-crd)
 - [Apply the TAPMS CR](#apply-the-tapms-cr)
 - [`slurm` operator CRD](#slurm-operator-crd)
 - [Apply the `slurm` operator CR](#apply-the-slurm-operator-cr)
+
+## Overview
+
+This page provides information about how to create a tenant. This procedure involves creating a Custom Resource Definition (CRD) and then applying the Custom Resource (CR),
+for both `tapms` and the `slurm` operator.
 
 ## TAPMS CRD
 
@@ -28,16 +30,21 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
       name: vcluster-blue
     spec:
       childnamespaces:
-        - user
-        - slurm
+      - slurm
+      - user
       tenantname: vcluster-blue
       tenantresources:
-        - type: compute
-          hsmgrouplabel: blue
-          enforceexclusivehsmgroups: true
-          xnames:
-            - x0c3s5b0n0
-            - x0c3s6b0n0
+      - enforceexclusivehsmgroups: true
+        hsmgrouplabel: blue
+        type: compute
+        xnames:
+        - x3000c0s19b1n0
+        - x3000c0s19b3n0
+      - enforceexclusivehsmgroups: true
+        hsmgrouplabel: blue
+        type: application
+        xnames:
+        - x3000c0s32b0n0
     ```
 
 ## Apply the TAPMS CR
@@ -56,7 +63,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     tenant.tapms.hpe.com/vcluster-blue created
     ```
 
-- (`ncn-mw#`) It can take up to a minute for `tapms` to fully create the tenant.  The following command can be used to monitor the status of the tenant:
+- (`ncn-mw#`) It can take up to a minute for `tapms` to fully create the tenant. The following command can be used to monitor the status of the tenant:
 
     ```bash
     kubectl get tenant -n tenants vcluster-blue -o yaml
@@ -69,20 +76,22 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     kind: Tenant
     metadata:
       annotations:
+        kopf.zalando.org/last-handled-configuration: |
+          {"spec":{"childnamespaces":["slurm","user"],"state":"Deployed","tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x3000c0s19b1n0","x3000c0s19b3n0"]},{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"application","xnames":["x3000c0s32b0n0"]}]}}
         kubectl.kubernetes.io/last-applied-configuration: |
-          {"apiVersion":"tapms.hpe.com/v1alpha1","kind":"Tenant","metadata":{"annotations":{},"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["user","slurm"],"tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x0c3s5b0n0","x0c3s6b0n0"]}]}}
-      creationTimestamp: "2022-08-23T18:37:25Z"
+          {"apiVersion":"tapms.hpe.com/v1alpha1","kind":"Tenant","metadata":{"annotations":{"kopf.zalando.org/last-handled-configuration":"{\"spec\":{\"childnamespaces\":[\"user\",\"slurm\"],\"state\":\"Deployed\",\"tenantname\":\"vcluster-test1\",\"tenantresources\":[{\"enforceexclusivehsmgroups\":true,\"hsmgrouplabel\":\"test1\",\"type\":\"compute\",\"xnames\":[\"x3000c0s19b1n0\",\"x3000c0s19b3n0\"]}]}}\n"},"finalizers":["tapms.hpe.com/finalizer"],"generation":3,"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["slurm","user"],"state":"Deployed","tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x3000c0s19b1n0","x3000c0s19b3n0"]},{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"application","xnames":["x3000c0s32b0n0"]}]}}
+      creationTimestamp: "2023-05-11T14:36:12Z"
       finalizers:
       - tapms.hpe.com/finalizer
-      generation: 3
+      generation: 2
       name: vcluster-blue
       namespace: tenants
-      resourceVersion: "3157072"
-      uid: 074b6db1-f504-4e9c-8245-259e9b22d2e6
+      resourceVersion: "134562804"
+      uid: f6ceb492-1e7b-4569-88be-f6b53bfb25fd
     spec:
       childnamespaces:
-      - user
       - slurm
+      - user
       state: Deployed
       tenantname: vcluster-blue
       tenantresources:
@@ -90,20 +99,30 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
         hsmgrouplabel: blue
         type: compute
         xnames:
-        - x0c3s5b0n0
-        - x0c3s6b0n0
+        - x3000c0s19b1n0
+        - x3000c0s19b3n0
+      - enforceexclusivehsmgroups: true
+        hsmgrouplabel: blue
+        type: application
+        xnames:
+        - x3000c0s32b0n0
     status:
       childnamespaces:
-      - vcluster-blue-user
       - vcluster-blue-slurm
+      - vcluster-blue-user
       tenantresources:
       - enforceexclusivehsmgroups: true
         hsmgrouplabel: blue
         type: compute
         xnames:
-        - x0c3s5b0n0
-        - x0c3s6b0n0
-      uuid: 074b6db1-f504-4e9c-8245-259e9b22d2e6
+        - x3000c0s19b1n0
+        - x3000c0s19b3n0
+      - enforceexclusivehsmgroups: true
+        hsmgrouplabel: blue
+        type: application
+        xnames:
+        - x3000c0s32b0n0
+      uuid: f6ceb492-1e7b-4569-88be-f6b53bfb25fd
     ```
 
 - (`ncn-mw#`) The `cray` command can now be used to display the HSM group:
@@ -121,7 +140,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     tags = [ "vcluster-blue",]
 
     [members]
-    ids = [ "x0c3s5b0n0", "x0c3s6b0n0",]
+    ids = [ "x3000c0s19b1n0", "x3000c0s19b3n0", "x3000c0s32b0n0",]
     ```
 
 - (`ncn-mw#`) The following command can now be used to display the namespace tree structure for the tenant:
@@ -143,16 +162,14 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
 
 Slurm provisioning is similar to tenant creation, using a CR.
 
-- (`ncn-mw#`) To see all possible configuration settings for the custom
-    resource, run this command:
+(`ncn-mw#`) To see all possible configuration settings for the custom resource, run this command:
 
-    ```bash
-    kubectl get crd slurmclusters.wlm.hpe.com -o yaml
-    ```
+```bash
+kubectl get crd slurmclusters.wlm.hpe.com -o yaml
+```
 
-Next, create a custom resource describing the Slurm tenant. For example, the
-following `mycluster.yaml` file describes a Slurm tenant named `mycluster`
-within a `vcluster-blue` TAPMS tenant:
+Create a custom resource describing the Slurm tenant. For example, the following `mycluster.yaml` file
+describes a Slurm tenant named `mycluster` within a `vcluster-blue` TAPMS tenant:
 
 ```yaml
 apiVersion: "wlm.hpe.com/v1alpha1"
@@ -247,23 +264,20 @@ spec:
 
 ## Apply the `slurm` operator CR
 
-- (`ncn-mw#`) To create the tenant and deploy Slurm resources, apply the tenant
-    file with `kubectl`:
+(`ncn-mw#`) To create the tenant and deploy Slurm resources, apply the tenant file with `kubectl`:
 
-    ```bash
-    kubectl apply -f <cluster>.yaml
-    ```
+```bash
+kubectl apply -f <cluster>.yaml
+```
 
-Once the tenant has been created, the Ansible configuration for compute and
-application nodes must be updated to use the tenant-specific configuration. To
-do this, create a `group_vars/<hsmgroup>/slurm.yaml` file in the
-`slurm-config-management` VCS repository with the following content:
+Once the tenant has been created, the Ansible configuration for compute and application nodes must be
+updated to use the tenant-specific configuration. To do this, create a `group_vars/<hsmgroup>/slurm.yaml`
+file in the `slurm-config-management` VCS repository with the following content:
 
 ```yaml
 munge_vault_path: slurm/<namespace>/<name>/munge
 slurm_conf_url: https://rgw-vip.local/wlm/<namespace>/<name>/
 ```
 
-Where `<namespace>` and `<name>` match the namespace and name of the Slurm
-tenant resource created above. This will configure nodes in that tenant with the
-munge key and Slurm configuration files created for that tenant.
+Where `<namespace>` and `<name>` match the namespace and name of the Slurm tenant resource created above. This
+will configure nodes in that tenant with the Munge key and Slurm configuration files created for that tenant.

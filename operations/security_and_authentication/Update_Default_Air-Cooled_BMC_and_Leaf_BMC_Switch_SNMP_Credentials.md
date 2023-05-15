@@ -6,7 +6,7 @@ new air-cooled `NodeBMCs` and Slingshot switch BMCs (`RouterBMCs`), and SNMP cre
 ***IMPORTANT*** After this procedure is completed, **all future air-cooled hardware** added to the system will be assumed to be configured with the new global default credential.
 
 > ***NOTE*** This procedure will not update the Redfish or SNMP credentials for existing air-cooled devices. To change the credentials on existing air-cooled hardware follow the
-> [Change Air-Cooled Node BMC Credentials](Change_Air-Cooled_Node_BMC_Credentials.md) and [Change SNMP Credentials on Leaf-BMC Switches](Change_SNMP_Credentials_on_Leaf_BMC_Switches.md) procedures.
+> [Change Air-Cooled Node BMC Credentials](Change_Air-Cooled_Node_BMC_Credentials.md) and [Configuring SNMP in CSM]( ../../operations/network/management_network/configure_snmp.md) procedures.
 
 ## Limitation
 
@@ -239,4 +239,18 @@ Before redeploying the River Endpoint Discovery Service (REDS), update the `cust
     SNMPAuthPassword    foo1
     SNMPPrivPassword    bar2
     SNMPUsername        testuser
+    ```
+
+### 1.4 Restart the SNMP backed RTS to pick up the SNMP credential changes
+
+1. Scale the SNMP backed RTS down:
+
+    ```bash
+    kubectl scale deployment cray-hms-rts-snmp -n services --replicas=0
+    ```
+
+1. Scale the SNMP backed RTS up:
+
+    ```bash
+    kubectl scale deployment cray-hms-rts-snmp -n services --replicas=1
     ```

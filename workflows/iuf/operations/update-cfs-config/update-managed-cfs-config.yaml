@@ -73,21 +73,29 @@ spec:
                     MEDIA_DIR="{{=jsonpath(inputs.parameters.global_params, '$.input_params.media_dir')}}"
                     BOOTPREP_FILE_PATH="{{=jsonpath(inputs.parameters.global_params, '$.input_params.bootprep_config_managed')}}"
                     if [[ -z "$BOOTPREP_FILE_PATH" ]]; then
-                      echo "INFO No bootprep file provided. Skipping operation." 1>&2
-                      echo "skipped"
+                      echo "INFO Cannot access bootprep config file (Input parameter '-bc' not provided). Skipping the 'update-managed-cfs-config' operation" 1>&2
                       exit 0
+                    else
+                      echo "INFO Using bootprep config file $BOOTPREP_FILE_PATH for updating CFS config on managed nodes" 1>&2
                     fi
 
                     VARS_FILE_PATH=$(mktemp)
                     cat > $VARS_FILE_PATH <<- 'EOF'
                       {{=toJson(jsonpath(inputs.parameters.global_params, '$.site_params.products'))}}
                     EOF
+
                     sat bootprep run \
                       --limit configurations \
                       --overwrite-configs \
                       --vars-file "$VARS_FILE_PATH" \
                       --format json \
                       $MEDIA_DIR/$BOOTPREP_FILE_PATH
+                    rc=$?
+                    if [ $rc -ne 0 ]; then
+                      echo "ERROR Bootprep for managed nodes failed. Please refer to the operations > configuration_management > Accessing_Sat_Bootprep_Files section of the CSM documentation and then re-run the 'update-cfs-config' stage" 1>&2
+                      echo "ERROR <sat bootprep run --limit configurations --overwrite-configs --vars-file "$VARS_FILE_PATH" --format json $MEDIA_DIR/$BOOTPREP_FILE_PATH> failed" 1>&2
+                      exit $rc
+                    fi
         - - name: end-operation
             templateRef:
               name: workflow-template-record-time-template

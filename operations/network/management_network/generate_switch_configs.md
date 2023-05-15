@@ -20,7 +20,7 @@ For example, if there is a suspected configuration issue on single switch, a con
   * If generating CSM 1.2 configurations, the SLS file must be updated prior to generating configurations.
   * See [Collect Data](collect_data.md).
 * Generate custom switch configuration.
-  * See [CANU custom configuration](https://github.com/Cray-HPE/canu/blob/develop/docs/network_configuration_and_upgrade/custom_config.md).
+  * See [CANU custom configuration](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/custom_config.md).
 
 ## Generate configuration files
 
@@ -41,7 +41,7 @@ NOTE: Only major and minor versions of CSM are tracked at this time. CANU bug fi
 * `--a`   : What is the system architecture? (See above)
 * `--ccj` : Match the `ccj.json` file to the one you created for your system.
 * `--sls` : Match the `sls_file.json` to the one you created for your system.
-* `--custom-config` : Pass in a switch configuration file that CANU will inject into the generated configuration. More documentation can be found from the official [CANU documentation](https://github.com/Cray-HPE/canu#generate-switch-configs-including-custom-configurations).
+* `--custom-config` : Pass in a switch configuration file that CANU will inject into the generated configuration. More documentation can be found from the official [CANU documentation](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/custom_config.md).
 
 * (`ncn#`) Generate a CSM 1.3 configuration file for a single switch:
 

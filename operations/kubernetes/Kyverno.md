@@ -323,6 +323,75 @@ Also, it generates the report of policy violation in respective workloads. The f
 
     If there are any discrepancies, look at the detailed policy report to triage the issue.
 
+## What is new in the HPE CSM 1.4 release and above
+
+The upstream Baseline profile is now available for customers as part of the HPE CSM 1.4 release.
+
+The Baseline profile is a collection of policies which implement the various levels of Kubernetes [Pod Security Standards](https://kubernetes.io/docs/concepts/security/pod-security-standards/).
+
+The Baseline profile is minimally restrictive and denies the most common vulnerabilities. It also follows many of the common security best practices for Kubernetes pods.
+
+[Baseline profile](https://github.com/kyverno/policies/tree/main/pod-security/baseline) consists of 12 policies as listed below.
+
+```bash
+kubectl get clusterpolicy -A
+```
+
+Example output:
+
+```text
+NAME                             BACKGROUND   ACTION   READY
+cluster-job-ttl                  true         audit    true
+disallow-capabilities            true         audit    true
+disallow-host-namespaces         true         audit    true
+disallow-host-path               true         audit    true
+disallow-host-ports              true         audit    true
+disallow-host-process            true         audit    true
+disallow-privileged-containers   true         audit    true
+disallow-proc-mount              true         audit    true
+disallow-selinux                 true         audit    true
+restrict-apparmor-profiles       true         audit    true
+restrict-seccomp                 true         audit    true
+restrict-sysctls                 true         audit    true
+```
+
+The violations for each of the Baseline policies is logged in a policy report, similar to the other policies mentioned in Validation section above.
+To get more information on each violation, use the following command.
+
+### Example to list policy violations at pod level
+
+```bash
+kubectl get polr -A -o json | jq -r -c '["Name","kind","Namespace","policy","message"],(.items[].results // [] | map(select(.result=="fail")) | select(. | length > 0) | .[] | select (.resources[0].kind == "Pod") | [.resources[0].name,.resources[0].kind,.resources[0].namespace,.policy,.message]) | @csv'
+```
+
+Example output:
+
+```text
+"Name","kind","Namespace","policy","message"
+"hms-discovery-28031310-lnvtf","Pod","services","disallow-capabilities","Any capabilities added beyond the allowed list (AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT) are disallowed."
+"etcd-backup-pvc-snapshots-to-s3-28031285-ssjfc","Pod","services","disallow-capabilities","Any capabilities added beyond the allowed list (AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT) are disallowed."
+"cray-dns-unbound-manager-28031310-wrhvj","Pod","services","disallow-capabilities","Any capabilities added beyond the allowed list (AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT) are disallowed."
+"cray-console-data-postgres-1","Pod","services","disallow-capabilities","Any capabilities added beyond the allowed list (AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT) are disallowed."
+"hms-discovery-28031292-6cxmz","Pod","services","disallow-capabilities","Any capabilities added beyond the allowed list (AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT) are disallowed."
+```
+
+### Example to list all the policy violations
+
+```bash
+kubectl get polr -A -o json | jq -r -c '["Name","kind","Namespace","policy","message"],(.items[].results // [] | map(select(.result=="fail")) | select(. | length > 0) | .[] | select (.resources[0].kind) | [.resources[0].name,.resources[0].kind,.resources[0].namespace,.policy,.message]) | @csv'
+```
+
+Example output:
+
+```text
+"Name","kind","Namespace","policy","message"
+"cray-nls","Deployment","argo","disallow-host-path","validation error: HostPath volumes are forbidden. The field spec.volumes[*].hostPath must be unset. Rule autogen-host-path failed at path /spec/template/spec/volumes/4/hostPath/"
+"cray-ceph-csi-cephfs-nodeplugin","DaemonSet","ceph-cephfs","disallow-host-ports","validation error: Use of host ports is disallowed. The fields spec.containers[*].ports[*].hostPort , spec.initContainers[*].ports[*].hostPort, and spec.ephemeralContainers[*].ports[*].hostPort must either be unset or set to `0`. Rule autogen-host-ports-none failed at path /spec/template/spec/containers/2/ports/0/hostPort/"
+"cray-ceph-csi-cephfs-nodeplugin","DaemonSet","ceph-cephfs","disallow-host-namespaces","validation error: Sharing the host namespaces is disallowed. The fields spec.hostNetwork, spec.hostIPC, and spec.hostPID must be unset or set to `false`. Rule autogen-host-namespaces failed at path /spec/template/spec/hostNetwork/"
+"cray-ceph-csi-cephfs-nodeplugin","DaemonSet","ceph-cephfs","disallow-capabilities","Any capabilities added beyond the allowed list (AUDIT_WRITE, CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID, SETPCAP, SETUID, SYS_CHROOT) are disallowed."
+"cray-ceph-csi-cephfs-nodeplugin","DaemonSet","ceph-cephfs","disallow-privileged-containers","validation error: Privileged mode is disallowed. The fields spec.containers[*].securityContext.privileged and spec.initContainers[*].securityContext.privileged must be unset or set to `false`. Rule autogen-privileged-containers failed at path /spec/template/spec/containers/0/securityContext/privileged/"
+```
+
 ## Known issues
 
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)

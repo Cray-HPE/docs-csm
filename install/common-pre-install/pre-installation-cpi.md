@@ -6,7 +6,7 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [Setup site network](#11-setup-site-network)
     1. [Prepare the data partition](#12-prepare-the-data-partition)
     1. [Set reusable environment variables](#13-set-reusable-environment-variables)
-    1. [Save the PIT image information](#14-save-the-pit-image-information)
+    1. [Configure Pre-install environment](#14-configure-pre-install-environment)
 1. [Create system configuration](#2-create-system-configuration)
     1. [Generate topology files](#21-generate-topology-files)
     1. [Customize `system_config.yaml`](#22-customize-system_configyaml)
@@ -198,54 +198,124 @@ These variables will need to be set for many procedures within the CSM installat
    EOF
    ```
 
-### 1.4 Save the PIT image information
+### 1.4 Configure Pre-install environment
 
-1. (`pit#`) Create the `admin` directory for the typescripts and administrative scratch work.
+1. Update `dnsmasq` and `apache2` configuration files.
 
-   ```bash
-   mkdir -pv "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/prep/admin"
-   ls -l "$(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/PITDATA)/prep/admin"
-   ```
-
-1. Create file `/etc/pit-release`.
+   Download the tarball from [here](files/dhcp_http.tar.gz) and extract it in the current working directory.
 
    ```bash
-   cat << EOF > /etc/pit-release
-   VERSION=1.8.8
-   TIMESTAMP=20221013160829
-   EOF
+   tar -xf dhcp_http.tar.gz
    ```
 
-1. (`pit#`) Print information about the booted PIT image for logging purposes.
+1. Update the `apache2` and `dnsmasq` configurations as follows:
+
+   ```bash
+   cp -rv dnsmasq/dnsmasq.conf  /etc/dnsmasq.conf
+   cp -rv apache2/* /etc/apache2/
+   cp -rv  conman/conman.conf /etc/conman.conf
+   cp -rv logrotate/conman /etc/logrotate.d/conman
+   cp -rv kubectl/kubectl /usr/bin/
+   ```
+
+   (Optional) Uncomment the `tftp_secure` entry in the `dnsmasq.conf` file.
+
+1. Stop the following services: `dhcpd` and `named`.
+
+   ```bash
+   systemctl stop dhcpd
+   systemctl stop named
+   systemctl restart apache2
+   ```
+
+1. If `ping dcldap3.us.cray.com` does not work, then add the following entry in `/etc/hosts`.
+
+   ```text
+   172.30.12.37    dcldap3.us.cray.com
+   ```
+
+1. (`pit#`) Get the artifact versions.
+
+   ```bash
+   KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
+   echo "${KUBERNETES_VERSION}"
+   CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
+   echo "${CEPH_VERSION}"
+   ```
+
+1. (`pit#`) Copy the NCN images from the expanded tarball.
+
+   > **NOTE:** This hard-links the files to do this copy as fast as possible, as well as to mitigate space waste on the USB stick.
+
+   ```bash
+   mkdir -pv "${PITDATA}/data/k8s/" "${PITDATA}/data/ceph/"
+   rsync -rltDP --delete "${CSM_PATH}/images/kubernetes/" --link-dest="${CSM_PATH}/images/kubernetes/" "${PITDATA}/data/k8s/${KUBERNETES_VERSION}"
+   rsync -rltDP --delete "${CSM_PATH}/images/storage-ceph/" --link-dest="${CSM_PATH}/images/storage-ceph/" "${PITDATA}/data/ceph/${CEPH_VERSION}"
+   ```
+
+1. (`pit#`) Modify the NCN images with SSH keys and `root` passwords.
+
+   The following substeps provide the most commonly used defaults for this process. For more advanced options, see
+   [Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
+
+   1. Generate SSH keys.
+
+       > **NOTE:** The code block below assumes there is an RSA key without a passphrase. This step can be customized to use a passphrase if desired.
+
+       ```bash
+       ssh-keygen -N "" -t rsa
+       ```
+
+   1. Export the password hash for `root` that is needed for the `ncn-image-modification.sh` script.
+
+       This will set the NCN `root` user password to be the same as the `root` user password on the PIT.
+
+       ```bash
+       export SQUASHFS_ROOT_PW_HASH="$(awk -F':' /^root:/'{print $2}' < /etc/shadow)"
+       ```
+
+   1. Inject these into the NCN images by running `ncn-image-modification.sh` from the CSM documentation RPM.
+
+       ```bash
+       NCN_MOD_SCRIPT=$(rpm -ql docs-csm | grep ncn-image-modification.sh)
+       echo "${NCN_MOD_SCRIPT}"
+       "${NCN_MOD_SCRIPT}" -p \
+          -d /root/.ssh \
+          -k "/var/www/ephemeral/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}.squashfs" \
+          -s "/var/www/ephemeral/data/ceph/${CEPH_VERSION}/storage-ceph-${CEPH_VERSION}.squashfs"
+       ```
+
+1. (`pit#`) Log the currently installed PIT packages.
 
    Having this information in the typescript can be helpful if problems are encountered during the install.
+   This command was run once in a previous step -- running it again now is intentional.
 
    ```bash
    /root/bin/metalid.sh
    ```
 
-   > Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
-   >
-   > ```text
-   > = PIT Identification = COPY/CUT START =======================================
-   > VERSION=1.6.0
-   > TIMESTAMP=20220504161044
-   > HASH=g10e2532
-   > 2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
-   > CRAY-Site-Init build signature...
-   > Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
-   > Build Time     : 2022-05-02T20:21:46Z
-   > Go Version     : go1.16.10
-   > Git Version    : v1.9.13-29-g0915d59f
-   > Platform       : linux/amd64
-   > App. Version   : 1.17.1
-   > metal-ipxe-2.2.6-1.noarch
-   > metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
-   > metal-basecamp-1.1.12-1.x86_64
-   > pit-init-1.2.20-1.noarch
-   > pit-nexus-1.1.4-1.x86_64
-   > = PIT Identification = COPY/CUT END =========================================
-   > ```
+   Expected output looks similar to the following (the versions in the example below may differ). There should be **no** errors.
+
+   ```text
+   = PIT Identification = COPY/CUT START =======================================
+   VERSION=1.6.0
+   TIMESTAMP=20220504161044
+   HASH=g10e2532
+   2022/05/04 17:08:19 Using config file: /var/www/ephemeral/prep/system_config.yaml
+   CRAY-Site-Init build signature...
+   Build Commit   : 0915d59f8292cfebe6b95dcba81b412a08e52ddf-main
+   Build Time     : 2022-05-02T20:21:46Z
+   Go Version     : go1.16.10
+   Git Version    : v1.9.13-29-g0915d59f
+   Platform       : linux/amd64
+   App. Version   : 1.17.1
+   metal-ipxe-2.2.6-1.noarch
+   metal-net-scripts-0.0.2-20210722171131_880ba18.noarch
+   metal-basecamp-1.1.12-1.x86_64
+   pit-init-1.2.20-1.noarch
+   pit-nexus-1.1.4-1.x86_64
+   = PIT Identification = COPY/CUT END =========================================
+   ```
 
 ## 2. Create system configuration
 

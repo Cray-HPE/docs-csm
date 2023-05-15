@@ -1,14 +1,17 @@
 # Update Default ServerTech PDU Credentials used by the Redfish Translation Service (RTS)
 
-This procedure updates the default credentials used by the Redfish Translation Service (RTS) for when new ServerTech PDUs are discovered in a system.
+This procedure updates the default credentials used by the Redfish Translation Service (RTS) for when new ServerTech PDUs or management network switches are discovered in a system.
 
 The Redfish Translation Service provides a Redfish interface that the Hardware State Manager (HSM) and Power Control Service (PCS) or Cray Advanced Platform Monitoring and Control (CAPMC) services can use interact with
-ServerTech PDUs which do not natively support Redfish.
+ServerTech PDUs and management network switches which do not natively support Redfish.
 
 There are two sets of default credentials that are required for RTS to function:
 
 1. The default credentials to use when new ServerTech PDUs are discovered in the system.
 1. The global default credential that RTS uses for its Redfish interface with other CSM services.
+
+***NOTE*** RTS management network switch Redfish interfaces only use the global default RTS password. The username comes from the SNMP credentials pushed by REDS.
+See [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md) to manage the SNMP credentials.
 
 ***IMPORTANT*** After this procedure is completed **going forward all future ServerTech PDUs** added to the system will be assumed to be already configured with the new global default
 credential when getting added to the system.
@@ -239,4 +242,18 @@ Before redeploying RTS, update the `customizations.yaml` file in the `site-init`
     ---         -----
     Password    supersecret
     Username    root
+    ```
+
+### 1.4 Restart the SNMP backed RTS to pick up the global RTS credential changes
+
+1. Scale the SNMP backed RTS down:
+
+    ```bash
+    kubectl scale deployment cray-hms-rts-snmp -n services --replicas=0
+    ```
+
+1. Scale the SNMP backed RTS up:
+
+    ```bash
+    kubectl scale deployment cray-hms-rts-snmp -n services --replicas=1
     ```

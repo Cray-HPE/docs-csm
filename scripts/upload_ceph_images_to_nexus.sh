@@ -32,6 +32,8 @@ nexus_username=$(ssh ncn-m001 'kubectl get secret -n nexus nexus-admin-credentia
 nexus_password=$(ssh ncn-m001 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode')
 ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
+ceph_nexus_digest_file="/tmp/ceph_nexus_digest"
+
 function wait_for_health_ok() {
   cnt=0
   cnt2=0
@@ -197,6 +199,20 @@ function check_mon_daemon() {
   fi
 }
 
+function check_currently_running_nexus_image() {
+  node=$1
+  nexus_sha=$(cat ${ceph_nexus_digest_file})
+  for daemon in "mon" "mgr" "osd" "mds" "crash" "rgw"; do
+    for each in $(ssh ${node} "podman ps --filter name=$daemon --format {{.Image}}" ); do
+      if [[ -z $(echo $each | grep "$nexus_sha" ) && -z $(echo $each | grep $nexus_location) ]]; then
+        echo "false"
+        return 0
+      fi
+    done
+  done
+  echo "true"
+}
+
 function redeploy_monitoring_stack() {
 # restart daemons
 for daemon in "prometheus" "node-exporter" "alertmanager" "grafana"; do
@@ -232,7 +248,12 @@ function upload_image() {
     echo "Pushing image: $local_image to $nexus_location"
     podman pull "$local_image"
     podman tag "$local_image" "$nexus_location"
-    podman push --creds "$nexus_username":"$nexus_password" "$nexus_location"
+    if [[ $name == "mgr" ]]; then
+      # save the digestfile of the mgr image, this contains the sha in nexus
+      podman push --creds "$nexus_username":"$nexus_password" "$nexus_location" --digestfile=${ceph_nexus_digest_file}
+    else
+      podman push --creds "$nexus_username":"$nexus_password" "$nexus_location"
+    fi
     for storage_node in "ncn-s001" "ncn-s002" "ncn-s003"; do
         # shellcheck disable=SC2086
         # shellcheck disable=SC2029
@@ -249,27 +270,33 @@ function upload_image() {
 }
 
 function redeploy_ceph_services(){
-# restart daemons
-for node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
-  enter_maintenance_mode
-  # shellcheck disable=SC2086
-  ssh ${node} ${ssh_options} "podman rmi --all --force"
-  exit_maintenance_mode
-  for daemon in "mon" "mgr" "osd" "mds" "crash" "rgw"; do
-    daemons_to_restart=$(ceph --name client.ro orch ps "$node"| awk '{print $1}' | grep $daemon)
-    for each in $daemons_to_restart; do
-      #shellcheck disable=SC2086
-      if [[ $(hostname) = @("ncn-s001"|"ncn-s002"|"ncn-s003") ]]; then
-	 ceph config set global container_image ${nexus_location}
-	 ceph orch daemon redeploy "$each" --image "$nexus_location"
-      else
-	echo "This script can only be run from ncn-s001/2/3."
-	exit 1
-      fi
-    done
+  # restart daemons
+  for node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
+    running_nexus_image=$(check_currently_running_nexus_image $node)
+    if ! $running_nexus_image; then
+      echo "$node is not running all ceph services using the image in nexus. Redeploying these daemons using the nexus image."
+      enter_maintenance_mode
+      # shellcheck disable=SC2086
+      ssh ${node} ${ssh_options} "podman rmi --all --force"
+      exit_maintenance_mode
+      for daemon in "mon" "mgr" "osd" "mds" "crash" "rgw"; do
+        daemons_to_restart=$(ceph --name client.ro orch ps "$node"| awk '{print $1}' | grep $daemon)
+        for each in $daemons_to_restart; do
+          #shellcheck disable=SC2086
+          if [[ $(hostname) = @("ncn-s001"|"ncn-s002"|"ncn-s003") ]]; then
+            ceph config set global container_image ${nexus_location}
+            ceph orch daemon redeploy "$each" --image "$nexus_location"
+          else
+            echo "This script can only be run from ncn-s001/2/3."
+            exit 1
+          fi
+        done
+      done
+      wait_for_health_ok
+    else
+      echo "$node is already running all ceph services using the image in nexus."
+    fi
   done
-  wait_for_health_ok
-done
 }
 
 function enter_maintenance_mode() {
@@ -287,7 +314,7 @@ function enter_maintenance_mode() {
   ceph orch host maintenance enter "$node" --force
   counter=0
   # shellcheck disable=SC2086
-  until [[ "$(ceph orch host ls $node --format json-pretty|jq -r '.[].status')" == "maintenance" ]]; do
+  until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty|jq -r '.[].status')" == "maintenance" ]]; do
     echo "Waiting for node $node to enter maintenance mode."
     (( counter ++ ))
     if [[ $counter -ge 5 ]]; then
@@ -303,7 +330,7 @@ function exit_maintenance_mode() {
   # shellcheck disable=SC2086
   if [[ "$(ceph orch host maintenance exit $node)" ]]; then
     # shellcheck disable=SC2086
-    until [[ "$(ceph orch host ls $node --format json-pretty|jq -r '.[].status')" != "maintenance" ]]; do
+    until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty|jq -r '.[].status')" != "maintenance" ]]; do
       echo "Waiting for node $node to exit maintenance mode."
       sleep 15
     done

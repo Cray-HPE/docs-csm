@@ -70,18 +70,30 @@ spec:
               value: |
                 CONTENT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest')
                 PARENT_DIR=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params."process-media".current_product.parent_directory')
+                PRODUCT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.name')
+                VERSION=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.version')
 
                 if [[ "${CONTENT,,}" == "null" ]] || [[ "$CONTENT" == "" ]]; then
-                    echo "ERROR current_product.manifest is null or empty"
+                    echo "ERROR No products found. IUF requires at least one product. Please place at least one valid product tarball in {{inputs.parameters.global_params.media_dir}} and start again from the 'process-media' stage"
+                    exit 1
+                fi
+
+                if [[ "${PRODUCT,,}" == "null" ]] || [[ "$PRODUCT" == "" ]]; then
+                    echo "ERROR Product name not found in the product manifest. Rerun with valid product tarball from 'process-media' stage"
                     exit 1
                 fi
 
                 if [[ "${PARENT_DIR,,}" == "null" ]] || [[ "$PARENT_DIR" == "" ]]; then
-                    echo "ERROR current_product.parent_directory is null or empty"
+                    echo "ERROR Cannot access product directory for $PRODUCT. Rerun with valid product tarball from 'process-media' stage"
                     exit 1
                 fi
 
+                echo "INFO S3 uploading manifest for $PRODUCT-$VERSION from $PARENT_DIR"
                 /usr/local/bin/s3-upload "$CONTENT" "$PARENT_DIR"
+                if [ $? -ne 0 ]; then
+                  echo "ERROR S3 manifest upload failed for $PRODUCT from $PARENT_DIR"
+                  exit 1
+                fi
     - - name: s3-manufacture-product-catalog-data
         template: make-product-catalog-content
         arguments:
@@ -171,9 +183,10 @@ spec:
       image: artifactory.algol60.net/csm-docker/stable/docker.io/portainer/kubectl-shell:latest-v1.21.1-amd64
       command: [bash]
       source: |
+        PRODUCT=$(echo '{{inputs.parameters.global_params}}' | jq -r '.product_manifest.current_product.manifest.name')
         ARRAY=$(echo '{{inputs.parameters.manifest_s3_content}}' | jq -r '[.[] | {"bucket": .bucket, "key": .key}]')
         if [ $? -ne 0 ]; then
           ARRAY="[]"
-          echo "No S3 content found."
+          echo "INFO No S3 content found in the manifest for $PRODUCT. Nothing to do here"
         fi
         echo "{\"component_versions\": {\"s3\": ${ARRAY}}}" > /tmp/product-content
