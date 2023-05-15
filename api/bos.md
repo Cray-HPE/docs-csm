@@ -159,13 +159,13 @@ Return list of versions currently running.
 ```json
 [
   {
-    "major": 0,
-    "minor": 0,
-    "patch": 0,
+    "major": "string",
+    "minor": "string",
+    "patch": "string",
     "links": [
       {
-        "rel": "string",
-        "href": "string"
+        "href": "string",
+        "rel": "string"
       }
     ]
   }
@@ -185,12 +185,12 @@ Status Code **200**
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |*anonymous*|[[Version](#schemaversion)]|false|none|[Version data]|
-|» major|integer|false|none|none|
-|» minor|integer|false|none|none|
-|» patch|integer|false|none|none|
+|» major|string|false|none|none|
+|» minor|string|false|none|none|
+|» patch|string|false|none|none|
 |» links|[[Link](#schemalink)]|false|none|[Link to other resources]|
-|»» rel|string|false|none|none|
 |»» href|string|false|none|none|
+|»» rel|string|false|none|none|
 
 <aside class="success">
 This operation does not require authentication
@@ -263,13 +263,13 @@ func main() {
 
 ```json
 {
-  "major": 0,
-  "minor": 0,
-  "patch": 0,
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -357,13 +357,13 @@ func main() {
 
 ```json
 {
-  "major": 0,
-  "minor": 0,
-  "patch": 0,
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -678,8 +678,8 @@ Create a new session template.
   },
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -827,8 +827,8 @@ uniquely identified by the name.
     },
     "links": [
       {
-        "rel": "string",
-        "href": "string"
+        "href": "string",
+        "rel": "string"
       }
     ]
   }
@@ -877,8 +877,8 @@ Status Code **200**
 |»»» rootfs_provider|string|false|none|The root file system provider.|
 |»»» rootfs_provider_passthrough|string|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter|
 |» links|[[Link](#schemalink)]|false|read-only|[Link to other resources]|
-|»» rel|string|false|none|none|
 |»» href|string|false|none|none|
+|»» rel|string|false|none|none|
 
 <aside class="success">
 This operation does not require authentication
@@ -1021,8 +1021,8 @@ of the session template.
   },
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -1264,8 +1264,8 @@ session templates.
   },
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -1382,8 +1382,10 @@ on the boot set(s) defined in the session template.
   "limit": "string",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "jobId": "string",
+      "rel": "session",
+      "type": "GET"
     }
   ]
 }
@@ -1478,8 +1480,10 @@ List all sessions, including those in progress and those complete.
     "limit": "string",
     "links": [
       {
-        "rel": "string",
-        "href": "string"
+        "href": "string",
+        "jobId": "string",
+        "rel": "session",
+        "type": "GET"
       }
     ]
   }
@@ -1504,9 +1508,19 @@ Status Code **200**
 |» templateName|string(string)|false|none|The name of the Session Template|
 |» job|string|false|read-only|The identity of the Kubernetes job that is created to handle the session.|
 |» limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
-|» links|[[Link](#schemalink)]|false|read-only|[Link to other resources]|
-|»» rel|string|false|none|none|
+|» links|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
 |»» href|string|false|none|none|
+|»» jobId|string|false|none|none|
+|»» rel|string|false|none|none|
+|»» type|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|rel|session|
+|rel|status|
+|type|GET|
 
 <aside class="success">
 This operation does not require authentication
@@ -1594,8 +1608,10 @@ Get session details by session_id.
   "limit": "string",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "jobId": "string",
+      "rel": "session",
+      "type": "GET"
     }
   ]
 }
@@ -1791,11 +1807,11 @@ A list of the statuses for the different boot sets.
   "boot_sets": [
     "string"
   ],
-  "id": "string",
+  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -1893,11 +1909,11 @@ Creates the initial session status.
   "boot_sets": [
     "string"
   ],
-  "id": "string",
+  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -1926,11 +1942,11 @@ Creates the initial session status.
   "boot_sets": [
     "string"
   ],
-  "id": "string",
+  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -2050,11 +2066,11 @@ Update the session status. You can update the start or stop times.
   "boot_sets": [
     "string"
   ],
-  "id": "string",
+  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -2290,8 +2306,8 @@ Get the status for a boot set.
   ],
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -2427,8 +2443,8 @@ Create a status for a Boot Set
   ],
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -2496,8 +2512,8 @@ Create a status for a Boot Set
   ],
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -2666,8 +2682,8 @@ the boot set.
   ],
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -3071,13 +3087,13 @@ func main() {
 
 ```json
 {
-  "major": 0,
-  "minor": 0,
-  "patch": 0,
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -3307,8 +3323,8 @@ uniquely identified by the name.
     },
     "links": [
       {
-        "rel": "string",
-        "href": "string"
+        "href": "string",
+        "rel": "string"
       }
     ]
   }
@@ -3544,8 +3560,8 @@ of the session template.
   },
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -3750,8 +3766,8 @@ Create a new session template.
   },
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -3954,8 +3970,8 @@ func main() {
   },
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -4190,8 +4206,8 @@ session templates.
   },
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -6547,13 +6563,13 @@ func main() {
 
 ```json
 {
-  "major": 0,
-  "minor": 0,
-  "patch": 0,
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -6704,13 +6720,13 @@ Service health status
 
 ```json
 {
-  "major": 0,
-  "minor": 0,
-  "patch": 0,
+  "major": "string",
+  "minor": "string",
+  "patch": "string",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -6723,9 +6739,9 @@ Version data
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|major|integer|false|none|none|
-|minor|integer|false|none|none|
-|patch|integer|false|none|none|
+|major|string|false|none|none|
+|minor|string|false|none|none|
+|patch|string|false|none|none|
 |links|[[Link](#schemalink)]|false|none|[Link to other resources]|
 
 <h2 id="tocS_ProblemDetails">ProblemDetails</h2>
@@ -6767,8 +6783,8 @@ An error response for RFC 7807 problem details.
 
 ```json
 {
-  "rel": "string",
-  "href": "string"
+  "href": "string",
+  "rel": "string"
 }
 
 ```
@@ -6779,8 +6795,8 @@ Link to other resources
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|rel|string|false|none|none|
 |href|string|false|none|none|
+|rel|string|false|none|none|
 
 <h2 id="tocS_V1CfsParameters">V1CfsParameters</h2>
 <!-- backwards compatibility -->
@@ -7016,8 +7032,8 @@ what category those nodes fall into within the phase.
   ],
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -7060,11 +7076,11 @@ The status for a Boot Set. It as a list of the phase statuses for the Boot Set.
   "boot_sets": [
     "string"
   ],
-  "id": "string",
+  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -7083,7 +7099,7 @@ The status for a Boot Session. It is a list of all of the Boot Set Statuses in t
 |---|---|---|---|---|
 |metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
 |boot_sets|[string]|false|none|The boot sets in the Session|
-|id|string|false|none|Session ID|
+|id|string(uuid)|false|none|Session ID|
 |links|[[Link](#schemalink)]|false|none|[Link to other resources]|
 
 <h2 id="tocS_V1BootSet">V1BootSet</h2>
@@ -7212,8 +7228,8 @@ the same ordinal number will be addressed at the same time.
   },
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -7249,6 +7265,42 @@ This name is required when creating a Session.
 |» **additionalProperties**|[V1BootSet](#schemav1bootset)|false|none|A boot set defines a collection of nodes and the information about the<br>boot artifacts and parameters to be sent to each node over the specified<br>network to enable these nodes to boot. When multiple boot sets are used<br>in a session template, the boot_ordinal and shutdown_ordinal indicate<br>the order in which boot sets need to be acted upon. Boot sets sharing<br>the same ordinal number will be addressed at the same time.|
 |links|[[Link](#schemalink)]|false|read-only|[Link to other resources]|
 
+<h2 id="tocS_V1SessionLink">V1SessionLink</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionlink"></a>
+<a id="schema_V1SessionLink"></a>
+<a id="tocSv1sessionlink"></a>
+<a id="tocsv1sessionlink"></a>
+
+```json
+{
+  "href": "string",
+  "jobId": "string",
+  "rel": "session",
+  "type": "GET"
+}
+
+```
+
+Link to other resources
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|href|string|false|none|none|
+|jobId|string|false|none|none|
+|rel|string|false|none|none|
+|type|string|false|none|none|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|rel|session|
+|rel|status|
+|type|GET|
+
 <h2 id="tocS_V1Session">V1Session</h2>
 <!-- backwards compatibility -->
 <a id="schemav1session"></a>
@@ -7265,8 +7317,10 @@ This name is required when creating a Session.
   "limit": "string",
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "jobId": "string",
+      "rel": "session",
+      "type": "GET"
     }
   ]
 }
@@ -7288,7 +7342,7 @@ A Session object
 |templateName|string(string)|false|none|The name of the Session Template|
 |job|string|false|read-only|The identity of the Kubernetes job that is created to handle the session.|
 |limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
-|links|[[Link](#schemalink)]|false|read-only|[Link to other resources]|
+|links|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
 
 <h2 id="tocS_V1NodeChangeList">V1NodeChangeList</h2>
 <!-- backwards compatibility -->
@@ -7560,8 +7614,8 @@ a Session Template, or individually within a boot set.
   },
   "links": [
     {
-      "rel": "string",
-      "href": "string"
+      "href": "string",
+      "rel": "string"
     }
   ]
 }
@@ -7654,8 +7708,8 @@ This name is required when creating a Session.
     },
     "links": [
       {
-        "rel": "string",
-        "href": "string"
+        "href": "string",
+        "rel": "string"
       }
     ]
   }
