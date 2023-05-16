@@ -155,6 +155,8 @@ function verify_ssh_keys() {
         touch "$TMPDIR"/empty-file
         # we're only looking for malformed keys here vs ensuring private & public keys match, etc.
         ssh-keygen -Y sign -f "$key" -n file "$TMPDIR"/empty-file || err_exit "unable to verify private key: $key"
+        # ensure we don't keep empty-file and empty-file.sig across iterations
+        rm -f "$TMPDIR"/empty-file*
     done
 }
 
