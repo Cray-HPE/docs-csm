@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management (CSM) `v1.3.2` from `v1.3.1`.
+This document guides an administrator through the patch update to Cray Systems Management (CSM) `v1.3.2` from `v1.3.0` or `v1.3.1`.
 If upgrading from CSM `v1.2.2` directly to `v1.3.2`, follow the procedures described in [Upgrade CSM](../README.md) instead.
 
 ## Bug Fixes and Improvements
