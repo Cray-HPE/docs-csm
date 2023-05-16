@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2014-2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2014-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -160,6 +160,8 @@ function verify_ssh_keys() {
             echo "ERROR: unable to verify private key: $key"
             exit 1
         fi
+        # ensure we don't keep empty-file and empty-file.sig across iterations
+        rm -f "$TMPDIR"/empty-file*
     done
 }
 
