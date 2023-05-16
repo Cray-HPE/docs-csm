@@ -65,8 +65,6 @@ spec:
               name: workflow-template-record-time-template
               template: record-time-template
           - name: verify-images-and-configuration
-            dependencies:
-              - INFO-to-read
             templateRef:
               name: ssh-template
               template: shell-script
