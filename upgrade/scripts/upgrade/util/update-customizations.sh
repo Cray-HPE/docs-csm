@@ -132,6 +132,10 @@ if [[ "$(yq r "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp
       temp=$(( temp+1 ))
     done
 fi
+
+# Kube-prometheus-stack
+sed -i 's/prometheus-operator/kube-prometheus-stack/g' "$c"
+
 if [[ "$inplace" == "yes" ]]; then
     cp "$c" "$customizations"
 else
