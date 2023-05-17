@@ -32,20 +32,23 @@ Follow the steps in only one of the sections below:
     ```bash
     ncn-mw# MASTER_USERNAME=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.user}' | base64 -d)
     ncn-mw# MASTER_PASSWORD=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d)
+    ncn-mw# SITE_DOMAIN="$(craysys metadata get site-domain)"
+    ncn-mw# SYSTEM_NAME="$(craysys metadata get system-name)"
+    ncn-mw# AUTH_FQDN="auth.cmn.${SYSTEM_NAME}.${SITE_DOMAIN}"
 
     ncn-mw# function get_master_token {
-              curl -ks -d client_id=admin-cli -d username="${MASTER_USERNAME}" -d password="${MASTER_PASSWORD}" \
-                  -d grant_type=password https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token | \
-                python -c "import sys.json; print json.load(sys.stdin)['access_token']"
-            }
+      curl -ks -d client_id=admin-cli -d username="${MASTER_USERNAME}" -d password="${MASTER_PASSWORD}" \
+          -d grant_type=password "https://${AUTH_FQDN}/keycloak/realms/master/protocol/openid-connect/token" | \
+        jq -r .access_token
+    }
     ```
 
 1. Get the component ID for the LDAP user federation.
 
     ```bash
     ncn-mw# COMPONENT_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
-                    https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components \
-                | jq -r '.[] | select(.providerId=="ldap").id')
+            "https://${AUTH_FQDN}/keycloak/admin/realms/shasta/components" \
+        | jq -r '.[] | select(.providerId=="ldap").id')
 
     ncn-mw# echo "${COMPONENT_ID}"
     ```
@@ -59,8 +62,7 @@ Follow the steps in only one of the sections below:
 1. Delete the LDAP user federation by performing a `DELETE` operation on the LDAP resource.
 
     ```bash
-    ncn-mw# curl -i -XDELETE -H "Authorization: Bearer $(get_master_token)" \
-        "https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/components/${COMPONENT_ID}"
+    ncn-mw# curl -i -XDELETE -H "Authorization: Bearer $(get_master_token)" "https://${AUTH_FQDN}/keycloak/admin/realms/shasta/components/${COMPONENT_ID}"
     ```
 
     If the operation is successful, then the expected HTTP status code is 204. In this case, the command output should begin with the following line:

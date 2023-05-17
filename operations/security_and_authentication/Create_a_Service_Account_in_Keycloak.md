@@ -71,13 +71,15 @@ Follow the steps in only one of the following sections, depending on if it is pr
    ```bash
    ncn-mw# MASTER_USERNAME=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.user}' | base64 -d)
    ncn-mw# MASTER_PASSWORD=$(kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d)
+   ncn-mw# SITE_DOMAIN="$(craysys metadata get site-domain)"
+   ncn-mw# SYSTEM_NAME="$(craysys metadata get system-name)"
+   ncn-mw# AUTH_FQDN="auth.cmn.${SYSTEM_NAME}.${SITE_DOMAIN}"
 
    ncn-mw# function get_master_token {
-             curl -ks -d client_id=admin-cli -d username=$MASTER_USERNAME \
-                     -d password=$MASTER_PASSWORD -d grant_type=password \
-                     https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token \
-             | python3 -c "import sys,json; print(json.load(sys.stdin)['access_token'])"
-           }
+     curl -ks -d client_id=admin-cli -d username="${MASTER_USERNAME}" -d password="${MASTER_PASSWORD}" \
+         -d grant_type=password "https://${AUTH_FQDN}/keycloak/realms/master/protocol/openid-connect/token" | \
+     jq -r .access_token
+   }
    ```
 
 1. Create the client by doing a POST call for a JSON object.
@@ -106,13 +108,13 @@ Follow the steps in only one of the following sections, depending on if it is pr
      ]
    }
    ' \
-   https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients
+   "https://${AUTH_FQDN}/keycloak/admin/realms/shasta/clients"
    ```
 
    Output similar to the following is expected:
 
    ```text
    HTTP/2 201
-   location: https://api-gw-service-nmn.local/keycloak/admin/realms/shasta/clients/bd8084d2-08bf-45cb-ab94-ee81e39921be
+   location: https://auth.cmn.system1.us.cray.com/keycloak/admin/realms/shasta/clients/bd8084d2-08bf-45cb-ab94-ee81e39921be
    content-length: 0
    ```
