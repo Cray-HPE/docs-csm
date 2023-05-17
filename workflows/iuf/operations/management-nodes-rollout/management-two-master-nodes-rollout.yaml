@@ -64,24 +64,9 @@ spec:
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template
-          - name: INFO-to-read
-            dependencies:
-              - start-operation
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"
-                - name: scriptContent
-                  value: |
-                    echo "NOTICE  this stage will not rollout storage nodes or ncn-m001. This will have to be done manually if rolling-out these nodes is desired."
-                    echo "NOTICE  this stage will rollout workers and master nodes according to --limit-management-rollout and the node label iuf-prevent-rollout=true."
-                    echo "NOTICE  check the argo pod logs from each step in the workflow to see what the step is doing."
           - name: verify-images-and-configuration
             dependencies:
-              - INFO-to-read
+              - start-operation
             templateRef:
               name: ssh-template
               template: shell-script
