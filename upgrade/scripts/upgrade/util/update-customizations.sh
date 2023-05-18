@@ -136,6 +136,9 @@ fi
 # Kube-prometheus-stack
 sed -i 's/prometheus-operator/kube-prometheus-stack/g' "$c"
 
+# When upgrading to CSM 1.5 or later, ensure that we remove obsolete cray-service.postgreSql entries (CASMPET-6584).
+yq d -i "$c" 'spec.kubernetes.services.*.cray-service.sqlCluster'
+
 if [[ "$inplace" == "yes" ]]; then
     cp "$c" "$customizations"
 else
