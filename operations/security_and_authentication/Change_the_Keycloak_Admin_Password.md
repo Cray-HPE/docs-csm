@@ -8,7 +8,7 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 
 1. Log in to Keycloak with the default admin credentials.
 
-    Point a browser at `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing SYSTEM\_DOMAIN\_NAME with the actual NCN's DNS name.
+    Point a browser at `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing SYSTEM\_DOMAIN\_NAME with the actual NCN's DNS name. Use of the `auth.cmn.` sub-domain is required for administrative access to Keycloak.
 
     The following is an example URL for a system: `auth.cmn.system1.us.cray.com/keycloak/admin`
 
