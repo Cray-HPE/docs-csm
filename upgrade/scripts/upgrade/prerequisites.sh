@@ -505,7 +505,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
-        "${locOfScript}/../upgrade/sysmgmt-health-upgrade.sh"
+        "${locOfScript}/util/sysmgmt-health-upgrade.sh"
 
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
@@ -575,20 +575,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
-    } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-state_name="UPGRADE_BSS"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
-    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-    {
-
-    upgrade_csm_chart cray-hms-bss sysmgmt.yaml
-
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
