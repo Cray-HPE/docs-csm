@@ -136,6 +136,9 @@ fi
 # Kube-prometheus-stack
 sed -i 's/prometheus-operator/kube-prometheus-stack/g' "$c"
 
+# Gitea
+yq d -i "$c" 'spec.kubernetes.services.gitea.cray-service.sqlCluster'
+
 if [[ "$inplace" == "yes" ]]; then
     cp "$c" "$customizations"
 else
