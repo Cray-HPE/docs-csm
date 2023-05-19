@@ -24,14 +24,6 @@
 #
 
 set -e
-# CASMPET-6390 - detect unexpected hostname before continuing
-if [[ $(hostname) == "ncn-m002" ]]; then
-    echo "WARN: running prerequisites.sh on ncn-m002..."
-elif [[ $(hostname) != "ncn-m001" ]]; then
-    echo "ERROR: unexpected hostname $(hostname)"
-    echo "You should only run prerequisites.sh from ncn-m001 or ncn-m002"
-    exit 1
-fi
 
 locOfScript=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 . "${locOfScript}/../common/upgrade-state.sh"
@@ -40,6 +32,8 @@ trap 'err_report' ERR INT TERM HUP EXIT
 # array for paths to unmount after chrooting images
 # shellcheck disable=SC2034
 declare -a UNMOUNTS=()
+
+PRIMARY_NODE="ncn-m001"
 
 while [[ $# -gt 0 ]]
 do
@@ -52,12 +46,25 @@ case ${key} in
     shift # past argument
     shift # past value
     ;;
+    --primary-node)
+    PRIMARY_NODE=$2
+    shift # past argument
+    shift # past value
+    ;;
     *)    # unknown option
     echo "[ERROR] - unknown options"
     exit 1
     ;;
 esac
 done
+
+# CASMPET-6390 - detect unexpected hostname before continuing
+if [[ $(hostname) != "${PRIMARY_NODE}" ]]; then
+    echo "ERROR: unexpected hostname $(hostname)"
+    echo "You should only run prerequisites.sh from ${PRIMARY_NODE}"
+    exit 1
+fi
+
 
 if [[ -z ${CSM_RELEASE} ]]; then
     echo "CSM RELEASE is not specified"
@@ -165,11 +172,27 @@ function upgrade_csm_chart
     loftsman ship --manifest-path "${TMP_MANIFEST_CUSTOMIZED}"
 }
 
+function is_vshasta_node {
+    # This is the best check for an image specifically booted to vshasta
+    [[ -f /etc/google_system ]] && return 0
+
+    # metal images can still be booted on GCP, so check if there are any disks vendored by Google
+    # if not, we conclude that this is not GCP
+    lsblk --noheadings -o vendor | grep -q Google
+    return $?
+}
+
+if is_vshasta_node; then
+    vshasta="true"
+else
+    vshasta="false"
+fi
+
 # Make a backup copy of select pre-upgrade information, just in case it is needed for later reference.
-# This is only run on ncn-m001 (not when it is run from ncn-m002 during the upgrade)
+# This is only run on the primary upgrade node
 state_name="BACKUP_SNAPSHOT"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -201,7 +224,7 @@ fi
 
 state_name="CHECK_WEAVE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     SLEEVE_MODE="yes"
@@ -258,55 +281,53 @@ fi
 
 state_name="REPAIR_AND_VERIFY_CHRONY_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-TOKEN=$(curl -s -S -d grant_type=client_credentials \
-                   -d client_id=admin-client \
-                   -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
-                   https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-export TOKEN
-if [[ ${state_recorded} == "0" ]]; then
+
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    if [[ "$(hostname)" == "ncn-m002" ]]; then
-        # we already did this from ncn-m001
-        echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-    else
-      for target_ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
+    for target_ncn in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
 
-        # ensure host is accessible, skip it if not
-        if ! ssh "${target_ncn}" hostname > /dev/null; then
-            continue
-        fi
+      if is_vshasta_node; then
+          if [ "${target_ncn}" == "ncn-m001" ]; then
+              echo "Skipping ncn-m001 because we are running on vshasta"
+              continue
+          fi
+      fi
 
-        # ensure the directory exists
-        ssh "${target_ncn}" mkdir -p /srv/cray/scripts/common/
+      # ensure host is accessible, skip it if not
+      if ! ssh "${target_ncn}" hostname > /dev/null; then
+          continue
+      fi
 
-        # copy the NTP script and template to the target ncn
-        rsync -aq "${CSM_ARTI_DIR}"/chrony "${target_ncn}":/srv/cray/scripts/common/
+      # ensure the directory exists
+      ssh "${target_ncn}" mkdir -p /srv/cray/scripts/common/
 
-        # shellcheck disable=SC2029 # it is intentional that ${TOKEN} expands on the client side
-        # run the script
-        if ! ssh "${target_ncn}" "TOKEN=${TOKEN} /srv/cray/scripts/common/chrony/csm_ntp.py"; then
-            echo "${target_ncn} csm_ntp failed"
-            exit 1
-        fi
+      # copy the NTP script and template to the target ncn
+      rsync -aq "${CSM_ARTI_DIR}"/chrony "${target_ncn}":/srv/cray/scripts/common/
 
-        ssh "${target_ncn}" chronyc makestep
-        loop_idx=0
-        in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
-        # wait up to 90s for the node to be in sync
-        while [[ ${loop_idx} -lt 18 && ${in_sync} == "no" ]]; do
-            sleep 5
-            in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
-            loop_idx=$(( loop_idx+1 ))
-        done
+      # shellcheck disable=SC2029 # it is intentional that ${TOKEN} expands on the client side
+      # run the script
+      if ! ssh "${target_ncn}" "TOKEN=${TOKEN} /srv/cray/scripts/common/chrony/csm_ntp.py"; then
+          echo "${target_ncn} csm_ntp failed"
+          exit 1
+      fi
 
-        if [[ ${in_sync} == "no" ]]; then
-            echo "The clock for ${target_ncn} is not in sync.  Wait a bit more or try again."
-            exit 1
-        fi
+      ssh "${target_ncn}" chronyc makestep
+      loop_idx=0
+      in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+      # wait up to 90s for the node to be in sync
+      while [[ ${loop_idx} -lt 18 && ${in_sync} == "no" ]]; do
+          sleep 5
+          in_sync=$(ssh "${target_ncn}" timedatectl | awk /synchronized:/'{print $NF}')
+          loop_idx=$(( loop_idx+1 ))
       done
-      record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-    fi
+
+      if [[ ${in_sync} == "no" ]]; then
+          echo "The clock for ${target_ncn} is not in sync.  Wait a bit more or try again."
+          exit 1
+      fi
+    done
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
     } >> "${LOG_FILE}" 2>&1
 else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
@@ -314,7 +335,7 @@ fi
 
 state_name="CHECK_CLOUD_INIT_PREREQ"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     echo "Ensuring cloud-init is healthy"
@@ -395,7 +416,7 @@ fi
 
 state_name="UPDATE_CUSTOMIZATIONS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -430,7 +451,7 @@ fi
 
 state_name="SETUP_NEXUS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -456,7 +477,7 @@ fi
 
 state_name="UPGRADE_NLS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
         "${locOfScript}/util/upgrade-cray-nls.sh"
@@ -487,7 +508,7 @@ fi
 
 state_name="UPGRADE_SPIRE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -501,7 +522,7 @@ fi
 
 state_name="UPGRADE_SYSMGMT_HEALTH"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -515,7 +536,7 @@ fi
 
 state_name="UPGRADE_CSM_CONFIG"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -529,7 +550,7 @@ fi
 
 state_name="UPGRADE_DRYDOCK"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -543,7 +564,7 @@ fi
 
 state_name="UPGRADE_KYVERNO"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -557,7 +578,7 @@ fi
 
 state_name="UPGRADE_KYVERNO_POLICY"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -571,7 +592,7 @@ fi
 
 state_name="UPGRADE_CRAY_KYVERNO_POLICIES_UPSTREAM"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
@@ -583,7 +604,7 @@ fi
 
 state_name="UPGRADE_TFTP"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -596,7 +617,7 @@ else
 fi
 state_name="UPGRADE_TFTP_PVC"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -610,7 +631,7 @@ fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     artdir=${CSM_ARTI_DIR}/images
@@ -722,7 +743,7 @@ fi
 
 state_name="UPDATE_CLOUD_INIT_RECORDS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -760,14 +781,9 @@ fi
 
 state_name="UPDATE_NCN_KERNEL_PARAMETERS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
-    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-        -d client_id=admin-client \
-        -d client_secret="$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d)" \
-        https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
-    export TOKEN
 
     # As boot parameters are added or removed, update these arrays.
     # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
@@ -808,6 +824,10 @@ if [[ ${state_recorded} == "0" ]]; then
       exit 1
     fi
 
+    if is_vshasta_node; then
+        sed -i 's/vshasta: false/vshasta: true/g' /opt/cray/tests/install/ncn/vars/variables-ncn.yaml
+    fi
+
     GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml \
         --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
 
@@ -819,7 +839,7 @@ fi
 
 state_name="UPGRADE_PRECACHE_CHART"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     tmp_current_configmap=/tmp/precache-current-configmap.yaml
@@ -862,7 +882,7 @@ fi
 
 state_name="UPGRADE_TRUSTEDCERTS_OPERATOR"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -876,7 +896,7 @@ fi
 
 state_name="CREATE_CEPH_RO_KEY"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -894,7 +914,7 @@ fi
 
 state_name="BACKUP_BSS_DATA"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -913,7 +933,7 @@ fi
 
 state_name="BACKUP_VCS_DATA"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -955,7 +975,7 @@ fi
 
 state_name="TDS_LOWER_CPU_REQUEST"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -973,9 +993,10 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# This is not run on vshasta because it doesn't have HSM
 state_name="CHECK_BMC_NCN_LOCKS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     # install the hpe-csm-scripts rpm early to get lock_management_nodes.py
@@ -1001,9 +1022,10 @@ fi
 # new sessions from being scheduled. It will also not prevent current sessions from updating
 # the status of the component when they complete. However, that update will not re-enable
 # the component.
+# This is not run on vshasta because it doesn't have HSM
 state_name="DISABLE_CFS_ON_NCNS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
         echo "Retrieving a list of all management node component names (xnames)"
@@ -1034,7 +1056,7 @@ fi
 # CRUS is being removed as part of this upgrade
 state_name="UNINSTALL_CRUS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "ncn-m001" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
         # If CRUS is installed, uninstall it
