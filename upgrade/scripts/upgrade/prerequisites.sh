@@ -182,6 +182,12 @@ function is_vshasta_node {
     return $?
 }
 
+if is_vshasta_node; then
+    vshasta="true"
+else
+    vshasta="false"
+fi
+
 # Make a backup copy of select pre-upgrade information, just in case it is needed for later reference.
 # This is only run on the primary upgrade node
 state_name="BACKUP_SNAPSHOT"
@@ -625,7 +631,7 @@ fi
 
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     artdir=${CSM_ARTI_DIR}/images
@@ -833,7 +839,7 @@ fi
 
 state_name="UPGRADE_PRECACHE_CHART"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}1" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     tmp_current_configmap=/tmp/precache-current-configmap.yaml
@@ -969,7 +975,7 @@ fi
 
 state_name="TDS_LOWER_CPU_REQUEST"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
 
@@ -987,9 +993,10 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# This is not run on vshasta because it doesn't have HSM
 state_name="CHECK_BMC_NCN_LOCKS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
     # install the hpe-csm-scripts rpm early to get lock_management_nodes.py
@@ -1015,9 +1022,10 @@ fi
 # new sessions from being scheduled. It will also not prevent current sessions from updating
 # the status of the component when they complete. However, that update will not re-enable
 # the component.
+# This is not run on vshasta because it doesn't have HSM
 state_name="DISABLE_CFS_ON_NCNS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" && ${vshasta} == "false" ]]; then
     echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
     {
         echo "Retrieving a list of all management node component names (xnames)"
