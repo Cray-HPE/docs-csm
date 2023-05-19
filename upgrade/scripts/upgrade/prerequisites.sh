@@ -469,8 +469,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "ncn-m001" ]]; then
         do
             counter=$((counter+1))
             sleep 5
-            # wait up to 90 seconds
-            if [[ ${counter} -gt 18 ]]; then
+            # wait up to 180 seconds
+            if [[ ${counter} -gt 36 ]]; then
                 echo "failed to find hooks.cray-nls.hpe.com crd"
                 exit 1
             fi
