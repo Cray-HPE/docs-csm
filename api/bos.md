@@ -71,7 +71,7 @@ endpoint.
 
 #### GET /session/{session_id}
 
-Get session details by session id.
+Get session details by session ID.
 
 List all in progress and completed sessions.
 
@@ -81,7 +81,7 @@ BOS works in concert with Image Management Service (IMS) to access boot images,
 and if *enable_cfs* is true then
 BOS will invoke CFS to configure the compute nodes.
 
-All boot images specified via the session template, must be available via IMS.
+All boot images specified via the session template must be available via IMS.
 
 Base URLs:
 
@@ -257,6 +257,8 @@ func main() {
 
 *Get API version*
 
+Return the API version
+
 > Example responses
 
 > 200 Response
@@ -350,6 +352,8 @@ func main() {
 `GET /v1/version`
 
 *Get API version*
+
+Return the API version
 
 > Example responses
 
@@ -447,7 +451,7 @@ func main() {
 
 *Get service health details*
 
-Get bos health details.
+Get BOS health details.
 
 > Example responses
 
@@ -839,46 +843,7 @@ uniquely identified by the name.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of SessionTemplates|Inline|
-
-<h3 id="get_v1_sessiontemplates-responseschema">Response Schema</h3>
-
-Status Code **200**
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V1SessionTemplate](#schemav1sessiontemplate)]|false|none|[A Session Template object represents a collection of resources and metadata.<br>A session template is used to create a Session which when combined with an<br>action (i.e. boot, reconfigure, reboot, shutdown) will create a Kubernetes BOA job<br>to complete the required tasks for the operation.<br><br>A Session Template can be created from a JSON structure.  It will return<br>a SessionTemplate name if successful.<br>This name is required when creating a Session.<br><br>## Link Relationships<br><br>* self : The session object<br>]|
-|» templateUrl|string|false|none|The URL to the resource providing the session template data.<br>Specify either a templateURL, or the other session<br>template parameters.|
-|» name|string|true|none|Name of the SessionTemplate. The length of the name is restricted to 45 characters.|
-|» description|string|false|none|An optional description for the session template.|
-|» cfs_url|string|false|none|The url for the repository providing the configuration. DEPRECATED|
-|» cfs_branch|string|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes.  DEPRECATED.|
-|» enable_cfs|boolean|false|none|Whether to enable the Configuration Framework Service (CFS).<br>Choices: true/false|
-|» cfs|[V1CfsParameters](#schemav1cfsparameters)|false|none|CFS Parameters is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled.|
-|»» clone_url|string|false|none|The clone url for the repository providing the configuration. (DEPRECATED)|
-|»» branch|string|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)|
-|»» commit|string|false|none|The commit id of the configuration that you want to<br>apply to the nodes. Mutually exclusive with branch. (DEPRECATED)|
-|»» playbook|string|false|none|The name of the playbook to run for configuration. The file path must be specified<br>relative to the base directory of the config repo. (DEPRECATED)|
-|»» configuration|string|false|none|The name of configuration to be applied.|
-|» partition|string|false|none|The machine partition to operate on.|
-|» boot_sets|object|false|none|none|
-|»» **additionalProperties**|[V1BootSet](#schemav1bootset)|false|none|A boot set defines a collection of nodes and the information about the<br>boot artifacts and parameters to be sent to each node over the specified<br>network to enable these nodes to boot. When multiple boot sets are used<br>in a session template, the boot_ordinal and shutdown_ordinal indicate<br>the order in which boot sets need to be acted upon. Boot sets sharing<br>the same ordinal number will be addressed at the same time.|
-|»»» name|string|false|none|The Boot Set name.|
-|»»» boot_ordinal|integer|false|none|The boot ordinal. This will establish the order for boot set operations.<br>Boot sets boot in order from the lowest to highest boot_ordinal.|
-|»»» shutdown_ordinal|integer|false|none|The shutdown ordinal. This will establish the order for boot set<br>shutdown operations. Sets shutdown from low to high shutdown_ordinal.|
-|»»» path|string|true|none|A path identifying the metadata describing the components of the boot image. This could be a URI, URL, etc.<br>It will be processed based on the type attribute.|
-|»»» type|string|true|none|The mime type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.|
-|»»» etag|string|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.|
-|»»» kernel_parameters|string|false|none|The kernel parameters to use to boot the nodes.|
-|»»» network|string|false|none|The network over which the node will boot from.<br>Choices:  NMN -- Node Management Network<br>pattern: '^(?i)nmn$'|
-|»»» node_list|[string]|false|none|The node list. This is an explicit mapping against hardware xnames.|
-|»»» node_roles_groups|[string]|false|none|The node roles list. Allows actions against nodes with associated roles. Roles are defined in SMD.|
-|»»» node_groups|[string]|false|none|The node groups list. Allows actions against associated nodes by logical groupings. Logical groups are user-defined groups in SMD.|
-|»»» rootfs_provider|string|false|none|The root file system provider.|
-|»»» rootfs_provider_passthrough|string|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter|
-|» links|[[Link](#schemalink)]|false|read-only|[Link to other resources]|
-|»» href|string|false|none|none|
-|»» rel|string|false|none|none|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details array|[SessionTemplateArray](#schemasessiontemplatearray)|
 
 <aside class="success">
 This operation does not require authentication
@@ -943,10 +908,10 @@ func main() {
 
 `GET /v1/sessiontemplate/{session_template_id}`
 
-*Get session template by id*
+*Get session template by ID*
 
-Get session template by session_template_id.
-The session_template_id corresponds to the *name*
+Get session template by session template ID.
+The session template ID corresponds to the *name*
 of the session template.
 
 <h3 id="get_v1_sessiontemplate-parameters">Parameters</h3>
@@ -1032,8 +997,10 @@ of the session template.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|[V1SessionTemplate](#schemav1sessiontemplate)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|Inline|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<h3 id="get_v1_sessiontemplate-responseschema">Response Schema</h3>
 
 <aside class="success">
 This operation does not require authentication
@@ -1356,7 +1323,7 @@ on the boot set(s) defined in the session template.
 
 ```json
 {
-  "operation": "string",
+  "operation": "boot",
   "templateUuid": "my-session-template",
   "templateName": "my-session-template",
   "limit": "string"
@@ -1367,7 +1334,7 @@ on the boot set(s) defined in the session template.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V1Session](#schemav1session)|true|A JSON object for creating a Session|
+|body|body|any|true|A JSON object for creating a Session|
 
 > Example responses
 
@@ -1375,7 +1342,7 @@ on the boot set(s) defined in the session template.
 
 ```json
 {
-  "operation": "string",
+  "operation": "boot",
   "templateUuid": "my-session-template",
   "templateName": "my-session-template",
   "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
@@ -1383,7 +1350,7 @@ on the boot set(s) defined in the session template.
   "links": [
     {
       "href": "string",
-      "jobId": "string",
+      "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
       "rel": "session",
       "type": "GET"
     }
@@ -1395,7 +1362,7 @@ on the boot set(s) defined in the session template.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session details|[V1Session](#schemav1session)|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session|[V1Session](#schemav1session)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
@@ -1462,9 +1429,9 @@ func main() {
 
 `GET /v1/session`
 
-*List sessions*
+*List session IDs*
 
-List all sessions, including those in progress and those complete.
+List IDs of all sessions, including those in progress and those complete.
 
 > Example responses
 
@@ -1472,21 +1439,7 @@ List all sessions, including those in progress and those complete.
 
 ```json
 [
-  {
-    "operation": "string",
-    "templateUuid": "my-session-template",
-    "templateName": "my-session-template",
-    "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
-    "limit": "string",
-    "links": [
-      {
-        "href": "string",
-        "jobId": "string",
-        "rel": "session",
-        "type": "GET"
-      }
-    ]
-  }
+  "8deb0746-b18c-427c-84a8-72ec6a28642c"
 ]
 ```
 
@@ -1494,7 +1447,7 @@ List all sessions, including those in progress and those complete.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Sessions|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Session IDs|Inline|
 
 <h3 id="get_v1_sessions-responseschema">Response Schema</h3>
 
@@ -1502,25 +1455,7 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[[V1Session](#schemav1session)]|false|none|[A Session object<br><br>## Link Relationships<br><br>* self : The session object<br>]|
-|» operation|string|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
-|» templateUuid|string(string)|false|none|DEPRECATED - use templateName|
-|» templateName|string(string)|false|none|The name of the Session Template|
-|» job|string|false|read-only|The identity of the Kubernetes job that is created to handle the session.|
-|» limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
-|» links|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
-|»» href|string|false|none|none|
-|»» jobId|string|false|none|none|
-|»» rel|string|false|none|none|
-|»» type|string|false|none|none|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|rel|session|
-|rel|status|
-|type|GET|
+|*anonymous*|[[V1SessionId](#schemav1sessionid)]|false|none|[Unique BOS v1 session identifier.]|
 
 <aside class="success">
 This operation does not require authentication
@@ -1585,9 +1520,9 @@ func main() {
 
 `GET /v1/session/{session_id}`
 
-*Get session details by id*
+*Get session details by ID*
 
-Get session details by session_id.
+Get session details by session ID.
 
 <h3 id="get_v1_session-parameters">Parameters</h3>
 
@@ -1601,19 +1536,15 @@ Get session details by session_id.
 
 ```json
 {
-  "operation": "string",
-  "templateUuid": "my-session-template",
-  "templateName": "my-session-template",
+  "complete": true,
+  "error_count": 0,
+  "in_progress": false,
   "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
-  "limit": "string",
-  "links": [
-    {
-      "href": "string",
-      "jobId": "string",
-      "rel": "session",
-      "type": "GET"
-    }
-  ]
+  "operation": "boot",
+  "start_time": "2020-04-24T12:00",
+  "status_link": "/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status",
+  "stop_time": "2020-04-24T12:00",
+  "templateName": "my-session-template"
 }
 ```
 
@@ -1621,8 +1552,10 @@ Get session details by session_id.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V1Session](#schemav1session)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|Inline|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<h3 id="get_v1_session-responseschema">Response Schema</h3>
 
 <aside class="success">
 This operation does not require authentication
@@ -1687,9 +1620,9 @@ func main() {
 
 `DELETE /v1/session/{session_id}`
 
-*Delete session by id*
+*Delete session by ID*
 
-Delete session by session_id.
+Delete session by session ID.
 
 <h3 id="delete_v1_session-parameters">Parameters</h3>
 
@@ -1798,16 +1731,16 @@ A list of the statuses for the different boot sets.
 ```json
 {
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
     "string"
   ],
-  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
     {
       "href": "string",
@@ -1900,16 +1833,16 @@ Creates the initial session status.
 ```json
 {
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
     "string"
   ],
-  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
     {
       "href": "string",
@@ -1933,16 +1866,16 @@ Creates the initial session status.
 ```json
 {
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
     "string"
   ],
-  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
     {
       "href": "string",
@@ -2035,11 +1968,11 @@ Update the session status. You can update the start or stop times.
 
 ```json
 {
-  "start_time": "2020-04-24T12:00",
-  "stop_time": "2020-04-24T12:00",
   "complete": true,
+  "error_count": 0,
   "in_progress": false,
-  "error_count": 0
+  "start_time": "2020-04-24T12:00",
+  "stop_time": "2020-04-24T12:00"
 }
 ```
 
@@ -2057,16 +1990,16 @@ Update the session status. You can update the start or stop times.
 ```json
 {
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
     "string"
   ],
-  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
     {
       "href": "string",
@@ -2259,23 +2192,23 @@ Get the status for a boot set.
 ```json
 {
   "name": "Boot-Set",
-  "session": "Session-ID",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "phases": [
     {
       "name": "Boot",
       "metadata": {
-        "start_time": "2020-04-24T12:00",
-        "stop_time": "2020-04-24T12:00",
         "complete": true,
+        "error_count": 0,
         "in_progress": false,
-        "error_count": 0
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
       },
       "categories": [
         {
@@ -2317,7 +2250,7 @@ Get the status for a boot set.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of the Phase Statuses for the Boot Set and metadata|[V1BootSetStatus](#schemav1bootsetstatus)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Metadata and a list of the Phase Statuses for the Boot Set|[V1BootSetStatus](#schemav1bootsetstatus)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="success">
@@ -2396,23 +2329,23 @@ Create a status for a Boot Set
 ```json
 {
   "name": "Boot-Set",
-  "session": "Session-ID",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "phases": [
     {
       "name": "Boot",
       "metadata": {
-        "start_time": "2020-04-24T12:00",
-        "stop_time": "2020-04-24T12:00",
         "complete": true,
+        "error_count": 0,
         "in_progress": false,
-        "error_count": 0
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
       },
       "categories": [
         {
@@ -2465,23 +2398,23 @@ Create a status for a Boot Set
 ```json
 {
   "name": "Boot-Set",
-  "session": "Session-ID",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "phases": [
     {
       "name": "Boot",
       "metadata": {
-        "start_time": "2020-04-24T12:00",
-        "stop_time": "2020-04-24T12:00",
         "complete": true,
+        "error_count": 0,
         "in_progress": false,
-        "error_count": 0
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
       },
       "categories": [
         {
@@ -2604,10 +2537,10 @@ the boot set.
 [
   {
     "update_type": "string",
-    "phase": "string",
+    "phase": "Boot",
     "data": {
       "phase": "Boot",
-      "source": "in_progress",
+      "source": "Succeeded",
       "destination": "Succeeded",
       "node_list": [
         [
@@ -2635,23 +2568,23 @@ the boot set.
 ```json
 {
   "name": "Boot-Set",
-  "session": "Session-ID",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "phases": [
     {
       "name": "Boot",
       "metadata": {
-        "start_time": "2020-04-24T12:00",
-        "stop_time": "2020-04-24T12:00",
         "complete": true,
+        "error_count": 0,
         "in_progress": false,
-        "error_count": 0
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
       },
       "categories": [
         {
@@ -2874,11 +2807,11 @@ Get the status for a specific boot set and phase.
 {
   "name": "Boot",
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "categories": [
     {
@@ -3081,6 +3014,8 @@ func main() {
 
 *Get API version*
 
+Return the API version
+
 > Example responses
 
 > 200 Response
@@ -3175,7 +3110,7 @@ func main() {
 
 *Get service health details*
 
-Get bos health details.
+Get BOS health details.
 
 > Example responses
 
@@ -3271,22 +3206,30 @@ uniquely identified by the name.
 ```json
 [
   {
+    "templateUrl": "string",
     "name": "cle-1.0.0",
     "description": "string",
+    "cfs_url": "string",
+    "cfs_branch": "string",
     "enable_cfs": true,
     "cfs": {
+      "clone_url": "string",
+      "branch": "string",
+      "commit": "string",
+      "playbook": "string",
       "configuration": "string"
     },
+    "partition": "string",
     "boot_sets": {
       "property1": {
         "name": "string",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
         "path": "string",
-        "cfs": {
-          "configuration": "string"
-        },
         "type": "string",
         "etag": "string",
         "kernel_parameters": "string",
+        "network": "string",
         "node_list": [
           "string"
         ],
@@ -3301,13 +3244,13 @@ uniquely identified by the name.
       },
       "property2": {
         "name": "string",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
         "path": "string",
-        "cfs": {
-          "configuration": "string"
-        },
         "type": "string",
         "etag": "string",
         "kernel_parameters": "string",
+        "network": "string",
         "node_list": [
           "string"
         ],
@@ -3335,7 +3278,7 @@ uniquely identified by the name.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|[V2SessionTemplateArray](#schemav2sessiontemplatearray)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details array|[SessionTemplateArray](#schemasessiontemplatearray)|
 
 <aside class="success">
 This operation does not require authentication
@@ -3400,10 +3343,10 @@ func main() {
 
 `GET /v2/sessiontemplatesvalid/{session_template_id}`
 
-*Validate the session template by id*
+*Validate the session template by ID*
 
-Validate session template by session_template_id.
-The session_template_id corresponds to the *name*
+Validate session template by session template ID.
+The session template ID corresponds to the *name*
 of the session template.
 
 <h3 id="validate_v2_sessiontemplate-parameters">Parameters</h3>
@@ -3490,10 +3433,10 @@ func main() {
 
 `GET /v2/sessiontemplates/{session_template_id}`
 
-*Get session template by id*
+*Get session template by ID*
 
-Get session template by session_template_id.
-The session_template_id corresponds to the *name*
+Get session template by session template ID.
+The session template ID corresponds to the *name*
 of the session template.
 
 <h3 id="get_v2_sessiontemplate-parameters">Parameters</h3>
@@ -3508,22 +3451,30 @@ of the session template.
 
 ```json
 {
+  "templateUrl": "string",
   "name": "cle-1.0.0",
   "description": "string",
+  "cfs_url": "string",
+  "cfs_branch": "string",
   "enable_cfs": true,
   "cfs": {
+    "clone_url": "string",
+    "branch": "string",
+    "commit": "string",
+    "playbook": "string",
     "configuration": "string"
   },
+  "partition": "string",
   "boot_sets": {
     "property1": {
       "name": "string",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "string",
-      "cfs": {
-        "configuration": "string"
-      },
       "type": "string",
       "etag": "string",
       "kernel_parameters": "string",
+      "network": "string",
       "node_list": [
         "string"
       ],
@@ -3538,13 +3489,13 @@ of the session template.
     },
     "property2": {
       "name": "string",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "string",
-      "cfs": {
-        "configuration": "string"
-      },
       "type": "string",
       "etag": "string",
       "kernel_parameters": "string",
+      "network": "string",
       "node_list": [
         "string"
       ],
@@ -3571,8 +3522,10 @@ of the session template.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|[V2SessionTemplate](#schemav2sessiontemplate)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|Inline|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
+
+<h3 id="get_v2_sessiontemplate-responseschema">Response Schema</h3>
 
 <aside class="success">
 This operation does not require authentication
@@ -3848,6 +3801,8 @@ func main() {
 `PATCH /v2/sessiontemplates/{session_template_id}`
 
 *Update a session template*
+
+Update an existing session template.
 
 > Body parameter
 
@@ -4451,7 +4406,7 @@ List all sessions, including those in progress and those complete.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details|[V2SessionArray](#schemav2sessionarray)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session details array|[V2SessionArray](#schemav2sessionarray)|
 
 <aside class="success">
 This operation does not require authentication
@@ -4518,7 +4473,8 @@ func main() {
 
 *Delete multiple sessions.*
 
-Delete multiple sessions.  If filters are provided, only sessions matching all filters will be deleted.  By default only completed sessions will be deleted.
+Delete multiple sessions.  If filters are provided, only sessions matching
+all filters will be deleted.  By default only completed sessions will be deleted.
 
 <h3 id="delete_v2_sessions-parameters">Parameters</h3>
 
@@ -4620,9 +4576,9 @@ func main() {
 
 `GET /v2/sessions/{session_id}`
 
-*Get session details by id*
+*Get session details by ID*
 
-Get session details by session_id.
+Get session details by session ID.
 
 <h3 id="get_v2_session-parameters">Parameters</h3>
 
@@ -4850,9 +4806,9 @@ func main() {
 
 `DELETE /v2/sessions/{session_id}`
 
-*Delete session by id*
+*Delete session by ID*
 
-Delete session by session_id.
+Delete session by session ID.
 
 <h3 id="delete_v2_session-parameters">Parameters</h3>
 
@@ -4944,9 +4900,9 @@ func main() {
 
 `GET /v2/sessions/{session_id}/status`
 
-*Get session extended status information by id*
+*Get session extended status information by ID*
 
-Get session extended status information by id
+Get session extended status information by ID
 
 <h3 id="get_v2_session_status-parameters">Parameters</h3>
 
@@ -5160,9 +5116,9 @@ Retrieve the full collection of components in the form of a ComponentArray. Full
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|ids|query|string|false|Retrieve the components with the given id (e.g. xname for hardware components). Can be chained for selecting groups of components.|
-|session|query|string|false|Retrieve the components with the given session id.|
-|staged_session|query|string|false|Retrieve the components with the given staged session id.|
+|ids|query|string|false|Retrieve the components with the given ID (e.g. xname for hardware components). Can be chained for selecting groups of components.|
+|session|query|string|false|Retrieve the components with the given session ID.|
+|staged_session|query|string|false|Retrieve the components with the given staged session ID.|
 |enabled|query|boolean|false|Retrieve the components with the "enabled" state.|
 |phase|query|string|false|Retrieve the components in the given phase.|
 |status|query|string|false|Retrieve the components with the given status.|
@@ -5704,7 +5660,7 @@ Retrieve the current and desired state of a single component
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+|component_id|path|string|true|Component ID. e.g. xname for hardware components|
 
 > Example responses
 
@@ -5899,7 +5855,7 @@ Update the state for a given component in the BOS database
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[V2Component](#schemav2component)|true|The state for a single component|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+|component_id|path|string|true|Component ID. e.g. xname for hardware components|
 
 > Example responses
 
@@ -6093,7 +6049,7 @@ Update the state for a given component in the BOS database
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[V2Component](#schemav2component)|true|The state for a single component|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+|component_id|path|string|true|Component ID. e.g. xname for hardware components|
 
 > Example responses
 
@@ -6232,7 +6188,7 @@ Delete the given component
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|component_id|path|string|true|Component id. e.g. xname for hardware components|
+|component_id|path|string|true|Component ID. e.g. xname for hardware components|
 
 > Example responses
 
@@ -6557,6 +6513,8 @@ func main() {
 
 *Get API version*
 
+Return the API version
+
 > Example responses
 
 > 200 Response
@@ -6768,11 +6726,11 @@ An error response for RFC 7807 problem details.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human readable documentation.|
-|title|string|false|none|Short, human-readable summary of the problem, should not change by occurrence.|
+|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human<br>readable documentation.|
+|title|string|false|none|Short, human-readable summary of the problem, should not change by<br>occurrence.|
 |status|integer|false|none|HTTP status code|
-|instance|string(uri)|false|none|A relative URI reference that identifies the specific occurrence of the problem|
-|detail|string|false|none|A human-readable explanation specific to this occurrence of the problem. Focus on helping correct the problem, rather than giving debugging information.|
+|instance|string(uri)|false|none|A relative URI reference that identifies the specific occurrence of<br>the problem|
+|detail|string|false|none|A human-readable explanation specific to this occurrence of the<br>problem. Focus on helping correct the problem, rather than giving<br>debugging information.|
 
 <h2 id="tocS_Link">Link</h2>
 <!-- backwards compatibility -->
@@ -6825,9 +6783,109 @@ Framework Service when configuration is enabled.
 |---|---|---|---|---|
 |clone_url|string|false|none|The clone url for the repository providing the configuration. (DEPRECATED)|
 |branch|string|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)|
-|commit|string|false|none|The commit id of the configuration that you want to<br>apply to the nodes. Mutually exclusive with branch. (DEPRECATED)|
+|commit|string|false|none|The commit ID of the configuration that you want to<br>apply to the nodes. Mutually exclusive with branch. (DEPRECATED)|
 |playbook|string|false|none|The name of the playbook to run for configuration. The file path must be specified<br>relative to the base directory of the config repo. (DEPRECATED)|
 |configuration|string|false|none|The name of configuration to be applied.|
+
+<h2 id="tocS_V1CompleteMetadata">V1CompleteMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1completemetadata"></a>
+<a id="schema_V1CompleteMetadata"></a>
+<a id="tocSv1completemetadata"></a>
+<a id="tocsv1completemetadata"></a>
+
+```json
+true
+
+```
+
+Is the object's status complete
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|boolean|false|none|Is the object's status complete|
+
+<h2 id="tocS_V1ErrorCountMetadata">V1ErrorCountMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1errorcountmetadata"></a>
+<a id="schema_V1ErrorCountMetadata"></a>
+<a id="tocSv1errorcountmetadata"></a>
+<a id="tocsv1errorcountmetadata"></a>
+
+```json
+0
+
+```
+
+How many errors were encountered
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|integer|false|none|How many errors were encountered|
+
+<h2 id="tocS_V1InProgressMetadata">V1InProgressMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1inprogressmetadata"></a>
+<a id="schema_V1InProgressMetadata"></a>
+<a id="tocSv1inprogressmetadata"></a>
+<a id="tocsv1inprogressmetadata"></a>
+
+```json
+false
+
+```
+
+Is the object still doing something
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|boolean|false|none|Is the object still doing something|
+
+<h2 id="tocS_V1StartTimeMetadata">V1StartTimeMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1starttimemetadata"></a>
+<a id="schema_V1StartTimeMetadata"></a>
+<a id="tocSv1starttimemetadata"></a>
+<a id="tocsv1starttimemetadata"></a>
+
+```json
+"2020-04-24T12:00"
+
+```
+
+The start time
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The start time|
+
+<h2 id="tocS_V1StopTimeMetadata">V1StopTimeMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1stoptimemetadata"></a>
+<a id="schema_V1StopTimeMetadata"></a>
+<a id="tocSv1stoptimemetadata"></a>
+<a id="tocsv1stoptimemetadata"></a>
+
+```json
+"2020-04-24T12:00"
+
+```
+
+The stop time
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The stop time|
 
 <h2 id="tocS_V1GenericMetadata">V1GenericMetadata</h2>
 <!-- backwards compatibility -->
@@ -6838,11 +6896,11 @@ Framework Service when configuration is enabled.
 
 ```json
 {
-  "start_time": "2020-04-24T12:00",
-  "stop_time": "2020-04-24T12:00",
   "complete": true,
+  "error_count": 0,
   "in_progress": false,
-  "error_count": 0
+  "start_time": "2020-04-24T12:00",
+  "stop_time": "2020-04-24T12:00"
 }
 
 ```
@@ -6853,11 +6911,11 @@ The status metadata
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|start_time|string|false|none|The start time|
-|stop_time|string|false|none|The stop time|
-|complete|boolean|false|none|Is the object's status complete|
-|in_progress|boolean|false|none|Is the object still doing something|
-|error_count|integer|false|none|How many errors were encountered|
+|complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
+|error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
+|in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
+|start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
+|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time|
 
 <h2 id="tocS_V1NodeList">V1NodeList</h2>
 <!-- backwards compatibility -->
@@ -6876,9 +6934,32 @@ The status metadata
 
 ```
 
+A list of node xnames.
+
 ### Properties
 
 *None*
+
+<h2 id="tocS_V1PhaseCategoryName">V1PhaseCategoryName</h2>
+<!-- backwards compatibility -->
+<a id="schemav1phasecategoryname"></a>
+<a id="schema_V1PhaseCategoryName"></a>
+<a id="tocSv1phasecategoryname"></a>
+<a id="tocsv1phasecategoryname"></a>
+
+```json
+"Succeeded"
+
+```
+
+Name of the Phase Category
+not_started, in_progress, succeeded, failed, or excluded
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
 
 <h2 id="tocS_V1PhaseCategoryStatus">V1PhaseCategoryStatus</h2>
 <!-- backwards compatibility -->
@@ -6910,8 +6991,8 @@ A list of the nodes in a given category within a phase.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|false|none|Name of the Phase Category|
-|node_list|[V1NodeList](#schemav1nodelist)|false|none|none|
+|name|[V1PhaseCategoryName](#schemav1phasecategoryname)|false|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
+|node_list|[V1NodeList](#schemav1nodelist)|false|none|A list of node xnames.|
 
 <h2 id="tocS_V1PhaseStatus">V1PhaseStatus</h2>
 <!-- backwards compatibility -->
@@ -6924,11 +7005,11 @@ A list of the nodes in a given category within a phase.
 {
   "name": "Boot",
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "categories": [
     {
@@ -6970,10 +7051,30 @@ what category those nodes fall into within the phase.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|false|none|Name of the Phase|
+|name|string|false|none|Name of the Phase<br>boot, configure, or shutdown|
 |metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
 |categories|[[V1PhaseCategoryStatus](#schemav1phasecategorystatus)]|false|none|[A list of the nodes in a given category within a phase.<br><br>## Link Relationships<br><br>* self : The session object<br>]|
 |errors|[V1NodeErrorsList](#schemav1nodeerrorslist)|false|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
+
+<h2 id="tocS_V1SessionId">V1SessionId</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionid"></a>
+<a id="schema_V1SessionId"></a>
+<a id="tocSv1sessionid"></a>
+<a id="tocsv1sessionid"></a>
+
+```json
+"8deb0746-b18c-427c-84a8-72ec6a28642c"
+
+```
+
+Unique BOS v1 session identifier.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string(uuid)|false|none|Unique BOS v1 session identifier.|
 
 <h2 id="tocS_V1BootSetStatus">V1BootSetStatus</h2>
 <!-- backwards compatibility -->
@@ -6985,23 +7086,23 @@ what category those nodes fall into within the phase.
 ```json
 {
   "name": "Boot-Set",
-  "session": "Session-ID",
+  "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "phases": [
     {
       "name": "Boot",
       "metadata": {
-        "start_time": "2020-04-24T12:00",
-        "stop_time": "2020-04-24T12:00",
         "complete": true,
+        "error_count": 0,
         "in_progress": false,
-        "error_count": 0
+        "start_time": "2020-04-24T12:00",
+        "stop_time": "2020-04-24T12:00"
       },
       "categories": [
         {
@@ -7052,7 +7153,7 @@ The status for a Boot Set. It as a list of the phase statuses for the Boot Set.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|string|false|none|Name of the Boot Set|
-|session|string|false|none|Session ID|
+|session|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 session identifier.|
 |metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
 |phases|[[V1PhaseStatus](#schemav1phasestatus)]|false|none|[The phase's status. It is a list of all of the nodes in the phase and<br>what category those nodes fall into within the phase.<br><br>## Link Relationships<br><br>* self : The session object<br>]|
 |links|[[Link](#schemalink)]|false|none|[Link to other resources]|
@@ -7067,16 +7168,16 @@ The status for a Boot Set. It as a list of the phase statuses for the Boot Set.
 ```json
 {
   "metadata": {
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00",
     "complete": true,
+    "error_count": 0,
     "in_progress": false,
-    "error_count": 0
+    "start_time": "2020-04-24T12:00",
+    "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
     "string"
   ],
-  "id": "497f6eca-6276-4993-bfeb-53cbbbba6f08",
+  "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
     {
       "href": "string",
@@ -7099,7 +7200,7 @@ The status for a Boot Session. It is a list of all of the Boot Set Statuses in t
 |---|---|---|---|---|
 |metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
 |boot_sets|[string]|false|none|The boot sets in the Session|
-|id|string(uuid)|false|none|Session ID|
+|id|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 session identifier.|
 |links|[[Link](#schemalink)]|false|none|[Link to other resources]|
 
 <h2 id="tocS_V1BootSet">V1BootSet</h2>
@@ -7149,10 +7250,10 @@ the same ordinal number will be addressed at the same time.
 |boot_ordinal|integer|false|none|The boot ordinal. This will establish the order for boot set operations.<br>Boot sets boot in order from the lowest to highest boot_ordinal.|
 |shutdown_ordinal|integer|false|none|The shutdown ordinal. This will establish the order for boot set<br>shutdown operations. Sets shutdown from low to high shutdown_ordinal.|
 |path|string|true|none|A path identifying the metadata describing the components of the boot image. This could be a URI, URL, etc.<br>It will be processed based on the type attribute.|
-|type|string|true|none|The mime type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.|
+|type|string|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.|
 |etag|string|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.|
 |kernel_parameters|string|false|none|The kernel parameters to use to boot the nodes.|
-|network|string|false|none|The network over which the node will boot from.<br>Choices:  NMN -- Node Management Network<br>pattern: '^(?i)nmn$'|
+|network|string|false|none|The network over which the node will boot.<br>Choices:  NMN -- Node Management Network|
 |node_list|[string]|false|none|The node list. This is an explicit mapping against hardware xnames.|
 |node_roles_groups|[string]|false|none|The node roles list. Allows actions against nodes with associated roles. Roles are defined in SMD.|
 |node_groups|[string]|false|none|The node groups list. Allows actions against associated nodes by logical groupings. Logical groups are user-defined groups in SMD.|
@@ -7265,6 +7366,97 @@ This name is required when creating a Session.
 |» **additionalProperties**|[V1BootSet](#schemav1bootset)|false|none|A boot set defines a collection of nodes and the information about the<br>boot artifacts and parameters to be sent to each node over the specified<br>network to enable these nodes to boot. When multiple boot sets are used<br>in a session template, the boot_ordinal and shutdown_ordinal indicate<br>the order in which boot sets need to be acted upon. Boot sets sharing<br>the same ordinal number will be addressed at the same time.|
 |links|[[Link](#schemalink)]|false|read-only|[Link to other resources]|
 
+<h2 id="tocS_V1BoaKubernetesJob">V1BoaKubernetesJob</h2>
+<!-- backwards compatibility -->
+<a id="schemav1boakubernetesjob"></a>
+<a id="schema_V1BoaKubernetesJob"></a>
+<a id="tocSv1boakubernetesjob"></a>
+<a id="tocsv1boakubernetesjob"></a>
+
+```json
+"boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0"
+
+```
+
+The identity of the Kubernetes job that is created to handle the session.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|read-only|The identity of the Kubernetes job that is created to handle the session.|
+
+<h2 id="tocS_V1Operation">V1Operation</h2>
+<!-- backwards compatibility -->
+<a id="schemav1operation"></a>
+<a id="schema_V1Operation"></a>
+<a id="tocSv1operation"></a>
+<a id="tocsv1operation"></a>
+
+```json
+"boot"
+
+```
+
+A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.
+Operation -- An operation to perform on nodes in this session.
+
+    Boot         Boot nodes that are off.
+
+    Configure    Reconfigure the nodes using the Configuration Framework
+                 Service (CFS).
+
+    Reboot       Gracefully power down nodes that are on and then power
+                 them back up.
+
+    Shutdown     Gracefully power down nodes that are on.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+
+<h2 id="tocS_V1TemplateName">V1TemplateName</h2>
+<!-- backwards compatibility -->
+<a id="schemav1templatename"></a>
+<a id="schema_V1TemplateName"></a>
+<a id="tocSv1templatename"></a>
+<a id="tocsv1templatename"></a>
+
+```json
+"my-session-template"
+
+```
+
+The name of the Session Template
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The name of the Session Template|
+
+<h2 id="tocS_V1TemplateUuid">V1TemplateUuid</h2>
+<!-- backwards compatibility -->
+<a id="schemav1templateuuid"></a>
+<a id="schema_V1TemplateUuid"></a>
+<a id="tocSv1templateuuid"></a>
+<a id="tocsv1templateuuid"></a>
+
+```json
+"my-session-template"
+
+```
+
+DEPRECATED - use templateName. This field is ignored if templateName is also set.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.|
+
 <h2 id="tocS_V1SessionLink">V1SessionLink</h2>
 <!-- backwards compatibility -->
 <a id="schemav1sessionlink"></a>
@@ -7275,7 +7467,7 @@ This name is required when creating a Session.
 ```json
 {
   "href": "string",
-  "jobId": "string",
+  "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
   "rel": "session",
   "type": "GET"
 }
@@ -7289,7 +7481,7 @@ Link to other resources
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |href|string|false|none|none|
-|jobId|string|false|none|none|
+|jobId|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
 |rel|string|false|none|none|
 |type|string|false|none|none|
 
@@ -7301,6 +7493,103 @@ Link to other resources
 |rel|status|
 |type|GET|
 
+<h2 id="tocS_V1SessionStatusUri">V1SessionStatusUri</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionstatusuri"></a>
+<a id="schema_V1SessionStatusUri"></a>
+<a id="tocSv1sessionstatusuri"></a>
+<a id="tocsv1sessionstatusuri"></a>
+
+```json
+"/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status"
+
+```
+
+URI to the status for this session
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string(uri)|false|none|URI to the status for this session|
+
+<h2 id="tocS_V1SessionDetails">V1SessionDetails</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessiondetails"></a>
+<a id="schema_V1SessionDetails"></a>
+<a id="tocSv1sessiondetails"></a>
+<a id="tocsv1sessiondetails"></a>
+
+```json
+{
+  "complete": true,
+  "error_count": 0,
+  "in_progress": false,
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "operation": "boot",
+  "start_time": "2020-04-24T12:00",
+  "status_link": "/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status",
+  "stop_time": "2020-04-24T12:00",
+  "templateName": "my-session-template"
+}
+
+```
+
+Details about a Session.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
+|error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
+|in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
+|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
+|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this session|
+|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time|
+|templateName|[V1TemplateName](#schemav1templatename)|false|none|The name of the Session Template|
+
+<h2 id="tocS_V1SessionDetailsByTemplateUuid">V1SessionDetailsByTemplateUuid</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessiondetailsbytemplateuuid"></a>
+<a id="schema_V1SessionDetailsByTemplateUuid"></a>
+<a id="tocSv1sessiondetailsbytemplateuuid"></a>
+<a id="tocsv1sessiondetailsbytemplateuuid"></a>
+
+```json
+{
+  "complete": true,
+  "error_count": 0,
+  "in_progress": false,
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "operation": "boot",
+  "start_time": "2020-04-24T12:00",
+  "status_link": "/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status",
+  "stop_time": "2020-04-24T12:00",
+  "templateName": "my-session-template"
+}
+
+```
+
+Details about a Session using templateUuid instead of templateName.
+DEPRECATED -- these will only exist from sessions created before templateUuid was deprecated.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
+|error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
+|in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
+|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
+|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this session|
+|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time|
+|templateName|[V1TemplateName](#schemav1templatename)|false|none|The name of the Session Template|
+
 <h2 id="tocS_V1Session">V1Session</h2>
 <!-- backwards compatibility -->
 <a id="schemav1session"></a>
@@ -7310,7 +7599,7 @@ Link to other resources
 
 ```json
 {
-  "operation": "string",
+  "operation": "boot",
   "templateUuid": "my-session-template",
   "templateName": "my-session-template",
   "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
@@ -7318,7 +7607,7 @@ Link to other resources
   "links": [
     {
       "href": "string",
-      "jobId": "string",
+      "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
       "rel": "session",
       "type": "GET"
     }
@@ -7327,7 +7616,7 @@ Link to other resources
 
 ```
 
-A Session object
+A Session object specified by templateName
 
 ## Link Relationships
 
@@ -7337,12 +7626,74 @@ A Session object
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|operation|string|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
-|templateUuid|string(string)|false|none|DEPRECATED - use templateName|
-|templateName|string(string)|false|none|The name of the Session Template|
-|job|string|false|read-only|The identity of the Kubernetes job that is created to handle the session.|
+|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|templateUuid|[V1TemplateUuid](#schemav1templateuuid)|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.|
+|templateName|[V1TemplateName](#schemav1templatename)|true|none|The name of the Session Template|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
 |limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
 |links|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
+
+<h2 id="tocS_V1SessionByTemplateUuid">V1SessionByTemplateUuid</h2>
+<!-- backwards compatibility -->
+<a id="schemav1sessionbytemplateuuid"></a>
+<a id="schema_V1SessionByTemplateUuid"></a>
+<a id="tocSv1sessionbytemplateuuid"></a>
+<a id="tocsv1sessionbytemplateuuid"></a>
+
+```json
+{
+  "operation": "boot",
+  "templateUuid": "my-session-template",
+  "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+  "limit": "string",
+  "links": [
+    {
+      "href": "string",
+      "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
+      "rel": "session",
+      "type": "GET"
+    }
+  ]
+}
+
+```
+
+A Session object specified by templateUuid (DEPRECATED -- use templateName)
+
+## Link Relationships
+
+* self : The session object
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|templateUuid|[V1TemplateUuid](#schemav1templateuuid)|true|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
+|limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
+|links|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
+
+<h2 id="tocS_V1PhaseName">V1PhaseName</h2>
+<!-- backwards compatibility -->
+<a id="schemav1phasename"></a>
+<a id="schema_V1PhaseName"></a>
+<a id="tocSv1phasename"></a>
+<a id="tocsv1phasename"></a>
+
+```json
+"Boot"
+
+```
+
+The phase that this data belongs to (boot, shutdown, or configure). If blank,
+it belongs to the Boot Set itself, which only applies to the GenericMetadata type.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
 
 <h2 id="tocS_V1NodeChangeList">V1NodeChangeList</h2>
 <!-- backwards compatibility -->
@@ -7354,7 +7705,7 @@ A Session object
 ```json
 {
   "phase": "Boot",
-  "source": "in_progress",
+  "source": "Succeeded",
   "destination": "Succeeded",
   "node_list": [
     [
@@ -7373,10 +7724,10 @@ one category to another within a phase.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|phase|string|true|none|none|
-|source|string|true|none|none|
-|destination|string|true|none|none|
-|node_list|[V1NodeList](#schemav1nodelist)|true|none|none|
+|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|source|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
+|destination|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
+|node_list|[V1NodeList](#schemav1nodelist)|true|none|A list of node xnames.|
 
 <h2 id="tocS_V1NodeErrorsList">V1NodeErrorsList</h2>
 <!-- backwards compatibility -->
@@ -7411,7 +7762,7 @@ This does not overwrite previously existing errors.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|**additionalProperties**|[V1NodeList](#schemav1nodelist)|false|none|none|
+|**additionalProperties**|[V1NodeList](#schemav1nodelist)|false|none|A list of node xnames.|
 
 <h2 id="tocS_V1UpdateRequestNodeChangeList">V1UpdateRequestNodeChangeList</h2>
 <!-- backwards compatibility -->
@@ -7424,10 +7775,10 @@ This does not overwrite previously existing errors.
 [
   {
     "update_type": "string",
-    "phase": "string",
+    "phase": "Boot",
     "data": {
       "phase": "Boot",
-      "source": "in_progress",
+      "source": "Succeeded",
       "destination": "Succeeded",
       "node_list": [
         [
@@ -7449,7 +7800,7 @@ updates to which categories nodes are in.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |update_type|string|false|none|The type of update data|
-|phase|string|false|none|The phase that this data belongs to. If  blank, it belongs to<br>the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
 |data|[V1NodeChangeList](#schemav1nodechangelist)|false|none|The information used to update the status of a node list. It moves nodes from<br>one category to another within a phase.|
 
 <h2 id="tocS_V1UpdateRequestNodeErrorsList">V1UpdateRequestNodeErrorsList</h2>
@@ -7463,7 +7814,7 @@ updates to which categories nodes are in.
 [
   {
     "update_type": "string",
-    "phase": "string",
+    "phase": "Boot",
     "data": {
       "property1": [
         [
@@ -7491,7 +7842,7 @@ updates to which errors have occurred and which nodes encountered those errors
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |update_type|string|false|none|The type of update data|
-|phase|string|false|none|The phase that this data belongs to. If  blank, it belongs to<br>the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
 |data|[V1NodeErrorsList](#schemav1nodeerrorslist)|false|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
 
 <h2 id="tocS_V1UpdateRequestGenericMetadata">V1UpdateRequestGenericMetadata</h2>
@@ -7505,13 +7856,13 @@ updates to which errors have occurred and which nodes encountered those errors
 [
   {
     "update_type": "string",
-    "phase": "string",
+    "phase": "Boot",
     "data": {
-      "start_time": "2020-04-24T12:00",
-      "stop_time": "2020-04-24T12:00",
       "complete": true,
+      "error_count": 0,
       "in_progress": false,
-      "error_count": 0
+      "start_time": "2020-04-24T12:00",
+      "stop_time": "2020-04-24T12:00"
     }
   }
 ]
@@ -7526,7 +7877,7 @@ updates to metadata, specifically start and stop times
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |update_type|string|false|none|The type of update data|
-|phase|string|false|none|The phase that this data belongs to. If the phase is boot_set, it belongs to<br>the Boot Set itself, which only applies to the GenericMetadata type.|
+|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
 |data|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
 
 <h2 id="tocS_V2CfsParameters">V2CfsParameters</h2>
@@ -7646,85 +7997,6 @@ This name is required when creating a Session.
 |» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|A boot set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.|
 |links|[[Link](#schemalink)]|false|read-only|[Link to other resources]|
 
-<h2 id="tocS_V2SessionTemplateArray">V2SessionTemplateArray</h2>
-<!-- backwards compatibility -->
-<a id="schemav2sessiontemplatearray"></a>
-<a id="schema_V2SessionTemplateArray"></a>
-<a id="tocSv2sessiontemplatearray"></a>
-<a id="tocsv2sessiontemplatearray"></a>
-
-```json
-[
-  {
-    "name": "cle-1.0.0",
-    "description": "string",
-    "enable_cfs": true,
-    "cfs": {
-      "configuration": "string"
-    },
-    "boot_sets": {
-      "property1": {
-        "name": "string",
-        "path": "string",
-        "cfs": {
-          "configuration": "string"
-        },
-        "type": "string",
-        "etag": "string",
-        "kernel_parameters": "string",
-        "node_list": [
-          "string"
-        ],
-        "node_roles_groups": [
-          "string"
-        ],
-        "node_groups": [
-          "string"
-        ],
-        "rootfs_provider": "string",
-        "rootfs_provider_passthrough": "string"
-      },
-      "property2": {
-        "name": "string",
-        "path": "string",
-        "cfs": {
-          "configuration": "string"
-        },
-        "type": "string",
-        "etag": "string",
-        "kernel_parameters": "string",
-        "node_list": [
-          "string"
-        ],
-        "node_roles_groups": [
-          "string"
-        ],
-        "node_groups": [
-          "string"
-        ],
-        "rootfs_provider": "string",
-        "rootfs_provider_passthrough": "string"
-      }
-    },
-    "links": [
-      {
-        "href": "string",
-        "rel": "string"
-      }
-    ]
-  }
-]
-
-```
-
-An array of session templates.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V2SessionTemplate](#schemav2sessiontemplate)]|false|none|An array of session templates.|
-
 <h2 id="tocS_V2SessionTemplateValidation">V2SessionTemplateValidation</h2>
 <!-- backwards compatibility -->
 <a id="schemav2sessiontemplatevalidation"></a>
@@ -7772,7 +8044,7 @@ A Session Creation object
 |---|---|---|---|---|
 |name|string|false|none|Name of the session. A UUID name is generated if a name is not provided.|
 |operation|string|true|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
-|template_name|string(string)|true|none|The name of the Session Template|
+|template_name|string|true|none|The name of the Session Template|
 |limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
 |stage|boolean|false|none|Set to stage a session which will not immediately change the state of any components. The "applystaged" endpoint can be called at a later time to trigger the start of this session.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM)|
@@ -7865,7 +8137,7 @@ filesystem provisioning.
 |name|string|false|none|The Boot Set name.|
 |path|string|true|none|A path identifying the metadata describing the components of the boot image. This could be a URI, URL, etc.<br>It will be processed based on the type attribute.|
 |cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|CFS Parameters is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a boot set.|
-|type|string|true|none|The mime type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.|
+|type|string|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.|
 |etag|string|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.|
 |kernel_parameters|string|false|none|The kernel parameters to use to boot the nodes.|
 |node_list|[string]|false|none|The node list. This is an explicit mapping against hardware xnames.|
@@ -7912,7 +8184,7 @@ A Session object
 |---|---|---|---|---|
 |name|string|false|none|Name of the session.|
 |operation|string|false|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
-|template_name|string(string)|false|none|The name of the Session Template|
+|template_name|string|false|none|The name of the Session Template|
 |limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
 |stage|boolean|false|none|Set to stage a session which will not immediately change the state of any components. The "applystaged" endpoint can be called at a later time to trigger the start of this session.|
 |components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes the session should operate against.  The list will remain even if other sessions have taken over management of the nodes.|
@@ -8336,7 +8608,7 @@ The current and desired artifacts state for a component.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|string|false|none|The component's id. e.g. xname for hardware components|
+|id|string|false|none|The component's ID. e.g. xname for hardware components|
 |actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The desired boot artifacts and configuration for a component|
 |desired_state|[V2ComponentDesiredState](#schemav2componentdesiredstate)|false|none|The desired boot artifacts and configuration for a component|
 |staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The desired boot artifacts and configuration for a component|
@@ -8618,4 +8890,99 @@ Options for the boot orchestration service.
 |max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
 |polling_frequency|integer|false|none|How frequently the BOS operators check component state for needed actions. (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
+
+<h2 id="tocS_SessionTemplateArray">SessionTemplateArray</h2>
+<!-- backwards compatibility -->
+<a id="schemasessiontemplatearray"></a>
+<a id="schema_SessionTemplateArray"></a>
+<a id="tocSsessiontemplatearray"></a>
+<a id="tocssessiontemplatearray"></a>
+
+```json
+[
+  {
+    "templateUrl": "string",
+    "name": "cle-1.0.0",
+    "description": "string",
+    "cfs_url": "string",
+    "cfs_branch": "string",
+    "enable_cfs": true,
+    "cfs": {
+      "clone_url": "string",
+      "branch": "string",
+      "commit": "string",
+      "playbook": "string",
+      "configuration": "string"
+    },
+    "partition": "string",
+    "boot_sets": {
+      "property1": {
+        "name": "string",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
+        "path": "string",
+        "type": "string",
+        "etag": "string",
+        "kernel_parameters": "string",
+        "network": "string",
+        "node_list": [
+          "string"
+        ],
+        "node_roles_groups": [
+          "string"
+        ],
+        "node_groups": [
+          "string"
+        ],
+        "rootfs_provider": "string",
+        "rootfs_provider_passthrough": "string"
+      },
+      "property2": {
+        "name": "string",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
+        "path": "string",
+        "type": "string",
+        "etag": "string",
+        "kernel_parameters": "string",
+        "network": "string",
+        "node_list": [
+          "string"
+        ],
+        "node_roles_groups": [
+          "string"
+        ],
+        "node_groups": [
+          "string"
+        ],
+        "rootfs_provider": "string",
+        "rootfs_provider_passthrough": "string"
+      }
+    },
+    "links": [
+      {
+        "href": "string",
+        "rel": "string"
+      }
+    ]
+  }
+]
+
+```
+
+An array of session templates.
+
+### Properties
+
+anyOf
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[V1SessionTemplate](#schemav1sessiontemplate)|false|none|A Session Template object represents a collection of resources and metadata.<br>A session template is used to create a Session which when combined with an<br>action (i.e. boot, reconfigure, reboot, shutdown) will create a Kubernetes BOA job<br>to complete the required tasks for the operation.<br><br>A Session Template can be created from a JSON structure.  It will return<br>a SessionTemplate name if successful.<br>This name is required when creating a Session.<br><br>## Link Relationships<br><br>* self : The session object|
+
+or
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[V2SessionTemplate](#schemav2sessiontemplate)|false|none|A Session Template object represents a collection of resources and metadata.<br>A session template is used to create a Session which applies the data to<br>group of components.<br><br>A Session Template can be created from a JSON structure.  It will return<br>a SessionTemplate name if successful.<br>This name is required when creating a Session.<br><br>## Link Relationships<br><br>* self : The session object|
 
