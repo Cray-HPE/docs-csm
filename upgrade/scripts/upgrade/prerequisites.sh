@@ -880,6 +880,43 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="UPGRADE_CERTMANAGER_CHART"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+        # Only remove these charts if installed
+        if helm list -n cert-manager --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
+            helm uninstall -n cray-certmanager cray-certmanager
+        fi
+        if helm list -n cray-certmanager-init --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1; then
+          helm uninstall -n cray-certmanager-init cray-certmanager-init
+        fi
+        tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
+
+        cat > "${tmp_manifest}" <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: cray-certmanager-images-tmp-manifest
+spec:
+  charts:
+  -
+EOF
+
+        yq r "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-drydock)' | sed 's/^/    /' >> "${tmp_manifest}"
+        yq r "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-certmanager)' | sed 's/^/    /' >> "${tmp_manifest}"
+
+        # Note the ownership for the cert-manager namespace changes ownership
+        # from cray-certmanager-init to cray-drydock, so we need to ensure we
+        # update drydock to create our namespace appropriately before
+        # reinstalling cray-certmanager.
+        loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "${tmp_manifest}"
+    }
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPGRADE_TRUSTEDCERTS_OPERATOR"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
