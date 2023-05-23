@@ -37,19 +37,6 @@ spec:
           - name: workflowType
       dag:
         tasks:
-          - name: copy-ceph-pub
-            templateRef:
-              name: ssh-template
-              template: shell-script
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{inputs.parameters.dryRun}}"
-                - name: scriptContent
-                  value: |
-                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
-                    ceph cephadm get-pub-key > ~/ceph.pub
-                    ssh-copy-id -f -i ~/ceph.pub root@${TARGET_NCN}
           - name: update-ssh-keys
             templateRef:
               name: ssh-template
@@ -63,7 +50,37 @@ spec:
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
                     TARGET_NCN_ip=$(host ${TARGET_NCN} | awk '{ print $NF }')
                     echo "Updating ssh keys to rebuilt/upgraded node"
-                    . ${basedir}/../common/ncn-common.sh ${TARGET_NCN}
+                    
+                    function ssh_keygen_keyscan() {
+                      set +e
+                      local target_ncn ncn_ip known_hosts
+                      known_hosts="/root/.ssh/known_hosts"
+                      sed -i 's@pdsh.*@@' $known_hosts
+                      target_ncn="$1"
+                      ncn_ip=$(host ${target_ncn} | awk '{ print $NF }')
+                      [ -n "${ncn_ip}" ]
+                      # Because we run with set +e in this function, check return codes after running commands
+                      [ $? -ne 0 ] && return 1
+                      echo "Updating SSH keys for node ${target_ncn} with IP address of ${ncn_ip}"
+                      ssh-keygen -R "${target_ncn}" -f "${known_hosts}" > /dev/null 2>&1
+                      [ $? -ne 0 ] && return 1
+                      ssh-keygen -R "${ncn_ip}" -f "${known_hosts}" > /dev/null 2>&1
+                      [ $? -ne 0 ] && return 1
+                      ssh-keyscan -H "${target_ncn},${ncn_ip}" > /dev/null 2>&1 >> "${known_hosts}"
+                      res=$?
+
+                      # remove the old authorized_hosts entry for the target NCN cluster-wide
+                      {
+                          NCNS=$(grep -oP 'ncn-w\w\d+|ncn-s\w\d+' /etc/hosts | sort -u)
+                          HOSTS=$(echo $NCNS | tr -t ' ' ',')
+                          pdsh -w $HOSTS ssh-keygen -R ${target_ncn}
+                          pdsh -w $HOSTS ssh-keygen -R ${ncn_ip}
+                      } >& /dev/null
+
+                      set -e
+                      return $res
+                    }
+
                     ssh_keygen_keyscan "${TARGET_NCN}"
                     # Add ssh keys to ncn-s00[1/2/3]
                     for node in "ncn-s001" "ncn-s002" "ncn-s003"; do
@@ -82,9 +99,26 @@ spec:
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
                     for container in "container_image_prometheus" "container_image_node_exporter" "container_image_alertmanager" "container_image_grafana"; do
                         image=$(ceph config get mgr mgr/cephadm/${container})
-                        ssh ${target_ncn} podman pull $image
+                        ssh ${TARGET_NCN} podman pull $image
                     done
-                    ssh ${target_ncn} podman pull "$(cat /tmp/ceph_global_container_image.txt)"
+                    active_mgr=$(ceph mgr dump | jq -r .active_name)
+                    active_mgr_version=$(ceph orch ps -f json | jq --arg MGR $active_mgr '.[] | select(.daemon_name | contains($MGR)) | .version' | tr -d '"')
+                    ssh ${TARGET_NCN} podman pull "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/ceph/ceph:v${active_mgr_version}"
+          - name: copy-ceph-pub
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            dependencies:
+              - update-ssh-keys
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    ceph cephadm get-pub-key > ~/ceph.pub
+                    ssh-copy-id -f -i ~/ceph.pub root@${TARGET_NCN}
           - name: restore-ceph-files-for-upgrade
             when: "{{inputs.parameters.workflowType}} == upgrade"
             dependencies:
@@ -122,6 +156,25 @@ spec:
                     ceph orch host add $TARGET_NCN
                     sleep 5
                     ceph orch host label rm $TARGET_NCN _no_schedule
+          - name: redeploy-daemons
+            when: "{{inputs.parameters.workflowType}} == upgrade"
+            dependencies:
+              - add-host
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    sleep 20
+                    to_restart=$(ceph orch ps ${TARGET_NCN} | grep ${TARGET_NCN} | awk '{print $1}')
+                    for each in $to_restart; do
+                      ceph orch daemon redeploy $each
+                    done
           
     ### Templates referenced by main DAG
     # this is used when a storage node is being rebuilt

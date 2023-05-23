@@ -46,5 +46,9 @@ spec:
                 - name: scriptContent
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
-                    scp /usr/share/doc/csm/upgrade/scripts/ceph/create_rgw_buckets.sh ${TARGET_NCN}:/tmp
-                    ssh ${TARGET_NCN} '/tmp/create_rgw_buckets.sh'
+                    if [[ ${TARGET_NCN} == "ncn-s001" ]]; then
+                      scp /usr/share/doc/csm/upgrade/scripts/ceph/create_rgw_buckets.sh ${TARGET_NCN}:/tmp
+                      ssh ${TARGET_NCN} '/tmp/create_rgw_buckets.sh'
+                    else
+                      echo "Creating rgw-buckets only needs to be done once on ncn-s001. Skipping this task on ${TARGET_NCN}"
+                    fi

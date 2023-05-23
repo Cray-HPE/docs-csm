@@ -47,4 +47,4 @@ spec:
                   value: |
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
                     ssh $TARGET_NCN -t 'GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-tests-storage.yaml \
-                      --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate' 
+                      --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate'

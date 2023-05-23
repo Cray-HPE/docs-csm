@@ -45,7 +45,7 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
-                    TARGET_NCN={{$value}}
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
                     TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
                       -d client_id=admin-client \
                       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
@@ -75,11 +75,11 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
-                    TARGET_NCN={{$value}}
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
                     if [[ ! -f /opt/cray/tests/install/ncn/scripts/check_bootloader.sh ]]; then 
                       echo "Error: this file is not present /opt/cray/tests/install/ncn/scripts/check_bootloader.sh on ncn-m001."
                       exit 1
                     fi
-                    scp /opt/cray/tests/install/ncn/scripts/check_bootloader.sh $TARGET_NCN:/opt/cray/tests/install/ncn/scripts/check_bootloader.sh
-                    ssh $TARGET_NCN '/opt/cray/tests/install/ncn/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
+                    scp /opt/cray/tests/install/ncn/scripts/check_bootloader.sh $TARGET_NCN:/opt/cray/csm/scripts/check_bootloader.sh
+                    ssh $TARGET_NCN '/opt/cray/csm/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
                     echo "Successfully checked bootloader on $TARGET_NCN and removed /metal/recovery."

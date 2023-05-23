@@ -200,6 +200,18 @@ spec:
               parameters:
                 - name: dryRun
                   value: "{{$.DryRun}}"
+          - name: ensure-running-services-{{$value}}
+            templateRef:
+              name: add-storage-node-to-haproxy-keepalived
+              template: main
+            dependencies: 
+              - wait-for-{{$value}}-health
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: "{{$value}}"
           - name: create-s3-buckets
             templateRef:
               name: create-rgw-buckets

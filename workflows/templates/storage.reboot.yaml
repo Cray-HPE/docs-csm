@@ -46,6 +46,10 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
+                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
                     TARGET_NCN="{{inputs.parameters.targetNcn}}"
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                         jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
@@ -73,7 +77,6 @@ spec:
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                         jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
                     
-                    /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
                     bootscript_last_epoch=$(curl -s -k -H "Content-Type: application/json" \
                     -H "Authorization: Bearer ${TOKEN}" \
                     "https://api-gw-service-nmn.local/apis/bss/boot/v1/endpoint-history?name=$TARGET_XNAME" \
@@ -88,7 +91,7 @@ spec:
                       bootscript_last_epoch=0
                       echo $bootscript_last_epoch
                     fi
-          - name: pxe-boot-node
+          - name: "pxe-boot-node"
             dependencies:
               - get-bootscript-last-access-timestamp
             templateRef:
@@ -106,11 +109,16 @@ spec:
                       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
                     TARGET_NCN={{inputs.parameters.targetNcn}}
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")            
+                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                    TARGET_MGMT_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Parent")
+                    TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
+                    export IPMI_USERNAME=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
+                    export IPMI_PASSWORD=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
                     
                     # Set ncn to pxe boot
                     ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis bootdev pxe options=efiboot
-                    echo "Set node to pxe boot."
+                    
                     powerStatus=$(ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power status)
                     if [[ "$powerStatus" == *"is on"* ]]; then
                       # power cycle node
@@ -118,7 +126,7 @@ spec:
                       sleep 20
                     fi
                     ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power on
-          - name: wait-for-boot
+          - name: "wait-for-boot"
             dependencies:
               - pxe-boot-node
             templateRef:
@@ -134,12 +142,15 @@ spec:
                       -d client_id=admin-client \
                       -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
                       https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
                     TARGET_NCN={{inputs.parameters.targetNcn}}
                     TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                         jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    
+                    TARGET_NCN_mgmt_host="${TARGET_NCN}-mgmt"
+                    export IPMI_USERNAME=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Username")
+                    export IPMI_PASSWORD=$(curl -XGET -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/scsd/v1/bmc/creds"| jq -r ".Targets[] | select(.Xname | contains(\"$TARGET_MGMT_XNAME\")) | .Password")
+
                     bootscript_last_epoch="{{tasks.get-bootscript-last-access-timestamp.outputs.result}}"
-                    
                     # wait for boot
                     counter=0
                     echo "waiting for boot: $TARGET_NCN ..."
@@ -161,6 +172,7 @@ spec:
                             echo "bootscript fetched"
                             break
                         fi
+
                         echo "waiting for boot: $TARGET_NCN ..."
                         counter=$((counter+1))
                         if [ $counter -gt 300 ]; then
@@ -170,7 +182,7 @@ spec:
                         fi
                         sleep 2
                     done
-          - name: wait-for-cloud-init
+          - name: "wait-for-cloud-init"
             dependencies:
               - wait-for-boot
             templateRef:
@@ -182,14 +194,8 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
-                    TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
-                      -d client_id=admin-client \
-                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
                     TARGET_NCN={{inputs.parameters.targetNcn}}
-                    TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
-                        jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
-                    
+
                     # wait random seconds (1-10s) until ssh is working
                     echo "wait for ssh ..."
                     while ! ssh "${TARGET_NCN}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'ls /var/log/cloud-init-output.log'
@@ -197,6 +203,7 @@ spec:
                       echo "wait for ssh ..."
                       sleep $(( ( RANDOM % 10 )  + 1 ))
                     done
+
                     # wait for cloud-init
                     # ssh commands are expected to fail for a while, so we temporarily disable set -e
                     set +e
