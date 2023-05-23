@@ -91,24 +91,38 @@ recreated.
       job.batch/keycloak-users-localize-1 condition met
       ```
 
-1. (`ncn-mw#`) Restart `keycloak-gatekeeper` to pick up the newly generated client ID.
+1. (`ncn-mw#`) Restart the ingress `oauth2-proxies`.
 
-   1. Restart the `keycloak-gatekeeper` pods.
+   1. Restart the deployments.
 
       ```bash
-      kubectl rollout restart deployment -n services cray-keycloak-gatekeeper-ingress
+      kubectl rollout restart -n services deployment/cray-oauth2-proxies-customer-access-ingress && \
+      kubectl rollout restart -n services deployment/cray-oauth2-proxies-customer-high-speed-ingress && \
+      kubectl rollout restart -n services deployment/cray-oauth2-proxies-customer-management-ingress
       ```
 
      Expected output:
 
       ```text
-      deployment.apps/cray-keycloak-gatekeeper-ingress restarted
+      deployment.apps/cray-oauth2-proxies-customer-access-ingress restarted
+      deployment.apps/cray-oauth2-proxies-customer-high-speed-ingress restarted
+      deployment.apps/cray-oauth2-proxies-customer-management-ingress restarte
       ```
 
    1. Wait for the restart to complete.
 
       ```bash
-      kubectl rollout status deployment -n services cray-keycloak-gatekeeper-ingress
+      kubectl rollout status -n services deployment/cray-oauth2-proxies-customer-access-ingress && \
+      kubectl rollout status -n services deployment/cray-oauth2-proxies-customer-high-speed-ingress && \
+      kubectl rollout status -n services deployment/cray-oauth2-proxies-customer-management-ingress
+      ```
+
+     Expected output:
+
+      ```text
+      deployment "cray-oauth2-proxies-customer-access-ingress" successfully rolled out
+      deployment "cray-oauth2-proxies-customer-high-speed-ingress" successfully rolled out
+      deployment "cray-oauth2-proxies-customer-management-ingress" successfully rolled out
       ```
 
 Any other changes made to Keycloak, such as local users that have been created, will have to be manually re-applied.
