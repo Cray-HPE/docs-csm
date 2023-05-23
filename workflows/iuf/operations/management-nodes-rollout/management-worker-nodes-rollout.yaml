@@ -171,7 +171,7 @@ spec:
                 value: |
                   limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
                   if [[ -z $(echo $limit_management_nodes | grep 'Management_Worker') ]]; then
-                    echo "NOTICE  Not rebuilding worker nodes because 'Management_Worker' was not in --limit-management-rollout"
+                    echo "NOTICE Not rebuilding worker nodes because 'Management_Worker' was not in --limit-management-rollout"
                     exit 0
                   fi
                   sets="{{inputs.parameters.sets}}"
@@ -179,7 +179,7 @@ spec:
                   current_count="{{inputs.parameters.counter}}"
                   rebuild_set=${set_array[$current_count]}
                   if [[ -z $rebuild_set ]]; then
-                    echo "NOTICE  this step received no nodes to rebuild. Continuing without rebuilding any worker nodes"
+                    echo "NOTICE This step received no nodes to rebuild. Continuing without rebuilding any worker nodes"
                     exit 0
                   fi
                   prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
@@ -187,9 +187,7 @@ spec:
                   configuration=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].configuration' | tr -d '"')
 
                   export TERM=linux
-                  echo "NOTICE  starting rebuild of $rebuild_set"
-                  echo "INFO  using image: $image"
-                  echo "INFO  using cfs-configuration: $configuration"
+                  echo "DEBUG Starting rebuild of $rebuild_set using image: $image and cfs-configuration: $configuration"
                   /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh $rebuild_set --image-id $image --desired-cfs-conf $configuration --labels "{activity:{{workflow.labels.activity}},session:{{workflow.labels.session}}}"
           - name: move-to-next-set
             template: move-to-next-set
