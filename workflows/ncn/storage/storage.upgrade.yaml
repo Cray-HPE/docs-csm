@@ -106,7 +106,12 @@ spec:
               name: before-each-node-storage-workflow
               template: main
             dependencies: 
+              {{ if eq $index 0 }}
               - before-all
+              {{ end }}
+              {{ if ne $index 0 }}
+              - ensure-running-services-{{ index $.TargetNcns (add $index -1) }}
+              {{ end }}
             arguments:
               parameters:
                 - name: dryRun
@@ -118,7 +123,12 @@ spec:
               name: set-no-wipe
               template: set-bss-no-wipe-1-no-wipe-osds
             dependencies: 
+              {{ if eq $index 0 }}
               - before-all
+              {{ end }}
+              {{ if ne $index 0 }}
+              - ensure-running-services-{{ index $.TargetNcns (add $index -1) }}
+              {{ end }}
             arguments:
               parameters:
                 - name: dryRun
@@ -130,7 +140,12 @@ spec:
               name: backup-ceph-data
               template: backup-ceph-data-for-node-upgrade
             dependencies: 
+              {{ if eq $index 0 }}
               - before-all
+              {{ end }}
+              {{ if ne $index 0 }}
+              - ensure-running-services-{{ index $.TargetNcns (add $index -1) }}
+              {{ end }}
             arguments:
               parameters:
                 - name: dryRun
@@ -212,7 +227,7 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: targetNcn
                   value: "{{$value}}"
-          - name: create-s3-buckets
+          - name: create-s3-buckets-{{$value}}
             templateRef:
               name: create-rgw-buckets
               template: main
@@ -237,7 +252,7 @@ spec:
                 - name: dryRun
                   value: "{{$.DryRun}}"
           {{- range $index,$value := .TargetNcns}}
-          - name: run-storage-goss-tests
+          - name: run-storage-goss-tests-{{$value}}
             dependencies:
               - after-reboot
             templateRef:
