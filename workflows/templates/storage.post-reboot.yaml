@@ -24,9 +24,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: post-rebuild
+  name: post-reboot
   namespace: argo
 spec:
+  entrypoint: main
   templates:
     - name: main
       inputs:
@@ -46,3 +47,15 @@ spec:
                   value: |
                     grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
                     grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
+          - name: enable-rbd-stats-monitoring
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    ceph config set mgr mgr/prometheus/rbd_stats_pools "kube,smf"
+                    ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600

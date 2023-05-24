@@ -225,25 +225,21 @@ spec:
                 - name: targetNcn
                   value: {{$value}}
           {{- end }}
-          - name: rescan-ssh-keys
+          - name: after-reboot
             templateRef:
-              name: ssh-template
-              template: shell-script
+              name: post-reboot
+              template: main
             dependencies:
               # wait for health check of last storage node complete
               - wait-for-{{ with $length := len $.TargetNcns }}{{ index $.TargetNcns (add $length -1) }}{{end}}-health
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
-                - name: scriptContent
-                  value: |
-                    grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
-                    grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
+                  value: "{{$.DryRun}}"
           {{- range $index,$value := .TargetNcns}}
           - name: run-storage-goss-tests
             dependencies:
-              - rescan-ssh-keys
+              - after-reboot
             templateRef:
               name: storage-goss-tests
               template: main

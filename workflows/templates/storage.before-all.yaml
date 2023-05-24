@@ -44,10 +44,17 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: scriptContent
                   value: |
+                    known_hosts="/root/.ssh/known_hosts"
+                    for host_ncn in "ncn-m001" "ncn-m002" "ncn-m003"; do
+                      ncn_ip=$(host ${host_ncn} | awk '{ print $NF }')
+                      ssh-keygen -R "${ncn_ip}" -f "${known_hosts}" > /dev/null 2>&1
+                      ssh-keygen -R "${host_ncn}" -f "${known_hosts}" > /dev/null 2>&1
+                      ssh-keyscan -H "${ncn_ip},${host_ncn}" > /dev/null 2>&1 >> "${known_hosts}"
+                    done
                     source /srv/cray/scripts/metal/metal-lib.sh
                     csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp4" \
                       | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
-                    pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url" || [[ $? -eq 106 ]] # code 106 means "nothing to do, csi is installed"
+                    pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
           - name: upload-ceph-images-to-nexus
             templateRef:
               name: ssh-template

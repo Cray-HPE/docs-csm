@@ -46,20 +46,9 @@ spec:
                   value: "{{inputs.parameters.dryRun}}"
                 - name: targetNcn
                   value: "{{inputs.parameters.targetNcn}}"
-          - name: set-rd-live-dir-overlay
-            templateRef:
-              name: rd-live-dir-rd-live-overlay-reset
-              template: set-rd-live-dir-and-rd-live-overlay-reset
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{inputs.parameters.dryRun}}"
-                - name: targetNcn
-                  value: "{{inputs.parameters.targetNcn}}"
           - name: shutdown-services
             dependencies:
               - eliminate-NTP-clock-skew
-              - set-rd-live-dir-overlay
             templateRef:
               name: shutdown-services
               template: storage-node-upgrade-or-no-wipe-services
