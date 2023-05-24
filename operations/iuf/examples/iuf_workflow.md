@@ -32,23 +32,27 @@ iuf -a admin.05-15 workflow admin-05-15-a5osq-deliver-product-p7rt6
 Example output:
 
 ```text
-workflow_id: admin-05-15-a5osq-deliver-product-p7rt6
-session: admin-05-15-a5osq
-command: ./iuf -i input.yaml run -b process-media -e update-cfs-config
+iuf -i input.yaml workflow admin-05-15-5bkf6-pre-install-check-tzb74
+workflow_id: admin-05-15-5bkf6-pre-install-check-tzb74
+session: admin-05-15-5bkf6
+command: ./iuf -a admin.05-15 run --site-vars /etc/cray/upgrade/csm/admin/site_vars.yaml
+  --bootprep-config-managed /etc/cray/upgrade/csm/admin/compute-and-uan-bootprep.yaml
+  -e update-vcs-config
 status: Succeeded
 args:
   activity: admin.05-15
-  begin_stage: process-media
   bootprep_config_managed: /etc/cray/upgrade/csm/admin/compute-and-uan-bootprep.yaml
-  end_stage: update-cfs-config
+  end_stage: update-vcs-config
+  force: true
   func: !!python/name:__main__.process_install ''
-  input_file: input.yaml
   log_dir: /etc/cray/upgrade/csm/iuf/admin.05-15/log
-  mask_recipe_prods:
-  - csm
   media_dir: /etc/cray/upgrade/csm/admin.05-15
-  recipe_vars: /etc/cray/upgrade/csm/admin/product_vars.yaml
   relative_bootprep_config_managed: .bootprep-admin.05-15/compute-and-uan-bootprep.yaml
   site_vars: /etc/cray/upgrade/csm/admin/site_vars.yaml
   state_dir: /etc/cray/upgrade/csm/iuf/admin.05-15/state
+script_stdout:
+  configurations:
+  - name: username-compute-23.2.17-activity
+  - name: username-lnet-23.2.17-activity
+  - name: username-uan-23.2.17-activity
 ```
