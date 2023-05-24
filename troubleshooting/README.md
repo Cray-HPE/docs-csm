@@ -45,6 +45,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [HSM Discovery Status `StoreFailed` Error](known_issues/HSM_Discovery_StoreFailed_Error.md)
 * [Software Management Services health check](known_issues/sms_health_check.md)
+* [Qlogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
 
 ## Booting
 
