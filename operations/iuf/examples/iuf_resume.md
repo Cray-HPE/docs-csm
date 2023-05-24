@@ -18,3 +18,9 @@ the execution of `iuf abort`.
 ```bash
 iuf -a admin-230126 resume
 ```
+
+(`ncn-m001#`) Resume activity `admin-230126` and add a comment to the activity log.
+
+```bash
+iuf -a admin-230126 resume "resuming activity"
+```

@@ -9,10 +9,12 @@ This procedure uses SYSTEM\_DOMAIN\_NAME as an example for the DNS name of the n
 1. Retrieve the `admin` user's password for Keycloak.
 
    ```bash
-   kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
+   kubectl get secret -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
    ```
 
-1. Log in to the Keycloak UI using the `admin` user and the password obtained in the previous step.
+1. Point a browser at `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak/`, replacing `SYSTEM_DOMAIN_NAME` with the actual NCN's DNS name. Login using the `admin` user and password obtained in the previous step.
+
+   Use of the `auth.cmn.` sub-domain is required for administrative access to Keycloak.
 
    The Keycloak UI URL is typically similar to the following: `https://auth.cmn.<system_name>/keycloak`
 
