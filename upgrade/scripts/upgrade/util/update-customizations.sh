@@ -135,7 +135,9 @@ fi
 
 # Kube-prometheus-stack
 if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator' $c)" != null ]; then
-        yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator = (.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack * .spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator)' -i $c
+        if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack' $c)" != null ]; then
+                yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator = (.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack * .spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator)' -i $c
+        fi        
         yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement[3] = \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].prometheus.prometheusSpec.externalAuthority }}\"" -i $c
         yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement[4] = \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].alertmanager.alertmanagerSpec.externalAuthority }}\"" -i $c
         yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement[5] = \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].grafana.externalAuthority }}\"" -i $c
