@@ -61,9 +61,11 @@ pipeline {
             matrix {
 
                 agent {
-                    node {
-                        label "metal-gcp-builder"
-                        customWorkspace "${env.WORKSPACE}/${sleVersion}"
+                    docker {
+                        label 'docker'
+                        reuseNode true
+                        image "${sleImage}:${sleVersion}"
+                        args "-v /home/jenkins/.ssh:/home/jenkins/.ssh"
                     }
                 }
 
@@ -74,20 +76,19 @@ pipeline {
                     }
                 }
 
+                environment{
+                    BUILD_DIR = "${env.WORKSPACE}/dist/rpmbuild/${sleVersion}"
+                    SPEC_FILE = "${env.NAME}-${sleVersion}.spec"
+                }
+
                 stages {
 
                     stage('Prepare: RPMs') {
-                        agent {
-                            docker {
-                                label 'docker'
-                                reuseNode true
-                                image "${sleImage}:${sleVersion}"
-                            }
-                        }
                         steps {
                             withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
-                                runLibraryScript("addRpmMetaData.sh", "${env.NAME}.spec")
-                                sh "git update-index --assume-unchanged ${env.NAME}.spec"
+                                sh "cp ${env.NAME}.spec ${env.SPEC_FILE}"
+                                runLibraryScript("addRpmMetaData.sh", env.SPEC_FILE)
+                                // sh "git update-index --assume-unchanged ${env.SPEC_FILE}"
                                 sh "echo ${env.BRANCH_NAME}"
                                 sh "env"
                                 sh "make prepare"
@@ -96,13 +97,6 @@ pipeline {
                     }
 
                     stage('Build: RPMs') {
-                        agent {
-                            docker {
-                                label 'docker'
-                                reuseNode true
-                                image "${sleImage}:${sleVersion}"
-                            }
-                        }
                         steps {
                             withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
                                 sh "make rpm"
@@ -128,7 +122,7 @@ pipeline {
                                         component: env.NAME + RELEASE_FOLDER,
                                         isStable: isStable,
                                         os: "sle-${sles_major}sp${sles_minor}",
-                                        pattern: "dist/rpmbuild/RPMS/noarch/*.rpm",
+                                        pattern: "dist/rpmbuild/${sleVersion}/RPMS/noarch/*.rpm",
                                 )
                                 publishCsmRpms(
                                         additionalVersions: ADDITIONAL_VERSIONS,
@@ -136,7 +130,7 @@ pipeline {
                                         component: env.NAME + RELEASE_FOLDER,
                                         isStable: isStable,
                                         os: "sle-${sles_major}sp${sles_minor}",
-                                        pattern: "dist/rpmbuild/SRPMS/*.rpm",
+                                        pattern: "dist/rpmbuild/${sleVersion}/SRPMS/*.rpm",
                                 )
                             }
                         }

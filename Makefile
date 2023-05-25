@@ -45,7 +45,7 @@ prepare:
 	cp $(SPEC_FILE) $(BUILD_DIR)/SPECS/
 
 rpm_package_source:
-	tar --transform 'flags=r;s,^,/${NAME}-${VERSION}/,' --exclude .git --exclude dist -cvjf $(SOURCE_PATH) .
+	tar --transform 'flags=r;s,^,/${NAME}-${VERSION}/,' -cvjf $(SOURCE_PATH) $(SPEC_FILE) --exclude .git --exclude "*.spec" --exclude dist .
 
 rpm_build_source:
 	rpmbuild -ts $(SOURCE_PATH) --define "_topdir $(BUILD_DIR)"
