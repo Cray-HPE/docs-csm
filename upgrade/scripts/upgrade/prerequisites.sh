@@ -887,7 +887,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     {
         # Only remove these charts if installed
         if helm list -n cert-manager --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
-            helm uninstall -n cray-certmanager cray-certmanager
+            helm uninstall -n cert-manager cray-certmanager
         fi
         if helm list -n cray-certmanager-init --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1; then
           helm uninstall -n cray-certmanager-init cray-certmanager-init
