@@ -890,7 +890,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
             helm uninstall -n cert-manager cray-certmanager
         fi
         if helm list -n cray-certmanager-init --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1; then
-          helm uninstall -n cray-certmanager-init cray-certmanager-init
+          helm uninstall -n cert-manager-init cray-certmanager-init
         fi
         tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
 
