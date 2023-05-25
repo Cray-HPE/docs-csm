@@ -106,7 +106,7 @@ spec:
                     if [[ $? -ne 0 ]]; then
                       result=$(echo "$result" | sed -e 's/^/DEBUG /')
                       echo "ERROR Could not update CFS config $config on $TARGET_NCN"
-                      echo -e "DEBUG <cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${config}"> failed with -\n\n$result"
+                      echo -e "DEBUG <cray cfs components update ${TARGET_XNAME} --enabled false --desired-config ${config}> failed with -\n\n$result"
                     fi
 
                     IMAGE_ID=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
@@ -158,7 +158,9 @@ spec:
                     if[ $? != 0 ]; then
                       result=$(echo "$result" | sed -e 's/^/DEBUG /')
                       echo "ERROR Failed to update BSS boot parameters on $TARGET_NCN ($TARGET_XNAME)"
-                      echo -e "DEBUG <cray bss bootparameters update --hosts "${TARGET_XNAME}" --kernel $kernel_image --initrd $initrd_image --params "${PARAMS}"> with error -\n\n$result"
+                      echo -e "DEBUG <cray bss bootparameters update --hosts ${TARGET_XNAME} --kernel $kernel_image --initrd $initrd_image --params ${PARAMS}> with error -\n\n$result"
+                    else
+                      echo "INFO Successfully updated BSS boot parameters on $TARGET_NCN ($TARGET_XNAME) with --kernel $kernel_image --initrd $initrd_image --params ${PARAMS}"
                     fi
                     export TERM=linux
                     echo "DEBUG Upgrading $TARGET_NCN"
@@ -207,7 +209,7 @@ spec:
                     if [[ $? -ne 0 ]]; then
                       result=$(echo "$result" | sed -e 's/^/DEBUG /')
                       echo "ERROR Could not update CFS config $config on $TARGET_NCN"
-                      echo -e "DEBUG <cray cfs components update ${TARGET_XNAME} --enabled false --desired-config "${config}"> failed with -\n\n$result"
+                      echo -e "DEBUG <cray cfs components update ${TARGET_XNAME} --enabled false --desired-config ${config}> failed with -\n\n$result"
                     fi
 
                     IMAGE_ID=$(echo $prepare_images_output | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
@@ -259,7 +261,9 @@ spec:
                     if[ $? != 0 ]; then
                       result=$(echo "$result" | sed -e 's/^/DEBUG /')
                       echo "ERROR Failed to update BSS boot parameters on $TARGET_NCN ($TARGET_XNAME)"
-                      echo -e "DEBUG <cray bss bootparameters update --hosts "${TARGET_XNAME}" --kernel $kernel_image --initrd $initrd_image --params "${PARAMS}"> with error -\n\n$result"
+                      echo -e "DEBUG <cray bss bootparameters update --hosts ${TARGET_XNAME} --kernel $kernel_image --initrd $initrd_image --params ${PARAMS}> with error -\n\n$result"
+                    else
+                      echo "INFO Successfully updated BSS boot parameters on $TARGET_NCN ($TARGET_XNAME) with --kernel $kernel_image --initrd $initrd_image --params ${PARAMS}"
                     fi
                     export TERM=linux
                     echo "DEBUG Upgrading $TARGET_NCN"
