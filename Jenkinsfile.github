@@ -87,11 +87,12 @@ pipeline {
                         steps {
                             withCredentials([gitUsernamePassword(credentialsId: 'jenkins-algol60-cray-hpe-github-integration')]) {
                                 sh "cp ${env.NAME}.spec ${env.SPEC_FILE}"
-                                runLibraryScript("addRpmMetaData.sh", env.SPEC_FILE)
-                                // sh "git update-index --assume-unchanged ${env.SPEC_FILE}"
                                 sh "echo ${env.BRANCH_NAME}"
                                 sh "env"
                                 sh "make prepare"
+                                dir("${env.BUILD_DIR}/SPECS/") {
+                                    runLibraryScript("addRpmMetaData.sh", "${env.SPEC_FILE}")
+                                }
                             }
                         }
                     }

@@ -48,7 +48,7 @@ rpm_package_source:
 	tar --transform 'flags=r;s,^,/${NAME}-${VERSION}/,' -cvjf $(SOURCE_PATH) $(SPEC_FILE) --exclude .git --exclude "*.spec" --exclude dist .
 
 rpm_build_source:
-	rpmbuild -ts $(SOURCE_PATH) --define "_topdir $(BUILD_DIR)"
+	rpmbuild -bs $(BUILD_DIR)/SPECS/$(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
 
 rpm_build:
-	rpmbuild -ba $(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
+	rpmbuild -ba $(BUILD_DIR)/SPECS/$(SPEC_FILE) --define "_topdir $(BUILD_DIR)"
