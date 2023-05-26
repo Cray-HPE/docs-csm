@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,29 +23,35 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 
-function deployNLS() {
+function deployPostgres() {
     BUILDDIR="/tmp/build"
     mkdir -p "$BUILDDIR"
     kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > "${BUILDDIR}/customizations.yaml"
-    manifestgen -i "${CSM_ARTI_DIR}/manifests/platform.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/iufnls.yaml"
-    charts="$(yq r $BUILDDIR/iufnls.yaml 'spec.charts[*].name')"
+    manifestgen -i "${CSM_ARTI_DIR}/manifests/platform.yaml" -c "${BUILDDIR}/customizations.yaml" -o "${BUILDDIR}/postgres.yaml"
+    charts="$(yq r $BUILDDIR/postgres.yaml 'spec.charts[*].name')"
     for chart in $charts; do
-        if [[ $chart != "cray-iuf" ]] && [[ $chart != "cray-nls" ]]; then
-            yq d -i ${BUILDDIR}/iufnls.yaml "spec.charts.(name==$chart)"
+        if [[ $chart != "cray-psp" ]] && [[ $chart != "cray-postgres-operator" ]]; then
+            yq d -i ${BUILDDIR}/postgres.yaml "spec.charts.(name==$chart)"
         fi
     done
 
-    yq w -i ${BUILDDIR}/iufnls.yaml "metadata.name" "iufnls"
-    yq d -i ${BUILDDIR}/iufnls.yaml "spec.sources"
+    yq w -i ${BUILDDIR}/postgres.yaml "metadata.name" "postgres"
+    yq d -i ${BUILDDIR}/postgres.yaml "spec.sources"
 
-    for c in $(kubectl get crd |grep argo | cut -d' ' -f1)
-    do
-      kubectl label --overwrite crd $c app.kubernetes.io/managed-by="Helm"
-      kubectl annotate --overwrite crd $c meta.helm.sh/release-name="cray-nls"
-      kubectl annotate --overwrite crd $c meta.helm.sh/release-namespace="argo"
+    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path ${BUILDDIR}/postgres.yaml
+
+    # CASMPET-6602 - need to wait for cray-nls-postgres cluster to be running with the right version
+    counter=0
+    while [ $(kubectl get postgresql cray-nls-postgres -n argo -o json | jq -r '.status.PostgresClusterStatus') != "Running" ] \
+        || [ $(kubectl get postgresql cray-nls-postgres -n argo -o json | jq -r '.spec.postgresql.version') != "14" ]; do
+        counter=$((counter+1))
+        sleep 10
+        if [[ ${counter} -gt 60 ]]
+        then
+            echo "cray-nls-postgres cluster not up within 10 minutes after upgrading postgres"
+            exit 1
+        fi
     done
-
-    loftsman ship --charts-path "${CSM_ARTI_DIR}/helm/" --manifest-path ${BUILDDIR}/iufnls.yaml
 }
 
-deployNLS
+deployPostgres
