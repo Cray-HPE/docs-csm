@@ -880,6 +880,62 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="UPGRADE_CERTMANAGER_CHART"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+        cmns=cert-manager
+        # Only remove these charts if installed
+        if helm list -n "${cmns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
+            helm uninstall -n "${cmns}" cray-certmanager
+        fi
+        cminitns="cert-manager-init"
+        if helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1; then
+          helm uninstall -n "${cminitns}" cray-certmanager-init
+        fi
+        tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
+
+        cat > "${tmp_manifest}" <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: cray-certmanager-images-tmp-manifest
+spec:
+  charts:
+  -
+EOF
+
+        # While kubectl get namespace cert-manager succeeds, backoff until it
+        # doesn't or after 5 minutes fail entirely as its likely not removing
+        # for whatever reason, humans get to figure out why or they can
+        # re-run...
+        start=$(date +%s)
+        lim=1
+        until ! kubectl get namespace "${cmns}" > /dev/null 2>&1; do
+          now=$(date +%s)
+          if [ "$((now-start))" -ge 300 ]; then
+            printf "fatal: namespace %s likely requires manual intervention after waiting for removal for at least 5 minutes, details:\n" "${cmns}" >&2
+            kubectl get namespace "${cmns}" -o yaml
+            exit 1
+          fi
+          lim="$((lim*2))"
+          sleep ${lim}
+        done
+
+        yq r "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-drydock)' | sed 's/^/    /' >> "${tmp_manifest}"
+        yq r "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-certmanager)' | sed 's/^/    /' >> "${tmp_manifest}"
+
+        # Note the ownership for the cert-manager namespace changes ownership
+        # from cray-certmanager-init to cray-drydock, so we need to ensure we
+        # update drydock to create our namespace appropriately before
+        # reinstalling cray-certmanager.
+        loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "${tmp_manifest}"
+    }
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPGRADE_TRUSTEDCERTS_OPERATOR"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
