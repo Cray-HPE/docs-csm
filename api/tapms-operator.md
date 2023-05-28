@@ -8,24 +8,24 @@ Read-Only APIs to Retrieve Tenant Status
 
 Base URLs:
 
-* <a href="http://cray-tapms">http://cray-tapms</a>
+* <a href="//cray-tapms/apis/tapms/">//cray-tapms/apis/tapms/</a>
 
 <h1 id="tapms-tenant-status-api-tenant-and-partition-management-system">Tenant and Partition Management System</h1>
 
-## get__v1_tenants
+## get__v1alpha2_tenants
 
 > Code samples
 
 ```http
-GET http://cray-tapms/v1/tenants HTTP/1.1
-Host: cray-tapms
+GET /cray-tapms/apis/tapms/v1alpha2/tenants HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://cray-tapms/v1/tenants \
+curl -X GET /cray-tapms/apis/tapms/v1alpha2/tenants \
   -H 'Accept: application/json'
 
 ```
@@ -36,7 +36,7 @@ headers = {
   'Accept': 'application/json'
 }
 
-r = requests.get('http://cray-tapms/v1/tenants', headers = headers)
+r = requests.get('/cray-tapms/apis/tapms/v1alpha2/tenants', headers = headers)
 
 print(r.json())
 
@@ -57,7 +57,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://cray-tapms/v1/tenants", data)
+    req, err := http.NewRequest("GET", "/cray-tapms/apis/tapms/v1alpha2/tenants", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -67,7 +67,7 @@ func main() {
 
 ```
 
-`GET /v1/tenants`
+`GET /v1alpha2/tenants`
 
 *Get list of tenants' spec/status*
 
@@ -87,6 +87,7 @@ func main() {
       "tenantresources": [
         {
           "enforceexclusivehsmgroups": true,
+          "forcepoweroff": true,
           "hsmgrouplabel": "green",
           "hsmpartitionname": "blue",
           "type": "compute",
@@ -104,6 +105,7 @@ func main() {
       "tenantresources": [
         {
           "enforceexclusivehsmgroups": true,
+          "forcepoweroff": true,
           "hsmgrouplabel": "green",
           "hsmpartitionname": "blue",
           "type": "compute",
@@ -119,7 +121,7 @@ func main() {
 ]
 ```
 
-<h3 id="get__v1_tenants-responses">Responses</h3>
+<h3 id="get__v1alpha2_tenants-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -128,7 +130,7 @@ func main() {
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Not Found|[ResponseError](#schemaresponseerror)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error|[ResponseError](#schemaresponseerror)|
 
-<h3 id="get__v1_tenants-responseschema">Response Schema</h3>
+<h3 id="get__v1alpha2_tenants-responseschema">Response Schema</h3>
 
 Status Code **200**
 
@@ -141,6 +143,7 @@ Status Code **200**
 |»» tenantname|string|true|none|none|
 |»» tenantresources|[[TenantResource](#schematenantresource)]|true|none|The desired resources for the Tenant|
 |»»» enforceexclusivehsmgroups|boolean|false|none|none|
+|»»» forcepoweroff|boolean|false|none|none|
 |»»» hsmgrouplabel|string|false|none|none|
 |»»» hsmpartitionname|string|false|none|none|
 |»»» type|string|true|none|none|
@@ -154,20 +157,20 @@ Status Code **200**
 This operation does not require authentication
 </aside>
 
-## get__v1_tenants_{id}
+## get__v1alpha2_tenants_{id}
 
 > Code samples
 
 ```http
-GET http://cray-tapms/v1/tenants/{id} HTTP/1.1
-Host: cray-tapms
+GET /cray-tapms/apis/tapms/v1alpha2/tenants/{id} HTTP/1.1
+
 Accept: application/json
 
 ```
 
 ```shell
 # You can also use wget
-curl -X GET http://cray-tapms/v1/tenants/{id} \
+curl -X GET /cray-tapms/apis/tapms/v1alpha2/tenants/{id} \
   -H 'Accept: application/json'
 
 ```
@@ -178,7 +181,7 @@ headers = {
   'Accept': 'application/json'
 }
 
-r = requests.get('http://cray-tapms/v1/tenants/{id}', headers = headers)
+r = requests.get('/cray-tapms/apis/tapms/v1alpha2/tenants/{id}', headers = headers)
 
 print(r.json())
 
@@ -199,7 +202,7 @@ func main() {
     }
 
     data := bytes.NewBuffer([]byte{jsonReq})
-    req, err := http.NewRequest("GET", "http://cray-tapms/v1/tenants/{id}", data)
+    req, err := http.NewRequest("GET", "/cray-tapms/apis/tapms/v1alpha2/tenants/{id}", data)
     req.Header = headers
 
     client := &http.Client{}
@@ -209,11 +212,11 @@ func main() {
 
 ```
 
-`GET /v1/tenants/{id}`
+`GET /v1alpha2/tenants/{id}`
 
 *Get a tenant's spec/status*
 
-<h3 id="get__v1_tenants_{id}-parameters">Parameters</h3>
+<h3 id="get__v1alpha2_tenants_{id}-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
@@ -234,6 +237,7 @@ func main() {
     "tenantresources": [
       {
         "enforceexclusivehsmgroups": true,
+        "forcepoweroff": true,
         "hsmgrouplabel": "green",
         "hsmpartitionname": "blue",
         "type": "compute",
@@ -251,6 +255,7 @@ func main() {
     "tenantresources": [
       {
         "enforceexclusivehsmgroups": true,
+        "forcepoweroff": true,
         "hsmgrouplabel": "green",
         "hsmpartitionname": "blue",
         "type": "compute",
@@ -265,7 +270,7 @@ func main() {
 }
 ```
 
-<h3 id="get__v1_tenants_{id}-responses">Responses</h3>
+<h3 id="get__v1alpha2_tenants_{id}-responses">Responses</h3>
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
@@ -318,6 +323,7 @@ This operation does not require authentication
     "tenantresources": [
       {
         "enforceexclusivehsmgroups": true,
+        "forcepoweroff": true,
         "hsmgrouplabel": "green",
         "hsmpartitionname": "blue",
         "type": "compute",
@@ -335,6 +341,7 @@ This operation does not require authentication
     "tenantresources": [
       {
         "enforceexclusivehsmgroups": true,
+        "forcepoweroff": true,
         "hsmgrouplabel": "green",
         "hsmpartitionname": "blue",
         "type": "compute",
@@ -369,6 +376,7 @@ The primary schema/definition of a tenant
 ```json
 {
   "enforceexclusivehsmgroups": true,
+  "forcepoweroff": true,
   "hsmgrouplabel": "green",
   "hsmpartitionname": "blue",
   "type": "compute",
@@ -387,6 +395,7 @@ The desired resources for the Tenant
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |enforceexclusivehsmgroups|boolean|false|none|none|
+|forcepoweroff|boolean|false|none|none|
 |hsmgrouplabel|string|false|none|none|
 |hsmpartitionname|string|false|none|none|
 |type|string|true|none|none|
@@ -409,6 +418,7 @@ The desired resources for the Tenant
   "tenantresources": [
     {
       "enforceexclusivehsmgroups": true,
+      "forcepoweroff": true,
       "hsmgrouplabel": "green",
       "hsmpartitionname": "blue",
       "type": "compute",
@@ -448,6 +458,7 @@ The desired state of Tenant
   "tenantresources": [
     {
       "enforceexclusivehsmgroups": true,
+      "forcepoweroff": true,
       "hsmgrouplabel": "green",
       "hsmpartitionname": "blue",
       "type": "compute",
