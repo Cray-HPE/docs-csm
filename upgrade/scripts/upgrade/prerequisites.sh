@@ -531,7 +531,7 @@ if [[ ${state_recorded} == "0" ]]; then
       loop_idx=0
       healthy="false"
       # wait up to 2 minutes for spire-postgres to be marked as healthy
-      while [[ ${loop_idx} -lt 18 ]]; do
+      while [[ ${loop_idx} -lt 24 ]]; do
           sleep 5
           if [[ "$(kubectl get postgresql -n spire spire-postgres -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
             echo "spire-postgres is healthy"
