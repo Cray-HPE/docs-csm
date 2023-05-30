@@ -334,7 +334,7 @@ function exit_maintenance_mode() {
     until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty|jq -r '.[].status')" != "maintenance" ]]; do
       echo "Waiting for node $node to exit maintenance mode."
       sleep 15
-      counter=$(( $counter + 1 ))
+      counter=$(( counter + 1 ))
       if [[ $counter -ge 5 ]]; then
         echo "$node is still in maintenance mode. Failing the Ceph mgr process to another node to force $node to exit maintenance mode."
         ceph mgr fail
