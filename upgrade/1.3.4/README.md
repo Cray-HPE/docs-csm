@@ -193,5 +193,6 @@ Remember to exit the typescript that was started at the beginning of the upgrade
 
 ```bash
 exit
+```
 
 It is recommended to save the typescript file for later reference.
