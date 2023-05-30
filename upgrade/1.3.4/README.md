@@ -65,7 +65,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.4`, follow the procedures descr
 1. Add customizations for the `cray-hms-hmcollector` Helm chart:
 
    ```bash
-   yq w -i "customizations.yaml" 'spec.kubernetes.services.cray-hms-hmcollector.hmcollector_external_hostname' 'hmcollector.hmnlb.{{ network.dns.external }}'
+   yq4 -i '.spec.kubernetes.services.cray-hms-hmcollector.hmcollector_external_hostname = "hmcollector.hmnlb.{{ network.dns.external }}"' "customizations.yaml"
    ```
 
 1. Update the `site-init` secret:
