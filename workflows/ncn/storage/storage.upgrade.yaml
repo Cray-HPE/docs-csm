@@ -135,6 +135,23 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: targetNcn
                   value: {{$value}}
+          - name: set-overlay-reset-{{$value}}
+            templateRef:
+              name: rd-live-dir-rd-live-overlay-reset
+              template: set-rd-live-overlay-reset
+            dependencies: 
+              {{ if eq $index 0 }}
+              - before-all
+              {{ end }}
+              {{ if ne $index 0 }}
+              - ensure-running-services-{{ index $.TargetNcns (add $index -1) }}
+              {{ end }}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"  
+                - name: targetNcn
+                  value: {{$value}}
           - name: backup-ceph-data-{{$value}}
             templateRef:
               name: backup-ceph-data
@@ -159,6 +176,7 @@ spec:
             dependencies: 
               - backup-ceph-data-{{$value}}
               - set-bss-no-wipe-to-1-{{$value}}
+              - set-overlay-reset-{{$value}}
               - before-each-{{$value}}
             arguments:
               parameters:
