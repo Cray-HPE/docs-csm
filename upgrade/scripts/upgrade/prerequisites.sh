@@ -520,6 +520,34 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="ROLL_SPIRE_POSTGRES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  kubectl rollout restart -n spire statefulset spire-postgres
+  echo "Waiting for spire-postgres rollout to be completed"
+  kubectl rollout status -n spire statefulset spire-postgres
+  echo "Waiting for postgres operator to consider spire-postgres healthy"
+      loop_idx=0
+      healthy="false"
+      # wait up to 2 minutes for spire-postgres to be marked as healthy
+      while [[ ${loop_idx} -lt 18 && ${in_sync} == "no" ]]; do
+          sleep 5
+          if [[ "$(kubectl get postgresql -n spire spire-postgres -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
+            echo "spire-postgres is healthy"
+            healthy="true"
+            break
+          fi
+          loop_idx=$(( loop_idx+1 ))
+      done
+      
+      if [[ ${healthy} == "false" ]]; then
+          echo "ERROR: spire-postgres is not healthy after 2 minutes"
+          exit 1
+      fi
+fi
+
+
 state_name="UPGRADE_SYSMGMT_HEALTH"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
