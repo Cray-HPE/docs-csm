@@ -815,8 +815,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     # As boot parameters are added or removed, update these arrays.
     # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
-    bootparameters_to_set=( "split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" "rd.live.overlay.thin=0" )
-    bootparameters_to_delete=( "rd.live.squashimg" "rd.live.overlay.thin" )
+    bootparameters_to_set=( "split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" "rd.live.overlay.thin=0" "rd.live.dir=${CSM_RELEASE}" )
+    bootparameters_to_delete=( "rd.live.squashimg" "rd.live.overlay.thin" "rd.live.dir" )
 
     for bootparameter in "${bootparameters_to_delete[@]}"; do
         csi handoff bss-update-param --delete "${bootparameter}"
