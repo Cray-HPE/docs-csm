@@ -38,6 +38,7 @@ cray hsm locks status list --format json > cray-smd-locks-dump_`date '+%Y-%m-%d_
 cray hsm groups list --format json > cray-smd-groups-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
 cray hsm partitions list --format json > cray-smd-partitions-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
 cray hsm memberships list --format json > cray-smd-memberships-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
+cray hsm inventory hardware history list --format json > cray-smd-hardware-history-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
 ls -la
 ```
 
@@ -151,7 +152,16 @@ ls -la
 Create a backup of the BSS Boot Parameters:
 
 ```bash
-cray bss bootparameters list --format json > cray-bss-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
+cray bss bootparameters list --format json > cray-bss-boot-parameters-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
+ls -la
+```
+
+Create a backup of the BSS Boot Parameters for only Compute Nodes:
+
+```bash
+xnames=`cray hsm state components list --type Node --role Compute --format json | jq -r '.[] | map(.ID) | join(",")'`
+echo $xnames
+cray bss bootparameters list --name $xnames --format json > cray-bss-compute-boot-parameters-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
 ls -la
 ```
 
