@@ -203,7 +203,7 @@ function check_currently_running_nexus_image() {
   node=$1
   nexus_sha=$(cat ${ceph_nexus_digest_file})
   for daemon in "mon" "mgr" "osd" "mds" "crash" "rgw"; do
-    for each in $(ssh ${node} "podman ps --filter name=$daemon --format {{.Image}}" ); do
+    for each in $(ssh ${node} ${ssh_options} "podman ps --filter name=$daemon --format {{.Image}}" ); do
       if [[ -z $(echo $each | grep "$nexus_sha" ) && -z $(echo $each | grep $nexus_location) ]]; then
         echo "false"
         return 0
@@ -330,9 +330,16 @@ function exit_maintenance_mode() {
   # shellcheck disable=SC2086
   if [[ "$(ceph orch host maintenance exit $node)" ]]; then
     # shellcheck disable=SC2086
+    counter=0
     until [[ "$(ceph orch host ls --host_pattern $node --format json-pretty|jq -r '.[].status')" != "maintenance" ]]; do
       echo "Waiting for node $node to exit maintenance mode."
       sleep 15
+      counter=$(( counter + 1 ))
+      if [[ $counter -ge 5 ]]; then
+        echo "$node is still in maintenance mode. Failing the Ceph mgr process to another node to force $node to exit maintenance mode."
+        ceph mgr fail
+        counter=0
+      fi
     done
   else
     echo "Could not exit maintenance mode on $node.  Please check ceph services on $node and ensure they are started."
