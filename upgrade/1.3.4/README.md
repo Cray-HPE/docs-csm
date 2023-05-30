@@ -156,7 +156,7 @@ pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zyppe
    Verify that the new CSM version is listed in the output of the following command:
 
    ```bash
-   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
+   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq4 eval -j | jq -r 'to_entries[] | .key' | sort -V
    ```
 
    Example output that includes the new CSM version (`1.3.4`):
