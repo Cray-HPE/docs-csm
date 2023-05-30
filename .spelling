@@ -933,6 +933,9 @@ Lorem
 # To allow Site Init
 Init
 
+- operations/boot_orchestration/Exporting_and_Importing_BOS_Data.md
+etag
+
 - operations/image_management/Exporting_and_Importing_IMS_Data.md
 etag
 etags
