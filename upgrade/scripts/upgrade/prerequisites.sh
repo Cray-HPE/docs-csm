@@ -938,14 +938,12 @@ EOF
           sleep ${lim}
         done
 
-        {
-          printf "    -\n"
-          yq r "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-drydock)' | sed 's/^/      /'
-          printf "    -\n"
-          yq r "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-certmanager)' | sed 's/^/      /'
-          printf "    -\n"
-          yq r "${CSM_MANIFESTS_DIR}/platform.yaml" 'spec.charts.(name==cray-certmanager-issuers)' | sed 's/^/      /'
-        }  >> "${tmp_manifest}"
+
+        platform="${CSM_MANIFESTS_DIR}/platform.yaml"
+        for chart in cray-drydock cray-certmanager cray-certmanager-issuers; do
+          printf "    -\n" >> "${tmp_manifest}"
+          yq4 '.spec.charts.[] | select(.name == "'${chart}'")' "${platform}" | sed 's/^/      /' >> "${tmp_manifest}"
+        done
 
         # Note the ownership for the cert-manager namespace changes ownership
         # from cray-certmanager-init to cray-drydock, so we need to ensure we
