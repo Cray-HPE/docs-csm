@@ -37,7 +37,9 @@ jobs:
       uses: tj-actions/changed-files@v36
       with:
         files: "**/*.md"
-        files_ignore: ".github/**/*"
+        files_ignore: |
+          .github/**/*
+          api/*
 
     - uses: docker://tmaier/markdown-spellcheck:latest
       env:
