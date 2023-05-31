@@ -520,6 +520,34 @@ else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="ROLL_SPIRE_POSTGRES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  kubectl rollout restart -n spire statefulset spire-postgres
+  echo "Waiting for spire-postgres rollout to be completed"
+  kubectl rollout status -n spire statefulset spire-postgres
+  echo "Waiting for postgres operator to consider spire-postgres healthy"
+  loop_idx=0
+  healthy="false"
+  # wait up to 2 minutes for spire-postgres to be marked as healthy
+  while [[ ${loop_idx} -lt 24 ]]; do
+    sleep 5
+    if [[ "$(kubectl get postgresql -n spire spire-postgres -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
+      echo "spire-postgres is healthy"
+      healthy="true"
+      break
+    fi
+    loop_idx=$(( loop_idx+1 ))
+  done
+    
+  if [[ ${healthy} == "false" ]]; then
+    echo "ERROR: spire-postgres is not healthy after 2 minutes"
+    exit 1
+  fi
+fi
+
+
 state_name="UPGRADE_SYSMGMT_HEALTH"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
@@ -801,38 +829,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
     echo
-else
-    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-state_name="PREFLIGHT_CHECK"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" ]]; then
-    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-    {
-    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)"
-
-    # get all installed CSM version into a file
-    kubectl get cm -n services cray-product-catalog -o json | jq  -r '.data.csm' | yq r -  -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
-    # sort -V: version sort
-    highest_version=$(sort -V /tmp/csm_versions | tail -1)
-    minimum_version=1.2.0
-    # compare sorted versions with unsorted so we know if our highest is greater than minimum
-    if [[ $(printf "${minimum_version}\n${highest_version}") != $(printf "${minimum_version}\n${highest_version}" | sort -V) ]]; then
-      echo "Required CSM patch ${minimum_version} or above has not been applied to this system"
-      exit 1
-    fi
-
-    if is_vshasta_node; then
-        sed -i 's/vshasta: false/vshasta: true/g' /opt/cray/tests/install/ncn/vars/variables-ncn.yaml
-    fi
-
-    GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml \
-        --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
-
-    } >> "${LOG_FILE}" 2>&1
-    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
@@ -1143,6 +1139,38 @@ if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         if helm status -n services cray-crus ; then
             helm uninstall -n services cray-crus
         fi
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+state_name="PREFLIGHT_CHECK"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+    export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)"
+
+    # get all installed CSM version into a file
+    kubectl get cm -n services cray-product-catalog -o json | jq  -r '.data.csm' | yq r -  -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
+    # sort -V: version sort
+    highest_version=$(sort -V /tmp/csm_versions | tail -1)
+    minimum_version=1.2.0
+    # compare sorted versions with unsorted so we know if our highest is greater than minimum
+    if [[ $(printf "${minimum_version}\n${highest_version}") != $(printf "${minimum_version}\n${highest_version}" | sort -V) ]]; then
+      echo "Required CSM patch ${minimum_version} or above has not been applied to this system"
+      exit 1
+    fi
+
+    if is_vshasta_node; then
+        sed -i 's/vshasta: false/vshasta: true/g' /opt/cray/tests/install/ncn/vars/variables-ncn.yaml
+    fi
+
+    GOSS_BASE=/opt/cray/tests/install/ncn goss -g /opt/cray/tests/install/ncn/suites/ncn-upgrade-preflight-tests.yaml \
+        --vars=/opt/cray/tests/install/ncn/vars/variables-ncn.yaml validate
+
     } >> "${LOG_FILE}" 2>&1
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
