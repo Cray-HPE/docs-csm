@@ -3,6 +3,12 @@
 This page describes how to update firmware on the management network switches. More details and other options to upgrade
 firmware can be found in the switch [External User Guides](../external_user_guides.md).
 
+## Warning
+
+Management network switch firmware upgrades do not typically include configuration changes and can be done without down time as long as your system is redundantly cabled and operating correctly.
+
+Care should be excercised to follow instructions specific to switch models to avoid network disruptions.  Refer to version specific CSM install/upgrade instructions for steps that may be unique to a given release.
+
 ## Prerequisites
 
 - Access to the switches.
@@ -45,8 +51,7 @@ If upgrading to a new major branch, in Aruba identified by the second integer in
 
 When upgrading past a major software release, for example, from 10.9 to 10.11 (and skipping `10.10.xxxx`)
 issue the `allow-unsafe-upgrades` command to allow any low level firmware/driver upgrades to complete. If going from the
-10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically
-completed.
+If going from the 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed.
 
 ```bash
 config
@@ -237,7 +242,7 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
 
    In this example we are uploading it to the secondary.
 
-    ```bash
+   ```bash
    copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_8325_10_08_1021.swi secondary
 
    write mem
