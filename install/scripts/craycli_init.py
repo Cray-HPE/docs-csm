@@ -780,6 +780,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--run", action="store_true", 
         help="Run the script to create Keycloak user and initialize craycli on all ncn hosts")
+    parser.add_argument("--keycloakHost", nargs='?', default=None,
+        help="Set address for keycloak server.")
     parser.add_argument("--cleanup", action="store_true", 
         help="Remove craycli initialization and clean up Keycloak user")
     parser.add_argument("--initnode", action="store_true", 
@@ -808,6 +810,13 @@ def main():
         LOGGER.error("Incorrect input syntax")
         parser.print_help()
         sys.exit(1)
+
+    # override default ingress used if provided
+    if args.keycloakHost is not None:
+        global DEFAULT_KEYCLOAK_BASE
+        DEFAULT_KEYCLOAK_BASE = 'https://' + args.keycloakHost + '/keycloak'
+        
+    LOGGER.info(f"Keycloak Admin URL: {DEFAULT_KEYCLOAK_BASE}")
 
     # Load K8s configuration
     k8sConfig = None
