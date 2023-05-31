@@ -212,8 +212,7 @@ function createWorkflowPayload() {
 "hosts": ${jsonArray},
 "switchPassword": "${SW_ADMIN_PASSWORD}",
 "imageId": "${imageId}",
-"desiredCfsConfig": "${desiredCfsConfig}",
-"labels": "${labels}"
+"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": \"${labels}\""; fi)
 }
 EOF
     fi
@@ -227,12 +226,12 @@ EOF
 "zapOsds": ${zapOsds},
 "workflowType": "${workflowType}",
 "imageId": "${imageId}",
-"desiredCfsConfig": "${desiredCfsConfig}",
-"labels": "${labels}"
+"desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": \"${labels}\""; fi)
 }
 EOF
     fi
 }
+
 
 function getToken() {
     # shellcheck disable=SC2155,SC2046
