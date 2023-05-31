@@ -21,27 +21,40 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Markdown spellcheck
-
-on:
-  pull_request:
-
-jobs:
-  spellcheck:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v36
-      with:
-        files: "**/*.md"
-        files_ignore: ".github/**/*"
-
-    - uses: docker://tmaier/markdown-spellcheck:latest
-      env:
-          FORCE_COLOR: "1"
-      with:
-        entrypoint: mdspell
-        args: ${{ steps.changed-files.outputs.all_changed_files }} -r -a -n
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: storage-upgrade-pre-shutdown
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: targetNcn
+      dag:
+        tasks:
+          - name: eliminate-NTP-clock-skew
+            templateRef:
+              name: time-sync
+              template: force-time-sync
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: targetNcn
+                  value: "{{inputs.parameters.targetNcn}}"
+          - name: shutdown-services
+            dependencies:
+              - eliminate-NTP-clock-skew
+            templateRef:
+              name: shutdown-services
+              template: storage-node-upgrade-or-no-wipe-services
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: targetNcn
+                  value: "{{inputs.parameters.targetNcn}}"

@@ -21,27 +21,34 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Markdown spellcheck
-
-on:
-  pull_request:
-
-jobs:
-  spellcheck:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v36
-      with:
-        files: "**/*.md"
-        files_ignore: ".github/**/*"
-
-    - uses: docker://tmaier/markdown-spellcheck:latest
-      env:
-          FORCE_COLOR: "1"
-      with:
-        entrypoint: mdspell
-        args: ${{ steps.changed-files.outputs.all_changed_files }} -r -a -n
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: create-rgw-buckets
+  namespace: argo
+spec:
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: targetNcn
+      dag:
+        tasks:
+          - name: create-rgw-buckets-task 
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    if [[ ${TARGET_NCN} == "ncn-s001" ]]; then
+                      scp /usr/share/doc/csm/upgrade/scripts/ceph/create_rgw_buckets.sh ${TARGET_NCN}:/tmp
+                      ssh ${TARGET_NCN} '/tmp/create_rgw_buckets.sh'
+                    else
+                      echo "Creating rgw-buckets only needs to be done once on ncn-s001. Skipping this task on ${TARGET_NCN}"
+                    fi

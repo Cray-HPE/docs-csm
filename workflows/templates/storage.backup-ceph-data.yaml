@@ -21,27 +21,30 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 #
-name: Markdown spellcheck
-
-on:
-  pull_request:
-
-jobs:
-  spellcheck:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Get changed files
-      id: changed-files
-      uses: tj-actions/changed-files@v36
-      with:
-        files: "**/*.md"
-        files_ignore: ".github/**/*"
-
-    - uses: docker://tmaier/markdown-spellcheck:latest
-      env:
-          FORCE_COLOR: "1"
-      with:
-        entrypoint: mdspell
-        args: ${{ steps.changed-files.outputs.all_changed_files }} -r -a -n
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: backup-ceph-data
+  namespace: argo
+spec:
+  templates:
+    - name: backup-ceph-data-for-node-upgrade
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: targetNcn
+      dag:
+        tasks:
+          - name: backup-ceph-data-for-node-upgrade-task
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    ssh ${TARGET_NCN} 'systemctl stop ceph.target;sleep 30;tar -zcvf /tmp/$(hostname)-ceph.tgz /var/lib/ceph /etc/ceph;systemctl start ceph.target'
+                    scp ${TARGET_NCN}:/tmp/${TARGET_NCN}-ceph.tgz .

@@ -1,0 +1,96 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: before-all-nodes-storage-workflow
+  namespace: argo
+spec:
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+      dag:
+        tasks:
+          - name: install-csi
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    known_hosts="/root/.ssh/known_hosts"
+                    for host_ncn in "ncn-m001" "ncn-m002" "ncn-m003"; do
+                      ncn_ip=$(host ${host_ncn} | awk '{ print $NF }')
+                      ssh-keygen -R "${ncn_ip}" -f "${known_hosts}" > /dev/null 2>&1
+                      ssh-keygen -R "${host_ncn}" -f "${known_hosts}" > /dev/null 2>&1
+                      ssh-keyscan -H "${ncn_ip},${host_ncn}" > /dev/null 2>&1 >> "${known_hosts}"
+                    done
+                    source /srv/cray/scripts/metal/metal-lib.sh
+                    csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp4" \
+                      | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
+                    pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
+          - name: upload-ceph-images-to-nexus
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    echo "This will upload Ceph images to nexus. It will restart ceph daemons so that they are using the image in nexus and not the local image."
+                    success=0
+                    for node in "ncn-s001" "ncn-s002" "ncn-s003"; do
+                      scp /usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh ${node}:/srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
+                      if [[ $(ssh ${node} "chmod +x /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh; /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh") ]]; then
+                        success=1
+                        break
+                      fi
+                    done
+                    if [[ $success -eq 0 ]]; then
+                      echo "ERROR was not able to successfully run '/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh' on ncn-s00[1/2/3]."
+                      exit 1
+                    fi
+          - name: add-admin-label-to-ncn-s002
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    # this is necessary so that ncn-s001 can be drained
+                    echo "This will add the '_admin' label to ncn-s002 if it is not already there."
+                    label_exists=$(ceph orch host ls | grep "ncn-s002" | grep "admin") || label_exists=""
+                    if [[ -z $label_exists ]]; then
+                      ceph orch host label add ncn-s002 _admin
+                    fi

@@ -787,8 +787,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     # As boot parameters are added or removed, update these arrays.
     # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
-    bootparameters_to_set=( "split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" "rd.live.overlay.thin=0" )
-    bootparameters_to_delete=( "rd.live.squashimg" "rd.live.overlay.thin" )
+    bootparameters_to_set=( "split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" "rd.live.overlay.thin=0" "rd.live.dir=${CSM_RELEASE}" )
+    bootparameters_to_delete=( "rd.live.squashimg" "rd.live.overlay.thin" "rd.live.dir" )
 
     for bootparameter in "${bootparameters_to_delete[@]}"; do
         csi handoff bss-update-param --delete "${bootparameter}"
@@ -875,6 +875,86 @@ EOF
         kubectl replace --force -f -
 
     } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+state_name="UPGRADE_CERTMANAGER_CHART"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+        cmns="cert-manager"
+        # Only remove these charts if installed
+        if helm list -n "${cmns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
+            helm uninstall -n "${cmns}" cray-certmanager
+        fi
+        cminitns="cert-manager-init"
+        if helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1; then
+          helm uninstall -n "${cminitns}" cray-certmanager-init
+        fi
+
+        # Note: These should *never* fail as we depend on helm uninstall doing
+        # its job, but if it didn't exit early here as something is amiss.
+        cm=1
+        cminit=1
+
+        if helm list -n "${cmns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
+          cm=0
+        fi
+
+        if helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null; then
+          cminit=0
+        fi
+        if [ "${cm}" = "1" ] || [ "${cminit}" = "1" ]; then
+          printf "fatal: helm uninstall did not remove expected charts, cert-manager %s cert-manager-init %s\n" "${cm}" "${cminit}" >&2
+          exit 1
+        fi
+        tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
+
+        cat > "${tmp_manifest}" <<EOF
+apiVersion: manifests/v1beta1
+metadata:
+  name: cray-certmanager-images-tmp-manifest
+spec:
+  charts:
+EOF
+
+        # While kubectl get namespace cert-manager succeeds, backoff until it
+        # doesn't or after 5 minutes fail entirely as its likely not removing
+        # for whatever reason, humans get to figure out why or they can
+        # re-run...
+        start=$(date +%s)
+        lim=1
+        until ! kubectl get namespace "${cmns}" > /dev/null 2>&1; do
+          now=$(date +%s)
+          if [ "$((now-start))" -ge 300 ]; then
+            printf "fatal: namespace %s likely requires manual intervention after waiting for removal for at least 5 minutes, details:\n" "${cmns}" >&2
+            kubectl get namespace "${cmns}" -o yaml
+            exit 1
+          fi
+          lim="$((lim*2))"
+          sleep ${lim}
+        done
+
+
+        platform="${CSM_MANIFESTS_DIR}/platform.yaml"
+        for chart in cray-drydock cray-certmanager cray-certmanager-issuers; do
+          printf "    -\n" >> "${tmp_manifest}"
+          yq4 '.spec.charts.[] | select(.name == "'${chart}'")' "${platform}" | sed 's/^/      /' >> "${tmp_manifest}"
+        done
+
+        # Note the ownership for the cert-manager namespace changes ownership
+        # from cray-certmanager-init to cray-drydock, so we need to ensure we
+        # update drydock to create our namespace appropriately before
+        # reinstalling cray-certmanager. Note, technically reinstalling
+        # cray-drydock is unnecessary at this stage but is here "just in case".
+        # cray-certmanager-issuers is also in this category in that it should be
+        # unnecessary as the upgrade will reinstall it anyway but this is just
+        # to be complete.
+        loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "${tmp_manifest}"
+    }
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"

@@ -1,0 +1,99 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: storage-node-drain
+  namespace: argo
+spec:
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+          - name: drain
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    ceph orch host drain $TARGET_NCN
+                    int=0
+                    success=0
+                    while [[ $int -lt 100 ]]; do
+                      if [[ $(ceph orch ps $TARGET_NCN | grep "osd" | wc -l) -eq 0 ]]; then
+                        success=1
+                        break
+                      else
+                        echo "Waiting for all osds to be removed from $TARGET_NCN. Sleeping 20s..."
+                        sleep 20
+                      fi
+                      int=$(($int + 1))
+                    done
+                    if [[ $success -eq 0 ]]; then
+                      echo "ERROR did not successfully drain osds from $TARGET_NCN. Manually run 'ceph orch ps $TARGET_NCN' to see what is still running."
+                      exit 1
+                    fi
+          - name: fail-over-mds-mgr
+            dependencies: 
+              - drain
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                    echo "This will fail over mds if the active cephfs or admin-tool mds daemon is on ${TARGET_NCN}."
+                    echo "This will fail over mgr if the active mgr is on ${TARGET_NCN}."
+                    active_mds=$(ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name')
+                    active_on_target=1
+                    while [[ $active_on_target -ne 0 ]]; do
+                      active_on_target=0
+                      for each in $active_mds; do
+                        if [[ -n $(echo $each | grep $TARGET_NCN ) ]]; then
+                          active_on_target=$(( $active_on_target + 1 ))
+                          ceph mds fail $each
+                        fi
+                      done
+
+                      active_mgr=$(ceph mgr dump | jq -r .active_name)
+                      if [[ -n $(echo $active_mgr | grep $TARGET_NCN) ]]; then
+                        echo "Acitve mgr is $active_mgr"
+                        ceph mgr fail
+                        echo "Failed over mgr"
+                        active_on_target=$(( $active_on_target + 1 ))
+                      fi
+                    done

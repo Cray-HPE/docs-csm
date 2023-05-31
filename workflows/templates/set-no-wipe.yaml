@@ -1,0 +1,109 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: set-no-wipe
+  namespace: argo
+spec:
+  templates:
+    - name: set-bss-no-wipe-1
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+        - name: set-bss-no-wipe-1-task
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  TARGET_NCN={{inputs.parameters.targetNcn}}
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                  echo "Setting metal.no-wipe=1"
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                  /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
+    - name: set-bss-no-wipe-1-no-wipe-osds
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+        - name: set-bss-no-wipe-1-no-wipe-osds-task
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                  echo "Setting metal.no-wipe=1"
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                  /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=1 --limit $TARGET_XNAME
+                  /host_usr_bin/csi handoff bss-update-cloud-init --set meta-data.wipe-ceph-osds=no --limit Global
+    - name: set-bss-no-wipe-0
+      inputs:
+        parameters:
+          - name: targetNcn
+          - name: dryRun
+      dag:
+        tasks:
+        - name: set-bss-no-wipe-0-task
+          templateRef:
+            name: kubectl-and-curl-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  TARGET_NCN="{{inputs.parameters.targetNcn}}"
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+                  echo "Setting metal.no-wipe=0"
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+                  /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
