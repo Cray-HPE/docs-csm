@@ -162,15 +162,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
     > - If the nodes have PXE boot issues (for example, getting PXE errors, or not pulling the `ipxe.efi` binary), then see [PXE boot troubleshooting](troubleshooting_pxe_boot.md).
     > - If ncn-s001 console has the message 'Sleeping for five seconds waiting ceph to be healthy...'
     for an extended period of time, then see [Utility Storage Installation Troubleshooting](troubleshooting_utility_storage_node_installation.md).
-    > - In the deployment of Storage NCN's the following error may occur in console :
-    ```bash
-    ncn-<storage node> systemd[1]: cray-heartbeat.service: Scheduled restart job, restart counter is at <retry number>.
-	ncn-<storage node> systemd[1]: Stopped heartbeat.
-	ncn-<storage node> systemd[1]: Started heartbeat.
-	ncn-<storage node> systemd[1]: cray-heartbeat.service: Main process exited, code=exited, status=1/FAILURE
-	ncn-<storage node> systemd[1]: cray-heartbeat.service: Failed with result 'exit-code'.
-    ```
-	> - Please note that this error is expected until after the csm-pit node is booted back into ncn-m001. This is a step later in the deployment procedure. Once this step has been run successfully, storage nodes will be joined to spire and the error message noted above should no longer be present.
+    > - In the deployment of Storage NCN's the console may show errors regarding `cray-heartbeat.service`. These are expected until the PIT is deployed as m001.
 
 1. (`pit#`) Wait for storage nodes to output the following before booting Kubernetes master nodes and worker nodes.
 
