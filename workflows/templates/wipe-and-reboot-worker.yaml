@@ -288,5 +288,5 @@ spec:
               - name: scriptContent
                 value: |
                   TARGET_NCN={{inputs.parameters.targetNcn}}
-                  ssh ${TARGET_NCN} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
+                  ssh ${TARGET_NCN} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local --tenant ""'
       
