@@ -43,7 +43,9 @@ jobs:
       uses: tj-actions/changed-files@v36
       with:
         files: "**/*.md"
-        files_ignore: ".github/**/*"
+        files_ignore: |
+          .github/**/*
+          api/*
 
     # Newer versions of markdown-link-checker do not work with anchors - https://github.com/tcort/markdown-link-check/issues/225
     - name: Check links in changed files
