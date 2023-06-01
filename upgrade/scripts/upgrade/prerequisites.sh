@@ -515,38 +515,13 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
         "${locOfScript}/util/upgrade-spire.sh"
 
     } >> "${LOG_FILE}" 2>&1
+    
+    echo "Rolling spire-postgres statefulset"
+    kubectl rollout restart -n spire statefulset spire-postgres
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
-
-state_name="ROLL_SPIRE_POSTGRES"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  kubectl rollout restart -n spire statefulset spire-postgres
-  echo "Waiting for spire-postgres rollout to be completed"
-  kubectl rollout status -n spire statefulset spire-postgres
-  echo "Waiting for postgres operator to consider spire-postgres healthy"
-  loop_idx=0
-  healthy="false"
-  # wait up to 2 minutes for spire-postgres to be marked as healthy
-  while [[ ${loop_idx} -lt 24 ]]; do
-    sleep 5
-    if [[ "$(kubectl get postgresql -n spire spire-postgres -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
-      echo "spire-postgres is healthy"
-      healthy="true"
-      break
-    fi
-    loop_idx=$(( loop_idx+1 ))
-  done
-    
-  if [[ ${healthy} == "false" ]]; then
-    echo "ERROR: spire-postgres is not healthy after 2 minutes"
-    exit 1
-  fi
-fi
-
 
 state_name="UPGRADE_SYSMGMT_HEALTH"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
@@ -1140,6 +1115,34 @@ if [[ $state_recorded == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
             helm uninstall -n services cray-crus
         fi
     } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+state_name="VALIDATE_SPIRE_POSTGRES_HEALTH"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  i=1
+  max_checks=40
+  wait_time=15
+  healthy="false"
+  while [[ ${i} -le ${max_checks} ]]; do
+    if [[ "$(kubectl get postgresql -n spire spire-postgres -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
+      echo "spire-postgres is healthy"
+      healthy="true"
+      break
+    fi
+    echo "Waiting for postgres operator to consider spire-postgres healthy (${i}/${max_checks})"
+    sleep ${wait_time}
+    i=$(( i+1 ))
+  done
+    
+  if [[ ${healthy} == "false" ]]; then
+    echo "ERROR: spire-postgres is not healthy after $(( max_checks * wait_time )) seconds"
+    exit 1
+  fi
     record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
     echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
