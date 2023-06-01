@@ -36,7 +36,9 @@ jobs:
       uses: tj-actions/changed-files@v36
       with:
         files: "**/*.sh"
-        files_ignore: ".github/**/*"
+        files_ignore: |
+          .github/**/*
+          api/*
 
     - uses: docker://koalaman/shellcheck:stable
       if: ${{ steps.changed-files.outputs.all_changed_files }}
