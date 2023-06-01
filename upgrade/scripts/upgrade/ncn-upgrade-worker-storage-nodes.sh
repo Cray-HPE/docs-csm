@@ -385,9 +385,9 @@ while true; do
         succeededSteps=$(jq -jr ".[] | select(.name==\"${workflow}\") | .status.nodes[] | select(.type==\"Retry\")| select(.phase==\"Succeeded\")  | .name +\"\n  \" " < "${res_file}")
         clear
         printf "\n%s\n" "INFO - Succeeded:"
-        echo "INFO - ${succeededSteps}" | awk -F'.' '{print $2" -  "$3}'
+        echo "INFO $(echo ${succeededSteps} | awk -F'.' '{print $2" -  "$3}')"
         printf "%s\n" "INFO - ${phase}:"
-        echo "INFO - ${runningSteps}"  | awk -F'.' '{print $2" -  "$3}'
+        echo "INFO $(echo ${runningSteps} | awk -F'.' '{print $2" -  "$3}')"
         sleep 10
     fi
     rm -f "${res_file}" > /dev/null 2>&1 || true

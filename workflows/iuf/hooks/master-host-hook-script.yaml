@@ -45,7 +45,7 @@ spec:
 
                     global_params_file=$(echo $RANDOM | md5sum | head -c 20; echo)
 
-                    echo "INFO  Saving global_params into file /tmp/${global_params_file}.json"
+                    echo "DEBUG Saving global_params into file /tmp/${global_params_file}.json"
 
                     cat << EOF > /tmp/${global_params_file}.json
 
@@ -53,7 +53,7 @@ spec:
 
                     EOF
 
-                    echo "INFO  Calling {{inputs.parameters.script_path}}"
+                    echo "DEBUG Calling {{inputs.parameters.script_path}}"
 
                     chmod +x {{inputs.parameters.script_path}}
 
