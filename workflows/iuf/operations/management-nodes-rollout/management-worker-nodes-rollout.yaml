@@ -102,6 +102,8 @@ spec:
                       echo "NOTICE found image:$image in IMS for Management_Worker rebuild"
                     fi
           - name: get-worker-rebuild-sets
+            dependencies:
+              - verify-worker-images-and-configuration
             templateRef:
               name: ssh-template
               template: shell-script
