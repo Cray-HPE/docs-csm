@@ -465,30 +465,16 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="UPGRADE_NLS"
+state_name="UPGRADE_NLS_POSTGRES"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
-    "${locOfScript}/util/upgrade-cray-nls.sh"
-    # CASMINST-6040 - need to wait for hooks.cray-nls.hpe.com crd to be created
-    # before uploading rebuild workflow templates which use hooks
-    echo "Wait for hooks.cray-nls.hpe.com crd to be created"
-    set +e
-    counter=0
-    until kubectl get crd hooks.cray-nls.hpe.com; do
-      counter=$((counter + 1))
-      sleep 5
-      # wait up to 90 seconds
-      if [[ ${counter} -gt 18 ]]; then
-        echo "failed to find hooks.cray-nls.hpe.com crd"
-        exit 1
-      fi
-    done
-    set -e
-    "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
-    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
-
+    # CASMPET-6602 ignore the cray-nls deployment error as cray-nls-postgres is not ready
+    "${locOfScript}/util/upgrade-cray-nls.sh" || true
+    sleep 5
+    echo "Rolling cray-nls-postgres statefulset"
+    kubectl rollout restart -n argo statefulset cray-nls-postgres
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
@@ -501,7 +487,8 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
 
-    "${locOfScript}/util/upgrade-spire.sh"
+    # CASMPET-6602 ignore the spire deployment error as spire-postgres is not ready
+    "${locOfScript}/util/upgrade-spire.sh" || true
 
   } >> "${LOG_FILE}" 2>&1
 
@@ -1131,6 +1118,59 @@ if [[ ${state_recorded} == "0" ]]; then
     echo "ERROR: spire-postgres is not healthy after $((max_checks * wait_time)) seconds"
     exit 1
   fi
+
+  # retry spire upgrade which is expected to succeed
+  "${locOfScript}/util/upgrade-spire.sh"
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+state_name="FINISH_NLS_UPGRADE"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  # make sure cray-nls-postgres is healthy
+  i=1
+  max_checks=40
+  wait_time=15
+  healthy="false"
+  while [[ ${i} -le ${max_checks} ]]; do
+    if [[ "$(kubectl get postgresql cray-nls-postgres -n argo -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
+      echo "cray-nls-postgres is healthy"
+      healthy="true"
+      break
+    fi
+    echo "Waiting for postgres operator to consider cray-nls-postgres healthy (${i}/${max_checks})"
+    sleep ${wait_time}
+    i=$((i + 1))
+  done
+
+  if [[ ${healthy} == "false" ]]; then
+    echo "ERROR: cray-nls-postgres is not healthy after $((max_checks * wait_time)) seconds"
+    exit 1
+  fi
+
+  # retry cray-nls upgrade which is expected to succeed
+  "${locOfScript}/util/upgrade-cray-nls.sh"
+  # CASMINST-6040 - need to wait for hooks.cray-nls.hpe.com crd to be created
+  # before uploading rebuild workflow templates which use hooks
+  echo "Wait for hooks.cray-nls.hpe.com crd to be created"
+  set +e
+  counter=0
+  until kubectl get crd hooks.cray-nls.hpe.com; do
+    counter=$((counter + 1))
+    sleep 5
+    # wait up to 90 seconds
+    if [[ ${counter} -gt 18 ]]; then
+      echo "ERROR: failed to find hooks.cray-nls.hpe.com crd"
+      exit 1
+    fi
+  done
+  set -e
+  "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
+  rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
+
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
