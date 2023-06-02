@@ -125,9 +125,11 @@ spec:
 
                     TARGET_NCN=ncn-m002
                     limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
-                    if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then 
-                      echo "NOTICE Not upgrading $TARGET_NCN nodes because 'Management_Master' was not in --limit-management-rollout"
-                      exit 0
+                    if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then
+                      if [[ -z $(echo $limit_management_nodes | grep "$TARGET_NCN" ) ]]; then
+                         echo "NOTICE ${TARGET_NCN} was not included in --limit-management-nodes. Not rebuilding ${TARGET_NCN}."
+                         exit 0
+                      fi
                     fi
                     labeled_nodes=$(kubectl get nodes --selector='iuf-prevent-rollout=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
                     if [[ -n $(echo $labeled_nodes | grep $TARGET_NCN) ]]; then
@@ -228,9 +230,11 @@ spec:
 
                     TARGET_NCN=ncn-m003
                     limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
-                    if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then 
-                      echo "NOTICE Not upgrading $TARGET_NCN nodes because 'Management_Master' was not in --limit-management-rollout"
-                      exit 0
+                    if [[ -z $(echo $limit_management_nodes | grep 'Management_Master') ]]; then
+                      if [[ -z $(echo $limit_management_nodes | grep "$TARGET_NCN" ) ]]; then
+                         echo "NOTICE ${TARGET_NCN} was not included in --limit-management-nodes. Not rebuilding ${TARGET_NCN}."
+                         exit 0
+                      fi
                     fi
                     labeled_nodes=$(kubectl get nodes --selector='iuf-prevent-rollout=true' -o jsonpath='{range .items[*]}{@.metadata.name}{" "}')
                     if [[ -n $(echo $labeled_nodes | grep $TARGET_NCN) ]]; then
