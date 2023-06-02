@@ -78,7 +78,7 @@ spec:
                   done
         - name: update-bss
           templateRef:
-            name: iuf-base-template
+            name: kubectl-and-curl-template
             template: shell-script
           arguments:
             parameters:
