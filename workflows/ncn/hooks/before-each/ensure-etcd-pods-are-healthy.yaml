@@ -30,7 +30,7 @@ metadata:
 spec:
   scriptContent: |
     #!/bin/sh
-    while [[ "$(kubectl get po -A  | grep -E "bitnami-etcd-[0-9]" | grep -v "Running"| wc -l)" != "1" ]]; do
+    while [[ "$(kubectl get po -A  | grep -E "bitnami-etcd-[0-9]" | grep -v "Running"| wc -l)" != "0" ]]; do
         echo "Some etcd pods are not in running state, wait for 5s ..."
         kubectl get po -A  | grep -E "bitnami-etcd-[0-9]" | grep -v "Running"
         sleep 5
