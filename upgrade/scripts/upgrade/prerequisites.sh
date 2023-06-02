@@ -860,11 +860,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     cm=1
     cminit=1
 
-    if helm list -n "${cmns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
+    if ! helm list -n "${cmns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
       cm=0
     fi
 
-    if helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null; then
+    if ! helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null; then
       cminit=0
     fi
     if [ "${cm}" = "1" ] || [ "${cminit}" = "1" ]; then
@@ -901,7 +901,7 @@ EOF
     platform="${CSM_MANIFESTS_DIR}/platform.yaml"
     for chart in cray-drydock cray-certmanager cray-certmanager-issuers; do
       printf "    -\n" >> "${tmp_manifest}"
-      yq4 '.spec.charts.[] | select(.name == "'${chart}'")' "${platform}" | sed 's/^/      /' >> "${tmp_manifest}"
+      yq r "${platform}" 'spec.charts.(name=='${chart}')' | sed 's/^/      /' >> "${tmp_manifest}"
     done
 
     # Note the ownership for the cert-manager namespace changes ownership
