@@ -144,7 +144,7 @@ spec:
                   fi
         - name: update-cfs
           templateRef:
-            name: iuf-base-template
+            name: kubectl-and-curl-template
             template: shell-script
           arguments:
             parameters:
