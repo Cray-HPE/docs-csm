@@ -64,7 +64,7 @@ spec:
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template
-          - name: verify-images-and-configuration
+          - name: verify-master-images-and-configuration
             dependencies:
               - start-operation
             templateRef:
@@ -76,64 +76,30 @@ spec:
                   value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
-                    rebuild_workers=false
-                    rebuild_masters=false
-                    limit_management_nodes=$(echo '{{inputs.parameters.global_params}}' | jq -r '.input_params.limit_management_nodes[]')
-                    if [[ -n $(echo $limit_management_nodes | grep 'Management_Worker') ]]; then rebuild_workers=true; fi
-                    if [[ -n $(echo $limit_management_nodes | grep 'Management_Master') ]]; then rebuild_masters=true; fi
-
                     prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
 
-                    if $rebuild_workers; then
-                      # Check config exists
-                      config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].configuration' | tr -d '"')
-                      if [[ -z $config ]]; then echo "ERROR  no CFS configuration was received for 'Management_Worker' from prepare images stage"; exit 1; fi
-                      cray cfs configurations describe "$config" > /dev/null
-                      if [[ $? -ne 0 ]]; then
-                        exit 1 # could not find the desired cfs configuration
-                      else
-                        echo "NOTICE found CFS configuration:$config in CFS for 'Management_Worker' nodes"
-                      fi
-
-                      # Check image exists
-                      image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Worker")) | .[].final_image_id' | tr -d '"')
-                      if [[ -z $image ]]; then echo "ERROR  no image was received for 'Management_Worker' from prepare images stage"; exit 1; fi
-                      if [[ $(echo $image | wc -l) -gt 1 ]]; then 
-                        echo "ERROR  more than 1 image was received for Management_Worker nodes. Must be exactly 1 image to rebuild"
-                        echo "ERROR  Images received: $image"; exit 1
-                      fi
-                      cray ims images describe "$image" > /dev/null
-                      if [[ $? -ne 0 ]]; then
-                        exit 1 # could not find the image in IMS
-                      else
-                        echo "NOTICE found image:$image in IMS for Management_Worker rebuild"
-                      fi
+                    # Check config exists
+                    config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
+                    if [[ -z $config ]]; then echo "ERROR  no CFS configuration was received for 'Management_Master' from prepare images stage"; exit 1; fi
+                    cray cfs configurations describe "$config" > /dev/null
+                    if [[ $? -ne 0 ]]; then
+                      exit 1 # could not find the desired cfs configuration
+                    else
+                      echo "NOTICE found CFS configuration:$config in CFS for 'Management_Master' nodes"
                     fi
 
-                    if $rebuild_masters; then
-                      # Check config exists
-                      config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration' | tr -d '"')
-                      if [[ -z $config ]]; then echo "ERROR  no CFS configuration was received for 'Management_Master' from prepare images stage"; exit 1; fi
-                      cray cfs configurations describe "$config" > /dev/null
-                      if [[ $? -ne 0 ]]; then
-                        exit 1 # could not find the desired cfs configuration
-                      else
-                        echo "NOTICE found CFS configuration:$config in CFS for 'Management_Master' nodes"
-                      fi
-
-                      # Check image exists
-                      image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
-                      if [[ -z $image ]]; then echo "ERROR  no image was received for 'Management_Master' from prepare images stage"; exit 1; fi
-                      if [[ $(echo $image | wc -l) -gt 1 ]]; then 
-                        echo "ERROR  more than 1 image was received for Management_Master nodes. Must be exactly 1 image to rebuild"
-                        echo "ERROR  Images received: $image"; exit 1
-                      fi
-                      cray ims images describe "$image" > /dev/null
-                      if [[ $? -ne 0 ]]; then
-                        exit 1 # could not find the image in IMS
-                      else
-                        echo "NOTICE found image:$image in IMS for Management_Master rebuild"
-                      fi
+                    # Check image exists
+                    image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id' | tr -d '"')
+                    if [[ -z $image ]]; then echo "ERROR  no image was received for 'Management_Master' from prepare images stage"; exit 1; fi
+                    if [[ $(echo $image | wc -l) -gt 1 ]]; then 
+                      echo "ERROR  more than 1 image was received for Management_Master nodes. Must be exactly 1 image to rebuild"
+                      echo "ERROR  Images received: $image"; exit 1
+                    fi
+                    cray ims images describe "$image" > /dev/null
+                    if [[ $? -ne 0 ]]; then
+                      exit 1 # could not find the image in IMS
+                    else
+                      echo "NOTICE found image:$image in IMS for Management_Master rebuild"
                     fi
           - name: upgrade-m002
             dependencies:
