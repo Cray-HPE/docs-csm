@@ -481,24 +481,6 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="UPGRADE_SPIRE"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    # CASMPET-6602 ignore the spire deployment error as spire-postgres is not ready
-    "${locOfScript}/util/upgrade-spire.sh" || true
-
-  } >> "${LOG_FILE}" 2>&1
-
-  echo "Rolling spire-postgres statefulset"
-  kubectl rollout restart -n spire statefulset spire-postgres
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
 state_name="UPGRADE_SYSMGMT_HEALTH"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
@@ -900,7 +882,7 @@ EOF
     # unnecessary as the upgrade will reinstall it anyway but this is just
     # to be complete.
     loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "${tmp_manifest}"
-  }
+  } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
@@ -950,48 +932,6 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     cray artifacts list "${backupBucket}" || backupBucket="vbis"
 
     cray artifacts create "${backupBucket}" "bss-backup-$(date +%Y-%m-%d).json" "bss-backup-$(date +%Y-%m-%d).json"
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
-state_name="BACKUP_VCS_DATA"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    pgLeaderPod=$(kubectl exec gitea-vcs-postgres-0 -n services -c postgres -it -- patronictl list -f json | jq -r '.[] | select(.Role == "Leader").Member')
-    kubectl exec -it "${pgLeaderPod}" -n services -c postgres -- pg_dumpall -c -U postgres > gitea-vcs-postgres.sql
-
-    SECRETS=("postgres" "service-account" "standby")
-    echo "---" > gitea-vcs-postgres.manifest
-    for secret in "${SECRETS[@]}"; do
-      kubectl get secret "${secret}.gitea-vcs-postgres.credentials" -n services -o yaml >> gitea-vcs-postgres.manifest
-      echo "---" >> gitea-vcs-postgres.manifest
-    done
-
-    POD=$(kubectl -n services get pod -l app.kubernetes.io/instance=gitea -o json | jq -r '.items[] | .metadata.name')
-    #
-    # Gitea change in 1.2 from /data to /var/lib/gitea, see which version we're
-    # backing up (in support of 1.2 -> 1.2 upgrades)
-    #
-    if kubectl -n services exec -it "${POD}" -c vcs -- /bin/sh -c 'ls /data' > /dev/null 2>&1; then
-      kubectl -n services exec "${POD}" -c vcs -- tar -cvf vcs.tar /data/
-    else
-      kubectl -n services exec "${POD}" -c vcs -- tar -cvf vcs.tar /var/lib/gitea/
-    fi
-
-    kubectl -n services -c vcs cp "${POD}":vcs.tar ./vcs.tar
-
-    backupBucket="config-data"
-    cray artifacts list "${backupBucket}" || backupBucket="vbis"
-
-    cray artifacts create "${backupBucket}" gitea-vcs-postgres.sql gitea-vcs-postgres.sql
-    cray artifacts create "${backupBucket}" gitea-vcs-postgres.manifest gitea-vcs-postgres.manifest
-    cray artifacts create "${backupBucket}" vcs.tar vcs.tar
 
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
@@ -1095,82 +1035,53 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="VALIDATE_SPIRE_POSTGRES_HEALTH"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  i=1
-  max_checks=40
-  wait_time=15
-  healthy="false"
-  while [[ ${i} -le ${max_checks} ]]; do
-    if [[ "$(kubectl get postgresql -n spire spire-postgres -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
-      echo "spire-postgres is healthy"
-      healthy="true"
-      break
-    fi
-    echo "Waiting for postgres operator to consider spire-postgres healthy (${i}/${max_checks})"
-    sleep ${wait_time}
-    i=$((i + 1))
-  done
-
-  if [[ ${healthy} == "false" ]]; then
-    echo "ERROR: spire-postgres is not healthy after $((max_checks * wait_time)) seconds"
-    exit 1
-  fi
-
-  # retry spire upgrade which is expected to succeed
-  "${locOfScript}/util/upgrade-spire.sh"
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
 state_name="FINISH_NLS_UPGRADE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  # make sure cray-nls-postgres is healthy
-  i=1
-  max_checks=40
-  wait_time=15
-  healthy="false"
-  while [[ ${i} -le ${max_checks} ]]; do
-    if [[ "$(kubectl get postgresql cray-nls-postgres -n argo -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
-      echo "cray-nls-postgres is healthy"
-      healthy="true"
-      break
-    fi
-    echo "Waiting for postgres operator to consider cray-nls-postgres healthy (${i}/${max_checks})"
-    sleep ${wait_time}
-    i=$((i + 1))
-  done
+  {
+    # make sure cray-nls-postgres is healthy
+    i=1
+    max_checks=40
+    wait_time=15
+    healthy="false"
+    while [[ ${i} -le ${max_checks} ]]; do
+      if [[ "$(kubectl get postgresql cray-nls-postgres -n argo -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
+        echo "cray-nls-postgres is healthy"
+        healthy="true"
+        break
+      fi
+      echo "Waiting for postgres operator to consider cray-nls-postgres healthy (${i}/${max_checks})"
+      sleep ${wait_time}
+      i=$((i + 1))
+    done
 
-  if [[ ${healthy} == "false" ]]; then
-    echo "ERROR: cray-nls-postgres is not healthy after $((max_checks * wait_time)) seconds"
-    exit 1
-  fi
-
-  # retry cray-nls upgrade which is expected to succeed
-  "${locOfScript}/util/upgrade-cray-nls.sh"
-  # CASMINST-6040 - need to wait for hooks.cray-nls.hpe.com crd to be created
-  # before uploading rebuild workflow templates which use hooks
-  echo "Wait for hooks.cray-nls.hpe.com crd to be created"
-  set +e
-  counter=0
-  until kubectl get crd hooks.cray-nls.hpe.com; do
-    counter=$((counter + 1))
-    sleep 5
-    # wait up to 90 seconds
-    if [[ ${counter} -gt 18 ]]; then
-      echo "ERROR: failed to find hooks.cray-nls.hpe.com crd"
+    if [[ ${healthy} == "false" ]]; then
+      echo "ERROR: cray-nls-postgres is not healthy after $((max_checks * wait_time)) seconds"
       exit 1
     fi
-  done
-  set -e
-  "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
-  rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
 
+    # retry cray-nls upgrade which is expected to succeed
+    "${locOfScript}/util/upgrade-cray-nls.sh"
+    # CASMINST-6040 - need to wait for hooks.cray-nls.hpe.com crd to be created
+    # before uploading rebuild workflow templates which use hooks
+    echo "Wait for hooks.cray-nls.hpe.com crd to be created"
+    set +e
+    counter=0
+    until kubectl get crd hooks.cray-nls.hpe.com; do
+      counter=$((counter + 1))
+      sleep 5
+      # wait up to 90 seconds
+      if [[ ${counter} -gt 18 ]]; then
+        echo "ERROR: failed to find hooks.cray-nls.hpe.com crd"
+        exit 1
+      fi
+    done
+    set -e
+    "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
+    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
+
+  } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
@@ -1183,6 +1094,9 @@ if [[ ${state_recorded} == "0" ]]; then
   {
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)"
+    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*platform-utils\*.rpm | sort -V | tail -1)"
+    rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*goss-servers\*.rpm | sort -V | tail -1)"
+    systemctl restart goss-servers
 
     # get all installed CSM version into a file
     kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | yq r - -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions
