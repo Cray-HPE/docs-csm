@@ -513,7 +513,7 @@ if [[ ${target_ncn} != ncn-s* ]]; then
             ssh_keygen_keyscan "${target_ncn}"
             ssh_keys_done=1
         fi
-        ssh ${TARGET_NCN} 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local'
+        ssh ${TARGET_NCN} 'cray init --no-auth --overwrite --hostname https://api-gw-service-nmn.local --tenant ""'
         } >> ${LOG_FILE} 2>&1
         record_state "${state_name}" ${target_ncn}
     else
