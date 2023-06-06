@@ -108,6 +108,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 * [Postgres PVC resize](#postgres-pvc-resize)
 * [Prometheus PVC resize](#prometheus-pvc-resize)
 * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
+* [`cray-cfs-api` pods are `OOMKilled`](#cray-cfs-api-pods-are-oomkilled)
 
 ### Prerequisites
 
@@ -766,6 +767,124 @@ Update resources associated with `cray-hms-hmcollector` in the `services` namesp
 Trial and error may be needed to determine what is best for a given system at scale.
 
 * [Adjust HM Collector Ingress Replicas and Resource Limits](../hmcollector/adjust_hmcollector_resource_limits_requests.md)
+
+### `cray-cfs-api` pods are `OOMKilled`
+
+Increase the memory requests and limits associated with `cray-cfs-api` deployment in the `services` namespace.
+
+1. (`ncn#`) Get the current cached customizations.
+
+   ```bash
+   kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ```
+
+1. (`ncn#`) Get the current cached CSM `sysmgmt` manifest.
+
+   ```bash
+   kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
+   ```
+
+1. (`ncn#`) Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-cfs-api.cray-service.containers.cray-cfs-api.resources`.
+
+   ```bash
+   yq4 -i '.spec.kubernetes.services.cray-cfs-api.cray-service.containers.cray-cfs-api.resources.requests.memory="200Mi"' customizations.yaml
+   yq4 -i '.spec.kubernetes.services.cray-cfs-api.cray-service.containers.cray-cfs-api.resources.limits.memory="500Mi"' customizations.yaml
+   ```
+
+1. (`ncn#`) Check that the customization file has been updated.
+
+   ```bash
+   yq4 '.spec.kubernetes.services.cray-cfs-api.cray-service.containers.cray-cfs-api.resources.requests.memory' customizations.yaml
+   ```
+
+   Expected output:
+
+   ```text
+   200Mi
+   ```
+
+   ```bash
+   yq4 '.spec.kubernetes.services.cray-cfs-api.cray-service.containers.cray-cfs-api.resources.limits.memory' customizations.yaml
+   ```
+
+   Expected output:
+
+   ```text
+   500Mi
+   ```
+
+1. Edit the `sysmgmt.yaml` to only include the `cray-cfs-api` chart and all its current data.
+
+   The version may differ, because this is an example.
+
+   ```yaml
+    apiVersion: manifests/v1beta1
+    metadata:
+      name: sysmgmt
+    spec:
+      charts:
+        - name: cray-cfs-api
+          namespace: services
+          source: csm-algol60
+          version: 1.12.1
+   ```
+
+1. (`ncn#`) Generate the manifest that will be used to redeploy the chart with the modified volume size.
+
+   ```bash
+   manifestgen -c customizations.yaml -i sysmgmt.yaml -o manifest.yaml
+   ```
+
+1. (`ncn#`) Check that the manifest file contains the desired memory settings.
+
+   ```bash
+   yq4 eval '.spec.charts.[] | select(.name=="cray-cfs-api") | .values.cray-service.containers.cray-cfs-api.resources'
+   ```
+
+   Example output:
+
+   ```yaml
+   limits:
+     memory: 500Mi
+   requests:
+     memory: 200Mi
+   ```
+
+1. (`ncn#`) Redeploy the same chart version but with the desired volume size setting.
+
+   ```bash
+   loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   ```
+
+1. (`ncn#`) Verify that the increased memory request and limit have been applied.
+
+   ```bash
+   kubectl get deployment -n services cray-cfs-api -o json | jq .spec.template.spec.containers[0].resources
+   ```
+
+   Example output:
+
+   ```json
+   {
+     "limits": {
+       "cpu": "500m",
+       "memory": "500Mi"
+     },
+     "requests": {
+       "cpu": "150m",
+       "memory": "200Mi"
+     }
+   }
+   ```
+
+1. (`ncn#`) **This step is critical.** Store the modified `customizations.yaml` in the `site-init` repository in the customer-managed location.
+
+   If this is not done, these changes will not persist in future installs or upgrades.
+
+   ```bash
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
 
 ## References
 
