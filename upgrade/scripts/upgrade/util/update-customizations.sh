@@ -83,6 +83,8 @@ fi
 # cray-opa
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-hmn.issuers.shasta-hmn' 'https://api.hmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
 yq w -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway-hmn.issuers.keycloak-hmn' 'https://auth.hmnlb.{{ network.dns.external }}/keycloak/realms/shasta'
+yq d -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.shasta-cmn'
+yq d -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers.keycloak-cmn'
 
 # cray-istio
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.hmnlb.{{ network.dns.external }},auth.hmnlb.{{ network.dns.external }},hmcollector.hmnlb.{{ network.dns.external }}'
@@ -137,7 +139,7 @@ fi
 if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator' $c)" != null ]; then
         if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack' $c)" != null ]; then
                 yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator = (.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack * .spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator)' -i $c
-        fi        
+        fi
         yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement[3] = \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].prometheus.prometheusSpec.externalAuthority }}\"" -i $c
         yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement[4] = \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].alertmanager.alertmanagerSpec.externalAuthority }}\"" -i $c
         yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement[5] = \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].grafana.externalAuthority }}\"" -i $c
