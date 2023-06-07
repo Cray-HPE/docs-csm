@@ -54,5 +54,5 @@ spec:
                     done
                     export TERM=linux
                     # setting PYTHONUNBUFFERED forces python to print output
-                    export PYTHONUNBUFFERED=0
+                    export PYTHONUNBUFFERED=1
                     /usr/share/doc/csm/upgrade/scripts/ceph/ceph-upgrade-tool.py --version '17.2.6'
