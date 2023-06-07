@@ -110,7 +110,7 @@ spec:
               - before-all
               {{ end }}
               {{ if ne $index 0 }}
-              - ensure-running-services-{{ index $.TargetNcns (add $index -1) }}
+              - run-storage-goss-tests-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
             arguments:
               parameters:
@@ -127,7 +127,7 @@ spec:
               - before-all
               {{ end }}
               {{ if ne $index 0 }}
-              - ensure-running-services-{{ index $.TargetNcns (add $index -1) }}
+              - run-storage-goss-tests-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
             arguments:
               parameters:
@@ -144,7 +144,7 @@ spec:
               - before-all
               {{ end }}
               {{ if ne $index 0 }}
-              - ensure-running-services-{{ index $.TargetNcns (add $index -1) }}
+              - run-storage-goss-tests-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
             arguments:
               parameters:
@@ -161,7 +161,7 @@ spec:
               - before-all
               {{ end }}
               {{ if ne $index 0 }}
-              - ensure-running-services-{{ index $.TargetNcns (add $index -1) }}
+              - run-storage-goss-tests-{{ index $.TargetNcns (add $index -1) }}
               {{ end }}
             arguments:
               parameters:
@@ -257,22 +257,9 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: targetNcn
                   value: {{$value}}
-          {{- end }}
-          - name: after-reboot
-            templateRef:
-              name: post-reboot
-              template: main
-            dependencies:
-              # wait for health check of last storage node complete
-              - wait-for-{{ with $length := len $.TargetNcns }}{{ index $.TargetNcns (add $length -1) }}{{end}}-health
-            arguments:
-              parameters:
-                - name: dryRun
-                  value: "{{$.DryRun}}"
-          {{- range $index,$value := .TargetNcns}}
           - name: run-storage-goss-tests-{{$value}}
             dependencies:
-              - after-reboot
+              - ensure-running-services-{{$value}}
             templateRef:
               name: storage-goss-tests
               template: main
@@ -282,4 +269,25 @@ spec:
                   value: "{{$.DryRun}}"  
                 - name: targetNcn
                   value: "{{$value}}"
-          {{ end }}
+          {{- end }}
+          - name: after-reboot
+            templateRef:
+              name: post-reboot
+              template: main
+            dependencies:
+              # wait for goss tests of last storage node complete
+              - run-storage-goss-tests-{{ with $length := len $.TargetNcns }}{{ index $.TargetNcns (add $length -1) }}{{end}}
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+          - name: upgrade-ceph
+            dependencies:
+              - after-reboot
+            templateRef:
+              name: ceph-upgrade
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
