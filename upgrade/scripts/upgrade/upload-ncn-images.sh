@@ -26,10 +26,19 @@
 set -u
 
 CSM_ARTI_DIR=${CSM_DISTDIR:-''}
+CSM_RELEASE=${CSM_RELEASE:-''}
 
 if [[ -z ${CSM_ARTI_DIR} ]]; then
     echo "CSM_DISTDIR environment variable needs to be set and exported. It should be set to the path \
 of the extracted CSM product release."
+    exit 1
+fi
+
+# CSM_ARTI_DIR and CSM_RELEASE are required for ncn-ims-image-upload.sh script used below
+export CSM_ARTI_DIR
+if [[ -z ${CSM_RELEASE} ]]; then
+    echo "CSM_RELEASE environment variable needs to be set and exported. It should be set to the \
+version of CSM being patched. For example 'export CSM_RELEASE=\"1.4.1\"'"
     exit 1
 fi
 
