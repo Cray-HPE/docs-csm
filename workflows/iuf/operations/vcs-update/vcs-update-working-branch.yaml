@@ -233,7 +233,7 @@ spec:
             value: "{{inputs.parameters.cf_update_gitea_org}}/{{inputs.parameters.cf_update_product_name}}/{{inputs.parameters.cf_update_product_version}}"
           - name: customer_branch
       container:
-        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-update:1.0.4
+        image: artifactory.algol60.net/csm-docker/stable/cf-gitea-update:1.0.6
         command:
           - "/bin/sh"
         args: ["-c", "/opt/csm/cf-gitea-update/entrypoint.sh"]
