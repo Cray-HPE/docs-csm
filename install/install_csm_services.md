@@ -93,16 +93,16 @@ This procedure will install CSM applications and services into the CSM Kubernete
    server: istio-envoy
    ```
 
-1. (`pit#`) Restart the `spire-update-bss` job.
+1. (`pit#`) Restart the `cray-spire-update-bss` job.
 
    ```bash
-   SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=spire-update-bss -o name)
+   SPIRE_JOB=$(kubectl -n spire get jobs -l app.kubernetes.io/name=cray-spire-update-bss -o name)
    kubectl -n spire get "${SPIRE_JOB}" -o json | jq 'del(.spec.selector)' \
        | jq 'del(.spec.template.metadata.labels."controller-uid")' \
        | kubectl replace --force -f -
    ```
 
-1. (`pit#`) Wait for the `spire-update-bss` job to complete.
+1. (`pit#`) Wait for the `cray-spire-update-bss` job to complete.
 
    ```bash
    kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
