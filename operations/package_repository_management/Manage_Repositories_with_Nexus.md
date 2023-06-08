@@ -2,19 +2,55 @@
 
 This section describes how to connect to Nexus with the Web UI, as well as how to access the REST API from non-compute nodes \(NCNs\) or compute nodes to manage repositories.
 
-### Access Nexus with the Web UI
+- [System domain name](#system-domain-name)
+- [Access Nexus with the web UI](#access-nexus-with-the-web-ui)
+- [Access Nexus with the REST API](#access-nexus-with-the-rest-api)
+  - [Pagination](#pagination)
+  - [Check the status of Nexus](#check-the-status-of-nexus)
+  - [List repositories](#list-repositories)
+  - [List assets](#list-assets)
+  - [Create a repository](#create-a-repository)
+  - [Update a repository](#update-a-repository)
+  - [Delete a repository](#delete-a-repository)
+  - [Create a blob store](#create-a-blob-store)
+  - [Delete a blob store](#delete-a-blob-store)
 
-Use the hostname set in `istio.ingress.hosts.ui.authority` \(see below\) to connect to Nexus over the Customer Access Network \(CAN\) using a web browser. For example:
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value found in some of the URLs on this page is expected to be the system's fully qualified domain name (FQDN).
+
+The FQDN can be found by running the following command on any Kubernetes NCN.
 
 ```bash
-ncn# kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d; echo
+ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | yq r - spec.network.dns.external
 ```
 
-Users will be redirected to Keycloak to log in, and based on the default OPA policy, only admin users will be authorized. Scripts may connect by first obtaining a JWT token from Keycloak and passing it in the HTTP `Authorization` header.
+Example output:
 
-### Access Nexus with the REST API
+```text
+system..hpc.amslabs.hpecorp.net
+```
 
-The [REST API](https://help.sonatype.com/repomanager3/rest-and-integration-api) is available from NCNs or compute nodes at `https://packages.local/service/rest`, as well as over the CAN at `https://nexus.{{network.dns.external}}/service/rest` (requires JWT token in the HTTP `Authorization` header).
+Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
+
+## Access Nexus with the web UI
+
+Nexus is accessible using a web browser at the following URL: `https://nexus.SYSTEM_DOMAIN_NAME`
+
+Users will be redirected to Keycloak to log in, and based on the default OPA policy, only admin users will be authorized.
+
+During the deployment or update of Nexus, a local admin account is created. To access the local admin account for Nexus on any Kubernetes NCN,
+run the following commands:
+
+```bash
+ncn-mw# kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d; echo
+ncn-mw# kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d; echo
+```
+
+## Access Nexus with the REST API
+
+The [Nexus REST API](https://help.sonatype.com/repomanager3/rest-and-integration-api) is available from NCNs or compute nodes at `https://packages.local/service/rest`,
+as well as over the Customer Access Network (CAN) at `https://nexus.SYSTEM_DOMAIN_NAME/service/rest` (requires JWT token in the HTTP `Authorization` header).
 
 Download the Open API document at `/service/rest/swagger.json` for details about the API, including specific options
 to available endpoints. By default, the REST API endpoints return (or accept) JSON.
@@ -25,24 +61,26 @@ warrant development of more full-featured tools.
 
 The following actions are described in this section:
 
--   Check the Status of Nexus
--   List Repositories
--   List Assets
--   Create a Repository
--   Update a Repository
--   Delete a Repository
--   Create a Blob Store
--   Delete a Blob Store
+- [Pagination](#pagination)
+- [Check the status of Nexus](#check-the-status-of-nexus)
+- [List repositories](#list-repositories)
+- [List assets](#list-assets)
+- [Create a repository](#create-a-repository)
+- [Update a repository](#update-a-repository)
+- [Delete a repository](#delete-a-repository)
+- [Create a blob store](#create-a-blob-store)
+- [Delete a blob store](#delete-a-blob-store)
 
 ### Pagination
 
-Various API endpoints use the external [pagination](https://help.sonatype.com/repomanager3/rest-and-integration-api/pagination) too to return results. When a `continuationToken` is included in the results and is non-null, it indicates additional items are available.
+Various API endpoints use the external [pagination](https://help.sonatype.com/repomanager3/rest-and-integration-api/pagination) tool to return results. When a
+`continuationToken` is included in the results and is non-null, it indicates additional items are available.
 
 The following is some example output:
 
 ```json
 {
-  "items": [...],
+  "items": [ "..." ],
   "continuationToken": "0a1b9d05d7162aa85d7747eaa75f171c"
 }
 ```
@@ -62,12 +100,17 @@ function paginate() {
 }
 ```
 
-### Check the Status of Nexus
+### Check the status of Nexus
 
 Send an HTTP `GET` request to `/service/rest/v1/status` to check the operating status of Nexus. An HTTP `200 OK` response indicates it is healthy:
 
 ```bash
-# curl -sSi https://packages.local/service/rest/v1/status
+ncn-mw# curl -sSi https://packages.local/service/rest/v1/status
+```
+
+Example output:
+
+```text
 HTTP/2 200
 date: Sat, 06 Mar 202117:27:56 GMT
 server: istio-envoy
@@ -79,7 +122,12 @@ x-envoy-upstream-service-time: 6
 Before attempting to write to Nexus, it is recommended to check that Nexus is writable by sending an HTTP `GET` request to `/service/rest/v1/status/writable`:
 
 ```bash
-# curl -sSi https://packages.local/service/rest/v1/status/writable
+ncn-mw# curl -sSi https://packages.local/service/rest/v1/status/writable
+```
+
+Example output:
+
+```text
 HTTP/2 200
 date: Sat, 06 Mar 202117:28:34 GMT
 server: istio-envoy
@@ -88,19 +136,25 @@ content-length: 0
 x-envoy-upstream-service-time: 6
 ```
 
-### List Repositories
+### List repositories
 
 Use the `/service/rest/v1/repositories` endpoint to get a basic listing of available repositories:
 
 ```bash
-# curl -sSk https://packages.local/service/rest/v1/repositories | jq -r '.[] | .name'
+ncn-mw# curl -sSk https://packages.local/service/rest/v1/repositories | jq -r '.[] | .name'
 ```
 
-The `/service/rest/beta/repositories` endpoint provides a more detailed listing of available repositories. For example, the object returned for the `csm-sle-15sp2` repository is:
+The `/service/rest/beta/repositories` endpoint provides a more detailed listing of available repositories.
+
+For example, the following command queries for information about the `csm-sle-15sp2` repository:
 
 ```bash
-# curl -sSk https://packages.local/service/rest/beta/repositories \
-| jq -r '.[] | select(.name == "csm-sle-15sp2")'
+ncn-mw# curl -sSk https://packages.local/service/rest/beta/repositories | jq -r '.[] | select(.name == "csm-sle-15sp2")'
+```
+
+Example output:
+
+```json
 {
   "name": "csm-sle-15sp2",
   "format": "raw",
@@ -121,20 +175,23 @@ The `/service/rest/beta/repositories` endpoint provides a more detailed listing 
 
 Neither the `v1` or `beta/repositories` endpoints are paginated.
 
-### List Assets
+### List assets
 
-Use the `/service/rest/v1/components` endpoint to list the assets in a specific repository \(REPO\_NAME\). The `/service/rest/v1/components` endpoint is paginated.
+Use the `/service/rest/v1/components` endpoint to list the assets in a specific repository \(`REPO_NAME`\). The `/service/rest/v1/components` endpoint is paginated.
 
 ```bash
-# paginate 'https://packages.local/service/rest/v1/components?repository=REPO_NAME' \
-| jq -r '.items[] | .name'
+ncn-mw# paginate 'https://packages.local/service/rest/v1/components?repository=REPO_NAME' | jq -r '.items[] | .name'
 ```
 
 For example, to list the names of all components in the `csm-sle-15sp2` repository:
 
 ```bash
-# paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp2" \
-| jq -r  '.items[] | .name' | sort -u
+ncn-mw# paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp2" | jq -r  '.items[] | .name' | sort -u
+```
+
+Example output:
+
+```text
 noarch/basecamp-1.0.1-20210126131805_a665272.noarch.rpm
 noarch/csm-testing-1.3.2-20210205160852_e012960.noarch.rpm
 noarch/docs-csm-1.7.4-20210206165423_2fae6fa.noarch.rpm
@@ -156,9 +213,7 @@ repodata/8dbbe7d1fceb13ccbae981aa9abe8575004df7bb3c0a74669502b5ea53a5455c-other.
 repodata/a4e95cc8a79f42b150d6c505c3f8e6bf242ee69de7849a2973dd19e0c1d8f07a-filelists.xml.gz
 repodata/d3a16a9bceebf92fd640d689a8c015984d2963e4c11d7a841ec9b24cc135e99a-primary.sqlite.bz2
 repodata/e9e8163a7c956f38eb37d6af3f1ac1bdae8079035843c9cd22ced9e824498da0-other.sqlite.bz2
-
 ...
-
 ```
 
 Each component item has the following structure:
@@ -192,8 +247,12 @@ Each component item has the following structure:
 For example, to list the download URLs for each asset in the `csm-sle-15sp2` repository:
 
 ```bash
-# paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp2" \
-| jq -r  '.items[] | .assets[] | .downloadUrl' | sort -u
+ncn-mw# paginate "https://packages.local/service/rest/v1/components?repository=csm-sle-15sp2" | jq -r  '.items[] | .assets[] | .downloadUrl' | sort -u
+```
+
+Example output:
+
+```text
 https://packages.local/repository/csm-sle-15sp2/noarch/basecamp-1.0.1-20210126131805_a665272.noarch.rpm
 https://packages.local/repository/csm-sle-15sp2/noarch/csm-testing-1.3.2-20210205160852_e012960.noarch.rpm
 https://packages.local/repository/csm-sle-15sp2/noarch/docs-csm-1.7.4-20210206165423_2fae6fa.noarch.rpm
@@ -219,11 +278,10 @@ https://packages.local/repository/csm-sle-15sp2/repodata/repomd.xml
 https://packages.local/repository/csm-sle-15sp2/x86_64/cfs-state-reporter-1.4.4-20201204120230_c198848.x86_64.rpm
 https://packages.local/repository/csm-sle-15sp2/x86_64/cfs-state-reporter-1.4.6-20210128142236_6bb340b.x86_64.rpm
 https://packages.local/repository/csm-sle-15sp2/x86_64/cfs-trust-1.0.2-20201216135115_58f3d86.x86_64.rpm
-
 ...
 ```
 
-### Create a Repository
+### Create a repository
 
 Repositories are created by an HTTP `POST` request to the `/service/rest/beta/repositories/<format>/<type>` endpoint with an appropriate body that defines the repository settings.
 
@@ -280,22 +338,28 @@ To create a `proxy` repository to an upstream repository given by URL, HTTP `POS
   },
   "type": "proxy"
 }
-
 ```
 
-The `proxy`, `httpClient`, and `negativeCache` options impact the proxy behavior. It may be helpful to create a repository via the Web UI, then retrieve its configuration through the `/service/rest/beta/repositories` endpoint in order to discover how to set appropriate settings.
+The `proxy`, `httpClient`, and `negativeCache` options impact the proxy behavior. It may be helpful to create a repository via the Web UI, then retrieve its configuration
+through the `/service/rest/beta/repositories` endpoint in order to discover how to set appropriate settings.
 
-Installers typically define Nexus repositories in `nexus-repositories.yaml` and rely on the `nexus-repositories-create` helper script included in the `cray/cray-nexus-setup` container image to facilitate creation.
+Installers typically define Nexus repositories in `nexus-repositories.yaml` and rely on the `nexus-repositories-create` helper script included in the `cray/cray-nexus-setup`
+container image to facilitate creation.
 
-### Update a Repository
+### Update a repository
 
 Update the configuration for a repository by sending an HTTP `PUT` request to the `/service/rest/beta/repositories/FORMAT/TYPE/NAME` endpoint.
 
-For example, if the `yum` `hosted` repository `test` is currently online and it needs to be updated to be offline instead, then send an HTTP `PUT` request to the `/service/rest/beta/repositories/yum/hosted/test` endpoint after getting the current configuration and changing the `online` attribute to `true`:
+For example, if the `yum` `hosted` repository `test` is currently online and it needs to be updated to be offline instead, then send an HTTP `PUT` request to the
+`/service/rest/beta/repositories/yum/hosted/test` endpoint after getting the current configuration and changing the `online` attribute to `true`:
 
 ```bash
-# curl -sS https://packages.local/service/rest/beta/repositories \
-| jq '.[] | select(.name == "test")'
+ncn-mw# curl -sS https://packages.local/service/rest/beta/repositories | jq '.[] | select(.name == "test")'
+```
+
+Example output:
+
+```json
 {
   "name": "test",
   "url": "https://packages.local/repository/test",
@@ -313,18 +377,31 @@ For example, if the `yum` `hosted` repository `test` is currently online and it 
   "format": "yum",
   "type": "hosted"
 }
+```
 
-# curl -sS https://packages.local/service/rest/beta/repositories \
-| jq '.[] | select(.name == "test") | .online = false' | curl -sSi -X PUT \
-'https://packages.local/service/rest/beta/repositories/yum/hosted/test' -H "Content-Type: application/json" -d @-
+```bash
+ncn-mw# curl -sS https://packages.local/service/rest/beta/repositories | \
+        jq '.[] | select(.name == "test") | .online = false' | \
+        curl -sSi -X PUT 'https://packages.local/service/rest/beta/repositories/yum/hosted/test' -H "Content-Type: application/json" -d @-
+```
+
+Example output:
+
+```text
 HTTP/2 204
 date: Sat, 06 Mar 202117:55:57 GMT
 server: istio-envoy
 x-content-type-options: nosniff
 x-envoy-upstream-service-time: 9
+```
 
-# curl -sS https://packages.local/service/rest/beta/repositories \
-| jq '.[] | select(.name == "test")'
+```bash
+ncn-mw# curl -sS https://packages.local/service/rest/beta/repositories | jq '.[] | select(.name == "test")'
+```
+
+Example output:
+
+```json
 {
   "name": "test",
   "url": "https://packages.local/repository/test",
@@ -344,17 +421,17 @@ x-envoy-upstream-service-time: 9
 }
 ```
 
-### Delete a Repository
+### Delete a repository
 
 To delete a repository, send an HTTP `DELETE` request to the `/service/rest/beta/repositories/NAME`.
 
 For example:
 
 ```bash
-# curl -sfkSL -X DELETE "https://packages.local/service/rest/beta/repositories/NAME"
+ncn-mw# curl -sfkSL -X DELETE "https://packages.local/service/rest/beta/repositories/NAME"
 ```
 
-### Create a Blob Store
+### Create a blob store
 
 A `File` type blob store may be created by sending an HTTP `POST` request to the `/service/rest/beta/blobstores/file` with the following body (replace NAME as appropriate):
 
@@ -368,12 +445,12 @@ A `File` type blob store may be created by sending an HTTP `POST` request to the
 
 Installers typically define Nexus blob stores in `nexus-blobstores.yaml` and rely on the `nexus-blobstores-create` helper script included in the `cray/cray-nexus-setup` container image to facilitate creation.
 
-### Delete a Blob Store
+### Delete a blob store
 
 To delete a blob store, send an HTTP `DELETE` request to the `/service/rest/v1/blobstores/NAME` endpoint.
 
 For example:
 
 ```bash
-# curl -sfkSL -X DELETE "https://packages.local/service/rest/v1/blobstores/NAME"
+ncn-mw# curl -sfkSL -X DELETE "https://packages.local/service/rest/v1/blobstores/NAME"
 ```
