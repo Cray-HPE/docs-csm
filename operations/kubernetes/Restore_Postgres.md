@@ -4,12 +4,20 @@ Below are the service-specific steps required to restore data to a Postgres clus
 
 Restore Postgres procedures by service:
 
-* [Restore Postgres for Spire](#restore-postgres-for-spire)
+* Restore Postgres for Spire
+  * [Restore from backup](#restore-postgres-for-spire)
+  * [Restore without backup](../spire/Restore_Spire_Postgres_without_a_Backup.md)
 * [Restore Postgres for Keycloak](#restore-postgres-for-keycloak)
 * [Restore Postgres for VCS](#restore-postgres-for-vcs)
 * [Restore Postgres for Capsules](#restore-postgres-for-capsules)
   * [Capsules Warehouse Server](#capsules-warehouse-server)
   * [Capsules Dispatch Server](#capsules-dispatch-server)
+* Restore Postgres for HSM
+  * [Restore from backup](../hardware_state_manager/Restore_HSM_Postgres_from_Backup.md)
+  * [Restore without backup](../hardware_state_manager/Restore_HSM_Postgres_without_a_Backup.md)
+* Restore Postgres for SLS
+  * [Restore from backup](../system_layout_service/Restore_SLS_Postgres_Database_from_Backup.md)
+  * [Restore without backup](../system_layout_service/Restore_SLS_Postgres_without_an_Existing_Backup.md)
 
 <a name="spire"> </a>
 
@@ -197,23 +205,71 @@ In the event that the Spire Postgres cluster must be rebuilt and the data restor
             secret standby.spire-postgres.credentials username & password: standby 123456
             ```
 
-        1. `kubectl exec` into the Postgres pod and update the password for each user.
-
-            For example:
+        1. `kubectl exec` into the Postgres pod.
 
             ```bash
             ncn-mw# kubectl exec "${POSTGRESQL}-0" -n "${NAMESPACE}" -c postgres -it -- bash
-            root@spire-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
-            postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
-            ALTER ROLE
-            postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
-            ALTER ROLE
-            postgres=#ALTER USER spire WITH PASSWORD 'XYZ123';
-            ALTER ROLE
-            postgres=#ALTER USER standby WITH PASSWORD '123456';
-            ALTER ROLE
-            postgres=#
             ```
+
+        1. Open a Postgres console.
+
+            ```bash
+            pod# /usr/bin/psql postgres postgres
+            ```
+
+        1. Update the password for each user to match the values found in the secrets.
+
+            1. Update the password for the `postgres` user.
+
+                ```console
+                postgres# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+            1. Update the password for the `service_account` user.
+
+                ```console
+                postgres# ALTER USER service_account WITH PASSWORD 'ABC123';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+            1. Update the password for the `spire` user.
+
+                ```console
+                postgres# ALTER USER spire WITH PASSWORD 'XYZ123';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+            1. Update the password for the `standby` user.
+
+                ```console
+                postgres# ALTER USER standby WITH PASSWORD '123456';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+        1. Exit the Postgres console with the `\q` command.
+
+        1. Exit the Postgres pod with the `exit` command.
 
    * Re-create secrets in Kubernetes.
 
@@ -497,21 +553,59 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
             secret standby.keycloak-postgres.credentials username & password: standby 123456
             ```
 
-        1. `kubectl exec` into the Postgres pod and update the password for each user.
-
-            For example:
+        1. `kubectl exec` into the Postgres pod.
 
             ```bash
             ncn-mw# kubectl exec "${POSTGRESQL}-0" -n "${NAMESPACE}" -c postgres -it -- bash
-            root@keycloak-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
-            postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
-            ALTER ROLE
-            postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
-            ALTER ROLE
-            postgres=#ALTER USER standby WITH PASSWORD '123456';
-            ALTER ROLE
-            postgres=#
             ```
+
+        1. Open a Postgres console.
+
+            ```bash
+            pod# /usr/bin/psql postgres postgres
+            ```
+
+        1. Update the password for each user to match the values found in the secrets.
+
+            1. Update the password for the `postgres` user.
+
+                ```console
+                postgres# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+            1. Update the password for the `service_account` user.
+
+                ```console
+                postgres# ALTER USER service_account WITH PASSWORD 'ABC123';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+            1. Update the password for the `standby` user.
+
+                ```console
+                postgres# ALTER USER standby WITH PASSWORD '123456';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+        1. Exit the Postgres console with the `\q` command.
+
+        1. Exit the Postgres pod with the `exit` command.
 
    * Re-create secrets in Kubernetes.
 
@@ -856,21 +950,59 @@ In the event that the VCS Postgres cluster must be rebuilt and the data restored
             secret standby.gitea-vcs-postgres.credentials username & password: standby 123456
             ```
 
-        1. `kubectl exec` into the Postgres pod and update the password for each user.
-
-            For example:
+        1. `kubectl exec` into the Postgres pod.
 
             ```bash
             ncn-mw# kubectl exec "${POSTGRESQL}-0" -n "${NAMESPACE}" -c postgres -it -- bash
-            root@gitea-vcs-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
-            postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
-            ALTER ROLE
-            postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
-            ALTER ROLE
-            postgres=#ALTER USER standby WITH PASSWORD '123456';
-            ALTER ROLE
-            postgres=#
             ```
+
+        1. Open a Postgres console.
+
+            ```bash
+            pod# /usr/bin/psql postgres postgres
+            ```
+
+        1. Update the password for each user to match the values found in the secrets.
+
+            1. Update the password for the `postgres` user.
+
+                ```console
+                postgres# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+            1. Update the password for the `service_account` user.
+
+                ```console
+                postgres# ALTER USER service_account WITH PASSWORD 'ABC123';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+            1. Update the password for the `standby` user.
+
+                ```console
+                postgres# ALTER USER standby WITH PASSWORD '123456';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+        1. Exit the Postgres console with the `\q` command.
+
+        1. Exit the Postgres pod with the `exit` command.
 
    * Re-create secrets in Kubernetes.
 
@@ -1104,21 +1236,59 @@ In the event that the Capsules Warehouse Postgres cluster is in a state that the
             secret standby.capsules-warehouse-server-postgres.credentials username & password: standby 123456
             ```
 
-        1. `kubectl exec` into the Postgres pod and update the password for each user.
-
-            For example:
+        1. `kubectl exec` into the Postgres pod.
 
             ```bash
             ncn-mw# kubectl exec "${POSTGRESQL}-0" -n "${NAMESPACE}" -c postgres -it -- bash
-            root@capsules-warehouse-server-postgres-0:/home/postgres# /usr/bin/psql postgres postgres
-            postgres=# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
-            ALTER ROLE
-            postgres=# ALTER USER service_account WITH PASSWORD 'ABC123';
-            ALTER ROLE
-            postgres=#ALTER USER standby WITH PASSWORD '123456';
-            ALTER ROLE
-            postgres=#
             ```
+
+        1. Open a Postgres console.
+
+            ```bash
+            pod# /usr/bin/psql postgres postgres
+            ```
+
+        1. Update the password for each user to match the values found in the secrets.
+
+            1. Update the password for the `postgres` user.
+
+                ```console
+                postgres# ALTER USER postgres WITH PASSWORD 'ABCXYZ';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+            1. Update the password for the `service_account` user.
+
+                ```console
+                postgres# ALTER USER service_account WITH PASSWORD 'ABC123';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+            1. Update the password for the `standby` user.
+
+                ```console
+                postgres# ALTER USER standby WITH PASSWORD '123456';
+                ```
+
+                Example of successful output:
+
+                ```text
+                ALTER ROLE
+                ```
+
+        1. Exit the Postgres console with the `\q` command.
+
+        1. Exit the Postgres pod with the `exit` command.
 
    * Re-create secrets in Kubernetes.
 
