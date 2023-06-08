@@ -2,9 +2,31 @@
 
 Add LDAP user federation using the Keycloak localization tool.
 
+- [Prerequisites](#prerequisites)
+- [System domain name](#system-domain-name)
+- [Procedure](#procedure)
+
 ## Prerequisites
 
 LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed.
+
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value found in some of the URLs on this page is expected to be the system's fully qualified domain name (FQDN).
+
+(`ncn-mw#`) The FQDN can be found by running the following command on any Kubernetes NCN.
+
+```bash
+kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | yq r - spec.network.dns.external
+```
+
+Example output:
+
+```text
+system..hpc.amslabs.hpecorp.net
+```
+
+Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
 
 ## Procedure
 
@@ -550,6 +572,11 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       ```bash
       kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
+      ```
+
+      Example output:
+
+      ```text
         certs.jks: <REDACTED>
       ```
 
@@ -571,6 +598,11 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       ```bash
       helm ls -A -a | grep cray-keycloak-users-localize | awk '{print $(NF-1)}'
+      ```
+
+      Example output:
+
+      ```text
       cray-keycloak-users-localize-<VERSION>
       ```
 
@@ -709,7 +741,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
    1. Log in to the Keycloak UI using the `admin` user and the password obtained in the previous step.
 
-      The Keycloak UI URL is typically similar to the following: `https://auth.cmn.<system_name>/keycloak`
+      The Keycloak UI URL is typically similar to the following: `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak`
 
    1. Click on the `Users` tab in the navigation pane on the left.
 
