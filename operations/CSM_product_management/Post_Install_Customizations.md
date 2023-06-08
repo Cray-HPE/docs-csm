@@ -7,6 +7,39 @@ Not all resources can be customized post-install; common scenarios are documente
 The following is a guide for determining where issues may exist, how to adjust the resources, and how to ensure the changes will persist.
 Different values may be be needed for systems as they scale.
 
+* [System domain name](#system-domain-name)
+* [`kubectl` events `OOMKilled`](#kubectl-events-oomkilled)
+* [Prometheus `CPUThrottlingHigh` alerts](#prometheus-cputhrottlinghigh-alerts)
+* [Grafana "Kubernetes / Compute Resources / Pod" dashboard](#grafana-kubernetes--compute-resources--pod-dashboard)
+  * [CPU throttling](#cpu-throttling)
+  * [Memory usage](#memory-usage)
+* [Common customization scenarios](#common-customization-scenarios)
+  * [Prerequisites](#prerequisites)
+  * [Prometheus pod is `OOMKilled` or CPU throttled](#prometheus-pod-is-oomkilled-or-cpu-throttled)
+  * [Postgres pods are `OOMKilled` or CPU throttled](#postgres-pods-are-oomkilled-or-cpu-throttled)
+  * [Scale `cray-bss` service](#scale-cray-bss-service)
+  * [Postgres PVC resize](#postgres-pvc-resize)
+  * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
+  * [References](#references)
+
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value found in some of the URLs on this page is expected to be the system's fully qualified domain name (FQDN).
+
+The FQDN can be found by running the following command on any Kubernetes NCN.
+
+```bash
+ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | yq r - spec.network.dns.external
+```
+
+Example output:
+
+```text
+system..hpc.amslabs.hpecorp.net
+```
+
+Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
+
 ## `kubectl` events `OOMKilled`
 
 Check to see if there are any recent out of memory events.
@@ -14,14 +47,10 @@ Check to see if there are any recent out of memory events.
 1. Check `kubectl` events to see if there are any recent out of memory events.
 
     ```bash
-    ncn# kubectl get event -A | grep OOM
+    ncn-mw# kubectl get event -A | grep OOM
     ```
 
-1. Log in to Grafana.
-
-   ```text
-   https://grafana.cmn.SYSTEM_DOMAIN_NAME/
-   ```
+1. Log in to Grafana at the following URL: `https://grafana.cmn.SYSTEM_DOMAIN_NAME/`
 
 1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the memory utilization graphs over time for any pod that has been `OOMKilled`.
 
@@ -29,33 +58,21 @@ Check to see if there are any recent out of memory events.
 
 Check Prometheus for recent `CPUThrottlingHigh` alerts.
 
-1. Log in to Prometheus.
-
-   ```text
-   https://prometheus.cmn.SYSTEM_DOMAIN_NAME/
-   ```
+1. Log in to Prometheus at the following URL: `https://prometheus.cmn.SYSTEM_DOMAIN_NAME/`
 
    1. Select the **Alert** tab.
 
    1. Scroll down to the alert for `CPUThrottlingHigh`.
 
-1. Log in to Grafana.
+1. Log in to Grafana at the following URL: `https://grafana.cmn.SYSTEM_DOMAIN_NAME/`
 
-   ```text
-   https://grafana.cmn.SYSTEM_DOMAIN_NAME/
-   ```
-
-1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the throttling graphs over time for any pod that is alerting.
+   1. Search for the "Kubernetes / Compute Resources / Pod" dashboard to view the throttling graphs over time for any pod that is alerting.
 
 ## Grafana "Kubernetes / Compute Resources / Pod" dashboard
 
 Use Grafana to investigate and analyze CPU throttling and memory usage.
 
-1. Log in to Grafana.
-
-   ```text
-   https://grafana.cmn.SYSTEM_DOMAIN_NAME/
-   ```
+1. Log in to Grafana at the following URL: `https://grafana.cmn.SYSTEM_DOMAIN_NAME/`
 
 1. Search for the "Kubernetes / Compute Resources / Pod" dashboard.
 
@@ -107,8 +124,7 @@ Use Grafana to investigate and analyze CPU throttling and memory usage.
 * [Scale `cray-bss` service](#bss_scale)
 * [Postgres PVC resize](#postgres_pvc_resize)
 * [`cray-hms-hmcollector` pods are `OOMKilled`](#cray-hms-hmcollector-pods-are-oomkilled)
-
-<a name="prerequisites"></a>
+* [References](#references)
 
 ### Prerequisites
 
@@ -122,11 +138,11 @@ These unpacked files can be safely removed after the customizations are deployed
 
 ```bash
 ## This example assumes the csm-1.0.0 release is currently running and the csm-1.0.0.tar.gz has been pulled down under /root
-ncn# cd /root
-ncn# tar -xzf csm-1.0.0.tar.gz
-ncn# rm csm-1.0.0.tar.gz
-ncn# PATH_TO_RELEASE=/root/csm-1.0.0
-ncn# ls $PATH_TO_RELEASE/helm
+ncn-mw# cd /root
+ncn-mw# tar -xzf csm-1.0.0.tar.gz
+ncn-mw# rm csm-1.0.0.tar.gz
+ncn-mw# PATH_TO_RELEASE=/root/csm-1.0.0
+ncn-mw# ls $PATH_TO_RELEASE/helm
 ```
 
 <a name="prometheus_resources"></a>
@@ -140,28 +156,28 @@ Trial and error may be needed to determine what is best for a given system at sc
 1. Get the current cached customizations.
 
    ```bash
-   ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ncn-mw# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
 1. Get the current cached platform manifest.
 
    ```bash
-   ncn# kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
+   ncn-mw# kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
    ```
 
 1. Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources`.
 
    ```bash
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu' --style=double '2'
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.memory' '15Gi'
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.cpu' --style=double '6'
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.memory' '30Gi'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.cpu' --style=double '2'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.requests.memory' '15Gi'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.cpu' --style=double '6'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources.limits.memory' '30Gi'
    ```
 
 1. Check that the customization file has been updated.
 
    ```bash
-   ncn# yq read customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources'
+   ncn-mw# yq read customizations.yaml 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator.prometheus.prometheusSpec.resources'
    ```
 
    Example output:
@@ -188,22 +204,20 @@ Trial and error may be needed to determine what is best for a given system at sc
      - name: cray-sysmgmt-health
        namespace: sysmgmt-health
        values:
-   .
-   .
-   .
+       - "..."
        version: 0.12.0
    ```
 
 1. Generate the manifest that will be used to redeploy the chart with the modified resources.
 
    ```bash
-   ncn# manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
+   ncn-mw# manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
    ```
 
 1. Check that the manifest file contains the desired resource settings.
 
    ```bash
-   ncn# yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
+   ncn-mw# yq read manifest.yaml 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
    ```
 
    Example output:
@@ -220,7 +234,7 @@ Trial and error may be needed to determine what is best for a given system at sc
 1. Redeploy the same chart version but with the desired resource settings.
 
    ```bash
-   ncn# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   ncn-mw# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. Verify that the pod restarts and that the desired resources have been applied.
@@ -228,20 +242,20 @@ Trial and error may be needed to determine what is best for a given system at sc
    1. Watch the `prometheus-cray-sysmgmt-health-promet-prometheus-0` pod restart.
 
       ```bash
-      ncn# watch "kubectl get pods -n sysmgmt-health -l prometheus=cray-sysmgmt-health-promet-prometheus"
+      ncn-mw# watch "kubectl get pods -n sysmgmt-health -l prometheus=cray-sysmgmt-health-promet-prometheus"
       ```
 
       It may take about 10 minutes for the `prometheus-cray-sysmgmt-health-promet-prometheus-0` pod to terminate.
       It can be forced deleted if it remains in the terminating state:
 
       ```bash
-      ncn# kubectl delete pod prometheus-cray-sysmgmt-health-promet-prometheus-0 --force --grace-period=0 -n sysmgmt-health
+      ncn-mw# kubectl delete pod prometheus-cray-sysmgmt-health-promet-prometheus-0 --force --grace-period=0 -n sysmgmt-health
       ```
 
    1. Verify that the resource changes are in place.
 
       ```bash
-      ncn#  kubectl get pod prometheus-cray-sysmgmt-health-promet-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
+      ncn-mw#  kubectl get pod prometheus-cray-sysmgmt-health-promet-prometheus-0 -n sysmgmt-health -o json | jq -r '.spec.containers[] | select(.name == "prometheus").resources'
       ```
 
 1. **This step is critical.** Store the modified `customizations.yaml` file in the `site-init` repository in the customer-managed location.
@@ -249,8 +263,8 @@ Trial and error may be needed to determine what is best for a given system at sc
    If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
-   ncn# kubectl delete secret -n loftsman site-init
-   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ncn-mw# kubectl delete secret -n loftsman site-init
+   ncn-mw# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
 <a name="postgres_resources"></a>
@@ -267,28 +281,28 @@ Refer to the note at the end of this section for more details.
 1. Get the current cached customizations.
 
    ```bash
-   ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ncn-mw# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
 1. Get the current cached `sysmgmt` manifest.
 
    ```bash
-   ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
+   ncn-mw# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}'  > sysmgmt.yaml
    ```
 
 1. Edit the customizations as desired by adding or updating `spec.kubernetes.services.spire.cray-service.sqlCluster.resources`.
 
    ```bash
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.cpu' --style=double '4'
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.memory' '4Gi'
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.cpu' --style=double '8'
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.memory' '8Gi'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.cpu' --style=double '4'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.requests.memory' '4Gi'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.cpu' --style=double '8'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources.limits.memory' '8Gi'
    ```
 
 1. Check that the customization file has been updated.
 
    ```bash
-   ncn# yq read customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources'
+   ncn-mw# yq read customizations.yaml 'spec.kubernetes.services.spire.cray-service.sqlCluster.resources'
    ```
 
    Example output:
@@ -315,22 +329,20 @@ Refer to the note at the end of this section for more details.
      - name: spire
        namespace: spire
        values:
-   .
-   .
-   .
+       - "..."
        version: 0.9.1
    ```
 
 1. Generate the manifest that will be used to redeploy the chart with the modified resources.
 
    ```bash
-   ncn# manifestgen -c customizations.yaml -i sysmgmt.yaml -o manifest.yaml
+   ncn-mw# manifestgen -c customizations.yaml -i sysmgmt.yaml -o manifest.yaml
    ```
 
 1. Check that the manifest file contains the desired resource settings.
 
    ```bash
-   ncn# yq read manifest.yaml 'spec.charts.(name==spire).values.cray-service.sqlCluster.resources'
+   ncn-mw# yq read manifest.yaml 'spec.charts.(name==spire).values.cray-service.sqlCluster.resources'
    ```
 
    Example output:
@@ -347,7 +359,7 @@ Refer to the note at the end of this section for more details.
 1. Redeploy the same chart version but with the desired resource settings.
 
    ```bash
-   ncn# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   ncn-mw# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. Verify the pods restart and that the desired resources have been applied.
@@ -355,13 +367,13 @@ Refer to the note at the end of this section for more details.
    1. Watch the pod restart.
 
       ```bash
-      ncn# watch "kubectl get pods -n spire -l application=spilo,cluster-name=spire-postgres"
+      ncn-mw# watch "kubectl get pods -n spire -l application=spilo,cluster-name=spire-postgres"
       ```
 
    1. Verify that the desired resources have been applied.
 
       ```bash
-      ncn# kubectl get pod spire-postgres-0 -n spire -o json | jq -r '.spec.containers[] | select(.name == "postgres").resources'
+      ncn-mw# kubectl get pod spire-postgres-0 -n spire -o json | jq -r '.spec.containers[] | select(.name == "postgres").resources'
       ```
 
       Example output:
@@ -384,8 +396,8 @@ Refer to the note at the end of this section for more details.
    If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
-   ncn# kubectl delete secret -n loftsman site-init
-   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ncn-mw# kubectl delete secret -n loftsman site-init
+   ncn-mw# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
 **IMPORTANT:** If `cray-sls-postgres`, `cray-smd-postgres`, or `gitea-vcs-postgres` resources need to be adjusted,
@@ -417,25 +429,30 @@ Trial and error may be needed to determine what is best for a given system at sc
 1. Get the current cached customizations.
 
    ```bash
-   ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ncn-mw# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
 1. Get the current cached `sysmgmt` manifest.
 
    ```bash
-   ncn# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}' > sysmgmt.yaml
+   ncn-mw# kubectl get cm -n loftsman loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}' > sysmgmt.yaml
    ```
 
 1. Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-hms-bss.cray-service.replicaCount`.
 
    ```bash
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.cray-hms-bss.cray-service.replicaCount' '5'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.cray-hms-bss.cray-service.replicaCount' '5'
    ```
 
 1. Check that the customization file has been updated.
 
    ```bash
-   ncn# yq read customizations.yaml 'spec.kubernetes.services.cray-hms-bss.cray-service.replicaCount'
+   ncn-mw# yq read customizations.yaml 'spec.kubernetes.services.cray-hms-bss.cray-service.replicaCount'
+   ```
+
+   Example output:
+
+   ```text
    5
    ```
 
@@ -452,29 +469,32 @@ Trial and error may be needed to determine what is best for a given system at sc
      - name: cray-hms-bss
        namespace: services
        values:
-   .
-   .
-   .
+       - "..."
        version: 1.5.8
    ```
 
 1. Generate the manifest that will be used to redeploy the chart with the modified resources.
 
    ```bash
-   ncn# manifestgen -c customizations.yaml -i sysmgmt.yaml -o manifest.yaml
+   ncn-mw# manifestgen -c customizations.yaml -i sysmgmt.yaml -o manifest.yaml
    ```
 
 1. Check that the manifest file contains the desired resource settings.
 
    ```bash
-   ncn# yq read manifest.yaml 'spec.charts.(name==cray-hms-bss).values.cray-service.replicaCount'
+   ncn-mw# yq read manifest.yaml 'spec.charts.(name==cray-hms-bss).values.cray-service.replicaCount'
+   ```
+
+   Example output:
+
+   ```text
    5
    ```
 
 1. Redeploy the same chart version but with the desired resource settings.
 
    ```bash
-   ncn# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   ncn-mw# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. Verify the `cray-bss` pods scale.
@@ -482,7 +502,7 @@ Trial and error may be needed to determine what is best for a given system at sc
    1. Watch the `cray-bss` pods scale to 5, with each pod reaching a `2/2` ready state.
 
       ```bash
-      ncn# watch "kubectl get pods -l app.kubernetes.io/instance=cray-hms-bss -n services"
+      ncn-mw# watch "kubectl get pods -l app.kubernetes.io/instance=cray-hms-bss -n services"
       ```
 
       Example output:
@@ -499,7 +519,7 @@ Trial and error may be needed to determine what is best for a given system at sc
    1. Verify that the replicas change is present in the Kubernetes `cray-bss` deployment.
 
       ```bash
-      ncn# kubectl get deployment cray-bss -n services -o json | jq -r '.spec.replicas'
+      ncn-mw# kubectl get deployment cray-bss -n services -o json | jq -r '.spec.replicas'
       ```
 
       In this example, `5` will be the returned value.
@@ -509,8 +529,8 @@ Trial and error may be needed to determine what is best for a given system at sc
    If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
-   ncn# kubectl delete secret -n loftsman site-init
-   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ncn-mw# kubectl delete secret -n loftsman site-init
+   ncn-mw# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
 <a name="postgres_pvc_resize"></a>
@@ -527,26 +547,30 @@ Refer to the note at the end of this section for more details.
 1. Get the current cached customizations.
 
    ```bash
-   ncn# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+   ncn-mw# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
    ```
 
 1. Get the current cached `core-services` manifest.
 
    ```bash
-   ncn# kubectl get cm -n loftsman loftsman-core-services -o jsonpath='{.data.manifest\.yaml}'  > core-services.yaml
+   ncn-mw# kubectl get cm -n loftsman loftsman-core-services -o jsonpath='{.data.manifest\.yaml}'  > core-services.yaml
    ```
 
 1. Edit the customizations as desired by adding or updating `spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.volumeSize`.
 
    ```bash
-   ncn# yq write -i customizations.yaml 'spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.volumeSize' '100Gi'
+   ncn-mw# yq write -i customizations.yaml 'spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.volumeSize' '100Gi'
    ```
 
 1. Check that the customization file has been updated.
 
    ```bash
-   ncn# yq read customizations.yaml 'spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.volumeSize'
+   ncn-mw# yq read customizations.yaml 'spec.kubernetes.services.cray-hms-smd.cray-service.sqlCluster.volumeSize'
+   ```
 
+   Example output:
+
+   ```text
    100Gi
    ```
 
@@ -563,36 +587,38 @@ Refer to the note at the end of this section for more details.
      - name: cray-hms-smd
        namespace: service
        values:
-   .
-   .
-   .
+       - "..."
        version: 1.26.20
    ```
 
 1. Generate the manifest that will be used to redeploy the chart with the modified volume size.
 
    ```bash
-   ncn# manifestgen -c customizations.yaml -i core-services.yaml -o manifest.yaml
+   ncn-mw# manifestgen -c customizations.yaml -i core-services.yaml -o manifest.yaml
    ```
 
 1. Check that the manifest file contains the desired volume size setting.
 
    ```bash
-   ncn# yq read manifest.yaml 'spec.charts.(name==cray-hms-smd).values.cray-service.sqlCluster.volumeSize'
+   ncn-mw# yq read manifest.yaml 'spec.charts.(name==cray-hms-smd).values.cray-service.sqlCluster.volumeSize'
+   ```
 
+   Example output:
+
+   ```text
    100Gi
    ```
 
 1. Redeploy the same chart version but with the desired volume size setting.
 
    ```bash
-   ncn# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
+   ncn-mw# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ${PWD}/manifest.yaml
    ```
 
 1. Verify that the increased volume size has been applied.
 
    ```bash
-   ncn# watch "kubectl get postgresql cray-smd-postgres -n services"
+   ncn-mw# watch "kubectl get postgresql cray-smd-postgres -n services"
    ```
 
    Example output:
@@ -612,8 +638,8 @@ Refer to the note at the end of this section for more details.
    If this is not done, these changes will not persist in future installs or upgrades.
 
    ```bash
-   ncn# kubectl delete secret -n loftsman site-init
-   ncn# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ncn-mw# kubectl delete secret -n loftsman site-init
+   ncn-mw# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
 **IMPORTANT:** If the volume sizes of `cray-sls-postgres`, `gitea-vcs-postgres`, or `spire-postgres` need to be adjusted, the same procedure as above can be used with the following changes:
