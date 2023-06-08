@@ -18,7 +18,7 @@ specified in the following table. They must be set in the `customizations.yaml` 
 |Customization|Default|Description|
 |-------------|-------|-----------|
 |`istio.ingress.hosts.ui.enabled`|`true`|Enables ingress from the CAN \(default chart value is `false`\)|
-|`istio.ingress.hosts.ui.authority`|`nexus.{{ network.dns.external }}`|Sets the CAN hostname \(default chart value is `nexus.local`\)|
+|`istio.ingress.hosts.ui.authority`|`nexus.cmn.{{ network.dns.external }}`|Sets the CAN hostname \(default chart value is `nexus.local`\)|
 |`sonatype-nexus.persistence.storageSize`|`1000Gi`|Nexus storage size, may be increased after installation; critical if `spec.kubernetes.services.cray-nexus-setup.s3.enabled` is `false`|
 
 (`ncn-mw#`) If modifying the `customizations.yaml` file, be sure to upload the new file to Kubernetes, otherwise the changes will not persist
