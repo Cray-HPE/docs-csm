@@ -2,9 +2,18 @@
 
 Overview of RPM repositories and container registry in Nexus.
 
-### RPM Repositories in Nexus
+- [RPM repositories](#rpm-repositories)
+- [Container registry](#container-registry)
+  - [Adding images](#adding-images)
+  - [Registry mirror configuration](#registry-mirror-configuration)
+  - [Pull example using CRI](#pull-example-using-cri)
+  - [Pull example using `containerd`](#pull-example-using-containerd)
+  - [Pull example using Podman](#pull-example-using-podman)
 
-Repositories are available at https://packages.local/repository/REPO\_NAME. For example, to configure the `csm-sle-15sp2` repository on a non-compute node \(NCN\):
+## RPM repositories
+
+(`ncn#`) Repositories are available at `https://packages.local/repository/REPO_NAME`. For example, to configure the `csm-sle-15sp2` repository on a
+non-compute node \(NCN\):
 
 ```bash
 zypper addrepo -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
@@ -12,7 +21,7 @@ zypper addrepo -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
 
 Example output:
 
-```
+```text
 Adding repository 'csm-sle-15sp2' .................................................................................................[done]
 Warning: GPG checking is disabled in configuration of repository 'csm-sle-15sp2'. Integrity and origin of packages cannot be verified.
 Repository 'csm-sle-15sp2' successfully added
@@ -30,13 +39,17 @@ Building repository 'csm-sle-15sp2' cache ......................................
 Specified repositories have been refreshed.
 ```
 
-The `-G` option is used in this example to disable GPG checks. However, if the named repository is properly signed, it is not recommended to use the `-G` option.
+The `-G` option is used in this example to disable GPG checks. However, if the named repository is properly signed, it is not recommended to use the
+`-G` option.
 
-### Container Registry
+## Container registry
 
-Container registry is available at https://registry.local on the NCNs or compute nodes. By default, access to the container registry is not available over the Customer Access Network \(CAN\). If desired, a corresponding route may be added to the `nexus` VirtualService resource in the `nexus` namespace:
+(`ncn-mw#`) The container registry is available at `https://registry.local` on the NCNs or compute nodes. By default, access to the container registry
+is not available over the Customer Access Network \(CAN\). If desired, a corresponding route may be added to the `nexus` `VirtualService` resource in the
+`nexus` namespace:
 
-**WARNING:** If access to the container registry in Nexus is exposed over CAN, it is strongly recommended to setup and configure fine-grained access control. However, as mentioned above, the default setup assumes the OPA policy only permits admin users access.
+**WARNING:** If access to the container registry in Nexus is exposed over CAN, it is strongly recommended to setup and configure fine-grained access control.
+However, the default setup assumes the OPA policy only permits administrative users access.
 
 ```bash
 kubectl -n nexus get vs nexus
@@ -44,23 +57,29 @@ kubectl -n nexus get vs nexus
 
 Example output:
 
-```
+```text
 NAME    GATEWAYS                      HOSTS                                                     AGE
 nexus   [services/services-gateway]   [packages.local registry.local nexus.odin.dev.cray.com]   21d
 ```
 
-The only way to add images to the container registry is with the Docker API. Use a client \(such as Skopeo, Podman, or Docker\) to push images. By default, product installers use Podman with a vendor version of the [Skopeo](https://github.com/containers/skopeo) image to sync container images included in a release distribution to `registry.local`.
+### Adding images
 
-The Cray System Management \(CSM\) product adds a recent version of quay.io/skopeo/stable to the container registry, and it may be used to copy images into `registry.local`. For example, to update the version of quay.io/skopeo/stable:
+The only way to add images to the container registry is with the Docker API. Use a client \(such as Skopeo, Podman, or Docker\) to push images. By default,
+product installers use Podman with a vendor version of the [Skopeo](https://github.com/containers/skopeo) image to sync container images included in a release
+distribution to `registry.local`.
+
+The Cray System Management \(CSM\) product adds a recent version of `quay.io/skopeo/stable` to the container registry, and it may be used to copy images into
+`registry.local`.
+
+(`ncn-mw#`) For example, to update the version of `quay.io/skopeo/stable`:
 
 ```bash
-podman run --rm registry.local/skopeo/stable copy \
---dest-tls-verify=false docker://quay.io/skopeo/stable docker://registry.local/skopeo/stable
+podman run --rm registry.local/skopeo/stable copy --dest-tls-verify=false docker://quay.io/skopeo/stable docker://registry.local/skopeo/stable
 ```
 
 Example output:
 
-```
+```text
 Getting image source signatures
 Copying blob sha256:85a74b04b5b84b45c763e9763cc0f62269390bb30058d3e2b2545d820d3558f7
 Copying blob sha256:ab9d1e8c4764f52ed5041c38bd3d64b6ae9c27d0f436be50f658ece38440a97b
@@ -73,7 +92,10 @@ Writing manifest to image destination
 Storing signatures
 ```
 
-Kubernetes Pods are expected to rely on the registry mirror configuration in */etc/containerd/config.toml* to automatically fetch container images from it using upstream references. By default, the following upstream registries are automatically redirected to `registry.local`:
+### Registry mirror configuration
+
+Kubernetes pods are expected to rely on the registry mirror configuration in `/etc/containerd/config.toml` to automatically fetch container images from it
+using upstream references. By default, the following upstream registries are automatically redirected to `registry.local`:
 
 - `dtr.dev.cray.com`
 - `docker.io` \(and `registry-1.docker.io`\)
@@ -81,18 +103,29 @@ Kubernetes Pods are expected to rely on the registry mirror configuration in */e
 - `gcr.io`
 - `k8s.gcr.io`
 
-**WARNING:** The registry mirror configuration in /etc/containerd/config.toml only applies to the CRI. When using the ctr command or another container runtime \(For example, `podman` or `docker`\), the admin must explicitly reference `registry.local`.
+**WARNING:** The registry mirror configuration in `/etc/containerd/config.toml` only applies to the CRI. When using the `ctr` command or another
+container runtime \(For example, `podman` or `docker`\), the administrator must explicitly reference `registry.local`.
 
-The following is an example of pulling dtr.dev.cray.com/baseos/alpine:3.12.0 using CRI:
+### Pull example using CRI
+
+(`ncn-mw#`) The following is an example of pulling `dtr.dev.cray.com/baseos/alpine:3.12.0` using CRI:
 
 ```bash
 crictl pull dtr.dev.cray.com/baseos/alpine:3.12.0
+```
+
+Example output:
+
+```text
 Image is up to date for sha256:5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c
 ```
 
-Using containerd or Podman tooling requires changing `dtr.dev.cray.com` to `registry.local` to guarantee the runtime fetches the image from the container registry in Nexus.
+### Pull example using `containerd`
 
-The following is an example for containerd:
+Using `containerd` or Podman requires changing `dtr.dev.cray.com` to `registry.local` in order to guarantee that the runtime fetches the image from the
+container registry in Nexus.
+
+(`ncn-mw#`) The following is an example for `containerd`:
 
 ```bash
 ctr image pull registry.local/baseos/alpine:3.12.0
@@ -100,7 +133,7 @@ ctr image pull registry.local/baseos/alpine:3.12.0
 
 Example output:
 
-```
+```text
 registry.local/baseos/alpine:3.12.0:                                              resolved       |++++++++++++++++++++++++++++++++++++++|
 manifest-sha256:e25f4e287fad9c0ee0a47af590e999f9ff1f043fb636a9dc7a61af6d13fc40ca: done           |++++++++++++++++++++++++++++++++++++++|
 layer-sha256:3ab6766f6281be4c2349e2122bab3b4d1ba1b524236b85fce0784453e759b516:    done           |++++++++++++++++++++++++++++++++++++++|
@@ -112,7 +145,9 @@ unpacking linux/amd64 sha256:e25f4e287fad9c0ee0a47af590e999f9ff1f043fb636a9dc7a6
 done
 ```
 
-The following is an example for Podman:
+### Pull example using Podman
+
+(`ncn-mw#`) The following is an example for Podman:
 
 ```bash
 podman pull registry.local/baseos/alpine:3.12.0
@@ -120,7 +155,7 @@ podman pull registry.local/baseos/alpine:3.12.0
 
 Example output:
 
-```
+```text
 Trying to pull registry.local/baseos/alpine:3.12.0...
 Getting image source signatures
 Copying blob df20fa9351a1 [--------------------------------------] 0.0b / 0.0b
@@ -131,4 +166,3 @@ Writing manifest to image destination
 Storing signatures
 5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c
 ```
-
