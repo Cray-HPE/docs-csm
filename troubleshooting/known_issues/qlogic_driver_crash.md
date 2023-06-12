@@ -6,7 +6,7 @@ In some failover/maintenance scenarios users may experience Qlogic driver crash 
 
 Issue seems to be aggravated by incorrect configuration for storage node back-channel links and per internal testing correcting the configuration on switch greatly reduces the risk of running into this issue.
 
-The configuration is fixed in Canu versions 2.3 and above.
+The configuration is fixed in CANU versions 2.3 and above.
 
 Signature of the driver crash:
 
