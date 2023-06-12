@@ -49,7 +49,7 @@ Signature of the driver crash:
 
 ## Workaround
 
-Upgrade Canu to 2.3 or above, regenerate the configuration and apply it the VSX-pair that hosts the storage nodes.
+Upgrade CANU to version 2.3 or above, regenerate the configuration, and then apply it the VSX-pair that hosts the storage nodes.
 
 Or manually correct the configuration.
 
