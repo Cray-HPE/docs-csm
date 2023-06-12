@@ -53,7 +53,7 @@ Upgrade Canu to 2.3 or above, regenerate the configuration and apply it the VSX-
 
 Or manually correct the configuration.
 
-In this example of the problem you can see that the lags 10,12,14 which are the lags for the storage back channel communication have applied configuration of "vlan trunk native 1". Which is wrong.
+In this example of the problem you can see that the lags 10,12,14 which are the lags for the storage back channel communication have applied configuration of `vlan trunk native 1`. Which is wrong.
 
 ```text
 interface lag 10 multi-chassis
