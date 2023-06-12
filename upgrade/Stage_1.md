@@ -6,8 +6,7 @@
 - [Stage 1 - Ceph image upgrade](#stage-1---ceph-image-upgrade)
   - [Start typescript](#start-typescript)
   - [Argo workflows](#argo-workflows)
-  - [Storage node image upgrade](#storage-node-image-upgrade)
-  - [Ensure that `rbd` stats monitoring is enabled](#ensure-that-rbd-stats-monitoring-is-enabled)
+  - [Storage node image upgrade and Ceph upgrade](#storage-node-image-upgrade-and-ceph-upgrade)
   - [Stop typescript](#stop-typescript)
   - [Stage completed](#stage-completed)
 
@@ -32,9 +31,10 @@ Note that the progress for the current stage will not show up in Argo before the
 
 For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md) and [Using Argo Workflows](../operations/argo/Using_Argo_Workflows.md).
 
-## Storage node image upgrade
+## Storage node image upgrade and Ceph upgrade
 
-(`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` with the `--upgrade` flag for all storage nodes to be upgraded. Provide the storage nodes in a comma-separated list, such as `ncn-s001,ncn-s002,ncn-s003`. This upgrades the storage nodes sequentially.
+(`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` with the `--upgrade` flag for all storage nodes to be upgraded. Provide the storage nodes in a comma-separated list, such as `ncn-s001,ncn-s002,ncn-s003`.
+This upgrades the storage nodes sequentially. Once all storage nodes have been upgraded, this workflow will upgrade Ceph to `v17.2.6`.
 
 ```bash
 /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-s001,ncn-s002,ncn-s003 --upgrade
@@ -55,18 +55,6 @@ It is possible to upgrade a single storage node at a time using the following co
 >   The crash should be evaluated to determine if there is an issue that should be addressed.
 > - Refer to [storage troubleshooting documentation](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) for Ceph related issues.
 > - Refer to [troubleshoot Ceph image with tag:'\<none\>'](../operations/utility_storage/Troubleshoot_ceph_image_with_none_tag.md) if running `podman images` on a storage node shows an image with tag:\<none\>.
-
-## Ensure that `rbd` stats monitoring is enabled
-
-(`ncn-m001#`) Run the following commands to enable the `rbd` stats collection on the pools.
-
-```bash
-ceph config set mgr mgr/prometheus/rbd_stats_pools "kube,smf"
-ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600
-```
-
-If this step was executed as a result of the [`management-nodes-rollout` with CSM upgrade](../operations/iuf/workflows/management_rollout.md#management-nodes-rollout-with-csm-upgrade)
-instructions, return to that procedure and continue with the next step. Otherwise, proceed to the next step below.
 
 ## Stop typescript
 
