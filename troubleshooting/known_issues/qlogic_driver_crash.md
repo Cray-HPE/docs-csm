@@ -119,4 +119,4 @@ interface lag 14 multi-chassis
 
 ## Fix
 
-Working with vendor to fix qlogic driver code, once fix is released we will add the new qlogic driver to our firmware pack.
+The vendor is working to fix the Qlogic driver code. Once a fix is released, the new Qlogic driver will be added to the firmware pack.
