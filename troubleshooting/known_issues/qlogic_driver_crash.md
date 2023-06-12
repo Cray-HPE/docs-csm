@@ -10,7 +10,7 @@ The configuration is fixed in Canu versions 2.3 and above.
 
 Signature of the driver crash:
 
-```bash
+```text
 [72201.473386] CPU: 28 PID: 1380762 Comm: sadc Kdump: loaded Tainted: G        W           5.14.21-150400.24.38.1.25440.1.PTF.1204911-default #1 SLE15-SP4 a183b387d1d6082da7a867507e6a04161f95b2be
 [72201.491487] Hardware name: HPE ProLiant DL325 Gen10 Plus/ProLiant DL325 Gen10 Plus, BIOS A43 11/17/2022
 [72201.501809] RIP: 0010:qed_get_current_link+0x11/0xe0 [qed]
