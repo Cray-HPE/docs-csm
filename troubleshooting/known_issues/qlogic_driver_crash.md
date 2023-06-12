@@ -2,7 +2,7 @@
 
 ## Description
 
-In some failover/maintenance scenarios users may experience Qlogic driver crash on the storage nodes. This issue is usually tied to network event's such as an reboot of a switch in the VSX pair but can happen with out user intervention as well albeit rarely.
+In some failover/maintenance scenarios users may experience Qlogic driver crash on the storage nodes. This issue is usually tied to network events, such as a reboot of a switch in the VSX pair, but can also occur without user intervention in rare events.
 
 Issue seems to be aggravated by incorrect configuration for storage node back-channel links and per internal testing correcting the configuration on switch greatly reduces the risk of running into this issue.
 
