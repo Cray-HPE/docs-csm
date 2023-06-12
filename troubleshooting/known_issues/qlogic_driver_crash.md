@@ -87,7 +87,7 @@ interface lag 14 multi-chassis
 
 Too correct the issue, please login to both the VSX pair switches and correct the configuration of these lags to use "vlan trunk native 10":
 
-```bash
+```text
 interface lag 10 multi-chassis
     description ncn-s001:ocp:2<==sw-spine-001
     no shutdown
