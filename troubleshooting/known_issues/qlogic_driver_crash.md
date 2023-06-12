@@ -55,7 +55,7 @@ Or manually correct the configuration.
 
 In this example of the problem you can see that the lags 10,12,14 which are the lags for the storage back channel communication have applied configuration of "vlan trunk native 1". Which is wrong.
 
-```bash
+```text
 interface lag 10 multi-chassis
     description ncn-s001:ocp:2<==sw-spine-001
     no shutdown
