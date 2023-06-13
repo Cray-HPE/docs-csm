@@ -7363,7 +7363,7 @@ This name is required when creating a Session.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |templateUrl|string|false|none|The URL to the resource providing the session template data.<br>Specify either a templateURL, or the other session<br>template parameters.|
-|name|string|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+|name|string|true|none|Name of the SessionTemplate. The length of the name is restricted to 45 characters.|
 |description|string|false|none|An optional description for the session template.|
 |cfs_url|string|false|none|The url for the repository providing the configuration. DEPRECATED|
 |cfs_branch|string|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes.  DEPRECATED.|
@@ -8039,7 +8039,7 @@ This name is required when creating a Session.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|false|read-only|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+|name|string|false|read-only|Name of the SessionTemplate. The length of the name is restricted to 45 characters.|
 |tenant|string|false|read-only|Name of the tenant that owns the session.  Only used in environments with multi-tenancy enabled.|
 |description|string|false|none|An optional description for the session template.|
 |enable_cfs|boolean|false|none|Whether to enable the Configuration Framework Service (CFS).<br>Choices: true/false|
@@ -8068,26 +8068,6 @@ Message describing errors or incompleteness in a Session Template.
 |---|---|---|---|---|
 |*anonymous*|string|false|none|Message describing errors or incompleteness in a Session Template.|
 
-<h2 id="tocS_V2TemplateName">V2TemplateName</h2>
-<!-- backwards compatibility -->
-<a id="schemav2templatename"></a>
-<a id="schema_V2TemplateName"></a>
-<a id="tocSv2templatename"></a>
-<a id="tocsv2templatename"></a>
-
-```json
-"my-session-template"
-
-```
-
-The name of the Session Template
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The name of the Session Template|
-
 <h2 id="tocS_V2SessionCreate">V2SessionCreate</h2>
 <!-- backwards compatibility -->
 <a id="schemav2sessioncreate"></a>
@@ -8115,7 +8095,7 @@ A Session Creation object
 |---|---|---|---|---|
 |name|string|false|none|Name of the session. A UUID name is generated if a name is not provided.|
 |operation|string|true|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
-|template_name|[V2TemplateName](#schemav2templatename)|true|none|The name of the Session Template|
+|template_name|string|true|none|The name of the Session Template|
 |limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
 |stage|boolean|false|none|Set to stage a session which will not immediately change the state of any components. The "applystaged" endpoint can be called at a later time to trigger the start of this session.|
 |include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM)|
@@ -8257,7 +8237,7 @@ A Session object
 |name|string|false|none|Name of the session.|
 |tenant|string|false|read-only|Name of the tenant that owns the session.  Only used in environments with multi-tenancy enabled.|
 |operation|string|false|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
-|template_name|[V2TemplateName](#schemav2templatename)|false|none|The name of the Session Template|
+|template_name|string|false|none|The name of the Session Template|
 |limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
 |stage|boolean|false|none|Set to stage a session which will not immediately change the state of any components. The "applystaged" endpoint can be called at a later time to trigger the start of this session.|
 |components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes the session should operate against.  The list will remain even if other sessions have taken over management of the nodes.|
