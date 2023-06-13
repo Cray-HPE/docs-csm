@@ -33,6 +33,8 @@ spec:
         parameters:
           - name: dryRun
           - name: targetNcn
+          - name: imageId
+          - name: desiredCfsConfig
       dag:
         tasks:
           - name: verify-bss-runcmd
@@ -83,3 +85,19 @@ spec:
                     scp /opt/cray/tests/install/ncn/scripts/check_bootloader.sh $TARGET_NCN:/opt/cray/csm/scripts/check_bootloader.sh
                     ssh $TARGET_NCN '/opt/cray/csm/scripts/check_bootloader.sh; rm -rf /metal/recovery/*'
                     echo "Successfully checked bootloader on $TARGET_NCN and removed /metal/recovery."
+          - name: set-bss-image-and-cfs-config
+            dependencies:
+            - verify-bss-runcmd
+            templateRef:
+              name: set-bss-image-cfs-config
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: targetNcn
+                  value: "{{inputs.parameters.targetNcn}}"
+                - name: imageId
+                  value: "{{inputs.parameters.imageId}}"
+                - name: desiredCfsConfig
+                  value: "{{inputs.parameters.desiredCfsConfig}}"
