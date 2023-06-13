@@ -2,9 +2,31 @@
 
 Add LDAP user federation using the Keycloak localization tool.
 
+- [Prerequisites](#prerequisites)
+- [System domain name](#system-domain-name)
+- [Procedure](#procedure)
+
 ## Prerequisites
 
 LDAP user federation is not currently configured in Keycloak. For example, if it was not configured in Keycloak when the system was initially installed or the LDAP user federation was removed.
+
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value found in some of the URLs on this page is expected to be the system's fully qualified domain name (FQDN).
+
+The FQDN can be found by running the following command on any Kubernetes NCN.
+
+```bash
+ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | yq r - spec.network.dns.external
+```
+
+Example output:
+
+```text
+system..hpc.amslabs.hpecorp.net
+```
+
+Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
 
 ## Procedure
 
@@ -13,8 +35,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    If the `customizations.yaml` file is managed in an external Git repository (as recommended), then clone a local working tree. Replace the `<URL>` value in the following command before running it.
 
    ```bash
-   ncn-m001# git clone <URL> /root/site-init
-   ncn-m001# cd /root/site-init
+   ncn-mw# git clone <URL> /root/site-init
+   ncn-mw# cd /root/site-init
    ```
 
    If there is not a backup of `site-init`, perform the following steps to create a new one using the values stored in the Kubernetes cluster.
@@ -27,21 +49,21 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       > `tar -zxvf CSM_RELEASE.tar.gz`. Replace the `CSM_RELEASE` value before running the command to unpack the tarball.
 
       ```bash
-      ncn-m001# cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
-      ncn-m001# cd /root/site-init
+      ncn-mw# cp -r ${CSM_DISTDIR}/shasta-cfg/* /root/site-init
+      ncn-mw# cd /root/site-init
       ```
 
    1. Extract `customizations.yaml` from the `site-init` Kubernetes secret.
 
       ```bash
-      ncn-m001# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
+      ncn-mw# kubectl -n loftsman get secret site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d - > customizations.yaml
       ```
 
    1. Extract the certificate and key used to create the sealed secrets.
 
       ```bash
-      ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
-      ncn-m001# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
+      ncn-mw# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.crt}' | base64 -d - > certs/sealed_secrets.crt
+      ncn-mw# kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
       ```
 
    > **NOTE:** All subsequent steps of this procedure should be performed within the `/root/site-init` directory created in this step.
@@ -274,7 +296,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       > **NOTE:** Requires a properly configured Docker or Podman environment.
 
       ```bash
-      ncn-m001# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
+      ncn-mw# ${CSM_DISTDIR}/hack/load-container-image.sh dtr.dev.cray.com/library/openjdk:11-jre-slim
       ```
 
       **Troubleshooting:**
@@ -298,8 +320,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
          To recover podman, move the overlay directories to a backup folder as follows:
 
          ```bash
-         ncn-m001# mkdir /var/lib/containers/storage/backup
-         ncn-m001# mv /var/lib/containers/storage/overlay* /var/lib/containers/storage/backup
+         ncn-mw# mkdir /var/lib/containers/storage/backup
+         ncn-mw# mv /var/lib/containers/storage/overlay* /var/lib/containers/storage/backup
          ```
 
          This should allow `load-container-images.sh` to succeed.
@@ -309,7 +331,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       > **IMPORTANT:** Replace `<ca-cert.pem>` and `<alias>` before running the command.
 
       ```bash
-      ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
+      ncn-mw# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool \
                     -importcert -trustcacerts -file /data/<ca-cert.pem> -alias <alias> -keystore /data/certs.jks \
                     -storepass password -noprompt
       ```
@@ -319,8 +341,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       In the following example, the LDAP server has the hostname `dcldap2.us.cray.com` and is using the port `636`.
 
       ```bash
-      ncn-m001# LDAP=dcldap2.us.cray.com
-      ncn-m001# PORT=636
+      ncn-mw# LDAP=dcldap2.us.cray.com
+      ncn-mw# PORT=636
       ```
 
    1. Get the issuer certificate for the LDAP server at port `636`.
@@ -328,7 +350,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       Use `openssl s_client` to connect and show the certificate chain returned by the LDAP host.
 
       ```bash
-      ncn-m001# openssl s_client -showcerts -connect $LDAP:${PORT} </dev/null
+      ncn-mw# openssl s_client -showcerts -connect $LDAP:${PORT} </dev/null
       ```
 
    1. Generate `cacert.pem` containing the issuer's certificate.
@@ -351,7 +373,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
          For example:
 
          ```bash
-         ncn-m001# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
+         ncn-mw# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null | grep issuer= | sed -e 's/^issuer=//'
          ```
 
          Example output:
@@ -367,7 +389,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
          > different, then be sure to escape it properly!
 
          ```bash
-         ncn-m001# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null |
+         ncn-mw# openssl s_client -showcerts -nameopt RFC2253 -connect $LDAP:${PORT} </dev/null 2>/dev/null |
                       awk '/s:emailAddress=dcops@hpe.com,CN=Data Center,OU=HPC\/MCS,O=HPE,ST=WI,C=US/,/END CERTIFICATE/' |
                       awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > cacert.pem
          ```
@@ -375,7 +397,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Verify that the issuer's certificate was properly extracted and saved in `cacert.pem`.
 
       ```bash
-      ncn-m001# cat cacert.pem
+      ncn-mw# cat cacert.pem
       ```
 
       Expected output looks similar to the following:
@@ -409,7 +431,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Create `certs.jks`.
 
       ```bash
-      ncn-m001# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
+      ncn-mw# podman run --rm -v "$(pwd):/data" dtr.dev.cray.com/library/openjdk:11-jre-slim keytool -importcert \
                     -trustcacerts -file /data/cacert.pem -alias cray-data-center-ca -keystore /data/certs.jks \
                     -storepass password -noprompt
       ```
@@ -417,13 +439,13 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Create `certs.jks.b64` by base-64 encoding `certs.jks`.
 
       ```bash
-      ncn-m001# base64 certs.jks > certs.jks.b64
+      ncn-mw# base64 certs.jks > certs.jks.b64
       ```
 
    1. Inject and encrypt `certs.jks.b64` into `customizations.yaml`.
 
       ```console
-      ncn-m001# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
+      ncn-mw# cat <<EOF | yq w - 'data."certs.jks"' "$(<certs.jks.b64)" | \
                     yq r -j - | /root/site-init/utils/secrets-encrypt.sh | \
                     yq w -f - -i /root/site-init/customizations.yaml \
                     spec.kubernetes.sealed_secrets.cray-keycloak
@@ -443,8 +465,8 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 1. Upload the modified `customizations.yaml` file to Kubernetes.
 
    ```bash
-   ncn-m001# kubectl delete secret -n loftsman site-init
-   ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ncn-mw# kubectl delete secret -n loftsman site-init
+   ncn-mw# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
 1. Prepare to generate sealed secrets.
@@ -455,7 +477,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    generated, and encrypted.
 
    ```bash
-   ncn-m001# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
+   ncn-mw# ./utils/secrets-reencrypt.sh customizations.yaml ./certs/sealed_secrets.key ./certs/sealed_secrets.crt
    ```
 
 1. Encrypt the static values in the `customizations.yaml` file after making changes.
@@ -463,7 +485,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    The following command must be run within the `site-init` directory.
 
    ```bash
-   ncn-m001# ./utils/secrets-seed-customizations.sh customizations.yaml
+   ncn-mw# ./utils/secrets-seed-customizations.sh customizations.yaml
    ```
 
    Expected output looks similar to:
@@ -506,7 +528,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 1. Decrypt the sealed secret to verify it was generated correctly.
 
    ```bash
-   ncn-m001# ./utils/secrets-decrypt.sh keycloak_users_localize | jq -r '.data.ldap_connection_url' | base64 --decode
+   ncn-mw# ./utils/secrets-decrypt.sh keycloak_users_localize | jq -r '.data.ldap_connection_url' | base64 --decode
    ```
 
    Expected output looks similar to the following:
@@ -520,7 +542,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Retrieve the current `platform.yaml` manifest.
 
       ```bash
-      ncn-m001# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > platform.yaml
+      ncn-mw# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > platform.yaml
       ```
 
    1. Remove all charts from the `platform.yaml` manifest except for `cray-keycloak`.
@@ -530,19 +552,19 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Change the name of the manifest being deployed from `platform` to `cray-keycloak`.
 
       ```bash
-      ncn-m001# sed -i 's/name: platform/name: cray-keycloak/' platform.yaml
+      ncn-mw# sed -i 's/name: platform/name: cray-keycloak/' platform.yaml
       ```
 
    1. Populate the platform manifest with data from the `customizations.yaml` file.
 
       ```bash
-      ncn-m001# manifestgen -i platform.yaml -c customizations.yaml -o new-platform.yaml
+      ncn-mw# manifestgen -i platform.yaml -c customizations.yaml -o new-platform.yaml
       ```
 
    1. Re-apply the platform manifest with the updated `cray-keycloak` chart.
 
       ```bash
-      ncn-m001# loftsman ship --manifest-path ./new-platform.yaml --charts-repo https://packages.local/repository/charts
+      ncn-mw# loftsman ship --manifest-path ./new-platform.yaml --charts-repo https://packages.local/repository/charts
       ```
 
    1. Wait for the `keycloak-certs` secret to reflect the new `cert.jks`.
@@ -550,20 +572,25 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       Run the following command until there is a non-empty value in the secret (this can take a minute or two):
 
       ```bash
-      ncn-m001# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
+      ncn-mw# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
+      ```
+
+      Example output:
+
+      ```text
         certs.jks: <REDACTED>
       ```
 
    1. Restart the `cray-keycloak-` pods.
 
       ```bash
-      ncn-m001# kubectl rollout restart statefulset -n services cray-keycloak
+      ncn-mw# kubectl rollout restart statefulset -n services cray-keycloak
       ```
 
    1. Wait for the Keycloak pods to restart.
 
       ```bash
-      ncn-m001# kubectl rollout status statefulset -n services cray-keycloak
+      ncn-mw# kubectl rollout status statefulset -n services cray-keycloak
       ```
 
 1. Re-apply the `cray-keycloak-users-localize` Helm chart with the updated `customizations.yaml` file.
@@ -571,7 +598,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Determine the `cray-keycloak-users-localize` chart version that is currently deployed.
 
       ```bash
-      ncn-m001# helm ls -A -a | grep cray-keycloak-users-localize | awk '{print $(NF-1)}'
+      ncn-mw# helm ls -A -a | grep cray-keycloak-users-localize | awk '{print $(NF-1)}'
+      ```
+
+      Example output:
+
+      ```text
       cray-keycloak-users-localize-1.5.6
       ```
 
@@ -593,20 +625,19 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Uninstall the current `cray-keycloak-users-localize` chart.
 
       ```bash
-      ncn-m001# helm del cray-keycloak-users-localize -n services
+      ncn-mw# helm del cray-keycloak-users-localize -n services
       ```
 
    1. Populate the deployment manifest with data from the `customizations.yaml` file.
 
       ```bash
-      ncn-m001# manifestgen -i cray-keycloak-users-localize-manifest.yaml -c customizations.yaml -o deploy.yaml
+      ncn-mw# manifestgen -i cray-keycloak-users-localize-manifest.yaml -c customizations.yaml -o deploy.yaml
       ```
 
    1. Reapply the `cray-keycloak-users-localize` chart.
 
       ```bash
-      ncn-m001# loftsman ship --manifest-path ./deploy.yaml \
-                   --charts-repo https://packages.local/repository/charts
+      ncn-mw# loftsman ship --manifest-path ./deploy.yaml --charts-repo https://packages.local/repository/charts
       ```
 
    1. Watch the pod to check the status of the job.
@@ -614,7 +645,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       The pod will go through the normal Kubernetes states. It will stay in a `Running` state for a while, and then it will go to `Completed`.
 
       ```bash
-      ncn-m001# kubectl get pods -n services | grep keycloak-users-localize
+      ncn-mw# kubectl get pods -n services | grep keycloak-users-localize
       ```
 
       Example output:
@@ -628,7 +659,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
       Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
       ```bash
-      ncn-m001# kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
+      ncn-mw# kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
       ```
 
       Example log entry showing that it has updated the "s3" objects and `ConfigMaps`:
@@ -642,16 +673,15 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Get the `crayvcs` password.
 
       ```bash
-      ncn-m001# kubectl get secret -n services vcs-user-credentials \
-                    --template={{.data.vcs_password}} | base64 --decode
+      ncn-mw# kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
       ```
 
    1. Check out content from the `cos-config-management` VCS repository.
 
       ```bash
-      ncn-m001# git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
-      ncn-m001# cd cos-config-management
-      ncn-m001# git checkout integration
+      ncn-mw# git clone https://api-gw-service-nmn.local/vcs/cray/cos-config-management.git
+      ncn-mw# cd cos-config-management
+      ncn-mw# git checkout integration
       ```
 
    1. Create the `group_vars/Compute/keycloak.yaml` file.
@@ -666,15 +696,15 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Push the changes to VCS with the `crayvcs` username.
 
       ```bash
-      ncn-m001# git add group_vars/Compute/keycloak.yaml
-      ncn-m001# git commit -m "Configure keycloak on computes"
-      ncn-m001# git push origin integration
+      ncn-mw# git add group_vars/Compute/keycloak.yaml
+      ncn-mw# git commit -m "Configure keycloak on computes"
+      ncn-mw# git push origin integration
       ```
 
    1. Update the Configuration Framework Service (CFS) configuration.
 
       ```bash
-      ncn-m001# cray cfs configurations update configurations-example --file ./configurations-example.json --format json
+      ncn-mw# cray cfs configurations update configurations-example --file ./configurations-example.json --format json
       ```
 
       Example output:
@@ -697,7 +727,7 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Reboot with the Boot Orchestration Service (BOS).
 
       ```bash
-      ncn-m001# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
+      ncn-mw# cray bos session create --template-uuid BOS_TEMPLATE --operation reboot
       ```
 
 1. Validate that LDAP integration was added successfully.
@@ -705,12 +735,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
    1. Retrieve the `admin` user's password for Keycloak.
 
       ```bash
-      ncn-m001# kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
+      ncn-mw# kubectl get secrets -n services keycloak-master-admin-auth -ojsonpath='{.data.password}' | base64 -d
       ```
 
    1. Log in to the Keycloak UI using the `admin` user and the password obtained in the previous step.
 
-      The Keycloak UI URL is typically similar to the following: `https://auth.cmn.<system_name>/keycloak`
+      The Keycloak UI URL is typically similar to the following: `https://auth.SYSTEM_DOMAIN_NAME/keycloak`
 
    1. Click on the `Users` tab in the navigation pane on the left.
 
@@ -726,12 +756,12 @@ LDAP user federation is not currently configured in Keycloak. For example, if it
 
       ```bash
       ncn-w001# curl -s \
-         -d grant_type=password \
-         -d client_id=shasta \
-         -d username=myuser \
-         -d password=mypass \
-         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
-      jq
+                    -d grant_type=password \
+                    -d client_id=shasta \
+                    -d username=myuser \
+                    -d password=mypass \
+                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token |
+                jq
       ```
 
       Expected output:

@@ -18,7 +18,19 @@
 
 The Version Control Service \(VCS\) includes a web interface for repository management, pull requests, and a visual view of all repositories and organizations. The following URL is for the VCS web interface:
 
-`https://vcs.SHASTA_CLUSTER_DNS_NAME`
+`https://vcs.ext.system.domain.com`
+
+To look up the external system domain name, run the following command:
+
+```bash
+ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:"
+```
+
+Example output:
+
+```yaml
+      external: ext.system.domain.com
+```
 
 ## Cloning a VCS repository
 
@@ -62,7 +74,7 @@ To change the password in the `vcs-user-credentials` Kubernetes secret, use the 
 
    Point a browser at `https://auth.SYSTEM_DOMAIN_NAME/keycloak/admin`, replacing `SYSTEM_DOMAIN_NAME` with the actual NCN's DNS name.
 
-   The following is an example URL for a system: `https://auth.cmn.system1.us.cray.com/keycloak/admin`
+   The following is an example URL for a system: `https://auth.system1.us.cray.com/keycloak/admin`
 
    Use the following `admin` login credentials:
 
