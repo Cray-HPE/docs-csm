@@ -3,6 +3,24 @@
 Configure an email alert notification for all Prometheus Postgres replication alerts: `PostgresReplicationLagSMA`,
 `PostgresReplicationServices`, `PostgresqlFollowerReplicationLagSMA`, and `PostgresqlFollowerReplicationLagServices`.
 
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value found in some of the URLs on this page is expected to be the system's fully qualified domain name (FQDN).
+
+The FQDN can be found by running the following command on any Kubernetes NCN.
+
+```bash
+ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | yq r - spec.network.dns.external
+```
+
+Example output:
+
+```text
+system..hpc.amslabs.hpecorp.net
+```
+
+Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
+
 ## Procedure
 
 This procedure can be performed on any master or worker NCN.
@@ -106,7 +124,7 @@ This procedure can be performed on any master or worker NCN.
         ```
 
 An email notification will be sent once either of the alerts set in this procedure is `FIRING` in Prometheus.
-See `https://prometheus.SYSTEM-NAME.SITE-DOMAIN/alerts` for more information.
+See `https://prometheus.cmn.SYSTEM_DOMAIN_NAME/alerts` for more information.
 
 If an alert is received, then refer to [Troubleshoot Postgres Database](../kubernetes/Troubleshoot_Postgres_Database.md) for more information
 about recovering replication.

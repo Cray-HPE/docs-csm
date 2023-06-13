@@ -3,33 +3,37 @@
 All System Management Health services are exposed outside the cluster through the OAuth2 Proxy and Istio's ingress gateway to enforce the authentication and authorization policies. The URLs
 to access these services are available on any system with CMN, BGP, MetalLB, and external DNS properly configured.
 
-- [System domain name](#system-domain-name)
 - [Prerequisites](#prerequisites)
+- [System domain name](#system-domain-name)
 - [System Management Health service links](#system-management-health-service-links)
   - [Prometheus](#prometheus)
   - [Alertmanager](#alertmanager)
   - [Grafana](#grafana)
   - [Kiali](#kiali)
 
-## System domain name
-
-The `SYSTEM_DOMAIN_NAME` value in the URLs on this page is an Ansible variable that can be retrieved as follows. It is expected to be the system's fully qualified domain name (FQDN).
-
-```bash
-ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:"
-```
-
-Example output:
-
-```yaml
-      external: SYSTEM_DOMAIN_NAME
-```
-
 ## Prerequisites
 
 - Access to the System Management Health web UIs is through Istio's ingress gateway and requires clients \(browsers\) to set the appropriate HTTP Host header to route traffic to the desired service.
 - Access to these URLs may require administrative privileges on the workstation running the user's web browser.
 - The Customer Management Network \(CMN\), Border Gateway Protocol \(BGP\), MetalLB, and external DNS are properly configured.
+
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value found in some of the URLs on this page is expected to be the system's fully qualified domain name (FQDN).
+
+The FQDN can be found by running the following command on any Kubernetes NCN.
+
+```bash
+ncn-mw# kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | yq r - spec.network.dns.external
+```
+
+Example output:
+
+```text
+system..hpc.amslabs.hpecorp.net
+```
+
+Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
 
 ## System Management Health service links
 
