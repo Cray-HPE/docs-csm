@@ -335,7 +335,7 @@ Verify that the Lustre file system is available from the management cluster.
     ncn-m001# kubectl rollout restart -n spire deployment spire-jwks
     ```
 
-1. Rejoin Kubernetes to the worker and master NCNs, to avoid issues with Spire tokens.
+1. Rejoin Spire on the worker and master NCNs, to avoid issues with Spire tokens.
 
     ```bash
     ncn-m001# kubectl rollout restart -n spire daemonset request-ncn-join-token
