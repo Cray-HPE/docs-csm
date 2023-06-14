@@ -40,7 +40,7 @@ spec:
         tasks:
         - name: update-image-in-bss
           templateRef:
-            name: kubectl-and-curl-template #iuf-base-template
+            name: ssh-template
             template: shell-script
           arguments:
             parameters:
@@ -100,7 +100,7 @@ spec:
                   fi
         - name: update-cfs-config
           templateRef:
-            name: kubectl-and-curl-template #iuf-base-template
+            name: ssh-template
             template: shell-script
           arguments:
             parameters:
