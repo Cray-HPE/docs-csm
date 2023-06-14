@@ -316,8 +316,8 @@ func main() {
     4
   ],
   "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-  "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-  "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+  "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+  "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
   "cloud-init": {
     "user-data": {
       "foo": "bar"
@@ -526,8 +526,8 @@ Retrieve the boot parameters for one or more hosts. If no parameters are provide
     4
   ],
   "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-  "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-  "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+  "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+  "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
   "cloud-init": {
     "user-data": {
       "foo": "bar"
@@ -571,8 +571,8 @@ Retrieve the boot parameters for one or more hosts. If no parameters are provide
       4
     ],
     "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-    "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-    "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+    "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+    "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
     "cloud-init": {
       "user-data": {
         "foo": "bar"
@@ -714,8 +714,8 @@ Special entries for HSM roles like 'Compute', 'Storage' and 'Application' can al
     4
   ],
   "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-  "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-  "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+  "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+  "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
   "cloud-init": {
     "user-data": {
       "foo": "bar"
@@ -855,8 +855,8 @@ Along with the hosts, there must be a kernel image reference in order for the bo
     4
   ],
   "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-  "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-  "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+  "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+  "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
   "cloud-init": {
     "user-data": {
       "foo": "bar"
@@ -993,8 +993,8 @@ Update an existing entry with new boot parameters while retaining existing setti
     4
   ],
   "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-  "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-  "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+  "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+  "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
   "cloud-init": {
     "user-data": {
       "foo": "bar"
@@ -1124,8 +1124,8 @@ Remove an existing boot parameter settings for one or more hosts, as specified b
     4
   ],
   "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-  "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-  "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+  "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+  "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
   "cloud-init": {
     "user-data": {
       "foo": "bar"
@@ -1483,8 +1483,8 @@ Dump internal state of boot script service for debugging purposes. Return known 
           4
         ],
         "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-        "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-        "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+        "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+        "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
         "cloud-init": {
           "user-data": {
             "foo": "bar"
@@ -2209,8 +2209,8 @@ This operation does not require authentication
     4
   ],
   "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-  "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-  "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+  "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+  "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
   "cloud-init": {
     "user-data": {
       "foo": "bar"
@@ -2449,8 +2449,8 @@ This data structure is used to return host info for debug purposes
           4
         ],
         "params": "console=tty0 console=ttyS0,115200n8 initrd=initrd-4.12.14-15.5_8.1.96-cray_shasta_c root=crayfs nfsserver=10.2.0.1nfspath=/var/opt/cray/boot_images imagename=/SLES selinux=0 rd.shell rd.net.timeout.carrier=40 rd.retry=40 ip=dhcp rd.neednet=1 crashkernel=256M htburl=https://api-gw-service-nmn.local/apis/hbtd/hmi/v1/heartbeat bad_page=panic hugepagelist=2m-2g intel_iommu=off iommu=pt numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet turbo_boost_limit=999",
-        "kernel": "http://10.252.100.50/apis/ars/downloads/30b96241-12ff-4185-93ea-a1f7991372d3",
-        "initrd": "http://10.252.100.50/apis/ars/downloads/7e0bcf9f-10fc-46a9-b2f8-ba8814c1999c",
+        "kernel": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/kernel",
+        "initrd": "s3://boot-images/1dbb777c-2527-449b-bd6d-fb4d1cb79e88/initrd",
         "cloud-init": {
           "user-data": {
             "foo": "bar"
