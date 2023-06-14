@@ -115,9 +115,13 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{$.DryRun}}"  
+                  value: "{{$.DryRun}}"
                 - name: targetNcn
                   value: {{$value}}
+                - name: imageId
+                  value: "{{$.ImageId}}"
+                - name: desiredCfsConfig
+                  value: "{{$.DesiredCfsConfig}}"
           - name: set-bss-no-wipe-to-1-{{$value}}
             templateRef:
               name: set-no-wipe
