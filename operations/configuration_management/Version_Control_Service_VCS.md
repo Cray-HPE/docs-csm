@@ -18,7 +18,19 @@
 
 The Version Control Service \(VCS\) includes a web interface for repository management, pull requests, and a visual view of all repositories and organizations. The following URL is for the VCS web interface:
 
-`https://vcs.SHASTA_CLUSTER_DNS_NAME`
+`https://vcs.ext.system.domain.com`
+
+(`ncn-mw#`) To look up the external system domain name, run the following command:
+
+```bash
+kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:"
+```
+
+Example output:
+
+```yaml
+      external: ext.system.domain.com
+```
 
 ## Cloning a VCS repository
 

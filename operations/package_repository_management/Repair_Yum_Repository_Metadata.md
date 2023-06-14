@@ -8,16 +8,43 @@ The example in this procedure is for creating a repair task to rebuild Yum metad
 
 See the [Nexus documentation on tasks](https://help.sonatype.com/repomanager3/system-configuration/tasks) for more information.
 
+- [Prerequisites](#prerequisites)
+- [System domain name](#system-domain-name)
+- [Nexus web URL](#nexus-web-url)
+- [Procedure](#procedure)
+- [Troubleshooting](#troubleshooting)
+
 ## Prerequisites
 
 CSM installation is complete.
 
+## System domain name
+
+The `SYSTEM_DOMAIN_NAME` value found in some of the URLs on this page is expected to be the system's fully qualified domain name (FQDN).
+
+(`ncn-mw#`) The FQDN can be found by running the following command on any Kubernetes NCN.
+
+```bash
+kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | yq r - spec.network.dns.external
+```
+
+Example output:
+
+```text
+system..hpc.amslabs.hpecorp.net
+```
+
+Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME` with the actual value found using the above command.
+
+## Nexus web URL
+
+Nexus is accessible using a web browser at the following URL: `https://nexus.cmn.SYSTEM_DOMAIN_NAME`
+
+An example of what the resulting URL will look like is: `https://nexus.cmn.eniac.dev.cray.com`.
+
 ## Procedure
 
 1. Log in to the Nexus web UI.
-
-    Use the hostname set in `istio.ingress.hosts.ui.authority` to connect to Nexus over the Customer Access Network \(CAN\) using a web browser.
-    An example of what the resulting URL will look like is: `https://nexus.cmn.eniac.dev.cray.com`.
 
     Users will need to log in through the Nexus UI. The account is configured through Keycloak with a role mapping for Nexus authentication.
     The role needed for administrative permissions is `nx-admin` in the `system-nexus-client` role.
