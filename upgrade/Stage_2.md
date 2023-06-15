@@ -3,7 +3,7 @@
 **Reminder:** If any problems are encountered and the procedure or command output does not provide relevant guidance, see
 [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
-- [Stage 1 - Ceph image upgrade](#stage-1---ceph-image-upgrade)
+- [Stage 2 - Ceph image upgrade](#stage-2---ceph-image-upgrade)
   - [Start typescript](#start-typescript)
   - [Argo workflows](#argo-workflows)
   - [Storage node image upgrade and Ceph upgrade](#storage-node-image-upgrade-and-ceph-upgrade)

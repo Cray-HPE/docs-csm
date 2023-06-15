@@ -4,23 +4,23 @@
 [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
 - [Start typescript on `ncn-m001`](#start-typescript-on-ncn-m001)
-- [Stage 2.1 - Master node image upgrade](#stage-21---master-node-image-upgrade)
+- [Stage 3.1 - Master node image upgrade](#Stage-31---master-node-image-upgrade)
 - [Argo workflows](#argo-workflows)
-- [Stage 2.2 - Worker node image upgrade](#stage-22---worker-node-image-upgrade)
+- [Stage 3.2 - Worker node image upgrade](#Stage-32---worker-node-image-upgrade)
   - [Option 1 - Serial upgrade](#option-1---serial-upgrade)
   - [Option 2 - Parallel upgrade (Tech preview)](#option-2---parallel-upgrade-tech-preview)
     - [Restrictions](#restrictions)
     - [Example](#example)
-- [Stage 2.3 - `ncn-m001` upgrade](#stage-23---ncn-m001-upgrade)
+- [Stage 3.3 - `ncn-m001` upgrade](#Stage-33---ncn-m001-upgrade)
   - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
   - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
   - [Move to `ncn-m002`](#move-to-ncn-m002)
   - [Start typescript on `ncn-m002`](#start-typescript-on-ncn-m002)
   - [Prepare `ncn-m002`](#prepare-ncn-m002)
   - [Upgrade `ncn-m001`](#upgrade-ncn-m001)
-- [Stage 2.4 - Upgrade `weave` and `multus`](#stage-24---upgrade-weave-and-multus)
-- [Stage 2.5 - `coredns` anti-affinity](#stage-25---coredns-anti-affinity)
-- [Stage 2.6 - Complete Kubernetes upgrade](#stage-26---complete-kubernetes-upgrade)
+- [Stage 3.4 - Upgrade `weave` and `multus`](#Stage-34---upgrade-weave-and-multus)
+- [Stage 3.5 - `coredns` anti-affinity](#Stage-35---coredns-anti-affinity)
+- [Stage 3.6 - Complete Kubernetes upgrade](#Stage-36---complete-kubernetes-upgrade)
 - [Stop typescript on `ncn-m002`](#stop-typescript-on-ncn-m002)
 - [Stage completed](#stage-completed)
 
@@ -38,7 +38,7 @@
 If additional shells are opened during this procedure, then record those with typescripts as well. When resuming a procedure
 after a break, always be sure that a typescript is running before proceeding.
 
-## Stage 2.1 - Master node image upgrade
+## Stage 3.1 - Master node image upgrade
 
 1. (`ncn-m001#`) Run `ncn-upgrade-master-nodes.sh` for `ncn-m002`.
 
@@ -54,7 +54,7 @@ after a break, always be sure that a typescript is running before proceeding.
 
 ## Argo workflows
 
-Before starting [Stage 2.2 - Worker node image upgrade](#stage-22---worker-node-image-upgrade), access the Argo UI to view the progress of this stage.
+Before starting [Stage 3.2 - Worker node image upgrade](#Stage-32---worker-node-image-upgrade), access the Argo UI to view the progress of this stage.
 Note that the progress for the current stage will not show up in Argo before the worker node image upgrade script has been started.
 
 For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md) and [Using Argo Workflows](../operations/argo/Using_Argo_Workflows.md).
@@ -67,7 +67,7 @@ cray cfs components update --error-count 0 <XNAME>
 cray cfs components update --state '[]' <XNAME>
 ```
 
-## Stage 2.2 - Worker node image upgrade
+## Stage 3.2 - Worker node image upgrade
 
 > **`NOTE`** When upgrading worker nodes which are running DVS, it is not recommended to simultaneously reboot compute nodes. This is to avoid restarting DVS clients and servers at the same time.
 
@@ -110,7 +110,7 @@ make sure that the following conditions are met:
 /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w002,ncn-w003,ncn-w004
 ```
 
-## Stage 2.3 - `ncn-m001` upgrade
+## Stage 3.3 - `ncn-m001` upgrade
 
 By this point, all NCNs have been upgraded, except for `ncn-m001`. In the upgrade process so far, `ncn-m001`
 has been the "stable node" -- that is, the node from which the other nodes were upgraded. At this point, the
@@ -215,7 +215,7 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
    ```
 
-## Stage 2.4 - Upgrade `weave` and `multus`
+## Stage 3.4 - Upgrade `weave` and `multus`
 
 Run the following command to complete the upgrade of the `weave` and `multus` manifest versions:
 
@@ -223,7 +223,7 @@ Run the following command to complete the upgrade of the `weave` and `multus` ma
 /srv/cray/scripts/common/apply-networking-manifests.sh
 ```
 
-## Stage 2.5 - `coredns` anti-affinity
+## Stage 3.5 - `coredns` anti-affinity
 
 Run the following script to apply anti-affinity to `coredns` pods:
 
@@ -231,7 +231,7 @@ Run the following script to apply anti-affinity to `coredns` pods:
 /usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh
 ```
 
-## Stage 2.6 - Complete Kubernetes upgrade
+## Stage 3.6 - Complete Kubernetes upgrade
 
 Complete the Kubernetes upgrade. This script will restart several pods on each master node to their new Docker containers.
 
@@ -253,5 +253,5 @@ For any typescripts that were started during this stage on `ncn-m002`, stop them
 
 All Kubernetes nodes have been rebooted into the new image.
 
-> **REMINDER**: If password for `ncn-m002` was reset during Stage 2.3, then also reset the password
+> **REMINDER**: If password for `ncn-m002` was reset during Stage 3.3, then also reset the password
 > on `ncn-m001` at this time.
