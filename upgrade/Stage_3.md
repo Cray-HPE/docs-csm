@@ -4,23 +4,23 @@
 [Relevant troubleshooting links for upgrade-related issues](Upgrade_Management_Nodes_and_CSM_Services.md#relevant-troubleshooting-links-for-upgrade-related-issues).
 
 - [Start typescript on `ncn-m001`](#start-typescript-on-ncn-m001)
-- [Stage 3.1 - Master node image upgrade](#Stage-31---master-node-image-upgrade)
+- [Stage 3.1 - Master node image upgrade](#stage-31---master-node-image-upgrade)
 - [Argo workflows](#argo-workflows)
-- [Stage 3.2 - Worker node image upgrade](#Stage-32---worker-node-image-upgrade)
+- [Stage 3.2 - Worker node image upgrade](#stage-32---worker-node-image-upgrade)
   - [Option 1 - Serial upgrade](#option-1---serial-upgrade)
   - [Option 2 - Parallel upgrade (Tech preview)](#option-2---parallel-upgrade-tech-preview)
     - [Restrictions](#restrictions)
     - [Example](#example)
-- [Stage 3.3 - `ncn-m001` upgrade](#Stage-33---ncn-m001-upgrade)
+- [Stage 3.3 - `ncn-m001` upgrade](#stage-33---ncn-m001-upgrade)
   - [Stop typescript on `ncn-m001`](#stop-typescript-on-ncn-m001)
   - [Backup artifacts on `ncn-m001`](#backup-artifacts-on-ncn-m001)
   - [Move to `ncn-m002`](#move-to-ncn-m002)
   - [Start typescript on `ncn-m002`](#start-typescript-on-ncn-m002)
   - [Prepare `ncn-m002`](#prepare-ncn-m002)
   - [Upgrade `ncn-m001`](#upgrade-ncn-m001)
-- [Stage 3.4 - Upgrade `weave` and `multus`](#Stage-34---upgrade-weave-and-multus)
-- [Stage 3.5 - `coredns` anti-affinity](#Stage-35---coredns-anti-affinity)
-- [Stage 3.6 - Complete Kubernetes upgrade](#Stage-36---complete-kubernetes-upgrade)
+- [Stage 3.4 - Upgrade `weave` and `multus`](#stage-34---upgrade-weave-and-multus)
+- [Stage 3.5 - `coredns` anti-affinity](#stage-35---coredns-anti-affinity)
+- [Stage 3.6 - Complete Kubernetes upgrade](#stage-36---complete-kubernetes-upgrade)
 - [Stop typescript on `ncn-m002`](#stop-typescript-on-ncn-m002)
 - [Stage completed](#stage-completed)
 
@@ -54,7 +54,7 @@ after a break, always be sure that a typescript is running before proceeding.
 
 ## Argo workflows
 
-Before starting [Stage 3.2 - Worker node image upgrade](#Stage-32---worker-node-image-upgrade), access the Argo UI to view the progress of this stage.
+Before starting [Stage 3.2 - Worker node image upgrade](#stage-32---worker-node-image-upgrade), access the Argo UI to view the progress of this stage.
 Note that the progress for the current stage will not show up in Argo before the worker node image upgrade script has been started.
 
 For more information, see [Using the Argo UI](../operations/argo/Using_the_Argo_UI.md) and [Using Argo Workflows](../operations/argo/Using_Argo_Workflows.md).
@@ -203,7 +203,7 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
        rpm -Uvh --force /root/libcsm-latest.noarch.rpm
        ```
 
-    If this step was executed as a result of the [`management-nodes-rollout` with CSM upgrade](../operations/iuf/workflows/management_rollout.md#management-nodes-rollout-with-csm-upgrade)
+    If this step was executed as a result of the [`management-nodes-rollout` with CSM upgrade](../operations/iuf/workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
     instructions, return to that procedure and continue with the next step.
     Otherwise, if performing an upgrade of only CSM, proceed to the next step.
 
