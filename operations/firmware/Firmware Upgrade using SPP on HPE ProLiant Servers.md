@@ -41,7 +41,7 @@ The SPP ISO Image can be deployed locally or remotely.
 * Select Remote console & media on to the left side
 * Launch the remote console either HTML5 or .NET console or through HPLOCONS. Best option would be .NET and HPLOCONS
 * Mount the ISO image either local location of the image or URL path. If URL path is given make sure that is in same network as ILO network
-* Do cold reboot or Reset the node from iLO virtual console
+* Do cold reboot or Reset the node from iLO remote console
 * Press F9 and go to One time Boot menu and select the mounted image, if URL is given then you see the URL path.
 * Select Interactive option
 * Accept and proceed
