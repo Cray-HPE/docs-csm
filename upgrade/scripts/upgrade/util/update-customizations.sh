@@ -148,6 +148,7 @@ if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-opera
         yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack = .spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator | del(.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator)" -i $c
         yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].prometheus.prometheusSpec.externalAuthority }}/\"" -i $c
         yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.alertmanager.alertmanagerSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].alertmanager.alertmanagerSpec.externalAuthority }}/\"" -i $c
+        yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.thanosSpec.externalAuthority = \"thanos.cmn.{{ network.dns.external }}\"" -i $c
         yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.thanosSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].thanos.thanosSpec.externalAuthority }}/\"" -i $c
 fi
 
