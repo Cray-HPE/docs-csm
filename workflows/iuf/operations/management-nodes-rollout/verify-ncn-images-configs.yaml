@@ -53,7 +53,7 @@ spec:
                     # Check config exists
                     config=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].configuration' | tr -d '"')
                     if [[ -z $config ]]; then
-                      echo "ERROR No CFS configuration was received for \'${role_subrole}\' from 'prepare-images' stage. Retry by running from 'prepare-images' stage"
+                      echo "ERROR No CFS configuration was received for '${role_subrole}' from 'prepare-images' stage. Retry by running from 'prepare-images' stage"
                       exit 1
                     fi
                     result=$(cray cfs configurations describe "$config" 2>&1)
@@ -69,7 +69,7 @@ spec:
                     # Check image exists
                     image=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].final_image_id' | tr -d '"')
                     if [[ -z $image ]]; then
-                      echo "ERROR No image was received for \'${role_subrole}\' from 'prepare-images' stage. Retry by running from 'prepare-images' stage"
+                      echo "ERROR No image was received for '${role_subrole}' from 'prepare-images' stage. Retry by running from 'prepare-images' stage"
                       exit 1
                     fi
                     if [[ $(echo $image | wc -l) -gt 1 ]]; then 
