@@ -7,7 +7,41 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.1`, follow the procedures descr
 
 ## Bug Fixes and Improvements
 
-* TO-ADD
+* Updates to the `bos` API specs
+* Refactoring of the `hms-rts` chart for deployment of multiple backends
+* Allow the power control service `pcs` to be able to report power status of `RTS` management switches
+* Support adding types of `MgmtHLSwitch` and `CDUMgmtSwitch` to vault to be able to set their SNMP credentials
+* Support for discovering `RTS` switches and updating their data in hardware state manager
+* Generation of API docs from swagger files in the `Cray-HPE` codebase
+* CVE fixes against the `metacontroller:v4.4.0` container image
+* Fix in `bos v2` to filter out any nodes disabled in hardware state manager at `bos` session creation
+* Fix for accidental removal of `crus` from the `cray-cli`
+* Fix for error in `cray fas loader` due to a python library change  
+* Fix permissions issue with the `goss-servers.service` that caused extraneous messages to print to the console
+* Add troubleshooting documentation instructing users to redeploy daemons that are stuck in error state during 'upload_ceph_images_to_nexus` 
+* Fix for upgrade of the `cray-dns-unbound` helm chart which wiped out `DNS` records
+* Add `SNMP` set up for all switches to the install and upgrade instructions
+* Fix for `grok-exporter` not running on the `ncn-m001` node
+* CVE fixes against the `cray-sat:3.21.4` container image
+* CVE fixes against the `cilium:v1.12.4` container image
+* Fix for `hsm_discovery_status_test` error
+* Fix for `bos v2` setting the wrong status at scale
+* Fix for `goss-platform-ca-in-bundle` test time out
+* Fix traceback in `bos` log with `bos` shutdown failure
+* Update to `bos v1` session create API spec to fix missing required parameters
+* Fix issue with missing data when `bos v1` lists sessions
+* Fix for return of expected object when describing a `bos v1` session
+* Fix for incorrect response from `bos v2 sessiontemplatetemplate` endpoint
+* Support for `python 3.11` in `bos` server
+* CVE fixes against the `argoexec` container image
+* Fix errors in `prerequisites.sh` for upgrading `nls`
+* Fix for wiping of `DNS` records from the configmap when restarting `kea`
+* Fix network policy in `cray-drydock` for communications between `mqtt` and `spire`
+* Fix failure in image pull during upgrade
+* Fix to ensure the `bos` API spec is accurate for get or list `sessiontemplates` endpoints 
+* CVE fixes against the `cfs-ara:1.0.2` container image
+* Fix timeout deploying `cray-dns-unbound` during the install of csm services
+* Fix to allow underscores in `bos sessiontemplate` names 
 
 ## Steps
 
