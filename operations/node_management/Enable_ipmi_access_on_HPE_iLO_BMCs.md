@@ -119,6 +119,6 @@ New HPE nodes ship with with IPMI access disabled by default. In order for CSM t
         ```json
         {
           "Port": 623,
-          "ProtocolEnabled": false
+          "ProtocolEnabled": true
         }
         ```
