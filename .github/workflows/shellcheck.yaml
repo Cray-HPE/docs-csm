@@ -44,3 +44,8 @@ jobs:
       if: ${{ steps.changed-files.outputs.all_changed_files }}
       with:
         args: --severity=warning --color=always ${{ steps.changed-files.outputs.all_changed_files }}
+
+    - uses: docker://mvdan/shfmt:v3
+      if: ${{ steps.changed-files.outputs.all_changed_files }}
+      with:
+        args: -ci -s -i 2 -bn -sr -d ${{ steps.changed-files.outputs.all_changed_files }}
