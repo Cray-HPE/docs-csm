@@ -809,18 +809,57 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Helper functions for below
+has_cm_init() {
+  ns="${1?no namespace provided}"
+  helm list -n "${ns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1
+}
+
+has_craycm() {
+  ns="${1?no namespace provided}"
+  helm list -n "${ns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1
+}
+
 state_name="UPGRADE_CERTMANAGER_CHART"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     cmns="cert-manager"
+    cminitns="cert-manager-init"
+
+    backup_secret="cm-restore-data"
+
+    # We need to backup before any helm uninstalls.
+    needs_backup=0
+
+    if has_craycm ${cmns}; then
+      ((needs_backup+=1))
+    fi
+
+    if has_cm_init ${cminitns}; then
+      ((needs_backup+=1))
+    fi
+
+    # Ok so the gist of this "backup" is we back up all the cert-manager data as
+    # guided by them. The secret we use for this is only kept around until this
+    # prereq state completes.
+    if [ "${needs_backup}" -gt 0 ]; then
+      # Note, check that the secret is present in case only one helm chart is
+      # removed and we error later, we don't want to backup stuff again at that
+      # point.
+      if ! kubectl get secret "${backup_secret?}" > /dev/null 2>&1; then
+        data=$(kubectl get --all-namespaces -o yaml clusterissuer,cert,issuer)
+        kubectl create secret generic "${backup_secret?}" --from-literal=data="${data?}"
+      fi
+    fi
+
     # Only remove these charts if installed
-    if helm list -n "${cmns}" --filter 'cray-certmanager$' | grep cray-certmanager > /dev/null 2>&1; then
+    if has_craycm ${cmns}; then
       helm uninstall -n "${cmns}" cray-certmanager
     fi
-    cminitns="cert-manager-init"
-    if helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null 2>&1; then
+
+    if has_cm_init ${cminitns}; then
       helm uninstall -n "${cminitns}" cray-certmanager-init
     fi
 
@@ -836,10 +875,16 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     if ! helm list -n "${cminitns}" --filter cray-certmanager-init | grep cray-certmanager-init > /dev/null; then
       cminit=0
     fi
+
     if [ "${cm}" = "1" ] || [ "${cminit}" = "1" ]; then
       printf "fatal: helm uninstall did not remove expected charts, cert-manager %s cert-manager-init %s\n" "${cm}" "${cminit}" >&2
       exit 1
     fi
+
+    # Ensure the cert-manager namespace is deleted in a case of both helm charts
+    # removed but there might be detritous leftover in the namespace.
+    kubectl delete namespce "${cmns}" || :
+
     tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
 
     cat > "${tmp_manifest}" << EOF
@@ -881,7 +926,17 @@ EOF
     # cray-certmanager-issuers is also in this category in that it should be
     # unnecessary as the upgrade will reinstall it anyway but this is just
     # to be complete.
+    #
+    # This only needs to happen for this 0.14.1->1.55 upgrade. We should remove
+    # this on the next release doing this work each time is unnecessary.
     loftsman ship --charts-path "${CSM_ARTI_DIR}/helm" --manifest-path "${tmp_manifest}"
+
+    # If the restore secret exists, apply that data here and when done then
+    # remove the secret as its purpose is no longer necessary.
+    if kubectl get secret "${backup_secret?}" > /dev/null 2>&1; then
+      kubectl get secret "${backup_secret?}" -o jsonpath='{.data.data}' | base64 -d | kubectl apply -f -
+      kubectl delete secret "${backup_secret}"
+    fi
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
@@ -1096,7 +1151,19 @@ if [[ ${state_recorded} == "0" ]]; then
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*csm-testing\*.rpm | sort -V | tail -1)"
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*platform-utils\*.rpm | sort -V | tail -1)"
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*goss-servers\*.rpm | sort -V | tail -1)"
+    systemctl enable goss-servers
     systemctl restart goss-servers
+
+    # CASMPET-6635
+    # Get the RPM versions from the primary node
+    ct_version=$(rpm -q csm-testing)
+    ct_rpm_nexus_url="https://packages.local/repository/csm-sle-15sp4/noarch/${ct_version}.rpm"
+    pu_version=$(rpm -q platform-utils)
+    pu_rpm_nexus_url="https://packages.local/repository/csm-sle-15sp4/noarch/${pu_version}.rpm"
+    gs_version=$(rpm -q goss-servers)
+    gs_rpm_nexus_url="https://packages.local/repository/csm-sle-15sp4/noarch/${gs_version}.rpm"
+    # Install above RPMs and restart goss-servers on ncn-w001
+    ssh ncn-w001 "rpm --force -Uvh $ct_rpm_nexus_url $pu_rpm_nexus_url $gs_rpm_nexus_url; systemctl enable goss-servers; systemctl restart goss-servers;"
 
     # get all installed CSM version into a file
     kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | yq r - -d '*' -j | jq -r 'keys[]' > /tmp/csm_versions

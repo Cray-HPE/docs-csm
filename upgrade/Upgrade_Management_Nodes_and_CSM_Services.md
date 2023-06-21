@@ -1,8 +1,8 @@
-# CSM 1.3.0 or later to 1.4.0 Upgrade Process
+# CSM 1.4.0 or later to 1.5.0 Upgrade Process
 
 ## Introduction
 
-This document guides an administrator through the upgrade of Cray Systems Management from v1.3 to v1.4. When upgrading a system, follow this top-level file
+This document guides an administrator through the upgrade of Cray Systems Management from v1.4 to v1.5. When upgrading a system, follow this top-level file
 from top to bottom. The content on this top-level page is meant to be terse. For additional reference material on the upgrade processes and scripts
 mentioned explicitly on this page, see [resource material](resource_material/README.md).
 
@@ -25,9 +25,9 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
 ## Upgrade stages
 
 - [Stage 0 - Prerequisites](Stage_0_Prerequisites.md)
-- [Stage 1 - Ceph Node Image Upgrade](Stage_1.md)
-- [Stage 2 - Kubernetes Upgrade](Stage_2.md)
-- [Stage 3 - CSM Services Upgrade](Stage_3.md)
+- [Stage 1 - CSM Services Upgrade](Stage_1.md)
+- [Stage 2 - Ceph Node Image Upgrade](Stage_2.md)
+- [Stage 3 - Kubernetes Upgrade](Stage_3.md)
 - [Validate CSM health](../operations/validate_csm_health.md)
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
