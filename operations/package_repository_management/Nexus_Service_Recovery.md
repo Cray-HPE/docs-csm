@@ -79,49 +79,23 @@ The following covers redeploying the Nexus service and restoring the data.
          persistentvolumeclaim "nexus-data" deleted
          ```
 
-1. (`ncn-mw#`) Redeploy the chart and wait for the resources to start.
+1. (`ncn-mw#`) Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-   1. Create the manifest.
-
-      ```bash
-      kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
-      kubectl get cm -n loftsman loftsman-nexus -o jsonpath='{.data.manifest\.yaml}' > cray-nexus.yaml
-      for i in $(yq r cray-nexus.yaml 'spec.charts[*].name' | grep -Ev '^cray-nexus$'); do yq d -i cray-nexus.yaml 'spec.charts(name=='"$i"')'; done
-      yq w -i cray-nexus.yaml metadata.name cray-nexus
-      yq d -i cray-nexus.yaml spec.sources
-      yq w -i cray-nexus.yaml spec.sources.charts[0].location 'https://csm-algol60.net/artifactory/csm-helm-charts/'
-      yq w -i cray-nexus.yaml spec.sources.charts[0].name csm-algol60
-      yq w -i cray-nexus.yaml spec.sources.charts[0].type repo
-      manifestgen -c customizations.yaml -i cray-nexus.yaml -o manifest.yaml
-      ```
-
-   1. Check that the chart version is correct based on the earlier `helm history`.
+   - Name of chart to be redeployed: `cray-nexus`
+   - Base name of manifest: `nexus`
+   - Chart files are located in Nexus.
+   - When reaching the step to update customizations, no edits need to be made to the customizations file.
+   - When running the `loftsman ship` command, use the following command:
 
       ```bash
-      grep "version:" manifest.yaml 
+      loftsman ship --charts-repo https://csm-algol60.net/artifactory/csm-helm-charts/ --manifest-path "${CUSTOMIZED_CHART_FILE}"
       ```
 
-      Example output:
+   - When reaching the step to validate that the redeploy was successful, perform the following step:
 
-      ```yaml
-            version: 0.6.0
-      ```
+      **Only follow this step as part of the previously linked chart redeploy procedure.**
 
-   1. Redeploy the chart.
-
-      ```bash
-      loftsman ship --manifest-path ${PWD}/manifest.yaml
-      ```
-
-      Example output contains:
-
-      ```text
-      NAME: nexus
-      ...
-      STATUS: deployed
-      ```
-
-   1. Wait for the resources to start.
+      Wait for the resources to start.
 
       ```bash
       watch "kubectl get pods -n nexus -l app=nexus"
