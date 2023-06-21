@@ -27,7 +27,7 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.1`, follow the procedures descr
 * Fix for `hsm_discovery_status_test` error
 * Fix for `bos v2` setting the wrong status at scale
 * Fix for `goss-platform-ca-in-bundle` test time out
-* Fix traceback in `bos` log with `bos` shutdown failure
+* Fix trace back in `bos` log with `bos` shutdown failure
 * Update to `bos v1 session create` API specification to fix missing required parameters
 * Fix issue with missing data in `bos v1 list sessions`
 * Fix for return of expected object when describing a `bos v1` session
@@ -35,12 +35,12 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.1`, follow the procedures descr
 * Support for `python 3.11` in `bos` server
 * CVE fixes against the `argoexec` container image
 * Fix errors in `prerequisites.sh` for upgrading `nls`
-* Fix for wiping of `DNS` records from the configmap when restarting `kea`
+* Fix for wiping of `DNS` records from the `configmap` when restarting `kea`
 * Fix network policy in `cray-drydock` for communications between `mqtt` and `spire`
 * Fix failure in image pull during upgrade
-* Fix to ensure the `bos` API spec is accurate for get or list `sessiontemplates` endpoints
+* Fix to ensure the `bos` API specification is accurate for get or list `sessiontemplates` endpoints
 * CVE fixes against the `cfs-ara:1.0.2` container image
-* Fix timeout deploying `cray-dns-unbound` during the install of csm services
+* Fix timeout deploying `cray-dns-unbound` during the install of `csm` services
 * Fix for allowing underscores in `bos sessiontemplate` names
 
 ## Steps
