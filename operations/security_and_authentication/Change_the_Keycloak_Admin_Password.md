@@ -50,131 +50,55 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
 1. Enter the existing password, new password and confirmation, and then click `Save`.
 
-1. Log on to `ncn-w001`.
+1. Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-1. Run `git clone https://github.com/Cray-HPE/csm.git`.
+   - Name of chart to be redeployed: `cray-keycloak`
+   - Base name of manifest: `platform`
+   - When reaching the step to update customizations, perform the following steps:
 
-1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` to your desired working directory, and
-   run the following commands from that work directory (not the `utils` directory).
+      **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-1. Save a local copy of the `customizations.yaml` file.
+      1. Clone the CSM repository.
 
-    ```bash
-    ncn-w001# kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' |
-         base64 -d > customizations.yaml
-    ```
+        ```bash
+        ncn-w001# git clone https://github.com/Cray-HPE/csm.git
+        ```
 
-1. Change the password in the `customizations.yaml` file.
+      1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` from the cloned repository into the desired working directory.
 
-    The Keycloak master admin password is also stored in the `keycloak-master-admin-auth` Kubernetes Secret in the `services`
-    namespace. This must be updated so that clients which need to make requests as the master admin can authenticate with the new
-    password.
+         ```bash
+         ncn-w001# cp -vr ./csm/vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils .
+         ```
 
-    In the `customizations.yaml` file, set the values for the `keycloak_master_admin_auth` keys in the `spec.kubernetes.sealed_secrets` field.
-    The value in the data element where the name is `password` needs to be changed to the new Keycloak master admin password. The section below will replace the existing sealed secret data in the `customizations.yaml` file.
+      1. Change the password in the `customizations.yaml` file.
 
-    For example:
+         In the `customizations.yaml` file, set the values for the `keycloak_master_admin_auth` keys in the
+         `spec.kubernetes.sealed_secrets` field. The value in the data element where the name is `password` needs to be changed to the
+         new Keycloak master admin password. The section below will replace the existing sealed secret data in the `customizations.yaml`
+         file.
 
-    ```yaml
-          keycloak_master_admin_auth:
-            generate:
-              name: keycloak-master-admin-auth
-              data:
-              - type: static
-                args:
-                  name: client-id
-                  value: admin-cli
-              - type: static
-                args:
-                  name: user
-                  value: admin
-              - type: static
-                args:
-                  name: password
-                  value: my_secret_password
-              - type: static
-                args:
-                  name: internal_token_url
-                  value: https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token
-    ```
+      1. Encrypt the values after changing the `customizations.yaml` file.
 
-1. Encrypt the values after changing the `customizations.yaml` file.
+         ```bash
+         ncn-w001# ./utils/secrets-seed-customizations.sh customizations.yaml
+         ```
 
-    ```bash
-    ncn-w001# ./utils/secrets-seed-customizations.sh customizations.yaml
-    ```
+         If the above command complains that it cannot find `certs/sealed_secrets.crt` then you can run the following commands to create it:
 
-    If the above command complains that it cannot find `certs/sealed_secrets.crt` then you can run the following commands to create it:
+         ```bash
+         mkdir -pV certs && ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > certs/sealed_secrets.crt
+         ```
 
-    ```bash
-    ncn-w001# mkdir -p certs &&
-         ./utils/bin/linux/kubeseal --controller-name sealed-secrets --fetch-cert > certs/sealed_secrets.crt
-    ```
+   - When reaching the step to validate that the redeploy was successful, perform the following step:
 
-1. Upload the modified `customizations.yaml` file to Kubernetes.
+      **Only follow this step as part of the previously linked chart redeploy procedure.**
 
-   ```bash
-   ncn-w001# kubectl delete secret -n loftsman site-init &&
-             kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-   ```
+      Verify that the Secret has been updated.
 
-1. Create a local copy of the `platform.yaml` file.
+      Give the SealedSecret controller a few seconds to update the Secret, then run the following command to see the current value of the Secret:
 
-    ```bash
-    ncn-w001# kubectl get cm -n loftsman loftsman-platform -o jsonpath='{.data.manifest\.yaml}'  > platform.yaml
-    ```
+      ```bash
+      kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | base64 --decode
+      ```
 
-1. Edit the `platform.yaml` to only include the `cray-keycloak` chart and all its current data.
-
-    Example:
-
-    ```yaml
-    apiVersion: manifests/v1beta1
-      metadata:
-        name: platform
-      spec:
-        charts:
-        - name: cray-keycloak
-          namespace: services
-          source: csm-algol60
-          values:
-            internalTokenUrl: https://api-gw-service-nmn.local/keycloak/realms/master/protocol/openid-connect/token
-            sealedSecrets:
-            - apiVersion: bitnami.com/v1alpha1
-              kind: SealedSecret
-              metadata:
-                annotations:
-                  sealedsecrets.bitnami.com/cluster-wide: 'true'
-    ```
-
-1. Generate the manifest that will be used to redeploy the chart with the modified resources.
-
-    ```bash
-    ncn-w001# manifestgen -c customizations.yaml -i platform.yaml -o manifest.yaml
-    ```
-
-1. Re-apply the `cray-keycloak` Helm chart with the updated `customizations.yaml` file.
-
-    This will update the `keycloak-master-admin-auth` SealedSecret which will cause the SealedSecret controller to update the Secret.
-
-    ```bash
-    ncn-w001# loftsman ship --charts-path ${PATH_TO_RELEASE}/helm --manifest-path ./manifest.yaml
-    ```
-
-1. Verify that the Secret has been updated.
-
-    Give the SealedSecret controller a few seconds to update the Secret, then run the following command to see the current value of the Secret:
-
-    ```bash
-    ncn-w001# kubectl get secret -n services keycloak-master-admin-auth \
-                 --template={{.data.password}} | base64 --decode
-    ```
-
-1. Save an updated copy of `customizations.yaml` to the `site-init` secret in the `loftsman` Kubernetes namespace.
-
-    ```bash
-    ncn-w001# CUSTOMIZATIONS=$(base64 < customizations.yaml  | tr -d '\n')
-    ncn-w001# kubectl get secrets -n loftsman site-init -o json |
-                jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" |
-                kubectl apply -f -
-    ```
+   - **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
