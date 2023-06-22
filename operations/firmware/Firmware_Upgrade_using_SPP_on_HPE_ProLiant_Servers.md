@@ -1,5 +1,7 @@
 # Firmware Upgrade using SPP on HPE ProLiant Servers
-#### Link to download SPP Image : 
+
+## Link to download SPP Image :
+
 https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx
 
 * Naming convention example : `2023.04.00.00` is the ISO image released in 4th Month of 2023
@@ -8,24 +10,24 @@ https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/i
 
 * Firmware can be deployed either individually by component or the SPP ISO image as a whole.
 
-### Deploying Individual Firmware Components
+## Deploying Individual Firmware Components
 
-####  Get the individual firmware component from SPP ISO image:
+###  Get the individual firmware component from SPP ISO image:
 
-* Mount or extract the SPP ISO image and locate the “contents.html” file.
-* Get the location of the file/package in the extracted/mounted ISO image from the "contents.html" file.  Usually it will be in the folder "Packages".
-* For example, to flash the BIOS/ROM for DL360 Gen11 server, find DL360 in “Description” column, and then find relevant component to flash. Note the extension should be `.fwpkg` if we are flashing through ILO.
+* Mount or extract the SPP ISO image and locate the `contents.html` file.
+* Get the location of the file/package in the extracted/mounted ISO image from the 'contents.html' file.  Usually it will be in the folder `Packages`.
+* For example, to flash the BIOS/ROM for `DL360 Gen11` server, find DL360 in `Description` column, and then find relevant component to flash. Note the extension should be `.fwpkg` if we are flashing through ILO.
 
-#### Steps to deploy individual components:
+### Steps to deploy individual components:
 
-* Login to the ILO page in web browser 
-* Go to the Firmware&OS Software at the left section
-* Select upload to iLO Repository
+* Login to the ILO page in web browser
+* Go to the `Firmware & OS` Software at the left section
+* Select `upload to iLO Repository`
 * Select the file where it is located and click on upload.
-* Go to iLO Repository, you should be able to see the uploaded component. Click on Install Component and then Click on TPM Override then click on add to the Installation queue
+* Go to iLO Repository, you should be able to see the uploaded component. Click on `Install Component` and then Click on `TPM Override` then click on `Add to the Installation queue`
 * You can check for the status message in Installation Queue. If you see any failed instance in Queue, then delete that instance else installation of next component would not get start if expiration is set to never for the failed instance.
 
-#### How to deploy SPP ISO image as a whole
+### How to deploy SPP ISO image as a whole
 
 **Pre-requisites:**
 
@@ -35,52 +37,52 @@ https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/i
 
 The SPP ISO Image can be deployed locally or remotely.
 
-### Deploying the ISO Image using the local method
+## Deploying the ISO Image using the local method
 
 * Login to ILO in web browser
-* Select Remote console & media on to the left side
-* Launch the remote console either HTML5 or .NET console or through HPLOCONS. Best option would be .NET and HPLOCONS
+* Select `Remote console & Media` on to the left side
+* Launch the remote console either `HTML5` or `.NET` console or through `HPLOCONS`. Best option would be .NET and HPLOCONS
 * Mount the ISO image either local location of the image or URL path. If URL path is given make sure that is in same network as ILO network
 * Do cold reboot or Reset the node from iLO remote console
-* Press F9 and go to One time Boot menu and select the mounted image, if URL is given then you see the URL path.
-* Select Interactive option
+* Press `F9` and go to `One time Boot` menu and select the mounted image, if URL is given then you see the URL path.
+* Select `Interactive` option
 * Accept and proceed
-* Click on Firmware Update and then Click OK
+* Click on `Firmware Update` and then Click OK
 * Inventory takes some time, wait until it completes and then click Next
 * Select the components that needs firmware flashing, you can also check for the version by clicking view details for each component. If its already up to date then by default it will not be selected, you can force update the component. Click on TPM override and then deploy
 * After deployment, check for the status and reboot the node
 
-### Deploying the ISO Image using the remote method
+## Deploying the ISO Image using the remote method
 
 * Mount the ISO image or copy and extract the ISO image.
-* If on a Windows Server then click on “launch_sum.bat” file, if on a Linux then “launch_sum.sh” file
+* If on a Windows Server then click on `launch_sum.bat` file, if on a Linux then `launch_sum.sh` file
 * Continue in the browser window that was opened
-* If “localhost Guided Update” is selected, then it updates the components on the server from where launch_sum execution file is launched.
+* If `localhost Guided Update` is selected, then it updates the components on the server from where `launch_sum` execution file is launched.
 * You can deploy on one or more than one target nodes by selecting the option Nodes
-* Click on Nodes, then Add Node. Give the ILO IP in IPV4 section (You can also give range of nodes), select Node type as iLO and give ILO credentials by scrolling down
-* Once the Discovery is done click on Add inventory, once inventory is completed click on Next and steps are same as 9, 10, 11 from local method.
+* Click on `Nodes`, then `Add Node`. Give the ILO IP in IPV4 section (You can also give range of nodes), select Node type as iLO and give ILO credentials by scrolling down
+* Once the Discovery is done click on `Add Inventory`, once inventory is completed click on Next
 * Inventory takes some time, wait until it completes and then click Next
-* Select the components that needs firmware flashing, you can also check for the version by clicking view details for each component. If its already up to date then by default it will not be selected, you can force 
-  update the component. Click on TPM override and then deploy
+* Select the components that needs firmware flashing, you can also check for the version by clicking view details for each component. If its already up to date then by default it will not be selected, you can force
+  update the component. Click on `TPM Override` and then `deploy`
 * After deployment, check for the status and reboot the node
 * Repeat this for all the nodes added.
 
-### Notes:
+## Notes:
 
 For any new server to boot up it should have the right set of Firmware Components
 
 1. ILO Firmware
 2. System ROM (BIOS)
 3. CPLD Firmware
-4. SPS Firmware(Only on Intel Proc servers)
-5. Minimum hardware requirements (like Proc, Mem, Fan, Power etc) based on QuickSpecs
+4. SPS Firmware (Only on `Intel Proc servers`)
+5. Minimum hardware requirements (like `Proc`, `Mem`, `Fan`, `Powe`r etc) based on `QuickSpecs`
 
 **On a high level:**
 
 * SPP has Firmware's, Drivers, ILO, ROM, SPS and other hardware components for all the server supported (Only DL, ML and Apollo Servers. For Synergy and Blade that’s a different Bundle) for that particular release
 * Procedure to flash from SPP can be found at SPP user guide, there are various deployment methods.
 
-#### In Customer world:
+### In Customer world:
 
 * Production server will have the minimum versions of firmware installed during factory integration.
 * SPP Images are released twice a year i.e every March and September.
