@@ -16,7 +16,7 @@ The `docs-csm` RPM has been installed on the NCN. Verify that the following file
 ls /usr/share/docs/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/update_customizations.sh
 ```
 
-## Update the `nmn_ncn_storage` List
+## Update the `nmn_ncn_storage` list
 
 Update the `nmn_ncn_storage` list to include the IP addresses for any added or removed storage nodes.
 
@@ -51,7 +51,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
    git commit -m 'Add customizations.yaml from site-init secret'
    ```
 
-### Modify the Customizations
+### Modify the customizations
 
 Modify the customizations to include the added or removed storage node.
 
@@ -110,46 +110,16 @@ Modify the customizations to include the added or removed storage node.
 
 ### Redeploy S3
 
-Redeploy S3 to pick up any changes for storage node endpoints.
+Redeploy S3 to pick up any changes for storage node endpoints. Follow the [Redeploying a Chart](../../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-1. Determine the version of S3.
+- Name of chart to be redeployed: `cray-s3`
+- Base name of manifest: `platform`
+- No customization changes need to be made during the redeploy procedure -- they were already done earlier on this page.
+- (`ncn-mw#`) When reaching the step to validate that the redeploy was successful, perform the following step:
 
-    ```bash
-    S3_VERSION=$(kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' |
-                        yq r - 'spec.charts.(name==cray-s3).version')
-    echo $S3_VERSION
-    ```
+    **Only follow this step as part of the previously linked chart redeploy procedure.**
 
-1. Create `s3-manifest.yaml`.
-
-    ```bash
-    cat > s3-manifest.yaml << EOF
-    apiVersion: manifests/v1beta1
-    metadata:
-        name: s3
-    spec:
-        charts:
-        - name: cray-s3
-          version: $S3_VERSION
-          namespace: ceph-rgw
-    EOF
-    ```
-
-1. Merge `customizations.yaml` with `s3-manifest.yaml`.
-
-    ```bash
-    manifestgen -c /tmp/customizations.yaml -i s3-manifest.yaml > s3-manifest.out.yaml
-    ```
-
-1. Redeploy the S3 helm chart.
-
-    ```bash
-    loftsman ship \
-        --charts-repo https://packages.local/repository/charts \
-        --manifest-path s3-manifest.out.yaml
-    ```
-
-1. Check that the new endpoint has been updated.
+    Check that the new endpoint has been updated.
 
     ```bash
     kubectl get endpoints -l app.kubernetes.io/instance=cray-s3 -n ceph-rgw -o jsonpath='{.items[*].subsets[].addresses}' | jq -r '.[] | .ip'
@@ -168,86 +138,16 @@ Redeploy S3 to pick up any changes for storage node endpoints.
 
 Redeploy `sysmgmt-health` to pick up any changes for storage node endpoints.
 
-1. Determine the version of `sysmgmt-health`.
+Follow the [Redeploying a Chart](../../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-    ```bash
-    SYSMGMT_VERSION=$(kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' |
-                             yq r - 'spec.charts.(name==cray-sysmgmt-health).version')
-    echo $SYSMGMT_VERSION
-    ```
+- Name of chart to be redeployed: `cray-sysmgmt-health`
+- Base name of manifest: `platform`
+- No customization changes need to be made during the redeploy procedure -- they were already done earlier on this page.
+- (`ncn-mw#`) When reaching the step to validate that the redeploy was successful, perform the following step:
 
-1. Determine the current resources.
+    **Only follow this step as part of the previously linked chart redeploy procedure.**
 
-    ```bash
-    kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | 
-              yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.resources'
-    ```
-
-    Example output:
-
-    ```yaml
-    limits:
-      cpu: '6'
-      memory: 30Gi
-    requests:
-      cpu: '2'
-      memory: 15Gi
-    ```
-
-1. Determine the current retention settings.
-
-    ```bash
-    kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-sysmgmt-health).values.prometheus-operator.prometheus.prometheusSpec.retention'
-    ```
-
-    Example output:
-
-    ```text
-    48h
-    ```
-
-1. Create `sysmgmt-health-manifest.yaml` and update the `resources` and `retention` sections as needed based upon the data from the previous steps.
-
-    ```bash
-    cat > sysmgmt-health-manifest.yaml << EOF
-    apiVersion: manifests/v1beta1
-    metadata:
-        name: sysmgmt-health
-    spec:
-        charts:
-        - name: cray-sysmgmt-health
-          version: $SYSMGMT_VERSION
-          namespace: sysmgmt-health
-          values:
-            prometheus-operator:
-              prometheus:
-                prometheusSpec:
-                  resources:
-                    limits:
-                      cpu: '6'
-                      memory: 30Gi
-                    requests:
-                      cpu: '2'
-                      memory: 15Gi
-                  retention: 48h
-    EOF
-    ```
-
-1. Merge `customizations.yaml` with `sysmgmt-health-manifest.yaml`.
-
-    ```bash
-    manifestgen -c /tmp/customizations.yaml -i sysmgmt-health-manifest.yaml > sysmgmt-health-manifest.out.yaml
-    ```
-
-1. Redeploy the `sysmgmt-health` helm chart.
-
-    ```bash
-    loftsman ship \
-        --charts-repo https://packages.local/repository/charts \
-        --manifest-path sysmgmt-health-manifest.out.yaml
-    ```
-
-1. Check that the new endpoint has been updated.
+    Check that the new endpoint has been updated.
 
     ```bash
     kubectl get endpoints -l app=cray-sysmgmt-health-ceph-exporter -n sysmgmt-health -o jsonpath='{.items[*].subsets[].addresses}' | jq -r '.[] | .ip'
@@ -271,7 +171,7 @@ Remove temporary files.
 rm /tmp/customizations.yaml /tmp/customizations.original.yaml /tmp/customizations.original.yaml.pretty
 ```
 
-## Next Step
+## Next step
 
 Proceed to the next step:
 
