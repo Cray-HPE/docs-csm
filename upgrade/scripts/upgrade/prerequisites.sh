@@ -481,6 +481,19 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="RESTART_SPIRE_POSTGRES"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    echo "Rolling spire-postgres statefulset"
+    kubectl rollout restart -n spire statefulset spire-postgres
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPGRADE_SYSMGMT_HEALTH"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
@@ -834,11 +847,11 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
     needs_backup=0
 
     if has_craycm ${cmns}; then
-      ((needs_backup+=1))
+      ((needs_backup += 1))
     fi
 
     if has_cm_init ${cminitns}; then
-      ((needs_backup+=1))
+      ((needs_backup += 1))
     fi
 
     # Ok so the gist of this "backup" is we back up all the cert-manager data as
@@ -1136,6 +1149,37 @@ if [[ ${state_recorded} == "0" ]]; then
     "${locOfScript}/../../../workflows/scripts/upload-rebuild-templates.sh"
     rpm --force -Uvh "$(find "${CSM_ARTI_DIR}"/rpm/cray/csm/ -name \*iuf-cli\*.rpm | sort -V | tail -1)"
 
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+state_name="VALIDATE_SPIRE_POSTGRES_HEALTH"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    # make sure spire-postgres is healthy
+    i=1
+    max_checks=40
+    wait_time=15
+    healthy="false"
+    while [[ ${i} -le ${max_checks} ]]; do
+      if [[ "$(kubectl get postgresql spire-postgres -n spire -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
+        echo "spire-postgres is healthy"
+        healthy="true"
+        break
+      fi
+      echo "Waiting for postgres operator to consider spire-postgres healthy (${i}/${max_checks})"
+      sleep ${wait_time}
+      i=$((i + 1))
+    done
+
+    if [[ ${healthy} == "false" ]]; then
+      echo "ERROR: spire-postgres is not healthy after $((max_checks * wait_time)) seconds"
+      exit 1
+    fi
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
