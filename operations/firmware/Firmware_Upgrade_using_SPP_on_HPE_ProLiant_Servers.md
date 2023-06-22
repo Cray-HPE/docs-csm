@@ -1,24 +1,22 @@
 # Firmware Upgrade using SPP on HPE ProLiant Servers
 
-## Link to download SPP Image :
+## Link to download SPP Image
 
 https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx
 
-* Naming convention example : `2023.04.00.00` is the ISO image released in 4th Month of 2023
-
+* Naming convention example: `2023.04.00.00` is the ISO image released in 4th Month of 2023
 * Download the latest version or the version you require.
-
 * Firmware can be deployed either individually by component or the SPP ISO image as a whole.
 
 ## Deploying Individual Firmware Components
 
-###  Get the individual firmware component from SPP ISO image:
+### Get the individual firmware component from SPP ISO image
 
 * Mount or extract the SPP ISO image and locate the `contents.html` file.
 * Get the location of the file/package in the extracted/mounted ISO image from the 'contents.html' file.  Usually it will be in the folder `Packages`.
 * For example, to flash the BIOS/ROM for `DL360 Gen11` server, find DL360 in `Description` column, and then find relevant component to flash. Note the extension should be `.fwpkg` if we are flashing through ILO.
 
-### Steps to deploy individual components:
+### Steps to deploy individual components
 
 * Login to the ILO page in web browser
 * Go to the `Firmware & OS` Software at the left section
@@ -29,11 +27,11 @@ https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/i
 
 ### How to deploy SPP ISO image as a whole
 
-**Pre-requisites:**
+**Pre-requisites**
 
-+ Downloaded SPP ISO image
-+ ILO accessible on system where you are flashing firmware using SPP ISO image
-+ Web Browser
+* Downloaded SPP ISO image
+* ILO accessible on system where you are flashing firmware using SPP ISO image
+* Web Browser
 
 The SPP ISO Image can be deployed locally or remotely.
 
@@ -49,7 +47,8 @@ The SPP ISO Image can be deployed locally or remotely.
 * Accept and proceed
 * Click on `Firmware Update` and then Click OK
 * Inventory takes some time, wait until it completes and then click Next
-* Select the components that needs firmware flashing, you can also check for the version by clicking view details for each component. If its already up to date then by default it will not be selected, you can force update the component. Click on TPM override and then deploy
+* Select the components that needs firmware flashing, you can also check for the version by clicking view details for each component.
+If its already up to date then by default it will not be selected, you can force update the component. Click on TPM override and then deploy
 * After deployment, check for the status and reboot the node
 
 ## Deploying the ISO Image using the remote method
@@ -67,7 +66,7 @@ The SPP ISO Image can be deployed locally or remotely.
 * After deployment, check for the status and reboot the node
 * Repeat this for all the nodes added.
 
-## Notes:
+## Notes
 
 For any new server to boot up it should have the right set of Firmware Components
 
@@ -77,12 +76,12 @@ For any new server to boot up it should have the right set of Firmware Component
 4. SPS Firmware (Only on `Intel Proc servers`)
 5. Minimum hardware requirements (like `Proc`, `Mem`, `Fan`, `Powe`r etc) based on `QuickSpecs`
 
-**On a high level:**
+**On a high level**
 
 * SPP has Firmware's, Drivers, ILO, ROM, SPS and other hardware components for all the server supported (Only DL, ML and Apollo Servers. For Synergy and Blade that’s a different Bundle) for that particular release
 * Procedure to flash from SPP can be found at SPP user guide, there are various deployment methods.
 
-### In Customer world:
+### In Customer world
 
 * Production server will have the minimum versions of firmware installed during factory integration.
 * SPP Images are released twice a year i.e every March and September.
