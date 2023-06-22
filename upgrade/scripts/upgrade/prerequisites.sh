@@ -1166,7 +1166,7 @@ if [[ ${state_recorded} == "0" ]]; then
     wait_time=15
     healthy="false"
     while [[ ${i} -le ${max_checks} ]]; do
-      if [[ "$(kubectl get postgresql cray-nls-postgres -n argo -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
+      if [[ "$(kubectl get postgresql spire-postgres -n spire -ojsonpath='{.status.PostgresClusterStatus}')" == "Running" ]]; then
         echo "spire-postgres is healthy"
         healthy="true"
         break
