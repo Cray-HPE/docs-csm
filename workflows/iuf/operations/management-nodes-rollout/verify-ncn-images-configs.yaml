@@ -1,0 +1,88 @@
+#
+# MIT License
+#
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: verify-ncn-images-and-configs
+  namespace: argo
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      inputs:
+        parameters:
+          - name: dryRun
+          - name: nodeType
+          - name: global_params
+      dag:
+        tasks:
+          - name: verify-images-and-configs
+            templateRef:
+              name: ssh-template
+              template: shell-script
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{inputs.parameters.dryRun}}"
+                - name: scriptContent
+                  value: |
+                    nodeType="{{inputs.parameters.nodeType}}"
+                    role_subrole="Management_${nodeType}"
+                    prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                    # Check config exists
+                    config=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].configuration' | tr -d '"')
+                    if [[ -z $config ]]; then
+                      echo "ERROR No CFS configuration was received for '${role_subrole}' from 'prepare-images' stage. Retry by running from 'prepare-images' stage"
+                      exit 1
+                    fi
+                    result=$(cray cfs configurations describe "$config" 2>&1)
+                    if [[ $? -ne 0 ]]; then
+                      result=$(echo "$result" | sed -e 's/^/DEBUG /')
+                      echo "ERROR Could not find the desired configuration $configuration in CFS for ${role_subrole} nodes"
+                      echo -e "DEBUG Command <cray cfs configurations describe $configuration> produced -\n\n$result"
+                      exit 1
+                    else
+                      echo "DEBUG Found CFS configuration:$config in CFS for ${role_subrole} nodes"
+                    fi
+
+                    # Check image exists
+                    image=$(echo $prepare_images_output | jq --arg ROLE_SUBROLE "${role_subrole}" '.images | map(select(.configuration_group_names[] == $ROLE_SUBROLE)) | .[].final_image_id' | tr -d '"')
+                    if [[ -z $image ]]; then
+                      echo "ERROR No image was received for '${role_subrole}' from 'prepare-images' stage. Retry by running from 'prepare-images' stage"
+                      exit 1
+                    fi
+                    if [[ $(echo $image | wc -l) -gt 1 ]]; then 
+                      echo "ERROR More than 1 image was received for ${role_subrole} nodes. Must be exactly 1 image to rebuild"
+                      echo "ERROR Images received: $image"
+                      exit 1
+                    fi
+                    result=$(cray ims images describe "$image" 2>&1)
+                    if [[ $? -ne 0 ]]; then
+                      result=$(echo "$result" | sed -e 's/^/DEBUG /')
+                      echo "ERROR Could not find the required image $image in IMS for ${role_subrole} rebuild"
+                      echo -e "DEBUG Command <cray ims images describe $image> produced -\n\n$result"
+                      exit 1
+                    else
+                      echo "DEBUG Found image:$image in IMS for ${role_subrole} rebuild"
+                    fi

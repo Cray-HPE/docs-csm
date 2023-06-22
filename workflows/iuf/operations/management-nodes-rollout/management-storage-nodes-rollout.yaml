@@ -64,7 +64,7 @@ spec:
             templateRef:
               name: workflow-template-record-time-template
               template: record-time-template
-          - name: verify-storage-images-and-configuration
+          - name: INFO-to-read
             dependencies:
               - start-operation
             templateRef:
@@ -76,31 +76,23 @@ spec:
                   value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
-                    prepare_images_ouput=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-
-                    # Check config exists
-                    config=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].configuration' | tr -d '"')
-                    if [[ -z $config ]]; then echo "ERROR  no CFS configuration was received for 'Management_Storage' from prepare images stage"; exit 1; fi
-                    cray cfs configurations describe "$config" > /dev/null
-                    if [[ $? -ne 0 ]]; then
-                      exit 1 # could not find the desired cfs configuration
-                    else
-                      echo "NOTICE found CFS configuration:$config in CFS for 'Management_Storage' nodes"
-                    fi
-
-                    # Check image exists
-                    image=$(echo $prepare_images_ouput | jq '.images | map(select(.configuration_group_names[] == "Management_Storage")) | .[].final_image_id' | tr -d '"')
-                    if [[ -z $image ]]; then echo "ERROR  no image was received for 'Management_Storage' from prepare images stage"; exit 1; fi
-                    if [[ $(echo $image | wc -l) -gt 1 ]]; then 
-                      echo "ERROR  more than 1 image was received for Management_Storage nodes. Must be exactly 1 image to rebuild"
-                      echo "ERROR  Images received: $image"; exit 1
-                    fi
-                    cray ims images describe "$image" > /dev/null
-                    if [[ $? -ne 0 ]]; then
-                      exit 1 # could not find the image in IMS
-                    else
-                      echo "NOTICE found image:$image in IMS for Management_Storage rebuild"
-                    fi
+                    echo "NOTICE This workflow will rollout storage nodes according to --limit-management-rollout parameter."
+                    echo "NOTICE This stage will start an additional Argo workflow whose name contains 'ncn-lifecycle-rebuild'. Check for this workflow in the Argo UI."
+                    echo "NOTICE Check the argo pod logs from each step in the workflow to see what the step is doing"
+          - name: verify-storage-images-and-configuration
+            dependencies:
+              - INFO-to-read
+            templateRef:
+              name: verify-ncn-images-and-configs
+              template: main
+            arguments:
+              parameters:
+                - name: dryRun
+                  value: "{{$.DryRun}}"
+                - name: global_params
+                  value: "{{inputs.parameters.global_params}}"
+                - name: nodeType
+                  value: "Storage"
           - name: storage-node-upgrade
             dependencies:
               - verify-storage-images-and-configuration
