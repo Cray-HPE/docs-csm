@@ -538,134 +538,87 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
 1. Re-apply the `cray-keycloak` Helm chart with the updated `customizations.yaml` file.
 
-   1. Retrieve the current `platform.yaml` manifest.
+   Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-      ```bash
-      ncn-mw# kubectl -n loftsman get cm loftsman-platform -o jsonpath='{.data.manifest\.yaml}' > platform.yaml
-      ```
+   - Name of chart to be redeployed: `cray-keycloak`
+   - Base name of manifest: `platform`
+   - Instead of downloading the customizations from Kubernetes, use the updated `customizations.yaml` file.
+   - When reaching the step to validate that the redeploy was successful, perform the following steps:
 
-   1. Remove all charts from the `platform.yaml` manifest except for `cray-keycloak`.
+      **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-      Edit the `platform.yaml` file and delete all sections starting with `-name: <chart_name>`, except for the `cray-keycloak` section.
+      1. Wait for the `keycloak-certs` secret to reflect the new `cert.jks`.
 
-   1. Change the name of the manifest being deployed from `platform` to `cray-keycloak`.
+         Run the following command until there is a non-empty value in the secret (this can take a minute or two):
 
-      ```bash
-      ncn-mw# sed -i 's/name: platform/name: cray-keycloak/' platform.yaml
-      ```
+         ```bash
+         ncn-mw# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
+         ```
 
-   1. Populate the platform manifest with data from the `customizations.yaml` file.
+         Example output:
 
-      ```bash
-      ncn-mw# manifestgen -i platform.yaml -c customizations.yaml -o new-platform.yaml
-      ```
+         ```text
+           certs.jks: <REDACTED>
+         ```
 
-   1. Re-apply the platform manifest with the updated `cray-keycloak` chart.
+      1. Restart the `cray-keycloak-` pods.
 
-      ```bash
-      ncn-mw# loftsman ship --manifest-path ./new-platform.yaml --charts-repo https://packages.local/repository/charts
-      ```
+         ```bash
+         ncn-mw# kubectl rollout restart statefulset -n services cray-keycloak
+         ```
 
-   1. Wait for the `keycloak-certs` secret to reflect the new `cert.jks`.
+      1. Wait for the Keycloak pods to restart.
 
-      Run the following command until there is a non-empty value in the secret (this can take a minute or two):
+         ```bash
+         kubectl rollout status statefulset -n services cray-keycloak
+         ```
 
-      ```bash
-      ncn-mw# kubectl get secret -n services keycloak-certs -o yaml | grep certs.jks
-      ```
+   - **Make sure to perform the entire linked procedure, including the step to save the updated customizations.**
 
-      Example output:
+1. Uninstall the current `cray-keycloak-users-localize` chart.
 
-      ```text
-        certs.jks: <REDACTED>
-      ```
-
-   1. Restart the `cray-keycloak-` pods.
-
-      ```bash
-      ncn-mw# kubectl rollout restart statefulset -n services cray-keycloak
-      ```
-
-   1. Wait for the Keycloak pods to restart.
-
-      ```bash
-      ncn-mw# kubectl rollout status statefulset -n services cray-keycloak
-      ```
+   ```bash
+   ncn-mw# helm del cray-keycloak-users-localize -n services
+   ```
 
 1. Re-apply the `cray-keycloak-users-localize` Helm chart with the updated `customizations.yaml` file.
 
-   1. Determine the `cray-keycloak-users-localize` chart version that is currently deployed.
+   Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
 
-      ```bash
-      ncn-mw# helm ls -A -a | grep cray-keycloak-users-localize | awk '{print $(NF-1)}'
-      ```
+   - Name of chart to be redeployed: `cray-keycloak-users-localize`
+   - Base name of manifest: `platform`
+   - Instead of downloading the customizations from Kubernetes, use the updated `customizations.yaml` file.
+   - When reaching the step to validate that the redeploy was successful, perform the following steps:
 
-      Example output:
+      **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-      ```text
-      cray-keycloak-users-localize-<VERSION>
-      ```
+      1. Watch the pod to check the status of the job.
 
-   1. Create a manifest file that will be used to reapply the same chart version.
+         The pod will go through the normal Kubernetes states. It will stay in a `Running` state for a while, and then it will go to `Completed`.
 
-      Create the file `./cray-keycloak-users-localize-manifest.yaml` with the following contents:
+         ```bash
+         ncn-mw# kubectl get pods -n services | grep keycloak-users-localize
+         ```
 
-      ```yaml
-      apiVersion: manifests/v1beta1
-      metadata:
-        name: reapply-cray-keycloak-users-localize
-      spec:
-        charts:
-          - name: cray-keycloak-users-localize
-            namespace: services
-            version: <VERSION FROM OUTPUT>
-      ```
+         Example output:
 
-   1. Uninstall the current `cray-keycloak-users-localize` chart.
+         ```text
+         keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
+         ```
 
-      ```bash
-      ncn-mw# helm del cray-keycloak-users-localize -n services
-      ```
+      1. Check the pod's logs.
 
-   1. Populate the deployment manifest with data from the `customizations.yaml` file.
+         Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
 
-      ```bash
-      ncn-mw# manifestgen -i cray-keycloak-users-localize-manifest.yaml -c customizations.yaml -o deploy.yaml
-      ```
+         ```bash
+         ncn-mw# kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
+         ```
 
-   1. Reapply the `cray-keycloak-users-localize` chart.
+         Example log entry showing that it has updated the "s3" objects and `ConfigMaps`:
 
-      ```bash
-      ncn-mw# loftsman ship --manifest-path ./deploy.yaml --charts-repo https://packages.local/repository/charts
-      ```
-
-   1. Watch the pod to check the status of the job.
-
-      The pod will go through the normal Kubernetes states. It will stay in a `Running` state for a while, and then it will go to `Completed`.
-
-      ```bash
-      ncn-mw# kubectl get pods -n services | grep keycloak-users-localize
-      ```
-
-      Example output:
-
-      ```text
-      keycloak-users-localize-1-sk2hn                                0/2     Completed   0          2m35s
-      ```
-
-   1. Check the pod's logs.
-
-      Replace the `KEYCLOAK_POD_NAME` value with the pod name from the previous step.
-
-      ```bash
-      ncn-mw# kubectl logs -n services KEYCLOAK_POD_NAME keycloak-localize
-      ```
-
-      Example log entry showing that it has updated the "s3" objects and `ConfigMaps`:
-
-      ```text
-      2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
-      ```
+         ```text
+         2020-07-20 18:26:15,774 - INFO    - keycloak_localize - keycloak-localize complete
+         ```
 
 1. Sync the users and groups from Keycloak to the compute nodes.
 
