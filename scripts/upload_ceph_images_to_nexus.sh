@@ -338,9 +338,9 @@ function disable_local_registries() {
   systemctl_force="--now"
 
   for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
-    #shellcheck disable=SC2029
-    if ssh "${storage_node}" "${ssh_options}" "systemctl disable registry.container.service ${systemctl_force}"; then
-       if ! ssh "${storage_node}" "${ssh_options}" "systemctl is-enabled registry.container.service"; then
+    #shellcheck disable=SC2029 disable=SC2086
+    if ssh "${storage_node}" ${ssh_options} "systemctl disable registry.container.service ${systemctl_force}"; then
+       if ! ssh "${storage_node}" ${ssh_options} "systemctl is-enabled registry.container.service"; then
          echo "Docker registry service on ${storage_node} has been disabled"
        fi
     fi
@@ -407,7 +407,8 @@ insecure = true
 EOF
 
   for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
-    scp "${ssh_options}" "${HEREFILE}" "${storage_node}":/etc/containers/registries.conf
+    #shellcheck disable=SC2086
+    scp ${ssh_options} "${HEREFILE}" "${storage_node}":/etc/containers/registries.conf
   done
 } #end fix_registries_conf()
 
