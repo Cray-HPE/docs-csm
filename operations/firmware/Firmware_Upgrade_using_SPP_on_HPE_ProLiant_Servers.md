@@ -25,7 +25,7 @@
 * Go to iLO Repository, you should be able to see the uploaded component. Click on `Install Component` and then Click on `TPM Override` then click on `Add to the Installation queue`
 * You can check for the status message in Installation Queue. If you see any failed instance in Queue, then delete that instance else installation of next component would not get start if expiration is set to never for the failed instance.
 
-##  Deploy SPP ISO image as a Whole
+## Deploy SPP ISO image as a Whole
 
 ### Pre-requisites
 
