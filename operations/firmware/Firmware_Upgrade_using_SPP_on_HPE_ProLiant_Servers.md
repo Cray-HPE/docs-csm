@@ -2,7 +2,7 @@
 
 ## Link to download SPP Image
 
-https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx
+`https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx`
 
 * Naming convention example: `2023.04.00.00` is the ISO image released in 4th Month of 2023
 * Download the latest version or the version you require.
@@ -27,7 +27,7 @@ https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/i
 
 ### How to deploy SPP ISO image as a whole
 
-**Pre-requisites**
+#### Pre-requisites
 
 * Downloaded SPP ISO image
 * ILO accessible on system where you are flashing firmware using SPP ISO image
@@ -76,7 +76,7 @@ For any new server to boot up it should have the right set of Firmware Component
 4. SPS Firmware (Only on `Intel Proc servers`)
 5. Minimum hardware requirements (like `Proc`, `Mem`, `Fan`, `Powe`r etc) based on `QuickSpecs`
 
-**On a high level**
+### On a high level
 
 * SPP has Firmware's, Drivers, ILO, ROM, SPS and other hardware components for all the server supported (Only DL, ML and Apollo Servers. For Synergy and Blade that’s a different Bundle) for that particular release
 * Procedure to flash from SPP can be found at SPP user guide, there are various deployment methods.
