@@ -896,7 +896,7 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
 
     # Ensure the cert-manager namespace is deleted in a case of both helm charts
     # removed but there might be detritous leftover in the namespace.
-    kubectl delete namespce "${cmns}" || :
+    kubectl delete namespace "${cmns}" || :
 
     tmp_manifest=/tmp/certmanager-tmp-manifest.yaml
 
@@ -947,8 +947,13 @@ EOF
     # If the restore secret exists, apply that data here and when done then
     # remove the secret as its purpose is no longer necessary.
     if kubectl get secret "${backup_secret?}" > /dev/null 2>&1; then
-      kubectl get secret "${backup_secret?}" -o jsonpath='{.data.data}' | base64 -d | kubectl apply -f -
-      kubectl delete secret "${backup_secret}"
+      # Only delete the secret if there are no errors. Note that existing
+      # resources may already exist and the full apply failed yet worked.
+      if kubectl get secret "${backup_secret?}" -o jsonpath='{.data.data}' | base64 -d | kubectl apply -f -; then
+        kubectl delete secret "${backup_secret}"
+      else
+        printf "warn: kubectl apply of %s encountered errors, restore of cert-manager data may be incomplete or simply tried to restore existing data\n" "${backup_secret}" >&2
+      fi
     fi
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
