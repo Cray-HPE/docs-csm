@@ -141,6 +141,21 @@ cd "$CSM_DISTDIR"
 ./upgrade.sh
 ```
 
+## Remove unsecured registry running on storage nodes
+
+Copy /usr/share/docs/csm/scripts to ncn-s001 like this:
+
+```bash
+rsync /usr/share/doc/csm ncn-s001:/usr/share/doc/
+```
+
+Then log onto node ncn-s001 and run this script:
+```bash
+ssh ncn-s001
+/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus
+exit
+```
+
 ## Update test suite packages
 
 Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
