@@ -1,12 +1,10 @@
 # Adjust HM Collector Ingress Replicas and Resource Limits
 
-* [Replica count and resource limit tuning guidance](#replica-count-and-resource-limit-tuning-guidance)
-* [Customize `cray-hms-hmcollector` in `customizations.yaml`](#customize-cray-hms-hmcollector-in-customizationsyaml)
-* [Redeploy `cray-hms-hmcollector` with new customizations](#redeploy-cray-hms-hmcollector-with-new-customizations)
+* [Inspect current resource usage](#inspect-current-resource-usage)
+* [Inspect pods for `OOMKilled` events](#inspect-pods-for-oomkilled-events)
+* [How to adjust replicas and limits](#how-to-adjust-replicas-and-limits)
 
-## Replica count and resource limit tuning guidance
-
-### Inspect current resource usage
+## Inspect current resource usage
 
 (`ncn-mw#`) View resource usage of the containers in the `cray-hms-hmcollector-ingress` pods:
 
@@ -38,7 +36,7 @@ The default resource limits for the `istio-proxy` containers are:
 * CPU: `2` or `2000m`
 * Memory: `1Gi`
 
-### Inspect pods for `OOMKilled` events
+## Inspect pods for `OOMKilled` events
 
 (`ncn-mw#`) Describe the `cray-hms-hmcollector-ingress` pods to determine if any have been `OOMKilled` in the recent past:
 
@@ -99,7 +97,7 @@ Containers:
 
 In the above example output, the `cray-hms-hmcollector-ingress` and the `istio-proxy` containers were previously `OOMKilled`, but both containers are currently running.
 
-### How to adjust replicas and limits
+## How to adjust replicas and limits
 
 * If the `cray-hms-hmcollector-ingress` containers are hitting their CPU limit and memory usage is steadily increasing until they get `OOMKilled`, then the number of replicas should be increased.
   It can be increased in increments of `1`, up to the number of worker nodes. This is a situation were the collector is unable to process events fast enough and they start to build up inside of it.
@@ -111,194 +109,101 @@ In the above example output, the `cray-hms-hmcollector-ingress` and the `istio-p
 For reference, on a system with four fully populated liquid-cooled cabinets, a single `cray-hms-hmcollector-ingress` pod (with a single replica) was consuming about `5000m` of CPU and
 about `300Mi` of memory.
 
-## Customize `cray-hms-hmcollector` in `customizations.yaml`
+Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure **with the following specifications**:
 
-1. (`ncn-mw#`) If the `site-init` repository is available as a remote repository, then clone it on the host orchestrating the upgrade.
+* Chart name: `cray-hms-hmcollector`
+* Base manifest name: `sysmgmt`
+* (`ncn-mw#`) When reaching the step to update the customizations, perform the following steps:
 
-   ```bash
-   git clone "$SITE_INIT_REPO_URL" site-init
-   ```
+   **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-   Otherwise, create a new `site-init` working tree:
+   1. Update `customizations.yaml` with the existing `cray-hms-hmcollector-ingress` resource settings.
 
-   ```bash
-   git init site-init
-   ```
+      1. Persist resource requests and limits from the `cray-hms-hmcollector-ingress` deployment.
 
-1. (`ncn-mw#`) Download `customizations.yaml`.
+         ```bash
+         kubectl -n services get deployments cray-hms-hmcollector-ingress \
+            -o jsonpath='{.spec.template.spec.containers[].resources}' | yq r -P - | \
+            yq w -f - -i ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector.collectorIngressConfig.resources
+         ```
 
-   ```bash
-   kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > site-init/customizations.yaml
-   ```
+      1. Persist annotations manually added to `cray-hms-hmcollector-ingress` deployment.
 
-1. (`ncn-mw#`) Review, add, and commit `customizations.yaml` to the local `site-init` repository as appropriate.
+         ```bash
+         kubectl -n services get deployments cray-hms-hmcollector-ingress \
+            -o jsonpath='{.spec.template.metadata.annotations}' | \
+            yq d -P - '"traffic.sidecar.istio.io/excludeOutboundPorts"' | \
+            yq w -f - -i ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector.podAnnotations
+         ```
 
-   > **`NOTE:`** If `site-init` was cloned from a remote repository, then
-   > there may not be any differences, and hence nothing to commit. This is
-   > okay. If there are differences between what is in the repository and what
-   > was stored in the `site-init`, then it suggests settings were improperly
-   > changed at some point. If that is the case, then be cautious.
+      1. View the updated overrides added to `customizations.yaml`.
 
-   ```bash
-   cd site-init
-   git diff
-   git add customizations.yaml
-   git commit -m 'Add customizations.yaml from site-init secret'
-   ```
+         If the value overrides look different to the sample output below, then the replica count or the resource limits
+         and requests have been manually modified in the past.
 
-1. (`ncn-mw#`) Update `customizations.yaml` with the existing `cray-hms-hmcollector-ingress` resource settings.
+         ```bash
+         yq r ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector
+         ```
 
-   1. Persist resource requests and limits from the `cray-hms-hmcollector-ingress` deployment.
+         Example output:
 
-      ```bash
-      kubectl -n services get deployments cray-hms-hmcollector-ingress \
-         -o jsonpath='{.spec.template.spec.containers[].resources}' | yq r -P - | \
-         yq w -f - -i ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector.collectorIngressConfig.resources
-      ```
+         ```yaml
+         hmcollector_external_ip: '{{ network.netstaticips.hmn_api_gw }}'
+         collectorIngressConfig:
+            replicas: 3
+            resources:
+               limits:
+                  cpu: "4"
+                  memory: 5Gi
+               requests:
+                  cpu: 500m
+                  memory: 256Mi
+         podAnnotations: {}
+         ```
 
-   1. Persist annotations manually added to `cray-hms-hmcollector-ingress` deployment.
+   1. If desired, adjust the replica count, resource limits, and resource requests for `cray-hms-hmcollector-ingress`.
 
-      ```bash
-      kubectl -n services get deployments cray-hms-hmcollector-ingress \
-         -o jsonpath='{.spec.template.metadata.annotations}' | \
-         yq d -P - '"traffic.sidecar.istio.io/excludeOutboundPorts"' | \
-         yq w -f - -i ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector.podAnnotations
-      ```
+      Otherwise this step can be skipped.
 
-   1. View the updated overrides added to `customizations.yaml`.
+      The value overrides for the `cray-hms-hmcollector-ingress` Helm chart are defined at `spec.kubernetes.services.cray-hms-hmcollector.collectorIngressConfig`.
 
-      If the value overrides look different to the sample output below, then the replica count or the resource limits
-      and requests have been manually modified in the past.
-
-      ```bash
-      yq r ./customizations.yaml spec.kubernetes.services.cray-hms-hmcollector
-      ```
-
-      Example output:
+      Adjust the resource limits and requests for the `cray-hms-hmcollector-ingress` deployment in `customizations.yaml`:
 
       ```yaml
-      hmcollector_external_ip: '{{ network.netstaticips.hmn_api_gw }}'
-      collectorIngressConfig:
-         replicas: 3
-         resources:
-            limits:
-               cpu: "4"
-               memory: 5Gi
-            requests:
-               cpu: 500m
-               memory: 256Mi
-      podAnnotations: {}
+            cray-hms-hmcollector:
+               hmcollector_external_ip: '{{ network.netstaticips.hmn_api_gw }}'
+               collectorIngressConfig:
+                  replicas: 3
+                  resources:
+                     limits:
+                        cpu: "4"
+                        memory: 5Gi
+                     requests:
+                        cpu: 500m
+                        memory: 256Mi
       ```
 
-1. (`ncn-mw#`) If desired, adjust the replica count, resource limits, and resource requests for `cray-hms-hmcollector-ingress`.
+      In order to specify a non-default memory limit for the Istio proxy used by all `cray-hms-hmcollector-*` pods,  add `sidecar.istio.io/proxyMemoryLimit` under `podAnnotations`.
+      By default, the Istio proxy memory limit is `1Gi`.
 
-   Otherwise this step can be skipped.
+      ```yaml
+            cray-hms-hmcollector:
+               podAnnotations:
+                  sidecar.istio.io/proxyMemoryLimit: 5Gi
+      ```
 
-   For information on possible adjustments, see [Replica count and resource limit tuning guidance](#replica-count-and-resource-limit-tuning-guidance).
+   1. Review the changes to `customizations.yaml`.
 
-   The value overrides for the `cray-hms-hmcollector-ingress` Helm chart are defined at `spec.kubernetes.services.cray-hms-hmcollector.collectorIngressConfig`.
+      Verify that [baseline system customizations](../../install/prepare_site_init.md#3-create-baseline-system-customizations)
+      and any customer-specific settings are correct.
 
-   Adjust the resource limits and requests for the `cray-hms-hmcollector-ingress` deployment in `customizations.yaml`:
+   1. Update the `site-init` sealed secret in the `loftsman` namespace.
 
-   ```yaml
-         cray-hms-hmcollector:
-            hmcollector_external_ip: '{{ network.netstaticips.hmn_api_gw }}'
-            collectorIngressConfig:
-               replicas: 3
-               resources:
-                  limits:
-                     cpu: "4"
-                     memory: 5Gi
-                  requests:
-                     cpu: 500m
-                     memory: 256Mi
-   ```
+      ```bash
+      kubectl delete secret -n loftsman site-init
+      kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+      ```
 
-   In order to specify a non-default memory limit for the Istio proxy used by all `cray-hms-hmcollector-*` pods,  add `sidecar.istio.io/proxyMemoryLimit` under `podAnnotations`.
-   By default, the Istio proxy memory limit is `1Gi`.
+   1. **If this document was referenced during an upgrade procure, then skip the rest of the redeploy procedure and also skip the rest of this page.**
 
-   ```yaml
-         cray-hms-hmcollector:
-            podAnnotations:
-               sidecar.istio.io/proxyMemoryLimit: 5Gi
-   ```
-
-1. (`ncn-mw#`) Review the changes to `customizations.yaml`.
-
-   Verify that [baseline system customizations](../../install/prepare_site_init.md#3-create-baseline-system-customizations)
-   and any customer-specific settings are correct.
-
-   ```bash
-   git diff
-   ```
-
-1. (`ncn-mw#`) Add and commit `customizations.yaml` if there are any changes.
-
-   ```bash
-   git add customizations.yaml
-   git commit -m "Update customizations.yaml consistent with CSM $CSM_RELEASE_VERSION"
-   ```
-
-1. (`ncn-mw#`) Update the `site-init` sealed secret in the `loftsman` namespace.
-
-   ```bash
-   kubectl delete secret -n loftsman site-init
-   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-   ```
-
-1. (`ncn-mw#`) Push to the remote repository, if applicable.
-
-   ```bash
-   git push
-   ```
-
-1. **If this document was referenced during an upgrade procure, then skip the rest of this page.**
-
-   Otherwise, proceed to [Redeploy `cray-hms-hmcollector` with new customizations](#redeploy-cray-hms-hmcollector-with-new-customizations)
-   in order for the new replica count and resource limits and requests to take effect.
-
-## Redeploy `cray-hms-hmcollector` with new customizations
-
-1. (`ncn-mw#`) Determine the version of HM Collector:
-
-    ```bash
-    kubectl -n loftsman get cm loftsman-sysmgmt -o jsonpath='{.data.manifest\.yaml}' | yq r - 'spec.charts.(name==cray-hms-hmcollector).version'
-    ```
-
-1. (`ncn-mw#`) Create `hmcollector-manifest.yaml` with the following contents.
-
-    > Be sure to replace `<HMCOLLECTOR_VERSION>` with the version determined in the previous step.
-
-    ```yaml
-    apiVersion: manifests/v1beta1
-    metadata:
-        name: hmcollector
-    spec:
-        charts:
-        - name: cray-hms-hmcollector
-          version: <HMCOLLECTOR_VERSION>
-          namespace: services
-    ```
-
-1. (`ncn-mw#`) Acquire `customizations.yaml`.
-
-   This step can be skipped if the `customizations.yaml` file is still available from the
-   [Customize `cray-hms-hmcollector` in `customizations.yaml`](#customize-cray-hms-hmcollector-in-customizationsyaml) procedure.
-
-   ```bash
-   kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
-   ```
-
-1. (`ncn-mw#`) Merge `customizations.yaml` with `hmcollector-manifest.yaml`.
-
-    ```bash
-    manifestgen -c customizations.yaml -i ./hmcollector-manifest.yaml > ./hmcollector-manifest.out.yaml
-    ```
-
-1. (`ncn-mw#`) Redeploy the HM Collector Helm chart.
-
-    ```bash
-    loftsman ship \
-        --charts-repo https://packages.local/repository/charts \
-        --manifest-path hmcollector-manifest.out.yaml
-    ```
+* When reaching the step to validate that the redeploy was successful, there are no validation steps to perform.

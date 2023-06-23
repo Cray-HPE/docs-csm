@@ -168,13 +168,19 @@ Using http proxies in any way other than the following examples will cause many 
    rpm -q docs-csm libcsm
    ```
 
+1. Set the `CSM_RELEASE` variable to the installed version of CSM.
+
+    ```bash
+    CSM_RELEASE=x.y.z
+    ```
+
 1. Download and upgrade the latest documentation RPM and CSM library.
 
     - Without proxy:
 
         ```bash
         wget "https://release.algol60.net/$(awk -F. '{print "csm-"$1"."$2}' <<< ${CSM_RELEASE})/docs-csm/docs-csm-latest.noarch.rpm" -O /root/docs-csm-latest.noarch.rpm
-        wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" -O libcsm-latest.noarch.rpm 
+        wget "https://release.algol60.net/lib/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/libcsm-latest.noarch.rpm" -O /root/libcsm-latest.noarch.rpm 
         ```
 
     - With https proxy:

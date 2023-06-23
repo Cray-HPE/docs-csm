@@ -280,6 +280,14 @@ def create_configs(configs_map: NameObjectMap, config_names_to_create: List[str]
     print("")
     for config_name in config_names_to_create:
         print(f"Importing configuration '{config_name}'")
+        # First, check for any layers which contain both "branch" and "commit" fields. It is not legal to
+        # specify both for a layer when creating a configuration. In these cases, we omit the
+        # "commit" field when recreating the layer, as it will be automatically populated by CFS.
+        # The alternative (omitting the "branch" field) means that information is lost, since the
+        # "branch" field is only present if it is specified when creating the configuration.
+        for layer in configs_map[config_name]["layers"]:
+            if "commit" in layer and "branch" in layer:
+                del layer["commit"]
         cfs.create_configuration(config_name, configs_map[config_name]["layers"])
 
 def update_components(comps_map: NameObjectMap, comp_ids_to_update: List[str]) -> None:

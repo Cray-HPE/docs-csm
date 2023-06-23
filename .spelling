@@ -920,6 +920,9 @@ Lorem
 # To allow Site Init
 Init
 
+- operations/boot_orchestration/Exporting_and_Importing_BOS_Data.md
+etag
+
 - operations/image_management/Exporting_and_Importing_IMS_Data.md
 etag
 etags
@@ -978,6 +981,12 @@ Admin
 - operations/security_and_authentication/Manage_Sealed_Secrets.md
 # To allow Site Init
 Init
+
+- operations/security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md
+SNMP-backed
+
+- operations/security_and_authentication/Update_Default_ServerTech_PDU_Credentials_used_by_the_Redfish_Translation_Service.md
+SNMP-backed
 
 - operations/security_and_authentication/Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md
 # To allow Site Init
