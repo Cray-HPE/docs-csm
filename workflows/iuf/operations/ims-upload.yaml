@@ -232,7 +232,7 @@ spec:
           default: "{}"
 
     container:
-      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.5.2
+      image: artifactory.algol60.net/csm-docker/stable/cray-ims-load-artifacts:2.6.0
       command:
         - "/bin/sh"
       args: ["-c", "/ims_load_artifacts/argo_entrypoint.sh"]
