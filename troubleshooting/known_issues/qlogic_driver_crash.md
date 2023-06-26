@@ -94,7 +94,7 @@ interface lag 14 multi-chassis
     spanning-tree port-type admin-edge
 ```
 
-Too correct the issue, please login to both the VSX pair switches and correct the configuration of these lags to
+Too correct the issue, log in to both the VSX pair switches and correct the configuration of these lags to
 use `vlan trunk native 10`:
 
 ```text
