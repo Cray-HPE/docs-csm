@@ -23,11 +23,21 @@ Acquire a CSM software release tarball for installation on the HPE Cray EX super
 The following procedure should work on any Linux system. If directed here from another procedure, then that source procedure should indicate on which system the CSM release should
 be downloaded and extracted.
 
+1. Set the `ENDPOINT` variable to the URL of the server hosting the CSM tarball.
+
+    ```bash
+    linux# ENDPOINT=URL_SERVER_Hosting_tarball
+    ```
+
+1. Set the `CSM_RELEASE` variable to the version of CSM software to be downloaded.
+
+    ```bash
+    linux# CSM_RELEASE=x.y.z
+    ```
+
 1. Download the CSM software release tarball.
 
    ```bash
-   linux# export ENDPOINT=URL_SERVER_Hosting_tarball
-   linux# export CSM_RELEASE=csm-x.y.z
    linux# wget ${ENDPOINT}/${CSM_RELEASE}.tar.gz
    ```
 
@@ -77,15 +87,30 @@ The following requirements must be met on the system where the procedure is bein
 
 ### Apply patch to CSM release: Procedure
 
+1. Set the `ENDPOINT` variable to the URL of the server hosting the CSM patch file.
+
+   ```bash
+   linux# ENDPOINT=URL_SERVER_Hosting_patch
+   ```
+
+1. Set the `CSM_RELEASE` variable to the version of CSM software to be patched.
+
+   ```bash
+   linux# CSM_RELEASE=x.y.z
+   ```
+
+1. Set the `PATCH_RELEASE` variable to the version of CSM patch.
+
+   ```bash
+   linux# PATCH_RELEASE=x.z.a
+   ```
+
 1. Download the compressed CSM software package patch file.
 
    The file name will be of the form `csm-x.y.z-x.z.a.patch.gz`.
    Be sure to modify the following example with the appropriate values.
 
    ```bash
-   linux# ENDPOINT=URL_SERVER_Hosting_tarball
-   linux# CSM_RELEASE=csm-x.y.z
-   linux# PATCH_RELEASE=x.z.a
    linux# wget "${ENDPOINT}/${CSM_RELEASE}-${PATCH_RELEASE}.patch.gz"
    ```
 

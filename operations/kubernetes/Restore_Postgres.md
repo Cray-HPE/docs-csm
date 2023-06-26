@@ -918,7 +918,7 @@ In the event that the VCS Postgres cluster must be rebuilt and the data restored
 1. Restore the data.
 
     ```bash
-    ncn-mw# kubectl exec "${SERVICE}-0" -c postgres -n services -it -- psql -U postgres < "${DUMPFILE}"
+    ncn-mw# kubectl exec "${POSTGRESQL}-0" -c postgres -n services -it -- psql -U postgres < "${DUMPFILE}"
     ```
 
     Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.
