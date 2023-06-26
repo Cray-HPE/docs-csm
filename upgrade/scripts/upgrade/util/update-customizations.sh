@@ -88,6 +88,7 @@ yq d -i "$c" 'spec.kubernetes.services.cray-opa.ingresses.ingressgateway.issuers
 
 # cray-istio
 yq w -i "$c" 'spec.kubernetes.services.cray-istio.services.istio-ingressgateway-hmn.serviceAnnotations.[external-dns.alpha.kubernetes.io/hostname]' 'api.hmnlb.{{ network.dns.external }},auth.hmnlb.{{ network.dns.external }},hmcollector.hmnlb.{{ network.dns.external }}'
+yq w -i "$c" 'spec.kubernetes.services.cray-istio.certificate.dnsNames[+]' 'istio-ingressgateway-cmn.istio-system.svc.cluster.local'
 
 # cray-keycloak
 if [[ -n "$(yq r "$c" "spec.kubernetes.services.cray-keycloak.keycloak.keycloak")" ]]; then
