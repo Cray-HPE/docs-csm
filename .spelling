@@ -885,9 +885,9 @@ twinax
 USR SFP-10G
 vcs-user-credentials
 Xcvr
-Canu
-VSX-pair
 vlan
+VSX-pair
+vsx-pair
 
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
