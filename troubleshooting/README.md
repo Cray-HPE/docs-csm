@@ -45,7 +45,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [CRUS Subcommands Missing From Cray CLI](known_issues/CRUS_Subcommands_Missing_From_Cray_CLI.md)
 * [Software Management Services health check](known_issues/sms_health_check.md)
-* [Qlogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
+* [QLogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
 
 ## Booting
 
