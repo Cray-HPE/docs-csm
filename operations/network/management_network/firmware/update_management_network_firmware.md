@@ -1,7 +1,7 @@
 # Update Management Network Firmware
 
-This page describes how to update firmware on the management network switches.
-More details and other options to upgrade firmware can be found in the switch [External User Guides](../external_user_guides.md).
+This page describes how to update firmware on the management network switches. More details and other options to upgrade
+firmware can be found in the switch [External User Guides](../external_user_guides.md).
 
 ## Prerequisites
 
@@ -12,23 +12,23 @@ All firmware can be found in the HFP package provided with the Shasta release.
 
 ## Switch Firmware
 
-| Model | software version |
-| ----- | -----: |
-| Aruba 8320 Switch Series | 10.11.1010  |
-| Aruba 8325 Switch Series | 10.11.1010  |
-| Aruba 8360 Switch Series | 10.11.1010  |
-| Aruba 6300 Switch Series | 10.11.1010  |
-| Mellanox SN2100 Switch Series | 3.9.3210|
-| Mellanox SN2700 Switch Series | 3.9.3210|
-| Dell S3048-ON Switch Series | 10.5.1.4|
-| Dell S4148T-ON Switch Series | 10.5.1.4|
-| Dell S4148F-ON Switch Series | 10.5.1.4|
+| Model                         | software version |
+|-------------------------------|-----------------:|
+| Aruba 8320 Switch Series      |     `10.11.1010` |
+| Aruba 8325 Switch Series      |     `10.11.1010` |
+| Aruba 8360 Switch Series      |     `10.11.1010` |
+| Aruba 6300 Switch Series      |     `10.11.1010` |
+| Mellanox SN2100 Switch Series |       `3.9.3210` |
+| Mellanox SN2700 Switch Series |       `3.9.3210` |
+| Dell S3048-ON Switch Series   |       `10.5.1.4` |
+| Dell S4148T-ON Switch Series  |       `10.5.1.4` |
+| Dell S4148F-ON Switch Series  |       `10.5.1.4` |
 
 ## Aruba Firmware Best Practices
 
 Aruba software version number explained:
 
-For example: 10.11.1010
+For example: `10.11.1010`
 
 - 10 = OS
 
@@ -38,25 +38,25 @@ For example: 10.11.1010
 
 It is considered to be a best practice to keep all Aruba CX platform devices running the same software version.
 
-Aruba CX devices two software image banks, which means sw images can be pre-staged to the device without booting to the new image.
+Aruba CX devices two software image banks, which means switch images can be pre-staged to the device without booting to the
+new image.
 
 If upgrading to a new major branch, in Aruba identified by the second integer in the software image number.
 
-When upgrading past a major software release, for example, from 10.9 to 10.11 (and skipping 10.10.xxxx)
-issue the `allow-unsafe-upgrades` command to allow any low level firmware/driver upgrades to complete.
-If going from the 10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically completed.
+When upgrading past a major software release, for example, from 10.9 to 10.11 (and skipping `10.10.xxxx`)
+issue the `allow-unsafe-upgrades` command to allow any low level firmware/driver upgrades to complete. If going from the
+10.6 branch to 10.7 branch, this step can be skipped as the low level firmware/driver upgrade would be automatically
+completed.
 
 ```bash
 config
 sw-leaf-001(config)# allow-unsafe-updates 30
 ```
 
-This command will enable non-failsafe updates of programmable devices for
-the next 30 minutes. First, wait for all line and fabric
-modules to reach the ready state, and then reboot the switch to begin
-applying any needed updates. Ensure that the switch will not lose power,
-be rebooted again, or have any modules removed until all updates have
-finished and all line and fabric modules have returned to the ready state.
+This command will enable non-failsafe updates of programmable devices for the next 30 minutes. First, wait for all line
+and fabric modules to reach the ready state, and then reboot the switch to begin applying any needed updates. Ensure
+that the switch will not lose power, be rebooted again, or have any modules removed until all updates have finished and
+all line and fabric modules have returned to the ready state.
 
 **WARNING:** Interrupting these updates may make the product unusable!
 
@@ -65,10 +65,9 @@ Continue (y/n)? y
 Unsafe updates      : allowed (less than 30 minute(s) remaining)
 ```
 
-VSX software upgrade command can automatically upgrade both of the peers
-in VSX topology by staging upgrade and automatically doing traffic shifting
-between peers to minimize impact to network. The following examples include
-the option for standalone and vsx-pair upgrade.
+VSX software upgrade command can automatically upgrade both of the peers in VSX topology by staging upgrade and
+automatically doing traffic shifting between peers to minimize impact to network. The following examples include the
+option for standalone and vsx-pair upgrade.
 
 ## Aruba Firmware Update - Standalone
 
@@ -77,7 +76,12 @@ Console into the switch being upgraded.
 1. Check images
 
    ```bash
-   show images
+   show images                        
+   ```
+
+   Potential output:
+
+   ```text
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -107,12 +111,17 @@ Console into the switch being upgraded.
 
 1. Upload the firmware to the desired image.
 
-In this example we are uploading it to the secondary.
+   In this example we are uploading it to the secondary.
 
    ```bash
    copy sftp://root@10.252.1.12//root/ArubaOS-CX_6400-6300_10_08_1021.swi secondary
 
    write mem
+   ```
+
+   Expected output:
+
+   ```text
    Copying configuration: [Success]
    ```
 
@@ -120,6 +129,11 @@ In this example we are uploading it to the secondary.
 
    ```bash
    show image
+   ```
+
+   Potential output:
+
+   ```text
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -157,6 +171,11 @@ In this example we are uploading it to the secondary.
 
    ```bash
    show version
+   ```
+
+   Potential output:
+
+   ```text
    -----------------------------------------------------------------------------
    ArubaOS-CX
    (c) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
@@ -182,6 +201,11 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
 
    ```bash
    show images
+   ```
+
+   Potential output:
+
+   ```text
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -211,12 +235,17 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
 
 1. Upload the firmware to the desired image.
 
-In this example we are uploading it to the secondary.
+   In this example we are uploading it to the secondary.
 
-   ```bash
+    ```bash
    copy sftp://root@10.252.1.12//var/www/ephemeral/data/network_images/ArubaOS-CX_8325_10_08_1021.swi secondary
 
    write mem
+   ```
+
+   Expected output:
+
+   ```text
    Copying configuration: [Success]
    ```
 
@@ -224,6 +253,11 @@ In this example we are uploading it to the secondary.
 
    ```bash
    show image
+   ```
+
+   Potential output:
+
+   ```text
    ---------------------------------------------------------------------------
    ArubaOS-CX Primary Image
    ---------------------------------------------------------------------------
@@ -251,24 +285,29 @@ In this example we are uploading it to the secondary.
    BIOS Version       : GL-01-0013
    ```
 
-1. After the firmware is uploaded to both VSX switches, you will need to start the software update from the VSX primary member.
+1. After the firmware is uploaded to both VSX switches, you will need to start the software update from the VSX primary
+   member.
 
-Since we uploaded to the secondary image, we choose that one to boot to.
+   Since we uploaded to the secondary image, we choose that one to boot to.
 
-```bash
-vsx update-software boot-bank secondary
-```
+    ```bash
+    vsx update-software boot-bank secondary
+    ```
 
-This will trigger the upgrade process on the VSX pair and it will start
-the dialogue explaining what will happen next, i.e. if any firmware/driver
-upgrades are needed (i.e. the unit would reboot twice if this was the case)
-and it will show you on the screen the current status of the upgrade process.
-In VSX upgrade process the secondary VSX member will always boot first.
+   This will trigger the upgrade process on the VSX pair and it will start the dialogue explaining what will happen
+   next, i.e. if any firmware/driver upgrades are needed (i.e. the unit would reboot twice if this was the case)
+   and it will show you on the screen the current status of the upgrade process. In VSX upgrade process the secondary
+   VSX member will always boot first.
 
-Once software update is complete verify the image version on both switches.
+   Once software update is complete verify the image version on both switches.
 
    ```bash
    show version
+   ```
+
+   Potential output:
+
+   ```text
    -----------------------------------------------------------------------------
    ArubaOS-CX
    (c) Copyright 2017-2020 Hewlett Packard Enterprise Development LP
@@ -291,33 +330,37 @@ SSH into the switch being upgraded.
 1. Fetch the image from `ncn-m001`.
 
    ```bash
-   sw-spine-001 [standalone: master] # image fetch scp://root@10.252.1.4/root/onyx-X86_64-3.9.3210.img
+   image fetch scp://root@10.252.1.4/root/onyx-X86_64-3.9.3210.img
    ```
 
 2. Install the image.
 
    ```bash
-   sw-spine-001 [standalone: master] # image install onyx-X86_64-3.9.3210.img
+   image install onyx-X86_64-3.9.3210.img
    ```
 
 3. Select the image to boot next.
 
    ```bash
-   sw-spine-001 [standalone: master] # image boot next
+   image boot next
    ```
 
 4. Write memory and reload.
 
    ```bash
-   sw-spine-001 [standalone: master] # write memory
-   sw-spine-001 [standalone: master] # reload
+   write memory
+   reload
    ```
 
 5. Once the switch is available, verify the image is installed.
 
    ```bash
-   sw-spine-001 [standalone: master] # show images
+   show images
+   ```
 
+   Expected output:
+
+   ```text
    Installed images:
    Partition 1:
      version: X86_64 3.9.0300 2020-02-26 19:25:24 x86_64
@@ -348,6 +391,11 @@ SSH into the switch being upgraded.
 
    ```bash
    show image status
+   ```
+
+   Potential output:
+
+   ```text
    Image Upgrade State:     download
    ==================================================
    File Transfer State:     download
@@ -372,6 +420,11 @@ SSH into the switch being upgraded.
 
    ```bash
    show version
+   ```
+
+   Potential output:
+
+   ```text
    Dell EMC Networking OS10 Enterprise
    Copyright (c) 1999-2020 by Dell Inc. All Rights Reserved.
    OS Version: 10.5.1.4
