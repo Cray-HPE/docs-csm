@@ -95,18 +95,15 @@ See [Create system configuration](../pre-installation.md#3-create-system-configu
 
 1. External connectivity has been established, and either bare-metal configurations can be installed or new/updated configurations can be applied.
 1. Validate SHCD and cabling
-1. Create custom CANU configurations and store them in version control.
-       ***At a minimum:***
+1. Create custom CANU configurations and store them in version control. ***At a minimum:***
     1. Create an [SNMP](#when-the-management-network-has-not-been-configured) configuration; see the detailed SNMP section below.
     1. Add configuration for site uplinks [CANU custom configuration](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/custom_config.md)
 
 If you have already validated SHCD, cabling and have created the required custom configurations and are comfortable with all steps of the network installation you can use the network install guide below.
 
-##### IMPORTANT
-
-Otherwise please refer to the ***Management Network User Guide***; i.e. if you have ***not*** validated your
-SHCD and cabling in prior or have a more complex installation that requires special configuration before proceeding
-with the network installation. Topic "install scenarios" contains more in depth instructions.
+> ***IMPORTANT*** Otherwise, please refer to the ***Management Network User Guide***; i.e. if you have ***not***
+> validated your SHCD and cabling in prior or have a more complex installation that requires special configuration before
+> proceeding with the network installation. Topic "install scenarios" contains more in depth instructions.
 
 ***Additional documentation:***
 
