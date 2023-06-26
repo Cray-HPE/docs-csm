@@ -43,6 +43,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Antero node NID allocation](known_issues/antero_node_NID_allocation.md)
 * [HPE nodes not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [Software Management Services health check](known_issues/sms_health_check.md)
+* [QLogic driver crash on storage nodes](known_issues/qlogic_driver_crash.md)
 
 ## Booting
 
