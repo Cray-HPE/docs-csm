@@ -885,8 +885,6 @@ twinax
 USR SFP-10G
 vcs-user-credentials
 Xcvr
-Qlogic
-qlogic
 Canu
 VSX-pair
 vlan

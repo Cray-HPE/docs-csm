@@ -1,10 +1,17 @@
-# Qlogic driver crash
+# QLogic driver crash
+
+- [Description](#description)
+- [Workaround](#workaround)
+- [Fix](#fix)
 
 ## Description
 
-In some failover/maintenance scenarios users may experience Qlogic driver crash on the storage nodes. This issue is usually tied to network events, such as a reboot of a switch in the VSX pair, but can also occur without user intervention in rare events.
+In some failover/maintenance scenarios users may experience QLogic driver crash on the storage nodes. This issue is
+usually tied to network events, such as a reboot of a switch in the VSX pair, but can also occur without user
+intervention in rare events.
 
-Issue seems to be aggravated by incorrect configuration for storage node back-channel links and per internal testing correcting the configuration on switch greatly reduces the risk of running into this issue.
+Issue seems to be aggravated by incorrect configuration for storage node back-channel links and per internal testing
+correcting the configuration on switch greatly reduces the risk of running into this issue.
 
 The configuration is fixed in CANU versions 2.3 and above.
 
@@ -49,11 +56,13 @@ Signature of the driver crash:
 
 ## Workaround
 
-Upgrade CANU to version 2.3 or above, regenerate the configuration, and then apply it the VSX-pair that hosts the storage nodes.
+Upgrade CANU to version 2.3 or above, regenerate the configuration, and then apply it the VSX-pair that hosts the
+storage nodes.
 
 Or manually correct the configuration.
 
-In this example of the problem you can see that the lags 10,12,14 which are the lags for the storage back channel communication have applied configuration of `vlan trunk native 1`. Which is wrong.
+In this example of the problem you can see that the lags 10,12,14 which are the lags for the storage back channel
+communication have applied configuration of `vlan trunk native 1`. Which is wrong.
 
 ```text
 interface lag 10 multi-chassis
@@ -85,7 +94,8 @@ interface lag 14 multi-chassis
     spanning-tree port-type admin-edge
 ```
 
-Too correct the issue, please login to both the VSX pair switches and correct the configuration of these lags to use `vlan trunk native 10`:
+Too correct the issue, please login to both the VSX pair switches and correct the configuration of these lags to
+use `vlan trunk native 10`:
 
 ```text
 interface lag 10 multi-chassis
@@ -119,4 +129,5 @@ interface lag 14 multi-chassis
 
 ## Fix
 
-The vendor is working to fix the Qlogic driver code. Once a fix is released, the new Qlogic driver will be added to the firmware pack.
+The vendor is working to fix the QLogic driver code. Once a fix is released, the new QLogic driver will be added to the
+firmware pack.
