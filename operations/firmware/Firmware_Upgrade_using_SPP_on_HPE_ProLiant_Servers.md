@@ -90,4 +90,5 @@ For any new server to boot up it should have the right set of Firmware Component
 * Production server will have the minimum versions of firmware installed during factory integration.
 * SPP Images are released twice a year i.e every March and September.
 * There will be hot fixes that are released as patch bundles throughout the year.
-* It’s always best practice to check the release notes of SPP image that is going to be used
+* It is always a best practice to check the release notes of the SPP image that is going to be used.
+
