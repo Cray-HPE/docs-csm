@@ -63,7 +63,7 @@ tasks:
             done
   - name: update-bss
     templateRef:
-      name: iuf-base-template
+      name: ssh-template
       template: shell-script
     arguments:
       parameters:
@@ -72,12 +72,16 @@ tasks:
         - name: scriptContent
           value: |
             TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+            TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
             TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                 jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
 
             CPS_PM_NODE=$( kubectl get node ${TARGET_NCN} -o json | jq -r '.metadata.labels."cps-pm-node"')
             if [ "$CPS_PM_NODE" = "True" ]; then
-              /host_usr_bin/csi handoff bss-update-param --set cps.pm-node=1 --limit $TARGET_XNAME
+              csi handoff bss-update-param --set cps.pm-node=1 --limit $TARGET_XNAME
             fi
  
 
@@ -121,12 +125,12 @@ tasks:
             else
               echo "INFO  No Image ID was specified for the boot image. The image that will be booted is the current image in BSS."
               echo "INFO setting metal.no-wipe=0 in BSS"
-              /host_usr_bin/csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
-              /host_usr_bin/csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
+              csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
+              csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
             fi
   - name: update-cfs
     templateRef:
-      name: iuf-base-template
+      name: ssh-template
       template: shell-script
     arguments:
       parameters:
@@ -135,6 +139,10 @@ tasks:
         - name: scriptContent
           value: |
             TARGET_NCN={{ `{{inputs.parameters.targetNcn}}` }}
+            TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                      -d client_id=admin-client \
+                      -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                      https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
             TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
                 jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
             
