@@ -31,7 +31,7 @@ rm -rf $BACKUP_NAME
 ls -la
 ```
 
-Create backups of locks, groups, partitions, and membership lists
+Create backups of locks, groups, partitions, membership, and hardware inventory
 
 ```bash
 cray hsm locks status list --format json > cray-smd-locks-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
@@ -106,23 +106,6 @@ Download the backup:
 
 ```bash
 cray artifacts get etcd-backup $SERVICE/$BACKUP_NAME $BACKUP_NAME
-ls -la
-```
-
-Make a backup of the Images stored in S3 and the image list from fas.
-You may receive an error "cannot create directory" - which you can ignore.
-
-```bash
-BACKUP_LOCATION=`pwd`
-BACKUP_NAME=cray-fas-images-backup_`date '+%Y-%m-%d_%H-%M-%S'`
-BACKUP_FOLDER=${BACKUP_LOCATION}/${BACKUP_NAME}
-mkdir -p "$BACKUP_FOLDER"
-cd $BACKUP_FOLDER
-for file in `cray fas images list --format json | jq -r '.[][].s3URL' | cut -d "/" -f 3-4`; do echo $file; mkdir `echo $file | cut -d "/" -f 1`; cray artifacts get fw-update $file $file; done
-cd $BACKUP_FOLDER && cd ..
-tar -czvf $BACKUP_NAME.tar.gz $BACKUP_NAME
-rm -rf $BACKUP_NAME
-cray fas images list --format json > cray-fas-images-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
 ls -la
 ```
 
