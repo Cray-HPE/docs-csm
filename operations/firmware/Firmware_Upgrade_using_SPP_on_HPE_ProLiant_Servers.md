@@ -1,8 +1,9 @@
 # Firmware Upgrade using SPP on HPE ProLiant Servers
 
-## Link to download SPP Image
+## Download SPP Image
 
-`https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx`
+[Link to download site](https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx).
+
 
 * Naming convention example: `2023.04.00.00` is the ISO image released in 4th Month of 2023
 * Download the latest version or the version you require.
