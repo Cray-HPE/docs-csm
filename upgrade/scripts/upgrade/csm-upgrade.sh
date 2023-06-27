@@ -98,6 +98,22 @@ else
     echo "====> ${state_name} has been completed"
 fi
 
+state_name="PRE_CSM_SERVICES_UPGRADE_BUCKETS"
+#shellcheck disable=SC2046
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+    target_ncn="ncn-s001"
+    echo "====> ${state_name} ..."
+    {
+    scp /usr/share/doc/csm/upgrade/scripts/ceph/create_rgw_buckets.sh $target_ncn:/tmp
+    scp /usr/share/doc/csm/upgrade/scripts/ceph/csm-1.5-new-buckets.yml $target_ncn:/tmp
+    ssh ${target_ncn} '/tmp/create_rgw_buckets.sh'
+    } >> ${LOG_FILE} 2>&1
+    record_state ${state_name} "$(hostname)"
+else
+    echo "====> ${state_name} has been completed"
+fi
+
 state_name="CSM_SERVICE_UPGRADE"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))

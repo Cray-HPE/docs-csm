@@ -53,6 +53,8 @@ for node_num in $(seq 1 "$num_storage_nodes"); do
 done
 
 sed -i "s/LASTNODE/$num_storage_nodes/g" /etc/ansible/hosts
+mkdir -p /etc/ansible/ceph-rgw-users/group_vars
+cp /tmp/csm-1.5-new-buckets.yml /etc/ansible/ceph-rgw-users/group_vars/all.yml
 
 # Adding conditional wait for k8s credentials.
 # Will exit with error if they do not show up within 2 mins.
@@ -82,4 +84,5 @@ EOF
 
 chmod 755 $playbook
 /etc/ansible/ceph-rgw-users/ceph-rgw-users.yaml
+rm /etc/ansible/ceph-rgw-users/group_vars/all.yml
 deactivate
