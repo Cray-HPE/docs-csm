@@ -19,12 +19,13 @@
 
 ### Steps to deploy individual components
 
-* Login to the ILO page in web browser
-* Go to the `Firmware & OS` Software at the left section
-* Select `upload to iLO Repository`
-* Select the file where it is located and click on upload.
-* Go to iLO Repository, you should be able to see the uploaded component. Click on `Install Component` and then Click on `TPM Override` then click on `Add to the Installation queue`
-* You can check for the status message in Installation Queue. If you see any failed instance in Queue, then delete that instance else installation of next component would not get start if expiration is set to never for the failed instance.
+1. Log in to the ILO page in web browser.
+1. Go to the `Firmware & OS` Software at the left section.
+1. Select `upload to iLO Repository`.
+1. Select the file where it is located and click on upload.
+1. Go to iLO Repository, you should be able to see the uploaded component. Click on `Install Component`, and then Click on `TPM Override` then click on `Add to the Installation queue`
+1. Check for the status message in Installation Queue. If you see any failed instance in Queue, then delete that instance or else the installation of the next component will not get to start if the expiration is set to never for the failed instance.
+
 
 ## Deploy SPP ISO image as a Whole
 
