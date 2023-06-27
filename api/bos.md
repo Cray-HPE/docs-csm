@@ -15,81 +15,73 @@ API calls return a content type of "application/problem+json" as per RFC 7807.
 
 ## Resources
 
-### Session Template
+### /sessiontemplate
 
-A Session Template sets the operational context of which nodes to operate on for
+A session template sets the operational context of which nodes to operate on for
 any given set of nodes. It is largely comprised of one or more boot
 sets and their associated software configuration.
 
-A Boot Set defines a list of nodes, the image you want to boot/reboot the nodes with,
+A boot set defines a list of nodes, the image you want to boot/reboot the nodes with,
 kernel parameters to use to boot the nodes, and additional configuration management
 framework actions to apply during node bring up.
 
-### Session
+### /session
 
-A BOS Session applies a provided action to the nodes defined in a Session Template.
+A BOS session applies a provided action to the nodes defined in a session
+template.
 
-## Workflow: Create a New Session
+## Workflow
 
-1. Choose the Session Template to use.
+### Create a New Session
 
-  Session Templates are uniquely identified by their names.
+#### GET /sessiontemplate
 
-  a. List available Session Templates.
+List available session templates.
+Note the *name* which uniquely identifies each session template.
+This value can be used to create a new session later,
+if specified in the request body of POST /session.
 
-    GET /v1/sessiontemplate or /v2/sessiontemplates
+#### POST /sessiontemplate
 
-  b. Create a new Session Template if desired.
+If no session template pre-exists that satisfies requirements,
+then create a new session template. *name* uniquely identifies the
+session template.
+This value can be used to create a new session later,
+if specified in the request body of POST /session.
 
-    POST /v1/sessiontemplate or PUT /v2/sessiontemplate/{template_name}
+#### POST /session
 
-    If no Session Template exists that satisfies requirements,
-    then create a new Session Template.
-    This Session Template can be used to create a new Session later.
+Specify template_name and an
+operation to create a new session.
+The template_name corresponds to the session template *name*.
+A new session is launched as a result of this call.
 
-2. Create the Session.
+A limit can also be specified to narrow the scope of the session. The limit
+can consist of nodes, groups, or roles in a comma-separated list.
+Multiple groups are treated as separated by OR, unless "&" is added to
+the start of the component, in which case this becomes an AND.  Components
+can also be preceded by "!" to exclude them.
 
-  POST /v1/session or /v2/sessions
+Note, the response from a successful session launch contains *links*.
+Within *links*, *href* is a string that uniquely identifies the session.
+*href* is constructed using the session template name and a generated UUID.
+Use the entire *href* string as the path parameter *session_id*
+to uniquely identify a session in for the /session/{session_id}
+endpoint.
 
-  Specify template_name and an operation to create a new Session.
-  The template_name corresponds to the Session Template *name*.
-  A new Session is launched as a result of this call (in the case of
-  /v2/sessions, the option to stage but not begin the Session also exists).
+#### GET /session/{session_id}
 
-  A limit can also be specified to narrow the scope of the Session. The limit
-  can consist of nodes, groups, or roles in a comma-separated list.
-  Multiple groups are treated as separated by OR, unless "&" is added to
-  the start of the component, in which case this becomes an AND.  Components
-  can also be preceded by "!" to exclude them.
+Get session details by session ID.
 
-  Note, the response from a successful Session launch contains *links*.
-  Within *links*, *href* is a string that uniquely identifies the Session.
-  *href* is constructed using the Session Template name and a generated UUID.
-  Use the entire *href* string as the path parameter *session_id*
-  to uniquely identify a Session.
-
-3. Get details on the Session.
-
-  GET /v1/session/{session_id} or /v2/sessions/{session_id}
+List all in progress and completed sessions.
 
 ## Interactions with Other APIs
 
-### Configuration Framework Service (CFS)
+BOS works in concert with Image Management Service (IMS) to access boot images,
+and if *enable_cfs* is true then
+BOS will invoke CFS to configure the compute nodes.
 
-If *enable_cfs* is true in a Session Template, then BOS will invoke CFS to
-configure the target nodes during *boot*, *reboot*, or *configure*
-operations. The *configure* operation is only available in BOS v1 Sessions;
-if desiring to only perform a CFS configuration on a set of nodes, it is
-recommended to use CFS directly.
-
-### Hardware State Manager (HSM)
-
-In some situations BOS checks HSM to determine if a node has been disabled.
-
-### Image Management Service (IMS)
-
-BOS works in concert with IMS to access boot images.
-All boot images specified via the Session Template must be available via IMS.
+All boot images specified via the session template must be available via IMS.
 
 Base URLs:
 
@@ -196,7 +188,7 @@ Status Code **200**
 |» major|string|false|none|none|
 |» minor|string|false|none|none|
 |» patch|string|false|none|none|
-|» links|[[Link](#schemalink)]|false|none|List of links to other resources|
+|» links|[[Link](#schemalink)]|false|none|[Link to other resources]|
 |»» href|string|false|none|none|
 |»» rel|string|false|none|none|
 
@@ -549,9 +541,9 @@ func main() {
 
 `POST /v1/sessiontemplate`
 
-*Create Session Template*
+*Create session template*
 
-Create a new Session Template.
+Create a new session template.
 
 > Body parameter
 
@@ -573,10 +565,13 @@ Create a new Session Template.
   "boot_sets": {
     "property1": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -589,17 +584,17 @@ Create a new Session Template.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -612,10 +607,7 @@ Create a new Session Template.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     }
   }
 }
@@ -625,7 +617,7 @@ Create a new Session Template.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V1SessionTemplate](#schemav1sessiontemplate)|true|A JSON object for creating a Session Template|
+|body|body|[V1SessionTemplate](#schemav1sessiontemplate)|true|A JSON object for creating a session template|
 
 > Example responses
 
@@ -639,7 +631,7 @@ Create a new Session Template.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session Template name|[SessionTemplateName](#schemasessiontemplatename)|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|Session Template name|[V1SessionTemplateName](#schemav1sessiontemplatename)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="success">
@@ -705,9 +697,10 @@ func main() {
 
 `GET /v1/sessiontemplate`
 
-*List Session Templates*
+*List session templates*
 
-List all Session Templates.
+List all session templates. Session templates are
+uniquely identified by the name.
 
 > Example responses
 
@@ -732,10 +725,13 @@ List all Session Templates.
     "boot_sets": {
       "property1": {
         "name": "compute",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "network": "string",
         "node_list": [
           "x3000c0s19b1n0",
           "x3000c0s19b2n0"
@@ -748,17 +744,17 @@ List all Session Templates.
           "string"
         ],
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       },
       "property2": {
         "name": "compute",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "network": "string",
         "node_list": [
           "x3000c0s19b1n0",
           "x3000c0s19b2n0"
@@ -771,10 +767,7 @@ List all Session Templates.
           "string"
         ],
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       }
     },
     "links": [
@@ -791,7 +784,7 @@ List all Session Templates.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[SessionTemplateArray](#schemasessiontemplatearray)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details array|[SessionTemplateArray](#schemasessiontemplatearray)|
 
 <aside class="success">
 This operation does not require authentication
@@ -856,17 +849,29 @@ func main() {
 
 `GET /v1/sessiontemplate/{session_template_id}`
 
-*Get Session Template by ID*
+*Get session template by ID*
 
-Get Session Template by Session Template ID.
-The Session Template ID corresponds to the *name*
-of the Session Template.
+Get session template by session template ID.
+The session template ID corresponds to the *name*
+of the session template.
 
 <h3 id="get_v1_sessiontemplate-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
+|session_template_id|path|string|true|Session Template ID|
+
+#### Detailed descriptions
+
+**session_template_id**: Session Template ID
+
+It is recommended to use names which meet the following restrictions:
+* Length of 1-127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but they are
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -890,10 +895,13 @@ of the Session Template.
   "boot_sets": {
     "property1": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -906,17 +914,17 @@ of the Session Template.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -929,10 +937,7 @@ of the Session Template.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     }
   },
   "links": [
@@ -948,7 +953,7 @@ of the Session Template.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|Inline|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <h3 id="get_v1_sessiontemplate-responseschema">Response Schema</h3>
@@ -1016,15 +1021,27 @@ func main() {
 
 `DELETE /v1/sessiontemplate/{session_template_id}`
 
-*Delete a Session Template*
+*Delete a session template*
 
-Delete a Session Template.
+Delete a session template.
 
 <h3 id="delete_v1_sessiontemplate-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
+|session_template_id|path|string|true|Session Template ID|
+
+#### Detailed descriptions
+
+**session_template_id**: Session Template ID
+
+It is recommended to use names which meet the following restrictions:
+* Length of 1-127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but they are
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -1110,11 +1127,11 @@ func main() {
 
 `GET /v1/sessiontemplatetemplate`
 
-*Get an example Session Template.*
+*Get an example session template.*
 
-Returns a skeleton of a Session Template, which can be
+Returns a skeleton of a session template, which can be
 used as a starting point for users creating their own
-Session Templates.
+session templates.
 
 > Example responses
 
@@ -1138,10 +1155,13 @@ Session Templates.
   "boot_sets": {
     "property1": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -1154,17 +1174,17 @@ Session Templates.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -1177,10 +1197,7 @@ Session Templates.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     }
   },
   "links": [
@@ -1196,7 +1213,7 @@ Session Templates.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V1SessionTemplate](#schemav1sessiontemplate)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|[V1SessionTemplate](#schemav1sessiontemplate)|
 
 <aside class="success">
 This operation does not require authentication
@@ -1267,11 +1284,11 @@ func main() {
 
 `POST /v1/session`
 
-*Create a Session*
+*Create a session*
 
-The creation of a Session performs the operation
+The creation of a session performs the operation
 specified in the SessionCreateRequest
-on the Boot Sets defined in the Session Template.
+on the boot set(s) defined in the session template.
 
 > Body parameter
 
@@ -1279,7 +1296,7 @@ on the Boot Sets defined in the Session Template.
 {
   "operation": "boot",
   "templateUuid": "my-session-template",
-  "templateName": "cle-1.0.0",
+  "templateName": "my-session-template",
   "limit": "string"
 }
 ```
@@ -1298,7 +1315,7 @@ on the Boot Sets defined in the Session Template.
 {
   "operation": "boot",
   "templateUuid": "my-session-template",
-  "templateName": "cle-1.0.0",
+  "templateName": "my-session-template",
   "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
   "limit": "string",
   "links": [
@@ -1383,9 +1400,9 @@ func main() {
 
 `GET /v1/session`
 
-*List Session IDs*
+*List session IDs*
 
-List IDs of all Sessions, including those in progress and those complete.
+List IDs of all sessions, including those in progress and those complete.
 
 > Example responses
 
@@ -1409,7 +1426,7 @@ Status Code **200**
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[[V1SessionId](#schemav1sessionid)]|false|none|[Unique BOS v1 Session identifier.]|
+|*anonymous*|[[V1SessionId](#schemav1sessionid)]|false|none|[Unique BOS v1 session identifier.]|
 
 <aside class="success">
 This operation does not require authentication
@@ -1474,9 +1491,9 @@ func main() {
 
 `GET /v1/session/{session_id}`
 
-*Get Session details by ID*
+*Get session details by ID*
 
-Get Session details by Session ID.
+Get session details by session ID.
 
 <h3 id="get_v1_session-parameters">Parameters</h3>
 
@@ -1498,7 +1515,7 @@ Get Session details by Session ID.
   "start_time": "2020-04-24T12:00",
   "status_link": "/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status",
   "stop_time": "2020-04-24T12:00",
-  "templateName": "cle-1.0.0"
+  "templateName": "my-session-template"
 }
 ```
 
@@ -1574,9 +1591,9 @@ func main() {
 
 `DELETE /v1/session/{session_id}`
 
-*Delete Session by ID*
+*Delete session by ID*
 
-Delete Session by Session ID.
+Delete session by session ID.
 
 <h3 id="delete_v1_session-parameters">Parameters</h3>
 
@@ -1668,9 +1685,9 @@ func main() {
 
 `GET /v1/session/{session_id}/status`
 
-*A list of the statuses for the different Boot Sets.*
+*A list of the statuses for the different boot sets.*
 
-A list of the statuses for the different Boot Sets.
+A list of the statuses for the different boot sets.
 
 <h3 id="get_v1_session_status-parameters">Parameters</h3>
 
@@ -1692,7 +1709,7 @@ A list of the statuses for the different Boot Sets.
     "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
-    "compute"
+    "string"
   ],
   "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
@@ -1778,9 +1795,9 @@ func main() {
 
 `POST /v1/session/{session_id}/status`
 
-*Create the initial Session status*
+*Create the initial session status*
 
-Creates the initial Session status.
+Creates the initial session status.
 
 > Body parameter
 
@@ -1794,7 +1811,7 @@ Creates the initial Session status.
     "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
-    "compute"
+    "string"
   ],
   "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
@@ -1810,7 +1827,7 @@ Creates the initial Session status.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V1SessionStatus](#schemav1sessionstatus)|true|A JSON object for creating the status for a Session|
+|body|body|[V1SessionStatus](#schemav1sessionstatus)|true|A JSON object for creating the status for a session|
 |session_id|path|string|true|Session ID|
 
 > Example responses
@@ -1827,7 +1844,7 @@ Creates the initial Session status.
     "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
-    "compute"
+    "string"
   ],
   "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
@@ -1914,9 +1931,9 @@ func main() {
 
 `PATCH /v1/session/{session_id}/status`
 
-*Update the Session status*
+*Update the session status*
 
-Update the Session status. You can update the start or stop times.
+Update the session status. You can update the start or stop times.
 
 > Body parameter
 
@@ -1934,7 +1951,7 @@ Update the Session status. You can update the start or stop times.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V1GenericMetadata](#schemav1genericmetadata)|true|A JSON object for updating the status for a Session|
+|body|body|[V1GenericMetadata](#schemav1genericmetadata)|true|A JSON object for updating the status for a session|
 |session_id|path|string|true|Session ID|
 
 > Example responses
@@ -1951,7 +1968,7 @@ Update the Session status. You can update the start or stop times.
     "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
-    "compute"
+    "string"
   ],
   "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
@@ -2033,7 +2050,7 @@ func main() {
 
 `DELETE /v1/session/{session_id}/status`
 
-*Delete the Session status*
+*Delete the session status*
 
 Deletes an existing Session status
 
@@ -2128,16 +2145,16 @@ func main() {
 
 `GET /v1/session/{session_id}/status/{boot_set_name}`
 
-*Get the status for a Boot Set.*
+*Get the status for a boot set.*
 
-Get the status for a Boot Set.
+Get the status for a boot set.
 
 <h3 id="get_v1_session_status_by_bootset-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
+|boot_set_name|path|string|true|Boot set name|
 
 > Example responses
 
@@ -2145,7 +2162,7 @@ Get the status for a Boot Set.
 
 ```json
 {
-  "name": "compute",
+  "name": "Boot-Set",
   "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
     "complete": true,
@@ -2276,7 +2293,7 @@ Create a status for a Boot Set
 
 ```json
 {
-  "name": "compute",
+  "name": "Boot-Set",
   "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
     "complete": true,
@@ -2331,7 +2348,7 @@ Create a status for a Boot Set
 |---|---|---|---|---|
 |body|body|[V1BootSetStatus](#schemav1bootsetstatus)|true|A JSON object for creating a status for a Boot Set|
 |session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
+|boot_set_name|path|string|true|Boot set name|
 
 > Example responses
 
@@ -2339,7 +2356,7 @@ Create a status for a Boot Set
 
 ```json
 {
-  "name": "compute",
+  "name": "Boot-Set",
   "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
     "complete": true,
@@ -2465,14 +2482,14 @@ func main() {
 *Update the status.*
 
 This will change the status for one or more nodes within
-the Boot Set.
+the boot set.
 
 > Body parameter
 
 ```json
 [
   {
-    "update_type": "NodeChangeList",
+    "update_type": "string",
     "phase": "Boot",
     "data": {
       "phase": "Boot",
@@ -2491,9 +2508,9 @@ the Boot Set.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V1UpdateRequestList](#schemav1updaterequestlist)|true|A JSON object for updating the status for a Session|
+|body|body|any|true|A JSON object for updating the status for a session|
 |session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
+|boot_set_name|path|string|true|Boot set name|
 
 > Example responses
 
@@ -2501,7 +2518,7 @@ the Boot Set.
 
 ```json
 {
-  "name": "compute",
+  "name": "Boot-Set",
   "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
     "complete": true,
@@ -2629,7 +2646,7 @@ Deletes an existing Boot Set status
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
+|boot_set_name|path|string|true|Boot set name|
 
 > Example responses
 
@@ -2715,16 +2732,16 @@ func main() {
 
 `GET /v1/session/{session_id}/status/{boot_set_name}/{phase_name}`
 
-*Get the status for a specific Boot Set and phase.*
+*Get the status for a specific boot set and phase.*
 
-Get the status for a specific Boot Set and phase.
+Get the status for a specific boot set and phase.
 
 <h3 id="get_v1_session_status_by_bootset_and_phase-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
+|boot_set_name|path|string|true|Boot set name|
 |phase_name|path|string|true|The phase name|
 
 > Example responses
@@ -2833,16 +2850,16 @@ func main() {
 
 `GET /v1/session/{session_id}/status/{boot_set_name}/{phase_name}/{category_name}`
 
-*Get the status for a specific Boot Set, phase, and category.*
+*Get the status for a specific boot set, phase, and category.*
 
-Get the status for a specific Boot Set, phase, and category.
+Get the status for a specific boot set, phase, and category.
 
 <h3 id="get_v1_session_status_by_bootset_and_phase_and_category-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |session_id|path|string|true|Session ID|
-|boot_set_name|path|string|true|Boot Set name|
+|boot_set_name|path|string|true|Boot set name|
 |phase_name|path|string|true|The phase name|
 |category_name|path|string|true|The category name|
 
@@ -3114,9 +3131,10 @@ func main() {
 
 `GET /v2/sessiontemplates`
 
-*List Session Templates*
+*List session templates*
 
-List all Session Templates.
+List all session templates. Session templates are
+uniquely identified by the name.
 
 > Example responses
 
@@ -3141,10 +3159,13 @@ List all Session Templates.
     "boot_sets": {
       "property1": {
         "name": "compute",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "network": "string",
         "node_list": [
           "x3000c0s19b1n0",
           "x3000c0s19b2n0"
@@ -3157,17 +3178,17 @@ List all Session Templates.
           "string"
         ],
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       },
       "property2": {
         "name": "compute",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "network": "string",
         "node_list": [
           "x3000c0s19b1n0",
           "x3000c0s19b2n0"
@@ -3180,10 +3201,7 @@ List all Session Templates.
           "string"
         ],
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       }
     },
     "links": [
@@ -3200,7 +3218,7 @@ List all Session Templates.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details array|[SessionTemplateArray](#schemasessiontemplatearray)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details array|[SessionTemplateArray](#schemasessiontemplatearray)|
 
 <aside class="success">
 This operation does not require authentication
@@ -3265,17 +3283,29 @@ func main() {
 
 `GET /v2/sessiontemplatesvalid/{session_template_id}`
 
-*Validate the Session Template by ID*
+*Validate the session template by ID*
 
-Validate Session Template by Session Template ID.
-The Session Template ID corresponds to the *name*
-of the Session Template.
+Validate session template by session template ID.
+The session template ID corresponds to the *name*
+of the session template.
 
 <h3 id="validate_v2_sessiontemplate-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
+|session_template_id|path|string|true|Session Template ID|
+
+#### Detailed descriptions
+
+**session_template_id**: Session Template ID
+
+It is recommended to use names which meet the following restrictions:
+* Length of 1-127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but they are
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -3289,7 +3319,7 @@ of the Session Template.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template validity details|[V2SessionTemplateValidation](#schemav2sessiontemplatevalidation)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template validity details|[V2SessionTemplateValidation](#schemav2sessiontemplatevalidation)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="success">
@@ -3355,17 +3385,29 @@ func main() {
 
 `GET /v2/sessiontemplates/{session_template_id}`
 
-*Get Session Template by ID*
+*Get session template by ID*
 
-Get Session Template by Session Template ID.
-The Session Template ID corresponds to the *name*
-of the Session Template.
+Get session template by session template ID.
+The session template ID corresponds to the *name*
+of the session template.
 
 <h3 id="get_v2_sessiontemplate-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
+|session_template_id|path|string|true|Session Template ID|
+
+#### Detailed descriptions
+
+**session_template_id**: Session Template ID
+
+It is recommended to use names which meet the following restrictions:
+* Length of 1-127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but they are
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -3389,10 +3431,13 @@ of the Session Template.
   "boot_sets": {
     "property1": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3405,17 +3450,17 @@ of the Session Template.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3428,10 +3473,7 @@ of the Session Template.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     }
   },
   "links": [
@@ -3447,7 +3489,7 @@ of the Session Template.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|Inline|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|Inline|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
 <h3 id="get_v2_sessiontemplate-responseschema">Response Schema</h3>
@@ -3519,9 +3561,9 @@ func main() {
 
 `PUT /v2/sessiontemplates/{session_template_id}`
 
-*Create Session Template*
+*Create session template*
 
-Create a new Session Template.
+Create a new session template.
 
 > Body parameter
 
@@ -3541,7 +3583,7 @@ Create a new Session Template.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3564,7 +3606,7 @@ Create a new Session Template.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3587,8 +3629,20 @@ Create a new Session Template.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2SessionTemplate](#schemav2sessiontemplate)|true|A JSON object for creating a Session Template|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
+|body|body|[V2SessionTemplate](#schemav2sessiontemplate)|true|A JSON object for creating a session template|
+|session_template_id|path|string|true|Session Template ID|
+
+#### Detailed descriptions
+
+**session_template_id**: Session Template ID
+
+It is recommended to use names which meet the following restrictions:
+* Length of 1-127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but they are
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -3611,7 +3665,7 @@ Create a new Session Template.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3634,7 +3688,7 @@ Create a new Session Template.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3663,7 +3717,7 @@ Create a new Session Template.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="success">
@@ -3733,9 +3787,9 @@ func main() {
 
 `PATCH /v2/sessiontemplates/{session_template_id}`
 
-*Update a Session Template*
+*Update a session template*
 
-Update an existing Session Template.
+Update an existing session template.
 
 > Body parameter
 
@@ -3755,7 +3809,7 @@ Update an existing Session Template.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3778,7 +3832,7 @@ Update an existing Session Template.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3801,8 +3855,20 @@ Update an existing Session Template.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2SessionTemplate](#schemav2sessiontemplate)|true|A JSON object for updating a Session Template|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
+|body|body|[V2SessionTemplate](#schemav2sessiontemplate)|true|A JSON object for updating a session template|
+|session_template_id|path|string|true|Session Template ID|
+
+#### Detailed descriptions
+
+**session_template_id**: Session Template ID
+
+It is recommended to use names which meet the following restrictions:
+* Length of 1-127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but they are
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -3825,7 +3891,7 @@ Update an existing Session Template.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3848,7 +3914,7 @@ Update an existing Session Template.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -3877,7 +3943,7 @@ Update an existing Session Template.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
@@ -3944,15 +4010,27 @@ func main() {
 
 `DELETE /v2/sessiontemplates/{session_template_id}`
 
-*Delete a Session Template*
+*Delete a session template*
 
-Delete a Session Template.
+Delete a session template.
 
 <h3 id="delete_v2_sessiontemplate-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|session_template_id|path|[SessionTemplateName](#schemasessiontemplatename)|true|Session Template name|
+|session_template_id|path|string|true|Session Template ID|
+
+#### Detailed descriptions
+
+**session_template_id**: Session Template ID
+
+It is recommended to use names which meet the following restrictions:
+* Length of 1-127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but they are
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -4038,11 +4116,11 @@ func main() {
 
 `GET /v2/sessiontemplatetemplate`
 
-*Get an example Session Template.*
+*Get an example session template.*
 
-Returns a skeleton of a Session Template, which can be
+Returns a skeleton of a session template, which can be
 used as a starting point for users creating their own
-Session Templates.
+session templates.
 
 > Example responses
 
@@ -4065,7 +4143,7 @@ Session Templates.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -4088,7 +4166,7 @@ Session Templates.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -4117,7 +4195,7 @@ Session Templates.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session Template details|[V2SessionTemplate](#schemav2sessiontemplate)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Session template details|[V2SessionTemplate](#schemav2sessiontemplate)|
 
 <aside class="success">
 This operation does not require authentication
@@ -4186,11 +4264,11 @@ func main() {
 
 `POST /v2/sessions`
 
-*Create a Session*
+*Create a session*
 
-The creation of a Session performs the operation
+The creation of a session performs the operation
 specified in the SessionCreateRequest
-on the Boot Sets defined in the Session Template.
+on the boot set(s) defined in the session template.
 
 > Body parameter
 
@@ -4198,7 +4276,7 @@ on the Boot Sets defined in the Session Template.
 {
   "name": "session-20190728032600",
   "operation": "boot",
-  "template_name": "cle-1.0.0",
+  "template_name": "my-session-template",
   "limit": "string",
   "stage": false,
   "include_disabled": false
@@ -4209,7 +4287,7 @@ on the Boot Sets defined in the Session Template.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2SessionCreate](#schemav2sessioncreate)|true|The information to create a Session|
+|body|body|[V2SessionCreate](#schemav2sessioncreate)|true|The information to create a session|
 
 > Example responses
 
@@ -4217,9 +4295,9 @@ on the Boot Sets defined in the Session Template.
 
 ```json
 {
-  "name": "session-20190728032600",
+  "name": "string",
   "operation": "boot",
-  "template_name": "cle-1.0.0",
+  "template_name": "my-session-template",
   "limit": "string",
   "stage": true,
   "components": "string",
@@ -4303,17 +4381,17 @@ func main() {
 
 `GET /v2/sessions`
 
-*List Sessions*
+*List sessions*
 
-List all Sessions, including those in progress and those complete.
+List all sessions, including those in progress and those complete.
 
 <h3 id="get_v2_sessions-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|min_age|query|[AgeString](#schemaagestring)|false|Only include Sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|[AgeString](#schemaagestring)|false|Only include Sessions younger than the given age.  Age is given in the format "1d" or "6h"|
-|status|query|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|Only include Sessions with the given status.|
+|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
+|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|status|query|string|false|Return only sessions with the given status.|
 
 #### Enumerated Values
 
@@ -4330,9 +4408,9 @@ List all Sessions, including those in progress and those complete.
 ```json
 [
   {
-    "name": "session-20190728032600",
+    "name": "string",
     "operation": "boot",
-    "template_name": "cle-1.0.0",
+    "template_name": "my-session-template",
     "limit": "string",
     "stage": true,
     "components": "string",
@@ -4416,18 +4494,18 @@ func main() {
 
 `DELETE /v2/sessions`
 
-*Delete multiple Sessions.*
+*Delete multiple sessions.*
 
-Delete multiple Sessions.  If filters are provided, only Sessions matching
-all filters will be deleted.  By default only completed Sessions will be deleted.
+Delete multiple sessions.  If filters are provided, only sessions matching
+all filters will be deleted.  By default only completed sessions will be deleted.
 
 <h3 id="delete_v2_sessions-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|min_age|query|[AgeString](#schemaagestring)|false|Only include Sessions older than the given age.  Age is given in the format "1d" or "6h"|
-|max_age|query|[AgeString](#schemaagestring)|false|Only include Sessions younger than the given age.  Age is given in the format "1d" or "6h"|
-|status|query|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|Only include Sessions with the given status.|
+|min_age|query|string|false|Return only sessions older than the given age.  Age is given in the format "1d" or "6h"|
+|max_age|query|string|false|Return only sessions younger than the given age.  Age is given in the format "1d" or "6h"|
+|status|query|string|false|Return only sessions with the given status.|
 
 #### Enumerated Values
 
@@ -4521,9 +4599,9 @@ func main() {
 
 `GET /v2/sessions/{session_id}`
 
-*Get Session details by ID*
+*Get session details by ID*
 
-Get Session details by Session ID.
+Get session details by session ID.
 
 <h3 id="get_v2_session-parameters">Parameters</h3>
 
@@ -4531,15 +4609,25 @@ Get Session details by Session ID.
 |---|---|---|---|---|
 |session_id|path|string|true|Session ID|
 
+#### Detailed descriptions
+
+**session_id**: Session ID
+
+BOS v2 session IDs must be 1-45 characters in length and match the
+following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+
+These restrictions are not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
+
 > Example responses
 
 > 200 Response
 
 ```json
 {
-  "name": "session-20190728032600",
+  "name": "string",
   "operation": "boot",
-  "template_name": "cle-1.0.0",
+  "template_name": "my-session-template",
   "limit": "string",
   "stage": true,
   "components": "string",
@@ -4627,17 +4715,17 @@ func main() {
 
 `PATCH /v2/sessions/{session_id}`
 
-*Update a single Session*
+*Update a single session*
 
-Update the state for a given Session in the BOS database
+Update the state for a given session in the BOS database
 
 > Body parameter
 
 ```json
 {
-  "name": "session-20190728032600",
+  "name": "string",
   "operation": "boot",
-  "template_name": "cle-1.0.0",
+  "template_name": "my-session-template",
   "limit": "string",
   "stage": true,
   "components": "string",
@@ -4655,8 +4743,18 @@ Update the state for a given Session in the BOS database
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2Session](#schemav2session)|true|The state for a single Session|
+|body|body|[V2Session](#schemav2session)|true|The state for a single session|
 |session_id|path|string|true|Session ID|
+
+#### Detailed descriptions
+
+**session_id**: Session ID
+
+BOS v2 session IDs must be 1-45 characters in length and match the
+following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+
+These restrictions are not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -4664,9 +4762,9 @@ Update the state for a given Session in the BOS database
 
 ```json
 {
-  "name": "session-20190728032600",
+  "name": "string",
   "operation": "boot",
-  "template_name": "cle-1.0.0",
+  "template_name": "my-session-template",
   "limit": "string",
   "stage": true,
   "components": "string",
@@ -4751,15 +4849,25 @@ func main() {
 
 `DELETE /v2/sessions/{session_id}`
 
-*Delete Session by ID*
+*Delete session by ID*
 
-Delete Session by Session ID.
+Delete session by session ID.
 
 <h3 id="delete_v2_session-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |session_id|path|string|true|Session ID|
+
+#### Detailed descriptions
+
+**session_id**: Session ID
+
+BOS v2 session IDs must be 1-45 characters in length and match the
+following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+
+These restrictions are not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -4845,15 +4953,25 @@ func main() {
 
 `GET /v2/sessions/{session_id}/status`
 
-*Get Session extended status information by ID*
+*Get session extended status information by ID*
 
-Get Session extended status information by ID
+Get session extended status information by ID
 
 <h3 id="get_v2_session_status-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |session_id|path|string|true|Session ID|
+
+#### Detailed descriptions
+
+**session_id**: Session ID
+
+BOS v2 session IDs must be 1-45 characters in length and match the
+following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+
+These restrictions are not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -4951,9 +5069,9 @@ func main() {
 
 `POST /v2/sessions/{session_id}/status`
 
-*Saves the current Session to database*
+*Saves the current session to database*
 
-Saves the current Session to database.  For use at Session completion.
+Saves the current session to database.  For use at session completion.
 
 <h3 id="save_v2_session_status-parameters">Parameters</h3>
 
@@ -4961,15 +5079,25 @@ Saves the current Session to database.  For use at Session completion.
 |---|---|---|---|---|
 |session_id|path|string|true|Session ID|
 
+#### Detailed descriptions
+
+**session_id**: Session ID
+
+BOS v2 session IDs must be 1-45 characters in length and match the
+following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+
+These restrictions are not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
+
 > Example responses
 
 > 200 Response
 
 ```json
 {
-  "name": "session-20190728032600",
+  "name": "string",
   "operation": "boot",
-  "template_name": "cle-1.0.0",
+  "template_name": "my-session-template",
   "limit": "string",
   "stage": true,
   "components": "string",
@@ -5053,31 +5181,20 @@ func main() {
 
 `GET /v2/components`
 
-*Retrieve the state of a collection of Components*
+*Retrieve the state of a collection of components*
 
-Retrieve the full collection of Components in the form of a
-ComponentArray. Full results can also be filtered by query
-parameters. Only the first filter parameter of each type is
-used and the parameters are applied in an AND fashion.
-If the collection is empty or the filters have no match, an
-empty array is returned.
+Retrieve the full collection of components in the form of a ComponentArray. Full results can also be filtered by query parameters. Only the first filter parameter of each type is used and the parameters are applied in an AND fashion. If the collection is empty or the filters have no match, an empty array is returned.
 
 <h3 id="get_v2_components-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|ids|query|[V2ComponentId](#schemav2componentid)|false|Retrieve the Components with the given ID|
-|session|query|string|false|Retrieve the Components with the given Session ID.|
-|staged_session|query|string|false|Retrieve the Components with the given staged Session ID.|
-|enabled|query|boolean|false|Retrieve the Components with the "enabled" state.|
-|phase|query|string|false|Retrieve the Components in the given phase.|
-|status|query|string|false|Retrieve the Components with the given status.|
-
-#### Detailed descriptions
-
-**ids**: Retrieve the Components with the given ID
-(e.g. xname for hardware Components). Can be chained
-for selecting groups of Components.
+|ids|query|string|false|Retrieve the components with the given ID (e.g. xname for hardware components). Can be chained for selecting groups of components.|
+|session|query|string|false|Retrieve the components with the given session ID.|
+|staged_session|query|string|false|Retrieve the components with the given staged session ID.|
+|enabled|query|boolean|false|Retrieve the components with the "enabled" state.|
+|phase|query|string|false|Retrieve the components in the given phase.|
+|status|query|string|false|Retrieve the components with the given status.|
 
 > Example responses
 
@@ -5086,34 +5203,34 @@ for selecting groups of Components.
 ```json
 [
   {
-    "id": "string",
+    "id": "x3001c0s39b0n0",
     "actual_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "desired_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
+      "configuration": "string",
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "staged_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
-      "session": "session-20190728032600",
+      "configuration": "string",
+      "session": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "last_action": {
@@ -5133,7 +5250,7 @@ for selecting groups of Components.
     },
     "enabled": true,
     "error": "string",
-    "session": "session-20190728032600",
+    "session": "string",
     "retry_policy": 1
   }
 ]
@@ -5143,7 +5260,7 @@ for selecting groups of Components.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V2ComponentArray](#schemav2componentarray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="success">
@@ -5213,41 +5330,41 @@ func main() {
 
 `PUT /v2/components`
 
-*Add or Replace a collection of Components*
+*Add or Replace a collection of components*
 
-Update the state for a collection of Components in the BOS database
+Update the state for a collection of components in the BOS database
 
 > Body parameter
 
 ```json
 [
   {
-    "id": "string",
+    "id": "x3001c0s39b0n0",
     "actual_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
       "bss_token": "string"
     },
     "desired_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
+      "configuration": "string",
       "bss_token": "string"
     },
     "staged_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
-      "session": "session-20190728032600"
+      "configuration": "string",
+      "session": "string"
     },
     "last_action": {
       "action": "string",
@@ -5264,7 +5381,7 @@ Update the state for a collection of Components in the BOS database
     },
     "enabled": true,
     "error": "string",
-    "session": "session-20190728032600",
+    "session": "string",
     "retry_policy": 1
   }
 ]
@@ -5274,7 +5391,7 @@ Update the state for a collection of Components in the BOS database
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2ComponentArray](#schemav2componentarray)|true|The state for an array of Components|
+|body|body|[V2ComponentArray](#schemav2componentarray)|true|The state for an array of components|
 
 > Example responses
 
@@ -5283,34 +5400,34 @@ Update the state for a collection of Components in the BOS database
 ```json
 [
   {
-    "id": "string",
+    "id": "x3001c0s39b0n0",
     "actual_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "desired_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
+      "configuration": "string",
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "staged_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
-      "session": "session-20190728032600",
+      "configuration": "string",
+      "session": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "last_action": {
@@ -5330,7 +5447,7 @@ Update the state for a collection of Components in the BOS database
     },
     "enabled": true,
     "error": "string",
-    "session": "session-20190728032600",
+    "session": "string",
     "retry_policy": 1
   }
 ]
@@ -5340,7 +5457,7 @@ Update the state for a collection of Components in the BOS database
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V2ComponentArray](#schemav2componentarray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="success">
@@ -5410,41 +5527,41 @@ func main() {
 
 `PATCH /v2/components`
 
-*Update a collection of Components*
+*Update a collection of components*
 
-Update the state for a collection of Components in the BOS database
+Update the state for a collection of components in the BOS database
 
 > Body parameter
 
 ```json
 {
   "patch": {
-    "id": "string",
+    "id": "x3001c0s39b0n0",
     "actual_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
       "bss_token": "string"
     },
     "desired_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
+      "configuration": "string",
       "bss_token": "string"
     },
     "staged_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
-      "session": "session-20190728032600"
+      "configuration": "string",
+      "session": "string"
     },
     "last_action": {
       "action": "string",
@@ -5461,12 +5578,12 @@ Update the state for a collection of Components in the BOS database
     },
     "enabled": true,
     "error": "string",
-    "session": "session-20190728032600",
+    "session": "string",
     "retry_policy": 1
   },
   "filters": {
     "ids": "string",
-    "session": "session-20190728032600"
+    "session": "string"
   }
 }
 ```
@@ -5475,7 +5592,7 @@ Update the state for a collection of Components in the BOS database
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|any|true|The state for an array of Components|
+|body|body|any|true|The state for an array of components|
 
 > Example responses
 
@@ -5484,34 +5601,34 @@ Update the state for a collection of Components in the BOS database
 ```json
 [
   {
-    "id": "string",
+    "id": "x3001c0s39b0n0",
     "actual_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "desired_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
+      "configuration": "string",
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "staged_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
-      "session": "session-20190728032600",
+      "configuration": "string",
+      "session": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "last_action": {
@@ -5531,7 +5648,7 @@ Update the state for a collection of Components in the BOS database
     },
     "enabled": true,
     "error": "string",
-    "session": "session-20190728032600",
+    "session": "string",
     "retry_policy": 1
   }
 ]
@@ -5541,7 +5658,7 @@ Update the state for a collection of Components in the BOS database
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of Component states|[V2ComponentArray](#schemav2componentarray)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A collection of component states|[V2ComponentArray](#schemav2componentarray)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
@@ -5608,15 +5725,24 @@ func main() {
 
 `GET /v2/components/{component_id}`
 
-*Retrieve the state of a single Component*
+*Retrieve the state of a single component*
 
-Retrieve the current and desired state of a single Component
+Retrieve the current and desired state of a single component
 
 <h3 id="get_v2_component-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|component_id|path|[V2ComponentId](#schemav2componentid)|true|Component ID. e.g. xname for hardware Components|
+|component_id|path|string|true|Component ID. e.g. xname for hardware components|
+
+#### Detailed descriptions
+
+**component_id**: Component ID. e.g. xname for hardware components
+
+It is recommended that this should be 1-127 characters in length.
+
+This restriction is not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -5624,34 +5750,34 @@ Retrieve the current and desired state of a single Component
 
 ```json
 {
-  "id": "string",
+  "id": "x3001c0s39b0n0",
   "actual_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
     "bss_token": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "desired_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
+    "configuration": "string",
     "bss_token": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "staged_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
-    "session": "session-20190728032600",
+    "configuration": "string",
+    "session": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "last_action": {
@@ -5671,7 +5797,7 @@ Retrieve the current and desired state of a single Component
   },
   "enabled": true,
   "error": "string",
-  "session": "session-20190728032600",
+  "session": "string",
   "retry_policy": 1
 }
 ```
@@ -5680,7 +5806,7 @@ Retrieve the current and desired state of a single Component
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V2Component](#schemav2component)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 
@@ -5751,40 +5877,40 @@ func main() {
 
 `PUT /v2/components/{component_id}`
 
-*Add or Replace a single Component*
+*Add or Replace a single component*
 
-Update the state for a given Component in the BOS database
+Update the state for a given component in the BOS database
 
 > Body parameter
 
 ```json
 {
-  "id": "string",
+  "id": "x3001c0s39b0n0",
   "actual_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
     "bss_token": "string"
   },
   "desired_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
+    "configuration": "string",
     "bss_token": "string"
   },
   "staged_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
-    "session": "session-20190728032600"
+    "configuration": "string",
+    "session": "string"
   },
   "last_action": {
     "action": "string",
@@ -5801,7 +5927,7 @@ Update the state for a given Component in the BOS database
   },
   "enabled": true,
   "error": "string",
-  "session": "session-20190728032600",
+  "session": "string",
   "retry_policy": 1
 }
 ```
@@ -5810,8 +5936,17 @@ Update the state for a given Component in the BOS database
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2Component](#schemav2component)|true|The state for a single Component|
-|component_id|path|[V2ComponentId](#schemav2componentid)|true|Component ID. e.g. xname for hardware Components|
+|body|body|[V2Component](#schemav2component)|true|The state for a single component|
+|component_id|path|string|true|Component ID. e.g. xname for hardware components|
+
+#### Detailed descriptions
+
+**component_id**: Component ID. e.g. xname for hardware components
+
+It is recommended that this should be 1-127 characters in length.
+
+This restriction is not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -5819,34 +5954,34 @@ Update the state for a given Component in the BOS database
 
 ```json
 {
-  "id": "string",
+  "id": "x3001c0s39b0n0",
   "actual_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
     "bss_token": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "desired_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
+    "configuration": "string",
     "bss_token": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "staged_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
-    "session": "session-20190728032600",
+    "configuration": "string",
+    "session": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "last_action": {
@@ -5866,7 +6001,7 @@ Update the state for a given Component in the BOS database
   },
   "enabled": true,
   "error": "string",
-  "session": "session-20190728032600",
+  "session": "string",
   "retry_policy": 1
 }
 ```
@@ -5875,7 +6010,7 @@ Update the state for a given Component in the BOS database
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V2Component](#schemav2component)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="success">
@@ -5945,40 +6080,40 @@ func main() {
 
 `PATCH /v2/components/{component_id}`
 
-*Update a single Component*
+*Update a single component*
 
-Update the state for a given Component in the BOS database
+Update the state for a given component in the BOS database
 
 > Body parameter
 
 ```json
 {
-  "id": "string",
+  "id": "x3001c0s39b0n0",
   "actual_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
     "bss_token": "string"
   },
   "desired_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
+    "configuration": "string",
     "bss_token": "string"
   },
   "staged_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
-    "session": "session-20190728032600"
+    "configuration": "string",
+    "session": "string"
   },
   "last_action": {
     "action": "string",
@@ -5995,7 +6130,7 @@ Update the state for a given Component in the BOS database
   },
   "enabled": true,
   "error": "string",
-  "session": "session-20190728032600",
+  "session": "string",
   "retry_policy": 1
 }
 ```
@@ -6004,8 +6139,17 @@ Update the state for a given Component in the BOS database
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2Component](#schemav2component)|true|The state for a single Component|
-|component_id|path|[V2ComponentId](#schemav2componentid)|true|Component ID. e.g. xname for hardware Components|
+|body|body|[V2Component](#schemav2component)|true|The state for a single component|
+|component_id|path|string|true|Component ID. e.g. xname for hardware components|
+
+#### Detailed descriptions
+
+**component_id**: Component ID. e.g. xname for hardware components
+
+It is recommended that this should be 1-127 characters in length.
+
+This restriction is not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -6013,34 +6157,34 @@ Update the state for a given Component in the BOS database
 
 ```json
 {
-  "id": "string",
+  "id": "x3001c0s39b0n0",
   "actual_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
     "bss_token": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "desired_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
+    "configuration": "string",
     "bss_token": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "staged_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
-    "session": "session-20190728032600",
+    "configuration": "string",
+    "session": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "last_action": {
@@ -6060,7 +6204,7 @@ Update the state for a given Component in the BOS database
   },
   "enabled": true,
   "error": "string",
-  "session": "session-20190728032600",
+  "session": "string",
   "retry_policy": 1
 }
 ```
@@ -6069,7 +6213,7 @@ Update the state for a given Component in the BOS database
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single Component state|[V2Component](#schemav2component)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single component state|[V2Component](#schemav2component)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The update was not allowed due to a conflict.|[ProblemDetails](#schemaproblemdetails)|
@@ -6137,15 +6281,24 @@ func main() {
 
 `DELETE /v2/components/{component_id}`
 
-*Delete a single Component*
+*Delete a single component*
 
-Delete the given Component
+Delete the given component
 
 <h3 id="delete_v2_component-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|component_id|path|[V2ComponentId](#schemav2componentid)|true|Component ID. e.g. xname for hardware Components|
+|component_id|path|string|true|Component ID. e.g. xname for hardware components|
+
+#### Detailed descriptions
+
+**component_id**: Component ID. e.g. xname for hardware components
+
+It is recommended that this should be 1-127 characters in length.
+
+This restriction is not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
 
 > Example responses
 
@@ -6235,11 +6388,11 @@ func main() {
 
 `POST /v2/applystaged`
 
-*Start a staged Session for the specified Components*
+*Start a staged session for the specified components*
 
-Given a list of xnames, this will trigger the start of any Sessions
-staged for those Components.  Components without a staged Session
-will be ignored, and a list all Components that are acted on will
+Given a list of xnames, this will trigger the start of any sessions
+staged for those components.  Components without a staged session
+will be ignored, and a list all components that are acted on will
 be returned in the response.
 
 > Body parameter
@@ -6256,7 +6409,7 @@ be returned in the response.
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|body|body|[V2ApplyStagedComponents](#schemav2applystagedcomponents)|true|A list of xnames that should have their staged Session applied.|
+|body|body|[V2ApplyStagedComponents](#schemav2applystagedcomponents)|true|A list of xnames that should have their staged session applied.|
 
 > Example responses
 
@@ -6280,7 +6433,7 @@ be returned in the response.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of xnames that should have their staged Session applied.|[V2ApplyStagedStatus](#schemav2applystagedstatus)|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A list of xnames that should have their staged session applied.|[V2ApplyStagedStatus](#schemav2applystagedstatus)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="success">
@@ -6358,16 +6511,16 @@ Update one or more of the BOS service options.
 
 ```json
 {
-  "cleanup_completed_session_ttl": "3d",
+  "cleanup_completed_session_ttl": "string",
   "clear_stage": true,
-  "component_actual_state_ttl": "6h",
+  "component_actual_state_ttl": "string",
   "disable_components_on_completion": true,
-  "discovery_frequency": 33554432,
+  "discovery_frequency": 0,
   "logging_level": "string",
-  "max_boot_wait_time": 1048576,
-  "max_power_on_wait_time": 1048576,
-  "max_power_off_wait_time": 1048576,
-  "polling_frequency": 1048576,
+  "max_boot_wait_time": 0,
+  "max_power_on_wait_time": 0,
+  "max_power_off_wait_time": 0,
+  "polling_frequency": 0,
   "default_retry_policy": 1
 }
 ```
@@ -6384,16 +6537,16 @@ Update one or more of the BOS service options.
 
 ```json
 {
-  "cleanup_completed_session_ttl": "3d",
+  "cleanup_completed_session_ttl": "string",
   "clear_stage": true,
-  "component_actual_state_ttl": "6h",
+  "component_actual_state_ttl": "string",
   "disable_components_on_completion": true,
-  "discovery_frequency": 33554432,
+  "discovery_frequency": 0,
   "logging_level": "string",
-  "max_boot_wait_time": 1048576,
-  "max_power_on_wait_time": 1048576,
-  "max_power_off_wait_time": 1048576,
-  "polling_frequency": 1048576,
+  "max_boot_wait_time": 0,
+  "max_power_on_wait_time": 0,
+  "max_power_off_wait_time": 0,
+  "polling_frequency": 0,
   "default_retry_policy": 1
 }
 ```
@@ -6576,16 +6729,16 @@ Retrieve the list of BOS service options.
 
 ```json
 {
-  "cleanup_completed_session_ttl": "3d",
+  "cleanup_completed_session_ttl": "string",
   "clear_stage": true,
-  "component_actual_state_ttl": "6h",
+  "component_actual_state_ttl": "string",
   "disable_components_on_completion": true,
-  "discovery_frequency": 33554432,
+  "discovery_frequency": 0,
   "logging_level": "string",
-  "max_boot_wait_time": 1048576,
-  "max_power_on_wait_time": 1048576,
-  "max_power_off_wait_time": 1048576,
-  "polling_frequency": 1048576,
+  "max_boot_wait_time": 0,
+  "max_power_on_wait_time": 0,
+  "max_power_off_wait_time": 0,
+  "polling_frequency": 0,
   "default_retry_policy": 1
 }
 ```
@@ -6601,302 +6754,6 @@ This operation does not require authentication
 </aside>
 
 # Schemas
-
-<h2 id="tocS_AgeString">AgeString</h2>
-<!-- backwards compatibility -->
-<a id="schemaagestring"></a>
-<a id="schema_AgeString"></a>
-<a id="tocSagestring"></a>
-<a id="tocsagestring"></a>
-
-```json
-"3d"
-
-```
-
-Age in minutes (e.g. "3m"), hours (e.g. "5h"), days (e.g. "10d"), or weeks (e.g. "2w").
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|Age in minutes (e.g. "3m"), hours (e.g. "5h"), days (e.g. "10d"), or weeks (e.g. "2w").|
-
-<h2 id="tocS_BootInitrdPath">BootInitrdPath</h2>
-<!-- backwards compatibility -->
-<a id="schemabootinitrdpath"></a>
-<a id="schema_BootInitrdPath"></a>
-<a id="tocSbootinitrdpath"></a>
-<a id="tocsbootinitrdpath"></a>
-
-```json
-"s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
-
-```
-
-A path to the initrd to use for booting.
-
-It is recommended that this should be no more than 4095 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A path to the initrd to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_BootKernelPath">BootKernelPath</h2>
-<!-- backwards compatibility -->
-<a id="schemabootkernelpath"></a>
-<a id="schema_BootKernelPath"></a>
-<a id="tocSbootkernelpath"></a>
-<a id="tocsbootkernelpath"></a>
-
-```json
-"s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel"
-
-```
-
-A path to the kernel to use for booting.
-
-It is recommended that this should be no more than 4095 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A path to the kernel to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_BootManifestPath">BootManifestPath</h2>
-<!-- backwards compatibility -->
-<a id="schemabootmanifestpath"></a>
-<a id="schema_BootManifestPath"></a>
-<a id="tocSbootmanifestpath"></a>
-<a id="tocsbootmanifestpath"></a>
-
-```json
-"s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json"
-
-```
-
-A path identifying the metadata describing the components of the boot image.
-This could be a URI, URL, etc, depending on the type of the Boot Set.
-
-It is recommended that this should be 1-4095 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_BootKernelParameters">BootKernelParameters</h2>
-<!-- backwards compatibility -->
-<a id="schemabootkernelparameters"></a>
-<a id="schema_BootKernelParameters"></a>
-<a id="tocSbootkernelparameters"></a>
-<a id="tocsbootkernelparameters"></a>
-
-```json
-"console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}"
-
-```
-
-The kernel parameters to use to boot the nodes.
-
-Linux kernel parameters may never exceed 4096 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_BootSetEtag">BootSetEtag</h2>
-<!-- backwards compatibility -->
-<a id="schemabootsetetag"></a>
-<a id="schema_BootSetEtag"></a>
-<a id="tocSbootsetetag"></a>
-<a id="tocsbootsetetag"></a>
-
-```json
-"1cc4eef4f407bd8a62d7d66ee4b9e9c8"
-
-```
-
-This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.
-
-ETags are defined as being 1-65536 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_BootSetName">BootSetName</h2>
-<!-- backwards compatibility -->
-<a id="schemabootsetname"></a>
-<a id="schema_BootSetName"></a>
-<a id="tocSbootsetname"></a>
-<a id="tocsbootsetname"></a>
-
-```json
-"compute"
-
-```
-
-The Boot Set name.
-
-It is recommended that:
-* Boot Set names should be 1-127 characters in length.
-* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).
-* Boot Set names should begin and end with a letter or digit.
-
-These restrictions are not enforced in this version of BOS, but they are
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_BootSetRootfsProvider">BootSetRootfsProvider</h2>
-<!-- backwards compatibility -->
-<a id="schemabootsetrootfsprovider"></a>
-<a id="schema_BootSetRootfsProvider"></a>
-<a id="tocSbootsetrootfsprovider"></a>
-<a id="tocsbootsetrootfsprovider"></a>
-
-```json
-"cpss3"
-
-```
-
-The root file system provider.
-
-It is recommended that this should be 1-511 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_BootSetRootfsProviderPassthrough">BootSetRootfsProviderPassthrough</h2>
-<!-- backwards compatibility -->
-<a id="schemabootsetrootfsproviderpassthrough"></a>
-<a id="schema_BootSetRootfsProviderPassthrough"></a>
-<a id="tocSbootsetrootfsproviderpassthrough"></a>
-<a id="tocsbootsetrootfsproviderpassthrough"></a>
-
-```json
-"dvs:api-gw-service-nmn.local:300:nmn0"
-
-```
-
-The root file system provider passthrough.
-These are additional kernel parameters that will be appended to
-the 'rootfs=<protocol>' kernel parameter
-
-Linux kernel parameters may never exceed 4096 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_BootSetType">BootSetType</h2>
-<!-- backwards compatibility -->
-<a id="schemabootsettype"></a>
-<a id="schema_BootSetType"></a>
-<a id="tocSbootsettype"></a>
-<a id="tocsbootsettype"></a>
-
-```json
-"s3"
-
-```
-
-The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.
-
-It is recommended that this should be 1-127 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_CfsConfiguration">CfsConfiguration</h2>
-<!-- backwards compatibility -->
-<a id="schemacfsconfiguration"></a>
-<a id="schema_CfsConfiguration"></a>
-<a id="tocScfsconfiguration"></a>
-<a id="tocscfsconfiguration"></a>
-
-```json
-"compute-23.4.0"
-
-```
-
-The name of configuration to be applied.
-
-It is recommended that this should be no more than 127 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_EnableCfs">EnableCfs</h2>
-<!-- backwards compatibility -->
-<a id="schemaenablecfs"></a>
-<a id="schema_EnableCfs"></a>
-<a id="tocSenablecfs"></a>
-<a id="tocsenablecfs"></a>
-
-```json
-true
-
-```
-
-Whether to enable the Configuration Framework Service (CFS).
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|boolean|false|none|Whether to enable the Configuration Framework Service (CFS).|
 
 <h2 id="tocS_Healthz">Healthz</h2>
 <!-- backwards compatibility -->
@@ -6921,267 +6778,6 @@ Service health status
 |---|---|---|---|---|
 |dbStatus|string|false|none|none|
 |apiStatus|string|false|none|none|
-
-<h2 id="tocS_Link">Link</h2>
-<!-- backwards compatibility -->
-<a id="schemalink"></a>
-<a id="schema_Link"></a>
-<a id="tocSlink"></a>
-<a id="tocslink"></a>
-
-```json
-{
-  "href": "string",
-  "rel": "string"
-}
-
-```
-
-Link to other resources
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|href|string|false|none|none|
-|rel|string|false|none|none|
-
-<h2 id="tocS_LinkList">LinkList</h2>
-<!-- backwards compatibility -->
-<a id="schemalinklist"></a>
-<a id="schema_LinkList"></a>
-<a id="tocSlinklist"></a>
-<a id="tocslinklist"></a>
-
-```json
-[
-  {
-    "href": "string",
-    "rel": "string"
-  }
-]
-
-```
-
-List of links to other resources
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Link](#schemalink)]|false|none|List of links to other resources|
-
-<h2 id="tocS_LinkListReadOnly">LinkListReadOnly</h2>
-<!-- backwards compatibility -->
-<a id="schemalinklistreadonly"></a>
-<a id="schema_LinkListReadOnly"></a>
-<a id="tocSlinklistreadonly"></a>
-<a id="tocslinklistreadonly"></a>
-
-```json
-[
-  {
-    "href": "string",
-    "rel": "string"
-  }
-]
-
-```
-
-List of links to other resources
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[Link](#schemalink)]|false|read-only|List of links to other resources|
-
-<h2 id="tocS_NodeList">NodeList</h2>
-<!-- backwards compatibility -->
-<a id="schemanodelist"></a>
-<a id="schema_NodeList"></a>
-<a id="tocSnodelist"></a>
-<a id="tocsnodelist"></a>
-
-```json
-[
-  "x3000c0s19b1n0",
-  "x3000c0s19b2n0"
-]
-
-```
-
-Node list.
-
-It is recommended that this list should be 1-65535 items in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-*None*
-
-<h2 id="tocS_NodeGroupList">NodeGroupList</h2>
-<!-- backwards compatibility -->
-<a id="schemanodegrouplist"></a>
-<a id="schema_NodeGroupList"></a>
-<a id="tocSnodegrouplist"></a>
-<a id="tocsnodegrouplist"></a>
-
-```json
-[
-  "string"
-]
-
-```
-
-Node group list. Allows actions against associated nodes by logical groupings.
-
-It is recommended that this list should be 1-4095 items in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-*None*
-
-<h2 id="tocS_NodeRoleList">NodeRoleList</h2>
-<!-- backwards compatibility -->
-<a id="schemanoderolelist"></a>
-<a id="schema_NodeRoleList"></a>
-<a id="tocSnoderolelist"></a>
-<a id="tocsnoderolelist"></a>
-
-```json
-[
-  "Compute",
-  "Application"
-]
-
-```
-
-Node role list. Allows actions against nodes with associated roles.
-
-It is recommended that this list should be 1-1023 items in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-*None*
-
-<h2 id="tocS_ProblemDetails">ProblemDetails</h2>
-<!-- backwards compatibility -->
-<a id="schemaproblemdetails"></a>
-<a id="schema_ProblemDetails"></a>
-<a id="tocSproblemdetails"></a>
-<a id="tocsproblemdetails"></a>
-
-```json
-{
-  "type": "about:blank",
-  "title": "string",
-  "status": 400,
-  "instance": "http://example.com",
-  "detail": "string"
-}
-
-```
-
-An error response for RFC 7807 problem details.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human<br>readable documentation.|
-|title|string|false|none|Short, human-readable summary of the problem, should not change by<br>occurrence.|
-|status|integer|false|none|HTTP status code|
-|instance|string(uri)|false|none|A relative URI reference that identifies the specific occurrence of<br>the problem|
-|detail|string|false|none|A human-readable explanation specific to this occurrence of the<br>problem. Focus on helping correct the problem, rather than giving<br>debugging information.|
-
-<h2 id="tocS_SessionLimit">SessionLimit</h2>
-<!-- backwards compatibility -->
-<a id="schemasessionlimit"></a>
-<a id="schema_SessionLimit"></a>
-<a id="tocSsessionlimit"></a>
-<a id="tocssessionlimit"></a>
-
-```json
-"string"
-
-```
-
-A comma-separated list of nodes, groups, or roles to which the Session
-will be limited. Components are treated as OR operations unless
-preceded by "&" for AND or "!" for NOT.
-
-It is recommended that this should be 1-65535 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_SessionTemplateDescription">SessionTemplateDescription</h2>
-<!-- backwards compatibility -->
-<a id="schemasessiontemplatedescription"></a>
-<a id="schema_SessionTemplateDescription"></a>
-<a id="tocSsessiontemplatedescription"></a>
-<a id="tocssessiontemplatedescription"></a>
-
-```json
-"string"
-
-```
-
-An optional description for the Session Template.
-
-It is recommended that this should be 1-1023 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_SessionTemplateName">SessionTemplateName</h2>
-<!-- backwards compatibility -->
-<a id="schemasessiontemplatename"></a>
-<a id="schema_SessionTemplateName"></a>
-<a id="tocSsessiontemplatename"></a>
-<a id="tocssessiontemplatename"></a>
-
-```json
-"cle-1.0.0"
-
-```
-
-Name of the Session Template.
-
-It is recommended to use names which meet the following restrictions:
-* Maximum length of 127 characters.
-* Use only letters, digits, periods (.), dashes (-), and underscores (_).
-* Begin and end with a letter or digit.
-
-These restrictions are not enforced in this version of BOS, but they are
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_Version">Version</h2>
 <!-- backwards compatibility -->
@@ -7214,58 +6810,61 @@ Version data
 |major|string|false|none|none|
 |minor|string|false|none|none|
 |patch|string|false|none|none|
-|links|[LinkList](#schemalinklist)|false|none|List of links to other resources|
+|links|[[Link](#schemalink)]|false|none|[Link to other resources]|
 
-<h2 id="tocS_V1CfsBranch">V1CfsBranch</h2>
+<h2 id="tocS_ProblemDetails">ProblemDetails</h2>
 <!-- backwards compatibility -->
-<a id="schemav1cfsbranch"></a>
-<a id="schema_V1CfsBranch"></a>
-<a id="tocSv1cfsbranch"></a>
-<a id="tocsv1cfsbranch"></a>
+<a id="schemaproblemdetails"></a>
+<a id="schema_ProblemDetails"></a>
+<a id="tocSproblemdetails"></a>
+<a id="tocsproblemdetails"></a>
 
 ```json
-"string"
+{
+  "type": "about:blank",
+  "title": "string",
+  "status": 400,
+  "instance": "http://example.com",
+  "detail": "string"
+}
 
 ```
 
-The name of the branch containing the configuration that you want to
-apply to the nodes. Mutually exclusive with commit. (DEPRECATED)
-
-It is recommended that this should be 1-1023 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
+An error response for RFC 7807 problem details.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|type|string(uri)|false|none|Relative URI reference to the type of problem which includes human<br>readable documentation.|
+|title|string|false|none|Short, human-readable summary of the problem, should not change by<br>occurrence.|
+|status|integer|false|none|HTTP status code|
+|instance|string(uri)|false|none|A relative URI reference that identifies the specific occurrence of<br>the problem|
+|detail|string|false|none|A human-readable explanation specific to this occurrence of the<br>problem. Focus on helping correct the problem, rather than giving<br>debugging information.|
 
-<h2 id="tocS_V1CfsUrl">V1CfsUrl</h2>
+<h2 id="tocS_Link">Link</h2>
 <!-- backwards compatibility -->
-<a id="schemav1cfsurl"></a>
-<a id="schema_V1CfsUrl"></a>
-<a id="tocSv1cfsurl"></a>
-<a id="tocsv1cfsurl"></a>
+<a id="schemalink"></a>
+<a id="schema_Link"></a>
+<a id="tocSlink"></a>
+<a id="tocslink"></a>
 
 ```json
-"string"
+{
+  "href": "string",
+  "rel": "string"
+}
 
 ```
 
-The clone URL for the repository providing the configuration. (DEPRECATED)
-
-It is recommended that this should be 1-4096 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
+Link to other resources
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|href|string|false|none|none|
+|rel|string|false|none|none|
 
 <h2 id="tocS_V1CfsParameters">V1CfsParameters</h2>
 <!-- backwards compatibility -->
@@ -7285,18 +6884,18 @@ targeted to start being enforced in an upcoming BOS version.
 
 ```
 
-This is the collection of parameters that are passed to the Configuration
+CFS Parameters is the collection of parameters that are passed to the Configuration
 Framework Service when configuration is enabled.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|clone_url|[V1CfsUrl](#schemav1cfsurl)|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|branch|[V1CfsBranch](#schemav1cfsbranch)|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|clone_url|string|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|branch|string|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |commit|string|false|none|The commit ID of the configuration that you want to<br>apply to the nodes. Mutually exclusive with branch. (DEPRECATED)<br><br>git commit hashes are hexadecimal strings with a length of 40 characters (although<br>fewer characters may be sufficient to uniquely identify a commit in some cases).<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|playbook|string|false|none|The name of the playbook to run for configuration. The file path must be specified<br>relative to the base directory of the config repository. (DEPRECATED)<br><br>It is recommended that this should be 1-255 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|playbook|string|false|none|The name of the playbook to run for configuration. The file path must be specified<br>relative to the base directory of the config repo. (DEPRECATED)<br><br>It is recommended that this should be 1-255 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|configuration|string|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_V1CompleteMetadata">V1CompleteMetadata</h2>
 <!-- backwards compatibility -->
@@ -7390,13 +6989,13 @@ The start time
 
 ```
 
-The stop time. In some contexts, the value may be null before the operation finishes.
+The stop time
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string¦null|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
+|*anonymous*|string|false|none|The stop time|
 
 <h2 id="tocS_V1GenericMetadata">V1GenericMetadata</h2>
 <!-- backwards compatibility -->
@@ -7426,7 +7025,28 @@ The status metadata
 |error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
 |in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
 |start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
-|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
+|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time|
+
+<h2 id="tocS_V1NodeList">V1NodeList</h2>
+<!-- backwards compatibility -->
+<a id="schemav1nodelist"></a>
+<a id="schema_V1NodeList"></a>
+<a id="tocSv1nodelist"></a>
+<a id="tocsv1nodelist"></a>
+
+```json
+[
+  "x3000c0s19b1n0",
+  "x3000c0s19b2n0"
+]
+
+```
+
+A list of node xnames.
+
+### Properties
+
+*None*
 
 <h2 id="tocS_V1PhaseCategoryName">V1PhaseCategoryName</h2>
 <!-- backwards compatibility -->
@@ -7467,18 +7087,18 @@ not_started, in_progress, succeeded, failed, or excluded
 
 ```
 
-A list of the nodes in a given category within a Phase.
+A list of the nodes in a given category within a phase.
 
 ## Link Relationships
 
-* self : The phase category status object
+* self : The session object
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|[V1PhaseCategoryName](#schemav1phasecategoryname)|false|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
-|node_list|[NodeList](#schemanodelist)|false|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_list|[V1NodeList](#schemav1nodelist)|false|none|A list of node xnames.|
 
 <h2 id="tocS_V1PhaseStatus">V1PhaseStatus</h2>
 <!-- backwards compatibility -->
@@ -7525,7 +7145,7 @@ what category those nodes fall into within the phase.
 
 ## Link Relationships
 
-* self : The phase status object
+* self : The session object
 
 ### Properties
 
@@ -7533,7 +7153,7 @@ what category those nodes fall into within the phase.
 |---|---|---|---|---|
 |name|string|false|none|Name of the Phase<br>boot, configure, or shutdown|
 |metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
-|categories|[[V1PhaseCategoryStatus](#schemav1phasecategorystatus)]|false|none|[A list of the nodes in a given category within a Phase.<br><br>## Link Relationships<br><br>* self : The phase category status object<br>]|
+|categories|[[V1PhaseCategoryStatus](#schemav1phasecategorystatus)]|false|none|[A list of the nodes in a given category within a phase.<br><br>## Link Relationships<br><br>* self : The session object<br>]|
 |errors|[V1NodeErrorsList](#schemav1nodeerrorslist)|false|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
 
 <h2 id="tocS_V1SessionId">V1SessionId</h2>
@@ -7548,13 +7168,13 @@ what category those nodes fall into within the phase.
 
 ```
 
-Unique BOS v1 Session identifier.
+Unique BOS v1 session identifier.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string(uuid)|false|none|Unique BOS v1 Session identifier.|
+|*anonymous*|string(uuid)|false|none|Unique BOS v1 session identifier.|
 
 <h2 id="tocS_V1BootSetStatus">V1BootSetStatus</h2>
 <!-- backwards compatibility -->
@@ -7565,7 +7185,7 @@ Unique BOS v1 Session identifier.
 
 ```json
 {
-  "name": "compute",
+  "name": "Boot-Set",
   "session": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "metadata": {
     "complete": true,
@@ -7619,18 +7239,18 @@ The status for a Boot Set. It as a list of the phase statuses for the Boot Set.
 
 ## Link Relationships
 
-* self : The Boot Set Status object
-* phase : A phase of the Boot Set
+* self : The session object
+* phase : A phase of the boot set
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|session|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 Session identifier.|
+|name|string|false|none|Name of the Boot Set|
+|session|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 session identifier.|
 |metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
-|phases|[[V1PhaseStatus](#schemav1phasestatus)]|false|none|[The phase's status. It is a list of all of the nodes in the phase and<br>what category those nodes fall into within the phase.<br><br>## Link Relationships<br><br>* self : The phase status object<br>]|
-|links|[LinkList](#schemalinklist)|false|none|List of links to other resources|
+|phases|[[V1PhaseStatus](#schemav1phasestatus)]|false|none|[The phase's status. It is a list of all of the nodes in the phase and<br>what category those nodes fall into within the phase.<br><br>## Link Relationships<br><br>* self : The session object<br>]|
+|links|[[Link](#schemalink)]|false|none|[Link to other resources]|
 
 <h2 id="tocS_V1SessionStatus">V1SessionStatus</h2>
 <!-- backwards compatibility -->
@@ -7649,7 +7269,7 @@ The status for a Boot Set. It as a list of the phase statuses for the Boot Set.
     "stop_time": "2020-04-24T12:00"
   },
   "boot_sets": [
-    "compute"
+    "string"
   ],
   "id": "8deb0746-b18c-427c-84a8-72ec6a28642c",
   "links": [
@@ -7662,11 +7282,10 @@ The status for a Boot Set. It as a list of the phase statuses for the Boot Set.
 
 ```
 
-The status for a Session. It is a list of all of the Boot Set Statuses in the Session.
-
+The status for a Boot Session. It is a list of all of the Boot Set Statuses in the session.
 ## Link Relationships
 
-* self : The Session status object
+* self : The session object
 * boot sets: URL to access the Boot Set status
 
 ### Properties
@@ -7674,9 +7293,9 @@ The status for a Session. It is a list of all of the Boot Set Statuses in the Se
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |metadata|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
-|boot_sets|[[BootSetName](#schemabootsetname)]|false|none|The Boot Sets in the Session|
-|id|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 Session identifier.|
-|links|[LinkList](#schemalinklist)|false|none|List of links to other resources|
+|boot_sets|[string]|false|none|The boot sets in the Session|
+|id|[V1SessionId](#schemav1sessionid)|false|none|Unique BOS v1 session identifier.|
+|links|[[Link](#schemalink)]|false|none|[Link to other resources]|
 
 <h2 id="tocS_V1BootSet">V1BootSet</h2>
 <!-- backwards compatibility -->
@@ -7688,10 +7307,13 @@ The status for a Session. It is a list of all of the Boot Set Statuses in the Se
 ```json
 {
   "name": "compute",
+  "boot_ordinal": 0,
+  "shutdown_ordinal": 0,
   "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
   "type": "s3",
   "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-  "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+  "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+  "network": "string",
   "node_list": [
     "x3000c0s19b1n0",
     "x3000c0s19b2n0"
@@ -7704,68 +7326,55 @@ The status for a Session. It is a list of all of the Boot Set Statuses in the Se
     "string"
   ],
   "rootfs_provider": "cpss3",
-  "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-  "network": "string",
-  "boot_ordinal": 0,
-  "shutdown_ordinal": 0
+  "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
 }
 
 ```
 
-A Boot Set defines a collection of nodes and the information about the
+A boot set defines a collection of nodes and the information about the
 boot artifacts and parameters to be sent to each node over the specified
-network to enable these nodes to boot. When multiple Boot Sets are used
-in a Session Template, the boot_ordinal and shutdown_ordinal indicate
-the order in which Boot Sets need to be acted upon. Boot Sets sharing
+network to enable these nodes to boot. When multiple boot sets are used
+in a session template, the boot_ordinal and shutdown_ordinal indicate
+the order in which boot sets need to be acted upon. Boot sets sharing
 the same ordinal number will be addressed at the same time.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|path|[BootManifestPath](#schemabootmanifestpath)|true|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_list|[NodeList](#schemanodelist)|false|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|rootfs_provider|[BootSetRootfsProvider](#schemabootsetrootfsprovider)|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|rootfs_provider_passthrough|[BootSetRootfsProviderPassthrough](#schemabootsetrootfsproviderpassthrough)|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|name|string|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|boot_ordinal|integer|false|none|The boot ordinal. This will establish the order for boot set operations.<br>Boot sets boot in order from the lowest to highest boot_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|shutdown_ordinal|integer|false|none|The shutdown ordinal. This will establish the order for boot set<br>shutdown operations. Sets shutdown from low to high shutdown_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|path|string|true|none|A path identifying the metadata describing the components of the boot image. This could be a URI, URL, etc.<br>It will be processed based on the type attribute.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|type|string|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|etag|string|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|kernel_parameters|string|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |network|string|false|none|The network over which the node will boot.<br>Choices:  NMN -- Node Management Network|
-|boot_ordinal|integer|false|none|The boot ordinal. This will establish the order for Boot Set operations.<br>Boot Sets boot in order from the lowest to highest boot_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|shutdown_ordinal|integer|false|none|The shutdown ordinal. This will establish the order for Boot Set<br>shutdown operations. Sets shutdown from low to high shutdown_ordinal.<br><br>It is recommended that this should have a maximum value of 65535.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_list|[string]|false|none|The node list. This is an explicit mapping against hardware xnames.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_roles_groups|[string]|false|none|The node roles list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_groups|[string]|false|none|The node groups list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|rootfs_provider|string|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|rootfs_provider_passthrough|string|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
-<h2 id="tocS_V1SessionTemplateUuid">V1SessionTemplateUuid</h2>
+<h2 id="tocS_V1SessionTemplateName">V1SessionTemplateName</h2>
 <!-- backwards compatibility -->
-<a id="schemav1sessiontemplateuuid"></a>
-<a id="schema_V1SessionTemplateUuid"></a>
-<a id="tocSv1sessiontemplateuuid"></a>
-<a id="tocsv1sessiontemplateuuid"></a>
+<a id="schemav1sessiontemplatename"></a>
+<a id="schema_V1SessionTemplateName"></a>
+<a id="tocSv1sessiontemplatename"></a>
+<a id="tocsv1sessiontemplatename"></a>
 
 ```json
-"my-session-template"
+"cle-1.0.0"
 
 ```
 
-DEPRECATED - use templateName. This field is ignored if templateName is also set.
-
 Name of the Session Template.
-
-It is recommended to use names which meet the following restrictions:
-* 1-127 characters in length.
-* Use only letters, digits, periods (.), dashes (-), and underscores (_).
-* Begin and end with a letter or digit.
-
-These restrictions are not enforced in this version of BOS, but they are
-targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|*anonymous*|string|false|none|Name of the Session Template.|
 
 <h2 id="tocS_V1SessionTemplate">V1SessionTemplate</h2>
 <!-- backwards compatibility -->
@@ -7792,10 +7401,13 @@ targeted to start being enforced in an upcoming BOS version.
   "boot_sets": {
     "property1": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -7808,17 +7420,17 @@ targeted to start being enforced in an upcoming BOS version.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     },
     "property2": {
       "name": "compute",
+      "boot_ordinal": 0,
+      "shutdown_ordinal": 0,
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "network": "string",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -7831,10 +7443,7 @@ targeted to start being enforced in an upcoming BOS version.
         "string"
       ],
       "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-      "network": "string",
-      "boot_ordinal": 0,
-      "shutdown_ordinal": 0
+      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
     }
   },
   "links": [
@@ -7848,28 +7457,32 @@ targeted to start being enforced in an upcoming BOS version.
 ```
 
 A Session Template object represents a collection of resources and metadata.
-A Session Template is used to create a Session which when combined with an
-action (i.e. boot, configure, reboot, shutdown) will create a Kubernetes BOA job
+A session template is used to create a Session which when combined with an
+action (i.e. boot, reconfigure, reboot, shutdown) will create a Kubernetes BOA job
 to complete the required tasks for the operation.
+
+A Session Template can be created from a JSON structure.  It will return
+a SessionTemplate name if successful.
+This name is required when creating a Session.
 
 ## Link Relationships
 
-* self : The Session Template object
+* self : The session object
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|description|[SessionTemplateDescription](#schemasessiontemplatedescription)|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|cfs_url|[V1CfsUrl](#schemav1cfsurl)|false|none|The clone URL for the repository providing the configuration. (DEPRECATED)<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|cfs_branch|[V1CfsBranch](#schemav1cfsbranch)|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes. Mutually exclusive with commit. (DEPRECATED)<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
-|cfs|[V1CfsParameters](#schemav1cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled.|
+|name|string|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+|description|string|false|none|An optional description for the session template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|cfs_url|string|false|none|The URL for the repository providing the configuration. DEPRECATED<br><br>It is recommended that this should be 1-4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|cfs_branch|string|false|none|The name of the branch containing the configuration that you want to<br>apply to the nodes.  DEPRECATED.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|enable_cfs|boolean|false|none|Whether to enable the Configuration Framework Service (CFS).|
+|cfs|[V1CfsParameters](#schemav1cfsparameters)|false|none|CFS Parameters is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled.|
 |partition|string|false|none|The machine partition to operate on.<br><br>It is recommended that this should be 1-255 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |boot_sets|object|false|none|Mapping from Boot Set names to Boot Sets.<br><br>It is recommended that:<br>* At least one Boot Set should be defined, because a Session Template with no<br>  Boot Sets is not functional.<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|» **additionalProperties**|[V1BootSet](#schemav1bootset)|false|none|A Boot Set defines a collection of nodes and the information about the<br>boot artifacts and parameters to be sent to each node over the specified<br>network to enable these nodes to boot. When multiple Boot Sets are used<br>in a Session Template, the boot_ordinal and shutdown_ordinal indicate<br>the order in which Boot Sets need to be acted upon. Boot Sets sharing<br>the same ordinal number will be addressed at the same time.|
-|links|[LinkListReadOnly](#schemalinklistreadonly)|false|none|List of links to other resources|
+|» **additionalProperties**|[V1BootSet](#schemav1bootset)|false|none|A boot set defines a collection of nodes and the information about the<br>boot artifacts and parameters to be sent to each node over the specified<br>network to enable these nodes to boot. When multiple boot sets are used<br>in a session template, the boot_ordinal and shutdown_ordinal indicate<br>the order in which boot sets need to be acted upon. Boot sets sharing<br>the same ordinal number will be addressed at the same time.|
+|links|[[Link](#schemalink)]|false|read-only|[Link to other resources]|
 
 <h2 id="tocS_V1BoaKubernetesJob">V1BoaKubernetesJob</h2>
 <!-- backwards compatibility -->
@@ -7883,13 +7496,13 @@ to complete the required tasks for the operation.
 
 ```
 
-The identity of the Kubernetes job that is created to handle the Session.
+The identity of the Kubernetes job that is created to handle the session.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|read-only|The identity of the Kubernetes job that is created to handle the Session.|
+|*anonymous*|string|false|read-only|The identity of the Kubernetes job that is created to handle the session.|
 
 <h2 id="tocS_V1Operation">V1Operation</h2>
 <!-- backwards compatibility -->
@@ -7903,12 +7516,8 @@ The identity of the Kubernetes job that is created to handle the Session.
 
 ```
 
-A Session represents an operation on a Session Template.
-The creation of a Session effectively results in the creation
-of a Kubernetes Boot Orchestration Agent (BOA) job to perform the
-duties required to complete the operation.
-
-Operation -- An operation to perform on nodes in this Session.
+A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.
+Operation -- An operation to perform on nodes in this session.
 
     Boot         Boot nodes that are off.
 
@@ -7924,7 +7533,63 @@ Operation -- An operation to perform on nodes in this Session.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|*anonymous*|string|false|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+
+<h2 id="tocS_V1TemplateName">V1TemplateName</h2>
+<!-- backwards compatibility -->
+<a id="schemav1templatename"></a>
+<a id="schema_V1TemplateName"></a>
+<a id="tocSv1templatename"></a>
+<a id="tocsv1templatename"></a>
+
+```json
+"my-session-template"
+
+```
+
+The name of the Session Template
+
+It is recommended to use names which meet the following restrictions:
+* Maximum length of 127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but will be
+enforced in a future version.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|The name of the Session Template<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+
+<h2 id="tocS_V1TemplateUuid">V1TemplateUuid</h2>
+<!-- backwards compatibility -->
+<a id="schemav1templateuuid"></a>
+<a id="schema_V1TemplateUuid"></a>
+<a id="tocSv1templateuuid"></a>
+<a id="tocsv1templateuuid"></a>
+
+```json
+"my-session-template"
+
+```
+
+DEPRECATED - use templateName. This field is ignored if templateName is also set.
+
+It is recommended to use names which meet the following restrictions:
+* Length of 1-127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but will be
+enforced in a future version.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>It is recommended to use names which meet the following restrictions:<br>* Length of 1-127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
 
 <h2 id="tocS_V1SessionLink">V1SessionLink</h2>
 <!-- backwards compatibility -->
@@ -7950,7 +7615,7 @@ Link to other resources
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |href|string|false|none|none|
-|jobId|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
+|jobId|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
 |rel|string|false|none|none|
 |type|string|false|none|none|
 
@@ -7974,13 +7639,13 @@ Link to other resources
 
 ```
 
-URI to the status for this Session
+URI to the status for this session
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string(uri)|false|none|URI to the status for this Session|
+|*anonymous*|string(uri)|false|none|URI to the status for this session|
 
 <h2 id="tocS_V1SessionDetails">V1SessionDetails</h2>
 <!-- backwards compatibility -->
@@ -7999,7 +7664,7 @@ URI to the status for this Session
   "start_time": "2020-04-24T12:00",
   "status_link": "/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status",
   "stop_time": "2020-04-24T12:00",
-  "templateName": "cle-1.0.0"
+  "templateName": "my-session-template"
 }
 
 ```
@@ -8013,12 +7678,12 @@ Details about a Session.
 |complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
 |error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
 |in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
-|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
+|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
 |start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
-|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this Session|
-|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
-|templateName|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this session|
+|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time|
+|templateName|[V1TemplateName](#schemav1templatename)|false|none|The name of the Session Template<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
 
 <h2 id="tocS_V1SessionDetailsByTemplateUuid">V1SessionDetailsByTemplateUuid</h2>
 <!-- backwards compatibility -->
@@ -8037,13 +7702,13 @@ Details about a Session.
   "start_time": "2020-04-24T12:00",
   "status_link": "/v1/session/90730844-094d-45a5-9b90-d661d14d9444/status",
   "stop_time": "2020-04-24T12:00",
-  "templateName": "cle-1.0.0"
+  "templateName": "my-session-template"
 }
 
 ```
 
 Details about a Session using templateUuid instead of templateName.
-DEPRECATED -- these will only exist from Sessions created before templateUuid was deprecated.
+DEPRECATED -- these will only exist from sessions created before templateUuid was deprecated.
 
 ### Properties
 
@@ -8052,37 +7717,12 @@ DEPRECATED -- these will only exist from Sessions created before templateUuid wa
 |complete|[V1CompleteMetadata](#schemav1completemetadata)|false|none|Is the object's status complete|
 |error_count|[V1ErrorCountMetadata](#schemav1errorcountmetadata)|false|none|How many errors were encountered|
 |in_progress|[V1InProgressMetadata](#schemav1inprogressmetadata)|false|none|Is the object still doing something|
-|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
+|operation|[V1Operation](#schemav1operation)|false|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
 |start_time|[V1StartTimeMetadata](#schemav1starttimemetadata)|false|none|The start time|
-|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this Session|
-|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time. In some contexts, the value may be null before the operation finishes.|
-|templateName|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_V1SessionLinkList">V1SessionLinkList</h2>
-<!-- backwards compatibility -->
-<a id="schemav1sessionlinklist"></a>
-<a id="schema_V1SessionLinkList"></a>
-<a id="tocSv1sessionlinklist"></a>
-<a id="tocsv1sessionlinklist"></a>
-
-```json
-[
-  {
-    "href": "string",
-    "jobId": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
-    "rel": "session",
-    "type": "GET"
-  }
-]
-
-```
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
+|status_link|[V1SessionStatusUri](#schemav1sessionstatusuri)|false|none|URI to the status for this session|
+|stop_time|[V1StopTimeMetadata](#schemav1stoptimemetadata)|false|none|The stop time|
+|templateName|[V1TemplateName](#schemav1templatename)|false|none|The name of the Session Template<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
 
 <h2 id="tocS_V1Session">V1Session</h2>
 <!-- backwards compatibility -->
@@ -8095,7 +7735,7 @@ DEPRECATED -- these will only exist from Sessions created before templateUuid wa
 {
   "operation": "boot",
   "templateUuid": "my-session-template",
-  "templateName": "cle-1.0.0",
+  "templateName": "my-session-template",
   "job": "boa-07877de1-09bb-4ca8-a4e5-943b1262dbf0",
   "limit": "string",
   "links": [
@@ -8114,18 +7754,18 @@ A Session object specified by templateName
 
 ## Link Relationships
 
-* self : The Session object
+* self : The session object
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
-|templateUuid|[V1SessionTemplateUuid](#schemav1sessiontemplateuuid)|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|templateName|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|links|[V1SessionLinkList](#schemav1sessionlinklist)|false|none|none|
+|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|templateUuid|[V1TemplateUuid](#schemav1templateuuid)|false|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>It is recommended to use names which meet the following restrictions:<br>* Length of 1-127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+|templateName|[V1TemplateName](#schemav1templatename)|true|none|The name of the Session Template<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
+|limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.<br>It is recommended that this should be 1-65535 characters in length.<br>This restriction is not enforced in this version of BOS, but it is targeted to start being enforced in an upcoming BOS version.|
+|links|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
 
 <h2 id="tocS_V1SessionByTemplateUuid">V1SessionByTemplateUuid</h2>
 <!-- backwards compatibility -->
@@ -8156,17 +7796,17 @@ A Session object specified by templateUuid (DEPRECATED -- use templateName)
 
 ## Link Relationships
 
-* self : The Session object
+* self : The session object
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a Session Template.<br>The creation of a Session effectively results in the creation<br>of a Kubernetes Boot Orchestration Agent (BOA) job to perform the<br>duties required to complete the operation.<br><br>Operation -- An operation to perform on nodes in this Session.<br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
-|templateUuid|[V1SessionTemplateUuid](#schemav1sessiontemplateuuid)|true|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* 1-127 characters in length.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the Session.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|links|[V1SessionLinkList](#schemav1sessionlinklist)|false|none|none|
+|operation|[V1Operation](#schemav1operation)|true|none|A Session represents an operation on a SessionTemplate. The creation of a session effectively results in the creation of a Kubernetes Boot Orchestration Agent (BOA) job to perform the duties required to complete the operation.<br>Operation -- An operation to perform on nodes in this session.<br><br><br>    Boot         Boot nodes that are off.<br><br>    Configure    Reconfigure the nodes using the Configuration Framework<br>                 Service (CFS).<br><br>    Reboot       Gracefully power down nodes that are on and then power<br>                 them back up.<br><br>    Shutdown     Gracefully power down nodes that are on.|
+|templateUuid|[V1TemplateUuid](#schemav1templateuuid)|true|none|DEPRECATED - use templateName. This field is ignored if templateName is also set.<br><br>It is recommended to use names which meet the following restrictions:<br>* Length of 1-127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+|job|[V1BoaKubernetesJob](#schemav1boakubernetesjob)|false|none|The identity of the Kubernetes job that is created to handle the session.|
+|limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.<br>It is recommended that this should be 1-65535 characters in length.<br>This restriction is not enforced in this version of BOS, but it is targeted to start being enforced in an upcoming BOS version.|
+|links|[[V1SessionLink](#schemav1sessionlink)]|false|read-only|[Link to other resources]|
 
 <h2 id="tocS_V1PhaseName">V1PhaseName</h2>
 <!-- backwards compatibility -->
@@ -8219,7 +7859,7 @@ one category to another within a phase.
 |phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
 |source|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
 |destination|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
-|node_list|[NodeList](#schemanodelist)|true|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_list|[V1NodeList](#schemav1nodelist)|true|none|A list of node xnames.|
 
 <h2 id="tocS_V1NodeErrorsList">V1NodeErrorsList</h2>
 <!-- backwards compatibility -->
@@ -8250,141 +7890,19 @@ This does not overwrite previously existing errors.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|**additionalProperties**|[NodeList](#schemanodelist)|false|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|**additionalProperties**|[V1NodeList](#schemav1nodelist)|false|none|A list of node xnames.|
 
-<h2 id="tocS_V1UpdateRequestNodeChange">V1UpdateRequestNodeChange</h2>
+<h2 id="tocS_V1UpdateRequestNodeChangeList">V1UpdateRequestNodeChangeList</h2>
 <!-- backwards compatibility -->
-<a id="schemav1updaterequestnodechange"></a>
-<a id="schema_V1UpdateRequestNodeChange"></a>
-<a id="tocSv1updaterequestnodechange"></a>
-<a id="tocsv1updaterequestnodechange"></a>
-
-```json
-{
-  "update_type": "NodeChangeList",
-  "phase": "Boot",
-  "data": {
-    "phase": "Boot",
-    "source": "Succeeded",
-    "destination": "Succeeded",
-    "node_list": [
-      "x3000c0s19b1n0",
-      "x3000c0s19b2n0"
-    ]
-  }
-}
-
-```
-
-This is an element of the payload sent during an update request. It contains
-updates to which categories nodes are in.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|update_type|string|true|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
-|data|[V1NodeChangeList](#schemav1nodechangelist)|true|none|The information used to update the status of a node list. It moves nodes from<br>one category to another within a phase.|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|update_type|NodeChangeList|
-
-<h2 id="tocS_V1UpdateRequestNodeErrors">V1UpdateRequestNodeErrors</h2>
-<!-- backwards compatibility -->
-<a id="schemav1updaterequestnodeerrors"></a>
-<a id="schema_V1UpdateRequestNodeErrors"></a>
-<a id="tocSv1updaterequestnodeerrors"></a>
-<a id="tocsv1updaterequestnodeerrors"></a>
-
-```json
-{
-  "update_type": "NodeErrorsList",
-  "phase": "Boot",
-  "data": {
-    "property1": [
-      "x3000c0s19b1n0",
-      "x3000c0s19b2n0"
-    ],
-    "property2": [
-      "x3000c0s19b1n0",
-      "x3000c0s19b2n0"
-    ]
-  }
-}
-
-```
-
-This is an element of the payload sent during an update request. It contains
-updates to which errors have occurred and which nodes encountered those errors
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|update_type|string|true|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
-|data|[V1NodeErrorsList](#schemav1nodeerrorslist)|true|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|update_type|NodeErrorsList|
-
-<h2 id="tocS_V1UpdateRequestGenericMetadata">V1UpdateRequestGenericMetadata</h2>
-<!-- backwards compatibility -->
-<a id="schemav1updaterequestgenericmetadata"></a>
-<a id="schema_V1UpdateRequestGenericMetadata"></a>
-<a id="tocSv1updaterequestgenericmetadata"></a>
-<a id="tocsv1updaterequestgenericmetadata"></a>
-
-```json
-{
-  "update_type": "GenericMetadata",
-  "phase": "Boot",
-  "data": {
-    "complete": true,
-    "error_count": 0,
-    "in_progress": false,
-    "start_time": "2020-04-24T12:00",
-    "stop_time": "2020-04-24T12:00"
-  }
-}
-
-```
-
-This is an element of the payload sent during an update request. It contains
-updates to metadata, specifically start and stop times
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|update_type|string|true|none|The type of update data|
-|phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
-|data|[V1GenericMetadata](#schemav1genericmetadata)|true|none|The status metadata|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|update_type|GenericMetadata|
-
-<h2 id="tocS_V1UpdateRequestList">V1UpdateRequestList</h2>
-<!-- backwards compatibility -->
-<a id="schemav1updaterequestlist"></a>
-<a id="schema_V1UpdateRequestList"></a>
-<a id="tocSv1updaterequestlist"></a>
-<a id="tocsv1updaterequestlist"></a>
+<a id="schemav1updaterequestnodechangelist"></a>
+<a id="schema_V1UpdateRequestNodeChangeList"></a>
+<a id="tocSv1updaterequestnodechangelist"></a>
+<a id="tocsv1updaterequestnodechangelist"></a>
 
 ```json
 [
   {
-    "update_type": "NodeChangeList",
+    "update_type": "string",
     "phase": "Boot",
     "data": {
       "phase": "Boot",
@@ -8400,27 +7918,89 @@ updates to metadata, specifically start and stop times
 
 ```
 
-This is the payload sent during an update request. It contains a list of updates.
+This is the payload sent during an update request. It contains
+updates to which categories nodes are in.
 
 ### Properties
 
-oneOf
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|update_type|string|false|none|The type of update data|
+|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|data|[V1NodeChangeList](#schemav1nodechangelist)|false|none|The information used to update the status of a node list. It moves nodes from<br>one category to another within a phase.|
+
+<h2 id="tocS_V1UpdateRequestNodeErrorsList">V1UpdateRequestNodeErrorsList</h2>
+<!-- backwards compatibility -->
+<a id="schemav1updaterequestnodeerrorslist"></a>
+<a id="schema_V1UpdateRequestNodeErrorsList"></a>
+<a id="tocSv1updaterequestnodeerrorslist"></a>
+<a id="tocsv1updaterequestnodeerrorslist"></a>
+
+```json
+[
+  {
+    "update_type": "string",
+    "phase": "Boot",
+    "data": {
+      "property1": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ],
+      "property2": [
+        "x3000c0s19b1n0",
+        "x3000c0s19b2n0"
+      ]
+    }
+  }
+]
+
+```
+
+This is the payload sent during an update request. It contains
+updates to which errors have occurred and which nodes encountered those errors
+
+### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[V1UpdateRequestNodeChange](#schemav1updaterequestnodechange)|false|none|This is an element of the payload sent during an update request. It contains<br>updates to which categories nodes are in.|
+|update_type|string|false|none|The type of update data|
+|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|data|[V1NodeErrorsList](#schemav1nodeerrorslist)|false|none|Categorizing nodes into failures by the type of error they have.<br>This is an additive characterization. Nodes will be added to existing errors.<br>This does not overwrite previously existing errors.|
 
-xor
+<h2 id="tocS_V1UpdateRequestGenericMetadata">V1UpdateRequestGenericMetadata</h2>
+<!-- backwards compatibility -->
+<a id="schemav1updaterequestgenericmetadata"></a>
+<a id="schema_V1UpdateRequestGenericMetadata"></a>
+<a id="tocSv1updaterequestgenericmetadata"></a>
+<a id="tocsv1updaterequestgenericmetadata"></a>
+
+```json
+[
+  {
+    "update_type": "string",
+    "phase": "Boot",
+    "data": {
+      "complete": true,
+      "error_count": 0,
+      "in_progress": false,
+      "start_time": "2020-04-24T12:00",
+      "stop_time": "2020-04-24T12:00"
+    }
+  }
+]
+
+```
+
+This is the payload sent during an update request. It contains
+updates to metadata, specifically start and stop times
+
+### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[V1UpdateRequestNodeErrors](#schemav1updaterequestnodeerrors)|false|none|This is an element of the payload sent during an update request. It contains<br>updates to which errors have occurred and which nodes encountered those errors|
-
-xor
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[V1UpdateRequestGenericMetadata](#schemav1updaterequestgenericmetadata)|false|none|This is an element of the payload sent during an update request. It contains<br>updates to metadata, specifically start and stop times|
+|update_type|string|false|none|The type of update data|
+|phase|[V1PhaseName](#schemav1phasename)|false|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
+|data|[V1GenericMetadata](#schemav1genericmetadata)|false|none|The status metadata|
 
 <h2 id="tocS_V2CfsParameters">V2CfsParameters</h2>
 <!-- backwards compatibility -->
@@ -8436,15 +8016,15 @@ xor
 
 ```
 
-This is the collection of parameters that are passed to the Configuration
+CFS Parameters is the collection of parameters that are passed to the Configuration
 Framework Service when configuration is enabled. Can be set as the global value for
-a Session Template, or individually within a Boot Set.
+a Session Template, or individually within a boot set.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|configuration|string|false|none|The name of configuration to be applied.|
 
 <h2 id="tocS_V2SessionTemplate">V2SessionTemplate</h2>
 <!-- backwards compatibility -->
@@ -8470,7 +8050,7 @@ a Session Template, or individually within a Boot Set.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -8493,7 +8073,7 @@ a Session Template, or individually within a Boot Set.
       },
       "type": "s3",
       "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
       "node_list": [
         "x3000c0s19b1n0",
         "x3000c0s19b2n0"
@@ -8520,24 +8100,28 @@ a Session Template, or individually within a Boot Set.
 ```
 
 A Session Template object represents a collection of resources and metadata.
-A Session Template is used to create a Session which applies the data to
-group of Components.
+A session template is used to create a Session which applies the data to
+group of components.
+
+A Session Template can be created from a JSON structure.  It will return
+a SessionTemplate name if successful.
+This name is required when creating a Session.
 
 ## Link Relationships
 
-* self : The Session Template object
+* self : The session object
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|string|false|read-only|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|description|[SessionTemplateDescription](#schemasessiontemplatedescription)|false|none|An optional description for the Session Template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|enable_cfs|[EnableCfs](#schemaenablecfs)|false|none|Whether to enable the Configuration Framework Service (CFS).|
-|cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
+|name|string|false|read-only|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+|description|string|false|none|An optional description for the session template.<br><br>It is recommended that this should be 1-1023 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|enable_cfs|boolean|false|none|Whether to enable the Configuration Framework Service (CFS).|
+|cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|CFS Parameters is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a boot set.|
 |boot_sets|object|false|none|Mapping from Boot Set names to Boot Sets.<br><br>It is recommended that:<br>* At least one Boot Set should be defined, because a Session Template with no<br>  Boot Sets is not functional.<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|A Boot Set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.|
-|links|[LinkListReadOnly](#schemalinklistreadonly)|false|none|List of links to other resources|
+|» **additionalProperties**|[V2BootSet](#schemav2bootset)|false|none|A boot set is a collection of nodes defined by an explicit list, their functional<br>role, and their logical groupings. This collection of nodes is associated with one<br>set of boot artifacts and optional additional records for configuration and root<br>filesystem provisioning.|
+|links|[[Link](#schemalink)]|false|read-only|[Link to other resources]|
 
 <h2 id="tocS_V2SessionTemplateValidation">V2SessionTemplateValidation</h2>
 <!-- backwards compatibility -->
@@ -8559,61 +8143,33 @@ Message describing errors or incompleteness in a Session Template.
 |---|---|---|---|---|
 |*anonymous*|string|false|none|Message describing errors or incompleteness in a Session Template.|
 
-<h2 id="tocS_V2SessionName">V2SessionName</h2>
+<h2 id="tocS_V2TemplateName">V2TemplateName</h2>
 <!-- backwards compatibility -->
-<a id="schemav2sessionname"></a>
-<a id="schema_V2SessionName"></a>
-<a id="tocSv2sessionname"></a>
-<a id="tocsv2sessionname"></a>
+<a id="schemav2templatename"></a>
+<a id="schema_V2TemplateName"></a>
+<a id="tocSv2templatename"></a>
+<a id="tocsv2templatename"></a>
 
 ```json
-"session-20190728032600"
+"my-session-template"
 
 ```
 
-Name of the Session.
+The name of the Session Template
+
+It is recommended to use names which meet the following restrictions:
+* Maximum length of 127 characters.
+* Use only letters, digits, periods (.), dashes (-), and underscores (_).
+* Begin and end with a letter or digit.
+
+These restrictions are not enforced in this version of BOS, but will be
+enforced in a future version.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|Name of the Session.|
-
-<h2 id="tocS_V2SessionOperation">V2SessionOperation</h2>
-<!-- backwards compatibility -->
-<a id="schemav2sessionoperation"></a>
-<a id="schema_V2SessionOperation"></a>
-<a id="tocSv2sessionoperation"></a>
-<a id="tocsv2sessionoperation"></a>
-
-```json
-"boot"
-
-```
-
-A Session represents a desired state that is being applied to a group
-of Components.  Sessions run until all Components it manages have
-either been disabled due to completion, or until all Components are
-managed by other newer Sessions.
-
-Operation -- An operation to perform on Components in this Session.
-    Boot                 Applies the Template to the Components and boots/reboots if necessary.
-    Reboot               Applies the Template to the Components; guarantees a reboot.
-    Shutdown             Power down Components that are on.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
-
-#### Enumerated Values
-
-|Property|Value|
-|---|---|
-|*anonymous*|boot|
-|*anonymous*|reboot|
-|*anonymous*|shutdown|
+|*anonymous*|string|false|none|The name of the Session Template<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
 
 <h2 id="tocS_V2SessionCreate">V2SessionCreate</h2>
 <!-- backwards compatibility -->
@@ -8626,7 +8182,7 @@ Operation -- An operation to perform on Components in this Session.
 {
   "name": "session-20190728032600",
   "operation": "boot",
-  "template_name": "cle-1.0.0",
+  "template_name": "my-session-template",
   "limit": "string",
   "stage": false,
   "include_disabled": false
@@ -8634,66 +8190,26 @@ Operation -- An operation to perform on Components in this Session.
 
 ```
 
-A Session Creation object. A UUID name is generated if a name is not provided.
+A Session Creation object
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
-|operation|[V2SessionOperation](#schemav2sessionoperation)|true|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
-|template_name|[SessionTemplateName](#schemasessiontemplatename)|true|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
-|include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
-
-<h2 id="tocS_V2SessionStatusLabel">V2SessionStatusLabel</h2>
-<!-- backwards compatibility -->
-<a id="schemav2sessionstatuslabel"></a>
-<a id="schema_V2SessionStatusLabel"></a>
-<a id="tocSv2sessionstatuslabel"></a>
-<a id="tocsv2sessionstatuslabel"></a>
-
-```json
-"pending"
-
-```
-
-The status of a Session.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The status of a Session.|
+|name|string|false|none|Name of the session. A UUID name is generated if a name is not provided.|
+|operation|string|true|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
+|template_name|[V2TemplateName](#schemav2templatename)|true|none|The name of the Session Template<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+|limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.<br>It is recommended that this should be 1-65535 characters in length.<br>This restriction is not enforced in this version of BOS, but it is targeted to start being enforced in an upcoming BOS version.|
+|stage|boolean|false|none|Set to stage a session which will not immediately change the state of any components. The "applystaged" endpoint can be called at a later time to trigger the start of this session.|
+|include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM)|
 
 #### Enumerated Values
 
 |Property|Value|
 |---|---|
-|*anonymous*|pending|
-|*anonymous*|running|
-|*anonymous*|complete|
-
-<h2 id="tocS_V2SessionTime">V2SessionTime</h2>
-<!-- backwards compatibility -->
-<a id="schemav2sessiontime"></a>
-<a id="schema_V2SessionTime"></a>
-<a id="tocSv2sessiontime"></a>
-<a id="tocsv2sessiontime"></a>
-
-```json
-"string"
-
-```
-
-When the Session was created or completed.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|When the Session was created or completed.|
+|operation|boot|
+|operation|reboot|
+|operation|shutdown|
 
 <h2 id="tocS_V2SessionStatus">V2SessionStatus</h2>
 <!-- backwards compatibility -->
@@ -8712,16 +8228,24 @@ When the Session was created or completed.
 
 ```
 
-Information on the status of a Session.
+Information on the status of a session.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|start_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
-|end_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
-|status|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|none|The status of a Session.|
-|error|string|false|none|Error which prevented the Session from running|
+|start_time|string|false|none|When the session was created.|
+|end_time|string|false|none|When the session completed.|
+|status|string|false|none|The status of a session.|
+|error|string|false|none|Error which prevented the session from running|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|status|pending|
+|status|running|
+|status|complete|
 
 <h2 id="tocS_V2BootSet">V2BootSet</h2>
 <!-- backwards compatibility -->
@@ -8739,7 +8263,7 @@ Information on the status of a Session.
   },
   "type": "s3",
   "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-  "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+  "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
   "node_list": [
     "x3000c0s19b1n0",
     "x3000c0s19b2n0"
@@ -8757,7 +8281,7 @@ Information on the status of a Session.
 
 ```
 
-A Boot Set is a collection of nodes defined by an explicit list, their functional
+A boot set is a collection of nodes defined by an explicit list, their functional
 role, and their logical groupings. This collection of nodes is associated with one
 set of boot artifacts and optional additional records for configuration and root
 filesystem provisioning.
@@ -8766,17 +8290,17 @@ filesystem provisioning.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[BootSetName](#schemabootsetname)|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|path|[BootManifestPath](#schemabootmanifestpath)|true|none|A path identifying the metadata describing the components of the boot image.<br>This could be a URI, URL, etc, depending on the type of the Boot Set.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|This is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a Boot Set.|
-|type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_list|[NodeList](#schemanodelist)|false|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|rootfs_provider|[BootSetRootfsProvider](#schemabootsetrootfsprovider)|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|rootfs_provider_passthrough|[BootSetRootfsProviderPassthrough](#schemabootsetrootfsproviderpassthrough)|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|name|string|false|none|The Boot Set name.<br><br>It is recommended that:<br>* Boot Set names should be 1-127 characters in length.<br>* Boot Set names should use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Boot Set names should begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
+|path|string|true|none|A path identifying the metadata describing the components of the boot image. This could be a URI, URL, etc.<br>It will be processed based on the type attribute.<br><br>It is recommended that this should be 1-4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|cfs|[V2CfsParameters](#schemav2cfsparameters)|false|none|CFS Parameters is the collection of parameters that are passed to the Configuration<br>Framework Service when configuration is enabled. Can be set as the global value for<br>a Session Template, or individually within a boot set.|
+|type|string|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|etag|string|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|kernel_parameters|string|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_list|[string]|false|none|The node list. This is an explicit mapping against hardware xnames.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_roles_groups|[string]|false|none|The node roles list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_groups|[string]|false|none|The node groups list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|rootfs_provider|string|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|rootfs_provider_passthrough|string|false|none|The root file system provider passthrough.<br>These are additional kernel parameters that will be appended to<br>the 'rootfs=<protocol>' kernel parameter<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_V2Session">V2Session</h2>
 <!-- backwards compatibility -->
@@ -8787,9 +8311,9 @@ filesystem provisioning.
 
 ```json
 {
-  "name": "session-20190728032600",
+  "name": "string",
   "operation": "boot",
-  "template_name": "cle-1.0.0",
+  "template_name": "my-session-template",
   "limit": "string",
   "stage": true,
   "components": "string",
@@ -8808,20 +8332,28 @@ A Session object
 
 ## Link Relationships
 
-* self : The Session object
+* self : The session object
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|name|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
-|operation|[V2SessionOperation](#schemav2sessionoperation)|false|none|A Session represents a desired state that is being applied to a group<br>of Components.  Sessions run until all Components it manages have<br>either been disabled due to completion, or until all Components are<br>managed by other newer Sessions.<br><br>Operation -- An operation to perform on Components in this Session.<br>    Boot                 Applies the Template to the Components and boots/reboots if necessary.<br>    Reboot               Applies the Template to the Components; guarantees a reboot.<br>    Shutdown             Power down Components that are on.|
-|template_name|[SessionTemplateName](#schemasessiontemplatename)|false|none|Name of the Session Template.<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but they are<br>targeted to start being enforced in an upcoming BOS version.|
-|limit|[SessionLimit](#schemasessionlimit)|false|none|A comma-separated list of nodes, groups, or roles to which the Session<br>will be limited. Components are treated as OR operations unless<br>preceded by "&" for AND or "!" for NOT.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|stage|boolean|false|none|Set to stage a Session which will not immediately change the state of any Components.<br>The "applystaged" endpoint can be called at a later time to trigger the start of this Session.|
-|components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes<br>the Session should operate against.  The list will remain even if<br>other Sessions have taken over management of the nodes.|
-|include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM).|
-|status|[V2SessionStatus](#schemav2sessionstatus)|false|none|Information on the status of a Session.|
+|name|string|false|none|Name of the session.|
+|operation|string|false|none|A Session represents a desired state that is being applied to a group of components.  Sessions run until all components it manages have either been disabled due to completion, or until all components are managed by other newer sessions.<br>Operation -- An operation to perform on nodes in this session.<br><br>    Boot                 Applies the template to the components and boots/reboots if necessary.<br>    Reboot               Applies the template to the components guarantees a reboot.<br>    Shutdown             Power down nodes that are on.|
+|template_name|[V2TemplateName](#schemav2templatename)|false|none|The name of the Session Template<br><br>It is recommended to use names which meet the following restrictions:<br>* Maximum length of 127 characters.<br>* Use only letters, digits, periods (.), dashes (-), and underscores (_).<br>* Begin and end with a letter or digit.<br><br>These restrictions are not enforced in this version of BOS, but will be<br>enforced in a future version.|
+|limit|string|false|none|A comma-separated of nodes, groups, or roles to which the session will be limited. Components are treated as OR operations unless preceded by "&" for AND or "!" for NOT.|
+|stage|boolean|false|none|Set to stage a session which will not immediately change the state of any components. The "applystaged" endpoint can be called at a later time to trigger the start of this session.|
+|components|string|false|none|A comma-separated list of nodes, representing the initial list of nodes the session should operate against.  The list will remain even if other sessions have taken over management of the nodes.|
+|include_disabled|boolean|false|none|Set to include nodes that have been disabled as indicated in the Hardware State Manager (HSM)|
+|status|[V2SessionStatus](#schemav2sessionstatus)|false|none|Information on the status of a session.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|operation|boot|
+|operation|reboot|
+|operation|shutdown|
 
 <h2 id="tocS_V2SessionArray">V2SessionArray</h2>
 <!-- backwards compatibility -->
@@ -8833,9 +8365,9 @@ A Session object
 ```json
 [
   {
-    "name": "session-20190728032600",
+    "name": "string",
     "operation": "boot",
-    "template_name": "cle-1.0.0",
+    "template_name": "my-session-template",
     "limit": "string",
     "stage": true,
     "components": "string",
@@ -8851,13 +8383,13 @@ A Session object
 
 ```
 
-An array of Sessions.
+An array of sessions.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[[V2Session](#schemav2session)]|false|none|An array of Sessions.|
+|*anonymous*|[[V2Session](#schemav2session)]|false|none|An array of sessions.|
 
 <h2 id="tocS_V2SessionExtendedStatusPhases">V2SessionExtendedStatusPhases</h2>
 <!-- backwards compatibility -->
@@ -8876,16 +8408,16 @@ An array of Sessions.
 
 ```
 
-Detailed information on the phases of a Session.
+Detailed information on the phases of a session.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|percent_complete|number|false|none|The percent of Components currently in a completed/stable state|
-|percent_powering_on|number|false|none|The percent of Components currently in the powering-on phase|
-|percent_powering_off|number|false|none|The percent of Components currently in the powering-off phase|
-|percent_configuring|number|false|none|The percent of Components currently in the configuring phase|
+|percent_complete|number|false|none|The percent of components currently in a completed/stable state|
+|percent_powering_on|number|false|none|The percent of components currently in the powering-on phase|
+|percent_powering_off|number|false|none|The percent of components currently in the powering-off phase|
+|percent_configuring|number|false|none|The percent of components currently in the configuring phase|
 
 <h2 id="tocS_V2SessionExtendedStatusTiming">V2SessionExtendedStatusTiming</h2>
 <!-- backwards compatibility -->
@@ -8903,15 +8435,15 @@ Detailed information on the phases of a Session.
 
 ```
 
-Detailed information on the timing of a Session.
+Detailed information on the timing of a session.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|start_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
-|end_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
-|duration|string|false|none|The current duration of the ongoing Session or final duration of the completed Session.|
+|start_time|string|false|none|When the session was created.|
+|end_time|string|false|none|When the session completed.|
+|duration|string|false|none|The current duration of the on-going session or final duration of the completed session.|
 
 <h2 id="tocS_V2SessionExtendedStatus">V2SessionExtendedStatus</h2>
 <!-- backwards compatibility -->
@@ -8943,20 +8475,28 @@ Detailed information on the timing of a Session.
 
 ```
 
-Detailed information on the status of a Session.
+Detailed information on the status of a session.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|status|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|none|The status of a Session.|
-|managed_components_count|integer|false|none|The count of Components currently managed by this Session|
-|phases|[V2SessionExtendedStatusPhases](#schemav2sessionextendedstatusphases)|false|none|Detailed information on the phases of a Session.|
-|percent_successful|number|false|none|The percent of Components currently in a successful state|
-|percent_failed|number|false|none|The percent of Components currently in a failed state|
-|percent_staged|number|false|none|The percent of Components currently still staged for this Session|
-|error_summary|object|false|none|A summary of the errors currently listed by all Components|
-|timing|[V2SessionExtendedStatusTiming](#schemav2sessionextendedstatustiming)|false|none|Detailed information on the timing of a Session.|
+|status|string|false|none|The status of a session.|
+|managed_components_count|integer|false|none|The count of components currently managed by this session|
+|phases|[V2SessionExtendedStatusPhases](#schemav2sessionextendedstatusphases)|false|none|Detailed information on the phases of a session.|
+|percent_successful|number|false|none|The percent of components currently in a successful state|
+|percent_failed|number|false|none|The percent of components currently in a failed state|
+|percent_staged|number|false|none|The percent of components currently still staged for this session|
+|error_summary|object|false|none|A summary of the errors currently listed by all components|
+|timing|[V2SessionExtendedStatusTiming](#schemav2sessionextendedstatustiming)|false|none|Detailed information on the timing of a session.|
+
+#### Enumerated Values
+
+|Property|Value|
+|---|---|
+|status|pending|
+|status|running|
+|status|complete|
 
 <h2 id="tocS_V2BootArtifacts">V2BootArtifacts</h2>
 <!-- backwards compatibility -->
@@ -8967,9 +8507,9 @@ Detailed information on the status of a Session.
 
 ```json
 {
-  "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-  "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-  "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+  "kernel": "string",
+  "kernel_parameters": "string",
+  "initrd": "string"
 }
 
 ```
@@ -8980,97 +8520,9 @@ A collection of boot artifacts.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|kernel|[BootKernelPath](#schemabootkernelpath)|false|none|A path to the kernel to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|initrd|[BootInitrdPath](#schemabootinitrdpath)|false|none|A path to the initrd to use for booting.<br><br>It is recommended that this should be no more than 4095 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_V2ComponentBssToken">V2ComponentBssToken</h2>
-<!-- backwards compatibility -->
-<a id="schemav2componentbsstoken"></a>
-<a id="schema_V2ComponentBssToken"></a>
-<a id="tocSv2componentbsstoken"></a>
-<a id="tocsv2componentbsstoken"></a>
-
-```json
-"string"
-
-```
-
-A token received from the node identifying the boot artifacts.
-For BOS use-only, users should not set this field. It will be overwritten.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten.|
-
-<h2 id="tocS_V2ComponentId">V2ComponentId</h2>
-<!-- backwards compatibility -->
-<a id="schemav2componentid"></a>
-<a id="schema_V2ComponentId"></a>
-<a id="tocSv2componentid"></a>
-<a id="tocsv2componentid"></a>
-
-```json
-"string"
-
-```
-
-The Component's ID. (e.g. xname for hardware Components)
-
-It is recommended that this should be 1-127 characters in length.
-
-This restriction is not enforced in this version of BOS, but it is
-targeted to start being enforced in an upcoming BOS version.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string|false|none|The Component's ID. (e.g. xname for hardware Components)<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-
-<h2 id="tocS_V2ComponentIdList">V2ComponentIdList</h2>
-<!-- backwards compatibility -->
-<a id="schemav2componentidlist"></a>
-<a id="schema_V2ComponentIdList"></a>
-<a id="tocSv2componentidlist"></a>
-<a id="tocsv2componentidlist"></a>
-
-```json
-[
-  "string"
-]
-
-```
-
-A list of Component IDs (xnames)
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|[[V2ComponentId](#schemav2componentid)]|false|none|A list of Component IDs (xnames)|
-
-<h2 id="tocS_V2ComponentLastUpdated">V2ComponentLastUpdated</h2>
-<!-- backwards compatibility -->
-<a id="schemav2componentlastupdated"></a>
-<a id="schema_V2ComponentLastUpdated"></a>
-<a id="tocSv2componentlastupdated"></a>
-<a id="tocsv2componentlastupdated"></a>
-
-```json
-"2019-07-28T03:26:00Z"
-
-```
-
-The date/time when the state was last updated in RFC 3339 format.
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|*anonymous*|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
+|kernel|string|false|none|An md5sum hash of the kernel ID|
+|kernel_parameters|string|false|none|Kernel parameters|
+|initrd|string|false|none|Initrd ID|
 
 <h2 id="tocS_V2ComponentActualState">V2ComponentActualState</h2>
 <!-- backwards compatibility -->
@@ -9082,9 +8534,9 @@ The date/time when the state was last updated in RFC 3339 format.
 ```json
 {
   "boot_artifacts": {
-    "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-    "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-    "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+    "kernel": "string",
+    "kernel_parameters": "string",
+    "initrd": "string"
   },
   "bss_token": "string",
   "last_updated": "2019-07-28T03:26:00Z"
@@ -9092,15 +8544,15 @@ The date/time when the state was last updated in RFC 3339 format.
 
 ```
 
-The desired boot artifacts and configuration for a Component
+The desired boot artifacts and configuration for a component
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
-|bss_token|[V2ComponentBssToken](#schemav2componentbsstoken)|false|none|A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten.|
-|last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
+|bss_token|string|false|none|A token received from the node identifying the boot artifacts. For BOS use-only, users should not set this field. It will be overwritten.|
+|last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
 
 <h2 id="tocS_V2ComponentDesiredState">V2ComponentDesiredState</h2>
 <!-- backwards compatibility -->
@@ -9112,27 +8564,27 @@ The desired boot artifacts and configuration for a Component
 ```json
 {
   "boot_artifacts": {
-    "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-    "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-    "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+    "kernel": "string",
+    "kernel_parameters": "string",
+    "initrd": "string"
   },
-  "configuration": "compute-23.4.0",
+  "configuration": "string",
   "bss_token": "string",
   "last_updated": "2019-07-28T03:26:00Z"
 }
 
 ```
 
-The desired boot artifacts and configuration for a Component
+The desired boot artifacts and configuration for a component
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|bss_token|[V2ComponentBssToken](#schemav2componentbsstoken)|false|none|A token received from the node identifying the boot artifacts.<br>For BOS use-only, users should not set this field. It will be overwritten.|
-|last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
+|configuration|string|false|none|A CFS configuration ID.|
+|bss_token|string|false|none|A token received from BSS identifying the boot artifacts. For BOS use-only, users should not set this field. It will be overwritten.|
+|last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
 
 <h2 id="tocS_V2ComponentStagedState">V2ComponentStagedState</h2>
 <!-- backwards compatibility -->
@@ -9144,28 +8596,27 @@ The desired boot artifacts and configuration for a Component
 ```json
 {
   "boot_artifacts": {
-    "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-    "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-    "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+    "kernel": "string",
+    "kernel_parameters": "string",
+    "initrd": "string"
   },
-  "configuration": "compute-23.4.0",
-  "session": "session-20190728032600",
+  "configuration": "string",
+  "session": "string",
   "last_updated": "2019-07-28T03:26:00Z"
 }
 
 ```
 
-The desired boot artifacts and configuration for a Component. Optionally, a Session
-may be set which can be triggered at a later time against this Component.
+The desired boot artifacts and configuration for a component
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |boot_artifacts|[V2BootArtifacts](#schemav2bootartifacts)|false|none|A collection of boot artifacts.|
-|configuration|[CfsConfiguration](#schemacfsconfiguration)|false|none|The name of configuration to be applied.<br><br>It is recommended that this should be no more than 127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|session|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
-|last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
+|configuration|string|false|none|A CFS configuration ID.|
+|session|string|false|none|A session which can be triggered at a later time against this component.|
+|last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
 
 <h2 id="tocS_V2ComponentLastAction">V2ComponentLastAction</h2>
 <!-- backwards compatibility -->
@@ -9189,8 +8640,8 @@ Information on the most recent action taken against the node.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|last_updated|[V2ComponentLastUpdated](#schemav2componentlastupdated)|false|none|The date/time when the state was last updated in RFC 3339 format.|
-|action|string|false|none|A description of the most recent operator/action to impact the Component.|
+|last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
+|action|string|false|none|A description of the most recent operator/action to impact the component.|
 |failed|boolean|false|none|Denotes if the last action failed to accomplish its task|
 
 <h2 id="tocS_V2ComponentEventStats">V2ComponentEventStats</h2>
@@ -9235,14 +8686,14 @@ Information on the most recent attempt to return the node to its desired state.
 
 ```
 
-Status information for the Component
+Status information for the component
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|phase|string|false|none|The current phase of the Component in the boot process.|
-|status|string|false|read-only|The current status of the Component.  More detailed than phase.|
+|phase|string|false|none|The current phase of the component in the boot process.|
+|status|string|false|read-only|The current status of the component.  More detailed than phase.|
 |status_override|string|false|none|If set, this will override the status value.|
 
 <h2 id="tocS_V2Component">V2Component</h2>
@@ -9254,34 +8705,34 @@ Status information for the Component
 
 ```json
 {
-  "id": "string",
+  "id": "x3001c0s39b0n0",
   "actual_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
     "bss_token": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "desired_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
+    "configuration": "string",
     "bss_token": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "staged_state": {
     "boot_artifacts": {
-      "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-      "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+      "kernel": "string",
+      "kernel_parameters": "string",
+      "initrd": "string"
     },
-    "configuration": "compute-23.4.0",
-    "session": "session-20190728032600",
+    "configuration": "string",
+    "session": "string",
     "last_updated": "2019-07-28T03:26:00Z"
   },
   "last_action": {
@@ -9301,29 +8752,28 @@ Status information for the Component
   },
   "enabled": true,
   "error": "string",
-  "session": "session-20190728032600",
+  "session": "string",
   "retry_policy": 1
 }
 
 ```
 
-The current and desired artifacts state for a Component, and
-the Session responsible for the Component's current state.
+The current and desired artifacts state for a component.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|id|[V2ComponentId](#schemav2componentid)|false|none|The Component's ID. (e.g. xname for hardware Components)<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The desired boot artifacts and configuration for a Component|
-|desired_state|[V2ComponentDesiredState](#schemav2componentdesiredstate)|false|none|The desired boot artifacts and configuration for a Component|
-|staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The desired boot artifacts and configuration for a Component. Optionally, a Session<br>may be set which can be triggered at a later time against this Component.|
+|id|string|false|none|The component's ID. e.g. xname for hardware components<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|actual_state|[V2ComponentActualState](#schemav2componentactualstate)|false|none|The desired boot artifacts and configuration for a component|
+|desired_state|[V2ComponentDesiredState](#schemav2componentdesiredstate)|false|none|The desired boot artifacts and configuration for a component|
+|staged_state|[V2ComponentStagedState](#schemav2componentstagedstate)|false|none|The desired boot artifacts and configuration for a component|
 |last_action|[V2ComponentLastAction](#schemav2componentlastaction)|false|none|Information on the most recent action taken against the node.|
 |event_stats|[V2ComponentEventStats](#schemav2componenteventstats)|false|none|Information on the most recent attempt to return the node to its desired state.|
-|status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the Component|
-|enabled|boolean|false|none|A flag indicating if actions should be taken for this Component.|
-|error|string|false|none|A description of the most recent error to impact the Component.|
-|session|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|status|[V2ComponentStatus](#schemav2componentstatus)|false|none|Status information for the component|
+|enabled|boolean|false|none|A flag indicating if actions should be taken for this component.|
+|error|string|false|none|A description of the most recent error to impact the component.|
+|session|string|false|none|The session responsible for the component's current state|
 |retry_policy|integer|false|none|The maximum number attempts per action when actions fail.<br>Defaults to the global default_retry_policy if not set|
 
 <h2 id="tocS_V2ComponentArray">V2ComponentArray</h2>
@@ -9336,34 +8786,34 @@ the Session responsible for the Component's current state.
 ```json
 [
   {
-    "id": "string",
+    "id": "x3001c0s39b0n0",
     "actual_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "desired_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
+      "configuration": "string",
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "staged_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
-      "session": "session-20190728032600",
+      "configuration": "string",
+      "session": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "last_action": {
@@ -9383,20 +8833,20 @@ the Session responsible for the Component's current state.
     },
     "enabled": true,
     "error": "string",
-    "session": "session-20190728032600",
+    "session": "string",
     "retry_policy": 1
   }
 ]
 
 ```
 
-An array of Component states.
+An array of component states.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[[V2Component](#schemav2component)]|false|none|An array of Component states.|
+|*anonymous*|[[V2Component](#schemav2component)]|false|none|An array of component states.|
 
 <h2 id="tocS_V2ComponentsFilter">V2ComponentsFilter</h2>
 <!-- backwards compatibility -->
@@ -9408,20 +8858,19 @@ An array of Component states.
 ```json
 {
   "ids": "string",
-  "session": "session-20190728032600"
+  "session": "string"
 }
 
 ```
 
-Information for patching multiple Components.
-If a Session name is specified, then all Components part of this Session will be patched.
+Information for patching multiple components.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|ids|string|false|none|A comma-separated list of Component IDs.<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|session|[V2SessionName](#schemav2sessionname)|false|none|Name of the Session.|
+|ids|string|false|none|A comma-separated list of component IDs<br><br>It is recommended that this should be 1-65535 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|session|string|false|none|A session name.  All components part of this session will be patched.<br><br>BOS v2 session names must be 1-45 characters in length and match the<br>following regular expression: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$<br><br>These restrictions are not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_V2ComponentsUpdate">V2ComponentsUpdate</h2>
 <!-- backwards compatibility -->
@@ -9433,34 +8882,34 @@ If a Session name is specified, then all Components part of this Session will be
 ```json
 {
   "patch": {
-    "id": "string",
+    "id": "x3001c0s39b0n0",
     "actual_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "desired_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
+      "configuration": "string",
       "bss_token": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "staged_state": {
       "boot_artifacts": {
-        "kernel": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/kernel",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
-        "initrd": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/initrd"
+        "kernel": "string",
+        "kernel_parameters": "string",
+        "initrd": "string"
       },
-      "configuration": "compute-23.4.0",
-      "session": "session-20190728032600",
+      "configuration": "string",
+      "session": "string",
       "last_updated": "2019-07-28T03:26:00Z"
     },
     "last_action": {
@@ -9480,25 +8929,25 @@ If a Session name is specified, then all Components part of this Session will be
     },
     "enabled": true,
     "error": "string",
-    "session": "session-20190728032600",
+    "session": "string",
     "retry_policy": 1
   },
   "filters": {
     "ids": "string",
-    "session": "session-20190728032600"
+    "session": "string"
   }
 }
 
 ```
 
-Information for patching multiple Components.
+Information for patching multiple components.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|patch|[V2Component](#schemav2component)|true|none|The current and desired artifacts state for a Component, and<br>the Session responsible for the Component's current state.|
-|filters|[V2ComponentsFilter](#schemav2componentsfilter)|true|none|Information for patching multiple Components.<br>If a Session name is specified, then all Components part of this Session will be patched.|
+|patch|[V2Component](#schemav2component)|true|none|The current and desired artifacts state for a component.|
+|filters|[V2ComponentsFilter](#schemav2componentsfilter)|true|none|Information for patching multiple components.|
 
 <h2 id="tocS_V2ApplyStagedComponents">V2ApplyStagedComponents</h2>
 <!-- backwards compatibility -->
@@ -9516,13 +8965,13 @@ Information for patching multiple Components.
 
 ```
 
-A list of Components that should have their staged Session applied.
+A list of components that should have their staged session applied.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|xnames|[V2ComponentIdList](#schemav2componentidlist)|false|none|A list of Component IDs (xnames)|
+|xnames|[string]|false|none|The list of component xnames|
 
 <h2 id="tocS_V2ApplyStagedStatus">V2ApplyStagedStatus</h2>
 <!-- backwards compatibility -->
@@ -9546,15 +8995,15 @@ A list of Components that should have their staged Session applied.
 
 ```
 
-Mapping from Component staged Session statuses to Components with that status.
+A list of components that should have their staged session applied.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|succeeded|[V2ComponentIdList](#schemav2componentidlist)|false|none|A list of Component IDs (xnames)|
-|failed|[V2ComponentIdList](#schemav2componentidlist)|false|none|A list of Component IDs (xnames)|
-|ignored|[V2ComponentIdList](#schemav2componentidlist)|false|none|A list of Component IDs (xnames)|
+|succeeded|[string]|false|none|The list of component xnames|
+|failed|[string]|false|none|The list of component xnames|
+|ignored|[string]|false|none|The list of component xnames|
 
 <h2 id="tocS_V2Options">V2Options</h2>
 <!-- backwards compatibility -->
@@ -9565,16 +9014,16 @@ Mapping from Component staged Session statuses to Components with that status.
 
 ```json
 {
-  "cleanup_completed_session_ttl": "3d",
+  "cleanup_completed_session_ttl": "string",
   "clear_stage": true,
-  "component_actual_state_ttl": "6h",
+  "component_actual_state_ttl": "string",
   "disable_components_on_completion": true,
-  "discovery_frequency": 33554432,
+  "discovery_frequency": 0,
   "logging_level": "string",
-  "max_boot_wait_time": 1048576,
-  "max_power_on_wait_time": 1048576,
-  "max_power_off_wait_time": 1048576,
-  "polling_frequency": 1048576,
+  "max_boot_wait_time": 0,
+  "max_power_on_wait_time": 0,
+  "max_power_off_wait_time": 0,
+  "polling_frequency": 0,
   "default_retry_policy": 1
 }
 
@@ -9586,16 +9035,16 @@ Options for the Boot Orchestration Service.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|cleanup_completed_session_ttl|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|Delete complete Sessions that are older than cleanup_completed_session_ttl (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior.|
-|clear_stage|boolean|false|none|Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.|
-|component_actual_state_ttl|string(^(0|0[mMhHdDwW]|[1-9][0-9]*[mMhHdDwW])$)|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
-|disable_components_on_completion|boolean|false|none|Allows for BOS Components to be marked as disabled after a Session has been completed. If false, BOS will continue to maintain the state<br>of the nodes declaratively, even after a Session finishes.|
-|discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM. (in seconds)|
+|cleanup_completed_session_ttl|string|false|none|Delete complete sessions that are older than cleanup_completed_session_ttl (in hours). 0h disables cleanup behavior.|
+|clear_stage|boolean|false|none|Allows components staged information to be cleared when the requested staging action has been started. Defaults to false.|
+|component_actual_state_ttl|string|false|none|The maximum amount of time a component's actual state is considered valid (in hours). 0h disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
+|disable_components_on_completion|boolean|false|none|Allows for BOS components to be marked as disabled after a session has been completed. If false, BOS will continue to maintain the state of the nodes declaratively, even after a session finishes.|
+|discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new components from HSM. (in seconds)|
 |logging_level|string|false|none|The logging level for all BOS services|
 |max_boot_wait_time|integer|false|none|How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds)|
 |max_power_on_wait_time|integer|false|none|How long BOS will wait for a node to power on before calling power on again (in seconds)|
 |max_power_off_wait_time|integer|false|none|How long BOS will wait for a node to power off before forcefully powering off (in seconds)|
-|polling_frequency|integer|false|none|How frequently the BOS operators check Component state for needed actions. (in seconds)|
+|polling_frequency|integer|false|none|How frequently the BOS operators check component state for needed actions. (in seconds)|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
 
 <h2 id="tocS_SessionTemplateArray">SessionTemplateArray</h2>
@@ -9624,10 +9073,13 @@ Options for the Boot Orchestration Service.
     "boot_sets": {
       "property1": {
         "name": "compute",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "network": "string",
         "node_list": [
           "x3000c0s19b1n0",
           "x3000c0s19b2n0"
@@ -9640,17 +9092,17 @@ Options for the Boot Orchestration Service.
           "string"
         ],
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       },
       "property2": {
         "name": "compute",
+        "boot_ordinal": 0,
+        "shutdown_ordinal": 0,
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
         "type": "s3",
         "etag": "1cc4eef4f407bd8a62d7d66ee4b9e9c8",
-        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave _omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell turbo_boost_lim it=999 spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "network": "string",
         "node_list": [
           "x3000c0s19b1n0",
           "x3000c0s19b2n0"
@@ -9663,10 +9115,7 @@ Options for the Boot Orchestration Service.
           "string"
         ],
         "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
-        "network": "string",
-        "boot_ordinal": 0,
-        "shutdown_ordinal": 0
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
       }
     },
     "links": [
@@ -9680,7 +9129,7 @@ Options for the Boot Orchestration Service.
 
 ```
 
-An array of Session Templates.
+An array of session templates.
 
 ### Properties
 
@@ -9688,11 +9137,11 @@ anyOf
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[V1SessionTemplate](#schemav1sessiontemplate)|false|none|A Session Template object represents a collection of resources and metadata.<br>A Session Template is used to create a Session which when combined with an<br>action (i.e. boot, configure, reboot, shutdown) will create a Kubernetes BOA job<br>to complete the required tasks for the operation.<br><br>## Link Relationships<br><br>* self : The Session Template object|
+|*anonymous*|[V1SessionTemplate](#schemav1sessiontemplate)|false|none|A Session Template object represents a collection of resources and metadata.<br>A session template is used to create a Session which when combined with an<br>action (i.e. boot, reconfigure, reboot, shutdown) will create a Kubernetes BOA job<br>to complete the required tasks for the operation.<br><br>A Session Template can be created from a JSON structure.  It will return<br>a SessionTemplate name if successful.<br>This name is required when creating a Session.<br><br>## Link Relationships<br><br>* self : The session object|
 
 or
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|[V2SessionTemplate](#schemav2sessiontemplate)|false|none|A Session Template object represents a collection of resources and metadata.<br>A Session Template is used to create a Session which applies the data to<br>group of Components.<br><br>## Link Relationships<br><br>* self : The Session Template object|
+|*anonymous*|[V2SessionTemplate](#schemav2sessiontemplate)|false|none|A Session Template object represents a collection of resources and metadata.<br>A session template is used to create a Session which applies the data to<br>group of components.<br><br>A Session Template can be created from a JSON structure.  It will return<br>a SessionTemplate name if successful.<br>This name is required when creating a Session.<br><br>## Link Relationships<br><br>* self : The session object|
 
