@@ -56,18 +56,19 @@ If it is already up to date then by default it will not be selected. You can for
 
 ## Deploying the ISO Image using the remote method
 
-* Mount the ISO image or copy and extract the ISO image.
-* If on a Windows Server then click on `launch_sum.bat` file, if on a Linux then `launch_sum.sh` file
-* Continue in the browser window that was opened
-* If `localhost Guided Update` is selected, then it updates the components on the server from where `launch_sum` execution file is launched.
-* You can deploy on one or more than one target nodes by selecting the option Nodes
-* Click on `Nodes`, then `Add Node`. Give the ILO IP in IPV4 section (You can also give range of nodes), select Node type as iLO and give ILO credentials by scrolling down
-* Once the Discovery is done click on `Add Inventory`, once inventory is completed click on Next
-* Inventory takes some time, wait until it completes and then click Next
-* Select the components that needs firmware flashing, you can also check for the version by clicking view details for each component. If its already up to date then by default it will not be selected, you can force
-  update the component. Click on `TPM Override` and then `deploy`
-* After deployment, check for the status and reboot the node
-* Repeat this for all the nodes added.
+1. Mount the ISO image or copy and extract the ISO image.
+1. If on a Windows Server then click on `launch_sum.bat` file, if on a Linux then `launch_sum.sh` file.
+1. Continue in the browser window that was opened.
+1. If `localhost Guided Update` is selected, then it updates the components on the server from where `launch_sum` execution file is launched.
+1. You can deploy on one or more than one target nodes by selecting the option Nodes.
+1. Click on `Nodes`, then `Add Node`. Give the ILO IP in IPV4 section (You can also give range of nodes), select Node type as iLO and give ILO credentials by scrolling down.
+1. Once the Discovery is done, click on `Add Inventory`. Once inventory is completed, click on `Next`.
+1. Inventory takes some time, wait until it completes and then click `Next`.
+1. Select the components that needs firmware flashing, you can also check for the version by clicking view details for each component. If it is already up to date then by default it will not be selected, you can force
+  update the component. Click on `TPM Override`, and then `deploy`.
+1. After deployment, check for the status and reboot the node
+1. Repeat this for all the nodes added.
+
 
 ## Notes
 
