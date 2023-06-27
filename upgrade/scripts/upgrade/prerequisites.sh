@@ -753,6 +753,94 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="UPDATE_NCN_CLOUD_INIT_PACKAGE_LISTS_AND_REPO_DEFINITIONS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    do_patch=0
+    error=0
+    sourcefile="${artdir}/rpm/cloud-init"
+
+    # If this is a re-run and our source JSON was already created we don't need to recreate it.
+    if [ ! -f "${sourcefile}.json" ]; then
+
+      # If the source JSON does not exist, check that our source YAML exists for creating the source JSON.
+      if [ ! -f "${sourcefile}.yaml" ]; then
+
+        # If the source YAML does not exist, then it can be assumed that this vintage of CSM does not support package installs from cloud-init.
+        # In this case, there is nothing to do because the CSM version we are upgrading to is too old.
+        echo "No $(basename "$sourcefile").yaml file found at: ${sourcefile}.yaml. Skipping package & repo meta-data injection."
+
+      else
+
+        # `csi handoff bss-update-cloud-init --user-data` only takes JSON, convert the human-friendlier YAML to JSON and nest it under the expected key.
+        yq4 '{"user-data": .}' "${sourcefile}.yaml" --output-format json > "${sourcefile}.json"
+
+        # Set `do_patch` to 1 so that the operations in this stage run.
+        do_patch=1
+      fi
+    fi
+
+    # Patch cloud-init user-data for each NCN only if we have our ${sourcefile}.json.
+    if [ "$do_patch" -eq 1 ]; then
+
+      # Get a list of NCNs.
+      IFS=$',' read -r -d '' -a NCN_XNAMES < <(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+
+      # If no NCNs are found we should exit, otherwise if forces its way forward then NCNs will be missing critical packages.
+      if [ "${#NCN_XNAMES[@]}" -eq '0' ]; then
+        echo >&2 'No NCN xnames were found in HSM! Aborting.'
+        exit 1
+      fi
+
+      # Loop through one at a time. If `--limit` isn't provided, we will error out on the 'Global' key.
+      for ncn_xname in "${NCN_XNAMES[@]}"; do
+
+        # Purge the old user-data.repos list for each NCN to make way for new definitions.
+        if ! csi handoff bss-update-cloud-init --limit "$ncn_xname" --delete 'user-data.repos' > /dev/null 2>&1; then
+          echo "${ncn_xname}: No defined repos to delete."
+        fi
+
+        # Verify that user-data.repos is now null.
+        if [ ! "$(cray bss bootparameters list --format json --hosts x3000c0s3b0n0 | jq '.[]."cloud-init"."user-data".repos')" = 'null' ]; then
+          echo >&2 "${ncn_xname}: user-data.repos key is still defined!"
+          error=1
+        fi
+
+        # Purge the old user-data.packages list for each NCN to make way for the new list.
+        if ! csi handoff bss-update-cloud-init --limit "$ncn_xname" --delete 'user-data.packages' > /dev/null 2>&1; then
+          echo "${ncn_xname}: No defined packages to delete."
+        fi
+
+        # Verify that user-data.packages is now null.
+        if [ ! "$(cray bss bootparameters list --format json --hosts x3000c0s3b0n0 | jq '.[]."cloud-init"."user-data".packages')" = 'null' ]; then
+          echo >&2 "${ncn_xname}: user-data.packages key is still defined!"
+          error=1
+        fi
+
+        # Set the new values for user-data.repos and user-data.packages.
+        if ! csi handoff bss-update-cloud-init --limit "$ncn_xname" --user-data "${sourcefile}.json" > /dev/null 2>&1; then
+          echo >&2 "${ncn_xname}: Failed to apply new cloud-init data!"
+          error=1
+        fi
+
+      done
+    fi
+
+    # If error was ever set we need to exit so the admin can investigate. We don't exit early so that all the errors can be seen at once.
+    if [ "$error" -ne 0 ]; then
+      echo >&2 "Errors were encountered during cloud-init patching for repos and package manifests."
+      exit 1
+    fi
+
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+  echo
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPDATE_NCN_KERNEL_PARAMETERS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then

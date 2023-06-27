@@ -435,7 +435,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        > orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
 
        ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/noos" --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
               --no-gpg-checks update -y cray-site-init
        ```
 
