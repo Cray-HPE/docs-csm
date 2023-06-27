@@ -39,19 +39,20 @@ The SPP ISO Image can be deployed locally or remotely.
 
 ## Deploying the ISO Image using the local method
 
-* Login to ILO in web browser
-* Select `Remote console & Media` on to the left side
-* Launch the remote console either `HTML5` or `.NET` console or through `HPLOCONS`. Best option would be .NET and HPLOCONS
-* Mount the ISO image either local location of the image or URL path. If URL path is given make sure that is in same network as ILO network
-* Do cold reboot or Reset the node from iLO remote console
-* Press `F9` and go to `One time Boot` menu and select the mounted image, if URL is given then you see the URL path.
-* Select `Interactive` option
-* Accept and proceed
-* Click on `Firmware Update` and then Click OK
-* Inventory takes some time, wait until it completes and then click Next
-* Select the components that needs firmware flashing, you can also check for the version by clicking view details for each component.
-If its already up to date then by default it will not be selected, you can force update the component. Click on TPM override and then deploy
-* After deployment, check for the status and reboot the node
+1. Log in to ILO in web browser.
+1. Select `Remote console & Media` on to the left side.
+1. Launch the remote console either `HTML5` or `.NET` console or through `HPLOCONS`. Best option would be .NET and HPLOCONS.
+1. Mount the ISO image either local location of the image or URL path. If URL path is given make sure that is in same network as ILO network.
+1. Do a cold reboot or reset the node from the iLO remote console.
+1. Press `F9` and go to `One time Boot` menu and select the mounted image. If the URL is given, then you will see the URL path.
+1. Select the `Interactive` option.
+1. Accept and proceed.
+1. Click on `Firmware Update` and then Click `OK`.
+1. Inventory takes some time, wait until it completes and then click `Next`.
+1. Select the components that needs firmware flashing, you can also check for the version by clicking view details for each component.
+If it is already up to date then by default it will not be selected. You can force update the component. Click on `TPM override`, and then deploy.
+1. After deployment, check for the status and reboot the node.
+
 
 ## Deploying the ISO Image using the remote method
 
