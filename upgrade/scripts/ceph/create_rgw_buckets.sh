@@ -24,21 +24,21 @@
 #
 
 function ssh_keygen_keyscan() {
-    local target_ncn ncn_ip known_hosts
-    known_hosts="/root/.ssh/known_hosts"
-    sed -i 's@pdsh.*@@' $known_hosts
-    target_ncn="$1"
-    ncn_ip=$(host ${target_ncn} | awk '{ print $NF }')
-    [ -n "${ncn_ip}" ]
-    # Because we may be called without set -e, we should check return codes after running commands
-    [ $? -ne 0 ] && return 1
-    echo "${target_ncn} IP address is ${ncn_ip}"
-    ssh-keygen -R "${target_ncn}" -f "${known_hosts}"
-    [ $? -ne 0 ] && return 1
-    ssh-keygen -R "${ncn_ip}" -f "${known_hosts}"
-    [ $? -ne 0 ] && return 1
-    ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"
-    return $?
+  local target_ncn ncn_ip known_hosts
+  known_hosts="/root/.ssh/known_hosts"
+  sed -i 's@pdsh.*@@' $known_hosts
+  target_ncn="$1"
+  ncn_ip=$(host ${target_ncn} | awk '{ print $NF }')
+  [ -n "${ncn_ip}" ]
+  # Because we may be called without set -e, we should check return codes after running commands
+  [ $? -ne 0 ] && return 1
+  echo "${target_ncn} IP address is ${ncn_ip}"
+  ssh-keygen -R "${target_ncn}" -f "${known_hosts}"
+  [ $? -ne 0 ] && return 1
+  ssh-keygen -R "${ncn_ip}" -f "${known_hosts}"
+  [ $? -ne 0 ] && return 1
+  ssh-keyscan -H "${target_ncn},${ncn_ip}" >> "${known_hosts}"
+  return $?
 }
 
 #shellcheck disable=SC2046
@@ -53,6 +53,8 @@ for node_num in $(seq 1 "$num_storage_nodes"); do
 done
 
 sed -i "s/LASTNODE/$num_storage_nodes/g" /etc/ansible/hosts
+mkdir -p /etc/ansible/ceph-rgw-users/group_vars
+cp /tmp/csm-1.5-new-buckets.yml /etc/ansible/ceph-rgw-users/group_vars/all.yml
 
 # Adding conditional wait for k8s credentials.
 # Will exit with error if they do not show up within 2 mins.
@@ -69,7 +71,7 @@ done
 source /etc/ansible/boto3_ansible/bin/activate
 
 playbook=/etc/ansible/ceph-rgw-users/ceph-rgw-users.yaml
-cat > $playbook <<EOF
+cat > $playbook << EOF
 #!/usr/bin/env ansible-playbook
 ---
 
@@ -82,4 +84,5 @@ EOF
 
 chmod 755 $playbook
 /etc/ansible/ceph-rgw-users/ceph-rgw-users.yaml
+rm /etc/ansible/ceph-rgw-users/group_vars/all.yml
 deactivate
