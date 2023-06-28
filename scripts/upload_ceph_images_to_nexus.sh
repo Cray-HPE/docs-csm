@@ -350,7 +350,7 @@ function disable_local_registries() {
 function fix_registries_conf() {
   HEREFILE=$(mktemp)
   cat > "${HEREFILE}" <<'EOF'
-# For more information on this configuration file, see containers-registries.conf(5).
+# Registry edited to remove localhost:5000 registry.
 #
 # Registries to search for images that are not fully-qualified.
 # i.e. foobar.com/my_image:latest vs my_image:latest
@@ -380,20 +380,6 @@ prefix = "registry.local"
 location = "registry.local"
 insecure = true
 
-[[registry.mirror]]
-prefix = "registry.local"
-location = "localhost:5000"
-insecure = true
-
-[[registry]]
-location = "localhost:5000"
-insecure = true
-
-[[registry]]
-prefix = "localhost"
-location = "localhost:5000"
-insecure = true
-
 [[registry]]
 prefix = "artifactory.algol60.net/csm-docker/stable/quay.io"
 location = "artifactory.algol60.net/csm-docker/stable/quay.io"
@@ -404,6 +390,7 @@ prefix = "artifactory.algol60.net/csm-docker/stable/quay.io"
 location = "registry.local/artifactory.algol60.net/csm-docker/stable/quay.io"
 insecure = true
 
+# Provided by the upload_ceph_images_to_nexus.sh script
 EOF
 
   for storage_node in $(ceph orch host ls -f json |jq -r '.[].hostname'); do
