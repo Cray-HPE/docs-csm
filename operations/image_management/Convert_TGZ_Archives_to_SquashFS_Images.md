@@ -16,7 +16,7 @@ This procedure can be run on any master or worker NCN.
 
     Images and recipes are uploaded to IMS and S3 via containers.
 
-1. Uncompress the desired file to a temporary directory.
+1. (`ncn-mw#`) Uncompress the desired file to a temporary directory.
 
     Replace the `TXZ_COMPRESSED_IMAGE` value with the name of the image root being used that was located in the previous step.
 
@@ -26,7 +26,7 @@ This procedure can be run on any master or worker NCN.
     tar xvf TXZ_COMPRESSED_IMAGE -C image-root
     ```
 
-1. Recompress the image root with SquashFS.
+1. (`ncn-mw#`) Recompress the image root with SquashFS.
 
     ```bash
     mksquashfs image-root IMAGE_NAME.squashfs

@@ -11,7 +11,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
 ## Create and Update IMS to Use a New Kiwi-NG Image with an Embedded Signing Key
 
-1. Create a temporary directory to perform the actions necessary to configure IMS to validate
+1. (`ncn-mw#`) Create a temporary directory to perform the actions necessary to configure IMS to validate
    RPM signatures.
 
     ```bash
@@ -19,7 +19,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     cd ims-validate/
     ```
 
-1. Determine the container version for the IMS Kiwi-NG container.
+1. (`ncn-mw#`) Determine the container version for the IMS Kiwi-NG container.
 
    ```bash
    kubectl -n services get cm cray-configmap-ims-v2-image-create-kiwi-ng -o yaml | grep cray-ims-kiwi-ng-opensuse-x86_64-builder
@@ -33,7 +33,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
    If successful, make note of the version of the listed container. In this case, the version is `0.4.7`.
 
-1. Create a file containing the public portion of the Signing Key to be added to the IMS Kiwi-NG image.
+1. (`ncn-mw#`) Create a file containing the public portion of the Signing Key to be added to the IMS Kiwi-NG image.
 
     ```bash
     cat my-signing-key.asc
@@ -42,13 +42,13 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     -----END PGP PUBLIC KEY BLOCK-----
     ```
 
-1. Obtain a copy of the `entrypoint.sh` script from `cray-ims-kiwi-ng-opensuse-x86_64-builder`.
+1. (`ncn-mw#`) Obtain a copy of the `entrypoint.sh` script from `cray-ims-kiwi-ng-opensuse-x86_64-builder`.
 
    ```bash
    podman run -it --entrypoint "" --rm cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7 cat /scripts/entrypoint.sh | tee entrypoint.sh
    ```
 
-1. Modify the `entrypoint.sh` script to pass the signing key to the `kiwi-ng` command.
+1. (`ncn-mw#`) Modify the `entrypoint.sh` script to pass the signing key to the `kiwi-ng` command.
 
     ```bash
     cat entrypoint.sh
@@ -56,7 +56,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
     Example output:
 
-    ```
+    ```text
     [...]
 
     # Call kiwi to build the image recipe. Note that the command line --add-bootstrap-package
@@ -70,8 +70,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
 1. Create a `Dockerfile` to create a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image.
 
-    ```bash
-    cat Dockerfile
+    ```text
     FROM registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7
 
     RUN mkdir /signing-keys
@@ -83,18 +82,19 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     > **`NOTE`** Make sure that the version of the `cray-ims-kiwi-ng-opensuse-x86_64-builder`
     image in the `FROM` line matches the version of the image above.
 
-1. Verify that the following files are in the temporary directory.
+1. (`ncn-mw#`) Verify that the following files are in the temporary directory.
 
-    ```bash
-    ls
+    ```text
     Dockerfile  entrypoint.sh  my-signing-key.asc
     ```
 
-1. Using the `podman` command, build and tag a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image.
+1. (`ncn-mw#`) Using the `podman` command, build and tag a new `cray-ims-kiwi-ng-opensuse-x86_64-builder` image.
 
     ```bash
     podman build -t registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate .
     ```
+
+    Expected output:
 
     ```text
     STEP 1: FROM registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7
@@ -114,20 +114,20 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     46c78827eb62c66c9f42aeba12333281b073dcc80212c4547c8cc806fe5519b3
     ```
 
-2. Obtain Nexus credentials.
+1. (`ncn-mw#`) Obtain Nexus credentials.
 
     ```bash
     NEXUS_USERNAME="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)"
     NEXUS_PASSWORD="$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)"
     ```
 
-3. Push the new image to the Nexus image registry.
+1. (`ncn-mw#`) Push the new image to the Nexus image registry.
 
     ```bash
     podman push registry.local/cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate --creds="$NEXUS_USERNAME:$NEXUS_PASSWORD"
     ```
 
-4. Update the IMS `cray-configmap-ims-v2-image-create-kiwi-ng` ConfigMap to use this new image.
+1. (`ncn-mw#`) Update the IMS `cray-configmap-ims-v2-image-create-kiwi-ng` ConfigMap to use this new image.
 
     ```bash
     kubectl -n services edit cm cray-configmap-ims-v2-image-create-kiwi-ng
@@ -135,7 +135,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
     Example output:
 
-    ```
+    ```text
     [...]
 
     - image: cray/cray-ims-kiwi-ng-opensuse-x86_64-builder:0.4.7-validate
@@ -145,7 +145,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
    > **`NOTE`** It may take several minutes for this change to take effect. Restarting IMS is not necessary.
 
-5. Cleanup and remove the temporary directory
+1. (`ncn-mw#`) Cleanup and remove the temporary directory
 
     ```bash
     cd ..
@@ -154,7 +154,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
 ## Update IMS Recipes to Require GPG Verification of RPMs/Repos
 
-1. List the IMS recipes and determine which recipes need to be updated.
+1. (`ncn-mw#`) List the IMS recipes and determine which recipes need to be updated.
 
     ```bash
     cray ims recipes list --format json
@@ -165,7 +165,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     ```json
     [
 
-      [...]
+      ...
 
       {
         "created": "2021-06-29T21:50:38.319526+00:00",
@@ -180,18 +180,18 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
         "recipe_type": "kiwi-ng"
       },
 
-    [...]
+      ...
 
     ]
     ```
 
-1. Download the recipe archive for any recipe that will be updated.
+1. (`ncn-mw#`) Download the recipe archive for any recipe that will be updated.
 
     ```bash
     cray artifacts get ims recipes/1aab3dbb-a654-4c84-b820-a293bd4ab2b4/recipe.tar.gz recipe.tar.gz
     ```
 
-1. Uncompress the recipe archive into a temporary directory.
+1. (`ncn-mw#`) Uncompress the recipe archive into a temporary directory.
 
     ```bash
     mkdir -v recipe
@@ -212,19 +212,19 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     </repository>
     ```
 
-1. Create a new recipe tar file.
+1. (`ncn-mw#`) Create a new recipe tar file.
 
     ```bash
     tar cvfz ../recipe-new.tgz .
     ```
 
-1. Move to the parent directory.
+1. (`ncn-mw#`) Move to the parent directory.
 
    ```bash
    cd ..
    ```
 
-1. Create a new IMS recipe record.
+1. (`ncn-mw#`) Create a new IMS recipe record.
 
     ```bash
     cray ims recipes create --name "My Recipe" \
@@ -233,7 +233,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
     Example output:
 
-    ```
+    ```text
     created = "2018-12-04T17:25:52.482514+00:00"
     id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     linux_distribution = "sles15"
@@ -247,7 +247,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
     ```
 
-1. Upload the customized recipe to S3.
+1. (`ncn-mw#`) Upload the customized recipe to S3.
 
     It is suggested as a best practice that the S3 object name start with `recipes/` and contain the IMS recipe ID to remove ambiguity.
 
@@ -255,7 +255,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     cray artifacts create ims recipes/$IMS_RECIPE_ID/recipe.tgz recipe-new.tgz
     ```
 
-1. Update the IMS recipe record with the S3 path to the recipe archive.
+1. (`ncn-mw#`) Update the IMS recipe record with the S3 path to the recipe archive.
 
     ```bash
     cray ims recipes update $IMS_RECIPE_ID \
@@ -265,7 +265,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
     Example output:
 
-    ```text
+    ```toml
     id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
     recipe_type = "kiwi-ng"
     linux_distribution = "sles15"
@@ -278,7 +278,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     type = "s3"
     ```
 
-1. Cleanup and remove the temporary directory.
+1. (`ncn-mw#`) Cleanup and remove the temporary directory.
 
     ```bash
     cd ..

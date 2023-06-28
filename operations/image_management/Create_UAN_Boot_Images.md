@@ -32,7 +32,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
 #### Get UAN Info
 
-1. Obtain UAN artifact IDs and other information.
+1. (`ncn-mw#`) Obtain UAN artifact IDs and other information.
 
     Upon successful installation of the UAN product, the UAN configuration, image recipes, and prebuilt boot images are cataloged in the `cray-product-catalog` Kubernetes
     ConfigMap. This information is required for this procedure.
@@ -59,7 +59,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
           id: cbd5cdf6-eac3-47e6-ace4-aa1aecb1359a                         # <--- IMS recipe id
     ```
 
-1. Generate the password hash for the `root` user.
+1. (`ncn-mw#`) Generate the password hash for the `root` user.
 
     > Replace `PASSWORD` with the desired `root` password.
     > Do not omit the `-n` from the echo command. It is necessary to generate a valid hash.
@@ -68,13 +68,13 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     echo -n PASSWORD | openssl passwd -6 -salt $(< /dev/urandom tr -dc ./A-Za-z0-9 | head -c4) --stdin
     ```
 
-1. Obtain the HashiCorp Vault `root` token.
+1. (`ncn-mw#`) Obtain the HashiCorp Vault `root` token.
 
     ```bash
     kubectl get secrets -n vault cray-vault-unseal-keys -o jsonpath='{.data.vault-root}' | base64 -d; echo
     ```
 
-1. Write the password hash obtained from the `openssl` command to the HashiCorp Vault.
+1. (`ncn-mw#`) Write the password hash obtained from the `openssl` command to the HashiCorp Vault.
 
     - The `vault login` command will request a token. That token value is the output of the previous step.
     - The `vault read secret/uan` command verifies that the hash was stored correctly. This password hash will be written to the UAN for the `root` user by CFS.
@@ -87,13 +87,13 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     vault read secret/uan
     ```
 
-1. Obtain the password for the `crayvcs` user from the Kubernetes secret for use in the next command.
+1. (`ncn-mw#`) Obtain the password for the `crayvcs` user from the Kubernetes secret for use in the next command.
 
     ```bash
     kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
     ```
 
-1. Clone the UAN configuration management repository.
+1. (`ncn-mw#`) Clone the UAN configuration management repository.
 
     The repository is in the VCS/Gitea service and the location is reported in the `cray-product-catalog` Kubernetes ConfigMap in the `configuration.clone_url` key.
     The `CRAY_EX_HOSTNAME` from the `clone_url` is replaced with `api-gw-service-nmn.local` in the command that clones the repository.
@@ -103,7 +103,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     cd uan-config-management && git checkout cray/uan/PRODUCT_VERSION && git pull
     ```
 
-1. Create a branch using the imported branch from the installation to customize the UAN image.
+1. (`ncn-mw#`) Create a branch using the imported branch from the installation to customize the UAN image.
 
     This imported branch will be reported in the `cray-product-catalog` Kubernetes ConfigMap in the `configuration.import_branch` key under the UAN section.
     The format is `cray/uan/PRODUCT_VERSION`. In this guide, an `integration` branch is used for examples, but the name can be any valid Git branch name.
@@ -114,7 +114,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     git checkout -b integration && git merge cray/uan/PRODUCT_VERSION
     ```
 
-1. Configure a `root` user in the UAN image.
+1. (`ncn-mw#`) Configure a `root` user in the UAN image.
 
     Add the encrypted password of the `root` user from `/etc/shadow` on an NCN worker to the file `group_vars/Application/passwd.yml`.
 
@@ -126,7 +126,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     root_passwd: $6$LmQ/PlWlKixK$VL4ueaZ8YoKOV6yYMA9iH0gCl8F4C/3yC.jMIGfOK6F61h6d.iZ6/QB0NLyex1J7AtOsYvqeycmLj2fQcLjfE1
     ```
 
-1. Apply any site-specific customizations and modifications to the Ansible configuration for the UAN nodes and commit the changes.
+1. (`ncn-mw#`) Apply any site-specific customizations and modifications to the Ansible configuration for the UAN nodes and commit the changes.
 
     The default Ansible play to configure UAN nodes is `site.yml` in the base of the `uan-config-management` repository. The roles that are executed in this play allow for
     nondefault configuration as required for the system.
@@ -149,7 +149,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     git commit -m "Add vars.yml customizations"
     ```
 
-1. Verify that the System Layout Service \(SLS\) and the `uan_interfaces` configuration role refer to the Mountain Node Management Network by the same name.
+1. (`ncn-mw#`) Verify that the System Layout Service \(SLS\) and the `uan_interfaces` configuration role refer to the Mountain Node Management Network by the same name.
 
     > Skip this step if there are no Mountain cabinets in the HPE Cray EX system.
 
@@ -176,7 +176,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         git commit -m "Add Mountain cabinet support"
         ```
 
-1. Push the changes to the repository using the proper credentials, including the password obtained previously.
+1. (`ncn-mw#`) Push the changes to the repository using the proper credentials, including the password obtained previously.
 
     ```bash
     git push --set-upstream origin integration
@@ -189,7 +189,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     Password for 'https://crayvcs@api-gw-service-nmn.local':
     ```
 
-1. Capture the most recent commit for reference in setting up a CFS configuration and navigate to the parent directory.
+1. (`ncn-mw#`) Capture the most recent commit for reference in setting up a CFS configuration and navigate to the parent directory.
 
     ```bash
     git rev-parse --verify HEAD
@@ -233,7 +233,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     }
     ```
 
-1. Add the configuration to CFS using the JSON input file.
+1. (`ncn-mw#`) Add the configuration to CFS using the JSON input file.
 
     In the following example, the JSON file created in the previous step is named `uan-config-PRODUCT_VERSION.json`. Only the details for the UAN layer are shown.
 
@@ -263,7 +263,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
     }
     ```
 
-1. Modify the UAN image to include the `1.4.0` Day Zero RPMs.
+1. (`ncn-mw#`) Modify the UAN image to include the `1.4.0` Day Zero RPMs.
 
     1. Expand the 1.4.0 Day Zero Patch tarball if it has not been done already.
 
@@ -413,6 +413,11 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         name = "UAN-1.4.0-day-zero"
         created = "2021-03-17T20:23:05.576754+00:00"
         id = "ac31e971-f990-4b5f-821d-c0c18daefb6e"
+        ```
+
+        Keep track of the new image id:
+
+        ```bash
         export NEW_IMAGE_ID=ac31e971-f990-4b5f-821d-c0c18daefb6e
         ```
 
@@ -618,7 +623,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
         type = "s3"
         ```
 
-1. Create a CFS session to perform preboot image customization of the UAN image.
+1. (`ncn-mw#`) Create a CFS session to perform preboot image customization of the UAN image.
 
     ```bash
     cray cfs sessions create --name uan-config-PRODUCT_VERSION \
@@ -630,7 +635,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
 #### Wait for CFS Session
 
-1. Wait for the CFS configuration session for the image customization to complete.
+1. (`ncn-mw#`) Wait for the CFS configuration session for the image customization to complete.
 
     Then record the ID of the IMS image created by CFS.
 
@@ -644,7 +649,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
 
 #### Get XNAMES
 
-1. Retrieve the component names (xnames) of the UAN nodes from the Hardware State Manager \(HSM\).
+1. (`ncn-mw#`) Retrieve the component names (xnames) of the UAN nodes from the Hardware State Manager \(HSM\).
 
     ```bash
     cray hsm state components list --role Application --subrole UAN --format json | jq -r .Components[].ID
@@ -668,7 +673,7 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
       - Either HPE DL325 or DL385 nodes which have a second OCP PCIe card installed, regardless of if it is being used or not.
       - Gigabyte nodes that have a PCIe network card installed in addition to the built-in LOM ports, regardless of if it is being used or not.
 
-1. Construct a JSON BOS boot session template for the UAN.
+1. (`ncn-mw#`) Construct a JSON BOS boot session template for the UAN.
 
     1. Populate the template with the following information:
 
@@ -687,25 +692,25 @@ and the HPE Cray Programming Environment\) that must be configured on the UANs.
                "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=nmn0:dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 spire_join_token=${SPIRE_JOIN_TOKEN}",
                "network": "nmn",
                "node_list": [
-                 # \[ ... List of Application Nodes from cray hsm state command ...\]
+                  [ #... List of Application Nodes from cray hsm state command ...]
                ],
-               "path": "s3://boot-images/IMS\_IMAGE\_ID/manifest.json",  # <-- result\_id from CFS image customization session
+               "path": "s3://boot-images/IMS_IMAGE_ID/manifest.json",  # <-- result_id from CFS image customization session
                "rootfs_provider": "cpss3",
                "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0",
                "type": "s3"
              }
            },
            "cfs": {
-               "configuration": "uan-config-PRODUCT\_VERSION"
+               "configuration": "uan-config-PRODUCT_VERSION"
            },
            "enable_cfs": true,
-           "name": "uan-sessiontemplate-PRODUCT\_VERSION"
+           "name": "uan-sessiontemplate-PRODUCT_VERSION"
          }
         ```
 
     1. Save the template with a descriptive name, such as `uan-sessiontemplate-PRODUCT_VERSION.json`.
 
-1. Register the session template with BOS.
+1. (`ncn-mw#`) Register the session template with BOS.
 
     The following command uses the JSON session template file to save a session template in BOS. This step allows administrators to boot UANs by referring to the session template name.
 
