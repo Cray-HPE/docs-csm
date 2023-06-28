@@ -24,48 +24,46 @@
 #
 
 set -e
-basedirLoc=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+basedirLoc=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 . ${basedirLoc}/../../common/upgrade-state.sh
 trap 'err_report' ERR
 set -o pipefail
 
 usage() {
-    echo >&2 "usage: ${0##*/} [-i] [CUSTOMIZATIONS-YAML]"
-    exit 1
+  echo >&2 "usage: ${0##*/} [-i] [CUSTOMIZATIONS-YAML]"
+  exit 1
 }
 
 args=()
 while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -h)
-            usage
-            ;;
-        -i)
-            inplace="yes"
-            ;;
-        *)
-            args+=("$1")
-            ;;
-    esac
-    shift
+  case "$1" in
+    -h)
+      usage
+      ;;
+    -i)
+      inplace="yes"
+      ;;
+    *)
+      args+=("$1")
+      ;;
+  esac
+  shift
 done
 
 set -- "${args[@]}"
 
 [[ $# -eq 1 ]] || usage
 
-
 customizations="$1"
 
-if [[ ! -f "$customizations" ]]; then
-    echo >&2 "error: no such file: $customizations"
-    usage
+if [[ ! -f $customizations ]]; then
+  echo >&2 "error: no such file: $customizations"
+  usage
 fi
 
-if ! command -v yq &> /dev/null
-then
-    echo >&2 "error: yq could not be found"
-    exit 1
+if ! command -v yq &> /dev/null; then
+  echo >&2 "error: yq could not be found"
+  exit 1
 fi
 
 c="$(mktemp)"
@@ -76,8 +74,8 @@ cp "$customizations" "$c"
 # argo/cray-nls
 yq w -i --style=single "$c" spec.kubernetes.services.cray-nls.externalHostname 'cmn.{{ network.dns.external }}'
 
-if [[ -z "$(yq r "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement(.==argo.cmn.{{ network.dns.external }})')" ]];then
-   yq w -i --style=single "$c" spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
+if [[ -z "$(yq r "$c" 'spec.proxiedWebAppExternalHostnames.customerManagement(.==argo.cmn.{{ network.dns.external }})')" ]]; then
+  yq w -i --style=single "$c" spec.proxiedWebAppExternalHostnames.customerManagement[+] 'argo.cmn.{{ network.dns.external }}'
 fi
 
 # cray-opa
@@ -120,38 +118,38 @@ if [[ -z "$(yq r "$c" "spec.network.netstaticips.nmn_ncn_storage_mons")" ]]; the
   loop_idx=0
   for node in ${mon_nodes}; do
     yq w -i $c "spec.network.netstaticips.nmn_ncn_storage_mons[${loop_idx}]" "${node}"
-    loop_idx=$(( loop_idx+1 ))
+    loop_idx=$((loop_idx + 1))
   done
   yq w -i --style=single "$c" spec.kubernetes.services.cray-sysmgmt-health.cephExporter.endpoints '{{ network.netstaticips.nmn_ncn_storage_mons }}'
 fi
 if [[ "$(yq r "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.enabled")" ]]; then
-    idx=0
-    temp=1
-    mon_node=$(yq r "$c" 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params.conf.target' | awk '{print $2}')
-    for node in ${mon_node}; do
-      yq w -i "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params[${idx}].name" "snmp$temp"
-      yq w -i "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params[${idx}].target" "${node}"
-      idx=$(( idx+1 ))
-      temp=$(( temp+1 ))
-    done
+  idx=0
+  temp=1
+  mon_node=$(yq r "$c" 'spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params.conf.target' | awk '{print $2}')
+  for node in ${mon_node}; do
+    yq w -i "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params[${idx}].name" "snmp$temp"
+    yq w -i "$c" "spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter.serviceMonitor.params[${idx}].target" "${node}"
+    idx=$((idx + 1))
+    temp=$((temp + 1))
+  done
 fi
 
 # Kube-prometheus-stack
 if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator' $c)" != null ]; then
-        if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack' $c)" != null ]; then
-                yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator = (.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack * .spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator)' -i $c
-        fi
-        yq4 eval 'del(.spec.proxiedWebAppExternalHostnames.customerManagement.[] | select(. == "*prometheus-operator*"))' -i $c
-        yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].prometheus.prometheusSpec.externalAuthority }}\"" -i $c
-        yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].alertmanager.alertmanagerSpec.externalAuthority }}\"" -i $c
-        yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].grafana.externalAuthority }}\"" -i $c
-        yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].thanos.thanosSpec.externalAuthority }}\"" -i $c
-        yq4 eval ".spec.kubernetes.services.cray-kiali.kiali-operator.cr.spec.external_services.grafana.url = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].grafana.externalAuthority }}/\"" -i $c
-        yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack = .spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator | del(.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator)" -i $c
-        yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].prometheus.prometheusSpec.externalAuthority }}/\"" -i $c
-        yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.alertmanager.alertmanagerSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].alertmanager.alertmanagerSpec.externalAuthority }}/\"" -i $c
-        yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.thanosSpec.externalAuthority = \"thanos.cmn.{{ network.dns.external }}\"" -i $c
-        yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.thanosSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].thanos.thanosSpec.externalAuthority }}/\"" -i $c
+  if [ "$(yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack' $c)" != null ]; then
+    yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator = (.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack * .spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator)' -i $c
+  fi
+  yq4 eval 'del(.spec.proxiedWebAppExternalHostnames.customerManagement.[] | select(. == "*prometheus-operator*"))' -i $c
+  yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].prometheus.prometheusSpec.externalAuthority }}\"" -i $c
+  yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].alertmanager.alertmanagerSpec.externalAuthority }}\"" -i $c
+  yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].grafana.externalAuthority }}\"" -i $c
+  yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].thanos.thanosSpec.externalAuthority }}\"" -i $c
+  yq4 eval ".spec.kubernetes.services.cray-kiali.kiali-operator.cr.spec.external_services.grafana.url = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].grafana.externalAuthority }}/\"" -i $c
+  yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack = .spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator | del(.spec.kubernetes.services.cray-sysmgmt-health.prometheus-operator)" -i $c
+  yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.prometheus.prometheusSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].prometheus.prometheusSpec.externalAuthority }}/\"" -i $c
+  yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.alertmanager.alertmanagerSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].alertmanager.alertmanagerSpec.externalAuthority }}/\"" -i $c
+  yq4 eval '.spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.thanosSpec.externalAuthority = "thanos.cmn.{{ network.dns.external }}"' -i $c
+  yq4 eval ".spec.kubernetes.services.cray-sysmgmt-health.kube-prometheus-stack.thanos.thanosSpec.externalUrl = \"https://{{ kubernetes.services['cray-sysmgmt-health']['kube-prometheus-stack'].thanos.thanosSpec.externalAuthority }}/\"" -i $c
 fi
 
 # When upgrading to CSM 1.5 or later, ensure that we remove obsolete cray-service.sqlCluster entries (CASMPET-6584).
@@ -161,8 +159,8 @@ yq4 -i eval 'del(.spec.kubernetes.services.*.cray-service.sqlCluster)' "$c"
 # customization only contains cray-service.sqlcluster (CASMPET-6584).
 yq4 -i eval 'del(.spec.kubernetes.services.cray-spire)' "$c"
 
-if [[ "$inplace" == "yes" ]]; then
-    cp "$c" "$customizations"
+if [[ $inplace == "yes" ]]; then
+  cp "$c" "$customizations"
 else
-    cat "$c"
+  cat "$c"
 fi
