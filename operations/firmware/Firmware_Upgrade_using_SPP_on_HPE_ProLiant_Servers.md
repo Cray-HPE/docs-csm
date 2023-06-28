@@ -4,7 +4,6 @@
 
 [Link to download site](https://techlibrary.hpe.com/us/en/enterprise/servers/products/service_pack/spp/index.aspx).
 
-
 * Naming convention example: `2023.04.00.00` is the ISO image released in 4th Month of 2023
 * Download the latest version or the version you require.
 * Firmware can be deployed either individually by component or the SPP ISO image as a whole.
@@ -25,7 +24,6 @@
 1. Select the file where it is located and click on upload.
 1. Go to iLO Repository, you should be able to see the uploaded component. Click on `Install Component`, and then Click on `TPM Override` then click on `Add to the Installation queue`
 1. Check for the status message in Installation Queue. If you see any failed instance in Queue, then delete that instance or else the installation of the next component will not get to start if the expiration is set to never for the failed instance.
-
 
 ## Deploy SPP ISO image as a Whole
 
@@ -53,7 +51,6 @@ The SPP ISO Image can be deployed locally or remotely.
 If it is already up to date then by default it will not be selected. You can force update the component. Click on `TPM override`, and then deploy.
 1. After deployment, check for the status and reboot the node.
 
-
 ## Deploying the ISO Image using the remote method
 
 1. Mount the ISO image or copy and extract the ISO image.
@@ -68,7 +65,6 @@ If it is already up to date then by default it will not be selected. You can for
   update the component. Click on `TPM Override`, and then `deploy`.
 1. After deployment, check for the status and reboot the node
 1. Repeat this for all the nodes added.
-
 
 ## Notes
 
@@ -91,4 +87,3 @@ For any new server to boot up it should have the right set of Firmware Component
 * SPP Images are released twice a year i.e every March and September.
 * There will be hot fixes that are released as patch bundles throughout the year.
 * It is always a best practice to check the release notes of the SPP image that is going to be used.
-
