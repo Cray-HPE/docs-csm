@@ -145,6 +145,15 @@ cd "$CSM_DISTDIR"
 
 Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
 
+**NOTE:** The following message may be emitted after running the following `zypper` command. The message can be safely ignored.
+
+```bash
+You may wish to restart these processes.
+See 'man zypper' for information about the meaning of values in the above table.
+No core libraries or services have been updated since the last system boot.
+Reboot is probably not necessary.
+```
+
 ```bash
 pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y csm-testing goss-servers'
 ```
