@@ -17,7 +17,7 @@
 1. (`ncn-m001#`) Start a typescript.
 
     ```bash
-    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_3.txt
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_1.txt
     export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
 
@@ -77,4 +77,4 @@ For any typescripts that were started during this stage, stop them with the `exi
 
 ## Stage completed
 
-This stage is completed. Proceed to [Validate CSM health](README.md#3-validate-csm-health) on the main upgrade page. Continue to [Stage 2](Stage_2.md).
+This stage is completed. Continue to [Stage 2](Stage_2.md).
