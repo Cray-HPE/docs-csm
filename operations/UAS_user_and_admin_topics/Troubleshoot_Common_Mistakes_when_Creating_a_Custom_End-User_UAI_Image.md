@@ -1,6 +1,7 @@
 # Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image
 
-There a several problems that may occur while making or working with a custom end-user UAI images. The following are some basic troubleshooting questions to ask:
+There are several problems that may occur while making or working with custom end-user UAI images.
+The following are some basic troubleshooting questions to ask:
 
 * Does `SESSION_NAME` match an actual entry in `cray bos v1 sessiontemplate list`?
 * Is the `SESSION_ID` set to an appropriate UUID format? Did the `awk` command not parse the UUID correctly?
