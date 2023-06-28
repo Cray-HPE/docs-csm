@@ -17,7 +17,7 @@
 1. (`ncn-m001#`) Start a typescript.
 
     ```bash
-    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_3.txt
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_1.txt
     export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
 

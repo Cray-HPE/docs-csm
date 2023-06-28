@@ -31,7 +31,7 @@
 1. (`ncn-m001#`) Start a typescript.
 
     ```bash
-    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_2_ncn-m001.txt
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_3_ncn-m001.txt
     export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
 
@@ -160,7 +160,7 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
 1. (`ncn-m002#`) Start a typescript.
 
     ```bash
-    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_2_ncn-m002.txt
+    script -af /root/csm_upgrade.$(date +%Y%m%d_%H%M%S).stage_3_ncn-m002.txt
     export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
     ```
 
