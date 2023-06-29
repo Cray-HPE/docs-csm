@@ -425,7 +425,7 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
    ```
 
-1. Upload the tarball rpms and container images to PIT-Nexus.
+1. Upload the tarball RPMs and container images to PIT-Nexus.
 
    > ***NOTE*** This allows container images to be accessible when deploying management nodes and CSM services.
 
