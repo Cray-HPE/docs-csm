@@ -1,16 +1,23 @@
 # Tenant Administrator Configuration
 
-* [Overview](#overview)
-* [Kubernetes OIDC API integration](#kubernetes-oidc-api-integration)
-* [Tenant-specific Keycloak groups](#tenant-specific-keycloak-groups)
-* [`Roles` and `Rolebindings`](#roles-and-rolebindings)
-* [Retrieve an OIDC token](#retrieve-an-oidc-token)
-* [Using `kubelogin`](#using-kubelogin)
+- [Tenant Administrator Configuration](#tenant-administrator-configuration)
+  - [Overview](#overview)
+  - [Cray CLI Integration](#cray-cli-integration)
+  - [Kubernetes OIDC API integration](#kubernetes-oidc-api-integration)
+  - [Tenant-specific Keycloak groups](#tenant-specific-keycloak-groups)
+  - [`Roles` and `Rolebindings`](#roles-and-rolebindings)
+  - [Retrieve an OIDC token](#retrieve-an-oidc-token)
+  - [Using `kubelogin`](#using-kubelogin)
 
 ## Overview
 
 This page describes how to configure a user as a `Tenant Administrator`, allowing that person to perform administrative functions on one or more tenants,
 without giving them the same permissions an `Infrastructure Administrator` would have.
+
+## Cray CLI Integration
+
+When using the `cray` CLI for various operations specific to tenant-owned resources (Compute/Application Nodes), the CLI should be scoped to the appropriate tenant when `cray init` is executed.
+The CLI supports the optional `--tenant <tenant-name>` argument, which subsequently passes the `cray-tenant-name` value in the header for API requests to the respective service.
 
 ## Kubernetes OIDC API integration
 
@@ -106,7 +113,7 @@ Decoding this token will illustrate the `groups` and `name` claims added by Keyc
 
 This token can now be used by a the tenant administrator to interact with Kubernetes.
 
-* (`ncn-mw#`) The following is an example of listing pods in the `vcluster-blue` namespace (which was specified in the `ClusterRole` above as allowed):
+- (`ncn-mw#`) The following is an example of listing pods in the `vcluster-blue` namespace (which was specified in the `ClusterRole` above as allowed):
 
   ```bash
   curl -k -H "Authorization: Bearer $TOKEN"  https://kubernetes-api.vshasta.io:6443/api/v1/namespaces/vcluster-blue/pods
@@ -124,7 +131,7 @@ This token can now be used by a the tenant administrator to interact with Kubern
   "items": []
   ```
 
-* (`ncn-mw#`) Note that this token could not be used to list pods in a different namespace (`services` for example):
+- (`ncn-mw#`) Note that this token could not be used to list pods in a different namespace (`services` for example):
 
     ```bash
     curl -k -H "Authorization: Bearer $TOKEN"  https://kubernetes-api.vshasta.io:643/api/v1/namespaces/services/pods

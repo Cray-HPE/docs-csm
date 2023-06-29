@@ -15,6 +15,10 @@ There are two ways to initialize the `cray` CLI:
 
 - [Configure all NCNs with temporary Keycloak user](#configure-all-ncns-with-temporary-keycloak-user)
 
+**NOTE:**  The `cray` CLI supports an optional parameter (`--tenant <tenant-name>`) when using the CLI for tenant-scoped operations.
+This argument is not used by default, but the CLI should be configured with the appropriate tenant when operating on tenant specific resources (i.e. creating BOS session templates for Compute Nodes that are members of a tenant, etc..).
+See [Tenant Administrator Configuration](multi-tenancy/TenantAdminConfig.md) or execute `cray init --help` for more information.
+
 ## Single user already configured in Keycloak
 
 There are times in normal operation that a particular user must be authenticated on the `cray` CLI. In
