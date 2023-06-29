@@ -475,7 +475,7 @@ Verify that the Lustre file system is available from the management cluster.
 
 ### Check `cronjobs`
 
-The `sat bootsys boot --stage platform-services` command above checks that all cronjobs are being
+The `sat bootsys boot --stage platform-services` command checks that all cronjobs
 run on time according to their specified cron schedule. If a cronjob is not being scheduled on time,
 it will be deleted and re-created to force it to be scheduled again. It is recommended to check that
 all cronjobs are being scheduled on time after running `sat bootsys boot --stage platform-services`.
