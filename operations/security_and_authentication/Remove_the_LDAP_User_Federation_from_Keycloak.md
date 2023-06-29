@@ -23,7 +23,7 @@ Follow the steps in only one of the sections below:
 
 1. Click on `User Federation` under the `Configure` header of the navigation panel on the left side of the page.
 
-1. Click on the `Delete` button on the line for the LDAP provider in the `User Federation` table.
+1. Click on the three dots on the LDAP provider then the `Delete` button.
 
 ### Use the Keycloak REST API
 
