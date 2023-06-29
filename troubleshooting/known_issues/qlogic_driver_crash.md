@@ -1,9 +1,9 @@
 # QLogic driver crash
 
 - [Description](#description)
-    - [Signatures](#signatures)
-        - [Driver Recovery](#driver-recovery)
-        - [Kernel Crash](#kernel-crash)
+  - [Signatures](#signatures)
+    - [Driver Recovery](#driver-recovery)
+    - [Kernel Crash](#kernel-crash)
 - [Workaround](#workaround)
 - [Fix](#fix)
 
