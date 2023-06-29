@@ -425,6 +425,14 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
    ```
 
+1. Upload the tarball rpms and container images to PIT-Nexus.
+
+   > ***NOTE*** This allows container images to be accessible when deploying management nodes and CSM services.
+
+   ```bash
+   /srv/cray/metal-provision/scripts/nexus/setup-nexus.sh -s
+   ```
+
 1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
 
    > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
