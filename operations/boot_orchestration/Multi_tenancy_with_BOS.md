@@ -17,7 +17,7 @@ endpoint which can be viewed but not patched, and the options endpoint which is 
 
 Systems admins have complete access to the BOS API, and can view and edit all resources for all tenants, including
 tenant-less resources. However, some endpoints require the admin to masquerade as a tenant in order to update resource.
-This can mean passing the tenant id in the query header, or authenticating the CLI as a specific tenant.
+This can mean passing the tenant ID in the query header, or authenticating the CLI as a specific tenant.
 See [Tenant Admin Configuration](../multi-tenancy/TenantAdminConfig.md) for information on authenticating the CLI as a
 specific tenant. While masquerading as a tenant, the system admin will only have the ability to view and update
 resources specific to that tenant.
