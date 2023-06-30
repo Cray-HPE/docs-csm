@@ -20,7 +20,7 @@ This page provides information about how to modify a tenant. Modifications that 
 An example of a change to add a component name (xname) to a tenant:
 
 ```yaml
-apiVersion: tapms.hpe.com/v1alpha1
+apiVersion: tapms.hpe.com/v1alpha2
 kind: Tenant
 metadata:
   name: vcluster-blue
@@ -62,12 +62,12 @@ spec:
     Example output:
 
     ```yaml
-    apiVersion: tapms.hpe.com/v1alpha1
+    apiVersion: tapms.hpe.com/v1alpha2
     kind: Tenant
     metadata:
       annotations:
         kubectl.kubernetes.io/last-applied-configuration: |
-          {"apiVersion":"tapms.hpe.com/v1alpha1","kind":"Tenant","metadata":{"annotations":{},"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["user","slurm"],"tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x0c3s5b0n0","x0c3s6b0n0"]}]}}
+          {"apiVersion":"tapms.hpe.com/v1alpha2","kind":"Tenant","metadata":{"annotations":{},"name":"vcluster-blue","namespace":"tenants"},"spec":{"childnamespaces":["user","slurm"],"tenantname":"vcluster-blue","tenantresources":[{"enforceexclusivehsmgroups":true,"hsmgrouplabel":"blue","type":"compute","xnames":["x0c3s5b0n0","x0c3s6b0n0"]}]}}
       creationTimestamp: "2022-08-23T18:37:25Z"
       finalizers:
       - tapms.hpe.com/finalizer

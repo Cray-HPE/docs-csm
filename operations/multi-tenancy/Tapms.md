@@ -25,6 +25,7 @@ See the [Tenant Custom Resource Definition](https://github.com/Cray-HPE/cray-tap
 | `tenantresources`.`hsmpartitionname` | The name of the HSM partition to create and assignments for the `xnames` specified below  (mutually exclusive from `hsmgrouplabel`). |
 | `tenantresources`.`enforceexclusivehsmgroups` | If `true`, tenants that share this setting will not be allowed to specify the same `xname` (only appropriate if `hsmgrouplabel` is also specified). |
 | `tenantresources`.`xnames` | List of compute or application component names (xnames) that this tenant is allowed to use for running jobs. |
+| `tenantresources`.`forcepoweroff` | If `true`, when the xname is powered off, the `force-off` option is passed to PCS (Power Control Service) and subsequently the Redfish endpoint, instead of a graceful shutdown. |
 
 ## Reconcile operations
 
@@ -38,6 +39,7 @@ When a tenant CR is applied, `tapms` will:
 1. Apply the valued specified in `hsmgrouplabel`
 1. If the `enforceexclusivehsmgroups` flag is `true`, `tapms` will ensure `xnames` cannot be specified in multiple tenants (that also have the flag set to `true` for their `hsmgrouplabel`).
 1. Create a Keycloak group with the name `<tenant-name>-tenant-admin` which can be assigned to users intended to be tenant administrators.
+1. Power off the xname(s) that are members of the tenant.
 
 ## Tenant states
 
