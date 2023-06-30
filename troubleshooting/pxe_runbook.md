@@ -5,14 +5,14 @@ This guide runs through the most common issues and shows what is needed in order
 
 1. [NCNs on install](#1-ncns-on-install)
 2. [`ncn-m001` on reboot or NCN boot](#2-ncn-m001-on-reboot-or-ncn-boot)
-    2.1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#21-verify-dhcp-packets-can-be-forwarded-from-the-workers-to-the-mtl-network-vlan1)
-    2.2. [Verify BGP](#22-verify-bgp)
-    2.3. [Verify route to TFTP](#23-verify-route-to-tftp)
-    2.4. [Test TFTP traffic (Aruba Only)](#23-verify-route-to-tftp)
-    2.5. [Check DHCP lease is getting allocated](#25-check-dhcp-lease-is-getting-allocated)
-    2.6. [Verify the DHCP traffic on the Workers](#26-verify-the-dhcp-traffic-on-the-workers)
-    2.7. [Verify the switches are forwarding DHCP traffic.](#27-verify-the-switches-are-forwarding-dhcp-traffic)
-    2.8. [Verify the iPXE binary is valid](#28-verify-the-ipxe-binary-is-valid)
+    1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#21-verify-dhcp-packets-can-be-forwarded-from-the-workers-to-the-mtl-network-vlan1)
+    2. [Verify BGP](#22-verify-bgp)
+    3. [Verify route to TFTP](#23-verify-route-to-tftp)
+    4. [Test TFTP traffic (Aruba Only)](#23-verify-route-to-tftp)
+    5. [Check DHCP lease is getting allocated](#25-check-dhcp-lease-is-getting-allocated)
+    6. [Verify the DHCP traffic on the Workers](#26-verify-the-dhcp-traffic-on-the-workers)
+    7. [Verify the switches are forwarding DHCP traffic.](#27-verify-the-switches-are-forwarding-dhcp-traffic)
+    8. [Verify the iPXE binary is valid](#28-verify-the-ipxe-binary-is-valid)
 3. [Computes/UANs/Application Nodes](#3-compute-nodesuansapplication-nodes)
 
 ## 1. NCNs on install
