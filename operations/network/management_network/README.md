@@ -50,10 +50,10 @@ exactly match installed products.
 * [User guides](#user-guides)
 * [Useful pages](#useful-pages)
 * [Changes](#changes)
-    * [Enhancements](#enhancements)
-    * [Fixes](#fixes)
-    * [Issues and workarounds](#issues-and-workarounds)
-    * [Security Bulletin Subscription Service](#security-bulletin-subscription-service)
+* [Enhancements](#enhancements)
+* [Fixes](#fixes)
+* [Issues and workarounds](#issues-and-workarounds)
+* [Security Bulletin Subscription Service](#security-bulletin-subscription-service)
 
 ## Adding Switch Admin Password to Vault
 
