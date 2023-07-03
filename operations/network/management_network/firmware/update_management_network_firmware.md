@@ -7,7 +7,7 @@ firmware can be found in the switch [External User Guides](../external_user_guid
 
 Management network switch firmware upgrades do not typically include configuration changes and can be done without down time as long as your system is redundantly cabled and operating correctly.
 
-Care should be excercised to follow instructions specific to switch models to avoid network disruptions.  Refer to version specific CSM install/upgrade instructions for steps that may be unique to a given release.
+Care should be used to follow instructions specific to switch models to avoid network disruptions.  Refer to version specific CSM install/upgrade instructions for steps that may be unique to a given release.
 
 ## Prerequisites
 
