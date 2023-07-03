@@ -14,4 +14,4 @@
 
 | Situation                            | Link                                                                             |
 |--------------------------------------|----------------------------------------------------------------------------------|
-| Known issue with Qlogic driver issue | [Qlogic driver issue](../../troubleshooting/known_issues/qlogic_driver_crash.md) |
+| Known issue with Qlogic driver issue | [Qlogic driver issue](../../../troubleshooting/known_issues/qlogic_driver_crash.md) |
