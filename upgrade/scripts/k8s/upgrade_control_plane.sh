@@ -27,6 +27,9 @@ echo ""
 kubectl get configmap kubeadm-config -n kube-system -o yaml > /tmp/kubeadm-config.yaml
 cp /tmp/kubeadm-config.yaml /tmp/kubeadm-config.yaml.back
 sed -i 's/imageRepository: k8s.gcr.io/imageRepository: artifactory.algol60.net\/csm-docker\/stable\/k8s.gcr.io/' /tmp/kubeadm-config.yaml
+if grep -q 'dns: {}' /tmp/kubeadm-config.yaml; then
+  sed -i -E "s/^([[:space:]]+)dns:.*/\1dns:\n\1  type: CoreDNS\n\1  imageRepository: artifactory.algol60.net\/csm-docker\/stable\/k8s.gcr.io\/coredns/" /tmp/kubeadm-config.yaml
+fi
 if ! grep -q istio-ca /tmp/kubeadm-config.yaml; then
   sed -i '/      runtime-config/a\        api-audiences: "api,istio-ca"' /tmp/kubeadm-config.yaml
 fi
@@ -58,8 +61,7 @@ masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u)
 #       so we can query "next" version here
 k8sVersionUpgradeTo=$(kubeadm version -o json | jq -r '.clientVersion.gitVersion')
 
-for master in $masters
-do
+for master in $masters; do
   echo "Upgrading kube-system pods for $master:"
   echo ""
   pdsh -b -S -w $master "kubeadm upgrade apply ${k8sVersionUpgradeTo} -y"
