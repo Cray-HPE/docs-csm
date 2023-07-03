@@ -7433,6 +7433,31 @@ Whether to enable the Configuration Framework Service (CFS).
 |---|---|---|---|---|
 |*anonymous*|boolean|false|none|Whether to enable the Configuration Framework Service (CFS).|
 
+<h2 id="tocS_HardwareComponentName">HardwareComponentName</h2>
+<!-- backwards compatibility -->
+<a id="schemahardwarecomponentname"></a>
+<a id="schema_HardwareComponentName"></a>
+<a id="tocShardwarecomponentname"></a>
+<a id="tocshardwarecomponentname"></a>
+
+```json
+"x3001c0s39b0n0"
+
+```
+
+Hardware component name (xname).
+
+It is recommended that this should be 1-127 characters in length.
+
+This restriction is not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string|false|none|Hardware component name (xname).<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+
 <h2 id="tocS_Healthz">Healthz</h2>
 <!-- backwards compatibility -->
 <a id="schemahealthz"></a>
@@ -7546,7 +7571,7 @@ List of links to other resources
 
 ```
 
-Node list.
+A node list that is required to have at least one node.
 
 It is recommended that this list should be 1-65535 items in length.
 
@@ -7555,7 +7580,37 @@ targeted to start being enforced in an upcoming BOS version.
 
 ### Properties
 
-*None*
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+
+<h2 id="tocS_NodeListEmptyOk">NodeListEmptyOk</h2>
+<!-- backwards compatibility -->
+<a id="schemanodelistemptyok"></a>
+<a id="schema_NodeListEmptyOk"></a>
+<a id="tocSnodelistemptyok"></a>
+<a id="tocsnodelistemptyok"></a>
+
+```json
+[
+  "x3000c0s19b1n0",
+  "x3000c0s19b2n0"
+]
+
+```
+
+A node list that is allowed to be empty.
+
+It is recommended that this list should be no more than 65535 items in length.
+
+This restriction is not enforced in this version of BOS, but it is
+targeted to start being enforced in an upcoming BOS version.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|[[HardwareComponentName](#schemahardwarecomponentname)]|false|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_NodeGroupList">NodeGroupList</h2>
 <!-- backwards compatibility -->
@@ -8038,7 +8093,7 @@ A list of the nodes in a given category within a Phase.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|[V1PhaseCategoryName](#schemav1phasecategoryname)|false|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
-|node_list|[NodeList](#schemanodelist)|false|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_list|[NodeListEmptyOk](#schemanodelistemptyok)|false|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_V1PhaseStatus">V1PhaseStatus</h2>
 <!-- backwards compatibility -->
@@ -8288,7 +8343,7 @@ the same ordinal number will be addressed at the same time.
 |type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_list|[NodeList](#schemanodelist)|false|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |rootfs_provider|[BootSetRootfsProvider](#schemabootsetrootfsprovider)|false|none|The root file system provider.<br><br>It is recommended that this should be 1-511 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
@@ -8820,7 +8875,7 @@ one category to another within a phase.
 |phase|[V1PhaseName](#schemav1phasename)|true|none|The phase that this data belongs to (boot, shutdown, or configure). If blank,<br>it belongs to the Boot Set itself, which only applies to the GenericMetadata type.|
 |source|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
 |destination|[V1PhaseCategoryName](#schemav1phasecategoryname)|true|none|Name of the Phase Category<br>not_started, in_progress, succeeded, failed, or excluded|
-|node_list|[NodeList](#schemanodelist)|true|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_list|[NodeListEmptyOk](#schemanodelistemptyok)|true|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_V1NodeErrorsList">V1NodeErrorsList</h2>
 <!-- backwards compatibility -->
@@ -8851,7 +8906,7 @@ This does not overwrite previously existing errors.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|**additionalProperties**|[NodeList](#schemanodelist)|false|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|**additionalProperties**|[NodeListEmptyOk](#schemanodelistemptyok)|false|none|A node list that is allowed to be empty.<br><br>It is recommended that this list should be no more than 65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 
 <h2 id="tocS_V1UpdateRequestNodeChange">V1UpdateRequestNodeChange</h2>
 <!-- backwards compatibility -->
@@ -9301,25 +9356,45 @@ The status of a Session.
 |*anonymous*|running|
 |*anonymous*|complete|
 
-<h2 id="tocS_V2SessionTime">V2SessionTime</h2>
+<h2 id="tocS_V2SessionStartTime">V2SessionStartTime</h2>
 <!-- backwards compatibility -->
-<a id="schemav2sessiontime"></a>
-<a id="schema_V2SessionTime"></a>
-<a id="tocSv2sessiontime"></a>
-<a id="tocsv2sessiontime"></a>
+<a id="schemav2sessionstarttime"></a>
+<a id="schema_V2SessionStartTime"></a>
+<a id="tocSv2sessionstarttime"></a>
+<a id="tocsv2sessionstarttime"></a>
 
 ```json
 "string"
 
 ```
 
-When the Session was created or completed.
+When the Session was created.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|When the Session was created or completed.|
+|*anonymous*|string|false|none|When the Session was created.|
+
+<h2 id="tocS_V2SessionEndTime">V2SessionEndTime</h2>
+<!-- backwards compatibility -->
+<a id="schemav2sessionendtime"></a>
+<a id="schema_V2SessionEndTime"></a>
+<a id="tocSv2sessionendtime"></a>
+<a id="tocsv2sessionendtime"></a>
+
+```json
+"string"
+
+```
+
+When the Session was completed. A null value means the Session has not ended.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string¦null|false|none|When the Session was completed. A null value means the Session has not ended.|
 
 <h2 id="tocS_V2SessionStatus">V2SessionStatus</h2>
 <!-- backwards compatibility -->
@@ -9344,10 +9419,10 @@ Information on the status of a Session.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|start_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
-|end_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
+|start_time|[V2SessionStartTime](#schemav2sessionstarttime)|false|none|When the Session was created.|
+|end_time|[V2SessionEndTime](#schemav2sessionendtime)|false|none|When the Session was completed. A null value means the Session has not ended.|
 |status|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|none|The status of a Session.|
-|error|string|false|none|Error which prevented the Session from running|
+|error|string¦null|false|none|Error which prevented the Session from running.<br>A null value means the Session has not encountered an error.|
 
 <h2 id="tocS_V2BootSet">V2BootSet</h2>
 <!-- backwards compatibility -->
@@ -9399,7 +9474,7 @@ filesystem provisioning.
 |type|[BootSetType](#schemabootsettype)|true|none|The MIME type of the metadata describing the components of the boot image. This type controls how BOS processes the path attribute.<br><br>It is recommended that this should be 1-127 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |etag|[BootSetEtag](#schemabootsetetag)|false|none|This is the 'entity tag'. It helps verify the version of metadata describing the components of the boot image we are working with.<br><br>ETags are defined as being 1-65536 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |kernel_parameters|[BootKernelParameters](#schemabootkernelparameters)|false|none|The kernel parameters to use to boot the nodes.<br><br>Linux kernel parameters may never exceed 4096 characters in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
-|node_list|[NodeList](#schemanodelist)|false|none|Node list.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
+|node_list|[NodeList](#schemanodelist)|false|none|A node list that is required to have at least one node.<br><br>It is recommended that this list should be 1-65535 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |node_roles_groups|[NodeRoleList](#schemanoderolelist)|false|none|Node role list. Allows actions against nodes with associated roles.<br><br>It is recommended that this list should be 1-1023 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |node_groups|[NodeGroupList](#schemanodegrouplist)|false|none|Node group list. Allows actions against associated nodes by logical groupings.<br><br>It is recommended that this list should be 1-4095 items in length.<br><br>This restriction is not enforced in this version of BOS, but it is<br>targeted to start being enforced in an upcoming BOS version.|
 |arch|string|false|none|The node architecture to target. Filters nodes that are not part of matching architecture from being targeted by boot actions. This value should correspond to HSM component 'Arch' field exactly. For reasons of backwards compatibility, all HSM nodes that are of type Unknown are treated as being of type X86.|
@@ -9549,8 +9624,8 @@ Detailed information on the timing of a Session.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|start_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
-|end_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
+|start_time|[V2SessionStartTime](#schemav2sessionstarttime)|false|none|When the Session was created.|
+|end_time|[V2SessionEndTime](#schemav2sessionendtime)|false|none|When the Session was completed. A null value means the Session has not ended.|
 |duration|string|false|none|The current duration of the ongoing Session or final duration of the completed Session.|
 
 <h2 id="tocS_V2SessionExtendedStatus">V2SessionExtendedStatus</h2>

@@ -1,21 +1,61 @@
 # QLogic driver crash
 
 - [Description](#description)
+  - [Signatures](#signatures)
+    - [Driver Recovery](#driver-recovery)
+    - [Kernel Crash](#kernel-crash)
 - [Workaround](#workaround)
 - [Fix](#fix)
 
 ## Description
 
-In some failover/maintenance scenarios users may experience QLogic driver crash on the storage nodes. This issue is
-usually tied to network events, such as a reboot of a switch in the VSX pair, but can also occur without user
-intervention in rare events.
+In some failover/maintenance scenarios users may experience QLogic driver crash with the following symptoms:
 
-Issue seems to be aggravated by incorrect configuration for storage node back-channel links and per internal testing
-correcting the configuration on switch greatly reduces the risk of running into this issue.
+- Sudden loss of connectivity, `mgmt0` and/or `mgmt1` will lose connectivity and the bond will fail.
+- Kernel crashing
+
+This is known to be a result of network events, such as a reboot of a switch in the VSX pair, or a sudden flood of
+packets due to CEPH recovery. However this can also occur without user intervention in rare cases.
+
+The issue is aggravated by a flaw in the configuration for the storage node back-channel links, and per internal testing
+correcting the configuration on the switch significantly reduces the risk of running into this issue.
 
 The configuration is fixed in CANU versions 2.3 and above.
 
-Signature of the driver crash:
+### Signatures
+
+All of the signatures of the crash may be observed through `dmesg`. It is advised if one wants to monitor for the crash
+that they run `dmesg -W` in a serial console to monitor live, new messages and to look for the following signatures
+listed below.
+
+#### Driver Recovery
+
+The QLogic driver will start a recovery flow after a transmit queue timeout when the firmware crashes, the driver is
+attempting to recover from the firmware crash. The following messages may be seen in `dmesg`:
+
+```text
+[71980.321853] NETDEV WATCHDOG: mgmt0 (qede): transmit queue 0 timed out
+[71980.321864] [qede_tx_timeout:529(mgmt1)]TX timeout on queue 2!
+```
+
+```text
+watchdog: BUG: soft lockup - CPU#10 stuck for 26s! [tp_osd_tp:11370]
+```
+
+To look for these, use:
+
+```bash
+dmesg | grep -i 'timeout' | grep qed
+```
+
+```bash
+dmesg | grep -i 'soft lockup'
+```
+
+#### Kernel Crash
+
+In cases where the inbox SLES driver is used (provided by the Kernel), a Kernel crash may be observed and a dump will be
+created.
 
 ```text
 [72201.473386] CPU: 28 PID: 1380762 Comm: sadc Kdump: loaded Tainted: G        W           5.14.21-150400.24.38.1.25440.1.PTF.1204911-default #1 SLE15-SP4 a183b387d1d6082da7a867507e6a04161f95b2be
@@ -54,17 +94,29 @@ Signature of the driver crash:
 [72201.695800] RIP: 0033:0x7f4a2d503a3e 
 ```
 
+If a crash is observed and a dump is created, generate a support config and send the generated tar plus the dump to
+CASM.
+
+- Generate the support config, the command will output the path to the generated archive.
+
+    ```bash
+    supportconfig
+    ```
+
+- Send the support config and the crash from `/var/crash/` to CASM
+
 ## Workaround
 
 Upgrade CANU to version 2.3 or above, regenerate the configuration, and then apply it the VSX-pair that hosts the
 storage nodes.
 
-Or manually correct the configuration.
+Or manually correct the configuration on both spines.
 
-In this example of the problem you can see that the lags 10,12,14 which are the lags for the storage back channel
+In this example of the problem we can see that the lags 10,12,14 which are the lags for the storage back channel
 communication have applied configuration of `vlan trunk native 1`. Which is wrong.
 
 ```text
+# Spine 1
 interface lag 10 multi-chassis
     description ncn-s001:ocp:2<==sw-spine-001
     no shutdown
@@ -85,6 +137,35 @@ interface lag 12 multi-chassis
     spanning-tree port-type admin-edge
 interface lag 14 multi-chassis
     description ncn-s003:ocp:2<==sw-spine-001
+    no shutdown
+    no routing
+    vlan trunk native 1
+    vlan trunk allowed 10
+    lacp mode active
+    lacp fallback
+    spanning-tree port-type admin-edge
+
+# Spine 2
+interface lag 10 multi-chassis
+    description ncn-s001:pcie-slot1:2<==sw-spine-002
+    no shutdown
+    no routing
+    vlan trunk native 1
+    vlan trunk allowed 10
+    lacp mode active
+    lacp fallback
+    spanning-tree port-type admin-edge
+interface lag 12 multi-chassis
+    description ncn-s002:pcie-slot1:2<==sw-spine-002
+    no shutdown
+    no routing
+    vlan trunk native 1
+    vlan trunk allowed 10
+    lacp mode active
+    lacp fallback
+    spanning-tree port-type admin-edge
+interface lag 14 multi-chassis
+    description ncn-s003:pcie-slot1:2<==sw-spine-002
     no shutdown
     no routing
     vlan trunk native 1
@@ -98,6 +179,7 @@ Too correct the issue, log in to both the VSX pair switches and correct the conf
 use `vlan trunk native 10`:
 
 ```text
+# Spine 1
 interface lag 10 multi-chassis
     description ncn-s001:ocp:2<==sw-spine-001
     no shutdown
@@ -125,9 +207,43 @@ interface lag 14 multi-chassis
     lacp mode active
     lacp fallback
     spanning-tree port-type admin-edge
+
+# Spine 2
+# Spine 2
+interface lag 10 multi-chassis
+    description ncn-s001:pcie-slot1:2<==sw-spine-002
+    no shutdown
+    no routing
+    vlan trunk native 10
+    vlan trunk allowed 10
+    lacp mode active
+    lacp fallback
+    spanning-tree port-type admin-edge
+interface lag 12 multi-chassis
+    description ncn-s002:pcie-slot1:2<==sw-spine-002
+    no shutdown
+    no routing
+    vlan trunk native 10
+    vlan trunk allowed 10
+    lacp mode active
+    lacp fallback
+    spanning-tree port-type admin-edge
+interface lag 14 multi-chassis
+    description ncn-s003:pcie-slot1:2<==sw-spine-002
+    no shutdown
+    no routing
+    vlan trunk native 10
+    vlan trunk allowed 10
+    lacp mode active
+    lacp fallback
+    spanning-tree port-type admin-edge
 ```
 
 ## Fix
 
-The vendor is working to fix the QLogic driver code. Once a fix is released, the new QLogic driver will be added to the
-firmware pack.
+The vendor is working to fix the QLogic driver drivers and firmware.
+
+Using the `qed` 8.72.1 driver (or newer) defends against the kernel panic, but not the connectivity loss.
+
+If/when a new driver/firmware is released that resolves this issue completely, it will be added to the CSM release
+and/or HFP firmware pack.

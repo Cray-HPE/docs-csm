@@ -330,18 +330,18 @@ Verify that the Lustre file system is available from the management cluster.
     spire-jwks-6b97457548-lvqmf    2/3  CrashLoopBackOff   9    23h   10.39.0.79   ncn-w001 <none>   <none>
     ```
 
-1. (`ncn-m001#`) If Spire pods indicate `CrashLoopBackOff`, then restart the Spire deployment.
+   1. (`ncn-m001#`) If Spire pods indicate `CrashLoopBackOff`, then restart the Spire deployment.
 
-    ```bash
-    kubectl rollout restart -n spire deployment spire-jwks
-    ```
+       ```bash
+       kubectl rollout restart -n spire deployment spire-jwks
+       ```
 
-1. (`ncn-m001#`) Rejoin Spire on the worker and master NCNs, to avoid issues with Spire tokens.
+   1. (`ncn-m001#`) Rejoin Spire on the worker and master NCNs, to avoid issues with Spire tokens.
 
-    ```bash
-    kubectl rollout restart -n spire daemonset request-ncn-join-token
-    kubectl rollout status -n spire daemonset request-ncn-join-token
-    ```
+       ```bash
+       kubectl rollout restart -n spire daemonset request-ncn-join-token
+       kubectl rollout status -n spire daemonset request-ncn-join-token
+       ```
 
 1. (`ncn-m001#`) Rejoin Spire on the storage NCNs, to avoid issues with Spire tokens.
 
@@ -469,11 +469,18 @@ Verify that the Lustre file system is available from the management cluster.
 
     See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 
+### Check etcd status and health
+
 1. Check the status and health of `etcd` clusters.
 
     See [Check the Health of etcd Clusters](../kubernetes/Check_the_Health_of_etcd_Clusters.md).
 
 ### Check `cronjobs`
+
+The `sat bootsys boot --stage platform-services` command checks that all cronjobs
+run on time according to their specified cron schedule. If a cronjob is not being scheduled on time,
+it will be deleted and re-created to force it to be scheduled again. It is recommended to check that
+all cronjobs are being scheduled on time after running `sat bootsys boot --stage platform-services`.
 
 1. (`ncn-m001#`) Display all the Kubernetes `cronjobs`.
 
@@ -619,6 +626,8 @@ Verify that the Lustre file system is available from the management cluster.
     | x3000c0s25b0n0 | ncn-w005 | Ready     | OK   | Management | Worker  |
     +----------------+----------+-----------+------+------------+---------+
     ```
+
+### Validate CSM Health
 
 1. To check the health and status of the management cluster after a power cycle, refer to the sections 1-4 in [Validate CSM Health](../validate_csm_health.md).
 
