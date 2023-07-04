@@ -425,35 +425,18 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
    tar -zxvf  "${PITDATA}/csm-${CSM_RELEASE}.tar.gz" -C ${PITDATA}
    ```
 
-1. (`pit#`) Upload the RPMs and container images to Nexus.
-
-   ```bash
-   /srv/cray/metal-provision/scripts/nexus/setup-nexus.sh -s
-   ```
-
 1. (`pit#`) Install/update the RPMs necessary for the CSM installation.
 
    > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
 
-   1. Add nexus repositories
-
-      > ***NOTE*** The `${releasever_major}` and `${releasever_minor}` must be surrounded in
-      > single-quotes, these are special Zypper variables that are interpolated when Zypper
-      > adds the repository. The values of these will always be replaced with respect to the
-      > running SLES release.
-
-      ```bash
-      zypper addrepo --no-gpgcheck --refresh http://packages/repository/csm-noos csm-noos
-      zypper addrepo --no-gpgcheck --refresh 'http://packages/repository/csm-sle-${releasever_major}sp${releasever_minor}' 'csm-sle-${releasever_major}sp${releasever_minor}'
-      ```
-
-   1. Update `cray-site-init`, `craycli`, and `canu`.
+   1. Update `cray-site-init`.
 
        > ***NOTE*** This provides `csi`, a tool for creating and managing configurations, as well as
        > orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
 
        ```bash
-       zypper update -y cray-site-init craycli canu
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+              --no-gpg-checks update -y cray-site-init
        ```
 
    1. Install `iuf-cli`.
@@ -461,7 +444,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        > ***NOTE*** This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../operations/iuf/IUF.md).
 
        ```bash
-       zypper install -y iuf-cli
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+              --no-gpg-checks install -y iuf-cli
        ```
 
    1. Install `csm-testing` RPM.
@@ -469,7 +453,8 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
        > ***NOTE*** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
 
        ```bash
-       zypper install -y csm-testing
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
+              --no-gpg-checks install -y csm-testing
        ```
 
 1. (`pit#`) Get the artifact versions.
