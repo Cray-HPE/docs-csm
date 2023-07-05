@@ -45,6 +45,7 @@ The following IUF topics are discussed in the sections below.
   - [Log files](#log-files)
 - [Site and recipe variables](#site-and-recipe-variables)
 - [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
+  - [ARM Images](#arm-images)
 - [Recovering from failures](#recovering-from-failures)
   - [Addressing the issue without changing products](#addressing-the-issue-without-changing-products)
   - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
@@ -712,6 +713,41 @@ input files to define the CFS configurations used to customize management NCN an
 HPE provides management NCN and managed node `sat bootprep` configuration files in the HPC CSM Software Recipe. The files provide default
 CFS configuration, image, and BOS session template definitions. The administrator may customize the files as needed. The files include
 variables, and the values used are provided by the recipe variables and/or site variables files specified when running `iuf run`.
+
+### ARM Images
+
+`sat bootprep` files support building ARM images on an opt-in basis. There is provided commented out configuration in the `compute-and-uan-bootprep.yaml`.
+
+```yaml
+# The following images are required only on systems with aarch64 (ARM) nodes.
+# Uncomment the lines below if ARM images are needed.
+#- name: "{{default.note}}{{base.name}}{{default.suffix}}"
+#  ref_name: base_cos_image.aarch64
+#  base:
+#    product:
+#      name: cos
+#      type: recipe
+#      version: "{{cos.version}}"
+#      filter:
+#        arch: aarch64
+#
+#- name: "compute-{{base.name}}"
+#  ref_name: compute_image.aarch64
+#  base:
+#    image_ref: base_cos_image.aarch64
+#  configuration: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
+#  configuration_group_names:
+#  - Compute
+#
+#- name: "uan-{{base.name}}"
+#  ref_name: uan_image.aarch64
+#  base:
+#    image_ref: base_cos_image.aarch64
+#  configuration: "{{default.note}}uan-{{recipe.version}}{{default.suffix}}"
+#  configuration_group_names:
+#  - Application
+#  - Application_UAN
+```
 
 ## Recovering from failures
 

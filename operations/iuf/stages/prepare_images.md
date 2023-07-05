@@ -10,6 +10,7 @@ files can be substituted with values found in the recipe variables (`-rv`) and/o
 
 - [Impact](#impact)
 - [Input](#input)
+  - [ARM Images](#arm-images)
 - [Artifacts created](#input)
 - [Execution details](#execution-details)
 - [Example](#example)
@@ -31,6 +32,10 @@ The following arguments are most often used with the `prepare-images` stage. See
 | Recipe variables                              | `-rv RECIPE_VARS`                | Path to YAML file containing recipe variables provided by HPE                                         |
 | Site variables                                | `-sv SITE_VARS`                  | Path to YAML file containing site defaults and any overrides                                          |
 | Recipe variables product mask                 | `-mrp MASK_RECIPE_PRODS`         | Mask the recipe variables file entries for the products specified, use product catalog values instead |
+
+### ARM Images
+
+If the customer requires to build `aarch64` images see the [IUF `sat bootprep` ARM](../IUF.md#arm-images)
 
 ## Artifacts created
 
