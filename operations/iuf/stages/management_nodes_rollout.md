@@ -22,7 +22,7 @@ See the [3. Execute the IUF `management-nodes-rollout` stage](../workflows/manag
 - [Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF](#manually-upgrade-or-rebuild-ncn-worker-node-with-specific-image-and-cfs-configuration-outside-of-iuf)
 - [Action needed if a worker rebuild fails](#action-needed-if-a-worker-rebuild-fails)
 - [Examples](#examples)
-- [Set NCN boot image for ncn-m001](#set-ncn-boot-image-for-ncn-m001)
+- [Set NCN boot image for `ncn-m001`](#set-ncn-boot-image-for-ncn-m001)
 
 ## Impact
 
@@ -166,9 +166,9 @@ or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_a
 
 1. (`ncn-mw#`) Get the xname for `ncn-m001`:
 
-        ```bash
-        ssh ncn-m001 cat /etc/cray/xname
-        ```
+    ```bash
+    ssh ncn-m001 cat /etc/cray/xname
+    ```
 
 1. (`ncn-mw#`) Update boot parameters for an NCN. Perform the following procedure for `ncn-m001`.
 
