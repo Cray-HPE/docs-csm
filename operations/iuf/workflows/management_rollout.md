@@ -56,7 +56,7 @@ Follow the steps below to upgrade all management nodes.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Perform the NCN storage node upgrades. This upgrades a single storage node first to test the storage node image and the upgrades the remaining storage nodes.
+1. Perform the NCN storage node upgrades. This upgrades a single storage node first to test the storage node image and then upgrades the remaining storage nodes.
 
     **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN storage nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`.
     If monitoring progress with the Argo UI, remember to include these workflows.
@@ -250,10 +250,9 @@ remember to include these workflows.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on the canary node. This will rebuild the canary node with the new CFS configuration and image built in
-previous steps of the workflow.
-
-    (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN worker node. The worker canary node can be any worker node and does not have to be `ncn-w001`.
+1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single    NCN worker node.
+This will rebuild the canary node with the new CFS configuration and image built in previous steps of the workflow.
+The worker canary node can be any worker node and does not have to be `ncn-w001`.
 
     ```bash
     WORKER_CANARY=ncn-w001
@@ -289,7 +288,6 @@ previous steps of the workflow.
 1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node.
 
     ```bash
-    HOSTNAME=ncn-w001
     kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout-
     ```
 
