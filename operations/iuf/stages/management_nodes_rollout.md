@@ -10,7 +10,7 @@ the same steps for rebuilding/upgrading NCN worker nodes.
 
 1. If CSM **is not** being upgraded, then NCN storage and master nodes will not be upgraded with a new image but will be updated with a CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md).
 
-1. If CSM **is** being upgraded, then NCN storage master nodes will be upgraded with a new image and CFS configuration.
+1. If CSM **is** being upgraded, then NCN storage and master nodes will be upgraded with a new image and CFS configuration.
 
 See the [3. Execute the IUF `management-nodes-rollout` stage](../workflows/management_rollout.md#3-execute-the-iuf-management-nodes-rollout-stage) documentation for more information.
 
@@ -22,7 +22,7 @@ See the [3. Execute the IUF `management-nodes-rollout` stage](../workflows/manag
 - [Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF](#manually-upgrade-or-rebuild-ncn-worker-node-with-specific-image-and-cfs-configuration-outside-of-iuf)
 - [Action needed if a worker rebuild fails](#action-needed-if-a-worker-rebuild-fails)
 - [Examples](#examples)
-- [Set NCN boot image for NCN master and NCN storage nodes](#set-ncn-boot-image-for-ncn-m001-and-ncn-storage-nodes)
+- [Set NCN boot image for ncn-m001](#set-ncn-boot-image-for-ncn-m001)
 
 ## Impact
 
@@ -36,7 +36,7 @@ The following arguments are most often used with the `management-nodes-rollout` 
 | ---------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | Activity                                 | `-a ACTIVITY`                                         | Activity created for the install or upgrade operations                                 |
 | Concurrent management rollout percentage | `-cmrp CONCURRENT_MANAGEMENT_ROLLOUT_PERCENTAGE`      | Percentage value that limits the number of NCN worker nodes rolled out in parallel |
-| Limit management rollout list            | `--limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT` | List of NCN management nodes to be rolled out, specified by HSM role and subrole (`Management_Master`, `Management_Worker`)       |
+| Limit management rollout list            | `--limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT` | List of NCN management nodes to be rolled out, specified by HSM role and subrole (`Management_Master`, `Management_Worker`, `Management_Storage`) or by NCN hostname (e.g. `ncn-w003`, `ncn-s001`, etc.)      |
 
 ## Execution details
 
@@ -119,30 +119,41 @@ Expected behavior: All NCN worker nodes will be rebuilt. Each set of worker node
 
 ---
 
-(`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the following parameters. Upgrading the NCN master nodes as shown, should only be done if CSM is being upgraded.
+(`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the default concurrent management rollout percentage and limiting the operation to `ncn-s001 ncn-s002` nodes.
+
+```bash
+iuf -a admin-230127 run --limit-management-rollout ncn-s001 ncn-s002  -r management-nodes-rollout
+```
+
+Expected behavior:
+
+1. `ncn-s001` will be upgraded
+1. `ncn-s002` will be upgraded
+
+---
+
+(`ncn-m001#`) Execute the `management-nodes-rollout` stage for activity `admin-230127` using the following parameters.
 
 - Assume 10 worker nodes (`ncn-w001` through `ncn-w010`)
-- `--limit-management-rollout Management_Worker Management_Master`
+- `--limit-management-rollout Management_Worker`
 - `-cmrp 33`
 - `ncn-w004` is labeled with `iuf-prevent-rollout=true`
 
 First, label `ncn-w004` with `iuf-prevent-rollout=true`. Then execute the following command.
 
 ```bash
-iuf -a admin-230127 run --limit-management-rollout Management_Worker Management_Master  --cmrp 33 -r management-nodes-rollout
+iuf -a admin-230127 run --limit-management-rollout Management_Worker --cmrp 33 -r management-nodes-rollout
 ```
 
 Expected behavior:
 
-1. `ncn-m002` will be upgraded
-1. `ncn-m003` will be upgraded
 1. Worker nodes `ncn-w001,ncn-w002,ncn-w003` will be upgraded
 1. Worker nodes `ncn-w005,ncn-w006,ncn-w007` will be upgraded
 1. Worker nodes `ncn-w008,ncn-w009,ncn-w010` will be upgraded
 
-## Set NCN boot image for `ncn-m001` and NCN storage nodes
+## Set NCN boot image for `ncn-m001`
 
-Follow these steps when upgrading NCN storage nodes and `ncn-m001` during [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
+Follow these steps when upgrading `ncn-m001` during [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
 when following the procedures in
 [Install or upgrade additional products with IUF](../workflows/install_or_upgrade_additional_products_with_iuf.md)
 or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_additional_products_with_iuf.md).
@@ -153,25 +164,15 @@ or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_a
     IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
     ```
 
-1. (`ncn-mw#`) Determine the xnames for the NCNs which are being upgraded. These will be used in the next step.
-
-    - Get a comma-separated list of all storage NCN xnames:
-
-        ```bash
-        cray hsm state components list --role Management --subrole Storage --type Node --format json |
-          jq -r '.Components | map(.ID) | join(",")'
-        ```
-
-    - Get the xname for `ncn-m001`:
+1. (`ncn-mw#`) Get the xname for `ncn-m001`:
 
         ```bash
         ssh ncn-m001 cat /etc/cray/xname
         ```
 
-1. (`ncn-mw#`) Update boot parameters for an NCN. Perform the following procedure **for each xname** being upgraded
-(each xname identified in the previous step).
+1. (`ncn-mw#`) Update boot parameters for an NCN. Perform the following procedure for `ncn-m001`.
 
-    1. Get the existing `metal.server` setting for the xname of the node of interest.
+    1. Get the existing `metal.server` setting for `ncn-m001`.
 
         ```bash
         XNAME=<node-xname>
