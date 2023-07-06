@@ -21,50 +21,47 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# Accepts two arguments
-# First argument is the image name needing tag references updated.
-# Second argument is the path of files to recursively update.
-# e.g. `update_tags.sh cray-ims-load-artifacts /etc/cray/upgrade/csm/docs-csm`
+# This script updates all image tag references in the workflows directory.
+# This is necessary since a new docs-csm version could land before or after a CSM update.
 
 set -e
-THIS_IMAGE=$1
-DIRECTORY_TO_PROCESS=$2
 
-cd $DIRECTORY_TO_PROCESS
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd $SCRIPT_DIR
 
-if [[ -z $THIS_IMAGE ]]; then
-  echo "Must specify an image name."
+if [[ "$(basename $(pwd))" != "workflows" ]]; then
+  echo "This script must be located in the workflows directory to run."
   exit 1
 fi
 
-if [[ -z $DIRECTORY_TO_PROCESS ]]; then
-  echo "Must specify a directory of files to process."
-  exit 1
-fi
-
-function get_repository_name_for_image() {
-  podman search registry.local/$THIS_IMAGE --format=json | jq -r '.[0].Name'
+function get_list_of_images_to_update() {
+  grep -rhPo "(?<=image: )[a-z].*(?=:)" . | sort | uniq
 }
 
 function get_latest_tag_for_image() {
-  THIS_REPO=$(get_repository_name_for_image $THIS_IMAGE)
-  podman search $THIS_REPO --list-tags --format=json | jq -r '.[0].Tags | last'
+  THIS_IMAGE=$1
+  THIS_PREFIX=$([[ $(echo $THIS_IMAGE | grep -e "^registry.local/") ]] && echo "" || echo "registry.local/")
+  podman search $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '.[0].Tags | last'
 }
 
-LATEST_TAG=$(get_latest_tag_for_image $THIS_IMAGE)
-
 function get_filenames_referring_to_image() {
-  grep -RHl -e "${THIS_IMAGE}:[0-9]\.[0-9]\.[0-9]" .
+  grep -RHl -e "${THIS_IMAGE}:" .
 }
 
 function update_tags_in_file() {
-  THIS_FILE=$1
+  THIS_IMAGE=$1
+  LATEST_TAG=$2
+  THIS_FILE=$3
   echo "Updating tag of ${THIS_IMAGE} in ${THIS_FILE} to ${LATEST_TAG}."
-  sed -i -e "s/${THIS_IMAGE}:[0-9]\.[0-9]\.[0-9].*/${THIS_IMAGE}:${LATEST_TAG}/g" $THIS_FILE
+  sed -i -e "s|${THIS_IMAGE}:.*|${THIS_IMAGE}:${LATEST_TAG}|g" $THIS_FILE
 }
 
-for FILE in $(get_filenames_referring_to_image); do
-  update_tags_in_file $FILE
+# For each image found, lookup the latest tag and update the references in every file.
+for THIS_IMAGE in $(get_list_of_images_to_update); do
+  LATEST_TAG=$(get_latest_tag_for_image $THIS_IMAGE)
+  for FILE in $(get_filenames_referring_to_image); do
+    update_tags_in_file $THIS_IMAGE $LATEST_TAG $FILE
+  done
 done
 
-cd $OLD_PWD
+cd $OLDPWD
