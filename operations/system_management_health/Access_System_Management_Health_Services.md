@@ -7,6 +7,7 @@ to access these services are available on any system with CMN, BGP, MetalLB, and
 - [System domain name](#system-domain-name)
 - [System Management Health service links](#system-management-health-service-links)
   - [Prometheus](#prometheus)
+  - [Thanos] (#thanos)
   - [Alertmanager](#alertmanager)
   - [Grafana](#grafana)
   - [Kiali](#kiali)
@@ -58,6 +59,17 @@ For more information regarding the use of the Prometheus interface, see
 
 Some alerts may be falsely triggered. This occurs if they are alerts which will be improved in the future, or if they are alerts impacted by whether all software products have been installed yet.
 See [Troubleshoot Prometheus Alerts](Troubleshoot_Prometheus_Alerts.md).
+
+### Thanos
+
+URL: `https://thanos.cmn.SYSTEM_DOMAIN_NAME/`
+
+Thanos is a set of components that can be composed into a highly available, multi Prometheus metric system with potentially unlimited storage capacity, if your Object Storage allows for it.
+It leverages the Prometheus 2.0 storage format to cost-efficiently store historical metric data in any object storage while retaining fast query latencies.
+Additionally, it provides a global query view across all Prometheus installations and can merge data from Prometheus HA pairs.
+
+For more information regarding the use of the Thanos interface, see
+[Getting Started/](https://thanos.io/tip/thanos/getting-started.md/) in the thanos online documentation.
 
 ### Alertmanager
 
