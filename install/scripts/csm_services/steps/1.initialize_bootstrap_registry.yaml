@@ -58,7 +58,7 @@ spec:
           > password `admin123`) in order to upload to the bootstrap registry, which
           > is listening on localhost:5000.
         command: |-
-          podman load -i /var/lib/cray/container-images/pit-nexus/skopeo-stable-latest.tar
+          podman load -i /var/lib/cray/container-images/metal-nexus/skopeo-stable-latest.tar
 
           podman run --rm --network host -v {{ getEnv "CSM_PATH" }}/docker:/images:ro \
               quay.io/skopeo/stable sync --scoped --src dir --dest docker --dest-tls-verify=false --dest-creds admin:admin123 \
