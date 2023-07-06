@@ -34,8 +34,8 @@ shown here with numbered topics.
     1. [Import CSM tarball](#3-import-csm-tarball)
     1. [Create system configuration](#4-create-system-configuration)
     1. [Configure management network switches](#5-configure-management-network-switches)
+        1. [Management network](#management-network)
         1. [Ensure SNMP is configured on the management network switches](#ensure-snmp-is-configured-on-the-management-network-switches)
-        1. [Configure the management network with CANU](#configure-the-management-network-with-canu)
 1. [Installation](#installation)
     1. [Deploy management nodes](#1-deploy-management-nodes)
     1. [Install CSM services](#2-install-csm-services)
@@ -88,6 +88,27 @@ See [Create system configuration](../pre-installation.md#3-create-system-configu
 
 ### 5. Configure management network switches
 
+#### Management network
+
+***Prerequisites***
+
+1. External connectivity has been established, and either bare-metal configurations can be installed or new/updated configurations can be applied.
+1. Validate SHCD and cabling
+1. Create custom CANU configurations and store them in version control. ***At a minimum:***
+    1. Create an [SNMP](#when-the-management-network-has-not-been-configured) configuration; see the detailed SNMP section below.
+    1. Add configuration for site uplinks [CANU custom configuration](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/custom_config.md)
+
+If you have already validated SHCD, cabling and have created the required custom configurations and are comfortable with all steps of the network installation you can use the [Quick Management Network Install Guide](../../operations/network/management_network/quick_management_network_install_guide.md).
+
+> ***IMPORTANT*** Otherwise, please refer to the ***Management Network User Guide***; i.e. if you have ***not***
+> validated your SHCD and cabling in prior or have a more complex installation that requires special configuration before
+> proceeding with the network installation. Topic "install scenarios" contains more in depth instructions.
+
+***Additional documentation:***
+
+* [Management Network User Guide](../../operations/network/management_network/README.md)
+* [CANU documentation](../../operations/network/management_network/canu/README.md)
+
 #### Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
@@ -137,26 +158,6 @@ the CSM install.
 
 See [Configure SNMP](../../operations/network/management_network/configure_snmp.md) for more information about
 configuring SNMP in CSM.
-
-#### Configure the management network with CANU
-
-At this point external connectivity has been established, and either bare-metal configurations can
-be installed or new/updated configurations can be applied.
-
-Most installations will require the following three tasks, although this may vary depending on
-site-specific settings and procedures.
-
-1. Create custom CANU configurations and store them in version control.
-   At a minimum, create an SNMP configuration; see the SNMP section earlier on this page.
-1. Apply the CANU-generated network configuration to the management switches.
-   CANU can also be used to generate a new network configuration and report on the differences between it
-   and the running switch configuration (useful when reinstalling CSM).
-
-See [Management Network User Guide](../../operations/network/management_network/README.md) for information on next steps
-for a variety of network configuration scenarios.
-
-Note that the configuration of the management network is an advanced task that may require the help of a networking
-subject matter expert.
 
 ## Installation
 
@@ -242,8 +243,8 @@ After completion of the firmware update with FAS, compute nodes can be prepared.
 
 These compute node types require preparation:
 
-- HPE Apollo 6500 XL645d Gen10 Plus
-- Gigabyte
+* HPE Apollo 6500 XL645d Gen10 Plus
+* Gigabyte
 
 See [Prepare Compute Nodes](../prepare_compute_nodes.md).
 
