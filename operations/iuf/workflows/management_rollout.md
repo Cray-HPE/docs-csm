@@ -250,7 +250,7 @@ remember to include these workflows.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single    NCN worker node.
+1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN worker node.
 This will rebuild the canary node with the new CFS configuration and image built in previous steps of the workflow.
 The worker canary node can be any worker node and does not have to be `ncn-w001`.
 
