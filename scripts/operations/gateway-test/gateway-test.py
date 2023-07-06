@@ -102,13 +102,13 @@ def get_access_token(adminSecret, tokenNet, nmn_override):
         tokendomain = "auth.{}.{}".format(tokenNet, SYSTEM_DOMAIN)
 
     url = "https://{}/keycloak/realms/shasta/protocol/openid-connect/token".format(tokendomain)
- 
+
     if not resolvable(tokendomain):
         return None
 
     if not reachable(tokendomain):
         return None
-   
+
     try:
       r = requests.post(url, data = payload, verify = False)
     except Exception as err:
@@ -163,7 +163,7 @@ def get_sls_networks(adminSecret, systemDomain, nets):
 
 def get_vs(service):
 
-    result = None	
+    result = None
     try:
         logging.debug("Getting gateways for service {}.".format(service['name']))
         command_line = ['kubectl', 'get', 'vs', service['name'], '-n', service['namespace'], '-o', 'yaml']
@@ -199,7 +199,7 @@ if __name__ == '__main__':
       logging.critical("{} does not exist.".format(test_defn_file))
       sys.exit(1)
 
-    SYSTEM_DOMAIN = (sys.argv[1]).lower() 
+    SYSTEM_DOMAIN = (sys.argv[1]).lower()
     NODE_TYPE = (sys.argv[2]).lower()
     ADMIN_SECRET = os.environ.get("ADMIN_CLIENT_SECRET", "")
 
@@ -336,27 +336,21 @@ if __name__ == '__main__':
 
           if net['gateway'] not in svcgws:
             svcexp = 404
-          # if the token we have does not match the network we are testing, we expect a 403
-          # CMN tokens will work with NMN and vice versa, because they are using the same gateway in 1.2.
-          elif tokname == "cmn" and netname != tokname and netname != "nmnlb":
-            svcexp = 403
-          elif tokname == "nmnlb" and netname != tokname and netname != "cmn":
-            svcexp = 403
-          elif tokname not in ["cmn","nmnlb"] and tokname != netname:
+          elif tokname != netname:
             svcexp = 403
 
           headers = {
               'Authorization': "Bearer " + mytok
           }
 
-   
+
           try:
               response = requests.request("GET", url, headers=headers, verify = False)
           except Exception as err:
               print("{}".format(err))
               logging.error(f"An unanticipated exception occurred while retrieving {url} {err}")
               break
-    
+
           if response.status_code == svcexp:
               print("PASS - [" + svcname + "]: " + url + " - " + str(response.status_code))
           else:
