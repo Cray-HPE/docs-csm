@@ -33,7 +33,8 @@ shown here with numbered topics.
     1. [Boot installation environment](#2-boot-installation-environment)
     1. [Import CSM tarball](#3-import-csm-tarball)
     1. [Create system configuration](#4-create-system-configuration)
-    1. [Configure management network switches](#5-configure-management-network-switches)
+    1. [Upload RPMs and Docker images to PIT Nexus](#5-upload-rpms-and-docker-images-to-pit-nexus)
+    1. [Configure management network switches](#6-configure-management-network-switches)
         1. [Ensure SNMP is configured on the management network switches](#ensure-snmp-is-configured-on-the-management-network-switches)
         1. [Configure the management network with CANU](#configure-the-management-network-with-canu)
 1. [Installation](#installation)
@@ -86,7 +87,11 @@ See [Import CSM tarball](../pre-installation.md#2-import-csm-tarball).
 
 See [Create system configuration](../pre-installation.md#3-create-system-configuration).
 
-### 5. Configure management network switches
+### 5. Upload RPMs and Docker images to PIT Nexus
+
+See [Upload RPMs and Docker images to PIT Nexus](../pre-installation.md#4-upload-rpms-and-docker-images-to-pit-nexus).
+
+### 6. Configure management network switches
 
 #### Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
