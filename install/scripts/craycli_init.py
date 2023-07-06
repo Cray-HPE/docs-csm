@@ -151,7 +151,7 @@ class CliUserAuth(object):
     def deleteSecret(self):
         # delete the secret if it exists
         sec = None
-        try: 
+        try:
             sec = self._k8sClientApi.read_namespaced_secret(self.CLI_USER_AUTH_SECRET_NAME, "services").data
         except client.exceptions.ApiException:
             LOGGER.info(f"Secret not present - no need to delete")
@@ -166,7 +166,7 @@ class CliUserAuth(object):
     def _getOrCreateUser(self):
         # if the secret already exists, read the username and password
         sec = None
-        try: 
+        try:
             sec = self._k8sClientApi.read_namespaced_secret(self.CLI_USER_AUTH_SECRET_NAME, "services")
             LOGGER.debug(f"Read existing tmp CLI user secret")
         except client.exceptions.ApiException:
@@ -191,7 +191,7 @@ class CliUserAuth(object):
             sec  = client.V1Secret()
             sec.metadata = client.V1ObjectMeta(name=self.CLI_USER_AUTH_SECRET_NAME)
             sec.type = "Opaque"
-            sec.data = {"user": base64.b64encode(newUser.encode('ascii')).decode('ascii'), 
+            sec.data = {"user": base64.b64encode(newUser.encode('ascii')).decode('ascii'),
                         "password": base64.b64encode(newPassword.encode('ascii')).decode('ascii')}
             try:
                 self._k8sClientApi.create_namespaced_secret(namespace="services", body=sec)
@@ -376,7 +376,7 @@ class KeycloakSetup(object):
                 role_id = role["id"]
                 role_name = role["name"]
                 LOGGER.debug(f"  Found: {role_id}:{role_name}")
-        
+
         # make sure we found one
         if role_id == "":
             LOGGER.error(f"Unable to find client role: {roleName} - unable to add role:{clientName}:{roleName}")
@@ -456,7 +456,7 @@ def run_remote_command(host, cmdOpt):
     if rc==0:
         # copy the script file to the remote host
         fileCpCmd = ["scp", THIS_FILE_FULL_PATH, f"{host}:{REMOTE_FILE_NAME}"]
-        cpOut = subprocess.run(fileCpCmd, shell=False, stdout=subprocess.PIPE, 
+        cpOut = subprocess.run(fileCpCmd, shell=False, stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT)
 
         # check for copy failure
@@ -492,7 +492,7 @@ def report_remote_init_results(host, retCode, message):
         remote_init_results[host] = (retCode, message)
 
 # get the access token to use the k8s gateway
-def getToken(k8sClientApi):
+def getToken(k8sClientApi, keycloakUrl):
     # get the secret to request a token for gateway access
     LOGGER.debug(f"Getting k8s gateway access token")
     cs = ""
@@ -505,17 +505,17 @@ def getToken(k8sClientApi):
         raise SystemExit(err)
 
     # construct the http call information
-    keycloak_endpoint = DEFAULT_KEYCLOAK_BASE + "/realms/shasta/protocol/openid-connect/token"
+    keycloak_endpoint = keycloakUrl + "/realms/shasta/protocol/openid-connect/token"
     req_body = {
         'grant_type': 'client_credentials',
         'client_id': 'admin-client',
-        'client_secret': cs 
+        'client_secret': cs
     }
 
     # make the call and parse response
     token = ""
     try:
-        LOGGER.debug(f"Querying Keycloak for access token")
+        LOGGER.debug(f"Querying Keycloak at {keycloak_endpoint} for access token")
         response = requests.post(keycloak_endpoint, data=req_body)
         response.raise_for_status()
         token = response.json()["access_token"]
@@ -535,11 +535,12 @@ def getSlsNodes(k8sClientApi):
 
     LOGGER.debug(f"Finding ncn nodes on the cluster through SLS")
 
-    # mimic the call: 
+    # mimic the call:
     # cray sls hardware list --format json | jq '.[]|select(.ExtraProperties.Role=="Management")|.ExtraProperties.Aliases[0]' | sort
 
     # get the gateway access token
-    token = getToken(k8sClientApi)
+    KeycloakUrl = 'https://' + DEFAULT_HOSTNAME + '/keycloak'
+    token = getToken(k8sClientApi, KeycloakUrl)
 
     # search for the users that match the expected user
     sls_url = f"{DEFAULT_SLS_BASE}/hardware"
@@ -672,7 +673,7 @@ def doIndividualInit(k8sClientApi):
 def checkCrayCli(exitErr):
     # check that the cray CLI works using the below command:
     # cray artifacts buckets list -vvv
-    output = subprocess.run(["cray","artifacts","buckets", "list", "-vvv"], 
+    output = subprocess.run(["cray","artifacts","buckets", "list", "-vvv"],
         stdout=subprocess.PIPE)
     outStr = output.stdout.decode()
     s3Pass = "S3 credentials retrieved successfully" in outStr
@@ -778,21 +779,21 @@ def main():
     # get the command line arguments
     # NOTE: user must specify one of the following
     parser = argparse.ArgumentParser()
-    parser.add_argument("--run", action="store_true", 
+    parser.add_argument("--run", action="store_true",
         help="Run the script to create Keycloak user and initialize craycli on all ncn hosts")
     parser.add_argument("--keycloakHost", nargs='?', default=None,
         help="Set address for keycloak server.")
-    parser.add_argument("--cleanup", action="store_true", 
+    parser.add_argument("--cleanup", action="store_true",
         help="Remove craycli initialization and clean up Keycloak user")
-    parser.add_argument("--initnode", action="store_true", 
+    parser.add_argument("--initnode", action="store_true",
         help="Initialize cray CLI on this host")
-    parser.add_argument("--cleanupnode", action="store_true", 
+    parser.add_argument("--cleanupnode", action="store_true",
         help="Cleanup craycli on this host")
-    parser.add_argument("--debug", action="store_true", 
+    parser.add_argument("--debug", action="store_true",
         help="Display debug level log messages")
-    parser.add_argument('-u', "--username", nargs='?', 
+    parser.add_argument('-u', "--username", nargs='?',
         help='Optional new user for re-init on cleanup')
-    parser.add_argument('-p', "--password", nargs='?', 
+    parser.add_argument('-p', "--password", nargs='?',
         help='Optional password for re-init on cleanup')
     parser.add_argument('-userOnly', action="store_true",
         help='Only create a new user and exit - used with --run')
@@ -815,7 +816,7 @@ def main():
     if args.keycloakHost is not None:
         global DEFAULT_KEYCLOAK_BASE
         DEFAULT_KEYCLOAK_BASE = 'https://' + args.keycloakHost + '/keycloak'
-        
+
     LOGGER.info(f"Keycloak Admin URL: {DEFAULT_KEYCLOAK_BASE}")
 
     # Load K8s configuration
