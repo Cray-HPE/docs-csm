@@ -61,7 +61,7 @@ The following IUF topics are discussed in the sections below.
   those configurations to their specific needs. Note that `sat` capabilities used by IUF rely on BOS V2.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
-- The `management-nodes-rollout` stage currently does not automatically upgrade management storage nodes or `ncn-m001`. These nodes must be upgraded using non-IUF methods described in the IUF documentation.
+- The `management-nodes-rollout` stage does not automatically upgrade `ncn-m001`. This node must be upgraded using non-IUF methods described in the IUF documentation.
 - If the `iuf run` subcommand ends unexpectedly before the Argo workflow it created completes, there is no CLI option to reconnect to the Argo workflow and continue displaying status. It is recommended the administrator
   monitors progress via the Argo workflow UI and/or IUF log files in this scenario.
 - It is currently not possible to add or remove product distribution files to an in progress IUF session without first re-executing the `process-media` stage and then re-executing any other stages required for that product. See
@@ -381,8 +381,10 @@ options:
                         Override list used to target specific nodes only when rolling out managed nodes.  Arguments
                         should be xnames or HSM node groups. Defaults to the Compute role.
   --limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]
-                        Override list used to target specific role_subrole(s) only when rolling out management nodes.
-                        Defaults to the Management_Worker role.
+                        List used to target specific hostnames or HSM management role_subrole only when rolling 
+                        out management nodes. Hostname arguments can only belong to a single node type. For example, 
+                        both master and worker hostnames can not be provided at the same time. Defaults to an empty list
+                        which means no nodes will be rolled out.
   -mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...], --mask-recipe-prods MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]
                         If `--recipe-vars` is specified, mask the versions found within the recipe variables YAML
                         file for the specified products, such that the largest version of the package already installed on
