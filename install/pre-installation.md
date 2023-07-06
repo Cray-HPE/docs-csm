@@ -9,16 +9,16 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [Prepare the data partition](#14-prepare-the-data-partition)
     1. [Set reusable environment variables](#15-set-reusable-environment-variables)
     1. [Exit the console and log in with SSH](#16-exit-the-console-and-log-in-with-ssh)
-1. [Import CSM tarball](#2-import-csm-tarball)
-    1. [Download CSM tarball](#21-download-csm-tarball)
-    1. [Import tarball assets](#22-import-tarball-assets)
+1. [Import CSM tarball](#2-download-and-extract-the-csm-tarball)
 1. [Create system configuration](#3-create-system-configuration)
     1. [Validate SHCD](#31-validate-shcd)
     1. [Generate topology files](#32-generate-topology-files)
-    1. [Customize `system_config.yaml`](#33-customize-system_configyaml)
+    1. [Customize `system_config.yaml`](#33-customize-systemconfigyaml)
     1. [Run CSI](#34-run-csi)
     1. [Prepare Site Init](#35-prepare-site-init)
     1. [Initialize the LiveCD](#36-initialize-the-livecd)
+1. [Import the CSM Tarball](#4-import-the-csm-tarball)
+1. [Validate the LiveCD](#5-validate-the-livecd)
 1. [Next topic](#next-topic)
 
 ## 1. Boot installation environment
@@ -381,9 +381,7 @@ These variables will need to be set for many procedures within the CSM installat
    = PIT Identification = COPY/CUT END =========================================
    ```
 
-## 2. Import CSM tarball
-
-### 2.1 Download CSM tarball
+## 2. Download and extract the CSM Tarball
 
 1. Download and install the latest documentation and scripts RPMs, see [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
@@ -414,11 +412,6 @@ These variables will need to be set for many procedures within the CSM installat
       scp "<external-server>:/<path>/csm-${CSM_RELEASE}.tar.gz" /var/www/ephemeral/
       ```
 
-### 2.2 Import tarball assets
-
-If resuming at this stage, the `CSM_RELEASE` and `PITDATA` variables are already set
-in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) step.
-
 1. (`pit#`) Extract the tarball.
 
    ```bash
@@ -429,32 +422,15 @@ in `/etc/environment` from the [Download CSM tarball](#21-download-csm-tarball) 
 
    > ***NOTE*** `--no-gpg-checks` is used because the repository contained within the tarball does not provide a GPG key.
 
-   1. Update `cray-site-init`.
+   1. Update `cray-site-init` and `pit-init`.
 
-       > ***NOTE*** This provides `csi`, a tool for creating and managing configurations, as well as
-       > orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
-
-       ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-              --no-gpg-checks update -y cray-site-init
-       ```
-
-   1. Install `iuf-cli`.
-
-       > ***NOTE*** This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../operations/iuf/IUF.md).
+       > ***NOTES***
+       > - `cray-site-init` provides `csi`, a tool for creating and managing configurations, as well as
+       >   orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
+       > - `pit-init` provides several scripts in `/root/bin` used for fresh installations.
 
        ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-              --no-gpg-checks install -y iuf-cli
-       ```
-
-   1. Install `csm-testing` RPM.
-
-       > ***NOTE*** This package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
-
-       ```bash
-       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/sle-$(awk -F= '/VERSION=/{gsub(/["-]/, "") ; print tolower($NF)}' /etc/os-release)/" \
-              --no-gpg-checks install -y csm-testing
+       zypper --plus-repo "${CSM_PATH}/rpm/cray/csm/noos" --no-gpg-checks update -y cray-site-init pit-init
        ```
 
 1. (`pit#`) Get the artifact versions.
@@ -690,6 +666,40 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
    cd $HOME && /root/bin/set-sqfs-links.sh
    ```
 
+## 4 Import the CSM Tarball
+
+The following steps require [create system configuration](#3-create-system-configuration) to have completed
+successfully.
+
+1. (`pit#`) Upload the CSM tarball's RPMs and container images to the local Nexus instance.
+
+   ```bash
+   /srv/cray/metal-provision/scripts/nexus/setup-nexus.sh -s
+   ```
+
+1. Add the local Zypper repositories for `noos` and the current SLES distribution.
+
+   > ***NOTE*** The `${releasever_major}` and `${releasever_minor}` variables are interpolated by Zypper, the URI
+   > is intentionally wrapped with single-quotes to prevent the shell from interpolating them. Zypper will replace
+   > these variables with the currently running distributions major and minor version numbers.
+
+   ```bash
+   zypper addrepo --no-gpgcheck --refresh http://packages/repository/csm-noos csm-noos
+   zypper addrepo --no-gpgcheck --refresh 'http://packages/repository/csm-sle-${releasever_major}sp${releasever_minor}' 'csm-sle'
+   ```
+
+1. (`pit#`) Install `csm-testing` RPM.
+
+   > ***NOTES***
+   > - `csm-testing` package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
+   > - This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../operations/iuf/IUF.md).
+
+   ```bash
+   zypper --no-gpg-checks install -y canu craycli csm-testing iuf-cli
+   ```
+
+## 5 Validate the LiveCD
+
 1. (`pit#`) Verify that the LiveCD is ready by running the preflight tests.
 
    ```bash
@@ -709,4 +719,4 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
 After completing this procedure, proceed to configure the management network switches.
 
-See [Configure management network switches](README.md#5-configure-management-network-switches).
+See [Configure management network switches](csm-install/README.md#7-configure-management-network-switches).
