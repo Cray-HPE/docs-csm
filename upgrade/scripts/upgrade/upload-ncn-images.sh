@@ -37,7 +37,7 @@ fi
 
 if [[ -z ${CSM_RELEASE} ]]; then
     echo "CSM_RELEASE_VERSION environment variable needs to be set and exported. It should be set to the \
-version of CSM being patched. For example 'export CSM_RELEASE=\"1.4.1\"'"
+version of CSM being patched. For example 'export CSM_RELEASE_VERSION=\"1.4.1\"'"
     exit 1
 fi
 
