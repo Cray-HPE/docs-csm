@@ -45,7 +45,7 @@ The following IUF topics are discussed in the sections below.
   - [Log files](#log-files)
 - [Site and recipe variables](#site-and-recipe-variables)
 - [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
-  - [ARM Images](#arm-images)
+  - [ARM images](#arm-images)
 - [Recovering from failures](#recovering-from-failures)
   - [Addressing the issue without changing products](#addressing-the-issue-without-changing-products)
   - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
@@ -714,9 +714,9 @@ HPE provides management NCN and managed node `sat bootprep` configuration files 
 CFS configuration, image, and BOS session template definitions. The administrator may customize the files as needed. The files include
 variables, and the values used are provided by the recipe variables and/or site variables files specified when running `iuf run`.
 
-### ARM Images
+### ARM images
 
-`sat bootprep` files support building ARM images on an opt-in basis. There is provided commented out configuration in the `compute-and-uan-bootprep.yaml`.
+`sat bootprep` files support building ARM images on an opt-in basis. A commented configuration is provided in the `compute-and-uan-bootprep.yaml` file.
 
 ```yaml
 # The following images are required only on systems with aarch64 (ARM) nodes.
