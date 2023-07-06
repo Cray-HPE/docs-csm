@@ -68,7 +68,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rolout ${STORAGE_CANARY}
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
         ```
 
     1. (`ncn-m#`) Verify that the storage node booted and is configured correctly. The CFS configuration can be
@@ -89,7 +89,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
         ```bash
-        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rolout ${STORAGE_NODES}
+        iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
         ```
 
 1. Perform the NCN master node upgrade on `ncn-m002` and `ncn-m003`.
