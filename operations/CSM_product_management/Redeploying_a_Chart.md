@@ -126,6 +126,16 @@ If redeploying more than one chart at once, perform the steps in this section fo
               version: 1.12.1
     ```
 
+1. (`ncn-mw#`) Remove chart source fields from the `${BASE_CHART_FILE}` file.
+
+    Remove the `spec.sources` stanza and remove the `source` field from each chart listing.
+
+    > These commands will work even if the stanzas and fields are not present in the file.
+
+    ```bash
+    yq d -i "${BASE_CHART_FILE}" spec.sources && yq d -i "${BASE_CHART_FILE}" spec.charts[\*].source
+    ```
+
 1. (`ncn-mw#`) Update the version numbers in `${BASE_CHART_FILE}` if necessary.
 
     The information in the chart stanza is from the time the chart was deploying during the most recent install or upgrade of the CSM software. However,
