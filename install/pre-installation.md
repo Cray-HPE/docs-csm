@@ -719,4 +719,4 @@ successfully.
 
 After completing this procedure, proceed to configure the management network switches.
 
-See [Configure management network switches](csm-install/README.md#7-configure-management-network-switches).
+See [Configure management network switches](csm-install/README.md#5-configure-management-network-switches).
