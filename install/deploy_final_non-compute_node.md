@@ -165,7 +165,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 
 1. (`pit#`) Collect a backdoor login. Fetch the CMN IP address for `ncn-m002` for a backdoor during the reboot of `ncn-m001`.
 
-    1. (`pit#`) Get the IP address.
+    1. Get the IP address.
 
         ```bash
         ssh ncn-m002 ip -4 a show bond0.cmn0 | grep inet | awk '{print $2}' | cut -d / -f1
@@ -245,7 +245,7 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
 
     ```bash
     PITBackupDateTime=$(date +%Y-%m-%d_%H-%M-%S)
-    tar -czf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/pre-install-toolkit"*.iso &&
+    tar -czvf "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" "${PITDATA}/prep" "${PITDATA}/configs" "${CSM_PATH}/pre-install-toolkit"*.iso &&
     cray artifacts create config-data \
         "PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" \
         "${PITDATA}/PitPrepIsoConfigsBackup-${PITBackupDateTime}.tgz" &&
@@ -328,6 +328,8 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
 
     Restore networking files from the manual backup taken during the
     [Backup](#33-backup) step.
+
+    > **`NOTE`** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
 
     ```bash
     SYSTEM_NAME=eniac
@@ -472,7 +474,14 @@ However, the commands in this section are all run **on** `ncn-m001`.
     Expected output looks similar to the following:
 
     ```text
-    ncn-m002-mgmt ncn-m003-mgmt ncn-s001-mgmt ncn-s002-mgmt ncn-s003-mgmt ncn-w001-mgmt ncn-w002-mgmt ncn-w003-mgmt
+    ncn-m002-mgmt
+    ncn-m003-mgmt
+    ncn-s001-mgmt
+    ncn-s002-mgmt
+    ncn-s003-mgmt
+    ncn-w001-mgmt
+    ncn-w002-mgmt
+    ncn-w003-mgmt
     ```
 
 1. (`ncn-m001#`) Get the DNS server IP address for the HMN.
@@ -511,6 +520,4 @@ However, the commands in this section are all run **on** `ncn-m001`.
 
 ## 7. Next topic
 
-After completing this procedure, the next step is to [Configure Administrative Access](README.md#5-configure-administrative-access).
-
-> **`NOTE`** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
+Return to the previous page and continue to the next step.
