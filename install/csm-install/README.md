@@ -31,9 +31,11 @@ shown here with numbered topics.
 1. [Pre-installation](#pre-installation)
     1. [Preparing for a re-installation](#1-preparing-for-a-re-installation)
     1. [Boot installation environment](#2-boot-installation-environment)
-    1. [Import CSM tarball](#3-import-csm-tarball)
+    1. [Download the CSM tarball](#3-download-the-csm-tarball)
     1. [Create system configuration](#4-create-system-configuration)
-    1. [Configure management network switches](#5-configure-management-network-switches)
+    1. [Import the CSM tarball](#5-import-the-csm-tarball)
+    1. [Validate the LiveCD](#6-validate-the-livecd)
+    1. [Configure management network switches](#7-configure-management-network-switches)
         1. [Ensure SNMP is configured on the management network switches](#ensure-snmp-is-configured-on-the-management-network-switches)
         1. [Configure the management network with CANU](#configure-the-management-network-with-canu)
 1. [Installation](#installation)
@@ -78,15 +80,23 @@ See [Pre-installation](../pre-installation.md).
 
 See [Boot installation environment](../pre-installation.md#1-boot-installation-environment).
 
-### 3. Import CSM tarball
+### 3. Download the CSM tarball
 
-See [Import CSM tarball](../pre-installation.md#2-import-csm-tarball).
+See [Download and extract the CSM tarball](../pre-installation.md#2-download-and-extract-the-csm-tarball).
 
 ### 4. Create system configuration
 
 See [Create system configuration](../pre-installation.md#3-create-system-configuration).
 
-### 5. Configure management network switches
+### 5. Import the CSM tarball
+
+See [Import the CSM tarball](../pre-installation.md#4-import-the-csm-tarball).
+
+### 6. Validate the LiveCD
+
+See [Validate the LiveCD](../pre-installation.md#5-validate-the-livecd).
+
+### 7. Configure management network switches
 
 #### Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
