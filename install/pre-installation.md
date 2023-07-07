@@ -9,7 +9,7 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [Prepare the data partition](#14-prepare-the-data-partition)
     1. [Set reusable environment variables](#15-set-reusable-environment-variables)
     1. [Exit the console and log in with SSH](#16-exit-the-console-and-log-in-with-ssh)
-1. [Import CSM tarball](#2-download-and-extract-the-csm-tarball)
+1. [Download and extract the CSM tarball](#2-download-and-extract-the-csm-tarball)
 1. [Create system configuration](#3-create-system-configuration)
     1. [Validate SHCD](#31-validate-shcd)
     1. [Generate topology files](#32-generate-topology-files)

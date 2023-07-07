@@ -82,7 +82,7 @@ See [Boot installation environment](../pre-installation.md#1-boot-installation-e
 
 ### 3. Download the CSM tarball
 
-See [Import CSM tarball](../pre-installation.md#2-download-and-extract-the-csm-tarball).
+See [Download and extract the CSM tarball](../pre-installation.md#2-download-and-extract-the-csm-tarball).
 
 ### 4. Create system configuration
 
@@ -90,7 +90,7 @@ See [Create system configuration](../pre-installation.md#3-create-system-configu
 
 ### 5. Import the CSM tarball
 
-See [Create system configuration](../pre-installation.md#4-import-the-csm-tarball).
+See [Import the CSM tarball](../pre-installation.md#4-import-the-csm-tarball).
 
 ### 6. Validate the LiveCD
 
