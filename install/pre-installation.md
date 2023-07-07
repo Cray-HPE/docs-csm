@@ -35,7 +35,7 @@ Any steps run on an `external` server require that server to have the following 
 - `ssh`
 - `tar`
 
-> **NOTE:** The CSM tarball will be fetched from the external server in the [Import tarball assets](#22-import-tarball-assets) step using `curl` or `scp`. If a web server is not installed, then `scp` is the backup option.
+> **NOTE:** The CSM tarball will be fetched from the external server in the [download and extract the CSM tarball](#2-download-and-extract-the-csm-tarball) step using `curl` or `scp`. If a web server is not installed, then `scp` is the backup option.
 
 ### 1.1 Prepare installation environment server
 
@@ -45,7 +45,7 @@ Any steps run on an `external` server require that server to have the following 
    >
    > - `-C -` is used to allow partial downloads. These tarballs are large; in the event of a connection disruption, the same `curl` command can be used to continue the disrupted download.
    > - **If air-gapped or behind a strict firewall**, then the tarball must be obtained from the medium delivered by Cray-HPE. For these cases, copy or download the tarball to the working
-   >   directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [Download CSM tarball](#21-download-csm-tarball) step.
+   >   directory and then proceed to the next step. The tarball will need to be fetched with `scp` during the [download and extract the CSM tarball](#2-download-and-extract-the-csm-tarball) step.
 
    1. (`external#`) Set the CSM RELEASE version
 
@@ -425,6 +425,7 @@ These variables will need to be set for many procedures within the CSM installat
    1. Update `cray-site-init` and `pit-init`.
 
        > ***NOTES***
+       >
        > - `cray-site-init` provides `csi`, a tool for creating and managing configurations, as well as
        >   orchestrating the [handoff and deploy of the final non-compute node](deploy_final_non-compute_node.md).
        > - `pit-init` provides several scripts in `/root/bin` used for fresh installations.
@@ -691,6 +692,7 @@ successfully.
 1. (`pit#`) Ensure any new, updated packages pertinent to the CSM install are installed.
 
    > ***NOTES***
+   >
    > - `csm-testing` package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
    > - This provides `iuf`, a command line interface to the [Install and Upgrade Framework](../operations/iuf/IUF.md).
 
