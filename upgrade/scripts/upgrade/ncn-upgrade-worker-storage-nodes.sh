@@ -24,7 +24,7 @@
 #
 
 set -e
-basedir=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+basedir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 . ${basedir}/../common/upgrade-state.sh
 trap 'argo_err_report' ERR
 
@@ -42,33 +42,33 @@ desiredCfsConfig=""
 labels=""
 
 function usage() {
-    echo "CSM ncn worker and storage upgrade script"
-    echo
-    echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run|--upgrade|--rebuild]"
-    echo "options:"
-    echo "--no-retry          Do not automatically retry  (default: false)"
-    echo "-f|--force          Remove failed worker or storage rebuild/upgrade workflow and create a new one  (default: ${force})"
-    echo "--base-url          Specify base url (default: ${baseUrl})"
-    echo "--dry-run           Print out steps of workflow instead of running steps (default: ${dryRun})"
-    echo "--upgrade           Perform a node upgrade. This only needs to be specified when upgrading storage nodes."
-    echo "--image-id          The image-id that a worker node should be booted into when a node is rebuilt. This is optional."
-    echo "--zap-osds          Zap osds. Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt. (This can only be used with storage rebuilds)."
-    echo "--desired-cfs-conf  The desired cfs config worker node should be booted into when a node is rebuilt. This is optional."
-    echo "--reboot-timeout    The timeout on worker reboot. This is optional."
-    echo
-    echo "*COMMA_SEPARATED_NCN_HOSTNAMES"
-    echo "  worker upgrade  - example 1) ncn-w001"
-    echo "  worker upgrade  - example 2) ncn-w001,ncn-w002,ncn-w003 --image-id <image-id>"
-    echo "  storage upgrade - example 3) ncn-s001 --upgrade"
-    echo "  storage upgrade - example 4) ncn-s001,ncn-s002,ncn-s003 --upgrade"
-    echo
+  echo "CSM ncn worker and storage upgrade script"
+  echo
+  echo "Syntax: /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh [COMMA_SEPARATED_NCN_HOSTNAMES] [-f|--force|--retry|--base-url|--dry-run|--upgrade|--rebuild]"
+  echo "options:"
+  echo "--no-retry          Do not automatically retry  (default: false)"
+  echo "-f|--force          Remove failed worker or storage rebuild/upgrade workflow and create a new one  (default: ${force})"
+  echo "--base-url          Specify base url (default: ${baseUrl})"
+  echo "--dry-run           Print out steps of workflow instead of running steps (default: ${dryRun})"
+  echo "--upgrade           Perform a node upgrade. This only needs to be specified when upgrading storage nodes."
+  echo "--image-id          The image-id that a worker node should be booted into when a node is rebuilt. This is optional."
+  echo "--zap-osds          Zap osds. Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt. (This can only be used with storage rebuilds)."
+  echo "--desired-cfs-conf  The desired cfs config worker node should be booted into when a node is rebuilt. This is optional."
+  echo "--reboot-timeout    The timeout on worker reboot. This is optional."
+  echo
+  echo "*COMMA_SEPARATED_NCN_HOSTNAMES"
+  echo "  worker upgrade  - example 1) ncn-w001"
+  echo "  worker upgrade  - example 2) ncn-w001,ncn-w002,ncn-w003 --image-id <image-id>"
+  echo "  storage upgrade - example 3) ncn-s001 --upgrade"
+  echo "  storage upgrade - example 4) ncn-s001,ncn-s002,ncn-s003 --upgrade"
+  echo
 }
 
 # Warn when passing in extra arguments that probably were intended to be comma
 # separated hosts to upgrade, should fix this script to just accept all args
 # after the first however
 function argerr() {
-  printf "Extra arguments %s present after arg parsing, did you intend these to be in the comma separated host list instead?\n\n" "$*">&2
+  printf "Extra arguments %s present after arg parsing, did you intend these to be in the comma separated host list instead?\n\n" "$*" >&2
 }
 
 terminal=false
