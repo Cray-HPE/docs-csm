@@ -54,6 +54,7 @@ function usage() {
     echo "--image-id          The image-id that a worker node should be booted into when a node is rebuilt. This is optional."
     echo "--zap-osds          Zap osds. Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt. (This can only be used with storage rebuilds)."
     echo "--desired-cfs-conf  The desired cfs config worker node should be booted into when a node is rebuilt. This is optional."
+    echo "--reboot-timeout    The timeout on worker reboot. This is optional."
     echo
     echo "*COMMA_SEPARATED_NCN_HOSTNAMES"
     echo "  worker upgrade  - example 1) ncn-w001"
@@ -118,6 +119,10 @@ while [[ $# -gt 0 ]]; do
         zapOsds=true
         shift # past argument
         ;;
+    --reboot-timeout)
+        rebootTimeout="$2"
+        shift # past argument
+        ;;
     ncn-w[0-9][0-9][0-9]*)
         if $terminal; then
           argerr "$@"
@@ -176,6 +181,11 @@ if [[ $nodeType == "storage" ]]; then
     fi
 fi
 
+# set default reboot timeout to 600 if not specified
+if [[ -z $rebootTimeout ]]; then
+    rebootTimeout=600
+fi
+
 # check that cfs config exists if desiredCfsConfig is not empty
 if [[ -n $desiredCfsConfig ]]; then
     cray cfs configurations describe "$desiredCfsConfig" > /dev/null
@@ -212,6 +222,7 @@ function createWorkflowPayload() {
 "hosts": ${jsonArray},
 "switchPassword": "${SW_ADMIN_PASSWORD}",
 "imageId": "${imageId}",
+"bootTimeoutInSeconds": ${rebootTimeout},
 "desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": \"${labels}\""; fi)
 }
 EOF
@@ -226,6 +237,7 @@ EOF
 "zapOsds": ${zapOsds},
 "workflowType": "${workflowType}",
 "imageId": "${imageId}",
+"bootTimeoutInSeconds": ${rebootTimeout},
 "desiredCfsConfig": "${desiredCfsConfig}"$(if [[ -n "${labels}" ]]; then echo ", \"labels\": \"${labels}\""; fi)
 }
 EOF
