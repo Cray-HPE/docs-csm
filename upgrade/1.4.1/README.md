@@ -139,7 +139,7 @@ with IUF. If this step is skipped, IUF will fail when updating or upgrading prod
 Update the `csm-testing` and `goss-servers` RPMs on the NCNs.
 
 ```bash
-pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y csm-testing goss-servers'
+pdsh -b -w $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') 'zypper install -y csm-testing goss-servers craycli'
 ```
 
 ## Verification
