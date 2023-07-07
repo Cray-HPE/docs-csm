@@ -86,6 +86,11 @@ If booted from the PIT node:
 
     ```bash
     sh do_bmc_change_mode_to_manual.sh read
+    ```
+
+    Example output:
+
+    ```text
     ---------------------------------------------------
     [ BMC: 172.30.48.33 ]
     => Manual mode (O)
@@ -116,7 +121,7 @@ If booted from the PIT node:
     sleep 300
     ```
 
-1. (`ncn#`) Add the default login and password to the BMC:
+1. (`ncn#`) Add the default login and password to the BMC.
 
     ```bash
     sh do_bmc_root_account.sh

@@ -16,7 +16,7 @@ new air-cooled `NodeBMCs` and Slingshot switch BMCs (`RouterBMCs`), and SNMP cre
 ## Limitation
 
 The default global credentials used for liquid-cooled BMCs in the [Change Cray EX Liquid-Cooled Cabinet Global Default Password](Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md)
-procedure needs to be the same as the one used in this procedure for air-cooled BMCs river hardware.
+procedure needs to be the same as the one used in this procedure for air-cooled BMCs (River hardware).
 
 ## Procedure
 
