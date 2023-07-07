@@ -13,7 +13,7 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
 1. [Create system configuration](#3-create-system-configuration)
     1. [Validate SHCD](#31-validate-shcd)
     1. [Generate topology files](#32-generate-topology-files)
-    1. [Customize `system_config.yaml`](#33-customize-systemconfigyaml)
+    1. [Customize `system_config.yaml`](#33-customize-system_configyaml)
     1. [Run CSI](#34-run-csi)
     1. [Prepare Site Init](#35-prepare-site-init)
     1. [Initialize the LiveCD](#36-initialize-the-livecd)
