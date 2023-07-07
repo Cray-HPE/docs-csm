@@ -688,7 +688,7 @@ successfully.
    zypper addrepo --no-gpgcheck --refresh 'http://packages/repository/csm-sle-${releasever_major}sp${releasever_minor}' 'csm-sle'
    ```
 
-1. (`pit#`) Install `csm-testing` RPM.
+1. (`pit#`) Ensure any new, updated packages pertinent to the CSM install are installed.
 
    > ***NOTES***
    > - `csm-testing` package provides the necessary tests and their dependencies for validating the pre-installation, installation, and more.
