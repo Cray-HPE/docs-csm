@@ -29,39 +29,44 @@
 # modifying the /etc/containers/registry.conf file on the storage node to point
 # to the nexus registry and then restarting the services.
 
-m002_ip=$(host ncn-m002 | awk '{ print $NF }')
-ssh-keygen -R ncn-m002 -f ~/.ssh/known_hosts > /dev/null 2>&1
-ssh-keygen -R "${m002_ip}" -f ~/.ssh/known_hosts > /dev/null 2>&1
-ssh-keyscan -H "ncn-m002,${m002_ip}" >> ~/.ssh/known_hosts
+set -eux
 
-nexus_username=$(ssh ncn-m002 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.username}} | base64 --decode')
-nexus_password=$(ssh ncn-m002 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode')
-ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+function cleanup_ssh_keys() {
+  m002_ip=$(dig +short ncn-m002)
+  ssh-keygen -R ncn-m002 -f ~/.ssh/known_hosts > /dev/null 2>&1
+  ssh-keygen -R "${m002_ip}" -f ~/.ssh/known_hosts > /dev/null 2>&1
+  ssh-keyscan -H ncn-m002 "${m002_ip}" >> ~/.ssh/known_hosts || true
+
+  nexus_username=$(ssh ncn-m002 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.username}} | base64 --decode')
+  nexus_password=$(ssh ncn-m002 'kubectl get secret -n nexus nexus-admin-credential --template={{.data.password}} | base64 --decode')
+  ssh_options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+}
 
 function oneshot_health_check() {
-  ceph_status=$(ceph health -f json-pretty | jq -r .status)
+  ceph_status=$(ceph health)
   if [[ $ceph_status != "HEALTH_OK" ]]; then
     echo "ERROR: Ceph is not healthy!"
     return 1
   fi
 }
 
+# This should break (then exit) after 60*5 seconds (5 minutes) or slightly longer
 function wait_for_health_ok() {
-  cnt=0
-  cnt2=0
+  local cnt=0
+  local cnt2=0
   while true; do
-    if [[ -n "$node" ]] && [[ "$cnt" -eq 300 ]] ; then
+    if [[ -n "$node" ]] && [[ "$cnt" -eq 55 ]] ; then
       check_mon_daemon "${node}"
     else
-      if [[ "$cnt" -eq 360 ]]; then
+      if [[ "$cnt" -eq 60 ]]; then
         echo "ERROR: Giving up on waiting for Ceph to become healthy..."
         break
       fi
       if [[ $(ceph crash ls-new -f json|jq -r '.|map(.crash_id)|length') -gt 0 ]]; then
         echo "archiving ceph crashes that may have been caused by restarts."
-	ceph crash archive-all
+	      ceph crash archive-all
       fi
-      ceph_status=$(ceph health -f json-pretty | jq -r .status)
+      ceph_status=$(ceph health)
       if [[ $ceph_status == "HEALTH_OK" ]]; then
         echo "Ceph is healthy -- continuing..."
         break
@@ -69,20 +74,23 @@ function wait_for_health_ok() {
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for Ceph to be healthy..."
-    cnt2=$((cnt2+1))
+    ((cnt2++))
     if [[ $cnt2 -ge 10 ]]; then
-      echo "Failing Ceph mgr daemon over to clear any stuck messages and sleeping 20 seconds."
+      echo "Failing Ceph mgr daemon over to clear any stuck messages and sleeping 30 seconds."
       ceph mgr fail
-      sleep 20
+      sleep 30
       cnt2=0
     fi
+    ((cnt++))
   done
 } # end wait_for_health_ok()
 
+
+# This should break (then exit) after 60*5 seconds (5 minutes)
 function wait_for_running_daemons() {
   daemon_type=$1
   num_daemons=$2
-  cnt=0
+  local cnt=0
   while true; do
     if [[ "$cnt" -eq 60 ]]; then
       echo "ERROR: Giving up on waiting for $num_daemons $daemon_type daemons to be running..."
@@ -98,29 +106,31 @@ function wait_for_running_daemons() {
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for $num_daemons running $daemon_type daemons..."
-    cnt=$((cnt+1))
+    ((cnt++))
   done
 }
 
+#This should break (then exit) after 120*5 seconds (10 minutes)
 function wait_for_orch_hosts() {
   for host in $(ceph node ls| jq -r '.osd|keys[]'); do
     echo "Verifying $host is in ceph orch host output..."
-    cnt=0
+    local cnt=0
     until ceph orch host ls -f json-pretty | jq -r '.[].hostname' | grep -q "$host"; do
       echo "Sleeping five seconds to wait for $host to appear in ceph orch host output..."
       sleep 5
-      cnt=$((cnt+1))
+      ((cnt++))
       if [ "$cnt" -eq 120 ]; then
         echo "ERROR: Giving up waiting for $host to appear in ceph orch host output!"
         break
       fi
     done
   done
-}
+} # end wait_for_orch_hosts()
 
+#Should timeout after 5 minutes 60 iterations times 5 seconds
 function wait_for_osd() {
   osd=$1
-  cnt=0
+  local cnt=0
   while true; do
     #
     # We have already slept 2 minutes adopting the OSD, so if it is not
@@ -131,7 +141,8 @@ function wait_for_osd() {
       echo "INFO: Restarting active mgr daemon to kick things along..."
       # shellcheck disable=SC2046
       ceph mgr fail $(ceph mgr dump | jq -r .active_name)
-      cnt=$((cnt+1))
+      ((cnt++))
+      sleep 5
       continue
     fi
     if [[ "$cnt" -eq 60 ]]; then
@@ -148,14 +159,14 @@ function wait_for_osd() {
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for osd.$osd running daemon..."
-    cnt=$((cnt+1))
+    ((cnt++))
   done
 } # end wait_for_osd()
 
 function wait_for_osds() {
   for host in $(ceph node ls| jq -r '.osd|keys[]'); do
     for osd in $(ceph node ls| jq --arg host_key "$host" -r '.osd[$host_key]|values|tostring|ltrimstr("[")|rtrimstr("]")'| sed "s/,/ /g"); do
-      wait_for_osd "$osd"
+      wait_for_osd "$osd" #This is likely to return an error if osd never becomes active which will exit script with set -eux
    done
  done
 }
@@ -166,9 +177,11 @@ function get_ip_from_metadata() {
   echo "$ip"
 }
 
+
+#Should time out after five minutes (60x5)
 function wait_for_mon_stat() {
   node=$1
-  cnt=0
+  local cnt=0
   while true; do
     if [[ "$cnt" -eq 60 ]]; then
       echo "ERROR: Giving up waiting for mon process to start on $node..."
@@ -187,9 +200,9 @@ function wait_for_mon_stat() {
     fi
     sleep 5
     echo "Sleeping for five seconds waiting for mon process to start on $node..."
-    cnt=$((cnt+1))
+    ((cnt++))
   done
-}
+} # end wait_for_mon_stat()
 
 function check_mon_daemon() {
   node=$1
@@ -209,7 +222,7 @@ function check_mon_daemon() {
     echo "Archiving daemon crash info..."
     ceph crash archive-all
   fi
-}
+} # end check_mon_daemon()
 
 function redeploy_monitoring_stack() {
 # restart daemons
@@ -310,7 +323,7 @@ function enter_maintenance_mode() {
     fi
     sleep 10
   done
-}
+} # end of enter_maintenance_mode()
 
 function exit_maintenance_mode() {
   echo "exiting maintenance mode for ${node}"
@@ -331,7 +344,7 @@ function exit_maintenance_mode() {
   else
     echo "Could not exit maintenance mode on $node.  Please check ceph services on $node and ensure they are started."
   fi
-}
+} # end of exit_maintenance_mode()
 
 function disable_local_registries() {
   echo "Disabling local docker registries"
@@ -404,6 +417,9 @@ if ! oneshot_health_check; then
   echo "Ceph is not healthy.  Please check ceph status and try again."
   exit 1
 fi
+
+#Clean up stale ssh keys
+cleanup_ssh_keys
 
 
 # Begin upload of local images into nexus
