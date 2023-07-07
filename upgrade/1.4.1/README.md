@@ -70,7 +70,7 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.1`, follow the procedures descr
    **IMPORTANT**: If necessary, change this command to match the actual location of the extracted files.
 
    ```bash
-   CSM_DISTDIR="$(pwd)/csm-1.4.1"
+   export CSM_DISTDIR="$(pwd)/csm-1.4.1"
    echo "${CSM_DISTDIR}"
    ```
 
