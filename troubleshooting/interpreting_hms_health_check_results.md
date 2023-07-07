@@ -5,6 +5,9 @@
   - [Prerequisites](#prerequisites)
   - [Overview](#overview)
   - [Execution](#execution)
+    - [Test all HMS services](#test-all-hms-services)
+    - [Test specific HMS service](#test-specific-hms-service)
+    - [Example output](#example-output)
   - [Failure analysis](#failure-analysis)
     - [Smoke test failure](#smoke-test-failure)
     - [Functional test failure](#functional-test-failure)
@@ -52,6 +55,33 @@ the proper management or expected use of hardware in the system.
 
 The `run_hms_ct_tests.sh` script executes the HMS CT tests in parallel. It waits for each Helm test job to complete, logs the results in a file for the test run, and
 prints a summary of the results. The script returns a status code of zero if all tests pass and non-zero if there are one or more failures.
+
+These tests may be executed on any one worker or master NCN (but **not** `ncn-m001` if it is still the PIT node).
+
+### Test all HMS services
+
+(`ncn-mw#`) Run the HMS CT tests by executing the following command:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh
+```
+
+### Test specific HMS service
+
+(`ncn-mw#`) After remediating a test failure for a particular service, just the tests for that individual service
+can be re-run by supplying the name of the service to the `run_hms_ct_tests.sh` script with the `-t` option:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -t <service>
+```
+
+(`ncn-mw#`) To list the HMS services that can be tested, use the `-l` option:
+
+```bash
+/opt/cray/csm/scripts/hms_verification/run_hms_ct_tests.sh -l
+```
+
+### Example output
 
 Example output:
 
