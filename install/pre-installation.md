@@ -709,4 +709,4 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 
 After completing this procedure, proceed to configure the management network switches.
 
-See [Configure management network switches](README.md#5-configure-management-network-switches).
+See [Configure management network switches](csm-install/README.md#5-configure-management-network-switches).

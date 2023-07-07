@@ -281,5 +281,5 @@ See [Update the Gigabyte Node BIOS Time](../operations/node_management/Update_th
 After completing the preparation for compute nodes, the CSM product stream
 has been fully installed and configured.
 
-See [Next topic](README.md#10-next-topic) for more information on other product
+See [Next topic](csm-install/README.md#installation-of-additional-hpe-cray-ex-software-products) for more information on other product
 streams to be installed and configured after CSM.
