@@ -25,12 +25,22 @@
 # This is necessary since a new docs-csm version could land before or after a CSM update.
 
 set -e
-
+REGISTRY="registry.local"
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $SCRIPT_DIR
 
 if [[ "$(basename $(pwd))" != "workflows" ]]; then
   echo "This script must be located in the workflows directory to run."
+  exit 1
+fi
+
+if [[ ! $(nslookup $REGISTRY) ]]; then
+  echo "${REGISTRY} does not resolve. Exiting script as success under assumption that docs were installed outside of CSM environment."
+  exit 0
+fi
+
+if [[ ! $(curl -s https://${REGISTRY}) ]]; then
+  echo "${REGISTRY} is not accessible over https. Check that it is accessible before continuing."
   exit 1
 fi
 
@@ -40,8 +50,8 @@ function get_list_of_images_to_update() {
 
 function get_latest_tag_for_image() {
   THIS_IMAGE=$1
-  THIS_PREFIX=$([[ $(echo $THIS_IMAGE | grep -e "^registry.local/") ]] && echo "" || echo "registry.local/")
-  podman search $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '.[0].Tags | last'
+  THIS_PREFIX=$([[ $(echo $THIS_IMAGE | grep -e "^${REGISTRY}/") ]] && echo "" || echo "${REGISTRY}/")
+  podman search $THIS_PREFIX$THIS_IMAGE --list-tags --format=json | jq -r '.[0].Tags | sort_by(.) | last'
 }
 
 function get_filenames_referring_to_image() {
