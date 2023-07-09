@@ -40,7 +40,7 @@ if [[ ! $(nslookup $REGISTRY) ]]; then
 fi
 
 if [[ ! $(curl -s https://${REGISTRY}) ]]; then
-  echo "${REGISTRY} is not accessible over https. Check that it is accessible before continuing."
+  echo "${REGISTRY} is not accessible over https. Check that it is running and accessible before continuing."
   exit 1
 fi
 
