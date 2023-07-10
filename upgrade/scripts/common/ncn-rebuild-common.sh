@@ -320,6 +320,10 @@ TIPS:
 EOF
     # wait for boot
     counter=0
+    if [[ -z $REBOOT_TIMEOUT_IN_SECONDS ]];then
+        REBOOT_TIMEOUT_IN_SECONDS=600
+    fi
+    echo "REBOOT_TIMEOUT_IN_SECONDS=$REBOOT_TIMEOUT_IN_SECONDS"
     printf "%s" "waiting for boot: $target_ncn ..."
     while true
     do
@@ -344,7 +348,7 @@ EOF
 
         printf "%c" "."
         counter=$((counter+1))
-        if [ $counter -gt 300 ]; then
+        if [ $counter -gt $REBOOT_TIMEOUT_IN_SECONDS ]; then
             if [[ ${target_ncn} == ncn-m* ]]; then
                 echo "Boot timeout, power cycle ${target_ncn} from another node via ipmitool"
                 exit 1
@@ -353,7 +357,7 @@ EOF
             ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $target_ncn_mgmt_host chassis power cycle
             echo "Boot timeout, power cycle again"
         fi
-        sleep 2
+        sleep 1
     done
     printf "\n%s\n" "$target_ncn is booted and online"
     
