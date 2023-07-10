@@ -526,6 +526,20 @@ If performing an upgrade of CSM and additional HPE Cray EX software products usi
 return to the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
 procedure. Otherwise, if performing an upgrade of only CSM, proceed to the next step.
 
+## Overwrite default boot timeout
+If you need to adjust default boot timeout (10 minutes), you can add `REBOOT_TIMEOUT_IN_SECONDS` in `/etc/cray/upgrade/csm/myenv`
+
+example:
+```
+export CSM_ARTI_DIR=/etc/cray/upgrade/csm/csm-1.4.1/tarball/csm-1.4.1
+export CSM_RELEASE=1.4.1
+export CSM_REL_NAME=csm-1.4.1
+
+...
+
+REBOOT_TIMEOUT_IN_SECONDS=999
+```
+
 ## Stop typescript
 
 For any typescripts that were started during this stage, stop them with the `exit` command.
