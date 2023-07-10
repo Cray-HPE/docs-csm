@@ -240,6 +240,11 @@ The steps in this section load hand-off data before a later procedure reboots th
 
         ```bash
         pit# efibootmgr -n $(efibootmgr | grep -Ei "ip(v4|4)" | awk '{print $1}' | head -n 1 | tr -d Boot*) | grep -i bootnext
+        ```
+
+        Example output:
+
+        ```text
         BootNext: 0014
         ```
 
@@ -262,7 +267,6 @@ The steps in this section load hand-off data before a later procedure reboots th
 
         ```bash
         external# ssh root@10.102.11.13
-        ncn-m002#
         ```
 
         > Keep this terminal active as it will enable `kubectl` commands during the bring-up of the new NCN.
@@ -367,7 +371,9 @@ The steps in this section load hand-off data before a later procedure reboots th
 
     ```bash
     external# ssh root@10.102.11.13
+    ```
 
+    ```bash
     ncn-m002# pushd /metal/bootstrap/prep/admin
     ncn-m002# script -af csm-verify.$(date +%Y-%m-%d).txt
     ncn-m002# export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
@@ -396,6 +402,8 @@ The steps in this section load hand-off data before a later procedure reboots th
 
     Restore networking files from the manual backup taken during the
     [Backup the bootstrap information](#backup-bootstrap-information) step.
+
+    > **`NOTE`** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
 
     ```bash
     ncn-m001# SYSTEM_NAME=eniac
@@ -633,10 +641,10 @@ However, the commands in this section are all run **on** `ncn-m001`.
     ncn-m002-mgmt ncn-m003-mgmt ncn-s001-mgmt ncn-s002-mgmt ncn-s003-mgmt ncn-w001-mgmt ncn-w002-mgmt ncn-w003-mgmt
     ```
 
-1. (`ncn-m001#`) Get the DNS server IP address for the HMN.
+1. Get the DNS server IP address for the HMN.
 
     ```bash
-    HMN_DNS=$(kubectl get services -n services -o wide | awk /cray-dns-unbound-udp-hmn/'{printf "%s%s", sep, $4; sep=","} END{print ""}'); echo ${HMN_DNS}
+    ncn-m001# HMN_DNS=$(kubectl get services -n services -o wide | awk /cray-dns-unbound-udp-hmn/'{printf "%s%s", sep, $4; sep=","} END{print ""}'); echo ${HMN_DNS}
     ```
 
     Example output for a single DNS server:
