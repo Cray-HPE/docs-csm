@@ -33,12 +33,14 @@
 # the Python script completes, the expanded files from the archive are
 # cleaned up by this shell script, unless --no-cleanup is specified.
 #
-# Usage: import_cfs_data.sh [--no-cleanup] <CFS export file.tgz>
+# Usage: import_cfs_data.sh [--clear-cfs] [--no-cleanup] <CFS export file.tgz>
 #
 ################################################################################
 
 CLEANUP=YES
 OUTPUT_DIR=""
+CLEAR_CFS=""
+ARCHIVE=""
 
 cleanup()
 {
@@ -60,7 +62,7 @@ err_exit()
 
 usage()
 {
-    echo "Usage: import_cfs_data.sh [--no-cleanup] <CFS export file.tgz>"
+    echo "Usage: import_cfs_data.sh [--clear-cfs] [--no-cleanup] <CFS export file.tgz>"
     echo
     err_exit "$@"
 }
@@ -72,14 +74,16 @@ run_cmd()
 
 if [[ $# -eq 0 ]]; then
     usage "Missing required argument"
-elif [[ $# -gt 2 ]]; then
-    usage "Too many arguments"
-elif [[ $# -eq 2 ]]; then
-    [[ $1 == --no-cleanup ]] || usage "Unrecognized argument: $1"
-    CLEANUP=""
-    shift
 fi
-ARCHIVE="$1"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        "--no-cleanup") CLEANUP="" ;;
+        "--clear-cfs")  CLEAR_CFS="$1" ;;
+        *)              [[ $# -eq 1 ]] || usage "Unrecognized argument: $1" ; ARCHIVE="$1" ;;
+    esac
+    shift
+done
 
 [[ ${ARCHIVE} =~ .*\.tgz$ ]] || usage "Invalid archive file name: '${ARCHIVE}'"
 [[ -e ${ARCHIVE} ]] || usage "Archive file does not exist: '${ARCHIVE}'"
@@ -110,7 +114,8 @@ for FNAME in configurations.json options.json ; do
 done
 
 # Call the Python importer script on this directory
-run_cmd "${import_python_script}" "${JSON_DIR}"
+# CLEAR_CFS is deliberately not quoted because if it is empty, we don't want to pass in an empty argument to the Python script
+run_cmd "${import_python_script}" ${CLEAR_CFS} "${JSON_DIR}"
 
 # Call cleanup (which will clean up the output directory unless --no-cleanup was specified)
 cleanup
