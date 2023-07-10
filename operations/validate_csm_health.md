@@ -360,8 +360,8 @@ If it was determined that the mismatch can not be ignored, then proceed onto the
 
 Known issues that may prevent hardware from getting discovered by Hardware State Manager:
 
-- All management network switches including Spine switches, CDU switches, and those with river cabinets, require SNMP to be enabled for discovery to work.
-  For configuring SNMP, see [Configure SNMP](./network/management_network/configure_snmp.md)
+- All management network switches including Spine switches, CDU switches, and those with River cabinets, require SNMP to be enabled for discovery to work.
+  For configuring SNMP, see [Configure SNMP](network/management_network/configure_snmp.md).
 - [HMS Discovery job not creating Redfish Endpoints in Hardware State Manager](../troubleshooting/known_issues/discovery_job_not_creating_redfish_endpoints.md)
 
 ## 3 Software Management Services (SMS) health checks
