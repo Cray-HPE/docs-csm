@@ -527,10 +527,12 @@ return to the [Upgrade CSM and additional products with IUF](../operations/iuf/w
 procedure. Otherwise, if performing an upgrade of only CSM, proceed to the next step.
 
 ## Overwrite default boot timeout
+
 If you need to adjust default boot timeout (10 minutes), you can add `REBOOT_TIMEOUT_IN_SECONDS` in `/etc/cray/upgrade/csm/myenv`
 
 example:
-```
+
+```bash
 export CSM_ARTI_DIR=/etc/cray/upgrade/csm/csm-1.4.1/tarball/csm-1.4.1
 export CSM_RELEASE=1.4.1
 export CSM_REL_NAME=csm-1.4.1
