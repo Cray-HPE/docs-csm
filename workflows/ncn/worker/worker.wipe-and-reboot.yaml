@@ -140,6 +140,11 @@ tasks:
             
             # wait for boot
             counter=0
+            source /etc/cray/upgrade/csm/myenv
+            if [[ -z $REBOOT_TIMEOUT_IN_SECONDS ]];then
+                REBOOT_TIMEOUT_IN_SECONDS=600
+            fi
+            echo "REBOOT_TIMEOUT_IN_SECONDS=$REBOOT_TIMEOUT_IN_SECONDS"
             echo "waiting for boot: $TARGET_NCN ..."
             while true
             do
@@ -162,12 +167,12 @@ tasks:
 
                 echo "waiting for boot: $TARGET_NCN ..."
                 counter=$((counter+1))
-                if [ $counter -gt 300 ]; then
+                if [ $counter -gt $REBOOT_TIMEOUT_IN_SECONDS ]; then
                     counter=0
                     ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power cycle
                     echo "Boot timeout, power cycle again"
                 fi
-                sleep 2
+                sleep 1
             done
   - name: "wait-for-cloud-init"
     dependencies:

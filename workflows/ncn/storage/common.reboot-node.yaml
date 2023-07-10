@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -108,7 +108,12 @@ tasks:
             bootscript_last_epoch="{{ `{{tasks.get-bootscript-last-access-timestamp.outputs.result}}` }}"
             
             # wait for boot
+            source /etc/cray/upgrade/csm/myenv
             counter=0
+            if [[ -z $REBOOT_TIMEOUT_IN_SECONDS ]];then
+                REBOOT_TIMEOUT_IN_SECONDS=600
+            fi
+            echo "REBOOT_TIMEOUT_IN_SECONDS=$REBOOT_TIMEOUT_IN_SECONDS"
             echo "waiting for boot: $TARGET_NCN ..."
             while true
             do
@@ -130,12 +135,12 @@ tasks:
                 fi
                 echo "waiting for boot: $TARGET_NCN ..."
                 counter=$((counter+1))
-                if [ $counter -gt 300 ]; then
+                if [ $counter -gt $REBOOT_TIMEOUT_IN_SECONDS ]; then
                     counter=0
                     ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power cycle
                     echo "Boot timeout, power cycle again"
                 fi
-                sleep 2
+                sleep 1
             done
   - name: "wait-for-cloud-init"
     dependencies:
