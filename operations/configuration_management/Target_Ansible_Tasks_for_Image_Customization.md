@@ -62,6 +62,24 @@ If a default is not provided, any playbooks or roles will not be runnable outsid
 
 CFS automatically sets this variable in the `hosts/01-cfs-generated.yaml` file for all sessions. When the session target is image customization, it sets `cray_cfs_image` to `true`; otherwise, it is `false`.
 
+## Image Management Service (IMS) variable passthrough
+
+IMS provides environment variables during image customization only for the purposes of
+further describing an image environment. This allows users to write their own Ansible tasks that can key off of this
+specific information in order to contextually configure an image correctly, regardless of where the host operating
+system is hosted. This is helpful in a number of scenarios, including when writing Ansible tasks specific to 
+[DKMS](../image_management/Configure_IMS_to_Use_DKMS.md) or for use with multi-architecture specific Ansible tasks.
+
+The full set of variables exposed is provided as an Ansible role alongside the `cfs-config` Git project within version
+control, and will be updated with the full set of variables, and a sample task to output the current read values, in
+the form of an Ansible role contained therein. See [related documentation about version control](Version_Control_Service_VCS.md#cloning-a-vcs-repository)
+for an up-to-date set of variables that IMS exposes during image customization. The `csm.ims-passthrough` role and
+accompanying role documentation for a sample playbook that demonstrates how this can be used.
+
+As IMS is not involved during node personalization, it does not provide these variables. Ansible playbooks that are
+written to target both image customization and node personalization use cases should choose sane defaults, so that the
+correct behavior is selected when the task is run.
+
 ## Image customization limitations
 
 When running Ansible against an IMS-hosted image root during an image customization CFS session, there are no special requirements for the paths when copying or syncing files.

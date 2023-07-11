@@ -1019,6 +1019,13 @@ Admin
 - operations/system_management_health/Configure_Prometheus_Alerta_Alert_Notifications.md
 Alerta
 
+- operations/system_management_health/thanos.md
+gRPC
+spec
+StoreAPIs
+Thanos
+thanos
+
 - RELEASE_NOTES.md
 5.x
 Antero

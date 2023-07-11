@@ -36,6 +36,7 @@ spec:
           - name: dryRun
           - name: imageId
           - name: desiredCfsConfig
+          - name: bootTimeoutInSeconds
       dag:
         tasks:
         - name: "validate-bss-ntp"
@@ -207,12 +208,12 @@ spec:
 
                       echo "waiting for boot: $TARGET_NCN ..."
                       counter=$((counter+1))
-                      if [ $counter -gt 300 ]; then
+                      if [ $counter -gt {{inputs.parameters.bootTimeoutInSeconds}} ]; then
                           counter=0
                           ipmitool -I lanplus -U ${IPMI_USERNAME} -E -H $TARGET_NCN_mgmt_host chassis power cycle
                           echo "Boot timeout, power cycle again"
                       fi
-                      sleep 2
+                      sleep 1
                   done
         - name: "wait-for-cloud-init"
           dependencies:
