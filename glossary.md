@@ -18,6 +18,8 @@ Glossary of terms used in CSM documentation.
 * [Content Projection Service (CPS)](#content-projection-service-cps)
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
 * [Cray CLI (`cray`)](#cray-cli-cray)
+* [Cray Operating System (COS)](#cray-operating-system-cos)
+* [Cray Programming Environment (CPE)](#cray-programming-environment-cpe)
 * [Cray Security Token Service (STS)](#cray-security-token-service-sts)
 * [Cray Site Init (CSI)](#cray-site-init-csi)
 * [Cray System Management (CSM)](#cray-system-management-csm)
@@ -57,6 +59,7 @@ Glossary of terms used in CSM documentation.
 * [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
 * [Rosetta ASIC](#rosetta-asic)
 * [Service/IO Cabinet](#serviceio-cabinet)
+* [Simple Storage Service (S3)](#simple-storage-service-s3)
 * [Slingshot](#slingshot)
 * [Slingshot Blade Switch](#slingshot-blade-switch)
 * [Slingshot Top of Rack (ToR) Switch](#slingshot-top-of-rack-tor-switch)
@@ -223,6 +226,14 @@ replaced by [Power Control Service (PCS)](#power-control-service-pcs).
 
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management
 REST APIs into easily usable commands.
+
+## Cray Operating System (COS)
+
+The Cray Operating System is a Cray product that may be installed on CSM systems.
+
+## Cray Programming Environment (CPE)
+
+The Cray Programming Environment is a Cray product that may be installed on CSM systems.
 
 ## Cray Security Token Service (STS)
 
@@ -515,6 +526,10 @@ that supports higher rates of small messages).
 An Air-Cooled service/IO cabinet houses a cluster of [NCNs](#non-compute-node-ncn), [Slingshot ToR switches](#slingshot-top-of-rack-tor-switch),
 and management network ToR switches to support the managed ecosystem storage,
 network, user access services (UAS), and other IO services such as LNet and gateways.
+
+## Simple Storage Service (S3)
+
+CSM uses S3 to store a variety of data and artifacts.
 
 ## Slingshot
 

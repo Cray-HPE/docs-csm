@@ -1,16 +1,21 @@
 # Component Status
 
-> **`NOTE`** This section is for BOS V2 only.
+> **`NOTE`** This section is for Boot Orchestration Service \(BOS\) v2 only.
 
-For each component, the Boot Orchestration Service \(BOS\) tracks information on what actions are expected to be happening (the `phase`) and what actions have recently happened (the `last_action`).
+For each component, BOS tracks information on what actions are expected to be happening (the `phase`) and what actions have recently happened (the `last_action`).
 This information is then aggregated into an overall `status`.
+
+* [Phases](#phases)
+* [Last actions](#last-actions)
+* [Status](#status)
+* [Status transitions](#status-transitions)
 
 ## Phases
 
 A component's phase is the high level part of the boot process that the component is currently on.
 This value is automatically monitored and set by the `status` operator based on the components desired and current state in BOS, the components power state as reported by HSM, and the component's configuration status as reported by CFS.
 Session status is also aggregated by phase in order to show a high level view of where components are at in the boot process.
-For more on session status see [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md#BOS-V2-session-status).
+For more on session status see [BOS v2 session status](View_the_Status_of_a_BOS_Session.md#bos-v2-session-status).
 
 The possible values for this field are:
 
@@ -31,10 +36,10 @@ The possible values for this field are:
 
     An empty phase indicates that the component is in a stable state and that BOS is not currently taking actions on the component.
 
-## Last Actions
+## Last actions
 
 The `last_action` field stores information on the last action that was taken by BOS for this component. This field is automatically updated by the operators as they take actions.
-For more information on the BOS operators see [BOS](BOS_Services.md#Operators).
+For more information on the BOS operators see [BOS operators](BOS_Services.md#bos-operators).
 
 The possible values for this field are:
 
@@ -138,4 +143,4 @@ However, typically `on_hold` will be the result of a `stable` of `failed` compon
 
 ![Status Transitions](../../img/operations/boot_orchestration/bos_v2_status_transitions.png)
 
-For more information on the BOS operators that act on components to move them from state to state, see [The BOS Operators](BOS_Services.md#The-BOS-operators)
+For more information on the BOS operators that act on components to move them from state to state, see [BOS operators](BOS_Services.md#bos-operators)
