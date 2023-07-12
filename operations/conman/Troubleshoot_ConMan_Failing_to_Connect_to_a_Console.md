@@ -108,20 +108,117 @@ This procedure requires administrative privileges.
         2021/05/20 16:13:25 INFO:      Unable to connect to <x3000c0s15b0> via IPMI for [x3000c0s15b0n0]: SOL in use
         ```
 
-    1. (`ncn#`) Force the connection to become available again.
+    1. (`ncn-mw#`) Force the connection to become available again.
 
         The BMC username and password must be known for this command to work.
 
         > **`NOTE`** `read -s` is used to prevent the password from appearing in the command history.
 
         ```bash
-        USERNAME=root
-        read -r -s -p "BMC ${USERNAME} password: " IPMI_PASSWORD
+        IPMI_USERNAME=root
+        read -r -s -p "BMC ${IPMI_USERNAME} password: " IPMI_PASSWORD
         ```
 
         ```bash
-        export IPMI_PASSWORD
-        ipmitool -H <BMC_XNAME> -U "${USERNAME}" -E -I lanplus sol deactivate
+        export IPMI_PASSWORD='your IMPI Password'
+        ipmitool -H <BMC_XNAME> -U "${USERNAME}" -P "${IPMI_USERNAME}" -E -I lanplus sol deactivate
         ```
 
     1. Retry ConMan to verify that the connection has been reestablished.
+
+1. Insure HPE iLO nodes have IPMI enabled.
+
+    If the node is an HPE iLO node, they sometimes ship with IPMI disabled. If that is the case,
+    the console services will not be able to interact with them. To check the state of the BMC
+    follow the directions in
+    [Enable IPMI access on HPE iLO BMCs](../node_management/Enable_ipmi_access_on_HPE_iLO_BMCs.md)
+
+1. (`ncn-mw#`) Insure River nodes have IPMI enabled.
+
+    If the error `Error activating SOL payload: Invalid data field in request` is seen, check the
+    setting of the `sol payload` on this node.
+
+    ```bash
+    ipmitool -H <BMC_XNAME> -U "${USERNAME}" -P "${IPMI_USERNAME}" -I lanplus sol info 3 | grep Enabled
+    ```
+
+    This will return the `Enabled` status:
+
+    ```text
+    Enabled                         : false
+    ```
+
+    or
+
+    ```text
+    Enabled                         : true
+    ```
+
+    If this is not enabled, then enable it:
+
+    ```bash
+    ipmitool -H <BMC_XNAME> -U "${USERNAME}" -P "${IPMI_USERNAME}" -I lanplus sol set enabled true
+    ```
+
+    Try the connection to the problematic node again.
+
+1. Reset the node information cached in the node pod.
+
+    The password (for air-cooled nodes only) and IP address of the BMC is cached at the time
+    the connection is initially made. Sometimes if this information is changed after a
+    connection has been established, it will continue to use the out of date information and
+    fail to connect. This information can be reset by forcing a restart of the `conmand`
+    process.
+
+    1. (`ncn-mw#`) Exec into the node pod the node is assigned to.
+
+        ```bash
+        kubectl -n services exec -it "${NODE_POD}" -c cray-console-node -- bash
+        ```
+
+        Expected output:
+
+        ```text
+        nobody@cray-console-node-0:/>
+        ```
+
+    1. Find the `conmand` process id.
+
+        ```bash
+        ps -ax | grep conmand
+        ```
+
+        Example output:
+
+        ```text
+           97 ?        Sl    45:36 conmand -F -v -c /etc/conman.conf
+        81501 pts/2    S+     0:00 grep conmand
+        nobody@cray-console-node-0:/>
+        ```
+
+    1. Kill the process for the `conmand -F -v...` process.
+
+        ```bash
+        kill PROCESS_ID
+        ```
+
+    1. Wait for the process to restart.
+
+        ```bash
+        ps -ax | grep conmand
+        ```
+
+        Output when the process has not restarted yet:
+
+        ```text
+          81517 pts/2    S+     0:00 grep conmand
+        ```
+
+        When the `conmand -F -v...` process is present proceed to the next step:
+
+        ```text
+        81518 ?        Sl     0:00 conmand -F -v -c /etc/conman.conf
+        81522 pts/2    S+     0:00 grep conmand
+        ```
+
+    1. Try the connection to the problematic node again.
