@@ -47,6 +47,7 @@ If upgrading from CSM `v1.3.4` directly to `v1.4.1`, follow the procedures descr
 
 1. [Preparation](#preparation)
 1. [Setup Nexus](#setup-nexus)
+1. [Update Argo CRDs](#update-argo-crds)
 1. [Upgrade services](#upgrade-services)
 1. [Upload NCN images](#upload-ncn-images)
 1. [Verification](#verification)
@@ -113,6 +114,19 @@ In the event of an error, consult [Troubleshoot Nexus](../../operations/package_
 to resolve potential problems and then try running `setup-nexus.sh` again. Note that subsequent runs of `setup-nexus.sh` may
 report `FAIL` when uploading duplicate assets. This is okay as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits
 with status code `0`.
+
+## Update Argo CRDs
+
+Run the following script in preparation for 1.4.1 patch upgrade:
+
+```bash
+for c in $(kubectl get crd |grep argo | cut -d' ' -f1)
+do
+   kubectl label --overwrite crd $c app.kubernetes.io/managed-by="Helm"
+   kubectl annotate --overwrite crd $c meta.helm.sh/release-name="cray-nls"
+   kubectl annotate --overwrite crd $c meta.helm.sh/release-namespace="argo"
+done
+```
 
 ## Upgrade services
 
