@@ -11,6 +11,8 @@ Session templates can be created via the API by providing JSON data or via the C
     * [Node list](#node-list)
     * [Node groups](#node-groups)
     * [Node roles groups](#node-roles-groups)
+  * [`rootfs` providers](#rootfs-providers)
+    * [`root` kernel parameter example](#root-kernel-parameter-example)
   * [Overriding configuration (BOS v2 only)](#overriding-configuration-bos-v2-only)
 
 ## Session template structure
@@ -130,6 +132,64 @@ For example:
 See [HSM Roles and Subroles](../hardware_state_manager/HSM_Roles_and_Subroles.md) for more information.
 
 Consult the `cray-hms-base-config` Kubernetes ConfigMap in the `services` namespace for a listing of the available roles and sub-roles on the system.
+
+### `rootfs` providers
+
+The `rootfs` is the root file system.
+
+`rootfs_provider` identifies the mechanism that provides the root file system for the node.
+
+In the case of the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) image, the `rootfs_provider` is HPE’s
+[Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps), which uses HPE’s
+[Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) to deliver the content.
+CPS projects the root file system onto the nodes as a SquashFS image. This is provided via an overlay file system which is set up in dracut.
+
+`rootfs_provider_passthrough` is a string that is passed through to the provider of the `rootfs`. This string can contain additional information that the provider will act upon.
+
+Both the `rootfs_provider` and `rootfs_provider_passthrough` parameters are used to construct the value of the kernel boot parameter `root` that BOS sends to the node.
+
+BOS constructs the kernel boot parameter `root` per the following syntax.
+
+```text
+root=<Protocol>:<Root FS location>:<Etag>:<RootFS-provider-passthrough parameters>
+```
+
+BOS fills in the protocol based on the value provided in `rootfs_provider`. If BOS does not know the `rootfs_provider`, then it omits the protocol field.
+Currently, BOS only recognizes the `rootfs_provider` `cpss3`.
+BOS finds the `rootfs_provider` and `Etag` values in the manifest file in the session template in the boot set.
+The `rootfs_provider_passthrough` parameters are appended to the `root` parameter without modification. They are "passed through", as the name implies.
+
+#### `root` kernel parameter example
+
+```text
+root=craycps-s3:s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs:f040d70bd6fabaf91838fe4e484563cf-211:dvs:api-gw-service-nmn.local:300:nmn0
+```
+
+The following table explains the different pieces in the preceding example.
+
+|Field|Example Value|Explanation|
+|-----|-------------|-----------|
+|Protocol|`craycps-s3`|The protocol used to mount the root file system, using CPS in this example.|
+|`rootfs_provider` location|`s3://boot-images/b9caaf66-c0b4-4231-aba7-a45f6282b21d/rootfs`|The `rootfs_provider` location is a SquashFS image stored in S3.|
+|`Etag`|`f040d70bd6fabaf91838fe4e484563cf-211`|The `Etag` (entity tag) is the identifier of the SquashFS image in S3.|
+|`rootfs_provider` passthrough parameters|`dvs:api-gw-service-nmn.local:300:nmn0`|These are additional parameters passed through to CPS in this example, which it uses to properly mount the file system.|
+
+The `rootfs_provider_passthrough` parameters are explained in the following table.
+
+|Parameter|Example|Explanation|
+|---|---|---|
+|Transport|`dvs`|Use DVS to project the SquashFS image down to the node.|
+|Gateway|`api-gw-service-nmn.local`|This is the URL that identifies the gateway where the DVS servers are located.|
+|Time-out|`300`|The number of seconds to wait to establish a contact.|
+|Interface|`nmn0`|The IP interface on the node to use to contact the DVS server; This interface must be up to continue booting.|
+
+Regarding the interface to use for contacting DVS, the possible values are:
+
+* `nmn0` -- Ensures that the `nmn0` interface is up
+* `nmn0,hsn0` -- Ensures that both the `nmn0` and `hsn0` interfaces are up. This is required for booting over the [High Speed Network (HSN)](../../glossary.md#high-speed-network-hsn).
+* `hsn0` -- Ensures that the `hsn0` interface is up.
+
+The DVS configuration files determine which interface to use (NMN or HSN). However, the CPS `dracut` ensures the that requested interfaces are up.
 
 ### Overriding configuration (BOS v2 only)
 
