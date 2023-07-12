@@ -1,8 +1,12 @@
 # BOS Options
 
-> **`NOTE`** This section is for BOS V2 only.
+> **`NOTE`** This section is for Boot Orchestration Service \(BOS\) v2 only.
 
-The Boot Orchestration Service \(BOS\) provides a global service options endpoint for modifying the base configuration of the service itself.  These options are available only for the BOS v2 API and only affect v2 functionality.
+BOS provides a global service options endpoint for modifying the base configuration of the service itself. These options are available only for the BOS v2 API and only affect v2 functionality.
+
+* [Viewing the current option values](#viewing-the-current-option-values)
+* [Updating the option values](#updating-the-option-values)
+* [BOS options details](#bos-options-details)
 
 ## Viewing the current option values
 
@@ -71,7 +75,7 @@ The following are the BOS global options:
 
 * `logging_level`
 
-    The logging level for all BOS services.  Valid values for this option are `DEBUG`, `INFO`, and `WARN`.
+    The logging level for all BOS services. Valid values for this option are `DEBUG`, `INFO`, and `WARN`.
 
 * `max_boot_wait_time`
 
