@@ -1,23 +1,27 @@
 # Clean Up Logs After a BOA Kubernetes Job
 
-Delete log entries from previous boot orchestration jobs. The Boot Orchestration Service \(BOS\) launches a Boot Orchestration Agent \(BOA\) Kubernetes job. BOA then launches a Configuration Framework Service \(CFS\) session, resulting in a CFS-BOA Kubernetes job. Thus, there are two separate sets of jobs that can be removed.
+Delete log entries from previous boot orchestration jobs. The Boot Orchestration Service \(BOS\) launches a
+Boot Orchestration Agent \(BOA\) Kubernetes job.
+BOA then launches a [Configuration Framework Service \(CFS\)](../../glossary.md#configuration-framework-service-cfs) session,
+resulting in a CFS-BOA Kubernetes job. Thus, there are two separate sets of jobs that can be removed.
 
 Deleting log entries creates more space and helps improve the usability of viewing logs.
 
+## Prerequisites
 
-### Prerequisites
+- A BOS session has finished.
 
--   A Boot Orchestration Service \(BOS\) session has finished.
+## Procedure
 
-
-### Procedure
-
-1.  View the existing list of jobs.
-
-    The following command will list the BOA jobs.
+1. List the current BOA jobs.
 
     ```bash
-    ncn-m001# kubectl get jobs -n services | grep boa
+    ncn-mw# kubectl get jobs -n services | grep boa
+    ```
+
+    Example output:
+
+    ```text
     boa-2c2211aa-9876-4aa7-92e2-c8a64d9bd9a6                    1/1           6m58s      13d
     boa-51918dbd-bde2-4836-9500-2a7bad93787c                    1/1           65s        9d
     boa-6fc198cc-486b-4340-81e0-f17c199a1ec6                    1/1           97s        9d
@@ -27,10 +31,10 @@ Deleting log entries creates more space and helps improve the usability of viewi
     boa-e9adfa63-24dc-4da6-b870-b3535adf0bcc                    1/1           7m53s      13d
     ```
 
-2.  Delete any jobs that are no longer needed.
+1. Delete any jobs that are no longer needed.
 
     Do not delete any jobs that are currently running.
 
     ```bash
-    ncn-m001# kubectl delete jobs BOA_JOB_ID
+    ncn-mw# kubectl delete jobs BOA_JOB_ID
     ```
