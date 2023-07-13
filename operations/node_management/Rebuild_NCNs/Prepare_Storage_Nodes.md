@@ -2,83 +2,81 @@
 
 Prepare a storage node before rebuilding it.
 
-**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed. For example, if this is a rebuild in place, then Ceph components will not be reporting down, in contrast to a failed node rebuild.
+**IMPORTANT:** All of the output examples may not reflect the cluster status where this operation is being performed.
+For example, if this is a rebuild in place, then Ceph components will not be reporting down, in contrast to a failed node rebuild.
+
+* [Prerequisites](#prerequisites)
+* [Procedure](#procedure)
+* [Next step](#next-step)
 
 ## Prerequisites
 
-If rebuilding `ncn-s001`, it is critical that the `storage-ceph-cloudinit.sh` has been removed from the `runcmd` in BSS.
+1. Ensure that the latest CSM documentation RPM is installed on `ncn-m001`.
 
-1. Get the component name (xname) for `ncn-s001`.
+    See [Check for Latest Documentation](../../../update_product_stream/index.md#check-for-latest-documentation).
 
-   ```bash
-   linux# ssh ncn-s001 cat /etc/cray/xname
-   ```
+1. When rebuilding a node, make sure that `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` and `/srv/cray/scripts/common/pre-load-images.sh` have been removed from the `runcmd` in BSS.
 
-2. Check the `bss bootparameters` for `ncn-s001`.
+    1. Set node name and xname if not already set.
 
-   ```bash
-   ncn# cray bss bootparameters list --name x3000c0s7b0n0 --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
-   ```
+        ```bash
+        ncn-m001# NODE=ncn-s00n
+        ncn-m001# XNAME=$(ssh $NODE cat /etc/cray/xname)
+        ```
 
-   Expected Output:
+    1. Get the `runcmd` in BSS.
 
-   ```json
-   [
-   "/srv/cray/scripts/metal/install-bootloader.sh",
-   "/srv/cray/scripts/metal/set-host-records.sh",
-   "/srv/cray/scripts/metal/set-dhcp-to-static.sh",
-   "/srv/cray/scripts/metal/set-dns-config.sh",
-   "/srv/cray/scripts/metal/set-ntp-config.sh",
-   "/srv/cray/scripts/metal/enable-lldp.sh",
-   "/srv/cray/scripts/metal/set-bmc-bbs.sh",
-   "/srv/cray/scripts/metal/set-efi-bbs.sh",
-   "/srv/cray/scripts/metal/disable-cloud-init.sh",
-   "/srv/cray/scripts/common/update_ca_certs.py",
-   "/srv/cray/scripts/metal/install-rpms.sh",
-   "/srv/cray/scripts/common/pre-load-images.sh",
-   "/srv/cray/scripts/common/ceph-enable-services.sh"
-   ]
-   ```
+        ```bash
+        ncn-m001# cray bss bootparameters list --name ${XNAME} --format=json|jq -r '.[]|.["cloud-init"]|.["user-data"].runcmd'
+        ```
 
-   If it is there then it will need to be fixed by running:
+        Expected output:
 
-   **IMPORTANT:** The below Python script is provided by the `docs-csm` RPM. To install the latest version of it, see [Check for Latest Documentation](../../../update_product_stream/index.md#documentation).
+        ```json
+        [
+        "/srv/cray/scripts/metal/net-init.sh",
+        "/srv/cray/scripts/common/update_ca_certs.py",
+        "/srv/cray/scripts/metal/install.sh",
+        "/srv/cray/scripts/common/ceph-enable-services.sh",
+        "touch /etc/cloud/cloud-init.disabled"
+        ]
+        ```
 
-   A token will need to be generated and made available as an environment variable. Refer to the [Retrieve an Authentication Token](../../security_and_authentication/Retrieve_an_Authentication_Token.md) procedure for more information.
+        If `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` or `/srv/cray/scripts/common/pre-load-images.sh` is in the `runcmd`, then it will need to be fixed using
+        the following procedure:
 
-   ```bash
-   ncn# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
-   ```
+        1. Obtain an API authentication token.
+
+            A token will need to be generated and made available as an environment variable.
+            Refer to the [Retrieve an Authentication Token](../../security_and_authentication/Retrieve_an_Authentication_Token.md) procedure for more information.
+
+        1. Run the following command to patch BSS.
+
+            ```bash
+            ncn-m001# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
+            ```
+
+        1. Repeat the original Cray CLI command and verify that the expected output is obtained.
 
 ## Procedure
 
-Check the status of Ceph.
+Upload Ceph container images into Nexus.
 
-1. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
+1. Log into one of the first three storage NCNs.
 
-    On the node being rebuilt run:
+    This procedure must be performed on a `ceph-mon`node. By default these will be
+    any of the first three storage NCNs: `ncn-s001`, `ncn-s002`, or `ncn-s003`
+
+1. Copy `upload_ceph_images_to_nexus.sh` from `ncn-m001` and execute it.
 
     ```bash
-    ncn-s# for service in $(cephadm ls |jq -r '.[].systemd_unit'); do systemctl stop $service; systemctl disable $service; done
+    ncn-s# scp ncn-m001:/usr/share/doc/csm/scripts/upload_ceph_images_to_nexus.sh /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh && \
+           /srv/cray/scripts/common/upload_ceph_images_to_nexus.sh
     ```
 
-    Example output:
+1. Check the status of Ceph.
 
-    ```screen
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.39.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mgr.ncn-s003.tjuyhj.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mon.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.41.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.36.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.37.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@mds.cephfs.ncn-s003.jcnovs.    service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.40.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@crash.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@node-exporter.ncn-s003.service.
-    Removed /etc/systemd/system/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14.target.    wants/ceph-184b8c56-172d-11ec-aa96-a4bf0138ee14@osd.38.service.
-    ```
-
-1. Check the OSD status, weight, and location:
+    Check the OSD status, weight, and location:
 
     ```bash
     ncn-s# ceph osd tree
@@ -87,28 +85,94 @@ Check the status of Ceph.
     Example output:
 
     ```text
-    ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
-    -1       20.95917 root default
-    -3        6.98639     host ncn-s001
-     2   ssd  1.74660         osd.2         up  1.00000 1.00000
-     5   ssd  1.74660         osd.5         up  1.00000 1.00000
-     8   ssd  1.74660         osd.8         up  1.00000 1.00000
-    11   ssd  1.74660         osd.11        up  1.00000 1.00000
-    -7        6.98639     host ncn-s002
-     0   ssd  1.74660         osd.0         up  1.00000 1.00000
-     4   ssd  1.74660         osd.4         up  1.00000 1.00000
-     7   ssd  1.74660         osd.7         up  1.00000 1.00000
-    10   ssd  1.74660         osd.10        up  1.00000 1.00000
-    -5        6.98639     host ncn-s003
-     1   ssd  1.74660         osd.1       down        0 1.00000
-     3   ssd  1.74660         osd.3       down        0 1.00000
-     6   ssd  1.74660         osd.6       down        0 1.00000
-     9   ssd  1.74660         osd.9       down        0 1.00000
+    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+    -1         62.87558  root default
+    -5         20.95853      host ncn-s001
+    2    ssd   3.49309          osd.2          up   1.00000  1.00000
+    5    ssd   3.49309          osd.5          up   1.00000  1.00000
+    6    ssd   3.49309          osd.6          up   1.00000  1.00000
+    9    ssd   3.49309          osd.9          up   1.00000  1.00000
+    12   ssd   3.49309          osd.12         up   1.00000  1.00000
+    16   ssd   3.49309          osd.16         up   1.00000  1.00000
+    -3         20.95853      host ncn-s002
+    0    ssd   3.49309          osd.0          up   1.00000  1.00000
+    3    ssd   3.49309          osd.3          up   1.00000  1.00000
+    7    ssd   3.49309          osd.7          up   1.00000  1.00000
+    10   ssd   3.49309          osd.10         up   1.00000  1.00000
+    13   ssd   3.49309          osd.13         up   1.00000  1.00000
+    15   ssd   3.49309          osd.15         up   1.00000  1.00000
+    -7         20.95853      host ncn-s003
+    1    ssd   3.49309          osd.1          up   1.00000  1.00000
+    4    ssd   3.49309          osd.4          up   1.00000  1.00000
+    8    ssd   3.49309          osd.8          up   1.00000  1.00000
+    11   ssd   3.49309          osd.11         up   1.00000  1.00000
+    14   ssd   3.49309          osd.14         up   1.00000  1.00000
+    17   ssd   3.49309          osd.17         up   1.00000  1.00000
+    ```
+
+1. If the node is up, then stop and disable all the Ceph services on the node being rebuilt.
+
+    ```bash
+    ncn-s# ceph orch maintenance enter <storage node hostname being rebuilt>
+    ```
+
+    Example output:
+
+    ```screen
+    Daemons for Ceph cluster 5f79a490-c281-11ed-b6ec-fa163e741e89 stopped on host ncn-s003. Host ncn-s003 moved to maintenance mode
+    ```
+
+    **IMPORTANT**: The --force flag is used to bypass warnings. These pertain to Ceph services which can handle failures, like `rgw`.  
+    * ***IF*** the command returns any lines with an **ALERT** status then please follow the output to remedy.  
+      * Typically this will be something like the active MGR process is on that node and it must be failed over first.
+
+    Example:
+
+    ```screen
+    WARNING: Stopping 1 out of 1 daemons in Alertmanager service. Service will not be operational with no daemons left. At least 1 daemon must be running to guarantee service.
+    ALERT: Cannot stop active Mgr daemon, Please switch active Mgrs with 'ceph mgr fail ncn-s003.ydycwn'
+    WARNING: Removing RGW daemons can cause clients to lose connectivity.
+    ```
+
+    In this example, the warnings for RGW and Alertmanager would be ignored by passing the `--force` flag. The alert for active `Mgr` will need to be addressed with the provided command (`ceph mgr fail ncn-s003.ydycwn`).
+
+1. Re-check the OSD status, weight, and location:
+
+    ```bash
+    ncn-s# ceph osd tree
+    ```
+
+    Example output:
+
+    ```text
+    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+    -1         62.87558  root default
+    -5         20.95853      host ncn-s001
+    2    ssd   3.49309          osd.2          up   1.00000  1.00000
+    5    ssd   3.49309          osd.5          up   1.00000  1.00000
+    6    ssd   3.49309          osd.6          up   1.00000  1.00000
+    9    ssd   3.49309          osd.9          up   1.00000  1.00000
+    12   ssd   3.49309          osd.12         up   1.00000  1.00000
+    16   ssd   3.49309          osd.16         up   1.00000  1.00000
+    -3         20.95853      host ncn-s002
+    0    ssd   3.49309          osd.0          up   1.00000  1.00000
+    3    ssd   3.49309          osd.3          up   1.00000  1.00000
+    7    ssd   3.49309          osd.7          up   1.00000  1.00000
+    10   ssd   3.49309          osd.10         up   1.00000  1.00000
+    13   ssd   3.49309          osd.13         up   1.00000  1.00000
+    15   ssd   3.49309          osd.15         up   1.00000  1.00000
+    -7         20.95853      host ncn-s003
+    1    ssd   3.49309          osd.1        down   1.00000  1.00000
+    4    ssd   3.49309          osd.4        down   1.00000  1.00000
+    8    ssd   3.49309          osd.8        down   1.00000  1.00000
+    11   ssd   3.49309          osd.11       down   1.00000  1.00000
+    14   ssd   3.49309          osd.14       down   1.00000  1.00000
+    17   ssd   3.49309          osd.17       down   1.00000  1.00000
     ```
 
 1. Check the status of the Ceph cluster:
 
-    ```screen
+    ```bash
     ncn-s# ceph -s
     ```
 
@@ -116,82 +180,87 @@ Check the status of Ceph.
 
     ```text
       cluster:
-        id:     184b8c56-172d-11ec-aa96-a4bf0138ee14
+        id:     4c9e9d74-a208-11ed-b008-98039bb427f6
         health: HEALTH_WARN
+                1 host is in maintenance mode           <-------- Expect this line.
                 1/3 mons down, quorum ncn-s001,ncn-s002
                 6 osds down
                 1 host (6 osds) down
-                Degraded data redundancy: 21624/131171 objects degraded (16.485%),     522 pgs degraded, 763 pgs undersized
+                Degraded data redundancy: 34257/102773 objects degraded (33.333%), 370 pgs degraded, 352 pgs undersized
 
       services:
-        mon: 3 daemons, quorum ncn-s001,ncn-s002 (age 3m), out of quorum: ncn-s003
-        mgr: ncn-s001.afiqwl(active, since 14h), standbys: ncn-s002.nafbdr
-        mds: cephfs:1 {0=cephfs.ncn-s001.nzsgxr=up:active} 1 up:standby-replay
-        osd: 36 osds: 30 up (since 3m), 36 in (since 14h)
-        rgw: 3 daemons active (site1.zone1.ncn-s002.tipbuf, site1.zone1.ncn-s004.    uvzcms, site1.zone1.ncn-s005.twisxx)
-
-      task status:
+        mon: 3 daemons, quorum ncn-s001,ncn-s002 (age 56s), out of quorum: ncn-s003
+        mgr: ncn-s002.amfitm(active, since 43m), standbys: ncn-s001.rytusj
+        mds: 1/1 daemons up, 1 hot standby
+        osd: 18 osds: 12 up (since 55s), 18 in (since 13h)
+        rgw: 2 daemons active (2 hosts, 1 zones)
 
       data:
-        pools:   12 pools, 1641 pgs
-        objects: 43.72k objects, 81 GiB
-        usage:   228 GiB used, 63 TiB / 63 TiB avail
-        pgs:     21624/131171 objects degraded (16.485%)
-                 878 active+clean
-                 522 active+undersized+degraded
-                 241 active+undersized
+        volumes: 1/1 healthy
+        pools:   13 pools, 553 pgs
+        objects: 34.26k objects, 58 GiB
+        usage:   173 GiB used, 63 TiB / 63 TiB avail
+        pgs:     34257/102773 objects degraded (33.333%)
+                370 active+undersized+degraded
+                159 active+undersized
+                24  active+clean
 
       io:
-        client:   6.2 KiB/s rd, 280 KiB/s wr, 2 op/s rd, 49 op/s wr
+        client:   8.7 KiB/s rd, 353 KiB/s wr, 3 op/s rd, 53 op/s wr
     ```
 
-1. Remove Ceph OSDs.
+1. List down Ceph OSDs.
+
+    **IMPORTANT:** Before proceeding, ensure that this rebuild requires OSD wipes. Storage node rebuilds that are done on an active node do not require the OSD removal. Some examples are rebuilds to get some a custom patched image.
 
     The `ceph osd tree` capture indicated that there are down OSDs on `ncn-s003`.
 
-     ```screen
-     ncn-s# ceph osd tree down
-     ```
+    ```bash
+    ncn-s# ceph osd tree down
+    ```
 
-     Example output:
+    Example output:
 
-     ```text
-     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
-     -1         62.87750  root default
-     -9         10.47958      host ncn-s003
-     36    ssd   1.74660          osd.36       down   1.00000  1.00000
-     37    ssd   1.74660          osd.37       down   1.00000  1.00000
-     38    ssd   1.74660          osd.38       down   1.00000  1.00000
-     39    ssd   1.74660          osd.39       down   1.00000  1.00000
-     40    ssd   1.74660          osd.40       down   1.00000  1.00000
-     41    ssd   1.74660          osd.41       down   1.00000  1.00000
-     ```
+    ```text
+    ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
+    -1         62.87758  root default
+    -7         20.95853      host ncn-s003
+     1    ssd   3.49309          osd.1        down   1.00000  1.00000
+     4    ssd   3.49309          osd.4        down   1.00000  1.00000
+     8    ssd   3.49309          osd.8        down   1.00000  1.00000
+     11   ssd   3.49309          osd.11       down   1.00000  1.00000
+     14   ssd   3.49309          osd.14       down   1.00000  1.00000
+     17   ssd   3.49309          osd.17       down   1.00000  1.00000
+    ```
 
-    1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
-       By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
-       This will result in OSDs that no longer exist appearing to be down.
+1. Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
+  
+    By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
+    This will result in OSDs that no longer exist appearing to be down.
 
-        The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) are set.
+    The following command assumes the variables from [the prerequisites section](Rebuild_NCNs.md#prerequisites) are set.
 
-        This must be run from a `ceph-mon` node (ncn-s00[1/2/3])
+    ```bash
+    ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
+    ```
 
-        ```bash
-        ncn-s# for osd in $(ceph osd ls-tree $NODE); do ceph osd destroy osd.$osd --force; ceph osd purge osd.$osd --force; done
-        ```
+    Example output:
 
-        Example Output:
+    ```text
+    destroyed osd.1
+    purged osd.1
+    destroyed osd.4
+    purged osd.4
+    destroyed osd.6
+    purged osd.6
+    destroyed osd.11
+    purged osd.11
+    destroyed osd.14
+    purged osd.14
+    destroyed osd.17
+    purged osd.17
+    ```
 
-        ```screen
-        destroyed osd.1
-        purged osd.1
-        destroyed osd.3
-        purged osd.3
-        destroyed osd.6
-        purged osd.6
-        destroyed osd.9
-        purged osd.9
-        ```
+## Next step
 
-## Next Step
-
-Proceed to the next step to [Identify Nodes and Update Metadata](Identify_Nodes_and_Update_Metadata.md) or return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
+Proceed to [Identify Nodes and Update Metadata](Identify_Nodes_and_Update_Metadata.md) or return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.
