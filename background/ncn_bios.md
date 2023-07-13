@@ -1,11 +1,11 @@
-# Non-Compute Node BIOS
+# NCN BIOS
 
-This page specifies the BIOS settings that are desirable for non-compute nodes.
+This page specifies the BIOS settings that are desirable for non-compute nodes (NCNs).
 
 > **`NOTES`**
 >
 > - Any tunables on this page are in the interest of performance and stability. If either of those facets seem to be infringed by any of the content on this page, then contact HPE Cray for support.
-> - The table below declares desired settings; unlisted settings should remain at vendor-default. This table may be expanded as new settings are adjusted.
+> - The table below declares desired settings; unlisted settings should remain at vendor default. This table may be expanded as new settings are adjusted.
 > - **PCIe** options can be found in [PCIe : Setting Expected Values](../operations/node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md#setting-expected-values).
 
 | Common Name | Common Value | Description | Value Rationale |

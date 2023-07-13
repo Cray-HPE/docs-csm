@@ -6,18 +6,18 @@ After the upgrade of CSM software, the CSM health checks will validate the syste
 tasks like the check and update of firmware on system components. Once the CSM upgrade has completed, other
 product streams for the HPE Cray EX system can be installed or upgraded.
 
-- [Known Issues](#known-issues)
+- [Known issues](#known-issues)
 - [1. Prepare for upgrade](#1-prepare-for-upgrade)
 - [2. Upgrade management nodes and CSM services](#2-upgrade-management-nodes-and-csm-services)
 - [3. Validate CSM health](#3-validate-csm-health)
 - [4. Apply security hardening](#4-apply-security-hardening)
-- [5. Check and Update Firmware](#5-check-and-update-firmware)
+- [5. Check and update firmware](#5-check-and-update-firmware)
 - [6. Next topic](#6-next-topic)
 
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
 
-## Known Issues
+## Known issues
 
 - The boot order on NCNs may not be correctly set. Because of a bug, the disk entries may be listed ahead of the PXE entries. During the upgrade, a workaround is applied to fix this.
 
@@ -99,7 +99,7 @@ Review the security hardening guide, apply non-optional procedures, and review o
 
 See [Security Hardening](../operations/CSM_product_management/Apply_Security_Hardening.md).
 
-## 5. Check and Update Firmware
+## 5. Check and update firmware
 
 Check and update firmware if not already at the correct versions.
 Make sure the latest version of the HPE Cray EX HPC Firmware Pack (HFP) has been installed.

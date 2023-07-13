@@ -19,20 +19,19 @@ documentation for detailed information about API options and features.
 The `cray capmc` command (see `--help`) can be used to control power to
 specific components by specifying the component NID, component name (xname), or group.
 
-- [Cray Advanced Platform Monitoring and Control (CAPMC)](#cray-advanced-platform-monitoring-and-control-capmc)
-  - [Power control and query by xname](#power-control-and-query-by-xname)
-    - [Controllable components](#controllable-components)
-      - [Air-cooled cabinets](#air-cooled-cabinets)
-      - [Liquid-cooled cabinets](#liquid-cooled-cabinets)
-      - [Naming convention](#naming-convention)
-        - [Examples of valid xnames](#examples-of-valid-xnames)
-    - [Power capping](#power-capping)
-  - [Deprecated interfaces](#deprecated-interfaces)
-    - [Power control and query by NID](#power-control-and-query-by-nid)
-    - [Power control and query by group](#power-control-and-query-by-group)
-  - [Node energy](#node-energy)
-    - [System monitor](#system-monitor)
-    - [Others](#others)
+- [Power control and query by xname](#power-control-and-query-by-xname)
+  - [Controllable components](#controllable-components)
+    - [Air-cooled cabinets](#air-cooled-cabinets)
+    - [Liquid-cooled cabinets](#liquid-cooled-cabinets)
+    - [Naming convention](#naming-convention)
+      - [Examples of valid xnames](#examples-of-valid-xnames)
+  - [Power capping](#power-capping)
+- [Deprecated interfaces](#deprecated-interfaces)
+  - [Power control and query by NID](#power-control-and-query-by-nid)
+  - [Power control and query by group](#power-control-and-query-by-group)
+- [Node energy](#node-energy)
+  - [System monitor](#system-monitor)
+  - [Others](#others)
 
 ## Power control and query by xname
 

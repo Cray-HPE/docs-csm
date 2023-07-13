@@ -150,10 +150,9 @@ See [CANU releases](https://github.com/Cray-HPE/canu/releases).
 To initiate a subscription to receive future HPE Security Bulletin alerts via email,
 see the [`HPE Support Center`](https://support.hpe.com/connect/s/?language=en_US).
 
-A Security Bulletin is the published notification of security vulnerabilities and is the only communication
-vehicle for security vulnerabilities.
+A Security Bulletin is the published notification of security vulnerabilities and is the only
+communication vehicle for security vulnerabilities.
 
-- Fixes for security vulnerabilities are not documented in manuals, release notes, or other forms of product
-documentation.
+- Fixes for security vulnerabilities are not documented in manuals, release notes, or other forms of product documentation.
 - A Security Bulletin is released when all vulnerable products still in support life have publicly available
-images that contain the fix for the security vulnerability.
+  images that contain the fix for the security vulnerability.

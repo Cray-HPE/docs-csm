@@ -9,13 +9,13 @@ There are two ways to implement bonded UAN configuration.
     - These connections are plugged into a spine (TDS) or leaf (FULL) switch.
 2. [1GB or 10GB Bonded UAN](#1gb-or-10gb-bonded-uan) (Not commonly used)
     - These use a RJ45 NIC to connect to a pair of Aruba 8360 switches that are used as `leaf-bmc` switches.
-    - For high availability VSX needs to be configured.  This is not typically done on `leaf-bmc` switches so it will require additional custom configuration.
+    - For high availability VSX needs to be configured. This is not typically done on `leaf-bmc` switches so it will require additional custom configuration.
 
 ## 25GB Bonded UAN Configuration
 
 This is the primary configuration for bonded UAN.
 
-Notice that `sw-spine-002` does NOT have `lacp fallback` enabled.  This allows the UAN to boot over the first interface and avoids PXE/BSS issues.  If `lacp fallback` is enabled on the secondary switch there will be booting issues.
+Notice that `sw-spine-002` does NOT have `lacp fallback` enabled. This allows the UAN to boot over the first interface and avoids PXE/BSS issues. If `lacp fallback` is enabled on the secondary switch there will be booting issues.
 
 ```yaml
 sw-spine-001: |
@@ -53,7 +53,7 @@ sw-spine-002: |
 ## 1GB or 10GB Bonded UAN
 
 This is using a pair of Aruba 8360 switches as `sw-leaf-bmc`.
-The `system-mac` NEEDS to be unique across the system.  This should NOT match any other `system-mac` on the system.
+The `system-mac` NEEDS to be unique across the system. This should NOT match any other `system-mac` on the system.
 
 ```yaml
 sw-leaf-bmc-001: |
