@@ -23,13 +23,13 @@ For this reason it's recommended that Ansible plays first setup a host group usi
 For ease of use, future versions of CFS will set up this `cfs_image` group automatically during the inventory creation.
 In preparation for this, create a `cfs_image` group now to make that conversion simple in the future. In CFS' next release, this `add_host` task can simply be removed without changing any other parts of the playbook.
 
-To target only image customization, plays should use the following syntax.  In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `cfs_image` groups.
+To target only image customization, plays should use the following syntax. In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `cfs_image` groups.
 
 ```yaml
 hosts: Compute:&cfs_image
 ```
 
-To target only node personalization, plays should use the following syntax.  In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `cfs_image` group, so that only Compute nodes that are not an image are targeted.
+To target only node personalization, plays should use the following syntax. In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `cfs_image` group, so that only Compute nodes that are not an image are targeted.
 
 ```yaml
 hosts: Compute:!cfs_image
