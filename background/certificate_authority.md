@@ -13,7 +13,7 @@ installation, there is no supported method to rotate or change the platform CA i
 
 ## Overview
 
-**At install time**, a PKI certificate authority (CA) can either be generated for a system, or a customer can opt to supply their own intermediate CA.
+**At install time**, a PKI certificate authority can either be generated for a system, or a customer can opt to supply their own intermediate CA.
 
 > Outside of a new installation, there is currently no supported method to rotate (change) the platform CA. The ability to rotate CAs is anticipated as part of a future release.
 

@@ -1,4 +1,4 @@
-# Plan of Record
+# NCN Plan of Record
 
 This document outlines the hardware necessary to meet CSM's Plan of Record (PoR). This serves as the
 **minimum, necessary** pieces required per each server in the management plane.
@@ -11,18 +11,13 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
    follow [Customize Disk Hardware](../operations/node_management/Customize_Disk_Hardware.md) before
    booting the NCN(s).
 
-## Table of Contents
+* [Disks](#disks)
+* [NICs](#nics)
+  * [Kubernetes Masters](#kubernetes-masters)
+  * [Kubernetes Workers](#kubernetes-workers)
+  * [Ceph Storage](#ceph-storage)
 
-* [Non-Compute Nodes](#non-compute-nodes)
-  * [Disks](#disks)
-  * [NICs](#nics)
-    * [Kubernetes Masters](#kubernetes-masters)
-    * [Kubernetes Workers](#kubernetes-workers)
-    * [Storage-CEPH](#storage-ceph)
-
-## Non-Compute Nodes
-
-### Disks
+## Disks
 
 A minimum size[^1] is denoted for each disk
 
@@ -44,16 +39,16 @@ see [`metal.disks`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/
 [^3]: The RAID is configurable,
 see [`metal.md-level`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#metalmd-level)
 
-### NICs
+## NICs
 
-#### Kubernetes Masters
+### Kubernetes Masters
 
 > **`NOTE:`** The 2nd port on each card is unused/empty (reserved for future use).
 
 * *Management Network:* `2x` PCIe cards, with 1 or 2 heads/ports each for a total of 4 ports split
   between two PCIe cards
 
-#### Kubernetes Workers
+### Kubernetes Workers
 
 > **`NOTE:`** There is no PCIe redundancy for the management network for worker NCNs. The only
 > redundancy set up for workers is port redundancy.
@@ -63,7 +58,7 @@ see [`metal.md-level`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/ma
 * *High-Speed Network:* `1x` PCIe card capable of `100Gbps` (e.g. ConnectX-5 or Cassini), with 1 or
   2 heads/ports
 
-### Storage-CEPH
+### Ceph Storage
 
 > **`NOTE:`** The 2nd port on each card is filled but not configured (reserved for future use).
 

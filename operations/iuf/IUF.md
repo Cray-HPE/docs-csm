@@ -316,7 +316,7 @@ Would you like to abort this run?
     Enter D, d, or disconnect to exit the IUF CLI.  The install will continue in the background, however no logs will be collected.
 
     Enter <return> to resume monitoring.
-    NOTE: The IUF CLI will remain connected until Argo completes the abort process.  Use the disconnect option to exit the IUF CLI immediately.
+    NOTE: The IUF CLI will remain connected until Argo completes the abort process. Use the disconnect option to exit the IUF CLI immediately.
     NOTE: All logging will be suspended when disconnected.
 ```
 
@@ -339,7 +339,7 @@ options:
   -b BEGIN_STAGE, --begin-stage BEGIN_STAGE
                         The first stage to execute. Defaults to process-media
   -e END_STAGE, --end-stage END_STAGE
-                        The last stage to execute.  Defaults to post-install-check
+                        The last stage to execute. Defaults to post-install-check
   -r RUN_STAGES [RUN_STAGES ...], --run-stages RUN_STAGES [RUN_STAGES ...]
                         Run the specified stages only. This argument is not compatible with `-b`, `-e`, or `-s`.
   -s SKIP_STAGES [SKIP_STAGES ...], --skip-stages SKIP_STAGES [SKIP_STAGES ...]
@@ -379,7 +379,7 @@ options:
                         concurrently based on the percentage specified. Must be an integer
                         between 1-100. Defaults to 20 (percent).
   --limit-managed-rollout LIMIT_MANAGED_ROLLOUT [LIMIT_MANAGED_ROLLOUT ...]
-                        Override list used to target specific nodes only when rolling out managed nodes.  Arguments
+                        Override list used to target specific nodes only when rolling out managed nodes. Arguments
                         should be xnames or HSM node groups. Defaults to the Compute role.
   --limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]
                         List used to target specific hostnames or HSM management role_subrole only when rolling 

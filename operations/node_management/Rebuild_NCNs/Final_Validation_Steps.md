@@ -1,6 +1,6 @@
 # Final Validation Steps
 
-Use this procedure to finish validating the success of a rebuilt NCN(s).
+Use this procedure to finish validating the success of rebuilt NCNs.
 
 ## Procedure
 
@@ -8,7 +8,7 @@ Use this procedure to finish validating the success of a rebuilt NCN(s).
 
    **`NOTE`** The following command will indicate if a CFS job is currently in progress for this node.
 
-   **IMPORTANT:** The following command assumes that the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) have been set.
+   **IMPORTANT:** The following command assumes that the variables from [the prerequisites section](Rebuild_NCNs.md#prerequisites) have been set.
 
    ```bash
    cray cfs components describe "${XNAME}" --format json | jq .configurationStatus
@@ -35,6 +35,6 @@ Use this procedure to finish validating the success of a rebuilt NCN(s).
    /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
-## Next Step
+## Next step
 
 Return to the main [Rebuild NCNs](Rebuild_NCNs.md) page.

@@ -43,7 +43,7 @@ such as:
 ### Dracut
 
 For SquashFS booted non-compute nodes, the `dracut-metal-mdsquash` module does some preparation for `kdump` by creating two symbolic links
-in the [root overlay](./ncn_mounts_and_filesystems.md#overlayfs-and-persistence).
+in the [root overlay](ncn_mounts_and_filesystems.md#overlayfs-and-persistence).
 
 * `ls $(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/ROOTRAID)/boot` points to the actual `/boot` directory.
 * `ls $(lsblk -o MOUNTPOINT -nr /dev/disk/by-label/ROOTRAID)/crash` points to the actual `/var/crash` directory.

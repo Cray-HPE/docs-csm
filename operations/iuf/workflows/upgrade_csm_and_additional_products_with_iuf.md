@@ -5,7 +5,7 @@ additional HPE Cray EX software products at the same time. This procedure would 
 upgrading from one HPC CSM Software Recipe release to another.
 
 This procedure is _not_ used to perform an initial install or upgrade of HPE Cray EX software products
-when CSM itself is not being upgraded.  See
+when CSM itself is not being upgraded. See
 [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md) for that procedure.
 
 This procedure streamlines the rollout of new images to management nodes. These images are based
@@ -28,7 +28,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
 1. CSM preparation, Stage 0.1, and Stage 0.2
    Read the _Important Notes_ section of the
-   [CSM 1.3.0 or later to 1.4.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
+   [CSM 1.4.0 or later to 1.5.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation and then follow only these CSM instructions in order:
 
    1. [Prepare for Upgrade](../../../upgrade/prepare_for_upgrade.md)
@@ -42,7 +42,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
    1. Download the desired HPE product media defined by the HPC CSM Software Recipe to `${MEDIA_DIR}`, which was defined in the previous step
 
-1. Product Delivery
+1. Product delivery
 
    Follow the IUF [Product delivery](product_delivery.md) instructions
 
@@ -64,7 +64,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
    Follow the IUF [Backup](backup.md) instructions
 
-1. Management Rollout
+1. Management rollout
 
    Follow the IUF [Management rollout](management_rollout.md) instructions
 
