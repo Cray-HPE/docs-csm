@@ -21,7 +21,7 @@ cfs-debug
 Example output:
 
 ```text
-Select debugger mode.  Type help for more details.
+Select debugger mode. Type help for more details.
 1) Auto-debug (default)
 2) Directed-debug
 3) Auto-debug report

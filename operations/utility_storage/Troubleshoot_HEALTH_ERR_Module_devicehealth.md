@@ -72,7 +72,7 @@ Error Message:
       ncn-s001:~ # ceph osd lspools
       ```
 
-      This will list the pools.  Verify that the `.mgr` pools is present.  This could take a minute or so to create the pool if the cluster is busy. If the pool is not created, please verify that the mgr processes are running using following step.
+      This will list the pools. Verify that the `.mgr` pools is present. This could take a minute or so to create the pool if the cluster is busy. If the pool is not created, please verify that the mgr processes are running using following step.
 
    2. Verify all 3 mgr instances are running.
 
@@ -138,4 +138,4 @@ Error Message:
             ...
             ```
 
-            This is a small sample of the output.  If the `curl` is successful, then the active manager instance is active and will ensure that the standby mgr daemons are functional and ready.
+            This is a small sample of the output. If the `curl` is successful, then the active manager instance is active and will ensure that the standby `mgr` daemons are functional and ready.

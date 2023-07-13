@@ -8,13 +8,13 @@ See [Configuration Management Use Cases](Configuration_Management.md#use-cases) 
 During image customization, CFS will automatically add all image customization hosts into a special `cfs_image` host group in Ansible inventory.
 Plays intended for image customization can then target this group in addition to any other provided host groups.
 
-To target only image customization, plays should use the following syntax.  In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `cfs_image` groups.
+To target only image customization, plays should use the following syntax. In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `cfs_image` groups.
 
 ```yaml
 hosts: Compute:&cfs_image
 ```
 
-To target only node personalization, plays should use the following syntax.  In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `cfs_image` group, so that only Compute nodes that are not an image are targeted.
+To target only node personalization, plays should use the following syntax. In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `cfs_image` group, so that only Compute nodes that are not an image are targeted.
 
 ```yaml
 hosts: Compute:!cfs_image
@@ -67,7 +67,7 @@ CFS automatically sets this variable in the `hosts/01-cfs-generated.yaml` file f
 IMS provides environment variables during image customization only for the purposes of
 further describing an image environment. This allows users to write their own Ansible tasks that can key off of this
 specific information in order to contextually configure an image correctly, regardless of where the host operating
-system is hosted. This is helpful in a number of scenarios, including when writing Ansible tasks specific to 
+system is hosted. This is helpful in a number of scenarios, including when writing Ansible tasks specific to
 [DKMS](../image_management/Configure_IMS_to_Use_DKMS.md) or for use with multi-architecture specific Ansible tasks.
 
 The full set of variables exposed is provided as an Ansible role alongside the `cfs-config` Git project within version
