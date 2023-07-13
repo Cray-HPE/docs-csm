@@ -8,13 +8,13 @@ See [Configuration Management Use Cases](Configuration_Management.md#use-cases) 
 During image customization, CFS will automatically add all image customization hosts into a special `cfs_image` host group in Ansible inventory.
 Plays intended for image customization can then target this group in addition to any other provided host groups.
 
-To target only image customization, plays should use the following syntax.  In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `cfs_image` groups.
+To target only image customization, plays should use the following syntax. In this example the play is targeting only _images_ for `Compute` nodes. `&` takes the intersection of the `Compute` and `cfs_image` groups.
 
 ```yaml
 hosts: Compute:&cfs_image
 ```
 
-To target only node personalization, plays should use the following syntax.  In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `cfs_image` group, so that only Compute nodes that are not an image are targeted.
+To target only node personalization, plays should use the following syntax. In this example the play is targeting only _running_ `Compute` nodes. `!` negates the `cfs_image` group, so that only Compute nodes that are not an image are targeted.
 
 ```yaml
 hosts: Compute:!cfs_image
