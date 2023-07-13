@@ -10,7 +10,7 @@ Help with Ansible can be found in the external Ansible documentation:
 * [Ansible playbook best practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html)
 * [Ansible examples](https://github.com/ansible/ansible-examples)
 
-## Ansible Code Structure
+## Ansible code structure
 
 The Version Control Service \(VCS\) is setup during the Cray System Management \(CSM\) product installation, which is the appropriate place to store configuration content.
 Individual product installations include the Ansible code to properly configure each product.
@@ -51,7 +51,7 @@ For more information on `gather_subset`, see the external [Ansible module setup]
 ### Reduce wasted time
 
 * Use `include_*` (dynamic re-use) to skip multiple tasks at once when using conditionals. Ansible evaluates conditionals for every node in every task.
-This includes when the conditional is applied to a block, or a role imported with `roles:` or the `import_role` task.
+  This includes when the conditional is applied to a block, or a role imported with `roles:` or the `import_role` task.
   This is because these are static imports that are compiled at the beginning of the playbook, and the conditional is inherited by every task in the role or block.
   Evaluating these conditionals for each task may only take a second or two, but across the hundreds of tasks that might be part of a playbook, this can add up to significant wasted time.
   Instead use dynamic imports with the `include_*` tasks. Because these are evaluated at runtime, a conditional can skip the import of the role or tasks entirely, and is only evaluated once.
