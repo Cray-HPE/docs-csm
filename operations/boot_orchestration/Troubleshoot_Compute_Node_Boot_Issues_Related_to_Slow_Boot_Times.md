@@ -1,12 +1,13 @@
 # Troubleshoot Compute Node Boot Issues Related to Slow Boot Times
 
-Inspect BOS, the Boot Orchestration Agent \(BOA\) job logs, and the Configuration Framework Service \(CFS\) job logs to
+Inspect Boot Orchestration Service (BOS), Boot Orchestration Agent (BOA), and
+[Configuration Framework Service \(CFS\)](../../glossary.md#configuration-framework-service-cfs) job logs in order to
 obtain information that is critical for boot troubleshooting. Use this procedure to determine why compute nodes are
 booting slower than expected.
 
 ## Prerequisites
 
-- A boot session has been created with the Boot Orchestration Service \(BOS\).
+- A boot session has been created with BOS.
 - The Cray CLI is configured. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure
