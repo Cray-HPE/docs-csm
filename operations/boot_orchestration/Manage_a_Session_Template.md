@@ -1,36 +1,43 @@
 # Manage a Session Template
 
-A session template must be created before starting a session with the Boot Orchestration Service \(BOS\). Session templates are managed via the Cray CLI.
+A session template must be created before starting a session with the Boot Orchestration Service \(BOS\).
 
-To find the API versions of any commands listed, add `-vvv` to the end of the CLI command, and the CLI will print the underlying call to the API in the output.
+This page shows Cray CLI commands for managing BOS session templates. To find the API versions of any commands listed, add `-vvv` to the end of the CLI command,
+and the CLI will print the underlying call to the API in the output.
 
-## Get the Framework for a Session Template
+* [Session template framework](#session-template-framework)
+* [Create a session template](#create-a-session-template)
+* [List all session templates](#list-all-session-templates)
+* [View a session template](#view-a-session-template)
+* [Delete a session template](#delete-a-session-template)
+
+## Session template framework
 
 When creating a new BOS session template, it can be helpful to start with a framework and then edit it as needed. Use the following command to retrieve the BOS session template framework:
 
-(`ncn-mw#`) V2 command:
+(`ncn-mw#`) v2 command:
 
 ```bash
 cray bos v2 sessiontemplatetemplate list --format json
 ```
 
-(`ncn-mw#`) V1 command:
+(`ncn-mw#`) v1 command:
 
 ```bash
 cray bos v1 sessiontemplatetemplate list --format json
 ```
 
-## Create a Session Template with the Cray CLI
+## Create a session template
 
 The following command takes a JSON input file that contains the information required to create a new BOS session template. It reads it in and creates a BOS session template using the BOS API.
 
-(`ncn-mw#`) V2 command:
+(`ncn-mw#`) v2 command:
 
 ```bash
 cray bos v2 sessiontemplates create --file <INPUT_FILE> --name <NEW_TEMPLATE_NAME>
 ```
 
-(`ncn-mw#`) V1 command:
+(`ncn-mw#`) v1 command:
 
 ```bash
 cray bos v1 sessiontemplate create --file <INPUT_FILE> --name <NEW_TEMPLATE_NAME>
@@ -60,17 +67,15 @@ The following is an example of an input file:
 }
 ```
 
-## List All Session Templates
+## List all session templates
 
-Use the following command to view all of the available session templates:
-
-(`ncn-mw#`) V2 command:
+(`ncn-mw#`) List all session templates (BOS v2 command):
 
 ```bash
 cray bos v2 sessiontemplates list --format json
 ```
 
-(`ncn-mw#`) V1 command:
+(`ncn-mw#`) List all session templates (BOS v1 command):
 
 ```bash
 cray bos v1 sessiontemplate list --format json
@@ -106,15 +111,15 @@ Example output:
 [...]
 ```
 
-## Show Details for a Session Template
+## View a session template
 
-(`ncn-mw#`) V2 command:
+(`ncn-mw#`) v2 command:
 
 ```bash
 cray bos v2 sessiontemplates describe <SESSION_TEMPLATE_NAME> --format json
 ```
 
-(`ncn-mw#`) V1 command:
+(`ncn-mw#`) v1 command:
 
 ```bash
 cray bos v1 sessiontemplate describe <SESSION_TEMPLATE_NAME> --format json
@@ -146,17 +151,17 @@ Example output:
 }
 ```
 
-## Delete a Session Template
+## Delete a session template
 
-Remove an existing session template with the following command:
+Remove an existing session template with the following commands:
 
-(`ncn-mw#`) V2 command:
+(`ncn-mw#`) v2 command:
 
 ```bash
 cray bos v2 sessiontemplates delete <SESSION_TEMPLATE_NAME>
 ```
 
-(`ncn-mw#`) V1 command:
+(`ncn-mw#`) v1 command:
 
 ```bash
 cray bos v1 sessiontemplate delete <SESSION_TEMPLATE_NAME>
