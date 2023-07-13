@@ -4,21 +4,21 @@ The following workflows present a high-level overview of common Boot Orchestrati
 These workflows depict how services interact with each other when booting, configuring, or shutting down nodes. They also help provide a quicker and deeper understanding of how the system functions.
 
 * [Terminology](#terminology)
-* [BOS V2 Workflows](#bos-v2-workflows)
-  * [Boot Nodes](#v2-boot-nodes)
-  * [Reboot Nodes](#v2-reboot-nodes)
-  * [Power Off Nodes](#v2-power-off-nodes)
-* [BOS V1 Workflows](#bos-v1-workflows)
-  * [Boot and Configure Nodes](#v1-boot-and-configure-nodes)
-  * [Reconfigure Nodes](#v1-reconfigure-nodes)
-  * [Power Off Nodes](#v1-power-off-nodes)
+* [BOS v2 workflows](#bos-v2-workflows)
+  * [Boot nodes](#v2-boot-nodes)
+  * [Reboot nodes](#v2-reboot-nodes)
+  * [Power off nodes](#v2-power-off-nodes)
+* [BOS v1 workflows](#bos-v1-workflows)
+  * [Boot and configure nodes](#v1-boot-and-configure-nodes)
+  * [Reconfigure nodes](#v1-reconfigure-nodes)
+  * [Power off nodes](#v1-power-off-nodes)
 
 ## Terminology
 
 The following are mentioned in the workflows:
 
 * Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes. The Boot Orchestration Service has the following components:
-  * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.  Session templates also include information on what CFS configuration should be applied.
+  * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters. Session templates also include information on what CFS configuration should be applied.
   * BOS sessions provide a way to apply a template across a group of nodes and monitor the progress of those nodes as they move toward their desired state.
   * BOS Operators interact with other services to perform actions on nodes, moving them toward their desired state. BOS operators are used only for BOS v2 operations.
   * Boot Orchestration Agent \(BOA\) is automatically launched to execute the session.
@@ -30,23 +30,23 @@ CAPMC interfaces directly with the Redfish APIs to the controller infrastructure
 * The Simple Storage Service \(Ceph S3\) is an artifact repository that stores boot artifacts.
 * Configuration Framework Service \(CFS\) configures nodes using the configuration framework. Launches and aggregates the status from one or more Ansible instances against nodes \(node personalization\) or images \(image customization\).
 
-## BOS V2 Workflows
+## BOS v2 workflows
 
 The following workflows are included in this section:
 
-* [Boot Nodes](#v2-boot-nodes)
-* [Reboot Nodes](#v2-reboot-nodes)
-* [Power Off Nodes](#v2-power-off-nodes)
+* [Boot nodes](#v2-boot-nodes)
+* [Reboot nodes](#v2-reboot-nodes)
+* [Power off nodes](#v2-power-off-nodes)
 
-### V2 Boot Nodes
+### V2 boot nodes
 
-**Use Case:** Administrator powers on and configures select compute nodes.
+**Use case:** Administrator powers on and configures select compute nodes.
 
-**BOS V2 Boot Flow Diagram:** This labels on the diagram correspond to the workflow steps listed below. Some steps are omitted from the diagram for readability.
+**BOS v2 boot flow diagram:** This labels on the diagram correspond to the workflow steps listed below. Some steps are omitted from the diagram for readability.
 
 ![Boot Nodes](../../img/operations/boot_orchestration/bos_v2_boot.png)
 
-**Workflow Overview:** The following sequence of steps occurs during this workflow.
+**Workflow overview:** The following sequence of steps occurs during this workflow.
 
 1. **Administrator creates a configuration**
 
@@ -138,15 +138,15 @@ The following workflows are included in this section:
 
     When all nodes belonging to a session have been disabled, the session is marked complete, and its final status is saved to the database.
 
-### V2 Reboot Nodes
+### V2 reboot nodes
 
-**Use Case:** Administrator reboots and configures select compute nodes.
+**Use case:** Administrator reboots and configures select compute nodes.
 
-**BOS V2 Reboot Flow Diagram:** This labels on the diagram correspond to the workflow steps listed below. Some steps are omitted from the diagram for readability.
+**BOS v2 reboot flow diagram:** This labels on the diagram correspond to the workflow steps listed below. Some steps are omitted from the diagram for readability.
 
 ![Boot Nodes](../../img/operations/boot_orchestration/bos_v2_reboot.png)
 
-**Workflow Overview:** The following sequence of steps occurs during this workflow.
+**Workflow overview:** The following sequence of steps occurs during this workflow.
 
 1. **Administrator creates a configuration**
 
@@ -259,15 +259,15 @@ The following workflows are included in this section:
 
     When all nodes belonging to a session have been disabled, the session is marked complete, and its final status is saved to the database.
 
-### V2 Power Off Nodes
+### V2 power off nodes
 
-**Use Cases:** Administrator powers off selected compute nodes.
+**Use case:** Administrator powers off selected compute nodes.
 
-**BOS V2 Shutdown Flow Diagram:** This labels on the diagram correspond to the workflow steps listed below. Some steps are omitted from the diagram for readability.
+**BOS v2 Shutdown flow diagram:** This labels on the diagram correspond to the workflow steps listed below. Some steps are omitted from the diagram for readability.
 
 ![Boot Nodes](../../img/operations/boot_orchestration/bos_v2_shutdown.png)
 
-**Workflow Overview:** The following sequence of steps occurs during this workflow.
+**Workflow overview:** The following sequence of steps occurs during this workflow.
 
 1. **Administrator creates a BOS session template**
 
@@ -321,23 +321,23 @@ The following workflows are included in this section:
 
     When all nodes belonging to a session have been disabled, the session is marked complete, and its final status is saved to the database.
   
-## BOS V1 Workflows
+## BOS v1 workflows
 
 The following workflows are included in this section:
 
-* [Boot and Configure Nodes](#v1-boot-and-configure-nodes)
-* [Reconfigure Nodes](#v1-reconfigure-nodes)
-* [Power Off Nodes](#v1-power-off-nodes)
+* [Boot and configure nodes](#v1-boot-and-configure-nodes)
+* [Reconfigure nodes](#v1-reconfigure-nodes)
+* [Power off nodes](#v1-power-off-nodes)
 
-### V1 Boot and Configure Nodes
+### V1 boot and configure nodes
 
-**Use Case:** Administrator powers on and configures select compute nodes.
+**Use case:** Administrator powers on and configures select compute nodes.
 
 **Components:** This workflow is based on the interaction of the BOS with other services during the boot process:
 
 ![Boot and Configure Nodes](../../img/operations/boot_orchestration/bos_v1_boot.gif)
 
-**Workflow Overview:** The following sequence of steps occurs during this workflow.
+**Workflow overview:** The following sequence of steps occurs during this workflow.
 
 1. **Administrator creates a configuration**
 
@@ -431,15 +431,15 @@ The following workflows are included in this section:
 
     CFS runs Ansible on the nodes and applies post-boot configuration \(also called node personalization\). CFS then communicates the results back to BOA.
 
-### V1 Reconfigure Nodes
+### V1 reconfigure nodes
 
-**Use Case:** Administrator reconfigures compute nodes that are already booted and configured.
+**Use case:** Administrator reconfigures compute nodes that are already booted and configured.
 
 **Components:** This workflow is based on the interaction of the BOS with other services during the reconfiguration process.
 
 ![Reconfigure Nodes](../../img/operations/boot_orchestration/bos_v1_reconfigure.gif)
 
-**Workflow Overview:** The following sequence of steps occurs during this workflow.
+**Workflow overview:** The following sequence of steps occurs during this workflow.
 
 1. **Administrator creates a BOS session template**
 
@@ -483,15 +483,15 @@ The following workflows are included in this section:
 
     CFS then communicates the results back to BOA.
 
-### V1 Power Off Nodes
+### V1 power off nodes
 
-**Use Cases:** Administrator powers off selected compute nodes.
+**Use cases:** Administrator powers off selected compute nodes.
 
 **Components:** This workflow is based on the interaction of the Boot Orchestration Service \(BOS\) with other services during the node shutdown process:
 
 ![Shutdown Nodes](../../img/operations/boot_orchestration/bos_v1_shutdown.gif)
 
-**Workflow Overview:** The following sequence of steps occurs during this workflow.
+**Workflow overview:** The following sequence of steps occurs during this workflow.
 
 1. **Administrator creates a BOS session template**
 
