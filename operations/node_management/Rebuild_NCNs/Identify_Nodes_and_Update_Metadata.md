@@ -2,14 +2,14 @@
 
 ## Inspect and modify the JSON file
 
-This section applies to all node types. The commands in this section assume you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+This section applies to all node types. The commands in this section assume the variables from [the prerequisites section](../Rebuild_NCNs.md#prerequisites) have been set.
 
 ### Step 1 - Generate the Boot Script Service \(BSS\) boot parameters JSON file
 
-1. Run the following commands from a node that has cray cli initialized:
+1. Run the following commands from a node that has the Cray CLI initialized:
 
     ```bash
-    cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
+    ncn-mw# cray bss bootparameters list --name $XNAME --format=json | jq .[] > ${XNAME}.json
     ```
 
 ### Step 2 - Modify the JSON file
@@ -23,7 +23,7 @@ This section applies to all node types. The commands in this section assume you 
 1. Get a token to interact with BSS using the REST API.
 
     ```bash
-    ncn# TOKEN=$(curl -s -S -d grant_type=client_credentials \
+    ncn-w# TOKEN=$(curl -s -S -d grant_type=client_credentials \
         -d client_id=admin-client -d client_secret=`kubectl get secrets admin-client-auth \
         -o jsonpath='{.data.client-secret}' | base64 -d` \
         https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token \
@@ -33,28 +33,26 @@ This section applies to all node types. The commands in this section assume you 
 1. Do a PUT action for the new JSON file.
 
     ```bash
-    ncn# curl -i -s -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
+    ncn-mw# curl -i -s -H "Content-Type: application/json" -H "Authorization: Bearer ${TOKEN}" \
     "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @./${XNAME}.json
     ```
 
     **IMPORTANT:** Ensure a good response \(`HTTP CODE 200`\) is returned in the output.
 
-### Step 4 -  Verify the `bss bootparameters list` command returns the expected information.
+### Step 4 -  Verify the `bss bootparameters list` command returns the expected information
 
 1. Export the list from BSS to a file with a different name.
 
     ```bash
-    ncn# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
+    ncn-mw# cray bss bootparameters list --name ${XNAME} --format=json |jq .[]> ${XNAME}.check.json
     ```
 
 1. Compare the new JSON file with what was PUT to BSS.
 
     ```bash
-    ncn# diff ${XNAME}.json ${XNAME}.check.json
+    ncn-mw# diff ${XNAME}.json ${XNAME}.check.json
     ```
 
-    * The files should be identical
+    * The files should be identical.
 
-[Click here for the Next Step](Wipe_Drives.md)
-
-Or [return to the Main Page](../Rebuild_NCNs.md)
+Proceed to the next step to [Wipe Drives](Wipe_Drives.md) or return to the main [Rebuild NCNs](../Rebuild_NCNs.md) page.

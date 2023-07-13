@@ -1,6 +1,6 @@
 # NCN Mounts and File Systems
 
-The management nodes use drive storage for persistence and block storage. This page outlines
+The management non-compute nodes (NCNs) use drive storage for persistence and block storage. This page outlines
 reference information for these disks, their partition tables, and their management.
 
 - [What controls partitioning](#What-controls-partitioning)

@@ -18,11 +18,26 @@ documentation for detailed information about API options and features.
 The `cray capmc` command (see `--help`) can be used to control power to
 specific components by specifying the component NID, xname, or group.
 
-## Power Control and Query by xname
-- xname_on
-- xname_off
-- xname_reinit
-- get_xname_status
+- [Power control and query by xname](#power-control-and-query-by-xname)
+  - [Controllable components](#controllable-components)
+    - [Air-cooled cabinets](#air-cooled-cabinets)
+    - [Liquid-cooled cabinets](#liquid-cooled-cabinets)
+    - [Naming convention](#naming-convention)
+      - [Examples of valid xnames](#examples-of-valid-xnames)
+- [Power capping](#power-capping)
+- [Deprecated interfaces](#deprecated-interfaces)
+  - [Power control and query by NID](#power-control-and-query-by-nid)
+  - [Power control and query by group](#power-control-and-query-by-group)
+  - [Node energy](#node-energy)
+  - [System monitor](#system-monitor)
+  - [Others](#others)
+
+## Power control and query by xname
+
+- `xname_on`
+- `xname_off`
+- `xname_reinit`
+- `get_xname_status`
 
 CAPMC power control assumes that all cabinets and PDUs have been plugged in,
 breakers are on, and PDU controllers, BMCs, and other embedded controller are
@@ -32,16 +47,21 @@ in a pre-defined order to properly handle requests of dependent components.
 **Important:** It is recommended to use the Boot Orchestration Service (BOS) to
 boot (power On), shutdown, and reboot compute nodes.
 
-### Controllable Components
-**Air Cooled Cabinets**
+### Controllable components
+
+#### Air-Cooled cabinets
+
 - Compute Nodes
 - NCNs
 
-**Liquid Cooled Cabinets**
+#### Liquid-cooled cabinets
+
 - Chassis
 - Slingshot Switch modules
 - Compute blades
 - Compute nodes
+
+#### Naming convention
 
 CAPMC uses xnames to specify entire cabinets or specific components throughout
 the system. By default, CAPMC controls power to only one component at a time. A
@@ -54,24 +74,26 @@ unique number. Cabinet numbers can range from 0-9999 and contain from 1-4 digits
 only.
 
 Although manufacturing typically follows a sequential cabinet numbering scheme:
-- Liquid Cooled cabinet numbers: x1000–x2999
-- Air Cooled cabinet numbers: x3000–x4999
-- Liquid Cooled TDS cabinet numbers: x5000–5999
 
-**Examples of valid xnames:**
-- Full system: s0, all
-- Cabinet numbers: x1000, x3000, x5000
-- Chassis numbers 0-7: x1000c7, x3500c0 (Air Cooled cabinets are always
-chassis 0)
-- Compute Blade Slots 0-7: x1000c7s3, x3500c0s15 (U15)
-- Compute Nodes: x1000c7s3b0n0, x3500c0s15b1n0
-- NCN Slots: x3200c0s9 (U9)
-- NCN Nodes: x3200c0s9b0n0
+- Liquid-cooled cabinet numbers: `x1000`–`x2999`
+- Air-cooled cabinet numbers: `x3000`–`x4999`
+- Liquid-cooled TDS cabinet numbers: `x5000`–`x5999`
 
-## Power Capping
-- get_power_cap_capabilities
-- get_power_cap
-- set_power_cap
+##### Examples of valid xnames
+
+- Full system: `s0`, `all`
+- Cabinet numbers: `x1000`, `x3000`, `x5000`
+- Chassis numbers 0-7: `x1000c7`, `x3500c0` (Air-cooled cabinets are always chassis 0)
+- Compute blade slots 0-7: `x1000c7s3`, `x3500c0s15` (`U15`)
+- Compute nodes: `x1000c7s3b0n0`, `x3500c0s15b1n0`
+- NCN slots: `x3200c0s9` (`U9`)
+- NCNs: `x3200c0s9b0n0`
+
+## Power capping
+
+- `get_power_cap_capabilities`
+- `get_power_cap`
+- `set_power_cap`
 
 CAPMC is capable of setting node power limits on all supported compute node
 hardware in both liquid cooled cabinets and air cooled cabinets. This
@@ -84,37 +106,47 @@ node type has its own power capping capabilities.
 modules, compute blades, and any non-compute nodes (NCNs) in air cooled
 cabinets.
 
-## Deprecated Interfaces
+## Deprecated interfaces
+
 See the [CAPMC Deprecation Notice](../../introduction/CAPMC_deprecation.md) for
 more information
 
-### Power Control and Query by NID
+### Power control and query by NID
+
 Use the interfaces from [Power control and query by xname](#power-control-and-query-by-xname):
-- node_on
-- node_off
-- node_reinit
-- get_node_status
 
-### Power Control and Query by group
+- `node_on`
+- `node_off`
+- `node_reinit`
+- `get_node_status`
+
+### Power control and query by group
+
 Use the interfaces from [Power control and query by xname](#power-control-and-query-by-xname):
-- group_on
-- group_off
-- group_reinit
-- get_group_status
 
-### Node Energy
-Use the System Monitoring Application (SMA) Grafana instance:
-- get_node_energy
-- get_node_energy_stats
-- get_node_energy_counters
+- `group_on`
+- `group_off`
+- `group_reinit`
+- `get_group_status`
 
-### System Monitor
+### Node energy
+
 Use the System Monitoring Application (SMA) Grafana instance:
-- get_system_parameters
-- get_system_power
-- get_system_power_details
+
+- `get_node_energy`
+- `get_node_energy_stats`
+- `get_node_energy_counters`
+
+### System monitor
+
+Use the System Monitoring Application (SMA) Grafana instance:
+
+- `get_system_parameters`
+- `get_system_power`
+- `get_system_power_details`
 
 ### Others
-- get_node_rules
-- emergency_power_off
-- get_nid_map
+
+- `get_node_rules`
+- `emergency_power_off`
+- `get_nid_map`
