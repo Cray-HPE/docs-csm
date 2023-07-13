@@ -128,7 +128,7 @@
 
 - `Etcd backups missing after system power up`
 
-   After system power up, automated Etcd backups will resume within about 24 hours of the cluster being back up.  When running the `ncnHealthChecks.sh` script within this time period, it may report a failure:
+   After system power up, automated Etcd backups will resume within about 24 hours of the cluster being back up. When running the `ncnHealthChecks.sh` script within this time period, it may report a failure:
 
    ```text
    --- FAILED --- not all Etcd clusters had expected backups.
