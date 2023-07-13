@@ -1,20 +1,22 @@
 # Clean Up After a BOS/BOA Job is Completed or Cancelled
 
+> **`NOTE`** This section is for Boot Orchestration Service (BOS) v1 only. BOS v2 does not use Boot Orchestration Agent (BOA) jobs and does not require cleanup.
+
 When a BOS session is created, there are a number of items created on the system. When a session is cancelled or completed, these items need to be cleaned up to ensure there is not lingering content from the session on the system.
 
 When a session is launched, the following items are created:
 
-- **Boot Orchestration Agent \(BOA\) job:** The Kubernetes job that runs and handles the BOS session.
+- **BOA job:** The Kubernetes job that runs and handles the BOS session.
 - **ConfigMap for BOA:** This ConfigMap contains the configuration information that the BOA job uses. The BOA pod mounts a ConfigMap named `boot-session` at `/mnt/boot_session` inside
   the pod. The name of the ConfigMap has a one-to-one relationship to the name of the BOS session created; however, the name of the BOS session can be different from the name of the
   session template used to create it. For created sessions that do not specify a name, this is most commonly a UUID value.
-- **etcd entries:** BOS makes an entry for the session in its etcd key/value store. If the BOA job has run for long enough, it will also have written a status entry into etcd for this session.
+- **Etcd entries:** BOS makes an entry for the session in its Etcd key/value store. If the BOA job has run for long enough, it will also have written a status entry into Etcd for this session.
 - **Configuration Framework Service \(CFS\) session:** If configuration is enabled, and the session is doing a boot, reboot, or configure operation, then BOA will have instructed CFS
   to configure the nodes once they boot. There is not an easy way to link a BOA session to the CFS sessions that are spawned.
 
 ## Prerequisites
 
-- A Boot Orchestration Service \(BOS\) session has been completed or cancelled.
+- A BOS session has been completed or cancelled.
 - The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure

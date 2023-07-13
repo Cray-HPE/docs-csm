@@ -1,8 +1,13 @@
 # BOS Sessions
 
-Overview of Boot Orchestration Service \(BOS\) session operations and limitations.
+The Boot Orchestration Service (BOS) creates a session when it is asked to perform an operation on a session template.
+Sessions provide a way to track the status of many nodes at once as they perform the same operation with the same session template information.
+When creating a session, both the operation and session template are required parameters.
 
-BOS creates a session when it is asked to perform one of the following operations:
+* [BOA functionality](#boa-functionality)
+* [BOS v1 session limitations](#bos-v1-session-limitations)
+
+The v1 version of BOS supports these operations:
 
 * Boot - Boot a designated collection of nodes.
 * Shutdown - Shutdown a designated collection of nodes.
@@ -31,7 +36,7 @@ For example, if there is a 6,000 node system and 3 nodes fail to power off durin
 then BOA will continue and attempt to re-provision the remaining 5,997 nodes.
 After the command is finished, it will provide information about what the administrator needs to do in order to retry the operation on the 3 nodes that failed.
 
-## Current BOS session limitations
+## BOS v1 session limitations
 
 The following limitations currently exist with BOS sessions:
 
@@ -39,6 +44,7 @@ The following limitations currently exist with BOS sessions:
   Concurrently running sessions may conflict with each other.
 * The boot ordinal and shutdown ordinal are not honored.
 * The partition parameter is not honored.
+* All nodes proceed at the same pace. BOA will not move on to the next step of the boot process until
+  all components have succeeded or failed the current step.
 * The Configuration Framework Service \(CFS\) has its own limitations.
   Refer to the [Configuration Management](../configuration_management/Configuration_Management.md) documentation for more information.
-  
