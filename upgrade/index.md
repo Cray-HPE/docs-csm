@@ -6,25 +6,25 @@ After the upgrade of CSM software, the CSM health checks will validate the syste
 tasks like the check and update of firmware on system components. Once the CSM upgrade has completed, other
 product streams for the HPE Cray EX system can be installed or upgraded.
 
-1. [Prepare for Upgrade](#prepare_for_upgrade)
-1. [Upgrade Management Nodes and CSM Services](#upgrade_management_nodes_csm_services)
-1. [Validate CSM Health](#validate_csm_health)
-1. [Next Topic](#next_topic)
+1. [Prepare for upgrade](#prepare_for_upgrade)
+1. [Upgrade management nodes and CSM services](#upgrade_management_nodes_csm_services)
+1. [Validate CSM health](#validate_csm_health)
+1. [Next topic](#next_topic)
 
 Note: If problems are encountered during the upgrade, some of the topics do have their own troubleshooting
 sections, but there is also a general troubleshooting topic.
 
-1. <a name="prepare_for_upgrade"></a>Prepare for Upgrade
+1. <a name="prepare_for_upgrade"></a>Prepare for upgrade
 
     See [Prepare for Upgrade](prepare_for_upgrade.md)
 
-1. <a name="upgrade_management_nodes_csm_services"></a>Upgrade Management Nodes and CSM Services
+1. <a name="upgrade_management_nodes_csm_services"></a>Upgrade management nodes and CSM services
 
     The upgrade of CSM software will do a controlled, rolling reboot of all management nodes before updating the CSM services.
 
     The upgrade is a guided process starting with [Upgrade Management Nodes and CSM Services](1.2/README.md).
 
-1. <a name="validate_csm_health"></a>Validate CSM Health
+1. <a name="validate_csm_health"></a>Validate CSM health
 
      **NOTE:**
 

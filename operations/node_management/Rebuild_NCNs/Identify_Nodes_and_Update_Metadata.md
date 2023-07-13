@@ -2,7 +2,7 @@
 
 Use the following procedure to inspect and modify the Boot Script Service \(BSS\) boot parameters JSON file.
 
-This section applies to all node types. The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) have been set.
+This section applies to all node types. The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#prerequisites) have been set.
 
 ## Procedure
 
@@ -17,7 +17,6 @@ This section applies to all node types. The commands in this section assume the 
 1. Modify the JSON file and set the kernel parameters to wipe the disk.
 
    Locate the portion of the line that contains `"metal.no-wipe"` and ensure it is set to zero `"metal.no-wipe=0"`.
-
 
 1. Re-apply the boot parameters list for the node using the JSON file.
 
