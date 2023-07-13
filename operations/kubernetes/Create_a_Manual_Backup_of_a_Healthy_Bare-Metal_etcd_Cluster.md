@@ -1,25 +1,23 @@
 # Create a Manual Backup of Bare-Metal etcd Cluster
 
-Manually create a backup of a healthy Bare-Metal etcd cluster.
+Manually create a backup of a healthy bare-metal etcd cluster.
 
-Bare-Metal etcd cluster backups are automatically created every ten minutes and deleted after 24 hours.
+bare-metal etcd cluster backups are automatically created every ten minutes and deleted after 24 hours.
 When necessary, these procedures can be used to create an additional backup, and then save a separate copy of it, or one of the automated backups.
-When needed, a Bare-Metal etcd cluster can be restored from a saved backup.
+When needed, a bare-metal etcd cluster can be restored from a saved backup.
 
 The commands in these procedures can be run on any master (control plane) node \(`ncn-m#`\) on the system.
-These procedures assume a healthy Bare-Metal etcd cluster.
+These procedures assume a healthy bare-metal etcd cluster.
 
-## Table of contents
+* [Check health of bare-metal etcd cluster](#check-health-of-bare-metal-etcd-cluster)
+* [bare-metal etcd cluster backups overview](#bare-metal-etcd-cluster-backups-overview)
+* [Create new bare-metal etcd cluster backup](#create-new-bare-metal-etcd-cluster-backup)
+* [Save a copy of a bare-metal etcd cluster backup](#save-a-copy-of-a-bare-metal-etcd-cluster-backup)
+* [Restore bare-metal etcd cluster from a saved backup file](#restore-bare-metal-etcd-cluster-from-a-saved-backup-file)
 
-* [Check health of Bare-Metal etcd cluster](#Check-health-of-Bare-Metal-etcd-cluster)
-* [Bare-Metal etcd cluster backups overview](#Bare-Metal-etcd-cluster-backups-overview)
-* [Create new Bare-Metal etcd cluster backup](#Create-new-Bare-Metal-etcd-cluster-backup)
-* [Save a copy of a Bare-Metal etcd cluster backup](#Save-a-copy-of-a-Bare-Metal-etcd-cluster-backup)
-* [Restore Bare-Metal etcd cluster from a saved backup file](#Restore-Bare-Metal-etcd-cluster-from-a-saved-backup-file)
+## Check health of bare-metal etcd cluster
 
-## Check health of Bare-Metal etcd cluster
-
-1. Verify Bare-Metal etcd cluster health on each master (control plane) node \(`ncn-m#`\) on the system.
+1. Verify bare-metal etcd cluster health on each master (control plane) node \(`ncn-m#`\) on the system.
 
     ```bash
     ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \
@@ -33,9 +31,9 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     127.0.0.1:2379 is healthy: successfully committed proposal: took = 20.697187ms
      ```
 
-## Bare-Metal etcd cluster backups overview
+## Bare-metal etcd cluster backups overview
 
-1. Verify that the Bare-Metal etcd cluster backups are initiated every ten minutes.
+1. (`ncn-mw#`) Verify that the bare-metal etcd cluster backups are initiated every ten minutes.
 
     ```bash
     kubectl get cronjob -n kube-system
@@ -48,7 +46,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     kube-etcdbackup   */10 * * * *   False     0        3m28s           7d10h
     ```
 
-1. View backup job.
+1. (`ncn-mw#`) View backup job.
 
     ```bash
     kubectl get jobs -n kube-system | grep -e NAME -e etcdbackup
@@ -61,11 +59,11 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     kube-etcdbackup-27721380   1/1           8s         2m30s
     ```
 
-1. List the available Bare-Metal etcd cluster backups. Note the ten minute interval.
+1. (`ncn-mw#`) List the available bare-metal etcd cluster backups. Note the ten minute interval.
 
     ```bash
-    cd /opt/cray/platform-utils/s3 && ./list-objects.py \
-        --bucket-name etcd-backup | \
+    cd /opt/cray/platform-utils/s3 && \
+        ./list-objects.py --bucket-name etcd-backup | \
         grep bare-metal | tail -5; echo "Current": $(date +"%Y-%m-%d-%H-%M-%S")
     ```
 
@@ -80,15 +78,16 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     Current: 2022-09-15-20-32-54
     ```
 
-## Create new Bare-Metal etcd cluster backup
+## Create new bare-metal etcd cluster backup
 
-1. Validate Bare-Metal etcd cluster's health [Check health of Bare-Metal etcd cluster](#Check health of Bare-Metal etcd cluster).
+1. Validate bare-metal etcd cluster's health.
 
-1. Create backup job.
+    See [Check health of bare-metal etcd cluster](#check-health-of-bare-metal-etcd-cluster).
+
+1. (`ncn-mw#`) Create backup job.
 
     ```bash
-    kubectl create job tmp-bare-metal-etcd-backup \
-        --from=cronjob/kube-etcdbackup -n kube-system
+    kubectl create job tmp-bare-metal-etcd-backup --from=cronjob/kube-etcdbackup -n kube-system
     ```
 
     Example output:
@@ -97,11 +96,10 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     job.batch/tmp-bare-metal-etcd-backup created
     ```
 
-1. Validate job creation.
+1. (`ncn-mw#`) Validate job creation.
 
     ```bash
-    kubectl get jobs -n kube-system | \
-        grep -e NAME -e tmp-bare-metal-etcd-backup
+    kubectl get jobs -n kube-system | grep -e NAME -e tmp-bare-metal-etcd-backup
     ```
 
     Example output:
@@ -111,7 +109,8 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     tmp-bare-metal-etcd-backup   1/1           9s         16s
     ```
 
-1. Verify new Bare-Metal etcd cluster backup created.
+1. (`ncn-mw#`) Verify that the new bare-metal etcd cluster backup was created.
+
     In this example, `bare-metal/etcd-backup-2022-09-15-20-34-13.tar.gz` is created.
 
     ```bash
@@ -131,7 +130,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     Current: 2022-09-15-20-36-14
     ```
 
-1. Delete the `tmp-bare-metal-etcd-backup` backup job.
+1. (`ncn-mw#`) Delete the `tmp-bare-metal-etcd-backup` backup job.
 
     ```bash
     kubectl -n kube-system delete job tmp-bare-metal-etcd-backup
@@ -143,15 +142,16 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     job.batch "tmp-bare-metal-etcd-backup" deleted
     ```
 
-## Save a copy of a Bare-Metal etcd cluster backup
+## Save a copy of a bare-metal etcd cluster backup
 
-1. Create a temporary directory.
+1. (`ncn-mw#`) Create a temporary directory.
 
     ```bash
     mkdir /tmp/etcd_backup
     ```
 
-1. Retrieve the backup from S3.
+1. (`ncn-mw#`) Retrieve the backup from S3.
+
     In this example, the `bare-metal/etcd-backup-2022-09-15-20-34-13.tar.gz` backup created earlier is saved.
     Set the `BACKUP_NAME` variable to the file name, omitting the `bare-metal/` prefix and the `.tar.gz suffix`.
 
@@ -170,15 +170,16 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     etcd-backup-2022-09-15-20-34-13.tar.gz
     ```
 
-## Restore Bare-Metal etcd cluster from a saved backup file
+## Restore bare-metal etcd cluster from a saved backup file
 
-1. Create a `/tmp/etcd_restore` directory.
+1. (`ncn-mw#`) Create a `/tmp/etcd_restore` directory.
 
     ```bash
     mkdir /tmp/etcd_restore
     ```
 
-1. Copy the saved Bare-Metal etcd cluster backup file into the directory.
+1. (`ncn-mw#`) Copy the saved bare-metal etcd cluster backup file into the directory.
+
     Set the `BACKUP_NAME` variable to the file name, omitting the `bare-metal/` prefix and the `.tar.gz suffix`.
     In the following example, the backup file is copied from `/tmp/etcd_backup`
     where a copy of the backup file `etcd-backup-2022-09-15-20-34-13.tar.gz` was saved above.
@@ -196,7 +197,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     etcd-backup-2022-09-15-20-34-13.tar.gz
     ```
 
-1. Uncompress the backup file and extract `etcd-dump.bin` file.
+1. (`ncn-mw#`) Uncompress the backup file and extract the `etcd-dump.bin` file.
 
     ```bash
     gunzip "${BACKUP_NAME}.tar.gz"
@@ -210,7 +211,7 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     renamed 'etcd-backup-2022-09-15-20-34-13/etcd-dump.bin' -> '/tmp/etcd-dump.bin'
     ```
 
-1. Push the `etcd-dump.bin` file to the other NCN master nodes.
+1. (`ncn-mw#`) Push the `etcd-dump.bin` file to the other NCN master nodes.
 
     If not running these steps on `ncn-m001`, adjust the NCN names in the following command accordingly.
 
@@ -219,7 +220,10 @@ These procedures assume a healthy Bare-Metal etcd cluster.
     scp /tmp/etcd-dump.bin ncn-m003:/tmp
     ```
 
-1. Continue the Bare-Metal etcd cluster restore with step `2. Restore member directory`
-     in [Restore Bare-Metal etcd Clusters from an S3 Snapshot](Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md#2-restore-member-directory).
+1. Continue the bare-metal etcd cluster restore.
 
-    Verify restored Bare-Metal etcd cluster's health [Check health of Bare-Metal etcd cluster](#Check health of Bare-Metal etcd cluster).
+    Continue with the [Restore member directory](Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md#2-restore-member-directory) step.
+
+1. Verify the restored bare-metal etcd cluster's health.
+
+    See [Check health of bare-metal etcd cluster](#check-health-of-bare-metal-etcd-cluster).

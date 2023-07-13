@@ -1,41 +1,34 @@
 # NCN Images
 
-The management nodes boot from NCN images which are created from layers on top of a common base image.
+* [Overview of NCN images](#overview-of-ncn-images)
+* [LiveCD server](#livecd-server)
+
+## Overview of NCN images
+
+The management non-compute nodes (NCNs) boot from images which are created from layers on top of a common base image.
 The common image is customized with a `kubernetes` layer for the master nodes and worker nodes.
 The common image is customized with a `storage-ceph` layer for the utility storage nodes.
 
-## Topics
-
-* [Overview of NCN Images](#overview-of-ncn-images)
-* [LiveCD Server](#livecd-server)
-
-## Details
-
-### Overview of NCN Images
-
-There are several flavors of NCN images, each share a common base image. When booting NCNs an admin or user will need to choose between
-stable (Release) and unstable (pre-release/dev) images.
-
-> For details on how these images behave and inherit from the base and common images, see [node-image-docs][1].
+When booting NCNs, an administrator will need to choose between stable (Release) and unstable (pre-release/development) images.
 
 In short, each image (for instance, `kubernetes` and `storage-ceph`) inherit from the non-compute-common layer. Operationally, these are all
 that matter; the common layer, Kubernetes layer, Ceph layer, and any other new images.
 
-To boot an NCN, you need three artifacts for each node-type (`kubernetes-master/worker`, `storage-ceph`):
+To boot an NCN, there are three required artifacts for each node-type (`kubernetes-master/worker`, `storage-ceph`):
 
-1. The Kubernetes SquashFS ([stable][4] or [unstable][5])
+1. The Kubernetes SquashFS (stable or unstable)
 
    * `initrd.img-[RELEASE]-[ARCH].xz`
    * `$version-[RELEASE]-[ARCH].kernel`
    * `kubernetes-[RELEASE]-[ARCH].squashfs`
 
-1. The CEPH SquashFS ([stable][6] or [unstable][7])
+1. The CEPH SquashFS (stable or unstable)
 
    * `initrd.img-[RELEASE].xz`
    * `$version-[RELEASE].kernel`
    * `storage-ceph-[RELEASE]-[ARCH].squashfs`
 
-### LiveCD Server
+## LiveCD server
 
 1. (`pit#`) View the current ephemeral data payload:
 
