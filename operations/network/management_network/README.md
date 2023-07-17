@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD013 -->
-
 # Management Network User Guide
 
 This documentation helps network administrators and support personnel install install and manage
@@ -26,10 +24,7 @@ products.
 
 ## Contents
 
-* [Adding EX2500 cabinet to CSM management network](hardware/ex2500.md)
-* [Aruba edge switch cabling guide](edge_switch_cabling_guide.md)
-* [Aruba split cables](aruba_split_cables.md)
-* [Adding Switch Admin Password to Vault](#adding-switch-admin-password-to-vault)
+* [Adding switch admin password to Vault](#adding-switch-admin-password-to-vault)
 * [Switch configuration states](#switch-configuration-states)
 * [Starting points](#starting-points)
 * [User guides](#user-guides)
@@ -38,14 +33,14 @@ products.
 * [Products supported](#products-supported)
 * [Architecture and naming conventions](#architecture-and-naming-conventions)
 * [Minimum software version requirements](#minimum-software-version-requirements)
-* [Transceiver and cable guide](./transceiver_cable_guide.md)
+* [Transceiver and cable guide](transceiver_cable_guide.md)
 * [Changes](#changes)
   * [Enhancements](#enhancements)
   * [Fixes](#fixes)
   * [Issues and workarounds](#issues-and-workarounds)
   * [Security Bulletin Subscription Service](#security-bulletin-subscription-service)
 
-## Adding Switch Admin Password to Vault
+## Adding switch admin password to Vault
 
 If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
 tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the
@@ -53,24 +48,22 @@ state of the switch. This step is not required to configure the management netwo
 unavailable, this step can be temporarily skipped. Any automated tests that depend on the switch
 credentials being in Vault will fail until they are added.
 
-First, write the switch admin password to the `SW_ADMIN_PASSWORD` variable if it is not already
-set.
+1. (`ncn-mw#`) Write the switch admin password to the `SW_ADMIN_PASSWORD` variable if it is not already set.
 
-```bash
-read -s SW_ADMIN_PASSWORD
-```
+    > The use of `read -s` is a convention used throughout this documentation which allows for the
+    > user input of secrets without echoing them to the terminal or saving them in history.
 
-Once the `SW_ADMIN_PASSWORD` variable is set, run the following commands to add the switch admin
-password to Vault.
+    ```bash
+    read -s SW_ADMIN_PASSWORD
+    ```
 
-```bash
-VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
-alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
-vault kv put secret/net-creds/switch_admin admin=$SW_ADMIN_PASSWORD
-```
+1. (`ncn-mw#`) Run the following commands to add the password to Vault.
 
-Note: The use of `read -s` is a convention used throughout this documentation which allows for the
-user input of secrets without echoing them to the terminal or saving them in history.
+    ```bash
+    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' |  base64 -d)
+    alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN="$VAULT_PASSWD" VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    vault kv put secret/net-creds/switch_admin admin=$SW_ADMIN_PASSWORD
+    ```
 
 ## Switch configuration states
 
@@ -157,11 +150,9 @@ network.
 
 ### Enhancements
 
-Software enhancements are listed in reverse-chronological order, with the newest on the top of the
-list.
+Software enhancements are listed in reverse-chronological order, with the newest on the top of the list.
 
-Unless otherwise noted, each network version listed includes all enhancements added in earlier
-versions.
+Unless otherwise noted, each network version listed includes all enhancements added in earlier versions.
 
 #### Spanning-tree
 
@@ -196,12 +187,8 @@ To initiate a subscription to receive future HPE Security Bulletin alerts via em
 see the [`HPE Support Center`](https://support.hpe.com/connect/s/?language=en_US).
 
 A Security Bulletin is the published notification of security vulnerabilities and is the only
-communication
-vehicle for security vulnerabilities.
+communication vehicle for security vulnerabilities.
 
-* Fixes for security vulnerabilities are not documented in manuals, release notes, or other forms of
-  product
-  documentation.
-* A Security Bulletin is released when all vulnerable products still in support life have publicly
-  available
+* Fixes for security vulnerabilities are not documented in manuals, release notes, or other forms of product documentation.
+* A Security Bulletin is released when all vulnerable products still in support life have publicly available
   images that contain the fix for the security vulnerability.

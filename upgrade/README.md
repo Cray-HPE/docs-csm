@@ -21,7 +21,7 @@ procedure.
 
 ## Option 3: Upgrade only CSM
 
-To perform an upgrade of only CSM, see the [Upgrade Only CSM](./Upgrade_Only_CSM.md) procedure.
+To perform an upgrade of only CSM, see the [Upgrade Only CSM](Upgrade_Only_CSM.md) procedure.
 
 This option applies to CSM-only systems and systems which have additional HPE Cray EX software
 products installed, as long as those additional products are not also being upgraded. This is an
