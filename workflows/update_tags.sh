@@ -30,17 +30,17 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd $SCRIPT_DIR
 
 if [[ "$(basename $(pwd))" != "workflows" ]]; then
-  echo "This script must be located in the workflows directory to run."
+  echo "ERROR: This script must be located in the workflows directory to run."
   exit 1
 fi
 
-if [[ ! $(nslookup $REGISTRY) ]]; then
-  echo "${REGISTRY} does not resolve. Exiting script as success under assumption that docs were installed outside of CSM environment."
+if [[ $(nslookup $REGISTRY | grep SERVFAIL) ]]; then
+  echo "INFO: Skipping update_tags.sh script given docs were installed outside of a CSM environment."
   exit 0
 fi
 
 if [[ ! $(curl -s https://${REGISTRY}) ]]; then
-  echo "${REGISTRY} is not accessible over https. Check that it is running and accessible before continuing."
+  echo "ERROR: Is this a CSM environment? Check that ${REGISTRY} is not accessible over https before continuing."
   exit 1
 fi
 
