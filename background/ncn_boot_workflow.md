@@ -1,12 +1,8 @@
 # NCN Boot Workflow
 
-Non-compute nodes can boot from two sources:
+This document provides information on non-compute node (NCN) boot devices and boot ordering.
 
-- Network/PXE
-- Disk
-
-## Topics
-
+- [Boot sources](#boot-sources)
 - [Determine the current boot order](#determine-the-current-boot-order)
 - [Reasons to change the boot order after CSM install](#reasons-to-change-the-boot-order-after-csm-install)
 - [Determine if NCNs booted via disk or PXE](#determine-if-ncns-booted-via-disk-or-pxe)
@@ -17,6 +13,13 @@ Non-compute nodes can boot from two sources:
 - [Example boot orders](#example-boot-orders)
 - [Reverting changes](#reverting-changes)
 - [Locating USB device](#locating-usb-device)
+
+## Boot sources
+
+Non-compute nodes (NCNs) can boot from two sources:
+
+- Network/PXE
+- Disk
 
 ## Determine the current boot order
 
@@ -45,7 +48,7 @@ PXE. The method to use will vary depending on the system environment.
 1. Check kernel parameters.
 
     ```bash
-    ncn# cat /proc/cmdline
+    ncn/pit# cat /proc/cmdline
     ```
 
     If it starts with `kernel` then the node network booted. If it starts with `BOOT_IMAGE=(` then it disk booted.
@@ -53,7 +56,7 @@ PXE. The method to use will vary depending on the system environment.
 1. Check output from `efibootmgr`.
 
     ```bash
-    ncn# efibootmgr
+    ncn/pit# efibootmgr
     ```
 
     The `BootCurrent` value should be matched to the list beneath to see if it lines up with a networking option or a `cray sd*)` option for disk boots.
@@ -120,7 +123,7 @@ ncn# for h in $( grep mgmt /etc/hosts | grep -v m001 | awk -F ',' '{print $2}' )
 - `efibootmgr` speaks directly to the node's UEFI; it can only be ignored by new BIOS activity
 
 > **NOTE:** `cloud-init` will set boot order when it runs, but this does not always work with certain hardware vendors. An administrator can invoke the `cloud-init` script at
-> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN. Find the script [here, on GitHub](https://github.com/Cray-HPE/node-image-build/blob/lts/csm-1.0/boxes/ncn-common/files/scripts/metal/set-efi-bbs.sh).
+> `/srv/cray/scripts/metal/set-efi-bbs.sh` on any NCN.
 
 <a name="setting-order"></a>
 

@@ -17,7 +17,7 @@ sections, but there is also a general troubleshooting topic.
 
 <a name="prepare_for_upgrade"></a>
 
-## Prepare For Upgrade
+## Prepare For upgrade
 
 See [Prepare for Upgrade](prepare_for_upgrade.md)
 
@@ -25,23 +25,23 @@ See [Prepare for Upgrade](prepare_for_upgrade.md)
 
 ## Upgrade management nodes and CSM services
 
-The procedure you follow depends on the new CSM version to which you are upgrading:
+The procedure to follow depends on the target CSM version of the upgrade.
 
 * Upgrading **to CSM 1.0.1**
 
-    **IMPORTANT**: You must be at CSM 0.9 (0.9.4 or later) or CSM 1.0.0 in order to upgrade to CSM 1.0.1.
+    **IMPORTANT**: Must be at CSM 0.9 (0.9.4 or later) or CSM 1.0.0 in order to upgrade to CSM 1.0.1.
 
     The upgrade is a guided process starting with [CSM 1.0.1 Upgrade Instructions](1.0.1/README.md).
 
 * Upgrading **to CSM 1.0.10**
 
-    **IMPORTANT**: You must be at CSM 1.0.1 in order to upgrade to CSM 1.0.10.
+    **IMPORTANT**: Must be at CSM 1.0.1 in order to upgrade to CSM 1.0.10.
 
     The upgrade is a guided process starting with [CSM 1.0.10 Upgrade Instructions](1.0.10/README.md).
 
 * Upgrading **to CSM 1.0.11**
 
-    **IMPORTANT**: You must be at CSM 1.0.0, CSM 1.0.1, or CSM 1.0.10 in order to upgrade to CSM 1.0.11.
+    **IMPORTANT**: Must be at CSM 1.0.0, CSM 1.0.1, or CSM 1.0.10 in order to upgrade to CSM 1.0.11.
 
     The upgrade is a guided process starting with [CSM 1.0.11 Upgrade Instructions](1.0.11/README.md).
 
@@ -51,8 +51,8 @@ The procedure you follow depends on the new CSM version to which you are upgradi
 
 **IMPORTANT**: Only do this step if upgrading from CSM 0.9 (Shasta 1.4). If upgrading from CSM 1.0 (Shasta 1.5), skip this step.
 
-There are new features and functions with Shasta v1.5. Some of these changes were available as patches and hotfixes
-for Shasta v1.4, so may already be applied.
+There are new features and functions with Shasta 1.5. Some of these changes were available as patches and hotfixes
+for Shasta 1.4, so may already be applied.
 
 * Static Lags from the CDU switches to the CMMs (Aruba and Dell).
 * HPE Apollo node port configuration, requires a trunk port to the iLO.
