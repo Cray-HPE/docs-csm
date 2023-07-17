@@ -1,9 +1,7 @@
 # NCN Networking
 
-Non-compute nodes and compute nodes have different network interfaces used for booting; this topic focuses on
-the network interfaces for management nodes.
-
-## Topics
+Non-compute nodes (NCNs) and compute nodes (CNs) have different network interfaces used for booting; this topic focuses on
+the network interfaces for management NCNs.
 
 * [NCN network interfaces](#ncn-network-interfaces)
 * [Device naming](#device-naming)

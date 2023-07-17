@@ -2,11 +2,11 @@
 
 ## Introduction
 
-This document guides an administrator through the upgrade of Cray Systems Management from v1.0 to v1.2. When upgrading a system, follow this top-level file
+This document guides an administrator through the upgrade of Cray Systems Management from version 1.2 to version 1.3. When upgrading a system, follow this top-level file
 from top to bottom. The content on this top-level page is meant to be terse. For additional reference material on the upgrade processes and scripts
 mentioned explicitly on this page, see [resource material](resource_material/README.md).
 
-## Important Notes
+## Important notes
 
 ### Service request adjustments are needed for small systems
 
@@ -20,7 +20,7 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
   upgrade), if other settings are desired in the `customizations.yaml` file for this system.
 
   For more information about modifying `customizations.yaml` and tuning for specific systems, see
-  [Post Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
+  [Post-Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
 
 ## Upgrade stages
 

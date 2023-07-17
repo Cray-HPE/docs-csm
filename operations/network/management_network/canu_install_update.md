@@ -10,7 +10,7 @@ Since CANU is a python application, it can be run on Linux and Mac, but the RPM 
 
 The CANU project can be cloned from GitHub and run directly by Python, but the project dependencies will need to be installed manually. This process is not supported by this documentation.
 
-The Windows operating system is untested and currently not officially supported.  We recommend that Windows users install or update CANU on the Shasta NCN nodes instead of attempting a workstation installation.
+The Windows operating system is untested and currently not officially supported. We recommend that Windows users install or update CANU on the Shasta NCN nodes instead of attempting a workstation installation.
 
 If CANU is already installed, then check the CANU version with following command.
 

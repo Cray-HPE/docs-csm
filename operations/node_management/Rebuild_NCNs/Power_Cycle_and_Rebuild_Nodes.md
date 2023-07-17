@@ -1,6 +1,6 @@
 # Power Cycle and Rebuild Nodes
 
-This section applies to all node types. The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) have been set.
+This section applies to all node types. The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#prerequisites) have been set.
 
 ## Procedure
 
@@ -16,7 +16,7 @@ This section applies to all node types. The commands in this section assume the 
 
     **IMPORTANT:** Run these commands from a node ***NOT*** being rebuilt.
 
-    **IMPORTANT:** The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#Prerequisites) have been set.
+    **IMPORTANT:** The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#prerequisites) have been set.
 
     1. Set the BMC variable to the hostname of the BMC of the node being rebuilt.
 

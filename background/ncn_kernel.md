@@ -1,9 +1,9 @@
-# Kernel
+# NCN Kernel
 
-This page provides information on the Linux kernel in the NCN.
+This page provides information on the Linux kernel in the non-compute nodes (NCNs).
 
 * [Locks](#locks)
-* [Module Blacklisting](#module-blacklisting)
+* [Module blacklisting](#module-blacklisting)
 * [Parameters](#parameters)
   * [`biosdevname`](#biosdevname)
   * [`ifname`](#ifname)
@@ -67,9 +67,9 @@ To remove the lock, run `zypper removelock kernel-default`.
 
 To add set the lock, run `zypper addlock kernel-default`.
 
-## Module Blacklisting
+## Module blacklisting
 
-Certain kernel modules are blacklisted from loading on the non-compute node.
+The following kernel modules are blacklisted from loading on the NCNs:
 
 * `rpcrdma` due to conflicts with slingshot.
 
@@ -93,7 +93,7 @@ Parameters are viewable in four places:
 For custom kernel parameters for resizing partitions or controlling other behaviors from CSM: Metal's
 dracut, see the following pages:
 
-* [`dracut-metal-mdsquash`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.md#kernel-parameters)
+* [`dracut-metal-mdsquash`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#kernel-parameters)
 * [`dracut-metal-dmk8s`](https://github.com/Cray-HPE/dracut-metal-dmk8s/blob/main/README.md#customizable-parameters)
 * [`dracut-metal-luksetcd`](https://github.com/Cray-HPE/dracut-metal-luksetcd/blob/main/README.md#customizable-parameters)
 
@@ -137,7 +137,7 @@ a name.
 in runtime.
 
 For more information, see [dracut command line's network parameter definition][13] and the
-[NCN Networking page](./ncn_networking.md).
+[NCN Networking page](ncn_networking.md).
 
 ### `ip`
 
@@ -691,11 +691,11 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 | CSM 1.3.0                 | 5.3.18-150300.59.**87.1** | [`CVE-2022-33981`][23]   |
 
 [1]:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
-[2]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.md#usage
-[3]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.md#metalno-wipe
-[4]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.md#metalwipe-delay
+[2]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#usage
+[3]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#metalno-wipe
+[4]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#metalwipe-delay
 [5]:https://docs.kernel.org/admin-guide/initrd.html
-[6]:https://cloudinit.readthedocs.io/en/latest/topics/datasources/nocloud.html
+[6]:https://cloudinit.readthedocs.io/en/21.4/topics/datasources/nocloud.html
 [7]:https://github.com/dracutdevs/dracut/blob/master/man/dracut.cmdline.7.asc#standard
 [8]:https://github.com/dracutdevs/dracut/blob/master/man/dracut.cmdline.7.asc#misc
 [9]:https://github.com/dracutdevs/dracut/blob/master/man/dracut.cmdline.7.asc#debug
