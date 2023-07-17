@@ -11,7 +11,7 @@ This procedure provisions only the default Redfish `root` account passwords. It 
 - [Prerequisites](#prerequisites)
 - [Procedure](#procedure)
 
-    1. [Update the default credentials used by MEDS for new hardware](#1-update the-default-credentials-used-by-meds-for-new-hardware)
+    1. [Update the default credentials used by MEDS for new hardware](#1-update-the-default-credentials-used-by-meds-for-new-hardware)
     1. [Update credentials for existing EX hardware in the system](#2-update-credentials-for-existing-ex-hardware-in-the-system)
     1. [Reapply BMC settings if a `StatefulReset` was performed on any BMC](#3-reapply-bmc-settings-if-a-statefulreset-was-performed-on-any-bmc)
 
