@@ -70,7 +70,7 @@ Use the `cray hsm state components bulkRole update` command to perform setting r
    Example output:
 
    ```text
-   x3000c0s5b0,x3000c0s4b0,x3000c0s7b0,x3000c0s6b0,x3000c0s3b0,x3000c0s2b0,x3000c0s9b0,x3000c0s8b0
+   x3000c0s1b0,x3000c0s2b0,x3000c0s3b0,x3000c0s6b0,x3000c0s5b0,x3000c0s4b0,x3000c0s7b0,x3000c0s8b0,x3000c0s9b0
    ```
 
 1. (`ncn-mw#`) Set the `Management` role for those BMCs.

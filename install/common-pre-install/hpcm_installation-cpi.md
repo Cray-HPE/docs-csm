@@ -643,7 +643,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
             Use the `cm controller add` command. Add only River cabinet fabric switches.
 
             ```bash
-            cm controller add -c sw-hsn-x3000-001 -t external_switch -m 00:40:a6:82:f7:5f -u root -p initial0
+            cm controller add -c sw-hsn-x3000-001 -t external_switch -m 00:40:a6:82:f7:5f -u [USERNAME] -p [PASSWORD]
             ```
 
          1. Discover CMCs.
@@ -651,7 +651,7 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
             Use the `cm controller add` command. An example for a Gigabyte server:
 
             ```bash
-            cm controller add -c SubRack001-cmc -t gigabyte -m  b4:2e:99:b8:da:03 -u root -p initial0
+            cm controller add -c SubRack001-cmc -t gigabyte -m  b4:2e:99:b8:da:03 -u [USERNAME] -p [PASSWORD]
             ```
 
          1. Discover CECs.
@@ -693,27 +693,29 @@ See the [set boot order](../../background/ncn_boot_workflow.md#setting-boot-orde
 
          1. Check the power status and PXE status.
 
-            >**NOTE:** Verify if all the River node BMCs are leased with an IP address.
+            >**NOTE:**  
+            >Verify if all the River node BMCs are leased with an IP address.  
+            >To set the username and IPMI password, see [Set IPMI credentials](../re-installation.md#set-ipmi-credentials).
 
             1. Check the power status of nodes.
 
                ```bash
                cm node discover status | grep client-hostname  > temp.txt
-               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power status; done
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -U "${USERNAME}" -E -H $i  power status; done
                ```
 
             1. Check if all the node's bootorder is set to `pxe`.
 
                ```bash
-               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 chassis bootdev; done
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -U "${USERNAME}" -E -H $i chassis bootdev; done
                ```
 
             1. Set the boot order to `pxe` and reboot the nodes.
 
                ```bash
-               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 chassis bootdev pxe; done
-               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power on; done
-               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -H $i -U root -P initial0 power reset; done
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -U "${USERNAME}" -E -H $i chassis bootdev pxe; done
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -U "${USERNAME}" -E -H $i power on; done
+               for i in `cat temp.txt| awk '{print $1}'` ; do echo $i; ipmitool -I lanplus -U "${USERNAME}" -E -H $i power reset; done
                ```
 
          1. Wait for the discovery process to detect desired hardware components, then check the status of discovered hardware using the following command.

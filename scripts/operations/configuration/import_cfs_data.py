@@ -308,12 +308,13 @@ def main() -> None:
     Parses the command line arguments, does the stuff.
 
     Arguments:
-    <directory containing JSON files>
+    [--clear-cfs] <directory containing JSON files>
 
     Raises CfsError if there is an error or if no data is found to import
     """
     parser = argparse.ArgumentParser(
         description="Reads CFS data from JSON files and imports the data info CFS")
+    parser.add_argument("--clear-cfs", action='store_true', help="Delete CFS configurations and clear CFS components before importing")
     parser.add_argument(metavar="json_directory", type=json_data_from_directory, dest="json_data",
                         help=f"Directory containing {CMP_JSON}, {CFG_JSON}, and {OPT_JSON}")
     parsed_args = parser.parse_args()
@@ -322,6 +323,25 @@ def main() -> None:
 
     print("Reading current data from CFS")
     current_cfs_data = load_cfs_data()
+
+    if parsed_args.clear_cfs:
+        # Take a snapshot of the CFS data before clearing it
+        print("Taking a snapshot of system CFS data before clearing it")
+        snapshot_cfs_data()
+
+        for config_name in current_cfs_data.configurations:
+            print(f"Deleting configuration '{config_name}'")
+            cfs.delete_configuration(config_name)
+            del current_cfs_data.configurations[config_name]
+
+        for comp_name, comp_data in current_cfs_data.components.items():
+            if "tags" in comp_data and comp_data["tags"]:
+                print(f"Clearing error count, desired configuration, state, and tags for component '{comp_name}'")
+                updated_comp = cfs.update_componnent(comp_name, errorCount=0, state=[], desiredConfig="", tags={})
+            else:
+                print(f"Clearing error count, desired configuration, and state for component '{comp_name}'")
+                updated_comp = cfs.update_componnent(comp_name, errorCount=0, state=[], desiredConfig="", tags={})
+            current_cfs_data.components[comp_name] = updated_comp
 
     # Determine the necessary updates
     print("\nExamining CFS configurations...")
@@ -342,9 +362,11 @@ def main() -> None:
         print("No updates to be performed.")
         return
 
-    # Take a snapshot of the CFS data before we begin.
-    print("Taking a snapshot of system CFS data before making changes")
-    snapshot_cfs_data()
+    if not parsed_args.clear_cfs:
+        # Only need to do this if we didn't clear CFS earlier
+        # Take a snapshot of the CFS data before we begin.
+        print("Taking a snapshot of system CFS data before making changes")
+        snapshot_cfs_data()
 
     change_options(cfs_data_to_import.options, options_to_change)
     create_configs(cfs_data_to_import.configurations, configs_to_create)

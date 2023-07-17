@@ -29,7 +29,7 @@ DHCP and external connectivity is required to download CSM tar ball.
 
 On the first login, configure and verify the site-link, DNS and gateway IP addresses.
 
-1. (`pit#`) Configure the site-link (`lan0`), DNS, and gateway IP addresses. (Optional) Also, at this stage, you can change the admin node password to `initial0`.
+1. (`pit#`) Configure the site-link (`lan0`), DNS, and gateway IP addresses. (Optional) Also, at this stage, you can change the admin node password.
 
    1. Set `site_ip` variable.
 

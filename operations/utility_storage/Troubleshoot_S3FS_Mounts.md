@@ -76,7 +76,7 @@ If the above line is not present in `/etc/fstab`, add the above content and proc
 
 ## Step 3: Attempt to Remount the Mount Point
 
-This step is the same for master and worker nodes.  Run the following command to mount the directories specified in the `/etc/fstab` file:
+This step is the same for master and worker nodes. Run the following command to mount the directories specified in the `/etc/fstab` file:
 
 ```bash
 ncn-mw: # mount -a

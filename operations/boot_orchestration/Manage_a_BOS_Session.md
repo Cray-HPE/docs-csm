@@ -4,9 +4,15 @@ Once a Boot Orchestration Service \(BOS\) session template is created, users can
 
 To find the API versions of any commands listed, add `-vvv` to the end of the CLI command, and the CLI will print the underlying call to the API in the output.
 
-## Create a New V2 Session
+* [Create a new v2 session](#create-a-new-v2-session)
+* [Create a new v1 session](#create-a-new-v1-session)
+* [List all sessions](#list-all-sessions)
+* [Show details for a session](#show-details-for-a-session)
+* [Delete a session](#delete-a-session)
 
-Creating a new BOS V2 session requires the following command-line options:
+## Create a new v2 session
+
+Creating a new BOS v2 session requires the following command-line options:
 
 * `--template-name`: Use this option to specify the name value returned in the `cray bos v2 sessiontemplates list` command.
 * `--operation`: Use this option to indicate if a `boot`, `reboot`, or `shutdown` action is being taken.
@@ -38,13 +44,13 @@ Example output:
 
 V2 Sessions also support several other optional arguments:
 
-* `--name`: The session name can be specified.  If not set, a random UUID will be generated for the name.
-* `--limit`: Limits the nodes that BOS will run against.  For more information see [Limit the Scope of a BOS Session](Limit_the_Scope_of_a_BOS_Session.md)
+* `--name`: The session name can be specified. If not set, a random UUID will be generated for the name.
+* `--limit`: Limits the nodes that BOS will run against. For more information see [Limit the Scope of a BOS Session](Limit_the_Scope_of_a_BOS_Session.md)
 * `--stage`: Sets `staged_state` for components rather than `desired_state`. This has no immediate effect, but can be applied at a later time. For more information see [Stage Changes with BOS](Stage_Changes_with_BOS.md)
 
-## Create a New V1 Session
+## Create a new v1 session
 
-Creating a new BOS V1 session requires the following command-line options:
+Creating a new BOS v1 session requires the following command-line options:
 
 * `--template-name`: Use this option to specify the name value returned in the `cray bos v1 sessiontemplate list` command.
 * `--operation`: Use this option to indicate if a `boot`, `reboot`, `configure`, or `shutdown` action is being taken.
@@ -79,11 +85,9 @@ Example output:
 }
 ```
 
-## List all Sessions
+## List all sessions
 
-List all existing BOS sessions with the following command:
-
-(`ncn-mw#`) V2 command:
+(`ncn-mw#`) List all BOS v2 sessions with the following command:
 
 ```bash
 cray bos v2 sessions list --format json
@@ -110,7 +114,7 @@ Example output:
 ]
 ```
 
-(`ncn-mw#`) V1 command:
+(`ncn-mw#`) List all BOS v1 sessions with the following command:
 
 ```bash
 cray bos v1 session list --format json
@@ -125,13 +129,11 @@ Example output:
 ]
 ```
 
-## Show Details for a Session
+## Show details for a session
 
-Get details for a BOS session using the session ID.
+(`ncn-mw#`) Get details for a BOS v2 session using the session ID.
 
-(`ncn-mw#`) V2 command:
-
-```bash
+ ```bash
 cray bos v2 sessions describe <BOS_SESSION_ID> --format json
 ```
 
@@ -154,7 +156,7 @@ Example output:
 }
 ```
 
-(`ncn-mw#`) V1 command:
+(`ncn-mw#`) Get details for a BOS v1 session using the session ID.
 
 ```bash
 cray bos v1 session describe <BOS_SESSION_ID> --format json
@@ -176,20 +178,18 @@ Example output:
 }
 ```
 
-**Troubleshooting:** There is a known issue in BOS V1 where some sessions cannot be described using the `cray bos v1 session describe` command.
+**Troubleshooting:** There is a known issue in BOS v1 where some sessions cannot be described using the `cray bos v1 session describe` command.
 The issue with the describe action results in a 404 error, despite the session existing in the output of `cray bos v1 session list` command.
 
-## Delete a Session
+## Delete a session
 
-Delete a specific BOS session:
-
-(`ncn-mw#`) V2 command:
+(`ncn-mw#`) Delete a specific BOS v2 session:
 
 ```bash
 cray bos v2 sessions delete <BOS_SESSION_ID>
 ```
 
-(`ncn-mw#`) V1 command:
+(`ncn-mw#`) Delete a specific BOS v1 session:
 
 ```bash
 cray bos v1 session delete <BOS_SESSION_ID>

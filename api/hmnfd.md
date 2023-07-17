@@ -10,11 +10,11 @@ To receive notifications, a compute node must have an http or https based HMNFD 
 
 The REST API provides the following functions:
 * Subscription for component state changes:
-    * Hardware state (On, Off, Ready, Standby, Halt etc.)
-    * Logical state (arbitrary like AdminDown, Other)
-    * Role (Compute, Management, Application etc.)
+    * Hardware state (On, Off, Ready, Standby, Halt, etc.)
+    * Logical state (arbitrary like AdminDown, Other, etc.)
+    * Role (Compute, Management, Application, etc.)
+    * SubRole (Master, Worker, Storage, etc.)
     * Enabled state
-    * Flag (OK, Alert, Warning, etc.)
 
 * View current subscriptions
 * Delete subscriptions
@@ -35,7 +35,7 @@ Retrieve health information for the service and its dependencies.
 #### GET /subscriptions
 Retrieve and view current subscriptions.
 #### POST /subscriptions/{xname}/agents/{agent}
-A node will subscribe to whatever state change notifications (SCNs) it wants to receive. Thus, the node needs to have a service running to which HMNFD can send, via REST, the subscribed-to SCNs. A URL that tells where to send the SCNs is provided as part of the request body schema. Once a subscribed-to SCN occurs, NFD sends it to the node's service via a REST call to the URL supplied during the subscribe operation.  The {xname} and {agent} segments of the URL state which node and which agent on that node are doing the subscribing.  The subscription request info is in the body of the PUT  payload.
+A node will subscribe to whatever state change notifications (SCNs) it wants to receive.  Thus, the node needs to have a service running to which HMNFD can send, via REST, the subscribed-to SCNs.  A URL that tells where to send the SCNs is provided as part of the request body schema.  Once a subscribed-to SCN occurs, NFD sends it to the node's service via a REST call to the URL supplied during the subscribe operation.  The {xname} and {agent} segments of the URL state which node and which agent on that node are doing the subscribing.  The subscription request info is in the body of the POST payload.
 #### PATCH /subscriptions/{xname}/agents/{agent}
 Modify an existing SCN subscription.  Component list, component states, etc. can be modified with this request, which will remain associated with the component and software agent specified in the URL.
 #### DELETE /subscriptions/{xname}/agents
@@ -158,7 +158,7 @@ Retrieve all information on currently held State Change Notification subscriptio
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.  Currently held subscriptions are returned.|[SubscriptionListArray](#schemasubscriptionlistarray)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist. Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /subscriptions, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
@@ -271,8 +271,9 @@ Retrieve currently held State Change Notification subscriptions for a component.
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.  Currently held subscriptions are returned.|[SubscriptionListArray](#schemasubscriptionlistarray)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Invalid XName in URL path.|[Problem7807](#schemaproblem7807)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
-|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist. Endpoint not available.|[Problem7807](#schemaproblem7807)|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  For /subscriptions, only GET operations are allowed.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
@@ -352,7 +353,7 @@ Delete all state change notification subscriptions for a component.
 
 > Example responses
 
-> 401 Response
+> 400 Response
 
 ```json
 {
@@ -369,7 +370,8 @@ Delete all state change notification subscriptions for a component.
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Success.|None|
-|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized. RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Invalid XName in URL path.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  Only DELETE operations are allowed.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
@@ -444,7 +446,7 @@ func main() {
 
 *Subscribe to a state change notification*
 
-Subscribe to state change notifications for a set of components. Once this is done, the subscribing components will receive these notifications as they occur, using the URL specified at subscription time.  The XName of the subscribing component as well as the software agent doing the subscribing are specified in the URL path.
+Subscribe to state change notifications for a set of components. Once this is done, the subscribing components will receive these notifications as they occur, using the URL specified at subscription time.  The xname of the subscribing component as well as the software agent doing the subscribing are specified in the URL path.
 
 > Body parameter
 
@@ -472,7 +474,7 @@ Subscribe to state change notifications for a set of components. Once this is do
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[SubscribePostV2](#schemasubscribepostv2)|true|none|
-|xname|path|string|true|The XName of the subscribing component (typically a node)|
+|xname|path|string|true|The xname of the subscribing component (typically a node)|
 |agent|path|string|true|The software agent running on the subscribing component|
 
 > Example responses
@@ -493,9 +495,9 @@ Subscribe to state change notifications for a set of components. Once this is do
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Success.|None|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Malformed JSON.  Verify all JSON formatting in payload, and that all xnames are properly formatted.|[Problem7807](#schemaproblem7807)|
-|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized. RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  Only PATCH and DELETE operations are allowed.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
@@ -570,7 +572,7 @@ func main() {
 
 *Modify a subscription to state change notifications*
 
-Modify an existing subscription to state change notifications for a  component and software agent.  The XName of the subscribing component  as well as the software agent doing the subscribing are specified in  the URL path.
+Modify an existing subscription to state change notifications for a  component and software agent.  The xname of the subscribing component  as well as the software agent doing the subscribing are specified in  the URL path.
 
 > Body parameter
 
@@ -598,7 +600,7 @@ Modify an existing subscription to state change notifications for a  component a
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
 |body|body|[SubscribePostV2](#schemasubscribepostv2)|true|none|
-|xname|path|string|true|The XName of the subscribing component (typically a node)|
+|xname|path|string|true|The xname of the subscribing component (typically a node)|
 |agent|path|string|true|The software agent running on the subscribing component|
 
 > Example responses
@@ -621,7 +623,7 @@ Modify an existing subscription to state change notifications for a  component a
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Success.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Malformed JSON.  Verify all JSON formatting in payload, and that all xnames are properly formatted.|[Problem7807](#schemaproblem7807)|
-|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized. RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
 |405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  Only POST, PATCH and DELETE operations are allowed.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
@@ -692,18 +694,18 @@ func main() {
 
 *Delete a specific state change notification subscription*
 
-Delete a specific state change notification subscription associated  with a target component and a target software agent.  The XName of the subscribing component as well as the software agent on the subscribing  component are specified in the URL path.
+Delete a specific state change notification subscription associated  with a target component and a target software agent.  The xname of the subscribing component as well as the software agent on the subscribing  component are specified in the URL path.
 
 <h3 id="dosubscriptiondeletexnameagentv2-parameters">Parameters</h3>
 
 |Name|In|Type|Required|Description|
 |---|---|---|---|---|
-|xname|path|string|true|The XName of the subscribing component (typically a node)|
+|xname|path|string|true|The xname of the subscribing component (typically a node)|
 |agent|path|string|true|The software agent running on the subscribing component|
 
 > Example responses
 
-> 401 Response
+> 400 Response
 
 ```json
 {
@@ -720,9 +722,10 @@ Delete a specific state change notification subscription associated  with a targ
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |204|[No Content](https://tools.ietf.org/html/rfc7231#section-6.3.5)|Success.|None|
-|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized. RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Invalid XName in URL path or No matching subscription for DELETE.|[Problem7807](#schemaproblem7807)|
+|401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
-|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  Only PUT and DELETE operations are allowed.|[Problem7807](#schemaproblem7807)|
+|405|[Method Not Allowed](https://tools.ietf.org/html/rfc7231#section-6.5.5)|Operation Not Permitted.  Only DELETE operations are allowed.|[Problem7807](#schemaproblem7807)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Internal Server Error.  Unexpected condition encountered when processing the request.|[Problem7807](#schemaproblem7807)|
 |default|Default|Unexpected error|[Problem7807](#schemaproblem7807)|
 
@@ -839,7 +842,7 @@ Send a state change notification for fanout to subscribers. This is the API endp
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Malformed JSON.  Verify all JSON formatting in payload.|[Problem7807](#schemaproblem7807)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|
@@ -1060,7 +1063,7 @@ Change the value of one or more configurable parameters.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success|None|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Success.|None|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request.  Malformed JSON.  Verify all JSON formatting in payload.|[Problem7807](#schemaproblem7807)|
 |401|[Unauthorized](https://tools.ietf.org/html/rfc7235#section-3.1)|Unauthorized.  RBAC prevented operation from executing, or authentication token has expired.|[Problem7807](#schemaproblem7807)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|Does Not Exist.  Endpoint not available.|[Problem7807](#schemaproblem7807)|

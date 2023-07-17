@@ -9356,25 +9356,45 @@ The status of a Session.
 |*anonymous*|running|
 |*anonymous*|complete|
 
-<h2 id="tocS_V2SessionTime">V2SessionTime</h2>
+<h2 id="tocS_V2SessionStartTime">V2SessionStartTime</h2>
 <!-- backwards compatibility -->
-<a id="schemav2sessiontime"></a>
-<a id="schema_V2SessionTime"></a>
-<a id="tocSv2sessiontime"></a>
-<a id="tocsv2sessiontime"></a>
+<a id="schemav2sessionstarttime"></a>
+<a id="schema_V2SessionStartTime"></a>
+<a id="tocSv2sessionstarttime"></a>
+<a id="tocsv2sessionstarttime"></a>
 
 ```json
 "string"
 
 ```
 
-When the Session was created or completed.
+When the Session was created.
 
 ### Properties
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|*anonymous*|string|false|none|When the Session was created or completed.|
+|*anonymous*|string|false|none|When the Session was created.|
+
+<h2 id="tocS_V2SessionEndTime">V2SessionEndTime</h2>
+<!-- backwards compatibility -->
+<a id="schemav2sessionendtime"></a>
+<a id="schema_V2SessionEndTime"></a>
+<a id="tocSv2sessionendtime"></a>
+<a id="tocsv2sessionendtime"></a>
+
+```json
+"string"
+
+```
+
+When the Session was completed. A null value means the Session has not ended.
+
+### Properties
+
+|Name|Type|Required|Restrictions|Description|
+|---|---|---|---|---|
+|*anonymous*|string¦null|false|none|When the Session was completed. A null value means the Session has not ended.|
 
 <h2 id="tocS_V2SessionStatus">V2SessionStatus</h2>
 <!-- backwards compatibility -->
@@ -9399,10 +9419,10 @@ Information on the status of a Session.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|start_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
-|end_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
+|start_time|[V2SessionStartTime](#schemav2sessionstarttime)|false|none|When the Session was created.|
+|end_time|[V2SessionEndTime](#schemav2sessionendtime)|false|none|When the Session was completed. A null value means the Session has not ended.|
 |status|[V2SessionStatusLabel](#schemav2sessionstatuslabel)|false|none|The status of a Session.|
-|error|string|false|none|Error which prevented the Session from running|
+|error|string¦null|false|none|Error which prevented the Session from running.<br>A null value means the Session has not encountered an error.|
 
 <h2 id="tocS_V2BootSet">V2BootSet</h2>
 <!-- backwards compatibility -->
@@ -9604,8 +9624,8 @@ Detailed information on the timing of a Session.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|start_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
-|end_time|[V2SessionTime](#schemav2sessiontime)|false|none|When the Session was created or completed.|
+|start_time|[V2SessionStartTime](#schemav2sessionstarttime)|false|none|When the Session was created.|
+|end_time|[V2SessionEndTime](#schemav2sessionendtime)|false|none|When the Session was completed. A null value means the Session has not ended.|
 |duration|string|false|none|The current duration of the ongoing Session or final duration of the completed Session.|
 
 <h2 id="tocS_V2SessionExtendedStatus">V2SessionExtendedStatus</h2>

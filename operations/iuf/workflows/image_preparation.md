@@ -8,6 +8,7 @@ and images are created with the correct content and configuration values.
 - [1. Execute the IUF `update-cfs-config` and `prepare-images` stages](#1-execute-the-iuf-update-cfs-config-and-prepare-images-stages)
 - [2. Manually prepare additional images](#2-manually-prepare-additional-images)
   - [2.1 UAI images](#21-uai-images)
+  - [2.2 ARM images](#22-arm-images)
 - [3. Next steps](#3-next-steps)
 
 ## 1. Execute the IUF `update-cfs-config` and `prepare-images` stages
@@ -53,6 +54,10 @@ If User Access Instances are utilized on the system, refer to one of the followi
 Once this step has completed:
 
 - New UAI images have been created
+
+### 2.2 ARM images
+
+If it is necessary to build `aarch64` images, then see [ARM images](../IUF.md#arm-images).
 
 ## 3. Next steps
 

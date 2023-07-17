@@ -1,9 +1,11 @@
 # Clean Up Logs After a BOA Kubernetes Job
 
-> **`NOTE`** This section is for BOS V1 only.  BOS V2 does not use BOA jobs and does not require cleanup.
+> **`NOTE`** This section is for Boot Orchestration Service \(BOS\) v1 only. BOS v2 does not use
+> Boot Orchestration Agent \(BOA\) jobs and does not require cleanup.
 
-Delete log entries from previous boot orchestration jobs. The Boot Orchestration Service \(BOS\) launches a Boot Orchestration Agent \(BOA\) Kubernetes job.
-BOA then launches a Configuration Framework Service \(CFS\) session, resulting in a CFS-BOA Kubernetes job. Thus, there are two separate sets of jobs that can be removed.
+Delete log entries from previous boot orchestration jobs. BOS launches a BOA Kubernetes job.
+BOA then launches a [Configuration Framework Service \(CFS\)](../../glossary.md#configuration-framework-service-cfs) session,
+resulting in a CFS-BOA Kubernetes job. Thus, there are two separate sets of jobs that can be removed.
 
 Deleting log entries creates more space and helps improve the usability of viewing logs.
 
@@ -13,11 +15,7 @@ Deleting log entries creates more space and helps improve the usability of viewi
 
 ## Procedure
 
-1. View the existing list of jobs.
-
-   The following command will list the BOA jobs.
-
-   (`ncn-mw#`)
+1. (`ncn-mw#`) List the current BOA jobs.
 
    ```bash
    kubectl get jobs -n services | grep boa
@@ -35,11 +33,9 @@ Deleting log entries creates more space and helps improve the usability of viewi
    boa-e9adfa63-24dc-4da6-b870-b3535adf0bcc                    1/1           7m53s      13d
    ```
 
-2. Delete any jobs that are no longer needed.
+1. (`ncn-mw#`) Delete any jobs that are no longer needed.
 
    Do not delete any jobs that are currently running.
-
-   (`ncn-mw#`)
 
    ```bash
    kubectl delete jobs BOA_JOB_ID

@@ -10,7 +10,7 @@ Help with Ansible can be found in the external Ansible documentation:
 * [Ansible playbook best practices](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html)
 * [Ansible examples](https://github.com/ansible/ansible-examples)
 
-## Ansible Code Structure
+## Ansible code structure
 
 The Version Control Service \(VCS\), which is setup during the Cray System Management \(CSM\) product installation, is the appropriate place to store configuration content.
 Individual product installations include the Ansible code to properly configure each product.
@@ -124,7 +124,7 @@ This is because these are static imports that are compiled at the beginning of t
 Evaluating these conditionals for each task may only take a second or two, but across the hundreds of tasks that might be part of a playbook, this can add up to significant wasted time.
 Instead use dynamic imports with the `include_*` tasks. Because these are evaluated at runtime, a conditional can skip the import of the role or tasks entirely, and is only evaluated once.
 
-For example, in the following case the role is imported statically and the `when` statement will be propagated down and evaluated for each task in the role.  This wastes time by running the same check many times.
+For example, in the following case the role is imported statically and the `when` statement will be propagated down and evaluated for each task in the role. This wastes time by running the same check many times.
 
 ```yaml
 - name: Sample playbook
@@ -150,7 +150,7 @@ and [Re-using files and roles](https://docs.ansible.com/ansible/latest/user_guid
 
 ### Other tips
 
-* Use the included Ansible modules rather than making shell calls or running scripts.  Ansible optimizes these and makes them flexible so the same module can be used for different systems.  This will also improve the log output for debugging.
+* Use the included Ansible modules rather than making shell calls or running scripts. Ansible optimizes these and makes them flexible so the same module can be used for different systems. This will also improve the log output for debugging.
 * Use loops rather than individual tasks where modules are called multiple times.
 Some Ansible modules will optimize the command, such as grouping package installations into a single transaction \(Refer to the external [Ansible playbook loops](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html) documentation\).
 * Use Ansible retries for small, recoverable failures. CFS supports retries on a large scale, but it takes far more time for CFS to detect a failed component and spin up a new session than it does for Ansible to retry a task.
