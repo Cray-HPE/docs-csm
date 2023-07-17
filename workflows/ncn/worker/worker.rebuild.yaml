@@ -177,6 +177,8 @@ spec:
                 value: "{{$.ImageId}}"
               - name: desiredCfsConfig
                 value: "{{$.DesiredCfsConfig}}"
+              - name: bootTimeoutInSeconds
+                value: "{{$.BootTimeoutInSeconds}}"
           # after each: parallel
           #     once a worker node is rebooted
           #     we need to run post boot hooks

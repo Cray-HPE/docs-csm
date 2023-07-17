@@ -170,4 +170,4 @@ downloaded and unpacked.
 
 ## Next topic
 
-See [Boot installation environment](README.md#2-boot-installation-environment).
+See [Boot installation environment](csm-install/README.md#2-boot-installation-environment).

@@ -45,6 +45,7 @@ The following IUF topics are discussed in the sections below.
   - [Log files](#log-files)
 - [Site and recipe variables](#site-and-recipe-variables)
 - [`sat bootprep` configuration files](#sat-bootprep-configuration-files)
+  - [ARM images](#arm-images)
 - [Recovering from failures](#recovering-from-failures)
   - [Addressing the issue without changing products](#addressing-the-issue-without-changing-products)
   - [Addressing the issue by removing a product](#addressing-the-issue-by-removing-a-product)
@@ -61,7 +62,7 @@ The following IUF topics are discussed in the sections below.
   those configurations to their specific needs. Note that `sat` capabilities used by IUF rely on BOS V2.
 - IUF will fail and provide feedback to the administrator in the event of an error, but it cannot automatically resolve issues.
 - IUF does not handle many aspects of installs and upgrades of CSM itself and cannot be used until a base level of CSM functionality is present.
-- The `management-nodes-rollout` stage currently does not automatically upgrade management storage nodes or `ncn-m001`. These nodes must be upgraded using non-IUF methods described in the IUF documentation.
+- The `management-nodes-rollout` stage does not automatically upgrade `ncn-m001`. This node must be upgraded using non-IUF methods described in the IUF documentation.
 - If the `iuf run` subcommand ends unexpectedly before the Argo workflow it created completes, there is no CLI option to reconnect to the Argo workflow and continue displaying status. It is recommended the administrator
   monitors progress via the Argo workflow UI and/or IUF log files in this scenario.
 - It is currently not possible to add or remove product distribution files to an in progress IUF session without first re-executing the `process-media` stage and then re-executing any other stages required for that product. See
@@ -381,8 +382,10 @@ options:
                         Override list used to target specific nodes only when rolling out managed nodes.  Arguments
                         should be xnames or HSM node groups. Defaults to the Compute role.
   --limit-management-rollout LIMIT_MANAGEMENT_ROLLOUT [LIMIT_MANAGEMENT_ROLLOUT ...]
-                        Override list used to target specific role_subrole(s) only when rolling out management nodes.
-                        Defaults to the Management_Worker role.
+                        List used to target specific hostnames or HSM management role_subrole only when rolling 
+                        out management nodes. Hostname arguments can only belong to a single node type. For example, 
+                        both master and worker hostnames can not be provided at the same time. Defaults to an empty list
+                        which means no nodes will be rolled out.
   -mrp MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...], --mask-recipe-prods MASK_RECIPE_PRODS [MASK_RECIPE_PRODS ...]
                         If `--recipe-vars` is specified, mask the versions found within the recipe variables YAML
                         file for the specified products, such that the largest version of the package already installed on
@@ -712,6 +715,41 @@ input files to define the CFS configurations used to customize management NCN an
 HPE provides management NCN and managed node `sat bootprep` configuration files in the HPC CSM Software Recipe. The files provide default
 CFS configuration, image, and BOS session template definitions. The administrator may customize the files as needed. The files include
 variables, and the values used are provided by the recipe variables and/or site variables files specified when running `iuf run`.
+
+### ARM images
+
+`sat bootprep` files support building ARM images on an opt-in basis. A commented configuration is provided in the `compute-and-uan-bootprep.yaml` file.
+
+```yaml
+# The following images are required only on systems with aarch64 (ARM) nodes.
+# Uncomment the lines below if ARM images are needed.
+#- name: "{{default.note}}{{base.name}}{{default.suffix}}"
+#  ref_name: base_cos_image.aarch64
+#  base:
+#    product:
+#      name: cos
+#      type: recipe
+#      version: "{{cos.version}}"
+#      filter:
+#        arch: aarch64
+#
+#- name: "compute-{{base.name}}"
+#  ref_name: compute_image.aarch64
+#  base:
+#    image_ref: base_cos_image.aarch64
+#  configuration: "{{default.note}}compute-{{recipe.version}}{{default.suffix}}"
+#  configuration_group_names:
+#  - Compute
+#
+#- name: "uan-{{base.name}}"
+#  ref_name: uan_image.aarch64
+#  base:
+#    image_ref: base_cos_image.aarch64
+#  configuration: "{{default.note}}uan-{{recipe.version}}{{default.suffix}}"
+#  configuration_group_names:
+#  - Application
+#  - Application_UAN
+```
 
 ## Recovering from failures
 

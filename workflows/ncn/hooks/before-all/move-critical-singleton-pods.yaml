@@ -64,11 +64,13 @@ spec:
       podName=${pods[0]}
       currentNode=$(kubectl get po -A -o wide | grep $podName | awk '{print $8}')
       ns=$(kubectl get po -A | grep $podName | awk '{print $1}')
-      if [[ "$nodeMoveTo" != "$currentNode" ]]; then
+      if [[ $targetNcns != *$currentNode* ]]; then
+        echo "$podName is on $currentNode and that node is not being rebuilt by this workflow. Not moving $podName."
+      elif [[ "$nodeMoveTo" != "$currentNode" ]]; then
         echo "Move Pod: $podName to Node: $nodeMoveTo"
         /opt/cray/platform-utils/move_pod.sh $podName $nodeMoveTo > /dev/null
       fi
 
-      kubectl wait --for=condition=ready pod $podName -n $ns --timeout=5m
+      kubectl wait --for=condition=ready pod -l ${label} -n $ns --timeout=5m
     done
   templateRefName: ssh-template

@@ -10,6 +10,7 @@
   - See [Configure the Cray CLI](../configure_cray_cli.md).
 - The latest CSM documentation RPM must be installed on the node where the procedure is being performed.
   - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+- If importing both CFS and VCS data, the VCS import should be done before the CFS import.
 
 ## Export
 
@@ -52,6 +53,8 @@ This tool does the following things:
   - The CFS component on the live system does NOT have a desired configuration set.
   - The desired configuration for this component in the archive either already exists on the live system, or is going to be created
     as part of this import process.
+- If the `--clear-cfs` option is specified, then before deciding which changes need to be imported, the tool will delete all
+  configurations in CFS and will clear the state, desired configuration, and error counts of all components in CFS.
 
 The script takes a snapshot of the live system CFS data before it makes any changes, and after all changes have been made.
 The output of the script lists all of the updates it is making, as well as any updates that it is not performing because of the
@@ -63,8 +66,19 @@ criteria listed above.
 
 1. (`ncn-mw#`) Run the following script to import the data from the archive file.
 
-   > Modify the following example command to specify the path to the output file from the automated export script.
+   > Modify the following example commands to specify the path to the output file from the automated export script.
 
-   ```bash
-   /usr/share/doc/csm/scripts/operations/configuration/import_cfs_data.sh /tmp/cfs-export-20230410170613-Tg0nap.tgz
-   ```
+   - If this import is not happening after a reinstall of CSM, OR if VCS data was not imported from a previous CSM install,
+     then invoke the tool as follows:
+
+      ```bash
+      /usr/share/doc/csm/scripts/operations/configuration/import_cfs_data.sh /tmp/cfs-export-20230410170613-Tg0nap.tgz
+      ```
+
+   - If the CFS import is being done after a reinstall of CSM AND if VCS data from a prior CSM install has been imported, then
+     invoke the tool with the `--clear-cfs` option. This is because the CFS data created during the reinstall of
+     CSM will not match the re-imported VCS data.
+
+      ```bash
+      /usr/share/doc/csm/scripts/operations/configuration/import_cfs_data.sh --clear-cfs /tmp/cfs-export-20230410170613-Tg0nap.tgz
+      ```
