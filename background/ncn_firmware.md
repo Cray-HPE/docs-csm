@@ -1,12 +1,12 @@
-# Firmware
+# NCN Firmware
 
 This page describes the non-compute node's (NCN) firmware; the minimum versions, and how to interrogate information from
 an NCN.
 
-* [Minimum Versions](#minimum-versions)
-* [BMC Interrogation](#bmc-interrogation)
+* [Minimum versions](#minimum-versions)
+* [BMC interrogation](#bmc-interrogation)
 
-## Minimum Versions
+## Minimum versions
 
 This section outlines the minimum firmware versions for a CSM install.
 
@@ -28,13 +28,12 @@ versions are required.
 
 > ***NOTE*** "Cray Inc" is reported as the board manufacturer on Gigabyte boards.
 
-## BMC Interrogation
+## BMC interrogation
 
 This section will assist an administrator in interrogating the BMCs on a system. It provides various methods for various
 contexts.
 
-> ***NOTE*** This section is a *stub*, information will be added to this section soon for querying Redfish®.
-> Right now, the viable endpoints to query for advanced Redfish® users are:
+> The viable endpoints to query for advanced Redfish® users are:
 >
 > * `redfish/v1/Managers/{ID} | jq -r '.Manufacturer, .BiosVersion , .Model'`
 > * `redfish/v1/Systems/{ID} | jq -r .FirmwareVersion`

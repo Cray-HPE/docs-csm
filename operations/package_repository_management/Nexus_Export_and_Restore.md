@@ -28,12 +28,12 @@ The above commands will return the following information:
 - The maximum amount of space available in that Ceph pool.
 
 If the size of the Nexus export plus the size of the currently used space is larger than the maximum available space,
-then follow the steps on [Nexus Space Cleanup](./Nexus_Space_Cleanup.md).
+then follow the steps on [Nexus Space Cleanup](Nexus_Space_Cleanup.md).
 
 Taking the export can take multiple hours and Nexus will be unavailable for the entire time. For a fresh install of Nexus, the export takes around
 1 hour for every 60 GiB stored in the `nexus-data` PVC. For example, if the `nexus-data` PVC is 120 GiB (meaning the first step showed the export will
 use 360 GiB on cluster), then Nexus would be unavailable for around 2 hours while the export was taking place. If the time required to backup is too long
-because of the size it will take follow the steps on [Nexus Space Cleanup](./Nexus_Space_Cleanup.md).
+because of the size it will take follow the steps on [Nexus Space Cleanup](Nexus_Space_Cleanup.md).
 
 (`ncn-m#`) To get an export, run the export script on any master node where the latest CSM documentation is installed. See
 [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).

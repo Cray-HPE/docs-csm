@@ -7,7 +7,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 1. [Install CSM services](#1-install-csm-services)
 1. [Create base BSS global boot parameters](#2-create-base-bss-global-boot-parameters)
-1. [Adding Switch Admin Password to Vault](#3-adding-switch-admin-password-to-vault)
+1. [Adding switch admin password to Vault](#3-adding-switch-admin-password-to-vault)
 1. [Wait for everything to settle](#4-wait-for-everything-to-settle)
 1. [Next topic](#next-topic)
 1. [Known issues](#known-issues)
@@ -108,7 +108,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
    kubectl -n spire wait "${SPIRE_JOB}" --for=condition=complete --timeout=5m
    ```
 
-## 3. Adding Switch Admin Password to Vault
+## 3. Adding switch admin password to Vault
 
 If CSM has been installed and Vault is running, add the switch credentials into Vault. Certain
 tests, including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to test the
@@ -154,12 +154,12 @@ immediately after the install script completes.
    ```
 
 1. The next step is to validate CSM health before redeploying the final NCN.
-   See [Validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
+   See [Validate CSM health before final NCN deployment](README.md#3-validate-csm-health-before-final-ncn-deployment).
 
-## Next Topic
+## Next topic
 
 After installing CSM, proceed
-to [validate CSM health before final NCN deployment](./README.md#3-validate-csm-health-before-final-ncn-deployment).
+to [validate CSM health before final NCN deployment](README.md#3-validate-csm-health-before-final-ncn-deployment).
 
 ## Known issues
 

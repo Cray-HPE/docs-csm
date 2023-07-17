@@ -37,7 +37,7 @@ Determine if the master node being removed is the first master node.
     ```
 
     - If the node returned is not the one being removed, then skip the substeps here and proceed to
-      [Reset Kubernetes on master node being removed](#Reset-Kubernetes-on-master-node-being-removed).
+      [Reset Kubernetes on master node being removed](#reset-kubernetes-on-master-node-being-removed).
     - ***IMPORTANT:*** The first master node is the node others contact to join the Kubernetes cluster.
       If this is the node being removed, then perform the remaining substeps here in order to promote another
       master node to the initial node, before proceeding with the rest of the overall procedure.
